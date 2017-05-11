@@ -52,7 +52,6 @@ RUN adduser --home "${GERRIT_HOME}" --disabled-password --gecos "My Gerrit User"
 
 # Ensure the entrypoint scripts are in a fixed location
 COPY gerrit-entrypoint.sh /
-COPY gerrit-start.sh /
 
 
 RUN chmod +x /gerrit*.sh
@@ -61,6 +60,8 @@ RUN chmod +x /gerrit*.sh
 #So gerrit user can own this directory.
 RUN su ${GERRIT_USER} && echo ${USER} mkdir -p ${GERRIT_SITE}
 
+
+COPY zuul_id_rsa.pub /zuul_id_rsa.pub
 
 VOLUME $GERRIT_SITE
 EXPOSE 8080 29418

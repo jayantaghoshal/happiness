@@ -1,0 +1,64 @@
+- defaults:
+    name: global
+    project-type: freestyle
+    concurrent: true
+
+- job:
+     name: testproject-unit-tests
+     defaults: global
+     builders:
+       - shell: |
+           export HTTP_PROXY=
+           export HTTPS_PROXY=
+           export http_proxy=
+           export https_proxy=
+           export JAVA_OPS=
+           zuul-cloner http://dock_gerrit:8080 $ZUUL_PROJECT
+           cd $ZUUL_PROJECT
+           ./run_tests.sh
+     parameters:
+        # Jenkins require parameters to be explicitly defined, otherwise they are removed
+        - string:
+            name: ZUUL_UUID
+        - string:
+            name: ZUUL_REF
+        - string:
+            name: ZUUL_COMMIT
+        - string:
+            name: ZUUL_PROJECT
+        - string:
+            name: ZUUL_PIPELINE
+        - string:
+            name: ZUUL_URL
+        - string:
+            name: BASE_LOG_PATH
+        - string:
+            name: lOG_PATH
+        - string:
+            name: ZUUL_VOTING
+        - string:
+            name: ZUUL_BRANCH
+        - string:
+            name: ZUUL_CHANGE
+        - string:
+            name: ZUUL_CHANGES
+        - string:
+            name: ZUUL_CHANGE_IDS
+        - string:
+            name: ZUUL_PATCHSET
+        - string:
+            name: ZUUL_OLDREV
+        - string:
+            name: ZUUL_NEWREV
+        - string:
+            name: ZUUL_SHORT_OLDREV
+        - string:
+            name: ZUUL_SHORT_NEWREV
+        - string:
+            name: ZUUL_PATCHSET
+
+- project:
+     name: testproject
+     node: master
+     jobs:
+       - testproject-unit-tests

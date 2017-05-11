@@ -1,0 +1,30 @@
+version: '2'
+services:
+    dock_gerrit:
+        build: gerrit
+        ports:
+        - "8080:8080"     # Gerrit web UI
+        - "29418:29418"   # Gerrit SSH
+        volumes:
+        - my-gerrit-data:/var/gerrit/review_site
+    dock_jenkins:
+        build: jenkins
+        ports:
+        - "8081:8080"     # Jenkins web UI
+        - "50000:50000"   # Jenkins remote control ????
+        volumes:
+        - my-jenkins-data:/var/jenkins_home
+        environment:
+            JAVA_OPTS: -Dhttp.proxyHost=10.244.0.55 -Dhttp.proxyPort=83 -Dhttps.proxyHost=10.244.0.55 -Dhttps.proxyPort=83
+    dock_zuul:
+        build: zuul
+        ports:
+        - "8082:80"       # Zuul web ui
+        - "8001:8001"     # Zuul web app
+        - "4730:4730"     # Gearman
+        volumes:
+        - my-zuul-data:/var/jenkins_home
+volumes:
+    my-gerrit-data:
+    my-jenkins-data:
+    my-zuul-data:
