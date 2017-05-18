@@ -1,0 +1,2 @@
+# Inherit Delphi's init.rc
+import init.ihu_abl_car.rc

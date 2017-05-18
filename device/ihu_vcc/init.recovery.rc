@@ -1,0 +1,2 @@
+# Inherit Delphi's init.recovery.rc
+import init.recovery.ihu_abl_car.rc
