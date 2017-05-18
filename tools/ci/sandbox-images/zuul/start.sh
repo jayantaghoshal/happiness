@@ -5,6 +5,9 @@ set -x
 echo "\
 ServerName dock_zuul" >> /etc/apache2/apache2.conf
 
+export http_proxy=
+export https_proxy=
+
 a2dissite 000-default
 a2ensite zuul
 

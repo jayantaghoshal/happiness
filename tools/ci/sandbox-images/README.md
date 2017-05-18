@@ -39,6 +39,9 @@ If not behind VCC proxy, remove all these commands.
 
 #Manual steps:
 
+TODO: Automate these, right now not automated because they depend on timing, must be done after the services are installed and running.
+Jenkins is especially troublesome as it has an interactive setup wizard and downloads stuff from internet during installation.
+
 1. Create zuul gerrit user in gerrit web UI
    Add gerrit/zuul_id_rsa.pub as SSH key to this user
 2. Add "Verified" options to gerrit code review
