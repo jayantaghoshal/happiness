@@ -1,36 +1,45 @@
-# IHU Android AOSP Docker build container
+# IHU Android AOSP Docker build image
 
 ## Introduction
 
-Before continuing make sure you know what Docker is, what are Docker
-images and containers.
+Before continuing make sure you know what Docker is, please see
+[What is docker](https://www.docker.com/what-docker).
 
-This document describes the Docker container that aims to provide a consistent environment when building AOSP in the IHU Android project.
+This document describes the Docker image that aims to provide a consistent environment when building AOSP in the IHU Android project.
 
 ## Prerequisites
 
 * Docker 17.03.1-ce - All scripts were tested and optimized to this version.
 
-## Instruction on how to use the image
+## How to build the docker image
 
-To run a command inside the container, execute:
+To build the docker image, execute:
+
+```bash
+./build.sh
+```
+
+## How to use the image
+
+To run a command inside a container, execute:
 
 ```bash
 ./run.sh <command>
 ```
 
-For example to build a full system:
+Example 1: Build a full system:
 
 ```bash
-./run.sh "lunch ihu_abl_car-eng && make dist droid -j8"
+./run.sh "lunch ihu_vcc-eng && make flashfiles -j8"
 ```
 
-## Instruction on how to build the docker container
-
-To build the docker container, execute:
+Example 2: Start an interactive shell
 
 ```bash
-./build.sh
+./run.sh bash
+# Now you can run interactively in the docker container with a AOSP build environment, for example:
+lunch ihu_vcc-eng
+make -j8
 ```
 
 ## Instructions on how to work with Docker registry

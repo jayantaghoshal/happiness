@@ -3,6 +3,8 @@
 # Based on Ubuntu
 FROM ubuntu:16.04
 
+USER root
+
 # INSTALLING TOOLS
 # ================
 
@@ -56,6 +58,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python-libxml2 \
     python-markdown \
     squashfs-tools \
+    sudo \
     tesseract-ocr \
     tofrodos \
     tree \
@@ -72,10 +75,5 @@ RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
-# Add an entry point script.
-COPY entrypoint_build_aic.sh /usr/local/bin/entrypoint_build_aic.sh
-
-# Declare a new entry point.
-ENTRYPOINT ["/usr/local/bin/entrypoint_build_aic.sh"]
-
-# EOF
+# The default command, if docker container is started without parameters
+CMD ["bash"]
