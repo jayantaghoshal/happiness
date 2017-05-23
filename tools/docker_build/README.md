@@ -16,7 +16,7 @@ This document describes the Docker image that aims to provide a consistent envir
 To build the docker image, execute:
 
 ```bash
-./build.sh
+vendor/volvocars/tools/docker_build/build.sh
 ```
 
 ## How to use the image
@@ -24,22 +24,31 @@ To build the docker image, execute:
 To run a command inside a container, execute:
 
 ```bash
-./run.sh <command>
+vendor/volvocars/tools/docker_build/run.sh <command>
 ```
 
 Example 1: Build a full system:
 
 ```bash
-./run.sh "lunch ihu_vcc-eng && make flashfiles -j8"
+# From the root of the project run:
+vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && make -j8"
 ```
 
 Example 2: Start an interactive shell
 
 ```bash
-./run.sh bash
-# Now you can run interactively in the docker container with a AOSP build environment, for example:
+vendor/volvocars/tools/docker_build/run.sh
+
+# Now you can run interactively in the docker container with
+# the AOSP build environment, for example:
 lunch ihu_vcc-eng
+
+# Build the complete system
 make -j8
+
+# Or just build a module
+cd vendor/volvocars/hardware/localconfig
+mm
 ```
 
 ## Instructions on how to work with Docker registry
