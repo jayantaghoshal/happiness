@@ -1,0 +1,3 @@
+# Netman execution rights
+/system/bin/netman u:object_r:netman_exec:s0
+
