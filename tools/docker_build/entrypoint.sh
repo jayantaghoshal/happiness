@@ -54,6 +54,13 @@ id -u "${HOST_UID}" &>/dev/null || {
         Failed "Adding user to sudo group failed"
 }
 
+# Create home directory if missing, used if volume $HOME is not mapped (i.e. CI)
+[[ ! -d "${HOME}" ]] && {
+    echo "Home directory (${HOME}) missing, will create..."
+    mkdir ${HOME}
+    chown ${CONTAINER_USERNAME}:${CONTAINER_GROUPNAME} ${HOME}
+}
+
 # Add user to dialout group. This allows access to /dev/ttyUSB* without sudo
 adduser ${CONTAINER_USERNAME} dialout &>/dev/null || Failed "Adding user to dialout group failed"
 
@@ -77,5 +84,5 @@ else
   COMMAND_IN_DOCKER="bash --rcfile ${BASHRC_FILE}"
 fi
 
-sudo -E -u ${CONTAINER_USERNAME} BASHRC_FILE=${BASHRC_FILE} BUILD_ENV_SETUP=$BUILD_ENV_SETUP LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=/sbin:$PATH USE_CCACHE=1 CCACHE_DIR=${CCACHE_DIR} ${COMMAND_IN_DOCKER}
+sudo -E -u ${CONTAINER_USERNAME} BASHRC_FILE=${BASHRC_FILE} BUILD_ENV_SETUP=$BUILD_ENV_SETUP LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=/sbin:$PATH USE_CCACHE=${USE_CCACHE} CCACHE_DIR=${CCACHE_DIR} ${COMMAND_IN_DOCKER}
 

@@ -8,7 +8,13 @@ USER root
 # INSTALLING TOOLS
 # ================
 
-LABEL vcc.git.commit='768761823adbc' vcc.git.url='https://SMANGELS@icup-android.gerrit.cm.volvocars.biz/a/aic_tools' vcc.project='POC Android In Car' vcc.docker.build.machine='gotsvl1413.got.volvocars.net'
+LABEL org.label-schema.vendor="Volvo Cars" \
+  org.label-schema.url="https://c1.confluence.cm.volvocars.biz/display/IHUA/How+to+build+Android+image" \
+  org.label-schema.name="VCC AOSP build environment" \
+  org.label-schema.vcs-url="ssh://icup-android.gerrit.cm.volvocars.biz/vendor/volvocars.git" \
+  org.label-schema.vcs-ref="" \
+  org.label-schema.build-date="" \
+  org.label-schema.docker.schema-version="1.0"
 
 # Configure proxy for environment.
 # TODO: Make dns work so that we can avoid hard-coded IPs.
@@ -69,8 +75,9 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     xsltproc \
     zip \
     zlib1g-dev \
+    repo \
     && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /cm/tmp/$(whoami)
+
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
