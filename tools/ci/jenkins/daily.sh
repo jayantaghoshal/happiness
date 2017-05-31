@@ -3,7 +3,8 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=$(readlink -f ${SCRIPT_DIR}/../../../../..)
 ENTRYPOINT="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/entrypoint.sh"
-IMAGE_NAME="swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:latest"
+IMAGE_NAME="swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:7920cefbdbb6f70761642b421b31fd6dc29ad84c
+"
 WORKING_DIR="$(pwd)"
 
 if [ -z ${WORSPACE} ]; then 

@@ -56,3 +56,26 @@ mm
 TODO: We want the image to be automatically generated and
 promoted to a central Docker registry so that devlopers easily
 can pull ready made images.
+
+Authenticate with Artifactory:
+```bash
+# Only required once since login information are stored in ~/.docker/config.json
+docker login -u $USER swf1.artifactory.cm.volvocars.biz:5002
+```
+
+To push the docker image to Artifactory, execute:
+```bash
+# Only for test, should be automated (Jenkins should build and push image to Artifactory)
+vendor/volvocars/tools/docker_build/push.sh <IMAGE ID>
+```
+
+To pull the docker image from Artifactory, execute:
+```bash
+docker pull swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build[:NAME]
+```
+
+TODO: Updates to vendor/volvocars/tools/docker_build/run.sh 
+is required to use image.
+The tag should be stored in configuration file in repo, 
+currently scripts using the image has hardcoded the tag or running latest.
+Move image from the "test" namespace.
