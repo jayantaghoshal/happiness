@@ -61,7 +61,7 @@ def check_output_logged(command,
                         timeout_sec: int = None,
                         *args,
                         **kwargs):
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop() # Something fishy about this, it is not closed properly on shut down..
     pid, exitcode, stdout, stderr = loop.run_until_complete(
         asyncio.wait_for(
             _check_output_logged_helper(command, encoding, shell, *args, **kwargs),

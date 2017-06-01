@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <!-- TODO: Copy real manifests from manifest repo !!
+      Few repos for now for testing the auto bump scripts...
+  -->
+
+
+  <remote name="origin" fetch="https://icup_android.gerrit.cm.volvocars.biz/a/" review="https://icup_android.gerrit.cm.volvocars.biz"/>
+  <default remote="origin" sync-c="true" sync-j="5"/>
+
+  <!-- Volvo Cars -->
+  <!-- Note the magic revision pointer, it is being updated by the autobumper in shipit
+       See more details in https://c1.confluence.cm.volvocars.biz/display/IHUA/CI+-+Workflow
+   -->
+  <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
+
+  <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
+
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="1a968a3db1922a3f79bac9c8ab5327bcb8386747"/>
+
+  <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
+
+  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="3027056b043a3a573f3bba422538e5dbdf6ed27a"/>
+
+</manifest>
