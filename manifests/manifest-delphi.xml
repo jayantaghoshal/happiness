@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <include name="manifest-intel.xml"/>
+
+  <!-- Delphi device tree (config files for IHU platform, cherry-pick commits from Intel) -->
+  <remove-project name="bsp/device/intel/broxton"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="ace376175b84efbe709d63e8eea2ab857cb07f51"/>
+
+  <!-- modifications / bug fixes implemented for IHU (rebase for each new release from Intel) -->
+  <remove-project name="bsp/kernel/bxt"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="002fc7d06551cc3f4736a36120ed4f91d7e2ecfa"/>
+
+  <remove-project name="bsp/host/deployment_tools/abl_config_tool"/>
+  <project name="bsp/host/deployment_tools/abl_config_tool" path="vendor/intel/abl/abl_config_tool" revision="d92aeee1bfe39366ce428ac6a0091499867ef5ff"/>
+
+  <remove-project name="bsp/vendor/intel/abl/abl_build_tools"/>
+  <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="43a691a1dd6c985d544aa486a9af7431611b6575"/>
+
+  <remove-project name="aosp/platform/build"/>
+  <project name="aosp/platform/build" path="build" revision="ea6db63ff816362cb467dc7034229eb34fb84379">
+    <copyfile dest="Makefile" src="core/root.mk"/>
+  </project>
+
+  <remove-project name="bsp/hardware/intel/efi/kernelflinger"/>
+  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="dbed9a2af40eff223ce2d3e101931a1a6e0f0c47"/>
+
+  <remove-project name="bsp/vendor/intel/common"/>
+  <project name="bsp/vendor/intel/common" path="device/intel/common" revision="725ac15b37cdd901ad0a9eb0ec35d2696e208bce"/>
+
+  <remove-project name="bsp/vendor/intel/fw/evmm"/>
+  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="d0192b19a9b453d381e3fdf74015f7df1cb89de5"/>
+
+  <remove-project name="bsp/target/security/ifwi-apl"/>
+  <project name="bsp/target/security/ifwi-apl" path="vendor/intel/abl/ifwi-apl" revision="e6ea588a65a37666788cffde2d979d38e9e51ced"/>
+
+  <remove-project name="aosp/platform/system/sepolicy"/>
+  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="7a1fa9b4ba8ffcb9f1649d654025928d496c3082"/>
+
+  <!-- Delphi platform extensions (no equivalent shipped by Intel) -->
+  <project name="bsp/external/libncurses" path="external/libncurses" revision="067ae32f7e4b45bb1cb7ba37d0ffe618905e049f"/>
+  <project name="bsp/external/vim" path="external/vim" revision="8485746d41001af62208dd2a988c6939ceb6f77d"/>
+  <project name="bsp/external/picocom" path="external/picocom" revision="e119091d98c069fcd8d36867546196a764772702"/>
+  <project name="bsp/external/i2c-tools" path="external/i2c-tools" revision="2a95cdfea28a0a3ddd2c7665f8df6ddd8ce054f0"/>
+
+</manifest>
+
