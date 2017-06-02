@@ -155,8 +155,8 @@ class HashInserterTest(ManifestTestCase):
 
 class ManifestUpdateTest(ManifestTestCase):
     def test_update_file(self):
-        self._create_test_repo('device/bar')
-        self._create_test_repo('vendor/foo')
+        bar_repo = self._create_test_repo('device/bar')
+        foo_repo = self._create_test_repo('vendor/foo')
 
         template = _manifest([
             '<project name="bar" path="device/bar" revision="${master}"/>',
@@ -173,10 +173,22 @@ class ManifestUpdateTest(ManifestTestCase):
         manifest.update_file(self.project_root, template_path, output_path)
 
         with open(output_path) as file:
-            output = file.read()
+            output1 = file.read()
 
-        self.assertRegex(output, pattern)
+        bar_repo.add([_write_file(bar_repo.path, 'bar.txt', '123')])
+        bar_repo.commit('Changed something in bar')
 
+        foo_repo.add([_write_file(foo_repo.path, 'foo.txt', 'abc')])
+        foo_repo.commit('Changed something in foo')
+
+        manifest.update_file(self.project_root, template_path, output_path)
+
+        with open(output_path) as file:
+            output2 = file.read()
+
+        self.assertRegex(output1, pattern)
+        self.assertRegex(output2, pattern)
+        self.assertNotEqual(output1, output2)
 
     def test_update_repo(self):
         bar_repo = self._create_test_repo('device/bar')
