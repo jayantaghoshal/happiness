@@ -4,6 +4,7 @@ import shutil
 from . import manifest
 from . import process_tools
 from . import git
+import logging
 
 
 def on_commit(aosp_root_dir):
@@ -49,6 +50,12 @@ def post_merge(aosp_root_dir):
 
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo_path)
     manifest_repo = git.Repo(manifest_repo_path)
-    manifest_repo.commit("Auto bump", True)
-    manifest_repo.push()
+    changed_paths = manifest_repo.changed_paths("HEAD")
+    if len(changed_paths) > 0:
+        # TODO: Include list of changes in commit message and log
+        logging.info("Changes found, pushing new manifest")
+        manifest_repo.commit("Auto bump", True)
+        manifest_repo.push()    # TODO: git push will not work together with gerrit
+    else:
+        logging.info("No Changes found")
 
