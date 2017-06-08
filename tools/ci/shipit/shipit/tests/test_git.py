@@ -208,3 +208,33 @@ class RepoTest(unittest.TestCase):
 
         with self.assertRaises(git.Error):
             repo.show('master:does_not_exist.txt')
+
+    def test_any_changes_staged(self):
+        repo = git.Repo.init(os.path.join(self.tmp_path, 'any_changes_staged'))
+
+        self.assertFalse(repo.any_changes_staged())
+
+        path = _write_file(repo.path, 'foo.txt', '123\n')
+        repo.add([path])
+        self.assertTrue(repo.any_changes_staged())
+
+        repo.commit('Foo')
+        self.assertFalse(repo.any_changes_staged())
+
+        _append_to_file(path, 'abc\n')
+        self.assertFalse(repo.any_changes_staged())
+
+        repo.add([path])
+        self.assertTrue(repo.any_changes_staged())
+
+        repo.commit('Foo2')
+        self.assertFalse(repo.any_changes_staged())
+
+        path2 = _write_file(repo.path, 'bar.txt', '456\n')
+        self.assertFalse(repo.any_changes_staged())
+
+        repo.add([path2])
+        self.assertTrue(repo.any_changes_staged())
+
+        repo.commit('Bar')
+        self.assertFalse(repo.any_changes_staged())

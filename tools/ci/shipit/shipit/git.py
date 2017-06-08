@@ -51,10 +51,10 @@ class Repo:
         self._run_git(args)
 
     def log(self) -> str:
-        return self._run_git(['log'])
+        return self._run_git(['log']).stdout_str
 
     def rev_parse(self, rev: str) -> str:
-        return self._run_git(['rev-parse', '--verify', rev]).rstrip()
+        return self._run_git(['rev-parse', '--verify', rev]).stdout_str.rstrip()
 
     def push(self, push_args=[]):
         args = ['push']
@@ -62,12 +62,19 @@ class Repo:
         self._run_git(args)
 
     def changed_paths(self, rev_range: str) -> List[str]:
-        return self._run_git(['diff', '--name-only', rev_range]).rstrip('\n').split('\n')
+        return self._run_git(['diff', '--name-only', rev_range]).stdout_str.rstrip('\n').split('\n')
 
     def show(self, git_object: str) -> str:
-        return self._run_git(['show', git_object])
+        return self._run_git(['show', git_object]).stdout_str
 
-    def _run_git(self, git_args: List[str], run_in_path: bool = True) -> str:
+    def any_changes_staged(self) -> bool:
+        result = self._run_git(['diff', '--cached', '--quiet'], check_exitcode=False)
+        return result.exitcode == 1
+
+    def _run_git(self,
+                 git_args: List[str],
+                 run_in_path: bool = True,
+                 check_exitcode: bool = True) -> process_tools.Result:
         """Run git command with arguments git_args.
 
         Some commands sets exit code to something other than 0 but only writes to stdout and not
@@ -81,8 +88,11 @@ class Repo:
 
         args.extend(git_args)
 
-        try:
-            return process_tools.check_output_logged(args).decode()
-        except subprocess.CalledProcessError as error:
-            error_msg = error.stderr if error.stderr else error.stdout
-            raise Error('{}\n{}'.format(error, error_msg.decode()))
+        result = process_tools.run(args)
+
+        if check_exitcode and result.exitcode != 0:
+            error_msg = result.stderr if result.stderr else result.stdout
+            raise Error('Git command "{}" failed. Exit code = {}. Error:\n{}'
+                        .format(' '.join(args), result.exitcode, error_msg.decode()))
+
+        return result
