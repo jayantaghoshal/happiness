@@ -56,8 +56,10 @@ class Repo:
     def rev_parse(self, rev: str) -> str:
         return self._run_git(['rev-parse', '--verify', rev]).rstrip()
 
-    def push(self):
-        self._run_git(['push'])
+    def push(self, push_args=[]):
+        args = ['push']
+        args.extend(push_args)
+        self._run_git(args)
 
     def changed_paths(self, rev_range: str) -> List[str]:
         return self._run_git(['diff', '--name-only', rev_range]).rstrip('\n').split('\n')

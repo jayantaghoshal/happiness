@@ -55,7 +55,7 @@ def post_merge(aosp_root_dir):
         # TODO: Include list of changes in commit message and log
         logging.info("Changes found, pushing new manifest")
         manifest_repo.commit("Auto bump", True)
-        manifest_repo.push()    # TODO: git push will not work together with gerrit
+        manifest_repo.push(["HEAD:refs/for/master%submit"])
     else:
         logging.info("No Changes found")
 
