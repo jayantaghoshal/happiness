@@ -38,7 +38,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, man
         manifest.update_file(aosp_root_dir, manifest_template_file, dest)
 
 
-def post_merge(aosp_root_dir):
+def post_merge(aosp_root_dir: str, additional_commit_message: str):
     manifest_repo_path = os.path.join(aosp_root_dir, ".repo/manifests")
     volvocars_repo = os.path.join(aosp_root_dir, "vendor/volvocars")
 
@@ -54,8 +54,8 @@ def post_merge(aosp_root_dir):
     if len(changed_paths) > 0:
         # TODO: Include list of changes in commit message and log
         logging.info("Changes found, pushing new manifest")
-        manifest_repo.commit("Auto bump", True)
-        manifest_repo.push(["HEAD:refs/for/master%submit"])
+        manifest_repo.commit("Auto bump\n\n" + additional_commit_message, True)
+        manifest_repo.push(["origin", "HEAD:refs/for/master%submit"])
     else:
         logging.info("No Changes found")
 
