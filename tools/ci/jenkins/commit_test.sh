@@ -12,7 +12,7 @@ if [ -z ${WORSPACE} ]; then
 fi
 
 # Setup ccache
-USE_CCACHE=0
+USE_CCACHE=1
 HOST_CCACHE_DIR=$(readlink -f ${REPO_ROOT_DIR}/../vcc-aosp-build-ccache)
 
 # Detect environment of docker command
@@ -43,4 +43,4 @@ docker_run () {
     $*
 }
 
-docker_run "lunch ihu_abl_car-eng && make -j32 flashfiles"
+docker_run "lunch ihu_abl_car-eng && make -j32 droid"
