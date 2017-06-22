@@ -19,12 +19,17 @@ $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && 
 $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mmm test/ut"
 
 # Run unit test
+TEST_OUTPUT=$(mktemp)
+
 lunch ihu_vcc-eng
-vts-tradefed run commandAndExit vts --skip-all-system-status-check --skip-preconditions --abi x86_64 --module VtsLocalConfigTestCases | tee testresult.txt
-if grep -q "fail:" testresult.txt; then
+
+vts-tradefed run commandAndExit vts --skip-all-system-status-check --skip-preconditions --abi x86_64 --module VtsLocalConfigTestCases | tee $TEST_OUTPUT
+if grep -q "fail:" $TEST_OUTPUT; then
   echo -e "\n${C_ERROR}Test FAILED!${C_OFF}\n"
 else
   echo -e "\n${C_OK}Test OK!${C_OFF}\n"
 fi
+
+rm -f $TEST_OUTPUT
 
 popd > /dev/null
