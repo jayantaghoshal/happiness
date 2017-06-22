@@ -43,4 +43,4 @@ docker_run () {
     $*
 }
 
-docker_run "lunch ihu_abl_car-eng && make -j32 droid"
+docker_run "lunch ihu_vcc-eng && make -j32 droid"
