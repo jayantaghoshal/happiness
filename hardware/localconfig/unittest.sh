@@ -9,25 +9,25 @@ C_OFF="\033[0m"
 
 pushd $SCRIPT_DIR > /dev/null
 
-# Source environment variables
 source $REPO_ROOT_DIR/build/envsetup.sh
+lunch ihu_vcc-eng
 
 # Build module
-$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm -j 4"
+$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm -j4" || exit 1
 
-# Build VTS framework if necessary
-if ! type vts-tradefed >/dev/null; then
-  $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && m vts -j 4"
+# Build vts framework
+if ! type vts-tradefed >/dev/null 2>&1; then
+  $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && m vts -j 4" || exit 1
 fi
 
 # Build unit test
-$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mmm test/ut"
+pushd test/ut > /dev/null
+$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm -j4" || exit 1
+popd > /dev/null
+
 
 # Run unit test
 TEST_OUTPUT=$(mktemp)
-
-source $REPO_ROOT_DIR/build/envsetup.sh
-lunch ihu_vcc-eng
 
 vts-tradefed run commandAndExit vts --skip-all-system-status-check --skip-preconditions --abi x86_64 --module VtsLocalConfigTestCases | tee $TEST_OUTPUT
 if grep -q "fail:" $TEST_OUTPUT; then

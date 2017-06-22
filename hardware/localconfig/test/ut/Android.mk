@@ -8,8 +8,10 @@ LOCAL_MODULE := VtsLocalConfigTestCases
 LOCAL_SRC_FILES := \
     localconfigtest.cpp
 
+# TODO: Investigate why we didn't get libjsoncpp due to transitive dependency through liblocalconfig_static.
 LOCAL_STATIC_LIBRARIES += \
-    liblocalconfig_static
+    liblocalconfig_static \
+    libjsoncpp
 
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
