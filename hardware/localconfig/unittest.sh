@@ -21,6 +21,7 @@ $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && 
 # Run unit test
 TEST_OUTPUT=$(mktemp)
 
+source $REPO_ROOT_DIR/build/envsetup.sh
 lunch ihu_vcc-eng
 
 vts-tradefed run commandAndExit vts --skip-all-system-status-check --skip-preconditions --abi x86_64 --module VtsLocalConfigTestCases | tee $TEST_OUTPUT
