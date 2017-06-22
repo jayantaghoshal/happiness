@@ -41,8 +41,8 @@ bool initWithFilepath(const char *filepath);
  * The template function supports the following types: string, int, bool, double
  *
  * @param key string that identifies a local config value
- * @return A pointer to the requested parameter value (in the type that was used to instantiate the function)
- *         or nullptr if the key does not exist among local config parameters.
+ * @return A pointer to the requested parameter value (in the type that was used to instantiate the function).
+ *         A std::runtime_error exception is thown if the parmeter is missing.
  *         The object pointed to is owned by localconfig so there is no need to delete or manage the object pointed to.
  */
 template <typename T>

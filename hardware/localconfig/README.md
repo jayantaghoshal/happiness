@@ -1,6 +1,8 @@
 # Localconfig
 
-Localconfig is a library for reading run time tunable parameter. The parameters are stored in a json file on target. The default file is located in the /etc but should be moved to a r/w partition.
+Localconfig is a library for reading run time tunable parameter. The parameters are stored in a json
+file on target. The default file is located in the /vendor/etc folder and is copied to
+/oem_config/localconfig on startup if missing.
 
 ## Unit test
 

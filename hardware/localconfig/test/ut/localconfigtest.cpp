@@ -15,10 +15,13 @@ TEST(LocalConfigTest, localconfig_init) {
   EXPECT_FALSE(vcc::localconfig::initWithFilepath(file_not_found_test_filepath));
 }
 
+TEST(LocalConfigTest, localconfig_get_non_existing_parameter) {
+  EXPECT_THROW(vcc::localconfig::getValue<int>("NOT_EXISTING"), std::runtime_error);
+}
+
 TEST(LocalConfigTest, localconfig_get_value_int) {
   ASSERT_TRUE(vcc::localconfig::initWithFilepath(good_test_filepath));
   EXPECT_EQ(42, *vcc::localconfig::getValue<int>("foo"));
-  EXPECT_EQ(nullptr, vcc::localconfig::getValue<int>("bar"));
 }
 
 TEST(LocalConfigTest, localconfig_get_value_string) {
@@ -30,14 +33,12 @@ TEST(LocalConfigTest, localconfig_get_value_boolean) {
   ASSERT_TRUE(vcc::localconfig::initWithFilepath(good_test_filepath));
   EXPECT_TRUE(*vcc::localconfig::getValue<bool>("bool1"));
   EXPECT_FALSE(*vcc::localconfig::getValue<bool>("bool2"));
-  EXPECT_EQ(nullptr, vcc::localconfig::getValue<bool>("bar"));
 }
 
 TEST(LocalConfigTest, localconfig_get_value_double) {
   ASSERT_TRUE(vcc::localconfig::initWithFilepath(good_test_filepath));
   ASSERT_DOUBLE_EQ(22.333, *vcc::localconfig::getValue<double>("double1"));
   ASSERT_DOUBLE_EQ(22, *vcc::localconfig::getValue<double>("double2"));
-  ASSERT_EQ(nullptr, vcc::localconfig::getValue<double>("bar"));
 }
 
 TEST(LocalConfigTest, localconfig_get_vector) {

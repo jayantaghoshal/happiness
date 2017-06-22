@@ -54,7 +54,7 @@ const T *getValue(const std::string &key) {
     return search.value().get<T *>();
   } else {
     // TODO Error logging
-    return nullptr;
+    throw std::runtime_error{ "Parameter " + key + " not found in localconfig"};
   }
 }
 
@@ -66,7 +66,7 @@ const int *getValue(const std::string &key) {
     return reinterpret_cast<int *>(search.value().get<json::number_integer_t *>());
   } else {
     // TODO Error logging
-    return nullptr;
+    throw std::runtime_error{ "Parameter " + key + " not found in localconfig"};
   }
 }
 
@@ -83,7 +83,7 @@ const double *getValue(const std::string &key) {
     return ptrVal;
   } else {
     // TODO Error logging
-    return nullptr;
+    throw std::runtime_error{ "Parameter " + key + " not found in localconfig"};
   }
 }
 

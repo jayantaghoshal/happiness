@@ -9,11 +9,16 @@ C_OFF="\033[0m"
 
 pushd $SCRIPT_DIR > /dev/null
 
-# Build module
-$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm"
+# Source environment variables
+source $REPO_ROOT_DIR/build/envsetup.sh
 
-# Build vts framework
-$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && m vts -j 4"
+# Build module
+$REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm -j 4"
+
+# Build VTS framework if necessary
+if ! type vts-tradefed >/dev/null; then
+  $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && m vts -j 4"
+fi
 
 # Build unit test
 $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mmm test/ut"
