@@ -35,6 +35,7 @@ TEST(LocalConfigTest, localconfig_get_value_int)
   vcc::localconfig::testInit(good_test_filepath);
   EXPECT_EQ(42, vcc::localconfig::getValueInt("foo"));
   EXPECT_THROW(vcc::localconfig::getValueInt("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::getValueInt("bum"), std::runtime_error);
 }
 
 // Verify getValueString().
@@ -43,6 +44,7 @@ TEST(LocalConfigTest, localconfig_get_value_string)
   vcc::localconfig::testInit(good_test_filepath);
   EXPECT_STREQ("mystring", vcc::localconfig::getValueString("bum").c_str());
   EXPECT_THROW(vcc::localconfig::getValueString("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::getValueString("foo"), std::runtime_error);
 }
 
 // Verify getValueBoolean().
@@ -52,6 +54,7 @@ TEST(LocalConfigTest, localconfig_get_value_boolean)
   EXPECT_TRUE(vcc::localconfig::getValueBool("bool1"));
   EXPECT_FALSE(vcc::localconfig::getValueBool("bool2"));
   EXPECT_THROW(vcc::localconfig::getValueBool("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::getValueBool("foo"), std::runtime_error);
 }
 
 // Verify getValueDouble().
@@ -61,4 +64,5 @@ TEST(LocalConfigTest, localconfig_get_value_double)
   ASSERT_DOUBLE_EQ(22.333, vcc::localconfig::getValueDouble("double1"));
   ASSERT_DOUBLE_EQ(22, vcc::localconfig::getValueDouble("double2"));
   EXPECT_THROW(vcc::localconfig::getValueDouble("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::getValueDouble("bum"), std::runtime_error);
 }

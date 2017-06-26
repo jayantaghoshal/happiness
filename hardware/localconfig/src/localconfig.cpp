@@ -59,13 +59,37 @@ namespace localconfig {
 
 void testInit(const char *filepath) { LocalConfig::Instance().Load(filepath); }
 
-const std::string getValueString(const std::string &key) { return LocalConfig::Instance().GetValue(key).asString(); }
+const std::string getValueString(const std::string &key) {
+  const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
-int getValueInt(const std::string &key) { return LocalConfig::Instance().GetValue(key).asInt(); }
+  if (!value.isString()) throw std::runtime_error("Parameter " + key + " is not a string.");
 
-bool getValueBool(const std::string &key) { return LocalConfig::Instance().GetValue(key).asBool(); }
+  return value.asString();
+}
 
-double getValueDouble(const std::string &key) { return LocalConfig::Instance().GetValue(key).asDouble(); }
+int getValueInt(const std::string &key) {
+  const Json::Value &value = LocalConfig::Instance().GetValue(key);
+
+  if (!value.isInt()) throw std::runtime_error("Parameter " + key + " is not an integer.");
+
+  return value.asInt();
+}
+
+bool getValueBool(const std::string &key) {
+  const Json::Value &value = LocalConfig::Instance().GetValue(key);
+
+  if (!value.isBool()) throw std::runtime_error("Parameter " + key + " is not a bool.");
+
+  return value.asBool();
+}
+
+double getValueDouble(const std::string &key) {
+  const Json::Value &value = LocalConfig::Instance().GetValue(key);
+
+  if (!value.isDouble()) throw std::runtime_error("Parameter " + key + " is not a double.");
+
+  return value.asDouble();
+}
 
 }  // namespace localconfig
 }  // namespace vcc
