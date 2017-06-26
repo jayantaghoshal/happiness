@@ -11,67 +11,61 @@
 
 namespace  // Anonymous namespace for localconfig internal stuff..
 {
-// Holds localconfig values that has been read from a JSON file.
-Json::Value json_root;
-
 // TODO: Change to non hardcoded filepath
 //       Perhaps use getenv() like the
 //       now deprecated ihu_local_config does
-const char *default_filepath = "/oem_config/localconfig/localconfig.json";
+const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
 
-// localconfig is a singleton, where this variable stores state.
-bool initialized = false;
+// Singleton for accessing localconfig.
+//
+// Exctracting values is thread safe. Loads default configuration when first accessed. Tests may
+// load a different configuration. This is not thread safe at the moment.
+class LocalConfig {
+ public:
+  LocalConfig() { Load(kDefaultFilePath); }
+
+  static LocalConfig &Instance() {
+    static LocalConfig instance;
+    return instance;
+  }
+
+  void Load(const std::string &file_path) {
+    std::ifstream ifs(file_path);
+    if (!ifs) {
+      throw std::runtime_error("JSON file " + file_path + " could not be opened.");
+    }
+
+    Json::Reader reader;
+    if (!reader.parse(ifs, root_)) {
+      throw std::runtime_error("JSON file " + file_path + " could not be parsed, please check file content.");
+    }
+  }
+
+  const Json::Value &GetValue(const std::string &key) const {
+    const Json::Value &value = root_[key];
+    if (value.isNull()) {
+      throw std::runtime_error("Parameter " + key + " not found in localconfig.");
+    }
+    return value;
+  }
+
+ private:
+  Json::Value root_;
+};
 }
 
 namespace vcc {
 namespace localconfig {
 
-void initWithFilepath(const char *filepath) {
-  // localconfig is a singleton, but when using this function we'll
-  // initialize unconditionally.
+void testInit(const char *filepath) { LocalConfig::Instance().Load(filepath); }
 
-  std::ifstream ifs(filepath);
-  if (!ifs) {
-    throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be found."};
-  }
+const std::string getValueString(const std::string &key) { return LocalConfig::Instance().GetValue(key).asString(); }
 
-  Json::Reader reader;
-  bool ok = reader.parse(ifs, json_root);
-  if (!ok) {
-    throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be parsed, please check file content."};
-  }
+int getValueInt(const std::string &key) { return LocalConfig::Instance().GetValue(key).asInt(); }
 
-  // If we use this function then we should prevent the normal init
-  // to be run subsequently.
-  initialized = true;
-}
+bool getValueBool(const std::string &key) { return LocalConfig::Instance().GetValue(key).asBool(); }
 
-void testInit(const char *filepath) { initWithFilepath(filepath); }
-
-void init() {
-  // localconfig is a singleton, only initialize once.
-  if (!initialized) {
-    initialized = true;
-    initWithFilepath(default_filepath);
-  }
-}
-
-const Json::Value getValue(const std::string &key) {
-  init();
-  const Json::Value value = json_root[key];
-  if (value.isNull()) {
-    throw std::runtime_error{"Parameter " + key + " not found in localconfig."};
-  }
-  return value;
-}
-
-const std::string getValueString(const std::string &key) { return getValue(key).asString(); }
-
-int getValueInt(const std::string &key) { return getValue(key).asInt(); }
-
-bool getValueBool(const std::string &key) { return getValue(key).asBool(); }
-
-double getValueDouble(const std::string &key) { return getValue(key).asDouble(); }
+double getValueDouble(const std::string &key) { return LocalConfig::Instance().GetValue(key).asDouble(); }
 
 }  // namespace localconfig
 }  // namespace vcc
