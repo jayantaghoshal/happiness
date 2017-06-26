@@ -26,14 +26,6 @@ bool initialized = false;
 namespace vcc {
 namespace localconfig {
 
-void init() {
-  // localconfig is a singleton, only initialize once.
-  if (!initialized) {
-    initialized = true;
-    initWithFilepath(default_filepath);
-  }
-}
-
 void initWithFilepath(const char *filepath) {
   // localconfig is a singleton, but when using this function we'll
   // initialize unconditionally.
@@ -54,6 +46,16 @@ void initWithFilepath(const char *filepath) {
   // If we use this function then we should prevent the normal init
   // to be run subsequently.
   initialized = true;
+}
+
+void testInit(const char *filepath) { initWithFilepath(filepath); }
+
+void init() {
+  // localconfig is a singleton, only initialize once.
+  if (!initialized) {
+    initialized = true;
+    initWithFilepath(default_filepath);
+  }
 }
 
 const Json::Value getValue(const std::string &key) {

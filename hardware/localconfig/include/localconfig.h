@@ -13,18 +13,6 @@ namespace vcc {
 namespace localconfig {
 
 /**
-   Initialize the use of localconfig in a test scenario
-
-   @note This function should only be used in test scenarios,
-         normally the init() function should be used.
-
-   @note If the file can't be loaded a std::runtime_error exception will be thrown.
-
-   @param filepath Absolute path to localconfig json file.
-*/
-void initWithFilepath(const char *filepath);
-
-/**
  * Get the value of a local config string parameter.
  *
  * Usage:

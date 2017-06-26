@@ -8,7 +8,11 @@ LOCAL_MODULE := VtsLocalConfigTestCases
 LOCAL_SRC_FILES := \
     localconfigtest.cpp
 
+# Note hat we use a static version of the liblocalconfig in the unittest as we want to decouple from
+# the alread deployed shared libary in the target image.
+#
 # TODO: Investigate why we didn't get libjsoncpp due to transitive dependency through liblocalconfig_static.
+#
 LOCAL_STATIC_LIBRARIES += \
     liblocalconfig_static \
     libjsoncpp
