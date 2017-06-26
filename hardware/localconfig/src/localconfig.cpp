@@ -18,13 +18,26 @@ Json::Value json_root;
 //       Perhaps use getenv() like the
 //       now deprecated ihu_local_config does
 const char *default_filepath = "/oem_config/localconfig/localconfig.json";
+
+// localconfig is a singleton, where this variable stores state.
+bool initialized = false;
 }
 
 namespace vcc {
 namespace localconfig {
-void init() { return initWithFilepath(default_filepath); }
+
+void init() {
+  // localconfig is a singleton, only initialize once.
+  if (!initialized) {
+    initialized = true;
+    initWithFilepath(default_filepath);
+  }
+}
 
 void initWithFilepath(const char *filepath) {
+  // localconfig is a singleton, but when using this function we'll
+  // initialize unconditionally.
+
   std::ifstream ifs(filepath);
   if (!ifs) {
     throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be found."};
@@ -37,9 +50,14 @@ void initWithFilepath(const char *filepath) {
   if (!ok) {
     throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be parsed, please check file content."};
   }
+
+  // If we use this function then we should prevent the normal init
+  // to be run subsequently.
+  initialized = true;
 }
 
 const Json::Value getValue(const std::string &key) {
+  init();
   const Json::Value value = json_root[key];
   if (value.isNull()) {
     throw std::runtime_error{"Parameter " + key + " not found in localconfig."};

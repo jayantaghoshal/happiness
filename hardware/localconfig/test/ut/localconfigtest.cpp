@@ -9,30 +9,37 @@ const char *bad_test_filepath = "/data/local/tmp/localconfig_bad.json";
 const char *file_not_found_test_filepath = "file/not/found";
 }
 
-TEST(LocalConfigTest, localconfig_init_good_file) {
-  vcc::localconfig::initWithFilepath(good_test_filepath);
-}
+// Verify that localconfig is intitialized automatically.
+TEST(LocalConfigTest, localconfig_default_file) { EXPECT_EQ(42, vcc::localconfig::getValueInt("Param1")); }
 
+// Verify that localconfig initWithFilePath is working with a "good" file.
+TEST(LocalConfigTest, localconfig_init_good_file) { vcc::localconfig::initWithFilepath(good_test_filepath); }
+
+// Verify that localconfig initWithFilePath handling a "bad" file.
 TEST(LocalConfigTest, localconfig_init_bad_file) {
   ASSERT_THROW(vcc::localconfig::initWithFilepath(bad_test_filepath), std::runtime_error);
 }
 
+// Verify that localconfig initWithFilePath handling a non existing file.
 TEST(LocalConfigTest, localconfig_init_non_existing_file) {
   ASSERT_THROW(vcc::localconfig::initWithFilepath(file_not_found_test_filepath), std::runtime_error);
 }
 
+// Verify getValueInt().
 TEST(LocalConfigTest, localconfig_get_value_int) {
   vcc::localconfig::initWithFilepath(good_test_filepath);
   EXPECT_EQ(42, vcc::localconfig::getValueInt("foo"));
   EXPECT_THROW(vcc::localconfig::getValueInt("NOT_EXISTING"), std::runtime_error);
 }
 
+// Verify getValueString().
 TEST(LocalConfigTest, localconfig_get_value_string) {
   vcc::localconfig::initWithFilepath(good_test_filepath);
   EXPECT_STREQ("mystring", vcc::localconfig::getValueString("bum").c_str());
   EXPECT_THROW(vcc::localconfig::getValueString("NOT_EXISTING"), std::runtime_error);
 }
 
+// Verify getValueBoolean().
 TEST(LocalConfigTest, localconfig_get_value_boolean) {
   vcc::localconfig::initWithFilepath(good_test_filepath);
   EXPECT_TRUE(vcc::localconfig::getValueBool("bool1"));
@@ -40,6 +47,7 @@ TEST(LocalConfigTest, localconfig_get_value_boolean) {
   EXPECT_THROW(vcc::localconfig::getValueBool("NOT_EXISTING"), std::runtime_error);
 }
 
+// Verify getValueDouble().
 TEST(LocalConfigTest, localconfig_get_value_double) {
   vcc::localconfig::initWithFilepath(good_test_filepath);
   ASSERT_DOUBLE_EQ(22.333, vcc::localconfig::getValueDouble("double1"));
