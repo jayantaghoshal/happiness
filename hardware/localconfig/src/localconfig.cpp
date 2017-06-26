@@ -35,10 +35,8 @@ void initWithFilepath(const char *filepath) {
     throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be found."};
   }
 
-  std::string doc;
-  std::getline(ifs, doc, (char)EOF);
   Json::Reader reader;
-  bool ok = reader.parse(doc, json_root);
+  bool ok = reader.parse(ifs, json_root);
   if (!ok) {
     throw std::runtime_error{"JSON file " + std::string(filepath) + " could not be parsed, please check file content."};
   }
