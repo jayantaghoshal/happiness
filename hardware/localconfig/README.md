@@ -42,6 +42,8 @@ Now you can use a test interface to load your own localconfig_mytest.json file, 
 
 ## Verification
 
-The unit test is implemented using VTS. To build and run test, please run:
+The unit tests and component tests is implemented using VTS/Trade Federation. To build and run test, please run:
 
     ./unittest.sh
+    or
+    ./componenttest.sh
