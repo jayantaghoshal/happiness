@@ -12,11 +12,10 @@ const char *kTestIntKey = "foo";
 const char *kTestStringKey = "bum";
 }  // namespace
 
-TEST(LocalConfigTest, DefaultConfigFileInitializedAutomatically) {
-  EXPECT_EQ(42, vcc::localconfig::GetValueInt("Param1"));
-}
 
 TEST(LocalConfigTest, TestInitWithGoodFile) { EXPECT_NO_THROW(vcc::localconfig::TestInit(kGoodTestFilePath)); }
+
+TEST(LocalConfigTest, localconfig_init_good_file) { vcc::localconfig::testInit(good_test_filepath); }
 
 TEST(LocalConfigTest, TestInitFailsWithBadFile) {
   EXPECT_THROW(vcc::localconfig::TestInit(kBadTestFilePath), std::runtime_error);

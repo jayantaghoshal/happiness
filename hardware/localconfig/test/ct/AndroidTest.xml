@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies the functionallity in localconfig that copies the a default localconfig.json
+file from /system/etc/ to /oem_config/localconfig on startup. We test this by deleting the
+copied file and then issue a restart (timeout assumed to be 1 minute).
+The test if the file exists is done in the actual test.
+-->
+<configuration description="Test automatic deployment of localconfig on first boot">
+    <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
+        <option name="run-command" value="rm /oem_config/localconfig/localconfig.json" />
+        <option name="run-command" value="/system/bin/reboot" />
+    </target_preparer>
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsLocalConfigCTTestCases->/data/local/tmp/VtsLocalConfigCTTestCases" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsLocalConfigCTTestCases" />
+        <option name="runtime-hint" value="35s" />
+    </test>
+</configuration>
