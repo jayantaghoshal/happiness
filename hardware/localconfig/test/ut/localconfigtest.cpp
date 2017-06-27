@@ -1,68 +1,57 @@
-#include <gtest/gtest.h>
 #include <localconfig.h>
 #include <localconfig_test.h>
-#include <cstdlib>
-#include <iostream>
 
-namespace
-{
-const char *good_test_filepath = "/data/local/tmp/localconfig_good.json";
-const char *bad_test_filepath = "/data/local/tmp/localconfig_bad.json";
-const char *file_not_found_test_filepath = "file/not/found";
+#include <gtest/gtest.h>
+
+namespace {
+const char *kGoodTestFilePath = "/data/local/tmp/localconfig_good.json";
+const char *kBadTestFilePath = "/data/local/tmp/localconfig_bad.json";
+const char *kFileNotFoundTestFilePath = "file/not/found";
+
+const char *kTestIntKey = "foo";
+const char *kTestStringKey = "bum";
+}  // namespace
+
+TEST(LocalConfigTest, DefaultConfigFileInitializedAutomatically) {
+  EXPECT_EQ(42, vcc::localconfig::GetValueInt("Param1"));
 }
 
-// Verify that localconfig is intitialized automatically.
-TEST(LocalConfigTest, localconfig_default_file) { EXPECT_EQ(42, vcc::localconfig::getValueInt("Param1")); }
+TEST(LocalConfigTest, TestInitWithGoodFile) { EXPECT_NO_THROW(vcc::localconfig::TestInit(kGoodTestFilePath)); }
 
-// Verify that localconfig testInit is working with a "good" file.
-TEST(LocalConfigTest, localconfig_init_good_file) { vcc::localconfig::testInit(good_test_filepath); }
-
-// Verify that localconfig testInit handling a "bad" file.
-TEST(LocalConfigTest, localconfig_init_bad_file)
-{
-  ASSERT_THROW(vcc::localconfig::testInit(bad_test_filepath), std::runtime_error);
+TEST(LocalConfigTest, TestInitFailsWithBadFile) {
+  EXPECT_THROW(vcc::localconfig::TestInit(kBadTestFilePath), std::runtime_error);
 }
 
-// Verify that localconfig testInit handling a non existing file.
-TEST(LocalConfigTest, localconfig_init_non_existing_file)
-{
-  ASSERT_THROW(vcc::localconfig::testInit(file_not_found_test_filepath), std::runtime_error);
+TEST(LocalConfigTest, TestInitFailsWithNonExistingFile) {
+  EXPECT_THROW(vcc::localconfig::TestInit(kFileNotFoundTestFilePath), std::runtime_error);
 }
 
-// Verify getValueInt().
-TEST(LocalConfigTest, localconfig_get_value_int)
-{
-  vcc::localconfig::testInit(good_test_filepath);
-  EXPECT_EQ(42, vcc::localconfig::getValueInt("foo"));
-  EXPECT_THROW(vcc::localconfig::getValueInt("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::getValueInt("bum"), std::runtime_error);
+TEST(LocalConfigTest, GetValueInt) {
+  vcc::localconfig::TestInit(kGoodTestFilePath);
+  EXPECT_EQ(42, vcc::localconfig::GetValueInt(kTestIntKey));
+  EXPECT_THROW(vcc::localconfig::GetValueInt("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetValueInt(kTestStringKey), std::runtime_error);
 }
 
-// Verify getValueString().
-TEST(LocalConfigTest, localconfig_get_value_string)
-{
-  vcc::localconfig::testInit(good_test_filepath);
-  EXPECT_STREQ("mystring", vcc::localconfig::getValueString("bum").c_str());
-  EXPECT_THROW(vcc::localconfig::getValueString("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::getValueString("foo"), std::runtime_error);
+TEST(LocalConfigTest, GetValueString) {
+  vcc::localconfig::TestInit(kGoodTestFilePath);
+  EXPECT_EQ("mystring", vcc::localconfig::GetValueString(kTestStringKey));
+  EXPECT_THROW(vcc::localconfig::GetValueString("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetValueString(kTestIntKey), std::runtime_error);
 }
 
-// Verify getValueBoolean().
-TEST(LocalConfigTest, localconfig_get_value_boolean)
-{
-  vcc::localconfig::testInit(good_test_filepath);
-  EXPECT_TRUE(vcc::localconfig::getValueBool("bool1"));
-  EXPECT_FALSE(vcc::localconfig::getValueBool("bool2"));
-  EXPECT_THROW(vcc::localconfig::getValueBool("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::getValueBool("foo"), std::runtime_error);
+TEST(LocalConfigTest, GetValueBoolean) {
+  vcc::localconfig::TestInit(kGoodTestFilePath);
+  EXPECT_TRUE(vcc::localconfig::GetValueBool("bool1"));
+  EXPECT_FALSE(vcc::localconfig::GetValueBool("bool2"));
+  EXPECT_THROW(vcc::localconfig::GetValueBool("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetValueBool(kTestIntKey), std::runtime_error);
 }
 
-// Verify getValueDouble().
-TEST(LocalConfigTest, localconfig_get_value_double)
-{
-  vcc::localconfig::testInit(good_test_filepath);
-  ASSERT_DOUBLE_EQ(22.333, vcc::localconfig::getValueDouble("double1"));
-  ASSERT_DOUBLE_EQ(22, vcc::localconfig::getValueDouble("double2"));
-  EXPECT_THROW(vcc::localconfig::getValueDouble("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::getValueDouble("bum"), std::runtime_error);
+TEST(LocalConfigTest, GetValueDouble) {
+  vcc::localconfig::TestInit(kGoodTestFilePath);
+  EXPECT_DOUBLE_EQ(22.333, vcc::localconfig::GetValueDouble("double1"));
+  EXPECT_DOUBLE_EQ(22, vcc::localconfig::GetValueDouble("double2"));
+  EXPECT_THROW(vcc::localconfig::GetValueDouble("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetValueDouble(kTestStringKey), std::runtime_error);
 }

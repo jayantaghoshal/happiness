@@ -2,16 +2,13 @@
  * Copyright 2017 Volvo Car Corporation, All Rights Reserved.
  \*==========================================================================*/
 
-#ifndef VCC_LOCALCONFIGTEST_H
-#define VCC_LOCALCONFIGTEST_H
+#ifndef VCC_LOCALCONFIG_TEST_H_
+#define VCC_LOCALCONFIG_TEST_H_
 
 #include <string>
-#include <vector>
 
-namespace vcc
-{
-namespace localconfig
-{
+namespace vcc {
+namespace localconfig {
 
 /**
    Initialize the use of localconfig in a test scenario
@@ -22,9 +19,9 @@ namespace localconfig
 
    @param filepath Absolute path to localconfig json file.
 */
-void testInit(const char *filepath);
+void TestInit(const std::string &file_path);
 
-} // namespace localconfig
-} // namespace vcc
+}  // namespace localconfig
+}  // namespace vcc
 
-#endif // VCC_LOCALCONFIG_H
+#endif  // VCC_LOCALCONFIG_TEST_H_

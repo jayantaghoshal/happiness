@@ -3,17 +3,16 @@
  * Delphi Confidential
 \*===========================================================================*/
 
-#include <json/json.h>
 #include <localconfig.h>
+#include <localconfig_test.h>
+
+#include <json/json.h>
+
 #include <fstream>
 #include <stdexcept>
 #include <string>
 
-namespace  // Anonymous namespace for localconfig internal stuff..
-{
-// TODO: Change to non hardcoded filepath
-//       Perhaps use getenv() like the
-//       now deprecated ihu_local_config does
+namespace {
 const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
 
 // Singleton for accessing localconfig.
@@ -52,14 +51,14 @@ class LocalConfig {
  private:
   Json::Value root_;
 };
-}
+}  // namespace
 
 namespace vcc {
 namespace localconfig {
 
-void testInit(const char *filepath) { LocalConfig::Instance().Load(filepath); }
+void TestInit(const std::string &file_path) { LocalConfig::Instance().Load(file_path); }
 
-const std::string getValueString(const std::string &key) {
+std::string GetValueString(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isString()) throw std::runtime_error("Parameter " + key + " is not a string.");
@@ -67,7 +66,7 @@ const std::string getValueString(const std::string &key) {
   return value.asString();
 }
 
-int getValueInt(const std::string &key) {
+int GetValueInt(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isInt()) throw std::runtime_error("Parameter " + key + " is not an integer.");
@@ -75,7 +74,7 @@ int getValueInt(const std::string &key) {
   return value.asInt();
 }
 
-bool getValueBool(const std::string &key) {
+bool GetValueBool(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isBool()) throw std::runtime_error("Parameter " + key + " is not a bool.");
@@ -83,7 +82,7 @@ bool getValueBool(const std::string &key) {
   return value.asBool();
 }
 
-double getValueDouble(const std::string &key) {
+double GetValueDouble(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isDouble()) throw std::runtime_error("Parameter " + key + " is not a double.");

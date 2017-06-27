@@ -3,11 +3,10 @@
  * Delphi Confidential
  \*===========================================================================*/
 
-#ifndef VCC_LOCALCONFIG_H
-#define VCC_LOCALCONFIG_H
+#ifndef VCC_LOCALCONFIG_H_
+#define VCC_LOCALCONFIG_H_
 
 #include <string>
-#include <vector>
 
 namespace vcc {
 namespace localconfig {
@@ -16,55 +15,55 @@ namespace localconfig {
  * Get the value of a local config string parameter.
  *
  * Usage:
- *   const std::string myString = vcc::localconfig::getValueString("MyLcfgValue1");
+ *   const std::string my_string = vcc::localconfig::GetValueString("MyLcfgValue1");
  *
  * If the key is not found a std::runtime_error exception will be thrown.
  *
  * @param key string that identifies a local config value
  * @return String with the requested parameter value.
  */
-const std::string getValueString(const std::string &key);
+std::string GetValueString(const std::string &key);
 
 /**
  * Get the value of a local config int parameter.
  *
  * Usage:
- *   const int myInt = vcc::localconfig::getValueInt("MyLcfgValue2");
+ *   const int my_int = vcc::localconfig::GetValueInt("MyLcfgValue2");
  *
  * If the key is not found a std::runtime_error exception will be thrown.
  *
  * @param key string that identifies a local config value
  * @return int with the requested parameter value.
  */
-int getValueInt(const std::string &key);
+int GetValueInt(const std::string &key);
 
 /**
  * Get the value of a local config bool parameter.
  *
  * Usage:
- *   const bool myBool = vcc::localconfig::getValueBool("MyLcfgValue3");
+ *   const bool my_bool = vcc::localconfig::GetValueBool("MyLcfgValue3");
  *
  * If the key is not found a std::runtime_error exception will be thrown.
  *
  * @param key string that identifies a local config value
  * @return bool with the requested parameter value.
  */
-bool getValueBool(const std::string &key);
+bool GetValueBool(const std::string &key);
 
 /**
  * Get the value of a local config double parameter.
  *
  * Usage:
- *   const double myDouble = vcc::localconfig::getValueDouble("MyLcfgValue4");
+ *   const double my_double = vcc::localconfig::GetValueDouble("MyLcfgValue4");
  *
  * If the key is not found a std::runtime_error exception will be thrown.
  *
  * @param key string that identifies a local config value
  * @return double with the requested parameter value.
  */
-double getValueDouble(const std::string &key);
+double GetValueDouble(const std::string &key);
 
 }  // namespace localconfig
 }  // namespace vcc
 
-#endif  // VCC_LOCALCONFIG_H
+#endif  // VCC_LOCALCONFIG_H_
