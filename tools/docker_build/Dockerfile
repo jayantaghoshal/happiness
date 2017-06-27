@@ -76,6 +76,8 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     zip \
     zlib1g-dev \
     repo \
+    picocom \
+    adb \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir  /usr/lib/i386-linux-gnu \
