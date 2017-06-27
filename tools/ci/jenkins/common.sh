@@ -1,31 +1,39 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
-REPO_ROOT_DIR=${SCRIPT_DIR}/../../../..
-
-IMAGE_NAME=vcc_aosp_build
+REPO_ROOT_DIR=$(readlink -f ${SCRIPT_DIR}/../../../../..)
+ENTRYPOINT="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/entrypoint.sh"
+DOCKER_IMAGE_REFERENCE_FILE="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/image.ref"
+DOCKER_IMAGE=`cat ${DOCKER_IMAGE_REFERENCE_FILE}`
 WORKING_DIR="$(pwd)"
 
+if [ -z ${WORSPACE} ]; then 
+  WORKSPACE=$(readlink -f ${REPO_ROOT_DIR}/..)
+fi
+
 # Setup ccache
-USE_CCACHE=1
-HOST_CCACHE_DIR=$HOME/vcc-aosp-build-docker-ccache
-if ! test -e ${HOST_CCACHE_DIR}; then
-  echo "Creating directory ${HOST_CCACHE_DIR}..."
-  mkdir -p ${HOST_CCACHE_DIR}
+if [ -z ${USE_CCACHE} ]; then 
+  USE_CCACHE=0
+fi
+if [ -z ${HOST_CCACHE_DIR} ]; then 
+  HOST_CCACHE_DIR=$(readlink -f ${REPO_ROOT_DIR}/../vcc-aosp-build-ccache)
 fi
 
 # Detect environment of docker command
 INTERACTIVE_OPTS="-"
+
 # Check if STDIN file is pipe. If not, it is "regular" STDIN
 [[ -p /dev/fd/0 ]] || INTERACTIVE_OPTS="${INTERACTIVE_OPTS}i"
+
 # Check if STDIN descriptor is associated with a terminal device
 [[ -t 0 ]] && INTERACTIVE_OPTS="${INTERACTIVE_OPTS}t"
 [[ "${INTERACTIVE_OPTS}" == "-" ]] && INTERACTIVE_OPTS=""
 
-docker run \
+docker_run () {
+    docker run \
     ${INTERACTIVE_OPTS} \
     --hostname aic-docker \
-    --volume $HOME:$HOME \
+    --volume $WORKSPACE:$WORKSPACE \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \
@@ -36,6 +44,7 @@ docker run \
     -w ${WORKING_DIR} \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
-    --entrypoint="${SCRIPT_DIR}/entrypoint.sh" \
-    ${IMAGE_NAME} \
+    --entrypoint=${ENTRYPOINT} \
+    ${DOCKER_IMAGE} \
     $*
+}
