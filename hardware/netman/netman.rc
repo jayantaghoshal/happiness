@@ -1,5 +1,7 @@
 service netman /system/bin/netman
+    class main
     oneshot
     user root
     group root
     seclabel u:r:netman:s0
+

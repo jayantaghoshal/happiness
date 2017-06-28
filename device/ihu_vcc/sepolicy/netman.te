@@ -4,3 +4,8 @@ type netman_exec, exec_type, file_type;
 
 init_daemon_domain(netman)
 
+allow netman self:netlink_route_socket {create create_socket_perms nlmsg_write};
+allow netman self:netlink_socket {create create_socket_perms};
+allow netman self:udp_socket { create ioctl };
+
+allow netman self:capability { net_admin net_raw kill };
