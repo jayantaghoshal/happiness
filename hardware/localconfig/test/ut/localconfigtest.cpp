@@ -15,8 +15,6 @@ const char *kTestStringKey = "bum";
 
 TEST(LocalConfigTest, TestInitWithGoodFile) { EXPECT_NO_THROW(vcc::localconfig::TestInit(kGoodTestFilePath)); }
 
-TEST(LocalConfigTest, localconfig_init_good_file) { vcc::localconfig::testInit(good_test_filepath); }
-
 TEST(LocalConfigTest, TestInitFailsWithBadFile) {
   EXPECT_THROW(vcc::localconfig::TestInit(kBadTestFilePath), std::runtime_error);
 }
