@@ -30,7 +30,7 @@ popd > /dev/null
 TEST_OUTPUT=$(mktemp)
 
 vts-tradefed run commandAndExit vts --skip-all-system-status-check --skip-preconditions --abi x86_64 --module VtsLocalConfigTestCases | tee $TEST_OUTPUT
-if grep -q "fail:" $TEST_OUTPUT; then
+if grep -q "fail:\|PASSED: 0" $TEST_OUTPUT; then
   echo -e "\n${C_ERROR}Test FAILED!${C_OFF}\n"
 else
   echo -e "\n${C_OK}Test OK!${C_OFF}\n"
