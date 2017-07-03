@@ -6,7 +6,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_MODULE := VtsLocalConfigTestCases
 
 LOCAL_SRC_FILES := \
-    localconfigtest.cpp
+    localconfig_test.cpp
 
 # Note hat we use a static version of the liblocalconfig in the unittest as we want to decouple from
 # the alread deployed shared libary in the target image.

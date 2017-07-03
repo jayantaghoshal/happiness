@@ -14,9 +14,9 @@ Add the liblocalconfig library in your Android.mk file:
 
 Now you can use LocalConfig in your component:
 
-    #include <localconfig.h>
+    #include <vcc/localconfig.h>
     ...
-    int some_param = vcc::localconfig::getValueInt("Param1");
+    int some_param = vcc::localconfig::GetInt("Param1");
 
 ### Testing
 

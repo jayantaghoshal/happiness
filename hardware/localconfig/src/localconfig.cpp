@@ -3,8 +3,8 @@
  * Delphi Confidential
 \*===========================================================================*/
 
-#include <localconfig.h>
-#include <localconfig_test.h>
+#include <vcc/localconfig.h>
+#include <vcc/localconfig_test.h>
 
 #include <json/json.h>
 
@@ -58,7 +58,7 @@ namespace localconfig {
 
 void TestInit(const std::string &file_path) { LocalConfig::Instance().Load(file_path); }
 
-std::string GetValueString(const std::string &key) {
+std::string GetString(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isString()) throw std::runtime_error("Parameter " + key + " is not a string.");
@@ -66,7 +66,7 @@ std::string GetValueString(const std::string &key) {
   return value.asString();
 }
 
-int GetValueInt(const std::string &key) {
+int GetInt(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isInt()) throw std::runtime_error("Parameter " + key + " is not an integer.");
@@ -74,7 +74,7 @@ int GetValueInt(const std::string &key) {
   return value.asInt();
 }
 
-bool GetValueBool(const std::string &key) {
+bool GetBool(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isBool()) throw std::runtime_error("Parameter " + key + " is not a bool.");
@@ -82,7 +82,7 @@ bool GetValueBool(const std::string &key) {
   return value.asBool();
 }
 
-double GetValueDouble(const std::string &key) {
+double GetDouble(const std::string &key) {
   const Json::Value &value = LocalConfig::Instance().GetValue(key);
 
   if (!value.isDouble()) throw std::runtime_error("Parameter " + key + " is not a double.");
