@@ -1,34 +1,29 @@
 LOCAL_PATH:= $(call my-dir)
 
-MY_LOCALCONFIG_SRC := src/localconfig.cpp
-MY_LOCALCONFIG_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
-MY_LOCALCONFIG_C_INCLUDES := $(LOCAL_PATH)/include
 MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-MY_LOCALCONFIG_STATIC_LIBRARIES += libjsoncpp
+MY_LOCALCONFIG_STATIC_LIBRARIES := libjsoncpp
+
+#
+# Static library. Used in shared lib and for unit tests.
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := liblocalconfig_static
+LOCAL_SRC_FILES := src/localconfig.cpp
+LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
+include $(BUILD_STATIC_LIBRARY)
 
 #
 # Shared library for deployment to system
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := liblocalconfig
-LOCAL_SRC_FILES := $(MY_LOCALCONFIG_SRC)
-LOCAL_CPPFLAGS := $(MY_LOCALCONFIG_CPPFLAGS)
-LOCAL_C_INCLUDES := $(MY_LOCALCONFIG_C_INCLUDES)
+LOCAL_WHOLE_STATIC_LIBRARIES := liblocalconfig_static
 LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
 include $(BUILD_SHARED_LIBRARY)
-
-#
-# Static library for unit test
-#
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblocalconfig_static
-LOCAL_SRC_FILES := $(MY_LOCALCONFIG_SRC)
-LOCAL_CPPFLAGS := $(MY_LOCALCONFIG_CPPFLAGS)
-LOCAL_C_INCLUDES := $(MY_LOCALCONFIG_C_INCLUDES)
-LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
-include $(BUILD_STATIC_LIBRARY)
 
 #
 # Copy the default JSON file to /vendor/etc
