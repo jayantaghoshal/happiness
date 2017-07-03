@@ -1,2 +1,5 @@
 BasedOnStyle: Google
+
+BreakBeforeBraces: Allman
+BreakConstructorInitializersBeforeComma: true
 ColumnLimit : 120
