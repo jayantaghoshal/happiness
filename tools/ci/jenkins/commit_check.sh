@@ -4,5 +4,4 @@ source "${SCRIPT_DIR}/common.sh"
 
 # Setup ccache
 USE_CCACHE=1
-
-docker_run "lunch ihu_vcc-eng && make -j16 droid"
+python3 ./vendor/volvocars/tools/ci/jenkins/verify_commit_message.py ./vendor/volvocars/
