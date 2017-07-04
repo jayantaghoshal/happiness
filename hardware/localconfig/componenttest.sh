@@ -25,9 +25,6 @@ pushd test/ct > /dev/null
 $REPO_ROOT_DIR/vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && mm -j4" || exit 1
 popd > /dev/null
 
-adb remount
-adb push $REPO_ROOT_DIR/out/target/product/ihu_vcc/system/lib/liblocalconfig.so /system/lib/liblocalconfig.so
-
 # Run unit test
 TEST_OUTPUT=$(mktemp)
 
