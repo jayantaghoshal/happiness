@@ -15,6 +15,8 @@ def verify_serial_is_vip(s, timeout_sec=5):
     stop_time = time.time() + timeout_sec
     while time.time() < stop_time:
         line = s.readline(timeout_sec)
+        if not line:
+            continue
         if re.match(r"\s*Project_ID.*VCC_IHU.*VIP", line) is not None:
             return True
         if re.match(r".*/sh: version: not found", line) is not None:
