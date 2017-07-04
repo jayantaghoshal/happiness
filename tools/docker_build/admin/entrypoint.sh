@@ -22,6 +22,7 @@ CONTAINER_GROUPNAME=ihu
 BUILD_ENV_SETUP="${REPO_ROOT_DIR}/build/envsetup.sh"
 BASHRC_FILE="/home/ihu/.bashrc"
 
+
 function Failed() {
     echo "$*"
     exit 1
