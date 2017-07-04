@@ -7,9 +7,10 @@
 
 #include <string>
 
-namespace vcc {
-namespace localconfig {
-
+namespace vcc
+{
+namespace localconfig
+{
 /**
    Initialize the use of localconfig in a test scenario
 

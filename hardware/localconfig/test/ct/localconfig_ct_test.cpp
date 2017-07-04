@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-TEST(LocalConfigTest, DefaultLocalConfigFileCopiedToRWPartitionOnBoot) {
+TEST(LocalConfigTest, DefaultLocalConfigFileCopiedToRWPartitionOnBoot)
+{
   struct stat sb;
   EXPECT_TRUE(stat("/oem_config/localconfig/localconfig.json", &sb) == 0);
 }

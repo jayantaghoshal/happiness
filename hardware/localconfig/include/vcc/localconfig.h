@@ -8,9 +8,10 @@
 
 #include <string>
 
-namespace vcc {
-namespace localconfig {
-
+namespace vcc
+{
+namespace localconfig
+{
 /**
  * Get the value of a local config string parameter.
  *
