@@ -72,7 +72,6 @@ def wait_for_dmesg_timestamp(s: recording_serial.RecordingSerial, device_timesta
 
     raise RuntimeError("Never reached time: %d" % device_timestamp_to_wait_for)
 
-
 def flash_image(port_mapping: PortMapping,
                 product: str,
                 hardware: str,
@@ -166,6 +165,15 @@ def flash_image(port_mapping: PortMapping,
                                      timeout_sec=60 * 5).decode().strip(" \n\r\t")
         logging.info("Device confirmed to be in device-mode via ADB")
 
+        then = time.time()
+        while (True):
+            output = check_output_logged([adb_executable, "logcat", '-d']).decode().strip(" \n\r\t")
+            if output.find("Running on action: android.intent.action.BOOT_COMPLETED") != -1:
+                return
+            if time.time() > then + 120:
+                raise RuntimeError("BOOT_COMPLETE intent not detected!")
+            time.sleep(0.5)
+
         serial_mapping.verify_serial_is_mp_android(ihu_serials.mp)
 
     except Exception:
@@ -203,6 +211,7 @@ def main():
     hardware = parsed_args.hardware
     flash_image(port_mapping, product, hardware, build_out_dir)
     logging.info("Flash completed")
+
 
 
 if __name__ == "__main__":
