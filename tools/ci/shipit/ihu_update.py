@@ -162,17 +162,18 @@ def flash_image(port_mapping: PortMapping,
         logging.info("Wait for device to enter device-mode via ADB")
         output = check_output_logged([adb_executable,
                                       "wait-for-device"],
-                                     timeout_sec=60 * 5).decode().strip(" \n\r\t")
-        logging.info("Device confirmed to be in device-mode via ADB")
-
+                                     timeout_sec=60 * 7).decode().strip(" \n\r\t")
         then = time.time()
         while (True):
-            output = check_output_logged([adb_executable, "logcat", '-d']).decode().strip(" \n\r\t")
+            try:
+                output = check_output_logged([adb_executable, "shell", 'logcat', '-d', '|', 'grep', 'BOOT_COMPLETE'], timeout_sec=4).decode().strip(" \n\r\t")
+            except:
+                pass # Ignore if the command times out
             if output.find("Running on action: android.intent.action.BOOT_COMPLETED") != -1:
                 return
-            if time.time() > then + 120:
+            if time.time() > then + 60 * 4: #Wait four minutes after the ADB sevice becomes available.
                 raise RuntimeError("BOOT_COMPLETE intent not detected!")
-            time.sleep(0.5)
+            time.sleep(4)
 
         serial_mapping.verify_serial_is_mp_android(ihu_serials.mp)
 
@@ -198,7 +199,7 @@ def main():
         "--mp_port", required=True, help="TTY device connected to VIP console UART")
     parsed_args = parser.parse_args()
 
-    with open("logging.json", "rt") as f:
+    with open(os.path.dirname(__file__)+ "/logging.json", "rt") as f:
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
