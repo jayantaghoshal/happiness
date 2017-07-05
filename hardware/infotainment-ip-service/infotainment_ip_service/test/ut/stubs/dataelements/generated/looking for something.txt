@@ -1,0 +1,2 @@
+folder structure here is trying to mimick the INSTALLED version of data elements (make install),
+not to be 1:1 with how the ihu_signals repo looks like
