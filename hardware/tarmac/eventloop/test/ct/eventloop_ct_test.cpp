@@ -7,10 +7,10 @@
 //#include <iostream>
 
 #include <cutils/log.h>
-#define  LOG_TAG    "eventloop_ct"
 
 
 TEST(EventLoopTest, TestEventFunctionCalled){
+    #define  LOG_TAG    "eventloop.TestEventFunctionCalled"
     ALOGI("TestEventFunctionCalled ...");
 
     bool event_func_called = false;
@@ -44,6 +44,7 @@ TEST(EventLoopTest, TestEventFunctionCalled){
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
+    #define  LOG_TAG    "eventloop.TestFdEventFunctionCalledReadAll"
     ALOGI("TestFdEventFunctionCalledReadAll ...");
 
     int fd[2];
@@ -96,6 +97,7 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial){
+    #define  LOG_TAG    "eventloop.TestFdEventFunctionCalledReadPartial"
     ALOGI("TestFdEventFunctionCalledReadPartial ...");
 
     int fd[2];
