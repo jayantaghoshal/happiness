@@ -10,6 +10,8 @@
 #include <cutils/log.h>
 #include <string>
 #include "services/gnss_service.h"
+#include "services/diagnostics_client.h"
+#include "services/iplm_service.h"
 
 // #include <services/common_phone_tele_service.h>
 // #include "services/car_modem_service_factory.h"
@@ -21,7 +23,6 @@
 // #include "services/diagnostics_client.h"
 // #include "services/enhanced_pos_client.h"
 // #include "services/global_reset.h"
-// #include "services/iplm_service.h"
 // #include "services/ota_service.h"
 // #include "services/ota_swlm_service.h"
 // #include "services/rvdc_client.h"
@@ -69,13 +70,13 @@ public:
 
 private:
     tarmac::eventloop::IDispatcher& timeProvider;
+    IpLmServiceStubImpl iplm_service_;
+    DiagnosticsClient diagnostics_client_;
     GnssService gnss_service_;
 
     // EnhancedPosClient enhanced_pos_client_;
-    // DiagnosticsClient diagnostics_client_;
     // DiagnosticManagementService diagnostic_management_service;
     // DiagnosticManagementClient diagnostic_management_client;
-    // IpLmServiceStubImpl iplm_service_;
     // ConnectivityService connectivity_service_;
     // RvdcClient rvdc_client_;
     // WlanService wlan_service_;

@@ -130,7 +130,6 @@ void Socket::setup(int domain, int type, int protocol)
     assert_sd_throw(sdstatus >= 0, "Failed to add socket fd to event loop");
     io_event_source_.reset(source);*/
     dispatcher_.AddFd(socket_fd_, [this]() {
-        ALOGD("Socket read");
         if (this->read_ready_cb_)
             this->read_ready_cb_();
     });

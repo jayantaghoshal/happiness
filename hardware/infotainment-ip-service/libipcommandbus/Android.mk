@@ -18,7 +18,7 @@ LOCAL_SRC_FILES := src/VccIpCmdApi.cpp \
     src/local_config_parameters.cpp
 #    src/shutdown_client.cpp
 
-LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
+LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined -DLOG_NDEBUG=0 -g
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
 LOCAL_SHARED_LIBRARIES := libtarmac liblocalconfig
