@@ -25,7 +25,8 @@ INTERACTIVE_OPTS="-"
 docker run \
     ${INTERACTIVE_OPTS} \
     --hostname aic-docker \
-    --volume $HOME:$HOME \
+    --volume $HOME:$HOME  \
+    --volume $PWD:$PWD    \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \
