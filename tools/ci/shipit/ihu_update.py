@@ -140,7 +140,7 @@ def flash_image(port_mapping: PortMapping,
         for parition_to_flash in ["boot", "multiboot", "system", "vendor", "recovery"]:
             logger.info("Flashing " + parition_to_flash +  " partition")
             img_path = os.path.join(
-                build_out_dir, "target", "product", product, parition_to_flash + ".img")
+                build_out_dir, "target", "product", product, "fast_flashfiles", parition_to_flash + ".img")
             output = check_output_logged([fastboot_executable,
                                           "flash", parition_to_flash, img_path]).decode().strip(" \n\r\t")
 
