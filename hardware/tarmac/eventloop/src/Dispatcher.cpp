@@ -1,4 +1,5 @@
 #include <map>
+#include <set>
 #include <mutex>
 #include <thread>
 #include <queue>
@@ -11,7 +12,7 @@
 
 #include "IDispatcher.h"
 
-#define LOG_TAG "dispatcher"
+#define LOG_TAG "tarmac.dispatcher"
 
 #if !defined(EFD_SEMAPHORE)
 #define EFD_SEMAPHORE (1 << 0)
@@ -162,6 +163,9 @@ class Dispatcher : public IDispatcher
     EPollQueue  queue_;
     bool        stop_;
     std::thread eventthread_;
+    JobId       next_job_id_;
+    mutable std::mutex mutex_;
+    std::set<JobId>    delayed_jobs_;
 };
 
 // static helpers
@@ -183,7 +187,8 @@ std::unique_ptr<IDispatcher> IDispatcher::CreateDispatcher() {
 // constructor
 Dispatcher::Dispatcher()
     : stop_(false),
-      eventthread_([this]() { Start(); })
+      eventthread_([this]() { Start(); }),
+      next_job_id_(0)
 {
 }
 
@@ -197,15 +202,36 @@ void Dispatcher::Enqueue(std::function<void()> &&f) {
 }
 
 IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) {
-    // TODO!!!!!
-    // for the moment we just dispatch directly but that MUST be fixed
-    queue_.enqueue(std::move(f));
-    return 0;
+    JobId this_id;
+    { // lock scope
+        std::lock_guard<std::mutex> lock(mutex_);
+        this_id = next_job_id_++; // obtain the new jobid
+        delayed_jobs_.insert(this_id); // and add this id to the set of running timers
+    }
+
+    // start thread that will sleep for the requested time
+    std::thread sleep_thread([this_id, delay, f, this]() mutable {
+        std::this_thread::sleep_for(delay);
+        bool dispatch_job_now;
+        { // lock scope
+            std::lock_guard<std::mutex> lock(mutex_);
+            auto iter = delayed_jobs_.find(this_id);
+            // see if job shall continue, which means it has NOT been cancelled
+            dispatch_job_now = (iter!=delayed_jobs_.end()); 
+            if (dispatch_job_now)
+                delayed_jobs_.erase(iter); // job has not been cancelled
+        }
+        if (dispatch_job_now)
+            Enqueue(std::move(f)); // job has not been cancelled so dispatch it now
+    });
+
+    sleep_thread.detach();
+    return this_id;
 }
 
 bool Dispatcher::Cancel(JobId jobid) {
-    // TODO
-    return true;
+    std::lock_guard<std::mutex> lock(mutex_);
+    return (delayed_jobs_.erase(jobid)>0);
 }
 
 void Dispatcher::AddFd(int fd, std::function<void()> &&f) {

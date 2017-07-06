@@ -31,7 +31,9 @@ class IDispatcher
         virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) = 0;
 
         // Cancel a job that has been enqueued with EnqueueWithDelay()
-        // The return value indicates if the job could be cancelled (true) or not (false)
+        // return value:
+        //    true  -> the job was cancelled before it was dispatched
+        //    false -> the job couldn't be cancelled, it was probably already dispatched or previously cancelled
         virtual bool Cancel(JobId jobid) = 0;
 
         // Add and remove file descriptor monitoring for available in-data
