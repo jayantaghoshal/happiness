@@ -1,5 +1,6 @@
 import asyncio
 import asyncio.subprocess
+import atexit
 import subprocess
 import logging
 from typing import Union, List
@@ -68,13 +69,38 @@ def _run_logged_helper(command: Union[str, List[str]],
     return Result(s.pid, exitcode, stdout, stderr, encoding)
 
 
+# Work around for problems with asyncio event loop termination on exit.
+#
+# The following is written to stderr upon exit if loop is not explicitly closed:
+#
+# Exception ignored in: <bound method BaseEventLoop.__del__ of <_UnixSelectorEventLoop running=False closed=True debug=False>>
+# Traceback (most recent call last):
+#  File "/usr/lib/python3.5/asyncio/base_events.py", line 510, in __del__
+#  File "/usr/lib/python3.5/asyncio/unix_events.py", line 65, in close
+#  File "/usr/lib/python3.5/asyncio/unix_events.py", line 146, in remove_signal_handler
+#  File "/usr/lib/python3.5/signal.py", line 47, in signal
+# TypeError: signal handler must be signal.SIG_IGN, signal.SIG_DFL, or a callable object
+#
+# There is a bug reported for this but it has been closed. See https://bugs.python.org/issue23548 .
+# Unsure what the correct fix is. Creating a new event loop and closing it in each call to run()
+# feels like the wrong approach (event loops are meant to be long lived... ?) and it also does not
+# work (complains about resources not beeing "freed"). Regestering an exit handler that closes the
+# event loop at least gets rid of the error message.
+#
+# TODO: Find a proper fix. Or wait until it is fixed in Python and remove this.
+def _close_event_loop():
+    asyncio.get_event_loop().close()
+
+atexit.register(_close_event_loop)
+
+
 def run(command,
         encoding="utf-8",
         shell=False,
         timeout_sec: int = None,
         *args,
         **kwargs) -> Result:
-    loop = asyncio.get_event_loop() # Something fishy about this, it is not closed properly on shut down..
+    loop = asyncio.get_event_loop()
     return loop.run_until_complete(
         asyncio.wait_for(
             _run_logged_helper(command, encoding, shell, *args, **kwargs),
