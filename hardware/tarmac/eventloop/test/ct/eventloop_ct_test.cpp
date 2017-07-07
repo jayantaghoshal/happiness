@@ -1,17 +1,14 @@
 #include <IDispatcher.h>
 
 #include <gtest/gtest.h>
-//#include <stdio.h>
-//#include <sys/stat.h>
-
-//#include <iostream>
-
 #include <cutils/log.h>
+
+#include <future>
 
 
 TEST(EventLoopTest, TestEventFunctionCalled){
     #define  LOG_TAG    "eventloop.TestEventFunctionCalled"
-    ALOGI("TestEventFunctionCalled ...");
+    ALOGI("Starting...");
 
     bool event_func_called = false;
 
@@ -40,12 +37,12 @@ TEST(EventLoopTest, TestEventFunctionCalled){
     //Check that task was executed, if not event_func_called will be false
     EXPECT_TRUE(event_func_called);
 
-    ALOGI("TestEventFunctionCalled finished");
+    ALOGI("Finished...");
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
     #define  LOG_TAG    "eventloop.TestFdEventFunctionCalledReadAll"
-    ALOGI("TestFdEventFunctionCalledReadAll ...");
+    ALOGI("Starting...");
 
     int fd[2];
 
@@ -93,12 +90,12 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
     close(fd[0]);
     close(fd[1]);
 
-    ALOGI("TestFdEventFunctionCalledReadAll finsihed...");
+    ALOGI("Finished...");
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial){
     #define  LOG_TAG    "eventloop.TestFdEventFunctionCalledReadPartial"
-    ALOGI("TestFdEventFunctionCalledReadPartial ...");
+    ALOGI("Starting...");
 
     int fd[2];
 
@@ -145,5 +142,77 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial){
     close(fd[0]);
     close(fd[1]);
 
-    ALOGI("TestFdEventFunctionCalledReadPartial finished...");
+    ALOGI("Finished...");
+}
+
+TEST(EventLoopTest, TestDelayedEventFunctionCalled){
+    #define  LOG_TAG    "eventloop.TestDelayedEventFunctionCalled"
+    ALOGI("Starting...");
+
+    std::promise<int> p;
+    std::future<int> f = p.get_future();
+
+    auto start = std::chrono::steady_clock::now();
+    auto end = start;
+
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+        std::chrono::microseconds(500000),
+        [&end, &p] () {
+            ALOGI("Task executed!");
+            end = std::chrono::steady_clock::now();
+            p.set_value(1);
+        });
+
+    //Wait for 100ms and check that task wasn't dispatched immediatelly
+    usleep(100000);
+    EXPECT_TRUE(start == end);
+
+    ALOGI("Wait for task to be executed");
+    std::future_status status = f.wait_for(std::chrono::seconds(5));
+    ALOGI("Done waiting for task to be executed");
+
+    //Check that task was executed, if not event_func_called will be false
+    EXPECT_TRUE(status == std::future_status::ready);
+
+    if (status == std::future_status::ready) {
+        std::chrono::duration<double> diff = end-start;
+        EXPECT_NEAR(diff.count(), 0.5f, 0.01f);
+        ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.01s", diff.count());
+    }
+
+    ALOGI("Finished...");
+}
+
+TEST(EventLoopTest, TestDelayedEventFunctionCancelled){
+    #define  LOG_TAG    "eventloop.TestDelayedEventFunctionCancelled"
+    ALOGI("Starting...");
+
+    std::promise<int> p;
+    std::future<int> f = p.get_future();
+
+    tarmac::eventloop::IDispatcher::JobId jobid = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+        std::chrono::microseconds(500000),
+        [&p] () {
+            ALOGI("Task executed!");
+            p.set_value(1);
+        });
+
+    //Wait for 100ms and check that task wasn't dispatched
+    std::future_status status = f.wait_for(std::chrono::milliseconds(100));
+    EXPECT_TRUE(status == std::future_status::timeout);
+
+    //Cancel event, expect it to be cancelled correctly
+    EXPECT_TRUE(tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(jobid));
+
+    //Cancel event again, expect Cancel() to return false since task is already cancelled
+    EXPECT_FALSE(tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(jobid));
+
+    ALOGI("Wait for task to be executed");
+    status = f.wait_for(std::chrono::seconds(2));
+    ALOGI("Done waiting for task to be executed");
+
+    //Check that task was executed, if not event_func_called will be false
+    EXPECT_TRUE(status == std::future_status::timeout);
+
+    ALOGI("Finished...");
 }
