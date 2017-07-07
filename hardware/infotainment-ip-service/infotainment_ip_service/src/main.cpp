@@ -8,7 +8,7 @@
 #include <ipcommandbus/TransportServices.h>
 #include <ipcommandbus/UdpSocket.h>
 #include <ipcommandbus/isocket.h>
-//#include <ipcommandbus/shutdown_client.h>
+#include <hidl/HidlTransportSupport.h>
 #include <cstdint>
 #include <functional>
 #include <future>
@@ -18,9 +18,10 @@
 #include <utility>
 #include <cutils/log.h>
 #include <IDispatcher.h>
+#include <sys/signalfd.h>
+
 
 #include "util/local_config.h"
-#include "main_loop.h"
 #include "service_manager.h"
 
 using namespace Connectivity;
@@ -28,8 +29,14 @@ using namespace VccIpCmd;
 using namespace tarmac::eventloop;
 
 
-// #define LOOPBACK_ADDRESS "127.0.0.1"
+// libhwbinder:
+using namespace android::hardware;
+//using android::hardware::configureRpcThreadpool;
+//using android::hardware::joinRpcThreadpool;
 
+
+// #define LOOPBACK_ADDRESS "127.0.0.1"
+// Configure sockets
 void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
 {
     const std::uint32_t sleep_time = 100000;  // sleep 100 ms
@@ -56,21 +63,103 @@ void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
     } while (true);
 }
 
+// Setup signal handlers
+void SigTermHandler(int fd)
+{
+    struct signalfd_siginfo sigdata;
+    read(fd, &sigdata, sizeof(sigdata));
+
+    ALOGD("SIGTERM received...");
+
+    IDispatcher::GetDefaultDispatcher().Stop(); // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess(); // Stop the binder
+}
+
+void SigHupHandler(int fd)
+{
+    struct signalfd_siginfo sigdata;
+    read(fd, &sigdata, sizeof(sigdata));
+
+    ALOGD("SIGHUP received...");
+}
+
+void SigIntHandler(int fd)
+{
+    struct signalfd_siginfo sigdata;
+    read(fd, &sigdata, sizeof(sigdata));
+
+    ALOGD("SIGINT received...");
+
+    IDispatcher::GetDefaultDispatcher().Stop(); // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess(); // Stop the binder
+}
+
+bool InitSignals()
+{
+    int ret_val;
+
+    sigset_t signal_set_term;
+    sigset_t signal_set_hup;
+    sigset_t signal_set_int;
+
+    // Create signals
+    if ((sigemptyset(&signal_set_term) < 0) || (sigemptyset(&signal_set_hup) < 0) ||
+        (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
+        (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0))
+    {
+        ALOGE("Failed to create signals: %s",strerror(errno));
+        return false;
+    }
+
+    // Block signals until we have added support for them
+    if ((sigprocmask(SIG_BLOCK, &signal_set_term, nullptr) < 0) ||
+        (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
+        (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0))
+    {
+        ALOGE("Failed to block signals: %s",strerror(errno));
+        return false;
+    }
+
+    int termfd = signalfd(-1, &signal_set_term, 0);
+    int hupfd  = signalfd(-1, &signal_set_hup, 0);
+    int intfd  = signalfd(-1, &signal_set_int, 0);
+
+    if (termfd<0 || hupfd<0 || intfd<0) {
+        ALOGE("signalfd failed: %s",strerror(errno));
+        return false;
+    }
+
+    IDispatcher::GetDefaultDispatcher().AddFd(termfd, [termfd]() {
+        SigTermHandler(termfd);
+    });
+
+    IDispatcher::GetDefaultDispatcher().AddFd(hupfd, [hupfd]() {
+        SigHupHandler(hupfd);
+    });
+
+    IDispatcher::GetDefaultDispatcher().AddFd(intfd, [intfd]() {
+        SigIntHandler(intfd);
+    });
+
+    return true;
+}
+
+
+// ===============================================================
+// MAIN
 int main(void)
 {
+    InitSignals();
     InfotainmentIpService::Utils::loadLocalConfig();
 
-    MainLoop ipCommandBusThread;
-    //IDispatcher& applicationThread = IDispatcher::GetDefaultDispatcher();
+    IDispatcher& dispatcher = IDispatcher::GetDefaultDispatcher();
 
-    //TimeProviderSd ipCommandBusTimeProvider{*ipCommandBusThread.event_};
-    //SdEventDispatcher ipCommandBusThreadDispatcher{ipCommandBusThread.event_.get()};
-    Connectivity::TransportServices transport{ipCommandBusThread.GetDispatcher(), ipCommandBusThread.GetDispatcher(), Message::Ecu::IHU};
+    TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
     try
     {
-        Connectivity::UdpSocket sock(ipCommandBusThread.GetDispatcher());
-        Connectivity::UdpSocket broadcastSock(ipCommandBusThread.GetDispatcher());  // Socket for broadcast
+        UdpSocket sock(dispatcher);
+        UdpSocket broadcastSock(dispatcher); // Socket for broadcast
 
         transport.setSocket(&sock);
         transport.setBroadcastSocket(&broadcastSock);
@@ -82,35 +171,12 @@ int main(void)
         setupSocket(sock, Message::IHU);
         setupSocket(broadcastSock, Message::ALL);
 
-        std::promise<void> servicesRegistered;
-        std::future<void> servicesRegisteredFut = servicesRegistered.get_future();
-        //SdEventDispatcher &appDispatcher = applicationThread.getDispatcher();
-        Connectivity::MessageDispatcher msgDispatcher{&transport, ipCommandBusThread.GetDispatcher()};
+        MessageDispatcher msgDispatcher{&transport, dispatcher};
+        ServiceManager    service_manager(dispatcher);
 
-        // TODO: unique_ptr Quick hack to keep these alive but allow init in the other thread, should be kept in a
-        // separate class.
-        //std::unique_ptr<Connectivity::TimeProviderSd> applicationTimeProvider;
-        //std::unique_ptr<Connectivity::CommonAPIMainLoopHandler> commonApi_mainLoop_handler;
-        std::unique_ptr<ServiceManager> service_manager;
-
-        ipCommandBusThread.GetDispatcher().Enqueue([&]() {
-            //sd_event *sd;
-            //sd_event_default(&sd);
-            //applicationTimeProvider = std::make_unique<Connectivity::TimeProviderSd>(*sd);
-
-            //commonApi_mainLoop_handler = std::make_unique<Connectivity::CommonAPIMainLoopHandler>();
-            //std::shared_ptr<CommonAPI::MainLoopContext> common_api_main_loop_context_ =
-            //    std::make_shared<CommonAPI::MainLoopContext>("InfotainmentIpServiceDbusConnection");
-            //commonApi_mainLoop_handler->Init(common_api_main_loop_context_);
-
-            service_manager =
-                std::make_unique<Connectivity::ServiceManager>(ipCommandBusThread.GetDispatcher());
-            service_manager->RegisterAllBinderServices(&msgDispatcher);
-            servicesRegistered.set_value();
-        });
-
-        servicesRegisteredFut.wait();  // Must wait for ServiceManager to finish init to set DiagnosticsClient
-        ipCommandBusThread.Run();
+        configureRpcThreadpool(1, true /*callerWillJoin*/);
+        service_manager.RegisterAllBinderServices(&msgDispatcher);
+        joinRpcThreadpool();
     }
     catch (const SocketException &e)
     {

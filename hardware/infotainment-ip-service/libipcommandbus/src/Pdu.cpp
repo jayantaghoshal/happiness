@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "lipcb.Pdu"
+
 #include "ipcommandbus/Pdu.h"
 #include <iomanip>
 #include <cutils/log.h>
@@ -9,7 +11,6 @@
 
 namespace Connectivity
 {
-#define LOG_TAG "PDU0"
 
 //TODO: Why is fromData not const?
 bool Pdu::fromData(std::vector<uint8_t> &fromData)

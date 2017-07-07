@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "TCP_Socket"
+
 #include "ipcommandbus/TcpSocket.h"
 #include <cassert>
 #include <cutils/log.h>
@@ -18,7 +20,6 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity
 {
-#define LOG_TAG "TCP_Socket"
 
 TcpSocket::TcpSocket(IDispatcher & dispatcher, EcuIpMap ecu_ip_map) : Socket(dispatcher, AF_INET, SOCK_STREAM, IPPROTO_TCP, ecu_ip_map)
 {

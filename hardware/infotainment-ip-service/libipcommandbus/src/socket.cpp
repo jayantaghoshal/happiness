@@ -2,12 +2,12 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "ipcb_socket"
+
 #include <cutils/log.h>
 #include "ipcommandbus/socket.h"
 
 using namespace tarmac::eventloop;
-
-#define LOG_TAG "ipcb_socket"
 
 namespace Connectivity
 {

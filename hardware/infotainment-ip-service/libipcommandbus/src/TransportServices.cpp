@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "Transport_Services"
+
 #include "ipcommandbus/TransportServices.h"
 
 #include <algorithm>
@@ -19,7 +21,6 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity
 {
-#define LOG_TAG "Transport_Services"
 
 TransportServices::TransportServices(IDispatcher &timeProvider, IDispatcher &threadDispatcher, Message::Ecu selfEcu, bool useWfaTimer)
     : timeProvider{timeProvider}, threadDispatcher{threadDispatcher}, m_useWfaTimer(useWfaTimer), selfEcu{selfEcu}

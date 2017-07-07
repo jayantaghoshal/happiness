@@ -22,29 +22,19 @@ ServiceManager::ServiceManager(IDispatcher& timeProvider)
 
 void ServiceManager::RegisterAllBinderServices(::Connectivity::MessageDispatcher* msg_dispatcher)
 {
-    ALOGD("+ ServiceManager::RegisterAllBinderServices");
+    ALOGD("ServiceManager::RegisterAllBinderServices");
 
     iplm_service_.Initialize(msg_dispatcher);
     gnss_service_.Initialize(msg_dispatcher);
     msg_dispatcher->setDiagnostics(&diagnostics_client_);
-    //// Register handling of services where IHU is CommonAPI server and IPBus client.
 
-    //RegisterCommonApiService<GnssService, std::false_type>(gnss_service_, commonApiMainLoopContext_, msg_dispatcher);
-
-    //// Register handling of services where IHU is CommonAPI client and IPBus server.
-
-    // Note: This is a good example if adding a new service where we are Franca client / IpBus server.
-
-    ALOGD("- ServiceManager::RegisterAllBinderServices");
+    // TODO
+    // gnss_service_.registerAsService();
 }
 
 void ServiceManager::UnregisterAllBinderServices()
 {
     ALOGD("ServiceManager::UnregisterAllBinderServices");
-    // Unregister CommonAPI services that we provided.
-    //UnregisterCommonApiService<GnssService>(gnss_service_);
-    // (Doesn't seem like unregister call is needed for CommonAPI services that we subscribe to...)
-    ALOGD("ServiceManager::UnregisterAllBinderServices done");
 }
 
 }  // namespace Connectivity

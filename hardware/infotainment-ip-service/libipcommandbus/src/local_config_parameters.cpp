@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "libipcb_localconfig"
+
 #include <vcc/localconfig.h>
 #include <cutils/log.h>
 
@@ -12,7 +14,6 @@ using namespace vcc;
 
 namespace Connectivity
 {
-#define LOG_TAG "libipcb_localconfig"
 
 LocalconfigParameters::LocalconfigParameters()
 {

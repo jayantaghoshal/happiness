@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "lipcb.MessageDispatcher"
+
 #include "ipcommandbus/MessageDispatcher.h"
 
 #include <cassert>
@@ -14,7 +16,6 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity
 {
-#define LOG_TAG "MD00"
 
 MessageDispatcher::MessageDispatcher(ITransportServices *transport, IDispatcher& dispatcher) : wakeUpApplicationThread(dispatcher)
 {

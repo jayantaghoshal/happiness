@@ -2,6 +2,8 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#define LOG_TAG "UDP_Socket"
+
 #include "ipcommandbus/UdpSocket.h"
 #include <cassert>
 #include <cutils/log.h>
@@ -16,7 +18,6 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity
 {
-#define LOG_TAG "UDP_Socket"
 
 UdpSocket::UdpSocket(IDispatcher& dispatcher, EcuIpMap ecu_ip_map) : Socket(dispatcher, AF_INET, SOCK_DGRAM, IPPROTO_UDP, ecu_ip_map)
 {
