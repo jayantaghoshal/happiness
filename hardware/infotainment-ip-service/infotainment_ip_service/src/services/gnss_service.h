@@ -13,6 +13,7 @@
 #include "ipcommandbus/Message.h"
 #include "ipcommandbus/MessageDispatcher.h"
 #include "ipcommandbus/vcc_pdu_header.h"
+#include "binderimpl/gnss/Gnss.h"
 
 #if defined(ENABLE_TESTS)
 #include "../../test/ut/mocks/mock_ip_service.h"
@@ -153,6 +154,8 @@ protected:
         std::bind(&GnssService::cbGNSSPositionDataNotification, this, std::placeholders::_1),
         false  // Static notification
     }};
+
+    android::hardware::gnss::V1_0::implementation::Gnss gnss_;
 
 };  // class GnssService
 

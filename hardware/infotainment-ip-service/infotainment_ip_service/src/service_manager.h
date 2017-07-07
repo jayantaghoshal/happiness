@@ -69,7 +69,7 @@ public:
     void UnregisterAllBinderServices();
 
 private:
-    tarmac::eventloop::IDispatcher& timeProvider;
+    tarmac::eventloop::IDispatcher& timeProvider_;
     IpLmServiceStubImpl iplm_service_;
     DiagnosticsClient diagnostics_client_;
     GnssService gnss_service_;

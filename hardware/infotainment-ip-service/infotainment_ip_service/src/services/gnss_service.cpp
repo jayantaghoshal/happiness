@@ -12,6 +12,8 @@
 #include "ipcommandbus/net_serializer.h"
 #include "util/type_conversion_helpers.h"
 
+using namespace android::hardware::gnss::V1_0::implementation;
+
 namespace Connectivity
 {
 static const std::chrono::milliseconds s_position_request_timeout_ms_{2000};
@@ -21,6 +23,7 @@ GnssService::GnssService()
     //// Init for IpService base class.
     //// Fix me: Update IpService constructor with arguments and do work there. Avoid fiddling with details here and in
     /// other services...
+
     IpService::service_name_ = "GNSS";
 }
 
@@ -36,6 +39,14 @@ bool GnssService::Initialize(Connectivity::MessageDispatcher *msgDispatcher)
     {
         ALOGE("Can not register as client");
         return false;
+    }
+
+    android::status_t status = gnss_.registerAsService();
+
+    if (status != android::OK) {
+        ALOGE("Failed to register Gnss binder service: %d",status);
+    } else {
+        ALOGI("Gnss binder service register ok");
     }
 
     return true;

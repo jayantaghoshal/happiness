@@ -172,7 +172,7 @@ int main(void)
         setupSocket(broadcastSock, Message::ALL);
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
-        ServiceManager    service_manager(dispatcher);
+        Connectivity::ServiceManager    service_manager(dispatcher);
 
         configureRpcThreadpool(1, true /*callerWillJoin*/);
         service_manager.RegisterAllBinderServices(&msgDispatcher);

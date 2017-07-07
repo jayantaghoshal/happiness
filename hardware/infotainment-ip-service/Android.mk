@@ -45,9 +45,33 @@ LOCAL_SRC_FILES += libipcommandbus/src/VccIpCmdApi.cpp \
     libipcommandbus/src/local_config_parameters.cpp
 #    libipcommandbus/src/shutdown_client.cpp
 
+# Gnss
+LOCAL_SRC_FILES += \
+    infotainment_ip_service/src/binderimpl/gnss/AGnssCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/AGnss.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/AGnssRilCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/AGnssRil.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssBatchingCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssBatching.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssConfiguration.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/Gnss.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssDebug.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssGeofenceCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssGeofencing.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssMeasurementCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssMeasurement.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssNavigationMessageCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssNavigationMessage.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssNiCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssNi.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssXtraCallback.cpp \
+    infotainment_ip_service/src/binderimpl/gnss/GnssXtra.cpp
+
 
 # TODO check if libhwbinder is the correct one to use here
-LOCAL_CPPFLAGS := -fexceptions -frtti -DLOG_NDEBUG=0 -g
+#LOCAL_CPPFLAGS := -fexceptions -frtti -DLOG_NDEBUG=0 -g
+LOCAL_CPPFLAGS := -fexceptions -DLOG_NDEBUG=0 -g
 LOCAL_SHARED_LIBRARIES += \
     liblog \
     liblocalconfig \
@@ -59,6 +83,10 @@ LOCAL_SHARED_LIBRARIES += \
     libhwbinder \
     android.hardware.gnss@1.0 \
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/infotainment_ip_service/src $(LOCAL_PATH)/libasn1/include $(LOCAL_PATH)/libipcommandbus/include
+LOCAL_C_INCLUDES := \
+    $(LOCAL_PATH)/infotainment_ip_service/src \
+    $(LOCAL_PATH)/libasn1/include \
+    $(LOCAL_PATH)/libipcommandbus/include \
+    $(LOCAL_PATH)/infotainment_ip_service/src/binderimpl/gnss
 
 include $(BUILD_EXECUTABLE)

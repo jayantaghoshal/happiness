@@ -14,7 +14,7 @@ using namespace tarmac::eventloop;
 namespace Connectivity
 {
 ServiceManager::ServiceManager(IDispatcher& timeProvider)
-    : timeProvider{timeProvider},
+    : timeProvider_{timeProvider},
       iplm_service_(timeProvider),
       gnss_service_{}
 {
