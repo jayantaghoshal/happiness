@@ -10,10 +10,20 @@
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="1a968a3db1922a3f79bac9c8ab5327bcb8386747"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="80757f67b2269855d3a41a67df55c0d1b928c830"/>
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
-  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="3027056b043a3a573f3bba422538e5dbdf6ed27a"/>
+  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="d259bda745afe32794c0fb5fd28681123558989e"/>
+
+  <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
+  <remove-project name="bsp/vendor/intel/fw/trusty_device_x86_sand"/>
+  <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="329e29e113cad25d34f4ee1e1100f72632a2730e">
+          <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
+  </project>
+  
+  <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
+  <remove-project name="bsp/vendor/intel/build"/>
+  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8d73c3d8f2a0f807a70673da40d5cc1a7f57b061"/>
 
 </manifest>
