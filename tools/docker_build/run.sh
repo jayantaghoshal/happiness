@@ -4,14 +4,24 @@ SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=${SCRIPT_DIR}/../../../..
 
 IMAGE_NAME=vcc_aosp_build
+
 WORKING_DIR="$(pwd)"
 
 # Setup ccache
-USE_CCACHE=1
-HOST_CCACHE_DIR=$HOME/vcc-aosp-build-docker-ccache
-if ! test -e ${HOST_CCACHE_DIR}; then
-  echo "Creating directory ${HOST_CCACHE_DIR}..."
-  mkdir -p ${HOST_CCACHE_DIR}
+if type ccache >/dev/null 2>&1; then CCACHE_EXISTS=1; else CCACHE_EXISTS=0; fi
+USE_CCACHE=${USE_CCACHE:-${CCACHE_EXISTS}}
+if [ "$USE_CCACHE" == "1" ]; then
+  if [ -z $CCACHE_DIR ]; then
+    if [ $CCACHE_EXISTS == "1" ]; then
+      CCACHE_DIR=$(ccache --print-config | grep cache_dir\ = | awk '{ print $4 }')
+    else
+      CCACHE_DIR=$HOME/.ccache
+    fi
+  fi
+  if ! test -e ${CCACHE_DIR}; then
+    echo "Creating directory ${CCACHE_DIR}..."
+    mkdir -p ${CCACHE_DIR}
+  fi
 fi
 
 # Detect environment of docker command
@@ -30,7 +40,7 @@ docker run \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \
-    --env=CCACHE_DIR=${HOST_CCACHE_DIR} \
+    --env=CCACHE_DIR=${CCACHE_DIR} \
     --env=USE_CCACHE=${USE_CCACHE} \
     --env=REPO_ROOT_DIR=${REPO_ROOT_DIR} \
     --env=HOME=$HOME \
