@@ -85,5 +85,8 @@ RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
+COPY ./entrypoint.sh /tmp
+ENTRYPOINT ["/tmp/entrypoint.sh"]
+
 # The default command, if docker container is started without parameters
 CMD ["bash"]
