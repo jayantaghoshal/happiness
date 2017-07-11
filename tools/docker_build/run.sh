@@ -37,5 +37,6 @@ docker run \
     -w ${WORKING_DIR} \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
+    --entrypoint="${SCRIPT_DIR}/entrypoint.sh" \
     ${IMAGE_NAME} \
     $*
