@@ -85,5 +85,10 @@ RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
+
 # The default command, if docker container is started without parameters
+COPY ./entrypoint.sh /tmp
+COPY ./bashrc /home/ihu/.bashrc
+RUN chmod +x /tmp/entrypoint.sh
+ENTRYPOINT ["/tmp/entrypoint.sh"]
 CMD ["bash"]
