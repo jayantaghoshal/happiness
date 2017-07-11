@@ -1,0 +1,10 @@
+package vcc.vcctest@1.0;
+
+import ISignalsCallback;
+
+interface ISignals {
+    set(string propValue) generates (uint32_t status);
+    subscribe(ISignalsCallback cb);
+};
+
+
