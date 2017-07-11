@@ -3,9 +3,12 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=${SCRIPT_DIR}/../../../..
 
-IMAGE_NAME=vcc_aosp_build
+DOCKER_IMAGE_REFERENCE_FILE="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/image.ref"
+DOCKER_IMAGE=`cat ${DOCKER_IMAGE_REFERENCE_FILE}`
 
 WORKING_DIR="$(pwd)"
+
+VOLUMES=${VOLUMES:---volume $HOME:$HOME --volume $PWD:$PWD}
 
 # Setup ccache
 if type ccache >/dev/null 2>&1; then CCACHE_EXISTS=1; else CCACHE_EXISTS=0; fi
@@ -35,8 +38,7 @@ INTERACTIVE_OPTS="-"
 docker run \
     ${INTERACTIVE_OPTS} \
     --hostname aic-docker \
-    --volume $HOME:$HOME  \
-    --volume $PWD:$PWD    \
+    $VOLUMES \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \
@@ -47,5 +49,5 @@ docker run \
     --workdir ${WORKING_DIR} \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
-    ${IMAGE_NAME} \
+    ${DOCKER_IMAGE} \
     $*
