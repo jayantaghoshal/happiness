@@ -16,11 +16,12 @@
     exit 1
 }
 
+
 # Global parameters
 CONTAINER_USERNAME=ihu
 CONTAINER_GROUPNAME=ihu
 BUILD_ENV_SETUP="${REPO_ROOT_DIR}/build/envsetup.sh"
-BASHRC_FILE="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/bashrc"
+BASHRC_FILE="/home/ihu/.bashrc"
 
 function Failed() {
     echo "$*"
@@ -62,27 +63,38 @@ id -u "${HOST_UID}" &>/dev/null || {
 }
 
 # Add user to dialout group. This allows access to /dev/ttyUSB* without sudo
-adduser ${CONTAINER_USERNAME} dialout &>/dev/null || Failed "Adding user to dialout group failed"
+adduser ${CONTAINER_USERNAME} dialout || Failed "Adding user to dialout group failed"
 
 # Allow user to sudo
 echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Prepare script - command which will be executed as a specified user
+# NOTE: This is tricky: Inside SCRIPT_FILE we source $BUILD_ENV_SETUP __before__ running $@,
+#       When running interactively $@ is equal to bash, and functions included from BUILD_ENV_SETUP are not inherited to the subshell.
+#       That's why we need to check if bash is the command to run and start it without the SCRIPT_FILE, the rcfile also includes the BUILD_ENV_SETUP
+#       We also can't copy the BASHRC_FILE to ~/.bashrc because we mount the host home as a --volume
 SCRIPT_FILE=/tmp/command_to_run.sh
 cat >$SCRIPT_FILE <<EOL
 #!/bin/bash
-
-source $BUILD_ENV_SETUP
-
+source ${BUILD_ENV_SETUP}
 $@
 EOL
 chmod +x $SCRIPT_FILE
 
-if [ $# -ne 0 ]; then
-  COMMAND_IN_DOCKER="$SCRIPT_FILE"
-else
+
+if [ $* = 'bash' ]; then
   COMMAND_IN_DOCKER="bash --rcfile ${BASHRC_FILE}"
+else
+  COMMAND_IN_DOCKER="$SCRIPT_FILE"
 fi
 
-sudo -E -u ${CONTAINER_USERNAME} BASHRC_FILE=${BASHRC_FILE} BUILD_ENV_SETUP=$BUILD_ENV_SETUP LD_LIBRARY_PATH=$LD_LIBRARY_PATH PATH=/sbin:$PATH USE_CCACHE=${USE_CCACHE} CCACHE_DIR=${CCACHE_DIR} ${COMMAND_IN_DOCKER}
+sudo -E \
+    -u ${CONTAINER_USERNAME} \
+    BASHRC_FILE=${BASHRC_FILE} \
+    BUILD_ENV_SETUP=$BUILD_ENV_SETUP \
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
+    PATH=/sbin:$PATH \
+    USE_CCACHE=${USE_CCACHE} \
+    CCACHE_DIR=${CCACHE_DIR} \
+    ${COMMAND_IN_DOCKER}
 

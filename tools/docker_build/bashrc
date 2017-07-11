@@ -121,5 +121,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-source $BUILD_ENV_SETUP
+pushd ${REPO_ROOT_DIR}
+source ${REPO_ROOT_DIR}/build/envsetup.sh
+popd
