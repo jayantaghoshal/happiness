@@ -26,7 +26,8 @@ ENV HTTPS_PROXY 'https://10.244.0.55:83/'
 # Configure proxy for apt-get.
 RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
 
-# First update the system.
+##################################################
+# Tools required for building Andriod image
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     bc \
     bison \
@@ -63,7 +64,6 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     openjdk-8-jdk \
     python-libxml2 \
     python-markdown \
-    python3-serial \
     squashfs-tools \
     sudo \
     tesseract-ocr \
@@ -75,20 +75,36 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     x11proto-core-dev \
     xsltproc \
     zip \
-    zlib1g-dev \
-    repo \
-    picocom \
-    adb \
-    && rm -rf /var/lib/apt/lists/*
+    zlib1g-dev  
 
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
+##################################################
+# Tools required for CI test environment
+RUN apt install -y \
+    git-all \
+    picocom \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-serial \  
+    adb 
+COPY repo /usr/bin/repo
+RUN pip3 install zuul==2.5.2
 
-# The default command, if docker container is started without parameters
+##################################################
+# Clean up apt package information to make image smaller
+RUN  rm -rf /var/lib/apt/lists/*
+
+
+
+##################################################
+# Prepare entry point
 COPY ./entrypoint.sh /tmp
 COPY ./bashrc /home/ihu/.bashrc
 RUN chmod +x /tmp/entrypoint.sh
 ENTRYPOINT ["/tmp/entrypoint.sh"]
+# The default command, if docker container is started without parameters
 CMD ["bash"]

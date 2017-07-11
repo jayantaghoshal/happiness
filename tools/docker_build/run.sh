@@ -44,7 +44,7 @@ docker run \
     --env=USE_CCACHE=${USE_CCACHE} \
     --env=REPO_ROOT_DIR=${REPO_ROOT_DIR} \
     --env=HOME=$HOME \
-    -w ${WORKING_DIR} \
+    --workdir ${WORKING_DIR} \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
     ${IMAGE_NAME} \
