@@ -10,6 +10,22 @@ WORKING_DIR="$(pwd)"
 
 VOLUMES=${VOLUMES:---volume $HOME:$HOME --volume $PWD:$PWD}
 
+## 
+# Handle options
+#
+for i in "$@"
+do
+case $i in
+    --local)
+    DOCKER_IMAGE="vcc_aosp_build"
+    shift # past argument with no value
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+
 # Setup ccache
 if type ccache >/dev/null 2>&1; then CCACHE_EXISTS=1; else CCACHE_EXISTS=0; fi
 USE_CCACHE=${USE_CCACHE:-${CCACHE_EXISTS}}
@@ -44,6 +60,9 @@ docker run \
     ${INTERACTIVE_OPTS} \
     --hostname aic-docker \
     $VOLUMES \
+    --dns=10.244.0.15 \
+    --dns=10.244.0.20 \
+    --dns-search=dhcp.nordic.volvocars.net \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \

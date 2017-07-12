@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import argparse
+import textwrap
+import redis
+import sys
+
+class Error(Exception):
+    """Exception raised for errors.
+
+    Attributes:
+        expression -- input expression in which the error occurred
+        message -- explanation of the error
+    """
+
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
+
+class RedisClient(object):
+
+    def __init__(self):
+        self._redis = None
+
+    def set(self, key, value):
+        return self.redis().set(key, value)
+
+    def get(self, key):
+        return self.redis().get(key)
+
+    def redis(self):
+        if self._redis is None:
+            self._redis = redis.StrictRedis(host='gotsvl1416.got.volvocars.net',
+                                            port=6379,
+                                            db=0,
+                                            decode_responses=True)
+        return self._redis
+
+##
+# Command line interface
+#
+
+def set(args):
+    if not RedisClient().set(args.key, args.value):
+        raise Exception("Failed to SET %s=%s", args.key, args.value)
+
+def get(args):
+    value = RedisClient().get(args.key)
+    if value is None:
+        raise Exception("GET \"%s\" returned None" % args.key)
+    else:
+        print(value)
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog='redis-cli',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''\
+            Command line tool to interact with Redis
+            Commands:
+            set     - Set value
+            get     - Print value
+            ''')
+        )
+
+    ##
+    # Global options
+    #
+    parser.add_argument('-v', '--verbose',
+                        action='store_true',
+                        default=False,
+                        help='verbose mode')
+
+    subparsers = parser.add_subparsers()
+
+    ##
+    # Create the parser for the "set" command
+    #
+    set_parser = subparsers.add_parser('set',
+                                       description='Set value')
+
+    set_parser.add_argument(
+        'key',
+        metavar='KEY',
+        help='Key used to store value'
+    )
+
+    set_parser.add_argument(
+        'value',
+        metavar='VALUE',
+        help='Value to store'
+    )
+
+    set_parser.set_defaults(func=set)
+
+    ##
+    # Create the parser for the "get" command
+    #
+    get_parser = subparsers.add_parser('get',
+                                       description='Get value')
+
+    get_parser.add_argument(
+        'key',
+        metavar='KEY',
+        help='Key used to store value'
+    )
+
+    get_parser.set_defaults(func=get)
+
+    args = parser.parse_args()
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()
+
+

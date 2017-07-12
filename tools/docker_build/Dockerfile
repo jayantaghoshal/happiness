@@ -22,6 +22,7 @@ ENV http_proxy 'http://10.244.0.55:83/'
 ENV HTTP_PROXY 'http://10.244.0.55:83/'
 ENV https_proxy 'https://10.244.0.55:83/'
 ENV HTTPS_PROXY 'https://10.244.0.55:83/'
+ENV NO_PROXY '.got.volvocars.net'
 
 # Configure proxy for apt-get.
 RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
@@ -75,7 +76,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     x11proto-core-dev \
     xsltproc \
     zip \
-    zlib1g-dev  
+    zlib1g-dev
 
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
@@ -92,12 +93,19 @@ RUN apt install -y \
     python3-serial \  
     adb 
 COPY repo /usr/bin/repo
-RUN pip3 install zuul==2.5.2
+RUN pip3 install redis \
+    zuul==2.5.2
+
+##################################################
+# Debug packages
+RUN apt install -y \
+    iputils-ping \
+    dnsutils \
+    net-tools
 
 ##################################################
 # Clean up apt package information to make image smaller
 RUN  rm -rf /var/lib/apt/lists/*
-
 
 
 ##################################################
