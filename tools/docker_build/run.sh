@@ -24,6 +24,11 @@ if [ "$USE_CCACHE" == "1" ]; then
   if ! test -e ${CCACHE_DIR}; then
     echo "Creating directory ${CCACHE_DIR}..."
     mkdir -p ${CCACHE_DIR}
+
+    # ccache must be initialized properly,
+    # just creating the directory will not work, when building you will get Error: "ccache: failed to create  (No such file or directory)"
+    # There is no "init" command but calling --max-size seems to do the trick
+    ccache --max-size=5G
   fi
 fi
 
