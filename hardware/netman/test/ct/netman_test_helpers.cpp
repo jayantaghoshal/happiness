@@ -1,5 +1,9 @@
 #include "netman_test_helpers.h"
 
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h> /* for strncpy */
@@ -31,6 +35,83 @@ std::string GetIpAddressForInterface(const std::string& ifname) {
     } else {
         return "";
     }
+}
+
+std::string GetNetmaskForInterface(const std::string& ifname)
+{
+    int fd;
+    struct ifreq ifr;
+
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    /* I want to get an IPv4 IP address */
+    ifr.ifr_addr.sa_family = AF_INET;
+
+    strncpy(ifr.ifr_name, ifname.c_str(), IFNAMSIZ-1);
+
+    int r = ioctl(fd, SIOCGIFNETMASK, &ifr);
+
+    close(fd);
+
+    if (r==0) {
+        return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+    } else {
+        return "";
+    }
+}
+
+int GetMtuForInterface(const std::string& ifname)
+{
+    int fd;
+    struct ifreq ifr;
+    unsigned char *mac;
+
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    ifr.ifr_addr.sa_family = AF_INET;
+    strncpy(ifr.ifr_name , ifname.c_str() , IFNAMSIZ-1);
+
+    int r = ioctl(fd, SIOCGIFMTU, &ifr);
+
+    close(fd);
+
+    if (r==0) {
+        return ifr.ifr_mtu;
+    } else {
+        return -1;
+    }
+}
+
+std::string GetMacAddressForInterface(const std::string& ifname)
+{
+    int fd;
+    struct ifreq ifr;
+    unsigned char *mac;
+
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    ifr.ifr_addr.sa_family = AF_INET;
+    strncpy(ifr.ifr_name , ifname.c_str() , IFNAMSIZ-1);
+
+    int r = ioctl(fd, SIOCGIFHWADDR, &ifr);
+
+    close(fd);
+
+    if (r != 0)
+        return "";
+
+    mac = (unsigned char *)ifr.ifr_hwaddr.sa_data;
+
+    const int MAC_ADDRESS_LENGTH = 6;
+    std::stringstream ss;
+    ss << std::hex << std::setfill('0');
+    for (int i = 0; i < MAC_ADDRESS_LENGTH; i++) {
+        ss <<  std::setw(2) << (int) mac[i];
+        if (i < MAC_ADDRESS_LENGTH - 1)
+            ss << ':';
+    }
+
+    return ss.str();
 }
 
 pid_t FindProcessId(const std::string& name)
