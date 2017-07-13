@@ -94,6 +94,7 @@ RUN apt install -y \
     adb 
 COPY repo /usr/bin/repo
 RUN pip3 install redis \
+    requests \
     zuul==2.5.2
 
 ##################################################
@@ -106,7 +107,6 @@ RUN apt install -y \
 ##################################################
 # Clean up apt package information to make image smaller
 RUN  rm -rf /var/lib/apt/lists/*
-
 
 ##################################################
 # Prepare entry point
