@@ -1,7 +1,7 @@
 {
-  "eth1.name" : "eth1",
-  "eth1.ip-address" : "198.18.34.1",
-  "eth1.netmask": "255.255.255.0",
-  "eth1.mac-address": "02:00:00:02:12:01",
-  "eth1.mtu": 1500
+    "eth1.name" : "eth1",
+    "eth1.ip-address" : "198.18.34.1",
+    "eth1.netmask": "255.255.255.0",
+    "eth1.mac-address": "02:00:00:02:12:01",
+    "eth1.mtu": 1500
 }
