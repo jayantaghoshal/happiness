@@ -9,17 +9,18 @@ This document describes the Docker image that aims to provide a consistent envir
 
 ## Prerequisites
 
-* Docker 17.03.1-ce - All scripts were tested and optimized to this version.
+* Docker CE. Tested OK with version: 17.04.0-ce and 17.06.0-ce
+  
+  DO NOT use the docker that comes in ubuntus apt-get repositories, it is super old. 
 
-## How to build the docker image
-
-To build the docker image, execute:
-
-```bash
-vendor/volvocars/tools/docker_build/build.sh
-```
 
 ## How to use the image
+
+First you need to authenticate with Artifactory
+```bash
+# Only required once since login information are stored in ~/.docker/config.json
+docker login -u $USER swf1.artifactory.cm.volvocars.biz:5002
+```
 
 To run a command inside a container, execute:
 
@@ -27,14 +28,14 @@ To run a command inside a container, execute:
 vendor/volvocars/tools/docker_build/run.sh <command>
 ```
 
-Example 1: Build a full system:
+### Example 1: Build a full system:
 
 ```bash
 # From the root of the project run:
 vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && make -j8"
 ```
 
-Example 2: Start an interactive shell
+### Example 2: Start an interactive shell
 
 ```bash
 vendor/volvocars/tools/docker_build/run.sh
@@ -51,31 +52,34 @@ cd vendor/volvocars/hardware/localconfig
 mm
 ```
 
-## Instructions on how to work with Docker registry
 
-TODO: We want the image to be automatically generated and
-promoted to a central Docker registry so that devlopers easily
-can pull ready made images.
 
-Authenticate with Artifactory:
+
+## Instructions on how to work with Docker registry (Adminstrators only)
+
+### How to build the docker image locally without pulling from artifactory
+
+To build the docker image, execute:
+
 ```bash
-# Only required once since login information are stored in ~/.docker/config.json
-docker login -u $USER swf1.artifactory.cm.volvocars.biz:5002
+vendor/volvocars/tools/docker_build/admin/create_docker_image.sh
+
+# If you built image yourself you need to provide --local flag to run.sh to use latest instead of tagged
+vendor/volvocars/tools/docker_build/run.sh --local COMMAND_TO_EXECUTE
 ```
+
+### How to push image to artifactory 
 
 To push the docker image to Artifactory, execute:
 ```bash
 # Only for test, should be automated (Jenkins should build and push image to Artifactory)
-vendor/volvocars/tools/docker_build/push.sh <IMAGE ID>
+vendor/volvocars/tools/docker_build/admin/push.sh <IMAGE ID>
 ```
+
+### How to pull image from artifactory 
+(Not needed since run.sh does this automatically)
 
 To pull the docker image from Artifactory, execute:
 ```bash
 docker pull swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build[:NAME]
 ```
-
-TODO: Updates to vendor/volvocars/tools/docker_build/run.sh 
-is required to use image.
-The tag should be stored in configuration file in repo, 
-currently scripts using the image has hardcoded the tag or running latest.
-Move image from the "test" namespace.
