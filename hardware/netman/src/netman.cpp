@@ -394,6 +394,28 @@ static bool TakeInterfaceDown(const char* interface_name)
     return true;
 }
 
+bool SetNetmask( int skfd, const char *intf, const char *newmask )
+{
+    struct ifreq ifr;
+    unsigned int dst;
+    struct sockaddr_in *sin = (struct sockaddr_in *)&ifr.ifr_addr;
+    memset(&ifr, 0, sizeof(ifr));
+    sin->sin_family = AF_INET;
+    if ( !inet_pton(AF_INET, newmask, &sin->sin_addr) )
+    {
+        ALOGE("failed to convert netmask\n");
+        return false;
+    }
+    strncpy( ifr.ifr_name, intf, IFNAMSIZ-1 );
+    if ( ioctl(skfd,SIOCSIFNETMASK,&ifr) == -1 )
+    {
+        ALOGE("could not read interface %s\n", intf);
+        return false;;
+    }
+
+    return true;
+}
+
 static bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask)
 {
     ALOGI("Entering SetIpAddress...");
@@ -429,14 +451,8 @@ static bool SetIpAddress(const char* interface_name, const char* ip_addr, const 
     }
 
     ALOGI("Setting Netmask...");
-    // Set Netmask
-    // safe to ignore return value as netmask is constant string in correct format
-    inet_aton(netmask, (struct in_addr*)&sin_addr.sin_addr.s_addr);
-    memset(&ifr, 0, sizeof(struct ifreq));
-    memcpy(&ifr.ifr_netmask, &sin_addr, sizeof(struct sockaddr));
-    strcpy(ifr.ifr_name, interface_name);
 
-    if (ioctl(inet_sock_fd, SIOCSIFNETMASK, &ifr) == -1)
+    if (!SetNetmask(inet_sock_fd, interface_name, netmask))
     {
         ALOGE("ioctl call to set netmask failed. Error is [%s]", strerror(errno));
         close(inet_sock_fd);
