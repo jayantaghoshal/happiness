@@ -57,17 +57,18 @@ def main():
         conn.confirmed_start()
         print("Simulation started")
 
-        send("UsgModSts", 13)
+        #send("UsgModSts", 13)
 
-        groups_to_subscribe = [g for g in groups if "IHUBackBone" in g.name]
+        groups_to_subscribe = [g for g in groups if "IHUBackBone" in g.name or "IHULIN19" in g.name]
         for g in groups_to_subscribe:
             print("Subscribing for %s" % g.name)
             conn.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
-        time.sleep(10)
+        time.sleep(60)
         for g in groups_to_subscribe:
             conn.send_free_running_cancel(g.group_id)
 
-        conn.send_stop()
+        print("-------- STOPPING -------")
+        conn.confirmed_stop()
         print("-------- DONE -------")
 
 

@@ -78,16 +78,21 @@ class FdxCommandParser:
         if self.done:
             raise Exception("Parser already finished, create a new one to parse more commands")
 
-        expected_header = list(struct.pack('=Qbb',
-                                          fdxSignature,
-                                          fdxMajorVersion,
-                                          fdxMinorVersion))
-        for index in range(len(expected_header)):
+        expected_signature = list(struct.pack('=Q', fdxSignature))
+        for index in range(len(expected_signature)):
             b = yield
-            if b == expected_header[index]:
+            if b == expected_signature[index]:
                 index += 1
             else:
-                raise Exception("Expected byte %d at index %d, got %d" % (expected_header[index], index, b))
+                raise Exception("Expected byte %d at index %d, got %d" % (expected_signature[index], index, b))
+
+        received_major_version = yield
+        if received_major_version != fdxMajorVersion:
+            raise Exception("Received FDX major version %d, only supporting version: %d" % (received_major_version, fdxMajorVersion))
+
+        received_minor_version = yield
+        if received_minor_version != fdxMinorVersion:
+            pass # This is ok. minor_version change = backwards compatible
 
         number_of_commands1 = yield
         number_of_commands2 = yield

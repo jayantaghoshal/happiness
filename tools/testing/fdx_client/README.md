@@ -5,7 +5,7 @@ It also contains a parser for the FDX Description file to create a simple mappin
 CANoe FDX (Fast Data eXchange) is a protocol to exchange data with a Vector CANoe simulation over UDP
 
     For detailed information, refer to Vector documentation.
-        CANoe FDX Protocol Version 1.5 PDF
+        CANoe FDX Protocol Version 1.8 PDF
 
     Supported commands are:
         * Start/Stop simulation
