@@ -5,4 +5,5 @@ source "${SCRIPT_DIR}/common.sh"
 # Setup ccache
 USE_CCACHE=1
 
+docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
 docker_run "lunch ihu_vcc-eng && make -j16 droid"
