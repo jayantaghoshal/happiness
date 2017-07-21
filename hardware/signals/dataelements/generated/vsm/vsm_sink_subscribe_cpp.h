@@ -2,8 +2,8 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-04-03T08:04:02.284168
- * Source: SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Generated at: 2017-08-18T13:15:23.081495
+ * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 
 AccAdprSpdLimActv_de = new DESink<autosar::AccAdprSpdLimActv_info>();
@@ -422,10 +422,10 @@ DrvrSeatDispMassgFct_de = new DESink<autosar::DrvrSeatDispMassgFct_info>();
 DrvrSeatDispMassgFct_de->subscribe([]() {
     auto deValue = DrvrSeatDispMassgFct_de->get().value();
     DrvrSeatDispMassgFct rteValue;
-    rteValue.DrvrSeatDispMassgFctOnOff = static_cast<decltype(rteValue.DrvrSeatDispMassgFctOnOff)>(deValue.OnOff);
     rteValue.DrvrSeatDispMassgFctMassgInten = static_cast<decltype(rteValue.DrvrSeatDispMassgFctMassgInten)>(deValue.MassgInten);
     rteValue.DrvrSeatDispMassgFctMassgProg = static_cast<decltype(rteValue.DrvrSeatDispMassgFctMassgProg)>(deValue.MassgProg);
     rteValue.DrvrSeatDispMassgFctMassgSpdLvl = static_cast<decltype(rteValue.DrvrSeatDispMassgFctMassgSpdLvl)>(deValue.MassgSpdLvl);
+    rteValue.DrvrSeatDispMassgFctOnOff = static_cast<decltype(rteValue.DrvrSeatDispMassgFctOnOff)>(deValue.OnOff);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igDrvrSeatDispMassgFct_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -453,9 +453,9 @@ DstToManvLocn_de->subscribe([]() {
     auto deValue = DstToManvLocn_de->get().value();
     DstToManvLocn rteValue;
     rteValue.CntDwnToManvStrtInDstToManvLocn = static_cast<decltype(rteValue.CntDwnToManvStrtInDstToManvLocn)>(deValue.CntDwnToManvStrt);
-    rteValue.SpprtForFctInDstToManvLocn = static_cast<decltype(rteValue.SpprtForFctInDstToManvLocn)>(deValue.SpprtForFct);
     rteValue.DstToManvInDstToManvLocn = static_cast<decltype(rteValue.DstToManvInDstToManvLocn)>(deValue.DstToManv);
     rteValue.PosnQlyInDstToManvLocn = static_cast<decltype(rteValue.PosnQlyInDstToManvLocn)>(deValue.PosnQly);
+    rteValue.SpprtForFctInDstToManvLocn = static_cast<decltype(rteValue.SpprtForFctInDstToManvLocn)>(deValue.SpprtForFct);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igDstToManvLocn_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -558,9 +558,9 @@ ExtrMirrTiltSetg2_de = new DESink<autosar::ExtrMirrTiltSetg2_info>();
 ExtrMirrTiltSetg2_de->subscribe([]() {
     auto deValue = ExtrMirrTiltSetg2_de->get().value();
     ExtrMirrTiltSetg2 rteValue;
+    rteValue.ExtrMirrTiltSetg2IdPen = static_cast<decltype(rteValue.ExtrMirrTiltSetg2IdPen)>(deValue.IdPen_);
     rteValue.ExtrMirrTiltSetg2MirrDrvr = static_cast<decltype(rteValue.ExtrMirrTiltSetg2MirrDrvr)>(deValue.MirrDrvr);
     rteValue.ExtrMirrTiltSetg2MirrPass = static_cast<decltype(rteValue.ExtrMirrTiltSetg2MirrPass)>(deValue.MirrPass);
-    rteValue.ExtrMirrTiltSetg2IdPen = static_cast<decltype(rteValue.ExtrMirrTiltSetg2IdPen)>(deValue.IdPen_);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igExtrMirrTiltSetg2_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -569,13 +569,13 @@ HdHwAprvdWirelsAdr_de = new DESink<autosar::HdHwAprvdWirelsAdr_info>();
 HdHwAprvdWirelsAdr_de->subscribe([]() {
     auto deValue = HdHwAprvdWirelsAdr_de->get().value();
     HdHwAprvdWirelsAdr rteValue;
-    rteValue.HdHwAprvdWirelsAdrHwOffsAdr6 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr6)>(deValue.HwOffsAdr6);
-    rteValue.HdHwAprvdWirelsAdrHwOffsAdr4 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr4)>(deValue.HwOffsAdr4);
-    rteValue.HdHwAprvdWirelsAdrHwOffsAdr5 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr5)>(deValue.HwOffsAdr5);
+    rteValue.HdHwAprvdWirelsAdrAprvdSts = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrAprvdSts)>(deValue.AprvdSts_);
+    rteValue.HdHwAprvdWirelsAdrHwOffsAdr1 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr1)>(deValue.HwOffsAdr1);
     rteValue.HdHwAprvdWirelsAdrHwOffsAdr2 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr2)>(deValue.HwOffsAdr2);
     rteValue.HdHwAprvdWirelsAdrHwOffsAdr3 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr3)>(deValue.HwOffsAdr3);
-    rteValue.HdHwAprvdWirelsAdrHwOffsAdr1 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr1)>(deValue.HwOffsAdr1);
-    rteValue.HdHwAprvdWirelsAdrAprvdSts = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrAprvdSts)>(deValue.AprvdSts_);
+    rteValue.HdHwAprvdWirelsAdrHwOffsAdr4 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr4)>(deValue.HwOffsAdr4);
+    rteValue.HdHwAprvdWirelsAdrHwOffsAdr5 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr5)>(deValue.HwOffsAdr5);
+    rteValue.HdHwAprvdWirelsAdrHwOffsAdr6 = static_cast<decltype(rteValue.HdHwAprvdWirelsAdrHwOffsAdr6)>(deValue.HwOffsAdr6);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHdHwAprvdWirelsAdr_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -632,14 +632,14 @@ HmiCmptmtTSp_de = new DESink<autosar::HmiCmptmtTSp_info>();
 HmiCmptmtTSp_de->subscribe([]() {
     auto deValue = HmiCmptmtTSp_de->get().value();
     HmiCmptmtTSp rteValue;
-    rteValue.HmiCmptmtTSpForRowSecRi = round((deValue.HmiCmptmtTSpForRowSecRi - 15.0) / 0.5);
     rteValue.HmiCmptmtTSpForRowFirstLe = round((deValue.HmiCmptmtTSpForRowFirstLe - 15.0) / 0.5);
-    rteValue.HmiCmptmtTSpSpclForRowFirstRi = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowFirstRi)>(deValue.HmiCmptmtTSpSpclForRowFirstRi);
-    rteValue.HmiCmptmtTSpSpclForRowSecRi = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowSecRi)>(deValue.HmiCmptmtTSpSpclForRowSecRi);
-    rteValue.HmiCmptmtTSpForRowSecLe = round((deValue.HmiCmptmtTSpForRowSecLe - 15.0) / 0.5);
-    rteValue.HmiCmptmtTSpSpclForRowFirstLe = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowFirstLe)>(deValue.HmiCmptmtTSpSpclForRowFirstLe);
     rteValue.HmiCmptmtTSpForRowFirstRi = round((deValue.HmiCmptmtTSpForRowFirstRi - 15.0) / 0.5);
+    rteValue.HmiCmptmtTSpForRowSecLe = round((deValue.HmiCmptmtTSpForRowSecLe - 15.0) / 0.5);
+    rteValue.HmiCmptmtTSpForRowSecRi = round((deValue.HmiCmptmtTSpForRowSecRi - 15.0) / 0.5);
+    rteValue.HmiCmptmtTSpSpclForRowFirstLe = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowFirstLe)>(deValue.HmiCmptmtTSpSpclForRowFirstLe);
+    rteValue.HmiCmptmtTSpSpclForRowFirstRi = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowFirstRi)>(deValue.HmiCmptmtTSpSpclForRowFirstRi);
     rteValue.HmiCmptmtTSpSpclForRowSecLe = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowSecLe)>(deValue.HmiCmptmtTSpSpclForRowSecLe);
+    rteValue.HmiCmptmtTSpSpclForRowSecRi = static_cast<decltype(rteValue.HmiCmptmtTSpSpclForRowSecRi)>(deValue.HmiCmptmtTSpSpclForRowSecRi);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHmiCmptmtTSp_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -699,12 +699,12 @@ HmiSeatClima_de = new DESink<autosar::HmiSeatClima_info>();
 HmiSeatClima_de->subscribe([]() {
     auto deValue = HmiSeatClima_de->get().value();
     HmiSeatClima rteValue;
-    rteValue.HmiSeatVentnForRowFirstRi = static_cast<decltype(rteValue.HmiSeatVentnForRowFirstRi)>(deValue.HmiSeatVentnForRowFirstRi);
-    rteValue.HmiSeatHeatgForRowSecRi = static_cast<decltype(rteValue.HmiSeatHeatgForRowSecRi)>(deValue.HmiSeatHeatgForRowSecRi);
-    rteValue.HmiSeatHeatgForRowFirstRi = static_cast<decltype(rteValue.HmiSeatHeatgForRowFirstRi)>(deValue.HmiSeatHeatgForRowFirstRi);
-    rteValue.HmiSeatVentnForRowFirstLe = static_cast<decltype(rteValue.HmiSeatVentnForRowFirstLe)>(deValue.HmiSeatVentnForRowFirstLe);
-    rteValue.HmiSeatHeatgForRowSecLe = static_cast<decltype(rteValue.HmiSeatHeatgForRowSecLe)>(deValue.HmiSeatHeatgForRowSecLe);
     rteValue.HmiSeatHeatgForRowFirstLe = static_cast<decltype(rteValue.HmiSeatHeatgForRowFirstLe)>(deValue.HmiSeatHeatgForRowFirstLe);
+    rteValue.HmiSeatHeatgForRowFirstRi = static_cast<decltype(rteValue.HmiSeatHeatgForRowFirstRi)>(deValue.HmiSeatHeatgForRowFirstRi);
+    rteValue.HmiSeatHeatgForRowSecLe = static_cast<decltype(rteValue.HmiSeatHeatgForRowSecLe)>(deValue.HmiSeatHeatgForRowSecLe);
+    rteValue.HmiSeatHeatgForRowSecRi = static_cast<decltype(rteValue.HmiSeatHeatgForRowSecRi)>(deValue.HmiSeatHeatgForRowSecRi);
+    rteValue.HmiSeatVentnForRowFirstLe = static_cast<decltype(rteValue.HmiSeatVentnForRowFirstLe)>(deValue.HmiSeatVentnForRowFirstLe);
+    rteValue.HmiSeatVentnForRowFirstRi = static_cast<decltype(rteValue.HmiSeatVentnForRowFirstRi)>(deValue.HmiSeatVentnForRowFirstRi);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHmiSeatClima_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -713,8 +713,8 @@ HmiSeatClimaExtd_de = new DESink<autosar::HmiSeatClimaExtd_info>();
 HmiSeatClimaExtd_de->subscribe([]() {
     auto deValue = HmiSeatClimaExtd_de->get().value();
     HmiSeatClimaExtd rteValue;
-    rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecRi = static_cast<decltype(rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecRi)>(deValue.HmiSeatVentnForRowSecRi);
     rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecLe = static_cast<decltype(rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecLe)>(deValue.HmiSeatVentnForRowSecLe);
+    rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecRi = static_cast<decltype(rteValue.HmiSeatClimaExtdHmiSeatVentnForRowSecRi)>(deValue.HmiSeatVentnForRowSecRi);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHmiSeatClimaExtd_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -749,27 +749,27 @@ HudVisFctSetg_de = new DESink<autosar::HudVisFctSetg_info>();
 HudVisFctSetg_de->subscribe([]() {
     auto deValue = HudVisFctSetg_de->get().value();
     HudVisFctSetg rteValue;
-    rteValue.HudVisFctSetgHudFct06 = static_cast<decltype(rteValue.HudVisFctSetgHudFct06)>(deValue.HudFct06);
-    rteValue.HudVisFctSetgHudFct07 = static_cast<decltype(rteValue.HudVisFctSetgHudFct07)>(deValue.HudFct07);
-    rteValue.HudVisFctSetgHudFct04 = static_cast<decltype(rteValue.HudVisFctSetgHudFct04)>(deValue.HudFct04);
-    rteValue.HudVisFctSetgHudFct05 = static_cast<decltype(rteValue.HudVisFctSetgHudFct05)>(deValue.HudFct05);
-    rteValue.HudVisFctSetgHudFct02 = static_cast<decltype(rteValue.HudVisFctSetgHudFct02)>(deValue.HudFct02);
-    rteValue.HudVisFctSetgHudFct03 = static_cast<decltype(rteValue.HudVisFctSetgHudFct03)>(deValue.HudFct03);
     rteValue.HudVisFctSetgHudFct00 = static_cast<decltype(rteValue.HudVisFctSetgHudFct00)>(deValue.HudFct00);
     rteValue.HudVisFctSetgHudFct01 = static_cast<decltype(rteValue.HudVisFctSetgHudFct01)>(deValue.HudFct01);
+    rteValue.HudVisFctSetgHudFct02 = static_cast<decltype(rteValue.HudVisFctSetgHudFct02)>(deValue.HudFct02);
+    rteValue.HudVisFctSetgHudFct03 = static_cast<decltype(rteValue.HudVisFctSetgHudFct03)>(deValue.HudFct03);
+    rteValue.HudVisFctSetgHudFct04 = static_cast<decltype(rteValue.HudVisFctSetgHudFct04)>(deValue.HudFct04);
+    rteValue.HudVisFctSetgHudFct05 = static_cast<decltype(rteValue.HudVisFctSetgHudFct05)>(deValue.HudFct05);
+    rteValue.HudVisFctSetgHudFct06 = static_cast<decltype(rteValue.HudVisFctSetgHudFct06)>(deValue.HudFct06);
+    rteValue.HudVisFctSetgHudFct07 = static_cast<decltype(rteValue.HudVisFctSetgHudFct07)>(deValue.HudFct07);
     rteValue.HudVisFctSetgHudFct08 = static_cast<decltype(rteValue.HudVisFctSetgHudFct08)>(deValue.HudFct08);
     rteValue.HudVisFctSetgHudFct09 = static_cast<decltype(rteValue.HudVisFctSetgHudFct09)>(deValue.HudFct09);
-    rteValue.HudVisFctSetgHudFct19 = static_cast<decltype(rteValue.HudVisFctSetgHudFct19)>(deValue.HudFct19);
-    rteValue.HudVisFctSetgHudFct18 = static_cast<decltype(rteValue.HudVisFctSetgHudFct18)>(deValue.HudFct18);
-    rteValue.HudVisFctSetgPen = static_cast<decltype(rteValue.HudVisFctSetgPen)>(deValue.Pen);
-    rteValue.HudVisFctSetgHudFct11 = static_cast<decltype(rteValue.HudVisFctSetgHudFct11)>(deValue.HudFct11);
     rteValue.HudVisFctSetgHudFct10 = static_cast<decltype(rteValue.HudVisFctSetgHudFct10)>(deValue.HudFct10);
-    rteValue.HudVisFctSetgHudFct13 = static_cast<decltype(rteValue.HudVisFctSetgHudFct13)>(deValue.HudFct13);
+    rteValue.HudVisFctSetgHudFct11 = static_cast<decltype(rteValue.HudVisFctSetgHudFct11)>(deValue.HudFct11);
     rteValue.HudVisFctSetgHudFct12 = static_cast<decltype(rteValue.HudVisFctSetgHudFct12)>(deValue.HudFct12);
-    rteValue.HudVisFctSetgHudFct15 = static_cast<decltype(rteValue.HudVisFctSetgHudFct15)>(deValue.HudFct15);
+    rteValue.HudVisFctSetgHudFct13 = static_cast<decltype(rteValue.HudVisFctSetgHudFct13)>(deValue.HudFct13);
     rteValue.HudVisFctSetgHudFct14 = static_cast<decltype(rteValue.HudVisFctSetgHudFct14)>(deValue.HudFct14);
-    rteValue.HudVisFctSetgHudFct17 = static_cast<decltype(rteValue.HudVisFctSetgHudFct17)>(deValue.HudFct17);
+    rteValue.HudVisFctSetgHudFct15 = static_cast<decltype(rteValue.HudVisFctSetgHudFct15)>(deValue.HudFct15);
     rteValue.HudVisFctSetgHudFct16 = static_cast<decltype(rteValue.HudVisFctSetgHudFct16)>(deValue.HudFct16);
+    rteValue.HudVisFctSetgHudFct17 = static_cast<decltype(rteValue.HudVisFctSetgHudFct17)>(deValue.HudFct17);
+    rteValue.HudVisFctSetgHudFct18 = static_cast<decltype(rteValue.HudVisFctSetgHudFct18)>(deValue.HudFct18);
+    rteValue.HudVisFctSetgHudFct19 = static_cast<decltype(rteValue.HudVisFctSetgHudFct19)>(deValue.HudFct19);
+    rteValue.HudVisFctSetgPen = static_cast<decltype(rteValue.HudVisFctSetgPen)>(deValue.Pen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHudVisFctSetg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -778,19 +778,19 @@ HznData_de = new DESink<autosar::HznData_info>();
 HznData_de->subscribe([]() {
     auto deValue = HznData_de->get().value();
     HznData rteValue;
-    rteValue.MapSrcInHznData = static_cast<decltype(rteValue.MapSrcInHznData)>(deValue.MapSrc);
+    rteValue.ChdTxVersInHznData = static_cast<decltype(rteValue.ChdTxVersInHznData)>(deValue.ChdTxVers);
     rteValue.CtryCodInHznData = static_cast<decltype(rteValue.CtryCodInHznData)>(deValue.CtryCod);
     rteValue.CycCntrInHznData = static_cast<decltype(rteValue.CycCntrInHznData)>(deValue.CycCntr);
-    rteValue.TxVersInHznData = static_cast<decltype(rteValue.TxVersInHznData)>(deValue.TxVers);
-    rteValue.SpdUnitInHznData = static_cast<decltype(rteValue.SpdUnitInHznData)>(deValue.SpdUnit);
-    rteValue.MsgTypInHznData = static_cast<decltype(rteValue.MsgTypInHznData)>(deValue.MsgTyp);
-    rteValue.RegnCodInHznData = static_cast<decltype(rteValue.RegnCodInHznData)>(deValue.RegnCod);
-    rteValue.HdTxVersInHznData = static_cast<decltype(rteValue.HdTxVersInHznData)>(deValue.HdTxVers);
-    rteValue.YrVersOfMapInHznData = static_cast<decltype(rteValue.YrVersOfMapInHznData)>(deValue.YrVersOfMap);
-    rteValue.PartOfYrVersOfMapInHznData = static_cast<decltype(rteValue.PartOfYrVersOfMapInHznData)>(deValue.PartOfYrVersOfMap);
-    rteValue.ChdTxVersInHznData = static_cast<decltype(rteValue.ChdTxVersInHznData)>(deValue.ChdTxVers);
     rteValue.DrvgSideInHznData = static_cast<decltype(rteValue.DrvgSideInHznData)>(deValue.DrvgSide);
+    rteValue.HdTxVersInHznData = static_cast<decltype(rteValue.HdTxVersInHznData)>(deValue.HdTxVers);
     rteValue.HwVersInHznData = static_cast<decltype(rteValue.HwVersInHznData)>(deValue.HwVers);
+    rteValue.MapSrcInHznData = static_cast<decltype(rteValue.MapSrcInHznData)>(deValue.MapSrc);
+    rteValue.MsgTypInHznData = static_cast<decltype(rteValue.MsgTypInHznData)>(deValue.MsgTyp);
+    rteValue.PartOfYrVersOfMapInHznData = static_cast<decltype(rteValue.PartOfYrVersOfMapInHznData)>(deValue.PartOfYrVersOfMap);
+    rteValue.RegnCodInHznData = static_cast<decltype(rteValue.RegnCodInHznData)>(deValue.RegnCod);
+    rteValue.SpdUnitInHznData = static_cast<decltype(rteValue.SpdUnitInHznData)>(deValue.SpdUnit);
+    rteValue.TxVersInHznData = static_cast<decltype(rteValue.TxVersInHznData)>(deValue.TxVers);
+    rteValue.YrVersOfMapInHznData = static_cast<decltype(rteValue.YrVersOfMapInHznData)>(deValue.YrVersOfMap);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznData_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -799,23 +799,23 @@ HznEdge_de = new DESink<autosar::HznEdge_info>();
 HznEdge_de->subscribe([]() {
     auto deValue = HznEdge_de->get().value();
     HznEdge rteValue;
-    rteValue.OffsInHznEdge = static_cast<decltype(rteValue.OffsInHznEdge)>(deValue.Offs);
-    rteValue.RoadClassInHznEdge = static_cast<decltype(rteValue.RoadClassInHznEdge)>(deValue.RoadClass);
-    rteValue.PartOfCourseCalcdInHznEdge = static_cast<decltype(rteValue.PartOfCourseCalcdInHznEdge)>(deValue.PartOfCourseCalcd);
-    rteValue.UpdInHznEdge = static_cast<decltype(rteValue.UpdInHznEdge)>(deValue.Upd);
-    rteValue.RelProbltyInHznEdge = round((deValue.RelProblty - 0.0) / 3.33333333);
-    rteValue.TypOfWayInHznEdge = static_cast<decltype(rteValue.TypOfWayInHznEdge)>(deValue.TypOfWay);
-    rteValue.RiOfWayInHznEdge = static_cast<decltype(rteValue.RiOfWayInHznEdge)>(deValue.RiOfWay);
-    rteValue.NrOfLaneInDrvgDirInHznEdge = static_cast<decltype(rteValue.NrOfLaneInDrvgDirInHznEdge)>(deValue.NrOfLaneInDrvgDir);
-    rteValue.MsgTypInHznEdge = static_cast<decltype(rteValue.MsgTypInHznEdge)>(deValue.MsgTyp);
-    rteValue.TxPrevInHznEdge = static_cast<decltype(rteValue.TxPrevInHznEdge)>(deValue.TxPrev);
-    rteValue.LstEdgeAtOffsInHznEdge = static_cast<decltype(rteValue.LstEdgeAtOffsInHznEdge)>(deValue.LstEdgeAtOffs);
     rteValue.CycCntrInHznEdge = static_cast<decltype(rteValue.CycCntrInHznEdge)>(deValue.CycCntr);
     rteValue.IntscnCmplxInHznEdge = static_cast<decltype(rteValue.IntscnCmplxInHznEdge)>(deValue.IntscnCmplx);
+    rteValue.LstEdgeAtOffsInHznEdge = static_cast<decltype(rteValue.LstEdgeAtOffsInHznEdge)>(deValue.LstEdgeAtOffs);
+    rteValue.MsgTypInHznEdge = static_cast<decltype(rteValue.MsgTypInHznEdge)>(deValue.MsgTyp);
+    rteValue.NrOfLaneInDrvgDirInHznEdge = static_cast<decltype(rteValue.NrOfLaneInDrvgDirInHznEdge)>(deValue.NrOfLaneInDrvgDir);
     rteValue.NrOfLaneInSecDirInHznEdge = static_cast<decltype(rteValue.NrOfLaneInSecDirInHznEdge)>(deValue.NrOfLaneInSecDir);
+    rteValue.OffsInHznEdge = static_cast<decltype(rteValue.OffsInHznEdge)>(deValue.Offs);
     rteValue.PahIdxInHznEdge = static_cast<decltype(rteValue.PahIdxInHznEdge)>(deValue.PahIdx);
-    rteValue.TurnAgInHznEdge = round((deValue.TurnAg - 0.0) / 1.4173228346456692);
     rteValue.PahIdxNewInHznEdge = static_cast<decltype(rteValue.PahIdxNewInHznEdge)>(deValue.PahIdxNew);
+    rteValue.PartOfCourseCalcdInHznEdge = static_cast<decltype(rteValue.PartOfCourseCalcdInHznEdge)>(deValue.PartOfCourseCalcd);
+    rteValue.RelProbltyInHznEdge = round((deValue.RelProblty - 0.0) / 3.33333333);
+    rteValue.RiOfWayInHznEdge = static_cast<decltype(rteValue.RiOfWayInHznEdge)>(deValue.RiOfWay);
+    rteValue.RoadClassInHznEdge = static_cast<decltype(rteValue.RoadClassInHznEdge)>(deValue.RoadClass);
+    rteValue.TurnAgInHznEdge = round((deValue.TurnAg - 0.0) / 1.4173228346456692);
+    rteValue.TxPrevInHznEdge = static_cast<decltype(rteValue.TxPrevInHznEdge)>(deValue.TxPrev);
+    rteValue.TypOfWayInHznEdge = static_cast<decltype(rteValue.TypOfWayInHznEdge)>(deValue.TypOfWay);
+    rteValue.UpdInHznEdge = static_cast<decltype(rteValue.UpdInHznEdge)>(deValue.Upd);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznEdge_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -824,17 +824,17 @@ HznPosn_de = new DESink<autosar::HznPosn_info>();
 HznPosn_de->subscribe([]() {
     auto deValue = HznPosn_de->get().value();
     HznPosn rteValue;
-    rteValue.OffsInHznPosn = static_cast<decltype(rteValue.OffsInHznPosn)>(deValue.Offs);
     rteValue.CycCntrInHznPosn = static_cast<decltype(rteValue.CycCntrInHznPosn)>(deValue.CycCntr);
-    rteValue.PosnQlyInHznPosn = static_cast<decltype(rteValue.PosnQlyInHznPosn)>(deValue.PosnQly);
-    rteValue.SpdInHznPosn = round((deValue.Spd - -12.8) / 0.2);
-    rteValue.MsgTypInHznPosn = static_cast<decltype(rteValue.MsgTypInHznPosn)>(deValue.MsgTyp);
-    rteValue.PosnProbltyInHznPosn = round((deValue.PosnProblty - 0.0) / 3.33333333);
     rteValue.LanePrsntInHznPosn = static_cast<decltype(rteValue.LanePrsntInHznPosn)>(deValue.LanePrsnt);
+    rteValue.MsgTypInHznPosn = static_cast<decltype(rteValue.MsgTypInHznPosn)>(deValue.MsgTyp);
+    rteValue.OffsInHznPosn = static_cast<decltype(rteValue.OffsInHznPosn)>(deValue.Offs);
     rteValue.PahIdxInHznPosn = static_cast<decltype(rteValue.PahIdxInHznPosn)>(deValue.PahIdx);
+    rteValue.PosnIdxInHznPosn = static_cast<decltype(rteValue.PosnIdxInHznPosn)>(deValue.PosnIdx);
+    rteValue.PosnProbltyInHznPosn = round((deValue.PosnProblty - 0.0) / 3.33333333);
+    rteValue.PosnQlyInHznPosn = static_cast<decltype(rteValue.PosnQlyInHznPosn)>(deValue.PosnQly);
     rteValue.PosnTiDifInHznPosn = round((deValue.PosnTiDif - 0.0) / 5.0);
     rteValue.RelDirInHznPosn = round((deValue.RelDir - 0.0) / 1.4173228346456692);
-    rteValue.PosnIdxInHznPosn = static_cast<decltype(rteValue.PosnIdxInHznPosn)>(deValue.PosnIdx);
+    rteValue.SpdInHznPosn = round((deValue.Spd - -12.8) / 0.2);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznPosn_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -843,15 +843,15 @@ HznPosnExtd_de = new DESink<autosar::HznPosnExtd_info>();
 HznPosnExtd_de->subscribe([]() {
     auto deValue = HznPosnExtd_de->get().value();
     HznPosnExtd rteValue;
-    rteValue.HznPosnExtdSpd = round((deValue.Spd - -12.8) / 0.2);
-    rteValue.HznPosnExtdPosnQly = static_cast<decltype(rteValue.HznPosnExtdPosnQly)>(deValue.PosnQly);
     rteValue.HznPosnExtdLanePrsnt = static_cast<decltype(rteValue.HznPosnExtdLanePrsnt)>(deValue.LanePrsnt);
-    rteValue.HznPosnExtdPosnProblty = round((deValue.PosnProblty - 0.0) / 3.33333333);
     rteValue.HznPosnExtdMsgTyp = static_cast<decltype(rteValue.HznPosnExtdMsgTyp)>(deValue.MsgTyp);
     rteValue.HznPosnExtdPahIdx = static_cast<decltype(rteValue.HznPosnExtdPahIdx)>(deValue.PahIdx);
+    rteValue.HznPosnExtdPosnIdx = static_cast<decltype(rteValue.HznPosnExtdPosnIdx)>(deValue.PosnIdx);
+    rteValue.HznPosnExtdPosnProblty = round((deValue.PosnProblty - 0.0) / 3.33333333);
+    rteValue.HznPosnExtdPosnQly = static_cast<decltype(rteValue.HznPosnExtdPosnQly)>(deValue.PosnQly);
     rteValue.HznPosnExtdPosnTiDif = round((deValue.PosnTiDif - 0.0) / 5.0);
     rteValue.HznPosnExtdRelDir = round((deValue.RelDir - 0.0) / 1.4173228346456692);
-    rteValue.HznPosnExtdPosnIdx = static_cast<decltype(rteValue.HznPosnExtdPosnIdx)>(deValue.PosnIdx);
+    rteValue.HznPosnExtdSpd = round((deValue.Spd - -12.8) / 0.2);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznPosnExtd_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -870,15 +870,15 @@ HznProfLong_de = new DESink<autosar::HznProfLong_info>();
 HznProfLong_de->subscribe([]() {
     auto deValue = HznProfLong_de->get().value();
     HznProfLong rteValue;
-    rteValue.OffsInHznProfLong = static_cast<decltype(rteValue.OffsInHznProfLong)>(deValue.Offs);
-    rteValue.ValInHznProfLong = static_cast<decltype(rteValue.ValInHznProfLong)>(deValue.Val);
-    rteValue.ProfTypInHznProfLong = static_cast<decltype(rteValue.ProfTypInHznProfLong)>(deValue.ProfTyp);
     rteValue.CycCntrInHznProfLong = static_cast<decltype(rteValue.CycCntrInHznProfLong)>(deValue.CycCntr);
-    rteValue.UpdInHznProfLong = static_cast<decltype(rteValue.UpdInHznProfLong)>(deValue.Upd);
-    rteValue.NodCtrlInHznProfLong = static_cast<decltype(rteValue.NodCtrlInHznProfLong)>(deValue.NodCtrl);
     rteValue.MsgTypInHznProfLong = static_cast<decltype(rteValue.MsgTypInHznProfLong)>(deValue.MsgTyp);
-    rteValue.TxPrevInHznProfLong = static_cast<decltype(rteValue.TxPrevInHznProfLong)>(deValue.TxPrev);
+    rteValue.NodCtrlInHznProfLong = static_cast<decltype(rteValue.NodCtrlInHznProfLong)>(deValue.NodCtrl);
+    rteValue.OffsInHznProfLong = static_cast<decltype(rteValue.OffsInHznProfLong)>(deValue.Offs);
     rteValue.PahIdxInHznProfLong = static_cast<decltype(rteValue.PahIdxInHznProfLong)>(deValue.PahIdx);
+    rteValue.ProfTypInHznProfLong = static_cast<decltype(rteValue.ProfTypInHznProfLong)>(deValue.ProfTyp);
+    rteValue.TxPrevInHznProfLong = static_cast<decltype(rteValue.TxPrevInHznProfLong)>(deValue.TxPrev);
+    rteValue.UpdInHznProfLong = static_cast<decltype(rteValue.UpdInHznProfLong)>(deValue.Upd);
+    rteValue.ValInHznProfLong = static_cast<decltype(rteValue.ValInHznProfLong)>(deValue.Val);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznProfLong_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -887,15 +887,15 @@ HznProfLongExtd_de = new DESink<autosar::HznProfLongExtd_info>();
 HznProfLongExtd_de->subscribe([]() {
     auto deValue = HznProfLongExtd_de->get().value();
     HznProfLongExtd rteValue;
-    rteValue.HznProfLongExtdOffs = round((deValue.Offs - 0.0) / 128.0);
-    rteValue.HznProfLongExtdVal = static_cast<decltype(rteValue.HznProfLongExtdVal)>(deValue.Val);
-    rteValue.HznProfLongExtdProfTyp = static_cast<decltype(rteValue.HznProfLongExtdProfTyp)>(deValue.ProfTyp);
     rteValue.HznProfLongExtdCycCntr = static_cast<decltype(rteValue.HznProfLongExtdCycCntr)>(deValue.CycCntr);
-    rteValue.HznProfLongExtdUpd = static_cast<decltype(rteValue.HznProfLongExtdUpd)>(deValue.Upd);
-    rteValue.HznProfLongExtdNodCtrl = static_cast<decltype(rteValue.HznProfLongExtdNodCtrl)>(deValue.NodCtrl);
     rteValue.HznProfLongExtdMsgTyp = static_cast<decltype(rteValue.HznProfLongExtdMsgTyp)>(deValue.MsgTyp);
-    rteValue.HznProfLongExtdTxPrev = static_cast<decltype(rteValue.HznProfLongExtdTxPrev)>(deValue.TxPrev);
+    rteValue.HznProfLongExtdNodCtrl = static_cast<decltype(rteValue.HznProfLongExtdNodCtrl)>(deValue.NodCtrl);
+    rteValue.HznProfLongExtdOffs = round((deValue.Offs - 0.0) / 128.0);
     rteValue.HznProfLongExtdPahIdx = static_cast<decltype(rteValue.HznProfLongExtdPahIdx)>(deValue.PahIdx);
+    rteValue.HznProfLongExtdProfTyp = static_cast<decltype(rteValue.HznProfLongExtdProfTyp)>(deValue.ProfTyp);
+    rteValue.HznProfLongExtdTxPrev = static_cast<decltype(rteValue.HznProfLongExtdTxPrev)>(deValue.TxPrev);
+    rteValue.HznProfLongExtdUpd = static_cast<decltype(rteValue.HznProfLongExtdUpd)>(deValue.Upd);
+    rteValue.HznProfLongExtdVal = static_cast<decltype(rteValue.HznProfLongExtdVal)>(deValue.Val);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznProfLongExtd_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -904,18 +904,18 @@ HznProfSho_de = new DESink<autosar::HznProfSho_info>();
 HznProfSho_de->subscribe([]() {
     auto deValue = HznProfSho_de->get().value();
     HznProfSho rteValue;
-    rteValue.OffsInHznProfSho = static_cast<decltype(rteValue.OffsInHznProfSho)>(deValue.Offs);
-    rteValue.NodCtrlInHznProfSho = static_cast<decltype(rteValue.NodCtrlInHznProfSho)>(deValue.NodCtrl);
     rteValue.CycCntrInHznProfSho = static_cast<decltype(rteValue.CycCntrInHznProfSho)>(deValue.CycCntr);
-    rteValue.UpdInHznProfSho = static_cast<decltype(rteValue.UpdInHznProfSho)>(deValue.Upd);
+    rteValue.Dst1InHznProfSho = static_cast<decltype(rteValue.Dst1InHznProfSho)>(deValue.Dst1);
+    rteValue.MsgTypInHznProfSho = static_cast<decltype(rteValue.MsgTypInHznProfSho)>(deValue.MsgTyp);
+    rteValue.NodCtrlInHznProfSho = static_cast<decltype(rteValue.NodCtrlInHznProfSho)>(deValue.NodCtrl);
+    rteValue.OffsInHznProfSho = static_cast<decltype(rteValue.OffsInHznProfSho)>(deValue.Offs);
+    rteValue.PahIdxInHznProfSho = static_cast<decltype(rteValue.PahIdxInHznProfSho)>(deValue.PahIdx);
     rteValue.ProfTypInHznProfSho = static_cast<decltype(rteValue.ProfTypInHznProfSho)>(deValue.ProfTyp);
     rteValue.ProfTypQlyInHznProfSho = static_cast<decltype(rteValue.ProfTypQlyInHznProfSho)>(deValue.ProfTypQly);
-    rteValue.MsgTypInHznProfSho = static_cast<decltype(rteValue.MsgTypInHznProfSho)>(deValue.MsgTyp);
-    rteValue.Dst1InHznProfSho = static_cast<decltype(rteValue.Dst1InHznProfSho)>(deValue.Dst1);
-    rteValue.Val1InHznProfSho = static_cast<decltype(rteValue.Val1InHznProfSho)>(deValue.Val1);
-    rteValue.Val0InHznProfSho = static_cast<decltype(rteValue.Val0InHznProfSho)>(deValue.Val0);
-    rteValue.PahIdxInHznProfSho = static_cast<decltype(rteValue.PahIdxInHznProfSho)>(deValue.PahIdx);
     rteValue.TxPrevInHznProfSho = static_cast<decltype(rteValue.TxPrevInHznProfSho)>(deValue.TxPrev);
+    rteValue.UpdInHznProfSho = static_cast<decltype(rteValue.UpdInHznProfSho)>(deValue.Upd);
+    rteValue.Val0InHznProfSho = static_cast<decltype(rteValue.Val0InHznProfSho)>(deValue.Val0);
+    rteValue.Val1InHznProfSho = static_cast<decltype(rteValue.Val1InHznProfSho)>(deValue.Val1);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznProfSho_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -924,25 +924,25 @@ HznSeg_de = new DESink<autosar::HznSeg_info>();
 HznSeg_de->subscribe([]() {
     auto deValue = HznSeg_de->get().value();
     HznSeg rteValue;
-    rteValue.RoadMplInHznSeg = static_cast<decltype(rteValue.RoadMplInHznSeg)>(deValue.RoadMpl);
-    rteValue.OffsInHznSeg = static_cast<decltype(rteValue.OffsInHznSeg)>(deValue.Offs);
-    rteValue.RoadClassInHznSeg = static_cast<decltype(rteValue.RoadClassInHznSeg)>(deValue.RoadClass);
-    rteValue.NrOfLaneInSecDirInHznSeg = static_cast<decltype(rteValue.NrOfLaneInSecDirInHznSeg)>(deValue.NrOfLaneInSecDir);
-    rteValue.CycCntrInHznSeg = static_cast<decltype(rteValue.CycCntrInHznSeg)>(deValue.CycCntr);
-    rteValue.UpdInHznSeg = static_cast<decltype(rteValue.UpdInHznSeg)>(deValue.Upd);
     rteValue.BrdgInHznSeg = static_cast<decltype(rteValue.BrdgInHznSeg)>(deValue.Brdg);
-    rteValue.SpdLimEfcInHznSeg = static_cast<decltype(rteValue.SpdLimEfcInHznSeg)>(deValue.SpdLimEfc);
-    rteValue.TypOfWayInHznSeg = static_cast<decltype(rteValue.TypOfWayInHznSeg)>(deValue.TypOfWay);
-    rteValue.NrOfLaneInDrvgDirInHznSeg = static_cast<decltype(rteValue.NrOfLaneInDrvgDirInHznSeg)>(deValue.NrOfLaneInDrvgDir);
-    rteValue.MsgTypInHznSeg = static_cast<decltype(rteValue.MsgTypInHznSeg)>(deValue.MsgTyp);
-    rteValue.TxPrevInHznSeg = static_cast<decltype(rteValue.TxPrevInHznSeg)>(deValue.TxPrev);
-    rteValue.PartOfCourseCalcdInHznSeg = static_cast<decltype(rteValue.PartOfCourseCalcdInHznSeg)>(deValue.PartOfCourseCalcd);
+    rteValue.CycCntrInHznSeg = static_cast<decltype(rteValue.CycCntrInHznSeg)>(deValue.CycCntr);
     rteValue.IntscnCmplxInHznSeg = static_cast<decltype(rteValue.IntscnCmplxInHznSeg)>(deValue.IntscnCmplx);
-    rteValue.TnlInHznSeg = static_cast<decltype(rteValue.TnlInHznSeg)>(deValue.Tnl);
+    rteValue.MsgTypInHznSeg = static_cast<decltype(rteValue.MsgTypInHznSeg)>(deValue.MsgTyp);
+    rteValue.NrOfLaneInDrvgDirInHznSeg = static_cast<decltype(rteValue.NrOfLaneInDrvgDirInHznSeg)>(deValue.NrOfLaneInDrvgDir);
+    rteValue.NrOfLaneInSecDirInHznSeg = static_cast<decltype(rteValue.NrOfLaneInSecDirInHznSeg)>(deValue.NrOfLaneInSecDir);
+    rteValue.OffsInHznSeg = static_cast<decltype(rteValue.OffsInHznSeg)>(deValue.Offs);
     rteValue.PahIdxInHznSeg = static_cast<decltype(rteValue.PahIdxInHznSeg)>(deValue.PahIdx);
-    rteValue.SpdLimTypEfcInHznSeg = static_cast<decltype(rteValue.SpdLimTypEfcInHznSeg)>(deValue.SpdLimTypEfc);
-    rteValue.RoadLiArInHznSeg = static_cast<decltype(rteValue.RoadLiArInHznSeg)>(deValue.RoadLiAr);
+    rteValue.PartOfCourseCalcdInHznSeg = static_cast<decltype(rteValue.PartOfCourseCalcdInHznSeg)>(deValue.PartOfCourseCalcd);
     rteValue.RelProbltyInHznSeg = round((deValue.RelProblty - 0.0) / 3.33333333);
+    rteValue.RoadClassInHznSeg = static_cast<decltype(rteValue.RoadClassInHznSeg)>(deValue.RoadClass);
+    rteValue.RoadLiArInHznSeg = static_cast<decltype(rteValue.RoadLiArInHznSeg)>(deValue.RoadLiAr);
+    rteValue.RoadMplInHznSeg = static_cast<decltype(rteValue.RoadMplInHznSeg)>(deValue.RoadMpl);
+    rteValue.SpdLimEfcInHznSeg = static_cast<decltype(rteValue.SpdLimEfcInHznSeg)>(deValue.SpdLimEfc);
+    rteValue.SpdLimTypEfcInHznSeg = static_cast<decltype(rteValue.SpdLimTypEfcInHznSeg)>(deValue.SpdLimTypEfc);
+    rteValue.TnlInHznSeg = static_cast<decltype(rteValue.TnlInHznSeg)>(deValue.Tnl);
+    rteValue.TxPrevInHznSeg = static_cast<decltype(rteValue.TxPrevInHznSeg)>(deValue.TxPrev);
+    rteValue.TypOfWayInHznSeg = static_cast<decltype(rteValue.TypOfWayInHznSeg)>(deValue.TypOfWay);
+    rteValue.UpdInHznSeg = static_cast<decltype(rteValue.UpdInHznSeg)>(deValue.Upd);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHznSeg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -967,16 +967,16 @@ IndcnUnit_de = new DESink<autosar::IndcnUnit_info>();
 IndcnUnit_de->subscribe([]() {
     auto deValue = IndcnUnit_de->get().value();
     IndcnUnit rteValue;
-    rteValue.IndcnUnitDateFmt = static_cast<decltype(rteValue.IndcnUnitDateFmt)>(deValue.DateFmt_);
-    rteValue.FuCnsUnit = static_cast<decltype(rteValue.FuCnsUnit)>(deValue.FuCnsUnit);
     rteValue.ClkFmt = static_cast<decltype(rteValue.ClkFmt)>(deValue.ClkFmt_);
-    rteValue.VolUnit = static_cast<decltype(rteValue.VolUnit)>(deValue.VolUnit_);
-    rteValue.PUnit = static_cast<decltype(rteValue.PUnit)>(deValue.PUnit_);
+    rteValue.IndcnUnitDateFmt = static_cast<decltype(rteValue.IndcnUnitDateFmt)>(deValue.DateFmt_);
     rteValue.DstLong = static_cast<decltype(rteValue.DstLong)>(deValue.DstLong_);
+    rteValue.DstSho = static_cast<decltype(rteValue.DstSho)>(deValue.DstSho_);
+    rteValue.FuCnsUnit = static_cast<decltype(rteValue.FuCnsUnit)>(deValue.FuCnsUnit);
+    rteValue.IdPenForUnits = static_cast<decltype(rteValue.IdPenForUnits)>(deValue.IdPenForUnit);
+    rteValue.PUnit = static_cast<decltype(rteValue.PUnit)>(deValue.PUnit_);
     rteValue.SpdUnit = static_cast<decltype(rteValue.SpdUnit)>(deValue.SpdUnit);
     rteValue.TUnit = static_cast<decltype(rteValue.TUnit)>(deValue.TUnit);
-    rteValue.DstSho = static_cast<decltype(rteValue.DstSho)>(deValue.DstSho_);
-    rteValue.IdPenForUnits = static_cast<decltype(rteValue.IdPenForUnits)>(deValue.IdPenForUnit);
+    rteValue.VolUnit = static_cast<decltype(rteValue.VolUnit)>(deValue.VolUnit_);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igIndcnUnit_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1001,9 +1001,9 @@ IntrLiAmbLiSetg_de = new DESink<autosar::IntrLiAmbLiSetg_info>();
 IntrLiAmbLiSetg_de->subscribe([]() {
     auto deValue = IntrLiAmbLiSetg_de->get().value();
     IntrLiAmbLiSetg rteValue;
+    rteValue.IntrLiAmbLiSetgForLiInten = static_cast<decltype(rteValue.IntrLiAmbLiSetgForLiInten)>(deValue.LiInten);
     rteValue.IntrLiAmbLiSetgForLiTintg = static_cast<decltype(rteValue.IntrLiAmbLiSetgForLiTintg)>(deValue.LiTintg);
     rteValue.IntrLiAmbLiSetgPen = static_cast<decltype(rteValue.IntrLiAmbLiSetgPen)>(deValue.Pen);
-    rteValue.IntrLiAmbLiSetgForLiInten = static_cast<decltype(rteValue.IntrLiAmbLiSetgForLiInten)>(deValue.LiInten);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igIntrLiAmbLiSetg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1012,9 +1012,9 @@ IntrLiSurrndgsLiSetgLi_de = new DESink<autosar::IntrLiSurrndgsLiSetgLi_info>();
 IntrLiSurrndgsLiSetgLi_de->subscribe([]() {
     auto deValue = IntrLiSurrndgsLiSetgLi_de->get().value();
     IntrLiSurrndgsLiSetgLi rteValue;
-    rteValue.IntrLiSurrndgsLiSetgPen = static_cast<decltype(rteValue.IntrLiSurrndgsLiSetgPen)>(deValue.Pen);
-    rteValue.IntrLiSurrndgsLiSetgForLiLvl = static_cast<decltype(rteValue.IntrLiSurrndgsLiSetgForLiLvl)>(deValue.LiLvl);
     rteValue.IntrLiSurrndgsLiSetgForLiInten = static_cast<decltype(rteValue.IntrLiSurrndgsLiSetgForLiInten)>(deValue.LiInten);
+    rteValue.IntrLiSurrndgsLiSetgForLiLvl = static_cast<decltype(rteValue.IntrLiSurrndgsLiSetgForLiLvl)>(deValue.LiLvl);
+    rteValue.IntrLiSurrndgsLiSetgPen = static_cast<decltype(rteValue.IntrLiSurrndgsLiSetgPen)>(deValue.Pen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igIntrLiSurrndgsLiSetgLi_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1251,8 +1251,8 @@ MassgFctActv_de = new DESink<autosar::MassgFctActv_info>();
 MassgFctActv_de->subscribe([]() {
     auto deValue = MassgFctActv_de->get().value();
     MassgFctActv rteValue;
-    rteValue.MassgFctActvPassMassgFctActv = static_cast<decltype(rteValue.MassgFctActvPassMassgFctActv)>(deValue.PassMassgFctActv);
     rteValue.MassgFctActvDrvrMassgFctActv = static_cast<decltype(rteValue.MassgFctActvDrvrMassgFctActv)>(deValue.DrvrMassgFctActv);
+    rteValue.MassgFctActvPassMassgFctActv = static_cast<decltype(rteValue.MassgFctActvPassMassgFctActv)>(deValue.PassMassgFctActv);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igMassgFctActv_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1285,8 +1285,8 @@ NetHdActvt_de = new DESink<autosar::NetHdActvt_info>();
 NetHdActvt_de->subscribe([]() {
     auto deValue = NetHdActvt_de->get().value();
     NetHdActvt rteValue;
-    rteValue.NetHdActvtResourceGroup = static_cast<decltype(rteValue.NetHdActvtResourceGroup)>(deValue.ResourceGroup);
     rteValue.NetHdActvtPrio = static_cast<decltype(rteValue.NetHdActvtPrio)>(deValue.Prio);
+    rteValue.NetHdActvtResourceGroup = static_cast<decltype(rteValue.NetHdActvtResourceGroup)>(deValue.ResourceGroup);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igNetHdActvt_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1312,7 +1312,7 @@ OffsForSpdWarnSetg_de->subscribe([]() {
     auto deValue = OffsForSpdWarnSetg_de->get().value();
     OffsForSpdWarnSetg rteValue;
     rteValue.OffsForSpdWarnSetgPen = static_cast<decltype(rteValue.OffsForSpdWarnSetgPen)>(deValue.Pen);
-    rteValue.OffsForSpdWarnSetgSts = static_cast<decltype(rteValue.OffsForSpdWarnSetgSts)>(deValue.Sts);
+    rteValue.OffsForSpdWarnSetgSts = round((deValue.Sts - 0.0) / 1.0);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igOffsForSpdWarnSetg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1329,9 +1329,9 @@ PassSeatDispMassgFct_de = new DESink<autosar::PassSeatDispMassgFct_info>();
 PassSeatDispMassgFct_de->subscribe([]() {
     auto deValue = PassSeatDispMassgFct_de->get().value();
     PassSeatDispMassgFct rteValue;
-    rteValue.PassSeatDispMassgFctMassgSpdLvl = static_cast<decltype(rteValue.PassSeatDispMassgFctMassgSpdLvl)>(deValue.MassgSpdLvl);
     rteValue.PassSeatDispMassgFctMassgInten = static_cast<decltype(rteValue.PassSeatDispMassgFctMassgInten)>(deValue.MassgInten);
     rteValue.PassSeatDispMassgFctMassgProg = static_cast<decltype(rteValue.PassSeatDispMassgFctMassgProg)>(deValue.MassgProg);
+    rteValue.PassSeatDispMassgFctMassgSpdLvl = static_cast<decltype(rteValue.PassSeatDispMassgFctMassgSpdLvl)>(deValue.MassgSpdLvl);
     rteValue.PassSeatDispMassgFctOnOff = static_cast<decltype(rteValue.PassSeatDispMassgFctOnOff)>(deValue.OnOff);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igPassSeatDispMassgFct_mtx, &rteValue, sizeof(rteValue) ); 
@@ -1425,8 +1425,8 @@ RngbdIllmnCmd_de = new DESink<autosar::RngbdIllmnCmd_info>();
 RngbdIllmnCmd_de->subscribe([]() {
     auto deValue = RngbdIllmnCmd_de->get().value();
     RngbdIllmnCmd rteValue;
-    rteValue.RngbdIllmnCmdPen = static_cast<decltype(rteValue.RngbdIllmnCmdPen)>(deValue.Pen);
     rteValue.RngbdIllmnCmdSts = static_cast<decltype(rteValue.RngbdIllmnCmdSts)>(deValue.Cmd);
+    rteValue.RngbdIllmnCmdPen = static_cast<decltype(rteValue.RngbdIllmnCmdPen)>(deValue.Pen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igRngbdIllmnCmd_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1513,8 +1513,8 @@ SetOfLang_de = new DESink<autosar::SetOfLang_info>();
 SetOfLang_de->subscribe([]() {
     auto deValue = SetOfLang_de->get().value();
     SetOfLang rteValue;
-    rteValue.SetOfLangLangTyp = static_cast<decltype(rteValue.SetOfLangLangTyp)>(deValue.LangTyp_);
     rteValue.SetOfLangIdPen = static_cast<decltype(rteValue.SetOfLangIdPen)>(deValue.IdPen_);
+    rteValue.SetOfLangLangTyp = static_cast<decltype(rteValue.SetOfLangLangTyp)>(deValue.LangTyp_);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSetOfLang_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1523,13 +1523,13 @@ SetTiAndDate_de = new DESink<autosar::SetTiAndDate_info>();
 SetTiAndDate_de->subscribe([]() {
     auto deValue = SetTiAndDate_de->get().value();
     SetTiAndDate rteValue;
+    rteValue.DateOrTi = static_cast<decltype(rteValue.DateOrTi)>(deValue.DateOrTi_);
+    rteValue.Day1 = static_cast<decltype(rteValue.Day1)>(deValue.Day);
     rteValue.Hr1 = static_cast<decltype(rteValue.Hr1)>(deValue.Hour);
+    rteValue.Mins1 = static_cast<decltype(rteValue.Mins1)>(deValue.Minute);
     rteValue.Mth1 = static_cast<decltype(rteValue.Mth1)>(deValue.Month);
     rteValue.Sec1 = static_cast<decltype(rteValue.Sec1)>(deValue.Second);
-    rteValue.DateOrTi = static_cast<decltype(rteValue.DateOrTi)>(deValue.DateOrTi_);
     rteValue.Yr1 = static_cast<decltype(rteValue.Yr1)>(deValue.Year);
-    rteValue.Day1 = static_cast<decltype(rteValue.Day1)>(deValue.Day);
-    rteValue.Mins1 = static_cast<decltype(rteValue.Mins1)>(deValue.Minute);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSetTiAndDate_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1554,11 +1554,11 @@ SftySigGroupFromAudSafe_de = new DESink<autosar::SftySigGroupFromAudSafe_info>()
 SftySigGroupFromAudSafe_de->subscribe([]() {
     auto deValue = SftySigGroupFromAudSafe_de->get().value();
     SftySigGroupFromAudSafe rteValue;
-    rteValue.SftySigFaildDetdByAud = static_cast<decltype(rteValue.SftySigFaildDetdByAud)>(deValue.SftySigFaildDetdByAud);
-    rteValue.SftySigGroupFromAudSafeCntr = static_cast<decltype(rteValue.SftySigGroupFromAudSafeCntr)>(deValue.SftySigGroupFromAudSafeCntr);
-    rteValue.SftySigGroupFromAudSafeSftyAudEna = static_cast<decltype(rteValue.SftySigGroupFromAudSafeSftyAudEna)>(deValue.SftyAudEna);
     rteValue.SftyAudDend = static_cast<decltype(rteValue.SftyAudDend)>(deValue.SftyAudDend);
+    rteValue.SftySigGroupFromAudSafeSftyAudEna = static_cast<decltype(rteValue.SftySigGroupFromAudSafeSftyAudEna)>(deValue.SftyAudEna);
+    rteValue.SftySigFaildDetdByAud = static_cast<decltype(rteValue.SftySigFaildDetdByAud)>(deValue.SftySigFaildDetdByAud);
     rteValue.SftySigGroupFromAudSafeChks = static_cast<decltype(rteValue.SftySigGroupFromAudSafeChks)>(deValue.SftySigGroupFromAudSafeChks);
+    rteValue.SftySigGroupFromAudSafeCntr = static_cast<decltype(rteValue.SftySigGroupFromAudSafeCntr)>(deValue.SftySigGroupFromAudSafeCntr);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSftySigGroupFromAudSafe_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1672,8 +1672,8 @@ TireCircumCalByNav_de->subscribe([]() {
     auto deValue = TireCircumCalByNav_de->get().value();
     TireCircumCalByNav rteValue;
     rteValue.HiQlyInTireCircumCalByNav = static_cast<decltype(rteValue.HiQlyInTireCircumCalByNav)>(deValue.HiQly);
-    rteValue.TireCircumInTireCircumCalByNav = static_cast<decltype(rteValue.TireCircumInTireCircumCalByNav)>(deValue.TireCircum);
     rteValue.SpprtForFctInTireCircumCalByNav = static_cast<decltype(rteValue.SpprtForFctInTireCircumCalByNav)>(deValue.SpprtForFct);
+    rteValue.TireCircumInTireCircumCalByNav = static_cast<decltype(rteValue.TireCircumInTireCircumCalByNav)>(deValue.TireCircum);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igTireCircumCalByNav_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1760,14 +1760,14 @@ UkwnCptRespFromInfoMgr_de = new DESink<autosar::UkwnCptRespFromInfoMgr_info>();
 UkwnCptRespFromInfoMgr_de->subscribe([]() {
     auto deValue = UkwnCptRespFromInfoMgr_de->get().value();
     UkwnCptRespFromInfoMgr rteValue;
-    rteValue.UkwnCptRespFromInfoMgrByte7 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte7)>(deValue.Byte7);
-    rteValue.UkwnCptRespFromInfoMgrByte6 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte6)>(deValue.Byte6);
-    rteValue.UkwnCptRespFromInfoMgrByte5 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte5)>(deValue.Byte5);
-    rteValue.UkwnCptRespFromInfoMgrByte4 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte4)>(deValue.Byte4);
-    rteValue.UkwnCptRespFromInfoMgrByte3 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte3)>(deValue.Byte3);
-    rteValue.UkwnCptRespFromInfoMgrByte2 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte2)>(deValue.Byte2);
-    rteValue.UkwnCptRespFromInfoMgrByte1 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte1)>(deValue.Byte1);
     rteValue.UkwnCptRespFromInfoMgrByte0 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte0)>(deValue.Byte0);
+    rteValue.UkwnCptRespFromInfoMgrByte1 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte1)>(deValue.Byte1);
+    rteValue.UkwnCptRespFromInfoMgrByte2 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte2)>(deValue.Byte2);
+    rteValue.UkwnCptRespFromInfoMgrByte3 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte3)>(deValue.Byte3);
+    rteValue.UkwnCptRespFromInfoMgrByte4 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte4)>(deValue.Byte4);
+    rteValue.UkwnCptRespFromInfoMgrByte5 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte5)>(deValue.Byte5);
+    rteValue.UkwnCptRespFromInfoMgrByte6 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte6)>(deValue.Byte6);
+    rteValue.UkwnCptRespFromInfoMgrByte7 = static_cast<decltype(rteValue.UkwnCptRespFromInfoMgrByte7)>(deValue.Byte7);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUkwnCptRespFromInfoMgr_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1776,14 +1776,14 @@ UkwnCptRespFromSoundMgr_de = new DESink<autosar::UkwnCptRespFromSoundMgr_info>()
 UkwnCptRespFromSoundMgr_de->subscribe([]() {
     auto deValue = UkwnCptRespFromSoundMgr_de->get().value();
     UkwnCptRespFromSoundMgr rteValue;
-    rteValue.UkwnCptRespFromSoundMgrByte7 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte7)>(deValue.Byte7);
-    rteValue.UkwnCptRespFromSoundMgrByte6 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte6)>(deValue.Byte6);
-    rteValue.UkwnCptRespFromSoundMgrByte5 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte5)>(deValue.Byte5);
-    rteValue.UkwnCptRespFromSoundMgrByte4 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte4)>(deValue.Byte4);
-    rteValue.UkwnCptRespFromSoundMgrByte3 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte3)>(deValue.Byte3);
-    rteValue.UkwnCptRespFromSoundMgrByte2 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte2)>(deValue.Byte2);
-    rteValue.UkwnCptRespFromSoundMgrByte1 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte1)>(deValue.Byte1);
     rteValue.UkwnCptRespFromSoundMgrByte0 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte0)>(deValue.Byte0);
+    rteValue.UkwnCptRespFromSoundMgrByte1 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte1)>(deValue.Byte1);
+    rteValue.UkwnCptRespFromSoundMgrByte2 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte2)>(deValue.Byte2);
+    rteValue.UkwnCptRespFromSoundMgrByte3 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte3)>(deValue.Byte3);
+    rteValue.UkwnCptRespFromSoundMgrByte4 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte4)>(deValue.Byte4);
+    rteValue.UkwnCptRespFromSoundMgrByte5 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte5)>(deValue.Byte5);
+    rteValue.UkwnCptRespFromSoundMgrByte6 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte6)>(deValue.Byte6);
+    rteValue.UkwnCptRespFromSoundMgrByte7 = static_cast<decltype(rteValue.UkwnCptRespFromSoundMgrByte7)>(deValue.Byte7);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUkwnCptRespFromSoundMgr_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1802,8 +1802,8 @@ UnlckKeylsReq_de = new DESink<autosar::UnlckKeylsReq_info>();
 UnlckKeylsReq_de->subscribe([]() {
     auto deValue = UnlckKeylsReq_de->get().value();
     UnlckKeylsReq rteValue;
-    rteValue.UnlckKeylsReqSts = static_cast<decltype(rteValue.UnlckKeylsReqSts)>(deValue.KeylsCfg);
     rteValue.UnlckKeylsReqPen = static_cast<decltype(rteValue.UnlckKeylsReqPen)>(deValue.IdPen_);
+    rteValue.UnlckKeylsReqSts = static_cast<decltype(rteValue.UnlckKeylsReqSts)>(deValue.KeylsCfg);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUnlckKeylsReq_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1832,12 +1832,12 @@ UsrSetSpdForKeySpdWarn_de = new DESink<autosar::UsrSetSpdForKeySpdWarn_info>();
 UsrSetSpdForKeySpdWarn_de->subscribe([]() {
     auto deValue = UsrSetSpdForKeySpdWarn_de->get().value();
     UsrSetSpdForKeySpdWarn rteValue;
-    rteValue.UsrSetSpdForKeySpdWarn5 = round((deValue.UsrSetSpdForKeySpdWarn5 - 0.0) / 0.03125);
-    rteValue.UsrSetSpdForKeySpdWarn4 = round((deValue.UsrSetSpdForKeySpdWarn4 - 0.0) / 0.03125);
-    rteValue.UsrSetSpdForKeySpdWarn6 = round((deValue.UsrSetSpdForKeySpdWarn6 - 0.0) / 0.03125);
     rteValue.UsrSetSpdForKeySpdWarn1 = round((deValue.UsrSetSpdForKeySpdWarn1 - 0.0) / 0.03125);
-    rteValue.UsrSetSpdForKeySpdWarn3 = round((deValue.UsrSetSpdForKeySpdWarn3 - 0.0) / 0.03125);
     rteValue.UsrSetSpdForKeySpdWarn2 = round((deValue.UsrSetSpdForKeySpdWarn2 - 0.0) / 0.03125);
+    rteValue.UsrSetSpdForKeySpdWarn3 = round((deValue.UsrSetSpdForKeySpdWarn3 - 0.0) / 0.03125);
+    rteValue.UsrSetSpdForKeySpdWarn4 = round((deValue.UsrSetSpdForKeySpdWarn4 - 0.0) / 0.03125);
+    rteValue.UsrSetSpdForKeySpdWarn5 = round((deValue.UsrSetSpdForKeySpdWarn5 - 0.0) / 0.03125);
+    rteValue.UsrSetSpdForKeySpdWarn6 = round((deValue.UsrSetSpdForKeySpdWarn6 - 0.0) / 0.03125);
     rteValue.UsrSetSpdForKeySpdWarnPen = static_cast<decltype(rteValue.UsrSetSpdForKeySpdWarnPen)>(deValue.UsrSetSpdForKeySpdWarnPen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUsrSetSpdForKeySpdWarn_mtx, &rteValue, sizeof(rteValue) ); 
@@ -1872,12 +1872,12 @@ UsrSwtDispClimaSts_de->subscribe([]() {
     auto deValue = UsrSwtDispClimaSts_de->get().value();
     UsrSwtDispClimaSts rteValue;
     rteValue.UsrSwtDispClimaTSpForRowSecLe = round((deValue.UsrSwtDispClimaTSpForRowSecLe - 15.0) / 0.5);
-    rteValue.UsrSwtDispFanLvlForRowSec = static_cast<decltype(rteValue.UsrSwtDispFanLvlForRowSec)>(deValue.UsrSwtDispFanLvlForRowSec);
-    rteValue.UsrSwtDispClimaTSpSpclForRowSecRi = static_cast<decltype(rteValue.UsrSwtDispClimaTSpSpclForRowSecRi)>(deValue.UsrSwtDispClimaTSpSpclForRowSecRi);
-    rteValue.UsrSwtDispSeatHeatLvlForRowSecRi = static_cast<decltype(rteValue.UsrSwtDispSeatHeatLvlForRowSecRi)>(deValue.UsrSwtDispSeatHeatLvlForRowSecRi);
     rteValue.UsrSwtDispClimaTSpForRowSecRi = round((deValue.UsrSwtDispClimaTSpForRowSecRi - 15.0) / 0.5);
     rteValue.UsrSwtDispClimaTSpSpclForRowSecLe = static_cast<decltype(rteValue.UsrSwtDispClimaTSpSpclForRowSecLe)>(deValue.UsrSwtDispClimaTSpSpclForRowSecLe);
+    rteValue.UsrSwtDispClimaTSpSpclForRowSecRi = static_cast<decltype(rteValue.UsrSwtDispClimaTSpSpclForRowSecRi)>(deValue.UsrSwtDispClimaTSpSpclForRowSecRi);
+    rteValue.UsrSwtDispFanLvlForRowSec = static_cast<decltype(rteValue.UsrSwtDispFanLvlForRowSec)>(deValue.UsrSwtDispFanLvlForRowSec);
     rteValue.UsrSwtDispSeatHeatLvlForRowSecLe = static_cast<decltype(rteValue.UsrSwtDispSeatHeatLvlForRowSecLe)>(deValue.UsrSwtDispSeatHeatLvlForRowSecLe);
+    rteValue.UsrSwtDispSeatHeatLvlForRowSecRi = static_cast<decltype(rteValue.UsrSwtDispSeatHeatLvlForRowSecRi)>(deValue.UsrSwtDispSeatHeatLvlForRowSecRi);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUsrSwtDispClimaSts_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1906,9 +1906,9 @@ VFCVectorIHU_de = new DESink<autosar::VFCVectorIHU_info>();
 VFCVectorIHU_de->subscribe([]() {
     auto deValue = VFCVectorIHU_de->get().value();
     VFCVectorIHU rteValue;
-    rteValue.VFCVectorIHUGrp3 = static_cast<decltype(rteValue.VFCVectorIHUGrp3)>(deValue.Grp3);
-    rteValue.VFCVectorIHUGrp2 = static_cast<decltype(rteValue.VFCVectorIHUGrp2)>(deValue.Grp2);
     rteValue.VFCVectorIHUGrp1 = static_cast<decltype(rteValue.VFCVectorIHUGrp1)>(deValue.Grp1);
+    rteValue.VFCVectorIHUGrp2 = static_cast<decltype(rteValue.VFCVectorIHUGrp2)>(deValue.Grp2);
+    rteValue.VFCVectorIHUGrp3 = static_cast<decltype(rteValue.VFCVectorIHUGrp3)>(deValue.Grp3);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igVFCVectorIHU_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1917,8 +1917,8 @@ VehDecelCtrlSetg_de = new DESink<autosar::VehDecelCtrlSetg_info>();
 VehDecelCtrlSetg_de->subscribe([]() {
     auto deValue = VehDecelCtrlSetg_de->get().value();
     VehDecelCtrlSetg rteValue;
-    rteValue.VehDecelCtrlSetgPen = static_cast<decltype(rteValue.VehDecelCtrlSetgPen)>(deValue.Pen);
     rteValue.VehDecelCtrlSetgNormSpt = static_cast<decltype(rteValue.VehDecelCtrlSetgNormSpt)>(deValue.NormSpt);
+    rteValue.VehDecelCtrlSetgPen = static_cast<decltype(rteValue.VehDecelCtrlSetgPen)>(deValue.Pen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igVehDecelCtrlSetg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1935,15 +1935,15 @@ VisnAgWideCfg_de = new DESink<autosar::VisnAgWideCfg_info>();
 VisnAgWideCfg_de->subscribe([]() {
     auto deValue = VisnAgWideCfg_de->get().value();
     VisnAgWideCfg rteValue;
-    rteValue.VisnAgWideCfgDstInfoFrnt = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoFrnt)>(deValue.DstInfoFrnt);
-    rteValue.VisnAgWideCfgSteerPahRe = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahRe)>(deValue.SteerPahRe);
-    rteValue.VisnAgWideCfgTwbrPah = static_cast<decltype(rteValue.VisnAgWideCfgTwbrPah)>(deValue.TwbrPah);
-    rteValue.VisnAgWideCfgObjDetn = static_cast<decltype(rteValue.VisnAgWideCfgObjDetn)>(deValue.ObjDetn);
-    rteValue.VisnAgWideCfgSteerPahSide = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahSide)>(deValue.SteerPahSide);
-    rteValue.VisnAgWideCfgDstInfoSide = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoSide)>(deValue.DstInfoSide);
-    rteValue.VisnAgWideCfgDstInfoRe = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoRe)>(deValue.DstInfoRe);
-    rteValue.VisnAgWideCfgSteerPahFrnt = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahFrnt)>(deValue.SteerPahFrnt);
     rteValue.VisnAgWideCfgCtraInfo = static_cast<decltype(rteValue.VisnAgWideCfgCtraInfo)>(deValue.CtraInfo);
+    rteValue.VisnAgWideCfgDstInfoFrnt = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoFrnt)>(deValue.DstInfoFrnt);
+    rteValue.VisnAgWideCfgDstInfoRe = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoRe)>(deValue.DstInfoRe);
+    rteValue.VisnAgWideCfgDstInfoSide = static_cast<decltype(rteValue.VisnAgWideCfgDstInfoSide)>(deValue.DstInfoSide);
+    rteValue.VisnAgWideCfgObjDetn = static_cast<decltype(rteValue.VisnAgWideCfgObjDetn)>(deValue.ObjDetn);
+    rteValue.VisnAgWideCfgSteerPahFrnt = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahFrnt)>(deValue.SteerPahFrnt);
+    rteValue.VisnAgWideCfgSteerPahRe = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahRe)>(deValue.SteerPahRe);
+    rteValue.VisnAgWideCfgSteerPahSide = static_cast<decltype(rteValue.VisnAgWideCfgSteerPahSide)>(deValue.SteerPahSide);
+    rteValue.VisnAgWideCfgTwbrPah = static_cast<decltype(rteValue.VisnAgWideCfgTwbrPah)>(deValue.TwbrPah);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igVisnAgWideCfg_mtx, &rteValue, sizeof(rteValue) ); 
 });
@@ -1960,10 +1960,10 @@ VisnImgCamReq_de = new DESink<autosar::VisnImgCamReq_info>();
 VisnImgCamReq_de->subscribe([]() {
     auto deValue = VisnImgCamReq_de->get().value();
     VisnImgCamReq rteValue;
-    rteValue.VisnImgCamReqCamLe = static_cast<decltype(rteValue.VisnImgCamReqCamLe)>(deValue.CamLe);
-    rteValue.VisnImgCamReqCamRi = static_cast<decltype(rteValue.VisnImgCamReqCamRi)>(deValue.CamRi);
     rteValue.VisnImgCamReqCamFrnt = static_cast<decltype(rteValue.VisnImgCamReqCamFrnt)>(deValue.CamFrnt);
+    rteValue.VisnImgCamReqCamLe = static_cast<decltype(rteValue.VisnImgCamReqCamLe)>(deValue.CamLe);
     rteValue.VisnImgCamReqCamRe = static_cast<decltype(rteValue.VisnImgCamReqCamRe)>(deValue.CamRe);
+    rteValue.VisnImgCamReqCamRi = static_cast<decltype(rteValue.VisnImgCamReqCamRi)>(deValue.CamRi);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igVisnImgCamReq_mtx, &rteValue, sizeof(rteValue) ); 
 });

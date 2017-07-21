@@ -2,8 +2,8 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-04-03T08:04:02.284168
- * Source: SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Generated at: 2017-08-18T13:15:23.081495
+ * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 #ifndef _DATATYPES_H
 #define _DATATYPES_H
@@ -3756,14 +3756,14 @@ enum class iTPMSTirePMSts {
  * \struct ADataRawSafe1
  */
 struct ADataRawSafe1 {
-    double ALat; /*!< m/s^2 , -139->139 (0.0085*x+0.0, raw is signed, 15 bits ) */
+    double ALat; /*!<Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )*/
     Qf1 ALat1Qf;
-    double ALgt; /*!< m/s^2 , -139->139 (0.0085*x+0.0, raw is signed, 15 bits ) */
+    double ALgt; /*!<Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )*/
     Qf1 ALgt1Qf;
-    double AVert; /*!< m/s^2 , -139->139 (0.0085*x+0.0, raw is signed, 15 bits ) */
+    double AVert; /*!<Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )*/
     Qf1 AVertQf;
-    uint8_t Chks; /*!< Unitless , 0->255 */
-    uint8_t Cntr; /*!< Unitless , 0->15 */
+    uint8_t Chks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Cntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -3786,12 +3786,12 @@ struct AdprTurnSpdModPen1 {
  * \struct AgDataRawSafe1
  */
 struct AgDataRawSafe1 {
-    double RollRate; /*!< rad/s , -6->6 (2.44140625E-4*x+0.0, raw is signed, 16 bits ) */
+    double RollRate; /*!<Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )*/
     Qf1 RollRateQf;
-    double YawRate; /*!< rad/s , -6->6 (2.44140625E-4*x+0.0, raw is signed, 16 bits ) */
+    double YawRate; /*!<Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )*/
     Qf1 YawRateQf;
-    uint8_t Chks; /*!< Unitless , 0->255 */
-    uint8_t Cntr; /*!< Unitless , 0->15 */
+    uint8_t Chks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Cntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -3799,7 +3799,7 @@ struct AgDataRawSafe1 {
  * Indicated ambient temp with indicated unit and QF
  */
 struct AmbTIndcdWithUnit {
-    double AmbTIndcd; /*!< Unitless , -100->309.5 (0.1*x+-100.0, raw is unsigned, 12 bits ) */
+    double AmbTIndcd; /*!<Unit: Unitless,  Range:-100->309.5, Resolution: (0.1*x+-100.0, raw is unsigned, 12 bits )*/
     AmbTIndcdUnit AmbTIndcdUnit_;
     GenQf1 QF;
 };
@@ -3809,14 +3809,14 @@ struct AmbTIndcdWithUnit {
  * The door module with a connected ambient temp sensor will send a temp value and QF, the door module without a connected ambient temp sensor will transmitt a temp value of 0x00 and QF = 0x00.
  */
 struct AmbTWithQly {
-    double AmbTVal; /*!< degC , -70->134.7 (0.1*x+-70.0, raw is unsigned, 11 bits ) */
+    double AmbTVal; /*!<Unit: degC,  Range:-70->134.7, Resolution: (0.1*x+-70.0, raw is unsigned, 11 bits )*/
     GenQf1 Qly;
 };
 
 /*!
  * \brief array Array8ByteU8
  */
-using Array8ByteU8 = std::array<uint8_t,8>; /*!< 0->255 */
+using Array8ByteU8 = std::array<uint8_t,8>;
 
 /*!
  * \struct AsyLaneChg1
@@ -3896,18 +3896,18 @@ struct BltLockStRe {
 struct BrkAndAbsWarnIndcnReqRec1 {
     OnOff2 BrkWarnIndcnReq;
     AbsWarnIndcnReq AbsWarnIndcnReq_;
-    uint8_t BrkAndAbsWarnIndcnReqChks; /*!< Unitless , 0->255 */
-    uint8_t BrkAndAbsWarnIndcnReqCntr; /*!< Unitless , 0->15 */
+    uint8_t BrkAndAbsWarnIndcnReqChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t BrkAndAbsWarnIndcnReqCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
  * \struct BrkFricTqAtWhlActRec
  */
 struct BrkFricTqAtWhlActRec {
-    uint16_t BrkFricTqAtWhlFrntLeAct; /*!< Nm , 0->8191 (1.0*x+0.0, raw is unsigned, 13 bits ) */
-    uint16_t BrkFricTqAtWhlFrntRiAct; /*!< Nm , 0->8191 (1.0*x+0.0, raw is unsigned, 13 bits ) */
-    uint16_t BrkFricTqAtWhlReLeAct; /*!< Nm , 0->8191 (1.0*x+0.0, raw is unsigned, 13 bits ) */
-    uint16_t BrkFricTqAtWhlReRiAct; /*!< Nm , 0->8191 (1.0*x+0.0, raw is unsigned, 13 bits ) */
+    uint16_t BrkFricTqAtWhlFrntLeAct; /*!<Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )*/
+    uint16_t BrkFricTqAtWhlFrntRiAct; /*!<Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )*/
+    uint16_t BrkFricTqAtWhlReLeAct; /*!<Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )*/
+    uint16_t BrkFricTqAtWhlReRiAct; /*!<Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )*/
 };
 
 /*!
@@ -3925,8 +3925,8 @@ struct CamIndReq {
  * Eco signals for DIM.
  */
 struct CchForFuEco1 {
-    double BarForFuEco; /*!< % , 0->102.3 (0.1*x+0.0, raw is unsigned, 10 bits ) */
-    double GrdForFuEco; /*!< Unitless , 0->102.3 (0.1*x+0.0, raw is unsigned, 10 bits ) */
+    double BarForFuEco; /*!<Unit: %,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )*/
+    double GrdForFuEco; /*!<Unit: Unitless,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )*/
 };
 
 /*!
@@ -3942,7 +3942,7 @@ struct CllsnWarnSide1 {
  * Estimated compartment temperature with quality flag
  */
 struct CmptmtAirTEstimdExtd {
-    double ComptmtT; /*!< degC , -60->125 (0.1*x+-60.0, raw is unsigned, 11 bits ) */
+    double ComptmtT; /*!<Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )*/
     GenQf1 QlyFlg;
 };
 
@@ -3950,7 +3950,7 @@ struct CmptmtAirTEstimdExtd {
  * \struct CmptmtTFrnt
  */
 struct CmptmtTFrnt {
-    double CmptmtTFrnt; /*!< degC , -60->125 (0.1*x+-60.0, raw is unsigned, 11 bits ) */
+    double CmptmtTFrnt; /*!<Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )*/
     CmptmtTFrntQf CmptmtTFrntQf_;
     Flg1 FanForCmptmtTRunng;
 };
@@ -3959,21 +3959,21 @@ struct CmptmtTFrnt {
  * \struct ConSftyWarn1
  */
 struct ConSftyWarn1 {
-    uint8_t ConSftyWarnId; /*!< Unitless , 0->15 */
+    uint8_t ConSftyWarnId; /*!<Unit: Unitless,  Range:0->15*/
     OnOff1 ConSftyWarnSnd;
-    uint8_t ConSftyWarnTyp; /*!< Unitless , 0->15 */
+    uint8_t ConSftyWarnTyp; /*!<Unit: Unitless,  Range:0->15*/
     ConSftyWarnLvl1 ConSftyWarnLvl;
-    uint16_t DistanceToWarning; /*!< m , 0->65535 */
+    uint16_t DistanceToWarning; /*!<Unit: m,  Range:0->65535*/
 };
 
 /*!
  * \struct DataSpclTyp
  */
 struct DataSpclTyp {
-    uint8_t DataIdn; /*!< Unitless , 0->255 */
-    uint8_t DataNrSpcl1; /*!< Unitless , 0->255 */
-    uint8_t DataNrSpcl2; /*!< Unitless , 0->255 */
-    uint8_t DataNrSpcl3; /*!< Unitless , 0->255 */
+    uint8_t DataIdn; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t DataNrSpcl1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t DataNrSpcl2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t DataNrSpcl3; /*!<Unit: Unitless,  Range:0->255*/
 };
 
 /*!
@@ -3981,24 +3981,24 @@ struct DataSpclTyp {
  */
 struct DateTi1ForSet {
     DateOrTi DateOrTi_;
-    uint8_t Year; /*!< Year , 0->99 */
-    uint8_t Month; /*!< Month , 1->12 */
-    uint8_t Day; /*!< Days , 1->31 */
-    uint8_t Hour; /*!< hours , 0->23 */
-    uint8_t Minute; /*!< Mins , 0->59 */
-    uint8_t Second; /*!< s , 0->59 */
+    uint8_t Year; /*!<Unit: Year,  Range:0->99*/
+    uint8_t Month; /*!<Unit: Month,  Range:1->12*/
+    uint8_t Day; /*!<Unit: Days,  Range:1->31*/
+    uint8_t Hour; /*!<Unit: hours,  Range:0->23*/
+    uint8_t Minute; /*!<Unit: Mins,  Range:0->59*/
+    uint8_t Second; /*!<Unit: s,  Range:0->59*/
 };
 
 /*!
  * \struct DateTi30
  */
 struct DateTi30 {
-    uint8_t Yr1; /*!< Year , 0->99 */
-    uint8_t Mth1; /*!< Month , 1->12 */
-    uint8_t Day; /*!< Days , 1->31 */
-    uint8_t Hr1; /*!< hours , 0->23 */
-    uint8_t Mins1; /*!< Mins , 0->59 */
-    uint8_t Sec1; /*!< s , 0->59 */
+    uint8_t Yr1; /*!<Unit: Year,  Range:0->99*/
+    uint8_t Mth1; /*!<Unit: Month,  Range:1->12*/
+    uint8_t Day; /*!<Unit: Days,  Range:1->31*/
+    uint8_t Hr1; /*!<Unit: hours,  Range:0->23*/
+    uint8_t Mins1; /*!<Unit: Mins,  Range:0->59*/
+    uint8_t Sec1; /*!<Unit: s,  Range:0->59*/
     NoYes1 DataValid;
 };
 
@@ -4007,7 +4007,7 @@ struct DateTi30 {
  */
 struct DriveAwayInfoWarnReq1 {
     ReqSrc1 ReqSrc;
-    uint8_t TiToDrvCntDwnTi; /*!< Unitless , 0->255 */
+    uint8_t TiToDrvCntDwnTi; /*!<Unit: Unitless,  Range:0->255*/
     CtrlDirOfTrfcLi1 CtrlDirOfTrfcLi;
     VisWarnReq1 VisWarnReq;
     AudWarnReq1 AudWarnReq;
@@ -4041,7 +4041,7 @@ struct DrvrHmiDispdModPen {
 /*!
  * \brief array DrvrHmiForHmiCen
  */
-using DrvrHmiForHmiCen = std::array<uint8_t,254>; /*!< 0->255 */
+using DrvrHmiForHmiCen = std::array<uint8_t,254>;
 
 /*!
  * \struct DrvrHmiUserIfSetgReq
@@ -4068,7 +4068,7 @@ struct DrvrSeatSwtSts1 {
  * \struct DstToEmptyWithUnit
  */
 struct DstToEmptyWithUnit {
-    uint16_t DstToEmpty; /*!< Unitless , 0->2000 */
+    uint16_t DstToEmpty; /*!<Unit: Unitless,  Range:0->2000*/
     DstUnit DstUnit_;
 };
 
@@ -4076,7 +4076,7 @@ struct DstToEmptyWithUnit {
  * \struct DstToManvLocnByNav
  */
 struct DstToManvLocnByNav {
-    uint16_t DstToManv; /*!< m , 0->4000 */
+    uint16_t DstToManv; /*!<Unit: m,  Range:0->4000*/
     NoYes1 CntDwnToManvStrt;
     PosnFromNavQly PosnQly;
     NoYes1 SpprtForFct;
@@ -4094,10 +4094,10 @@ struct EngIdleEco1 {
  * \struct EngNSafe
  */
 struct EngNSafe {
-    double EngN; /*!< rpm , 0->16383 (0.5*x+0.0, raw is unsigned, 15 bits ) */
-    int16_t EngNGrdt; /*!< RpmPerSec , -30000->30000 (1.0*x+0.0, raw is signed, 16 bits ) */
-    uint8_t EngNChks; /*!< Unitless , 0->255 */
-    uint8_t EngNCntr; /*!< Unitless , 0->15 */
+    double EngN; /*!<Unit: rpm,  Range:0->16383, Resolution: (0.5*x+0.0, raw is unsigned, 15 bits )*/
+    int16_t EngNGrdt; /*!<Unit: RpmPerSec,  Range:-30000->30000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )*/
+    uint8_t EngNChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EngNCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -4105,8 +4105,8 @@ struct EngNSafe {
  */
 struct EpbLampReqRec {
     EpbLampReqType1 EpbLampReq;
-    uint8_t EpbLampReqChks; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t EpbLampReqCntr; /*!< Unitless , 0->15 (1.0*x+0.0, raw is unsigned, 4 bits ) */
+    uint8_t EpbLampReqChks; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t EpbLampReqCntr; /*!<Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 4 bits )*/
 };
 
 /*!
@@ -4122,8 +4122,8 @@ struct EscSptModReqdByDrvrRec1 {
  */
 struct EscStSafe1 {
     EscSt1 EscSt;
-    uint8_t EscStChks; /*!< Unitless , 0->255 */
-    uint8_t EscStCntr; /*!< Unitless , 0->15 */
+    uint8_t EscStChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EscStCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -4131,8 +4131,8 @@ struct EscStSafe1 {
  */
 struct EscWarnIndcnReqRec1 {
     EscWarnIndcnReq EscWarnIndcnReq_;
-    uint8_t EscWarnIndcnReqChks; /*!< Unitless , 0->255 */
-    uint8_t EscWarnIndcnReqCntr; /*!< Unitless , 0->15 */
+    uint8_t EscWarnIndcnReqChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EscWarnIndcnReqCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -4150,15 +4150,15 @@ struct ExtrMirrTiltSetg {
 struct FrntWiprLvrReq2 {
     FrntWiprLvrCmd1 FrntWiprLvrCmd1_;
     Qf1 FrntWiprLvrQf;
-    uint8_t FrntWiprLvrCrc; /*!< Unitless , 0->255 */
-    uint8_t FrntWiprLvrCntr; /*!< Unitless , 0->3 */
+    uint8_t FrntWiprLvrCrc; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t FrntWiprLvrCntr; /*!<Unit: Unitless,  Range:0->3*/
 };
 
 /*!
  * \struct FuLvlValWithQly
  */
 struct FuLvlValWithQly {
-    double FuLvlValFromFuTbl; /*!< Litre , 0->204.6 (0.2*x+0.0, raw is unsigned, 10 bits ) */
+    double FuLvlValFromFuTbl; /*!<Unit: Litre,  Range:0->204.6, Resolution: (0.2*x+0.0, raw is unsigned, 10 bits )*/
     GenQf1 GenQF;
 };
 
@@ -4183,19 +4183,19 @@ struct GlbRstForSetgAndData {
 /*!
  * \brief array HmiCenForDrvrHmi
  */
-using HmiCenForDrvrHmi = std::array<uint8_t,254>; /*!< 0->255 */
+using HmiCenForDrvrHmi = std::array<uint8_t,254>;
 
 /*!
  * \struct HmiCmptmtTSp
  */
 struct HmiCmptmtTSp {
-    double HmiCmptmtTSpForRowFirstLe; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double HmiCmptmtTSpForRowFirstLe; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     HmiCmptmtTSpSpcl HmiCmptmtTSpSpclForRowFirstLe;
-    double HmiCmptmtTSpForRowFirstRi; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double HmiCmptmtTSpForRowFirstRi; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     HmiCmptmtTSpSpcl HmiCmptmtTSpSpclForRowFirstRi;
-    double HmiCmptmtTSpForRowSecLe; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double HmiCmptmtTSpForRowSecLe; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     HmiCmptmtTSpSpcl HmiCmptmtTSpSpclForRowSecLe;
-    double HmiCmptmtTSpForRowSecRi; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double HmiCmptmtTSpForRowSecRi; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     HmiCmptmtTSpSpcl HmiCmptmtTSpSpclForRowSecRi;
 };
 
@@ -4281,12 +4281,12 @@ struct HudVisFctSetgReq {
  * Status for Bluetooth pairing
  */
 struct HwAprvdWirelsAdr1 {
-    uint8_t HwOffsAdr1; /*!< Unitless , 0->255 */
-    uint8_t HwOffsAdr2; /*!< Unitless , 0->255 */
-    uint8_t HwOffsAdr3; /*!< Unitless , 0->255 */
-    uint8_t HwOffsAdr4; /*!< Unitless , 0->255 */
-    uint8_t HwOffsAdr5; /*!< Unitless , 0->255 */
-    uint8_t HwOffsAdr6; /*!< Unitless , 0->255 */
+    uint8_t HwOffsAdr1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t HwOffsAdr2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t HwOffsAdr3; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t HwOffsAdr4; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t HwOffsAdr5; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t HwOffsAdr6; /*!<Unit: Unitless,  Range:0->255*/
     AprvdSts AprvdSts_;
 };
 
@@ -4295,18 +4295,18 @@ struct HwAprvdWirelsAdr1 {
  */
 struct HznDataGroup2 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
-    uint16_t CtryCod; /*!< Unitless , 0->1023 */
-    uint16_t RegnCod; /*!< Unitless , 0->32767 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
+    uint16_t CtryCod; /*!<Unit: Unitless,  Range:0->1023*/
+    uint16_t RegnCod; /*!<Unit: Unitless,  Range:0->32767*/
     DrvgSide1 DrvgSide;
     SpdUnit1 SpdUnit;
-    uint8_t HdTxVers; /*!< Unitless , 0->3 */
-    uint8_t TxVers; /*!< Unitless , 0->15 */
-    uint8_t ChdTxVers; /*!< Unitless , 0->7 */
-    uint16_t HwVers; /*!< Unitless , 0->511 */
+    uint8_t HdTxVers; /*!<Unit: Unitless,  Range:0->3*/
+    uint8_t TxVers; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t ChdTxVers; /*!<Unit: Unitless,  Range:0->7*/
+    uint16_t HwVers; /*!<Unit: Unitless,  Range:0->511*/
     HznMapSrc2 MapSrc;
-    uint8_t YrVersOfMap; /*!< Unitless , 0->63 */
-    uint8_t PartOfYrVersOfMap; /*!< Unitless , 0->3 */
+    uint8_t YrVersOfMap; /*!<Unit: Unitless,  Range:0->63*/
+    uint8_t PartOfYrVersOfMap; /*!<Unit: Unitless,  Range:0->3*/
 };
 
 /*!
@@ -4314,20 +4314,20 @@ struct HznDataGroup2 {
  */
 struct HznEdgeGroup2 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
     NoYes1 TxPrev;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint16_t Offs; /*!< m , 0->8191 */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint16_t Offs; /*!<Unit: m,  Range:0->8191*/
     NoYes1 Upd;
-    uint8_t PahIdxNew; /*!< Unitless , 0->63 */
-    double TurnAg; /*!< Deg , 0->360 (1.4173228346456692*x+0.0, raw is unsigned, 8 bits ) */
-    double RelProblty; /*!< % , 0->103.33333323 (3.33333333*x+0.0, raw is unsigned, 5 bits ) */
+    uint8_t PahIdxNew; /*!<Unit: Unitless,  Range:0->63*/
+    double TurnAg; /*!<Unit: Deg,  Range:0->360, Resolution: (1.4173228346456692*x+0.0, raw is unsigned, 8 bits )*/
+    double RelProblty; /*!<Unit: %,  Range:0->103.33333323, Resolution: (3.33333333*x+0.0, raw is unsigned, 5 bits )*/
     HznTypOfWay1 TypOfWay;
     HznNrOfLaneInDrvgDir1 NrOfLaneInDrvgDir;
     HznNrOfLaneInSecDir1 NrOfLaneInSecDir;
     HznIntscnCmplx1 IntscnCmplx;
     HznRiOfWay1 RiOfWay;
-    uint8_t RoadClass; /*!< Unitless , 0->7 */
+    uint8_t RoadClass; /*!<Unit: Unitless,  Range:0->7*/
     HznPartOfCourseCalcd1 PartOfCourseCalcd;
     NoYes1 LstEdgeAtOffs;
 };
@@ -4337,13 +4337,13 @@ struct HznEdgeGroup2 {
  */
 struct HznPosnExtdGroup1 {
     HznMsgTyp1 MsgTyp;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint8_t PosnIdx; /*!< Unitless , 0->3 */
-    double PosnTiDif; /*!< ms , 0->2555 (5.0*x+0.0, raw is unsigned, 9 bits ) */
-    double Spd; /*!< m/s , -12.8->89.4 (0.2*x+-12.8, raw is unsigned, 9 bits ) */
-    double RelDir; /*!< Deg , 0->360 (1.4173228346456692*x+0.0, raw is unsigned, 8 bits ) */
-    double PosnProblty; /*!< % , 0->103.33333323 (3.33333333*x+0.0, raw is unsigned, 5 bits ) */
-    uint8_t PosnQly; /*!< Unitless , 0->7 */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint8_t PosnIdx; /*!<Unit: Unitless,  Range:0->3*/
+    double PosnTiDif; /*!<Unit: ms,  Range:0->2555, Resolution: (5.0*x+0.0, raw is unsigned, 9 bits )*/
+    double Spd; /*!<Unit: m/s,  Range:-12.8->89.4, Resolution: (0.2*x+-12.8, raw is unsigned, 9 bits )*/
+    double RelDir; /*!<Unit: Deg,  Range:0->360, Resolution: (1.4173228346456692*x+0.0, raw is unsigned, 8 bits )*/
+    double PosnProblty; /*!<Unit: %,  Range:0->103.33333323, Resolution: (3.33333333*x+0.0, raw is unsigned, 5 bits )*/
+    uint8_t PosnQly; /*!<Unit: Unitless,  Range:0->7*/
     HznLanePrsnt2 LanePrsnt;
 };
 
@@ -4351,8 +4351,8 @@ struct HznPosnExtdGroup1 {
  * \struct HznPosnExtdOffs
  */
 struct HznPosnExtdOffs {
-    double Offs; /*!< m , 0->1048448 (128.0*x+0.0, raw is unsigned, 13 bits ) */
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    double Offs; /*!<Unit: m,  Range:0->1048448, Resolution: (128.0*x+0.0, raw is unsigned, 13 bits )*/
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
 };
 
 /*!
@@ -4360,15 +4360,15 @@ struct HznPosnExtdOffs {
  */
 struct HznPosnGroup3 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint16_t Offs; /*!< m , 0->8191 */
-    uint8_t PosnIdx; /*!< Unitless , 0->3 */
-    double PosnTiDif; /*!< ms , 0->2555 (5.0*x+0.0, raw is unsigned, 9 bits ) */
-    double Spd; /*!< m/s , -12.8->89.4 (0.2*x+-12.8, raw is unsigned, 9 bits ) */
-    double RelDir; /*!< Deg , 0->360 (1.4173228346456692*x+0.0, raw is unsigned, 8 bits ) */
-    double PosnProblty; /*!< % , 0->103.33333323 (3.33333333*x+0.0, raw is unsigned, 5 bits ) */
-    uint8_t PosnQly; /*!< Unitless , 0->7 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint16_t Offs; /*!<Unit: m,  Range:0->8191*/
+    uint8_t PosnIdx; /*!<Unit: Unitless,  Range:0->3*/
+    double PosnTiDif; /*!<Unit: ms,  Range:0->2555, Resolution: (5.0*x+0.0, raw is unsigned, 9 bits )*/
+    double Spd; /*!<Unit: m/s,  Range:-12.8->89.4, Resolution: (0.2*x+-12.8, raw is unsigned, 9 bits )*/
+    double RelDir; /*!<Unit: Deg,  Range:0->360, Resolution: (1.4173228346456692*x+0.0, raw is unsigned, 8 bits )*/
+    double PosnProblty; /*!<Unit: %,  Range:0->103.33333323, Resolution: (3.33333333*x+0.0, raw is unsigned, 5 bits )*/
+    uint8_t PosnQly; /*!<Unit: Unitless,  Range:0->7*/
     HznLanePrsnt2 LanePrsnt;
 };
 
@@ -4377,14 +4377,14 @@ struct HznPosnGroup3 {
  */
 struct HznProfLongExtdGroup1 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
     NoYes1 TxPrev;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    double Offs; /*!< m , 0->1048448 (128.0*x+0.0, raw is unsigned, 13 bits ) */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    double Offs; /*!<Unit: m,  Range:0->1048448, Resolution: (128.0*x+0.0, raw is unsigned, 13 bits )*/
     NoYes1 Upd;
     HznProfLongTypExtd1 ProfTyp;
     NoYes1 NodCtrl;
-    uint32_t Val; /*!< Unitless , 0->4294967295 */
+    uint32_t Val; /*!<Unit: Unitless,  Range:0->4294967295*/
 };
 
 /*!
@@ -4392,14 +4392,14 @@ struct HznProfLongExtdGroup1 {
  */
 struct HznProfLongGroup3 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
     NoYes1 TxPrev;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint16_t Offs; /*!< m , 0->8191 */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint16_t Offs; /*!<Unit: m,  Range:0->8191*/
     NoYes1 Upd;
     HznProfLongTyp ProfTyp;
     NoYes1 NodCtrl;
-    uint32_t Val; /*!< Unitless , 0->4294967295 */
+    uint32_t Val; /*!<Unit: Unitless,  Range:0->4294967295*/
 };
 
 /*!
@@ -4407,16 +4407,16 @@ struct HznProfLongGroup3 {
  */
 struct HznProfSho2 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
     NoYes1 TxPrev;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint16_t Offs; /*!< m , 0->8191 */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint16_t Offs; /*!<Unit: m,  Range:0->8191*/
     NoYes1 Upd;
     HznProfShoTyp ProfTyp;
     NoYes1 NodCtrl;
-    uint16_t Val0; /*!< Unitless , 0->1023 */
-    uint16_t Dst1; /*!< m , 0->1023 */
-    uint16_t Val1; /*!< Unitless , 0->1023 */
+    uint16_t Val0; /*!<Unit: Unitless,  Range:0->1023*/
+    uint16_t Dst1; /*!<Unit: m,  Range:0->1023*/
+    uint16_t Val1; /*!<Unit: Unitless,  Range:0->1023*/
     HznProfTypQly1 ProfTypQly;
 };
 
@@ -4425,12 +4425,12 @@ struct HznProfSho2 {
  */
 struct HznSegGroup2 {
     HznMsgTyp1 MsgTyp;
-    uint8_t CycCntr; /*!< Unitless , 0->3 */
+    uint8_t CycCntr; /*!<Unit: Unitless,  Range:0->3*/
     NoYes1 TxPrev;
-    uint8_t PahIdx; /*!< Unitless , 0->63 */
-    uint16_t Offs; /*!< m , 0->8191 */
+    uint8_t PahIdx; /*!<Unit: Unitless,  Range:0->63*/
+    uint16_t Offs; /*!<Unit: m,  Range:0->8191*/
     NoYes1 Upd;
-    uint8_t RoadClass; /*!< Unitless , 0->7 */
+    uint8_t RoadClass; /*!<Unit: Unitless,  Range:0->7*/
     HznTypOfWay1 TypOfWay;
     HznSpdLimEfc1 SpdLimEfc;
     HznSpdLimTypEfc1 SpdLimTypEfc;
@@ -4441,7 +4441,7 @@ struct HznSegGroup2 {
     HznRoadMpl1 RoadMpl;
     HznRoadLiAr1 RoadLiAr;
     HznIntscnCmplx1 IntscnCmplx;
-    double RelProblty; /*!< % , 0->103.33333323 (3.33333333*x+0.0, raw is unsigned, 5 bits ) */
+    double RelProblty; /*!<Unit: %,  Range:0->103.33333323, Resolution: (3.33333333*x+0.0, raw is unsigned, 5 bits )*/
     HznPartOfCourseCalcd1 PartOfCourseCalcd;
 };
 
@@ -4549,7 +4549,7 @@ struct MirrDimPen {
  * \struct MtrlSnsrT
  */
 struct MtrlSnsrT {
-    double MtrlSnsrT; /*!< degC , -256->255.9 (0.1*x+0.0, raw is unsigned ) */
+    double MtrlSnsrT; /*!<Unit: degC,  Range:-256->255.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
     MtrlSnsrTFacQly MtrlSnsrTFacQly_;
 };
 
@@ -4557,7 +4557,7 @@ struct MtrlSnsrT {
  * \struct NetActvtRec1
  */
 struct NetActvtRec1 {
-    uint8_t ResourceGroup; /*!< Unitless , 0->255 */
+    uint8_t ResourceGroup; /*!<Unit: Unitless,  Range:0->255*/
     PrioHighNormal Prio;
 };
 
@@ -4573,17 +4573,17 @@ struct NormSptPen {
  * \struct NrSerlNodLIN
  */
 struct NrSerlNodLIN {
-    uint8_t Nr1; /*!< Unitless , 0->255 */
-    uint8_t Nr2; /*!< Unitless , 0->255 */
-    uint8_t Nr3; /*!< Unitless , 0->255 */
-    uint8_t Nr4; /*!< Unitless , 0->255 */
+    uint8_t Nr1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr3; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr4; /*!<Unit: Unitless,  Range:0->255*/
 };
 
 /*!
  * \struct OffsForSpdWarnSetgPen
  */
 struct OffsForSpdWarnSetgPen {
-    uint8_t Sts; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
+    uint8_t Sts; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
     IdPen Pen;
 };
 
@@ -4599,13 +4599,13 @@ struct OnOffPen {
  * \struct PartNrNodLIN
  */
 struct PartNrNodLIN {
-    uint8_t Nr1; /*!< Unitless , 0->255 */
-    uint8_t Nr2; /*!< Unitless , 0->255 */
-    uint8_t Nr3; /*!< Unitless , 0->255 */
-    uint8_t Nr4; /*!< Unitless , 0->255 */
-    uint8_t EndSgn1; /*!< Unitless , 0->255 */
-    uint8_t EndSgn2; /*!< Unitless , 0->255 */
-    uint8_t EndSgn3; /*!< Unitless , 0->255 */
+    uint8_t Nr1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr3; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Nr4; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EndSgn1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EndSgn2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t EndSgn3; /*!<Unit: Unitless,  Range:0->255*/
 };
 
 /*!
@@ -4626,7 +4626,7 @@ struct PassSeatSwtSts2 {
  * \struct PinionSteerAg1Rec
  */
 struct PinionSteerAg1Rec {
-    double PinionSteerAg1; /*!< rad , -14.5->14.5 (9.765625E-4*x+0.0, raw is signed, 15 bits ) */
+    double PinionSteerAg1; /*!<Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )*/
     GenQf1 PinionSteerAg1Qf;
 };
 
@@ -4634,11 +4634,11 @@ struct PinionSteerAg1Rec {
  * \struct PosnFromNav
  */
 struct PosnFromNav {
-    double PosnLat; /*!< Deg , -90->90 (2.7777777777777776E-7*x+0.0, raw is unsigned ) */
-    double PosnLgt; /*!< Deg , -180->180 (2.7777777777777776E-7*x+0.0, raw is unsigned ) */
-    double PosnAlti; /*!< m , -100->6000 (0.1*x+-100.0, raw is unsigned ) */
-    double PosnSpd; /*!< m/s , 0->100 (0.001*x+0.0, raw is unsigned ) */
-    double PosnDir; /*!< Deg , 0->359.99 (0.01*x+0.0, raw is unsigned ) */
+    double PosnLat; /*!<Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is unsigned, 0 bits )*/
+    double PosnLgt; /*!<Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is unsigned, 0 bits )*/
+    double PosnAlti; /*!<Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 0 bits )*/
+    double PosnSpd; /*!<Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 0 bits )*/
+    double PosnDir; /*!<Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 0 bits )*/
     PosnFromNavQly PosnQly;
 };
 
@@ -4646,19 +4646,19 @@ struct PosnFromNav {
  * \struct PosnFromSatlt
  */
 struct PosnFromSatlt {
-    double PosnLat; /*!< Deg , -90->90 (2.7777777777777776E-7*x+0.0, raw is signed, 30 bits ) */
-    double PosnLgt; /*!< Deg , -180->180 (2.7777777777777776E-7*x+0.0, raw is signed, 31 bits ) */
-    double PosnAlti; /*!< m , -100->6000 (0.1*x+-100.0, raw is unsigned, 16 bits ) */
-    double PosnSpd; /*!< m/s , 0->100 (0.001*x+0.0, raw is unsigned, 17 bits ) */
-    double PosnVHozl; /*!< m/s , 0->100 (0.001*x+0.0, raw is unsigned, 17 bits ) */
-    double PosnVVert; /*!< m/s , -100->100 (0.001*x+0.0, raw is signed, 18 bits ) */
-    double PosnDir; /*!< Deg , 0->359.99 (0.01*x+0.0, raw is unsigned, 16 bits ) */
-    uint8_t TiForYr; /*!< Year , 0->99 */
-    uint8_t TiForMth; /*!< Month , 1->12 */
-    uint8_t TiForDay; /*!< Days , 1->31 */
-    uint8_t TiForHr; /*!< hours , 0->23 */
-    uint8_t TiForMins; /*!< Mins , 0->59 */
-    uint8_t TiForSec; /*!< s , 0->59 */
+    double PosnLat; /*!<Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 30 bits )*/
+    double PosnLgt; /*!<Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 31 bits )*/
+    double PosnAlti; /*!<Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 16 bits )*/
+    double PosnSpd; /*!<Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )*/
+    double PosnVHozl; /*!<Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )*/
+    double PosnVVert; /*!<Unit: m/s,  Range:-100->100, Resolution: (0.001*x+0.0, raw is signed, 18 bits )*/
+    double PosnDir; /*!<Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 16 bits )*/
+    uint8_t TiForYr; /*!<Unit: Year,  Range:0->99*/
+    uint8_t TiForMth; /*!<Unit: Month,  Range:1->12*/
+    uint8_t TiForDay; /*!<Unit: Days,  Range:1->31*/
+    uint8_t TiForHr; /*!<Unit: hours,  Range:0->23*/
+    uint8_t TiForMins; /*!<Unit: Mins,  Range:0->59*/
+    uint8_t TiForSec; /*!<Unit: s,  Range:0->59*/
     NoYes1 SatltSysNo1InUse;
     NoYes1 SatltSysNo2InUse;
     NoYes1 SatltSysNo3InUse;
@@ -4668,16 +4668,16 @@ struct PosnFromSatlt {
     SatltPosnSts SatltPosnStsPrm1;
     bool SatltPosnStsPrm2;
     bool SatltPosnStsPrm3;
-    uint8_t NoOfSatltForSysNo1; /*!< Unitless , 0->31 */
-    uint8_t NoOfSatltForSysNo2; /*!< Unitless , 0->31 */
-    uint8_t NoOfSatltForSysNo3; /*!< Unitless , 0->31 */
-    uint8_t NoOfSatltForSysNo4; /*!< Unitless , 0->31 */
-    uint8_t NoOfSatltForSysNo5; /*!< Unitless , 0->31 */
-    uint8_t NoOfSatltForSysNo6; /*!< Unitless , 0->31 */
-    double PrePosnDil; /*!< Unitless , 0->25.5 (0.1*x+0.0, raw is unsigned, 8 bits ) */
-    double PreHozlDil; /*!< Unitless , 0->25.5 (0.1*x+0.0, raw is unsigned, 8 bits ) */
-    double PreVertDil; /*!< Unitless , 0->25.5 (0.1*x+0.0, raw is unsigned, 8 bits ) */
-    double PreTiDil; /*!< Unitless , 0->25.5 (0.1*x+0.0, raw is unsigned, 8 bits ) */
+    uint8_t NoOfSatltForSysNo1; /*!<Unit: Unitless,  Range:0->31*/
+    uint8_t NoOfSatltForSysNo2; /*!<Unit: Unitless,  Range:0->31*/
+    uint8_t NoOfSatltForSysNo3; /*!<Unit: Unitless,  Range:0->31*/
+    uint8_t NoOfSatltForSysNo4; /*!<Unit: Unitless,  Range:0->31*/
+    uint8_t NoOfSatltForSysNo5; /*!<Unit: Unitless,  Range:0->31*/
+    uint8_t NoOfSatltForSysNo6; /*!<Unit: Unitless,  Range:0->31*/
+    double PrePosnDil; /*!<Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )*/
+    double PreHozlDil; /*!<Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )*/
+    double PreVertDil; /*!<Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )*/
+    double PreTiDil; /*!<Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )*/
 };
 
 /*!
@@ -4729,8 +4729,8 @@ struct ProfLimd1 {
  * \struct PtCluTq1
  */
 struct PtCluTq1 {
-    int16_t PtCluTq; /*!< NewtonMeter , -1024->1023 (1.0*x+-1024.0, raw is unsigned, 11 bits ) */
-    int16_t PtCluTqDyn; /*!< NewtonMeter , -1024->1023 (1.0*x+-1024.0, raw is unsigned, 11 bits ) */
+    int16_t PtCluTq; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )*/
+    int16_t PtCluTqDyn; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )*/
     Qly3 PtCluTqQly;
 };
 
@@ -4746,9 +4746,9 @@ struct PtDrvrSetg2 {
  * \struct PtTqAtWhlFrntActRec1
  */
 struct PtTqAtWhlFrntActRec1 {
-    int16_t PtTqAtWhlFrntLeAct; /*!< NewtonMeter , -20000->20000 (1.0*x+0.0, raw is signed, 16 bits ) */
-    int16_t PtTqAtWhlFrntRiAct; /*!< NewtonMeter , -20000->20000 (1.0*x+0.0, raw is signed, 16 bits ) */
-    int16_t PtTqAtAxleFrntAct; /*!< NewtonMeter , -20000->20000 (1.0*x+0.0, raw is signed, 16 bits ) */
+    int16_t PtTqAtWhlFrntLeAct; /*!<Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )*/
+    int16_t PtTqAtWhlFrntRiAct; /*!<Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )*/
+    int16_t PtTqAtAxleFrntAct; /*!<Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )*/
     Qly3 PtTqAtWhlsFrntQly;
 };
 
@@ -4839,24 +4839,24 @@ struct SetOfLang {
  */
 struct SftyCchActvnSts1 {
     NoYes1 Actv;
-    uint8_t Yr; /*!< Unitless , 0->15 */
-    uint8_t Mth; /*!< Unitless , 0->15 */
-    uint8_t Day; /*!< Unitless , 0->15 */
+    uint8_t Yr; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t Mth; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t Day; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
  * \struct SftyCchIdx1
  */
 struct SftyCchIdx1 {
-    double Tot; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double Tot; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 TotAvl;
-    double DstToVeh; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double DstToVeh; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 DstToVehAvl;
-    double LaneKeep; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double LaneKeep; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 LaneKeepAvl;
-    double Attention; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double Attention; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 AttentionAvl;
-    double KeepSpdLim; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double KeepSpdLim; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 KeepSpdLimAvl;
 };
 
@@ -4864,22 +4864,22 @@ struct SftyCchIdx1 {
  * \struct SftyCchIdx2
  */
 struct SftyCchIdx2 {
-    double Tot; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double Tot; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 TotAvl;
     SftyCchCntxt1 TotCntxt;
-    double DstToVeh; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double DstToVeh; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 DstToVehAvl;
     SftyCchCntxt1 DstToVehCntxt;
-    double LaneKeep; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double LaneKeep; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 LaneKeepAvl;
     SftyCchCntxt1 LaneKeepCntxt;
-    double Attention; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double Attention; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 AttentionAvl;
     SftyCchCntxt1 AttentionCntxt;
-    double KeepSpdLim; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double KeepSpdLim; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 KeepSpdLimAvl;
     SftyCchCntxt1 KeepSpdLimCntxt;
-    double FldTot; /*!< Unitless , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double FldTot; /*!<Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     FcnAvlSts1 FldTotAvl;
 };
 
@@ -4890,8 +4890,8 @@ struct SftySigGroupFromAudSafe1 {
     NoYesCrit1 SftySigFaildDetdByAud;
     NoYesCrit1 SftyAudDend;
     NoYesCrit1 SftyAudEna;
-    uint8_t SftySigGroupFromAudSafeChks; /*!< Unitless , 0->255 */
-    uint8_t SftySigGroupFromAudSafeCntr; /*!< Unitless , 0->15 */
+    uint8_t SftySigGroupFromAudSafeChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t SftySigGroupFromAudSafeCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -4901,8 +4901,8 @@ struct SftyWarnGroupFromAsySafe1 {
     NoYesCrit1 CnclWarnLatForAutDrv;
     NoYesCrit1 SteerOvrdWarnReqForAutDrv;
     SteerStsForAutDrv3 SteerStsForAutDrv;
-    uint8_t SftyWarnGroupFromAsySafeChks; /*!< Unitless , 0->255 */
-    uint8_t SftyWarnGroupFromAsySafeCntr; /*!< Unitless , 0->15 */
+    uint8_t SftyWarnGroupFromAsySafeChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t SftyWarnGroupFromAsySafeCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -4932,12 +4932,12 @@ struct SnsrParkAssi1 {
  * New record type to hold distances using new data type for longer range ultrasound sensors (DstOfSnsr2). Rest of content (audio warning data types) is the same as in (older) SnsrParkAssi1 record type.
  */
 struct SnsrPrkgAssi2 {
-    double SnsrDstInsdLe; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned, 10 bits ) */
-    double SnsrDstOutdLe; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned, 10 bits ) */
-    double SnsrDstSideLe; /*!< cm , 0->511 (-1.0*x+511.0, raw is unsigned, 9 bits ) */
-    double SnsrDstInsdRi; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned, 10 bits ) */
-    double SnsrDstOutdRi; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned, 10 bits ) */
-    double SnsrDstSideRi; /*!< cm , 0->511 (-1.0*x+511.0, raw is unsigned, 9 bits ) */
+    double SnsrDstInsdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstOutdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstSideLe; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 9 bits )*/
+    double SnsrDstInsdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstOutdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstSideRi; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 9 bits )*/
     WarnDir1 AudWarnDir;
     ParkAssiLeRi1 AudSideWarn;
 };
@@ -4947,12 +4947,12 @@ struct SnsrPrkgAssi2 {
  * New record type to hold distances using new data type for longer range ultrasound sensors (DstOfSnsr2 and DstOfSnsr3).
  */
 struct SnsrPrkgAssi3 {
-    double SnsrDstInsdLe; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned ) */
-    double SnsrDstOutdLe; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned ) */
-    double SnsrDstSideLe; /*!< cm , 0->511 (-1.0*x+511.0, raw is unsigned ) */
-    double SnsrDstInsdRi; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned ) */
-    double SnsrDstOutdRi; /*!< cm , 0->1023 (-1.0*x+1023.0, raw is unsigned ) */
-    double SnsrDstSideRi; /*!< cm , 0->511 (-1.0*x+511.0, raw is unsigned ) */
+    double SnsrDstInsdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
+    double SnsrDstOutdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
+    double SnsrDstSideLe; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 0 bits )*/
+    double SnsrDstInsdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
+    double SnsrDstOutdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
+    double SnsrDstSideRi; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 0 bits )*/
 };
 
 /*!
@@ -4992,11 +4992,11 @@ struct SteerSetg {
  * \struct SteerWhlSnsrSafe1
  */
 struct SteerWhlSnsrSafe1 {
-    double SteerWhlAg; /*!< rad , -14.5->14.5 (9.765625E-4*x+0.0, raw is signed, 15 bits ) */
-    double SteerWhlAgSpd; /*!< rad/s , -50->50 (0.0078125*x+0.0, raw is signed, 14 bits ) */
+    double SteerWhlAg; /*!<Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )*/
+    double SteerWhlAgSpd; /*!<Unit: rad/s,  Range:-50->50, Resolution: (0.0078125*x+0.0, raw is signed, 14 bits )*/
     GenQf1 SteerWhlSnsrQf;
-    uint8_t SteerWhlSnsrChks; /*!< Unitless , 0->255 */
-    uint8_t SteerWhlSnsrCntr; /*!< Unitless , 0->15 */
+    uint8_t SteerWhlSnsrChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t SteerWhlSnsrCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -5013,7 +5013,7 @@ struct SuspSetgRec {
  * System voltage represented by the CEM node Voltage
  */
 struct SysU {
-    double SysU; /*!< Volt , 0->25 (0.1*x+0.0, raw is unsigned, 8 bits ) */
+    double SysU; /*!<Unit: Volt,  Range:0->25, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )*/
     GenQf1 SysUQf;
 };
 
@@ -5021,9 +5021,9 @@ struct SysU {
  * \struct TiCorrn
  */
 struct TiCorrn {
-    int8_t HrCorrn; /*!< hours , -15->15 */
-    int8_t MinsCorrn; /*!< Unitless , -59->59 */
-    int8_t DayLiSaveTi; /*!< hours , -15->15 */
+    int8_t HrCorrn; /*!<Unit: hours,  Range:-15->15*/
+    int8_t MinsCorrn; /*!<Unit: Unitless,  Range:-59->59*/
+    int8_t DayLiSaveTi; /*!<Unit: hours,  Range:-15->15*/
     NoYes1 SpprtForFct;
 };
 
@@ -5039,7 +5039,7 @@ struct TiGapAdpvSeldPen1 {
  * \struct TiGapPen1
  */
 struct TiGapPen1 {
-    double Sts; /*!< s , 0->6.3 (0.1*x+0.0, raw is unsigned, 6 bits ) */
+    double Sts; /*!<Unit: s,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )*/
     IdPen Pen;
 };
 
@@ -5047,7 +5047,7 @@ struct TiGapPen1 {
  * \struct TireCircumCalByNav
  */
 struct TireCircumCalByNav {
-    uint16_t TireCircum; /*!< Unitless , 0->4095 */
+    uint16_t TireCircum; /*!<Unit: Unitless,  Range:0->4095*/
     NoYes1 HiQly;
     NoYes1 SpprtForFct;
 };
@@ -5056,7 +5056,7 @@ struct TireCircumCalByNav {
  * \struct TirePAbsltValFrntLe3
  */
 struct TirePAbsltValFrntLe3 {
-    double TirepabsltVal1; /*!< hPa , 0->637.5 (2.5*x+0.0, raw is unsigned, 8 bits ) */
+    double TirepabsltVal1; /*!<Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )*/
     TirePAbsltValQf TirePabsltValQF;
     TirePPosn TirePPosn_;
 };
@@ -5065,7 +5065,7 @@ struct TirePAbsltValFrntLe3 {
  * \struct TirePAbsltValFrntRi1
  */
 struct TirePAbsltValFrntRi1 {
-    double TirePAbsltVal1; /*!< hPa , 0->637.5 (2.5*x+0.0, raw is unsigned, 8 bits ) */
+    double TirePAbsltVal1; /*!<Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )*/
     TirePAbsltValQf TirePAbsltValQF;
     TirePPosn TirePPosn_;
 };
@@ -5074,7 +5074,7 @@ struct TirePAbsltValFrntRi1 {
  * \struct TirePAbsltValReLe1
  */
 struct TirePAbsltValReLe1 {
-    double TirePAbsltVal1; /*!< hPa , 0->637.5 (2.5*x+0.0, raw is unsigned, 8 bits ) */
+    double TirePAbsltVal1; /*!<Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )*/
     TirePAbsltValQf TirePAbsltValQF;
     TirePPosn TirePPosn_;
 };
@@ -5083,7 +5083,7 @@ struct TirePAbsltValReLe1 {
  * \struct TirePAbsltValReRi1
  */
 struct TirePAbsltValReRi1 {
-    double TirePAbsltVal1; /*!< hPa , 0->637.5 (2.5*x+0.0, raw is unsigned, 8 bits ) */
+    double TirePAbsltVal1; /*!<Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )*/
     TirePAbsltValQf TirePAbsltValQF;
     TirePPosn TirePPosn_;
 };
@@ -5103,18 +5103,18 @@ struct TirePMonData1 {
  * \struct TqSafe2
  */
 struct TqSafe2 {
-    double TqAct; /*!< NewtonMeter , -8188->8192 (4.0*x+-8188.0, raw is unsigned, 12 bits ) */
-    uint8_t TqActChks; /*!< Unitless , 0->255 */
-    uint8_t TqActCntr; /*!< Unitless , 0->15 */
+    double TqAct; /*!<Unit: NewtonMeter,  Range:-8188->8192, Resolution: (4.0*x+-8188.0, raw is unsigned, 12 bits )*/
+    uint8_t TqActChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t TqActCntr; /*!<Unit: Unitless,  Range:0->15*/
     QualityFactor TqActQlyFac;
-    double SpdLimn; /*!< rpm , 0->2550 (10.0*x+0.0, raw is unsigned, 8 bits ) */
+    double SpdLimn; /*!<Unit: rpm,  Range:0->2550, Resolution: (10.0*x+0.0, raw is unsigned, 8 bits )*/
 };
 
 /*!
  * \struct TwliBriRaw
  */
 struct TwliBriRaw {
-    uint16_t TwliBriRaw1; /*!< Unitless , 0->10000 */
+    uint16_t TwliBriRaw1; /*!<Unit: Unitless,  Range:0->10000*/
     GenQf1 TwliBriRawQf;
 };
 
@@ -5122,14 +5122,14 @@ struct TwliBriRaw {
  * \struct UInt64Rec
  */
 struct UInt64Rec {
-    uint8_t Byte0; /*!< Unitless , 0->255 */
-    uint8_t Byte1; /*!< Unitless , 0->255 */
-    uint8_t Byte2; /*!< Unitless , 0->255 */
-    uint8_t Byte3; /*!< Unitless , 0->255 */
-    uint8_t Byte4; /*!< Unitless , 0->255 */
-    uint8_t Byte5; /*!< Unitless , 0->255 */
-    uint8_t Byte6; /*!< Unitless , 0->255 */
-    uint8_t Byte7; /*!< Unitless , 0->255 */
+    uint8_t Byte0; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte1; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte2; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte3; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte4; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte5; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte6; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Byte7; /*!<Unit: Unitless,  Range:0->255*/
 };
 
 /*!
@@ -5152,7 +5152,7 @@ struct UnlckRemCfgPen1 {
  * \struct UsrSetSpdForKeySpdLimn
  */
 struct UsrSetSpdForKeySpdLimn {
-    double Sts; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
+    double Sts; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
     IdPen Pen;
 };
 
@@ -5165,12 +5165,12 @@ struct UsrSetSpdForKeySpdLimn {
  * Personal ID shows to which Profile the settings belongs.
  */
 struct UsrSetSpdForKeySpdWarn {
-    double UsrSetSpdForKeySpdWarn1; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
-    double UsrSetSpdForKeySpdWarn2; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
-    double UsrSetSpdForKeySpdWarn3; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
-    double UsrSetSpdForKeySpdWarn4; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
-    double UsrSetSpdForKeySpdWarn5; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
-    double UsrSetSpdForKeySpdWarn6; /*!< m/s , 0->125 (0.03125*x+0.0, raw is unsigned, 12 bits ) */
+    double UsrSetSpdForKeySpdWarn1; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
+    double UsrSetSpdForKeySpdWarn2; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
+    double UsrSetSpdForKeySpdWarn3; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
+    double UsrSetSpdForKeySpdWarn4; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
+    double UsrSetSpdForKeySpdWarn5; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
+    double UsrSetSpdForKeySpdWarn6; /*!<Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )*/
     IdPen UsrSetSpdForKeySpdWarnPen;
 };
 
@@ -5186,9 +5186,9 @@ struct UsrSetVolMaxForKeyVolLimn {
  * \struct UsrSwtDispClimaReqForRowSec
  */
 struct UsrSwtDispClimaReqForRowSec {
-    double UsrSwtDispClimaReqForTSpForRowSecLe; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double UsrSwtDispClimaReqForTSpForRowSecLe; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     bool UsrSwtDispUpdClimaReqForTSpForRowSecLe;
-    double UsrSwtDispClimaReqForTSpForRowSecRi; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double UsrSwtDispClimaReqForTSpForRowSecRi; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     bool UsrSwtDispUpdClimaReqForTSpForRowSecRi;
     SeatClimaLvl UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe;
     bool UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe;
@@ -5204,8 +5204,8 @@ struct UsrSwtDispClimaReqForRowSec {
  * \struct UsrSwtDispClimaSts
  */
 struct UsrSwtDispClimaSts {
-    double UsrSwtDispClimaTSpForRowSecLe; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
-    double UsrSwtDispClimaTSpForRowSecRi; /*!< Deg , 15->30.5 (0.5*x+15.0, raw is unsigned, 5 bits ) */
+    double UsrSwtDispClimaTSpForRowSecLe; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
+    double UsrSwtDispClimaTSpForRowSecRi; /*!<Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )*/
     SeatClimaLvl UsrSwtDispSeatHeatLvlForRowSecLe;
     SeatClimaLvl UsrSwtDispSeatHeatLvlForRowSecRi;
     HmiHvacFanLvl UsrSwtDispFanLvlForRowSec;
@@ -5243,30 +5243,30 @@ struct UsrSwtDispReqVrnt {
  * \struct VFCGrp
  */
 struct VFCGrp {
-    uint16_t Grp1; /*!< Unitless , 0->65535 */
-    uint16_t Grp2; /*!< Unitless , 0->65535 */
-    uint16_t Grp3; /*!< Unitless , 0->65535 */
+    uint16_t Grp1; /*!<Unit: Unitless,  Range:0->65535*/
+    uint16_t Grp2; /*!<Unit: Unitless,  Range:0->65535*/
+    uint16_t Grp3; /*!<Unit: Unitless,  Range:0->65535*/
 };
 
 /*!
  * \struct VehCfgPrm
  */
 struct VehCfgPrm {
-    uint8_t BlkIDBytePosn1; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn2; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn3; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn4; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn5; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn6; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn7; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t CCPBytePosn8; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
+    uint8_t BlkIDBytePosn1; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn2; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn3; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn4; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn5; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn6; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn7; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t CCPBytePosn8; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
 };
 
 /*!
  * \struct VehMNomRec1
  */
 struct VehMNomRec1 {
-    uint16_t VehM; /*!< kg , 0->10000 (1.0*x+0.0, raw is unsigned, 14 bits ) */
+    uint16_t VehM; /*!<Unit: kg,  Range:0->10000, Resolution: (1.0*x+0.0, raw is unsigned, 14 bits )*/
     Qly2 VehMQly;
     TrlrM TrlrM_;
 };
@@ -5277,14 +5277,14 @@ struct VehMNomRec1 {
 struct VehModMngtGlbSafe1 {
     UsgModSts1 UsgModSts;
     CarModSts1 CarModSts1_;
-    uint8_t CarModSubtypWdCarModSubtyp; /*!< Unitless , 0->7 */
-    uint8_t EgyLvlElecMai; /*!< Unitless , 0->15 */
-    uint8_t EgyLvlElecSubtyp; /*!< Unitless , 0->15 */
-    uint8_t PwrLvlElecMai; /*!< Unitless , 0->15 */
-    uint8_t PwrLvlElecSubtyp; /*!< Unitless , 0->15 */
+    uint8_t CarModSubtypWdCarModSubtyp; /*!<Unit: Unitless,  Range:0->7*/
+    uint8_t EgyLvlElecMai; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t EgyLvlElecSubtyp; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t PwrLvlElecMai; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t PwrLvlElecSubtyp; /*!<Unit: Unitless,  Range:0->15*/
     FltEgyCns1 FltEgyCnsWdSts;
-    uint8_t Chks; /*!< Unitless , 0->255 */
-    uint8_t Cntr; /*!< Unitless , 0->15 */
+    uint8_t Chks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t Cntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -5292,8 +5292,8 @@ struct VehModMngtGlbSafe1 {
  */
 struct VehMtnStSafe1 {
     VehMtnSt2 VehMtnSt;
-    uint8_t VehMtnStChks; /*!< Unitless , 0->255 */
-    uint8_t VehMtnStCntr; /*!< Unitless , 0->15 */
+    uint8_t VehMtnStChks; /*!<Unit: Unitless,  Range:0->255*/
+    uint8_t VehMtnStCntr; /*!<Unit: Unitless,  Range:0->15*/
 };
 
 /*!
@@ -5301,7 +5301,7 @@ struct VehMtnStSafe1 {
  * Data type for indicated vehicle speed, containing unitless number for the value of the speed, and a separate defined unit.
  */
 struct VehSpdIndcd1 {
-    uint16_t VehSpdIndcd; /*!< Unitless , 0->511 */
+    uint16_t VehSpdIndcd; /*!<Unit: Unitless,  Range:0->511*/
     VehSpdIndcdUnit VeSpdIndcdUnit;
 };
 
@@ -5309,24 +5309,24 @@ struct VehSpdIndcd1 {
  * \struct VehSpdLgtSafe1
  */
 struct VehSpdLgtSafe1 {
-    double VehSpdLgt; /*!< m/s , 0->125 (0.00391*x+0.0, raw is unsigned, 15 bits ) */
+    double VehSpdLgt; /*!<Unit: m/s,  Range:0->125, Resolution: (0.00391*x+0.0, raw is unsigned, 15 bits )*/
     GenQf1 VehSpdLgtQf;
-    uint8_t VehSpdLgtCntr; /*!< Unitless , 0->15 */
-    uint8_t VehSpdLgtChks; /*!< Unitless , 0->255 */
+    uint8_t VehSpdLgtCntr; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t VehSpdLgtChks; /*!<Unit: Unitless,  Range:0->255*/
 };
 
 /*!
  * \struct Vin1
  */
 struct Vin1 {
-    uint8_t BlockNr; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos1; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos2; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos3; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos4; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos5; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos6; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t VINSignalPos7; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
+    uint8_t BlockNr; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos1; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos2; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos3; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos4; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos5; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos6; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t VINSignalPos7; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
 };
 
 /*!
@@ -5364,10 +5364,10 @@ struct WarnTypForLaneChgWarnPen1 {
  * \struct WhlRotToothCntrRec
  */
 struct WhlRotToothCntrRec {
-    uint8_t WhlRotToothCntrFrntLe; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t WhlRotToothCntrFrntRi; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t WhlRotToothCntrReLe; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
-    uint8_t WhlRotToothCntrReRi; /*!< Unitless , 0->255 (1.0*x+0.0, raw is unsigned, 8 bits ) */
+    uint8_t WhlRotToothCntrFrntLe; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t WhlRotToothCntrFrntRi; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t WhlRotToothCntrReLe; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
+    uint8_t WhlRotToothCntrReRi; /*!<Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )*/
 };
 
 /*!

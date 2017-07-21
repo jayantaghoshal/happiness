@@ -2,8 +2,8 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-04-03T08:04:02.284168
- * Source: SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Generated at: 2017-08-18T13:15:23.081495
+ * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 #ifndef _DATAELEMENTS_H
 #define _DATAELEMENTS_H
@@ -414,7 +414,7 @@ struct AmbTRaw_info : InTag, public DataElemInfo {
  * Used to distribute the setting Reduced guard.
  */
 struct AntithftRednReq_info : OutTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->7 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->7*/
 
     static const char* Name();
     static const char* TypeName();
@@ -465,7 +465,7 @@ struct AsySteerApplyRqrd_info : InTag, public DataElemInfo {
  * Used by the DIM to request audio chimes
  */
 struct AudMsgReq_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->255 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->255*/
 
     static const char* Name();
     static const char* TypeName();
@@ -498,7 +498,7 @@ struct AudWarnActv_info : OutTag, public DataElemInfo {
  * \brief Signal BackCntrForMissCom
  */
 struct BackCntrForMissCom_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->255 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->255*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1009,7 +1009,7 @@ struct CallSts_info : OutTag, public DataElemInfo {
  * Presents a tiime value that shall be used by all ECUs to time-stamp diagnsotic trouble codes (DTC) according to the requirements for Global DTC snapshot data.
  */
 struct CarTiGlb_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< s , 0->4.294967294E8 (0.1*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1146,7 +1146,7 @@ struct ClimaActv_info : InTag, public DataElemInfo {
  * Actual current consumption of electric climate loads
  */
 struct ClimaPwrCns_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< W , 0->2047 (1.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = uint16_t; /*!<Unit: W,  Range:0->2047, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1180,7 +1180,7 @@ struct ClimaRqrdFromHmi_info : OutTag, public DataElemInfo {
  * Time that the car shall be finished with pre-condition.
  */
 struct ClimaTmr_info : OutTag, public DataElemInfo {
-    using data_elem_type = double; /*!< s , 0->4.294967294E8 (0.1*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1754,7 +1754,7 @@ struct DataSpclDMSM_info : InTag, public DataElemInfo {
  * Days left before service shall be done
  */
 struct DayToSrv_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Days , 0->750 */
+    using data_elem_type = uint16_t; /*!<Unit: Days,  Range:0->750*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1891,7 +1891,7 @@ struct DispAndHomeBtnSts_info : OutTag, public DataElemInfo {
  * Energy=integral( max( battery power flowing in , 0) )
  */
 struct DispBattEgyIn_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< Wh , 0->127.5 (0.5*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -1912,7 +1912,7 @@ struct DispBattEgyIn_info : InTag, public DataElemInfo {
  * Energy=integral( max( battery power flowing out , 0) )
  */
 struct DispBattEgyOut_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< Wh , 0->127.5 (0.5*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2742,7 +2742,7 @@ struct DstToManvLocn_info : OutTag, public DataElemInfo {
  * Distance (km) left before service shall be done
  */
 struct DstToSrv_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< km , 0->32000 */
+    using data_elem_type = uint16_t; /*!<Unit: km,  Range:0->32000*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2759,7 +2759,7 @@ struct DstToSrv_info : InTag, public DataElemInfo {
  * Value of the indicated Trip meter 1.
  */
 struct DstTrvld1_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< km , 0->9999.9 (0.1*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2776,7 +2776,7 @@ struct DstTrvld1_info : InTag, public DataElemInfo {
  * Value of the indicated Trip meter 2.
  */
 struct DstTrvld2_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< km , 0->9999.9 (0.1*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2793,7 +2793,7 @@ struct DstTrvld2_info : InTag, public DataElemInfo {
  * High resolution trip meter value, resolution of 1m with a modulus 256 counter (counts 0 -> 255 -> 0 etc).
  */
 struct DstTrvldHiResl_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< m , 0->255 */
+    using data_elem_type = uint8_t; /*!<Unit: m,  Range:0->255*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2810,7 +2810,7 @@ struct DstTrvldHiResl_info : InTag, public DataElemInfo {
  * Indicated odometer (total driven distance) value in km.
  */
 struct BkpOfDstTrvld_info : InTag, public DataElemInfo {
-    using data_elem_type = uint32_t; /*!< km , 0->2000000 (1.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = uint32_t; /*!<Unit: km,  Range:0->2000000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2827,7 +2827,7 @@ struct BkpOfDstTrvld_info : InTag, public DataElemInfo {
  * Indicated odometer value in unit miles.
  */
 struct DstTrvldMst2_info : InTag, public DataElemInfo {
-    using data_elem_type = uint32_t; /*!< Milg , 0->1000000 */
+    using data_elem_type = uint32_t; /*!<Unit: Milg,  Range:0->1000000*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2973,7 +2973,7 @@ struct EngCooltLvl_info : InTag, public DataElemInfo {
  * The transmitted econometer data for used for calculations in DIM shall be unfiltered and without any offset. Thus, this econometer data shall be as close to the true current fuel consumption by engine as possible, at all times.
  */
 struct EngFuCns_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< MicroL , 0->51000 (200.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2994,7 +2994,7 @@ struct EngFuCns_info : InTag, public DataElemInfo {
  * Extra fuel consumption during these events shall be stored locally in the ECM, to be transmitted as a distributed small added extra consumption data. This extra value shall be so designed such that there is no to the customer visible significant jumps in the transmitted ECON signal (that is related to the extra fuel consumed during the specific event). The total transmitted fuel consumption as indicated by the ECON signal, shall over time equal true consumption.
  */
 struct EngFuCnsFild_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< MicroL , 0->51000 (200.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3011,7 +3011,7 @@ struct EngFuCnsFild_info : InTag, public DataElemInfo {
  * Engine hours left before a service shall be done
  */
 struct EngHrToSrv_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< hours , 0->2000 */
+    using data_elem_type = uint16_t; /*!<Unit: hours,  Range:0->2000*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3063,7 +3063,7 @@ struct EngNSafe_info : InTag, public DataElemInfo {
  * Engine oil level, Range 0-120 %
  */
 struct EngOilLvl_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< % , 0->120 (0.5*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: %,  Range:0->120, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3115,7 +3115,7 @@ struct EngOilPWarn_info : InTag, public DataElemInfo {
  * Engine speed value for engine speed meter in the driver information display. Note that this speed value may differ from the real actual engine speed.
  */
 struct EngSpdDispd_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< rpm , 0->16383.5 (0.5*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: rpm,  Range:0->16383.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3319,7 +3319,7 @@ struct ExtrMirrTintgSetg_info : InternalTag, public DataElemInfo {
  * \brief Signal FRNetworkStatus
  */
 struct FRNetworkStatus_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 0->65535 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3473,7 +3473,7 @@ struct FuHeatrActv_info : InTag, public DataElemInfo {
  * Informs of how much fuel the heater has consumed since entering Usage mod driving. Signal is modulus.
  */
 struct FuHeatrFuCns1_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< MicroL , 0->51000 (200.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -3490,7 +3490,7 @@ struct FuHeatrFuCns1_info : InTag, public DataElemInfo {
  * Informs how much that have been used by the fuel operated heater when not in usage mode driving. Will reset to 0 when leaving usage mode driving.
  */
 struct FuHeatrFuCnsDurgCyc1_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< Litre , 0->1.27 (0.01*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: Litre,  Range:0->1.27, Resolution: (0.01*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -4072,7 +4072,7 @@ struct HudVisFctSetg_info : OutTag, public DataElemInfo {
  * Estimated total mass air flow in front HVAC.
  */
 struct HvacAirMFlowEstimd_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Kg / h , 0->1000 (1.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = uint16_t; /*!<Unit: Kg / h,  Range:0->1000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -4398,7 +4398,7 @@ struct IndcrTurnSts1WdSts_info : InTag, public DataElemInfo {
  * \brief Signal IniValSigCfgIDBackboneFR
  */
 struct IniValSigCfgIDBackboneFR_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 0->65535 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
 
     static const char* Name();
     static const char* TypeName();
@@ -4415,7 +4415,7 @@ struct IniValSigCfgIDBackboneFR_info : InTag, public DataElemInfo {
  * Signal that represents the perceived audio noise (in dB RMS over 3 seconds) in the coupé.
  */
 struct InsdCarNoiseMeasd_info : OutTag, public DataElemInfo {
-    using data_elem_type = double; /*!< dB , 0->127.5 (0.5*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: dB,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -4453,7 +4453,7 @@ struct IntAudCnclWarn_info : InternalTag, public DataElemInfo {
  * Set by user through rheostat wheel situated on MyCar Module.
  */
 struct IntrBriSts_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->15 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->15*/
 
     static const char* Name();
     static const char* TypeName();
@@ -4469,7 +4469,7 @@ struct IntrBriSts_info : InTag, public DataElemInfo {
  * \brief Signal IntrBriStsForSeatHeatrRe
  */
 struct IntrBriStsForSeatHeatrRe_info : OutTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->15 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->15*/
 
     static const char* Name();
     static const char* TypeName();
@@ -5392,7 +5392,7 @@ struct MmedTvmPwerMod_info : OutTag, public DataElemInfo {
  * \brief Signal MstCfgIDBackboneFR
  */
 struct MstCfgIDBackboneFR_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 0->65535 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
 
     static const char* Name();
     static const char* TypeName();
@@ -5540,7 +5540,7 @@ struct NoSoundSys_info : OutTag, public DataElemInfo {
  * Contains notification number used in Check view
  */
 struct NotifChkDistbn_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 0->65535 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
 
     static const char* Name();
     static const char* TypeName();
@@ -5557,7 +5557,7 @@ struct NotifChkDistbn_info : InTag, public DataElemInfo {
  * Number of belts that is currently used in the vehicle. Originates from LC: ExtSigIf1.
  */
 struct NrOfBltAppld_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->7 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->7*/
 
     static const char* Name();
     static const char* TypeName();
@@ -5946,7 +5946,7 @@ struct PrkgAssiManvActvSts_info : InTag, public DataElemInfo {
  * Information such that a progress bar can be created and shown to the driver. The progress bar represent the distance to next action needed by the driver.
  */
 struct PrkgAssiManvProgs_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->63 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->63*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6247,7 +6247,7 @@ struct PrpsnHvBattUsgOfHldSmtBlkd2_info : InTag, public DataElemInfo {
  * \brief Signal PrpsnHvBattUsgOfHldSpd
  */
 struct PrpsnHvBattUsgOfHldSpd_info : OutTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Km/h , 0->150 */
+    using data_elem_type = uint8_t; /*!<Unit: Km/h,  Range:0->150*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6484,7 +6484,7 @@ struct PwrSplyErrSts_info : InTag, public DataElemInfo {
  * \brief Signal RadioFrqAn
  */
 struct RadioFrqAn_info : OutTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 522->1710 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:522->1710*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6754,7 +6754,7 @@ struct RotyDirReq1_info : InTag, public DataElemInfo {
  * If the knob is turned backward --> Then bit0 to bit4 shall shall increase with 1 for every step turned.
  */
 struct RotyPosReq2_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->31 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->31*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6779,7 +6779,7 @@ struct RotyPosReq2_info : InTag, public DataElemInfo {
  * (example see req-266313)
  */
 struct RotyPosReq1_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->31 */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->31*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6855,7 +6855,7 @@ struct SaveSetgToMemPrmnt_info : OutTag, public DataElemInfo {
  * The signal is sent from Engine in 5% steps but are visualized in IHU according to above information.
  */
 struct ScrBarVolIndcn_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< % , 0->100 (5.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: %,  Range:0->100, Resolution: (5.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6871,7 +6871,7 @@ struct ScrBarVolIndcn_info : InTag, public DataElemInfo {
  * \brief Signal ScrMaxFillgVol
  */
 struct ScrMaxFillgVol_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Litre , 0->31 */
+    using data_elem_type = uint8_t; /*!<Unit: Litre,  Range:0->31*/
 
     static const char* Name();
     static const char* TypeName();
@@ -6887,7 +6887,7 @@ struct ScrMaxFillgVol_info : InTag, public DataElemInfo {
  * \brief Signal ScrReagentTankVol
  */
 struct ScrReagentTankVol_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Litre , 0->31 */
+    using data_elem_type = uint8_t; /*!<Unit: Litre,  Range:0->31*/
 
     static const char* Name();
     static const char* TypeName();
@@ -7428,7 +7428,7 @@ struct SoundExtActvSts_info : OutTag, public DataElemInfo {
  * The actual speed of the ERAD electric motor scaled to the wheel domain.
  */
 struct WhlMotSysSpdAct_info : InTag, public DataElemInfo {
-    using data_elem_type = double; /*!< rpm , -1638.4->1638.3 (0.1*x+-1638.4, raw is unsigned ) */
+    using data_elem_type = double; /*!<Unit: rpm,  Range:-1638.4->1638.3, Resolution: (0.1*x+-1638.4, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -7547,7 +7547,7 @@ struct SrvRst_info : InTag, public DataElemInfo {
  * Information that a service reminder message is shown in the instrument cluster. Gives information of which parameter that trigged the message and which service reminder message that is shown.
  */
 struct SrvTrig_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!< Unitless , 0->15 (1.0*x+0.0, raw is unsigned ) */
+    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -7758,7 +7758,7 @@ struct SteerWhlSwtPwr_info : InTag, public DataElemInfo {
  * Bit 23: TBD
  */
 struct StopStrtInhb_info : InTag, public DataElemInfo {
-    using data_elem_type = uint32_t; /*!< Unitless , 0->16777215 */
+    using data_elem_type = uint32_t; /*!<Unit: Unitless,  Range:0->16777215*/
 
     static const char* Name();
     static const char* TypeName();
@@ -9152,7 +9152,7 @@ struct WarnTypForLaneKeepAid_info : OutTag, public DataElemInfo {
  * Value in mm. Fault indicated using 4095.
  */
 struct WhlCircum_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!< Unitless , 0->4095 */
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->4095*/
 
     static const char* Name();
     static const char* TypeName();
