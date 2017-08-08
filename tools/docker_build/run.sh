@@ -10,9 +10,7 @@ WORKING_DIR="$(pwd)"
 
 VOLUMES=${VOLUMES:---volume $HOME:$HOME --volume $PWD:$PWD}
 
-## 
 # Handle options
-#
 for i in "$@"
 do
 case $i in

@@ -81,10 +81,11 @@ $@
 EOL
 chmod +x $SCRIPT_FILE
 
-
-if [ $* = 'bash' ]; then
+if [[ $- == *i* ]]; then
+  # If this is an interactive invocation then we should start bash with $BASHRC_FILE.
   COMMAND_IN_DOCKER="bash --rcfile ${BASHRC_FILE}"
 else
+  # If this is a non-interactive invocation then we should use run the $SCRIPT_FILE.
   COMMAND_IN_DOCKER="$SCRIPT_FILE"
 fi
 
