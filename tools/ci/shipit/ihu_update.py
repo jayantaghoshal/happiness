@@ -106,7 +106,6 @@ def flash_image(port_mapping: PortMapping,
         expect_line(ihu_serials.mp, "Android", 5,
                     "Is the MP UART connected? Or do you have the TTY open already?")
         expect_line(ihu_serials.mp, "auto-boot ...", 5)
-        expect_line(ihu_serials.mp, "SB: Disabled", 5)
         expect_line(ihu_serials.mp, ">>>.*", 5)
         logger.info("ELK confirmed, boot elk to fastboot")
         ihu_serials.mp.writeline("boot elk")
