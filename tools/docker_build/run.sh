@@ -24,26 +24,10 @@ case $i in
 esac
 done
 
-# Setup ccache
-if type ccache >/dev/null 2>&1; then CCACHE_EXISTS=1; else CCACHE_EXISTS=0; fi
-USE_CCACHE=${USE_CCACHE:-${CCACHE_EXISTS}}
-if [ "$USE_CCACHE" == "1" ]; then
-  if [ -z $CCACHE_DIR ]; then
-    if [ $CCACHE_EXISTS == "1" ]; then
-      CCACHE_DIR=$(ccache --print-config | grep cache_dir\ = | awk '{ print $4 }')
-    else
-      CCACHE_DIR=$HOME/.ccache
-    fi
-  fi
-  if ! test -e ${CCACHE_DIR}; then
-    echo "Creating directory ${CCACHE_DIR}..."
-    mkdir -p ${CCACHE_DIR}
-
-    # ccache must be initialized properly,
-    # just creating the directory will not work, when building you will get Error: "ccache: failed to create  (No such file or directory)"
-    # There is no "init" command but calling --max-size seems to do the trick
-    ccache --max-size=5G
-  fi
+# Default to using ccache
+# Technically unnecessary (the build system only checks for "not false") but explicit for clarity
+if [[ ! -v USE_CCACHE ]]; then
+  export USE_CCACHE=true
 fi
 
 # Detect environment of docker command
@@ -64,8 +48,8 @@ docker run \
     --env=HOST_UID=$(id -u) \
     --env=HOST_GID=$(id -g) \
     --env=HOST_UNAME=$(id -un) \
-    --env=CCACHE_DIR=${CCACHE_DIR} \
-    --env=USE_CCACHE=${USE_CCACHE} \
+    --env CCACHE_DIR \
+    --env USE_CCACHE \
     --env=REPO_ROOT_DIR=${REPO_ROOT_DIR} \
     --env=HOME=$HOME \
     --workdir ${WORKING_DIR} \
