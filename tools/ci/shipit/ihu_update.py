@@ -12,6 +12,7 @@ import argparse
 import logging
 import logging.config
 import json
+import socket
 from shipit.serial_mapping import open_serials, PortMapping
 from shipit import serial_mapping
 from shipit import recording_serial
@@ -197,6 +198,9 @@ def main():
     parser.add_argument(
         "--mp_port", required=True, help="TTY device connected to VIP console UART")
     parsed_args = parser.parse_args()
+
+    if socket.gethostname() != "aic-docker":
+        raise RuntimeError("Script seems to be running outside the docker container, exiting")
 
     with open(os.path.dirname(__file__)+ "/logging.json", "rt") as f:
         log_config = json.load(f)
