@@ -1,3 +1,0 @@
-on post-fs
-    mkdir /oem_config/localconfig 0775 root root
-    copy /vendor/etc/localconfig.json /oem_config/localconfig/localconfig.json
