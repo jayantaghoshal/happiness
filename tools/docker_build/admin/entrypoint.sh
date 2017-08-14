@@ -81,7 +81,7 @@ $@
 EOL
 chmod +x $SCRIPT_FILE
 
-if [[ $- == *i* ]]; then
+if [[ $* = 'bash' ]]; then
   # If this is an interactive invocation then we should start bash with $BASHRC_FILE.
   COMMAND_IN_DOCKER="bash --rcfile ${BASHRC_FILE}"
 else
