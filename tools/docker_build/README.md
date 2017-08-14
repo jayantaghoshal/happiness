@@ -10,8 +10,8 @@ This document describes the Docker image that aims to provide a consistent envir
 ## Prerequisites
 
 * Docker CE. Tested OK with version: 17.04.0-ce and 17.06.0-ce
-  
-  DO NOT use the docker that comes in ubuntus apt-get repositories, it is super old. 
+
+  DO NOT use the docker that comes in ubuntus apt-get repositories, it is super old.
 
 
 ## How to use the image
@@ -40,8 +40,9 @@ vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && make -j8"
 ```bash
 vendor/volvocars/tools/docker_build/run.sh
 
-# Now you can run interactively in the docker container with
-# the AOSP build environment, for example:
+# Now you can work interactively with the AOSP build environment, for example:
+
+# Setup the build target
 lunch ihu_vcc-eng
 
 # Build the complete system
@@ -53,33 +54,51 @@ mm
 ```
 
 
+## Instructions on how to update the Docker image (Adminstrators only)
 
-
-## Instructions on how to work with Docker registry (Adminstrators only)
+Maybe you need to update the docker image, to add some new tool or change the environment. Please be aware that this image is used in production so be sure to
+invite the CI-team for code review.
 
 ### How to build the docker image locally without pulling from artifactory
 
-To build the docker image, execute:
+Update the image configuration and build it:
 
 ```bash
 vendor/volvocars/tools/docker_build/admin/create_docker_image.sh
-
-# If you built image yourself you need to provide --local flag to run.sh to use latest instead of tagged
-vendor/volvocars/tools/docker_build/run.sh --local COMMAND_TO_EXECUTE
 ```
 
-### How to push image to artifactory 
+Now you can test the local image using the --local option
 
-To push the docker image to Artifactory, execute:
 ```bash
-# Only for test, should be automated (Jenkins should build and push image to Artifactory)
-vendor/volvocars/tools/docker_build/admin/push.sh <IMAGE ID>
+vendor/volvocars/tools/docker_build/run.sh --local
 ```
 
-### How to pull image from artifactory 
+Commit your changes and update the file vendor/volvocars/tools/docker_build/image.ref with the the change id. This is used by the run script to baseline the docker image. For example:
+
+```
+swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:I51526c2c73b3a94b65b5b06d7adf3115129bc3b7
+```
+
+Now you need to add this change and amend it to the commit.
+
+### How to push image to artifactory
+
+When you have verified the image you can now push it to Artifactory. The <CHANGE ID> below refers to your committed changes above.
+
+```bash
+vendor/volvocars/tools/docker_build/admin/push.sh <CHANGE ID>
+```
+
+### How to pull image from artifactory
 (Not needed since run.sh does this automatically)
 
 To pull the docker image from Artifactory, execute:
+
 ```bash
 docker pull swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build[:NAME]
 ```
+
+## Future improvements
+
+* Move image from the "test" namespace.
+* The image should be automatically built, verified and pushed to Artifactory by the CI-machinery.
