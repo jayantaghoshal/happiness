@@ -78,20 +78,31 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     zip \
     zlib1g-dev
 
+##################################################
+# Tools required for testing with VTS, see:
+# https://source.android.com/devices/tech/test_infra/tradefed/fundamentals/vts
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+    python-dev \
+    python-protobuf \
+    protobuf-compiler \
+    python-virtualenv \
+    python-pip
+
+
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
 ##################################################
 # Tools required for CI test environment
-RUN apt install -y \
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     git-all \
     picocom \
     python3 \
     python3-pip \
     python3-venv \
-    python3-serial \  
-    adb 
+    python3-serial \
+    adb
 COPY repo /usr/bin/repo
 RUN pip3 install redis \
     requests \
@@ -99,7 +110,7 @@ RUN pip3 install redis \
 
 ##################################################
 # Debug packages
-RUN apt install -y \
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     iputils-ping \
     dnsutils \
     net-tools
