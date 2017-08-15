@@ -20,20 +20,23 @@ include $(BUILD_STATIC_LIBRARY)
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := liblocalconfig
+LOCAL_VENDOR_MODULE := true
 LOCAL_WHOLE_STATIC_LIBRARIES := liblocalconfig_static
 LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
 # We need an init.rc which will initialize with a default
 # localconfig.json if needed.
 LOCAL_INIT_RC := misc/localconfig.rc
+LOCAL_REQUIRED_MODULES := localconfig.json
 include $(BUILD_SHARED_LIBRARY)
 
 #
-# Copy the default JSON file to /vendor/etc
+# Copy the default JSON file to /vendor/etc/config
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := localconfig.json
+LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT)/../vendor/etc
+LOCAL_MODULE_RELATIVE_PATH := config
 LOCAL_SRC_FILES := misc/localconfig.json
 include $(BUILD_PREBUILT)
