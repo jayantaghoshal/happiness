@@ -16,7 +16,6 @@
     exit 1
 }
 
-
 # Global parameters
 CONTAINER_USERNAME=ihu
 CONTAINER_GROUPNAME=ihu
@@ -95,7 +94,5 @@ sudo -E \
     BUILD_ENV_SETUP=$BUILD_ENV_SETUP \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
     PATH=/sbin:$PATH \
-    USE_CCACHE=${USE_CCACHE} \
-    CCACHE_DIR=${CCACHE_DIR} \
     ${COMMAND_IN_DOCKER}
 
