@@ -10,7 +10,7 @@ fi
 
 # Setup ccache
 if [ -z ${USE_CCACHE} ]; then
-  USE_CCACHE=0
+  USE_CCACHE=false
 fi
 if [ -z ${CCACHE_DIR} ]; then
   CCACHE_DIR=$(readlink -f ${REPO_ROOT_DIR}/../vcc-aosp-build-ccache)
