@@ -16,7 +16,18 @@ if [ -z ${CCACHE_DIR} ]; then
   CCACHE_DIR=$(readlink -f ${REPO_ROOT_DIR}/../vcc-aosp-build-ccache)
 fi
 
-docker_run () {
+# Color codes which can be used when printing stuff to terminal
+C_ERROR="\033[0;31m"
+C_OK="\033[0;32m"
+C_OFF="\033[0m"
+
+function die() {
+    message=$1
+    echo -e "${C_ERROR}${message}${C_OFF}"
+    exit 1
+}
+
+function docker_run() {
   USE_CCACHE=$USE_CCACHE \
   CCACHE_DIR=$CCACHE_DIR \
   VOLUMES="--volume $WORKSPACE:$WORKSPACE" \
