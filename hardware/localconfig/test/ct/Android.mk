@@ -19,4 +19,9 @@ LOCAL_WHOLE_STATIC_LIBRARIES += \
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts
 
+# We only build for 64 bit architecture
+# "first" refers to the first target architecture set by lunch
+LOCAL_MULTILIB := first
+LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
+
 include $(BUILD_NATIVE_TEST)
