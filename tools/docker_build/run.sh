@@ -11,9 +11,15 @@ WORKING_DIR="$(pwd)"
 VOLUMES=${VOLUMES:---volume $HOME:$HOME --volume $PWD:$PWD}
 
 # Handle options
+ENV_FILE_OPT=
+
 for i in "$@"
 do
 case $i in
+    --env-file=*)
+    ENV_FILE_OPT=$i
+    shift
+    ;;
     --local)
     DOCKER_IMAGE="vcc_aosp_build"
     shift # past argument with no value
@@ -40,6 +46,7 @@ INTERACTIVE_OPTS="-"
 
 docker run \
     ${INTERACTIVE_OPTS} \
+    ${ENV_FILE_OPT} \
     --hostname aic-docker \
     $VOLUMES \
     --dns=10.244.0.15 \

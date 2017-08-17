@@ -21,5 +21,5 @@ docker_run () {
   CCACHE_DIR=$CCACHE_DIR \
   VOLUMES="--volume $WORKSPACE:$WORKSPACE" \
   ${DOCKER_BUILD_DIR}/run.sh \
-  $*
+  --env-file=${SCRIPT_DIR}/env.list $*
 }
