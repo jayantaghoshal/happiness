@@ -4,6 +4,18 @@ LocalConfig is a library for reading run time tunable parameter. The parameters 
 stored in a json file on target. The default file is located in the /vendor/etc folder
 and is copied to /oem_config/localconfig on startup if missing.
 
+## Update default LocalConfig
+
+Change the ./misc/localconfig.json file to fit your needs. Run the tests
+
+    ./unit_test_build.sh && ./unit_test_run.sh
+    ./component_test_build.sh && ./component_test_run.sh
+
+Build the image and update the IHU. Note that when an IHU is updated with fastboot the
+/oem_config/localconfig is not overwritten by default. Therefor you need to explicitly
+remove the /oem_config/localconfig/localconfig.json file and reboot the IHU in order to
+get your updated LocalConfig to be used.
+
 ## Using LocalConfig in your component
 
 ### Usage
