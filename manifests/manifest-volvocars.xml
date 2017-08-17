@@ -8,6 +8,28 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
+  <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
+  <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars_apps/VolvoLauncher" revision="research/o"/>
+
+  <!-- AOSP Changed by Volvo Cars -->
+  <remove-project name="aosp/platform/frameworks/base"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="research/o"/>
+  <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
+  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="research/o"/>
+  <remove-project name="aosp/platform/frameworks/support"/>
+  <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="research/o"/>
+  <remove-project name="aosp/platform/packages/services/Car"/>
+  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="research/o"/>
+
+  <!-- Volvo Cars partner apps -->
+  <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
+  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars_apps/Spotify" revision="vcc/aae/googleio_ww02"/>
+
+  <!-- Google services -->
+  <!-- TODO: Temporarily disabled while waiting for O compatible version
+  <project name="vendor/google/apps/GoogleServices" path="vendor/google/apps/GoogleServices" revision="vcc/aae/googleio_ww02"/>
+  -->
+
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
   <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="80757f67b2269855d3a41a67df55c0d1b928c830"/>
