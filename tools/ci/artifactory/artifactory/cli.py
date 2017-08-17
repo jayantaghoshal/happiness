@@ -46,8 +46,8 @@ class ArgumentHandler(object):
         push_parser.add_argument(
             'job',
             metavar='JOB-ID',
-            type=int,
-            help='Jenkins job ID'
+            type=str,
+            help='Jenkins job ID or Zuul change IDs (ZUUL_CHANGE_IDS env var)'
         )
 
         push_parser.add_argument(
@@ -74,8 +74,8 @@ class ArgumentHandler(object):
         pull_parser.add_argument(
             'job',
             metavar='JOB-ID',
-            type=int,
-            help='Jenkins job ID'
+            type=str,
+            help='Jenkins job ID or Zuul change IDs (ZUUL_CHANGE_IDS env var)'
         )
 
         pull_parser.add_argument(
@@ -110,8 +110,8 @@ class ArgumentHandler(object):
             'job',
             metavar='JOB-ID',
             nargs='?',
-            type=int,
-            help='Jenkins job ID'
+            type=str,
+            help='Jenkins job ID or Zuul change IDs (ZUUL_CHANGE_IDS env var)'
         )
 
         show_parser.add_argument(
