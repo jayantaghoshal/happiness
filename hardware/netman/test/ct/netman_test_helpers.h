@@ -14,6 +14,7 @@
 
 std::string GetIpAddressForInterface(const std::string& ifname);
 std::string GetNetmaskForInterface(const std::string& ifname);
+std::string GetBroadcastAddressForInterface(const std::string& ifname);
 std::string GetMacAddressForInterface(const std::string& ifname);
 int GetMtuForInterface(const std::string& ifname);
 

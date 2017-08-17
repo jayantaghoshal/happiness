@@ -40,6 +40,7 @@ static bool SetupInterface(const char* interface_name,
                            const std::vector<uint8_t> &mac_address,
                            const char* ip_addr,
                            const char* netmask,
+                           const char* broadcast_addr,
                            const uint32_t mtu);
 
 static void ConvertMacAddress(const std::string &mac_address,
@@ -55,6 +56,7 @@ void LoadInterfaceConfiguration(InterfaceConfiguration &conf)
     conf.ip_address = vcc::localconfig::GetString("eth1.ip-address");
     conf.netmask = vcc::localconfig::GetString("eth1.netmask");
     conf.mac_address = vcc::localconfig::GetString("eth1.mac-address");
+    conf.broadcast_address = vcc::localconfig::GetString("eth1.broadcast-address");
     conf.mtu = (uint32_t)vcc::localconfig::GetInt("eth1.mtu");
 }
 
@@ -70,6 +72,7 @@ void ListenForNetlinkEvents(const int socket_fd, const InterfaceConfiguration &i
                    mac_address,
                    interface_conf.ip_address.c_str(),
                    interface_conf.netmask.c_str(),
+                   interface_conf.broadcast_address.c_str(),
                    interface_conf.mtu);
 
     ALOGI("Interface configuration set first time...");
@@ -131,6 +134,7 @@ static bool RecvMessage(const int netlink_fd, const InterfaceConfiguration &inte
     const char *interface_name = interface_conf.name.c_str();
     const char *ip_addr = interface_conf.ip_address.c_str();
     const char *netmask = interface_conf.netmask.c_str();
+    const char *broadcast_addr = interface_conf.broadcast_address.c_str();
     const int mtu = interface_conf.mtu;
     std::vector<uint8_t> mac_address(5);
 
@@ -198,7 +202,7 @@ static bool RecvMessage(const int netlink_fd, const InterfaceConfiguration &inte
                 ALOGI("RTM_NEWLINK Link UP for interface %s...", name);
                 if (0 == strncmp(name, interface_name, strlen(interface_name)))
                 {
-                    SetupInterface(interface_name, mac_address, ip_addr, netmask, mtu);
+                    SetupInterface(interface_name, mac_address, ip_addr, netmask, broadcast_addr, mtu);
                 }
                 else
                 {
@@ -394,7 +398,7 @@ static bool TakeInterfaceDown(const char* interface_name)
     return true;
 }
 
-bool SetNetmask( int skfd, const char *intf, const char *newmask )
+bool SetNetmask(int skfd, const char *intf, const char *newmask)
 {
     struct ifreq ifr;
     unsigned int dst;
@@ -407,7 +411,7 @@ bool SetNetmask( int skfd, const char *intf, const char *newmask )
         return false;
     }
     strncpy( ifr.ifr_name, intf, IFNAMSIZ-1 );
-    if ( ioctl(skfd,SIOCSIFNETMASK,&ifr) == -1 )
+    if ( ioctl(skfd, SIOCSIFNETMASK, &ifr) == -1 )
     {
         ALOGE("could not read interface %s\n", intf);
         return false;;
@@ -416,7 +420,31 @@ bool SetNetmask( int skfd, const char *intf, const char *newmask )
     return true;
 }
 
-static bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask)
+bool SetBroadcastAddress(int inet_sock_fd, const char *interface_name, const char *broadcast_address)
+{
+    struct sockaddr_in sin_addr;
+    sin_addr.sin_family = AF_INET;
+    sin_addr.sin_port = htons(0);
+
+    // safe to ignore return value as ip address is a const string in correct format
+    inet_aton(broadcast_address, (struct in_addr*)&sin_addr.sin_addr.s_addr);
+
+    struct ifreq ifr;
+    memset(&ifr, 0, sizeof(struct ifreq));
+    memcpy(&ifr.ifr_broadaddr, &sin_addr, sizeof(struct sockaddr));
+    strcpy(ifr.ifr_name, interface_name);
+
+    // Set broadcast address
+    if (ioctl(inet_sock_fd, SIOCSIFBRDADDR, &ifr) == -1)
+    {
+        ALOGE("ioctl call set broadcast address failed. Error is [%s]", strerror(errno));
+        return false;
+    }
+
+    return true;
+}
+
+static bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask, const char *broadcast_address)
 {
     ALOGI("Entering SetIpAddress...");
 
@@ -446,6 +474,15 @@ static bool SetIpAddress(const char* interface_name, const char* ip_addr, const 
     if (ioctl(inet_sock_fd, SIOCSIFADDR, &ifr) == -1)
     {
         ALOGE("ioctl call set IP address failed. Error is [%s]", strerror(errno));
+        close(inet_sock_fd);
+        return false;
+    }
+
+    ALOGI("Setting broadcast address...");
+
+    if (!SetBroadcastAddress(inet_sock_fd, interface_name, broadcast_address))
+    {
+        ALOGE("ioctl call to set broadcast address failed. Error is [%s]", strerror(errno));
         close(inet_sock_fd);
         return false;
     }
@@ -546,6 +583,7 @@ static bool SetupInterface(const char* interface_name,
                            const std::vector<uint8_t> &mac_address,
                            const char* ip_addr,
                            const char* netmask,
+                           const char* broadcast_addr,
                            const uint32_t mtu)
 {
     ALOGI("Entering SetupInterface...");
@@ -581,7 +619,7 @@ static bool SetupInterface(const char* interface_name,
     }
 
     // Set ip adress if ethernet interface is up already...
-    if (!SetIpAddress(interface_name, ip_addr, netmask))
+    if (!SetIpAddress(interface_name, ip_addr, netmask, broadcast_addr))
     {
         ALOGE("Failed to configure IP address for %s!", interface_name);
     }
