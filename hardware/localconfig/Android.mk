@@ -13,6 +13,8 @@ LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
+# We only build for 64 bit.
+LOCAL_MULTILIB := 64
 include $(BUILD_STATIC_LIBRARY)
 
 #
@@ -24,10 +26,11 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_WHOLE_STATIC_LIBRARIES := liblocalconfig_static
 LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
-# We need an init.rc which will initialize with a default
-# localconfig.json if needed.
+# We need an init.rc which will initialize with a default localconfig.json if needed.
 LOCAL_INIT_RC := misc/localconfig.rc
 LOCAL_REQUIRED_MODULES := localconfig.json
+# We only build for 64 bit.
+LOCAL_MULTILIB := 64
 include $(BUILD_SHARED_LIBRARY)
 
 #
