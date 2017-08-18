@@ -4,3 +4,4 @@ service infotainment-ip-service /vendor/bin/hw/infotainment-ip-service
     user root
     group root
     seclabel u:r:infotainment-ip-service:s0
+
