@@ -61,9 +61,6 @@ id -u "${HOST_UID}" &>/dev/null || {
     chown ${CONTAINER_USERNAME}:${CONTAINER_GROUPNAME} ${HOME}
 }
 
-# Add user to dialout group. This allows access to /dev/ttyUSB* without sudo
-adduser ${CONTAINER_USERNAME} dialout || Failed "Adding user to dialout group failed"
-
 # Allow user to sudo
 echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
@@ -87,6 +84,24 @@ else
   # If this is a non-interactive invocation then we should use run the $SCRIPT_FILE.
   COMMAND_IN_DOCKER="$SCRIPT_FILE"
 fi
+
+# Add docker user to same groups as host user
+IFS='_'
+for group_id in $HOST_USER_GROUPS
+do
+  # Get group name from group id
+  group_name=$(getent group ${group_id} | cut -d : -f 1)
+  # If group does not exists create it
+  if [[ -z ${group_name} ]]; then
+    group_name=host-group-${group_id}
+    groupadd -g ${group_id} ${group_name}
+  fi
+  # Add user to group
+  echo "Adding user ${CONTAINER_USERNAME} to group ${group_name}"
+  usermod -a -G ${group_name} $CONTAINER_USERNAME
+done
+unset IFS
+
 
 sudo -E \
     -u ${CONTAINER_USERNAME} \

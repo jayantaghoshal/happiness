@@ -36,6 +36,10 @@ if [[ ! -v USE_CCACHE ]]; then
   export USE_CCACHE=true
 fi
 
+# Get a underscore-separated list of group ids for the host user groups
+HOST_USER_GROUPS=$(id -G $USER)
+HOST_USER_GROUPS=${HOST_USER_GROUPS// /_}
+
 # Detect environment of docker command
 INTERACTIVE_OPTS="-"
 # Check if STDIN file is pipe. If not, it is "regular" STDIN
@@ -57,6 +61,7 @@ docker run \
     --env=HOST_UNAME=$(id -un) \
     --env CCACHE_DIR \
     --env USE_CCACHE \
+    --env=HOST_USER_GROUPS=${HOST_USER_GROUPS} \
     --env=REPO_ROOT_DIR=${REPO_ROOT_DIR} \
     --env=HOME=$HOME \
     --workdir ${WORKING_DIR} \
