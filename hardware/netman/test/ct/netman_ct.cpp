@@ -59,7 +59,7 @@ TEST(NetmanTest, NetmaskAfterBoot)
         if (netmask=="")
         { // nothing set yet, just wait
         }
-        else if (netmask == "255.255.255.0")
+        else if (netmask == "255.255.240.0")
         { // yes we found it
             ALOGI("Found netmask %s", netmask.c_str());
             EXPECT_TRUE(true);
@@ -69,6 +69,37 @@ TEST(NetmanTest, NetmaskAfterBoot)
         {
             // We found something else. Print out and wait
             ALOGW("Found netmask %s, waiting further ...", netmask.c_str());
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, BroadcastAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for broadcast address...");
+
+    while (loop_cnt--) {
+        const std::string broadcast_address = GetBroadcastAddressForInterface("eth1");
+        if (broadcast_address =="" )
+        { // nothing set yet, just wait
+        }
+        else if (broadcast_address == "198.18.255.255")
+        { // yes we found it
+            ALOGI("Found broadcast address %s", broadcast_address.c_str());
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found broadcast address %s, waiting further ...", broadcast_address.c_str());
         }
         usleep(poll_intervall*1000);
     }

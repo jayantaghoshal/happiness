@@ -60,6 +60,29 @@ std::string GetNetmaskForInterface(const std::string& ifname)
     }
 }
 
+std::string GetBroadcastAddressForInterface(const std::string &ifname)
+{
+    int fd;
+    struct ifreq ifr;
+
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    /* I want to get an IPv4 IP address */
+    ifr.ifr_addr.sa_family = AF_INET;
+
+    strncpy(ifr.ifr_name, ifname.c_str(), IFNAMSIZ-1);
+
+    int r = ioctl(fd, SIOCGIFBRDADDR, &ifr);
+
+    close(fd);
+
+    if (r==0) {
+        return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_broadaddr)->sin_addr);
+    } else {
+        return "";
+    }
+}
+
 int GetMtuForInterface(const std::string& ifname)
 {
     int fd;

@@ -10,6 +10,7 @@ struct InterfaceConfiguration {
     std::string name;
     std::string ip_address;
     std::string netmask;
+    std::string broadcast_address;
     std::string mac_address;
     int mtu;
 };

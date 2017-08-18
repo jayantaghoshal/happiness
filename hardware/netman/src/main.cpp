@@ -47,6 +47,7 @@ int main()
         ALOGI("Interface name: %s", interface_conf.name.c_str());
         ALOGI("Mac address: %s", interface_conf.mac_address.c_str());
         ALOGI("IP address: %s", interface_conf.ip_address.c_str());
+        ALOGI("Broadcast address: %s", interface_conf.broadcast_address.c_str());
         ALOGI("Netmask: %s", interface_conf.netmask.c_str());
         ALOGI("MTU: %i", interface_conf.mtu);
 

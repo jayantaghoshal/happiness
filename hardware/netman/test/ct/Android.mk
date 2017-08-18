@@ -19,6 +19,9 @@ LOCAL_WHOLE_STATIC_LIBRARIES += \
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts
 
+# We only build for 64 bit.
+LOCAL_MULTILIB := 64
+
 include $(BUILD_NATIVE_TEST)
 
 #
