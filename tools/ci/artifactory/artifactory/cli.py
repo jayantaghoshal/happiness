@@ -128,7 +128,7 @@ class ArgumentHandler(object):
     def push(self, args):
         artifactory = Artifactory()
         for file in args.files:
-            path = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, file)
+            path = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
             print("Deploy file to Artifactory - %s -> %s" % (file, path))
             artifactory.deploy_artifact(path, file)
 
