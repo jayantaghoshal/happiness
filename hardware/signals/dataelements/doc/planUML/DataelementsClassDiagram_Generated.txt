@@ -1,0 +1,31 @@
+@startuml
+
+package GeneratedCode <<Frame>> {
+
+class DataElemInfo {
+virtual const char* name() const=0;
+virtual const char* typeName() const=0;
+virtual Dir direction() const=0;
+}
+
+class ADataRawSafe_info<<Generated>> {
+    virtual const char* name() const=0;
+    virtual const char* typeName() const=0;
+    virtual Dir direction() const=0;
+}
+
+class GeneratedAutoSARType1<<Generated>>
+class GeneratedAutoSARType2<<Generated>>
+
+}
+
+
+DataElemInfo <|-- ADataRawSafe_info
+DataElemInfo <|-- GeneratedAutoSARType1
+DataElemInfo <|-- GeneratedAutoSARType2
+
+
+
+@enduml
+
+
