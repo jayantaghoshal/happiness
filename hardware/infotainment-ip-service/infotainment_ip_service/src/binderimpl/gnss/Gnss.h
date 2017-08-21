@@ -35,6 +35,9 @@ using ::android::sp;
 
 struct Gnss : public IGnss {
     Gnss();
+
+    void updateLocation(const android::hardware::gnss::V1_0::GnssLocation& location);
+
     // Methods from ::android::hardware::gnss::V1_0::IGnss follow.
     Return<bool> setCallback(const sp<IGnssCallback>& callback) override;
     Return<bool> start() override;
@@ -57,6 +60,8 @@ struct Gnss : public IGnss {
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
 
+    bool started_;
+    sp<IGnssCallback> callback_;
 };
 
 extern "C" IGnss* HIDL_FETCH_IGnss(const char* name);

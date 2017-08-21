@@ -265,7 +265,8 @@ void Dispatcher::Stop() {
 }
 
 void Dispatcher::Join() {
-    if (eventthread_.joinable()) {
+    if ( eventthread_.joinable() && (std::this_thread::get_id()!=eventthread_.get_id()) )  {
+        // Only call join if joinable and when we are not calling Join() from the dispatcher thread
         eventthread_.join();
     }
 }

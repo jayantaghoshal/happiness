@@ -9,12 +9,27 @@
 #include <cmath>
 #include <string>
 #include <cutils/log.h>
+#include "date.h"
 
 namespace InfotainmentIpService
 {
 namespace Utils
 {
 using namespace Connectivity;
+using namespace std::chrono;
+
+int64_t ToMsSince1970(const Icb_DateTime_t* utc_time)
+{
+    // create the epoch as a time_point
+    static const date::year_month_day ymd1970(date::year(1970), date::month(1), date::day(1));
+    static const std::chrono::system_clock::time_point tp1970((date::sys_days(ymd1970)));
+
+    // create received time as a time_point
+    const date::year_month_day ymd(date::year(utc_time->year), date::month(utc_time->month), date::day(utc_time->day));
+    const std::chrono::system_clock::time_point tp(date::sys_days(ymd) + hours(utc_time->hour) + minutes(utc_time->minute) + seconds(utc_time->second));
+
+    return duration_cast<milliseconds>(tp - tp1970).count();
+}
 
 std::string FixTypeToString(Icb_GnssFixType_t fix_type)
 {
