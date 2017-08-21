@@ -3,7 +3,7 @@ import crc16
 
 total = len(sys.argv)
 if total!=3:
-    print "Usage: crc16cmd.py <file> <def-name>"
+    sys.exit("Usage: crc16cmd.py <file> <def-name>")
 else:
     file = open(sys.argv[1],'r')
     print "// "+sys.argv[1]
