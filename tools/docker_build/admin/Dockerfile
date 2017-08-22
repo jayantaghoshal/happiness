@@ -88,6 +88,11 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python-virtualenv \
     python-pip
 
+# Install android view client, used for android test automation
+# https://github.com/dtmilano/AndroidViewClient/wiki
+# RUN pip install git+https://github.com/dtmilano/AndroidViewClient.git
+RUN pip install androidviewclient
+
 
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
