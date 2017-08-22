@@ -54,7 +54,7 @@ std::string GetNetmaskForInterface(const std::string& ifname)
     close(fd);
 
     if (r==0) {
-        return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+        return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_netmask)->sin_addr);
     } else {
         return "";
     }

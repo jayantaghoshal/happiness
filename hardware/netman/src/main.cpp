@@ -1,88 +1,53 @@
-#define  LOG_TAG    "netman_daemon"
+#define  LOG_TAG    "Netmand"
 
 #include <cutils/log.h>
-#include <signal.h>
-#include <stdlib.h>
 
-#include <netman.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "netlink_event_listener.h"
+#include "netlink_event_handler.h"
+#include "netman.h"
 
 using namespace vcc::netman;
-
-int socket_fd = 0;
-
-void CleanUp()
-{
-    CloseNetlinkSocket(socket_fd);
-    ALOGI("NetLink socket closed...");
-}
-
-void SigTermHandler(int sig)
-{
-    ALOGI("Terminate signal catched");
-    CleanUp();
-    exit(0);
-}
-
-void SigHupHandler(int sig)
-{
-    ALOGI("Sighup signal catched");
-    CleanUp();
-    exit(0);
-}
 
 int main()
 {
     try
     {
-        ALOGI("Netman started...");
+        ALOGI("Netmand 0.1 starting");
 
-        signal(SIGTERM, SigTermHandler);
-        signal(SIGHUP, SigHupHandler);
+        InterfaceConfiguration eth1_configuration;
 
-        InterfaceConfiguration interface_conf;
+        LoadInterfaceConfiguration(eth1_configuration);
 
-        LoadInterfaceConfiguration(interface_conf);
+        SetupInterface(eth1_configuration.name.c_str(),
+                       eth1_configuration.mac_address_bytes,
+                       eth1_configuration.ip_address.c_str(),
+                       eth1_configuration.netmask.c_str(),
+                       eth1_configuration.broadcast_address.c_str(),
+                       eth1_configuration.mtu);
 
-        ALOGI("Configuration loaded...");
-        ALOGI("Interface name: %s", interface_conf.name.c_str());
-        ALOGI("Mac address: %s", interface_conf.mac_address.c_str());
-        ALOGI("IP address: %s", interface_conf.ip_address.c_str());
-        ALOGI("Broadcast address: %s", interface_conf.broadcast_address.c_str());
-        ALOGI("Netmask: %s", interface_conf.netmask.c_str());
-        ALOGI("MTU: %i", interface_conf.mtu);
+        ALOGI("Initial eth1 configuration set");
 
-        if ((socket_fd = OpenNetlinkSocket()) == -1 )
-        {
-            ALOGE("Failed to open Netlink socket");
-            return EXIT_FAILURE;
+        NetlinkEventHandler nl_event_handler(eth1_configuration);
+
+        NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
+        nl_socket_listener.SetNetlinkEventHandler(nl_event_handler);
+
+        if (nl_socket_listener.StartListening()) {
+            ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
+            exit(1);
         }
 
-        ALOGI("NetLink socket opened...");
-
-        if (BindNetlinkSocket(socket_fd) == -1)
-        {
-            ALOGE("Failed to bind to Netlink socket");
-            CloseNetlinkSocket(socket_fd);
-            return EXIT_FAILURE;
-        }
-
-        ALOGI("NetLink socket bound...");
-
-        ListenForNetlinkEvents(socket_fd, interface_conf);
-
-        CloseNetlinkSocket(socket_fd);
-
-        ALOGI("NetLink socket closed...");
-
-        return EXIT_SUCCESS;
-
+        exit(0);
     }
     catch(const std::runtime_error &e)
     {
-
         ALOGE("ABORTING: Exception thrown: %s", e.what());
-
     }
 
-    return EXIT_SUCCESS;
+    exit(0);
 }
