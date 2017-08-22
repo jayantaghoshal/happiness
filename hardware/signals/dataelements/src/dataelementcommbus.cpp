@@ -6,7 +6,9 @@
 #include "dataelementcommbus.h"
 #include <mosquittopp.h>
 
-#include "logging.h"
+#undef LOG_TAG
+#define LOG_TAG "DataElementDBus"
+#include <cutils/log.h>
 
 #include <unistd.h>
 #include <mutex>

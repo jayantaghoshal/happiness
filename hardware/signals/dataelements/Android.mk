@@ -28,8 +28,7 @@ LOCAL_SRC_FILES:= \
     
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 LOCAL_CPPFLAGS += -frtti # Dataelements use dynamic_cast which requires rtti
-#LOCAL_SHARED_LIBRARIES += libc++ libihulog libdbus
-
+LOCAL_SHARED_LIBRARIES +:= liblog libcutils
 
 LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/include \
@@ -38,7 +37,6 @@ LOCAL_C_INCLUDES += \
 
 LOCAL_EXPORT_C_INCLUDE_DIRS := \
 	$(LOCAL_PATH)/include \
-        $(LOCAL_PATH)/generated \
-        $(LOCAL_PATH)/generated 
+    $(LOCAL_PATH)/generated
 
 include $(BUILD_SHARED_LIBRARY)

@@ -9,8 +9,10 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <vector>
-#include "logging.h"
-LOG_DECLARE_DEFAULT_CONTEXT(deleContext, "DELE", "DataElements main logging context")
+
+#undef LOG_TAG
+#define LOG_TAG "ComBusDBUSReceiverTest"
+#include <cutils/log.h>
 
 /// TBD
 class ComBusDBUSReceiverTest : public ::testing::Test

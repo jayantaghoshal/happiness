@@ -1,3 +1,4 @@
+#undef LOG_TAG
 #define LOG_TAG "vcc.vcctest@1.0::SignalsCallback"
 
 #include <android/log.h>

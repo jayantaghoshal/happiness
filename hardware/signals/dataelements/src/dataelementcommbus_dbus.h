@@ -5,14 +5,18 @@
 
 #pragma once
 
-#include "dataelementcommbus.h"
-#include "dataelementcommbus_dbus_receiver.h"
-#include "pipe.h"
+#include <systemd/sd-bus.h>
 #include <map>
 #include <set>
 #include <systemd/sd-bus.h>
 #include <thread>
-#include "logging.h"
+#include "dataelementcommbus.h"
+#include "dataelementcommbus_dbus_receiver.h"
+#include "pipe.h"
+
+#undef  LOG_TAG
+#define LOG_TAG "SdBusWrapper"
+#include <cutils/log.h>
 
 /// This class keeps track of that the correct sdbus object is used when
 /// accessed from different threads.

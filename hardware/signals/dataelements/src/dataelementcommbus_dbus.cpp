@@ -7,9 +7,10 @@
 #include "dataelementcommbus_dbus_common.h"
 
 #include <thread>
-#include "logging.h"
 
-LOG_SET_DEFAULT_CONTEXT(deleContext)
+#undef LOG_TAG
+#define LOG_TAG "DataElementDBus"
+#include <cutils/log.h>
 
 SdBusWrapper::SdBusWrapper()
 {

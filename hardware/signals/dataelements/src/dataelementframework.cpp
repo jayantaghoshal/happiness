@@ -5,13 +5,12 @@
 
 #include "dataelementframework.h"
 
-#include "logging.h"
+#undef LOG_TAG
+#define LOG_TAG "DataElementFramework"
+#include <cutils/log.h>
 
 #include <sys/types.h>
 
-
-LOG_DECLARE_DEFAULT_CONTEXT(deleContext, "DELE",
-                            "DataElements main logging context")
 
 DataElementFramework& DataElementFramework::instance() {
   static DataElementFramework theInstance;

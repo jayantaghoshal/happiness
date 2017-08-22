@@ -1,4 +1,4 @@
-
+#undef LOG_TAG
 #define LOG_TAG "hidl-test-server@1.0-service"
 #include <SignalsImpl.h>
 #include <android/log.h>

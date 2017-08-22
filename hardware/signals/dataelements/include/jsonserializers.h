@@ -8,8 +8,9 @@
 
 #include "gen_jsonencdec.h"
 
-#include "ivi-logging.h"
-extern logging::DefaultLogContext deleContext;
+#undef LOG_TAG
+#define LOG_TAG "JsonSerializer"
+#include <cutils/log.h>
 
 // ==================================================================
 // The following two json serialize/deserialize shall be in another file
@@ -42,7 +43,7 @@ DataElemValue<S> deserialize(const std::string& ba) {
 
     const std::string typeName = typeIter.value().get<std::string>();
     if (typeName!=S::TypeName()) {
-        log_with_context(deleContext,  logging::LogLevel::Warning) << "Is trying to deserialize " << typeName << "into " << S::TypeName();
+        ALOGW("Is trying to deserialize %s into %s", typeName.c_str(), S::TypeName());
         return DataElemValue<S>::ERROR(-1, timestamp);
     }
 

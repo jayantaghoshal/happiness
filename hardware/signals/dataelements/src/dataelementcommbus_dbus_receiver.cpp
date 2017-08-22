@@ -8,9 +8,10 @@
 
 #include <mutex>
 #include <set>
-#include "logging.h"
 
-LOG_SET_DEFAULT_CONTEXT(deleContext)
+#undef LOG_TAG
+#define LOG_TAG "DataElementDBus"
+#include <cutils/log.h>
 
 const std::string                            DataElementCommBusDBusReceiver::VSM_STARTED_SIGNAL_NAME = "VSMStarted";
 std::atomic<DataElementCommBusDBusReceiver*> DataElementCommBusDBusReceiver::_theInstance{ nullptr };

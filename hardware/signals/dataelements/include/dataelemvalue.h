@@ -14,8 +14,10 @@
 
 #include "gen_dataelements.h"
 #include "internalsignals.h"
-#include "ivi-logging.h"
-extern logging::DefaultLogContext deleContext;
+
+#undef LOG_TAG
+#define LOG_TAG "DataElementValue"
+#include <cutils/log.h>
 
 /*!
  * \enum SignalErrorCode
@@ -124,32 +126,29 @@ public:
     static DataElemValue OK(const value_type& value, long long timestamp=-1) { return DataElemValue(value, timestamp, State::OK, 0); }
     static DataElemValue ERROR(int errorCode, long long timestamp=-1) { return DataElemValue(value_type(), timestamp, State::ERROR, errorCode); }
     virtual ~DataElemValue() {}
-
+  
     virtual std::string serialize() const { return ::serialize(*this); }
     virtual void deserialize(const std::string &ba) { *this = ::deserialize<S>(ba); }
-
     /*!
      * \brief name
      * \return A unique signal name
      */
     virtual std::string name() const { return S::Name(); }
-
     /*!
      * \brief direction
      * \return Dir enum - valid directions are: in, out, internal (relative to the IHU/MP)
      */
     virtual autosar::Dir direction() const { return S::Direction(); }
-
     /*!
      * \brief value
      * \return the signal value. Only valid if state==ok. The type of value depends on the signal (S::data_elem_type).
      */
-    value_type value() const { 
-       if (isError())
-       {
-          log_with_context(deleContext, logging::LogLevel::Error) << "DEReceiver, reading value() of signal that is in error state, signalname: " << name();
-       }
-       return m_value;
+    value_type value() const {
+      if (isError())
+      {
+        ALOGE("DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
+      }
+      return m_value;
     }
 
 private:

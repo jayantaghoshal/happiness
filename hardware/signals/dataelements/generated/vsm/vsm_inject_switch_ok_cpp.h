@@ -2,14 +2,14 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-08-18T13:15:23.081495
+ * Generated at: 2017-08-23T16:45:18.324562
  * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 
     case SignalGroup|ComConf_ComSignalGroup_igADataRawSafe_mrx:
     {
         if (sizeof(ADataRawSafe) == length) {
-            log_verbose() << "Received ADataRawSafe (" << ComConf_ComSignalGroup_igADataRawSafe_mrx << ")";
+            ALOGV("Received ADataRawSafe (%u)", ComConf_ComSignalGroup_igADataRawSafe_mrx);
             const ADataRawSafe& rteValue = *static_cast<const ADataRawSafe*>(buffer);
             autosar::ADataRawSafe_info::data_elem_type deValue;
             deValue.ALat = static_cast<decltype(deValue.ALat)>( toSignedFromRaw<15>(rteValue.ALat1) ) * 0.0085 + 0.0;
@@ -23,7 +23,7 @@
 
             ADataRawSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ADataRawSafe (" << ComConf_ComSignalGroup_igADataRawSafe_mrx << "). Got " << length << ", expected " << sizeof(ADataRawSafe);
+            ALOGE("Wrong buffer size received for ADataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igADataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(ADataRawSafe)));        
         }
     }
     break;
@@ -31,13 +31,13 @@
     case ComConf_ComSignal_isAccAutResuWarnReq_mrx:
     {
         if (sizeof(AccAutResuWarnReq) == length) {
-            log_verbose() << "Received AccAutResuWarnReq (" << ComConf_ComSignal_isAccAutResuWarnReq_mrx << ")";
+            ALOGV("Received AccAutResuWarnReq (%u)", ComConf_ComSignal_isAccAutResuWarnReq_mrx);
             const AccAutResuWarnReq& rteValue = *static_cast<const AccAutResuWarnReq*>(buffer);
             autosar::AccAutResuWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AccAutResuWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AccAutResuWarnReq (" << ComConf_ComSignal_isAccAutResuWarnReq_mrx << "). Got " << length << ", expected " << sizeof(AccAutResuWarnReq);
+            ALOGE("Wrong buffer size received for AccAutResuWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isAccAutResuWarnReq_mrx, length, static_cast<unsigned long>(sizeof(AccAutResuWarnReq)));
         }
     }
     break;
@@ -45,13 +45,13 @@
     case ComConf_ComSignal_isAccSts_mrx:
     {
         if (sizeof(AccSts) == length) {
-            log_verbose() << "Received AccSts (" << ComConf_ComSignal_isAccSts_mrx << ")";
+            ALOGV("Received AccSts (%u)", ComConf_ComSignal_isAccSts_mrx);
             const AccSts& rteValue = *static_cast<const AccSts*>(buffer);
             autosar::AccSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AccSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AccSts (" << ComConf_ComSignal_isAccSts_mrx << "). Got " << length << ", expected " << sizeof(AccSts);
+            ALOGE("Wrong buffer size received for AccSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isAccSts_mrx, length, static_cast<unsigned long>(sizeof(AccSts)));
         }
     }
     break;
@@ -59,13 +59,13 @@
     case ComConf_ComSignal_isActvOfHorn_mrx:
     {
         if (sizeof(ActvOfHorn) == length) {
-            log_verbose() << "Received ActvOfHorn (" << ComConf_ComSignal_isActvOfHorn_mrx << ")";
+            ALOGV("Received ActvOfHorn (%u)", ComConf_ComSignal_isActvOfHorn_mrx);
             const ActvOfHorn& rteValue = *static_cast<const ActvOfHorn*>(buffer);
             autosar::ActvOfHorn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ActvOfHorn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ActvOfHorn (" << ComConf_ComSignal_isActvOfHorn_mrx << "). Got " << length << ", expected " << sizeof(ActvOfHorn);
+            ALOGE("Wrong buffer size received for ActvOfHorn (%u). Got %zu , expected %lu", ComConf_ComSignal_isActvOfHorn_mrx, length, static_cast<unsigned long>(sizeof(ActvOfHorn)));
         }
     }
     break;
@@ -73,13 +73,13 @@
     case ComConf_ComSignal_isAdjSpdLimnSts_mrx:
     {
         if (sizeof(AdjSpdLimnSts) == length) {
-            log_verbose() << "Received AdjSpdLimnSts (" << ComConf_ComSignal_isAdjSpdLimnSts_mrx << ")";
+            ALOGV("Received AdjSpdLimnSts (%u)", ComConf_ComSignal_isAdjSpdLimnSts_mrx);
             const AdjSpdLimnSts& rteValue = *static_cast<const AdjSpdLimnSts*>(buffer);
             autosar::AdjSpdLimnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AdjSpdLimnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AdjSpdLimnSts (" << ComConf_ComSignal_isAdjSpdLimnSts_mrx << "). Got " << length << ", expected " << sizeof(AdjSpdLimnSts);
+            ALOGE("Wrong buffer size received for AdjSpdLimnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isAdjSpdLimnSts_mrx, length, static_cast<unsigned long>(sizeof(AdjSpdLimnSts)));
         }
     }
     break;
@@ -87,13 +87,13 @@
     case ComConf_ComSignal_isAdjSpdLimnWarn_mrx:
     {
         if (sizeof(AdjSpdLimnWarn) == length) {
-            log_verbose() << "Received AdjSpdLimnWarn (" << ComConf_ComSignal_isAdjSpdLimnWarn_mrx << ")";
+            ALOGV("Received AdjSpdLimnWarn (%u)", ComConf_ComSignal_isAdjSpdLimnWarn_mrx);
             const AdjSpdLimnWarn& rteValue = *static_cast<const AdjSpdLimnWarn*>(buffer);
             autosar::AdjSpdLimnWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AdjSpdLimnWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AdjSpdLimnWarn (" << ComConf_ComSignal_isAdjSpdLimnWarn_mrx << "). Got " << length << ", expected " << sizeof(AdjSpdLimnWarn);
+            ALOGE("Wrong buffer size received for AdjSpdLimnWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isAdjSpdLimnWarn_mrx, length, static_cast<unsigned long>(sizeof(AdjSpdLimnWarn)));
         }
     }
     break;
@@ -101,7 +101,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igAgDataRawSafe_mrx:
     {
         if (sizeof(AgDataRawSafe) == length) {
-            log_verbose() << "Received AgDataRawSafe (" << ComConf_ComSignalGroup_igAgDataRawSafe_mrx << ")";
+            ALOGV("Received AgDataRawSafe (%u)", ComConf_ComSignalGroup_igAgDataRawSafe_mrx);
             const AgDataRawSafe& rteValue = *static_cast<const AgDataRawSafe*>(buffer);
             autosar::AgDataRawSafe_info::data_elem_type deValue;
             deValue.Chks = static_cast<decltype(deValue.Chks)>(rteValue.AgDataRawSafeChks);
@@ -113,7 +113,7 @@
 
             AgDataRawSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AgDataRawSafe (" << ComConf_ComSignalGroup_igAgDataRawSafe_mrx << "). Got " << length << ", expected " << sizeof(AgDataRawSafe);
+            ALOGE("Wrong buffer size received for AgDataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAgDataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(AgDataRawSafe)));        
         }
     }
     break;
@@ -121,7 +121,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx:
     {
         if (sizeof(AmbTIndcdWithUnit) == length) {
-            log_verbose() << "Received AmbTIndcdWithUnit (" << ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx << ")";
+            ALOGV("Received AmbTIndcdWithUnit (%u)", ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx);
             const AmbTIndcdWithUnit& rteValue = *static_cast<const AmbTIndcdWithUnit*>(buffer);
             autosar::AmbTIndcdWithUnit_info::data_elem_type deValue;
             deValue.AmbTIndcd = static_cast<decltype(deValue.AmbTIndcd)>( toUnsignedFromRaw<12>(rteValue.AmbTIndcd) ) * 0.1 + -100.0;
@@ -130,7 +130,7 @@
 
             AmbTIndcdWithUnit_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AmbTIndcdWithUnit (" << ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx << "). Got " << length << ", expected " << sizeof(AmbTIndcdWithUnit);
+            ALOGE("Wrong buffer size received for AmbTIndcdWithUnit (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx, length, static_cast<unsigned long>(sizeof(AmbTIndcdWithUnit)));        
         }
     }
     break;
@@ -138,7 +138,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igAmbTRaw_mrx:
     {
         if (sizeof(AmbTRaw) == length) {
-            log_verbose() << "Received AmbTRaw (" << ComConf_ComSignalGroup_igAmbTRaw_mrx << ")";
+            ALOGV("Received AmbTRaw (%u)", ComConf_ComSignalGroup_igAmbTRaw_mrx);
             const AmbTRaw& rteValue = *static_cast<const AmbTRaw*>(buffer);
             autosar::AmbTRaw_info::data_elem_type deValue;
             deValue.AmbTVal = static_cast<decltype(deValue.AmbTVal)>( toUnsignedFromRaw<11>(rteValue.AmbTRawVal) ) * 0.1 + -70.0;
@@ -146,7 +146,7 @@
 
             AmbTRaw_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AmbTRaw (" << ComConf_ComSignalGroup_igAmbTRaw_mrx << "). Got " << length << ", expected " << sizeof(AmbTRaw);
+            ALOGE("Wrong buffer size received for AmbTRaw (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTRaw_mrx, length, static_cast<unsigned long>(sizeof(AmbTRaw)));        
         }
     }
     break;
@@ -154,7 +154,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igAsyLaneChg_mrx:
     {
         if (sizeof(AsyLaneChg) == length) {
-            log_verbose() << "Received AsyLaneChg (" << ComConf_ComSignalGroup_igAsyLaneChg_mrx << ")";
+            ALOGV("Received AsyLaneChg (%u)", ComConf_ComSignalGroup_igAsyLaneChg_mrx);
             const AsyLaneChg& rteValue = *static_cast<const AsyLaneChg*>(buffer);
             autosar::AsyLaneChg_info::data_elem_type deValue;
             deValue.Psbl = static_cast<decltype(deValue.Psbl)>(rteValue.AsyLaneChgPsbl);
@@ -163,7 +163,7 @@
 
             AsyLaneChg_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AsyLaneChg (" << ComConf_ComSignalGroup_igAsyLaneChg_mrx << "). Got " << length << ", expected " << sizeof(AsyLaneChg);
+            ALOGE("Wrong buffer size received for AsyLaneChg (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAsyLaneChg_mrx, length, static_cast<unsigned long>(sizeof(AsyLaneChg)));        
         }
     }
     break;
@@ -171,13 +171,13 @@
     case ComConf_ComSignal_isAsySteerApplyRqrd_mrx:
     {
         if (sizeof(AsySteerApplyRqrd) == length) {
-            log_verbose() << "Received AsySteerApplyRqrd (" << ComConf_ComSignal_isAsySteerApplyRqrd_mrx << ")";
+            ALOGV("Received AsySteerApplyRqrd (%u)", ComConf_ComSignal_isAsySteerApplyRqrd_mrx);
             const AsySteerApplyRqrd& rteValue = *static_cast<const AsySteerApplyRqrd*>(buffer);
             autosar::AsySteerApplyRqrd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AsySteerApplyRqrd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AsySteerApplyRqrd (" << ComConf_ComSignal_isAsySteerApplyRqrd_mrx << "). Got " << length << ", expected " << sizeof(AsySteerApplyRqrd);
+            ALOGE("Wrong buffer size received for AsySteerApplyRqrd (%u). Got %zu , expected %lu", ComConf_ComSignal_isAsySteerApplyRqrd_mrx, length, static_cast<unsigned long>(sizeof(AsySteerApplyRqrd)));
         }
     }
     break;
@@ -185,13 +185,13 @@
     case ComConf_ComSignal_isAudMsgReq_mrx:
     {
         if (sizeof(AudMsgReq) == length) {
-            log_verbose() << "Received AudMsgReq (" << ComConf_ComSignal_isAudMsgReq_mrx << ")";
+            ALOGV("Received AudMsgReq (%u)", ComConf_ComSignal_isAudMsgReq_mrx);
             const AudMsgReq& rteValue = *static_cast<const AudMsgReq*>(buffer);
             autosar::AudMsgReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AudMsgReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AudMsgReq (" << ComConf_ComSignal_isAudMsgReq_mrx << "). Got " << length << ", expected " << sizeof(AudMsgReq);
+            ALOGE("Wrong buffer size received for AudMsgReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isAudMsgReq_mrx, length, static_cast<unsigned long>(sizeof(AudMsgReq)));
         }
     }
     break;
@@ -199,13 +199,13 @@
     case ComConf_ComSignal_isBackCntrForMissCom_mrx:
     {
         if (sizeof(BackCntrForMissCom) == length) {
-            log_verbose() << "Received BackCntrForMissCom (" << ComConf_ComSignal_isBackCntrForMissCom_mrx << ")";
+            ALOGV("Received BackCntrForMissCom (%u)", ComConf_ComSignal_isBackCntrForMissCom_mrx);
             const BackCntrForMissCom& rteValue = *static_cast<const BackCntrForMissCom*>(buffer);
             autosar::BackCntrForMissCom_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BackCntrForMissCom_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BackCntrForMissCom (" << ComConf_ComSignal_isBackCntrForMissCom_mrx << "). Got " << length << ", expected " << sizeof(BackCntrForMissCom);
+            ALOGE("Wrong buffer size received for BackCntrForMissCom (%u). Got %zu , expected %lu", ComConf_ComSignal_isBackCntrForMissCom_mrx, length, static_cast<unsigned long>(sizeof(BackCntrForMissCom)));
         }
     }
     break;
@@ -213,7 +213,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx:
     {
         if (sizeof(BltLockStAtDrvr) == length) {
-            log_verbose() << "Received BltLockStAtDrvr (" << ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx << ")";
+            ALOGV("Received BltLockStAtDrvr (%u)", ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx);
             const BltLockStAtDrvr& rteValue = *static_cast<const BltLockStAtDrvr*>(buffer);
             autosar::BltLockStAtDrvr_info::data_elem_type deValue;
             deValue.BltLockSt1_ = static_cast<decltype(deValue.BltLockSt1_)>(rteValue.BltLockStAtDrvrForBltLockSt1);
@@ -221,7 +221,7 @@
 
             BltLockStAtDrvr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtDrvr (" << ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtDrvr);
+            ALOGE("Wrong buffer size received for BltLockStAtDrvr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtDrvr)));        
         }
     }
     break;
@@ -229,7 +229,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtPass_mrx:
     {
         if (sizeof(BltLockStAtPass) == length) {
-            log_verbose() << "Received BltLockStAtPass (" << ComConf_ComSignalGroup_igBltLockStAtPass_mrx << ")";
+            ALOGV("Received BltLockStAtPass (%u)", ComConf_ComSignalGroup_igBltLockStAtPass_mrx);
             const BltLockStAtPass& rteValue = *static_cast<const BltLockStAtPass*>(buffer);
             autosar::BltLockStAtPass_info::data_elem_type deValue;
             deValue.BltLockSt1_ = static_cast<decltype(deValue.BltLockSt1_)>(rteValue.BltLockStAtPassForBltLockSt1);
@@ -237,7 +237,7 @@
 
             BltLockStAtPass_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtPass (" << ComConf_ComSignalGroup_igBltLockStAtPass_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtPass);
+            ALOGE("Wrong buffer size received for BltLockStAtPass (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtPass_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtPass)));        
         }
     }
     break;
@@ -245,7 +245,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx:
     {
         if (sizeof(BltLockStAtRowSecLe) == length) {
-            log_verbose() << "Received BltLockStAtRowSecLe (" << ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx << ")";
+            ALOGV("Received BltLockStAtRowSecLe (%u)", ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx);
             const BltLockStAtRowSecLe& rteValue = *static_cast<const BltLockStAtRowSecLe*>(buffer);
             autosar::BltLockStAtRowSecLe_info::data_elem_type deValue;
             deValue.BltLockEquid = static_cast<decltype(deValue.BltLockEquid)>(rteValue.BltLockStAtRowSecLeForBltLockEquid);
@@ -254,7 +254,7 @@
 
             BltLockStAtRowSecLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtRowSecLe (" << ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtRowSecLe);
+            ALOGE("Wrong buffer size received for BltLockStAtRowSecLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecLe)));        
         }
     }
     break;
@@ -262,7 +262,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx:
     {
         if (sizeof(BltLockStAtRowSecMid) == length) {
-            log_verbose() << "Received BltLockStAtRowSecMid (" << ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx << ")";
+            ALOGV("Received BltLockStAtRowSecMid (%u)", ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx);
             const BltLockStAtRowSecMid& rteValue = *static_cast<const BltLockStAtRowSecMid*>(buffer);
             autosar::BltLockStAtRowSecMid_info::data_elem_type deValue;
             deValue.BltLockEquid = static_cast<decltype(deValue.BltLockEquid)>(rteValue.BltLockStAtRowSecMidForBltLockEquid);
@@ -271,7 +271,7 @@
 
             BltLockStAtRowSecMid_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtRowSecMid (" << ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtRowSecMid);
+            ALOGE("Wrong buffer size received for BltLockStAtRowSecMid (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecMid)));        
         }
     }
     break;
@@ -279,7 +279,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx:
     {
         if (sizeof(BltLockStAtRowSecRi) == length) {
-            log_verbose() << "Received BltLockStAtRowSecRi (" << ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx << ")";
+            ALOGV("Received BltLockStAtRowSecRi (%u)", ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx);
             const BltLockStAtRowSecRi& rteValue = *static_cast<const BltLockStAtRowSecRi*>(buffer);
             autosar::BltLockStAtRowSecRi_info::data_elem_type deValue;
             deValue.BltLockEquid = static_cast<decltype(deValue.BltLockEquid)>(rteValue.BltLockStAtRowSecRiForBltLockEquid);
@@ -288,7 +288,7 @@
 
             BltLockStAtRowSecRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtRowSecRi (" << ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtRowSecRi);
+            ALOGE("Wrong buffer size received for BltLockStAtRowSecRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecRi)));        
         }
     }
     break;
@@ -296,7 +296,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx:
     {
         if (sizeof(BltLockStAtRowThrdLe) == length) {
-            log_verbose() << "Received BltLockStAtRowThrdLe (" << ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx << ")";
+            ALOGV("Received BltLockStAtRowThrdLe (%u)", ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx);
             const BltLockStAtRowThrdLe& rteValue = *static_cast<const BltLockStAtRowThrdLe*>(buffer);
             autosar::BltLockStAtRowThrdLe_info::data_elem_type deValue;
             deValue.BltLockEquid = static_cast<decltype(deValue.BltLockEquid)>(rteValue.BltLockStAtRowThrdLeForBltLockEquid);
@@ -305,7 +305,7 @@
 
             BltLockStAtRowThrdLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtRowThrdLe (" << ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtRowThrdLe);
+            ALOGE("Wrong buffer size received for BltLockStAtRowThrdLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdLe)));        
         }
     }
     break;
@@ -313,7 +313,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx:
     {
         if (sizeof(BltLockStAtRowThrdRi) == length) {
-            log_verbose() << "Received BltLockStAtRowThrdRi (" << ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx << ")";
+            ALOGV("Received BltLockStAtRowThrdRi (%u)", ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx);
             const BltLockStAtRowThrdRi& rteValue = *static_cast<const BltLockStAtRowThrdRi*>(buffer);
             autosar::BltLockStAtRowThrdRi_info::data_elem_type deValue;
             deValue.BltLockEquid = static_cast<decltype(deValue.BltLockEquid)>(rteValue.BltLockStAtRowThrdRiForBltLockEquid);
@@ -322,7 +322,7 @@
 
             BltLockStAtRowThrdRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltLockStAtRowThrdRi (" << ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx << "). Got " << length << ", expected " << sizeof(BltLockStAtRowThrdRi);
+            ALOGE("Wrong buffer size received for BltLockStAtRowThrdRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdRi)));        
         }
     }
     break;
@@ -330,13 +330,13 @@
     case ComConf_ComSignal_isBltRmnSound1_mrx:
     {
         if (sizeof(BltRmnSound1) == length) {
-            log_verbose() << "Received BltRmnSound1 (" << ComConf_ComSignal_isBltRmnSound1_mrx << ")";
+            ALOGV("Received BltRmnSound1 (%u)", ComConf_ComSignal_isBltRmnSound1_mrx);
             const BltRmnSound1& rteValue = *static_cast<const BltRmnSound1*>(buffer);
             autosar::BltRmnSound1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BltRmnSound1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltRmnSound1 (" << ComConf_ComSignal_isBltRmnSound1_mrx << "). Got " << length << ", expected " << sizeof(BltRmnSound1);
+            ALOGE("Wrong buffer size received for BltRmnSound1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isBltRmnSound1_mrx, length, static_cast<unsigned long>(sizeof(BltRmnSound1)));
         }
     }
     break;
@@ -344,13 +344,13 @@
     case ComConf_ComSignal_isBltRmnSound2_mrx:
     {
         if (sizeof(BltRmnSound2) == length) {
-            log_verbose() << "Received BltRmnSound2 (" << ComConf_ComSignal_isBltRmnSound2_mrx << ")";
+            ALOGV("Received BltRmnSound2 (%u)", ComConf_ComSignal_isBltRmnSound2_mrx);
             const BltRmnSound2& rteValue = *static_cast<const BltRmnSound2*>(buffer);
             autosar::BltRmnSound2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BltRmnSound2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltRmnSound2 (" << ComConf_ComSignal_isBltRmnSound2_mrx << "). Got " << length << ", expected " << sizeof(BltRmnSound2);
+            ALOGE("Wrong buffer size received for BltRmnSound2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isBltRmnSound2_mrx, length, static_cast<unsigned long>(sizeof(BltRmnSound2)));
         }
     }
     break;
@@ -358,13 +358,13 @@
     case ComConf_ComSignal_isBltRmnSound3_mrx:
     {
         if (sizeof(BltRmnSound3) == length) {
-            log_verbose() << "Received BltRmnSound3 (" << ComConf_ComSignal_isBltRmnSound3_mrx << ")";
+            ALOGV("Received BltRmnSound3 (%u)", ComConf_ComSignal_isBltRmnSound3_mrx);
             const BltRmnSound3& rteValue = *static_cast<const BltRmnSound3*>(buffer);
             autosar::BltRmnSound3_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BltRmnSound3_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltRmnSound3 (" << ComConf_ComSignal_isBltRmnSound3_mrx << "). Got " << length << ", expected " << sizeof(BltRmnSound3);
+            ALOGE("Wrong buffer size received for BltRmnSound3 (%u). Got %zu , expected %lu", ComConf_ComSignal_isBltRmnSound3_mrx, length, static_cast<unsigned long>(sizeof(BltRmnSound3)));
         }
     }
     break;
@@ -372,13 +372,13 @@
     case ComConf_ComSignal_isBltRmnSound4_mrx:
     {
         if (sizeof(BltRmnSound4) == length) {
-            log_verbose() << "Received BltRmnSound4 (" << ComConf_ComSignal_isBltRmnSound4_mrx << ")";
+            ALOGV("Received BltRmnSound4 (%u)", ComConf_ComSignal_isBltRmnSound4_mrx);
             const BltRmnSound4& rteValue = *static_cast<const BltRmnSound4*>(buffer);
             autosar::BltRmnSound4_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BltRmnSound4_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BltRmnSound4 (" << ComConf_ComSignal_isBltRmnSound4_mrx << "). Got " << length << ", expected " << sizeof(BltRmnSound4);
+            ALOGE("Wrong buffer size received for BltRmnSound4 (%u). Got %zu , expected %lu", ComConf_ComSignal_isBltRmnSound4_mrx, length, static_cast<unsigned long>(sizeof(BltRmnSound4)));
         }
     }
     break;
@@ -386,7 +386,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx:
     {
         if (sizeof(BrkAndAbsWarnIndcnReqGroup) == length) {
-            log_verbose() << "Received BrkAndAbsWarnIndcnReqGroup (" << ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx << ")";
+            ALOGV("Received BrkAndAbsWarnIndcnReqGroup (%u)", ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx);
             const BrkAndAbsWarnIndcnReqGroup& rteValue = *static_cast<const BrkAndAbsWarnIndcnReqGroup*>(buffer);
             autosar::BrkAndAbsWarnIndcnReq_info::data_elem_type deValue;
             deValue.AbsWarnIndcnReq_ = static_cast<decltype(deValue.AbsWarnIndcnReq_)>(rteValue.AbsWarnIndcnReq);
@@ -396,7 +396,7 @@
 
             BrkAndAbsWarnIndcnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BrkAndAbsWarnIndcnReqGroup (" << ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx << "). Got " << length << ", expected " << sizeof(BrkAndAbsWarnIndcnReqGroup);
+            ALOGE("Wrong buffer size received for BrkAndAbsWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(BrkAndAbsWarnIndcnReqGroup)));        
         }
     }
     break;
@@ -404,13 +404,13 @@
     case ComConf_ComSignal_isBrkFldLvl_mrx:
     {
         if (sizeof(BrkFldLvl) == length) {
-            log_verbose() << "Received BrkFldLvl (" << ComConf_ComSignal_isBrkFldLvl_mrx << ")";
+            ALOGV("Received BrkFldLvl (%u)", ComConf_ComSignal_isBrkFldLvl_mrx);
             const BrkFldLvl& rteValue = *static_cast<const BrkFldLvl*>(buffer);
             autosar::BrkFldLvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BrkFldLvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BrkFldLvl (" << ComConf_ComSignal_isBrkFldLvl_mrx << "). Got " << length << ", expected " << sizeof(BrkFldLvl);
+            ALOGE("Wrong buffer size received for BrkFldLvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isBrkFldLvl_mrx, length, static_cast<unsigned long>(sizeof(BrkFldLvl)));
         }
     }
     break;
@@ -418,7 +418,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx:
     {
         if (sizeof(BrkFricTqAtWhlAct) == length) {
-            log_verbose() << "Received BrkFricTqAtWhlAct (" << ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx << ")";
+            ALOGV("Received BrkFricTqAtWhlAct (%u)", ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx);
             const BrkFricTqAtWhlAct& rteValue = *static_cast<const BrkFricTqAtWhlAct*>(buffer);
             autosar::BrkFricTqAtWhlAct_info::data_elem_type deValue;
             deValue.BrkFricTqAtWhlFrntLeAct = static_cast<decltype(deValue.BrkFricTqAtWhlFrntLeAct)>( toUnsignedFromRaw<13>(rteValue.BrkFricTqAtWhlFrntLeAct) ) * 1.0 + 0.0;
@@ -428,7 +428,7 @@
 
             BrkFricTqAtWhlAct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BrkFricTqAtWhlAct (" << ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx << "). Got " << length << ", expected " << sizeof(BrkFricTqAtWhlAct);
+            ALOGE("Wrong buffer size received for BrkFricTqAtWhlAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx, length, static_cast<unsigned long>(sizeof(BrkFricTqAtWhlAct)));        
         }
     }
     break;
@@ -436,13 +436,13 @@
     case ComConf_ComSignal_isBrkRelsWarnReq_mrx:
     {
         if (sizeof(BrkRelsWarnReq) == length) {
-            log_verbose() << "Received BrkRelsWarnReq (" << ComConf_ComSignal_isBrkRelsWarnReq_mrx << ")";
+            ALOGV("Received BrkRelsWarnReq (%u)", ComConf_ComSignal_isBrkRelsWarnReq_mrx);
             const BrkRelsWarnReq& rteValue = *static_cast<const BrkRelsWarnReq*>(buffer);
             autosar::BrkRelsWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BrkRelsWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BrkRelsWarnReq (" << ComConf_ComSignal_isBrkRelsWarnReq_mrx << "). Got " << length << ", expected " << sizeof(BrkRelsWarnReq);
+            ALOGE("Wrong buffer size received for BrkRelsWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBrkRelsWarnReq_mrx, length, static_cast<unsigned long>(sizeof(BrkRelsWarnReq)));
         }
     }
     break;
@@ -450,13 +450,13 @@
     case ComConf_ComSignal_isBtn1ForUsrSwtPanFrntReq_mrx:
     {
         if (sizeof(Btn1ForUsrSwtPanFrntReq) == length) {
-            log_verbose() << "Received Btn1ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn1ForUsrSwtPanFrntReq_mrx << ")";
+            ALOGV("Received Btn1ForUsrSwtPanFrntReq (%u)", ComConf_ComSignal_isBtn1ForUsrSwtPanFrntReq_mrx);
             const Btn1ForUsrSwtPanFrntReq& rteValue = *static_cast<const Btn1ForUsrSwtPanFrntReq*>(buffer);
             autosar::Btn1ForUsrSwtPanFrntReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             Btn1ForUsrSwtPanFrntReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Btn1ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn1ForUsrSwtPanFrntReq_mrx << "). Got " << length << ", expected " << sizeof(Btn1ForUsrSwtPanFrntReq);
+            ALOGE("Wrong buffer size received for Btn1ForUsrSwtPanFrntReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtn1ForUsrSwtPanFrntReq_mrx, length, static_cast<unsigned long>(sizeof(Btn1ForUsrSwtPanFrntReq)));
         }
     }
     break;
@@ -464,13 +464,13 @@
     case ComConf_ComSignal_isBtn2ForUsrSwtPanFrntReq_mrx:
     {
         if (sizeof(Btn2ForUsrSwtPanFrntReq) == length) {
-            log_verbose() << "Received Btn2ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn2ForUsrSwtPanFrntReq_mrx << ")";
+            ALOGV("Received Btn2ForUsrSwtPanFrntReq (%u)", ComConf_ComSignal_isBtn2ForUsrSwtPanFrntReq_mrx);
             const Btn2ForUsrSwtPanFrntReq& rteValue = *static_cast<const Btn2ForUsrSwtPanFrntReq*>(buffer);
             autosar::Btn2ForUsrSwtPanFrntReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             Btn2ForUsrSwtPanFrntReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Btn2ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn2ForUsrSwtPanFrntReq_mrx << "). Got " << length << ", expected " << sizeof(Btn2ForUsrSwtPanFrntReq);
+            ALOGE("Wrong buffer size received for Btn2ForUsrSwtPanFrntReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtn2ForUsrSwtPanFrntReq_mrx, length, static_cast<unsigned long>(sizeof(Btn2ForUsrSwtPanFrntReq)));
         }
     }
     break;
@@ -478,13 +478,13 @@
     case ComConf_ComSignal_isBtn3ForUsrSwtPanFrntReq_mrx:
     {
         if (sizeof(Btn3ForUsrSwtPanFrntReq) == length) {
-            log_verbose() << "Received Btn3ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn3ForUsrSwtPanFrntReq_mrx << ")";
+            ALOGV("Received Btn3ForUsrSwtPanFrntReq (%u)", ComConf_ComSignal_isBtn3ForUsrSwtPanFrntReq_mrx);
             const Btn3ForUsrSwtPanFrntReq& rteValue = *static_cast<const Btn3ForUsrSwtPanFrntReq*>(buffer);
             autosar::Btn3ForUsrSwtPanFrntReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             Btn3ForUsrSwtPanFrntReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Btn3ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn3ForUsrSwtPanFrntReq_mrx << "). Got " << length << ", expected " << sizeof(Btn3ForUsrSwtPanFrntReq);
+            ALOGE("Wrong buffer size received for Btn3ForUsrSwtPanFrntReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtn3ForUsrSwtPanFrntReq_mrx, length, static_cast<unsigned long>(sizeof(Btn3ForUsrSwtPanFrntReq)));
         }
     }
     break;
@@ -492,13 +492,13 @@
     case ComConf_ComSignal_isBtn4ForUsrSwtPanFrntReq_mrx:
     {
         if (sizeof(Btn4ForUsrSwtPanFrntReq) == length) {
-            log_verbose() << "Received Btn4ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn4ForUsrSwtPanFrntReq_mrx << ")";
+            ALOGV("Received Btn4ForUsrSwtPanFrntReq (%u)", ComConf_ComSignal_isBtn4ForUsrSwtPanFrntReq_mrx);
             const Btn4ForUsrSwtPanFrntReq& rteValue = *static_cast<const Btn4ForUsrSwtPanFrntReq*>(buffer);
             autosar::Btn4ForUsrSwtPanFrntReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             Btn4ForUsrSwtPanFrntReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Btn4ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn4ForUsrSwtPanFrntReq_mrx << "). Got " << length << ", expected " << sizeof(Btn4ForUsrSwtPanFrntReq);
+            ALOGE("Wrong buffer size received for Btn4ForUsrSwtPanFrntReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtn4ForUsrSwtPanFrntReq_mrx, length, static_cast<unsigned long>(sizeof(Btn4ForUsrSwtPanFrntReq)));
         }
     }
     break;
@@ -506,13 +506,13 @@
     case ComConf_ComSignal_isBtn5ForUsrSwtPanFrntReq_mrx:
     {
         if (sizeof(Btn5ForUsrSwtPanFrntReq) == length) {
-            log_verbose() << "Received Btn5ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn5ForUsrSwtPanFrntReq_mrx << ")";
+            ALOGV("Received Btn5ForUsrSwtPanFrntReq (%u)", ComConf_ComSignal_isBtn5ForUsrSwtPanFrntReq_mrx);
             const Btn5ForUsrSwtPanFrntReq& rteValue = *static_cast<const Btn5ForUsrSwtPanFrntReq*>(buffer);
             autosar::Btn5ForUsrSwtPanFrntReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             Btn5ForUsrSwtPanFrntReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Btn5ForUsrSwtPanFrntReq (" << ComConf_ComSignal_isBtn5ForUsrSwtPanFrntReq_mrx << "). Got " << length << ", expected " << sizeof(Btn5ForUsrSwtPanFrntReq);
+            ALOGE("Wrong buffer size received for Btn5ForUsrSwtPanFrntReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtn5ForUsrSwtPanFrntReq_mrx, length, static_cast<unsigned long>(sizeof(Btn5ForUsrSwtPanFrntReq)));
         }
     }
     break;
@@ -520,13 +520,13 @@
     case ComConf_ComSignal_isBtnAudFbSts_mrx:
     {
         if (sizeof(BtnAudFbSts) == length) {
-            log_verbose() << "Received BtnAudFbSts (" << ComConf_ComSignal_isBtnAudFbSts_mrx << ")";
+            ALOGV("Received BtnAudFbSts (%u)", ComConf_ComSignal_isBtnAudFbSts_mrx);
             const BtnAudFbSts& rteValue = *static_cast<const BtnAudFbSts*>(buffer);
             autosar::BtnAudFbSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BtnAudFbSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BtnAudFbSts (" << ComConf_ComSignal_isBtnAudFbSts_mrx << "). Got " << length << ", expected " << sizeof(BtnAudFbSts);
+            ALOGE("Wrong buffer size received for BtnAudFbSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtnAudFbSts_mrx, length, static_cast<unsigned long>(sizeof(BtnAudFbSts)));
         }
     }
     break;
@@ -534,13 +534,13 @@
     case ComConf_ComSignal_isBtnAudVolSts_mrx:
     {
         if (sizeof(BtnAudVolSts) == length) {
-            log_verbose() << "Received BtnAudVolSts (" << ComConf_ComSignal_isBtnAudVolSts_mrx << ")";
+            ALOGV("Received BtnAudVolSts (%u)", ComConf_ComSignal_isBtnAudVolSts_mrx);
             const BtnAudVolSts& rteValue = *static_cast<const BtnAudVolSts*>(buffer);
             autosar::BtnAudVolSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BtnAudVolSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BtnAudVolSts (" << ComConf_ComSignal_isBtnAudVolSts_mrx << "). Got " << length << ", expected " << sizeof(BtnAudVolSts);
+            ALOGE("Wrong buffer size received for BtnAudVolSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtnAudVolSts_mrx, length, static_cast<unsigned long>(sizeof(BtnAudVolSts)));
         }
     }
     break;
@@ -548,13 +548,13 @@
     case ComConf_ComSignal_isBtnMmedLeRiSts_mrx:
     {
         if (sizeof(BtnMmedLeRiSts) == length) {
-            log_verbose() << "Received BtnMmedLeRiSts (" << ComConf_ComSignal_isBtnMmedLeRiSts_mrx << ")";
+            ALOGV("Received BtnMmedLeRiSts (%u)", ComConf_ComSignal_isBtnMmedLeRiSts_mrx);
             const BtnMmedLeRiSts& rteValue = *static_cast<const BtnMmedLeRiSts*>(buffer);
             autosar::BtnMmedLeRiSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BtnMmedLeRiSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BtnMmedLeRiSts (" << ComConf_ComSignal_isBtnMmedLeRiSts_mrx << "). Got " << length << ", expected " << sizeof(BtnMmedLeRiSts);
+            ALOGE("Wrong buffer size received for BtnMmedLeRiSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtnMmedLeRiSts_mrx, length, static_cast<unsigned long>(sizeof(BtnMmedLeRiSts)));
         }
     }
     break;
@@ -562,13 +562,13 @@
     case ComConf_ComSignal_isBtnMmedModSts_mrx:
     {
         if (sizeof(BtnMmedModSts) == length) {
-            log_verbose() << "Received BtnMmedModSts (" << ComConf_ComSignal_isBtnMmedModSts_mrx << ")";
+            ALOGV("Received BtnMmedModSts (%u)", ComConf_ComSignal_isBtnMmedModSts_mrx);
             const BtnMmedModSts& rteValue = *static_cast<const BtnMmedModSts*>(buffer);
             autosar::BtnMmedModSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BtnMmedModSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BtnMmedModSts (" << ComConf_ComSignal_isBtnMmedModSts_mrx << "). Got " << length << ", expected " << sizeof(BtnMmedModSts);
+            ALOGE("Wrong buffer size received for BtnMmedModSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtnMmedModSts_mrx, length, static_cast<unsigned long>(sizeof(BtnMmedModSts)));
         }
     }
     break;
@@ -576,13 +576,13 @@
     case ComConf_ComSignal_isBtnMmedSetSts_mrx:
     {
         if (sizeof(BtnMmedSetSts) == length) {
-            log_verbose() << "Received BtnMmedSetSts (" << ComConf_ComSignal_isBtnMmedSetSts_mrx << ")";
+            ALOGV("Received BtnMmedSetSts (%u)", ComConf_ComSignal_isBtnMmedSetSts_mrx);
             const BtnMmedSetSts& rteValue = *static_cast<const BtnMmedSetSts*>(buffer);
             autosar::BtnMmedSetSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             BtnMmedSetSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BtnMmedSetSts (" << ComConf_ComSignal_isBtnMmedSetSts_mrx << "). Got " << length << ", expected " << sizeof(BtnMmedSetSts);
+            ALOGE("Wrong buffer size received for BtnMmedSetSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isBtnMmedSetSts_mrx, length, static_cast<unsigned long>(sizeof(BtnMmedSetSts)));
         }
     }
     break;
@@ -590,13 +590,13 @@
     case ComConf_ComSignal_isCCSMBtn6_mrx:
     {
         if (sizeof(CCSMBtn6) == length) {
-            log_verbose() << "Received CCSMBtn6 (" << ComConf_ComSignal_isCCSMBtn6_mrx << ")";
+            ALOGV("Received CCSMBtn6 (%u)", ComConf_ComSignal_isCCSMBtn6_mrx);
             const CCSMBtn6& rteValue = *static_cast<const CCSMBtn6*>(buffer);
             autosar::CCSMBtn6_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CCSMBtn6_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CCSMBtn6 (" << ComConf_ComSignal_isCCSMBtn6_mrx << "). Got " << length << ", expected " << sizeof(CCSMBtn6);
+            ALOGE("Wrong buffer size received for CCSMBtn6 (%u). Got %zu , expected %lu", ComConf_ComSignal_isCCSMBtn6_mrx, length, static_cast<unsigned long>(sizeof(CCSMBtn6)));
         }
     }
     break;
@@ -604,13 +604,13 @@
     case ComConf_ComSignal_isCarTiGlb_mrx:
     {
         if (sizeof(CarTiGlb) == length) {
-            log_verbose() << "Received CarTiGlb (" << ComConf_ComSignal_isCarTiGlb_mrx << ")";
+            ALOGV("Received CarTiGlb (%u)", ComConf_ComSignal_isCarTiGlb_mrx);
             const CarTiGlb& rteValue = *static_cast<const CarTiGlb*>(buffer);
             autosar::CarTiGlb_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.1 + 0.0;
             CarTiGlb_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CarTiGlb (" << ComConf_ComSignal_isCarTiGlb_mrx << "). Got " << length << ", expected " << sizeof(CarTiGlb);
+            ALOGE("Wrong buffer size received for CarTiGlb (%u). Got %zu , expected %lu", ComConf_ComSignal_isCarTiGlb_mrx, length, static_cast<unsigned long>(sizeof(CarTiGlb)));
         }
     }
     break;
@@ -618,7 +618,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igCchForFuEco_mrx:
     {
         if (sizeof(CchForFuEco) == length) {
-            log_verbose() << "Received CchForFuEco (" << ComConf_ComSignalGroup_igCchForFuEco_mrx << ")";
+            ALOGV("Received CchForFuEco (%u)", ComConf_ComSignalGroup_igCchForFuEco_mrx);
             const CchForFuEco& rteValue = *static_cast<const CchForFuEco*>(buffer);
             autosar::CchForFuEco_info::data_elem_type deValue;
             deValue.BarForFuEco = static_cast<decltype(deValue.BarForFuEco)>( toUnsignedFromRaw<10>(rteValue.BarForFuEco) ) * 0.1 + 0.0;
@@ -626,7 +626,7 @@
 
             CchForFuEco_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CchForFuEco (" << ComConf_ComSignalGroup_igCchForFuEco_mrx << "). Got " << length << ", expected " << sizeof(CchForFuEco);
+            ALOGE("Wrong buffer size received for CchForFuEco (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCchForFuEco_mrx, length, static_cast<unsigned long>(sizeof(CchForFuEco)));        
         }
     }
     break;
@@ -634,13 +634,13 @@
     case ComConf_ComSignal_isChdLockgProtnStsToHmi_mrx:
     {
         if (sizeof(ChdLockgProtnStsToHmi) == length) {
-            log_verbose() << "Received ChdLockgProtnStsToHmi (" << ComConf_ComSignal_isChdLockgProtnStsToHmi_mrx << ")";
+            ALOGV("Received ChdLockgProtnStsToHmi (%u)", ComConf_ComSignal_isChdLockgProtnStsToHmi_mrx);
             const ChdLockgProtnStsToHmi& rteValue = *static_cast<const ChdLockgProtnStsToHmi*>(buffer);
             autosar::ChdLockgProtnStsToHmi_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ChdLockgProtnStsToHmi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ChdLockgProtnStsToHmi (" << ComConf_ComSignal_isChdLockgProtnStsToHmi_mrx << "). Got " << length << ", expected " << sizeof(ChdLockgProtnStsToHmi);
+            ALOGE("Wrong buffer size received for ChdLockgProtnStsToHmi (%u). Got %zu , expected %lu", ComConf_ComSignal_isChdLockgProtnStsToHmi_mrx, length, static_cast<unsigned long>(sizeof(ChdLockgProtnStsToHmi)));
         }
     }
     break;
@@ -648,13 +648,13 @@
     case ComConf_ComSignal_isChdWinProtnStsAtDrvrRe_mrx:
     {
         if (sizeof(ChdWinProtnStsAtDrvrRe) == length) {
-            log_verbose() << "Received ChdWinProtnStsAtDrvrRe (" << ComConf_ComSignal_isChdWinProtnStsAtDrvrRe_mrx << ")";
+            ALOGV("Received ChdWinProtnStsAtDrvrRe (%u)", ComConf_ComSignal_isChdWinProtnStsAtDrvrRe_mrx);
             const ChdWinProtnStsAtDrvrRe& rteValue = *static_cast<const ChdWinProtnStsAtDrvrRe*>(buffer);
             autosar::ChdWinProtnStsAtDrvrRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ChdWinProtnStsAtDrvrRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ChdWinProtnStsAtDrvrRe (" << ComConf_ComSignal_isChdWinProtnStsAtDrvrRe_mrx << "). Got " << length << ", expected " << sizeof(ChdWinProtnStsAtDrvrRe);
+            ALOGE("Wrong buffer size received for ChdWinProtnStsAtDrvrRe (%u). Got %zu , expected %lu", ComConf_ComSignal_isChdWinProtnStsAtDrvrRe_mrx, length, static_cast<unsigned long>(sizeof(ChdWinProtnStsAtDrvrRe)));
         }
     }
     break;
@@ -662,13 +662,13 @@
     case ComConf_ComSignal_isChdWinProtnStsAtPassRe_mrx:
     {
         if (sizeof(ChdWinProtnStsAtPassRe) == length) {
-            log_verbose() << "Received ChdWinProtnStsAtPassRe (" << ComConf_ComSignal_isChdWinProtnStsAtPassRe_mrx << ")";
+            ALOGV("Received ChdWinProtnStsAtPassRe (%u)", ComConf_ComSignal_isChdWinProtnStsAtPassRe_mrx);
             const ChdWinProtnStsAtPassRe& rteValue = *static_cast<const ChdWinProtnStsAtPassRe*>(buffer);
             autosar::ChdWinProtnStsAtPassRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ChdWinProtnStsAtPassRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ChdWinProtnStsAtPassRe (" << ComConf_ComSignal_isChdWinProtnStsAtPassRe_mrx << "). Got " << length << ", expected " << sizeof(ChdWinProtnStsAtPassRe);
+            ALOGE("Wrong buffer size received for ChdWinProtnStsAtPassRe (%u). Got %zu , expected %lu", ComConf_ComSignal_isChdWinProtnStsAtPassRe_mrx, length, static_cast<unsigned long>(sizeof(ChdWinProtnStsAtPassRe)));
         }
     }
     break;
@@ -676,7 +676,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx:
     {
         if (sizeof(ChrgrHwAprvdWirelsAdr) == length) {
-            log_verbose() << "Received ChrgrHwAprvdWirelsAdr (" << ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx << ")";
+            ALOGV("Received ChrgrHwAprvdWirelsAdr (%u)", ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx);
             const ChrgrHwAprvdWirelsAdr& rteValue = *static_cast<const ChrgrHwAprvdWirelsAdr*>(buffer);
             autosar::ChrgrHwAprvdWirelsAdr_info::data_elem_type deValue;
             deValue.AprvdSts_ = static_cast<decltype(deValue.AprvdSts_)>(rteValue.ChrgrHwAprvdWirelsAdrAprvdSts);
@@ -689,7 +689,7 @@
 
             ChrgrHwAprvdWirelsAdr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ChrgrHwAprvdWirelsAdr (" << ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx << "). Got " << length << ", expected " << sizeof(ChrgrHwAprvdWirelsAdr);
+            ALOGE("Wrong buffer size received for ChrgrHwAprvdWirelsAdr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx, length, static_cast<unsigned long>(sizeof(ChrgrHwAprvdWirelsAdr)));        
         }
     }
     break;
@@ -697,13 +697,13 @@
     case ComConf_ComSignal_isChrgrWirelsSts_mrx:
     {
         if (sizeof(ChrgrWirelsSts) == length) {
-            log_verbose() << "Received ChrgrWirelsSts (" << ComConf_ComSignal_isChrgrWirelsSts_mrx << ")";
+            ALOGV("Received ChrgrWirelsSts (%u)", ComConf_ComSignal_isChrgrWirelsSts_mrx);
             const ChrgrWirelsSts& rteValue = *static_cast<const ChrgrWirelsSts*>(buffer);
             autosar::ChrgrWirelsSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ChrgrWirelsSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ChrgrWirelsSts (" << ComConf_ComSignal_isChrgrWirelsSts_mrx << "). Got " << length << ", expected " << sizeof(ChrgrWirelsSts);
+            ALOGE("Wrong buffer size received for ChrgrWirelsSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isChrgrWirelsSts_mrx, length, static_cast<unsigned long>(sizeof(ChrgrWirelsSts)));
         }
     }
     break;
@@ -711,13 +711,13 @@
     case ComConf_ComSignal_isClimaActv_mrx:
     {
         if (sizeof(ClimaActv) == length) {
-            log_verbose() << "Received ClimaActv (" << ComConf_ComSignal_isClimaActv_mrx << ")";
+            ALOGV("Received ClimaActv (%u)", ComConf_ComSignal_isClimaActv_mrx);
             const ClimaActv& rteValue = *static_cast<const ClimaActv*>(buffer);
             autosar::ClimaActv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ClimaActv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ClimaActv (" << ComConf_ComSignal_isClimaActv_mrx << "). Got " << length << ", expected " << sizeof(ClimaActv);
+            ALOGE("Wrong buffer size received for ClimaActv (%u). Got %zu , expected %lu", ComConf_ComSignal_isClimaActv_mrx, length, static_cast<unsigned long>(sizeof(ClimaActv)));
         }
     }
     break;
@@ -725,13 +725,13 @@
     case ComConf_ComSignal_isClimaPwrCns_mrx:
     {
         if (sizeof(ClimaPwrCns) == length) {
-            log_verbose() << "Received ClimaPwrCns (" << ComConf_ComSignal_isClimaPwrCns_mrx << ")";
+            ALOGV("Received ClimaPwrCns (%u)", ComConf_ComSignal_isClimaPwrCns_mrx);
             const ClimaPwrCns& rteValue = *static_cast<const ClimaPwrCns*>(buffer);
             autosar::ClimaPwrCns_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 1.0 + 0.0;
             ClimaPwrCns_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ClimaPwrCns (" << ComConf_ComSignal_isClimaPwrCns_mrx << "). Got " << length << ", expected " << sizeof(ClimaPwrCns);
+            ALOGE("Wrong buffer size received for ClimaPwrCns (%u). Got %zu , expected %lu", ComConf_ComSignal_isClimaPwrCns_mrx, length, static_cast<unsigned long>(sizeof(ClimaPwrCns)));
         }
     }
     break;
@@ -739,13 +739,13 @@
     case ComConf_ComSignal_isClimaTmrSts_mrx:
     {
         if (sizeof(ClimaTmrSts) == length) {
-            log_verbose() << "Received ClimaTmrSts (" << ComConf_ComSignal_isClimaTmrSts_mrx << ")";
+            ALOGV("Received ClimaTmrSts (%u)", ComConf_ComSignal_isClimaTmrSts_mrx);
             const ClimaTmrSts& rteValue = *static_cast<const ClimaTmrSts*>(buffer);
             autosar::ClimaTmrSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ClimaTmrSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ClimaTmrSts (" << ComConf_ComSignal_isClimaTmrSts_mrx << "). Got " << length << ", expected " << sizeof(ClimaTmrSts);
+            ALOGE("Wrong buffer size received for ClimaTmrSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isClimaTmrSts_mrx, length, static_cast<unsigned long>(sizeof(ClimaTmrSts)));
         }
     }
     break;
@@ -753,13 +753,13 @@
     case ComConf_ComSignal_isClimaWarn_mrx:
     {
         if (sizeof(ClimaWarn) == length) {
-            log_verbose() << "Received ClimaWarn (" << ComConf_ComSignal_isClimaWarn_mrx << ")";
+            ALOGV("Received ClimaWarn (%u)", ComConf_ComSignal_isClimaWarn_mrx);
             const ClimaWarn& rteValue = *static_cast<const ClimaWarn*>(buffer);
             autosar::ClimaWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ClimaWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ClimaWarn (" << ComConf_ComSignal_isClimaWarn_mrx << "). Got " << length << ", expected " << sizeof(ClimaWarn);
+            ALOGE("Wrong buffer size received for ClimaWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isClimaWarn_mrx, length, static_cast<unsigned long>(sizeof(ClimaWarn)));
         }
     }
     break;
@@ -767,13 +767,13 @@
     case ComConf_ComSignal_isCllsnFwdWarnReq_mrx:
     {
         if (sizeof(CllsnFwdWarnReq) == length) {
-            log_verbose() << "Received CllsnFwdWarnReq (" << ComConf_ComSignal_isCllsnFwdWarnReq_mrx << ")";
+            ALOGV("Received CllsnFwdWarnReq (%u)", ComConf_ComSignal_isCllsnFwdWarnReq_mrx);
             const CllsnFwdWarnReq& rteValue = *static_cast<const CllsnFwdWarnReq*>(buffer);
             autosar::CllsnFwdWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CllsnFwdWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CllsnFwdWarnReq (" << ComConf_ComSignal_isCllsnFwdWarnReq_mrx << "). Got " << length << ", expected " << sizeof(CllsnFwdWarnReq);
+            ALOGE("Wrong buffer size received for CllsnFwdWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isCllsnFwdWarnReq_mrx, length, static_cast<unsigned long>(sizeof(CllsnFwdWarnReq)));
         }
     }
     break;
@@ -781,13 +781,13 @@
     case ComConf_ComSignal_isCllsnWarnReq_mrx:
     {
         if (sizeof(CllsnWarnReq) == length) {
-            log_verbose() << "Received CllsnWarnReq (" << ComConf_ComSignal_isCllsnWarnReq_mrx << ")";
+            ALOGV("Received CllsnWarnReq (%u)", ComConf_ComSignal_isCllsnWarnReq_mrx);
             const CllsnWarnReq& rteValue = *static_cast<const CllsnWarnReq*>(buffer);
             autosar::CllsnWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CllsnWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CllsnWarnReq (" << ComConf_ComSignal_isCllsnWarnReq_mrx << "). Got " << length << ", expected " << sizeof(CllsnWarnReq);
+            ALOGE("Wrong buffer size received for CllsnWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isCllsnWarnReq_mrx, length, static_cast<unsigned long>(sizeof(CllsnWarnReq)));
         }
     }
     break;
@@ -795,7 +795,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igCllsnWarnSide_mrx:
     {
         if (sizeof(CllsnWarnSide) == length) {
-            log_verbose() << "Received CllsnWarnSide (" << ComConf_ComSignalGroup_igCllsnWarnSide_mrx << ")";
+            ALOGV("Received CllsnWarnSide (%u)", ComConf_ComSignalGroup_igCllsnWarnSide_mrx);
             const CllsnWarnSide& rteValue = *static_cast<const CllsnWarnSide*>(buffer);
             autosar::CllsnWarnSide_info::data_elem_type deValue;
             deValue.Le = static_cast<decltype(deValue.Le)>(rteValue.CllsnWarnSideLe);
@@ -803,7 +803,7 @@
 
             CllsnWarnSide_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CllsnWarnSide (" << ComConf_ComSignalGroup_igCllsnWarnSide_mrx << "). Got " << length << ", expected " << sizeof(CllsnWarnSide);
+            ALOGE("Wrong buffer size received for CllsnWarnSide (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCllsnWarnSide_mrx, length, static_cast<unsigned long>(sizeof(CllsnWarnSide)));        
         }
     }
     break;
@@ -811,13 +811,13 @@
     case ComConf_ComSignal_isClngActv_mrx:
     {
         if (sizeof(ClngActv) == length) {
-            log_verbose() << "Received ClngActv (" << ComConf_ComSignal_isClngActv_mrx << ")";
+            ALOGV("Received ClngActv (%u)", ComConf_ComSignal_isClngActv_mrx);
             const ClngActv& rteValue = *static_cast<const ClngActv*>(buffer);
             autosar::ClngActv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ClngActv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ClngActv (" << ComConf_ComSignal_isClngActv_mrx << "). Got " << length << ", expected " << sizeof(ClngActv);
+            ALOGE("Wrong buffer size received for ClngActv (%u). Got %zu , expected %lu", ComConf_ComSignal_isClngActv_mrx, length, static_cast<unsigned long>(sizeof(ClngActv)));
         }
     }
     break;
@@ -825,13 +825,13 @@
     case ComConf_ComSignal_isCmftFctSts_mrx:
     {
         if (sizeof(CmftFctSts) == length) {
-            log_verbose() << "Received CmftFctSts (" << ComConf_ComSignal_isCmftFctSts_mrx << ")";
+            ALOGV("Received CmftFctSts (%u)", ComConf_ComSignal_isCmftFctSts_mrx);
             const CmftFctSts& rteValue = *static_cast<const CmftFctSts*>(buffer);
             autosar::CmftFctSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CmftFctSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CmftFctSts (" << ComConf_ComSignal_isCmftFctSts_mrx << "). Got " << length << ", expected " << sizeof(CmftFctSts);
+            ALOGE("Wrong buffer size received for CmftFctSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isCmftFctSts_mrx, length, static_cast<unsigned long>(sizeof(CmftFctSts)));
         }
     }
     break;
@@ -839,7 +839,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx:
     {
         if (sizeof(CmptmtAirTEstimdExtd) == length) {
-            log_verbose() << "Received CmptmtAirTEstimdExtd (" << ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx << ")";
+            ALOGV("Received CmptmtAirTEstimdExtd (%u)", ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx);
             const CmptmtAirTEstimdExtd& rteValue = *static_cast<const CmptmtAirTEstimdExtd*>(buffer);
             autosar::CmptmtAirTEstimdExtd_info::data_elem_type deValue;
             deValue.ComptmtT = static_cast<decltype(deValue.ComptmtT)>( toUnsignedFromRaw<11>(rteValue.CmptmtAirTEstimdExtdComptmtT) ) * 0.1 + -60.0;
@@ -847,7 +847,7 @@
 
             CmptmtAirTEstimdExtd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CmptmtAirTEstimdExtd (" << ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx << "). Got " << length << ", expected " << sizeof(CmptmtAirTEstimdExtd);
+            ALOGE("Wrong buffer size received for CmptmtAirTEstimdExtd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx, length, static_cast<unsigned long>(sizeof(CmptmtAirTEstimdExtd)));        
         }
     }
     break;
@@ -855,7 +855,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx:
     {
         if (sizeof(CmptmtTFrntGroup) == length) {
-            log_verbose() << "Received CmptmtTFrntGroup (" << ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx << ")";
+            ALOGV("Received CmptmtTFrntGroup (%u)", ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx);
             const CmptmtTFrntGroup& rteValue = *static_cast<const CmptmtTFrntGroup*>(buffer);
             autosar::CmptmtTFrnt_info::data_elem_type deValue;
             deValue.CmptmtTFrnt = static_cast<decltype(deValue.CmptmtTFrnt)>( toUnsignedFromRaw<11>(rteValue.CmptmtTFrnt) ) * 0.1 + -60.0;
@@ -864,7 +864,7 @@
 
             CmptmtTFrnt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CmptmtTFrntGroup (" << ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx << "). Got " << length << ", expected " << sizeof(CmptmtTFrntGroup);
+            ALOGE("Wrong buffer size received for CmptmtTFrntGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx, length, static_cast<unsigned long>(sizeof(CmptmtTFrntGroup)));        
         }
     }
     break;
@@ -872,13 +872,13 @@
     case ComConf_ComSignal_isCnclWarnForCrsCtrl_mrx:
     {
         if (sizeof(CnclWarnForCrsCtrl) == length) {
-            log_verbose() << "Received CnclWarnForCrsCtrl (" << ComConf_ComSignal_isCnclWarnForCrsCtrl_mrx << ")";
+            ALOGV("Received CnclWarnForCrsCtrl (%u)", ComConf_ComSignal_isCnclWarnForCrsCtrl_mrx);
             const CnclWarnForCrsCtrl& rteValue = *static_cast<const CnclWarnForCrsCtrl*>(buffer);
             autosar::CnclWarnForCrsCtrl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CnclWarnForCrsCtrl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CnclWarnForCrsCtrl (" << ComConf_ComSignal_isCnclWarnForCrsCtrl_mrx << "). Got " << length << ", expected " << sizeof(CnclWarnForCrsCtrl);
+            ALOGE("Wrong buffer size received for CnclWarnForCrsCtrl (%u). Got %zu , expected %lu", ComConf_ComSignal_isCnclWarnForCrsCtrl_mrx, length, static_cast<unsigned long>(sizeof(CnclWarnForCrsCtrl)));
         }
     }
     break;
@@ -886,13 +886,13 @@
     case ComConf_ComSignal_isCnclWarnLgtForAutDrv_mrx:
     {
         if (sizeof(CnclWarnLgtForAutDrv) == length) {
-            log_verbose() << "Received CnclWarnLgtForAutDrv (" << ComConf_ComSignal_isCnclWarnLgtForAutDrv_mrx << ")";
+            ALOGV("Received CnclWarnLgtForAutDrv (%u)", ComConf_ComSignal_isCnclWarnLgtForAutDrv_mrx);
             const CnclWarnLgtForAutDrv& rteValue = *static_cast<const CnclWarnLgtForAutDrv*>(buffer);
             autosar::CnclWarnLgtForAutDrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CnclWarnLgtForAutDrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CnclWarnLgtForAutDrv (" << ComConf_ComSignal_isCnclWarnLgtForAutDrv_mrx << "). Got " << length << ", expected " << sizeof(CnclWarnLgtForAutDrv);
+            ALOGE("Wrong buffer size received for CnclWarnLgtForAutDrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isCnclWarnLgtForAutDrv_mrx, length, static_cast<unsigned long>(sizeof(CnclWarnLgtForAutDrv)));
         }
     }
     break;
@@ -900,13 +900,13 @@
     case ComConf_ComSignal_isComLostExtrSound_mrx:
     {
         if (sizeof(ComLostExtrSound) == length) {
-            log_verbose() << "Received ComLostExtrSound (" << ComConf_ComSignal_isComLostExtrSound_mrx << ")";
+            ALOGV("Received ComLostExtrSound (%u)", ComConf_ComSignal_isComLostExtrSound_mrx);
             const ComLostExtrSound& rteValue = *static_cast<const ComLostExtrSound*>(buffer);
             autosar::ComLostExtrSound_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ComLostExtrSound_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ComLostExtrSound (" << ComConf_ComSignal_isComLostExtrSound_mrx << "). Got " << length << ", expected " << sizeof(ComLostExtrSound);
+            ALOGE("Wrong buffer size received for ComLostExtrSound (%u). Got %zu , expected %lu", ComConf_ComSignal_isComLostExtrSound_mrx, length, static_cast<unsigned long>(sizeof(ComLostExtrSound)));
         }
     }
     break;
@@ -914,7 +914,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igConSftyWarn_mrx:
     {
         if (sizeof(ConSftyWarn) == length) {
-            log_verbose() << "Received ConSftyWarn (" << ComConf_ComSignalGroup_igConSftyWarn_mrx << ")";
+            ALOGV("Received ConSftyWarn (%u)", ComConf_ComSignalGroup_igConSftyWarn_mrx);
             const ConSftyWarn& rteValue = *static_cast<const ConSftyWarn*>(buffer);
             autosar::ConSftyWarn_info::data_elem_type deValue;
             deValue.ConSftyWarnId = static_cast<decltype(deValue.ConSftyWarnId)>(rteValue.ConSftyWarnConSftyWarnId);
@@ -925,7 +925,7 @@
 
             ConSftyWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ConSftyWarn (" << ComConf_ComSignalGroup_igConSftyWarn_mrx << "). Got " << length << ", expected " << sizeof(ConSftyWarn);
+            ALOGE("Wrong buffer size received for ConSftyWarn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igConSftyWarn_mrx, length, static_cast<unsigned long>(sizeof(ConSftyWarn)));        
         }
     }
     break;
@@ -933,13 +933,13 @@
     case ComConf_ComSignal_isCoolgStsForDisp_mrx:
     {
         if (sizeof(CoolgStsForDisp) == length) {
-            log_verbose() << "Received CoolgStsForDisp (" << ComConf_ComSignal_isCoolgStsForDisp_mrx << ")";
+            ALOGV("Received CoolgStsForDisp (%u)", ComConf_ComSignal_isCoolgStsForDisp_mrx);
             const CoolgStsForDisp& rteValue = *static_cast<const CoolgStsForDisp*>(buffer);
             autosar::CoolgStsForDisp_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CoolgStsForDisp_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CoolgStsForDisp (" << ComConf_ComSignal_isCoolgStsForDisp_mrx << "). Got " << length << ", expected " << sizeof(CoolgStsForDisp);
+            ALOGE("Wrong buffer size received for CoolgStsForDisp (%u). Got %zu , expected %lu", ComConf_ComSignal_isCoolgStsForDisp_mrx, length, static_cast<unsigned long>(sizeof(CoolgStsForDisp)));
         }
     }
     break;
@@ -947,13 +947,13 @@
     case ComConf_ComSignal_isCrsCtrlrSts_mrx:
     {
         if (sizeof(CrsCtrlrSts) == length) {
-            log_verbose() << "Received CrsCtrlrSts (" << ComConf_ComSignal_isCrsCtrlrSts_mrx << ")";
+            ALOGV("Received CrsCtrlrSts (%u)", ComConf_ComSignal_isCrsCtrlrSts_mrx);
             const CrsCtrlrSts& rteValue = *static_cast<const CrsCtrlrSts*>(buffer);
             autosar::CrsCtrlrSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CrsCtrlrSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CrsCtrlrSts (" << ComConf_ComSignal_isCrsCtrlrSts_mrx << "). Got " << length << ", expected " << sizeof(CrsCtrlrSts);
+            ALOGE("Wrong buffer size received for CrsCtrlrSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isCrsCtrlrSts_mrx, length, static_cast<unsigned long>(sizeof(CrsCtrlrSts)));
         }
     }
     break;
@@ -961,13 +961,13 @@
     case ComConf_ComSignal_isCrvtSpdAdpvSts_mrx:
     {
         if (sizeof(CrvtSpdAdpvSts) == length) {
-            log_verbose() << "Received CrvtSpdAdpvSts (" << ComConf_ComSignal_isCrvtSpdAdpvSts_mrx << ")";
+            ALOGV("Received CrvtSpdAdpvSts (%u)", ComConf_ComSignal_isCrvtSpdAdpvSts_mrx);
             const CrvtSpdAdpvSts& rteValue = *static_cast<const CrvtSpdAdpvSts*>(buffer);
             autosar::CrvtSpdAdpvSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CrvtSpdAdpvSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CrvtSpdAdpvSts (" << ComConf_ComSignal_isCrvtSpdAdpvSts_mrx << "). Got " << length << ", expected " << sizeof(CrvtSpdAdpvSts);
+            ALOGE("Wrong buffer size received for CrvtSpdAdpvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isCrvtSpdAdpvSts_mrx, length, static_cast<unsigned long>(sizeof(CrvtSpdAdpvSts)));
         }
     }
     break;
@@ -975,13 +975,13 @@
     case ComConf_ComSignal_isCrvtSpdWarnReq_mrx:
     {
         if (sizeof(CrvtSpdWarnReq) == length) {
-            log_verbose() << "Received CrvtSpdWarnReq (" << ComConf_ComSignal_isCrvtSpdWarnReq_mrx << ")";
+            ALOGV("Received CrvtSpdWarnReq (%u)", ComConf_ComSignal_isCrvtSpdWarnReq_mrx);
             const CrvtSpdWarnReq& rteValue = *static_cast<const CrvtSpdWarnReq*>(buffer);
             autosar::CrvtSpdWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CrvtSpdWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CrvtSpdWarnReq (" << ComConf_ComSignal_isCrvtSpdWarnReq_mrx << "). Got " << length << ", expected " << sizeof(CrvtSpdWarnReq);
+            ALOGE("Wrong buffer size received for CrvtSpdWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isCrvtSpdWarnReq_mrx, length, static_cast<unsigned long>(sizeof(CrvtSpdWarnReq)));
         }
     }
     break;
@@ -989,13 +989,13 @@
     case ComConf_ComSignal_isCrvtSpdWarnSts_mrx:
     {
         if (sizeof(CrvtSpdWarnSts) == length) {
-            log_verbose() << "Received CrvtSpdWarnSts (" << ComConf_ComSignal_isCrvtSpdWarnSts_mrx << ")";
+            ALOGV("Received CrvtSpdWarnSts (%u)", ComConf_ComSignal_isCrvtSpdWarnSts_mrx);
             const CrvtSpdWarnSts& rteValue = *static_cast<const CrvtSpdWarnSts*>(buffer);
             autosar::CrvtSpdWarnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CrvtSpdWarnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CrvtSpdWarnSts (" << ComConf_ComSignal_isCrvtSpdWarnSts_mrx << "). Got " << length << ", expected " << sizeof(CrvtSpdWarnSts);
+            ALOGE("Wrong buffer size received for CrvtSpdWarnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isCrvtSpdWarnSts_mrx, length, static_cast<unsigned long>(sizeof(CrvtSpdWarnSts)));
         }
     }
     break;
@@ -1003,13 +1003,13 @@
     case ComConf_ComSignal_isCtraIndcnLe_mrx:
     {
         if (sizeof(CtraIndcnLe) == length) {
-            log_verbose() << "Received CtraIndcnLe (" << ComConf_ComSignal_isCtraIndcnLe_mrx << ")";
+            ALOGV("Received CtraIndcnLe (%u)", ComConf_ComSignal_isCtraIndcnLe_mrx);
             const CtraIndcnLe& rteValue = *static_cast<const CtraIndcnLe*>(buffer);
             autosar::CtraIndcnLe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CtraIndcnLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CtraIndcnLe (" << ComConf_ComSignal_isCtraIndcnLe_mrx << "). Got " << length << ", expected " << sizeof(CtraIndcnLe);
+            ALOGE("Wrong buffer size received for CtraIndcnLe (%u). Got %zu , expected %lu", ComConf_ComSignal_isCtraIndcnLe_mrx, length, static_cast<unsigned long>(sizeof(CtraIndcnLe)));
         }
     }
     break;
@@ -1017,13 +1017,13 @@
     case ComConf_ComSignal_isCtraIndcnRi_mrx:
     {
         if (sizeof(CtraIndcnRi) == length) {
-            log_verbose() << "Received CtraIndcnRi (" << ComConf_ComSignal_isCtraIndcnRi_mrx << ")";
+            ALOGV("Received CtraIndcnRi (%u)", ComConf_ComSignal_isCtraIndcnRi_mrx);
             const CtraIndcnRi& rteValue = *static_cast<const CtraIndcnRi*>(buffer);
             autosar::CtraIndcnRi_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CtraIndcnRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CtraIndcnRi (" << ComConf_ComSignal_isCtraIndcnRi_mrx << "). Got " << length << ", expected " << sizeof(CtraIndcnRi);
+            ALOGE("Wrong buffer size received for CtraIndcnRi (%u). Got %zu , expected %lu", ComConf_ComSignal_isCtraIndcnRi_mrx, length, static_cast<unsigned long>(sizeof(CtraIndcnRi)));
         }
     }
     break;
@@ -1031,13 +1031,13 @@
     case ComConf_ComSignal_isCtraOn1_mrx:
     {
         if (sizeof(CtraOn1) == length) {
-            log_verbose() << "Received CtraOn1 (" << ComConf_ComSignal_isCtraOn1_mrx << ")";
+            ALOGV("Received CtraOn1 (%u)", ComConf_ComSignal_isCtraOn1_mrx);
             const CtraOn1& rteValue = *static_cast<const CtraOn1*>(buffer);
             autosar::CtraOn1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             CtraOn1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for CtraOn1 (" << ComConf_ComSignal_isCtraOn1_mrx << "). Got " << length << ", expected " << sizeof(CtraOn1);
+            ALOGE("Wrong buffer size received for CtraOn1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isCtraOn1_mrx, length, static_cast<unsigned long>(sizeof(CtraOn1)));
         }
     }
     break;
@@ -1045,7 +1045,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igDataSpclDMSM_mrx:
     {
         if (sizeof(DataSpclDMSM) == length) {
-            log_verbose() << "Received DataSpclDMSM (" << ComConf_ComSignalGroup_igDataSpclDMSM_mrx << ")";
+            ALOGV("Received DataSpclDMSM (%u)", ComConf_ComSignalGroup_igDataSpclDMSM_mrx);
             const DataSpclDMSM& rteValue = *static_cast<const DataSpclDMSM*>(buffer);
             autosar::DataSpclDMSM_info::data_elem_type deValue;
             deValue.DataIdn = static_cast<decltype(deValue.DataIdn)>(rteValue.DataSpclDMSMDataIdn);
@@ -1055,7 +1055,7 @@
 
             DataSpclDMSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DataSpclDMSM (" << ComConf_ComSignalGroup_igDataSpclDMSM_mrx << "). Got " << length << ", expected " << sizeof(DataSpclDMSM);
+            ALOGE("Wrong buffer size received for DataSpclDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDataSpclDMSM_mrx, length, static_cast<unsigned long>(sizeof(DataSpclDMSM)));        
         }
     }
     break;
@@ -1063,13 +1063,13 @@
     case ComConf_ComSignal_isDayToSrv_mrx:
     {
         if (sizeof(DayToSrv) == length) {
-            log_verbose() << "Received DayToSrv (" << ComConf_ComSignal_isDayToSrv_mrx << ")";
+            ALOGV("Received DayToSrv (%u)", ComConf_ComSignal_isDayToSrv_mrx);
             const DayToSrv& rteValue = *static_cast<const DayToSrv*>(buffer);
             autosar::DayToSrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DayToSrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DayToSrv (" << ComConf_ComSignal_isDayToSrv_mrx << "). Got " << length << ", expected " << sizeof(DayToSrv);
+            ALOGE("Wrong buffer size received for DayToSrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isDayToSrv_mrx, length, static_cast<unsigned long>(sizeof(DayToSrv)));
         }
     }
     break;
@@ -1077,13 +1077,13 @@
     case ComConf_ComSignal_isDiagcCCSM_mrx:
     {
         if (sizeof(DiagcCCSM) == length) {
-            log_verbose() << "Received DiagcCCSM (" << ComConf_ComSignal_isDiagcCCSM_mrx << ")";
+            ALOGV("Received DiagcCCSM (%u)", ComConf_ComSignal_isDiagcCCSM_mrx);
             const DiagcCCSM& rteValue = *static_cast<const DiagcCCSM*>(buffer);
             autosar::DiagcCCSM_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DiagcCCSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DiagcCCSM (" << ComConf_ComSignal_isDiagcCCSM_mrx << "). Got " << length << ", expected " << sizeof(DiagcCCSM);
+            ALOGE("Wrong buffer size received for DiagcCCSM (%u). Got %zu , expected %lu", ComConf_ComSignal_isDiagcCCSM_mrx, length, static_cast<unsigned long>(sizeof(DiagcCCSM)));
         }
     }
     break;
@@ -1091,13 +1091,13 @@
     case ComConf_ComSignal_isDiagcRCSM_mrx:
     {
         if (sizeof(DiagcRCSM) == length) {
-            log_verbose() << "Received DiagcRCSM (" << ComConf_ComSignal_isDiagcRCSM_mrx << ")";
+            ALOGV("Received DiagcRCSM (%u)", ComConf_ComSignal_isDiagcRCSM_mrx);
             const DiagcRCSM& rteValue = *static_cast<const DiagcRCSM*>(buffer);
             autosar::DiagcRCSM_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DiagcRCSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DiagcRCSM (" << ComConf_ComSignal_isDiagcRCSM_mrx << "). Got " << length << ", expected " << sizeof(DiagcRCSM);
+            ALOGE("Wrong buffer size received for DiagcRCSM (%u). Got %zu , expected %lu", ComConf_ComSignal_isDiagcRCSM_mrx, length, static_cast<unsigned long>(sizeof(DiagcRCSM)));
         }
     }
     break;
@@ -1105,13 +1105,13 @@
     case ComConf_ComSignal_isDiagcRSHC_mrx:
     {
         if (sizeof(DiagcRSHC) == length) {
-            log_verbose() << "Received DiagcRSHC (" << ComConf_ComSignal_isDiagcRSHC_mrx << ")";
+            ALOGV("Received DiagcRSHC (%u)", ComConf_ComSignal_isDiagcRSHC_mrx);
             const DiagcRSHC& rteValue = *static_cast<const DiagcRSHC*>(buffer);
             autosar::DiagcRSHC_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DiagcRSHC_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DiagcRSHC (" << ComConf_ComSignal_isDiagcRSHC_mrx << "). Got " << length << ", expected " << sizeof(DiagcRSHC);
+            ALOGE("Wrong buffer size received for DiagcRSHC (%u). Got %zu , expected %lu", ComConf_ComSignal_isDiagcRSHC_mrx, length, static_cast<unsigned long>(sizeof(DiagcRSHC)));
         }
     }
     break;
@@ -1119,13 +1119,13 @@
     case ComConf_ComSignal_isDiagcStsDMSM_mrx:
     {
         if (sizeof(DiagcStsDMSM) == length) {
-            log_verbose() << "Received DiagcStsDMSM (" << ComConf_ComSignal_isDiagcStsDMSM_mrx << ")";
+            ALOGV("Received DiagcStsDMSM (%u)", ComConf_ComSignal_isDiagcStsDMSM_mrx);
             const DiagcStsDMSM& rteValue = *static_cast<const DiagcStsDMSM*>(buffer);
             autosar::DiagcStsDMSM_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DiagcStsDMSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DiagcStsDMSM (" << ComConf_ComSignal_isDiagcStsDMSM_mrx << "). Got " << length << ", expected " << sizeof(DiagcStsDMSM);
+            ALOGE("Wrong buffer size received for DiagcStsDMSM (%u). Got %zu , expected %lu", ComConf_ComSignal_isDiagcStsDMSM_mrx, length, static_cast<unsigned long>(sizeof(DiagcStsDMSM)));
         }
     }
     break;
@@ -1133,13 +1133,13 @@
     case ComConf_ComSignal_isDispBattEgyIn_mrx:
     {
         if (sizeof(DispBattEgyIn) == length) {
-            log_verbose() << "Received DispBattEgyIn (" << ComConf_ComSignal_isDispBattEgyIn_mrx << ")";
+            ALOGV("Received DispBattEgyIn (%u)", ComConf_ComSignal_isDispBattEgyIn_mrx);
             const DispBattEgyIn& rteValue = *static_cast<const DispBattEgyIn*>(buffer);
             autosar::DispBattEgyIn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.5 + 0.0;
             DispBattEgyIn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DispBattEgyIn (" << ComConf_ComSignal_isDispBattEgyIn_mrx << "). Got " << length << ", expected " << sizeof(DispBattEgyIn);
+            ALOGE("Wrong buffer size received for DispBattEgyIn (%u). Got %zu , expected %lu", ComConf_ComSignal_isDispBattEgyIn_mrx, length, static_cast<unsigned long>(sizeof(DispBattEgyIn)));
         }
     }
     break;
@@ -1147,13 +1147,13 @@
     case ComConf_ComSignal_isDispBattEgyOut_mrx:
     {
         if (sizeof(DispBattEgyOut) == length) {
-            log_verbose() << "Received DispBattEgyOut (" << ComConf_ComSignal_isDispBattEgyOut_mrx << ")";
+            ALOGV("Received DispBattEgyOut (%u)", ComConf_ComSignal_isDispBattEgyOut_mrx);
             const DispBattEgyOut& rteValue = *static_cast<const DispBattEgyOut*>(buffer);
             autosar::DispBattEgyOut_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.5 + 0.0;
             DispBattEgyOut_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DispBattEgyOut (" << ComConf_ComSignal_isDispBattEgyOut_mrx << "). Got " << length << ", expected " << sizeof(DispBattEgyOut);
+            ALOGE("Wrong buffer size received for DispBattEgyOut (%u). Got %zu , expected %lu", ComConf_ComSignal_isDispBattEgyOut_mrx, length, static_cast<unsigned long>(sizeof(DispBattEgyOut)));
         }
     }
     break;
@@ -1161,13 +1161,13 @@
     case ComConf_ComSignal_isDispOfPrpsnMod_mrx:
     {
         if (sizeof(DispOfPrpsnMod) == length) {
-            log_verbose() << "Received DispOfPrpsnMod (" << ComConf_ComSignal_isDispOfPrpsnMod_mrx << ")";
+            ALOGV("Received DispOfPrpsnMod (%u)", ComConf_ComSignal_isDispOfPrpsnMod_mrx);
             const DispOfPrpsnMod& rteValue = *static_cast<const DispOfPrpsnMod*>(buffer);
             autosar::DispOfPrpsnMod_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DispOfPrpsnMod_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DispOfPrpsnMod (" << ComConf_ComSignal_isDispOfPrpsnMod_mrx << "). Got " << length << ", expected " << sizeof(DispOfPrpsnMod);
+            ALOGE("Wrong buffer size received for DispOfPrpsnMod (%u). Got %zu , expected %lu", ComConf_ComSignal_isDispOfPrpsnMod_mrx, length, static_cast<unsigned long>(sizeof(DispOfPrpsnMod)));
         }
     }
     break;
@@ -1175,13 +1175,13 @@
     case ComConf_ComSignal_isDoorDrvrLockReSts_mrx:
     {
         if (sizeof(DoorDrvrLockReSts) == length) {
-            log_verbose() << "Received DoorDrvrLockReSts (" << ComConf_ComSignal_isDoorDrvrLockReSts_mrx << ")";
+            ALOGV("Received DoorDrvrLockReSts (%u)", ComConf_ComSignal_isDoorDrvrLockReSts_mrx);
             const DoorDrvrLockReSts& rteValue = *static_cast<const DoorDrvrLockReSts*>(buffer);
             autosar::DoorDrvrLockReSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorDrvrLockReSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorDrvrLockReSts (" << ComConf_ComSignal_isDoorDrvrLockReSts_mrx << "). Got " << length << ", expected " << sizeof(DoorDrvrLockReSts);
+            ALOGE("Wrong buffer size received for DoorDrvrLockReSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorDrvrLockReSts_mrx, length, static_cast<unsigned long>(sizeof(DoorDrvrLockReSts)));
         }
     }
     break;
@@ -1189,13 +1189,13 @@
     case ComConf_ComSignal_isDoorDrvrLockSts_mrx:
     {
         if (sizeof(DoorDrvrLockSts) == length) {
-            log_verbose() << "Received DoorDrvrLockSts (" << ComConf_ComSignal_isDoorDrvrLockSts_mrx << ")";
+            ALOGV("Received DoorDrvrLockSts (%u)", ComConf_ComSignal_isDoorDrvrLockSts_mrx);
             const DoorDrvrLockSts& rteValue = *static_cast<const DoorDrvrLockSts*>(buffer);
             autosar::DoorDrvrLockSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorDrvrLockSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorDrvrLockSts (" << ComConf_ComSignal_isDoorDrvrLockSts_mrx << "). Got " << length << ", expected " << sizeof(DoorDrvrLockSts);
+            ALOGE("Wrong buffer size received for DoorDrvrLockSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorDrvrLockSts_mrx, length, static_cast<unsigned long>(sizeof(DoorDrvrLockSts)));
         }
     }
     break;
@@ -1203,13 +1203,13 @@
     case ComConf_ComSignal_isDoorDrvrReSts_mrx:
     {
         if (sizeof(DoorDrvrReSts) == length) {
-            log_verbose() << "Received DoorDrvrReSts (" << ComConf_ComSignal_isDoorDrvrReSts_mrx << ")";
+            ALOGV("Received DoorDrvrReSts (%u)", ComConf_ComSignal_isDoorDrvrReSts_mrx);
             const DoorDrvrReSts& rteValue = *static_cast<const DoorDrvrReSts*>(buffer);
             autosar::DoorDrvrReSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorDrvrReSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorDrvrReSts (" << ComConf_ComSignal_isDoorDrvrReSts_mrx << "). Got " << length << ", expected " << sizeof(DoorDrvrReSts);
+            ALOGE("Wrong buffer size received for DoorDrvrReSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorDrvrReSts_mrx, length, static_cast<unsigned long>(sizeof(DoorDrvrReSts)));
         }
     }
     break;
@@ -1217,13 +1217,13 @@
     case ComConf_ComSignal_isDoorDrvrSts_mrx:
     {
         if (sizeof(DoorDrvrSts) == length) {
-            log_verbose() << "Received DoorDrvrSts (" << ComConf_ComSignal_isDoorDrvrSts_mrx << ")";
+            ALOGV("Received DoorDrvrSts (%u)", ComConf_ComSignal_isDoorDrvrSts_mrx);
             const DoorDrvrSts& rteValue = *static_cast<const DoorDrvrSts*>(buffer);
             autosar::DoorDrvrSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorDrvrSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorDrvrSts (" << ComConf_ComSignal_isDoorDrvrSts_mrx << "). Got " << length << ", expected " << sizeof(DoorDrvrSts);
+            ALOGE("Wrong buffer size received for DoorDrvrSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorDrvrSts_mrx, length, static_cast<unsigned long>(sizeof(DoorDrvrSts)));
         }
     }
     break;
@@ -1231,13 +1231,13 @@
     case ComConf_ComSignal_isDoorPassLockReSts_mrx:
     {
         if (sizeof(DoorPassLockReSts) == length) {
-            log_verbose() << "Received DoorPassLockReSts (" << ComConf_ComSignal_isDoorPassLockReSts_mrx << ")";
+            ALOGV("Received DoorPassLockReSts (%u)", ComConf_ComSignal_isDoorPassLockReSts_mrx);
             const DoorPassLockReSts& rteValue = *static_cast<const DoorPassLockReSts*>(buffer);
             autosar::DoorPassLockReSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorPassLockReSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorPassLockReSts (" << ComConf_ComSignal_isDoorPassLockReSts_mrx << "). Got " << length << ", expected " << sizeof(DoorPassLockReSts);
+            ALOGE("Wrong buffer size received for DoorPassLockReSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorPassLockReSts_mrx, length, static_cast<unsigned long>(sizeof(DoorPassLockReSts)));
         }
     }
     break;
@@ -1245,13 +1245,13 @@
     case ComConf_ComSignal_isDoorPassLockSts_mrx:
     {
         if (sizeof(DoorPassLockSts) == length) {
-            log_verbose() << "Received DoorPassLockSts (" << ComConf_ComSignal_isDoorPassLockSts_mrx << ")";
+            ALOGV("Received DoorPassLockSts (%u)", ComConf_ComSignal_isDoorPassLockSts_mrx);
             const DoorPassLockSts& rteValue = *static_cast<const DoorPassLockSts*>(buffer);
             autosar::DoorPassLockSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorPassLockSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorPassLockSts (" << ComConf_ComSignal_isDoorPassLockSts_mrx << "). Got " << length << ", expected " << sizeof(DoorPassLockSts);
+            ALOGE("Wrong buffer size received for DoorPassLockSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorPassLockSts_mrx, length, static_cast<unsigned long>(sizeof(DoorPassLockSts)));
         }
     }
     break;
@@ -1259,13 +1259,13 @@
     case ComConf_ComSignal_isDoorPassReSts_mrx:
     {
         if (sizeof(DoorPassReSts) == length) {
-            log_verbose() << "Received DoorPassReSts (" << ComConf_ComSignal_isDoorPassReSts_mrx << ")";
+            ALOGV("Received DoorPassReSts (%u)", ComConf_ComSignal_isDoorPassReSts_mrx);
             const DoorPassReSts& rteValue = *static_cast<const DoorPassReSts*>(buffer);
             autosar::DoorPassReSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorPassReSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorPassReSts (" << ComConf_ComSignal_isDoorPassReSts_mrx << "). Got " << length << ", expected " << sizeof(DoorPassReSts);
+            ALOGE("Wrong buffer size received for DoorPassReSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorPassReSts_mrx, length, static_cast<unsigned long>(sizeof(DoorPassReSts)));
         }
     }
     break;
@@ -1273,13 +1273,13 @@
     case ComConf_ComSignal_isDoorPassSts_mrx:
     {
         if (sizeof(DoorPassSts) == length) {
-            log_verbose() << "Received DoorPassSts (" << ComConf_ComSignal_isDoorPassSts_mrx << ")";
+            ALOGV("Received DoorPassSts (%u)", ComConf_ComSignal_isDoorPassSts_mrx);
             const DoorPassSts& rteValue = *static_cast<const DoorPassSts*>(buffer);
             autosar::DoorPassSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DoorPassSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DoorPassSts (" << ComConf_ComSignal_isDoorPassSts_mrx << "). Got " << length << ", expected " << sizeof(DoorPassSts);
+            ALOGE("Wrong buffer size received for DoorPassSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDoorPassSts_mrx, length, static_cast<unsigned long>(sizeof(DoorPassSts)));
         }
     }
     break;
@@ -1287,13 +1287,13 @@
     case ComConf_ComSignal_isDriveAwayInfoActvSts_mrx:
     {
         if (sizeof(DriveAwayInfoActvSts) == length) {
-            log_verbose() << "Received DriveAwayInfoActvSts (" << ComConf_ComSignal_isDriveAwayInfoActvSts_mrx << ")";
+            ALOGV("Received DriveAwayInfoActvSts (%u)", ComConf_ComSignal_isDriveAwayInfoActvSts_mrx);
             const DriveAwayInfoActvSts& rteValue = *static_cast<const DriveAwayInfoActvSts*>(buffer);
             autosar::DriveAwayInfoActvSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DriveAwayInfoActvSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DriveAwayInfoActvSts (" << ComConf_ComSignal_isDriveAwayInfoActvSts_mrx << "). Got " << length << ", expected " << sizeof(DriveAwayInfoActvSts);
+            ALOGE("Wrong buffer size received for DriveAwayInfoActvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDriveAwayInfoActvSts_mrx, length, static_cast<unsigned long>(sizeof(DriveAwayInfoActvSts)));
         }
     }
     break;
@@ -1301,7 +1301,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx:
     {
         if (sizeof(DriveAwayInfoWarnReq) == length) {
-            log_verbose() << "Received DriveAwayInfoWarnReq (" << ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx << ")";
+            ALOGV("Received DriveAwayInfoWarnReq (%u)", ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx);
             const DriveAwayInfoWarnReq& rteValue = *static_cast<const DriveAwayInfoWarnReq*>(buffer);
             autosar::DriveAwayInfoWarnReq_info::data_elem_type deValue;
             deValue.AudWarnReq = static_cast<decltype(deValue.AudWarnReq)>(rteValue.DriveAwayInfoWarnReqAudWarnReq);
@@ -1313,7 +1313,7 @@
 
             DriveAwayInfoWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DriveAwayInfoWarnReq (" << ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx << "). Got " << length << ", expected " << sizeof(DriveAwayInfoWarnReq);
+            ALOGE("Wrong buffer size received for DriveAwayInfoWarnReq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx, length, static_cast<unsigned long>(sizeof(DriveAwayInfoWarnReq)));        
         }
     }
     break;
@@ -1321,13 +1321,13 @@
     case ComConf_ComSignal_isDrvrCtrlOfPassSeatFrntSts_mrx:
     {
         if (sizeof(DrvrCtrlOfPassSeatFrntSts) == length) {
-            log_verbose() << "Received DrvrCtrlOfPassSeatFrntSts (" << ComConf_ComSignal_isDrvrCtrlOfPassSeatFrntSts_mrx << ")";
+            ALOGV("Received DrvrCtrlOfPassSeatFrntSts (%u)", ComConf_ComSignal_isDrvrCtrlOfPassSeatFrntSts_mrx);
             const DrvrCtrlOfPassSeatFrntSts& rteValue = *static_cast<const DrvrCtrlOfPassSeatFrntSts*>(buffer);
             autosar::DrvrCtrlOfPassSeatFrntSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrCtrlOfPassSeatFrntSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrCtrlOfPassSeatFrntSts (" << ComConf_ComSignal_isDrvrCtrlOfPassSeatFrntSts_mrx << "). Got " << length << ", expected " << sizeof(DrvrCtrlOfPassSeatFrntSts);
+            ALOGE("Wrong buffer size received for DrvrCtrlOfPassSeatFrntSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrCtrlOfPassSeatFrntSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrCtrlOfPassSeatFrntSts)));
         }
     }
     break;
@@ -1335,13 +1335,13 @@
     case ComConf_ComSignal_isDrvrDesDir_mrx:
     {
         if (sizeof(DrvrDesDir) == length) {
-            log_verbose() << "Received DrvrDesDir (" << ComConf_ComSignal_isDrvrDesDir_mrx << ")";
+            ALOGV("Received DrvrDesDir (%u)", ComConf_ComSignal_isDrvrDesDir_mrx);
             const DrvrDesDir& rteValue = *static_cast<const DrvrDesDir*>(buffer);
             autosar::DrvrDesDir_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrDesDir_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrDesDir (" << ComConf_ComSignal_isDrvrDesDir_mrx << "). Got " << length << ", expected " << sizeof(DrvrDesDir);
+            ALOGE("Wrong buffer size received for DrvrDesDir (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrDesDir_mrx, length, static_cast<unsigned long>(sizeof(DrvrDesDir)));
         }
     }
     break;
@@ -1349,13 +1349,13 @@
     case ComConf_ComSignal_isDrvrMassgRunng_mrx:
     {
         if (sizeof(DrvrMassgRunng) == length) {
-            log_verbose() << "Received DrvrMassgRunng (" << ComConf_ComSignal_isDrvrMassgRunng_mrx << ")";
+            ALOGV("Received DrvrMassgRunng (%u)", ComConf_ComSignal_isDrvrMassgRunng_mrx);
             const DrvrMassgRunng& rteValue = *static_cast<const DrvrMassgRunng*>(buffer);
             autosar::DrvrMassgRunng_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrMassgRunng_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrMassgRunng (" << ComConf_ComSignal_isDrvrMassgRunng_mrx << "). Got " << length << ", expected " << sizeof(DrvrMassgRunng);
+            ALOGE("Wrong buffer size received for DrvrMassgRunng (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrMassgRunng_mrx, length, static_cast<unsigned long>(sizeof(DrvrMassgRunng)));
         }
     }
     break;
@@ -1363,13 +1363,13 @@
     case ComConf_ComSignal_isDrvrPfmncLvl_mrx:
     {
         if (sizeof(DrvrPfmncLvl) == length) {
-            log_verbose() << "Received DrvrPfmncLvl (" << ComConf_ComSignal_isDrvrPfmncLvl_mrx << ")";
+            ALOGV("Received DrvrPfmncLvl (%u)", ComConf_ComSignal_isDrvrPfmncLvl_mrx);
             const DrvrPfmncLvl& rteValue = *static_cast<const DrvrPfmncLvl*>(buffer);
             autosar::DrvrPfmncLvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrPfmncLvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrPfmncLvl (" << ComConf_ComSignal_isDrvrPfmncLvl_mrx << "). Got " << length << ", expected " << sizeof(DrvrPfmncLvl);
+            ALOGE("Wrong buffer size received for DrvrPfmncLvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrPfmncLvl_mrx, length, static_cast<unsigned long>(sizeof(DrvrPfmncLvl)));
         }
     }
     break;
@@ -1377,13 +1377,13 @@
     case ComConf_ComSignal_isDrvrPfmncSts_mrx:
     {
         if (sizeof(DrvrPfmncSts) == length) {
-            log_verbose() << "Received DrvrPfmncSts (" << ComConf_ComSignal_isDrvrPfmncSts_mrx << ")";
+            ALOGV("Received DrvrPfmncSts (%u)", ComConf_ComSignal_isDrvrPfmncSts_mrx);
             const DrvrPfmncSts& rteValue = *static_cast<const DrvrPfmncSts*>(buffer);
             autosar::DrvrPfmncSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrPfmncSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrPfmncSts (" << ComConf_ComSignal_isDrvrPfmncSts_mrx << "). Got " << length << ", expected " << sizeof(DrvrPfmncSts);
+            ALOGE("Wrong buffer size received for DrvrPfmncSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrPfmncSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrPfmncSts)));
         }
     }
     break;
@@ -1391,13 +1391,13 @@
     case ComConf_ComSignal_isDrvrPfmncWarnReq_mrx:
     {
         if (sizeof(DrvrPfmncWarnReq) == length) {
-            log_verbose() << "Received DrvrPfmncWarnReq (" << ComConf_ComSignal_isDrvrPfmncWarnReq_mrx << ")";
+            ALOGV("Received DrvrPfmncWarnReq (%u)", ComConf_ComSignal_isDrvrPfmncWarnReq_mrx);
             const DrvrPfmncWarnReq& rteValue = *static_cast<const DrvrPfmncWarnReq*>(buffer);
             autosar::DrvrPfmncWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrPfmncWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrPfmncWarnReq (" << ComConf_ComSignal_isDrvrPfmncWarnReq_mrx << "). Got " << length << ", expected " << sizeof(DrvrPfmncWarnReq);
+            ALOGE("Wrong buffer size received for DrvrPfmncWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrPfmncWarnReq_mrx, length, static_cast<unsigned long>(sizeof(DrvrPfmncWarnReq)));
         }
     }
     break;
@@ -1405,13 +1405,13 @@
     case ComConf_ComSignal_isDrvrSeatActvSpplFct_mrx:
     {
         if (sizeof(DrvrSeatActvSpplFct) == length) {
-            log_verbose() << "Received DrvrSeatActvSpplFct (" << ComConf_ComSignal_isDrvrSeatActvSpplFct_mrx << ")";
+            ALOGV("Received DrvrSeatActvSpplFct (%u)", ComConf_ComSignal_isDrvrSeatActvSpplFct_mrx);
             const DrvrSeatActvSpplFct& rteValue = *static_cast<const DrvrSeatActvSpplFct*>(buffer);
             autosar::DrvrSeatActvSpplFct_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrSeatActvSpplFct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrSeatActvSpplFct (" << ComConf_ComSignal_isDrvrSeatActvSpplFct_mrx << "). Got " << length << ", expected " << sizeof(DrvrSeatActvSpplFct);
+            ALOGE("Wrong buffer size received for DrvrSeatActvSpplFct (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrSeatActvSpplFct_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatActvSpplFct)));
         }
     }
     break;
@@ -1419,7 +1419,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx:
     {
         if (sizeof(DrvrSeatMassgFct) == length) {
-            log_verbose() << "Received DrvrSeatMassgFct (" << ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx << ")";
+            ALOGV("Received DrvrSeatMassgFct (%u)", ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx);
             const DrvrSeatMassgFct& rteValue = *static_cast<const DrvrSeatMassgFct*>(buffer);
             autosar::DrvrSeatMassgFct_info::data_elem_type deValue;
             deValue.MassgInten = static_cast<decltype(deValue.MassgInten)>(rteValue.DrvrSeatMassgFctMassgInten);
@@ -1429,7 +1429,7 @@
 
             DrvrSeatMassgFct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrSeatMassgFct (" << ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx << "). Got " << length << ", expected " << sizeof(DrvrSeatMassgFct);
+            ALOGE("Wrong buffer size received for DrvrSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatMassgFct)));        
         }
     }
     break;
@@ -1437,7 +1437,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx:
     {
         if (sizeof(DrvrSeatSwtSts) == length) {
-            log_verbose() << "Received DrvrSeatSwtSts (" << ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx << ")";
+            ALOGV("Received DrvrSeatSwtSts (%u)", ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx);
             const DrvrSeatSwtSts& rteValue = *static_cast<const DrvrSeatSwtSts*>(buffer);
             autosar::DrvrSeatSwtSts_info::data_elem_type deValue;
             deValue.DrvrSeatSwtAdjmtOfSpplFctHozlSts = static_cast<decltype(deValue.DrvrSeatSwtAdjmtOfSpplFctHozlSts)>(rteValue.DrvrSeatSwtAdjmtOfSpplFctHozlSts);
@@ -1450,7 +1450,7 @@
 
             DrvrSeatSwtSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrSeatSwtSts (" << ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx << "). Got " << length << ", expected " << sizeof(DrvrSeatSwtSts);
+            ALOGE("Wrong buffer size received for DrvrSeatSwtSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatSwtSts)));        
         }
     }
     break;
@@ -1458,13 +1458,13 @@
     case ComConf_ComSignal_isDrvrWLoadLvl_mrx:
     {
         if (sizeof(DrvrWLoadLvl) == length) {
-            log_verbose() << "Received DrvrWLoadLvl (" << ComConf_ComSignal_isDrvrWLoadLvl_mrx << ")";
+            ALOGV("Received DrvrWLoadLvl (%u)", ComConf_ComSignal_isDrvrWLoadLvl_mrx);
             const DrvrWLoadLvl& rteValue = *static_cast<const DrvrWLoadLvl*>(buffer);
             autosar::DrvrWLoadLvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DrvrWLoadLvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DrvrWLoadLvl (" << ComConf_ComSignal_isDrvrWLoadLvl_mrx << "). Got " << length << ", expected " << sizeof(DrvrWLoadLvl);
+            ALOGE("Wrong buffer size received for DrvrWLoadLvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrWLoadLvl_mrx, length, static_cast<unsigned long>(sizeof(DrvrWLoadLvl)));
         }
     }
     break;
@@ -1472,13 +1472,13 @@
     case ComConf_ComSignal_isDstNotifSts_mrx:
     {
         if (sizeof(DstNotifSts) == length) {
-            log_verbose() << "Received DstNotifSts (" << ComConf_ComSignal_isDstNotifSts_mrx << ")";
+            ALOGV("Received DstNotifSts (%u)", ComConf_ComSignal_isDstNotifSts_mrx);
             const DstNotifSts& rteValue = *static_cast<const DstNotifSts*>(buffer);
             autosar::DstNotifSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DstNotifSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstNotifSts (" << ComConf_ComSignal_isDstNotifSts_mrx << "). Got " << length << ", expected " << sizeof(DstNotifSts);
+            ALOGE("Wrong buffer size received for DstNotifSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstNotifSts_mrx, length, static_cast<unsigned long>(sizeof(DstNotifSts)));
         }
     }
     break;
@@ -1486,7 +1486,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx:
     {
         if (sizeof(DstToEmptyIndcd) == length) {
-            log_verbose() << "Received DstToEmptyIndcd (" << ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx << ")";
+            ALOGV("Received DstToEmptyIndcd (%u)", ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx);
             const DstToEmptyIndcd& rteValue = *static_cast<const DstToEmptyIndcd*>(buffer);
             autosar::DstToEmptyIndcd_info::data_elem_type deValue;
             deValue.DstToEmpty = static_cast<decltype(deValue.DstToEmpty)>(rteValue.DstToEmpty);
@@ -1494,7 +1494,7 @@
 
             DstToEmptyIndcd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstToEmptyIndcd (" << ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx << "). Got " << length << ", expected " << sizeof(DstToEmptyIndcd);
+            ALOGE("Wrong buffer size received for DstToEmptyIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx, length, static_cast<unsigned long>(sizeof(DstToEmptyIndcd)));        
         }
     }
     break;
@@ -1502,13 +1502,13 @@
     case ComConf_ComSignal_isDstToSrv_mrx:
     {
         if (sizeof(DstToSrv) == length) {
-            log_verbose() << "Received DstToSrv (" << ComConf_ComSignal_isDstToSrv_mrx << ")";
+            ALOGV("Received DstToSrv (%u)", ComConf_ComSignal_isDstToSrv_mrx);
             const DstToSrv& rteValue = *static_cast<const DstToSrv*>(buffer);
             autosar::DstToSrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DstToSrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstToSrv (" << ComConf_ComSignal_isDstToSrv_mrx << "). Got " << length << ", expected " << sizeof(DstToSrv);
+            ALOGE("Wrong buffer size received for DstToSrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstToSrv_mrx, length, static_cast<unsigned long>(sizeof(DstToSrv)));
         }
     }
     break;
@@ -1516,13 +1516,13 @@
     case ComConf_ComSignal_isDstTrvld1_mrx:
     {
         if (sizeof(DstTrvld1) == length) {
-            log_verbose() << "Received DstTrvld1 (" << ComConf_ComSignal_isDstTrvld1_mrx << ")";
+            ALOGV("Received DstTrvld1 (%u)", ComConf_ComSignal_isDstTrvld1_mrx);
             const DstTrvld1& rteValue = *static_cast<const DstTrvld1*>(buffer);
             autosar::DstTrvld1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.1 + 0.0;
             DstTrvld1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstTrvld1 (" << ComConf_ComSignal_isDstTrvld1_mrx << "). Got " << length << ", expected " << sizeof(DstTrvld1);
+            ALOGE("Wrong buffer size received for DstTrvld1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstTrvld1_mrx, length, static_cast<unsigned long>(sizeof(DstTrvld1)));
         }
     }
     break;
@@ -1530,13 +1530,13 @@
     case ComConf_ComSignal_isDstTrvld2_mrx:
     {
         if (sizeof(DstTrvld2) == length) {
-            log_verbose() << "Received DstTrvld2 (" << ComConf_ComSignal_isDstTrvld2_mrx << ")";
+            ALOGV("Received DstTrvld2 (%u)", ComConf_ComSignal_isDstTrvld2_mrx);
             const DstTrvld2& rteValue = *static_cast<const DstTrvld2*>(buffer);
             autosar::DstTrvld2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.1 + 0.0;
             DstTrvld2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstTrvld2 (" << ComConf_ComSignal_isDstTrvld2_mrx << "). Got " << length << ", expected " << sizeof(DstTrvld2);
+            ALOGE("Wrong buffer size received for DstTrvld2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstTrvld2_mrx, length, static_cast<unsigned long>(sizeof(DstTrvld2)));
         }
     }
     break;
@@ -1544,13 +1544,13 @@
     case ComConf_ComSignal_isDstTrvldHiResl_mrx:
     {
         if (sizeof(DstTrvldHiResl) == length) {
-            log_verbose() << "Received DstTrvldHiResl (" << ComConf_ComSignal_isDstTrvldHiResl_mrx << ")";
+            ALOGV("Received DstTrvldHiResl (%u)", ComConf_ComSignal_isDstTrvldHiResl_mrx);
             const DstTrvldHiResl& rteValue = *static_cast<const DstTrvldHiResl*>(buffer);
             autosar::DstTrvldHiResl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DstTrvldHiResl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstTrvldHiResl (" << ComConf_ComSignal_isDstTrvldHiResl_mrx << "). Got " << length << ", expected " << sizeof(DstTrvldHiResl);
+            ALOGE("Wrong buffer size received for DstTrvldHiResl (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstTrvldHiResl_mrx, length, static_cast<unsigned long>(sizeof(DstTrvldHiResl)));
         }
     }
     break;
@@ -1558,13 +1558,13 @@
     case ComConf_ComSignal_isBkpOfDstTrvld_mrx:
     {
         if (sizeof(BkpOfDstTrvld) == length) {
-            log_verbose() << "Received BkpOfDstTrvld (" << ComConf_ComSignal_isBkpOfDstTrvld_mrx << ")";
+            ALOGV("Received BkpOfDstTrvld (%u)", ComConf_ComSignal_isBkpOfDstTrvld_mrx);
             const BkpOfDstTrvld& rteValue = *static_cast<const BkpOfDstTrvld*>(buffer);
             autosar::BkpOfDstTrvld_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 1.0 + 0.0;
             BkpOfDstTrvld_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for BkpOfDstTrvld (" << ComConf_ComSignal_isBkpOfDstTrvld_mrx << "). Got " << length << ", expected " << sizeof(BkpOfDstTrvld);
+            ALOGE("Wrong buffer size received for BkpOfDstTrvld (%u). Got %zu , expected %lu", ComConf_ComSignal_isBkpOfDstTrvld_mrx, length, static_cast<unsigned long>(sizeof(BkpOfDstTrvld)));
         }
     }
     break;
@@ -1572,13 +1572,13 @@
     case ComConf_ComSignal_isDstTrvldMst2_mrx:
     {
         if (sizeof(DstTrvldMst2) == length) {
-            log_verbose() << "Received DstTrvldMst2 (" << ComConf_ComSignal_isDstTrvldMst2_mrx << ")";
+            ALOGV("Received DstTrvldMst2 (%u)", ComConf_ComSignal_isDstTrvldMst2_mrx);
             const DstTrvldMst2& rteValue = *static_cast<const DstTrvldMst2*>(buffer);
             autosar::DstTrvldMst2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             DstTrvldMst2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for DstTrvldMst2 (" << ComConf_ComSignal_isDstTrvldMst2_mrx << "). Got " << length << ", expected " << sizeof(DstTrvldMst2);
+            ALOGE("Wrong buffer size received for DstTrvldMst2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstTrvldMst2_mrx, length, static_cast<unsigned long>(sizeof(DstTrvldMst2)));
         }
     }
     break;
@@ -1586,13 +1586,13 @@
     case ComConf_ComSignal_isEmgyAsscSts_mrx:
     {
         if (sizeof(EmgyAsscSts) == length) {
-            log_verbose() << "Received EmgyAsscSts (" << ComConf_ComSignal_isEmgyAsscSts_mrx << ")";
+            ALOGV("Received EmgyAsscSts (%u)", ComConf_ComSignal_isEmgyAsscSts_mrx);
             const EmgyAsscSts& rteValue = *static_cast<const EmgyAsscSts*>(buffer);
             autosar::EmgyAsscSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EmgyAsscSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EmgyAsscSts (" << ComConf_ComSignal_isEmgyAsscSts_mrx << "). Got " << length << ", expected " << sizeof(EmgyAsscSts);
+            ALOGE("Wrong buffer size received for EmgyAsscSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isEmgyAsscSts_mrx, length, static_cast<unsigned long>(sizeof(EmgyAsscSts)));
         }
     }
     break;
@@ -1600,13 +1600,13 @@
     case ComConf_ComSignal_isEmgyVehWarnSts_mrx:
     {
         if (sizeof(EmgyVehWarnSts) == length) {
-            log_verbose() << "Received EmgyVehWarnSts (" << ComConf_ComSignal_isEmgyVehWarnSts_mrx << ")";
+            ALOGV("Received EmgyVehWarnSts (%u)", ComConf_ComSignal_isEmgyVehWarnSts_mrx);
             const EmgyVehWarnSts& rteValue = *static_cast<const EmgyVehWarnSts*>(buffer);
             autosar::EmgyVehWarnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EmgyVehWarnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EmgyVehWarnSts (" << ComConf_ComSignal_isEmgyVehWarnSts_mrx << "). Got " << length << ", expected " << sizeof(EmgyVehWarnSts);
+            ALOGE("Wrong buffer size received for EmgyVehWarnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isEmgyVehWarnSts_mrx, length, static_cast<unsigned long>(sizeof(EmgyVehWarnSts)));
         }
     }
     break;
@@ -1614,13 +1614,13 @@
     case ComConf_ComSignal_isEngCooltIndcnReq_mrx:
     {
         if (sizeof(EngCooltIndcnReq) == length) {
-            log_verbose() << "Received EngCooltIndcnReq (" << ComConf_ComSignal_isEngCooltIndcnReq_mrx << ")";
+            ALOGV("Received EngCooltIndcnReq (%u)", ComConf_ComSignal_isEngCooltIndcnReq_mrx);
             const EngCooltIndcnReq& rteValue = *static_cast<const EngCooltIndcnReq*>(buffer);
             autosar::EngCooltIndcnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EngCooltIndcnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngCooltIndcnReq (" << ComConf_ComSignal_isEngCooltIndcnReq_mrx << "). Got " << length << ", expected " << sizeof(EngCooltIndcnReq);
+            ALOGE("Wrong buffer size received for EngCooltIndcnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngCooltIndcnReq_mrx, length, static_cast<unsigned long>(sizeof(EngCooltIndcnReq)));
         }
     }
     break;
@@ -1628,13 +1628,13 @@
     case ComConf_ComSignal_isEngCooltLvl_mrx:
     {
         if (sizeof(EngCooltLvl) == length) {
-            log_verbose() << "Received EngCooltLvl (" << ComConf_ComSignal_isEngCooltLvl_mrx << ")";
+            ALOGV("Received EngCooltLvl (%u)", ComConf_ComSignal_isEngCooltLvl_mrx);
             const EngCooltLvl& rteValue = *static_cast<const EngCooltLvl*>(buffer);
             autosar::EngCooltLvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EngCooltLvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngCooltLvl (" << ComConf_ComSignal_isEngCooltLvl_mrx << "). Got " << length << ", expected " << sizeof(EngCooltLvl);
+            ALOGE("Wrong buffer size received for EngCooltLvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngCooltLvl_mrx, length, static_cast<unsigned long>(sizeof(EngCooltLvl)));
         }
     }
     break;
@@ -1642,13 +1642,13 @@
     case ComConf_ComSignal_isEngFuCns_mrx:
     {
         if (sizeof(EngFuCns) == length) {
-            log_verbose() << "Received EngFuCns (" << ComConf_ComSignal_isEngFuCns_mrx << ")";
+            ALOGV("Received EngFuCns (%u)", ComConf_ComSignal_isEngFuCns_mrx);
             const EngFuCns& rteValue = *static_cast<const EngFuCns*>(buffer);
             autosar::EngFuCns_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 200.0 + 0.0;
             EngFuCns_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngFuCns (" << ComConf_ComSignal_isEngFuCns_mrx << "). Got " << length << ", expected " << sizeof(EngFuCns);
+            ALOGE("Wrong buffer size received for EngFuCns (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngFuCns_mrx, length, static_cast<unsigned long>(sizeof(EngFuCns)));
         }
     }
     break;
@@ -1656,13 +1656,13 @@
     case ComConf_ComSignal_isEngFuCnsFild_mrx:
     {
         if (sizeof(EngFuCnsFild) == length) {
-            log_verbose() << "Received EngFuCnsFild (" << ComConf_ComSignal_isEngFuCnsFild_mrx << ")";
+            ALOGV("Received EngFuCnsFild (%u)", ComConf_ComSignal_isEngFuCnsFild_mrx);
             const EngFuCnsFild& rteValue = *static_cast<const EngFuCnsFild*>(buffer);
             autosar::EngFuCnsFild_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 200.0 + 0.0;
             EngFuCnsFild_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngFuCnsFild (" << ComConf_ComSignal_isEngFuCnsFild_mrx << "). Got " << length << ", expected " << sizeof(EngFuCnsFild);
+            ALOGE("Wrong buffer size received for EngFuCnsFild (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngFuCnsFild_mrx, length, static_cast<unsigned long>(sizeof(EngFuCnsFild)));
         }
     }
     break;
@@ -1670,13 +1670,13 @@
     case ComConf_ComSignal_isEngHrToSrv_mrx:
     {
         if (sizeof(EngHrToSrv) == length) {
-            log_verbose() << "Received EngHrToSrv (" << ComConf_ComSignal_isEngHrToSrv_mrx << ")";
+            ALOGV("Received EngHrToSrv (%u)", ComConf_ComSignal_isEngHrToSrv_mrx);
             const EngHrToSrv& rteValue = *static_cast<const EngHrToSrv*>(buffer);
             autosar::EngHrToSrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EngHrToSrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngHrToSrv (" << ComConf_ComSignal_isEngHrToSrv_mrx << "). Got " << length << ", expected " << sizeof(EngHrToSrv);
+            ALOGE("Wrong buffer size received for EngHrToSrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngHrToSrv_mrx, length, static_cast<unsigned long>(sizeof(EngHrToSrv)));
         }
     }
     break;
@@ -1684,7 +1684,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igEngNSafe_mrx:
     {
         if (sizeof(EngNSafe) == length) {
-            log_verbose() << "Received EngNSafe (" << ComConf_ComSignalGroup_igEngNSafe_mrx << ")";
+            ALOGV("Received EngNSafe (%u)", ComConf_ComSignalGroup_igEngNSafe_mrx);
             const EngNSafe& rteValue = *static_cast<const EngNSafe*>(buffer);
             autosar::EngNSafe_info::data_elem_type deValue;
             deValue.EngN = static_cast<decltype(deValue.EngN)>( toUnsignedFromRaw<15>(rteValue.EngN) ) * 0.5 + 0.0;
@@ -1694,7 +1694,7 @@
 
             EngNSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngNSafe (" << ComConf_ComSignalGroup_igEngNSafe_mrx << "). Got " << length << ", expected " << sizeof(EngNSafe);
+            ALOGE("Wrong buffer size received for EngNSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEngNSafe_mrx, length, static_cast<unsigned long>(sizeof(EngNSafe)));        
         }
     }
     break;
@@ -1702,13 +1702,13 @@
     case ComConf_ComSignal_isEngOilLvl_mrx:
     {
         if (sizeof(EngOilLvl) == length) {
-            log_verbose() << "Received EngOilLvl (" << ComConf_ComSignal_isEngOilLvl_mrx << ")";
+            ALOGV("Received EngOilLvl (%u)", ComConf_ComSignal_isEngOilLvl_mrx);
             const EngOilLvl& rteValue = *static_cast<const EngOilLvl*>(buffer);
             autosar::EngOilLvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.5 + 0.0;
             EngOilLvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngOilLvl (" << ComConf_ComSignal_isEngOilLvl_mrx << "). Got " << length << ", expected " << sizeof(EngOilLvl);
+            ALOGE("Wrong buffer size received for EngOilLvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngOilLvl_mrx, length, static_cast<unsigned long>(sizeof(EngOilLvl)));
         }
     }
     break;
@@ -1716,13 +1716,13 @@
     case ComConf_ComSignal_isEngOilLvlSts_mrx:
     {
         if (sizeof(EngOilLvlSts) == length) {
-            log_verbose() << "Received EngOilLvlSts (" << ComConf_ComSignal_isEngOilLvlSts_mrx << ")";
+            ALOGV("Received EngOilLvlSts (%u)", ComConf_ComSignal_isEngOilLvlSts_mrx);
             const EngOilLvlSts& rteValue = *static_cast<const EngOilLvlSts*>(buffer);
             autosar::EngOilLvlSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EngOilLvlSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngOilLvlSts (" << ComConf_ComSignal_isEngOilLvlSts_mrx << "). Got " << length << ", expected " << sizeof(EngOilLvlSts);
+            ALOGE("Wrong buffer size received for EngOilLvlSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngOilLvlSts_mrx, length, static_cast<unsigned long>(sizeof(EngOilLvlSts)));
         }
     }
     break;
@@ -1730,13 +1730,13 @@
     case ComConf_ComSignal_isEngOilPWarn_mrx:
     {
         if (sizeof(EngOilPWarn) == length) {
-            log_verbose() << "Received EngOilPWarn (" << ComConf_ComSignal_isEngOilPWarn_mrx << ")";
+            ALOGV("Received EngOilPWarn (%u)", ComConf_ComSignal_isEngOilPWarn_mrx);
             const EngOilPWarn& rteValue = *static_cast<const EngOilPWarn*>(buffer);
             autosar::EngOilPWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             EngOilPWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngOilPWarn (" << ComConf_ComSignal_isEngOilPWarn_mrx << "). Got " << length << ", expected " << sizeof(EngOilPWarn);
+            ALOGE("Wrong buffer size received for EngOilPWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngOilPWarn_mrx, length, static_cast<unsigned long>(sizeof(EngOilPWarn)));
         }
     }
     break;
@@ -1744,13 +1744,13 @@
     case ComConf_ComSignal_isEngSpdDispd_mrx:
     {
         if (sizeof(EngSpdDispd) == length) {
-            log_verbose() << "Received EngSpdDispd (" << ComConf_ComSignal_isEngSpdDispd_mrx << ")";
+            ALOGV("Received EngSpdDispd (%u)", ComConf_ComSignal_isEngSpdDispd_mrx);
             const EngSpdDispd& rteValue = *static_cast<const EngSpdDispd*>(buffer);
             autosar::EngSpdDispd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.5 + 0.0;
             EngSpdDispd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EngSpdDispd (" << ComConf_ComSignal_isEngSpdDispd_mrx << "). Got " << length << ", expected " << sizeof(EngSpdDispd);
+            ALOGE("Wrong buffer size received for EngSpdDispd (%u). Got %zu , expected %lu", ComConf_ComSignal_isEngSpdDispd_mrx, length, static_cast<unsigned long>(sizeof(EngSpdDispd)));
         }
     }
     break;
@@ -1758,7 +1758,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igEpbLampReqGroup_mrx:
     {
         if (sizeof(EpbLampReqGroup) == length) {
-            log_verbose() << "Received EpbLampReqGroup (" << ComConf_ComSignalGroup_igEpbLampReqGroup_mrx << ")";
+            ALOGV("Received EpbLampReqGroup (%u)", ComConf_ComSignalGroup_igEpbLampReqGroup_mrx);
             const EpbLampReqGroup& rteValue = *static_cast<const EpbLampReqGroup*>(buffer);
             autosar::EpbLampReq_info::data_elem_type deValue;
             deValue.EpbLampReq = static_cast<decltype(deValue.EpbLampReq)>(rteValue.EpbLampReq);
@@ -1767,7 +1767,7 @@
 
             EpbLampReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EpbLampReqGroup (" << ComConf_ComSignalGroup_igEpbLampReqGroup_mrx << "). Got " << length << ", expected " << sizeof(EpbLampReqGroup);
+            ALOGE("Wrong buffer size received for EpbLampReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEpbLampReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EpbLampReqGroup)));        
         }
     }
     break;
@@ -1775,7 +1775,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igEscStGroup_mrx:
     {
         if (sizeof(EscStGroup) == length) {
-            log_verbose() << "Received EscStGroup (" << ComConf_ComSignalGroup_igEscStGroup_mrx << ")";
+            ALOGV("Received EscStGroup (%u)", ComConf_ComSignalGroup_igEscStGroup_mrx);
             const EscStGroup& rteValue = *static_cast<const EscStGroup*>(buffer);
             autosar::EscSt_info::data_elem_type deValue;
             deValue.EscSt = static_cast<decltype(deValue.EscSt)>(rteValue.EscSt);
@@ -1784,7 +1784,7 @@
 
             EscSt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EscStGroup (" << ComConf_ComSignalGroup_igEscStGroup_mrx << "). Got " << length << ", expected " << sizeof(EscStGroup);
+            ALOGE("Wrong buffer size received for EscStGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscStGroup_mrx, length, static_cast<unsigned long>(sizeof(EscStGroup)));        
         }
     }
     break;
@@ -1792,7 +1792,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx:
     {
         if (sizeof(EscWarnIndcnReqGroup) == length) {
-            log_verbose() << "Received EscWarnIndcnReqGroup (" << ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx << ")";
+            ALOGV("Received EscWarnIndcnReqGroup (%u)", ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx);
             const EscWarnIndcnReqGroup& rteValue = *static_cast<const EscWarnIndcnReqGroup*>(buffer);
             autosar::EscWarnIndcnReq_info::data_elem_type deValue;
             deValue.EscWarnIndcnReq_ = static_cast<decltype(deValue.EscWarnIndcnReq_)>(rteValue.EscWarnIndcnReq);
@@ -1801,7 +1801,7 @@
 
             EscWarnIndcnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for EscWarnIndcnReqGroup (" << ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx << "). Got " << length << ", expected " << sizeof(EscWarnIndcnReqGroup);
+            ALOGE("Wrong buffer size received for EscWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EscWarnIndcnReqGroup)));        
         }
     }
     break;
@@ -1809,13 +1809,13 @@
     case ComConf_ComSignal_isFRNetworkStatus_mrx:
     {
         if (sizeof(FRNetworkStatus) == length) {
-            log_verbose() << "Received FRNetworkStatus (" << ComConf_ComSignal_isFRNetworkStatus_mrx << ")";
+            ALOGV("Received FRNetworkStatus (%u)", ComConf_ComSignal_isFRNetworkStatus_mrx);
             const FRNetworkStatus& rteValue = *static_cast<const FRNetworkStatus*>(buffer);
             autosar::FRNetworkStatus_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FRNetworkStatus_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FRNetworkStatus (" << ComConf_ComSignal_isFRNetworkStatus_mrx << "). Got " << length << ", expected " << sizeof(FRNetworkStatus);
+            ALOGE("Wrong buffer size received for FRNetworkStatus (%u). Got %zu , expected %lu", ComConf_ComSignal_isFRNetworkStatus_mrx, length, static_cast<unsigned long>(sizeof(FRNetworkStatus)));
         }
     }
     break;
@@ -1823,13 +1823,13 @@
     case ComConf_ComSignal_isFltIndcrTurnLeFrnt_mrx:
     {
         if (sizeof(FltIndcrTurnLeFrnt) == length) {
-            log_verbose() << "Received FltIndcrTurnLeFrnt (" << ComConf_ComSignal_isFltIndcrTurnLeFrnt_mrx << ")";
+            ALOGV("Received FltIndcrTurnLeFrnt (%u)", ComConf_ComSignal_isFltIndcrTurnLeFrnt_mrx);
             const FltIndcrTurnLeFrnt& rteValue = *static_cast<const FltIndcrTurnLeFrnt*>(buffer);
             autosar::FltIndcrTurnLeFrnt_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FltIndcrTurnLeFrnt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FltIndcrTurnLeFrnt (" << ComConf_ComSignal_isFltIndcrTurnLeFrnt_mrx << "). Got " << length << ", expected " << sizeof(FltIndcrTurnLeFrnt);
+            ALOGE("Wrong buffer size received for FltIndcrTurnLeFrnt (%u). Got %zu , expected %lu", ComConf_ComSignal_isFltIndcrTurnLeFrnt_mrx, length, static_cast<unsigned long>(sizeof(FltIndcrTurnLeFrnt)));
         }
     }
     break;
@@ -1837,13 +1837,13 @@
     case ComConf_ComSignal_isFltIndcrTurnLeRe_mrx:
     {
         if (sizeof(FltIndcrTurnLeRe) == length) {
-            log_verbose() << "Received FltIndcrTurnLeRe (" << ComConf_ComSignal_isFltIndcrTurnLeRe_mrx << ")";
+            ALOGV("Received FltIndcrTurnLeRe (%u)", ComConf_ComSignal_isFltIndcrTurnLeRe_mrx);
             const FltIndcrTurnLeRe& rteValue = *static_cast<const FltIndcrTurnLeRe*>(buffer);
             autosar::FltIndcrTurnLeRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FltIndcrTurnLeRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FltIndcrTurnLeRe (" << ComConf_ComSignal_isFltIndcrTurnLeRe_mrx << "). Got " << length << ", expected " << sizeof(FltIndcrTurnLeRe);
+            ALOGE("Wrong buffer size received for FltIndcrTurnLeRe (%u). Got %zu , expected %lu", ComConf_ComSignal_isFltIndcrTurnLeRe_mrx, length, static_cast<unsigned long>(sizeof(FltIndcrTurnLeRe)));
         }
     }
     break;
@@ -1851,13 +1851,13 @@
     case ComConf_ComSignal_isFltIndcrTurnRiFrnt_mrx:
     {
         if (sizeof(FltIndcrTurnRiFrnt) == length) {
-            log_verbose() << "Received FltIndcrTurnRiFrnt (" << ComConf_ComSignal_isFltIndcrTurnRiFrnt_mrx << ")";
+            ALOGV("Received FltIndcrTurnRiFrnt (%u)", ComConf_ComSignal_isFltIndcrTurnRiFrnt_mrx);
             const FltIndcrTurnRiFrnt& rteValue = *static_cast<const FltIndcrTurnRiFrnt*>(buffer);
             autosar::FltIndcrTurnRiFrnt_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FltIndcrTurnRiFrnt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FltIndcrTurnRiFrnt (" << ComConf_ComSignal_isFltIndcrTurnRiFrnt_mrx << "). Got " << length << ", expected " << sizeof(FltIndcrTurnRiFrnt);
+            ALOGE("Wrong buffer size received for FltIndcrTurnRiFrnt (%u). Got %zu , expected %lu", ComConf_ComSignal_isFltIndcrTurnRiFrnt_mrx, length, static_cast<unsigned long>(sizeof(FltIndcrTurnRiFrnt)));
         }
     }
     break;
@@ -1865,13 +1865,13 @@
     case ComConf_ComSignal_isFltIndcrTurnRiRe_mrx:
     {
         if (sizeof(FltIndcrTurnRiRe) == length) {
-            log_verbose() << "Received FltIndcrTurnRiRe (" << ComConf_ComSignal_isFltIndcrTurnRiRe_mrx << ")";
+            ALOGV("Received FltIndcrTurnRiRe (%u)", ComConf_ComSignal_isFltIndcrTurnRiRe_mrx);
             const FltIndcrTurnRiRe& rteValue = *static_cast<const FltIndcrTurnRiRe*>(buffer);
             autosar::FltIndcrTurnRiRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FltIndcrTurnRiRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FltIndcrTurnRiRe (" << ComConf_ComSignal_isFltIndcrTurnRiRe_mrx << "). Got " << length << ", expected " << sizeof(FltIndcrTurnRiRe);
+            ALOGE("Wrong buffer size received for FltIndcrTurnRiRe (%u). Got %zu , expected %lu", ComConf_ComSignal_isFltIndcrTurnRiRe_mrx, length, static_cast<unsigned long>(sizeof(FltIndcrTurnRiRe)));
         }
     }
     break;
@@ -1879,13 +1879,13 @@
     case ComConf_ComSignal_isFltOfLiDaytiRunngRi_mrx:
     {
         if (sizeof(FltOfLiDaytiRunngRi) == length) {
-            log_verbose() << "Received FltOfLiDaytiRunngRi (" << ComConf_ComSignal_isFltOfLiDaytiRunngRi_mrx << ")";
+            ALOGV("Received FltOfLiDaytiRunngRi (%u)", ComConf_ComSignal_isFltOfLiDaytiRunngRi_mrx);
             const FltOfLiDaytiRunngRi& rteValue = *static_cast<const FltOfLiDaytiRunngRi*>(buffer);
             autosar::FltOfLiDaytiRunngRi_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FltOfLiDaytiRunngRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FltOfLiDaytiRunngRi (" << ComConf_ComSignal_isFltOfLiDaytiRunngRi_mrx << "). Got " << length << ", expected " << sizeof(FltOfLiDaytiRunngRi);
+            ALOGE("Wrong buffer size received for FltOfLiDaytiRunngRi (%u). Got %zu , expected %lu", ComConf_ComSignal_isFltOfLiDaytiRunngRi_mrx, length, static_cast<unsigned long>(sizeof(FltOfLiDaytiRunngRi)));
         }
     }
     break;
@@ -1893,13 +1893,13 @@
     case ComConf_ComSignal_isFrntAxleWarn_mrx:
     {
         if (sizeof(FrntAxleWarn) == length) {
-            log_verbose() << "Received FrntAxleWarn (" << ComConf_ComSignal_isFrntAxleWarn_mrx << ")";
+            ALOGV("Received FrntAxleWarn (%u)", ComConf_ComSignal_isFrntAxleWarn_mrx);
             const FrntAxleWarn& rteValue = *static_cast<const FrntAxleWarn*>(buffer);
             autosar::FrntAxleWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FrntAxleWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FrntAxleWarn (" << ComConf_ComSignal_isFrntAxleWarn_mrx << "). Got " << length << ", expected " << sizeof(FrntAxleWarn);
+            ALOGE("Wrong buffer size received for FrntAxleWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isFrntAxleWarn_mrx, length, static_cast<unsigned long>(sizeof(FrntAxleWarn)));
         }
     }
     break;
@@ -1907,7 +1907,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx:
     {
         if (sizeof(FrntWiprLvrReq2) == length) {
-            log_verbose() << "Received FrntWiprLvrReq2 (" << ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx << ")";
+            ALOGV("Received FrntWiprLvrReq2 (%u)", ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx);
             const FrntWiprLvrReq2& rteValue = *static_cast<const FrntWiprLvrReq2*>(buffer);
             autosar::FrntWiprLvrReq2_info::data_elem_type deValue;
             deValue.FrntWiprLvrCmd1_ = static_cast<decltype(deValue.FrntWiprLvrCmd1_)>(rteValue.FrntWiprLvrReq2FrntWiprLvrCmd1);
@@ -1917,7 +1917,7 @@
 
             FrntWiprLvrReq2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FrntWiprLvrReq2 (" << ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx << "). Got " << length << ", expected " << sizeof(FrntWiprLvrReq2);
+            ALOGE("Wrong buffer size received for FrntWiprLvrReq2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx, length, static_cast<unsigned long>(sizeof(FrntWiprLvrReq2)));        
         }
     }
     break;
@@ -1925,13 +1925,13 @@
     case ComConf_ComSignal_isFuHeatrActv_mrx:
     {
         if (sizeof(FuHeatrActv) == length) {
-            log_verbose() << "Received FuHeatrActv (" << ComConf_ComSignal_isFuHeatrActv_mrx << ")";
+            ALOGV("Received FuHeatrActv (%u)", ComConf_ComSignal_isFuHeatrActv_mrx);
             const FuHeatrActv& rteValue = *static_cast<const FuHeatrActv*>(buffer);
             autosar::FuHeatrActv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FuHeatrActv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuHeatrActv (" << ComConf_ComSignal_isFuHeatrActv_mrx << "). Got " << length << ", expected " << sizeof(FuHeatrActv);
+            ALOGE("Wrong buffer size received for FuHeatrActv (%u). Got %zu , expected %lu", ComConf_ComSignal_isFuHeatrActv_mrx, length, static_cast<unsigned long>(sizeof(FuHeatrActv)));
         }
     }
     break;
@@ -1939,13 +1939,13 @@
     case ComConf_ComSignal_isFuHeatrFuCns1_mrx:
     {
         if (sizeof(FuHeatrFuCns1) == length) {
-            log_verbose() << "Received FuHeatrFuCns1 (" << ComConf_ComSignal_isFuHeatrFuCns1_mrx << ")";
+            ALOGV("Received FuHeatrFuCns1 (%u)", ComConf_ComSignal_isFuHeatrFuCns1_mrx);
             const FuHeatrFuCns1& rteValue = *static_cast<const FuHeatrFuCns1*>(buffer);
             autosar::FuHeatrFuCns1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 200.0 + 0.0;
             FuHeatrFuCns1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuHeatrFuCns1 (" << ComConf_ComSignal_isFuHeatrFuCns1_mrx << "). Got " << length << ", expected " << sizeof(FuHeatrFuCns1);
+            ALOGE("Wrong buffer size received for FuHeatrFuCns1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isFuHeatrFuCns1_mrx, length, static_cast<unsigned long>(sizeof(FuHeatrFuCns1)));
         }
     }
     break;
@@ -1953,13 +1953,13 @@
     case ComConf_ComSignal_isFuHeatrFuCnsDurgCyc1_mrx:
     {
         if (sizeof(FuHeatrFuCnsDurgCyc1) == length) {
-            log_verbose() << "Received FuHeatrFuCnsDurgCyc1 (" << ComConf_ComSignal_isFuHeatrFuCnsDurgCyc1_mrx << ")";
+            ALOGV("Received FuHeatrFuCnsDurgCyc1 (%u)", ComConf_ComSignal_isFuHeatrFuCnsDurgCyc1_mrx);
             const FuHeatrFuCnsDurgCyc1& rteValue = *static_cast<const FuHeatrFuCnsDurgCyc1*>(buffer);
             autosar::FuHeatrFuCnsDurgCyc1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.01 + 0.0;
             FuHeatrFuCnsDurgCyc1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuHeatrFuCnsDurgCyc1 (" << ComConf_ComSignal_isFuHeatrFuCnsDurgCyc1_mrx << "). Got " << length << ", expected " << sizeof(FuHeatrFuCnsDurgCyc1);
+            ALOGE("Wrong buffer size received for FuHeatrFuCnsDurgCyc1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isFuHeatrFuCnsDurgCyc1_mrx, length, static_cast<unsigned long>(sizeof(FuHeatrFuCnsDurgCyc1)));
         }
     }
     break;
@@ -1967,7 +1967,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igFuLvlIndcd_mrx:
     {
         if (sizeof(FuLvlIndcd) == length) {
-            log_verbose() << "Received FuLvlIndcd (" << ComConf_ComSignalGroup_igFuLvlIndcd_mrx << ")";
+            ALOGV("Received FuLvlIndcd (%u)", ComConf_ComSignalGroup_igFuLvlIndcd_mrx);
             const FuLvlIndcd& rteValue = *static_cast<const FuLvlIndcd*>(buffer);
             autosar::FuLvlIndcd_info::data_elem_type deValue;
             deValue.FuLvlValFromFuTbl = static_cast<decltype(deValue.FuLvlValFromFuTbl)>( toUnsignedFromRaw<10>(rteValue.FuLvlIndcdVal) ) * 0.2 + 0.0;
@@ -1975,7 +1975,7 @@
 
             FuLvlIndcd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuLvlIndcd (" << ComConf_ComSignalGroup_igFuLvlIndcd_mrx << "). Got " << length << ", expected " << sizeof(FuLvlIndcd);
+            ALOGE("Wrong buffer size received for FuLvlIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFuLvlIndcd_mrx, length, static_cast<unsigned long>(sizeof(FuLvlIndcd)));        
         }
     }
     break;
@@ -1983,13 +1983,13 @@
     case ComConf_ComSignal_isFuLvlLoIndcn_mrx:
     {
         if (sizeof(FuLvlLoIndcn) == length) {
-            log_verbose() << "Received FuLvlLoIndcn (" << ComConf_ComSignal_isFuLvlLoIndcn_mrx << ")";
+            ALOGV("Received FuLvlLoIndcn (%u)", ComConf_ComSignal_isFuLvlLoIndcn_mrx);
             const FuLvlLoIndcn& rteValue = *static_cast<const FuLvlLoIndcn*>(buffer);
             autosar::FuLvlLoIndcn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FuLvlLoIndcn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuLvlLoIndcn (" << ComConf_ComSignal_isFuLvlLoIndcn_mrx << "). Got " << length << ", expected " << sizeof(FuLvlLoIndcn);
+            ALOGE("Wrong buffer size received for FuLvlLoIndcn (%u). Got %zu , expected %lu", ComConf_ComSignal_isFuLvlLoIndcn_mrx, length, static_cast<unsigned long>(sizeof(FuLvlLoIndcn)));
         }
     }
     break;
@@ -1997,13 +1997,13 @@
     case ComConf_ComSignal_isFuLvlLoWarn_mrx:
     {
         if (sizeof(FuLvlLoWarn) == length) {
-            log_verbose() << "Received FuLvlLoWarn (" << ComConf_ComSignal_isFuLvlLoWarn_mrx << ")";
+            ALOGV("Received FuLvlLoWarn (%u)", ComConf_ComSignal_isFuLvlLoWarn_mrx);
             const FuLvlLoWarn& rteValue = *static_cast<const FuLvlLoWarn*>(buffer);
             autosar::FuLvlLoWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             FuLvlLoWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for FuLvlLoWarn (" << ComConf_ComSignal_isFuLvlLoWarn_mrx << "). Got " << length << ", expected " << sizeof(FuLvlLoWarn);
+            ALOGE("Wrong buffer size received for FuLvlLoWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isFuLvlLoWarn_mrx, length, static_cast<unsigned long>(sizeof(FuLvlLoWarn)));
         }
     }
     break;
@@ -2011,7 +2011,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igGearIndcnRec_mrx:
     {
         if (sizeof(GearIndcnRec) == length) {
-            log_verbose() << "Received GearIndcnRec (" << ComConf_ComSignalGroup_igGearIndcnRec_mrx << ")";
+            ALOGV("Received GearIndcnRec (%u)", ComConf_ComSignalGroup_igGearIndcnRec_mrx);
             const GearIndcnRec& rteValue = *static_cast<const GearIndcnRec*>(buffer);
             autosar::GearIndcnRec_info::data_elem_type deValue;
             deValue.GearIndcn = static_cast<decltype(deValue.GearIndcn)>(rteValue.GearIndcn);
@@ -2020,7 +2020,7 @@
 
             GearIndcnRec_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for GearIndcnRec (" << ComConf_ComSignalGroup_igGearIndcnRec_mrx << "). Got " << length << ", expected " << sizeof(GearIndcnRec);
+            ALOGE("Wrong buffer size received for GearIndcnRec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igGearIndcnRec_mrx, length, static_cast<unsigned long>(sizeof(GearIndcnRec)));        
         }
     }
     break;
@@ -2028,13 +2028,13 @@
     case ComConf_ComSignal_isHmiCenForDrvrHmi_mrx:
     {
         if (sizeof(HmiCenForDrvrHmi) == length) {
-            log_verbose() << "Received HmiCenForDrvrHmi (" << ComConf_ComSignal_isHmiCenForDrvrHmi_mrx << ")";
+            ALOGV("Received HmiCenForDrvrHmi (%u)", ComConf_ComSignal_isHmiCenForDrvrHmi_mrx);
             const HmiCenForDrvrHmi& rteValue = *static_cast<const HmiCenForDrvrHmi*>(buffer);
             autosar::HmiCenForDrvrHmi_info::data_elem_type deValue;
             for (unsigned int i=0; i<deValue.size(); ++i) deValue[i] = static_cast<autosar::HmiCenForDrvrHmi_info::data_elem_type::value_type>( rteValue[i] );
             HmiCenForDrvrHmi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HmiCenForDrvrHmi (" << ComConf_ComSignal_isHmiCenForDrvrHmi_mrx << "). Got " << length << ", expected " << sizeof(HmiCenForDrvrHmi);
+            ALOGE("Wrong buffer size received for HmiCenForDrvrHmi (%u). Got %zu , expected %lu", ComConf_ComSignal_isHmiCenForDrvrHmi_mrx, length, static_cast<unsigned long>(sizeof(HmiCenForDrvrHmi)));
         }
     }
     break;
@@ -2042,7 +2042,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igHMIDefrstSts_mrx:
     {
         if (sizeof(HMIDefrstSts) == length) {
-            log_verbose() << "Received HMIDefrstSts (" << ComConf_ComSignalGroup_igHMIDefrstSts_mrx << ")";
+            ALOGV("Received HMIDefrstSts (%u)", ComConf_ComSignalGroup_igHMIDefrstSts_mrx);
             const HMIDefrstSts& rteValue = *static_cast<const HMIDefrstSts*>(buffer);
             autosar::HmiDefrstElecSts_info::data_elem_type deValue;
             deValue.Frnt = static_cast<decltype(deValue.Frnt)>(rteValue.HmiDefrstFrntSts);
@@ -2051,7 +2051,7 @@
 
             HmiDefrstElecSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HMIDefrstSts (" << ComConf_ComSignalGroup_igHMIDefrstSts_mrx << "). Got " << length << ", expected " << sizeof(HMIDefrstSts);
+            ALOGE("Wrong buffer size received for HMIDefrstSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHMIDefrstSts_mrx, length, static_cast<unsigned long>(sizeof(HMIDefrstSts)));        
         }
     }
     break;
@@ -2059,13 +2059,13 @@
     case ComConf_ComSignal_isHoodSts_mrx:
     {
         if (sizeof(HoodSts) == length) {
-            log_verbose() << "Received HoodSts (" << ComConf_ComSignal_isHoodSts_mrx << ")";
+            ALOGV("Received HoodSts (%u)", ComConf_ComSignal_isHoodSts_mrx);
             const HoodSts& rteValue = *static_cast<const HoodSts*>(buffer);
             autosar::HoodSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             HoodSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HoodSts (" << ComConf_ComSignal_isHoodSts_mrx << "). Got " << length << ", expected " << sizeof(HoodSts);
+            ALOGE("Wrong buffer size received for HoodSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isHoodSts_mrx, length, static_cast<unsigned long>(sizeof(HoodSts)));
         }
     }
     break;
@@ -2073,13 +2073,13 @@
     case ComConf_ComSignal_isHudActvSts_mrx:
     {
         if (sizeof(HudActvSts) == length) {
-            log_verbose() << "Received HudActvSts (" << ComConf_ComSignal_isHudActvSts_mrx << ")";
+            ALOGV("Received HudActvSts (%u)", ComConf_ComSignal_isHudActvSts_mrx);
             const HudActvSts& rteValue = *static_cast<const HudActvSts*>(buffer);
             autosar::HudActvSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             HudActvSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HudActvSts (" << ComConf_ComSignal_isHudActvSts_mrx << "). Got " << length << ", expected " << sizeof(HudActvSts);
+            ALOGE("Wrong buffer size received for HudActvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isHudActvSts_mrx, length, static_cast<unsigned long>(sizeof(HudActvSts)));
         }
     }
     break;
@@ -2087,7 +2087,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igHudDiagc_mrx:
     {
         if (sizeof(HudDiagc) == length) {
-            log_verbose() << "Received HudDiagc (" << ComConf_ComSignalGroup_igHudDiagc_mrx << ")";
+            ALOGV("Received HudDiagc (%u)", ComConf_ComSignalGroup_igHudDiagc_mrx);
             const HudDiagc& rteValue = *static_cast<const HudDiagc*>(buffer);
             autosar::HudDiagc_info::data_elem_type deValue;
             deValue.HudCircShoSts = static_cast<decltype(deValue.HudCircShoSts)>(rteValue.HudDiagcHudCircShoSts);
@@ -2098,7 +2098,7 @@
 
             HudDiagc_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HudDiagc (" << ComConf_ComSignalGroup_igHudDiagc_mrx << "). Got " << length << ", expected " << sizeof(HudDiagc);
+            ALOGE("Wrong buffer size received for HudDiagc (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHudDiagc_mrx, length, static_cast<unsigned long>(sizeof(HudDiagc)));        
         }
     }
     break;
@@ -2106,13 +2106,13 @@
     case ComConf_ComSignal_isHudSts_mrx:
     {
         if (sizeof(HudSts) == length) {
-            log_verbose() << "Received HudSts (" << ComConf_ComSignal_isHudSts_mrx << ")";
+            ALOGV("Received HudSts (%u)", ComConf_ComSignal_isHudSts_mrx);
             const HudSts& rteValue = *static_cast<const HudSts*>(buffer);
             autosar::HudSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             HudSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HudSts (" << ComConf_ComSignal_isHudSts_mrx << "). Got " << length << ", expected " << sizeof(HudSts);
+            ALOGE("Wrong buffer size received for HudSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isHudSts_mrx, length, static_cast<unsigned long>(sizeof(HudSts)));
         }
     }
     break;
@@ -2120,13 +2120,13 @@
     case ComConf_ComSignal_isHvacAirMFlowEstimd_mrx:
     {
         if (sizeof(HvacAirMFlowEstimd) == length) {
-            log_verbose() << "Received HvacAirMFlowEstimd (" << ComConf_ComSignal_isHvacAirMFlowEstimd_mrx << ")";
+            ALOGV("Received HvacAirMFlowEstimd (%u)", ComConf_ComSignal_isHvacAirMFlowEstimd_mrx);
             const HvacAirMFlowEstimd& rteValue = *static_cast<const HvacAirMFlowEstimd*>(buffer);
             autosar::HvacAirMFlowEstimd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 1.0 + 0.0;
             HvacAirMFlowEstimd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HvacAirMFlowEstimd (" << ComConf_ComSignal_isHvacAirMFlowEstimd_mrx << "). Got " << length << ", expected " << sizeof(HvacAirMFlowEstimd);
+            ALOGE("Wrong buffer size received for HvacAirMFlowEstimd (%u). Got %zu , expected %lu", ComConf_ComSignal_isHvacAirMFlowEstimd_mrx, length, static_cast<unsigned long>(sizeof(HvacAirMFlowEstimd)));
         }
     }
     break;
@@ -2134,13 +2134,13 @@
     case ComConf_ComSignal_isHznRstExtd_mrx:
     {
         if (sizeof(HznRstExtd) == length) {
-            log_verbose() << "Received HznRstExtd (" << ComConf_ComSignal_isHznRstExtd_mrx << ")";
+            ALOGV("Received HznRstExtd (%u)", ComConf_ComSignal_isHznRstExtd_mrx);
             const HznRstExtd& rteValue = *static_cast<const HznRstExtd*>(buffer);
             autosar::HznRstExtd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             HznRstExtd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HznRstExtd (" << ComConf_ComSignal_isHznRstExtd_mrx << "). Got " << length << ", expected " << sizeof(HznRstExtd);
+            ALOGE("Wrong buffer size received for HznRstExtd (%u). Got %zu , expected %lu", ComConf_ComSignal_isHznRstExtd_mrx, length, static_cast<unsigned long>(sizeof(HznRstExtd)));
         }
     }
     break;
@@ -2148,13 +2148,13 @@
     case ComConf_ComSignal_isHzrdLiWarnSts_mrx:
     {
         if (sizeof(HzrdLiWarnSts) == length) {
-            log_verbose() << "Received HzrdLiWarnSts (" << ComConf_ComSignal_isHzrdLiWarnSts_mrx << ")";
+            ALOGV("Received HzrdLiWarnSts (%u)", ComConf_ComSignal_isHzrdLiWarnSts_mrx);
             const HzrdLiWarnSts& rteValue = *static_cast<const HzrdLiWarnSts*>(buffer);
             autosar::HzrdLiWarnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             HzrdLiWarnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for HzrdLiWarnSts (" << ComConf_ComSignal_isHzrdLiWarnSts_mrx << "). Got " << length << ", expected " << sizeof(HzrdLiWarnSts);
+            ALOGE("Wrong buffer size received for HzrdLiWarnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isHzrdLiWarnSts_mrx, length, static_cast<unsigned long>(sizeof(HzrdLiWarnSts)));
         }
     }
     break;
@@ -2162,13 +2162,13 @@
     case ComConf_ComSignal_isIndcnOfParkAssiSts_mrx:
     {
         if (sizeof(IndcnOfParkAssiSts) == length) {
-            log_verbose() << "Received IndcnOfParkAssiSts (" << ComConf_ComSignal_isIndcnOfParkAssiSts_mrx << ")";
+            ALOGV("Received IndcnOfParkAssiSts (%u)", ComConf_ComSignal_isIndcnOfParkAssiSts_mrx);
             const IndcnOfParkAssiSts& rteValue = *static_cast<const IndcnOfParkAssiSts*>(buffer);
             autosar::IndcnOfParkAssiSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IndcnOfParkAssiSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IndcnOfParkAssiSts (" << ComConf_ComSignal_isIndcnOfParkAssiSts_mrx << "). Got " << length << ", expected " << sizeof(IndcnOfParkAssiSts);
+            ALOGE("Wrong buffer size received for IndcnOfParkAssiSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isIndcnOfParkAssiSts_mrx, length, static_cast<unsigned long>(sizeof(IndcnOfParkAssiSts)));
         }
     }
     break;
@@ -2176,13 +2176,13 @@
     case ComConf_ComSignal_isIndcnOfPrkgAutSts_mrx:
     {
         if (sizeof(IndcnOfPrkgAutSts) == length) {
-            log_verbose() << "Received IndcnOfPrkgAutSts (" << ComConf_ComSignal_isIndcnOfPrkgAutSts_mrx << ")";
+            ALOGV("Received IndcnOfPrkgAutSts (%u)", ComConf_ComSignal_isIndcnOfPrkgAutSts_mrx);
             const IndcnOfPrkgAutSts& rteValue = *static_cast<const IndcnOfPrkgAutSts*>(buffer);
             autosar::IndcnOfPrkgAutSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IndcnOfPrkgAutSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IndcnOfPrkgAutSts (" << ComConf_ComSignal_isIndcnOfPrkgAutSts_mrx << "). Got " << length << ", expected " << sizeof(IndcnOfPrkgAutSts);
+            ALOGE("Wrong buffer size received for IndcnOfPrkgAutSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isIndcnOfPrkgAutSts_mrx, length, static_cast<unsigned long>(sizeof(IndcnOfPrkgAutSts)));
         }
     }
     break;
@@ -2190,13 +2190,13 @@
     case ComConf_ComSignal_isIndcrDisp1WdSts_mrx:
     {
         if (sizeof(IndcrDisp1WdSts) == length) {
-            log_verbose() << "Received IndcrDisp1WdSts (" << ComConf_ComSignal_isIndcrDisp1WdSts_mrx << ")";
+            ALOGV("Received IndcrDisp1WdSts (%u)", ComConf_ComSignal_isIndcrDisp1WdSts_mrx);
             const IndcrDisp1WdSts& rteValue = *static_cast<const IndcrDisp1WdSts*>(buffer);
             autosar::IndcrDisp1WdSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IndcrDisp1WdSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IndcrDisp1WdSts (" << ComConf_ComSignal_isIndcrDisp1WdSts_mrx << "). Got " << length << ", expected " << sizeof(IndcrDisp1WdSts);
+            ALOGE("Wrong buffer size received for IndcrDisp1WdSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isIndcrDisp1WdSts_mrx, length, static_cast<unsigned long>(sizeof(IndcrDisp1WdSts)));
         }
     }
     break;
@@ -2204,13 +2204,13 @@
     case ComConf_ComSignal_isIndcrTurnSts1WdSts_mrx:
     {
         if (sizeof(IndcrTurnSts1WdSts) == length) {
-            log_verbose() << "Received IndcrTurnSts1WdSts (" << ComConf_ComSignal_isIndcrTurnSts1WdSts_mrx << ")";
+            ALOGV("Received IndcrTurnSts1WdSts (%u)", ComConf_ComSignal_isIndcrTurnSts1WdSts_mrx);
             const IndcrTurnSts1WdSts& rteValue = *static_cast<const IndcrTurnSts1WdSts*>(buffer);
             autosar::IndcrTurnSts1WdSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IndcrTurnSts1WdSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IndcrTurnSts1WdSts (" << ComConf_ComSignal_isIndcrTurnSts1WdSts_mrx << "). Got " << length << ", expected " << sizeof(IndcrTurnSts1WdSts);
+            ALOGE("Wrong buffer size received for IndcrTurnSts1WdSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isIndcrTurnSts1WdSts_mrx, length, static_cast<unsigned long>(sizeof(IndcrTurnSts1WdSts)));
         }
     }
     break;
@@ -2218,13 +2218,13 @@
     case ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx:
     {
         if (sizeof(IniValSigCfgIDBackboneFR) == length) {
-            log_verbose() << "Received IniValSigCfgIDBackboneFR (" << ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx << ")";
+            ALOGV("Received IniValSigCfgIDBackboneFR (%u)", ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx);
             const IniValSigCfgIDBackboneFR& rteValue = *static_cast<const IniValSigCfgIDBackboneFR*>(buffer);
             autosar::IniValSigCfgIDBackboneFR_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IniValSigCfgIDBackboneFR_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IniValSigCfgIDBackboneFR (" << ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx << "). Got " << length << ", expected " << sizeof(IniValSigCfgIDBackboneFR);
+            ALOGE("Wrong buffer size received for IniValSigCfgIDBackboneFR (%u). Got %zu , expected %lu", ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx, length, static_cast<unsigned long>(sizeof(IniValSigCfgIDBackboneFR)));
         }
     }
     break;
@@ -2232,13 +2232,13 @@
     case ComConf_ComSignal_isIntrBriSts_mrx:
     {
         if (sizeof(IntrBriSts) == length) {
-            log_verbose() << "Received IntrBriSts (" << ComConf_ComSignal_isIntrBriSts_mrx << ")";
+            ALOGV("Received IntrBriSts (%u)", ComConf_ComSignal_isIntrBriSts_mrx);
             const IntrBriSts& rteValue = *static_cast<const IntrBriSts*>(buffer);
             autosar::IntrBriSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             IntrBriSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for IntrBriSts (" << ComConf_ComSignal_isIntrBriSts_mrx << "). Got " << length << ", expected " << sizeof(IntrBriSts);
+            ALOGE("Wrong buffer size received for IntrBriSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isIntrBriSts_mrx, length, static_cast<unsigned long>(sizeof(IntrBriSts)));
         }
     }
     break;
@@ -2246,13 +2246,13 @@
     case ComConf_ComSignal_isKeyLostWarnIndcn_mrx:
     {
         if (sizeof(KeyLostWarnIndcn) == length) {
-            log_verbose() << "Received KeyLostWarnIndcn (" << ComConf_ComSignal_isKeyLostWarnIndcn_mrx << ")";
+            ALOGV("Received KeyLostWarnIndcn (%u)", ComConf_ComSignal_isKeyLostWarnIndcn_mrx);
             const KeyLostWarnIndcn& rteValue = *static_cast<const KeyLostWarnIndcn*>(buffer);
             autosar::KeyLostWarnIndcn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             KeyLostWarnIndcn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for KeyLostWarnIndcn (" << ComConf_ComSignal_isKeyLostWarnIndcn_mrx << "). Got " << length << ", expected " << sizeof(KeyLostWarnIndcn);
+            ALOGE("Wrong buffer size received for KeyLostWarnIndcn (%u). Got %zu , expected %lu", ComConf_ComSignal_isKeyLostWarnIndcn_mrx, length, static_cast<unsigned long>(sizeof(KeyLostWarnIndcn)));
         }
     }
     break;
@@ -2260,7 +2260,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx:
     {
         if (sizeof(KeyReadStsToProfCtrl) == length) {
-            log_verbose() << "Received KeyReadStsToProfCtrl (" << ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx << ")";
+            ALOGV("Received KeyReadStsToProfCtrl (%u)", ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx);
             const KeyReadStsToProfCtrl& rteValue = *static_cast<const KeyReadStsToProfCtrl*>(buffer);
             autosar::KeyReadStsToProfCtrl_info::data_elem_type deValue;
             deValue.Boolean = static_cast<decltype(deValue.Boolean)>(rteValue.KeyReadStsToProfCtrlBoolean);
@@ -2268,7 +2268,7 @@
 
             KeyReadStsToProfCtrl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for KeyReadStsToProfCtrl (" << ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx << "). Got " << length << ", expected " << sizeof(KeyReadStsToProfCtrl);
+            ALOGE("Wrong buffer size received for KeyReadStsToProfCtrl (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx, length, static_cast<unsigned long>(sizeof(KeyReadStsToProfCtrl)));        
         }
     }
     break;
@@ -2276,13 +2276,13 @@
     case ComConf_ComSignal_isKeyRmnIndcn_mrx:
     {
         if (sizeof(KeyRmnIndcn) == length) {
-            log_verbose() << "Received KeyRmnIndcn (" << ComConf_ComSignal_isKeyRmnIndcn_mrx << ")";
+            ALOGV("Received KeyRmnIndcn (%u)", ComConf_ComSignal_isKeyRmnIndcn_mrx);
             const KeyRmnIndcn& rteValue = *static_cast<const KeyRmnIndcn*>(buffer);
             autosar::KeyRmnIndcn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             KeyRmnIndcn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for KeyRmnIndcn (" << ComConf_ComSignal_isKeyRmnIndcn_mrx << "). Got " << length << ", expected " << sizeof(KeyRmnIndcn);
+            ALOGE("Wrong buffer size received for KeyRmnIndcn (%u). Got %zu , expected %lu", ComConf_ComSignal_isKeyRmnIndcn_mrx, length, static_cast<unsigned long>(sizeof(KeyRmnIndcn)));
         }
     }
     break;
@@ -2290,13 +2290,13 @@
     case ComConf_ComSignal_isKeySpdWarn_mrx:
     {
         if (sizeof(KeySpdWarn) == length) {
-            log_verbose() << "Received KeySpdWarn (" << ComConf_ComSignal_isKeySpdWarn_mrx << ")";
+            ALOGV("Received KeySpdWarn (%u)", ComConf_ComSignal_isKeySpdWarn_mrx);
             const KeySpdWarn& rteValue = *static_cast<const KeySpdWarn*>(buffer);
             autosar::KeySpdWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             KeySpdWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for KeySpdWarn (" << ComConf_ComSignal_isKeySpdWarn_mrx << "). Got " << length << ", expected " << sizeof(KeySpdWarn);
+            ALOGE("Wrong buffer size received for KeySpdWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isKeySpdWarn_mrx, length, static_cast<unsigned long>(sizeof(KeySpdWarn)));
         }
     }
     break;
@@ -2304,13 +2304,13 @@
     case ComConf_ComSignal_isLaneChgWarnSts_mrx:
     {
         if (sizeof(LaneChgWarnSts) == length) {
-            log_verbose() << "Received LaneChgWarnSts (" << ComConf_ComSignal_isLaneChgWarnSts_mrx << ")";
+            ALOGV("Received LaneChgWarnSts (%u)", ComConf_ComSignal_isLaneChgWarnSts_mrx);
             const LaneChgWarnSts& rteValue = *static_cast<const LaneChgWarnSts*>(buffer);
             autosar::LaneChgWarnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LaneChgWarnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LaneChgWarnSts (" << ComConf_ComSignal_isLaneChgWarnSts_mrx << "). Got " << length << ", expected " << sizeof(LaneChgWarnSts);
+            ALOGE("Wrong buffer size received for LaneChgWarnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isLaneChgWarnSts_mrx, length, static_cast<unsigned long>(sizeof(LaneChgWarnSts)));
         }
     }
     break;
@@ -2318,13 +2318,13 @@
     case ComConf_ComSignal_isLaneDetnStsForAutDrv_mrx:
     {
         if (sizeof(LaneDetnStsForAutDrv) == length) {
-            log_verbose() << "Received LaneDetnStsForAutDrv (" << ComConf_ComSignal_isLaneDetnStsForAutDrv_mrx << ")";
+            ALOGV("Received LaneDetnStsForAutDrv (%u)", ComConf_ComSignal_isLaneDetnStsForAutDrv_mrx);
             const LaneDetnStsForAutDrv& rteValue = *static_cast<const LaneDetnStsForAutDrv*>(buffer);
             autosar::LaneDetnStsForAutDrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LaneDetnStsForAutDrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LaneDetnStsForAutDrv (" << ComConf_ComSignal_isLaneDetnStsForAutDrv_mrx << "). Got " << length << ", expected " << sizeof(LaneDetnStsForAutDrv);
+            ALOGE("Wrong buffer size received for LaneDetnStsForAutDrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isLaneDetnStsForAutDrv_mrx, length, static_cast<unsigned long>(sizeof(LaneDetnStsForAutDrv)));
         }
     }
     break;
@@ -2332,13 +2332,13 @@
     case ComConf_ComSignal_isLaneDetnStsForLaneKeepAid_mrx:
     {
         if (sizeof(LaneDetnStsForLaneKeepAid) == length) {
-            log_verbose() << "Received LaneDetnStsForLaneKeepAid (" << ComConf_ComSignal_isLaneDetnStsForLaneKeepAid_mrx << ")";
+            ALOGV("Received LaneDetnStsForLaneKeepAid (%u)", ComConf_ComSignal_isLaneDetnStsForLaneKeepAid_mrx);
             const LaneDetnStsForLaneKeepAid& rteValue = *static_cast<const LaneDetnStsForLaneKeepAid*>(buffer);
             autosar::LaneDetnStsForLaneKeepAid_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LaneDetnStsForLaneKeepAid_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LaneDetnStsForLaneKeepAid (" << ComConf_ComSignal_isLaneDetnStsForLaneKeepAid_mrx << "). Got " << length << ", expected " << sizeof(LaneDetnStsForLaneKeepAid);
+            ALOGE("Wrong buffer size received for LaneDetnStsForLaneKeepAid (%u). Got %zu , expected %lu", ComConf_ComSignal_isLaneDetnStsForLaneKeepAid_mrx, length, static_cast<unsigned long>(sizeof(LaneDetnStsForLaneKeepAid)));
         }
     }
     break;
@@ -2346,13 +2346,13 @@
     case ComConf_ComSignal_isLaneKeepAidSts_mrx:
     {
         if (sizeof(LaneKeepAidSts) == length) {
-            log_verbose() << "Received LaneKeepAidSts (" << ComConf_ComSignal_isLaneKeepAidSts_mrx << ")";
+            ALOGV("Received LaneKeepAidSts (%u)", ComConf_ComSignal_isLaneKeepAidSts_mrx);
             const LaneKeepAidSts& rteValue = *static_cast<const LaneKeepAidSts*>(buffer);
             autosar::LaneKeepAidSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LaneKeepAidSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LaneKeepAidSts (" << ComConf_ComSignal_isLaneKeepAidSts_mrx << "). Got " << length << ", expected " << sizeof(LaneKeepAidSts);
+            ALOGE("Wrong buffer size received for LaneKeepAidSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isLaneKeepAidSts_mrx, length, static_cast<unsigned long>(sizeof(LaneKeepAidSts)));
         }
     }
     break;
@@ -2360,13 +2360,13 @@
     case ComConf_ComSignal_isLatMovmtWarn_mrx:
     {
         if (sizeof(LatMovmtWarn) == length) {
-            log_verbose() << "Received LatMovmtWarn (" << ComConf_ComSignal_isLatMovmtWarn_mrx << ")";
+            ALOGV("Received LatMovmtWarn (%u)", ComConf_ComSignal_isLatMovmtWarn_mrx);
             const LatMovmtWarn& rteValue = *static_cast<const LatMovmtWarn*>(buffer);
             autosar::LatMovmtWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LatMovmtWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LatMovmtWarn (" << ComConf_ComSignal_isLatMovmtWarn_mrx << "). Got " << length << ", expected " << sizeof(LatMovmtWarn);
+            ALOGE("Wrong buffer size received for LatMovmtWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isLatMovmtWarn_mrx, length, static_cast<unsigned long>(sizeof(LatMovmtWarn)));
         }
     }
     break;
@@ -2374,13 +2374,13 @@
     case ComConf_ComSignal_isLcmaOn1_mrx:
     {
         if (sizeof(LcmaOn1) == length) {
-            log_verbose() << "Received LcmaOn1 (" << ComConf_ComSignal_isLcmaOn1_mrx << ")";
+            ALOGV("Received LcmaOn1 (%u)", ComConf_ComSignal_isLcmaOn1_mrx);
             const LcmaOn1& rteValue = *static_cast<const LcmaOn1*>(buffer);
             autosar::LcmaOn1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LcmaOn1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LcmaOn1 (" << ComConf_ComSignal_isLcmaOn1_mrx << "). Got " << length << ", expected " << sizeof(LcmaOn1);
+            ALOGE("Wrong buffer size received for LcmaOn1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isLcmaOn1_mrx, length, static_cast<unsigned long>(sizeof(LcmaOn1)));
         }
     }
     break;
@@ -2388,13 +2388,13 @@
     case ComConf_ComSignal_isLiDrvrFltIndcrTurn_mrx:
     {
         if (sizeof(LiDrvrFltIndcrTurn) == length) {
-            log_verbose() << "Received LiDrvrFltIndcrTurn (" << ComConf_ComSignal_isLiDrvrFltIndcrTurn_mrx << ")";
+            ALOGV("Received LiDrvrFltIndcrTurn (%u)", ComConf_ComSignal_isLiDrvrFltIndcrTurn_mrx);
             const LiDrvrFltIndcrTurn& rteValue = *static_cast<const LiDrvrFltIndcrTurn*>(buffer);
             autosar::LiDrvrFltIndcrTurn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LiDrvrFltIndcrTurn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LiDrvrFltIndcrTurn (" << ComConf_ComSignal_isLiDrvrFltIndcrTurn_mrx << "). Got " << length << ", expected " << sizeof(LiDrvrFltIndcrTurn);
+            ALOGE("Wrong buffer size received for LiDrvrFltIndcrTurn (%u). Got %zu , expected %lu", ComConf_ComSignal_isLiDrvrFltIndcrTurn_mrx, length, static_cast<unsigned long>(sizeof(LiDrvrFltIndcrTurn)));
         }
     }
     break;
@@ -2402,13 +2402,13 @@
     case ComConf_ComSignal_isLiLvrSwt1_mrx:
     {
         if (sizeof(LiLvrSwt1) == length) {
-            log_verbose() << "Received LiLvrSwt1 (" << ComConf_ComSignal_isLiLvrSwt1_mrx << ")";
+            ALOGV("Received LiLvrSwt1 (%u)", ComConf_ComSignal_isLiLvrSwt1_mrx);
             const LiLvrSwt1& rteValue = *static_cast<const LiLvrSwt1*>(buffer);
             autosar::LiLvrSwt1Req_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LiLvrSwt1Req_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LiLvrSwt1 (" << ComConf_ComSignal_isLiLvrSwt1_mrx << "). Got " << length << ", expected " << sizeof(LiLvrSwt1);
+            ALOGE("Wrong buffer size received for LiLvrSwt1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isLiLvrSwt1_mrx, length, static_cast<unsigned long>(sizeof(LiLvrSwt1)));
         }
     }
     break;
@@ -2416,13 +2416,13 @@
     case ComConf_ComSignal_isLiPassFltIndcrTurn_mrx:
     {
         if (sizeof(LiPassFltIndcrTurn) == length) {
-            log_verbose() << "Received LiPassFltIndcrTurn (" << ComConf_ComSignal_isLiPassFltIndcrTurn_mrx << ")";
+            ALOGV("Received LiPassFltIndcrTurn (%u)", ComConf_ComSignal_isLiPassFltIndcrTurn_mrx);
             const LiPassFltIndcrTurn& rteValue = *static_cast<const LiPassFltIndcrTurn*>(buffer);
             autosar::LiPassFltIndcrTurn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LiPassFltIndcrTurn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LiPassFltIndcrTurn (" << ComConf_ComSignal_isLiPassFltIndcrTurn_mrx << "). Got " << length << ", expected " << sizeof(LiPassFltIndcrTurn);
+            ALOGE("Wrong buffer size received for LiPassFltIndcrTurn (%u). Got %zu , expected %lu", ComConf_ComSignal_isLiPassFltIndcrTurn_mrx, length, static_cast<unsigned long>(sizeof(LiPassFltIndcrTurn)));
         }
     }
     break;
@@ -2430,7 +2430,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igLockgCenSts_mrx:
     {
         if (sizeof(LockgCenSts) == length) {
-            log_verbose() << "Received LockgCenSts (" << ComConf_ComSignalGroup_igLockgCenSts_mrx << ")";
+            ALOGV("Received LockgCenSts (%u)", ComConf_ComSignalGroup_igLockgCenSts_mrx);
             const LockgCenSts& rteValue = *static_cast<const LockgCenSts*>(buffer);
             autosar::LockgCenSts_info::data_elem_type deValue;
             deValue.LockSt = static_cast<decltype(deValue.LockSt)>(rteValue.LockgCenStsLockSt);
@@ -2439,7 +2439,7 @@
 
             LockgCenSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LockgCenSts (" << ComConf_ComSignalGroup_igLockgCenSts_mrx << "). Got " << length << ", expected " << sizeof(LockgCenSts);
+            ALOGE("Wrong buffer size received for LockgCenSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igLockgCenSts_mrx, length, static_cast<unsigned long>(sizeof(LockgCenSts)));        
         }
     }
     break;
@@ -2447,13 +2447,13 @@
     case ComConf_ComSignal_isLockgCenStsForUsrFb_mrx:
     {
         if (sizeof(LockgCenStsForUsrFb) == length) {
-            log_verbose() << "Received LockgCenStsForUsrFb (" << ComConf_ComSignal_isLockgCenStsForUsrFb_mrx << ")";
+            ALOGV("Received LockgCenStsForUsrFb (%u)", ComConf_ComSignal_isLockgCenStsForUsrFb_mrx);
             const LockgCenStsForUsrFb& rteValue = *static_cast<const LockgCenStsForUsrFb*>(buffer);
             autosar::LockgCenStsForUsrFb_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LockgCenStsForUsrFb_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LockgCenStsForUsrFb (" << ComConf_ComSignal_isLockgCenStsForUsrFb_mrx << "). Got " << length << ", expected " << sizeof(LockgCenStsForUsrFb);
+            ALOGE("Wrong buffer size received for LockgCenStsForUsrFb (%u). Got %zu , expected %lu", ComConf_ComSignal_isLockgCenStsForUsrFb_mrx, length, static_cast<unsigned long>(sizeof(LockgCenStsForUsrFb)));
         }
     }
     break;
@@ -2461,13 +2461,13 @@
     case ComConf_ComSignal_isLockgPrsnlSts_mrx:
     {
         if (sizeof(LockgPrsnlSts) == length) {
-            log_verbose() << "Received LockgPrsnlSts (" << ComConf_ComSignal_isLockgPrsnlSts_mrx << ")";
+            ALOGV("Received LockgPrsnlSts (%u)", ComConf_ComSignal_isLockgPrsnlSts_mrx);
             const LockgPrsnlSts& rteValue = *static_cast<const LockgPrsnlSts*>(buffer);
             autosar::LockgPrsnlSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LockgPrsnlSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LockgPrsnlSts (" << ComConf_ComSignal_isLockgPrsnlSts_mrx << "). Got " << length << ", expected " << sizeof(LockgPrsnlSts);
+            ALOGE("Wrong buffer size received for LockgPrsnlSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isLockgPrsnlSts_mrx, length, static_cast<unsigned long>(sizeof(LockgPrsnlSts)));
         }
     }
     break;
@@ -2475,13 +2475,13 @@
     case ComConf_ComSignal_isLvlOfClimaCmft_mrx:
     {
         if (sizeof(LvlOfClimaCmft) == length) {
-            log_verbose() << "Received LvlOfClimaCmft (" << ComConf_ComSignal_isLvlOfClimaCmft_mrx << ")";
+            ALOGV("Received LvlOfClimaCmft (%u)", ComConf_ComSignal_isLvlOfClimaCmft_mrx);
             const LvlOfClimaCmft& rteValue = *static_cast<const LvlOfClimaCmft*>(buffer);
             autosar::LvlOfClimaCmft_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             LvlOfClimaCmft_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for LvlOfClimaCmft (" << ComConf_ComSignal_isLvlOfClimaCmft_mrx << "). Got " << length << ", expected " << sizeof(LvlOfClimaCmft);
+            ALOGE("Wrong buffer size received for LvlOfClimaCmft (%u). Got %zu , expected %lu", ComConf_ComSignal_isLvlOfClimaCmft_mrx, length, static_cast<unsigned long>(sizeof(LvlOfClimaCmft)));
         }
     }
     break;
@@ -2489,13 +2489,13 @@
     case ComConf_ComSignal_isMemBtnSound_mrx:
     {
         if (sizeof(MemBtnSound) == length) {
-            log_verbose() << "Received MemBtnSound (" << ComConf_ComSignal_isMemBtnSound_mrx << ")";
+            ALOGV("Received MemBtnSound (%u)", ComConf_ComSignal_isMemBtnSound_mrx);
             const MemBtnSound& rteValue = *static_cast<const MemBtnSound*>(buffer);
             autosar::MemBtnSound_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MemBtnSound_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MemBtnSound (" << ComConf_ComSignal_isMemBtnSound_mrx << "). Got " << length << ", expected " << sizeof(MemBtnSound);
+            ALOGE("Wrong buffer size received for MemBtnSound (%u). Got %zu , expected %lu", ComConf_ComSignal_isMemBtnSound_mrx, length, static_cast<unsigned long>(sizeof(MemBtnSound)));
         }
     }
     break;
@@ -2503,13 +2503,13 @@
     case ComConf_ComSignal_isMirrDwnStsAtDrvr_mrx:
     {
         if (sizeof(MirrDwnStsAtDrvr) == length) {
-            log_verbose() << "Received MirrDwnStsAtDrvr (" << ComConf_ComSignal_isMirrDwnStsAtDrvr_mrx << ")";
+            ALOGV("Received MirrDwnStsAtDrvr (%u)", ComConf_ComSignal_isMirrDwnStsAtDrvr_mrx);
             const MirrDwnStsAtDrvr& rteValue = *static_cast<const MirrDwnStsAtDrvr*>(buffer);
             autosar::MirrDwnStsAtDrvr_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MirrDwnStsAtDrvr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MirrDwnStsAtDrvr (" << ComConf_ComSignal_isMirrDwnStsAtDrvr_mrx << "). Got " << length << ", expected " << sizeof(MirrDwnStsAtDrvr);
+            ALOGE("Wrong buffer size received for MirrDwnStsAtDrvr (%u). Got %zu , expected %lu", ComConf_ComSignal_isMirrDwnStsAtDrvr_mrx, length, static_cast<unsigned long>(sizeof(MirrDwnStsAtDrvr)));
         }
     }
     break;
@@ -2517,13 +2517,13 @@
     case ComConf_ComSignal_isMirrDwnStsAtPass_mrx:
     {
         if (sizeof(MirrDwnStsAtPass) == length) {
-            log_verbose() << "Received MirrDwnStsAtPass (" << ComConf_ComSignal_isMirrDwnStsAtPass_mrx << ")";
+            ALOGV("Received MirrDwnStsAtPass (%u)", ComConf_ComSignal_isMirrDwnStsAtPass_mrx);
             const MirrDwnStsAtPass& rteValue = *static_cast<const MirrDwnStsAtPass*>(buffer);
             autosar::MirrDwnStsAtPass_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MirrDwnStsAtPass_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MirrDwnStsAtPass (" << ComConf_ComSignal_isMirrDwnStsAtPass_mrx << "). Got " << length << ", expected " << sizeof(MirrDwnStsAtPass);
+            ALOGE("Wrong buffer size received for MirrDwnStsAtPass (%u). Got %zu , expected %lu", ComConf_ComSignal_isMirrDwnStsAtPass_mrx, length, static_cast<unsigned long>(sizeof(MirrDwnStsAtPass)));
         }
     }
     break;
@@ -2531,13 +2531,13 @@
     case ComConf_ComSignal_isMirrFoldStsAtDrvr_mrx:
     {
         if (sizeof(MirrFoldStsAtDrvr) == length) {
-            log_verbose() << "Received MirrFoldStsAtDrvr (" << ComConf_ComSignal_isMirrFoldStsAtDrvr_mrx << ")";
+            ALOGV("Received MirrFoldStsAtDrvr (%u)", ComConf_ComSignal_isMirrFoldStsAtDrvr_mrx);
             const MirrFoldStsAtDrvr& rteValue = *static_cast<const MirrFoldStsAtDrvr*>(buffer);
             autosar::MirrFoldStsAtDrvr_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MirrFoldStsAtDrvr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MirrFoldStsAtDrvr (" << ComConf_ComSignal_isMirrFoldStsAtDrvr_mrx << "). Got " << length << ", expected " << sizeof(MirrFoldStsAtDrvr);
+            ALOGE("Wrong buffer size received for MirrFoldStsAtDrvr (%u). Got %zu , expected %lu", ComConf_ComSignal_isMirrFoldStsAtDrvr_mrx, length, static_cast<unsigned long>(sizeof(MirrFoldStsAtDrvr)));
         }
     }
     break;
@@ -2545,13 +2545,13 @@
     case ComConf_ComSignal_isMirrFoldStsAtPass_mrx:
     {
         if (sizeof(MirrFoldStsAtPass) == length) {
-            log_verbose() << "Received MirrFoldStsAtPass (" << ComConf_ComSignal_isMirrFoldStsAtPass_mrx << ")";
+            ALOGV("Received MirrFoldStsAtPass (%u)", ComConf_ComSignal_isMirrFoldStsAtPass_mrx);
             const MirrFoldStsAtPass& rteValue = *static_cast<const MirrFoldStsAtPass*>(buffer);
             autosar::MirrFoldStsAtPass_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MirrFoldStsAtPass_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MirrFoldStsAtPass (" << ComConf_ComSignal_isMirrFoldStsAtPass_mrx << "). Got " << length << ", expected " << sizeof(MirrFoldStsAtPass);
+            ALOGE("Wrong buffer size received for MirrFoldStsAtPass (%u). Got %zu , expected %lu", ComConf_ComSignal_isMirrFoldStsAtPass_mrx, length, static_cast<unsigned long>(sizeof(MirrFoldStsAtPass)));
         }
     }
     break;
@@ -2559,13 +2559,13 @@
     case ComConf_ComSignal_isMstCfgIDBackboneFR_mrx:
     {
         if (sizeof(MstCfgIDBackboneFR) == length) {
-            log_verbose() << "Received MstCfgIDBackboneFR (" << ComConf_ComSignal_isMstCfgIDBackboneFR_mrx << ")";
+            ALOGV("Received MstCfgIDBackboneFR (%u)", ComConf_ComSignal_isMstCfgIDBackboneFR_mrx);
             const MstCfgIDBackboneFR& rteValue = *static_cast<const MstCfgIDBackboneFR*>(buffer);
             autosar::MstCfgIDBackboneFR_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             MstCfgIDBackboneFR_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for MstCfgIDBackboneFR (" << ComConf_ComSignal_isMstCfgIDBackboneFR_mrx << "). Got " << length << ", expected " << sizeof(MstCfgIDBackboneFR);
+            ALOGE("Wrong buffer size received for MstCfgIDBackboneFR (%u). Got %zu , expected %lu", ComConf_ComSignal_isMstCfgIDBackboneFR_mrx, length, static_cast<unsigned long>(sizeof(MstCfgIDBackboneFR)));
         }
     }
     break;
@@ -2573,7 +2573,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igNetCtrlrActvt_mrx:
     {
         if (sizeof(NetCtrlrActvt) == length) {
-            log_verbose() << "Received NetCtrlrActvt (" << ComConf_ComSignalGroup_igNetCtrlrActvt_mrx << ")";
+            ALOGV("Received NetCtrlrActvt (%u)", ComConf_ComSignalGroup_igNetCtrlrActvt_mrx);
             const NetCtrlrActvt& rteValue = *static_cast<const NetCtrlrActvt*>(buffer);
             autosar::NetCtrlrActvt_info::data_elem_type deValue;
             deValue.Prio = static_cast<decltype(deValue.Prio)>(rteValue.NetCtrlrActvtPrio);
@@ -2581,7 +2581,7 @@
 
             NetCtrlrActvt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NetCtrlrActvt (" << ComConf_ComSignalGroup_igNetCtrlrActvt_mrx << "). Got " << length << ", expected " << sizeof(NetCtrlrActvt);
+            ALOGE("Wrong buffer size received for NetCtrlrActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetCtrlrActvt_mrx, length, static_cast<unsigned long>(sizeof(NetCtrlrActvt)));        
         }
     }
     break;
@@ -2589,7 +2589,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igNetTelmActvt_mrx:
     {
         if (sizeof(NetTelmActvt) == length) {
-            log_verbose() << "Received NetTelmActvt (" << ComConf_ComSignalGroup_igNetTelmActvt_mrx << ")";
+            ALOGV("Received NetTelmActvt (%u)", ComConf_ComSignalGroup_igNetTelmActvt_mrx);
             const NetTelmActvt& rteValue = *static_cast<const NetTelmActvt*>(buffer);
             autosar::NetTelmActvt_info::data_elem_type deValue;
             deValue.Prio = static_cast<decltype(deValue.Prio)>(rteValue.NetTelmActvtPrio);
@@ -2597,7 +2597,7 @@
 
             NetTelmActvt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NetTelmActvt (" << ComConf_ComSignalGroup_igNetTelmActvt_mrx << "). Got " << length << ", expected " << sizeof(NetTelmActvt);
+            ALOGE("Wrong buffer size received for NetTelmActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetTelmActvt_mrx, length, static_cast<unsigned long>(sizeof(NetTelmActvt)));        
         }
     }
     break;
@@ -2605,13 +2605,13 @@
     case ComConf_ComSignal_isNewTripCdn_mrx:
     {
         if (sizeof(NewTripCdn) == length) {
-            log_verbose() << "Received NewTripCdn (" << ComConf_ComSignal_isNewTripCdn_mrx << ")";
+            ALOGV("Received NewTripCdn (%u)", ComConf_ComSignal_isNewTripCdn_mrx);
             const NewTripCdn& rteValue = *static_cast<const NewTripCdn*>(buffer);
             autosar::NewTripCdn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             NewTripCdn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NewTripCdn (" << ComConf_ComSignal_isNewTripCdn_mrx << "). Got " << length << ", expected " << sizeof(NewTripCdn);
+            ALOGE("Wrong buffer size received for NewTripCdn (%u). Got %zu , expected %lu", ComConf_ComSignal_isNewTripCdn_mrx, length, static_cast<unsigned long>(sizeof(NewTripCdn)));
         }
     }
     break;
@@ -2619,13 +2619,13 @@
     case ComConf_ComSignal_isNoEntryWarnReq_mrx:
     {
         if (sizeof(NoEntryWarnReq) == length) {
-            log_verbose() << "Received NoEntryWarnReq (" << ComConf_ComSignal_isNoEntryWarnReq_mrx << ")";
+            ALOGV("Received NoEntryWarnReq (%u)", ComConf_ComSignal_isNoEntryWarnReq_mrx);
             const NoEntryWarnReq& rteValue = *static_cast<const NoEntryWarnReq*>(buffer);
             autosar::NoEntryWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             NoEntryWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NoEntryWarnReq (" << ComConf_ComSignal_isNoEntryWarnReq_mrx << "). Got " << length << ", expected " << sizeof(NoEntryWarnReq);
+            ALOGE("Wrong buffer size received for NoEntryWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isNoEntryWarnReq_mrx, length, static_cast<unsigned long>(sizeof(NoEntryWarnReq)));
         }
     }
     break;
@@ -2633,13 +2633,13 @@
     case ComConf_ComSignal_isNotifChkDistbn_mrx:
     {
         if (sizeof(NotifChkDistbn) == length) {
-            log_verbose() << "Received NotifChkDistbn (" << ComConf_ComSignal_isNotifChkDistbn_mrx << ")";
+            ALOGV("Received NotifChkDistbn (%u)", ComConf_ComSignal_isNotifChkDistbn_mrx);
             const NotifChkDistbn& rteValue = *static_cast<const NotifChkDistbn*>(buffer);
             autosar::NotifChkDistbn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             NotifChkDistbn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NotifChkDistbn (" << ComConf_ComSignal_isNotifChkDistbn_mrx << "). Got " << length << ", expected " << sizeof(NotifChkDistbn);
+            ALOGE("Wrong buffer size received for NotifChkDistbn (%u). Got %zu , expected %lu", ComConf_ComSignal_isNotifChkDistbn_mrx, length, static_cast<unsigned long>(sizeof(NotifChkDistbn)));
         }
     }
     break;
@@ -2647,13 +2647,13 @@
     case ComConf_ComSignal_isNrOfBltAppld_mrx:
     {
         if (sizeof(NrOfBltAppld) == length) {
-            log_verbose() << "Received NrOfBltAppld (" << ComConf_ComSignal_isNrOfBltAppld_mrx << ")";
+            ALOGV("Received NrOfBltAppld (%u)", ComConf_ComSignal_isNrOfBltAppld_mrx);
             const NrOfBltAppld& rteValue = *static_cast<const NrOfBltAppld*>(buffer);
             autosar::NrOfBltAppld_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             NrOfBltAppld_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NrOfBltAppld (" << ComConf_ComSignal_isNrOfBltAppld_mrx << "). Got " << length << ", expected " << sizeof(NrOfBltAppld);
+            ALOGE("Wrong buffer size received for NrOfBltAppld (%u). Got %zu , expected %lu", ComConf_ComSignal_isNrOfBltAppld_mrx, length, static_cast<unsigned long>(sizeof(NrOfBltAppld)));
         }
     }
     break;
@@ -2661,13 +2661,13 @@
     case ComConf_ComSignal_isNrOfKeyAvl_mrx:
     {
         if (sizeof(NrOfKeyAvl) == length) {
-            log_verbose() << "Received NrOfKeyAvl (" << ComConf_ComSignal_isNrOfKeyAvl_mrx << ")";
+            ALOGV("Received NrOfKeyAvl (%u)", ComConf_ComSignal_isNrOfKeyAvl_mrx);
             const NrOfKeyAvl& rteValue = *static_cast<const NrOfKeyAvl*>(buffer);
             autosar::NrOfKeyAvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             NrOfKeyAvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NrOfKeyAvl (" << ComConf_ComSignal_isNrOfKeyAvl_mrx << "). Got " << length << ", expected " << sizeof(NrOfKeyAvl);
+            ALOGE("Wrong buffer size received for NrOfKeyAvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isNrOfKeyAvl_mrx, length, static_cast<unsigned long>(sizeof(NrOfKeyAvl)));
         }
     }
     break;
@@ -2675,7 +2675,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igNrSerlDMSM_mrx:
     {
         if (sizeof(NrSerlDMSM) == length) {
-            log_verbose() << "Received NrSerlDMSM (" << ComConf_ComSignalGroup_igNrSerlDMSM_mrx << ")";
+            ALOGV("Received NrSerlDMSM (%u)", ComConf_ComSignalGroup_igNrSerlDMSM_mrx);
             const NrSerlDMSM& rteValue = *static_cast<const NrSerlDMSM*>(buffer);
             autosar::NrSerlDMSM_info::data_elem_type deValue;
             deValue.Nr1 = static_cast<decltype(deValue.Nr1)>(rteValue.NrSerlDMSMNr1);
@@ -2685,7 +2685,7 @@
 
             NrSerlDMSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for NrSerlDMSM (" << ComConf_ComSignalGroup_igNrSerlDMSM_mrx << "). Got " << length << ", expected " << sizeof(NrSerlDMSM);
+            ALOGE("Wrong buffer size received for NrSerlDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNrSerlDMSM_mrx, length, static_cast<unsigned long>(sizeof(NrSerlDMSM)));        
         }
     }
     break;
@@ -2693,7 +2693,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPartNrDMSM_mrx:
     {
         if (sizeof(PartNrDMSM) == length) {
-            log_verbose() << "Received PartNrDMSM (" << ComConf_ComSignalGroup_igPartNrDMSM_mrx << ")";
+            ALOGV("Received PartNrDMSM (%u)", ComConf_ComSignalGroup_igPartNrDMSM_mrx);
             const PartNrDMSM& rteValue = *static_cast<const PartNrDMSM*>(buffer);
             autosar::PartNrDMSM_info::data_elem_type deValue;
             deValue.EndSgn1 = static_cast<decltype(deValue.EndSgn1)>(rteValue.PartNrDMSMEndSgn1);
@@ -2706,7 +2706,7 @@
 
             PartNrDMSM_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PartNrDMSM (" << ComConf_ComSignalGroup_igPartNrDMSM_mrx << "). Got " << length << ", expected " << sizeof(PartNrDMSM);
+            ALOGE("Wrong buffer size received for PartNrDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPartNrDMSM_mrx, length, static_cast<unsigned long>(sizeof(PartNrDMSM)));        
         }
     }
     break;
@@ -2714,13 +2714,13 @@
     case ComConf_ComSignal_isPasAlrmSts_mrx:
     {
         if (sizeof(PasAlrmSts) == length) {
-            log_verbose() << "Received PasAlrmSts (" << ComConf_ComSignal_isPasAlrmSts_mrx << ")";
+            ALOGV("Received PasAlrmSts (%u)", ComConf_ComSignal_isPasAlrmSts_mrx);
             const PasAlrmSts& rteValue = *static_cast<const PasAlrmSts*>(buffer);
             autosar::PasAlrmSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PasAlrmSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PasAlrmSts (" << ComConf_ComSignal_isPasAlrmSts_mrx << "). Got " << length << ", expected " << sizeof(PasAlrmSts);
+            ALOGE("Wrong buffer size received for PasAlrmSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPasAlrmSts_mrx, length, static_cast<unsigned long>(sizeof(PasAlrmSts)));
         }
     }
     break;
@@ -2728,13 +2728,13 @@
     case ComConf_ComSignal_isPassMassgRunng_mrx:
     {
         if (sizeof(PassMassgRunng) == length) {
-            log_verbose() << "Received PassMassgRunng (" << ComConf_ComSignal_isPassMassgRunng_mrx << ")";
+            ALOGV("Received PassMassgRunng (%u)", ComConf_ComSignal_isPassMassgRunng_mrx);
             const PassMassgRunng& rteValue = *static_cast<const PassMassgRunng*>(buffer);
             autosar::PassMassgRunng_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PassMassgRunng_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PassMassgRunng (" << ComConf_ComSignal_isPassMassgRunng_mrx << "). Got " << length << ", expected " << sizeof(PassMassgRunng);
+            ALOGE("Wrong buffer size received for PassMassgRunng (%u). Got %zu , expected %lu", ComConf_ComSignal_isPassMassgRunng_mrx, length, static_cast<unsigned long>(sizeof(PassMassgRunng)));
         }
     }
     break;
@@ -2742,13 +2742,13 @@
     case ComConf_ComSignal_isPassSeatActvSpplFct_mrx:
     {
         if (sizeof(PassSeatActvSpplFct) == length) {
-            log_verbose() << "Received PassSeatActvSpplFct (" << ComConf_ComSignal_isPassSeatActvSpplFct_mrx << ")";
+            ALOGV("Received PassSeatActvSpplFct (%u)", ComConf_ComSignal_isPassSeatActvSpplFct_mrx);
             const PassSeatActvSpplFct& rteValue = *static_cast<const PassSeatActvSpplFct*>(buffer);
             autosar::PassSeatActvSpplFct_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PassSeatActvSpplFct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PassSeatActvSpplFct (" << ComConf_ComSignal_isPassSeatActvSpplFct_mrx << "). Got " << length << ", expected " << sizeof(PassSeatActvSpplFct);
+            ALOGE("Wrong buffer size received for PassSeatActvSpplFct (%u). Got %zu , expected %lu", ComConf_ComSignal_isPassSeatActvSpplFct_mrx, length, static_cast<unsigned long>(sizeof(PassSeatActvSpplFct)));
         }
     }
     break;
@@ -2756,7 +2756,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPassSeatMassgFct_mrx:
     {
         if (sizeof(PassSeatMassgFct) == length) {
-            log_verbose() << "Received PassSeatMassgFct (" << ComConf_ComSignalGroup_igPassSeatMassgFct_mrx << ")";
+            ALOGV("Received PassSeatMassgFct (%u)", ComConf_ComSignalGroup_igPassSeatMassgFct_mrx);
             const PassSeatMassgFct& rteValue = *static_cast<const PassSeatMassgFct*>(buffer);
             autosar::PassSeatMassgFct_info::data_elem_type deValue;
             deValue.MassgInten = static_cast<decltype(deValue.MassgInten)>(rteValue.PassSeatMassgFctMassgInten);
@@ -2766,7 +2766,7 @@
 
             PassSeatMassgFct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PassSeatMassgFct (" << ComConf_ComSignalGroup_igPassSeatMassgFct_mrx << "). Got " << length << ", expected " << sizeof(PassSeatMassgFct);
+            ALOGE("Wrong buffer size received for PassSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(PassSeatMassgFct)));        
         }
     }
     break;
@@ -2774,13 +2774,13 @@
     case ComConf_ComSignal_isPassSeatSts_mrx:
     {
         if (sizeof(PassSeatSts) == length) {
-            log_verbose() << "Received PassSeatSts (" << ComConf_ComSignal_isPassSeatSts_mrx << ")";
+            ALOGV("Received PassSeatSts (%u)", ComConf_ComSignal_isPassSeatSts_mrx);
             const PassSeatSts& rteValue = *static_cast<const PassSeatSts*>(buffer);
             autosar::PassSeatSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PassSeatSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PassSeatSts (" << ComConf_ComSignal_isPassSeatSts_mrx << "). Got " << length << ", expected " << sizeof(PassSeatSts);
+            ALOGE("Wrong buffer size received for PassSeatSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPassSeatSts_mrx, length, static_cast<unsigned long>(sizeof(PassSeatSts)));
         }
     }
     break;
@@ -2788,7 +2788,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx:
     {
         if (sizeof(PassSeatSwtSts2) == length) {
-            log_verbose() << "Received PassSeatSwtSts2 (" << ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx << ")";
+            ALOGV("Received PassSeatSwtSts2 (%u)", ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx);
             const PassSeatSwtSts2& rteValue = *static_cast<const PassSeatSwtSts2*>(buffer);
             autosar::PassSeatSwtSts2_info::data_elem_type deValue;
             deValue.PassSeatSwtAdjmtOfSpplFctHozlSts = static_cast<decltype(deValue.PassSeatSwtAdjmtOfSpplFctHozlSts)>(rteValue.PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctHozlSts);
@@ -2801,7 +2801,7 @@
 
             PassSeatSwtSts2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PassSeatSwtSts2 (" << ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx << "). Got " << length << ", expected " << sizeof(PassSeatSwtSts2);
+            ALOGE("Wrong buffer size received for PassSeatSwtSts2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx, length, static_cast<unsigned long>(sizeof(PassSeatSwtSts2)));        
         }
     }
     break;
@@ -2809,7 +2809,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx:
     {
         if (sizeof(PinionSteerAg1Group) == length) {
-            log_verbose() << "Received PinionSteerAg1Group (" << ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx << ")";
+            ALOGV("Received PinionSteerAg1Group (%u)", ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx);
             const PinionSteerAg1Group& rteValue = *static_cast<const PinionSteerAg1Group*>(buffer);
             autosar::PinionSteerAg1_info::data_elem_type deValue;
             deValue.PinionSteerAg1 = static_cast<decltype(deValue.PinionSteerAg1)>( toSignedFromRaw<15>(rteValue.PinionSteerAg1) ) * 0.0009765625 + 0.0;
@@ -2817,7 +2817,7 @@
 
             PinionSteerAg1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PinionSteerAg1Group (" << ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx << "). Got " << length << ", expected " << sizeof(PinionSteerAg1Group);
+            ALOGE("Wrong buffer size received for PinionSteerAg1Group (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx, length, static_cast<unsigned long>(sizeof(PinionSteerAg1Group)));        
         }
     }
     break;
@@ -2825,7 +2825,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPosnFromSatlt_mrx:
     {
         if (sizeof(PosnFromSatlt) == length) {
-            log_verbose() << "Received PosnFromSatlt (" << ComConf_ComSignalGroup_igPosnFromSatlt_mrx << ")";
+            ALOGV("Received PosnFromSatlt (%u)", ComConf_ComSignalGroup_igPosnFromSatlt_mrx);
             const PosnFromSatlt& rteValue = *static_cast<const PosnFromSatlt*>(buffer);
             autosar::PosnFromSatlt_info::data_elem_type deValue;
             deValue.NoOfSatltForSysNo1 = static_cast<decltype(deValue.NoOfSatltForSysNo1)>(rteValue.NoOfSatltForSysNo1InPosnFromSatlt);
@@ -2863,7 +2863,7 @@
 
             PosnFromSatlt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PosnFromSatlt (" << ComConf_ComSignalGroup_igPosnFromSatlt_mrx << "). Got " << length << ", expected " << sizeof(PosnFromSatlt);
+            ALOGE("Wrong buffer size received for PosnFromSatlt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPosnFromSatlt_mrx, length, static_cast<unsigned long>(sizeof(PosnFromSatlt)));        
         }
     }
     break;
@@ -2871,13 +2871,13 @@
     case ComConf_ComSignal_isPostDrvgClimaAvl_mrx:
     {
         if (sizeof(PostDrvgClimaAvl) == length) {
-            log_verbose() << "Received PostDrvgClimaAvl (" << ComConf_ComSignal_isPostDrvgClimaAvl_mrx << ")";
+            ALOGV("Received PostDrvgClimaAvl (%u)", ComConf_ComSignal_isPostDrvgClimaAvl_mrx);
             const PostDrvgClimaAvl& rteValue = *static_cast<const PostDrvgClimaAvl*>(buffer);
             autosar::PostDrvgClimaAvl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PostDrvgClimaAvl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PostDrvgClimaAvl (" << ComConf_ComSignal_isPostDrvgClimaAvl_mrx << "). Got " << length << ", expected " << sizeof(PostDrvgClimaAvl);
+            ALOGE("Wrong buffer size received for PostDrvgClimaAvl (%u). Got %zu , expected %lu", ComConf_ComSignal_isPostDrvgClimaAvl_mrx, length, static_cast<unsigned long>(sizeof(PostDrvgClimaAvl)));
         }
     }
     break;
@@ -2885,13 +2885,13 @@
     case ComConf_ComSignal_isPreClngNotif_mrx:
     {
         if (sizeof(PreClngNotif) == length) {
-            log_verbose() << "Received PreClngNotif (" << ComConf_ComSignal_isPreClngNotif_mrx << ")";
+            ALOGV("Received PreClngNotif (%u)", ComConf_ComSignal_isPreClngNotif_mrx);
             const PreClngNotif& rteValue = *static_cast<const PreClngNotif*>(buffer);
             autosar::PreClngNotif_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PreClngNotif_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PreClngNotif (" << ComConf_ComSignal_isPreClngNotif_mrx << "). Got " << length << ", expected " << sizeof(PreClngNotif);
+            ALOGE("Wrong buffer size received for PreClngNotif (%u). Got %zu , expected %lu", ComConf_ComSignal_isPreClngNotif_mrx, length, static_cast<unsigned long>(sizeof(PreClngNotif)));
         }
     }
     break;
@@ -2899,13 +2899,13 @@
     case ComConf_ComSignal_isPrkgAssiFailr_mrx:
     {
         if (sizeof(PrkgAssiFailr) == length) {
-            log_verbose() << "Received PrkgAssiFailr (" << ComConf_ComSignal_isPrkgAssiFailr_mrx << ")";
+            ALOGV("Received PrkgAssiFailr (%u)", ComConf_ComSignal_isPrkgAssiFailr_mrx);
             const PrkgAssiFailr& rteValue = *static_cast<const PrkgAssiFailr*>(buffer);
             autosar::PrkgAssiFailr_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgAssiFailr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgAssiFailr (" << ComConf_ComSignal_isPrkgAssiFailr_mrx << "). Got " << length << ", expected " << sizeof(PrkgAssiFailr);
+            ALOGE("Wrong buffer size received for PrkgAssiFailr (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAssiFailr_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiFailr)));
         }
     }
     break;
@@ -2913,13 +2913,13 @@
     case ComConf_ComSignal_isPrkgAssiManvActvSts_mrx:
     {
         if (sizeof(PrkgAssiManvActvSts) == length) {
-            log_verbose() << "Received PrkgAssiManvActvSts (" << ComConf_ComSignal_isPrkgAssiManvActvSts_mrx << ")";
+            ALOGV("Received PrkgAssiManvActvSts (%u)", ComConf_ComSignal_isPrkgAssiManvActvSts_mrx);
             const PrkgAssiManvActvSts& rteValue = *static_cast<const PrkgAssiManvActvSts*>(buffer);
             autosar::PrkgAssiManvActvSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgAssiManvActvSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgAssiManvActvSts (" << ComConf_ComSignal_isPrkgAssiManvActvSts_mrx << "). Got " << length << ", expected " << sizeof(PrkgAssiManvActvSts);
+            ALOGE("Wrong buffer size received for PrkgAssiManvActvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAssiManvActvSts_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiManvActvSts)));
         }
     }
     break;
@@ -2927,13 +2927,13 @@
     case ComConf_ComSignal_isPrkgAssiManvProgs_mrx:
     {
         if (sizeof(PrkgAssiManvProgs) == length) {
-            log_verbose() << "Received PrkgAssiManvProgs (" << ComConf_ComSignal_isPrkgAssiManvProgs_mrx << ")";
+            ALOGV("Received PrkgAssiManvProgs (%u)", ComConf_ComSignal_isPrkgAssiManvProgs_mrx);
             const PrkgAssiManvProgs& rteValue = *static_cast<const PrkgAssiManvProgs*>(buffer);
             autosar::PrkgAssiManvProgs_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgAssiManvProgs_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgAssiManvProgs (" << ComConf_ComSignal_isPrkgAssiManvProgs_mrx << "). Got " << length << ", expected " << sizeof(PrkgAssiManvProgs);
+            ALOGE("Wrong buffer size received for PrkgAssiManvProgs (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAssiManvProgs_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiManvProgs)));
         }
     }
     break;
@@ -2941,13 +2941,13 @@
     case ComConf_ComSignal_isPrkgAssiSts_mrx:
     {
         if (sizeof(PrkgAssiSts) == length) {
-            log_verbose() << "Received PrkgAssiSts (" << ComConf_ComSignal_isPrkgAssiSts_mrx << ")";
+            ALOGV("Received PrkgAssiSts (%u)", ComConf_ComSignal_isPrkgAssiSts_mrx);
             const PrkgAssiSts& rteValue = *static_cast<const PrkgAssiSts*>(buffer);
             autosar::PrkgAssiSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgAssiSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgAssiSts (" << ComConf_ComSignal_isPrkgAssiSts_mrx << "). Got " << length << ", expected " << sizeof(PrkgAssiSts);
+            ALOGE("Wrong buffer size received for PrkgAssiSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAssiSts_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiSts)));
         }
     }
     break;
@@ -2955,13 +2955,13 @@
     case ComConf_ComSignal_isPrkgAutSts_mrx:
     {
         if (sizeof(PrkgAutSts) == length) {
-            log_verbose() << "Received PrkgAutSts (" << ComConf_ComSignal_isPrkgAutSts_mrx << ")";
+            ALOGV("Received PrkgAutSts (%u)", ComConf_ComSignal_isPrkgAutSts_mrx);
             const PrkgAutSts& rteValue = *static_cast<const PrkgAutSts*>(buffer);
             autosar::PrkgAutSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgAutSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgAutSts (" << ComConf_ComSignal_isPrkgAutSts_mrx << "). Got " << length << ", expected " << sizeof(PrkgAutSts);
+            ALOGE("Wrong buffer size received for PrkgAutSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAutSts_mrx, length, static_cast<unsigned long>(sizeof(PrkgAutSts)));
         }
     }
     break;
@@ -2969,13 +2969,13 @@
     case ComConf_ComSignal_isPrkgCamSysAvlSts_mrx:
     {
         if (sizeof(PrkgCamSysAvlSts) == length) {
-            log_verbose() << "Received PrkgCamSysAvlSts (" << ComConf_ComSignal_isPrkgCamSysAvlSts_mrx << ")";
+            ALOGV("Received PrkgCamSysAvlSts (%u)", ComConf_ComSignal_isPrkgCamSysAvlSts_mrx);
             const PrkgCamSysAvlSts& rteValue = *static_cast<const PrkgCamSysAvlSts*>(buffer);
             autosar::PrkgCamSysAvlSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgCamSysAvlSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgCamSysAvlSts (" << ComConf_ComSignal_isPrkgCamSysAvlSts_mrx << "). Got " << length << ", expected " << sizeof(PrkgCamSysAvlSts);
+            ALOGE("Wrong buffer size received for PrkgCamSysAvlSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgCamSysAvlSts_mrx, length, static_cast<unsigned long>(sizeof(PrkgCamSysAvlSts)));
         }
     }
     break;
@@ -2983,13 +2983,13 @@
     case ComConf_ComSignal_isPrkgTypVld_mrx:
     {
         if (sizeof(PrkgTypVld) == length) {
-            log_verbose() << "Received PrkgTypVld (" << ComConf_ComSignal_isPrkgTypVld_mrx << ")";
+            ALOGV("Received PrkgTypVld (%u)", ComConf_ComSignal_isPrkgTypVld_mrx);
             const PrkgTypVld& rteValue = *static_cast<const PrkgTypVld*>(buffer);
             autosar::PrkgTypVld_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrkgTypVld_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrkgTypVld (" << ComConf_ComSignal_isPrkgTypVld_mrx << "). Got " << length << ", expected " << sizeof(PrkgTypVld);
+            ALOGE("Wrong buffer size received for PrkgTypVld (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgTypVld_mrx, length, static_cast<unsigned long>(sizeof(PrkgTypVld)));
         }
     }
     break;
@@ -2997,7 +2997,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igProfAct_mrx:
     {
         if (sizeof(ProfAct) == length) {
-            log_verbose() << "Received ProfAct (" << ComConf_ComSignalGroup_igProfAct_mrx << ")";
+            ALOGV("Received ProfAct (%u)", ComConf_ComSignalGroup_igProfAct_mrx);
             const ProfAct& rteValue = *static_cast<const ProfAct*>(buffer);
             autosar::ProfAct_info::data_elem_type deValue;
             deValue.Prof1 = static_cast<decltype(deValue.Prof1)>(rteValue.ProfActProf1);
@@ -3015,7 +3015,7 @@
 
             ProfAct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ProfAct (" << ComConf_ComSignalGroup_igProfAct_mrx << "). Got " << length << ", expected " << sizeof(ProfAct);
+            ALOGE("Wrong buffer size received for ProfAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfAct_mrx, length, static_cast<unsigned long>(sizeof(ProfAct)));        
         }
     }
     break;
@@ -3023,7 +3023,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igProfLimd_mrx:
     {
         if (sizeof(ProfLimd) == length) {
-            log_verbose() << "Received ProfLimd (" << ComConf_ComSignalGroup_igProfLimd_mrx << ")";
+            ALOGV("Received ProfLimd (%u)", ComConf_ComSignalGroup_igProfLimd_mrx);
             const ProfLimd& rteValue = *static_cast<const ProfLimd*>(buffer);
             autosar::ProfLimd_info::data_elem_type deValue;
             deValue.Prof1 = static_cast<decltype(deValue.Prof1)>(rteValue.ProfLimdProf1);
@@ -3041,7 +3041,7 @@
 
             ProfLimd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ProfLimd (" << ComConf_ComSignalGroup_igProfLimd_mrx << "). Got " << length << ", expected " << sizeof(ProfLimd);
+            ALOGE("Wrong buffer size received for ProfLimd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfLimd_mrx, length, static_cast<unsigned long>(sizeof(ProfLimd)));        
         }
     }
     break;
@@ -3049,13 +3049,13 @@
     case ComConf_ComSignal_isProfPenSts1_mrx:
     {
         if (sizeof(ProfPenSts1) == length) {
-            log_verbose() << "Received ProfPenSts1 (" << ComConf_ComSignal_isProfPenSts1_mrx << ")";
+            ALOGV("Received ProfPenSts1 (%u)", ComConf_ComSignal_isProfPenSts1_mrx);
             const ProfPenSts1& rteValue = *static_cast<const ProfPenSts1*>(buffer);
             autosar::ProfPenSts1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ProfPenSts1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ProfPenSts1 (" << ComConf_ComSignal_isProfPenSts1_mrx << "). Got " << length << ", expected " << sizeof(ProfPenSts1);
+            ALOGE("Wrong buffer size received for ProfPenSts1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isProfPenSts1_mrx, length, static_cast<unsigned long>(sizeof(ProfPenSts1)));
         }
     }
     break;
@@ -3063,13 +3063,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx:
     {
         if (sizeof(PrpsnHvBattUsgModAct) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgModAct (" << ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgModAct (%u)", ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx);
             const PrpsnHvBattUsgModAct& rteValue = *static_cast<const PrpsnHvBattUsgModAct*>(buffer);
             autosar::PrpsnHvBattUsgModAct_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgModAct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgModAct (" << ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgModAct);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgModAct (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgModAct)));
         }
     }
     break;
@@ -3077,13 +3077,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfChrgBlkd) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfChrgBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfChrgBlkd (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd_mrx);
             const PrpsnHvBattUsgOfChrgBlkd& rteValue = *static_cast<const PrpsnHvBattUsgOfChrgBlkd*>(buffer);
             autosar::PrpsnHvBattUsgOfChrgBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfChrgBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfChrgBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfChrgBlkd);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfChrgBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfChrgBlkd)));
         }
     }
     break;
@@ -3091,13 +3091,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd2_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfChrgBlkd2) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfChrgBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd2_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfChrgBlkd2 (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd2_mrx);
             const PrpsnHvBattUsgOfChrgBlkd2& rteValue = *static_cast<const PrpsnHvBattUsgOfChrgBlkd2*>(buffer);
             autosar::PrpsnHvBattUsgOfChrgBlkd2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfChrgBlkd2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfChrgBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd2_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfChrgBlkd2);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfChrgBlkd2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfChrgBlkd2_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfChrgBlkd2)));
         }
     }
     break;
@@ -3105,13 +3105,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfHldBlkd) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfHldBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfHldBlkd (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd_mrx);
             const PrpsnHvBattUsgOfHldBlkd& rteValue = *static_cast<const PrpsnHvBattUsgOfHldBlkd*>(buffer);
             autosar::PrpsnHvBattUsgOfHldBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfHldBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfHldBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfHldBlkd);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfHldBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfHldBlkd)));
         }
     }
     break;
@@ -3119,13 +3119,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd2_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfHldBlkd2) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfHldBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd2_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfHldBlkd2 (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd2_mrx);
             const PrpsnHvBattUsgOfHldBlkd2& rteValue = *static_cast<const PrpsnHvBattUsgOfHldBlkd2*>(buffer);
             autosar::PrpsnHvBattUsgOfHldBlkd2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfHldBlkd2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfHldBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd2_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfHldBlkd2);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfHldBlkd2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfHldBlkd2_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfHldBlkd2)));
         }
     }
     break;
@@ -3133,13 +3133,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfHldSmtBlkd) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfHldSmtBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfHldSmtBlkd (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd_mrx);
             const PrpsnHvBattUsgOfHldSmtBlkd& rteValue = *static_cast<const PrpsnHvBattUsgOfHldSmtBlkd*>(buffer);
             autosar::PrpsnHvBattUsgOfHldSmtBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfHldSmtBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfHldSmtBlkd (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfHldSmtBlkd);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfHldSmtBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfHldSmtBlkd)));
         }
     }
     break;
@@ -3147,13 +3147,13 @@
     case ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd2_mrx:
     {
         if (sizeof(PrpsnHvBattUsgOfHldSmtBlkd2) == length) {
-            log_verbose() << "Received PrpsnHvBattUsgOfHldSmtBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd2_mrx << ")";
+            ALOGV("Received PrpsnHvBattUsgOfHldSmtBlkd2 (%u)", ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd2_mrx);
             const PrpsnHvBattUsgOfHldSmtBlkd2& rteValue = *static_cast<const PrpsnHvBattUsgOfHldSmtBlkd2*>(buffer);
             autosar::PrpsnHvBattUsgOfHldSmtBlkd2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnHvBattUsgOfHldSmtBlkd2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnHvBattUsgOfHldSmtBlkd2 (" << ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd2_mrx << "). Got " << length << ", expected " << sizeof(PrpsnHvBattUsgOfHldSmtBlkd2);
+            ALOGE("Wrong buffer size received for PrpsnHvBattUsgOfHldSmtBlkd2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnHvBattUsgOfHldSmtBlkd2_mrx, length, static_cast<unsigned long>(sizeof(PrpsnHvBattUsgOfHldSmtBlkd2)));
         }
     }
     break;
@@ -3161,13 +3161,13 @@
     case ComConf_ComSignal_isPrpsnModElecDrvBlkd_mrx:
     {
         if (sizeof(PrpsnModElecDrvBlkd) == length) {
-            log_verbose() << "Received PrpsnModElecDrvBlkd (" << ComConf_ComSignal_isPrpsnModElecDrvBlkd_mrx << ")";
+            ALOGV("Received PrpsnModElecDrvBlkd (%u)", ComConf_ComSignal_isPrpsnModElecDrvBlkd_mrx);
             const PrpsnModElecDrvBlkd& rteValue = *static_cast<const PrpsnModElecDrvBlkd*>(buffer);
             autosar::PrpsnModElecDrvBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnModElecDrvBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnModElecDrvBlkd (" << ComConf_ComSignal_isPrpsnModElecDrvBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnModElecDrvBlkd);
+            ALOGE("Wrong buffer size received for PrpsnModElecDrvBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnModElecDrvBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnModElecDrvBlkd)));
         }
     }
     break;
@@ -3175,13 +3175,13 @@
     case ComConf_ComSignal_isPrpsnModOfSaveBlkd_mrx:
     {
         if (sizeof(PrpsnModOfSaveBlkd) == length) {
-            log_verbose() << "Received PrpsnModOfSaveBlkd (" << ComConf_ComSignal_isPrpsnModOfSaveBlkd_mrx << ")";
+            ALOGV("Received PrpsnModOfSaveBlkd (%u)", ComConf_ComSignal_isPrpsnModOfSaveBlkd_mrx);
             const PrpsnModOfSaveBlkd& rteValue = *static_cast<const PrpsnModOfSaveBlkd*>(buffer);
             autosar::PrpsnModOfSaveBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnModOfSaveBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnModOfSaveBlkd (" << ComConf_ComSignal_isPrpsnModOfSaveBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnModOfSaveBlkd);
+            ALOGE("Wrong buffer size received for PrpsnModOfSaveBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnModOfSaveBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnModOfSaveBlkd)));
         }
     }
     break;
@@ -3189,13 +3189,13 @@
     case ComConf_ComSignal_isPrpsnModOfTracBlkd_mrx:
     {
         if (sizeof(PrpsnModOfTracBlkd) == length) {
-            log_verbose() << "Received PrpsnModOfTracBlkd (" << ComConf_ComSignal_isPrpsnModOfTracBlkd_mrx << ")";
+            ALOGV("Received PrpsnModOfTracBlkd (%u)", ComConf_ComSignal_isPrpsnModOfTracBlkd_mrx);
             const PrpsnModOfTracBlkd& rteValue = *static_cast<const PrpsnModOfTracBlkd*>(buffer);
             autosar::PrpsnModOfTracBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnModOfTracBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnModOfTracBlkd (" << ComConf_ComSignal_isPrpsnModOfTracBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnModOfTracBlkd);
+            ALOGE("Wrong buffer size received for PrpsnModOfTracBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnModOfTracBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnModOfTracBlkd)));
         }
     }
     break;
@@ -3203,13 +3203,13 @@
     case ComConf_ComSignal_isPrpsnModOffroadBlkd_mrx:
     {
         if (sizeof(PrpsnModOffroadBlkd) == length) {
-            log_verbose() << "Received PrpsnModOffroadBlkd (" << ComConf_ComSignal_isPrpsnModOffroadBlkd_mrx << ")";
+            ALOGV("Received PrpsnModOffroadBlkd (%u)", ComConf_ComSignal_isPrpsnModOffroadBlkd_mrx);
             const PrpsnModOffroadBlkd& rteValue = *static_cast<const PrpsnModOffroadBlkd*>(buffer);
             autosar::PrpsnModOffroadBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnModOffroadBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnModOffroadBlkd (" << ComConf_ComSignal_isPrpsnModOffroadBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnModOffroadBlkd);
+            ALOGE("Wrong buffer size received for PrpsnModOffroadBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnModOffroadBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnModOffroadBlkd)));
         }
     }
     break;
@@ -3217,13 +3217,13 @@
     case ComConf_ComSignal_isPrpsnModSptBlkd_mrx:
     {
         if (sizeof(PrpsnModSptBlkd) == length) {
-            log_verbose() << "Received PrpsnModSptBlkd (" << ComConf_ComSignal_isPrpsnModSptBlkd_mrx << ")";
+            ALOGV("Received PrpsnModSptBlkd (%u)", ComConf_ComSignal_isPrpsnModSptBlkd_mrx);
             const PrpsnModSptBlkd& rteValue = *static_cast<const PrpsnModSptBlkd*>(buffer);
             autosar::PrpsnModSptBlkd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PrpsnModSptBlkd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PrpsnModSptBlkd (" << ComConf_ComSignal_isPrpsnModSptBlkd_mrx << "). Got " << length << ", expected " << sizeof(PrpsnModSptBlkd);
+            ALOGE("Wrong buffer size received for PrpsnModSptBlkd (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnModSptBlkd_mrx, length, static_cast<unsigned long>(sizeof(PrpsnModSptBlkd)));
         }
     }
     break;
@@ -3231,7 +3231,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPtCluTq_mrx:
     {
         if (sizeof(PtCluTq) == length) {
-            log_verbose() << "Received PtCluTq (" << ComConf_ComSignalGroup_igPtCluTq_mrx << ")";
+            ALOGV("Received PtCluTq (%u)", ComConf_ComSignalGroup_igPtCluTq_mrx);
             const PtCluTq& rteValue = *static_cast<const PtCluTq*>(buffer);
             autosar::PtCluTq_info::data_elem_type deValue;
             deValue.PtCluTq = static_cast<decltype(deValue.PtCluTq)>( toUnsignedFromRaw<11>(rteValue.PtCluTqPtCluTq) ) * 1.0 + 0.0;
@@ -3240,7 +3240,7 @@
 
             PtCluTq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PtCluTq (" << ComConf_ComSignalGroup_igPtCluTq_mrx << "). Got " << length << ", expected " << sizeof(PtCluTq);
+            ALOGE("Wrong buffer size received for PtCluTq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtCluTq_mrx, length, static_cast<unsigned long>(sizeof(PtCluTq)));        
         }
     }
     break;
@@ -3248,13 +3248,13 @@
     case ComConf_ComSignal_isPtGearTar_mrx:
     {
         if (sizeof(PtGearTar) == length) {
-            log_verbose() << "Received PtGearTar (" << ComConf_ComSignal_isPtGearTar_mrx << ")";
+            ALOGV("Received PtGearTar (%u)", ComConf_ComSignal_isPtGearTar_mrx);
             const PtGearTar& rteValue = *static_cast<const PtGearTar*>(buffer);
             autosar::PtGearTar_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PtGearTar_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PtGearTar (" << ComConf_ComSignal_isPtGearTar_mrx << "). Got " << length << ", expected " << sizeof(PtGearTar);
+            ALOGE("Wrong buffer size received for PtGearTar (%u). Got %zu , expected %lu", ComConf_ComSignal_isPtGearTar_mrx, length, static_cast<unsigned long>(sizeof(PtGearTar)));
         }
     }
     break;
@@ -3262,7 +3262,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx:
     {
         if (sizeof(PtTqAtWhlFrntActGroup) == length) {
-            log_verbose() << "Received PtTqAtWhlFrntActGroup (" << ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx << ")";
+            ALOGV("Received PtTqAtWhlFrntActGroup (%u)", ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx);
             const PtTqAtWhlFrntActGroup& rteValue = *static_cast<const PtTqAtWhlFrntActGroup*>(buffer);
             autosar::PtTqAtWhlFrntAct_info::data_elem_type deValue;
             deValue.PtTqAtAxleFrntAct = static_cast<decltype(deValue.PtTqAtAxleFrntAct)>( toSignedFromRaw<16>(rteValue.PtTqAtAxleFrntAct) ) * 1.0 + 0.0;
@@ -3272,7 +3272,7 @@
 
             PtTqAtWhlFrntAct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PtTqAtWhlFrntActGroup (" << ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx << "). Got " << length << ", expected " << sizeof(PtTqAtWhlFrntActGroup);
+            ALOGE("Wrong buffer size received for PtTqAtWhlFrntActGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx, length, static_cast<unsigned long>(sizeof(PtTqAtWhlFrntActGroup)));        
         }
     }
     break;
@@ -3280,13 +3280,13 @@
     case ComConf_ComSignal_isPwrChrgDetdForPrkgHeatrElec_mrx:
     {
         if (sizeof(PwrChrgDetdForPrkgHeatrElec) == length) {
-            log_verbose() << "Received PwrChrgDetdForPrkgHeatrElec (" << ComConf_ComSignal_isPwrChrgDetdForPrkgHeatrElec_mrx << ")";
+            ALOGV("Received PwrChrgDetdForPrkgHeatrElec (%u)", ComConf_ComSignal_isPwrChrgDetdForPrkgHeatrElec_mrx);
             const PwrChrgDetdForPrkgHeatrElec& rteValue = *static_cast<const PwrChrgDetdForPrkgHeatrElec*>(buffer);
             autosar::PwrChrgDetdForPrkgHeatrElec_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PwrChrgDetdForPrkgHeatrElec_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PwrChrgDetdForPrkgHeatrElec (" << ComConf_ComSignal_isPwrChrgDetdForPrkgHeatrElec_mrx << "). Got " << length << ", expected " << sizeof(PwrChrgDetdForPrkgHeatrElec);
+            ALOGE("Wrong buffer size received for PwrChrgDetdForPrkgHeatrElec (%u). Got %zu , expected %lu", ComConf_ComSignal_isPwrChrgDetdForPrkgHeatrElec_mrx, length, static_cast<unsigned long>(sizeof(PwrChrgDetdForPrkgHeatrElec)));
         }
     }
     break;
@@ -3294,13 +3294,13 @@
     case ComConf_ComSignal_isPwrSplyErrSts_mrx:
     {
         if (sizeof(PwrSplyErrSts) == length) {
-            log_verbose() << "Received PwrSplyErrSts (" << ComConf_ComSignal_isPwrSplyErrSts_mrx << ")";
+            ALOGV("Received PwrSplyErrSts (%u)", ComConf_ComSignal_isPwrSplyErrSts_mrx);
             const PwrSplyErrSts& rteValue = *static_cast<const PwrSplyErrSts*>(buffer);
             autosar::PwrSplyErrSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             PwrSplyErrSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for PwrSplyErrSts (" << ComConf_ComSignal_isPwrSplyErrSts_mrx << "). Got " << length << ", expected " << sizeof(PwrSplyErrSts);
+            ALOGE("Wrong buffer size received for PwrSplyErrSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPwrSplyErrSts_mrx, length, static_cast<unsigned long>(sizeof(PwrSplyErrSts)));
         }
     }
     break;
@@ -3308,13 +3308,13 @@
     case ComConf_ComSignal_isReAxleWarn_mrx:
     {
         if (sizeof(ReAxleWarn) == length) {
-            log_verbose() << "Received ReAxleWarn (" << ComConf_ComSignal_isReAxleWarn_mrx << ")";
+            ALOGV("Received ReAxleWarn (%u)", ComConf_ComSignal_isReAxleWarn_mrx);
             const ReAxleWarn& rteValue = *static_cast<const ReAxleWarn*>(buffer);
             autosar::ReAxleWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ReAxleWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ReAxleWarn (" << ComConf_ComSignal_isReAxleWarn_mrx << "). Got " << length << ", expected " << sizeof(ReAxleWarn);
+            ALOGE("Wrong buffer size received for ReAxleWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isReAxleWarn_mrx, length, static_cast<unsigned long>(sizeof(ReAxleWarn)));
         }
     }
     break;
@@ -3322,13 +3322,13 @@
     case ComConf_ComSignal_isRmnLockgPrsnlReq_mrx:
     {
         if (sizeof(RmnLockgPrsnlReq) == length) {
-            log_verbose() << "Received RmnLockgPrsnlReq (" << ComConf_ComSignal_isRmnLockgPrsnlReq_mrx << ")";
+            ALOGV("Received RmnLockgPrsnlReq (%u)", ComConf_ComSignal_isRmnLockgPrsnlReq_mrx);
             const RmnLockgPrsnlReq& rteValue = *static_cast<const RmnLockgPrsnlReq*>(buffer);
             autosar::RmnLockgPrsnlReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RmnLockgPrsnlReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RmnLockgPrsnlReq (" << ComConf_ComSignal_isRmnLockgPrsnlReq_mrx << "). Got " << length << ", expected " << sizeof(RmnLockgPrsnlReq);
+            ALOGE("Wrong buffer size received for RmnLockgPrsnlReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isRmnLockgPrsnlReq_mrx, length, static_cast<unsigned long>(sizeof(RmnLockgPrsnlReq)));
         }
     }
     break;
@@ -3336,13 +3336,13 @@
     case ComConf_ComSignal_isRoadFricIndcnSts_mrx:
     {
         if (sizeof(RoadFricIndcnSts) == length) {
-            log_verbose() << "Received RoadFricIndcnSts (" << ComConf_ComSignal_isRoadFricIndcnSts_mrx << ")";
+            ALOGV("Received RoadFricIndcnSts (%u)", ComConf_ComSignal_isRoadFricIndcnSts_mrx);
             const RoadFricIndcnSts& rteValue = *static_cast<const RoadFricIndcnSts*>(buffer);
             autosar::RoadFricIndcnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RoadFricIndcnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RoadFricIndcnSts (" << ComConf_ComSignal_isRoadFricIndcnSts_mrx << "). Got " << length << ", expected " << sizeof(RoadFricIndcnSts);
+            ALOGE("Wrong buffer size received for RoadFricIndcnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isRoadFricIndcnSts_mrx, length, static_cast<unsigned long>(sizeof(RoadFricIndcnSts)));
         }
     }
     break;
@@ -3350,13 +3350,13 @@
     case ComConf_ComSignal_isRoadFricWarnReq_mrx:
     {
         if (sizeof(RoadFricWarnReq) == length) {
-            log_verbose() << "Received RoadFricWarnReq (" << ComConf_ComSignal_isRoadFricWarnReq_mrx << ")";
+            ALOGV("Received RoadFricWarnReq (%u)", ComConf_ComSignal_isRoadFricWarnReq_mrx);
             const RoadFricWarnReq& rteValue = *static_cast<const RoadFricWarnReq*>(buffer);
             autosar::RoadFricWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RoadFricWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RoadFricWarnReq (" << ComConf_ComSignal_isRoadFricWarnReq_mrx << "). Got " << length << ", expected " << sizeof(RoadFricWarnReq);
+            ALOGE("Wrong buffer size received for RoadFricWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isRoadFricWarnReq_mrx, length, static_cast<unsigned long>(sizeof(RoadFricWarnReq)));
         }
     }
     break;
@@ -3364,13 +3364,13 @@
     case ComConf_ComSignal_isRoadSgnInfoSts_mrx:
     {
         if (sizeof(RoadSgnInfoSts) == length) {
-            log_verbose() << "Received RoadSgnInfoSts (" << ComConf_ComSignal_isRoadSgnInfoSts_mrx << ")";
+            ALOGV("Received RoadSgnInfoSts (%u)", ComConf_ComSignal_isRoadSgnInfoSts_mrx);
             const RoadSgnInfoSts& rteValue = *static_cast<const RoadSgnInfoSts*>(buffer);
             autosar::RoadSgnInfoSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RoadSgnInfoSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RoadSgnInfoSts (" << ComConf_ComSignal_isRoadSgnInfoSts_mrx << "). Got " << length << ", expected " << sizeof(RoadSgnInfoSts);
+            ALOGE("Wrong buffer size received for RoadSgnInfoSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isRoadSgnInfoSts_mrx, length, static_cast<unsigned long>(sizeof(RoadSgnInfoSts)));
         }
     }
     break;
@@ -3378,13 +3378,13 @@
     case ComConf_ComSignal_isRoadUsrProtnSts_mrx:
     {
         if (sizeof(RoadUsrProtnSts) == length) {
-            log_verbose() << "Received RoadUsrProtnSts (" << ComConf_ComSignal_isRoadUsrProtnSts_mrx << ")";
+            ALOGV("Received RoadUsrProtnSts (%u)", ComConf_ComSignal_isRoadUsrProtnSts_mrx);
             const RoadUsrProtnSts& rteValue = *static_cast<const RoadUsrProtnSts*>(buffer);
             autosar::RoadUsrProtnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RoadUsrProtnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RoadUsrProtnSts (" << ComConf_ComSignal_isRoadUsrProtnSts_mrx << "). Got " << length << ", expected " << sizeof(RoadUsrProtnSts);
+            ALOGE("Wrong buffer size received for RoadUsrProtnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isRoadUsrProtnSts_mrx, length, static_cast<unsigned long>(sizeof(RoadUsrProtnSts)));
         }
     }
     break;
@@ -3392,13 +3392,13 @@
     case ComConf_ComSignal_isRotyDirReq2_mrx:
     {
         if (sizeof(RotyDirReq2) == length) {
-            log_verbose() << "Received RotyDirReq2 (" << ComConf_ComSignal_isRotyDirReq2_mrx << ")";
+            ALOGV("Received RotyDirReq2 (%u)", ComConf_ComSignal_isRotyDirReq2_mrx);
             const RotyDirReq2& rteValue = *static_cast<const RotyDirReq2*>(buffer);
             autosar::RotyDirReq2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RotyDirReq2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RotyDirReq2 (" << ComConf_ComSignal_isRotyDirReq2_mrx << "). Got " << length << ", expected " << sizeof(RotyDirReq2);
+            ALOGE("Wrong buffer size received for RotyDirReq2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isRotyDirReq2_mrx, length, static_cast<unsigned long>(sizeof(RotyDirReq2)));
         }
     }
     break;
@@ -3406,13 +3406,13 @@
     case ComConf_ComSignal_isRotyDirReq1_mrx:
     {
         if (sizeof(RotyDirReq1) == length) {
-            log_verbose() << "Received RotyDirReq1 (" << ComConf_ComSignal_isRotyDirReq1_mrx << ")";
+            ALOGV("Received RotyDirReq1 (%u)", ComConf_ComSignal_isRotyDirReq1_mrx);
             const RotyDirReq1& rteValue = *static_cast<const RotyDirReq1*>(buffer);
             autosar::RotyDirReq1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RotyDirReq1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RotyDirReq1 (" << ComConf_ComSignal_isRotyDirReq1_mrx << "). Got " << length << ", expected " << sizeof(RotyDirReq1);
+            ALOGE("Wrong buffer size received for RotyDirReq1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isRotyDirReq1_mrx, length, static_cast<unsigned long>(sizeof(RotyDirReq1)));
         }
     }
     break;
@@ -3420,13 +3420,13 @@
     case ComConf_ComSignal_isRotyPosReq2_mrx:
     {
         if (sizeof(RotyPosReq2) == length) {
-            log_verbose() << "Received RotyPosReq2 (" << ComConf_ComSignal_isRotyPosReq2_mrx << ")";
+            ALOGV("Received RotyPosReq2 (%u)", ComConf_ComSignal_isRotyPosReq2_mrx);
             const RotyPosReq2& rteValue = *static_cast<const RotyPosReq2*>(buffer);
             autosar::RotyPosReq2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RotyPosReq2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RotyPosReq2 (" << ComConf_ComSignal_isRotyPosReq2_mrx << "). Got " << length << ", expected " << sizeof(RotyPosReq2);
+            ALOGE("Wrong buffer size received for RotyPosReq2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isRotyPosReq2_mrx, length, static_cast<unsigned long>(sizeof(RotyPosReq2)));
         }
     }
     break;
@@ -3434,13 +3434,13 @@
     case ComConf_ComSignal_isRotyPosReq1_mrx:
     {
         if (sizeof(RotyPosReq1) == length) {
-            log_verbose() << "Received RotyPosReq1 (" << ComConf_ComSignal_isRotyPosReq1_mrx << ")";
+            ALOGV("Received RotyPosReq1 (%u)", ComConf_ComSignal_isRotyPosReq1_mrx);
             const RotyPosReq1& rteValue = *static_cast<const RotyPosReq1*>(buffer);
             autosar::RotyPosReq1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             RotyPosReq1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RotyPosReq1 (" << ComConf_ComSignal_isRotyPosReq1_mrx << "). Got " << length << ", expected " << sizeof(RotyPosReq1);
+            ALOGE("Wrong buffer size received for RotyPosReq1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isRotyPosReq1_mrx, length, static_cast<unsigned long>(sizeof(RotyPosReq1)));
         }
     }
     break;
@@ -3448,7 +3448,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igRsdsSysStsLe_mrx:
     {
         if (sizeof(RsdsSysStsLe) == length) {
-            log_verbose() << "Received RsdsSysStsLe (" << ComConf_ComSignalGroup_igRsdsSysStsLe_mrx << ")";
+            ALOGV("Received RsdsSysStsLe (%u)", ComConf_ComSignalGroup_igRsdsSysStsLe_mrx);
             const RsdsSysStsLe& rteValue = *static_cast<const RsdsSysStsLe*>(buffer);
             autosar::RsdsSysStsLe_info::data_elem_type deValue;
             deValue.CtraSts = static_cast<decltype(deValue.CtraSts)>(rteValue.RsdsSysStsLeCtraSts);
@@ -3461,7 +3461,7 @@
 
             RsdsSysStsLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RsdsSysStsLe (" << ComConf_ComSignalGroup_igRsdsSysStsLe_mrx << "). Got " << length << ", expected " << sizeof(RsdsSysStsLe);
+            ALOGE("Wrong buffer size received for RsdsSysStsLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsLe_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsLe)));        
         }
     }
     break;
@@ -3469,7 +3469,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igRsdsSysStsRi_mrx:
     {
         if (sizeof(RsdsSysStsRi) == length) {
-            log_verbose() << "Received RsdsSysStsRi (" << ComConf_ComSignalGroup_igRsdsSysStsRi_mrx << ")";
+            ALOGV("Received RsdsSysStsRi (%u)", ComConf_ComSignalGroup_igRsdsSysStsRi_mrx);
             const RsdsSysStsRi& rteValue = *static_cast<const RsdsSysStsRi*>(buffer);
             autosar::RsdsSysStsRi_info::data_elem_type deValue;
             deValue.CtraSts = static_cast<decltype(deValue.CtraSts)>(rteValue.RsdsSysStsRiCtraSts);
@@ -3482,7 +3482,7 @@
 
             RsdsSysStsRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for RsdsSysStsRi (" << ComConf_ComSignalGroup_igRsdsSysStsRi_mrx << "). Got " << length << ", expected " << sizeof(RsdsSysStsRi);
+            ALOGE("Wrong buffer size received for RsdsSysStsRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsRi_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsRi)));        
         }
     }
     break;
@@ -3490,13 +3490,13 @@
     case ComConf_ComSignal_isScrBarVolIndcn_mrx:
     {
         if (sizeof(ScrBarVolIndcn) == length) {
-            log_verbose() << "Received ScrBarVolIndcn (" << ComConf_ComSignal_isScrBarVolIndcn_mrx << ")";
+            ALOGV("Received ScrBarVolIndcn (%u)", ComConf_ComSignal_isScrBarVolIndcn_mrx);
             const ScrBarVolIndcn& rteValue = *static_cast<const ScrBarVolIndcn*>(buffer);
             autosar::ScrBarVolIndcn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 5.0 + 0.0;
             ScrBarVolIndcn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ScrBarVolIndcn (" << ComConf_ComSignal_isScrBarVolIndcn_mrx << "). Got " << length << ", expected " << sizeof(ScrBarVolIndcn);
+            ALOGE("Wrong buffer size received for ScrBarVolIndcn (%u). Got %zu , expected %lu", ComConf_ComSignal_isScrBarVolIndcn_mrx, length, static_cast<unsigned long>(sizeof(ScrBarVolIndcn)));
         }
     }
     break;
@@ -3504,13 +3504,13 @@
     case ComConf_ComSignal_isScrMaxFillgVol_mrx:
     {
         if (sizeof(ScrMaxFillgVol) == length) {
-            log_verbose() << "Received ScrMaxFillgVol (" << ComConf_ComSignal_isScrMaxFillgVol_mrx << ")";
+            ALOGV("Received ScrMaxFillgVol (%u)", ComConf_ComSignal_isScrMaxFillgVol_mrx);
             const ScrMaxFillgVol& rteValue = *static_cast<const ScrMaxFillgVol*>(buffer);
             autosar::ScrMaxFillgVol_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ScrMaxFillgVol_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ScrMaxFillgVol (" << ComConf_ComSignal_isScrMaxFillgVol_mrx << "). Got " << length << ", expected " << sizeof(ScrMaxFillgVol);
+            ALOGE("Wrong buffer size received for ScrMaxFillgVol (%u). Got %zu , expected %lu", ComConf_ComSignal_isScrMaxFillgVol_mrx, length, static_cast<unsigned long>(sizeof(ScrMaxFillgVol)));
         }
     }
     break;
@@ -3518,13 +3518,13 @@
     case ComConf_ComSignal_isScrReagentTankVol_mrx:
     {
         if (sizeof(ScrReagentTankVol) == length) {
-            log_verbose() << "Received ScrReagentTankVol (" << ComConf_ComSignal_isScrReagentTankVol_mrx << ")";
+            ALOGV("Received ScrReagentTankVol (%u)", ComConf_ComSignal_isScrReagentTankVol_mrx);
             const ScrReagentTankVol& rteValue = *static_cast<const ScrReagentTankVol*>(buffer);
             autosar::ScrReagentTankVol_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             ScrReagentTankVol_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for ScrReagentTankVol (" << ComConf_ComSignal_isScrReagentTankVol_mrx << "). Got " << length << ", expected " << sizeof(ScrReagentTankVol);
+            ALOGE("Wrong buffer size received for ScrReagentTankVol (%u). Got %zu , expected %lu", ComConf_ComSignal_isScrReagentTankVol_mrx, length, static_cast<unsigned long>(sizeof(ScrReagentTankVol)));
         }
     }
     break;
@@ -3532,7 +3532,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx:
     {
         if (sizeof(SeatBackUnlckdThrd) == length) {
-            log_verbose() << "Received SeatBackUnlckdThrd (" << ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx << ")";
+            ALOGV("Received SeatBackUnlckdThrd (%u)", ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx);
             const SeatBackUnlckdThrd& rteValue = *static_cast<const SeatBackUnlckdThrd*>(buffer);
             autosar::SeatBackUnlckdThrd_info::data_elem_type deValue;
             deValue.SeatBackUnlckdLe = static_cast<decltype(deValue.SeatBackUnlckdLe)>(rteValue.SeatBackUnlckdThrdLe);
@@ -3540,7 +3540,7 @@
 
             SeatBackUnlckdThrd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SeatBackUnlckdThrd (" << ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx << "). Got " << length << ", expected " << sizeof(SeatBackUnlckdThrd);
+            ALOGE("Wrong buffer size received for SeatBackUnlckdThrd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx, length, static_cast<unsigned long>(sizeof(SeatBackUnlckdThrd)));        
         }
     }
     break;
@@ -3548,13 +3548,13 @@
     case ComConf_ComSignal_isSeatHeatgAutCdn_mrx:
     {
         if (sizeof(SeatHeatgAutCdn) == length) {
-            log_verbose() << "Received SeatHeatgAutCdn (" << ComConf_ComSignal_isSeatHeatgAutCdn_mrx << ")";
+            ALOGV("Received SeatHeatgAutCdn (%u)", ComConf_ComSignal_isSeatHeatgAutCdn_mrx);
             const SeatHeatgAutCdn& rteValue = *static_cast<const SeatHeatgAutCdn*>(buffer);
             autosar::SeatHeatgAutCdn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SeatHeatgAutCdn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SeatHeatgAutCdn (" << ComConf_ComSignal_isSeatHeatgAutCdn_mrx << "). Got " << length << ", expected " << sizeof(SeatHeatgAutCdn);
+            ALOGE("Wrong buffer size received for SeatHeatgAutCdn (%u). Got %zu , expected %lu", ComConf_ComSignal_isSeatHeatgAutCdn_mrx, length, static_cast<unsigned long>(sizeof(SeatHeatgAutCdn)));
         }
     }
     break;
@@ -3562,13 +3562,13 @@
     case ComConf_ComSignal_isSeatVentnAutCdn_mrx:
     {
         if (sizeof(SeatVentnAutCdn) == length) {
-            log_verbose() << "Received SeatVentnAutCdn (" << ComConf_ComSignal_isSeatVentnAutCdn_mrx << ")";
+            ALOGV("Received SeatVentnAutCdn (%u)", ComConf_ComSignal_isSeatVentnAutCdn_mrx);
             const SeatVentnAutCdn& rteValue = *static_cast<const SeatVentnAutCdn*>(buffer);
             autosar::SeatVentnAutCdn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SeatVentnAutCdn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SeatVentnAutCdn (" << ComConf_ComSignal_isSeatVentnAutCdn_mrx << "). Got " << length << ", expected " << sizeof(SeatVentnAutCdn);
+            ALOGE("Wrong buffer size received for SeatVentnAutCdn (%u). Got %zu , expected %lu", ComConf_ComSignal_isSeatVentnAutCdn_mrx, length, static_cast<unsigned long>(sizeof(SeatVentnAutCdn)));
         }
     }
     break;
@@ -3576,7 +3576,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx:
     {
         if (sizeof(SftyCchAccActvnSts) == length) {
-            log_verbose() << "Received SftyCchAccActvnSts (" << ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx << ")";
+            ALOGV("Received SftyCchAccActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx);
             const SftyCchAccActvnSts& rteValue = *static_cast<const SftyCchAccActvnSts*>(buffer);
             autosar::SftyCchAccActvnSts_info::data_elem_type deValue;
             deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchAccActvnStsActv);
@@ -3586,7 +3586,7 @@
 
             SftyCchAccActvnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchAccActvnSts (" << ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx << "). Got " << length << ", expected " << sizeof(SftyCchAccActvnSts);
+            ALOGE("Wrong buffer size received for SftyCchAccActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchAccActvnSts)));        
         }
     }
     break;
@@ -3594,7 +3594,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx:
     {
         if (sizeof(SftyCchDrvgCycIdx) == length) {
-            log_verbose() << "Received SftyCchDrvgCycIdx (" << ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx << ")";
+            ALOGV("Received SftyCchDrvgCycIdx (%u)", ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx);
             const SftyCchDrvgCycIdx& rteValue = *static_cast<const SftyCchDrvgCycIdx*>(buffer);
             autosar::SftyCchDrvgCycIdx_info::data_elem_type deValue;
             deValue.Attention = static_cast<decltype(deValue.Attention)>( toUnsignedFromRaw<6>(rteValue.SftyCchDrvgCycIdxAttention) ) * 0.1 + 0.0;
@@ -3617,7 +3617,7 @@
 
             SftyCchDrvgCycIdx_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchDrvgCycIdx (" << ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx << "). Got " << length << ", expected " << sizeof(SftyCchDrvgCycIdx);
+            ALOGE("Wrong buffer size received for SftyCchDrvgCycIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchDrvgCycIdx)));        
         }
     }
     break;
@@ -3625,7 +3625,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx:
     {
         if (sizeof(SftyCchLaneKeepAidActvnSts) == length) {
-            log_verbose() << "Received SftyCchLaneKeepAidActvnSts (" << ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx << ")";
+            ALOGV("Received SftyCchLaneKeepAidActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx);
             const SftyCchLaneKeepAidActvnSts& rteValue = *static_cast<const SftyCchLaneKeepAidActvnSts*>(buffer);
             autosar::SftyCchLaneKeepAidActvnSts_info::data_elem_type deValue;
             deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchLaneKeepAidActvnStsActv);
@@ -3635,7 +3635,7 @@
 
             SftyCchLaneKeepAidActvnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchLaneKeepAidActvnSts (" << ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx << "). Got " << length << ", expected " << sizeof(SftyCchLaneKeepAidActvnSts);
+            ALOGE("Wrong buffer size received for SftyCchLaneKeepAidActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLaneKeepAidActvnSts)));        
         }
     }
     break;
@@ -3643,7 +3643,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx:
     {
         if (sizeof(SftyCchLongTermIdx) == length) {
-            log_verbose() << "Received SftyCchLongTermIdx (" << ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx << ")";
+            ALOGV("Received SftyCchLongTermIdx (%u)", ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx);
             const SftyCchLongTermIdx& rteValue = *static_cast<const SftyCchLongTermIdx*>(buffer);
             autosar::SftyCchLongTermIdx_info::data_elem_type deValue;
             deValue.Attention = static_cast<decltype(deValue.Attention)>( toUnsignedFromRaw<6>(rteValue.SftyCchLongTermIdxAttention) ) * 0.1 + 0.0;
@@ -3659,7 +3659,7 @@
 
             SftyCchLongTermIdx_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchLongTermIdx (" << ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx << "). Got " << length << ", expected " << sizeof(SftyCchLongTermIdx);
+            ALOGE("Wrong buffer size received for SftyCchLongTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLongTermIdx)));        
         }
     }
     break;
@@ -3667,7 +3667,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx:
     {
         if (sizeof(SftyCchMidTermIdx) == length) {
-            log_verbose() << "Received SftyCchMidTermIdx (" << ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx << ")";
+            ALOGV("Received SftyCchMidTermIdx (%u)", ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx);
             const SftyCchMidTermIdx& rteValue = *static_cast<const SftyCchMidTermIdx*>(buffer);
             autosar::SftyCchMidTermIdx_info::data_elem_type deValue;
             deValue.Attention = static_cast<decltype(deValue.Attention)>( toUnsignedFromRaw<6>(rteValue.SftyCchMidTermIdxAttention) ) * 0.1 + 0.0;
@@ -3683,7 +3683,7 @@
 
             SftyCchMidTermIdx_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchMidTermIdx (" << ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx << "). Got " << length << ", expected " << sizeof(SftyCchMidTermIdx);
+            ALOGE("Wrong buffer size received for SftyCchMidTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchMidTermIdx)));        
         }
     }
     break;
@@ -3691,7 +3691,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx:
     {
         if (sizeof(SftyCchPilotAssiActvnSts) == length) {
-            log_verbose() << "Received SftyCchPilotAssiActvnSts (" << ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx << ")";
+            ALOGV("Received SftyCchPilotAssiActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx);
             const SftyCchPilotAssiActvnSts& rteValue = *static_cast<const SftyCchPilotAssiActvnSts*>(buffer);
             autosar::SftyCchPilotAssiActvnSts_info::data_elem_type deValue;
             deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchPilotAssiActvnStsActv);
@@ -3701,7 +3701,7 @@
 
             SftyCchPilotAssiActvnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchPilotAssiActvnSts (" << ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx << "). Got " << length << ", expected " << sizeof(SftyCchPilotAssiActvnSts);
+            ALOGE("Wrong buffer size received for SftyCchPilotAssiActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPilotAssiActvnSts)));        
         }
     }
     break;
@@ -3709,13 +3709,13 @@
     case ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx:
     {
         if (sizeof(SftyCchPrimFbAftDrvg) == length) {
-            log_verbose() << "Received SftyCchPrimFbAftDrvg (" << ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx << ")";
+            ALOGV("Received SftyCchPrimFbAftDrvg (%u)", ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx);
             const SftyCchPrimFbAftDrvg& rteValue = *static_cast<const SftyCchPrimFbAftDrvg*>(buffer);
             autosar::SftyCchPrimFbAftDrvg_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SftyCchPrimFbAftDrvg_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchPrimFbAftDrvg (" << ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx << "). Got " << length << ", expected " << sizeof(SftyCchPrimFbAftDrvg);
+            ALOGE("Wrong buffer size received for SftyCchPrimFbAftDrvg (%u). Got %zu , expected %lu", ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPrimFbAftDrvg)));
         }
     }
     break;
@@ -3723,13 +3723,13 @@
     case ComConf_ComSignal_isSftyCchPrimFbDurgDrvg_mrx:
     {
         if (sizeof(SftyCchPrimFbDurgDrvg) == length) {
-            log_verbose() << "Received SftyCchPrimFbDurgDrvg (" << ComConf_ComSignal_isSftyCchPrimFbDurgDrvg_mrx << ")";
+            ALOGV("Received SftyCchPrimFbDurgDrvg (%u)", ComConf_ComSignal_isSftyCchPrimFbDurgDrvg_mrx);
             const SftyCchPrimFbDurgDrvg& rteValue = *static_cast<const SftyCchPrimFbDurgDrvg*>(buffer);
             autosar::SftyCchPrimFbDurgDrvg_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SftyCchPrimFbDurgDrvg_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchPrimFbDurgDrvg (" << ComConf_ComSignal_isSftyCchPrimFbDurgDrvg_mrx << "). Got " << length << ", expected " << sizeof(SftyCchPrimFbDurgDrvg);
+            ALOGE("Wrong buffer size received for SftyCchPrimFbDurgDrvg (%u). Got %zu , expected %lu", ComConf_ComSignal_isSftyCchPrimFbDurgDrvg_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPrimFbDurgDrvg)));
         }
     }
     break;
@@ -3737,13 +3737,13 @@
     case ComConf_ComSignal_isSftyCchSecFbAftDrvg_mrx:
     {
         if (sizeof(SftyCchSecFbAftDrvg) == length) {
-            log_verbose() << "Received SftyCchSecFbAftDrvg (" << ComConf_ComSignal_isSftyCchSecFbAftDrvg_mrx << ")";
+            ALOGV("Received SftyCchSecFbAftDrvg (%u)", ComConf_ComSignal_isSftyCchSecFbAftDrvg_mrx);
             const SftyCchSecFbAftDrvg& rteValue = *static_cast<const SftyCchSecFbAftDrvg*>(buffer);
             autosar::SftyCchSecFbAftDrvg_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SftyCchSecFbAftDrvg_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchSecFbAftDrvg (" << ComConf_ComSignal_isSftyCchSecFbAftDrvg_mrx << "). Got " << length << ", expected " << sizeof(SftyCchSecFbAftDrvg);
+            ALOGE("Wrong buffer size received for SftyCchSecFbAftDrvg (%u). Got %zu , expected %lu", ComConf_ComSignal_isSftyCchSecFbAftDrvg_mrx, length, static_cast<unsigned long>(sizeof(SftyCchSecFbAftDrvg)));
         }
     }
     break;
@@ -3751,13 +3751,13 @@
     case ComConf_ComSignal_isSftyCchSecFbDurgDrvg_mrx:
     {
         if (sizeof(SftyCchSecFbDurgDrvg) == length) {
-            log_verbose() << "Received SftyCchSecFbDurgDrvg (" << ComConf_ComSignal_isSftyCchSecFbDurgDrvg_mrx << ")";
+            ALOGV("Received SftyCchSecFbDurgDrvg (%u)", ComConf_ComSignal_isSftyCchSecFbDurgDrvg_mrx);
             const SftyCchSecFbDurgDrvg& rteValue = *static_cast<const SftyCchSecFbDurgDrvg*>(buffer);
             autosar::SftyCchSecFbDurgDrvg_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SftyCchSecFbDurgDrvg_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchSecFbDurgDrvg (" << ComConf_ComSignal_isSftyCchSecFbDurgDrvg_mrx << "). Got " << length << ", expected " << sizeof(SftyCchSecFbDurgDrvg);
+            ALOGE("Wrong buffer size received for SftyCchSecFbDurgDrvg (%u). Got %zu , expected %lu", ComConf_ComSignal_isSftyCchSecFbDurgDrvg_mrx, length, static_cast<unsigned long>(sizeof(SftyCchSecFbDurgDrvg)));
         }
     }
     break;
@@ -3765,7 +3765,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx:
     {
         if (sizeof(SftyCchShortTermIdx) == length) {
-            log_verbose() << "Received SftyCchShortTermIdx (" << ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx << ")";
+            ALOGV("Received SftyCchShortTermIdx (%u)", ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx);
             const SftyCchShortTermIdx& rteValue = *static_cast<const SftyCchShortTermIdx*>(buffer);
             autosar::SftyCchShortTermIdx_info::data_elem_type deValue;
             deValue.Attention = static_cast<decltype(deValue.Attention)>( toUnsignedFromRaw<6>(rteValue.SftyCchShortTermIdxAttention) ) * 0.1 + 0.0;
@@ -3781,7 +3781,7 @@
 
             SftyCchShortTermIdx_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchShortTermIdx (" << ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx << "). Got " << length << ", expected " << sizeof(SftyCchShortTermIdx);
+            ALOGE("Wrong buffer size received for SftyCchShortTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchShortTermIdx)));        
         }
     }
     break;
@@ -3789,13 +3789,13 @@
     case ComConf_ComSignal_isSftyCchSts_mrx:
     {
         if (sizeof(SftyCchSts) == length) {
-            log_verbose() << "Received SftyCchSts (" << ComConf_ComSignal_isSftyCchSts_mrx << ")";
+            ALOGV("Received SftyCchSts (%u)", ComConf_ComSignal_isSftyCchSts_mrx);
             const SftyCchSts& rteValue = *static_cast<const SftyCchSts*>(buffer);
             autosar::SftyCchSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SftyCchSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyCchSts (" << ComConf_ComSignal_isSftyCchSts_mrx << "). Got " << length << ", expected " << sizeof(SftyCchSts);
+            ALOGE("Wrong buffer size received for SftyCchSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isSftyCchSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchSts)));
         }
     }
     break;
@@ -3803,7 +3803,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx:
     {
         if (sizeof(SftyWarnGroupFromAsySafe) == length) {
-            log_verbose() << "Received SftyWarnGroupFromAsySafe (" << ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx << ")";
+            ALOGV("Received SftyWarnGroupFromAsySafe (%u)", ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx);
             const SftyWarnGroupFromAsySafe& rteValue = *static_cast<const SftyWarnGroupFromAsySafe*>(buffer);
             autosar::SftyWarnGroupFromAsySafe_info::data_elem_type deValue;
             deValue.CnclWarnLatForAutDrv = static_cast<decltype(deValue.CnclWarnLatForAutDrv)>(rteValue.CnclWarnLatForAutDrv);
@@ -3814,7 +3814,7 @@
 
             SftyWarnGroupFromAsySafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SftyWarnGroupFromAsySafe (" << ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx << "). Got " << length << ", expected " << sizeof(SftyWarnGroupFromAsySafe);
+            ALOGE("Wrong buffer size received for SftyWarnGroupFromAsySafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx, length, static_cast<unsigned long>(sizeof(SftyWarnGroupFromAsySafe)));        
         }
     }
     break;
@@ -3822,7 +3822,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx:
     {
         if (sizeof(SnsrParkAssiFrnt) == length) {
-            log_verbose() << "Received SnsrParkAssiFrnt (" << ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx << ")";
+            ALOGV("Received SnsrParkAssiFrnt (%u)", ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx);
             const SnsrParkAssiFrnt& rteValue = *static_cast<const SnsrParkAssiFrnt*>(buffer);
             autosar::SnsrParkAssiFrnt_info::data_elem_type deValue;
             deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.ParkAssiDstFrntOfAudSideWarn);
@@ -3836,7 +3836,7 @@
 
             SnsrParkAssiFrnt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SnsrParkAssiFrnt (" << ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx << "). Got " << length << ", expected " << sizeof(SnsrParkAssiFrnt);
+            ALOGE("Wrong buffer size received for SnsrParkAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiFrnt)));        
         }
     }
     break;
@@ -3844,7 +3844,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx:
     {
         if (sizeof(SnsrParkAssiRe) == length) {
-            log_verbose() << "Received SnsrParkAssiRe (" << ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx << ")";
+            ALOGV("Received SnsrParkAssiRe (%u)", ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx);
             const SnsrParkAssiRe& rteValue = *static_cast<const SnsrParkAssiRe*>(buffer);
             autosar::SnsrParkAssiRe_info::data_elem_type deValue;
             deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.ParkAssiDstReOfAudSideWarn);
@@ -3858,7 +3858,7 @@
 
             SnsrParkAssiRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SnsrParkAssiRe (" << ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx << "). Got " << length << ", expected " << sizeof(SnsrParkAssiRe);
+            ALOGE("Wrong buffer size received for SnsrParkAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiRe)));        
         }
     }
     break;
@@ -3866,7 +3866,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx:
     {
         if (sizeof(SnsrPrkgAssiFrnt) == length) {
-            log_verbose() << "Received SnsrPrkgAssiFrnt (" << ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx << ")";
+            ALOGV("Received SnsrPrkgAssiFrnt (%u)", ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx);
             const SnsrPrkgAssiFrnt& rteValue = *static_cast<const SnsrPrkgAssiFrnt*>(buffer);
             autosar::SnsrPrkgAssiFrnt_info::data_elem_type deValue;
             deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.SnsrPrkgAssiFrntAudSideWarn);
@@ -3880,7 +3880,7 @@
 
             SnsrPrkgAssiFrnt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SnsrPrkgAssiFrnt (" << ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx << "). Got " << length << ", expected " << sizeof(SnsrPrkgAssiFrnt);
+            ALOGE("Wrong buffer size received for SnsrPrkgAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiFrnt)));        
         }
     }
     break;
@@ -3888,7 +3888,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx:
     {
         if (sizeof(SnsrPrkgAssiRe) == length) {
-            log_verbose() << "Received SnsrPrkgAssiRe (" << ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx << ")";
+            ALOGV("Received SnsrPrkgAssiRe (%u)", ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx);
             const SnsrPrkgAssiRe& rteValue = *static_cast<const SnsrPrkgAssiRe*>(buffer);
             autosar::SnsrPrkgAssiRe_info::data_elem_type deValue;
             deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.SnsrPrkgAssiReAudSideWarn);
@@ -3902,7 +3902,7 @@
 
             SnsrPrkgAssiRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SnsrPrkgAssiRe (" << ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx << "). Got " << length << ", expected " << sizeof(SnsrPrkgAssiRe);
+            ALOGE("Wrong buffer size received for SnsrPrkgAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiRe)));        
         }
     }
     break;
@@ -3910,13 +3910,13 @@
     case ComConf_ComSignal_isWhlMotSysSpdAct_mrx:
     {
         if (sizeof(WhlMotSysSpdAct) == length) {
-            log_verbose() << "Received WhlMotSysSpdAct (" << ComConf_ComSignal_isWhlMotSysSpdAct_mrx << ")";
+            ALOGV("Received WhlMotSysSpdAct (%u)", ComConf_ComSignal_isWhlMotSysSpdAct_mrx);
             const WhlMotSysSpdAct& rteValue = *static_cast<const WhlMotSysSpdAct*>(buffer);
             autosar::WhlMotSysSpdAct_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.1 + -1638.4;
             WhlMotSysSpdAct_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WhlMotSysSpdAct (" << ComConf_ComSignal_isWhlMotSysSpdAct_mrx << "). Got " << length << ", expected " << sizeof(WhlMotSysSpdAct);
+            ALOGE("Wrong buffer size received for WhlMotSysSpdAct (%u). Got %zu , expected %lu", ComConf_ComSignal_isWhlMotSysSpdAct_mrx, length, static_cast<unsigned long>(sizeof(WhlMotSysSpdAct)));
         }
     }
     break;
@@ -3924,13 +3924,13 @@
     case ComConf_ComSignal_isSpdLimAdpvSts_mrx:
     {
         if (sizeof(SpdLimAdpvSts) == length) {
-            log_verbose() << "Received SpdLimAdpvSts (" << ComConf_ComSignal_isSpdLimAdpvSts_mrx << ")";
+            ALOGV("Received SpdLimAdpvSts (%u)", ComConf_ComSignal_isSpdLimAdpvSts_mrx);
             const SpdLimAdpvSts& rteValue = *static_cast<const SpdLimAdpvSts*>(buffer);
             autosar::SpdLimAdpvSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SpdLimAdpvSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SpdLimAdpvSts (" << ComConf_ComSignal_isSpdLimAdpvSts_mrx << "). Got " << length << ", expected " << sizeof(SpdLimAdpvSts);
+            ALOGE("Wrong buffer size received for SpdLimAdpvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isSpdLimAdpvSts_mrx, length, static_cast<unsigned long>(sizeof(SpdLimAdpvSts)));
         }
     }
     break;
@@ -3938,13 +3938,13 @@
     case ComConf_ComSignal_isSpdLimWarnReq_mrx:
     {
         if (sizeof(SpdLimWarnReq) == length) {
-            log_verbose() << "Received SpdLimWarnReq (" << ComConf_ComSignal_isSpdLimWarnReq_mrx << ")";
+            ALOGV("Received SpdLimWarnReq (%u)", ComConf_ComSignal_isSpdLimWarnReq_mrx);
             const SpdLimWarnReq& rteValue = *static_cast<const SpdLimWarnReq*>(buffer);
             autosar::SpdLimWarnReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SpdLimWarnReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SpdLimWarnReq (" << ComConf_ComSignal_isSpdLimWarnReq_mrx << "). Got " << length << ", expected " << sizeof(SpdLimWarnReq);
+            ALOGE("Wrong buffer size received for SpdLimWarnReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isSpdLimWarnReq_mrx, length, static_cast<unsigned long>(sizeof(SpdLimWarnReq)));
         }
     }
     break;
@@ -3952,13 +3952,13 @@
     case ComConf_ComSignal_isSpdWarn_mrx:
     {
         if (sizeof(SpdWarn) == length) {
-            log_verbose() << "Received SpdWarn (" << ComConf_ComSignal_isSpdWarn_mrx << ")";
+            ALOGV("Received SpdWarn (%u)", ComConf_ComSignal_isSpdWarn_mrx);
             const SpdWarn& rteValue = *static_cast<const SpdWarn*>(buffer);
             autosar::SpdWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SpdWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SpdWarn (" << ComConf_ComSignal_isSpdWarn_mrx << "). Got " << length << ", expected " << sizeof(SpdWarn);
+            ALOGE("Wrong buffer size received for SpdWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isSpdWarn_mrx, length, static_cast<unsigned long>(sizeof(SpdWarn)));
         }
     }
     break;
@@ -3966,13 +3966,13 @@
     case ComConf_ComSignal_isSrvRst_mrx:
     {
         if (sizeof(SrvRst) == length) {
-            log_verbose() << "Received SrvRst (" << ComConf_ComSignal_isSrvRst_mrx << ")";
+            ALOGV("Received SrvRst (%u)", ComConf_ComSignal_isSrvRst_mrx);
             const SrvRst& rteValue = *static_cast<const SrvRst*>(buffer);
             autosar::SrvRst_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SrvRst_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SrvRst (" << ComConf_ComSignal_isSrvRst_mrx << "). Got " << length << ", expected " << sizeof(SrvRst);
+            ALOGE("Wrong buffer size received for SrvRst (%u). Got %zu , expected %lu", ComConf_ComSignal_isSrvRst_mrx, length, static_cast<unsigned long>(sizeof(SrvRst)));
         }
     }
     break;
@@ -3980,13 +3980,13 @@
     case ComConf_ComSignal_isSrvTrig_mrx:
     {
         if (sizeof(SrvTrig) == length) {
-            log_verbose() << "Received SrvTrig (" << ComConf_ComSignal_isSrvTrig_mrx << ")";
+            ALOGV("Received SrvTrig (%u)", ComConf_ComSignal_isSrvTrig_mrx);
             const SrvTrig& rteValue = *static_cast<const SrvTrig*>(buffer);
             autosar::SrvTrig_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 1.0 + 0.0;
             SrvTrig_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SrvTrig (" << ComConf_ComSignal_isSrvTrig_mrx << "). Got " << length << ", expected " << sizeof(SrvTrig);
+            ALOGE("Wrong buffer size received for SrvTrig (%u). Got %zu , expected %lu", ComConf_ComSignal_isSrvTrig_mrx, length, static_cast<unsigned long>(sizeof(SrvTrig)));
         }
     }
     break;
@@ -3994,13 +3994,13 @@
     case ComConf_ComSignal_isSteerWarnReqForAutDrv_mrx:
     {
         if (sizeof(SteerWarnReqForAutDrv) == length) {
-            log_verbose() << "Received SteerWarnReqForAutDrv (" << ComConf_ComSignal_isSteerWarnReqForAutDrv_mrx << ")";
+            ALOGV("Received SteerWarnReqForAutDrv (%u)", ComConf_ComSignal_isSteerWarnReqForAutDrv_mrx);
             const SteerWarnReqForAutDrv& rteValue = *static_cast<const SteerWarnReqForAutDrv*>(buffer);
             autosar::SteerWarnReqForAutDrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SteerWarnReqForAutDrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SteerWarnReqForAutDrv (" << ComConf_ComSignal_isSteerWarnReqForAutDrv_mrx << "). Got " << length << ", expected " << sizeof(SteerWarnReqForAutDrv);
+            ALOGE("Wrong buffer size received for SteerWarnReqForAutDrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isSteerWarnReqForAutDrv_mrx, length, static_cast<unsigned long>(sizeof(SteerWarnReqForAutDrv)));
         }
     }
     break;
@@ -4008,13 +4008,13 @@
     case ComConf_ComSignal_isSteerWarnReqForLaneKeepAid_mrx:
     {
         if (sizeof(SteerWarnReqForLaneKeepAid) == length) {
-            log_verbose() << "Received SteerWarnReqForLaneKeepAid (" << ComConf_ComSignal_isSteerWarnReqForLaneKeepAid_mrx << ")";
+            ALOGV("Received SteerWarnReqForLaneKeepAid (%u)", ComConf_ComSignal_isSteerWarnReqForLaneKeepAid_mrx);
             const SteerWarnReqForLaneKeepAid& rteValue = *static_cast<const SteerWarnReqForLaneKeepAid*>(buffer);
             autosar::SteerWarnReqForLaneKeepAid_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SteerWarnReqForLaneKeepAid_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SteerWarnReqForLaneKeepAid (" << ComConf_ComSignal_isSteerWarnReqForLaneKeepAid_mrx << "). Got " << length << ", expected " << sizeof(SteerWarnReqForLaneKeepAid);
+            ALOGE("Wrong buffer size received for SteerWarnReqForLaneKeepAid (%u). Got %zu , expected %lu", ComConf_ComSignal_isSteerWarnReqForLaneKeepAid_mrx, length, static_cast<unsigned long>(sizeof(SteerWarnReqForLaneKeepAid)));
         }
     }
     break;
@@ -4022,13 +4022,13 @@
     case ComConf_ComSignal_isSteerWhlHeatgStrtAutCdnOk_mrx:
     {
         if (sizeof(SteerWhlHeatgStrtAutCdnOk) == length) {
-            log_verbose() << "Received SteerWhlHeatgStrtAutCdnOk (" << ComConf_ComSignal_isSteerWhlHeatgStrtAutCdnOk_mrx << ")";
+            ALOGV("Received SteerWhlHeatgStrtAutCdnOk (%u)", ComConf_ComSignal_isSteerWhlHeatgStrtAutCdnOk_mrx);
             const SteerWhlHeatgStrtAutCdnOk& rteValue = *static_cast<const SteerWhlHeatgStrtAutCdnOk*>(buffer);
             autosar::SteerWhlHeatgStrtAutCdnOk_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SteerWhlHeatgStrtAutCdnOk_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SteerWhlHeatgStrtAutCdnOk (" << ComConf_ComSignal_isSteerWhlHeatgStrtAutCdnOk_mrx << "). Got " << length << ", expected " << sizeof(SteerWhlHeatgStrtAutCdnOk);
+            ALOGE("Wrong buffer size received for SteerWhlHeatgStrtAutCdnOk (%u). Got %zu , expected %lu", ComConf_ComSignal_isSteerWhlHeatgStrtAutCdnOk_mrx, length, static_cast<unsigned long>(sizeof(SteerWhlHeatgStrtAutCdnOk)));
         }
     }
     break;
@@ -4036,7 +4036,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igSteerWhlSnsr_mrx:
     {
         if (sizeof(SteerWhlSnsr) == length) {
-            log_verbose() << "Received SteerWhlSnsr (" << ComConf_ComSignalGroup_igSteerWhlSnsr_mrx << ")";
+            ALOGV("Received SteerWhlSnsr (%u)", ComConf_ComSignalGroup_igSteerWhlSnsr_mrx);
             const SteerWhlSnsr& rteValue = *static_cast<const SteerWhlSnsr*>(buffer);
             autosar::SteerWhlSnsrSafe_info::data_elem_type deValue;
             deValue.SteerWhlAg = static_cast<decltype(deValue.SteerWhlAg)>( toSignedFromRaw<15>(rteValue.SteerWhlAgSafe) ) * 0.0009765625 + 0.0;
@@ -4047,7 +4047,7 @@
 
             SteerWhlSnsrSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SteerWhlSnsr (" << ComConf_ComSignalGroup_igSteerWhlSnsr_mrx << "). Got " << length << ", expected " << sizeof(SteerWhlSnsr);
+            ALOGE("Wrong buffer size received for SteerWhlSnsr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSteerWhlSnsr_mrx, length, static_cast<unsigned long>(sizeof(SteerWhlSnsr)));        
         }
     }
     break;
@@ -4055,13 +4055,13 @@
     case ComConf_ComSignal_isSteerWhlSwtPwr_mrx:
     {
         if (sizeof(SteerWhlSwtPwr) == length) {
-            log_verbose() << "Received SteerWhlSwtPwr (" << ComConf_ComSignal_isSteerWhlSwtPwr_mrx << ")";
+            ALOGV("Received SteerWhlSwtPwr (%u)", ComConf_ComSignal_isSteerWhlSwtPwr_mrx);
             const SteerWhlSwtPwr& rteValue = *static_cast<const SteerWhlSwtPwr*>(buffer);
             autosar::SteerWhlSwtPwr_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SteerWhlSwtPwr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SteerWhlSwtPwr (" << ComConf_ComSignal_isSteerWhlSwtPwr_mrx << "). Got " << length << ", expected " << sizeof(SteerWhlSwtPwr);
+            ALOGE("Wrong buffer size received for SteerWhlSwtPwr (%u). Got %zu , expected %lu", ComConf_ComSignal_isSteerWhlSwtPwr_mrx, length, static_cast<unsigned long>(sizeof(SteerWhlSwtPwr)));
         }
     }
     break;
@@ -4069,13 +4069,13 @@
     case ComConf_ComSignal_isStopStrtInhb_mrx:
     {
         if (sizeof(StopStrtInhb) == length) {
-            log_verbose() << "Received StopStrtInhb (" << ComConf_ComSignal_isStopStrtInhb_mrx << ")";
+            ALOGV("Received StopStrtInhb (%u)", ComConf_ComSignal_isStopStrtInhb_mrx);
             const StopStrtInhb& rteValue = *static_cast<const StopStrtInhb*>(buffer);
             autosar::StopStrtInhb_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             StopStrtInhb_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for StopStrtInhb (" << ComConf_ComSignal_isStopStrtInhb_mrx << "). Got " << length << ", expected " << sizeof(StopStrtInhb);
+            ALOGE("Wrong buffer size received for StopStrtInhb (%u). Got %zu , expected %lu", ComConf_ComSignal_isStopStrtInhb_mrx, length, static_cast<unsigned long>(sizeof(StopStrtInhb)));
         }
     }
     break;
@@ -4083,13 +4083,13 @@
     case ComConf_ComSignal_isStrtInProgs_mrx:
     {
         if (sizeof(StrtInProgs) == length) {
-            log_verbose() << "Received StrtInProgs (" << ComConf_ComSignal_isStrtInProgs_mrx << ")";
+            ALOGV("Received StrtInProgs (%u)", ComConf_ComSignal_isStrtInProgs_mrx);
             const StrtInProgs& rteValue = *static_cast<const StrtInProgs*>(buffer);
             autosar::StrtInProgs_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             StrtInProgs_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for StrtInProgs (" << ComConf_ComSignal_isStrtInProgs_mrx << "). Got " << length << ", expected " << sizeof(StrtInProgs);
+            ALOGE("Wrong buffer size received for StrtInProgs (%u). Got %zu , expected %lu", ComConf_ComSignal_isStrtInProgs_mrx, length, static_cast<unsigned long>(sizeof(StrtInProgs)));
         }
     }
     break;
@@ -4097,13 +4097,13 @@
     case ComConf_ComSignal_isSunRoofPosnSts_mrx:
     {
         if (sizeof(SunRoofPosnSts) == length) {
-            log_verbose() << "Received SunRoofPosnSts (" << ComConf_ComSignal_isSunRoofPosnSts_mrx << ")";
+            ALOGV("Received SunRoofPosnSts (%u)", ComConf_ComSignal_isSunRoofPosnSts_mrx);
             const SunRoofPosnSts& rteValue = *static_cast<const SunRoofPosnSts*>(buffer);
             autosar::SunRoofPosnSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SunRoofPosnSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SunRoofPosnSts (" << ComConf_ComSignal_isSunRoofPosnSts_mrx << "). Got " << length << ", expected " << sizeof(SunRoofPosnSts);
+            ALOGE("Wrong buffer size received for SunRoofPosnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isSunRoofPosnSts_mrx, length, static_cast<unsigned long>(sizeof(SunRoofPosnSts)));
         }
     }
     break;
@@ -4111,13 +4111,13 @@
     case ComConf_ComSignal_isSwtAcptReq_mrx:
     {
         if (sizeof(SwtAcptReq) == length) {
-            log_verbose() << "Received SwtAcptReq (" << ComConf_ComSignal_isSwtAcptReq_mrx << ")";
+            ALOGV("Received SwtAcptReq (%u)", ComConf_ComSignal_isSwtAcptReq_mrx);
             const SwtAcptReq& rteValue = *static_cast<const SwtAcptReq*>(buffer);
             autosar::SwtAcptReq_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SwtAcptReq_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SwtAcptReq (" << ComConf_ComSignal_isSwtAcptReq_mrx << "). Got " << length << ", expected " << sizeof(SwtAcptReq);
+            ALOGE("Wrong buffer size received for SwtAcptReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isSwtAcptReq_mrx, length, static_cast<unsigned long>(sizeof(SwtAcptReq)));
         }
     }
     break;
@@ -4125,13 +4125,13 @@
     case ComConf_ComSignal_isSwtForPassAirbCutOffSt_mrx:
     {
         if (sizeof(SwtForPassAirbCutOffSt) == length) {
-            log_verbose() << "Received SwtForPassAirbCutOffSt (" << ComConf_ComSignal_isSwtForPassAirbCutOffSt_mrx << ")";
+            ALOGV("Received SwtForPassAirbCutOffSt (%u)", ComConf_ComSignal_isSwtForPassAirbCutOffSt_mrx);
             const SwtForPassAirbCutOffSt& rteValue = *static_cast<const SwtForPassAirbCutOffSt*>(buffer);
             autosar::SwtForPassAirbCutOffSt_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SwtForPassAirbCutOffSt_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SwtForPassAirbCutOffSt (" << ComConf_ComSignal_isSwtForPassAirbCutOffSt_mrx << "). Got " << length << ", expected " << sizeof(SwtForPassAirbCutOffSt);
+            ALOGE("Wrong buffer size received for SwtForPassAirbCutOffSt (%u). Got %zu , expected %lu", ComConf_ComSignal_isSwtForPassAirbCutOffSt_mrx, length, static_cast<unsigned long>(sizeof(SwtForPassAirbCutOffSt)));
         }
     }
     break;
@@ -4139,13 +4139,13 @@
     case ComConf_ComSignal_isTankFlapSts_mrx:
     {
         if (sizeof(TankFlapSts) == length) {
-            log_verbose() << "Received TankFlapSts (" << ComConf_ComSignal_isTankFlapSts_mrx << ")";
+            ALOGV("Received TankFlapSts (%u)", ComConf_ComSignal_isTankFlapSts_mrx);
             const TankFlapSts& rteValue = *static_cast<const TankFlapSts*>(buffer);
             autosar::TankFlapSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TankFlapSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TankFlapSts (" << ComConf_ComSignal_isTankFlapSts_mrx << "). Got " << length << ", expected " << sizeof(TankFlapSts);
+            ALOGE("Wrong buffer size received for TankFlapSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTankFlapSts_mrx, length, static_cast<unsigned long>(sizeof(TankFlapSts)));
         }
     }
     break;
@@ -4153,13 +4153,13 @@
     case ComConf_ComSignal_isTelmSts_mrx:
     {
         if (sizeof(TelmSts) == length) {
-            log_verbose() << "Received TelmSts (" << ComConf_ComSignal_isTelmSts_mrx << ")";
+            ALOGV("Received TelmSts (%u)", ComConf_ComSignal_isTelmSts_mrx);
             const TelmSts& rteValue = *static_cast<const TelmSts*>(buffer);
             autosar::TelmSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TelmSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TelmSts (" << ComConf_ComSignal_isTelmSts_mrx << "). Got " << length << ", expected " << sizeof(TelmSts);
+            ALOGE("Wrong buffer size received for TelmSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTelmSts_mrx, length, static_cast<unsigned long>(sizeof(TelmSts)));
         }
     }
     break;
@@ -4167,7 +4167,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTiAndDateIndcn_mrx:
     {
         if (sizeof(TiAndDateIndcn) == length) {
-            log_verbose() << "Received TiAndDateIndcn (" << ComConf_ComSignalGroup_igTiAndDateIndcn_mrx << ")";
+            ALOGV("Received TiAndDateIndcn (%u)", ComConf_ComSignalGroup_igTiAndDateIndcn_mrx);
             const TiAndDateIndcn& rteValue = *static_cast<const TiAndDateIndcn*>(buffer);
             autosar::TiAndDateIndcn_info::data_elem_type deValue;
             deValue.DataValid = static_cast<decltype(deValue.DataValid)>(rteValue.TiAndDateVld);
@@ -4180,7 +4180,7 @@
 
             TiAndDateIndcn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TiAndDateIndcn (" << ComConf_ComSignalGroup_igTiAndDateIndcn_mrx << "). Got " << length << ", expected " << sizeof(TiAndDateIndcn);
+            ALOGE("Wrong buffer size received for TiAndDateIndcn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTiAndDateIndcn_mrx, length, static_cast<unsigned long>(sizeof(TiAndDateIndcn)));        
         }
     }
     break;
@@ -4188,7 +4188,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx:
     {
         if (sizeof(TirePAbsltValFrntRi) == length) {
-            log_verbose() << "Received TirePAbsltValFrntRi (" << ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx << ")";
+            ALOGV("Received TirePAbsltValFrntRi (%u)", ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx);
             const TirePAbsltValFrntRi& rteValue = *static_cast<const TirePAbsltValFrntRi*>(buffer);
             autosar::TirePAbsltValFrntRi_info::data_elem_type deValue;
             deValue.TirePAbsltVal1 = static_cast<decltype(deValue.TirePAbsltVal1)>( toUnsignedFromRaw<8>(rteValue.TirePAbsltValFrntRiTirePAbsltVal1) ) * 2.5 + 0.0;
@@ -4197,7 +4197,7 @@
 
             TirePAbsltValFrntRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePAbsltValFrntRi (" << ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx << "). Got " << length << ", expected " << sizeof(TirePAbsltValFrntRi);
+            ALOGE("Wrong buffer size received for TirePAbsltValFrntRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntRi)));        
         }
     }
     break;
@@ -4205,7 +4205,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx:
     {
         if (sizeof(TirePAbsltValFrntLe) == length) {
-            log_verbose() << "Received TirePAbsltValFrntLe (" << ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx << ")";
+            ALOGV("Received TirePAbsltValFrntLe (%u)", ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx);
             const TirePAbsltValFrntLe& rteValue = *static_cast<const TirePAbsltValFrntLe*>(buffer);
             autosar::TirePAbsltValFrntLe_info::data_elem_type deValue;
             deValue.TirePPosn_ = static_cast<decltype(deValue.TirePPosn_)>(rteValue.TirePPosnForFrntLe);
@@ -4214,7 +4214,7 @@
 
             TirePAbsltValFrntLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePAbsltValFrntLe (" << ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx << "). Got " << length << ", expected " << sizeof(TirePAbsltValFrntLe);
+            ALOGE("Wrong buffer size received for TirePAbsltValFrntLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntLe)));        
         }
     }
     break;
@@ -4222,7 +4222,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx:
     {
         if (sizeof(TirePAbsltValReLe) == length) {
-            log_verbose() << "Received TirePAbsltValReLe (" << ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx << ")";
+            ALOGV("Received TirePAbsltValReLe (%u)", ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx);
             const TirePAbsltValReLe& rteValue = *static_cast<const TirePAbsltValReLe*>(buffer);
             autosar::TirePAbsltValReLe_info::data_elem_type deValue;
             deValue.TirePAbsltVal1 = static_cast<decltype(deValue.TirePAbsltVal1)>( toUnsignedFromRaw<8>(rteValue.TirePAbsltValForReLe) ) * 2.5 + 0.0;
@@ -4231,7 +4231,7 @@
 
             TirePAbsltValReLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePAbsltValReLe (" << ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx << "). Got " << length << ", expected " << sizeof(TirePAbsltValReLe);
+            ALOGE("Wrong buffer size received for TirePAbsltValReLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReLe)));        
         }
     }
     break;
@@ -4239,7 +4239,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx:
     {
         if (sizeof(TirePAbsltValReRi) == length) {
-            log_verbose() << "Received TirePAbsltValReRi (" << ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx << ")";
+            ALOGV("Received TirePAbsltValReRi (%u)", ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx);
             const TirePAbsltValReRi& rteValue = *static_cast<const TirePAbsltValReRi*>(buffer);
             autosar::TirePAbsltValReRi_info::data_elem_type deValue;
             deValue.TirePAbsltVal1 = static_cast<decltype(deValue.TirePAbsltVal1)>( toUnsignedFromRaw<8>(rteValue.TirePAbsltValForReRi) ) * 2.5 + 0.0;
@@ -4248,7 +4248,7 @@
 
             TirePAbsltValReRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePAbsltValReRi (" << ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx << "). Got " << length << ", expected " << sizeof(TirePAbsltValReRi);
+            ALOGE("Wrong buffer size received for TirePAbsltValReRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReRi)));        
         }
     }
     break;
@@ -4256,13 +4256,13 @@
     case ComConf_ComSignal_isTirePCalSts_mrx:
     {
         if (sizeof(TirePCalSts) == length) {
-            log_verbose() << "Received TirePCalSts (" << ComConf_ComSignal_isTirePCalSts_mrx << ")";
+            ALOGV("Received TirePCalSts (%u)", ComConf_ComSignal_isTirePCalSts_mrx);
             const TirePCalSts& rteValue = *static_cast<const TirePCalSts*>(buffer);
             autosar::TirePCalSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TirePCalSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePCalSts (" << ComConf_ComSignal_isTirePCalSts_mrx << "). Got " << length << ", expected " << sizeof(TirePCalSts);
+            ALOGE("Wrong buffer size received for TirePCalSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTirePCalSts_mrx, length, static_cast<unsigned long>(sizeof(TirePCalSts)));
         }
     }
     break;
@@ -4270,7 +4270,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTirePMonData_mrx:
     {
         if (sizeof(TirePMonData) == length) {
-            log_verbose() << "Received TirePMonData (" << ComConf_ComSignalGroup_igTirePMonData_mrx << ")";
+            ALOGV("Received TirePMonData (%u)", ComConf_ComSignalGroup_igTirePMonData_mrx);
             const TirePMonData& rteValue = *static_cast<const TirePMonData*>(buffer);
             autosar::TirePMonData_info::data_elem_type deValue;
             deValue.TirePFrntLe = static_cast<decltype(deValue.TirePFrntLe)>(rteValue.TirePFrntLe);
@@ -4281,7 +4281,7 @@
 
             TirePMonData_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TirePMonData (" << ComConf_ComSignalGroup_igTirePMonData_mrx << "). Got " << length << ", expected " << sizeof(TirePMonData);
+            ALOGE("Wrong buffer size received for TirePMonData (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePMonData_mrx, length, static_cast<unsigned long>(sizeof(TirePMonData)));        
         }
     }
     break;
@@ -4289,13 +4289,13 @@
     case ComConf_ComSignal_isTnlEntryOrEnd_mrx:
     {
         if (sizeof(TnlEntryOrEnd) == length) {
-            log_verbose() << "Received TnlEntryOrEnd (" << ComConf_ComSignal_isTnlEntryOrEnd_mrx << ")";
+            ALOGV("Received TnlEntryOrEnd (%u)", ComConf_ComSignal_isTnlEntryOrEnd_mrx);
             const TnlEntryOrEnd& rteValue = *static_cast<const TnlEntryOrEnd*>(buffer);
             autosar::TnlEntryOrEnd_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TnlEntryOrEnd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TnlEntryOrEnd (" << ComConf_ComSignal_isTnlEntryOrEnd_mrx << "). Got " << length << ", expected " << sizeof(TnlEntryOrEnd);
+            ALOGE("Wrong buffer size received for TnlEntryOrEnd (%u). Got %zu , expected %lu", ComConf_ComSignal_isTnlEntryOrEnd_mrx, length, static_cast<unsigned long>(sizeof(TnlEntryOrEnd)));
         }
     }
     break;
@@ -4303,13 +4303,13 @@
     case ComConf_ComSignal_isTrSts_mrx:
     {
         if (sizeof(TrSts) == length) {
-            log_verbose() << "Received TrSts (" << ComConf_ComSignal_isTrSts_mrx << ")";
+            ALOGV("Received TrSts (%u)", ComConf_ComSignal_isTrSts_mrx);
             const TrSts& rteValue = *static_cast<const TrSts*>(buffer);
             autosar::TrSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TrSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TrSts (" << ComConf_ComSignal_isTrSts_mrx << "). Got " << length << ", expected " << sizeof(TrSts);
+            ALOGE("Wrong buffer size received for TrSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTrSts_mrx, length, static_cast<unsigned long>(sizeof(TrSts)));
         }
     }
     break;
@@ -4317,13 +4317,13 @@
     case ComConf_ComSignal_isTrfcLiSpprtSts_mrx:
     {
         if (sizeof(TrfcLiSpprtSts) == length) {
-            log_verbose() << "Received TrfcLiSpprtSts (" << ComConf_ComSignal_isTrfcLiSpprtSts_mrx << ")";
+            ALOGV("Received TrfcLiSpprtSts (%u)", ComConf_ComSignal_isTrfcLiSpprtSts_mrx);
             const TrfcLiSpprtSts& rteValue = *static_cast<const TrfcLiSpprtSts*>(buffer);
             autosar::TrfcLiSpprtSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TrfcLiSpprtSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TrfcLiSpprtSts (" << ComConf_ComSignal_isTrfcLiSpprtSts_mrx << "). Got " << length << ", expected " << sizeof(TrfcLiSpprtSts);
+            ALOGE("Wrong buffer size received for TrfcLiSpprtSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTrfcLiSpprtSts_mrx, length, static_cast<unsigned long>(sizeof(TrfcLiSpprtSts)));
         }
     }
     break;
@@ -4331,13 +4331,13 @@
     case ComConf_ComSignal_isTrlrLampActvtChk_mrx:
     {
         if (sizeof(TrlrLampActvtChk) == length) {
-            log_verbose() << "Received TrlrLampActvtChk (" << ComConf_ComSignal_isTrlrLampActvtChk_mrx << ")";
+            ALOGV("Received TrlrLampActvtChk (%u)", ComConf_ComSignal_isTrlrLampActvtChk_mrx);
             const TrlrLampActvtChk& rteValue = *static_cast<const TrlrLampActvtChk*>(buffer);
             autosar::TrlrLampChkSts1WdSts1_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TrlrLampChkSts1WdSts1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TrlrLampActvtChk (" << ComConf_ComSignal_isTrlrLampActvtChk_mrx << "). Got " << length << ", expected " << sizeof(TrlrLampActvtChk);
+            ALOGE("Wrong buffer size received for TrlrLampActvtChk (%u). Got %zu , expected %lu", ComConf_ComSignal_isTrlrLampActvtChk_mrx, length, static_cast<unsigned long>(sizeof(TrlrLampActvtChk)));
         }
     }
     break;
@@ -4345,13 +4345,13 @@
     case ComConf_ComSignal_isTrlrLampChkSts_mrx:
     {
         if (sizeof(TrlrLampChkSts) == length) {
-            log_verbose() << "Received TrlrLampChkSts (" << ComConf_ComSignal_isTrlrLampChkSts_mrx << ")";
+            ALOGV("Received TrlrLampChkSts (%u)", ComConf_ComSignal_isTrlrLampChkSts_mrx);
             const TrlrLampChkSts& rteValue = *static_cast<const TrlrLampChkSts*>(buffer);
             autosar::TrlrLampChkSts1WdSts2_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TrlrLampChkSts1WdSts2_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TrlrLampChkSts (" << ComConf_ComSignal_isTrlrLampChkSts_mrx << "). Got " << length << ", expected " << sizeof(TrlrLampChkSts);
+            ALOGE("Wrong buffer size received for TrlrLampChkSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTrlrLampChkSts_mrx, length, static_cast<unsigned long>(sizeof(TrlrLampChkSts)));
         }
     }
     break;
@@ -4359,13 +4359,13 @@
     case ComConf_ComSignal_isTrlrPrsnt_mrx:
     {
         if (sizeof(TrlrPrsnt) == length) {
-            log_verbose() << "Received TrlrPrsnt (" << ComConf_ComSignal_isTrlrPrsnt_mrx << ")";
+            ALOGV("Received TrlrPrsnt (%u)", ComConf_ComSignal_isTrlrPrsnt_mrx);
             const TrlrPrsnt& rteValue = *static_cast<const TrlrPrsnt*>(buffer);
             autosar::TrlrPrsntSts1WdSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TrlrPrsntSts1WdSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TrlrPrsnt (" << ComConf_ComSignal_isTrlrPrsnt_mrx << "). Got " << length << ", expected " << sizeof(TrlrPrsnt);
+            ALOGE("Wrong buffer size received for TrlrPrsnt (%u). Got %zu , expected %lu", ComConf_ComSignal_isTrlrPrsnt_mrx, length, static_cast<unsigned long>(sizeof(TrlrPrsnt)));
         }
     }
     break;
@@ -4373,7 +4373,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igTwliBriRawGroup_mrx:
     {
         if (sizeof(TwliBriRawGroup) == length) {
-            log_verbose() << "Received TwliBriRawGroup (" << ComConf_ComSignalGroup_igTwliBriRawGroup_mrx << ")";
+            ALOGV("Received TwliBriRawGroup (%u)", ComConf_ComSignalGroup_igTwliBriRawGroup_mrx);
             const TwliBriRawGroup& rteValue = *static_cast<const TwliBriRawGroup*>(buffer);
             autosar::TwliBriRaw_info::data_elem_type deValue;
             deValue.TwliBriRaw1 = static_cast<decltype(deValue.TwliBriRaw1)>(rteValue.TwliBriRaw);
@@ -4381,7 +4381,7 @@
 
             TwliBriRaw_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TwliBriRawGroup (" << ComConf_ComSignalGroup_igTwliBriRawGroup_mrx << "). Got " << length << ", expected " << sizeof(TwliBriRawGroup);
+            ALOGE("Wrong buffer size received for TwliBriRawGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTwliBriRawGroup_mrx, length, static_cast<unsigned long>(sizeof(TwliBriRawGroup)));        
         }
     }
     break;
@@ -4389,13 +4389,13 @@
     case ComConf_ComSignal_isTwliBriSts_mrx:
     {
         if (sizeof(TwliBriSts) == length) {
-            log_verbose() << "Received TwliBriSts (" << ComConf_ComSignal_isTwliBriSts_mrx << ")";
+            ALOGV("Received TwliBriSts (%u)", ComConf_ComSignal_isTwliBriSts_mrx);
             const TwliBriSts& rteValue = *static_cast<const TwliBriSts*>(buffer);
             autosar::TwliBriSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             TwliBriSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for TwliBriSts (" << ComConf_ComSignal_isTwliBriSts_mrx << "). Got " << length << ", expected " << sizeof(TwliBriSts);
+            ALOGE("Wrong buffer size received for TwliBriSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTwliBriSts_mrx, length, static_cast<unsigned long>(sizeof(TwliBriSts)));
         }
     }
     break;
@@ -4403,7 +4403,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx:
     {
         if (sizeof(UkwnCptReqToInfoMgr) == length) {
-            log_verbose() << "Received UkwnCptReqToInfoMgr (" << ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx << ")";
+            ALOGV("Received UkwnCptReqToInfoMgr (%u)", ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx);
             const UkwnCptReqToInfoMgr& rteValue = *static_cast<const UkwnCptReqToInfoMgr*>(buffer);
             autosar::UkwnCptReqToInfoMgr_info::data_elem_type deValue;
             deValue.Byte0 = static_cast<decltype(deValue.Byte0)>(rteValue.UkwnCptReqToInfoMgrByte0);
@@ -4417,7 +4417,7 @@
 
             UkwnCptReqToInfoMgr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for UkwnCptReqToInfoMgr (" << ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx << "). Got " << length << ", expected " << sizeof(UkwnCptReqToInfoMgr);
+            ALOGE("Wrong buffer size received for UkwnCptReqToInfoMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToInfoMgr)));        
         }
     }
     break;
@@ -4425,7 +4425,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx:
     {
         if (sizeof(UkwnCptReqToSoundMgr) == length) {
-            log_verbose() << "Received UkwnCptReqToSoundMgr (" << ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx << ")";
+            ALOGV("Received UkwnCptReqToSoundMgr (%u)", ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx);
             const UkwnCptReqToSoundMgr& rteValue = *static_cast<const UkwnCptReqToSoundMgr*>(buffer);
             autosar::UkwnCptReqToSoundMgr_info::data_elem_type deValue;
             deValue.Byte0 = static_cast<decltype(deValue.Byte0)>(rteValue.UkwnCptReqToSoundMgrByte0);
@@ -4439,7 +4439,7 @@
 
             UkwnCptReqToSoundMgr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for UkwnCptReqToSoundMgr (" << ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx << "). Got " << length << ", expected " << sizeof(UkwnCptReqToSoundMgr);
+            ALOGE("Wrong buffer size received for UkwnCptReqToSoundMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToSoundMgr)));        
         }
     }
     break;
@@ -4447,7 +4447,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx:
     {
         if (sizeof(UsrSwtDispClimaReqForRowSec) == length) {
-            log_verbose() << "Received UsrSwtDispClimaReqForRowSec (" << ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx << ")";
+            ALOGV("Received UsrSwtDispClimaReqForRowSec (%u)", ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx);
             const UsrSwtDispClimaReqForRowSec& rteValue = *static_cast<const UsrSwtDispClimaReqForRowSec*>(buffer);
             autosar::UsrSwtDispClimaReqForRowSec_info::data_elem_type deValue;
             deValue.UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe = static_cast<decltype(deValue.UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe)>(rteValue.UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe);
@@ -4465,7 +4465,7 @@
 
             UsrSwtDispClimaReqForRowSec_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for UsrSwtDispClimaReqForRowSec (" << ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx << "). Got " << length << ", expected " << sizeof(UsrSwtDispClimaReqForRowSec);
+            ALOGE("Wrong buffer size received for UsrSwtDispClimaReqForRowSec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispClimaReqForRowSec)));        
         }
     }
     break;
@@ -4473,7 +4473,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx:
     {
         if (sizeof(UsrSwtDispReqForSecRowSeatVentn) == length) {
-            log_verbose() << "Received UsrSwtDispReqForSecRowSeatVentn (" << ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx << ")";
+            ALOGV("Received UsrSwtDispReqForSecRowSeatVentn (%u)", ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx);
             const UsrSwtDispReqForSecRowSeatVentn& rteValue = *static_cast<const UsrSwtDispReqForSecRowSeatVentn*>(buffer);
             autosar::UsrSwtDispReqForSecRowSeatVentn_info::data_elem_type deValue;
             deValue.UsrSwtDispReqForSecRowSeatVentnLe = static_cast<decltype(deValue.UsrSwtDispReqForSecRowSeatVentnLe)>(rteValue.UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe);
@@ -4483,7 +4483,7 @@
 
             UsrSwtDispReqForSecRowSeatVentn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for UsrSwtDispReqForSecRowSeatVentn (" << ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx << "). Got " << length << ", expected " << sizeof(UsrSwtDispReqForSecRowSeatVentn);
+            ALOGE("Wrong buffer size received for UsrSwtDispReqForSecRowSeatVentn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispReqForSecRowSeatVentn)));        
         }
     }
     break;
@@ -4491,13 +4491,13 @@
     case ComConf_ComSignal_isSeatHeatLvlReqLe_mrx:
     {
         if (sizeof(SeatHeatLvlReqLe) == length) {
-            log_verbose() << "Received SeatHeatLvlReqLe (" << ComConf_ComSignal_isSeatHeatLvlReqLe_mrx << ")";
+            ALOGV("Received SeatHeatLvlReqLe (%u)", ComConf_ComSignal_isSeatHeatLvlReqLe_mrx);
             const SeatHeatLvlReqLe& rteValue = *static_cast<const SeatHeatLvlReqLe*>(buffer);
             autosar::SeatHeatLvlReqLe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SeatHeatLvlReqLe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SeatHeatLvlReqLe (" << ComConf_ComSignal_isSeatHeatLvlReqLe_mrx << "). Got " << length << ", expected " << sizeof(SeatHeatLvlReqLe);
+            ALOGE("Wrong buffer size received for SeatHeatLvlReqLe (%u). Got %zu , expected %lu", ComConf_ComSignal_isSeatHeatLvlReqLe_mrx, length, static_cast<unsigned long>(sizeof(SeatHeatLvlReqLe)));
         }
     }
     break;
@@ -4505,13 +4505,13 @@
     case ComConf_ComSignal_isSeatHeatLvlReqRi_mrx:
     {
         if (sizeof(SeatHeatLvlReqRi) == length) {
-            log_verbose() << "Received SeatHeatLvlReqRi (" << ComConf_ComSignal_isSeatHeatLvlReqRi_mrx << ")";
+            ALOGV("Received SeatHeatLvlReqRi (%u)", ComConf_ComSignal_isSeatHeatLvlReqRi_mrx);
             const SeatHeatLvlReqRi& rteValue = *static_cast<const SeatHeatLvlReqRi*>(buffer);
             autosar::SeatHeatLvlReqRi_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             SeatHeatLvlReqRi_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for SeatHeatLvlReqRi (" << ComConf_ComSignal_isSeatHeatLvlReqRi_mrx << "). Got " << length << ", expected " << sizeof(SeatHeatLvlReqRi);
+            ALOGE("Wrong buffer size received for SeatHeatLvlReqRi (%u). Got %zu , expected %lu", ComConf_ComSignal_isSeatHeatLvlReqRi_mrx, length, static_cast<unsigned long>(sizeof(SeatHeatLvlReqRi)));
         }
     }
     break;
@@ -4519,13 +4519,13 @@
     case ComConf_ComSignal_isVehActvMsgToDrvr_mrx:
     {
         if (sizeof(VehActvMsgToDrvr) == length) {
-            log_verbose() << "Received VehActvMsgToDrvr (" << ComConf_ComSignal_isVehActvMsgToDrvr_mrx << ")";
+            ALOGV("Received VehActvMsgToDrvr (%u)", ComConf_ComSignal_isVehActvMsgToDrvr_mrx);
             const VehActvMsgToDrvr& rteValue = *static_cast<const VehActvMsgToDrvr*>(buffer);
             autosar::VehActvMsgToDrvr_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             VehActvMsgToDrvr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehActvMsgToDrvr (" << ComConf_ComSignal_isVehActvMsgToDrvr_mrx << "). Got " << length << ", expected " << sizeof(VehActvMsgToDrvr);
+            ALOGE("Wrong buffer size received for VehActvMsgToDrvr (%u). Got %zu , expected %lu", ComConf_ComSignal_isVehActvMsgToDrvr_mrx, length, static_cast<unsigned long>(sizeof(VehActvMsgToDrvr)));
         }
     }
     break;
@@ -4533,7 +4533,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehBattUGroup_mrx:
     {
         if (sizeof(VehBattUGroup) == length) {
-            log_verbose() << "Received VehBattUGroup (" << ComConf_ComSignalGroup_igVehBattUGroup_mrx << ")";
+            ALOGV("Received VehBattUGroup (%u)", ComConf_ComSignalGroup_igVehBattUGroup_mrx);
             const VehBattUGroup& rteValue = *static_cast<const VehBattUGroup*>(buffer);
             autosar::VehBattU_info::data_elem_type deValue;
             deValue.SysU = static_cast<decltype(deValue.SysU)>( toUnsignedFromRaw<8>(rteValue.VehBattUSysU) ) * 0.1 + 0.0;
@@ -4541,7 +4541,7 @@
 
             VehBattU_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehBattUGroup (" << ComConf_ComSignalGroup_igVehBattUGroup_mrx << "). Got " << length << ", expected " << sizeof(VehBattUGroup);
+            ALOGE("Wrong buffer size received for VehBattUGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehBattUGroup_mrx, length, static_cast<unsigned long>(sizeof(VehBattUGroup)));        
         }
     }
     break;
@@ -4549,7 +4549,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehCfgPrm_mrx:
     {
         if (sizeof(VehCfgPrm) == length) {
-            log_verbose() << "Received VehCfgPrm (" << ComConf_ComSignalGroup_igVehCfgPrm_mrx << ")";
+            ALOGV("Received VehCfgPrm (%u)", ComConf_ComSignalGroup_igVehCfgPrm_mrx);
             const VehCfgPrm& rteValue = *static_cast<const VehCfgPrm*>(buffer);
             autosar::VehCfgPrm_info::data_elem_type deValue;
             deValue.BlkIDBytePosn1 = static_cast<decltype(deValue.BlkIDBytePosn1)>( toUnsignedFromRaw<8>(rteValue.VehCfgPrmBlk) ) * 1.0 + 0.0;
@@ -4563,7 +4563,7 @@
 
             VehCfgPrm_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehCfgPrm (" << ComConf_ComSignalGroup_igVehCfgPrm_mrx << "). Got " << length << ", expected " << sizeof(VehCfgPrm);
+            ALOGE("Wrong buffer size received for VehCfgPrm (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehCfgPrm_mrx, length, static_cast<unsigned long>(sizeof(VehCfgPrm)));        
         }
     }
     break;
@@ -4571,7 +4571,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehMGroup_mrx:
     {
         if (sizeof(VehMGroup) == length) {
-            log_verbose() << "Received VehMGroup (" << ComConf_ComSignalGroup_igVehMGroup_mrx << ")";
+            ALOGV("Received VehMGroup (%u)", ComConf_ComSignalGroup_igVehMGroup_mrx);
             const VehMGroup& rteValue = *static_cast<const VehMGroup*>(buffer);
             autosar::VehMNom_info::data_elem_type deValue;
             deValue.TrlrM_ = static_cast<decltype(deValue.TrlrM_)>(rteValue.VehMNomTrlrM);
@@ -4580,7 +4580,7 @@
 
             VehMNom_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehMGroup (" << ComConf_ComSignalGroup_igVehMGroup_mrx << "). Got " << length << ", expected " << sizeof(VehMGroup);
+            ALOGE("Wrong buffer size received for VehMGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMGroup)));        
         }
     }
     break;
@@ -4588,7 +4588,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx:
     {
         if (sizeof(VehModMngtGlbSafe1) == length) {
-            log_verbose() << "Received VehModMngtGlbSafe1 (" << ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx << ")";
+            ALOGV("Received VehModMngtGlbSafe1 (%u)", ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx);
             const VehModMngtGlbSafe1& rteValue = *static_cast<const VehModMngtGlbSafe1*>(buffer);
             autosar::VehModMngtGlbSafe1_info::data_elem_type deValue;
             deValue.CarModSts1_ = static_cast<decltype(deValue.CarModSts1_)>(rteValue.CarModSts1);
@@ -4604,7 +4604,7 @@
 
             VehModMngtGlbSafe1_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehModMngtGlbSafe1 (" << ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx << "). Got " << length << ", expected " << sizeof(VehModMngtGlbSafe1);
+            ALOGE("Wrong buffer size received for VehModMngtGlbSafe1 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx, length, static_cast<unsigned long>(sizeof(VehModMngtGlbSafe1)));        
         }
     }
     break;
@@ -4612,7 +4612,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx:
     {
         if (sizeof(VehMtnStSafeGroup) == length) {
-            log_verbose() << "Received VehMtnStSafeGroup (" << ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx << ")";
+            ALOGV("Received VehMtnStSafeGroup (%u)", ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx);
             const VehMtnStSafeGroup& rteValue = *static_cast<const VehMtnStSafeGroup*>(buffer);
             autosar::VehMtnStSafe_info::data_elem_type deValue;
             deValue.VehMtnSt = static_cast<decltype(deValue.VehMtnSt)>(rteValue.VehMtnStSafe);
@@ -4621,7 +4621,7 @@
 
             VehMtnStSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehMtnStSafeGroup (" << ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx << "). Got " << length << ", expected " << sizeof(VehMtnStSafeGroup);
+            ALOGE("Wrong buffer size received for VehMtnStSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMtnStSafeGroup)));        
         }
     }
     break;
@@ -4629,13 +4629,13 @@
     case ComConf_ComSignal_isAudWarn_mrx:
     {
         if (sizeof(AudWarn) == length) {
-            log_verbose() << "Received AudWarn (" << ComConf_ComSignal_isAudWarn_mrx << ")";
+            ALOGV("Received AudWarn (%u)", ComConf_ComSignal_isAudWarn_mrx);
             const AudWarn& rteValue = *static_cast<const AudWarn*>(buffer);
             autosar::AudWarn_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             AudWarn_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for AudWarn (" << ComConf_ComSignal_isAudWarn_mrx << "). Got " << length << ", expected " << sizeof(AudWarn);
+            ALOGE("Wrong buffer size received for AudWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isAudWarn_mrx, length, static_cast<unsigned long>(sizeof(AudWarn)));
         }
     }
     break;
@@ -4643,7 +4643,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx:
     {
         if (sizeof(VehSpdAvgIndcd) == length) {
-            log_verbose() << "Received VehSpdAvgIndcd (" << ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx << ")";
+            ALOGV("Received VehSpdAvgIndcd (%u)", ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx);
             const VehSpdAvgIndcd& rteValue = *static_cast<const VehSpdAvgIndcd*>(buffer);
             autosar::VehSpdAvgIndcd_info::data_elem_type deValue;
             deValue.VeSpdIndcdUnit = static_cast<decltype(deValue.VeSpdIndcdUnit)>(rteValue.VehSpdAvgUnit);
@@ -4651,7 +4651,7 @@
 
             VehSpdAvgIndcd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehSpdAvgIndcd (" << ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx << "). Got " << length << ", expected " << sizeof(VehSpdAvgIndcd);
+            ALOGE("Wrong buffer size received for VehSpdAvgIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdAvgIndcd)));        
         }
     }
     break;
@@ -4659,7 +4659,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehSpdIndcd_mrx:
     {
         if (sizeof(VehSpdIndcd) == length) {
-            log_verbose() << "Received VehSpdIndcd (" << ComConf_ComSignalGroup_igVehSpdIndcd_mrx << ")";
+            ALOGV("Received VehSpdIndcd (%u)", ComConf_ComSignalGroup_igVehSpdIndcd_mrx);
             const VehSpdIndcd& rteValue = *static_cast<const VehSpdIndcd*>(buffer);
             autosar::VehSpdIndcd_info::data_elem_type deValue;
             deValue.VeSpdIndcdUnit = static_cast<decltype(deValue.VeSpdIndcdUnit)>(rteValue.VehSpdIndcdUnit);
@@ -4667,7 +4667,7 @@
 
             VehSpdIndcd_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehSpdIndcd (" << ComConf_ComSignalGroup_igVehSpdIndcd_mrx << "). Got " << length << ", expected " << sizeof(VehSpdIndcd);
+            ALOGE("Wrong buffer size received for VehSpdIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdIndcd)));        
         }
     }
     break;
@@ -4675,7 +4675,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx:
     {
         if (sizeof(VehSpdLgtSafeGroup) == length) {
-            log_verbose() << "Received VehSpdLgtSafeGroup (" << ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx << ")";
+            ALOGV("Received VehSpdLgtSafeGroup (%u)", ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx);
             const VehSpdLgtSafeGroup& rteValue = *static_cast<const VehSpdLgtSafeGroup*>(buffer);
             autosar::VehSpdLgtSafe_info::data_elem_type deValue;
             deValue.VehSpdLgt = static_cast<decltype(deValue.VehSpdLgt)>( toUnsignedFromRaw<15>(rteValue.VehSpdLgtSafe) ) * 0.00391 + 0.0;
@@ -4685,7 +4685,7 @@
 
             VehSpdLgtSafe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VehSpdLgtSafeGroup (" << ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx << "). Got " << length << ", expected " << sizeof(VehSpdLgtSafeGroup);
+            ALOGE("Wrong buffer size received for VehSpdLgtSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehSpdLgtSafeGroup)));        
         }
     }
     break;
@@ -4693,7 +4693,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igVin_mrx:
     {
         if (sizeof(Vin) == length) {
-            log_verbose() << "Received Vin (" << ComConf_ComSignalGroup_igVin_mrx << ")";
+            ALOGV("Received Vin (%u)", ComConf_ComSignalGroup_igVin_mrx);
             const Vin& rteValue = *static_cast<const Vin*>(buffer);
             autosar::Vin_info::data_elem_type deValue;
             deValue.BlockNr = static_cast<decltype(deValue.BlockNr)>( toUnsignedFromRaw<8>(rteValue.VinBlk) ) * 1.0 + 0.0;
@@ -4707,7 +4707,7 @@
 
             Vin_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for Vin (" << ComConf_ComSignalGroup_igVin_mrx << "). Got " << length << ", expected " << sizeof(Vin);
+            ALOGE("Wrong buffer size received for Vin (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVin_mrx, length, static_cast<unsigned long>(sizeof(Vin)));        
         }
     }
     break;
@@ -4715,13 +4715,13 @@
     case ComConf_ComSignal_isVisnAgWideSts_mrx:
     {
         if (sizeof(VisnAgWideSts) == length) {
-            log_verbose() << "Received VisnAgWideSts (" << ComConf_ComSignal_isVisnAgWideSts_mrx << ")";
+            ALOGV("Received VisnAgWideSts (%u)", ComConf_ComSignal_isVisnAgWideSts_mrx);
             const VisnAgWideSts& rteValue = *static_cast<const VisnAgWideSts*>(buffer);
             autosar::VisnAgWideSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             VisnAgWideSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VisnAgWideSts (" << ComConf_ComSignal_isVisnAgWideSts_mrx << "). Got " << length << ", expected " << sizeof(VisnAgWideSts);
+            ALOGE("Wrong buffer size received for VisnAgWideSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isVisnAgWideSts_mrx, length, static_cast<unsigned long>(sizeof(VisnAgWideSts)));
         }
     }
     break;
@@ -4729,13 +4729,13 @@
     case ComConf_ComSignal_isVisnImgAgWideInUse_mrx:
     {
         if (sizeof(VisnImgAgWideInUse) == length) {
-            log_verbose() << "Received VisnImgAgWideInUse (" << ComConf_ComSignal_isVisnImgAgWideInUse_mrx << ")";
+            ALOGV("Received VisnImgAgWideInUse (%u)", ComConf_ComSignal_isVisnImgAgWideInUse_mrx);
             const VisnImgAgWideInUse& rteValue = *static_cast<const VisnImgAgWideInUse*>(buffer);
             autosar::VisnImgAgWideInUse_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             VisnImgAgWideInUse_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for VisnImgAgWideInUse (" << ComConf_ComSignal_isVisnImgAgWideInUse_mrx << "). Got " << length << ", expected " << sizeof(VisnImgAgWideInUse);
+            ALOGE("Wrong buffer size received for VisnImgAgWideInUse (%u). Got %zu , expected %lu", ComConf_ComSignal_isVisnImgAgWideInUse_mrx, length, static_cast<unsigned long>(sizeof(VisnImgAgWideInUse)));
         }
     }
     break;
@@ -4743,13 +4743,13 @@
     case ComConf_ComSignal_isWhlCircum_mrx:
     {
         if (sizeof(WhlCircum) == length) {
-            log_verbose() << "Received WhlCircum (" << ComConf_ComSignal_isWhlCircum_mrx << ")";
+            ALOGV("Received WhlCircum (%u)", ComConf_ComSignal_isWhlCircum_mrx);
             const WhlCircum& rteValue = *static_cast<const WhlCircum*>(buffer);
             autosar::WhlCircum_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WhlCircum_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WhlCircum (" << ComConf_ComSignal_isWhlCircum_mrx << "). Got " << length << ", expected " << sizeof(WhlCircum);
+            ALOGE("Wrong buffer size received for WhlCircum (%u). Got %zu , expected %lu", ComConf_ComSignal_isWhlCircum_mrx, length, static_cast<unsigned long>(sizeof(WhlCircum)));
         }
     }
     break;
@@ -4757,7 +4757,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx:
     {
         if (sizeof(WhlMotSysTqEstGroup) == length) {
-            log_verbose() << "Received WhlMotSysTqEstGroup (" << ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx << ")";
+            ALOGV("Received WhlMotSysTqEstGroup (%u)", ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx);
             const WhlMotSysTqEstGroup& rteValue = *static_cast<const WhlMotSysTqEstGroup*>(buffer);
             autosar::WhlMotSysTqEst_info::data_elem_type deValue;
             deValue.SpdLimn = static_cast<decltype(deValue.SpdLimn)>( toUnsignedFromRaw<8>(rteValue.WhlMotSysTqEstSpdLimn) ) * 10.0 + 0.0;
@@ -4768,7 +4768,7 @@
 
             WhlMotSysTqEst_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WhlMotSysTqEstGroup (" << ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx << "). Got " << length << ", expected " << sizeof(WhlMotSysTqEstGroup);
+            ALOGE("Wrong buffer size received for WhlMotSysTqEstGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx, length, static_cast<unsigned long>(sizeof(WhlMotSysTqEstGroup)));        
         }
     }
     break;
@@ -4776,7 +4776,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igWhlRotToothCntr_mrx:
     {
         if (sizeof(WhlRotToothCntr) == length) {
-            log_verbose() << "Received WhlRotToothCntr (" << ComConf_ComSignalGroup_igWhlRotToothCntr_mrx << ")";
+            ALOGV("Received WhlRotToothCntr (%u)", ComConf_ComSignalGroup_igWhlRotToothCntr_mrx);
             const WhlRotToothCntr& rteValue = *static_cast<const WhlRotToothCntr*>(buffer);
             autosar::WhlRotToothCntr_info::data_elem_type deValue;
             deValue.WhlRotToothCntrFrntLe = static_cast<decltype(deValue.WhlRotToothCntrFrntLe)>( toUnsignedFromRaw<8>(rteValue.WhlRotToothCntrFrntLe) ) * 1.0 + 0.0;
@@ -4786,7 +4786,7 @@
 
             WhlRotToothCntr_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WhlRotToothCntr (" << ComConf_ComSignalGroup_igWhlRotToothCntr_mrx << "). Got " << length << ", expected " << sizeof(WhlRotToothCntr);
+            ALOGE("Wrong buffer size received for WhlRotToothCntr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlRotToothCntr_mrx, length, static_cast<unsigned long>(sizeof(WhlRotToothCntr)));        
         }
     }
     break;
@@ -4794,13 +4794,13 @@
     case ComConf_ComSignal_isWinPosnStsDrv_mrx:
     {
         if (sizeof(WinPosnStsDrv) == length) {
-            log_verbose() << "Received WinPosnStsDrv (" << ComConf_ComSignal_isWinPosnStsDrv_mrx << ")";
+            ALOGV("Received WinPosnStsDrv (%u)", ComConf_ComSignal_isWinPosnStsDrv_mrx);
             const WinPosnStsDrv& rteValue = *static_cast<const WinPosnStsDrv*>(buffer);
             autosar::WinPosnStsAtDrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WinPosnStsAtDrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WinPosnStsDrv (" << ComConf_ComSignal_isWinPosnStsDrv_mrx << "). Got " << length << ", expected " << sizeof(WinPosnStsDrv);
+            ALOGE("Wrong buffer size received for WinPosnStsDrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isWinPosnStsDrv_mrx, length, static_cast<unsigned long>(sizeof(WinPosnStsDrv)));
         }
     }
     break;
@@ -4808,13 +4808,13 @@
     case ComConf_ComSignal_isWinPosnStsAtDrvrRe_mrx:
     {
         if (sizeof(WinPosnStsAtDrvrRe) == length) {
-            log_verbose() << "Received WinPosnStsAtDrvrRe (" << ComConf_ComSignal_isWinPosnStsAtDrvrRe_mrx << ")";
+            ALOGV("Received WinPosnStsAtDrvrRe (%u)", ComConf_ComSignal_isWinPosnStsAtDrvrRe_mrx);
             const WinPosnStsAtDrvrRe& rteValue = *static_cast<const WinPosnStsAtDrvrRe*>(buffer);
             autosar::WinPosnStsAtDrvrRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WinPosnStsAtDrvrRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WinPosnStsAtDrvrRe (" << ComConf_ComSignal_isWinPosnStsAtDrvrRe_mrx << "). Got " << length << ", expected " << sizeof(WinPosnStsAtDrvrRe);
+            ALOGE("Wrong buffer size received for WinPosnStsAtDrvrRe (%u). Got %zu , expected %lu", ComConf_ComSignal_isWinPosnStsAtDrvrRe_mrx, length, static_cast<unsigned long>(sizeof(WinPosnStsAtDrvrRe)));
         }
     }
     break;
@@ -4822,13 +4822,13 @@
     case ComConf_ComSignal_isWinPosnStsPass_mrx:
     {
         if (sizeof(WinPosnStsPass) == length) {
-            log_verbose() << "Received WinPosnStsPass (" << ComConf_ComSignal_isWinPosnStsPass_mrx << ")";
+            ALOGV("Received WinPosnStsPass (%u)", ComConf_ComSignal_isWinPosnStsPass_mrx);
             const WinPosnStsPass& rteValue = *static_cast<const WinPosnStsPass*>(buffer);
             autosar::WinPosnStsAtPass_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WinPosnStsAtPass_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WinPosnStsPass (" << ComConf_ComSignal_isWinPosnStsPass_mrx << "). Got " << length << ", expected " << sizeof(WinPosnStsPass);
+            ALOGE("Wrong buffer size received for WinPosnStsPass (%u). Got %zu , expected %lu", ComConf_ComSignal_isWinPosnStsPass_mrx, length, static_cast<unsigned long>(sizeof(WinPosnStsPass)));
         }
     }
     break;
@@ -4836,13 +4836,13 @@
     case ComConf_ComSignal_isWinPosnStsRePass_mrx:
     {
         if (sizeof(WinPosnStsRePass) == length) {
-            log_verbose() << "Received WinPosnStsRePass (" << ComConf_ComSignal_isWinPosnStsRePass_mrx << ")";
+            ALOGV("Received WinPosnStsRePass (%u)", ComConf_ComSignal_isWinPosnStsRePass_mrx);
             const WinPosnStsRePass& rteValue = *static_cast<const WinPosnStsRePass*>(buffer);
             autosar::WinPosnStsAtPassRe_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WinPosnStsAtPassRe_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WinPosnStsRePass (" << ComConf_ComSignal_isWinPosnStsRePass_mrx << "). Got " << length << ", expected " << sizeof(WinPosnStsRePass);
+            ALOGE("Wrong buffer size received for WinPosnStsRePass (%u). Got %zu , expected %lu", ComConf_ComSignal_isWinPosnStsRePass_mrx, length, static_cast<unsigned long>(sizeof(WinPosnStsRePass)));
         }
     }
     break;
@@ -4850,7 +4850,7 @@
     case SignalGroup|ComConf_ComSignalGroup_igWipgInfo_mrx:
     {
         if (sizeof(WipgInfo) == length) {
-            log_verbose() << "Received WipgInfo (" << ComConf_ComSignalGroup_igWipgInfo_mrx << ")";
+            ALOGV("Received WipgInfo (%u)", ComConf_ComSignalGroup_igWipgInfo_mrx);
             const WipgInfo& rteValue = *static_cast<const WipgInfo*>(buffer);
             autosar::WipgInfo_info::data_elem_type deValue;
             deValue.WipgSpdInfo_ = static_cast<decltype(deValue.WipgSpdInfo_)>(rteValue.WipgInfoWipgSpdInfo);
@@ -4859,7 +4859,7 @@
 
             WipgInfo_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WipgInfo (" << ComConf_ComSignalGroup_igWipgInfo_mrx << "). Got " << length << ", expected " << sizeof(WipgInfo);
+            ALOGE("Wrong buffer size received for WipgInfo (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWipgInfo_mrx, length, static_cast<unsigned long>(sizeof(WipgInfo)));        
         }
     }
     break;
@@ -4867,13 +4867,13 @@
     case ComConf_ComSignal_isWiprInPosnForSrv_mrx:
     {
         if (sizeof(WiprInPosnForSrv) == length) {
-            log_verbose() << "Received WiprInPosnForSrv (" << ComConf_ComSignal_isWiprInPosnForSrv_mrx << ")";
+            ALOGV("Received WiprInPosnForSrv (%u)", ComConf_ComSignal_isWiprInPosnForSrv_mrx);
             const WiprInPosnForSrv& rteValue = *static_cast<const WiprInPosnForSrv*>(buffer);
             autosar::WiprInPosnForSrv_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WiprInPosnForSrv_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WiprInPosnForSrv (" << ComConf_ComSignal_isWiprInPosnForSrv_mrx << "). Got " << length << ", expected " << sizeof(WiprInPosnForSrv);
+            ALOGE("Wrong buffer size received for WiprInPosnForSrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isWiprInPosnForSrv_mrx, length, static_cast<unsigned long>(sizeof(WiprInPosnForSrv)));
         }
     }
     break;
@@ -4881,13 +4881,13 @@
     case ComConf_ComSignal_isWshrFldSts_mrx:
     {
         if (sizeof(WshrFldSts) == length) {
-            log_verbose() << "Received WshrFldSts (" << ComConf_ComSignal_isWshrFldSts_mrx << ")";
+            ALOGV("Received WshrFldSts (%u)", ComConf_ComSignal_isWshrFldSts_mrx);
             const WshrFldSts& rteValue = *static_cast<const WshrFldSts*>(buffer);
             autosar::WshrFldSts1WdElmHMI_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             WshrFldSts1WdElmHMI_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for WshrFldSts (" << ComConf_ComSignal_isWshrFldSts_mrx << "). Got " << length << ", expected " << sizeof(WshrFldSts);
+            ALOGE("Wrong buffer size received for WshrFldSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isWshrFldSts_mrx, length, static_cast<unsigned long>(sizeof(WshrFldSts)));
         }
     }
     break;
@@ -4895,13 +4895,13 @@
     case ComConf_ComSignal_isiTPMSCalPsbl_mrx:
     {
         if (sizeof(iTPMSCalPsbl) == length) {
-            log_verbose() << "Received iTPMSCalPsbl (" << ComConf_ComSignal_isiTPMSCalPsbl_mrx << ")";
+            ALOGV("Received iTPMSCalPsbl (%u)", ComConf_ComSignal_isiTPMSCalPsbl_mrx);
             const iTPMSCalPsbl& rteValue = *static_cast<const iTPMSCalPsbl*>(buffer);
             autosar::iTPMSCalPsbl_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             iTPMSCalPsbl_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for iTPMSCalPsbl (" << ComConf_ComSignal_isiTPMSCalPsbl_mrx << "). Got " << length << ", expected " << sizeof(iTPMSCalPsbl);
+            ALOGE("Wrong buffer size received for iTPMSCalPsbl (%u). Got %zu , expected %lu", ComConf_ComSignal_isiTPMSCalPsbl_mrx, length, static_cast<unsigned long>(sizeof(iTPMSCalPsbl)));
         }
     }
     break;
@@ -4909,13 +4909,13 @@
     case ComConf_ComSignal_isiTPMSCalSts_mrx:
     {
         if (sizeof(iTPMSCalSts) == length) {
-            log_verbose() << "Received iTPMSCalSts (" << ComConf_ComSignal_isiTPMSCalSts_mrx << ")";
+            ALOGV("Received iTPMSCalSts (%u)", ComConf_ComSignal_isiTPMSCalSts_mrx);
             const iTPMSCalSts& rteValue = *static_cast<const iTPMSCalSts*>(buffer);
             autosar::iTPMSCalSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             iTPMSCalSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for iTPMSCalSts (" << ComConf_ComSignal_isiTPMSCalSts_mrx << "). Got " << length << ", expected " << sizeof(iTPMSCalSts);
+            ALOGE("Wrong buffer size received for iTPMSCalSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isiTPMSCalSts_mrx, length, static_cast<unsigned long>(sizeof(iTPMSCalSts)));
         }
     }
     break;
@@ -4923,13 +4923,13 @@
     case ComConf_ComSignal_isiTPMSTirePMSts_mrx:
     {
         if (sizeof(iTPMSTirePMSts) == length) {
-            log_verbose() << "Received iTPMSTirePMSts (" << ComConf_ComSignal_isiTPMSTirePMSts_mrx << ")";
+            ALOGV("Received iTPMSTirePMSts (%u)", ComConf_ComSignal_isiTPMSTirePMSts_mrx);
             const iTPMSTirePMSts& rteValue = *static_cast<const iTPMSTirePMSts*>(buffer);
             autosar::iTPMSTirePMSts_info::data_elem_type deValue;
             deValue = static_cast<decltype(deValue)>(rteValue);
             iTPMSTirePMSts_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for iTPMSTirePMSts (" << ComConf_ComSignal_isiTPMSTirePMSts_mrx << "). Got " << length << ", expected " << sizeof(iTPMSTirePMSts);
+            ALOGE("Wrong buffer size received for iTPMSTirePMSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isiTPMSTirePMSts_mrx, length, static_cast<unsigned long>(sizeof(iTPMSTirePMSts)));
         }
     }
     break;

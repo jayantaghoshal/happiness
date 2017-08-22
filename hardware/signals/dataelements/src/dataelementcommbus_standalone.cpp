@@ -5,7 +5,9 @@
 
 #include "dataelementcommbus.h"
 
-#include "logging.h"
+#undef LOG_TAG
+#define LOG_TAG "DataElementDBus"
+#include <cutils/log.h>
 
 LOG_SET_DEFAULT_CONTEXT(deleContext)
 

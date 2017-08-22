@@ -8,9 +8,9 @@
 
 #include <type_traits>
 
-#include "logging.h"
-LOG_SET_DEFAULT_CONTEXT(deleContext)
-
+#undef LOG_TAG
+#define LOG_TAG "VipFramework"
+#include <cutils/log.h>
 
 // Types needed by MpRouter_Signals.h below
 using int8 = int8_t;
@@ -79,7 +79,7 @@ namespace vipcomm {
             #include "vsm/vsm_inject_switch_ok_cpp.h"
 
             default:
-                log_error() << "handleIncomingOkSignal unknown signalId: " << signalId;
+                ALOGE("handleIncomingOkSignal unknown signalId: %u", signalId);
             break;
         }
 
@@ -93,7 +93,7 @@ namespace vipcomm {
             #include "vsm/vsm_inject_switch_error_cpp.h"
 
             default:
-                log_error() << "handleIncomingErrorSignal unknown signalId: " << signalId;
+                ALOGE("handleIncomingErrorSignal unknown signalId: %u", signalId);
             break;
         }
     }

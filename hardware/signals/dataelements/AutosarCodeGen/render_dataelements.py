@@ -46,13 +46,13 @@ GEN_VSM_INJECT_INSTANCE_TEMPLATE = """    {DATAELEM}_de = new DEInjector<autosar
 GEN_VSM_INJECT_SIGNAL_SWITCH_OK = """    case ComConf_ComSignal_is{RTETYPE}_mrx:
     {
         if (sizeof({RTETYPE}) == length) {
-            log_verbose() << "Received {RTETYPE} (" << ComConf_ComSignal_is{RTETYPE}_mrx << ")";
+            ALOGV("Received {RTETYPE} (%u)", ComConf_ComSignal_is{RTETYPE}_mrx);
             const {RTETYPE}& rteValue = *static_cast<const {RTETYPE}*>(buffer);
             autosar::{DATAELEM}_info::data_elem_type deValue;
             {TRANSFER};
             {DATAELEM}_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for {RTETYPE} (" << ComConf_ComSignal_is{RTETYPE}_mrx << "). Got " << length << ", expected " << sizeof({RTETYPE});
+            ALOGE("Wrong buffer size received for {RTETYPE} (%u). Got %zu , expected %lu", ComConf_ComSignal_is{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));
         }
     }
     break;
@@ -103,13 +103,13 @@ GEN_VSM_INJECT_SIGNALGROUP_SWITCH_ERROR = """    case SignalGroup|ComConf_ComSig
 GEN_VSM_INJECT_SIGNALGROUP_SWITCH_OK = """    case SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mrx:
     {
         if (sizeof({RTETYPE}) == length) {
-            log_verbose() << "Received {RTETYPE} (" << ComConf_ComSignalGroup_ig{RTETYPE}_mrx << ")";
+            ALOGV("Received {RTETYPE} (%u)", ComConf_ComSignalGroup_ig{RTETYPE}_mrx);
             const {RTETYPE}& rteValue = *static_cast<const {RTETYPE}*>(buffer);
             autosar::{DATAELEM}_info::data_elem_type deValue;
 {TRANSFER}
             {DATAELEM}_de->inject(deValue);
         } else {
-            log_error() << "Wrong buffer size received for {RTETYPE} (" << ComConf_ComSignalGroup_ig{RTETYPE}_mrx << "). Got " << length << ", expected " << sizeof({RTETYPE});
+            ALOGE("Wrong buffer size received for {RTETYPE} (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_ig{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));        
         }
     }
     break;
