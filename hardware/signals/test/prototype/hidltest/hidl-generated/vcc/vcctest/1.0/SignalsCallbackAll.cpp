@@ -71,7 +71,7 @@ __attribute__((destructor))static void static_destructor() {
 
 ::android::hardware::Return<void> ISignalsCallback::getHashChain(getHashChain_cb _hidl_cb){
     _hidl_cb({
-        (uint8_t[32]){94,103,243,225,185,215,2,172,4,118,2,71,79,242,205,220,196,202,194,81,116,91,217,190,219,245,5,45,203,91,55,136} /* 5e67f3e1b9d702ac047602474ff2cddcc4cac251745bd9bedbf5052dcb5b3788 */,
+        (uint8_t[32]){183,173,27,185,153,223,180,247,24,135,239,87,85,252,99,192,144,221,184,214,139,108,112,170,47,145,26,61,178,26,20,151} /* b7ad1bb999dfb4f71887ef5755fc63c090ddb8d68b6c70aa2f911a3db21a1497 */,
         (uint8_t[32]){189,218,182,24,77,122,52,109,166,160,125,192,130,140,241,154,105,111,76,170,54,17,197,31,46,20,86,90,20,180,15,217} /* bddab6184d7a346da6a07dc0828cf19a696f4caa3611c51f2e14565a14b40fd9 */});
     return ::android::hardware::Void();
 }
