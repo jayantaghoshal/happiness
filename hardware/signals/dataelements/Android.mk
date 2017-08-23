@@ -3,6 +3,16 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE:= libdataelements
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+
+intermediates:= $(local-generated-sources-dir)
+GEN := $(intermediates)/Mp_Router_crc.h
+crc_gen_tool := $(LOCAL_PATH)/crc16cmd.py
+$(GEN): PRIVATE_INPUT_FILE := $(LOCAL_PATH)/vector/gen/MpRouter_Signals.h
+$(GEN): PRIVATE_CUSTOM_TOOL = python $(crc_gen_tool) $(PRIVATE_INPUT_FILE) MP_ROUTER_CRC > $@
+$(GEN): $(LOCAL_PATH)/vector/gen/MpRouter_Signals.h $(TOOL)
+	    $(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 LOCAL_SRC_FILES:= \
     src/dataelemvalue.cpp \
