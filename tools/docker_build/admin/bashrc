@@ -121,6 +121,12 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
 pushd ${REPO_ROOT_DIR}
-source ${REPO_ROOT_DIR}/build/envsetup.sh
+if [ -f ${REPO_ROOT_DIR}/build/envsetup.sh ]; then
+   source ${REPO_ROOT_DIR}/build/envsetup.sh
+fi
+if [ -f ${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh ]; then
+   source ${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh
+fi
 popd

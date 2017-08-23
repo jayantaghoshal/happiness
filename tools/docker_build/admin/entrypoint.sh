@@ -20,6 +20,7 @@
 CONTAINER_USERNAME=ihu
 CONTAINER_GROUPNAME=ihu
 BUILD_ENV_SETUP="${REPO_ROOT_DIR}/build/envsetup.sh"
+VOLVO_ENV_SETUP="${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 BASHRC_FILE="/home/ihu/.bashrc"
 
 
@@ -66,14 +67,19 @@ id -u "${HOST_UID}" &>/dev/null || {
 echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Prepare script - command which will be executed as a specified user
-# NOTE: This is tricky: Inside SCRIPT_FILE we source $BUILD_ENV_SETUP __before__ running $@,
-#       When running interactively $@ is equal to bash, and functions included from BUILD_ENV_SETUP are not inherited to the subshell.
+# NOTE: This is tricky: Inside SCRIPT_FILE we source $BUILD/VOLVO_ENV_SETUP __before__ running $@,
+#       When running interactively $@ is equal to bash, and functions included from BUILD/VOLVO_ENV_SETUP are not inherited to the subshell.
 #       That's why we need to check if bash is the command to run and start it without the SCRIPT_FILE, the rcfile also includes the BUILD_ENV_SETUP
 #       We also can't copy the BASHRC_FILE to ~/.bashrc because we mount the host home as a --volume
 SCRIPT_FILE=/tmp/command_to_run.sh
 cat >$SCRIPT_FILE <<EOL
 #!/bin/bash
-source ${BUILD_ENV_SETUP}
+if [ -f ${BUILD_ENV_SETUP} ]; then
+   source ${BUILD_ENV_SETUP}
+fi
+if [ -f ${VOLVO_ENV_SETUP} ]; then
+   source ${VOLVO_ENV_SETUP}
+fi
 $@
 EOL
 chmod +x $SCRIPT_FILE
