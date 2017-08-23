@@ -128,16 +128,18 @@ class ArgumentHandler(object):
     def push(self, args):
         artifactory = Artifactory()
         for file in args.files:
-            path = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
-            print("Deploy file to Artifactory - %s -> %s" % (file, path))
-            artifactory.deploy_artifact(path, file)
+            uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
+            artifactory.deploy_artifact(uri, file)
 
     def pull(self, args):
         artifactory = Artifactory()
-        for file in args.files:
-            path = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, file)
-            print("Retrieve file from Artifactory - %s -> %s/%s" % (path, args.dir, file))
-            artifactory.retrieve_artifact(path, args.dir)
+        if not args.files:
+            uri = "ICUP_ANDROID_CI/%s/%s" % (args.project, args.job)
+            artifactory.retrieve_artifacts(uri, args.dir)
+        else:
+            for file in args.files:
+                uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, file)
+                artifactory.retrieve_artifact(uri, args.dir)
 
     def show(self, args):
         artifactory = Artifactory()
