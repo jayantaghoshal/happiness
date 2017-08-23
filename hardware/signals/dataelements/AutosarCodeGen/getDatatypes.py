@@ -331,10 +331,9 @@ def crcFileToDefine(infile, outfile, definename):
         contents = file.read()
         crc = crc16.crc16(contents)
 
-
+        s += "#ifndef "+definename+"\n"
         s += "#define "+definename+" "+str(crc)+"\n"
         s += "#endif\n"
-    s += "#ifndef "+definename+"\n"
     with open(outfile,'w') as file:
         file.write(s)
 
