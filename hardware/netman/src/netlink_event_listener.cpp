@@ -137,7 +137,6 @@ int NetlinkSocketListener::RecvMessage()
     for (nl_message_header = (struct nlmsghdr*)buf;
          NLMSG_OK(nl_message_header, (unsigned int)message_length);
          nl_message_header = NLMSG_NEXT(nl_message_header, message_length)) {
-        ALOGI("Handling event.");
         netlink_event_handler_->HandleEvent(nl_message_header);
     }
 

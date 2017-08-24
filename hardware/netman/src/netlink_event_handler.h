@@ -9,7 +9,7 @@ namespace netman {
 
 class NetlinkEventHandler
 {
-    InterfaceConfiguration eth1_configuration_;
+    const InterfaceConfiguration eth1_configuration_;
 
 public:
     NetlinkEventHandler(const InterfaceConfiguration &eth1_configuration_);

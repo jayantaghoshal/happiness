@@ -18,13 +18,15 @@
 
 #include "netlink_event_handler.h"
 #include "netlink_event_listener.h"
+#include "netman.h"
 
 namespace vcc {
 namespace netman {
 
 NetlinkEventHandler::NetlinkEventHandler(const InterfaceConfiguration &eth1_configuration)
+    : eth1_configuration_(eth1_configuration)
 {
-    eth1_configuration_ = eth1_configuration;
+    PrintInterfaceConfiguration("NetlinkEventHandler", eth1_configuration);
 }
 
 NetlinkEventHandler::~NetlinkEventHandler()
@@ -59,7 +61,7 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
 void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
                                              struct ifinfomsg *if_info_msg)
 {
-    ALOGI("RTM_NEWLINK handler.");
+    ALOGI("Message received: RTM_NEWLINK");
 
     const char *interface_name = eth1_configuration_.name.c_str();
     const char *ip_addr = eth1_configuration_.ip_address.c_str();
@@ -69,8 +71,6 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
 
     char name[IF_NAMESIZE];
 
-    ALOGI("RTM_NEWLINK received...(ifi_flags = 0x%x)", if_info_msg->ifi_flags);
-
     // Comments:
     // IFF_UP = ifconfig eth0 up
     // IFF_RUNNING = cable plugged in
@@ -79,8 +79,8 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
         (if_indextoname(if_info_msg->ifi_index, name) != NULL) &&
         (if_info_msg->ifi_flags & IFF_UP) &&
         !(if_info_msg->ifi_flags & IFF_RUNNING)) {
-        ALOGI("RTM_NEWLINK Link UP for interface %s.", name);
         if (0 == strncmp(name, interface_name, strlen(interface_name))) {
+            ALOGI("Detected invalid interface configuration. Resetting configuration.");
             SetupInterface(interface_name,
                            eth1_configuration_.mac_address_bytes,
                            ip_addr,

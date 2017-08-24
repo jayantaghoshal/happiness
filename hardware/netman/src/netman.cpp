@@ -36,6 +36,23 @@ void ConvertMacAddress(const std::string &mac_address,
 
 /** Public Functions **/
 
+
+void PrintInterfaceConfiguration(const std::string context,
+                                 const InterfaceConfiguration &conf)
+{
+    ALOGI("--------------------------------------------------------");
+    ALOGI("Interface configuration: %s", context.c_str());
+    ALOGI("Interface name: %s", conf.name.c_str());
+    ALOGI("Mac address: %s", conf.mac_address.c_str());
+    ALOGI("Mac address bytes: %02x:%02x:%02x:%02x:%02x:%02x",
+          conf.mac_address_bytes[0], conf.mac_address_bytes[1], conf.mac_address_bytes[2],
+          conf.mac_address_bytes[3], conf.mac_address_bytes[4], conf.mac_address_bytes[5]);
+    ALOGI("IP address: %s", conf.ip_address.c_str());
+    ALOGI("Broadcast address: %s", conf.broadcast_address.c_str());
+    ALOGI("Netmask: %s", conf.netmask.c_str());
+    ALOGI("MTU: %i", conf.mtu);
+}
+
 void LoadInterfaceConfiguration(InterfaceConfiguration &conf)
 {
     conf.name = vcc::localconfig::GetString("eth1.name");
@@ -45,15 +62,7 @@ void LoadInterfaceConfiguration(InterfaceConfiguration &conf)
     ConvertMacAddress(conf.mac_address, conf.mac_address_bytes);
     conf.broadcast_address = vcc::localconfig::GetString("eth1.broadcast-address");
     conf.mtu = (uint32_t)vcc::localconfig::GetInt("eth1.mtu");
-
-    ALOGI("--------------------------------------------------------");
-    ALOGI("Interface configuration loaded from local config:");
-    ALOGI("Interface name: %s", conf.name.c_str());
-    ALOGI("Mac address: %s", conf.mac_address.c_str());
-    ALOGI("IP address: %s", conf.ip_address.c_str());
-    ALOGI("Broadcast address: %s", conf.broadcast_address.c_str());
-    ALOGI("Netmask: %s", conf.netmask.c_str());
-    ALOGI("MTU: %i", conf.mtu);
+    PrintInterfaceConfiguration("Local Configuration", conf);
 }
 
 /** Private Functions */
@@ -63,7 +72,7 @@ void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac
     int byte;
     char skip_byte;
 
-    mac_address_out.resize(5);
+    mac_address_out.resize(6);
 
     std::stringstream address(mac_address, std::ios_base::in);
 
@@ -424,6 +433,7 @@ bool SetupInterface(const char* interface_name,
 
     if (!IsMacAddressCorrect(mac_address, interface_name))
     {
+        ALOGI("Setting interface MAC address.");
         if (IsInterfaceUp(interface_name))
         {
             TakeInterfaceDown(interface_name);
