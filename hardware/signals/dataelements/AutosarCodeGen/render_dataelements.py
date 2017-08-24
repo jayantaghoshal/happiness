@@ -117,7 +117,7 @@ GEN_VSM_INJECT_SIGNALGROUP_SWITCH_OK = """    case SignalGroup|ComConf_ComSignal
 """
 
 
-def render_dataelments(header: str, all_de_elements: List[DE_Element], all_types: Dict[DE_Type_Key, DE_BaseType]):
+def render_dataelments(header: str, footer: str, all_de_elements: List[DE_Element], all_types: Dict[DE_Type_Key, DE_BaseType]):
 
     # TODO: Split this into VIP and DataElements?
 
@@ -160,7 +160,7 @@ class InternalTag : public InTag, public OutTag {
 namespace autosar {
 
 """
-    gen_vsm_all_dataelements_cpp = ""
+    gen_vsm_all_dataelements_cpp = header + "\n"
     gen_vsm_inject_variable_cpp = header + "\n"
     gen_vsm_inject_instance_cpp = header + "\n"
     gen_vsm_inject_switch_ok_cpp = header + "\n"
@@ -301,6 +301,16 @@ namespace autosar {
 
     dataElementsHeaderStr += "} // end of namespace\n#endif"
     dataElemetsCppStr += "} // end of namespace\n"
+
+    dataElementsHeaderStr += footer
+    dataElemetsCppStr += footer
+    gen_vsm_all_dataelements_cpp += footer 
+    gen_vsm_inject_variable_cpp += footer
+    gen_vsm_inject_instance_cpp += footer
+    gen_vsm_inject_switch_ok_cpp += footer
+    gen_vsm_inject_switch_error_cpp += footer
+    gen_vsm_sink_variable_cpp += footer
+    gen_vsm_sink_subscribe_cpp += footer
 
     return (dataElementsHeaderStr,
             dataElemetsCppStr,

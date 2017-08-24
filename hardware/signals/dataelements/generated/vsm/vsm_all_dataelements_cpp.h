@@ -1,3 +1,12 @@
+// clang-format off
+/*!
+ * \file
+ * C++ code generator for AUTOSAR v1.0
+ * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
+ * Generated at: 2017-08-24T13:18:22.289840
+ * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ */
+
 new autosar::ADataRawSafe_info(),
 new autosar::AccAdprSpdLimActv_info(),
 new autosar::AccAdprTurnSpdActv_info(),
@@ -535,3 +544,5 @@ new autosar::iTPMSCalPsbl_info(),
 new autosar::iTPMSCalReq_info(),
 new autosar::iTPMSCalSts_info(),
 new autosar::iTPMSTirePMSts_info(),
+
+// clang-format on

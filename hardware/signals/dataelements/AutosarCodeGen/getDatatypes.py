@@ -234,11 +234,13 @@ def getDatatypes(swc_input_file, options):
     if not os.path.isdir(options.outputdirectory): os.mkdir(options.outputdirectory)
     if not os.path.isdir(options.outputdirectory+"/vsm"): os.mkdir(options.outputdirectory+"/vsm")
 
-    header = "/*!\n * \\file\n * " + DESCRIPTION+" "+VERSION+"\n"
+    header = "// clang-format off\n"
+    header += "/*!\n * \\file\n * " + DESCRIPTION+" "+VERSION+"\n"
     header += " * " + COPYRIGHT + "\n"
     header += " * Generated at: " + datetime.now().isoformat() + "\n"
     header += " * Source: " + options.swcinputfile + "\n */\n"
 
+    footer = "\n// clang-format on\n"
 
     print("Calculating CRC16 for Swc file")
     crcFileToDefine(swc_input_file, swccrcpath, "SWC_CRC")
@@ -264,11 +266,11 @@ def getDatatypes(swc_input_file, options):
      gen_vsm_sink_variable_cpp,
      gen_vsm_sink_subscribe_cpp,
      gen_vsm_all_dataelements_cpp
-     ) = render_dataelements.render_dataelments(header, all_de_elements, all_types)
-    (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents) = render_json.render_json(header, all_arrays, all_structs, all_types)
+     ) = render_dataelements.render_dataelments(header, footer, all_de_elements, all_types)
+    (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents) = render_json.render_json(header, footer, all_arrays, all_structs, all_types)
 
     with codecs.open(datatypespath, 'w', encoding=OUTPUT_FILE_ENCODING) as fout:
-        fout.write(render_datatype(header, all_enums, all_arrays, all_structs, all_types))
+        fout.write(render_datatype(header, footer, all_enums, all_arrays, all_structs, all_types))
 
     with codecs.open(jsonencdecpath, 'w', encoding=OUTPUT_FILE_ENCODING) as fout:
         fout.write(gen_jsonenc_h_contents)

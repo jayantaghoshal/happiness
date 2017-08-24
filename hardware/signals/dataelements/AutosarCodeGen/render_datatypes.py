@@ -5,6 +5,7 @@ from render_cpp_basic import escape_cpp_comment, get_cpp_type, create_cpp_brief_
 
 
 def render_datatype(header: str,
+                    footer: str,
                     enums : List[DE_Enum],
                     arrays: List[DE_Array],
                     structs: List[DE_Struct],
@@ -67,4 +68,5 @@ namespace autosar {\n
             dTStr += "};\n\n"
 
     dTStr += "} // end of namespace\n#endif"
+    dTStr += footer
     return dTStr
