@@ -12,6 +12,8 @@ namespace netman {
 
 void LoadInterfaceConfiguration(InterfaceConfiguration &conf);
 
+void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf);
+
 bool SetupInterface(const char* interface_name,
                     const std::vector<uint8_t> &mac_address,
                     const char* ip_addr,
