@@ -1,0 +1,5 @@
+# infotainment-ip-service service
+type infotainment-ip-service, domain;
+type infotainment-ip-service_exec, exec_type, file_type;
+
+init_daemon_domain(infotainment-ip-service)
