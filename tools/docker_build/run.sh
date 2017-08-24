@@ -3,7 +3,7 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=${SCRIPT_DIR}/../../../..
 
-DOCKER_IMAGE_REFERENCE_FILE="${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build/image.ref"
+DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}/image.ref"
 DOCKER_IMAGE=`cat ${DOCKER_IMAGE_REFERENCE_FILE}`
 
 WORKING_DIR="$(pwd)"

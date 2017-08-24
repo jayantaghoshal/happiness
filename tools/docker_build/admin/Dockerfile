@@ -99,6 +99,13 @@ RUN mkdir  /usr/lib/i386-linux-gnu \
        /usr/lib/i386-linux-gnu/libGL.so
 
 ##################################################
+# Debug packages
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+    iputils-ping \
+    dnsutils \
+    net-tools
+
+##################################################
 # Tools required for CI test environment
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     git-all \
@@ -109,16 +116,10 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python3-serial \
     adb
 COPY repo /usr/bin/repo
+COPY redis-cli /usr/bin/redis-cli
 RUN pip3 install redis \
     requests \
     zuul==2.5.2
-
-##################################################
-# Debug packages
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
-    iputils-ping \
-    dnsutils \
-    net-tools
 
 ##################################################
 # Clean up apt package information to make image smaller
