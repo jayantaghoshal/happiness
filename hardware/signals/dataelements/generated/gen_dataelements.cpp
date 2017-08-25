@@ -1,8 +1,9 @@
+// clang-format off
 /*!
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-08-23T17:26:58.440282
+ * Generated at: 2017-08-24T13:18:22.289840
  * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 #include "gen_dataelements.h"
@@ -5381,3 +5382,5 @@ Dir iTPMSTirePMSts_info::direction() const { return Direction(); }
 
 
 } // end of namespace
+
+// clang-format on

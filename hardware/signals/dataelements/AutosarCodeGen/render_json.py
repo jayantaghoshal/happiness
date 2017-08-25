@@ -57,6 +57,7 @@ template <> {STRUCT} fromJson<{STRUCT}>(const json& j);
 """
 
 def render_json(header,
+                footer: str,
                 arrays: List[DE_Array],
                 structs: List[DE_Struct],
                 all_types: Dict[DE_Type_Key, DE_BaseType]):
@@ -148,5 +149,7 @@ AllButAREnum<T> fromJson(const json& j) {
             gen_jsonenc_cpp_contents += func_tojson_str + "\n" + func_fromjson_str
     gen_jsonenc_h_contents += "} // end of namespace\n#endif"
     gen_jsonenc_cpp_contents += "} // end of namespace\n"
+    gen_jsonenc_h_contents += footer
+    gen_jsonenc_cpp_contents += footer
 
     return (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents)
