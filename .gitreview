@@ -1,0 +1,6 @@
+[gerrit]
+host=icup_android.gerrit.cm.volvocars.biz
+port=29418
+project=vendor/volvocars
+defaultbranch=master
+defaultremote=origin
