@@ -1,7 +1,7 @@
 from typing import List, Dict
 
-from model import DE_Enum, DE_Array, DE_Struct, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical
-from render_cpp_basic import escape_cpp_comment, get_cpp_type, create_cpp_brief_comment
+from .model import DE_Enum, DE_Array, DE_Struct, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical
+from .render_cpp_basic import escape_cpp_comment, get_cpp_type, create_cpp_brief_comment
 
 
 def render_datatype(header: str,

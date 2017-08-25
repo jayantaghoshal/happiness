@@ -1,6 +1,6 @@
 import struct
 import xml.etree.ElementTree as ET
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional
 
 
 #https://docs.python.org/2/library/struct.html#format-characters
@@ -36,7 +36,7 @@ class Group():
 
 
 class Item():
-    def __init__(self, parent_group: Group, name: str, msg_or_namespace : str, offset: int, size: int, datatype: str, is_raw: bool):
+    def __init__(self, parent_group: Group, name: str, msg_or_namespace : str, offset: int, size: int, datatype: str, is_raw: bool, bus_name:Optional[str]):
         self.parent_group = parent_group
         self.name = name
         self.msg_or_namespace = msg_or_namespace
@@ -45,6 +45,7 @@ class Item():
         self.type = datatype
         self.is_raw = is_raw   # If is_raw is false, then CANoe will handle scaling conversion
         self._value = 0        # NOTE: Value can be either raw or physical depending on the FDXDescriptionFile
+        self.bus_name = bus_name
 
     @property
     def value_raw(self):
@@ -87,7 +88,7 @@ def parse(filename: str) -> Tuple[List[Group], List[Item], List[Item]]:
             if sysvar is not None:
                 name = sysvar.attrib["name"]
                 namespace = sysvar.attrib["namespace"]
-                s = Item(g, name, namespace, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], True)
+                s = Item(g, name, namespace, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], True, None)
                 g.items.append(s)
                 sysvar_list.append(s)
             if signal is not None:
@@ -98,7 +99,7 @@ def parse(filename: str) -> Tuple[List[Group], List[Item], List[Item]]:
                 if not is_raw:
                     assert scaling == "physical", "Unrecognized value scaling %s " % scaling
 
-                s = Item(g, name, msg, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], is_raw)
+                s = Item(g, name, msg, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], is_raw, signal.attrib["bus"])
                 g.items.append(s)
                 signal_list.append(s)
         g.validate()

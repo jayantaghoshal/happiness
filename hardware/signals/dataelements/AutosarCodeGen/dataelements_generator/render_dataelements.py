@@ -1,8 +1,8 @@
 from typing import List, Dict
 
-from model import DE_Element, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical, DE_Boolean, DE_Struct, DE_Array
-from render_cpp_basic import escape_cpp_comment, create_cpp_brief_comment, get_cpp_type
-
+from .model import DE_Element, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical, DE_Boolean, \
+    DE_Struct, DE_Array
+from .render_cpp_basic import escape_cpp_comment, create_cpp_brief_comment, get_cpp_type
 
 GEN_DATAELEMENTS_HPP_CLASS_TEMPLATE = """%sstruct %s : %spublic DataElemInfo {
     using data_elem_type = %s;%s

@@ -1,9 +1,7 @@
 from typing import List, Dict
 
-from model import DE_Array, DE_Struct, DE_Type_Key, DE_BaseType
-from render_cpp_basic import get_cpp_type
-
-
+from .model import DE_Array, DE_Struct, DE_Type_Key, DE_BaseType
+from .render_cpp_basic import get_cpp_type
 
 GEN_JSONENCDEC_CPP_FROMJSON_FUNC_OPENING = """template <>
 {STRUCT} fromJson<{STRUCT}>(const json& object) {

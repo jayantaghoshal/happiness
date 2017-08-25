@@ -1,4 +1,4 @@
-from model import DE_BaseType, DE_Value, DE_Boolean, DE_Identical
+from .model import DE_BaseType, DE_Value, DE_Boolean, DE_Identical
 
 
 def escape_cpp_comment(text):

@@ -4,18 +4,21 @@
 import codecs
 import os
 import uuid
+import logging
+logger = logging.getLogger(__name__)
 from datetime import datetime
-from argparse import ArgumentParser
 from typing import Dict, List
-import crc16
+
+from . import render_json
+from .render_datatypes import render_datatype
+
 import autosar
-import render_cpp_basic
-import render_dataelements
-import render_json
 from autosar.components import AR_RPort
-from model import DE_Type_Key, DE_BaseType, DE_Enum, DE_Struct, DE_Value, DE_Array, DE_StructMember, DE_Element, DE_Boolean, \
+from dataelements_generator import crc16, render_dataelements
+from dataelements_generator.model import DE_Type_Key, DE_BaseType, DE_Enum, DE_Struct, DE_Value, DE_Array, \
+    DE_StructMember, DE_Element, \
+    DE_Boolean, \
     DE_Identical, DE_EnumItem
-from render_datatypes import render_datatype
 
 VERSION = 'v1.0'
 DESCRIPTION = 'C++ code generator for AUTOSAR'
@@ -164,11 +167,11 @@ def parse_dataelements(swc_data : autosar.arxml.ARXml,
             continue
         for k2, port in sorted(swcs.ports.items()):
             isInsignal = isinstance(port, AR_RPort)
-            print("   RPort: " if isInsignal else "   PPort: " + port.shortname)
+            logger.debug("   RPort: " if isInsignal else "   PPort: " + port.shortname)
             elems = port.getDataElements()
             port_interface = port.arxml.port_interfaces[port.port_interface.text]
             for de, dname in elems.items():
-                print("      " + de)
+                logger.debug("      " + de)
 
                 desc = port_interface.getDesc()
                 isExternal = de in comfile_data.groupmapping
@@ -184,7 +187,7 @@ def parse_dataelements(swc_data : autosar.arxml.ARXml,
                     if data_type.getCategory() == 'STRUCTURE':
                         rte_attr_map = {}
                         for deattr, rteattr in rtegroup.groupsignalmap.items():
-                            print("          DEATTR: %r, RTEATTR: %r, RTENAME: %r" % (deattr, rteattr, rte_name))
+                            logger.debug("          DEATTR: %r, RTEATTR: %r, RTENAME: %r" % (deattr, rteattr, rte_name))
                             rte_attr_map[deattr] = rteattr
 
                 t = parse_type(swc_data, all_types, data_type, data_type.getSwBaseType())
@@ -194,7 +197,7 @@ def parse_dataelements(swc_data : autosar.arxml.ARXml,
     return all_de_elements
 
 
-def getDatatypes(swc_input_file, options):
+def generate(swc_input_file, options):
     datatypespath = options.outputdirectory+"/gen_datatypes.h"
     dataelementshpath = options.outputdirectory+"/gen_dataelements.h"
     dataelementscpppath = options.outputdirectory+"/gen_dataelements.cpp"
@@ -250,7 +253,6 @@ def getDatatypes(swc_input_file, options):
     print("Get Datatypes:")
     swc_data = autosar.arxml.load(swc_input_file)
     comfile_data = autosar.arxml.load(options.cominputfile)
-
     (all_types, all_de_elements) = parse(swc_data, comfile_data)
 
     all_enums = [e for e in all_types.values() if isinstance(e, DE_Enum)]
@@ -338,28 +340,4 @@ def crcFileToDefine(infile, outfile, definename):
         s += "#endif\n"
     with open(outfile,'w') as file:
         file.write(s)
-
-def main():
-    print('%s (%s)\n%s\n'%(DESCRIPTION, VERSION, COPYRIGHT))
-
-    parser = ArgumentParser()
-    parser.add_argument('--version', action='version', version="%%(prog)s %s (%s)"%(VERSION, autosar.VERSION))
-    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='Enable verbose output')
-    parser.add_argument('-d', '--directory', dest='outputdirectory', help='Output directory for generated files', required=True)
-    parser.add_argument('-s', '--swcinputfile', dest='swcinputfile', help='SWC input arxml, (Elektra export file)', required=True)
-    parser.add_argument('-c', '--cominputfile', dest='cominputfile', help='COM input arxml, (Elektra export file)', required=True)
-    args = parser.parse_args()
-
-    autosar.arxml.options.verbose = args.verbose
-
-    if not os.path.exists(args.swcinputfile):
-        parser.error("swcinputfile \"%s\" does not exist" % args.swcinputfile)
-    if not os.path.exists(args.cominputfile):
-        parser.error("cominputfile  \"%s\" does not exist" % args.cominputfile)
-
-    getDatatypes(args.swcinputfile, args)
-    print("done!")
-
-if __name__ == "__main__":
-    main()
 
