@@ -53,8 +53,9 @@ def render(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
             rte_name_to_de_name[d.rtename] = d.de_dataelementname
 
 
+
     convstr = ""
-    fr_and_lin19_signals = [s for s in signals if s.bus_name in ["Backbone", "LIN19"]]
+    fr_and_lin19_signals = [s for s in signals if s.bus_name.lower() in ["backbone", "lin19"]]
     for signal in sorted(fr_and_lin19_signals,  key=lambda s: s.name.lower()):
         s = signal.name
         try:

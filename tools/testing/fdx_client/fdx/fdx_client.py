@@ -128,7 +128,7 @@ class FdxCommandParser:
 
 
 class FDXConnection:
-    def __init__(self, data_exchange_callback, ip: str, port=2809):
+    def __init__(self, data_exchange_callback, ip: str, port=2809) -> None:
         self.ip = ip
         self.port = port
         self.next_seq_nr_to_send = 0

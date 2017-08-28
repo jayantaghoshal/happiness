@@ -44,7 +44,7 @@ class FDXClientTestBase():
         g.receive_data(data)
 
     def get_signal(self, name: str) -> fdx_description_file_parser.Item:
-        candidate = None
+        candidate = None # type: fdx_description_file_parser.Item
 
         parts = name.split("::")
         signame = parts[-1]

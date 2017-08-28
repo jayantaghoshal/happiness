@@ -26,7 +26,7 @@ def main():
             old_values[i.name] = i.value_raw
 
     def get_signal(name: str) -> fdx_description_file_parser.Item:
-        candidate = None
+        candidate = None # type: fdx_description_file_parser.Item
 
         parts = name.split("::")
         signame = parts[-1]

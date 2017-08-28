@@ -12,11 +12,11 @@ fdx_type_to_struct_map = {
 }
 
 class Group():
-    def __init__(self, group_id: int, name: str, size: int):
+    def __init__(self, group_id: int, name: str, size: int) -> None:
         self.group_id = group_id
         self.name = name
         self.size = size
-        self.items = [] # typing.List[Item]
+        self.items = [] # type: List[Item]
 
     def validate(self):
         summed_size = sum(i.size for i in self.items)
@@ -36,7 +36,7 @@ class Group():
 
 
 class Item():
-    def __init__(self, parent_group: Group, name: str, msg_or_namespace : str, offset: int, size: int, datatype: str, is_raw: bool, bus_name:Optional[str]):
+    def __init__(self, parent_group: Group, name: str, msg_or_namespace : str, offset: int, size: int, datatype: str, is_raw: bool, bus_name:Optional[str]) -> None:
         self.parent_group = parent_group
         self.name = name
         self.msg_or_namespace = msg_or_namespace
