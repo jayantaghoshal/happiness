@@ -20,4 +20,4 @@ docker_run "tar cvfz out.tgz \
 
 # Upload to Artifactory
 docker_run "artifactory push ihu_image_build ${BUILD_NUMBER} out.tgz" || die "Upload out.tgz to Artifactory failed"
-docker_run "redis-cli set icup_android.jenkins.ihu_image_build.${JOB_NUMBER}.commit ${GIT_COMMIT}" || die "redis-cli set failed"
+docker_run "redis-cli set icup_android.jenkins.ihu_image_build.${BUILD_NUMBER}.commit ${GIT_COMMIT}" || die "redis-cli set failed"
