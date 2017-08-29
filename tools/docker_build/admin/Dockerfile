@@ -122,6 +122,13 @@ RUN pip3 install redis \
     zuul==2.5.2
 
 ##################################################
+# Static analysis tools
+RUN pip3 install mypy
+# Typing comes built in with python3, but has to be installed with python2
+# Then you can use it together with comment annotations and mypy
+RUN pip install typing
+
+##################################################
 # Clean up apt package information to make image smaller
 RUN  rm -rf /var/lib/apt/lists/*
 
