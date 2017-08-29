@@ -8,16 +8,20 @@ The test if the file exists is done in the actual test.
 <configuration description="Test standard ethernet is up with 198.18.34.1 after boot">
     <!-- Delete localconfig.json, set wrong ip configuration and reboot -->
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
-        <option name="run-command" value="rm /oem_config/localconfig/localconfig.json" />
-        <option name="run-command" value="pkill netman" />
+        <option name="run-command" value="ifconfig eth1 down" />
         <option name="run-command" value="ifconfig eth1 198.18.34.2" />
         <option name="run-command" value="ifconfig eth1 netmask 198.18.34.3" />
         <option name="run-command" value="ifconfig eth1 broadcast 198.18.34.255" />
         <option name="run-command" value="ifconfig eth1 mtu 1000" />
-        <option name="run-command" value="ifconfig eth1 down" />
         <option name="run-command" value="ifconfig eth1 hw ether 02:01:02:03:04:08" />
         <option name="run-command" value="ifconfig eth1 up" />
-        <option name="run-command" value="/system/bin/reboot" />
+        <option name="run-command" value="ifconfig eth0 down" />
+        <option name="run-command" value="ifconfig eth0 198.18.34.5" />
+        <option name="run-command" value="ifconfig eth0 netmask 198.18.34.77" />
+        <option name="run-command" value="ifconfig eth0 broadcast 198.18.34.254" />
+        <option name="run-command" value="ifconfig eth0 mtu 1000" />
+        <option name="run-command" value="ifconfig eth0 hw ether 02:01:02:03:04:09" />
+        <option name="run-command" value="ifconfig eth0 up" />
     </target_preparer>
 
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
@@ -29,6 +33,6 @@ The test if the file exists is done in the actual test.
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsNetmanCTCases" />
-        <option name="runtime-hint" value="70s" />
+        <option name="runtime-hint" value="10s" />
     </test>
 </configuration>

@@ -8,13 +8,12 @@
 
 #include "netman_test_helpers.h"
 
-
 TEST(NetmanTest, NetmanStartedAfterBoot)
 {
   EXPECT_NE( -1, FindProcessId("netman") );
 }
 
-TEST(NetmanTest, IpAddressAfterBoot)
+TEST(NetmanTest, Eth1_IpAddressAfterBoot)
 {
     // poll eth1 each 200ms during 5 secs
     const int total_duration = 5000; // 5 secs
@@ -45,7 +44,7 @@ TEST(NetmanTest, IpAddressAfterBoot)
     EXPECT_TRUE(false); // test failed
 }
 
-TEST(NetmanTest, NetmaskAfterBoot)
+TEST(NetmanTest, Eth1_NetmaskAfterBoot)
 {
     // poll eth1 each 200ms during 5 secs
     const int total_duration = 5000; // 5 secs
@@ -76,7 +75,7 @@ TEST(NetmanTest, NetmaskAfterBoot)
     EXPECT_TRUE(false); // test failed
 }
 
-TEST(NetmanTest, BroadcastAfterBoot)
+TEST(NetmanTest, Eth1_BroadcastAfterBoot)
 {
     // poll eth1 each 200ms during 5 secs
     const int total_duration = 5000; // 5 secs
@@ -107,7 +106,7 @@ TEST(NetmanTest, BroadcastAfterBoot)
     EXPECT_TRUE(false); // test failed
 }
 
-TEST(NetmanTest, MacAddressAfterBoot)
+TEST(NetmanTest, Eth1_MacAddressAfterBoot)
 {
     // poll eth1 each 200ms during 5 secs
     const int total_duration = 5000; // 5 secs
@@ -138,7 +137,7 @@ TEST(NetmanTest, MacAddressAfterBoot)
     EXPECT_TRUE(false); // test failed
 }
 
-TEST(NetmanTest, MtuAddressAfterBoot)
+TEST(NetmanTest, Eth1_MtuAddressAfterBoot)
 {
     // poll eth1 each 200ms during 5 secs
     const int total_duration = 5000; // 5 secs
@@ -149,6 +148,161 @@ TEST(NetmanTest, MtuAddressAfterBoot)
 
     while (loop_cnt--) {
         const int mtu = GetMtuForInterface("eth1");
+        if (mtu==-1)
+        { // nothing set yet, just wait
+        }
+        else if (mtu==1500)
+        { // yes we found it
+            ALOGI("Found mtu %i", mtu);
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found mtu %i, waiting further ...", mtu);
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, Eth0_IpAddressAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for ip address ...");
+
+    while (loop_cnt--) {
+        const std::string ipaddress = GetIpAddressForInterface("eth0");
+        if (ipaddress=="")
+        { // nothing set yet, just wait
+        }
+        else if (ipaddress=="198.18.18.1")
+        { // yes we found it
+            ALOGI("Found ip address %s",ipaddress.c_str());
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found ip address %s, waiting further ...", ipaddress.c_str());
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, Eth0_NetmaskAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for netmask ...");
+
+    while (loop_cnt--) {
+        const std::string netmask = GetNetmaskForInterface("eth0");
+        if (netmask=="")
+        { // nothing set yet, just wait
+        }
+        else if (netmask == "255.255.240.0")
+        { // yes we found it
+            ALOGI("Found netmask %s", netmask.c_str());
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found netmask %s, waiting further ...", netmask.c_str());
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, Eth0_BroadcastAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for broadcast address...");
+
+    while (loop_cnt--) {
+        const std::string broadcast_address = GetBroadcastAddressForInterface("eth0");
+        if (broadcast_address =="" )
+        { // nothing set yet, just wait
+        }
+        else if (broadcast_address == "198.18.255.255")
+        { // yes we found it
+            ALOGI("Found broadcast address %s", broadcast_address.c_str());
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found broadcast address %s, waiting further ...", broadcast_address.c_str());
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, Eth0_MacAddressAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for mac address ...");
+
+    while (loop_cnt--) {
+        const std::string mac_address = GetMacAddressForInterface("eth0");
+        if (mac_address=="")
+        {// nothing set yet, just wait
+        }
+        else if (mac_address == "02:00:00:00:12:01")
+        {// yes we found it
+            ALOGI("Found mac address %s", mac_address.c_str());
+            EXPECT_TRUE(true);
+            return; // test is over
+        }
+        else
+        {
+            // We found something else. Print out and wait
+            ALOGW("Found mac address %s, waiting further ...", mac_address.c_str());
+        }
+        usleep(poll_intervall*1000);
+    }
+
+    EXPECT_TRUE(false); // test failed
+}
+
+TEST(NetmanTest, Eth0_MtuAddressAfterBoot)
+{
+    // poll eth1 each 200ms during 5 secs
+    const int total_duration = 5000; // 5 secs
+    const int poll_intervall = 200;
+    int loop_cnt = total_duration / poll_intervall;
+
+    ALOGI("Waiting for mtu ...");
+
+    while (loop_cnt--) {
+        const int mtu = GetMtuForInterface("eth0");
         if (mtu==-1)
         { // nothing set yet, just wait
         }

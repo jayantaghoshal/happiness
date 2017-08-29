@@ -19,20 +19,15 @@ int main()
     {
         ALOGI("Netmand 0.1 starting");
 
-        InterfaceConfiguration eth1_configuration;
+        std::vector<InterfaceConfiguration> interface_configurations;
 
-        LoadInterfaceConfiguration(eth1_configuration);
+        LoadInterfaceConfiguration(interface_configurations);
 
-        SetupInterface(eth1_configuration.name.c_str(),
-                       eth1_configuration.mac_address_bytes,
-                       eth1_configuration.ip_address.c_str(),
-                       eth1_configuration.netmask.c_str(),
-                       eth1_configuration.broadcast_address.c_str(),
-                       eth1_configuration.mtu);
+        SetupInterface(interface_configurations);
 
-        ALOGI("Initial eth1 configuration set");
+        ALOGI("Initial configurations set");
 
-        NetlinkEventHandler nl_event_handler(eth1_configuration);
+        NetlinkEventHandler nl_event_handler(interface_configurations);
 
         NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(nl_event_handler);
