@@ -17,11 +17,15 @@ Gnss::Gnss() {
     started_=false;
 }
 
-// I assume this one is called on our dispatcher mainloop
+// The assumption is that this method is called on our dispatcher mainloop
 void Gnss::updateLocation(const GnssLocation& location) {
     if (started_) {
         if (callback_!=nullptr) {
-            callback_->gnssLocationCb(location);
+            if ( callback_->gnssLocationCb(location).isDeadObject() ) {
+                // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
+                callback_ = nullptr;
+                ALOGI("callback=null due to dead client");
+            }
         }
     } else {
         ALOGD("newLocationDelivered but not started -> ignored");
@@ -37,10 +41,15 @@ Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
         if (callback_!=nullptr)
         {
             ALOGD("Cap+SysInfo callback");
-            callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING);
+            bool dead1 = callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING).isDeadObject();
             IGnssCallback::GnssSystemInfo systeminfo;
             systeminfo.yearOfHw = 2016;
-            callback_->gnssSetSystemInfoCb(systeminfo);
+            bool dead2 = callback_->gnssSetSystemInfoCb(systeminfo).isDeadObject();
+            if (dead1 || dead2) {
+                // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
+                callback_=nullptr;
+                ALOGI("callback=null due to dead client");
+            }
         }
     });
 
