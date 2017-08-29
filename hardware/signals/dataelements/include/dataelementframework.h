@@ -59,8 +59,9 @@ public:
             subscribe<S>(nullptr);
             v = get(S::Name());
         }
-
-        const DataElemValue<S> *rval = dynamic_cast<const DataElemValue<S>*>(v);
+        // rtti not supported -> static_cast used instead of dynaic_cast.
+        // Should be safe anyway since it is generatred code that calls this method
+        const DataElemValue<S> *rval = static_cast<const DataElemValue<S>*>(v);
         return (*rval);
     }
 

@@ -81,7 +81,9 @@ public:
     }
 
     virtual void newDataElementValue(const DataElemValueBase& newvalue) {
-        _value = dynamic_cast<const DataElemValue<S>&>(newvalue);
+        // rtti not supported -> static_cast used instead of dynaic_cast.
+        // Should be safe anyway since it is generatred code that calls this method
+        _value = static_cast<const DataElemValue<S>&>(newvalue);
     }
 
     virtual void performCallback() {
