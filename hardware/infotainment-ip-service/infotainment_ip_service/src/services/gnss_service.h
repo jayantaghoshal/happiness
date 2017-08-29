@@ -63,43 +63,7 @@ public:
 protected:
 
     void cbGNSSPositionDataNotification(Message &msg);
-
-    /**
-     * description: The UTC time provided by the VCM, provided by GNSS (GPS, etc).
-     */
-    /// Sends a broadcast event for UtcTime.
-    void fireUtcTimeEvent(const Icb_DateTime_t &src_utc_time);
-
-    /**
-     * description: The GPS time provided by the VCM. Prefer UTC time unless you explicitly
-
-     *   need this type of time.
-     */
-    /// Sends a broadcast event for GpsTime.
-    void fireGpsTimeEvent(const Icb_GPSSystemTime_t &src_gps_system_time);
-
-    /**
-     * description: The raw geographical position provided by the VCM.
-            Note that this type
-     *   of position is not the optimal position in most cases. Prefer to use
-
-     *   an enhanced (map matched, predicted, ...) position provided by
-     *   EnhancedPositionService instead.
-     */
-    /// Sends a broadcast event for GeographicalPosition.
-    void fireGeographicalPositionEvent(const Icb_GeographicalPosition_t &src_geographical_position);
-
-    /**
-     * description: Get speed, horizontal and vertical velocity, provided by the VCM.
-     */
-    /// Sends a broadcast event for Movement.
-    void fireMovementEvent(const Icb_Velocity_t &src_movement);
-
-    /**
-     * description: Heading provided by the VCM.
-     */
-    /// Sends a broadcast event for Heading.
-    void fireHeadingEvent(const uint32_t &src_heading);
+    void cbGNSSPositionDataAccuracyNotification(Message &msg);
 
     /**
      * description: Gnss status provided by the VCM. Includes
@@ -153,9 +117,18 @@ protected:
         nullptr,
         std::bind(&GnssService::cbGNSSPositionDataNotification, this, std::placeholders::_1),
         false  // Static notification
+    },{
+        Message::VCM,
+        VccIpCmd::ServiceId::Positioning,
+        VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+        nullptr,
+        std::bind(&GnssService::cbGNSSPositionDataAccuracyNotification, this, std::placeholders::_1),
+        false  // Static notification
     }};
 
     android::hardware::gnss::V1_0::implementation::Gnss gnss_;
+    android::hardware::gnss::V1_0::GnssLocation location_;
+    bool expect_location_accuracy_;
 
 };  // class GnssService
 

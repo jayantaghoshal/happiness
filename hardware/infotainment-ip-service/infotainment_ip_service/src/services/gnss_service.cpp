@@ -13,6 +13,8 @@
 #include "util/type_conversion_helpers.h"
 
 using namespace android::hardware::gnss::V1_0::implementation;
+using namespace android::hardware::gnss::V1_0;
+using namespace InfotainmentIpService::Utils;
 
 namespace Connectivity
 {
@@ -25,6 +27,10 @@ GnssService::GnssService()
     /// other services...
 
     IpService::service_name_ = "GNSS";
+
+    expect_location_accuracy_ = false; // set this according to which VCM ver you are currently using
+    location_.timestamp = 0;
+    location_.gnssLocationFlags = 0;
 }
 
 bool GnssService::Initialize(Connectivity::MessageDispatcher *msgDispatcher)
@@ -70,78 +76,129 @@ void GnssService::cbGNSSPositionDataNotification(Message &msg)
     if (DecodeMessage(msg, p, Icb_OpGNSSPositionData_Response_Create, Icb_OpGNSSPositionData_Response_Decode))
     {
         // All ok.
-        ALOGD("UTC: %d-%d-%d %d:%d:%d",
+        const int64_t mssince1970 = ToMsSince1970(p->gnssPositionData->utcTime);
+        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
                                    p->gnssPositionData->utcTime->year,
                                    p->gnssPositionData->utcTime->month,
                                    p->gnssPositionData->utcTime->day,
                                    p->gnssPositionData->utcTime->hour,
                                    p->gnssPositionData->utcTime->minute,
-                                   p->gnssPositionData->utcTime->second);
+                                   p->gnssPositionData->utcTime->second,
+                                   mssince1970);
 
 #ifdef OpGNSSPositionData_PRINT_ENABLED
         Icb_OpGNSSPositionData_Response_Print(p);
 #endif
 
-        // Notify CommonAPI listeners.
-        fireUtcTimeEvent(*(p->gnssPositionData->utcTime));
-        fireGpsTimeEvent(*(p->gnssPositionData->gpsTime));
-        fireGeographicalPositionEvent(*(p->gnssPositionData->position));
-        fireMovementEvent(*(p->gnssPositionData->movement));
-        fireHeadingEvent(p->gnssPositionData->heading);
+        bool sendnow = false;
+        if (!expect_location_accuracy_) {
+            // we don't expect any accuracy signal to arrive so lets send this right now
+            // We set some dummy values  for horizontal accuracy
+            // otherwise Android completely filters out the location samples.
+            location_.gnssLocationFlags |= (uint16_t)GnssLocationFlags::HAS_HORIZONTAL_ACCURACY;
+            location_.horizontalAccuracyMeters = 10.0;
+            sendnow=true;
+        } else if (mssince1970==location_.timestamp) {
+            // We seem to have already received the accuracy signal so lets send now
+            sendnow=true;
+        } else if (expect_location_accuracy_ && location_.timestamp!=0) {
+            // This is just to detect misconfigurations; that we expect accuracy but we dont seem to get them
+            ALOGW("Received cbGNSSPositionDataNotification but no accuracy in sight");
+        }
+        location_.timestamp = mssince1970;
+
+        location_.gnssLocationFlags |=
+            (uint16_t)GnssLocationFlags::HAS_LAT_LONG |
+            (uint16_t)GnssLocationFlags::HAS_ALTITUDE |
+            (uint16_t)GnssLocationFlags::HAS_SPEED |
+            (uint16_t)GnssLocationFlags::HAS_BEARING;
+
+        location_.latitudeDegrees  = FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->latitude);
+        location_.longitudeDegrees = FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->longitude);
+        location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;   // dm -> meters
+        location_.speedMetersPerSec = p->gnssPositionData->movement->speed / 1000.0; // mm/s -> m/s
+        location_.bearingDegrees = p->gnssPositionData->heading / 100.0;             // 1/100 degrees -> degrees
+        ALOGD("lat=%.4lf , long=%.4lf",location_.latitudeDegrees,location_.longitudeDegrees);
+
+
+        // TODO these shall maybe also be handled
+        // we call them here now just to get the logging
         fireGnssStatusEvent(*(p->gnssPositionData->gnssStatus));
         firePositioningStatusEvent(*(p->gnssPositionData->positioningStatus));
         fireSatelliteUsageEvent(*(p->gnssPositionData->satelliteInfo));
         firePrecisionEvent(*(p->gnssPositionData->precision));
         fireReceiverChannelsEvent(*(p->gnssPositionData->receiverChannels));
+
+
+        if (sendnow) {
+            ALOGD("location send to gnss, triggered by location");
+            gnss_.updateLocation(location_);
+            location_.timestamp = 0;
+            location_.gnssLocationFlags = 0;
+        }
     }
 }
 
-void GnssService::fireUtcTimeEvent(const Icb_DateTime_t &src_utc_time)
+void GnssService::cbGNSSPositionDataAccuracyNotification(Message &msg)
 {
-    ALOGV("not impl Source utc time - year: %u, month: %u, day: %u, hour: %u, minute: %u, second: %u",
-                                 src_utc_time.year,
-                                 src_utc_time.month,
-                                 src_utc_time.day,
-                                 src_utc_time.hour,
-                                 src_utc_time.minute,
-                                 src_utc_time.second);
+    Icb_OpGNSSPositionDataAccuracy_Response p = nullptr;
+
+    ALOGD("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d",
+                               (int)msg.pdu.header.service_id,
+                               (int)msg.pdu.header.operation_id,
+                               (int)msg.pdu.header.operation_type,
+                               msg.pdu.header.sender_handle_id,
+                               (int)msg.pdu.payload.size());
+
+    if (DecodeMessage(msg, p, Icb_OpGNSSPositionDataAccuracy_Response_Create, Icb_OpGNSSPositionDataAccuracy_Response_Decode))
+    {
+        // All ok.
+        const int64_t mssince1970 = ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
+        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
+                                   p->gnssPositionDataAccuracy->utcTime->year,
+                                   p->gnssPositionDataAccuracy->utcTime->month,
+                                   p->gnssPositionDataAccuracy->utcTime->day,
+                                   p->gnssPositionDataAccuracy->utcTime->hour,
+                                   p->gnssPositionDataAccuracy->utcTime->minute,
+                                   p->gnssPositionDataAccuracy->utcTime->second,
+                                   mssince1970);
+
+#ifdef OpGNSSPositionDataAccuracy_PRINT_ENABLED
+        Icb_OpGNSSPositionDataAccuracy_Response_Print(p);
+#endif
+        bool sendnow = false;
+        if (mssince1970==location_.timestamp) {
+            // We seem to have already received the location signal so lets send now
+            sendnow=true;
+        }
+        location_.timestamp = mssince1970;
+
+        if (!expect_location_accuracy_) {
+            ALOGW("Strange, we dont expect accuracy but still receives it!!");
+        }
+
+        location_.gnssLocationFlags |=
+            (uint16_t)GnssLocationFlags::HAS_HORIZONTAL_ACCURACY |
+            (uint16_t)GnssLocationFlags::HAS_VERTICAL_ACCURACY;
+        // we can currently not provide speed and bearing accuracy since it is not available from the VCM
+
+        // In Android we can only report horizontal accuracy but what we receive are values for
+        // the lat and long axis. Now we take "max" of these but maybe "min" or "mean" could be used!?
+        double lat_accuracy = p->gnssPositionDataAccuracy->accuracy->sdLatitude/100.0; // cm -> m
+        double long_accuracy = p->gnssPositionDataAccuracy->accuracy->sdLongitud/100.0;// cm -> m
+        location_.horizontalAccuracyMeters = std::max(lat_accuracy,long_accuracy);
+
+        location_.verticalAccuracyMeters = p->gnssPositionDataAccuracy->accuracy->sdAltitude/100.0; // cm -> m
+
+        if (sendnow) {
+            ALOGD("location send to gnss, triggered by accuracy");
+            gnss_.updateLocation(location_);
+            location_.timestamp=0;
+            location_.gnssLocationFlags = 0;
+        }
+    }
 }
 
-void GnssService::fireGpsTimeEvent(const Icb_GPSSystemTime_t &src_gps_system_time)
-{
-    ALOGV(
-        "not impl Source weekNumber: %u, timeOfWeek: %u", src_gps_system_time.weekNumber, src_gps_system_time.timeOfWeek);
-}
-
-void GnssService::fireGeographicalPositionEvent(const Icb_GeographicalPosition_t &src_geographical_position)
-{
-    ALOGV(
-        "not impl Source longitude: %d / 360*2^32 degrees, latitude: %d / 360*2^32 degrees, altitude: %d *0.1m.",
-        src_geographical_position.longLat->longitude,
-        src_geographical_position.longLat->latitude,
-        src_geographical_position.altitude);
-
-    // The altitude data from vcm is stored in 1/10m. We want whole meters.
-    double altitude = src_geographical_position.altitude / 10.0;
-
-    double floating_point_longitude =
-        InfotainmentIpService::Utils::FixedPoint32ToDegreesD(src_geographical_position.longLat->longitude);
-    double floating_point_latitude =
-        InfotainmentIpService::Utils::FixedPoint32ToDegreesD(src_geographical_position.longLat->latitude);
-}
-
-void GnssService::fireMovementEvent(const Icb_Velocity_t &src_movement)
-{
-    ALOGV("not impl Source speed: %u, horizontalVelocity: %u, verticalVelocity: %d",
-                                 src_movement.speed,
-                                 src_movement.horizontalVelocity,
-                                 src_movement.verticalVelocity);
-}
-
-void GnssService::fireHeadingEvent(const uint32_t &src_heading)
-{
-    ALOGV("not impl Source heading: %u", src_heading);
-}
 
 void GnssService::fireGnssStatusEvent(const Icb_GNSSUsage_t &src_gnss_status)
 {

@@ -8,23 +8,32 @@ import json
 
 class Artifactory(object):
 
-    def retrieve_artifact(self, repository_path, dest_dir):
-        filename = dest_dir + '/' + os.path.basename(repository_path)
-        response = self._download(self._url(repository_path), filename)
+    def retrieve_artifacts(self, uri, dest_dir):
+        ''' Download all files in directory '''
+        response = self.properties(uri)
+        for child in response.json()['children']:
+            self.retrieve_artifact(uri + child['uri'], dest_dir)
+
+    def retrieve_artifact(self, uri, dest_dir):
+        ''' Download file '''
+        filename = dest_dir + '/' + os.path.basename(uri)
+        print("Retrieve file from Artifactory - %s -> %s/%s" % (uri, dest_dir, filename))
+        response = self._download(self._url(uri), filename)
         response.raise_for_status()
 
         checksum = response.headers["X-Checksum-Md5"]
         self._verify_checksum(filename, checksum)
         return response
 
-    def deploy_artifact(self, repository_path, filename):
+    def deploy_artifact(self, uri, filename):
         headers = {
             'X-Checksum-Deploy': "false",
             'X-Checksum-Sha1': self._check_sum("sha1", filename),
             'X-Checksum-Sha256': self._check_sum("sha256", filename)
         }
 
-        response = self._upload(self._url(repository_path), filename, headers=headers)
+        print("Deploy file to Artifactory - %s -> %s" % (filename, uri))
+        response = self._upload(self._url(uri), filename, headers=headers)
         response.raise_for_status()
         return response
 
@@ -82,8 +91,8 @@ class Artifactory(object):
                 fd.write(chunk)
         return response
 
-    def _url(self, repository_path):
-        return self._base_url() + '/' + repository_path
+    def _url(self, uri):
+        return self._base_url() + '/' + uri
 
     def _base_url(self):
         return "https://swf1.artifactory.cm.volvocars.biz/artifactory"

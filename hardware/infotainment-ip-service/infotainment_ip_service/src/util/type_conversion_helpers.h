@@ -19,6 +19,11 @@ namespace InfotainmentIpService
 namespace Utils
 {
 
+/*
+Convert from UTC time Icb_DateTime_t to ms since 1970-01-01 00:00:00
+*/
+int64_t ToMsSince1970(const Icb_DateTime_t* utc_time);
+
 //// 'ToString' functions (mainly for logging purposes)
 
 std::string FixTypeToString(Icb_GnssFixType_t fix_type);

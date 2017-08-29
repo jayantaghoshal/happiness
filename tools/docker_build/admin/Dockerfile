@@ -88,10 +88,22 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python-virtualenv \
     python-pip
 
+# Install android view client, used for android test automation
+# https://github.com/dtmilano/AndroidViewClient/wiki
+# RUN pip install git+https://github.com/dtmilano/AndroidViewClient.git
+RUN pip install androidviewclient
+
 
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
+
+##################################################
+# Debug packages
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+    iputils-ping \
+    dnsutils \
+    net-tools
 
 ##################################################
 # Tools required for CI test environment
@@ -104,16 +116,17 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python3-serial \
     adb
 COPY repo /usr/bin/repo
+COPY redis-cli /usr/bin/redis-cli
 RUN pip3 install redis \
     requests \
     zuul==2.5.2
 
 ##################################################
-# Debug packages
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
-    iputils-ping \
-    dnsutils \
-    net-tools
+# Static analysis tools
+RUN pip3 install mypy
+# Typing comes built in with python3, but has to be installed with python2
+# Then you can use it together with comment annotations and mypy
+RUN pip install typing
 
 ##################################################
 # Clean up apt package information to make image smaller

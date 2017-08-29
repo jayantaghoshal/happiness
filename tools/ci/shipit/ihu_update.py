@@ -133,13 +133,13 @@ def flash_image(port_mapping: PortMapping,
 
         logger.info("Assigning partition table")
         img_path = os.path.join(
-            build_out_dir, "target", "product", product, "fast_flashfiles", "gpt_" + "ihu_6_0_HIGH.bin")
+            build_out_dir, "target", "product", product, "fast_flashfiles", "gpt_" + hardware + ".bin")
         output = check_output_logged([fastboot_executable,
                                       "flash", "gpt", img_path]).decode().strip(" \n\r\t")
 
         logger.info("Flashing bootloader partition")
         bootloader_path = os.path.join(
-            build_out_dir, "target", "product", product, "fast_flashfiles", "bootloader_" + "ihu_6_0_HIGH")
+            build_out_dir, "target", "product", product, "fast_flashfiles", "bootloader_" + hardware)
         output = check_output_logged([fastboot_executable,
                                       "flash", "bootloader", bootloader_path]).decode().strip(" \n\r\t")
 

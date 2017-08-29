@@ -1,0 +1,34 @@
+@startuml
+
+node "Framework" {
+  [LocationManager]
+  [VOCManager]
+  [VehicleManager]
+}
+
+node "HAL" {
+  interface IGnss
+  interface ITcam
+  interface IVehicle
+}
+
+node "HAL impl" {
+  IGnss - [GnssD]
+  ITcam - [TCamD]
+  IVehicle - [VehicleD]
+  ITcam <.. [GnssD] : use
+  ITcam <.. [VehicleD] : use
+  [IPLMD]
+}
+
+[LocationManager] ..> IGnss : use
+[VOCManager] ..> ITcam : use
+[VehicleManager] ..> IVehicle : use
+
+[TCamD] o-- [libipcb+libasn1]
+[IPLMD] o-- [libipcb+libasn1] : includes
+
+[IPLMD] <-- [TCAM] : IPCB
+[TCamD] <-- [TCAM]: IPCB
+
+@enduml
