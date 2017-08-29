@@ -9,10 +9,10 @@ namespace netman {
 
 class NetlinkEventHandler
 {
-    const InterfaceConfiguration eth1_configuration_;
+    const std::vector<InterfaceConfiguration> &interface_configurations_;
 
 public:
-    NetlinkEventHandler(const InterfaceConfiguration &eth1_configuration_);
+    NetlinkEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations);
     ~NetlinkEventHandler();
 
     void HandleEvent(struct nlmsghdr *nl_message_header);

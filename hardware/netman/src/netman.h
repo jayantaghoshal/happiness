@@ -10,9 +10,11 @@
 namespace vcc {
 namespace netman {
 
-void LoadInterfaceConfiguration(InterfaceConfiguration &conf);
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_configurations);
 
 void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf);
+
+void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations);
 
 bool SetupInterface(const char* interface_name,
                     const std::vector<uint8_t> &mac_address,

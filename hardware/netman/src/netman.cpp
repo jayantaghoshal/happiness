@@ -53,16 +53,21 @@ void PrintInterfaceConfiguration(const std::string context,
     ALOGI("MTU: %i", conf.mtu);
 }
 
-void LoadInterfaceConfiguration(InterfaceConfiguration &conf)
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_configurations)
 {
-    conf.name = vcc::localconfig::GetString("eth1.name");
-    conf.ip_address = vcc::localconfig::GetString("eth1.ip-address");
-    conf.netmask = vcc::localconfig::GetString("eth1.netmask");
-    conf.mac_address = vcc::localconfig::GetString("eth1.mac-address");
-    ConvertMacAddress(conf.mac_address, conf.mac_address_bytes);
-    conf.broadcast_address = vcc::localconfig::GetString("eth1.broadcast-address");
-    conf.mtu = (uint32_t)vcc::localconfig::GetInt("eth1.mtu");
-    PrintInterfaceConfiguration("Local Configuration", conf);
+    const std::vector<std::string> interface_names = {"eth0", "eth1", "meth0"};
+    for (auto &name : interface_names) {
+        InterfaceConfiguration conf;
+        conf.name = vcc::localconfig::GetString(name + ".name");
+        conf.ip_address = vcc::localconfig::GetString(name + ".ip-address");
+        conf.netmask = vcc::localconfig::GetString(name + ".netmask");
+        conf.mac_address = vcc::localconfig::GetString(name + ".mac-address");
+        ConvertMacAddress(conf.mac_address, conf.mac_address_bytes);
+        conf.broadcast_address = vcc::localconfig::GetString(name + ".broadcast-address");
+        conf.mtu = (uint32_t)vcc::localconfig::GetInt(name + ".mtu");
+        interface_configurations.push_back(conf);
+        PrintInterfaceConfiguration("Local Configuration", conf);
+    }
 }
 
 /** Private Functions */
@@ -415,6 +420,18 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* i
     close(sockfd);
 
     return true;
+}
+
+void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations)
+{
+    for (auto &conf : interface_configurations) {
+        SetupInterface(conf.name.c_str(),
+                       conf.mac_address_bytes,
+                       conf.ip_address.c_str(),
+                       conf.netmask.c_str(),
+                       conf.broadcast_address.c_str(),
+                       conf.mtu);
+    }
 }
 
 bool SetupInterface(const char* interface_name,
