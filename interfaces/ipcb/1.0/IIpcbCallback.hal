@@ -1,0 +1,10 @@
+package android.vendor.volvocars.ipcb@1.0;
+
+interface IIpcbCallback
+{
+    /**
+     * Handle messages received over IPCB
+     * @param msg Message received over IPCB.
+     */
+    oneway onMessageRcvd(Msg msg);
+};

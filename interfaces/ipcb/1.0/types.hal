@@ -1,0 +1,22 @@
+package android.vendor.volvocars.ipcb@1.0;
+
+struct Header
+{
+    uint16_t serviceID;
+    uint16_t operationID;
+    uint8_t operationType;
+    uint8_t seqNbr;
+};
+
+struct Msg
+{
+    Header header;
+    vec<uint8_t> payload;
+};
+
+enum Status : int64_t
+{
+    SUCCESS,
+    FAIL,
+    UNKNOWN,
+};

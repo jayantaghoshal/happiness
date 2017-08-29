@@ -1,0 +1,29 @@
+package android.vendor.volvocars.ipcb@1.0;
+
+import IIpcbCallback;
+
+interface IIpcb
+{
+    /**
+     * Subscribe to messages received on IPCB
+     * @param serviceID ID of the service to subscribe to
+     * @param operationID ID of the operation to subscribe to, use 0xFFFF to subscribe to all operation IDs for the service
+     * @param callbackHandler Instance handling callbacks for subscribed operation IDs
+     */
+    subscribe(uint16_t serviceID, uint16_t operationID, IIpcbCallback callbackHandler) generates (Status status);
+
+    /**
+     * Unsubscribe to messages received on IPCB
+     * @param serviceID ID of the service to unsubscribe to
+     * @param operationID ID of the operation to unsubscribe to, use 0xFFFF to unsubscribe to all operation IDs for the service
+     * @param callbackHandler Instance handling callbacks for subscribed operation IDs, used to unsubscribe the correct instance if multiple subscribers exist
+     */
+    unsubscribe(uint16_t serviceID, uint16_t operationID, IIpcbCallback callbackHandler) generates (Status status);
+
+    /**
+     * Send message over IPCB
+     * Never send messages with opType ACK, this will be sent automatically by IPCB "server"
+     * @param msg Message to send over IPCB.
+     */
+    oneway sendMessage(Msg msg);
+};
