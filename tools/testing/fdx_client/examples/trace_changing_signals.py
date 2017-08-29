@@ -25,7 +25,10 @@ def main():
                 print("%s::%s = %d" %(g.name, i.name, i.value_raw))
             old_values[i.name] = i.value_raw
 
-    def get_signal(name: str) -> fdx_description_file_parser.Item:
+
+
+    def get_signal(name):
+        # type: (str) -> fdx_description_file_parser.Item
         candidate = None # type: fdx_description_file_parser.Item
 
         parts = name.split("::")
@@ -45,7 +48,8 @@ def main():
         return candidate
 
     with contextlib.closing(fdx_client.FDXConnection(data_exchange, config.vector_fdx_ip, config.vector_fdx_port)) as conn:
-        def send(name: str, raw_value: int):
+        def send(name, raw_value):
+            # type: (str, int) -> None
             item = get_signal(name)
             item._value = raw_value
             g = item.parent_group
@@ -73,5 +77,5 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.DEBUG)
     main()

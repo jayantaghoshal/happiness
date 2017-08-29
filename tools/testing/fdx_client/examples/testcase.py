@@ -5,7 +5,7 @@ import time
 sys.path.append("..")
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
-from examples import config
+from . import config
 
 
 ns_per_ms = 1000000
@@ -43,7 +43,8 @@ class FDXClientTestBase():
         g = self.group_id_map[group_id]
         g.receive_data(data)
 
-    def get_signal(self, name: str) -> fdx_description_file_parser.Item:
+    def get_signal(self, name):
+        # type: (str) -> fdx_description_file_parser.Item
         candidate = None # type: fdx_description_file_parser.Item
 
         parts = name.split("::")

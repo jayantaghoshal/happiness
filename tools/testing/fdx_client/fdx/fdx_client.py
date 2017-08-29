@@ -6,6 +6,8 @@ import logging
 import time
 import select
 logger = logging.getLogger(__name__)
+import typing
+
 
 class kCommandCode:
     start=0x0001
@@ -78,13 +80,13 @@ class FdxCommandParser:
         if self.done:
             raise Exception("Parser already finished, create a new one to parse more commands")
 
-        expected_signature = list(struct.pack('=Q', fdxSignature))
+        expected_signature = struct.pack('=Q', fdxSignature)
         for index in range(len(expected_signature)):
             b = yield
-            if b == expected_signature[index]:
+            if b == ord(expected_signature[index]):
                 index += 1
             else:
-                raise Exception("Expected byte %d at index %d, got %d" % (expected_signature[index], index, b))
+                raise Exception("Expected byte %d at index %d, got %d" % (ord(expected_signature[index]), index, b))
 
         received_major_version = yield
         if received_major_version != fdxMajorVersion:
@@ -96,11 +98,11 @@ class FdxCommandParser:
 
         number_of_commands1 = yield
         number_of_commands2 = yield
-        (nrOfCommands, ) = struct.unpack('=h', bytes([number_of_commands1, number_of_commands2]))
+        (nrOfCommands, ) = struct.unpack('=h', bytearray([number_of_commands1, number_of_commands2]))
 
         seq_nr1 = yield
         seq_nr2 = yield
-        (seq_nr, ) = struct.unpack('=h', bytes([seq_nr1, seq_nr2]))
+        (seq_nr, ) = struct.unpack('=h', bytearray([seq_nr1, seq_nr2]))
         next_seq_nr = increase_seq_nr(self.prev_seq_nr)
         if self.prev_seq_nr != 0 and next_seq_nr != seq_nr:
             logger.error("Sequence nr error, got %d, expected %d",seq_nr, next_seq_nr)
@@ -116,7 +118,7 @@ class FdxCommandParser:
             command.append(len1)
             command.append(len2)
 
-            (command_size, ) = struct.unpack('=h', bytes([len1, len2]))
+            (command_size, ) = struct.unpack('=h', bytearray([len1, len2]))
 
             for i in range(command_size - size_size):
                 b = yield
@@ -128,7 +130,12 @@ class FdxCommandParser:
 
 
 class FDXConnection:
-    def __init__(self, data_exchange_callback, ip: str, port=2809) -> None:
+    def __init__(self,
+                 data_exchange_callback,    # type: typing.Any
+                 ip,                        # type: str
+                 port=2809                  # type: int
+                 ):
+        # type: (...) -> None
         self.ip = ip
         self.port = port
         self.next_seq_nr_to_send = 0
@@ -170,7 +177,7 @@ class FDXConnection:
                     gen = parser.feed()
                     gen.send(None)
                     for d in data:
-                        gen.send(d)
+                        gen.send(ord(d))
                         if parser.done:
                             # TODO: I think we might be able to extract more accurate time stamps here if we combine multiple
                             # messages from the datagram to parse.
@@ -218,10 +225,17 @@ class FDXConnection:
         data += bytes(dataBytes)
         self.send_command(data)
 
-    def send_data_request(self, groupId: int):
+    def send_data_request(self,
+                          groupId):
+        # type: (int) -> None
         self.send_command(struct.pack('=hh', kCommandCode.dataRequest, groupId))
 
-    def send_free_running_request(self, group_id: int, freeRunningFlags, cycleTime_ns: int, firstDuration_ns: int):
+    def send_free_running_request(self,
+                                  group_id,             # type: int
+                                  freeRunningFlags,     # type: int
+                                  cycleTime_ns,         # type: int
+                                  firstDuration_ns,     # type: int
+                                    ):
         self.send_command(struct.pack('=hhhLL',
                                       kCommandCode.freeRunningRequest,
                                       group_id,
@@ -232,17 +246,18 @@ class FDXConnection:
     def send_free_running_cancel(self, group_id):
         self.send_command(struct.pack('=hh', kCommandCode.freeRunningCancel, group_id))
 
-    def parse(self, command: FdxCommand):
-        (commandCode, ) = struct.unpack('=h', bytes(command.command[2:4]))
+    def parse(self, command):
+        # type: (FdxCommand) -> None
+        (commandCode, ) = struct.unpack('=h', bytearray(command.command[2:4]))
 
         if commandCode == kCommandCode.status:
-            (measurement_state, unused, timestamps) = struct.unpack('=b3sq', bytes(command.command[4:]))
+            (measurement_state, unused, timestamps) = struct.unpack('=b3sq', bytearray(command.command[4:]))
             self.last_received_measurement_status = measurement_state
         elif commandCode == kCommandCode.dataError:
-            (groupId, dataErrorCode) = struct.unpack('=hh', bytes(command.command[4:]))
+            (groupId, dataErrorCode) = struct.unpack('=hh', bytearray(command.command[4:]))
             logger.error("DataError, groupid: %d, dataErrorCode: %s" % (groupId, reverse_dict(kDataError, dataErrorCode)))
         elif commandCode == kCommandCode.dataExchange:
-            (groupId, dataSize) = struct.unpack('=hh', bytes(command.command[4:8]))
+            (groupId, dataSize) = struct.unpack('=hh', bytearray(command.command[4:8]))
             data = command.command[8:]
             if len(data) != dataSize:
                 raise Exception("Data exchange length does not match, dataSize=%d, len(data)=%d, groupId=%d" %
@@ -250,14 +265,15 @@ class FDXConnection:
 
             self.data_exchange_callback(groupId, data)
         elif commandCode == kCommandCode.sequenceNrError:
-            (received_seqnr, expected_seqnr) = struct.unpack('=hh', bytes(command.command[4:8]))
+            (received_seqnr, expected_seqnr) = struct.unpack('=hh', bytearray(command.command[4:8]))
             logger.error("Remote side report invalid seqnr received, expected %d, got %d" % (expected_seqnr, received_seqnr))
         else:
             logger.error("Received unhandled command: %s, data=%r",
                           reverse_dict(kCommandCode, commandCode),
                           command.command)
 
-    def confirmed_start(self, timeout_sec: int = 30):
+    def confirmed_start(self, timeout_sec=30):
+        # type: (int) -> None
         deadline = time.time() + timeout_sec
         while time.time() < deadline:
             if self.last_received_measurement_status == kMeasurmentState.Running:
@@ -265,10 +281,11 @@ class FDXConnection:
             self.send_start()
             self.status_req()
             time.sleep(1)
-        raise Exception("Timeout waiting for measurement to start, current status: %s" %
+        raise Exception(("Timeout waiting for measurement to start, current status: %s." + os.linesep + "Make sure you are connected to the Vector hardware") %
                         reverse_dict(kMeasurmentState, self.last_received_measurement_status))
 
-    def confirmed_stop(self, timeout_sec: int = 30):
+    def confirmed_stop(self, timeout_sec=30):
+        # type: (int) -> None
         deadline = time.time() + timeout_sec
         while time.time() < deadline:
             if self.last_received_measurement_status == kMeasurmentState.NotRunning:

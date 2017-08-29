@@ -1,6 +1,6 @@
 import struct
 import xml.etree.ElementTree as ET
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Dict
 
 
 #https://docs.python.org/2/library/struct.html#format-characters
@@ -12,7 +12,12 @@ fdx_type_to_struct_map = {
 }
 
 class Group():
-    def __init__(self, group_id: int, name: str, size: int) -> None:
+    def __init__(self,
+                 group_id, # type: int
+                 name,     # type: str
+                 size      # type: int
+                ):
+        # type: (...) -> None
         self.group_id = group_id
         self.name = name
         self.size = size
@@ -30,13 +35,23 @@ class Group():
             data[i.offset:(i.offset+i.size)] = list(item_data)
         return data
 
-    def receive_data(self, data: List[int]):
+    def receive_data(self, data):
+        # type: (List[int]) -> None
         for i in self.items:
-            (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytes(data[i.offset:(i.offset + i.size)]))
+            (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
 
 
 class Item():
-    def __init__(self, parent_group: Group, name: str, msg_or_namespace : str, offset: int, size: int, datatype: str, is_raw: bool, bus_name:Optional[str]) -> None:
+    def __init__(self,
+                 parent_group,      # type: Group
+                 name,              # type: str
+                 msg_or_namespace,  # type: str
+                 offset,            # type: int
+                 size,              # type: int
+                 datatype,          # type: str
+                 is_raw,            # type: bool
+                 ):
+        # type: (...) -> None
         self.parent_group = parent_group
         self.name = name
         self.msg_or_namespace = msg_or_namespace
@@ -45,7 +60,6 @@ class Item():
         self.type = datatype
         self.is_raw = is_raw   # If is_raw is false, then CANoe will handle scaling conversion
         self._value = 0        # NOTE: Value can be either raw or physical depending on the FDXDescriptionFile
-        self.bus_name = bus_name
 
     @property
     def value_raw(self):
@@ -68,7 +82,8 @@ class Item():
         self._value = value
 
 
-def parse(filename: str) -> Tuple[List[Group], List[Item], List[Item]]:
+def parse(filename):
+    # type: (str) -> Tuple[List[Group], List[Item], List[Item]]
     all_groups = []
     signal_list = []
     sysvar_list = []
@@ -88,7 +103,7 @@ def parse(filename: str) -> Tuple[List[Group], List[Item], List[Item]]:
             if sysvar is not None:
                 name = sysvar.attrib["name"]
                 namespace = sysvar.attrib["namespace"]
-                s = Item(g, name, namespace, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], True, None)
+                s = Item(g, name, namespace, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], True)
                 g.items.append(s)
                 sysvar_list.append(s)
             if signal is not None:
@@ -99,7 +114,7 @@ def parse(filename: str) -> Tuple[List[Group], List[Item], List[Item]]:
                 if not is_raw:
                     assert scaling == "physical", "Unrecognized value scaling %s " % scaling
 
-                s = Item(g, name, msg, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], is_raw, signal.attrib["bus"])
+                s = Item(g, name, msg, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], is_raw)
                 g.items.append(s)
                 signal_list.append(s)
         g.validate()
