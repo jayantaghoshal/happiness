@@ -73,4 +73,55 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := \
 	$(LOCAL_PATH)/include \
     $(LOCAL_PATH)/generated \
 
+LOCAL_MULTILIB := 64
+
 include $(BUILD_SHARED_LIBRARY)
+
+
+#
+# Static library. Used for unit tests.
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := libdataelements_unittest
+
+LOCAL_SRC_FILES:= \
+    src/dataelemvalue.cpp \
+    src/dataelementframework.cpp \
+    src/dataelementcommbus_standalone.cpp \
+    src/vipcomm/VipFramework.cpp \
+    src/vipcomm/VipFramework_crc.cpp \
+    generated/gen_dataelements.cpp \
+    generated/gen_jsonencdec.cpp
+
+    
+LOCAL_CPPFLAGS := -std=c++1z \
+                -g \
+                -Wno-non-virtual-dtor \
+                -DUNIT_TEST \
+                -fexceptions \
+                -Wno-non-virtual-dtor \
+                -Wno-unused-parameter \
+                -Wno-macro-redefined
+
+LOCAL_SHARED_LIBRARIES :=   liblog \
+                            libcutils \
+                            libbase \
+                            libhidlbase \
+                            libhidltransport \
+                            liblog \
+                            libutils \
+                            libhwbinder
+
+LOCAL_C_INCLUDES += \
+    $(LOCAL_PATH)/include \
+    $(LOCAL_PATH)/generated \
+    $(LOCAL_PATH)/vector
+
+LOCAL_EXPORT_C_INCLUDE_DIRS := \
+    $(LOCAL_PATH)/include \
+    $(LOCAL_PATH)/generated \
+    $(LOCAL_PATH)/vector
+
+# We only build for 64 bit.
+LOCAL_MULTILIB := 64
+include $(BUILD_STATIC_LIBRARY)
