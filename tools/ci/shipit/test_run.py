@@ -36,16 +36,24 @@ def vts_tradefed_run_module(module_name: str):
     if re.search(fail_pattern1, test_result):
         raise Exception("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
 
-    fail_pattern2 = "PASSED: [1-9]"
+    fail_pattern2 = "PASSED: [1-9][0-9]*"
     if not re.search(fail_pattern2, test_result):
         raise Exception("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
 
 def read_module_name(android_test_xml_file: str):
+    # TODO: This feels needlessly complex, can't we just start vts with the xml file as argument? Or let vts do the parsing.
+    # The format of the xml file isn't exactly well documented so we are just guessing here.
+
     logging.info("Reading module name from %s" % android_test_xml_file)
     xmldoc = minidom.parse(android_test_xml_file)
     test_element = xmldoc.getElementsByTagName("test")[0]
     for subelement in test_element.getElementsByTagName("option"):
         if subelement.hasAttribute("name"):
+            #test-module-name is used by com.android.tradefed.testtype.VtsMultiDeviceTest
+            if subelement.getAttribute("name") == "test-module-name":
+                if subelement.hasAttribute("value"):
+                    return subelement.getAttribute("value")
+            # module-name is used by com.android.tradefed.testtype.GTest
             if subelement.getAttribute("name") == "module-name":
                 if subelement.hasAttribute("value"):
                     return subelement.getAttribute("value")
