@@ -177,6 +177,8 @@ int main(void)
         configureRpcThreadpool(1, true /*callerWillJoin*/);
         service_manager.RegisterAllBinderServices(&msgDispatcher);
         joinRpcThreadpool();
+
+        ALOGI("exiting ...");
     }
     catch (const SocketException &e)
     {

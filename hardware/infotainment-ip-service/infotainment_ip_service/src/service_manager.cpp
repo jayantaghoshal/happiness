@@ -27,9 +27,6 @@ void ServiceManager::RegisterAllBinderServices(::Connectivity::MessageDispatcher
     iplm_service_.Initialize(msg_dispatcher);
     gnss_service_.Initialize(msg_dispatcher);
     msg_dispatcher->setDiagnostics(&diagnostics_client_);
-
-    // TODO
-    // gnss_service_.registerAsService();
 }
 
 void ServiceManager::UnregisterAllBinderServices()
