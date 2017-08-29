@@ -8,9 +8,7 @@ Generate code from HIDL interface
 3. Build hidl-gen if not already done:
     make hidl-gen
 4. Generate C++ code from hidl files, example:
-    hidl-gen -o ~/as/vendor/volvocars/hardware/signals/test/prototype/hidltest/hidl-generated/ \
-    -L c++ -r vcc:~/as/vendor/volvocars/hardware/signals/test/prototype/hidltest/interface/vcc \
-    -r android.hidl:system/libhidl/transport vcc.vcctest@1.0
+    hidl-gen -o hidl-generated/ -L c++ -r vcc:interface/vcc -r android.hidl:${ANDROID_BUILD_TOP}/system/libhidl/transport vcc.vcctest@1.0
 
 Note! It is important the defined package name defined in interface description(*.hal files) match the folder structure in which it is placed.
 
