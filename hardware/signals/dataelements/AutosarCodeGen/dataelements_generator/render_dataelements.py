@@ -209,14 +209,10 @@ namespace autosar {
                                                                                                member_name).replace(
                                 "{RTEATTR}", rteattr).replace("{SCALE}", str(subType.scale)).replace("{OFFSET}", str(subType.offset)) + ";\n"
                         else:
-                            if True or "func" in derealattr:
-                                tmpTransferInject += GEN_VSM_INJECT_SIGNALGROUP_TRANSFER_LINEAR.replace("{FUNC}",
-                                                                                                        func).replace(
-                                    "{SIZE}", str(subType.nr_of_bits)).replace("{DEATTR}", member_name).replace("{RTEATTR}",
+                            tmpTransferInject += GEN_VSM_INJECT_SIGNALGROUP_TRANSFER_LINEAR.replace("{FUNC}",
+                                                                                                    func).replace(
+                                "{SIZE}", str(subType.nr_of_bits)).replace("{DEATTR}", member_name).replace("{RTEATTR}",
                                                                                                         rteattr) + ";\n"
-                            else:
-                                tmpTransferInject += \
-                                    GEN_VSM_INJECT_SIGNALGROUP_TRANSFER.replace("{DEATTR}", member_name).replace("{RTEATTR}", rteattr) + ";\n"
                             tmpTransferSink += GEN_VSM_SINK_SIGNALGROUP_TRANSFER.replace("{DEATTR}", member_name).replace(
                                 "{RTEATTR}", rteattr) + ";\n"
                     else:

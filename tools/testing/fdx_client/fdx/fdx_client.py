@@ -72,7 +72,7 @@ class FdxCommand:
 
 class FdxCommandParser:
     def __init__(self):
-        self.results = []
+        self.results = []  #type: typing.List[FdxCommand]
         self.done = False
         self.prev_seq_nr = 0
 
@@ -165,7 +165,7 @@ class FDXConnection:
 
                 (ready_to_read, _, _) = select.select(watch_list, [], [], None)
                 if self.close_pipe[0] in ready_to_read:
-                    _ = os.read(self.close_pipe[0], 100)
+                    os.read(self.close_pipe[0], 100)
                     break
                 if self.sock in ready_to_read:
                     (data, (host, port)) = self.sock.recvfrom(buffer_size)

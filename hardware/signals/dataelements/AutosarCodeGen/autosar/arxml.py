@@ -17,8 +17,10 @@ from . import base
 from . import components
 from . import maps
 from . import options
+import typing
+from typing import Dict
 
-arxml_files = dict()
+arxml_files = dict()  # type: typing.Dict[str, ARXml]
 
 
 def printProgress(message = None):
@@ -105,29 +107,29 @@ class ARXml:
 			self.xml = ET.ElementTree(ET.Element('{http://autosar.org/schema/r4.0}AUTOSAR'))
 			self.filename = None
 
-		self.parents = dict()
-		self.packages = dict()
-		self.compositions = dict()
-		self.port_interfaces = dict()
-		self.swcs = dict()
-		self.impl_mappings = dict()
-		self.swc_impls = dict()
-		self.system = dict()
-		self.datatypes = dict()
-		self.recordDatatypes = dict()
-		self.recordElements = dict()
-		self.impl_datatypes = dict()
-		self.constants = dict()
-		self.data_constr = dict()
-		self.swbasetype = dict()
-		self.units = dict()
-		self.phys_dimension = dict()
-		self.compu_methods = dict()
-		self.isignal = dict()
-		self.syssignal = dict()
-		self.syssignalgroup = dict()
-		self.endtoendprotection = dict()
-		self.groupmapping = dict()
+		self.parents = dict()  # type: Dict[ET.Element, ET.Element]
+		self.packages = dict() # type: Dict[str, base.ARPackage]
+		self.compositions = dict()	# type: Dict[str, components.ARComposition]
+		self.port_interfaces = dict() # type: Dict[str, components.ARPortInterface]
+		self.swcs = dict()			# type: Dict[str, components.ARSwc]
+		self.impl_mappings = dict()	# type: Dict[str, components.ARSwcImplementation]
+		self.swc_impls = dict()		# type: Dict[str, components.ARSwcImplementation]
+		self.system = dict()		# type: Dict[str, components.ARSystem]
+		self.datatypes = dict()		# type: Dict[str, components.ARDatatype]
+		self.recordDatatypes = dict() # type: Dict[str, components.ARRecordDatatype]
+		self.recordElements = dict() # type: Dict[str, components.ARRecordElement]
+		self.impl_datatypes = dict()	# type: Dict[str, components.ARImplDatatype]
+		self.constants = dict()		# type: Dict[str, components.ARConstant]
+		self.data_constr = dict()	# type: Dict[str, components.ARDataConstraint]
+		self.swbasetype = dict()	# type: Dict[str, components.ARSwBaseType]
+		self.units = dict()			# type: Dict[str, components.ARUnit]
+		self.phys_dimension = dict()	# type: Dict[str, components.ARPhysDimension]
+		self.compu_methods = dict()	# type: Dict[str, components.ARCompuMethod]
+		self.isignal = dict()				# type: Dict[str, components.ARIsignal]
+		self.syssignal = dict()				# type: Dict[str, components.ARSysSignal]
+		self.syssignalgroup = dict()		# type: Dict[str, components.ARIsignalGroup]
+		self.endtoendprotection = dict()	# type: Dict[str, components.AREndToEndProtection]
+		self.groupmapping = dict()			# type: Dict[str, components.ARGroupMap]
 
 		self.reload()
 
@@ -198,11 +200,11 @@ class ARXml:
 		self.syssignal = dict()
 		self.syssignal.update(get_elem_dict(self.xml.getroot(), self.parents, 'SYSTEM-SIGNAL', components.ARSysSignal, self))
 		#self.ecu_instance = get_elem_dict(self.xml.getroot(), self.parents, 'ECU-INSTANCE', base.ARObject)
-		self.isignalgroup = dict()
+		self.isignalgroup = dict() # type: Dict[str, components.ARIsignalGroup]
 		self.isignalgroup.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL-GROUP', components.ARIsignalGroup, self))
 		self.endtoendprotection = get_elem_dict(self.xml.getroot(), self.parents, 'END-TO-END-PROTECTION', components.AREndToEndProtection, self)
 		
-		self.sigtrig = dict()
+		self.sigtrig = dict() # type: Dict[str, components.ARSigTrig]
 		self.sigtrig.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL-TRIGGERING', components.ARSigTrig, self))
 		
 		self.groupmapping = get_elem_dict2(self.xml.getroot(), self.parents, 'SENDER-RECEIVER-TO-SIGNAL-GROUP-MAPPING', 'DATA-ELEMENT-IREF/TARGET-DATA-PROTOTYPE-REF', components.ARGroupMap,self)
@@ -726,12 +728,11 @@ def set_namespaces(etree):
 		#in etree < 1.3, this is a workaround for supressing prefixes
 
 		def fixtag(tag, namespaces):
-			import string
 			# given a decorated tag (of the form {uri}tag), return prefixed
 			# tag and namespace declaration, if any
 			if isinstance(tag, etree.QName):
 				tag = tag.text
-			namespace_uri, tag = string.split(tag[1:], "}", 1)
+			namespace_uri, tag = tag[1:].split("}", 1)
 			prefix = namespaces.get(namespace_uri)
 			if namespace_uri not in namespaces:
 				prefix = etree._namespace_map.get(namespace_uri)

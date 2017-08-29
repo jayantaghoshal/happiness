@@ -18,27 +18,35 @@ DE_Type_Key = str
 
 
 class DE_EnumItem:
-    def __init__(self, name: str, value: int):
+    def __init__(self, name: str, value: int) -> None:
         self.name = name
         self.value = value
 
 
 class DE_StructMember:
-    def __init__(self, type_id: DE_Type_Key, name: str):
+    def __init__(self, type_id: DE_Type_Key, name: str) -> None:
         self.de_type_id = type_id
         self.member_name = name
 
 
 class DE_BaseType:
-    def __init__(self, de_type_name : DE_Type_Key):
+    def __init__(self, de_type_name : DE_Type_Key) -> None:
         self.de_type_name = de_type_name
+
+    @property
+    def desc(self):
+        return ""
 
 
 class DE_Enum(DE_BaseType):
-    def __init__(self, name: DE_Type_Key, description: str, values: List[DE_EnumItem]):
+    def __init__(self, name: DE_Type_Key, description: str, values: List[DE_EnumItem]) -> None:
         super().__init__(name)
-        self.desc = description
+        self._description = description
         self.values = values
+
+    @property
+    def desc(self):
+        return self._description
 
 
 # Integer value without scaling/offset
@@ -48,7 +56,7 @@ class DE_Identical(DE_BaseType):
                  underlying_type: str,
                  limit_min: float,
                  limit_max: float,
-                 unitstr: str):
+                 unitstr: str) -> None:
         super().__init__("IDENTICALTYPE:" + name_uuid)
         self.underlying_type = underlying_type
         self.limit_min = limit_min
@@ -62,8 +70,17 @@ class DE_Identical(DE_BaseType):
 
 # Float value with scale/offset
 class DE_Value(DE_BaseType):
-    def __init__(self, name_uuid: DE_Type_Key, underlying_type: str, is_signed: bool, nr_of_bits: int, scale: float,
-                 offset: float, limit_min: float, limit_max: float, unitstr: str, no_scale: bool):
+    def __init__(self,
+                 name_uuid: DE_Type_Key,
+                 underlying_type: str,
+                 is_signed: bool,
+                 nr_of_bits: int,
+                 scale: float,
+                 offset: float,
+                 limit_min: float,
+                 limit_max: float,
+                 unitstr: str,
+                 no_scale: bool) -> None:
         super().__init__("VALUETYPE:" + name_uuid)
         self.underlying_type = underlying_type
         self.is_signed = is_signed
@@ -90,31 +107,36 @@ class DE_Value(DE_BaseType):
 
 
 class DE_Boolean(DE_BaseType):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("bool")
-        self.desc = ""
 
 
 class DE_Array(DE_BaseType):
-    def __init__(self, typename: DE_Type_Key, item_type: DE_Type_Key, max_elements: int, desc: str):
+    def __init__(self, typename: DE_Type_Key, item_type: DE_Type_Key, max_elements: int, desc: str) -> None:
         super().__init__(typename)
         self.arrayitem_type_id = item_type
         self.max_elements = max_elements
-        self.desc = desc
+        self._description = desc
 
+    @property
+    def desc(self):
+        return self._description
 
 class DE_Struct(DE_BaseType):
-    def __init__(self, name: DE_Type_Key, desc: str, children: List[DE_StructMember]):
+    def __init__(self, name: DE_Type_Key, desc: str, children: List[DE_StructMember]) -> None:
         super().__init__(name)
-        self.desc = desc
+        self._description = desc
         self.children = children
 
+    @property
+    def desc(self):
+        return self._description
 
 class DE_Element:
     def __init__(self, type: DE_Type_Key, name: str, is_insignal: bool, is_internal: bool, description: str,
                  is_rte_signal: bool,
                  rte_name: str,
-                 rte_attr_map: Dict[str, str]):
+                 rte_attr_map: Dict[str, str]) -> None:
         self.de_type_id = type
         self.de_dataelementname = name      # This is the name you usually use to refer to the DataElement
         self.is_insignal = is_insignal

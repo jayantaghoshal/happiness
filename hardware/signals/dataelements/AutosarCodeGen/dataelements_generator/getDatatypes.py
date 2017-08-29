@@ -7,13 +7,13 @@ import uuid
 import logging
 logger = logging.getLogger(__name__)
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, cast
 
 from . import render_json
 from .render_datatypes import render_datatype
 
 import autosar
-from autosar.components import AR_RPort
+from autosar.components import AR_RPort 
 from dataelements_generator import crc16, render_dataelements
 from dataelements_generator.model import DE_Type_Key, DE_BaseType, DE_Enum, DE_Struct, DE_Value, DE_Array, \
     DE_StructMember, DE_Element, \
@@ -77,17 +77,16 @@ def parse_type(swc_data: autosar.arxml.ARXml,
             lim = typeT.getDataConstraint().getLimits()
             underlying_type = getIntTypeStr(lim)
 
-            t = DE_Identical(new_key(), underlying_type, lim[0], lim[1], unitstr)
-            all_types[t.de_type_name] = t
-            return t.de_type_name
+            ti = DE_Identical(new_key(), underlying_type, lim[0], lim[1], unitstr)
+            all_types[ti.de_type_name] = ti
+            return ti.de_type_name
         else:
-            raise Exception(
-                "Unhandled structure compuMethod category '" + typeT.getCompuMethod().getCategory() + "' for data-type/element " + d.shortname + "/" + r.shortname)
+            raise Exception("Unhandled structure compuMethod category '" + typeT.getCompuMethod().getCategory())
     elif typeT.getCategory() == 'BOOLEAN':
         return "bool"
     else:
         raise Exception(
-            "Unhandled structure data-type category '" + r.getCategory() + "' for data-type/element " + d.shortname + "/" + r.shortname)
+            "Unhandled structure data-type category: '" + typeT.getCategory())
 
 
 def parse(swc_data: autosar.arxml.ARXml, comfile_data):
@@ -97,7 +96,7 @@ def parse(swc_data: autosar.arxml.ARXml, comfile_data):
 
 
 def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseType]:
-    all_types = {}
+    all_types = {}  # type: Dict[str, DE_BaseType]
     all_types["bool"] = DE_Boolean()
 
     def push_type(key, t):
@@ -106,8 +105,7 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
         all_types[key] = t
 
     for k, d in sorted(swc_data.datatypes.items()):
-        d = d
-        """:type: autosar.components.ARDatatype""" # can also be subclasses ARRecordDatatype, ARArrayDatatype
+        d = cast(autosar.components.ARDatatype, d) # can also be subclasses ARRecordDatatype, ARArrayDatatype
 
         if d.getCategory() == 'VALUE':
             compuMethod = d.getCompuMethod()
@@ -117,8 +115,8 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
                 pass
             elif compuMethod.getCategory() == 'TEXTTABLE':
                 enumerations = compuMethod.getEnumerations()
-                inverted_dict = dict([[v[0], k] for k, v in enumerations.items()])
-                name_to_value_list = []
+                inverted_dict = dict([(v[0], k) for (k, v) in enumerations.items()])  # type: Dict[str, str]
+                name_to_value_list = [] # type: List[DE_EnumItem]
                 for i in compuMethod.getValues():
                     ename = inverted_dict[str(i)].replace(compuMethod.shortname + '_','')
                     name_to_value_list.append(DE_EnumItem(ename, i))
@@ -128,8 +126,7 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
         elif d.getCategory() == 'BOOLEAN':
             pass
         elif d.getCategory() == 'STRUCTURE':
-            d = d
-            """:type: autosar.components.ARRecordDatatype"""
+            d = cast(autosar.components.ARRecordDatatype, d)
 
             struct_children = []
             for record_element in d.getElements():
@@ -140,8 +137,8 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
 
             push_type(d.shortname, DE_Struct(d.shortname, d.getDesc(), struct_children))
         elif d.getCategory() == 'ARRAY':
-            d = d
-            """:type: autosar.components.ARArrayDatatype"""
+            d = cast(autosar.components.ARArrayDatatype, d)
+
             et = d.getElementType()
             baseType = None
             if d.getDataType().getCategory() == "VALUE" and d.getDataType().getCompuMethod() == "LINEAR":
@@ -156,12 +153,10 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
 def parse_dataelements(swc_data : autosar.arxml.ARXml,
                        comfile_data,
                        all_types: Dict[DE_Type_Key, DE_BaseType]) -> List[DE_Element]:
-    all_de_elements = []
-    """:type: List[DE_Element]"""
+    all_de_elements = []  # type: List[DE_Element]
 
     for k, swcs in swc_data.swcs.items():
-        swcs = swcs
-        """:type: autosar.components.ARSwc"""
+        swcs = cast(autosar.components.ARSwc, swcs)
 
         if swcs.shortname != "IHU":
             continue
@@ -328,7 +323,7 @@ def getIntTypeStr(limits):
 
 def crcFileToDefine(infile, outfile, definename):
     s = "// "+infile+"\n"
-    with open(infile,'r') as file:
+    with open(infile, 'r', encoding="utf-8") as file:
 
         #TODO: This is incredibly slow (up to 20 sec), can we use another algorithm?
         #      Maybe call out to another process... linux crc32 takes 0,07sec on the same file.
