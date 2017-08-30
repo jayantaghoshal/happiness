@@ -5,6 +5,7 @@ from examples import config
 import sys
 sys.path.append("..")
 from fdx import fdx_client, fdx_description_file_parser
+import typing
 
 ns_per_ms = 1000000
 
@@ -14,7 +15,7 @@ def main():
 
     group_id_map = {g.group_id: g for g in groups}
 
-    old_values = {}
+    old_values = {}  # type: typing.Dict[str, fdx_description_file_parser.Item]
 
     def data_exchange(group_id, data):
         g = group_id_map[group_id]

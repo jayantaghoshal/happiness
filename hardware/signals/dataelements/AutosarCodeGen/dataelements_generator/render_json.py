@@ -1,5 +1,5 @@
 from typing import List, Dict
-
+import typing
 from .model import DE_Array, DE_Struct, DE_Type_Key, DE_BaseType
 from .render_cpp_basic import get_cpp_type
 
@@ -114,14 +114,16 @@ AllButAREnum<T> fromJson(const json& j) {
 
 
 """
-    hist = dict()
+
+    #TODO: Is this really needed?
+    already_rendered_enums = set()  # type: typing.Set[str]
 
     for e in sorted(all_types.values(), key=lambda x: x.de_type_name):
         if isinstance(e, DE_Array):
             subtype_name = get_cpp_type(all_types[e.arrayitem_type_id])
             arrayTypeStr = "std::array<%s,%d>" % (subtype_name, e.max_elements)
-            if arrayTypeStr not in hist:
-                hist[arrayTypeStr] = 1
+            if arrayTypeStr not in already_rendered_enums:
+                already_rendered_enums.add(arrayTypeStr)
                 gen_jsonenc_h_contents += GEN_JSONENCDEC_HPP_FROMTO_ARRAY_TEMPLATE.replace("{ARRAY}", arrayTypeStr)
                 func_tojson_str = GEN_JSONENCDEC_CPP_FROMTO_ARRAY_TEMPLATE.replace("{ARRAY}", arrayTypeStr)
                 func_tojson_str = func_tojson_str.replace("{N}", str(e.max_elements))

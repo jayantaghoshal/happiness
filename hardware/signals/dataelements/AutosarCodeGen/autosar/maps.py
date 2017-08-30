@@ -1,12 +1,11 @@
+import typing
 #########################################
 # This file contains global hashmaps
 #########################################
 
-# copy = original
-object_copy = dict()
 
 # referenced path = [ refering objects ]
-references = dict()
+references = dict()  # type: typing.Dict[typing.Any, typing.Any]
 
 def addReference(ref, obj):
 	'''
