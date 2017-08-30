@@ -4,7 +4,8 @@
 ##############################################################
 PRODUCT_PACKAGES += \
     netman \
-    infotainment-ip-service
+    infotainment-ip-service \
+    vehicle-signals-daemon
 
 ##############################################################
 # System UI
