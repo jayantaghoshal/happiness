@@ -49,6 +49,7 @@ INTERACTIVE_OPTS="-"
 [[ "${INTERACTIVE_OPTS}" == "-" ]] && INTERACTIVE_OPTS=""
 
 docker run \
+    --rm \
     ${INTERACTIVE_OPTS} \
     ${ENV_FILE_OPT} \
     --hostname aic-docker \
