@@ -8,10 +8,9 @@ DOCKER_IMAGE=`cat ${DOCKER_IMAGE_REFERENCE_FILE}`
 
 WORKING_DIR="$(pwd)"
 
-VOLUMES=${VOLUMES:---volume $HOME:$HOME --volume $PWD:$PWD}
-
 # Handle options
 ENV_FILE_OPT=
+VOLUMES="--volume=$HOME:$HOME --volume=$PWD:$PWD --volume=/dev/bus/usb:/dev/bus/usb"
 
 for i in "$@"
 do
@@ -23,6 +22,10 @@ case $i in
     --local)
     DOCKER_IMAGE="vcc_aosp_build"
     shift # past argument with no value
+    ;;
+    --volume=*)
+    VOLUMES="$VOLUMES $i"
+    shift
     ;;
     *)
             # unknown option
@@ -66,6 +69,5 @@ docker run \
     --env=HOME=$HOME \
     --workdir ${WORKING_DIR} \
     --privileged \
-    --volume /dev/bus/usb:/dev/bus/usb \
     ${DOCKER_IMAGE} \
     $*
