@@ -103,7 +103,9 @@ RUN mkdir  /usr/lib/i386-linux-gnu \
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     iputils-ping \
     dnsutils \
-    net-tools
+    net-tools \
+    gdb \
+    strace
 
 ##################################################
 # Tools required for CI test environment
@@ -123,7 +125,10 @@ RUN pip3 install redis \
 
 ##################################################
 # Static analysis tools
-RUN pip3 install mypy
+RUN pip3 install mypy \
+                 pylint \
+                 flake8
+RUN pip install flake8
 # Typing comes built in with python3, but has to be installed with python2
 # Then you can use it together with comment annotations and mypy
 RUN pip install typing
