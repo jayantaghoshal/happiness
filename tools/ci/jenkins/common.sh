@@ -30,7 +30,8 @@ function die() {
 function docker_run() {
   USE_CCACHE=$USE_CCACHE \
   CCACHE_DIR=$CCACHE_DIR \
-  VOLUMES="--volume $WORKSPACE:$WORKSPACE" \
   ${DOCKER_BUILD_DIR}/run.sh \
-  --env-file=${SCRIPT_DIR}/env.list $*
+  --env-file=${SCRIPT_DIR}/env.list \
+  --volume=$WORKSPACE:$WORKSPACE \
+  $*
 }
