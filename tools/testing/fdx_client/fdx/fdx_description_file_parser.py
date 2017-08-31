@@ -16,7 +16,7 @@ class Group():
                  group_id, # type: int
                  name,     # type: str
                  size      # type: int
-                ):
+                 ):
         # type: (...) -> None
         self.group_id = group_id
         self.name = name
@@ -26,14 +26,14 @@ class Group():
     def validate(self):
         summed_size = sum(i.size for i in self.items)
         if summed_size != self.size:
-            raise  Exception("Size of group not equals to sum(items in group), groupsize=%d, itemsize=%d"% (self.size, summed_size))
+            raise Exception("Size of group not equals to sum(items in group), groupsize=%d, itemsize=%d"% (self.size, summed_size))
 
     def build_data(self):
         data = [0] * self.size
         for i in self.items:
             # a bit awkward casting to be both py2 and 3 compatible
             item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
-            data[i.offset:(i.offset+i.size)] = [ord(c) for c in item_data]
+            data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
         return data
 
     def receive_data(self, data):

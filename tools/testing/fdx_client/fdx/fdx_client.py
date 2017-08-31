@@ -105,11 +105,11 @@ class FdxCommandParser:
         (seq_nr, ) = struct.unpack('=h', bytearray([seq_nr1, seq_nr2]))
         next_seq_nr = increase_seq_nr(self.prev_seq_nr)
         if self.prev_seq_nr != 0 and next_seq_nr != seq_nr:
-            logger.error("Sequence nr error, got %d, expected %d",seq_nr, next_seq_nr)
+            logger.error("Sequence nr error, got %d, expected %d", seq_nr, next_seq_nr)
         self.prev_seq_nr = seq_nr
 
-        reserved1 = yield
-        reserved2 = yield
+        reserved1 = yield  # NOQA
+        reserved2 = yield  # NOQA
 
         for n in range(nrOfCommands):
             command = []
@@ -161,7 +161,7 @@ class FDXConnection:
         watch_list = [self.sock, self.close_pipe[0]]
         while True:
             try:
-                buffer_size = 1024*8
+                buffer_size = 1024 * 8
 
                 (ready_to_read, _, _) = select.select(watch_list, [], [], None)
                 if self.close_pipe[0] in ready_to_read:
@@ -235,7 +235,7 @@ class FDXConnection:
                                   freeRunningFlags,     # type: int
                                   cycleTime_ns,         # type: int
                                   firstDuration_ns,     # type: int
-                                    ):
+                                  ):
         self.send_command(struct.pack('=hhhLL',
                                       kCommandCode.freeRunningRequest,
                                       group_id,
