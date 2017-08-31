@@ -9,8 +9,8 @@ import logging.config
 import json
 import os
 import re
-from xml.dom import minidom
 from shipit.process_tools import check_output_logged
+import xml.etree.cElementTree as ET
 
 logger = logging.getLogger(__name__)
 
@@ -42,13 +42,15 @@ def vts_tradefed_run_module(module_name: str):
 
 def read_module_name(android_test_xml_file: str):
     logging.info("Reading module name from %s" % android_test_xml_file)
-    xmldoc = minidom.parse(android_test_xml_file)
-    test_element = xmldoc.getElementsByTagName("test")[0]
-    for subelement in test_element.getElementsByTagName("option"):
-        if subelement.hasAttribute("name"):
-            if subelement.getAttribute("name") == "module-name":
-                if subelement.hasAttribute("value"):
-                    return subelement.getAttribute("value")
+    et = ET.parse(android_test_xml_file)
+
+    module_name_option = et.find("/test/option/[@name='module-name']")
+    if module_name_option is not None:
+        return module_name_option.attrib["value"]
+
+    test_module_name_option = et.find("/test/option/[@name='test-module-name']")
+    if test_module_name_option is not None:
+        return test_module_name_option.attrib["value"]
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
 
