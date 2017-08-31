@@ -5,6 +5,11 @@ source "${SCRIPT_DIR}/common.sh"
 # Setup ccache
 USE_CCACHE=true
 
+#TODO: Move this to commit check when the commit gate is ready
+#TODO: Investigate Hidl tool generator for multilib flag before
+#uncommenting the following line
+# docker_run "64bit_sanity.py $REPO_ROOT_DIR/vendor/volvocars/" || die "64 bit build sanity check failed"
+
 docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
 docker_run "lunch ihu_vcc-eng && make -j16 droid"
 

@@ -42,4 +42,6 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_RELATIVE_PATH := config
 LOCAL_SRC_FILES := misc/localconfig.json
+# This is probably not needed, please review...
+LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)

@@ -30,4 +30,7 @@ LOCAL_SHARED_LIBRARIES := \
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror
 
+
+LOCAL_MULTILIB := 64
+
 include $(BUILD_EXECUTABLE)

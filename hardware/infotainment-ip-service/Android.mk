@@ -89,4 +89,5 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/libipcommandbus/include \
     $(LOCAL_PATH)/infotainment_ip_service/src/binderimpl/gnss
 
+LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)
