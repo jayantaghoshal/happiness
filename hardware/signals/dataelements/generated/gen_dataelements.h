@@ -3,7 +3,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-08-24T13:18:22.289840
+ * Generated at: 2017-09-01T07:54:52.466719
  * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 #ifndef _DATAELEMENTS_H
@@ -13,10 +13,11 @@
 
 namespace autosar {
 
-enum class Dir {
-    IN,
-    OUT,
-    INTERNAL
+// This enum must match the enum Dir defined in the ISigals/types.hal
+enum class Dir : uint16_t {
+    IN = 0,
+    OUT = 1,
+    INTERNAL = 2
 };
 
 struct DataElemInfo {

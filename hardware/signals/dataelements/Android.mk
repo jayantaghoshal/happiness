@@ -21,16 +21,15 @@ LOCAL_GENERATED_SOURCES += $(GEN)
 
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 #
-# Generate C++ code for HIDL interface ISignals.hal, ISignalsChangedCallback.hal and ISignalsServiceCallback.hal
+# Generate C++ code for HIDL interface ISignals.hal, ISignalsChangedCallback.hal
 #
 GEN := $(intermediates)/ihu/signals/1.0/SignalsAll.cpp \
-        $(intermediates)/ihu/signals/1.0/SignalsChangedCallbackAll.cpp \
-        $(intermediates)/ihu/signals/1.0/SignalsServiceCallbackAll.cpp
+        $(intermediates)/ihu/signals/1.0/SignalsChangedCallbackAll.cpp
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/ISignals.hal \
-                        $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/ISignalsChangedCallback.hal \
-                        $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/ISignalsServiceCallback.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/ISignals.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/ISignalsChangedCallback.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/hidl/interface/ihu/signals/1.0/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 local_path_stored := $(LOCAL_PATH)
 $(GEN): PRIVATE_CUSTOM_TOOL = \

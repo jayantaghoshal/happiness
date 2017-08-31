@@ -2,13 +2,13 @@ package ihu.signals@1.0;
 
 /**
 * This interface is implemented by the clients to get events from the server side about changes in signals
-* or other events.  This interface is used internally within in the signals framework. 
+* or other events. This interface is used internally within in the signals framework. 
 */
 interface ISignalsChangedCallback {
     /**
     * Is called when a signal value or state has changed on the server side
     */
-    signalChanged(string signalName);
+    signalChanged(string signalName, Dir dir, string data);
 };
 
 
