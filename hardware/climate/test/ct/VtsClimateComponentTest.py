@@ -16,6 +16,14 @@ from subprocess import call
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from com.dtmilano.android.viewclient import ViewClient
+from fdx import fdx_client
+from fdx import fdx_description_file_parser
+
+
+ns_per_ms = 1000000
+
+#TODO: Test flexray temporarily disabled until fully hooked up in CI environment
+TEST_FLEXRAY = False
 
 class VtsClimateComponentTest(base_test.BaseTestClass):
     """Testing Climate functions"""
@@ -57,6 +65,49 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(0x00ff0000, self.vtypes.VehiclePropertyType.MASK)
         asserts.assertEqual(0x0f000000, self.vtypes.VehicleArea.MASK)
 
+        if TEST_FLEXRAY:
+            self.fdx = fdx_client.FDXConnection(self.fdx_signal_received, "198.18.34.2")
+            (self.fdx_groups, _, self.fdx_signals) = fdx_description_file_parser.parse(
+                os.path.realpath(os.path.dirname(__file__) +
+                "/../../../../tools/testing/fdx_client/FDXDescriptionFile.xml"))
+            self.fdx.confirmed_start()
+
+
+            self.fdx_group_id_map = {g.group_id: g for g in self.fdx_groups}
+
+            self.groups_to_subscribe = [g for g in self.fdx_groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
+            for g in self.groups_to_subscribe:
+                self.fdx.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
+
+
+    def fdx_signal_received(self, group_id, data):
+        group = self.fdx_group_id_map[group_id]
+        group.receive_data(data)
+
+    def get_signal(self, name):
+        # type: (str) -> fdx_description_file_parser.Item
+        candidate = None  # type: fdx_description_file_parser.Item
+
+        parts = name.split("::")
+        signame = parts[-1]
+        msg = None
+        if len(parts) > 1:
+            msg = parts[-2]
+
+        for i in self.fdx_signals:
+            if i.name == signame and (msg is None or msg == i.msg_or_namespace):
+                if candidate is not None:
+                    raise Exception("Signal name '%s' is ambiguous between %s::%s and %s::%s" %
+                                    (name, candidate.msg_or_namespace, candidate.name, i.msg_or_namespace, i.name))
+                candidate = i
+        if candidate is None:
+            raise Exception("Signal %s not found" % name)
+        return candidate
+
+    def read_signal(self, signal_name):
+        signal_item = self.get_signal(signal_name)
+        return signal_item.value_raw
+
     def tearDownClass(self):
         """Disables the profiling.
 
@@ -72,6 +123,13 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
         if self.coverage.enabled:
             self.coverage.SetCoverageData(dut=self.dut, isGlobal=True)
+
+        if TEST_FLEXRAY:
+            for g in self.groups_to_subscribe:
+                self.fdx.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic,
+                                                   500 * ns_per_ms, 0)
+            self.fdx.confirmed_stop()
+
 
     def setUp(self):
         self.propToConfig = {}
@@ -275,6 +333,11 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
     def isPropSupported(self, propertyId):
         return self.getPropConfig(propertyId) is not None
 
+    def assert_signal_equals(self, signal_name, expected_value):
+        if not TEST_FLEXRAY:
+            return
+        read_value = self.read_signal(signal_name)
+        asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( signal_name, read_value, expected_value ))
 
     def testFanLevel(self):
         _s = 0.5
@@ -302,6 +365,8 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
         asserts.assertEqual(self.extractValue(val), 1)
         vc.sleep(_s)
+        self.assert_signal_equals("HmiHvacFanLvlFrnt", 1)
+
 
         # Click fan level 2 and assert
         device.touchDip(*fan_level_2_location)
