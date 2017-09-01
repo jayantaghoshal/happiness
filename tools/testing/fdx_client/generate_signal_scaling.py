@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import sys
 import os
 import keyword
@@ -27,14 +27,13 @@ def clean_variable_name(n:str):
         return n + "_"
     return n
 
+#Returns the common signals between the signalDB (all_de_elements) and fdx_description-file (signals)
+def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
+                       all_de_elements: List[model.DE_Element],
+                       signals: List[fdx_description_file_parser.Item]) -> Tuple[List[fdx_description_file_parser.Item], Dict[str, str], Dict[str, model.DE_BaseType]]:
 
-def render(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
-           all_de_elements: List[model.DE_Element],
-           groups : List[fdx_description_file_parser.Group],
-           signals: List[fdx_description_file_parser.Item]):
-
-    rte_name_to_de_type = {}
-    rte_name_to_de_name = {}
+    rte_name_to_de_type = {}  # type: Dict[str, model.DE_BaseType]
+    rte_name_to_de_name = {}  # type: Dict[str, str]
 
     for d in all_de_elements:
         if d.is_internal:
@@ -47,22 +46,41 @@ def render(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
                 rte_name_to_de_type[rtename] = child_type
                 rte_name_to_de_name[rtename] = d.de_dataelementname + "." + c.member_name
         else:
-            assert(d.rtename is not None)
-            assert(d.rte_attr_map is None)
+            assert (d.rtename is not None)
+            assert (d.rte_attr_map is None)
             rte_name_to_de_type[d.rtename] = type
             rte_name_to_de_name[d.rtename] = d.de_dataelementname
 
+    fr_and_lin19_signals = [s for s in signals if s.bus_name.lower() in ["backbone", "lin19"]]
 
+    common_signals = []
+    for signal in sorted(fr_and_lin19_signals, key=lambda s: s.name.lower()):
+        if signal.name in rte_name_to_de_name and not isinstance(rte_name_to_de_type[signal.name], model.DE_Array):
+            common_signals.append(signal)
+
+    return (common_signals, rte_name_to_de_name, rte_name_to_de_type)
+
+
+def render_signals(signals: List[fdx_description_file_parser.Item]):
+
+    convstr = "        name_to_item_map = { i.name : i for i in self.signal_list }\n\n"
+    for signal in signals:
+        convstr += "        self.%s = %s(self, name_to_item_map[%s.fdx_name])\n" % (signal.name, signal.name, signal.name)
+    convstr += "\n"
+
+    return convstr
+
+
+def render(signals: List[fdx_description_file_parser.Item],
+           rte_name_to_de_name : Dict[str, str],
+           rte_name_to_de_type : Dict[str, model.DE_BaseType]):
 
     convstr = ""
-    fr_and_lin19_signals = [s for s in signals if s.bus_name.lower() in ["backbone", "lin19"]]
-    for signal in sorted(fr_and_lin19_signals,  key=lambda s: s.name.lower()):
+
+    for signal in signals:
         s = signal.name
-        try:
-            type = rte_name_to_de_type[s]
-        except KeyError:
-            # This is ok, because the FDXDescriptionFile contains signals from/to other ECUs
-            continue
+        type = rte_name_to_de_type[s]
+
         if isinstance(type, model.DE_Array):
             continue # Unsupported, for now...
 
@@ -70,7 +88,11 @@ def render(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
         convstr += "class %s:\n" % s
         convstr += "    de_name     = \"%s\"\n" % rte_name_to_de_name[s]
         convstr += "    fdx_name    = \"%s\"\n" % s
-        convstr += "    fdx_groupid = %s\n" % signal.parent_group.group_id
+        convstr += "    fdx_groupid = %s\n\n" % signal.parent_group.group_id
+        convstr += "    def __init__(self, signal_interface, item):\n"
+        convstr += "        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None\n"
+        convstr += "        self.signal_interface = signal_interface\n"
+        convstr += "        self.item = item\n"
 
         if isinstance(type, model.DE_Identical):
             convstr += "    min = %s\n" % type.limit_min
@@ -93,16 +115,36 @@ def render(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
         elif isinstance(type, model.DE_Enum):
             convstr += "    class map:\n        "
             convstr += "\n        ".join( "%s = %s" %(clean_variable_name(v.name), v.value)  for v in type.values)
-            convstr += "\n    \n"
+            convstr += "\n"
         elif isinstance(type, model.DE_Boolean):
-            convstr += "    def %s_r2p(raw):\n" % s
+            convstr += "    def r2p(raw):\n"
             convstr += "        return raw\n"
-            convstr += "    def %s_p2r(physical):\n" % s
+            convstr += "    def p2r(physical):\n"
             convstr += "        return physical\n"
         else:
             assert(False)
-        convstr+="\n"
 
+        if(isinstance(type, model.DE_Identical) or isinstance(type, model.DE_Value) or isinstance(type, model.DE_Boolean)):
+            convstr+="""    
+    def send(self, value):
+        self.item.value_raw(self.p2r(value))
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+
+    def receive(self):
+        value = self.r2p(self.item.value_raw())
+        return value
+
+"""
+        elif isinstance(type, model.DE_Enum):
+            convstr+="""
+    def send(self, value):
+        self.item.value_raw(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+
+    def receive(self):
+        return self.item.value_raw()
+        
+"""
     return convstr
 
 
@@ -124,16 +166,39 @@ def main():
 
     (groups, sysvars, signals) = fdx_description_file_parser.parse(args.fdxdescriptionfile)
 
-    generated_output = render(all_types, all_de_elements, groups, signals)
-
     os.makedirs(os.path.dirname(args.outputname), exist_ok=True)
     with open(args.outputname, "w", encoding="utf-8") as f:
         f.write("# Signal scaling database\n")
         f.write("# --- AUTO GENERATED ---\n")
         f.write("# Inputs: %s\n" %  " \n#    ".join(sys.argv))
-        f.write("\n\n")
-        f.write(generated_output)
+        f.write("from fdx import fdx_client\n")
+        f.write("from fdx import fdx_description_file_parser\n")
+        f.write("from . import config\n")
+        code = """
+class FrSignalInterface:
+    def __init__(self):
+        (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
+                config.fdx_description_file_path)
+        self.group_id_map = {g.group_id: g for g in self.groups}
 
+        def data_exchange(self, group_id, data):
+            group = self.group_id_map[group_id]
+            group.receive_data(data)
+
+        try:
+            self.connection = fdx_client.FDXConnection(data_exchange, config.vector_fdx_ip, config.vector_fdx_port)
+            self.connection.send_start()
+            self.connection.confirmed_start()
+        except:
+            self.connection.close()
+            raise
+
+
+"""
+        f.write(code)
+        (common_signals, rte_name_to_de_name, rte_name_to_de_type) = get_common_signals(all_types, all_de_elements, signals)
+        f.write(render_signals(common_signals))
+        f.write(render(common_signals, rte_name_to_de_name, rte_name_to_de_type))
 
 
 if __name__ == "__main__":

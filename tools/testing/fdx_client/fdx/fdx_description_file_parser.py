@@ -116,7 +116,6 @@ def parse(filename):
                 is_raw = scaling == "raw"
                 if not is_raw:
                     assert scaling == "physical", "Unrecognized value scaling %s " % scaling
-
                 s = Item(g, name, msg, int(i.attrib["offset"]), int(i.attrib["size"]), i.attrib["type"], is_raw, signal.attrib["bus"])
                 g.items.append(s)
                 signal_list.append(s)
