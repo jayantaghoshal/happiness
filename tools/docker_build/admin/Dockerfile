@@ -125,6 +125,8 @@ RUN pip3 install redis \
 
 ##################################################
 # Static analysis tools
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+    shellcheck 
 RUN pip3 install mypy \
                  pylint \
                  flake8
