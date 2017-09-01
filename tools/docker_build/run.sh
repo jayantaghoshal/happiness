@@ -1,10 +1,10 @@
 #!/bin/bash
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
-REPO_ROOT_DIR=${SCRIPT_DIR}/../../../..
+REPO_ROOT_DIR="${SCRIPT_DIR}"/../../../..
 
-DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}/image.ref"
-DOCKER_IMAGE=`cat ${DOCKER_IMAGE_REFERENCE_FILE}`
+DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
+DOCKER_IMAGE=$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")
 
 WORKING_DIR="$(pwd)"
 
@@ -40,7 +40,7 @@ if [[ ! -v USE_CCACHE ]]; then
 fi
 
 # Get a underscore-separated list of group ids for the host user groups
-HOST_USER_GROUPS=$(id -G $USER)
+HOST_USER_GROUPS=$(id -G "$USER")
 HOST_USER_GROUPS=${HOST_USER_GROUPS// /_}
 
 # Detect environment of docker command
@@ -51,6 +51,7 @@ INTERACTIVE_OPTS="-"
 [[ -t 0 ]] && INTERACTIVE_OPTS="${INTERACTIVE_OPTS}t"
 [[ "${INTERACTIVE_OPTS}" == "-" ]] && INTERACTIVE_OPTS=""
 
+#shellcheck disable=SC2086
 docker run \
     --rm \
     ${INTERACTIVE_OPTS} \
@@ -60,15 +61,15 @@ docker run \
     --dns=10.244.0.15 \
     --dns=10.244.0.20 \
     --dns-search=dhcp.nordic.volvocars.net \
-    --env=HOST_UID=$(id -u) \
-    --env=HOST_GID=$(id -g) \
-    --env=HOST_UNAME=$(id -un) \
+    --env=HOST_UID="$(id -u)" \
+    --env=HOST_GID="$(id -g)" \
+    --env=HOST_UNAME="$(id -un)" \
     --env CCACHE_DIR \
     --env USE_CCACHE \
-    --env=HOST_USER_GROUPS=${HOST_USER_GROUPS} \
-    --env=REPO_ROOT_DIR=${REPO_ROOT_DIR} \
-    --env=HOME=$HOME \
-    --workdir ${WORKING_DIR} \
+    --env=HOST_USER_GROUPS="${HOST_USER_GROUPS}" \
+    --env=REPO_ROOT_DIR="${REPO_ROOT_DIR}" \
+    --env=HOME="$HOME" \
+    --workdir "${WORKING_DIR}" \
     --privileged \
-    ${DOCKER_IMAGE} \
-    $*
+    "${DOCKER_IMAGE}" \
+    "$@"

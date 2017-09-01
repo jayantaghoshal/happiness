@@ -6,4 +6,4 @@ export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor:$ANDROID_BUILD_TOP/vendo
 
 # Run component test
 # TODO: We should move the test_run.py to this directory.
-$SCRIPT_DIR/test_run.sh test/ct
+"$SCRIPT_DIR"/test_run.sh test/ct

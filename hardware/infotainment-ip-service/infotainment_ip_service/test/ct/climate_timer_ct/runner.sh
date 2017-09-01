@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+set -ue
 output_dir_base_path=output
-output_dir=$output_dir_base_path/`date +%Y%m%d`
+output_dir=$output_dir_base_path/$(date +%Y%m%d)
 
 # read the options
-TEMP=`getopt -o cnh --long clean,clean-all,no-run,help -- "$@"`
+TEMP=$(getopt -o cnh --long clean,clean-all,no-run,help -- "$@")
 eval set -- "$TEMP"
 no_run=false
 
@@ -11,12 +12,12 @@ no_run=false
 while true ; do
     case "$1" in
         -c|--clean)
-            rm -rf $output_dir
+            rm -rf "$output_dir"
             echo "Removed todays test result, $output_dir"
             shift ;;
 
         --clean-all)
-            rm -rf $output_dir_base_path/*
+            rm -rf "${output_dir_base_path:?}"/*
             echo "Removed all test results"
             shift ;;
 
@@ -46,15 +47,15 @@ if [ "$no_run" = true ]
 fi
 
 # check that we got at least one test suite file or directory
-if [ -z $1 ]
+if [ -z "$1" ]
     then
         echo "Please specify at least one test suite file or directory"
         exit 1
 fi
 
 # create the output directory
-mkdir -p $output_dir
+mkdir -p "$output_dir"
 
 # finally launch robotframework with extended options from 'settings/options'
-pybot -A settings/options -d $output_dir  $1
+pybot -A settings/options -d "$output_dir"  "$1"
 exit $?

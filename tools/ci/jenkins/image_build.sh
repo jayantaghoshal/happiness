@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -xue
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"

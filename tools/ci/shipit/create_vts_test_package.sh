@@ -24,15 +24,15 @@ C_OFF="\033[0m"
 
 function die {
   message=$1
-  echo -e "${C_ERROR}Package creation failed.${C_OFF}"
+  echo -e "${C_ERROR}Package creation failed - $message ${C_OFF}"
   exit 1
 }
 
-pushd $REPO_ROOT_DIR > /dev/null
+pushd "$REPO_ROOT_DIR" > /dev/null
 
 TEST_PACKAGE_FILE=test_package.tar.gz
 
-tar cvzf $TEST_PACKAGE_FILE \
+tar cvzf "$TEST_PACKAGE_FILE" \
   out/host/linux-x86/vts/android-vts \
   out/host/linux-x86/bin/adb \
   out/host/linux-x86/bin/vts-tradefed || die "Couldn't create package"

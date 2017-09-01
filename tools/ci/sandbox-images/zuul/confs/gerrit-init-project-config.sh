@@ -1,3 +1,4 @@
+#!/bin/bash
 # Git project config
 export GIT_SSH=/ssh_wrapper.sh
 mkdir gtproj

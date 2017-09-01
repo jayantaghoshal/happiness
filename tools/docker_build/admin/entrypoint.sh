@@ -33,7 +33,8 @@ function GetDirOwner() {
     set -o pipefail               # Turn on failing the command, if any command in pipe fails
 
     local dir="$1"
-    local owner=$(stat $dir | egrep -o 'Uid: \([ \t]+[0-9]+\/[ \t]+[a-zA-Z0-9]+\)' | cut -d/ -f2)
+    local owner
+    owner=$(stat "$dir" | egrep -o 'Uid: \([ \t]+[0-9]+\/[ \t]+[a-zA-Z0-9]+\)' | cut -d/ -f2)
     local rc=$?
 
     set +o pipefail               # Turn off failing the command, if any command in pipe fails
@@ -41,26 +42,28 @@ function GetDirOwner() {
     [[ "$rc" == "0" ]] || return $rc
     [[ -z "${owner}" ]] && return 1     # Unexpected output
 
+    
+    # shellcheck disable=SC2086
     echo ${owner::-1}             # Do not use quotes - variable will be trimmed automatically
     return 0
 }
 
 # Add user (matching to the host user)
-id -g "${HOST_GID}" &>/dev/null || groupadd --gid ${HOST_GID} ${CONTAINER_GROUPNAME} ||
+id -g "${HOST_GID}" &>/dev/null || groupadd --gid "${HOST_GID}" "${CONTAINER_GROUPNAME}" ||
     Failed "Creating group with group id ${HOST_GID} failed"
 
 id -u "${HOST_UID}" &>/dev/null || {
-    useradd --uid ${HOST_UID} --gid ${HOST_GID} --home-dir "${HOME}" ${CONTAINER_USERNAME} ||
+    useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --home-dir "${HOME}" ${CONTAINER_USERNAME} ||
         Failed "Creating user with id ${HOST_UID} failed"
-    adduser $CONTAINER_USERNAME sudo > /dev/null ||
+    adduser "$CONTAINER_USERNAME" sudo > /dev/null ||
         Failed "Adding user to sudo group failed"
 }
 
 # Create home directory if missing, used if volume $HOME is not mapped (i.e. CI)
 [[ ! -d "${HOME}" ]] && {
     echo "Home directory (${HOME}) missing, will create..."
-    mkdir ${HOME}
-    chown ${CONTAINER_USERNAME}:${CONTAINER_GROUPNAME} ${HOME}
+    mkdir "${HOME}"
+    chown ${CONTAINER_USERNAME}:${CONTAINER_GROUPNAME} "${HOME}"
 }
 
 # Allow user to sudo
@@ -84,7 +87,7 @@ $@
 EOL
 chmod +x $SCRIPT_FILE
 
-if [[ $* = 'bash' ]]; then
+if [[ "$*" = 'bash' ]]; then
   # If this is an interactive invocation then we should start bash with $BASHRC_FILE.
   COMMAND_IN_DOCKER="bash --rcfile ${BASHRC_FILE}"
 else
@@ -97,24 +100,24 @@ IFS='_'
 for group_id in $HOST_USER_GROUPS
 do
   # Get group name from group id
-  group_name=$(getent group ${group_id} | cut -d : -f 1)
+  group_name=$(getent group "${group_id}" | cut -d : -f 1)
   # If group does not exists create it
   if [[ -z ${group_name} ]]; then
     group_name=host-group-${group_id}
-    groupadd -g ${group_id} ${group_name}
+    groupadd -g "${group_id}" "${group_name}"
   fi
   # Add user to group
   echo "Adding user ${CONTAINER_USERNAME} to group ${group_name}"
-  usermod -a -G ${group_name} $CONTAINER_USERNAME
+  usermod -a -G "${group_name}" "$CONTAINER_USERNAME"
 done
 unset IFS
 
 
 sudo -E \
-    -u ${CONTAINER_USERNAME} \
-    BASHRC_FILE=${BASHRC_FILE} \
-    BUILD_ENV_SETUP=$BUILD_ENV_SETUP \
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH \
-    PATH=/sbin:$PATH \
+    -u "${CONTAINER_USERNAME}" \
+    BASHRC_FILE="${BASHRC_FILE}" \
+    BUILD_ENV_SETUP="$BUILD_ENV_SETUP" \
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH" \
+    PATH=/sbin:"$PATH" \
     ${COMMAND_IN_DOCKER}
 
