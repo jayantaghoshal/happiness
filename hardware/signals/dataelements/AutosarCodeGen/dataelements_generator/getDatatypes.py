@@ -7,13 +7,13 @@ import uuid
 import logging
 logger = logging.getLogger(__name__)
 from datetime import datetime
-from typing import Dict, List, cast
+from typing import Dict, List, cast, Tuple
 
 from . import render_json
 from .render_datatypes import render_datatype
 
 import autosar
-from autosar.components import AR_RPort 
+from autosar.components import AR_RPort
 from dataelements_generator import crc16, render_dataelements
 from dataelements_generator.model import DE_Type_Key, DE_BaseType, DE_Enum, DE_Struct, DE_Value, DE_Array, \
     DE_StructMember, DE_Element, \
@@ -118,7 +118,7 @@ def parse_datatypes(swc_data: autosar.arxml.ARXml) -> Dict[DE_Type_Key, DE_BaseT
                 inverted_dict = dict([(v[0], k) for (k, v) in enumerations.items()])  # type: Dict[str, str]
                 name_to_value_list = [] # type: List[DE_EnumItem]
                 for i in compuMethod.getValues():
-                    ename = inverted_dict[str(i)].replace(compuMethod.shortname + '_','')
+                    ename = inverted_dict[str(i)].replace(compuMethod.shortname + '_', '')
                     name_to_value_list.append(DE_EnumItem(ename, i))
                 push_type(d.shortname, DE_Enum(d.shortname, d.getDesc(), name_to_value_list))
             else:
@@ -193,22 +193,22 @@ def parse_dataelements(swc_data : autosar.arxml.ARXml,
 
 
 def generate(swc_input_file, options):
-    datatypespath = options.outputdirectory+"/gen_datatypes.h"
-    dataelementshpath = options.outputdirectory+"/gen_dataelements.h"
-    dataelementscpppath = options.outputdirectory+"/gen_dataelements.cpp"
-    jsonencdecpath = options.outputdirectory+"/gen_jsonencdec.h"
-    jsonencdeccpppath = options.outputdirectory+"/gen_jsonencdec.cpp"
-    
-    vsminjectinstancespath = options.outputdirectory+"/vsm/vsm_inject_instances_cpp.h"
-    vsminjectvariablespath = options.outputdirectory+"/vsm/vsm_inject_variables_cpp.h"
-    vsminjectswitchokpath = options.outputdirectory+"/vsm/vsm_inject_switch_ok_cpp.h"
-    vsminjectswitcherrorpath = options.outputdirectory+"/vsm/vsm_inject_switch_error_cpp.h"
-    vsmsinkvariablespath = options.outputdirectory+"/vsm/vsm_sink_variables_cpp.h"
-    vsmsinksubscribepath = options.outputdirectory+"/vsm/vsm_sink_subscribe_cpp.h"
-    vsmalldataelementspath = options.outputdirectory+"/vsm/vsm_all_dataelements_cpp.h"
+    datatypespath = options.outputdirectory + "/gen_datatypes.h"
+    dataelementshpath = options.outputdirectory + "/gen_dataelements.h"
+    dataelementscpppath = options.outputdirectory + "/gen_dataelements.cpp"
+    jsonencdecpath = options.outputdirectory + "/gen_jsonencdec.h"
+    jsonencdeccpppath = options.outputdirectory + "/gen_jsonencdec.cpp"
 
-    swccrcpath = options.outputdirectory+"/vsm/swc_crc.h"
-    comcrcpath = options.outputdirectory+"/vsm/com_crc.h"
+    vsminjectinstancespath = options.outputdirectory + "/vsm/vsm_inject_instances_cpp.h"
+    vsminjectvariablespath = options.outputdirectory + "/vsm/vsm_inject_variables_cpp.h"
+    vsminjectswitchokpath = options.outputdirectory + "/vsm/vsm_inject_switch_ok_cpp.h"
+    vsminjectswitcherrorpath = options.outputdirectory + "/vsm/vsm_inject_switch_error_cpp.h"
+    vsmsinkvariablespath = options.outputdirectory + "/vsm/vsm_sink_variables_cpp.h"
+    vsmsinksubscribepath = options.outputdirectory + "/vsm/vsm_sink_subscribe_cpp.h"
+    vsmalldataelementspath = options.outputdirectory + "/vsm/vsm_all_dataelements_cpp.h"
+
+    swccrcpath = options.outputdirectory + "/vsm/swc_crc.h"
+    comcrcpath = options.outputdirectory + "/vsm/com_crc.h"
 
     for f in [
         datatypespath,
@@ -225,15 +225,17 @@ def generate(swc_input_file, options):
         vsmalldataelementspath,
         swccrcpath,
         comcrcpath
-            ]:
+    ]:
         if os.path.isfile(f):
             os.remove(f)
 
-    if not os.path.isdir(options.outputdirectory): os.mkdir(options.outputdirectory)
-    if not os.path.isdir(options.outputdirectory+"/vsm"): os.mkdir(options.outputdirectory+"/vsm")
+    if not os.path.isdir(options.outputdirectory):
+        os.mkdir(options.outputdirectory)
+    if not os.path.isdir(options.outputdirectory + "/vsm"):
+        os.mkdir(options.outputdirectory + "/vsm")
 
     header = "// clang-format off\n"
-    header += "/*!\n * \\file\n * " + DESCRIPTION+" "+VERSION+"\n"
+    header += "/*!\n * \\file\n * " + DESCRIPTION + " " + VERSION + "\n"
     header += " * " + COPYRIGHT + "\n"
     header += " * Generated at: " + datetime.now().isoformat() + "\n"
     header += " * Source: " + options.swcinputfile + "\n */\n"
@@ -304,25 +306,31 @@ def generate(swc_input_file, options):
 
 
 
-def getIntTypeStr(limits):
+def getIntTypeStr(limits: Tuple[int, int]) -> str:
     (minValueStr, maxValueStr) = limits
     minValue = int(minValueStr)
     maxValue = int(maxValueStr)
     if minValue >= 0:
         # unsigned int type
-        if maxValue <= 0xFF: return "uint8_t"
-        if maxValue <= 0xFFFF: return "uint16_t"
-        if maxValue <= 0xFFFFFFFF: return "uint32_t"
+        if maxValue <= 0xFF:
+            return "uint8_t"
+        if maxValue <= 0xFFFF:
+            return "uint16_t"
+        if maxValue <= 0xFFFFFFFF:
+            return "uint32_t"
         return "int64_t"
     else:
         # signed int
-        if minValue >= -0x80 and maxValue <= 0x7F: return "int8_t"
-        if minValue >= -0x8000 and maxValue <= 0x7FFF: return "int16_t"
-        if minValue >= -0x80000000 and maxValue <= 0x7FFFFFFF: return "int32_t"
+        if minValue >= -0x80 and maxValue <= 0x7F:
+            return "int8_t"
+        if minValue >= -0x8000 and maxValue <= 0x7FFF:
+            return "int16_t"
+        if minValue >= -0x80000000 and maxValue <= 0x7FFFFFFF:
+            return "int32_t"
         return "int64_t"
 
-def crcFileToDefine(infile, outfile, definename):
-    s = "// "+infile+"\n"
+def crcFileToDefine(infile: str, outfile: str, definename: str):
+    s = "// " + infile + "\n"
     with open(infile, 'r', encoding="utf-8") as file:
 
         #TODO: This is incredibly slow (up to 20 sec), can we use another algorithm?
@@ -330,9 +338,9 @@ def crcFileToDefine(infile, outfile, definename):
         contents = file.read()
         crc = crc16.crc16(contents)
 
-        s += "#ifndef "+definename+"\n"
-        s += "#define "+definename+" "+str(crc)+"\n"
+        s += "#ifndef " + definename + "\n"
+        s += "#define "+  definename + " " + str(crc) + "\n"
         s += "#endif\n"
-    with open(outfile,'w') as file:
+    with open(outfile, 'w', encoding="utf-8") as file:
         file.write(s)
 

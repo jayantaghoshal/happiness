@@ -3,8 +3,8 @@ from .model import DE_BaseType, DE_Value, DE_Boolean, DE_Identical
 
 def escape_cpp_comment(text):
     s=text.replace("*/", "* /")
-    s=s.replace("\n","\n * ")
-    s=s.replace("\"","")
+    s=s.replace("\n", "\n * ")
+    s=s.replace("\"", "")
     return s
 
 def create_cpp_comment(text):
