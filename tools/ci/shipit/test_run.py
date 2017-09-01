@@ -42,6 +42,7 @@ def vts_tradefed_run_module(module_name: str):
 
 def read_module_name(android_test_xml_file: str):
     logging.info("Reading module name from %s" % android_test_xml_file)
+
     et = ET.parse(android_test_xml_file)
 
     module_name_option = et.find("/test/option/[@name='module-name']")

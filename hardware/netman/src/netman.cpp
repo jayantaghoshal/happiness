@@ -66,7 +66,6 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_c
         conf.broadcast_address = vcc::localconfig::GetString(name + ".broadcast-address");
         conf.mtu = (uint32_t)vcc::localconfig::GetInt(name + ".mtu");
         interface_configurations.push_back(conf);
-        PrintInterfaceConfiguration("Local Configuration", conf);
     }
 }
 
@@ -110,7 +109,7 @@ static bool InterfaceExists(const char* interface_name)
 
     if (ioctl(inet_sock_fd, SIOCGIFHWADDR, &ifr_req) == -1)
     {
-        ALOGE("Failed to get flags for %s interface", interface_name);
+        ALOGE("%s: Failed to get flags for interface", interface_name);
 
         close(inet_sock_fd);
         return false;
@@ -178,7 +177,7 @@ static bool IsInterfaceUp(const char* interface_name)
 
     if (ioctl(inet_sock_fd, SIOCGIFFLAGS, &ifr_req) == -1)
     {
-        ALOGE("Failed to get flags for %s interface", interface_name);
+        ALOGE("%s: Failed to get flags for interface", interface_name);
         close(inet_sock_fd);
         return false;
     }
@@ -333,6 +332,8 @@ static bool SetIpAddress(const char* interface_name, const char* ip_addr, const 
         return false;
     }
 
+    ALOGI("%s: Ip address set to %s", interface_name, ip_addr);
+
     if (!SetBroadcastAddress(inet_sock_fd, interface_name, broadcast_address))
     {
         ALOGE("ioctl call to set broadcast address failed. Error is [%s]", strerror(errno));
@@ -340,12 +341,16 @@ static bool SetIpAddress(const char* interface_name, const char* ip_addr, const 
         return false;
     }
 
+    ALOGI("%s: Broadcast address set to %s", interface_name, broadcast_address);
+
     if (!SetNetmask(inet_sock_fd, interface_name, netmask))
     {
         ALOGE("ioctl call to set netmask failed. Error is [%s]", strerror(errno));
         close(inet_sock_fd);
         return false;
     }
+
+    ALOGI("%s: Netmask set to %s", interface_name, netmask);
 
     close(inet_sock_fd);
 
@@ -375,7 +380,7 @@ static bool SetMtu(const uint32_t mtu, const char* interface_name)
     }
     else
     {
-        ALOGI("Successfully set MTU for device %s", interface_name);
+        ALOGI("%s: MTU set to %i", interface_name, mtu);
     }
 
     close(sockfd);
@@ -404,10 +409,10 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* i
     ifr_mac.ifr_hwaddr.sa_family = ARPHRD_ETHER;
 
     //Set MAC address
+    std::string printable_mac_address(mac_address.begin(), mac_address.end());
     if (ioctl(sockfd, SIOCSIFHWADDR, &ifr_mac) == -1)
     {
         close(sockfd);
-        std::string printable_mac_address(mac_address.begin(), mac_address.end());
         ALOGE("Unable to set MAC address (%s) for %s, errno %s.",
               printable_mac_address.c_str(),
               interface_name,
@@ -415,7 +420,7 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* i
         return false;
     }
 
-    ALOGI("Successfully set MAC address for device %s", interface_name);
+    ALOGI("%s: MAC address set to %s", interface_name, printable_mac_address.c_str());
 
     close(sockfd);
 
@@ -441,16 +446,16 @@ bool SetupInterface(const char* interface_name,
                     const char* broadcast_addr,
                     const uint32_t mtu)
 {
-    //First check if interface exists
+    ALOGI("%s: Setting configuration for network interface", interface_name);
+
     if (!InterfaceExists(interface_name))
     {
-        ALOGE("Interface %s does not appear to exist!", interface_name);
+        ALOGE("%s: Interface does not appear to exist!", interface_name);
         return false;
     }
 
     if (!IsMacAddressCorrect(mac_address, interface_name))
     {
-        ALOGI("Setting interface MAC address.");
         if (IsInterfaceUp(interface_name))
         {
             TakeInterfaceDown(interface_name);
@@ -460,6 +465,10 @@ bool SetupInterface(const char* interface_name,
         {
             ALOGE("Failed to set MAC address for %s!", interface_name);
         }
+    }
+    else
+    {
+        ALOGI("%s: MAC address already set", interface_name);
     }
 
     // Set ip adress if ethernet interface is up already...

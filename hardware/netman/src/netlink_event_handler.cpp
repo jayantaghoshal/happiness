@@ -26,9 +26,6 @@ namespace netman {
 NetlinkEventHandler::NetlinkEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations)
     : interface_configurations_(interface_configurations)
 {
-    for (auto &configuration : interface_configurations) {
-        PrintInterfaceConfiguration("NetlinkEventHandler", configuration);
-    }
 }
 
 NetlinkEventHandler::~NetlinkEventHandler()
@@ -37,8 +34,6 @@ NetlinkEventHandler::~NetlinkEventHandler()
 
 void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
 {
-    struct ifinfomsg *if_info_msg = (struct ifinfomsg *)NLMSG_DATA(nl_message_header);
-    struct ifaddrmsg *if_addr_msg = (struct ifaddrmsg *)NLMSG_DATA(nl_message_header);
     struct rtmsg *rt_msg = (struct rtmsg *)NLMSG_DATA(nl_message_header);
 
     switch (nl_message_header->nlmsg_type) {
@@ -49,13 +44,19 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
         ALOGI("NLMSG_ERROR handler.");
         break; // TODO: Handle error
     case RTM_NEWLINK: // Interface up/down
-        HandleNewLinkEvent(nl_message_header, if_info_msg);
-        break;
+        {
+            struct ifinfomsg *if_info_msg = (struct ifinfomsg *)NLMSG_DATA(nl_message_header);
+            HandleNewLinkEvent(nl_message_header, if_info_msg);
+            break;
+        }
     case RTM_NEWADDR: // Name, Ip address, Broadcast address, Netmask, Mtu, MAC
-        HandleNewAddressEvent(nl_message_header, if_addr_msg);
-        break;
+        {
+            struct ifaddrmsg *if_addr_msg = (struct ifaddrmsg *)NLMSG_DATA(nl_message_header);
+            HandleNewAddressEvent(nl_message_header, if_addr_msg);
+            break;
+        }
     default:
-        ALOGI("Unknown event arrived: (%i)", nl_message_header->nlmsg_type);
+        //ALOGI("Unknown event arrived: (%i)", nl_message_header->nlmsg_type);
         break;
     }
 }
@@ -91,7 +92,24 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
 void NetlinkEventHandler::HandleNewAddressEvent(struct nlmsghdr *nl_message_header,
                                                 struct ifaddrmsg *if_addr_msg)
 {
-    ALOGI("RTM_NEWADDR handler.");
+    ALOGI("Message received: RTM_NEWADDR");
+    char name[IF_NAMESIZE];
+
+    // TODO: Refactor common parts in HandleNewLinkEvent and HandleNewAddressEvent
+    if ((if_addr_msg != NULL) &&
+        (if_indextoname(if_addr_msg->ifa_index, name) != NULL)) {
+
+        for (const auto &ic : interface_configurations_) {
+            if (name == ic.name) {
+                SetupInterface(ic.name.c_str(),
+                               ic.mac_address_bytes,
+                               ic.ip_address.c_str(),
+                               ic.netmask.c_str(),
+                               ic.broadcast_address.c_str(),
+                               ic.mtu);
+            }
+        }
+    }
 }
 
 }
