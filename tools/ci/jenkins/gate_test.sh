@@ -12,5 +12,7 @@ docker_run artifactory pull ihu_gate_build "${ZUUL_CHANGE_IDS}" ${OUT_ARCHIVE} \
 tar xvf ${OUT_ARCHIVE} || die "Could not extract out archive."
 rm ${OUT_ARCHIVE}
 
+ihu_update
+
 # Dummy test case to test whole CI chain down to device
 # ./out/host/linux-x86/bin/adb shell ls
