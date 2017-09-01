@@ -4,10 +4,10 @@ from dataelements_generator import getDatatypes
 import autosar
 
 def main():
-    print('%s (%s)\n%s\n'%(getDatatypes.DESCRIPTION, getDatatypes.VERSION, getDatatypes.COPYRIGHT))
+    print('%s (%s)\n%s\n' % (getDatatypes.DESCRIPTION, getDatatypes.VERSION, getDatatypes.COPYRIGHT))
 
     parser = ArgumentParser()
-    parser.add_argument('--version', action='version', version="%%(prog)s %s (%s)"%(getDatatypes.VERSION, autosar.VERSION))
+    parser.add_argument('--version', action='version', version="%%(prog)s %s (%s)" % (getDatatypes.VERSION, autosar.VERSION))
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', help='Enable verbose output')
     parser.add_argument('-d', '--directory', dest='outputdirectory', help='Output directory for generated files', required=True)
     parser.add_argument('-s', '--swcinputfile', dest='swcinputfile', help='SWC input arxml, (Elektra export file)', required=True)

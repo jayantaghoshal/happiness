@@ -732,7 +732,7 @@ class ARDelegationConnector(base.ARObject):
             base.add_schema('INNER-PORT-IREF/P-PORT-IN-COMPOSITION-INSTANCE-REF/CONTEXT-COMPONENT-REF'))
         self.inner_port = element.find(
             base.add_schema('INNER-PORT-IREF/P-PORT-IN-COMPOSITION-INSTANCE-REF/TARGET-P-PORT-REF'))
-        if self.inner_comp == None:
+        if self.inner_comp is None:
             self.inner_comp = element.find(
                 base.add_schema('INNER-PORT-IREF/R-PORT-IN-COMPOSITION-INSTANCE-REF/CONTEXT-COMPONENT-REF'))
             self.inner_port = element.find(
@@ -1418,11 +1418,11 @@ class ARConstant(base.ARObject):
 
         else:
             valSpec = self.getSubElem('VALUE-SPEC/NUMERICAL-VALUE-SPECIFICATION')
-            if valSpec == None:
+            if valSpec is None:
 
                 recValSpec = self.getSubElem('VALUE-SPEC/RECORD-VALUE-SPECIFICATION')
-                if recValSpec == None:
-                    arrayValSpec = self.getSubElem('VALUE-SPEC/ARRAY-VALUE-SPECIFICATION')
+                if recValSpec is None:
+                    arrayValSpec = self.getSubElem('VALUE-SPEC/ARRAY-VALUE-SPECIFICATION')  # NOQA
                     fields = self.xmlref.findall('.//' + base.add_schema('NUMERICAL-VALUE-SPECIFICATION'))
                     if len(fields) == 0:
                         value = ['0']

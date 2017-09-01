@@ -21,7 +21,7 @@ namespace autosar {\n
     # TODO: Not sure why we output all enums first, i think it's legacy from when parsing and output was done in same phase
     #       I left it that way for easier diff of output files.
 
-    for t in sorted(all_types.values(), key=lambda x:x.de_type_name):
+    for t in sorted(all_types.values(), key=lambda x: x.de_type_name):
         if isinstance(t, DE_Enum):
             if t.desc != "":
                 dTStr += "/*!\n * \enum %s\n * %s\n */\n" % (t.de_type_name, escape_cpp_comment(t.desc.strip()))
