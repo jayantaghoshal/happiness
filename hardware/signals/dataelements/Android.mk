@@ -83,6 +83,22 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := libdataelements_unittest
 
+LOCAL_MODULE_CLASS := STATIC_LIBRARIES
+
+intermediates:= $(local-generated-sources-dir)
+
+#
+# Generate Mp_Router_crc.h
+#
+GEN := $(intermediates)/Mp_Router_crc.h
+crc_gen_tool := $(LOCAL_PATH)/crc16cmd.py
+$(GEN): PRIVATE_INPUT_FILE := $(LOCAL_PATH)/vector/gen/MpRouter_Signals.h
+$(GEN): PRIVATE_CUSTOM_TOOL = python $(crc_gen_tool) $(PRIVATE_INPUT_FILE) MP_ROUTER_CRC > $@
+$(GEN): $(LOCAL_PATH)/vector/gen/MpRouter_Signals.h $(TOOL)
+	    $(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+
 LOCAL_SRC_FILES:= \
     src/dataelemvalue.cpp \
     src/dataelementframework.cpp \
@@ -119,7 +135,8 @@ LOCAL_C_INCLUDES += \
 LOCAL_EXPORT_C_INCLUDE_DIRS := \
     $(LOCAL_PATH)/include \
     $(LOCAL_PATH)/generated \
-    $(LOCAL_PATH)/vector
+    $(LOCAL_PATH)/vector \
+    $(call local-generated-sources-dir)
 
 # We only build for 64 bit.
 LOCAL_MULTILIB := 64
