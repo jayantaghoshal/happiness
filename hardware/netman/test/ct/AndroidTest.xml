@@ -1,38 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-This tests verifies the functionallity in localconfig that copies the a default localconfig.json
-file from /system/etc/ to /oem_config/localconfig on startup. We test this by deleting the
-copied file and then issue a restart (timeout assumed to be 1 minute).
-The test if the file exists is done in the actual test.
+This test verifies the functionality of netmand.
+It checks that Ip address, Broadcast address, MAC Address, MTU and Netmask have
+been set on startup and when another process has changed any of the above fields
+during operation.
 -->
 <configuration description="Test standard ethernet is up with 198.18.34.1 after boot">
-    <!-- Delete localconfig.json, set wrong ip configuration and reboot -->
-    <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
-        <option name="run-command" value="ifconfig eth1 down" />
-        <option name="run-command" value="ifconfig eth1 198.18.34.2" />
-        <option name="run-command" value="ifconfig eth1 netmask 198.18.34.3" />
-        <option name="run-command" value="ifconfig eth1 broadcast 198.18.34.255" />
-        <option name="run-command" value="ifconfig eth1 mtu 1000" />
-        <option name="run-command" value="ifconfig eth1 hw ether 02:01:02:03:04:08" />
-        <option name="run-command" value="ifconfig eth1 up" />
-        <option name="run-command" value="ifconfig eth0 down" />
-        <option name="run-command" value="ifconfig eth0 198.18.34.5" />
-        <option name="run-command" value="ifconfig eth0 netmask 198.18.34.77" />
-        <option name="run-command" value="ifconfig eth0 broadcast 198.18.34.254" />
-        <option name="run-command" value="ifconfig eth0 mtu 1000" />
-        <option name="run-command" value="ifconfig eth0 hw ether 02:01:02:03:04:09" />
-        <option name="run-command" value="ifconfig eth0 up" />
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push" />
     </target_preparer>
-
-    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
-        <option name="cleanup" value="true" />
-        <option name="push" value="VtsNetmanCTCases->/data/local/tmp/VtsNetmanCTCases" />
-    </target_preparer>
-
-    <!-- Run test -->
-    <test class="com.android.tradefed.testtype.GTest" >
-        <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsNetmanCTCases" />
-        <option name="runtime-hint" value="10s" />
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsNetmandComponentTest"/>
+        <option name="test-case-path" value="volvocars/hardware/netman/test/ct/VtsNetmandComponentTest"/>
     </test>
 </configuration>

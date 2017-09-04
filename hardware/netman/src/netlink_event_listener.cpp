@@ -83,9 +83,9 @@ int NetlinkSocketListener::StartListening()
         return -1;
     }
 
-    ALOGI("Socket successfully setup.");
+    ALOGI("Netlink socket successfully setup.");
 
-    ALOGI("Waiting for messages to arrive.");
+    ALOGI("Waiting for netlink messages to arrive...");
 
     for (;;) {
         if (RecvMessage() == -1) {
@@ -132,7 +132,6 @@ int NetlinkSocketListener::RecvMessage()
         return -1;
     }
 
-    ALOGI("Event received.");
     // Parse message
     for (nl_message_header = (struct nlmsghdr*)buf;
          NLMSG_OK(nl_message_header, (unsigned int)message_length);

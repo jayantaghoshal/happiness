@@ -19,9 +19,13 @@ int main()
     {
         ALOGI("Netmand 0.1 starting");
 
+        ALOGI("Loading configuration from local config");
+
         std::vector<InterfaceConfiguration> interface_configurations;
 
         LoadInterfaceConfiguration(interface_configurations);
+
+        ALOGI("Setting initial configuration on network interfaces");
 
         SetupInterface(interface_configurations);
 
