@@ -2,6 +2,11 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 
+# Update the manifests based on the templates and download all other
+# repositories. First time this will take a very long time but subsequent
+# downloads are incremental and faster.
+docker_run python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
+
 # Setup ccache
 USE_CCACHE=true
 
