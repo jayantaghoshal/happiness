@@ -129,10 +129,11 @@ def render_dataelments(header: str, footer: str, all_de_elements: List[DE_Elemen
 
 namespace autosar {
 
-enum class Dir {
-    IN,
-    OUT,
-    INTERNAL
+// This enum must match the enum Dir defined in the ISigals/types.hal
+enum class Dir : uint16_t {
+    IN = 0,
+    OUT = 1,
+    INTERNAL = 2
 };
 
 struct DataElemInfo {

@@ -3,24 +3,48 @@
 #include "dataelementcommbus.h"
 #include "ihu/signals/1.0/ISignals.h"
 
+#include <functional>
+#include <map>
+#include <mutex>
+#include <string>
+
+namespace andrHw = ::android::hardware;
+namespace dataElemHidl = ihu::signals::V1_0;
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 /// Hidl implementation of the DataElementCommBus
-class DataElementCommBusHIDL : public IDataElementCommBus
+class DataElementCommBusHIDL final : public IDataElementCommBus,
+                                     public ::android::hidl::manager::V1_0::IServiceNotification,
+                                     public andrHw::hidl_death_recipient,
+                                     public dataElemHidl::ISignalsChangedCallback
 {
-public:
-    void setNewDataElementHandler(
-        std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) override;
-    void addName(autosar::Dir dir, const std::string& name) override;
-    void send(const std::string& name, const std::string& payload, autosar::Dir dir) override;
+ public:
+  void setNewDataElementHandler(
+      std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) override;
+  void addName(autosar::Dir dir, const std::string& name) override;
+  void send(const std::string& name, const std::string& payload, autosar::Dir dir) override;
+  andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
+                                      bool preexisting) override;
+  void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
-    static DataElementCommBusHIDL& instance() noexcept;
+  andrHw::Return<void> signalChanged(const andrHw::hidl_string& signalName, dataElemHidl::Dir dir,
+                                     const andrHw::hidl_string& data) override;
 
-private:
-    DataElementCommBusHIDL();
-    virtual ~DataElementCommBusHIDL() = default;
+  static DataElementCommBusHIDL& instance() noexcept;
 
-    void VSMStarted();
+ private:
+  DataElementCommBusHIDL();
 
-    //std::map<std::tuple<std::string, autosar::Dir>, std::string> pendingSendMessages_;
-    ::android::sp<ihu::signals::V1_0::ISignals> proxy_;
+  void resendMessages(::android::sp<dataElemHidl::ISignals> vsd_proxy);
+  void connectToVsdProxyAndResend();
+  void sendWithoutProxyMutex(const std::string& name, const std::string& payload, autosar::Dir dir,
+                             ::android::sp<dataElemHidl::ISignals> vsd_proxy);
+
+  std::mutex pendingMessageMutex_;
+  std::mutex vsdProxyMutex_;
+  std::map<std::tuple<std::string, autosar::Dir>, std::string> pendingSendMessages_;
+  ::android::sp<dataElemHidl::ISignals> vsd_proxy_;
+  std::function<void(const std::string& name, const std::string& payload)> dataElementCallback_;
+
+  static const uint ISIGNAL_HAL_DEATH_COOKIE = 0xDEAD;  // Cookie sent for ISignal hal death notification.
 };

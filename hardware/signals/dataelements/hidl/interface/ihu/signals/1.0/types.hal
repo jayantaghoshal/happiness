@@ -1,0 +1,11 @@
+package ihu.signals@1.0;
+
+/**
+ *Enum to indicate signal direction
+ * 
+ */
+enum Dir : uint16_t {
+         IN = 0,
+         OUT = 1,
+         INTERNAL = 2
+};
