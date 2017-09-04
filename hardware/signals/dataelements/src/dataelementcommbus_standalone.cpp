@@ -28,7 +28,7 @@ IDataElementCommBus* IDataElementCommBus::create() {
 }
 
 DataElementCommBus_standalone::DataElementCommBus_standalone() {
-    ALOGI("Using DataElementCommBus_standalone , no mosquitto in other words!!!");
+    ALOGI("Using DataElementCommBus_standalone");
 }
 
 void DataElementCommBus_standalone::send(const std::string& name, const std::string& payload, autosar::Dir /*dir*/) {
