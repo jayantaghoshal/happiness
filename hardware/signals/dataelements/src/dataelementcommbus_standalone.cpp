@@ -9,8 +9,6 @@
 #define LOG_TAG "DataElementDBus"
 #include <cutils/log.h>
 
-LOG_SET_DEFAULT_CONTEXT(deleContext)
-
 class DataElementCommBus_standalone : public IDataElementCommBus {
 public:
     DataElementCommBus_standalone();
@@ -30,7 +28,7 @@ IDataElementCommBus* IDataElementCommBus::create() {
 }
 
 DataElementCommBus_standalone::DataElementCommBus_standalone() {
-    log_info() << "Using DataElementCommBus_standalone , no mosquitto in other words!!!";
+    ALOGI("Using DataElementCommBus_standalone , no mosquitto in other words!!!");
 }
 
 void DataElementCommBus_standalone::send(const std::string& name, const std::string& payload, autosar::Dir /*dir*/) {
@@ -46,6 +44,7 @@ void DataElementCommBus_standalone::setNewDataElementHandler(std::function<void(
 }
 
 void DataElementCommBus_standalone::addName(autosar::Dir dir, const std::string& name) {
+    (void)dir;
     if (_datacache.find(name)!=_datacache.end()) {
         // Yes we have data for this one
         if (_callback) {

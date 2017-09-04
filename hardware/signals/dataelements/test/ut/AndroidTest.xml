@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DataElements unit test -->
+<configuration description="Config for VCC Local Config test cases">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsDEUnitTest->/data/local/tmp/VtsDEUnitTest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsDEUnitTest" />
+        <option name="runtime-hint" value="1s" />
+    </test>
+</configuration>

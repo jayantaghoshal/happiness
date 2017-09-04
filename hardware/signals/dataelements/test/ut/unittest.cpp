@@ -1,3 +1,4 @@
+
 /*===========================================================================*\
 * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
 * Delphi Confidential
@@ -23,6 +24,10 @@
 #include <vipcomm/VipFramework.h>
 #include <vipcomm/VipFrameworkPrivate.h>
 
+#include "vsm/com_crc.h"
+#include "vsm/swc_crc.h"
+#include "Mp_Router_crc.h"
+
 // Types needed by MpRouter_Signals.h below
 using int8 = int8_t;
 using int16 = int16_t;
@@ -32,6 +37,10 @@ using uint16 = uint16_t;
 using uint32 = uint32_t;
 using boolean = bool;
 #include "gen/MpRouter_Signals.h"
+
+#undef LOG_TAG
+#define LOG_TAG "Dataelements UnitTest"
+#include <cutils/log.h>
 
 // This is the namespace for ARSender and ARReceiver (found in Application_dataelement.h>
 using namespace ApplicationDataElement;
@@ -49,6 +58,7 @@ static std::atomic_bool cvsink_cont;
 
 static auto waitTimeout = std::chrono::seconds(2);
 static const int SignalGroup = 0x2000;
+
 
 class DETest : public ::testing::Test{
   void SetUp(){
@@ -75,6 +85,7 @@ std::atomic_bool cv_cont;
 struct CompileTest {
     void test(){}
 };
+
 
 // Send structs, enums and arrays from Application to ECD and verify the received values in the "ECD" (DESink)
 TEST_F (DETest, sendStruct_verifyReceivedInCallbackAndParsedOk) {
@@ -615,6 +626,7 @@ TEST_F (DETest, RTE_test_sink_unsigned) {
     cvsink_cont=false;
 
     autosar::HmiCmptmtTSp_info::data_elem_type senddata;
+
     senddata.HmiCmptmtTSpForRowFirstLe = 15.0;
     senddata.HmiCmptmtTSpForRowFirstRi = 30.5;
     senddata.HmiCmptmtTSpForRowSecLe = 142.5; // this is out-of-range BUT it should encode properly
@@ -636,9 +648,9 @@ TEST_F (DETest, RTE_checksum) {
     vipcomm::getFileCrc(com_arxml, swc_arxml, rte_type, com_cfg);
 
     EXPECT_EQ(0,com_cfg);
-    EXPECT_EQ(47489,rte_type);
-    EXPECT_EQ(3333,com_arxml);
-    EXPECT_EQ(4444,swc_arxml);
+    EXPECT_EQ(MP_ROUTER_CRC,rte_type);
+    EXPECT_EQ(COM_CRC,com_arxml);
+    EXPECT_EQ(SWC_CRC,swc_arxml);
 }
 
 TEST_F (DETest, Negative8BitValue_toSignedFromRaw_success) {
@@ -712,4 +724,3 @@ TEST_F (DETest, CompileTest) {
     sink.subscribe(std::bind(&CompileTest::test,&ct));
     sink.subscribeVal(std::bind(&CompileTest::test,&ct));
 }
-
