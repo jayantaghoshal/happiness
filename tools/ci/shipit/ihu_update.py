@@ -82,9 +82,6 @@ def flash_image(port_mapping: PortMapping,
     fastboot_executable = os.path.join(
         build_out_dir, "host", "linux-x86", "bin", "fastboot")
 
-    fastboot_script = os.path.join(
-        build_out_dir, "target", "product", product, "fast_flashfiles", "fastboot.sh")
-
     ihu_serials = open_serials(port_mapping)
     if not serial_mapping.verify_serial_is_vip(ihu_serials.vip):
         raise RuntimeError(
@@ -156,7 +153,7 @@ def flash_image(port_mapping: PortMapping,
                                           "erase", partition_to_erase]).decode().strip(" \n\r\t")
 
         for partition_to_format in ["config", "cache"]:
-            logger.info("Formating " + partition_to_erase +  " partition")
+            logger.info("Formating " + partition_to_format +  " partition")
             output = check_output_logged([fastboot_executable,
                                           "format", partition_to_format]).decode().strip(" \n\r\t")
 

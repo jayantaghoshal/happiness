@@ -18,7 +18,7 @@ struct InterfaceConfiguration {
     int mtu = 0;
 };
 
-}
-}
+} // netman namespace
+} // vcc namespace
 
 #endif

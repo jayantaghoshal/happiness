@@ -46,7 +46,8 @@ MY_STIMULI_SRC := $(LOCAL_PATH)/localconfig_good.json
 
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts
-
+# We may not need this.Please review ...
+LOCAL_MULTILIB := 64
 include $(BUILD_SYSTEM)/base_rules.mk
 $(LOCAL_BUILT_MODULE) : $(MY_STIMULI_SRC)
 	@echo "Copy stimuli file $< to $@"
@@ -68,6 +69,8 @@ MY_STIMULI_SRC := $(LOCAL_PATH)/localconfig_bad.json
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts
 
+# We may not need this.Please review ...
+LOCAL_MULTILIB := 64
 include $(BUILD_SYSTEM)/base_rules.mk
 $(LOCAL_BUILT_MODULE) : $(MY_STIMULI_SRC)
 	@echo "Copy stimuli file $< to $@"

@@ -11,7 +11,7 @@ class Error(Exception):
 
 
 class Repo:
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         self.path = os.path.abspath(path)
 
     @classmethod

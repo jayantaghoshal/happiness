@@ -11,7 +11,8 @@ def on_commit(aosp_root_dir: str, branch: str):
     # Zuul will have already cloned vendor/volvocars
 
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
-    volvocars_repo = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
 
     process_tools.check_output_logged(
         ["repo", "init",
@@ -30,7 +31,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               volvocars_repo: git.Repo,
                                               manifest_repo: git.Repo,
                                               stage_changes: bool = False):
-    vcc_manifest_files = glob.glob(os.path.join(volvocars_repo, "manifests") + "/*.xml")
+    vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
 
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
     for f in old_manifest_files_in_manifest_repo:
@@ -47,7 +48,8 @@ def post_merge(aosp_root_dir: str,
                branch: str,
                additional_commit_message: str):
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
-    volvocars_repo = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
 
     process_tools.check_output_logged(
         ["repo", "init",

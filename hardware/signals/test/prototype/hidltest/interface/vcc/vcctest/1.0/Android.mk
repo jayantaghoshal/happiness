@@ -34,6 +34,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
 $(GEN): $(LOCAL_PATH)/ISignals.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
+
+LOCAL_MULTILIB := 64
+
 include $(BUILD_JAVA_LIBRARY)
 
 
@@ -69,6 +72,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
 $(GEN): $(LOCAL_PATH)/ISignals.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
+
+
+LOCAL_MULTILIB := 64
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
 

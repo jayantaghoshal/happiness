@@ -10,7 +10,7 @@ class Error(Exception):
 
 
 class HashInserter:
-    def __init__(self, project_root: str):
+    def __init__(self, project_root: str) -> None:
         self._project_root = project_root
 
         self._revision_regex = re.compile(r"(?P<prefix><project[^>]*?\s+revision\s*=\s*[\"'])"

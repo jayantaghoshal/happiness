@@ -1,9 +1,9 @@
 import threading
 import time
 
-import serial
+import serial #type: ignore
 import logging
-
+from typing import List, Tuple
 
 class RecordingSerial:
     def __init__(self,
@@ -11,22 +11,22 @@ class RecordingSerial:
                  baudrate: int,
                  timeout_sec: int,
                  encoding="utf-8",
-                 log_context_name: str = None):
+                 log_context_name: str = None) -> None:
         if log_context_name is None:
             self.log_context_name = __name__  + "." + port
         else:
             self.log_context_name = log_context_name
         self._s = serial.Serial(port, baudrate, timeout=timeout_sec)
         self._encoding = encoding
-        self._output = []
-        self._input = []
+        self._output = []   # type: List[Tuple[float, str]]
+        self._input = []    # type: List[Tuple[float, str]]
         self._read_index = 0
         self._close_event = threading.Event()
         self._output_lock = threading.Lock()
-        self._read_thread = threading.Thread(target=self._read_thread, daemon=True, name="TTY Reader %s" % port)
+        self._read_thread = threading.Thread(target=self._read_worker, daemon=True, name="TTY Reader %s" % port)
         self._read_thread.start()
 
-    def _read_thread(self):
+    def _read_worker(self):
         logger = logging.getLogger(self.log_context_name + "._IN")
         while not self._close_event.is_set():
             try:

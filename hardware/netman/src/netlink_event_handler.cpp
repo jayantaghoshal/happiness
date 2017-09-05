@@ -23,10 +23,12 @@
 namespace vcc {
 namespace netman {
 
-NetlinkEventHandler::NetlinkEventHandler(const InterfaceConfiguration &eth1_configuration)
-    : eth1_configuration_(eth1_configuration)
+NetlinkEventHandler::NetlinkEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations)
+    : interface_configurations_(interface_configurations)
 {
-    PrintInterfaceConfiguration("NetlinkEventHandler", eth1_configuration);
+    for (auto &configuration : interface_configurations) {
+        PrintInterfaceConfiguration("NetlinkEventHandler", configuration);
+    }
 }
 
 NetlinkEventHandler::~NetlinkEventHandler()
@@ -63,15 +65,8 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
 {
     ALOGI("Message received: RTM_NEWLINK");
 
-    const char *interface_name = eth1_configuration_.name.c_str();
-    const char *ip_addr = eth1_configuration_.ip_address.c_str();
-    const char *netmask = eth1_configuration_.netmask.c_str();
-    const char *broadcast_addr = eth1_configuration_.broadcast_address.c_str();
-    const int mtu = eth1_configuration_.mtu;
-
     char name[IF_NAMESIZE];
 
-    // Comments:
     // IFF_UP = ifconfig eth0 up
     // IFF_RUNNING = cable plugged in
     // Should if statement around IFF_RUNNING be ! ??? /Philip Werner
@@ -79,14 +74,16 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
         (if_indextoname(if_info_msg->ifi_index, name) != NULL) &&
         (if_info_msg->ifi_flags & IFF_UP) &&
         !(if_info_msg->ifi_flags & IFF_RUNNING)) {
-        if (0 == strncmp(name, interface_name, strlen(interface_name))) {
-            ALOGI("Detected invalid interface configuration. Resetting configuration.");
-            SetupInterface(interface_name,
-                           eth1_configuration_.mac_address_bytes,
-                           ip_addr,
-                           netmask,
-                           broadcast_addr,
-                           mtu);
+
+        for (const auto &ic : interface_configurations_) {
+            if (name == ic.name) {
+                SetupInterface(ic.name.c_str(),
+                               ic.mac_address_bytes,
+                               ic.ip_address.c_str(),
+                               ic.netmask.c_str(),
+                               ic.broadcast_address.c_str(),
+                               ic.mtu);
+            }
         }
     }
 }

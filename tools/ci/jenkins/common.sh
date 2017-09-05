@@ -30,7 +30,17 @@ function die() {
 function docker_run() {
   USE_CCACHE=$USE_CCACHE \
   CCACHE_DIR=$CCACHE_DIR \
-  VOLUMES="--volume $WORKSPACE:$WORKSPACE" \
   ${DOCKER_BUILD_DIR}/run.sh \
-  --env-file=${SCRIPT_DIR}/env.list $*
+  --env-file=${SCRIPT_DIR}/env.list \
+  --volume=$WORKSPACE:$WORKSPACE \
+  $*
+}
+
+function ihu_update() {
+  local mp_dev=/dev/ttyMP
+  local vip_dev=/dev/ttyVIP
+
+  docker_run --volume=$mp_dev:$mp_dev --volume=$vip_dev:$vip_dev \
+    $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/ihu_update.py \
+    --aosp_root_dir $REPO_ROOT_DIR --vip_port $vip_dev --mp_port $mp_dev
 }
