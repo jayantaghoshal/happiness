@@ -75,13 +75,11 @@ int main(int argc, char* argv[])
     ALOGI("Flexray/LIN vehicle signals communication service calls app.exec().");
   }
 
-  // TBD Remove this when we have the HIDL main loop running
   while(true) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ALOGD("VSD Running");
     std::cout << "vsd running" << std::endl; 
   }    
     
-  // DBUSSignalServer::join();
 }
 

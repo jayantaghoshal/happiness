@@ -9,6 +9,7 @@ However it is also possible to generate in the build step by instructions in And
 3. Build hidl-gen if not already done:
     make hidl-gen
 4. Generate C++ code from hidl files, example:
-    hidl-gen -o generated/ -L c++ -r ihu:interface/ihu -r android.hidl:${ANDROID_BUILD_TOP}/system/libhidl/transport ihu.signals@1.0
+    hidl-gen -o generated/ -L androidbp -r ihu:vendor/volvocars/hardware/signals/hidl_interface/ihu -r android.hidl:system/libhidl/transport ihu.signals@1.0
+    hidl-gen -o generated/ -L c++ -r ihu:vendor/volvocars/hardware/signals/hidl_interface/ihu -r android.hidl:system/libhidl/transport ihu.signals@1.0
 
 Note! It is important the defined package name defined in interface description(*.hal files) match the folder structure in which it is placed.

@@ -1,0 +1,5 @@
+service dataelements-hidl-server /vendor/bin/hw/dataelements-hidl-server
+    class main
+    user root
+    group root
+    seclabel u:r:infotainment-ip-service:s0

@@ -5,7 +5,8 @@
 PRODUCT_PACKAGES += \
     netman \
     infotainment-ip-service \
-    vehicle-signals-daemon
+    vehicle-signals-daemon \
+    dataelements-hidl-server
 
 ##############################################################
 # System UI
