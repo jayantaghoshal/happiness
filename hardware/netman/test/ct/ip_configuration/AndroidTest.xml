@@ -12,6 +12,6 @@ during operation.
     <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="VtsNetmandComponentTest"/>
-        <option name="test-case-path" value="volvocars/hardware/netman/test/ct/VtsNetmandComponentTest"/>
+        <option name="test-case-path" value="volvocars/hardware/netman/test/ct/ip_configuration/VtsNetmandComponentTest"/>
     </test>
 </configuration>

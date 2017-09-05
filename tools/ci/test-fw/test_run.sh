@@ -7,7 +7,12 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-TEST_DIR="$CURRENT_MODULE_DIR/$1"
+ROOT_TEST_DIR="$CURRENT_MODULE_DIR/$1"
 
-echo -e "${C_NOTICE}Run test for ${CURRENT_MODULE} in ${TEST_DIR}...${C_OFF}"
-docker_run "${SCRIPT_DIR}/../shipit/test_run.py ${TEST_DIR}"
+# Find all subtests
+TESTS=$(find "$ROOT_TEST_DIR" -type f -name 'AndroidTest.xml' | sed -r 's|/[^/]+$||' | sort)
+
+for TEST_DIR in $TESTS; do
+    echo -e "${C_NOTICE}Run test for ${CURRENT_MODULE} in ${TEST_DIR}...${C_OFF}"
+    docker_run "${SCRIPT_DIR}/../shipit/test_run.py ${TEST_DIR}"
+done
