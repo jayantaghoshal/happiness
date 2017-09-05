@@ -23,6 +23,8 @@ def vts_tradefed_run_module(module_name: str):
                                            "vts",
                                            "--skip-all-system-status-check",
                                            "--skip-preconditions",
+                                           "-l",
+                                           "INFO",
                                            "--abi",
                                            "x86_64",
                                            "--module",

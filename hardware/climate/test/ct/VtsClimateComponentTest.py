@@ -18,12 +18,9 @@ sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from com.dtmilano.android.viewclient import ViewClient
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
-
+from generated.pyDataElements import FrSignalInterface
 
 ns_per_ms = 1000000
-
-#TODO: Test flexray temporarily disabled until fully hooked up in CI environment
-TEST_FLEXRAY = False
 
 class VtsClimateComponentTest(base_test.BaseTestClass):
     """Testing Climate functions"""
@@ -65,48 +62,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(0x00ff0000, self.vtypes.VehiclePropertyType.MASK)
         asserts.assertEqual(0x0f000000, self.vtypes.VehicleArea.MASK)
 
-        if TEST_FLEXRAY:
-            self.fdx = fdx_client.FDXConnection(self.fdx_signal_received, "198.18.34.2")
-            (self.fdx_groups, _, self.fdx_signals) = fdx_description_file_parser.parse(
-                os.path.realpath(os.path.dirname(__file__) +
-                "/../../../../tools/testing/fdx_client/FDXDescriptionFile.xml"))
-            self.fdx.confirmed_start()
-
-
-            self.fdx_group_id_map = {g.group_id: g for g in self.fdx_groups}
-
-            self.groups_to_subscribe = [g for g in self.fdx_groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
-            for g in self.groups_to_subscribe:
-                self.fdx.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
-
-
-    def fdx_signal_received(self, group_id, data):
-        group = self.fdx_group_id_map[group_id]
-        group.receive_data(data)
-
-    def get_signal(self, name):
-        # type: (str) -> fdx_description_file_parser.Item
-        candidate = None  # type: fdx_description_file_parser.Item
-
-        parts = name.split("::")
-        signame = parts[-1]
-        msg = None
-        if len(parts) > 1:
-            msg = parts[-2]
-
-        for i in self.fdx_signals:
-            if i.name == signame and (msg is None or msg == i.msg_or_namespace):
-                if candidate is not None:
-                    raise Exception("Signal name '%s' is ambiguous between %s::%s and %s::%s" %
-                                    (name, candidate.msg_or_namespace, candidate.name, i.msg_or_namespace, i.name))
-                candidate = i
-        if candidate is None:
-            raise Exception("Signal %s not found" % name)
-        return candidate
-
-    def read_signal(self, signal_name):
-        signal_item = self.get_signal(signal_name)
-        return signal_item.value_raw
+        self.flexray = FrSignalInterface()
 
     def tearDownClass(self):
         """Disables the profiling.
@@ -123,12 +79,6 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
         if self.coverage.enabled:
             self.coverage.SetCoverageData(dut=self.dut, isGlobal=True)
-
-        if TEST_FLEXRAY:
-            for g in self.groups_to_subscribe:
-                self.fdx.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic,
-                                                   500 * ns_per_ms, 0)
-            self.fdx.confirmed_stop()
 
 
     def setUp(self):
@@ -333,11 +283,10 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
     def isPropSupported(self, propertyId):
         return self.getPropConfig(propertyId) is not None
 
-    def assert_signal_equals(self, signal_name, expected_value):
-        if not TEST_FLEXRAY:
-            return
-        read_value = self.read_signal(signal_name)
-        asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( signal_name, read_value, expected_value ))
+    def assert_signal_equals(self, fdx_signal, expected_value):
+        if self.flexray.connected:
+            read_value = fdx_signal.receive()
+            asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ))
 
     def testFanLevel(self):
         _s = 0.5
@@ -348,60 +297,89 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
                    'autodump': False, 'startviewserver': True, 'compresseddump': True}
         vc = ViewClient(device, serialno, **kwargs2)
 
-        # Open hvac default ui
-        device.touchDip(86.0, 1011.0, 0)
+        # Get content of current visible view
+        vc.dump(window=-1)
+
+        # Try to find fan off button
+        try:
+            vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_btn")
+        except:
+            #Ok, not in climate view, assume we are on home screen, push climate button on homescreen
+            device.touchDip(388.0, 948.0, 0)
+
+        #Get content of climate first row view
+        vc.dump(window=-1)
+
+        #Get fan buttons
+        fan_off = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_btn")
+        fan_level = vc.findViewByIdOrRaise("com.volvocars.launcher:id/fan_level_seekbar")
+        fan_max = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_max_btn")
+        climate_close = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_bar_close_btn")
+
+        #Calcutale x,y of fan level seekbar
+        fan_level_pic_with = fan_level.getWidth()/5
+        fan_level_pic_pos1 = fan_level.getX()+(fan_level_pic_with/2)
+        fan_level_1 = (fan_level_pic_pos1+(fan_level_pic_with*0), fan_level.getY(), 0)
+        fan_level_2 = (fan_level_pic_pos1+(fan_level_pic_with*1), fan_level.getY(), 0)
+        fan_level_3 = (fan_level_pic_pos1+(fan_level_pic_with*2), fan_level.getY(), 0)
+        fan_level_4 = (fan_level_pic_pos1+(fan_level_pic_with*3), fan_level.getY(), 0)
+        fan_level_5 = (fan_level_pic_pos1+(fan_level_pic_with*4), fan_level.getY(), 0)
+
+        # Using flexray signal values for ECC climate
+
+        # Set to OFF
+        fan_off.touch()
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 0, "Failed to set fan to OFF")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.Off)
 
-        fan_level_OFF_location = (186.0, 643.0, 0)
-        fan_level_2_location = (267.0, 634.0, 0)
-        fan_level_3_location = (343.0, 635.0, 0)
-        fan_level_4_location = (423.0, 636.0, 0)
-        fan_level_5_location = (500.0, 635.0, 0)
-        fan_level_MAX_location = (589.0, 631.0, 0)
-       
-
-        # Click fan level OFF and assert
-        device.touchDip(*fan_level_OFF_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 1)
+        # Set to Level 1
+        device.touchDip(*fan_level_1)
         vc.sleep(_s)
-        self.assert_signal_equals("HmiHvacFanLvlFrnt", 1)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 1, "Failed to set fan to Level 1")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutMinusMinus)
 
-
-        # Click fan level 2 and assert
-        device.touchDip(*fan_level_2_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 2)
+        # Set to Level 2
+        device.touchDip(*fan_level_2)
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 2, "Failed to set fan to Level 2")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutMinus)
 
-        # Click fan level 3 and assert
-        device.touchDip(*fan_level_3_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 3)
+        # Set to Level 3
+        device.touchDip(*fan_level_3)
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 3, "Failed to set fan to Level 3")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutoNorm)
 
-        # Click fan level 4 and assert
-        device.touchDip(*fan_level_4_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 4)
+        # Set to Level 4
+        device.touchDip(*fan_level_4)
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 4, "Failed to set fan to Level 4")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutPlus)
 
-        # Click fan level 5 and assert
-        device.touchDip(*fan_level_5_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 5)
+        # Set to Level 5
+        device.touchDip(*fan_level_5)
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 5, "Failed to set fan to Level 5")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutPlusPlus)
 
-        # Click fan level MAX and assert
-        device.touchDip(*fan_level_MAX_location)
-        val = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
-        asserts.assertEqual(self.extractValue(val), 6)
+        # Set to Max
+        fan_max.touch()
         vc.sleep(_s)
+        fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
+        asserts.assertEqual(self.extractValue(fan_speed_value), 6, "Failed to set fan to Level Max")
+        self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.Max)
 
-        # Close hvac default ui
-        device.touchDip(82.0, 971.0, 0)
+        #Close climate screen
+        climate_close.touch()
+
         vc.sleep(_s)
-
 
 if __name__ == "__main__":
     test_runner.main()
