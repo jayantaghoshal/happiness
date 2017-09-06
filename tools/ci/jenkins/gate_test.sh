@@ -2,6 +2,9 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 
+# Sync repos required for build/envsetup.sh and lunch so we can run VTS.
+repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/services/Car aosp/device/sample
+
 # Pull out files uploaded to Artifactory in gate_build.sh.
 OUT_ARCHIVE=out.tar.gz
 rm -rf out ${OUT_ARCHIVE}
