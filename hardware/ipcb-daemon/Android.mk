@@ -1,13 +1,13 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := infotainment-ip-service
-LOCAL_INIT_RC := infotainment-ip-service.rc
+LOCAL_MODULE := ipcb-daemon
+LOCAL_INIT_RC := ipcb-daemon.rc
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_PROPRIETARY_MODULE := true
 
-# infotainment-ip-service
-MY_ROOT := infotainment_ip_service/
+# ipcb-daemon
+MY_ROOT := ipcb-daemon/
 LOCAL_SRC_FILES := $(MY_ROOT)src/main.cpp \
     $(MY_ROOT)src/util/type_conversion_helpers.cpp \
     $(MY_ROOT)src/util/local_config.cpp \
@@ -45,30 +45,6 @@ LOCAL_SRC_FILES += libipcommandbus/src/VccIpCmdApi.cpp \
     libipcommandbus/src/local_config_parameters.cpp
 #    libipcommandbus/src/shutdown_client.cpp
 
-# Gnss
-LOCAL_SRC_FILES += \
-    infotainment_ip_service/src/binderimpl/gnss/AGnssCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/AGnss.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/AGnssRilCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/AGnssRil.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssBatchingCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssBatching.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssConfiguration.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/Gnss.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssDebug.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssGeofenceCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssGeofencing.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssMeasurementCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssMeasurement.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssNavigationMessageCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssNavigationMessage.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssNiCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssNi.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssXtraCallback.cpp \
-    infotainment_ip_service/src/binderimpl/gnss/GnssXtra.cpp
-
-
 # TODO check if libhwbinder is the correct one to use here
 #LOCAL_CPPFLAGS := -fexceptions -frtti -DLOG_NDEBUG=0 -g
 LOCAL_CPPFLAGS := -fexceptions -DLOG_NDEBUG=0 -g
@@ -84,10 +60,9 @@ LOCAL_SHARED_LIBRARIES += \
     android.hardware.gnss@1.0 \
 
 LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/infotainment_ip_service/src \
+    $(LOCAL_PATH)/ipcb-daemon/src \
     $(LOCAL_PATH)/libasn1/include \
     $(LOCAL_PATH)/libipcommandbus/include \
-    $(LOCAL_PATH)/infotainment_ip_service/src/binderimpl/gnss
 
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)

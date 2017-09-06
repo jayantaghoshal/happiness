@@ -262,7 +262,7 @@ typedef struct Icb_DRPositionData_t * Icb_DRPositionData;
 typedef struct Icb_GeographicalPosition_t * Icb_GeographicalPosition;
 typedef struct Icb_SatelliteUsage_t * Icb_SatelliteUsage;
 typedef struct Icb_ChannelData_t * Icb_ChannelData;
-typedef struct Icb_GNSSDataAccuracy_t * Icb_GNSSDataAccuracy;
+//typedef struct Icb_GNSSDataAccuracy_t * Icb_GNSSDataAccuracy;
 typedef struct Icb_OpRemoteDiagnosticInfo_Notification_t * Icb_OpRemoteDiagnosticInfo_Notification;
 typedef struct Icb_OpCurrentDoIPState_Notification_t * Icb_OpCurrentDoIPState_Notification;
 typedef struct Icb_OpCurrentDoIPConnection_Notification_t * Icb_OpCurrentDoIPConnection_Notification;
@@ -281,9 +281,9 @@ typedef struct Icb_OpEcallSettings_SetRequest_t * Icb_OpEcallSettings_SetRequest
 typedef struct Icb_OpEcallSettings_Response_t * Icb_OpEcallSettings_Response;
 typedef struct Icb_ClimateTimer_t * Icb_ClimateTimer;
 typedef struct Icb_OpWLANChannelFreqInfo_Notification_t * Icb_OpWLANChannelFreqInfo_Notification;
-typedef struct Icb_GNSSData_t * Icb_GNSSData;
-typedef struct Icb_OpGNSSPositionDataAccuracy_Response_t * Icb_OpGNSSPositionDataAccuracy_Response;
-typedef struct Icb_OpGNSSPositionData_Response_t * Icb_OpGNSSPositionData_Response;
+//typedef struct Icb_GNSSData_t * Icb_GNSSData;
+//typedef struct Icb_OpGNSSPositionDataAccuracy_Response_t * Icb_OpGNSSPositionDataAccuracy_Response;
+//typedef struct Icb_OpGNSSPositionData_Response_t * Icb_OpGNSSPositionData_Response;
 
 ///////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Predefined values ////////////////////////////////
