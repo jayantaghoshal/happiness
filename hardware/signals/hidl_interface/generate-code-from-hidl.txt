@@ -1,0 +1,15 @@
+The below instructions describes how to generate code from HIDL interface using the command line.
+However it is also possible to generate in the build step by instructions in Android.mk make file.
+---------------------------------
+1. Source your android anveŕironment:
+    . build/envsetup.sh
+    lunch
+2. Goto your root:
+    croot
+3. Build hidl-gen if not already done:
+    make hidl-gen
+4. Generate C++ code from hidl files, example:
+    hidl-gen -o generated/ -L androidbp -r ihu:vendor/volvocars/hardware/signals/hidl_interface/ihu -r android.hidl:system/libhidl/transport ihu.signals@1.0
+    hidl-gen -o generated/ -L c++ -r ihu:vendor/volvocars/hardware/signals/hidl_interface/ihu -r android.hidl:system/libhidl/transport ihu.signals@1.0
+
+Note! It is important the defined package name defined in interface description(*.hal files) match the folder structure in which it is placed.

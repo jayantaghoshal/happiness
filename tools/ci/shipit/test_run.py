@@ -36,7 +36,7 @@ def vts_tradefed_run_module(module_name: str):
     if re.search(fail_pattern1, test_result):
         raise Exception("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
 
-    fail_pattern2 = "PASSED: [1-9]"
+    fail_pattern2 = "PASSED: [1-9][0-9]*"
     if not re.search(fail_pattern2, test_result):
         raise Exception("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
 

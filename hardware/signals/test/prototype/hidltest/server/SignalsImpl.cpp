@@ -1,4 +1,4 @@
-//#define LOG_TAG "hidl-test-server@2.0-service"
+#undef LOG_TAG
 #define LOG_TAG "hidl-test-server@1.0-service"
 
 #include "SignalsImpl.h"

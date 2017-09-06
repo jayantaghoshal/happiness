@@ -1,0 +1,74 @@
+@startuml
+
+
+class DataElementFramework <<Singelton>>  {
+
+template<typename S> DataElemValue subscribe( INewDataElement* callback )
+
+template<typename S> DataElemValue get()
+
+template<typename S> void inject(const typename S::data_elem_type& deValue, long long timestamp )
+
+template<typename S> void injectError( int errorCode, long long timestamp )
+
+void unsubscribe( const std::string& name, INewDataElement* callback );
+}
+
+together {
+	class IDataElementCommBus<<Interface>>{
+	virtual void setNewDataElementHandler(std::function<void(const std::string& name, const QByteArray& payload)>&& newDataElementCallback)
+	virtual void send(const std::string& name, const QByteArray& payload, autosar::Dir dir)
+	virtual void addName(autosar::Dir dir, const std::string& name)
+	}
+
+	class DataElementCommBusMQTT {
+	}
+
+	class DataElementCommBusDBUS {
+	}
+
+}
+
+
+
+
+class DataElemValueBase<<interface>>{
+	virtual QByteArray serialize() const = 0;
+	virtual void deserialize(const QByteArray& ba) = 0;
+	virtual std::string name() const = 0;
+	virtual autosar::Dir direction() const = 0;
+}
+
+class DESender{
+   void send( const typename S::data_elem_type& deValue );
+}
+
+class DEReceiver {
+void newDataElementValue(const DataElemValueBase& newvalue)
+void performCallback()
+void subscribe( const std::function<void()>& callback )
+}
+
+
+DataElementFramework o-- IDataElementCommBus
+IDataElementCommBus <|-- DataElementCommBusMQTT
+IDataElementCommBus <|-- DataElementCommBusDBUS
+
+
+
+DataElemValueBase <|-- DataElemValue
+
+DESender o-- DataElementFramework
+DEReceiver o-- DataElementFramework
+
+note "These are the classes that is used by the applications.\n They instatiate one of these classes(depending of if it is a in or out signal) \n with the AutoSAR type as template parameter" as N1
+DESender -- N1
+DEReceiver -- N1
+
+note "Implements the client interface of DBUS used in the applications.\n Uses sd-bus implementation to write and read properties from the dbus server" as N2
+DataElementCommBusDBUS -- N2
+
+
+@enduml
+
+

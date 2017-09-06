@@ -1,10 +1,15 @@
-This module contains a client implementing the Vector FDX protocol over UDP sockets
-It also contains a parser for the FDX Description file to create a simple mapping from signal names to groupIDs.
+# FDX Client
+
+This module contains:
+
+* Client implementing the Vector FDX protocol over UDP sockets
+* Parser for the FDX Description file to create a simple mapping from signal names to groupIDs.
+* Parser combining the FDX Description file with data elements to create signal scaling functions.
 
 
-CANoe FDX (Fast Data eXchange) is a protocol to exchange data with a Vector CANoe simulation over UDP
+## CANoe FDX (Fast Data eXchange) is a protocol to exchange data with a Vector CANoe simulation over UDP
 
-    For detailed information, refer to Vector documentation.
+    For detailed information, refer to Vector documentation (included with installation of CANoe).
         CANoe FDX Protocol Version 1.8 PDF
 
     Supported commands are:
@@ -19,3 +24,10 @@ CANoe FDX (Fast Data eXchange) is a protocol to exchange data with a Vector CANo
 
     The FDX description file is a file mapping signal names to protocol identifiers,
     this file can be generated using the FDXDescriptionFileParser from SVN InfotainmentAOV tests.
+
+
+## For information how to set up
+
+https://c1.confluence.cm.volvocars.biz/display/IHUA/CI+-+Lab+setup#CI-Labsetup-InstallationofVectorhardware(oldmethod)
+
+https://c1.confluence.cm.volvocars.biz/display/IHUA/Setup+Blackbox+testing+for+flexray

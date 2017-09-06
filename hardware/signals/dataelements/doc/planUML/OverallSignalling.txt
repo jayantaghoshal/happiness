@@ -1,0 +1,34 @@
+@startuml
+participant Flexray
+participant VIP
+box "VSM" #LightBlue
+	participant AVMP
+	participant Dataelements1 as "Dataelements.so"
+	participant DBUS as "DBUS server"
+end box	
+
+box "Application1" #LightRed
+	participant Dataelements2 as "Dataelements.so"
+	participant AppLogic1 as "AppLogic"
+end box	
+
+box "Application2" #LightGreen
+	participant Dataelements3 as "Dataelements.so"
+	participant AppLogic2 as "AppLogic"
+end box	
+
+
+== Incoming signal ==
+AppLogic1 -> Dataelements2: SignalX.subscribe()
+AppLogic2 -> Dataelements3: SignalX.subscribe()
+Flexray -> VIP: SignalX(6)
+VIP -> AVMP: SignalX(OK,6)
+AVMP -> Dataelements1: SignalX.inject(6)
+Dataelements1 -> DBUS: write_property(SignalX,6)
+DBUS -> Dataelements2: property_changed(SignalX)
+Dataelements2 -> DBUS: read_property(SignalX)
+Dataelements2 -> AppLogic1: SignalX.callback
+AppLogic1 -> Dataelements2: SignalX.get()
+DBUS -> Dataelements3: property_changed(SignalX)
+@enduml
+

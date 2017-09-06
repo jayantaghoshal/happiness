@@ -1,0 +1,28 @@
+package ihu.signals@1.0;
+
+import ISignalsChangedCallback;
+
+/**
+* This interface is used by the clients and implemented in the server to send and receive flexray signals.
+* This interface is used internally within in the signals framework. 
+*/
+interface ISignals {
+
+    /**
+    * Subscribe for changes on the defined signal.
+    * This function will be called when signal data or state is changed 
+    */
+    subscribe(string signalName, Dir dir, ISignalsChangedCallback cb);
+    
+    /**
+    * Sends the signals with the specified signal name and data to the server 
+    */
+    oneway send(string signalname, Dir dir, string data);
+    
+    /**
+    * Receive the signal data for a spefified signal
+    */
+    get(string signalname) generates (string data, Dir dir);
+};
+
+

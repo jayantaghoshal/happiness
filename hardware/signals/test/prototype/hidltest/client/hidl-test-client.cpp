@@ -1,4 +1,5 @@
 
+#undef LOG_TAG
 #define LOG_TAG "hidl-test-client@1.0"
 #include <android/log.h>
 #include <hidl/HidlTransportSupport.h>
