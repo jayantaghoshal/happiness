@@ -72,6 +72,7 @@ cc_library_static {
     name: "libdataelements_unittest", 
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
+    export_generated_headers: ["libdataelements_crcgen"],
 
     srcs: [
         "src/dataelemvalue.cpp",
