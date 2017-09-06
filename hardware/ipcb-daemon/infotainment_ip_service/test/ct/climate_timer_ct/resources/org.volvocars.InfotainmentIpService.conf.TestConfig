@@ -1,0 +1,16 @@
+<!DOCTYPE busconfig PUBLIC
+ "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+   <!-- Only root can own the service -->
+   <policy user="root">
+        <allow own="org.volvocars.InfotainmentIpService"/>
+   </policy>
+   <!-- Any user can send to all of the interfaces.
+        TODO: Is this a good idea? -->
+   <policy context="default">
+       <allow own="org.volvocars.InfotainmentIpService"/>
+       <allow send_destination="org.volvocars.InfotainmentIpService"/>
+       <allow receive_sender="org.volvocars.InfotainmentIpService"/>
+   </policy>
+</busconfig>
