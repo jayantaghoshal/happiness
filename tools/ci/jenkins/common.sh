@@ -44,3 +44,8 @@ function ihu_update() {
     $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/ihu_update.py \
     --aosp_root_dir $REPO_ROOT_DIR --vip_port $vip_dev --mp_port $mp_dev
 }
+
+function repo_sync() {
+  local repos=$*
+  docker_run "repo sync --no-clone-bundle --current-branch -q -j8 $repos" || die "repo sync failed"
+}
