@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vehicle Signals Daemon unit test -->
+<configuration description="Config for VCC Vehicle Signals Daemon test cases">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="vsd_message_inject_unittest->/data/local/tmp/vsd_unittest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="vsd_message_inject_unittest" />
+        <option name="runtime-hint" value="1s" />
+    </test>
+</configuration>
