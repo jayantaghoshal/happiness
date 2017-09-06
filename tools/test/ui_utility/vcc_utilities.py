@@ -134,6 +134,12 @@ def make_mem_performance_measurement(measurement_number):
     """
     _parse_mem_measurement(subprocess.check_output("adb shell dumpsys meminfo -c", stderr=subprocess.STDOUT,shell=True), measurement_number)
 
+def make_mem_total_measurement():
+    """
+    Grabs an summary of memory usage
+    """
+    _parse_total_mem_measurement(subprocess.check_output("adb shell cat /proc/meminfo", stderr=subprocess.STDOUT,shell=True))
+
 def make_cpu_performance_measurement_per_process(measurement_number):
     result = "NA"
     try:
@@ -191,6 +197,10 @@ def _parse_mem_measurement(to_parse, measurement_number):
     print(to_parse)
     print("---END MEM MEASURE {0}---".format(measurement_number))
 
+def _parse_total_mem_measurement(to_parse):
+    print("---START TOTAL MEM MEASURE---")
+    print(to_parse)
+    print("---END TOTAL MEM MEASURE---")
 
 def _parse_graphics_measurement(to_parse, measurement_number):
     reader = to_parse.split('\n')

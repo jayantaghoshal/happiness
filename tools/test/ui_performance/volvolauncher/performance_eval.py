@@ -37,6 +37,7 @@ time.sleep(_anim_delay)
 # Measure ram usage before test start and then again at the end
 if _enable_mem:
     make_mem_performance_measurement(1)
+    make_mem_total_measurement()
 
 if _enable_cpu_proc:
     make_cpu_performance_measurement_per_process(1)
