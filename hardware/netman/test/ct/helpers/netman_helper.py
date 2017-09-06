@@ -5,6 +5,11 @@ import time
 import sys
 import os
 
+from os import listdir
+from os.path import join, isdir
+
+from vts.runners.host import const
+
 import re
 
 from base_helper import BaseHelper
@@ -82,6 +87,27 @@ class NetmanHelper(BaseHelper):
 
     def interface_up(self, interface):
         cmd = " ".join(["ifconfig", interface, "up"])
+        self.execute_cmd(cmd)
+
+    def is_interface_up(self, interface):
+        cmd = " ".join(["cat", "cat /sys/class/net/{}/operstate".format(interface)])
+        return self.execute_cmd(cmd) == "up"
+
+    def get_vcm_interface_name(self):
+        """
+        """
+        #
+        # TODO: Hard coded device path for now
+        #
+        path = "/sys/devices/pci0000:00/0000:00:13.0/0000:01:00.0/net"
+        cmd = "ls " + path
+        output = self.execute_cmd(cmd)
+        return output[const.STDOUT][0].rstrip() # return first line with eol stripped
+
+    def rename_interface(self, old_interface_name, new_interface_name):
+        if self.is_interface_up(old_interface_name):
+            raise ValueError("Error: Cannot rename {} when interface is up.".format(old_interface_name))
+        cmd = " ".join(["ip", "link", "set", old_interface_name, "name", new_interface_name])
         self.execute_cmd(cmd)
 
     def _parse_ip_address(self, ifconfig_output):
