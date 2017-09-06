@@ -42,7 +42,11 @@ def _generateFpsGraph(lines):
         xVal = int(match.group(1))
         yVal = int(match.group(2))
         if xVal < _num_measures:
-            _drawRect(img, xVal*4-3, _graph_height-yVal*4, xVal*4-1, _graph_height, _red_color)
+            if yVal>16:
+                _drawRect(img, xVal*4-3, _graph_height-yVal*4, xVal*4-1, _graph_height, _red_color)
+            else:
+                _drawRect(img, xVal*4-3, _graph_height-yVal*4, xVal*4-1, _graph_height, _dark_green_color)
+
 
     img.save(_result_folder + '/frame_performance_img.png', 'png')
 
@@ -187,8 +191,8 @@ def _extract_total_mem_usage(lines):
             toReturn += "<tr><td>" + str(line) + "</td></tr>\n"
     toReturn = toReturn + "</table>\n"
     percent_free = float(freeValue)/totalValue
-    _drawRect(img, 0, int(_graph_height-percent_free*_graph_height), _mem_graph_width, _graph_height, _red_color)
-    _drawRect(img, 0, 0, _mem_graph_width, int(_graph_height*(1.0-percent_free)), _dark_green_color)
+    _drawRect(img, 0, int(_graph_height-(1.0-percent_free)*_graph_height), _mem_graph_width, _graph_height, _red_color)
+    _drawRect(img, 0, 0, _mem_graph_width, int(_graph_height*(percent_free)), _dark_green_color)
 
     img.save(_result_folder + '/'+imageReturned, 'png')
     return toReturn, imageReturned, totalValue, freeValue
@@ -206,17 +210,18 @@ def _generateMainHtml(lines):
     f.write('Each graph is clickable for additional details.\n')
     f.write('<table><tr valign="top"><td valign="top">\n')
     f.write('<H2>Graphics</H2>\n')
-    f.write('Shows valid frames only, green is objective line for 60fps target<br>\n')
+    f.write('Shows valid frames only, yellow marker indicates 60fps target (16ms)<br>\n')
     f.write('<a href="graphics.html"><img src="frame_performance_img.png" border=1/></a><br>\n')
-    f.write('<div class="color-box" style="background-color: #CDBB79;"></div>Target time for one frame render (16ms)<br>\n')
-    f.write('<div class="color-box" style="background-color: #B7695C;"></div>Frame rendering time<br>\n')
+    f.write('<div class="color-box" style="background-color: #CDBB79;"></div>Target time for one frame to render (16ms)<br>\n')
+    f.write('<div class="color-box" style="background-color: #B7695C;"></div>Frame rendering failed (>16ms)<br>\n')
+    f.write('<div class="color-box" style="background-color: #51A39D;"></div>Frame rendering ok<br>\n')
     f.write('</td><td><H2>CPU</H2>\n')
     f.write('First bar is average for all CPUs the rest is the individual cores<br>\n')
     f.write('<a href="cpu.html"><img src="' + cpu_image + '"></a><br>\n')
     f.write('<div class="color-box" style="background-color: #51A39D; left: 20px;margin-right: 30px;"></div>User<br>\n')
     f.write('<div class="color-box" style="background-color: #CDBB79; left: 20px;margin-right: 30px;"></div>Nice<br>\n')
     f.write('<div class="color-box" style="background-color: #B7695C; left: 20px;margin-right: 30px;"></div>Kernel<br>\n')
-    f.write('</td><td><H2>Memory ' + str(int(100.0*(1.0-float(free)/float(total)))) + '% free</H2>\n')
+    f.write('</td><td><H2>Memory ' + str(int(100.0*(float(free)/float(total)))) + '% free</H2>\n')
     f.write('Total memory usage, green is free memory<br>\n')
     f.write('<a href="mem.html"><img src=' + mem_image + '></a><br>')
     f.write('<div class="color-box" style="background-color: #51A39D;"></div>Free memory<br>\n')
