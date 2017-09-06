@@ -1,7 +1,0 @@
-service infotainment-ip-service /vendor/bin/hw/infotainment-ip-service
-    class main
-    oneshot
-    user root
-    group root
-    seclabel u:r:infotainment-ip-service:s0
-

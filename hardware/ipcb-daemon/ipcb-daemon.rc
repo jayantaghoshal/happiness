@@ -1,0 +1,7 @@
+service ipcb-daemon /vendor/bin/hw/ipcb-daemon
+    class main
+    oneshot
+    user root
+    group root
+    seclabel u:r:ipcb-daemon:s0
+
