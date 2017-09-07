@@ -1,7 +1,0 @@
-package vcc.vcctest@1.0;
-
-interface ISignalsCallback {
-    signalChanged(string signalName);
-};
-
-
