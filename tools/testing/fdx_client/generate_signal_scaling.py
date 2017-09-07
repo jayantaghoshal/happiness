@@ -171,27 +171,36 @@ def main():
         f.write("# Signal scaling database\n")
         f.write("# --- AUTO GENERATED ---\n")
         f.write("# Inputs: %s\n" %  " \n#    ".join(sys.argv))
+
+        f.write("import os\n")
         f.write("from fdx import fdx_client\n")
         f.write("from fdx import fdx_description_file_parser\n")
-        f.write("from . import config\n")
         code = """
 class FrSignalInterface:
     def __init__(self):
+
+        self.connected = False
+
         (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
-                config.fdx_description_file_path)
+            os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../FDXDescriptionFile.xml"))
+                
         self.group_id_map = {g.group_id: g for g in self.groups}
 
         def data_exchange(self, group_id, data):
             group = self.group_id_map[group_id]
             group.receive_data(data)
 
-        try:
-            self.connection = fdx_client.FDXConnection(data_exchange, config.vector_fdx_ip, config.vector_fdx_port)
-            self.connection.send_start()
-            self.connection.confirmed_start()
-        except:
-            self.connection.close()
-            raise
+        if "VECTOR_FDX_PORT" and "VECTOR_FDX_IP" in os.environ:
+            try:
+                self.connection = fdx_client.FDXConnection(data_exchange, os.environ['VECTOR_FDX_IP'], int(os.environ['VECTOR_FDX_PORT']))
+                self.connection.send_start()
+                self.connection.confirmed_start()
+                self.connected = True
+            except:
+                self.connection.close()
+                raise
+        else:
+            print "Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to tagret"
 
 
 """
