@@ -9,25 +9,24 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
-  <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars_apps/VolvoLauncher" revision="research/o"/>
+  <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars_apps/VolvoLauncher" revision="70db4bf25235134145558656f4dc50765a5a4243"/>
 
   <!-- AOSP Changed by Volvo Cars -->
   <remove-project name="aosp/platform/frameworks/base"/>
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="research/o"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
   <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
-  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="research/o"/>
+  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="bc820c71d876e99af286dbdd53e1e224d7bba732"/>
   <remove-project name="aosp/platform/frameworks/support"/>
-  <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="research/o"/>
+  <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="bb7e331b58f05b0cb71c8a022e495c917145674c"/>
   <remove-project name="aosp/platform/packages/services/Car"/>
-  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="research/o"/>
+  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="5b085f3c9ff37b6d80db7a9115386bfd1cb44e54"/>
 
   <!-- Volvo Cars partner apps -->
   <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
-  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars_apps/Spotify" revision="vcc/aae/googleio_ww02"/>
+  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars_apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
 
   <!-- Google services -->
   <!-- TODO: Temporarily disabled while waiting for O compatible version
-  <project name="vendor/google/apps/GoogleServices" path="vendor/google/apps/GoogleServices" revision="vcc/aae/googleio_ww02"/>
   -->
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
