@@ -51,3 +51,42 @@ function repo_sync() {
   local repos=$*
   docker_run "repo sync --no-clone-bundle --current-branch -q -j8 $repos" || die "repo sync failed"
 }
+
+# TODO: Add to build system, should replace *_test_build.sh
+function build_tests {
+    local build_sh_list dir script
+    build_sh_list=$(find vendor/volvocars -type l -name '*_test_build.sh')
+
+    for build_sh in $build_sh_list; do
+        dir=$(dirname "${build_sh}")
+        script=$(basename "${build_sh}")
+        # shellcheck disable=SC2086
+        echo "Calling ${script} in directory $(realpath ${dir})"
+        pushd "${dir}" >> /dev/null
+        "./${script}" || die "Failed to build tests!"
+        popd > /dev/null
+    done
+}
+
+# TODO: Replace with using VTS/Tradefed test plans
+function run_tests {
+    local run_sh_list status dir script
+    run_sh_list=$(find vendor/volvocars -type l -name '*_test_run.sh')
+    status=0
+    for run_sh in $run_sh_list; do
+        dir=$(dirname "${run_sh}")
+        script=$(basename "${run_sh}")
+        # shellcheck disable=SC2086
+        echo "Calling ${script} in directory $(realpath ${dir})"
+        pushd "${dir}" >> /dev/null
+        "./${script}"
+        if [ $status -eq 0 ]; then
+            status=$?
+        fi
+        popd > /dev/null
+    done
+    
+    if [ $status -eq 0 ]; then
+        die "Test failed!"
+    fi
+}

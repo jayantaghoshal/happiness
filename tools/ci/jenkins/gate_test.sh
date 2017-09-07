@@ -7,7 +7,7 @@ source "${SCRIPT_DIR}/common.sh"
 repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/services/Car aosp/device/sample
 
 # Pull out files uploaded to Artifactory in gate_build.sh.
-OUT_ARCHIVE=out.tar.gz
+OUT_ARCHIVE=out.tgz
 rm -rf out ${OUT_ARCHIVE}
 
 docker_run artifactory pull ihu_gate_build "${ZUUL_CHANGE_IDS}" ${OUT_ARCHIVE} \
@@ -18,5 +18,5 @@ rm ${OUT_ARCHIVE}
 
 ihu_update
 
-# Dummy test case to test whole CI chain down to device
-# ./out/host/linux-x86/bin/adb shell ls
+# Run Unit and Component tests for vendor/volvocars
+# run_tests
