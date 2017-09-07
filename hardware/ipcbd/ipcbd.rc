@@ -1,0 +1,7 @@
+service ipcbd /vendor/bin/hw/ipcbd
+    class main
+    oneshot
+    user root
+    group root
+    seclabel u:r:ipcbd:s0
+
