@@ -43,15 +43,26 @@ SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir){
 
     const auto key = make_key(signalname, dir);
     signalStorage[key] = data;
-    auto iter = subscriptions.find(key);
-    if (iter != subscriptions.end()) {
-        auto& subList = iter->second;
-        for (::android::sp<ISignalsChangedCallback>& sub : subList) {
+    auto map_iter = subscriptions.find(key);
+    if (map_iter != subscriptions.end()) {
+        auto& subList = map_iter->second;
+        
+        for (auto subList_it = subList.begin(); subList_it != subList.end(); ) {        
+            auto sub = *subList_it;
             auto result = sub->signalChanged(signalname, dir, data);
+            
+            if (result.isDeadObject()) {
+                subList_it = subList.erase(subList_it);                
+                continue;
+            }
+            else 
+            {
+                ++subList_it;
+            }
+
             if (!result.isOk())
             {
-                //TODO: Should we remove the subscription?
-                ALOGE("Sending signalChanged notification failed, name: %s", signalname.c_str());
+                ALOGE("Send signalChanged notification failed, name: %s, description: %s", signalname.c_str(), result.description().c_str());
             }
         }
     }
@@ -76,10 +87,7 @@ SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir){
     }
     else
     {
-        //TODO: Not sure what to do here, if this can even happen..?
-        const std::string& value = R"({"timestamp":0, state:0, errorCode: 1 }")";
-        ALOGV("SignalsServer::get value not existing, sending dummy: %s", value.c_str());
-        _hidl_cb(value, dir);
+        _hidl_cb("", dir);
     }
 
     return ::android::hardware::Return<void>();
