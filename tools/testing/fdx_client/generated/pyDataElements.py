@@ -5,27 +5,35 @@
 #    --cominputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com.arxml 
 #    --fdxdescriptionfile=FDXDescriptionFile.xml 
 #    --out=generated/pyDataElements.py
+import os
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
-from . import config
 
 class FrSignalInterface:
     def __init__(self):
+
+        self.connected = False
+
         (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
-                config.fdx_description_file_path)
+            os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../FDXDescriptionFile.xml"))
+                
         self.group_id_map = {g.group_id: g for g in self.groups}
 
         def data_exchange(self, group_id, data):
             group = self.group_id_map[group_id]
             group.receive_data(data)
 
-        try:
-            self.connection = fdx_client.FDXConnection(data_exchange, config.vector_fdx_ip, config.vector_fdx_port)
-            self.connection.send_start()
-            self.connection.confirmed_start()
-        except:
-            self.connection.close()
-            raise
+        if "VECTOR_FDX_PORT" and "VECTOR_FDX_IP" in os.environ:
+            try:
+                self.connection = fdx_client.FDXConnection(data_exchange, os.environ['VECTOR_FDX_IP'], int(os.environ['VECTOR_FDX_PORT']))
+                self.connection.send_start()
+                self.connection.confirmed_start()
+                self.connected = True
+            except:
+                self.connection.close()
+                raise
+        else:
+            print "Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to tagret"
 
 
         name_to_item_map = { i.name : i for i in self.signal_list }
