@@ -1,6 +1,9 @@
 # Netman execution rights
 /system/bin/netman u:object_r:netman_exec:s0
 
+# IplmD execution rights
+/vendor/bin/hw/iplmd u:object_r:iplmd_exec:s0
+
 /vendor/bin/hw/infotainment-ip-service u:object_r:infotainment-ip-service_exec:s0
 
 
