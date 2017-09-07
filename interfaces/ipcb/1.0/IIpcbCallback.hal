@@ -1,4 +1,4 @@
-package android.vendor.volvocars.ipcb@1.0;
+package vendor.volvocars.hardware.ipcb@1.0;
 
 interface IIpcbCallback
 {
