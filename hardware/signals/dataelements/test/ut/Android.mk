@@ -3,12 +3,14 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE := VtsDEUnitTest
 
-LOCAL_SRC_FILES := unittest.cpp
+LOCAL_SRC_FILES := unittest.cpp \
+                   server_test.cpp
 
 LOCAL_C_INCLUDES := ../../include \
                     ../../generated
 
-LOCAL_STATIC_LIBRARIES += libdataelements_unittest 
+LOCAL_STATIC_LIBRARIES += libdataelements_unittest \
+                        libgmock
 
 LOCAL_SHARED_LIBRARIES :=   liblog \
                             libcutils \
@@ -17,7 +19,8 @@ LOCAL_SHARED_LIBRARIES :=   liblog \
                             libhidltransport \
                             liblog \
                             libutils \
-                            libhwbinder
+                            libhwbinder \
+                            vendor.volvocars.hardware.signals@1.0
 
 LOCAL_CPPFLAGS := -std=c++1z \
                   -g \

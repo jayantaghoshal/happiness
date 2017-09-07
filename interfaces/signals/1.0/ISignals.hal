@@ -8,11 +8,14 @@ import ISignalsChangedCallback;
 */
 interface ISignals {
 
+    
+
     /**
     * Subscribe for changes on the defined signal.
     * This function will be called when signal data or state is changed 
+    * Filters are case sensitive and can contain *-wildcards
     */
-    subscribe(string signalName, Dir dir, ISignalsChangedCallback cb);
+    subscribe(string filter, Dir dir, ISignalsChangedCallback cb);
     
     /**
     * Sends the signals with the specified signal name and data to the server 
@@ -22,7 +25,13 @@ interface ISignals {
     /**
     * Receive the signal data for a spefified signal
     */
-    get(string signalname) generates (string data, Dir dir);
+    get(string signalname, Dir dir) generates (string data);
+
+    /**
+    * Receive the signal data for a all signals matching filter
+    * Filters are case sensitive and can contain *-wildcards
+    */
+    get_all(string filter, Dir dir) generates (vec<Result> data);
 };
 
 

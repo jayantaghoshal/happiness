@@ -9,3 +9,10 @@ enum Dir : uint16_t {
          OUT = 1,
          INTERNAL = 2
 };
+
+
+struct Result {
+    string name;
+    Dir dir;
+    string value;
+};
