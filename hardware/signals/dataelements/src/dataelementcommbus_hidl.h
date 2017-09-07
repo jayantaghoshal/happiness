@@ -1,15 +1,14 @@
 #pragma once
 
 #include "dataelementcommbus.h"
-#include "ihu/signals/1.0/ISignals.h"
-
+#include <vendor/volvocars/hardware/signals/1.0/ISignals.h>
 #include <functional>
 #include <map>
 #include <mutex>
 #include <string>
 
 namespace andrHw = ::android::hardware;
-namespace dataElemHidl = ihu::signals::V1_0;
+namespace dataElemHidl = vendor::volvocars::hardware::signals::V1_0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 /// Hidl implementation of the DataElementCommBus

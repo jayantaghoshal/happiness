@@ -1,1 +1,5 @@
-subdirs = ["hidl_interface/ihu/signals/1.0", "dataelements"]
+subdirs = [
+    "dataelements",
+    "hidl_server",
+    "vehiclesignalsdaemon"
+]

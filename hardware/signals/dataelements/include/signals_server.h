@@ -1,14 +1,19 @@
 #pragma once
-#include "ihu/signals/1.0/ISignals.h"
-#include "ihu/signals/1.0/ISignalsChangedCallback.h"
-#include "ihu/signals/1.0/types.h"
+#include <vendor/volvocars/hardware/signals/1.0/ISignals.h>
+#include <vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h>
+#include <vendor/volvocars/hardware/signals/1.0/types.h>
 #include <vector>
 #include <utility>
 
-namespace ihu {
+namespace vendor {
+namespace volvocars {
+namespace hardware {
 namespace signals {
 namespace V1_0 {
-class SignalsServer final : public ihu::signals::V1_0::ISignals
+namespace implementation {
+
+
+class SignalsServer final : public ISignals
 {    
 private:
     using signal_key = std::pair<std::string, Dir>;
@@ -34,6 +39,9 @@ public:
         get_cb _hidl_cb) override;
 
 };
+}
+}
+}
 }
 }
 }

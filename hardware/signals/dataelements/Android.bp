@@ -46,7 +46,7 @@ cc_library_shared {
         "libutils",
         "libhwbinder",
         "android.hidl.base@1.0",
-        "ihu.signals@1.0",
+        "vendor.volvocars.hardware.signals@1.0",
     ],
 
     local_include_dirs: [
@@ -73,6 +73,7 @@ cc_library_static {
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
     export_generated_headers: ["libdataelements_crcgen"],
+    tidy: true,
 
     srcs: [
         "src/dataelemvalue.cpp",

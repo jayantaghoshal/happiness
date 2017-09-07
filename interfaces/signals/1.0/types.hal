@@ -1,4 +1,4 @@
-package ihu.signals@1.0;
+package vendor.volvocars.hardware.signals@1.0;
 
 /**
  *Enum to indicate signal direction

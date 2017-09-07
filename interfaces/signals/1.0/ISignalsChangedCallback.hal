@@ -1,4 +1,4 @@
-package ihu.signals@1.0;
+package vendor.volvocars.hardware.signals@1.0;
 
 /**
 * This interface is implemented by the clients to get events from the server side about changes in signals

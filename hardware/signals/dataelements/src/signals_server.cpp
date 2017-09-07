@@ -5,13 +5,14 @@
 #undef LOG_TAG
 #define LOG_TAG "DataElementServer"
 
-using namespace ihu::signals::V1_0;
+using namespace vendor::volvocars::hardware::signals::V1_0;
+using namespace vendor::volvocars::hardware::signals::V1_0::implementation;
 
 SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir){
     return std::make_pair(name, dir);
 }
 
-::android::hardware::Return<void> ihu::signals::V1_0::SignalsServer::subscribe(
+::android::hardware::Return<void> SignalsServer::subscribe(
     const ::android::hardware::hidl_string& signalName,
     Dir dir,
     const ::android::sp<ISignalsChangedCallback>& cb)
@@ -33,7 +34,7 @@ SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir){
     return ::android::hardware::Return<void>();
 }
 
-::android::hardware::Return<void> ihu::signals::V1_0::SignalsServer::send(
+::android::hardware::Return<void> SignalsServer::send(
     const ::android::hardware::hidl_string& signalname,
     Dir dir,
     const ::android::hardware::hidl_string& data)
@@ -69,7 +70,7 @@ SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir){
     return ::android::hardware::Return<void>();
 }
 
-::android::hardware::Return<void> ihu::signals::V1_0::SignalsServer::get(
+::android::hardware::Return<void> SignalsServer::get(
     const ::android::hardware::hidl_string& signalname,
     get_cb _hidl_cb)
 {

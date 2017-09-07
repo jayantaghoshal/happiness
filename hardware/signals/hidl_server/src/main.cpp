@@ -5,7 +5,7 @@
 #undef LOG_TAG
 #define LOG_TAG "SignalsHidlServer"
 
-using namespace ihu::signals::V1_0;
+using namespace vendor::volvocars::hardware::signals::V1_0::implementation;
 
 int main(int argc, char* argv[])
 {

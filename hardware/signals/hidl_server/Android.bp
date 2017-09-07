@@ -1,0 +1,38 @@
+cc_binary {
+    name: "dataelements-hidl-server", 
+    init_rc: ["dataelements-hidl-server.rc"],
+    proprietary: true,
+    relative_install_path: "hw",
+    vendor: true,
+    tidy: true,
+
+    srcs: [
+        "src/main.cpp"
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined"
+    ],
+
+    shared_libs: [
+        "libc++", 
+        "liblog",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libdataelements",
+        "vendor.volvocars.hardware.signals@1.0",
+        "libutils",
+        "android.hidl.base@1.0"
+    ],
+
+    local_include_dirs: [
+        "src"
+    ],
+
+    // We only build for 64 bit.
+    compile_multilib: "64",
+}
