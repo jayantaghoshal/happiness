@@ -1,0 +1,6 @@
+service iplmd /vendor/bin/hw/iplmd
+    class main
+    oneshot
+    user root
+    group root
+    seclabel u:r:iplmd:s0
