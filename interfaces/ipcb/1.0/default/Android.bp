@@ -1,5 +1,5 @@
 cc_library_shared {
-    name: "android.vendor.volvocars.ipcb@1.0-impl",
+    name: "vendor.volvocars.hardware.ipcb@1.0-impl",
     relative_install_path: "hw",
     proprietary: true,
     srcs: [
@@ -9,7 +9,7 @@ cc_library_shared {
         "libhidlbase",
         "libhidltransport",
         "libutils",
-        "android.vendor.volvocars.ipcb@1.0",
+        "vendor.volvocars.hardware.ipcb@1.0",
         "android.hidl.base@1.0",
     ],
 }

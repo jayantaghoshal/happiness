@@ -1,13 +1,13 @@
 #include "IpcbCallback.h"
 
-namespace android {
 namespace vendor {
 namespace volvocars {
+namespace hardware {
 namespace ipcb {
 namespace V1_0 {
 namespace implementation {
 
-// Methods from ::android::vendor::volvocars::ipcb::V1_0::IIpcbCallback follow.
+// Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
 Return<void> IpcbCallback::onMessageRcvd(const Msg& msg) {
     // TODO implement
     return Void();
@@ -23,6 +23,6 @@ IIpcbCallback* HIDL_FETCH_IIpcbCallback(const char* /* name */) {
 }  // namespace implementation
 }  // namespace V1_0
 }  // namespace ipcb
+}  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor
-}  // namespace android

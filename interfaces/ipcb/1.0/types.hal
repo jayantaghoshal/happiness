@@ -1,11 +1,28 @@
-package android.vendor.volvocars.ipcb@1.0;
+package vendor.volvocars.hardware.ipcb@1.0;
+
+enum OperationType : uint8_t
+{
+    /**
+        The values of the OperationType enums below match those used by ip command bus
+    */
+    REQUEST = 0x00,
+    SETREQUEST_NORETURN = 0x01,
+    SETREQUEST = 0x02,
+    NOTIFICATION_REQUEST = 0x03,
+    RESPONSE = 0x04,
+    NOTIFICATION = 0x05,
+    NOTIFICATION_CYCLIC = 0x06,
+    ACK = 0x70,
+    ERROR = 0xE0,
+    UNDEFINED = 0xFF
+};
 
 struct Header
 {
-    uint16_t serviceID;
-    uint16_t operationID;
-    uint8_t operationType;
-    uint8_t seqNbr;
+    uint16_t      serviceID;
+    uint16_t      operationID;
+    OperationType operationType;
+    uint8_t       seqNbr;
 };
 
 struct Msg
