@@ -1,4 +1,4 @@
-service vehicle-signals-daemon /vendor/bin/hw/vehicle-signals-daemon
+service vehicle-signals-daemon /vendor/bin/hw/vehicle-signals-daemon /dev/ttyVSM 921600
     class main
     user root
     group root

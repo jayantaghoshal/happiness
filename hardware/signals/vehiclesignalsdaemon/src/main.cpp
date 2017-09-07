@@ -1,8 +1,7 @@
+#include <cutils/log.h>
+#include <chrono>
 #include <iostream>
 #include <thread>
-#include <chrono>
-#include <cutils/log.h>
-
 
 #include <cutils/log.h>
 #include <string.h>
@@ -19,8 +18,6 @@
 #undef LOG_TAG
 #define LOG_TAG "VSD"
 
-// static void printStartupErrorMessage(ECD_Error_Codes error, char* uartPath);
-
 int main(int argc, char* argv[])
 {
   bool startOnlyDBUS = false;
@@ -28,18 +25,9 @@ int main(int argc, char* argv[])
   if (3 > argc)
   {
     ALOGE("Serial port and/or UART speed not specified when starting the Vehicle Signals Manager.");
-
-    // log_error() << "";
     return EXIT_FAILURE;
   }
-  else if (3 == argc || 4 == argc)
-  {
-    if (4 == argc && strcmp(argv[3], "onlydbus") == 0)
-    {
-      startOnlyDBUS = true;
-    }
-  }
-  else
+  else if (3 < argc)
   {
     ALOGE(
         "Wrong number of parameters specified when starting "
@@ -47,39 +35,29 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  // if (!DBUSSignalServer::start())
+  ALOGI("VSM communication service is starting....");
+
+  // Initialize the VSM module. After this function is called the VSM
+  // will be able to handle injected messages from lower layers
+  vsm_init();
+
+  // Init desip with path to UART diver and UART speed
+  bool result = initDesip(argv[1], argv[2]);
+
+  if (!result)
   {
-    ALOGE("Failed to start DBUS server");
+    ALOGE("Failed to initialize DESIP with uart=%s and speed=%s", argv[1], argv[2]);
     return EXIT_FAILURE;
   }
 
-  if (!startOnlyDBUS)
+  // Start the VSM module. After this function is called
+  // the VSM module will sink messages to lower layers
+  vsm_start();
+
+  ALOGI("Flexray/LIN vehicle signals communication service calls app.exec().");
+
+  while (true)
   {
-    ALOGI("VSM communication service is starting...");
-
-    // Initialize the VSM module. After this function is called the VSM
-    // will be able to handle injected messages from lower layers
-    vsm_init();
-
-    bool result = initDesip(argv[1], argv[2]);
-
-    if (!result)
-    {
-      return EXIT_FAILURE;
-    }
-
-    // Start the VSM module. After this function is called
-    // the VSM module will sink messages to lower layers
-    vsm_start();
-
-    ALOGI("Flexray/LIN vehicle signals communication service calls app.exec().");
-  }
-
-  while(true) {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    ALOGD("VSD Running");
-    std::cout << "vsd running" << std::endl; 
-  }    
-    
+  }
 }
-
