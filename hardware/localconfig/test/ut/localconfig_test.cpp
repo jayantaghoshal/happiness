@@ -58,3 +58,16 @@ TEST(LocalConfigTest, GetDouble)
   EXPECT_THROW(vcc::localconfig::GetDouble("NOT_EXISTING"), std::runtime_error);
   EXPECT_THROW(vcc::localconfig::GetDouble(kTestStringKey), std::runtime_error);
 }
+
+TEST(LocalConfigTest, GetArray)
+{
+  vcc::localconfig::TestInit(kGoodTestFilePath);
+  EXPECT_EQ(std::vector<std::string>({"test1"}), vcc::localconfig::GetStringArray("strarray1"));
+  EXPECT_EQ(std::vector<std::string>({"test1"}), vcc::localconfig::GetStringArray("strarray2", "substrarray"));
+  EXPECT_EQ(std::vector<std::string>({"rule1", "rule2"}),
+            vcc::localconfig::GetStringArray("FIREWALL", "NAT_TABLE", "RULES"));
+  EXPECT_EQ(std::vector<std::string>(), vcc::localconfig::GetStringArray("FIREWALL", "NAT_TABLE", "CHAINS"));
+  EXPECT_THROW(vcc::localconfig::GetStringArray("strarray2", "substrarray2"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetStringArray("strarray3", "substrarray3"), std::runtime_error);
+  EXPECT_THROW(vcc::localconfig::GetStringArray("DOES_NOT_EXIST"), std::runtime_error);
+}
