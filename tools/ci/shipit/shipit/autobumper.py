@@ -1,11 +1,21 @@
 import os
 import glob
-import shutil
+import logging
 from . import manifest
 from . import process_tools
 from . import git
-import logging
 
+
+
+def check_manifest(aosp_root_dir: str, branch: str):
+    # Zuul will have already cloned vendor/volvocars
+
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
+
+    vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
+    for manifest_template_file in vcc_manifest_files:
+        manifest.verify_no_floating_branches(manifest_template_file, branch)
 
 def on_commit(aosp_root_dir: str, branch: str):
     # Zuul will have already cloned vendor/volvocars
