@@ -79,6 +79,7 @@ cat >$SCRIPT_FILE <<EOL
 #!/bin/bash
 if [ -f ${BUILD_ENV_SETUP} ]; then
    source ${BUILD_ENV_SETUP}
+   lunch ihu_vcc-eng
 fi
 if [ -f ${VOLVO_ENV_SETUP} ]; then
    source ${VOLVO_ENV_SETUP}
