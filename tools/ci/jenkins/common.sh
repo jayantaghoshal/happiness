@@ -38,6 +38,16 @@ function docker_run() {
  $*
 }
 
+# Make sure there are no other Docker containers left running on slaves that
+# might interfer with current job. E.g. it is promplematic to have an adb server
+# running in another container if we want to invoke it in the current job.
+function docker_killall() {
+  local containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1)
+  if [ -n "$containers" ]; then
+    docker kill $containers
+  fi
+}
+
 function ihu_update() {
   local mp_dev=/dev/ttyMP
   local vip_dev=/dev/ttyVIP
