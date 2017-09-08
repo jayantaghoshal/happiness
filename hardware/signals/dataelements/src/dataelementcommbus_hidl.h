@@ -1,11 +1,11 @@
 #pragma once
 
-#include "dataelementcommbus.h"
 #include <vendor/volvocars/hardware/signals/1.0/ISignals.h>
 #include <functional>
 #include <map>
 #include <mutex>
 #include <string>
+#include "dataelementcommbus.h"
 
 namespace andrHw = ::android::hardware;
 namespace dataElemHidl = vendor::volvocars::hardware::signals::V1_0;
@@ -45,5 +45,5 @@ class DataElementCommBusHIDL final : public IDataElementCommBus,
   ::android::sp<dataElemHidl::ISignals> vsd_proxy_;
   std::function<void(const std::string& name, const std::string& payload)> dataElementCallback_;
 
-  static const uint ISIGNAL_HAL_DEATH_COOKIE = 0xDEAD;  // Cookie sent for ISignal hal death notification.
+  static const uint64_t ISIGNAL_HAL_DEATH_COOKIE = 0xDEAD;  // Cookie sent for ISignal hal death notification.
 };

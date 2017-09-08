@@ -36,16 +36,16 @@ void DataElementCommBusHIDL::sendWithoutProxyMutex(const std::string& name, cons
                                                    autosar::Dir dir,
                                                    ::android::sp<dataElemHidl::ISignals> vsd_proxy_local)
 {
-  ALOGV("Sending name: %s, payload: %s", name.c_str(), payload.c_str());
-
   if (vsd_proxy_local != nullptr)
   {
-    if (vsd_proxy_local->send(name, static_cast<dataElemHidl::Dir>(dir), payload).isOk())
+    auto result = vsd_proxy_local->send(name, static_cast<dataElemHidl::Dir>(dir), payload);
+    if (result.isOk())
     {
       return;
     }
 
-    ALOGW("Error writing property: %s. Message will be send if service becomes available", name.c_str());
+    ALOGW("Error %s while writing property: %s. Message will be send if service becomes available",
+          result.description().c_str(), name.c_str());
 
     // If we fail to write messages it might be that the service is not up yet
     // put it in the map to try later on
@@ -62,12 +62,13 @@ void DataElementCommBusHIDL::setNewDataElementHandler(
 {
   bool doOnce = dataElementCallback_ == nullptr;
   dataElementCallback_ = std::move(newDataElementCallback);
+  ALOGI("New dataElementHandler set");
 
   if (doOnce)
   {
-    // Try to connect now, after the dataElementCallback_ is in place, to avoid the need for mutex lock for the
-    // callback.
-    dataElemHidl::ISignals::registerForNotifications("ihu.signals@1.0::ISignals", this);
+    ALOGI("Register for notifications for signaling service to come up");
+    dataElemHidl::ISignals::registerForNotifications("default", this);
+    connectToVsdProxyAndResend();
   }
 }
 
@@ -104,7 +105,7 @@ void DataElementCommBusHIDL::resendMessages(::android::sp<dataElemHidl::ISignals
     auto msgName = std::get<0>(msg.first);
     auto msgDir = std::get<1>(msg.first);
     auto payload = msg.second;
-    ALOGV("Resending: %s", msgName.c_str());
+    ALOGD("Resending: %s", msgName.c_str());
     sendWithoutProxyMutex(msgName, payload, msgDir, vsd_proxy_local);
   }
 }
@@ -114,17 +115,23 @@ void DataElementCommBusHIDL::connectToVsdProxyAndResend()
   ::android::sp<dataElemHidl::ISignals> vsd_proxy_local;
   {  // lock scope
     std::lock_guard<std::mutex> lock(vsdProxyMutex_);
+    if (vsd_proxy_ != nullptr)
+    {
+      return;
+    }
     vsd_proxy_ = dataElemHidl::ISignals::getService();
     if (vsd_proxy_ == nullptr)
     {
       ALOGE("Could not contact ISignals HAL");
       return;
     }
-    if (!vsd_proxy_->linkToDeath(this, ISIGNAL_HAL_DEATH_COOKIE).isOk())
+    auto result = vsd_proxy_->linkToDeath(this, ISIGNAL_HAL_DEATH_COOKIE);
+    if (!result.isOk())
     {
-      ALOGE("Signaling service not available, link to death not possible");
+      ALOGE("Signaling service not available, link to death not possible: %s", result.description().c_str());
       return;
     }
+    ALOGI("Signaling service is up and registred as a proxy");
     vsd_proxy_local = vsd_proxy_;
   }
 
@@ -134,7 +141,7 @@ void DataElementCommBusHIDL::connectToVsdProxyAndResend()
 andrHw::Return<void> DataElementCommBusHIDL::onRegistration(const andrHw::hidl_string& fqName,
                                                             const andrHw::hidl_string& name, bool preexisting)
 {
-  ALOGI("Signal service (VSD) started");
+  ALOGI("Signal service started callback received");
   connectToVsdProxyAndResend();
   return andrHw::Void();
 }
@@ -143,9 +150,19 @@ void DataElementCommBusHIDL::serviceDied(uint64_t cookie, const android::wp<::an
 {
   {  // lock scope
     std::lock_guard<std::mutex> lock(vsdProxyMutex_);
+    if (cookie != ISIGNAL_HAL_DEATH_COOKIE || who != vsd_proxy_)
+    {
+      ALOGD(
+          "Service died callback received but cookie and/or \"who\" did not match this clients server. Cookie "
+          "received: %lu",
+          cookie);
+      return;
+    }
+
     vsd_proxy_ = nullptr;
   }
-  ALOGE("Signal service (VSD) died");
+
+  ALOGE("Signal service died callback received");
 }
 
 andrHw::Return<void> DataElementCommBusHIDL::signalChanged(const andrHw::hidl_string& signalName, dataElemHidl::Dir dir,
