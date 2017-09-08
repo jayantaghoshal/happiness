@@ -1,0 +1,62 @@
+# Jenkins job configurations for iCUP Android
+
+This directory contains Jenkins Job Builder configurations to set up
+Jenkins jobs required for iCUP Android.
+
+Most of the CI scripts are located inside the vendor/volvocars repository 
+and will be executed from there after the repository has been cloned.
+
+However, in order to first clone the repository and checkout the commit to verify, 
+some bootstrapping is required. Most of the code in these jobs are related to such.
+
+Once the bootstrap-scripts or the job template has been modified, it has to be pushed to Jenkins manually.
+
+
+## Installing Jenkins job builder
+
+See https://docs.openstack.org/infra/jenkins-job-builder/index.html
+
+
+## To test your config
+
+```bash
+jenkins-jobs test -o output ./jobs
+```
+
+## Downloading old configs:
+
+This can be useful if you want to diff your generated files with the existing config.
+
+```bash
+# User is CDSID
+# Get your token at https://icup_android.jenkins.cm.volvocars.biz/me/configure after logging in
+CDSID=
+TOKEN=
+JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_hourly_test ihu_image_build icup_android_manifest_bump)
+
+mkdir -p old
+for job in "${JOBS[@]}"; do
+    curl -s https://"$CDSID":"$TOKEN"@icup_android.jenkins.cm.volvocars.biz/job/"$job"/config.xml > old/"$job"
+done
+```
+
+
+## Pushing the config to Jenkins
+
+* User is CDSID
+* Get your token at https://icup_android.jenkins.cm.volvocars.biz/me/configure after logging in
+
+```bash
+jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs
+```
+
+## Quirks
+
+
+* The !include-raw command can't be used inline together with plain strings, we want to 
+share some common shell-functions across all jobs and then run some job-specific code.
+For the job-specific code to get access to the functions defined in the common-file, they
+must be in the same shell-section in jenkins. Hence some of the included files are just one-liners
+instead of inline which might look a bit odd. 
+
+* To keep the scripts analyzed by shellcheck they have the .sh file ending and #!/bin/bash

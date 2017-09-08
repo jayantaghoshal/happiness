@@ -1,0 +1,119 @@
+- defaults:
+    name: commit_job_defaults
+    project-type: freestyle
+    concurrent: false
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    parameters:
+        # Jenkins require parameters to be explicitly defined, otherwise they are removed
+        - string:
+            name: ZUUL_UUID
+        - string:
+            name: ZUUL_REF
+        - string:
+            name: ZUUL_COMMIT
+        - string:
+            name: ZUUL_PROJECT
+        - string:
+            name: ZUUL_PIPELINE
+        - string:
+            name: ZUUL_URL
+        - string:
+            name: BASE_LOG_PATH
+        - string:
+            name: LOG_PATH
+        - string:
+            name: ZUUL_VOTING
+        - string:
+            name: ZUUL_BRANCH
+        - string:
+            name: ZUUL_CHANGE
+        - string:
+            name: ZUUL_CHANGES
+        - string:
+            name: ZUUL_CHANGE_IDS
+        - string:
+            name: ZUUL_PATCHSET
+        - string:
+            name: ZUUL_OLDREV
+        - string:
+            name: ZUUL_NEWREV
+        - string:
+            name: ZUUL_SHORT_OLDREV
+        - string:
+            name: ZUUL_SHORT_NEWREV
+        - string:
+            name: ZUUL_PATCHSET
+    properties:
+        - build-discarder:
+            days-to-keep: 40
+            artifact-days-to-keep: 40
+            numToKeep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+
+
+    wrappers:
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+
+
+- job:
+    name: ihu_commit_check
+    defaults: commit_job_defaults
+    node: commit_gate_build
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_commit_check.sh
+- job:
+    name: ihu_gate_build
+    defaults: commit_job_defaults
+    node: commit_gate_build
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_build.sh            
+
+- job:
+    name: ihu_gate_test
+    defaults: commit_job_defaults
+    node: rack-rig    
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_test.sh
+
+- job:
+    name: ihu_gate_test_flexray
+    defaults: commit_job_defaults
+    node: rack-rig-flexray    
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_test_flexray.sh            
+         
+- project:
+    name: ihu
+    node: master
+    jobs:
+      - ihu_commit_check
+      - ihu_gate_build
+      - ihu_gate_test
+      - ihu_gate_test_flexray
+      

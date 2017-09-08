@@ -35,3 +35,6 @@ docker_run "tar cvfz out.tgz \
 # Upload to Artifactory
 docker_run "artifactory push ihu_image_build ${BUILD_NUMBER} out.tgz" || die "Upload out.tgz to Artifactory failed"
 docker_run "redis-cli set icup_android.jenkins.ihu_image_build.${BUILD_NUMBER}.commit ${GIT_COMMIT}" || die "redis-cli set failed"
+
+# Set this job to latest image build in Redis
+docker_run "redis-cli set icup_android.jenkins.ihu_image_build.latest.job_number ${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
