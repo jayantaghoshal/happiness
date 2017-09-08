@@ -21,14 +21,28 @@ docker_run "cd vendor/volvocars/tools/ci/shipit && ./analyze.sh"
 docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
 docker_run "cd vendor/volvocars/hardware/signals/dataelements/AutosarCodeGen && ./analyze.sh"
 docker_run "cd vendor/volvocars/tools/testing/fdx_client && ./analyze.sh"
-docker_run "lunch ihu_vcc-eng && make -j16 droid"
+
+docker_run "lunch ihu_vcc-eng && make -j16 droid" || die "Build image failed"
+
+docker_run "lunch ihu_vcc-eng && make -j16 vts" || die "Build VTS failed"
+
+docker_run "lunch ihu_vcc-eng && make -j16 tradefed-all" || die "Build Tradefed failed"
+
+# Build vendor/volovcar tests (Unit and Component Tests)
+# build_tests
 
 # Push out files required for gate_test.sh to Artifactory.
-OUT_ARCHIVE=out.tar.gz
-tar cvzf ${OUT_ARCHIVE} \
-    ./out/host/linux-x86/bin/{adb,fastboot} \
-    ./out/target/product/ihu_vcc/fast_flashfiles \
-    || die "Could not create out archive"
+OUT_ARCHIVE=out.tgz
+docker_run "tar cvfz ${OUT_ARCHIVE} \
+            ./out/target/product/ihu_vcc/fast_flashfiles \
+            ./out/target/product/ihu_vcc/data \
+            ./out/host/linux-x86/bin/fastboot \
+            ./out/host/linux-x86/bin/adb \
+            ./out/host/linux-x86/bin/aapt \
+            ./out/host/linux-x86/bin/tradefed.sh \
+            ./out/host/linux-x86/bin/vts-tradefed \
+            ./out/host/linux-x86/vts/android-vts \
+            ./out/host/linux-x86/tradefed" || die "Could not create out archive"
 
 docker_run artifactory push ihu_gate_build "${ZUUL_CHANGE_IDS}" ${OUT_ARCHIVE} \
     || die "Could not push out archive to Artifactory."

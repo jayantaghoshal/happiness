@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xe
+set -x
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
@@ -17,22 +17,20 @@ docker_run "tar xfz out.tgz" || die "Unpack out.tgz failed"
 ihu_update || die "Failed to flash IHU image"
 
 # Get properties
-docker_run "./out/host/linux-x86/bin/adb shell getprop"
+docker_run "adb shell getprop"
 
 # Run tests
 # TODO: Create a config file with tests to run instead of calling vts-tradefed for each test
-docker_run "lunch ihu_vcc-eng && ./out/host/linux-x86/vts/android-vts/tools/vts-tradefed run commandAndExit vts --abi x86_64 --module SampleShellTest"
+docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64 --module SampleShellTest"
 status=$?
 
-docker_run "lunch ihu_vcc-eng && ./out/host/linux-x86/vts/android-vts/tools/vts-tradefed run commandAndExit vts --abi x86_64 --module BinderThroughputBenchmark"
-if [ $status -ne 0 ]; then
+docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64 --module BinderThroughputBenchmark"
+if [ $status -eq 0 ]; then
     status=$?
 fi
 
-docker_run "lunch ihu_vcc-eng && ./out/host/linux-x86/vts/android-vts/tools/vts-tradefed run commandAndExit vts --abi x86_64 --module BinderPerformanceTest"
-if [ $status -ne 0 ]; then
-    status=$?
-fi
+# Run Unit and Component tests for vendor/volvocars
+# run_tests
 
 # Push logs and reports to Artifactory
 docker_run "artifactory push ihu_hourly_test ${BUILD_NUMBER} ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz"

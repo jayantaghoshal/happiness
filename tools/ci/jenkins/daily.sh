@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xe
+set -x
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
@@ -20,7 +20,7 @@ ihu_update || die "Failed to flash IHU image"
 docker_run "./out/host/linux-x86/bin/adb shell getprop"
 
 # Run tests
-docker run "lunch ihu_vcc-eng && ./out/host/linux-x86/vts/android-vts/tools/vts-tradefed run commandAndExit vts --abi x86_64"
+docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64"
 status=$?
 
 # Push logs and reports to Artifactory
