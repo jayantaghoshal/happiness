@@ -125,6 +125,7 @@ fi
 pushd ${REPO_ROOT_DIR}
 if [ -f ${REPO_ROOT_DIR}/build/envsetup.sh ]; then
    source ${REPO_ROOT_DIR}/build/envsetup.sh
+   lunch ihu_vcc-eng
 fi
 if [ -f ${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh ]; then
    source ${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh
