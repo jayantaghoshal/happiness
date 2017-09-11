@@ -127,22 +127,22 @@ def render(signals: List[fdx_description_file_parser.Item],
         if(isinstance(type, model.DE_Identical) or isinstance(type, model.DE_Value) or isinstance(type, model.DE_Boolean)):
             convstr+="""    
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 """
         elif isinstance(type, model.DE_Enum):
             convstr+="""
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 """
     return convstr
