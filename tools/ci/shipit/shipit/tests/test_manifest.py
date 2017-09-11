@@ -231,3 +231,53 @@ class ManifestUpdateTest(ManifestTestCase):
         self.assertRegex(manifest1, pattern)
         self.assertRegex(manifest2, pattern)
         self.assertNotEqual(manifest1, manifest2)
+
+
+class VerifyNoFloatingBranchesTest(ManifestTestCase):
+    def test_manifest_with_branches_on_master(self):
+        bar_repo = self._create_test_repo('device/bar')
+        branch = "master"
+
+        template = _manifest([
+            '<project name="foo" path="vendor/foo" revision="vcc/aae/googleio_ww02"/>',
+            '<project name="foo" path="vendor/foo" revision="research/o"/>'
+        ])
+
+        manifest_path = _write_file(bar_repo.path, 'manifest.xml', template)
+        with self.assertRaises(manifest.Error):
+            manifest.verify_no_floating_branches(manifest_path, branch)
+
+    def test_manifest_with_branches_on_branch(self):
+        bar_repo = self._create_test_repo('device/bar')
+        branch = "foo_branch"
+
+        template = _manifest([
+            '<project name="foo" path="vendor/foo" revision="vcc/aae/googleio_ww02"/>',
+            '<project name="foo" path="vendor/foo" revision="research/o"/>'
+        ])
+
+        manifest_path = _write_file(bar_repo.path, 'manifest.xml', template)
+
+        try:
+            manifest.verify_no_floating_branches(manifest_path, branch)
+        except manifest.Error:
+            self.fail("verify_no_floating_branches() rasied Exception,"
+                      "revision format may not be supported on branch")
+
+
+    def test_manifest_without_branches_on_master(self):
+        bar_repo = self._create_test_repo('device/bar')
+        branch = "master"
+
+        template = _manifest([
+            '<project name="bar" path="device/bar" revision="329e29e113cad25d34f4ee1e1100f72632a2730e"/>',
+            '<project name="foo" path="vendor/foo" revision="${HEAD}"/>',
+        ])
+
+        manifest_path = _write_file(bar_repo.path, 'manifest.xml', template)
+
+        try:
+            manifest.verify_no_floating_branches(manifest_path, branch)
+        except manifest.Error:
+            self.fail("verify_no_floating_branches() rasied Exception,"
+                      " revision format may not be supported on master")

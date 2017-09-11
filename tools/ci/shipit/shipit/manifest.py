@@ -1,7 +1,7 @@
 import os
 import re
 import tempfile
-
+from xml.etree.cElementTree import ElementTree as ET
 from . import git
 
 
@@ -76,3 +76,21 @@ def update_repo(project_root: str,
         repo.add([manifest_path_in_repo])
         repo.commit('Update manifest')
         repo.push()
+
+
+def verify_no_floating_branches(manifest_path: str, branch: str):
+    def is_sha_hash(revision):
+        return re.match(r"[a-f0-9]{40}", revision) is not None
+
+    root = ET()
+    parsed_manifest = root.parse(manifest_path)
+    projects = parsed_manifest.findall("project")
+
+    for project in projects:
+        rev = project.attrib["revision"]
+        if not is_sha_hash(rev):
+            if rev != "${HEAD}":
+                if branch == "master":
+                    raise Error("Project %s --- You are not allowed to have floating branches in"
+                                " the manifest files on master. All projects must be refered to"
+                                " by explicit git hash revision" % project.attrib["name"])
