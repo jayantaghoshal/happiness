@@ -14,7 +14,7 @@ from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
-from helpers import netman_helper as nh
+from ..helpers import netman_helper as nh
 
 class VtsNetmandComponentTest(base_test.BaseTestClass):
 
@@ -173,53 +173,6 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
         # Assert
         mac_address = self.helper.get_mac_address(self.ETH1)
         asserts.assertEqual(mac_address, self.ETH1_MAC_ADDRESS)
-
-    ## ----------------------------------------
-    ## --/ Interface Identification Tests /--
-    ## ----------------------------------------
-
-    def testEth1_Startup_Identification(self):
-        # Arrange
-        self.helper.kill_netman()
-        #
-        # TODO: Hard coded device path for now
-        #
-        #/sys/devices/pci0000:00/0000:00:13.0/0000:01:00.0
-        old_interface_name = self.helper.get_vcm_interface_name()
-        new_interface_name = "eth1"
-        self.helper.interface_down(old_interface_name)
-        self.helper.rename_interface(old_interface_name, new_interface_name)
-        self.helper.interface_up(new_interface_name)
-
-        # Act
-        self.helper.start_netman()
-
-        # Assert
-        conf = self.helper.get_interface_conf("vcm")
-        asserts.assertEqual(conf["ip_address"], self.ETH1_IP_ADDRESS)
-        asserts.assertEqual(conf["broadcast_address"], self.ETH1_BROADCAST_ADDRESS)
-        asserts.assertEqual(conf["netmask"], self.ETH1_NETMASK)
-        asserts.assertEqual(conf["mtu"], self.ETH1_MTU)
-        asserts.assertEqual(conf["mac_address"], self.ETH1_MAC_ADDRESS)
-
-    def testEth1_Runetime_Identification(self):
-        # Arrange
-        self.helper.restart_netman()
-
-        # Act
-        old_interface_name = self.helper.get_vcm_interface_name()
-        new_interface_name = "eth1"
-        self.helper.interface_down(old_interface_name)
-        self.helper.rename_interface(old_interface_name, new_interface_name)
-        self.helper.interface_up(new_interface_name)
-
-        # Assert
-        conf = self.helper.get_interface_conf("vcm")
-        asserts.assertEqual(conf["ip_address"], self.ETH1_IP_ADDRESS)
-        asserts.assertEqual(conf["broadcast_address"], self.ETH1_BROADCAST_ADDRESS)
-        asserts.assertEqual(conf["netmask"], self.ETH1_NETMASK)
-        asserts.assertEqual(conf["mtu"], self.ETH1_MTU)
-        asserts.assertEqual(conf["mac_address"], self.ETH1_MAC_ADDRESS)
 
     def _invoke_terminal(self, name="test_terminal"):
         self.dut.shell.InvokeTerminal(name)
