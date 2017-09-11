@@ -21,4 +21,4 @@ rm ${OUT_ARCHIVE}
 ihu_update
 
 # Run Unit and Component tests for vendor/volvocars
-# run_tests
+run_tests

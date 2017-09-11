@@ -45,7 +45,8 @@ function docker_killall() {
   local containers
   containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1)
   if [ -n "$containers" ]; then
-    docker kill "$containers"
+    #shellcheck disable=SC2086
+    docker kill $containers
   fi
 }
 
@@ -63,10 +64,19 @@ function repo_sync() {
   docker_run "repo sync --no-clone-bundle --current-branch -q -j8 $repos" || die "repo sync failed"
 }
 
+# Passed to find's -regex. Use \| to separate paths to components to disable tests for.
+# Example:
+#
+# TEST_BLACKLIST="vendor/volvocars/hardware/foo/.*\|vendor/volvocars/hardware/bar/.*"
+#
+# TODO: Make this configurable in a JSON config file or somthing when porting to
+#       Python.
+TEST_BLACKLIST="vendor/volvocars/hardware/climate/.*\|vendor/volvocars/hardware/signals/vehiclesignalsdaemon/.*"
+
 # TODO: Add to build system, should replace *_test_build.sh
 function build_tests {
     local build_sh_list dir script
-    build_sh_list=$(find vendor/volvocars -type l -name '*_test_build.sh')
+    build_sh_list=$(find vendor/volvocars -type l -name '*_test_build.sh' -not -regex "$TEST_BLACKLIST")
 
     for build_sh in $build_sh_list; do
         dir=$(dirname "${build_sh}")
@@ -74,7 +84,7 @@ function build_tests {
         # shellcheck disable=SC2086
         echo "Calling ${script} in directory $(realpath ${dir})"
         pushd "${dir}" >> /dev/null
-        "./${script}" || die "Failed to build tests!"
+        docker_run "./${script}" || die "Failed to build tests!"
         popd > /dev/null
     done
 }
@@ -82,7 +92,8 @@ function build_tests {
 # TODO: Replace with using VTS/Tradefed test plans
 function run_tests {
     local run_sh_list status dir script
-    run_sh_list=$(find vendor/volvocars -type l -name '*_test_run.sh')
+    run_sh_list=$(find vendor/volvocars -type l -name '*_test_run.sh' -not -regex "$TEST_BLACKLIST")
+
     status=0
     for run_sh in $run_sh_list; do
         dir=$(dirname "${run_sh}")
@@ -90,14 +101,14 @@ function run_tests {
         # shellcheck disable=SC2086
         echo "Calling ${script} in directory $(realpath ${dir})"
         pushd "${dir}" >> /dev/null
-        "./${script}"
+        docker_run "./${script}"
         if [ $status -eq 0 ]; then
             status=$?
         fi
         popd > /dev/null
     done
     
-    if [ $status -eq 0 ]; then
+    if [ $status -ne 0 ]; then
         die "Test failed!"
     fi
 }

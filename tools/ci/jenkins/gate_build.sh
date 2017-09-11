@@ -25,7 +25,7 @@ docker_run "lunch ihu_vcc-eng && make -j16 vts" || die "Build VTS failed"
 docker_run "lunch ihu_vcc-eng && make -j16 tradefed-all" || die "Build Tradefed failed"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-# build_tests
+build_tests
 
 # Push out files required for gate_test.sh to Artifactory.
 OUT_ARCHIVE=out.tgz
