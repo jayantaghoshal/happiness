@@ -25,7 +25,7 @@
 //#include "service_manager.h"
 
 using namespace Connectivity;
-using namespace VccIpCmd;
+using namespace IpCmdTypes;
 using namespace tarmac::eventloop;
 
 

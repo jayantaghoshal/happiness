@@ -16,7 +16,7 @@
 
 #include "ipcommandbus/Message.h"
 #include "ipcommandbus/TransportServicesIf.h"
-#include "ipcommandbus/VccIpCmdApi.h"
+#include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/idiagnostics_client.h"
 #include "ipcommandbus/vcc_pdu_header.h"
 
@@ -72,8 +72,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerResponseCallback(VccIpCmd::ServiceId serviceId,
-                                  VccIpCmd::OperationId operationId,
+    void registerResponseCallback(IpCmdTypes::ServiceId serviceId,
+                                  IpCmdTypes::OperationId operationId,
                                   ResponseMessageCallback messageCb);
 
     /**
@@ -83,8 +83,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerRequestCallback(VccIpCmd::ServiceId serviceId,
-                                 VccIpCmd::OperationId operationId,
+    void registerRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                 IpCmdTypes::OperationId operationId,
                                  MessageCallback messageCb);
 
     /**
@@ -94,8 +94,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerSetRequestCallback(VccIpCmd::ServiceId serviceId,
-                                    VccIpCmd::OperationId operationId,
+    void registerSetRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                    IpCmdTypes::OperationId operationId,
                                     MessageCallback messageCb);
 
     /**
@@ -105,8 +105,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerNotificationCallback(VccIpCmd::ServiceId serviceId,
-                                      VccIpCmd::OperationId operationId,
+    void registerNotificationCallback(IpCmdTypes::ServiceId serviceId,
+                                      IpCmdTypes::OperationId operationId,
                                       MessageCallback messageCb);
 
     /**
@@ -116,8 +116,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerNotificationCyclicCallback(VccIpCmd::ServiceId serviceId,
-                                            VccIpCmd::OperationId operationId,
+    void registerNotificationCyclicCallback(IpCmdTypes::ServiceId serviceId,
+                                            IpCmdTypes::OperationId operationId,
                                             MessageCallback messageCb);
 
     /**
@@ -127,8 +127,8 @@ public:
      * @param[in] operationId               The operation id  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerNotificationRequestCallback(VccIpCmd::ServiceId serviceId,
-                                             VccIpCmd::OperationId operationId,
+    void registerNotificationRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                             IpCmdTypes::OperationId operationId,
                                              MessageCallback messageCb);
 
     // Note: There is by design no 'registerErrorCallback'.
@@ -153,27 +153,27 @@ protected:
      */
     struct RegInfo
     {
-        RegInfo(VccIpCmd::ServiceId serviceId, VccIpCmd::OperationId operationId, ResponseMessageCallback messageCb)
+        RegInfo(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId, ResponseMessageCallback messageCb)
             : serviceId(serviceId),
               operationId(operationId),
-              operationType(VccIpCmd::OperationType::RESPONSE),
+              operationType(IpCmdTypes::OperationType::RESPONSE),
               messageCbResp(messageCb)
         {
             assert(messageCbResp);
         }
 
-        RegInfo(VccIpCmd::ServiceId serviceId,
-                VccIpCmd::OperationId operationId,
-                VccIpCmd::OperationType operationType,
+        RegInfo(IpCmdTypes::ServiceId serviceId,
+                IpCmdTypes::OperationId operationId,
+                IpCmdTypes::OperationType operationType,
                 MessageCallback messageCb)
             : serviceId(serviceId), operationId(operationId), operationType(operationType), messageCb(messageCb)
         {
             assert(messageCb);
         }
 
-        VccIpCmd::ServiceId serviceId;
-        VccIpCmd::OperationId operationId;
-        VccIpCmd::OperationType operationType;
+        IpCmdTypes::ServiceId serviceId;
+        IpCmdTypes::OperationId operationId;
+        IpCmdTypes::OperationType operationType;
         ResponseMessageCallback messageCbResp;  // Responses and errors
         MessageCallback messageCb;              // All other message types
     };
@@ -188,9 +188,9 @@ private:
      * @param[in] operationType             The operation  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerMessageCallback(VccIpCmd::ServiceId serviceId,
-                                 VccIpCmd::OperationId operationId,
-                                 VccIpCmd::OperationType operationType,
+    void registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+                                 IpCmdTypes::OperationId operationId,
+                                 IpCmdTypes::OperationType operationType,
                                  MessageCallback messageCb);
 
     /**
@@ -230,7 +230,7 @@ private:
     std::mutex m_registeredReceiversMutex;
     std::vector<RegInfo> m_registeredReceivers;  ///< Contain all registered receivers of messages. (Accessed from both TransportService-thread and App-thread)
 
-    typedef std::map<VccIpCmd::SenderHandleId, std::shared_ptr<CallerData>> RequestsMap;
+    typedef std::map<IpCmdTypes::SenderHandleId, std::shared_ptr<CallerData>> RequestsMap;
     RequestsMap m_requestsMap;  //USed to associate pCallerData (Only accessed from App-thread)
 
 

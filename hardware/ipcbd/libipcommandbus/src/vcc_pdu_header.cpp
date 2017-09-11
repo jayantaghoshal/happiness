@@ -34,13 +34,13 @@ namespace Connectivity
 
         VCCPDUHeader header;
 
-        header.service_id = static_cast<VccIpCmd::ServiceId>(deserializer.read_uint16());
-        header.operation_id = static_cast<VccIpCmd::OperationId>(deserializer.read_uint16());
+        header.service_id = static_cast<IpCmdTypes::ServiceId>(deserializer.read_uint16());
+        header.operation_id = static_cast<IpCmdTypes::OperationId>(deserializer.read_uint16());
         header.length = deserializer.read_uint32();
         header.sender_handle_id = deserializer.read_uint32();
         header.protocol_version = deserializer.read_uint8();
-        header.operation_type = static_cast<VccIpCmd::OperationType>(deserializer.read_uint8());
-        header.data_type = static_cast<VccIpCmd::DataType>(deserializer.read_uint8());
+        header.operation_type = static_cast<IpCmdTypes::OperationType>(deserializer.read_uint8());
+        header.data_type = static_cast<IpCmdTypes::DataType>(deserializer.read_uint8());
         header.process_flag_and_reserved = deserializer.read_uint8();
 
         // TODO: More validation here or somewhere else? Where should e.g. header.length >= 8 be

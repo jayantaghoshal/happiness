@@ -40,12 +40,11 @@ void MessageDispatcher::setDiagnostics(IDiagnosticsClient *diagnostics)
     m_transport->setDiagnostics(diagnostics, &wakeUpApplicationThread);
 }
 
-void MessageDispatcher::registerResponseCallback(VccIpCmd::ServiceId serviceId,
-                                                 VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerResponseCallback(IpCmdTypes::ServiceId serviceId,
+                                                 IpCmdTypes::OperationId operationId,
                                                  ResponseMessageCallback messageCb)
 {
-    ALOGD("Register response callback for %s / %04X.%04X",
-                               VccIpCmd::toString(VccIpCmd::CombinedId(serviceId, operationId)).c_str(),
+    ALOGD("Register response callback for %04X.%04X",
                                (unsigned int)serviceId,
                                (unsigned int)operationId);
 
@@ -56,52 +55,51 @@ void MessageDispatcher::registerResponseCallback(VccIpCmd::ServiceId serviceId,
     }
 }
 
-void MessageDispatcher::registerRequestCallback(VccIpCmd::ServiceId serviceId,
-                                                VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                                IpCmdTypes::OperationId operationId,
                                                 MessageCallback messageCb)
 {
-    return registerMessageCallback(serviceId, operationId, VccIpCmd::OperationType::REQUEST, messageCb);
+    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::REQUEST, messageCb);
 }
 
-void MessageDispatcher::registerSetRequestCallback(VccIpCmd::ServiceId serviceId,
-                                                   VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerSetRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                                   IpCmdTypes::OperationId operationId,
                                                    MessageCallback messageCb)
 {
-    return registerMessageCallback(serviceId, operationId, VccIpCmd::OperationType::SETREQUEST, messageCb);
+    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::SETREQUEST, messageCb);
 }
 
-void MessageDispatcher::registerNotificationCallback(VccIpCmd::ServiceId serviceId,
-                                                     VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerNotificationCallback(IpCmdTypes::ServiceId serviceId,
+                                                     IpCmdTypes::OperationId operationId,
                                                      MessageCallback messageCb)
 {
-    return registerMessageCallback(serviceId, operationId, VccIpCmd::OperationType::NOTIFICATION, messageCb);
+    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION, messageCb);
 }
 
-void MessageDispatcher::registerNotificationCyclicCallback(VccIpCmd::ServiceId serviceId,
-                                                           VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerNotificationCyclicCallback(IpCmdTypes::ServiceId serviceId,
+                                                           IpCmdTypes::OperationId operationId,
                                                            MessageCallback messageCb)
 {
-    return registerMessageCallback(serviceId, operationId, VccIpCmd::OperationType::NOTIFICATION_CYCLIC, messageCb);
+    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, messageCb);
 }
 
-void MessageDispatcher::registerNotificationRequestCallback(VccIpCmd::ServiceId serviceId,
-                                                            VccIpCmd::OperationId operationId,
+void MessageDispatcher::registerNotificationRequestCallback(IpCmdTypes::ServiceId serviceId,
+                                                            IpCmdTypes::OperationId operationId,
                                                             MessageCallback messageCb)
 {
-    return registerMessageCallback(serviceId, operationId, VccIpCmd::OperationType::NOTIFICATION_REQUEST, messageCb);
+    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION_REQUEST, messageCb);
 }
 
-void MessageDispatcher::registerMessageCallback(VccIpCmd::ServiceId serviceId,
-                                                VccIpCmd::OperationId operationId,
-                                                VccIpCmd::OperationType operationType,
+void MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+                                                IpCmdTypes::OperationId operationId,
+                                                IpCmdTypes::OperationType operationType,
                                                 MessageCallback messageCb)
 {
-    ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s.%s'",
+    ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'",
                                (unsigned int)serviceId,
                                (unsigned int)operationId,
                                (unsigned int)operationType,
-                               VccIpCmd::toString(VccIpCmd::CombinedId(serviceId, operationId)).c_str(),
-                               VccIpCmd::toString(operationType));
+                               IpCmdTypes::toString(operationType));
     RegInfo ri(serviceId, operationId, operationType, messageCb);
     {
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
@@ -123,15 +121,15 @@ void MessageDispatcher::sendMessage(Message &&msg, std::shared_ptr<CallerData> p
         }
     }
 
-    if (msg.pdu.header.operation_type == VccIpCmd::OperationType::REQUEST ||
-        msg.pdu.header.operation_type == VccIpCmd::OperationType::SETREQUEST ||
-        msg.pdu.header.operation_type == VccIpCmd::OperationType::NOTIFICATION_REQUEST)
+    if (msg.pdu.header.operation_type == IpCmdTypes::OperationType::REQUEST ||
+        msg.pdu.header.operation_type == IpCmdTypes::OperationType::SETREQUEST ||
+        msg.pdu.header.operation_type == IpCmdTypes::OperationType::NOTIFICATION_REQUEST)
     {
         // TODO: Uncomment assert after having stricted up public send api (IPService.h)...
         //       assert(pCallerData);
         if (pCallerData)
         {
-            const VccIpCmd::SenderHandleId senderHandleId = msg.pdu.header.sender_handle_id;
+            const IpCmdTypes::SenderHandleId senderHandleId = msg.pdu.header.sender_handle_id;
 
             if (m_requestsMap.find(senderHandleId) != m_requestsMap.end())
             {
@@ -424,7 +422,7 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
             // Note: We shall call the regular response callback at the service layer.
             //       (Thus the last condition looking as it does.)
             return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId &&
-                   VccIpCmd::OperationType::RESPONSE == ri.operationType;
+                   IpCmdTypes::OperationType::RESPONSE == ri.operationType;
         });
 
         if (m_registeredReceivers.end() != it)

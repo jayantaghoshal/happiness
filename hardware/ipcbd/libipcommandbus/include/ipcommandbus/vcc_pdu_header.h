@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 
-#include "ipcommandbus/VccIpCmdApi.h"
+#include "ipcommandbus/IpCmdTypes.h"
 
 namespace Connectivity
 {
@@ -22,13 +22,13 @@ namespace Connectivity
         static VCCPDUHeader from_data(const std::vector<std::uint8_t> &data);
         void to_data(std::vector<std::uint8_t> &data) const;
 
-        VccIpCmd::ServiceId service_id = VccIpCmd::ServiceId::Undefined;
-        VccIpCmd::OperationId operation_id = VccIpCmd::OperationId::Undefined;
+        IpCmdTypes::ServiceId service_id = 0x0000; //Undefined
+        IpCmdTypes::OperationId operation_id = 0x0000; //Undefined
         std::uint32_t length = 0;
-        VccIpCmd::SenderHandleId sender_handle_id = 0;
+        IpCmdTypes::SenderHandleId sender_handle_id = 0;
         std::uint8_t protocol_version = 0;
-        VccIpCmd::OperationType operation_type = VccIpCmd::OperationType::UNDEFINED;
-        VccIpCmd::DataType  data_type = VccIpCmd::DataType::UNDEFINED;
+        IpCmdTypes::OperationType operation_type = IpCmdTypes::OperationType::UNDEFINED;
+        IpCmdTypes::DataType  data_type = IpCmdTypes::DataType::UNDEFINED;
         std::uint8_t process_flag_and_reserved = 0;
     };
 }

@@ -8,7 +8,7 @@
 #include <cutils/log.h>
 
 #include "ipcommandbus/local_config_parameters.h"
-#include "ipcommandbus/VccIpCmdApi.h"
+#include "ipcommandbus/IpCmdTypes.h"
 
 using namespace vcc;
 
@@ -61,33 +61,6 @@ bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, std::st
 
     ALOGI("%s %s", configId.c_str(), config.c_str());
     return true;
-}
-
-std::chrono::milliseconds LocalconfigParameters::getTimeout(const VccIpCmd::CombinedId id)
-{
-    const auto it = timeout_values_.find(id);
-    if (it != timeout_values_.end())
-    {
-        return it->second;
-    }
-    else
-    {
-        return defaultRespTimeout_;
-    }
-}
-
-uint32_t LocalconfigParameters::getRetries(const VccIpCmd::CombinedId id)
-{
-    const auto it = retries_values_.find(id);
-    if (it != retries_values_.end())
-    {
-        ALOGD("0 numOfRetries here");
-        return it->second;
-    }
-    else
-    {
-        return defaultRespNumRetries_;
-    }
 }
 
 void LocalconfigParameters::Init()
@@ -183,90 +156,6 @@ void LocalconfigParameters::InitTimeoutValues()
                                defaultRespTimeout_.count(),
                                defaultRespNumRetries_,
                                defaultRespMultiplier_);
-
-    // Mapping from the internal enums to the parameter name in Localconfig
-    std::unordered_map<VccIpCmd::CombinedId, std::string, CombinedIdHash> temporaryMap = {
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity, VccIpCmd::OperationId::PSIMSecurity),
-         "CommonPSIM_TEM_PSIMSecurity_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity, VccIpCmd::OperationId::PSIMEnterCode),
-         "CommonPSIM_TEM_PSIMEnterCode_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity,
-                              VccIpCmd::OperationId::PSIMRegisterState),
-         "CommonPSIM_TEM_PSIMRegisterState_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity,
-                              VccIpCmd::OperationId::PSIMNetworkOperators),
-         "CommonPSIM_TEM_PSIMNetworkOperators_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity,
-                              VccIpCmd::OperationId::PSIMNetworkOperatorCommand),
-         "CommonPSIM_TEM_PSIMNetworkOperatorCommand_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity, VccIpCmd::OperationId::PSIMState),
-         "CommonPSIM_TEM_PSIMState_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::CommonPSIMPhoneConnectivity, VccIpCmd::OperationId::PSIMUssd),
-         "CommonPSIM_TEM_PSIMUssd_TimeoutMs"},
-
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMDataCounter),
-         "CONN_TEM_PSIMDataCounter_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMResetDataCounter),
-         "CONN_TEM_PSIMResetDataCounter_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMNetworkConfiguration),
-         "CONN_TEM_PSIMNetworkConfiguration_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMConnect),
-         "CONN_TEM_PSIMConnect_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMConnectionStatus),
-         "CONN_TEM_PSIMConnectionStatus_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMRoamingConfiguration),
-         "CONN_TEM_PSIMRoamingConfiguration_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::AccessRightPinCode),
-         "CONN_TEM_AccessRightPinCode_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::CurrentInternetSource),
-         "CONN_VCM_CurrentInternetSource_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::InternetSourceCtrlBT),
-         "CONN_IHU_InternetSourceCtrlBT_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::InternetSourceCtrlUSB),
-         "CONN_IHU_InternetSourceCtrlUSB_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::Connectivity, VccIpCmd::OperationId::PSIMMessage),
-         "CONN_IHU_PSIMMessage_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::DiagnosticManagement,
-                              VccIpCmd::OperationId::RequestUserAuthentication),
-         "RD_USER_TIMEOUT"},
-
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANMode),
-         "WLAN_VCM_WLANMode_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANAPSSID),
-         "WLAN_VCM_WLANAPSSID_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANAPPasswd),
-         "WLAN_VCM_WLANAPPassword_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANSTAConnect),
-         "WLAN_VCM_WLANSTAConnect_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANSTADisconnect),
-         "WLAN_VCM_WLANSTADisconnect_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANAPStatusSettings),
-         "WLAN_VCM_WLANAPStatusSettings_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANSTAStatus),
-         "WLAN_VCM_WLANSTAStatus_TimeoutMs"},
-        {VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANSTAForgetRememberedNetwk),
-         "WLAN_VCM_WLANSTAForgetRememberedNetwk_TimeoutMs"}};
-
-    for (auto &it : temporaryMap)
-    {
-        int value;
-        if (ReadLocalConfig(it.second, value))
-        {
-            if (it.second == "RD_USER_TIMEOUT")
-            {
-                timeout_values_.emplace(it.first, std::chrono::minutes{value});
-            }
-            else
-            {
-                timeout_values_.emplace(it.first, std::chrono::milliseconds{value});
-            }
-        }
-    }
-
-    // REQPROD:338711
-    retries_values_[VccIpCmd::CombinedId(VccIpCmd::ServiceId::OTA, VccIpCmd::OperationId::CancelDownload)] = 0;
-    // REQPROD:346425
-    retries_values_[VccIpCmd::CombinedId(VccIpCmd::ServiceId::OTA, VccIpCmd::OperationId::DownloadSoftware)] = 0;
 }
 
 void LocalconfigParameters::InitNetworkPriority()

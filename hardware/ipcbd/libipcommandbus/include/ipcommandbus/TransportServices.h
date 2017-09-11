@@ -11,6 +11,7 @@
 
 #include <IDispatcher.h>
 
+#include "ipcommandbus/IpCmdTypes.h"
 #include "TransportServicesIf.h"
 #include "ipcommandbus/TrackMessage.h"
 #include "ipcommandbus/idiagnostics_client.h"
@@ -194,7 +195,7 @@ protected:
      *
      * @param[in] tm                        Reference to the message track structure that has to handle the time out.
      */
-    void messageTimeout(TrackMessage &tm, VccIpCmd::SenderHandleId id);
+    void messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id);
 
     /// Handle to the callback to call when we get a well formed incoming request.
     std::function<bool(Message &)> m_incomingRequestCb;

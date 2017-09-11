@@ -14,7 +14,6 @@
 #include <cutils/log.h>
 
 #include "ipcommandbus/Pdu.h"
-#include "ipcommandbus/VccIpCmdApi.h"
 #include "ipcommandbus/net_serializer.h"
 
 using namespace tarmac::eventloop;
@@ -76,8 +75,8 @@ void TransportServices::sendMessage(Message &&msg)
 
     switch (msg.pdu.header.operation_type)
     {
-        case VccIpCmd::OperationType::SETREQUEST_NORETURN:
-        case VccIpCmd::OperationType::NOTIFICATION_REQUEST:
+        case IpCmdTypes::OperationType::SETREQUEST_NORETURN:
+        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST:
         {
             ALOGV("Send request (0x%02x): ", (int)msg.pdu.header.operation_type);
             if (!m_useWfaTimer)
@@ -90,21 +89,23 @@ void TransportServices::sendMessage(Message &&msg)
             // as REQUEST and SETREQUEST: fall through
         }
 
-        case VccIpCmd::OperationType::REQUEST:
-        case VccIpCmd::OperationType::SETREQUEST:
+        case IpCmdTypes::OperationType::REQUEST:
+        case IpCmdTypes::OperationType::SETREQUEST:
         {
             ALOGV("Send request (0x%02x): ", (int)msg.pdu.header.operation_type);
             // Set up timers and states
             std::unique_ptr<TrackMessage> pTm(new TrackMessage);
             pTm->wfa = TimeoutInfo();
-            pTm->wfr = TimeoutInfo(VccIpCmd::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
+            pTm->wfr = TimeoutInfo();
+            //TODO: FLOW PSS370-3695
+            //pTm->wfr = TimeoutInfo(IpCmdTypes::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
             pTm->msg = std::move(msg);
             auto pTmRef = std::ref(*pTm);
             std::chrono::milliseconds timeoutValue;
             if (m_useWfaTimer)
             {
                 timeoutValue = pTm->wfa.getTimeoutValue();
-                pTm->state = msg.pdu.header.operation_type == VccIpCmd::OperationType::SETREQUEST_NORETURN
+                pTm->state = msg.pdu.header.operation_type == IpCmdTypes::OperationType::SETREQUEST_NORETURN
                                  ? TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK
                                  : TrackMessage::WAIT_FOR_REQUEST_ACK;
             }
@@ -123,7 +124,7 @@ void TransportServices::sendMessage(Message &&msg)
         }
         break;
 
-        case VccIpCmd::OperationType::RESPONSE:
+        case IpCmdTypes::OperationType::RESPONSE:
         {
             ALOGV("Send response: 0x%08X", msg.pdu.header.sender_handle_id);
 
@@ -153,7 +154,7 @@ void TransportServices::sendMessage(Message &&msg)
         }
         break;
 
-        case VccIpCmd::OperationType::NOTIFICATION:
+        case IpCmdTypes::OperationType::NOTIFICATION:
         {
             ALOGV("Send notification (0x%02x): ", (int)msg.pdu.header.operation_type);
 
@@ -163,7 +164,9 @@ void TransportServices::sendMessage(Message &&msg)
                 std::unique_ptr<TrackMessage> pTm(new TrackMessage);
                 pTm->state = TrackMessage::WAIT_FOR_NOTIFICATION_ACK;
                 pTm->wfa = TimeoutInfo();
-                pTm->wfr = TimeoutInfo(VccIpCmd::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
+                pTm->wfr = TimeoutInfo();
+                //TODO: FLOW PSS370-3695
+                //pTm->wfr = TimeoutInfo(IpCmdTypes::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
                 pTm->msg = std::move(msg);
                 auto pTmRef = std::ref(*pTm);
                 pTm->timer = timeProvider.EnqueueWithDelay(
@@ -183,15 +186,15 @@ void TransportServices::sendMessage(Message &&msg)
         }
         break;
 
-        case VccIpCmd::OperationType::ERROR:
-        case VccIpCmd::OperationType::NOTIFICATION_CYCLIC:
+        case IpCmdTypes::OperationType::ERROR:
+        case IpCmdTypes::OperationType::NOTIFICATION_CYCLIC:
             // Both ERROR and NOTIFICATION_CYCLIC does not require book keeping...
             // I.e. we shall not wait for an ACK after this one...
             this->sendPdu(msg.ecu, msg.pdu);
             break;
 
-        case VccIpCmd::OperationType::ACK:
-        case VccIpCmd::OperationType::UNDEFINED:
+        case IpCmdTypes::OperationType::ACK:
+        case IpCmdTypes::OperationType::UNDEFINED:
             // Not handled
             break;
     }
@@ -279,7 +282,7 @@ void TransportServices::sendAck(Message::Ecu destination, const Pdu &pdu)
         Pdu ackPdu;
         ackPdu.header = pdu.header;
         ackPdu.header.length = VCCPDUHeader::BASE_LENGTH;
-        ackPdu.header.operation_type = VccIpCmd::OperationType::ACK;
+        ackPdu.header.operation_type = IpCmdTypes::OperationType::ACK;
         this->sendPdu(destination, ackPdu);
     }
     else
@@ -321,8 +324,8 @@ void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCod
 
     errorPdu.header = pdu.header;
     errorPdu.header.length = VCCPDUHeader::BASE_LENGTH + payload_size;
-    errorPdu.header.operation_type = VccIpCmd::OperationType::ERROR;
-    errorPdu.header.data_type = VccIpCmd::DataType::ENCODED;
+    errorPdu.header.operation_type = IpCmdTypes::OperationType::ERROR;
+    errorPdu.header.data_type = IpCmdTypes::DataType::ENCODED;
 
     errorPdu.payload.resize(payload_size);
 
@@ -403,15 +406,6 @@ void TransportServices::handleInData(ISocket *socket)
 
         // Since the error codes are ranked we shall not test for payload length here, but after the other header tests.
 
-        // Sanity check the header
-        if (!VccIpCmd::ServiceIdIsValid(pdu.header.service_id))
-        {
-            ALOGE(
-                "Unsupported service ID 0x%04X from %s", (int)pdu.header.service_id, Message::EcuStr(sourceEcu));
-            sendError(sourceEcu, pdu, INVALID_SERVICE_ID, static_cast<std::uint16_t>(pdu.header.service_id));
-            return;
-        }
-
         // TODO: Resolve if this check is valid. According to example in spec a message with no sender handle id shall
         // be ignored and discarded.
         uint32_t sender_handle_mask = ((static_cast<uint16_t>(pdu.header.service_id) & 0xFF) << 24) |
@@ -460,17 +454,17 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
     // Handle PDU
     switch (pdu.header.operation_type)
     {
-        case VccIpCmd::OperationType::ERROR:
+        case IpCmdTypes::OperationType::ERROR:
             // Handle incoming error
             this->handleIncomingError(pdu);
             break;
-        case VccIpCmd::OperationType::ACK:
+        case IpCmdTypes::OperationType::ACK:
             // Handle incoming ACK
             this->handleIncomingAck(pdu, sourceEcu);
             break;
-        case VccIpCmd::OperationType::REQUEST:
-        case VccIpCmd::OperationType::SETREQUEST:
-        case VccIpCmd::OperationType::NOTIFICATION_REQUEST:
+        case IpCmdTypes::OperationType::REQUEST:
+        case IpCmdTypes::OperationType::SETREQUEST:
+        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST:
         {
             // * An incoming request shall be responded to by an ACK followed by the RESPONSE or an ERROR.
             // * The RESPONSE might be sent by higher layers in the call to m_incomingRequestCb or at a later time.
@@ -511,7 +505,7 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
         }
         break;
 
-        case VccIpCmd::OperationType::SETREQUEST_NORETURN:
+        case IpCmdTypes::OperationType::SETREQUEST_NORETURN:
         {
             Message msg(std::move(pdu));
             msg.ecu = sourceEcu;
@@ -533,7 +527,7 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
         }
         break;
 
-        case VccIpCmd::OperationType::RESPONSE:
+        case IpCmdTypes::OperationType::RESPONSE:
         {
             std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(pdu.header.sender_handle_id);
 
@@ -560,10 +554,10 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
         }
         break;
 
-        case VccIpCmd::OperationType::NOTIFICATION:
+        case IpCmdTypes::OperationType::NOTIFICATION:
             // Acknowledge the NOTIFICATION
             this->sendAck(sourceEcu, pdu);
-        case VccIpCmd::OperationType::NOTIFICATION_CYCLIC:
+        case IpCmdTypes::OperationType::NOTIFICATION_CYCLIC:
             // Incoming notification shall just be forwarded
             // Cyclic notifications shall not be acknowledged...
             if (m_incomingNotificationCb)
@@ -576,7 +570,7 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
             break;
         default:
         {
-            ALOGE("Unknown operation type: %s", VccIpCmd::toString(pdu.header.operation_type));
+            ALOGE("Unknown operation type: %s", IpCmdTypes::toString(pdu.header.operation_type));
             this->sendError(
                 sourceEcu, pdu, INVALID_OPERATION_TYPE, static_cast<std::uint16_t>(pdu.header.operation_type));
             assert(m_diagnostics);
@@ -749,7 +743,7 @@ void TransportServices::handleIncomingError(const Pdu &pdu)
     }
 }
 
-void TransportServices::messageTimeout(TrackMessage &tm, VccIpCmd::SenderHandleId id)
+void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id)
 {
     ALOGI("MessageTimeout: senderid: %d",id);
     // TrackMessage &tm = *pTm;

@@ -49,10 +49,10 @@ void Pdu::toData(std::vector<uint8_t> &buffer) const
     buffer.insert(buffer.end(), payload.begin(), payload.end());
 }
 
-void Pdu::createHeader(VccIpCmd::ServiceId serviceId,
-                       VccIpCmd::OperationId operationId,
-                       VccIpCmd::OperationType operationType,
-                       VccIpCmd::DataType dataType,
+void Pdu::createHeader(IpCmdTypes::ServiceId serviceId,
+                       IpCmdTypes::OperationId operationId,
+                       IpCmdTypes::OperationType operationType,
+                       IpCmdTypes::DataType dataType,
                        uint8_t sequenceId)
 {
     header.service_id = serviceId;
@@ -81,10 +81,7 @@ std::string Pdu::toString(const Pdu &pdu)
     ss << std::setfill('0') << std::setw(4) << std::hex << static_cast<int>(pdu.header.service_id) << ", ";
     ss << std::setfill('0') << std::setw(4) << std::hex << static_cast<int>(pdu.header.operation_id) << ", ";
     ss << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(pdu.header.operation_type);
-    ss << ") ";
-    ss << VccIpCmd::toString(pdu.header.service_id) << ", ";
-    ss << VccIpCmd::toString(VccIpCmd::CombinedId(pdu.header.service_id, pdu.header.operation_id)) << ", ";
-    ss << VccIpCmd::toString(pdu.header.operation_type) << ", ";
+    ss << ")";
     return ss.str();
 }
 

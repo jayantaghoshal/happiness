@@ -11,7 +11,7 @@
 #ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_PDU_H_
 #define _CONNECTIVITY_LIBIPCOMMANDBUS_PDU_H_
 
-#include "ipcommandbus/VccIpCmdApi.h"
+#include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/vcc_pdu_header.h"
 
 #include <vector>
@@ -51,10 +51,10 @@ public:
      * @param[in] sequenceId                    Unique number for this specific triplet(srvId, opId, opType). Typically
      * this is just a number that is increased by one each time the triplet is sent.
      */
-    void createHeader(VccIpCmd::ServiceId serviceId,
-                      VccIpCmd::OperationId operationId,
-                      VccIpCmd::OperationType operationType,
-                      VccIpCmd::DataType dataType,
+    void createHeader(IpCmdTypes::ServiceId serviceId,
+                      IpCmdTypes::OperationId operationId,
+                      IpCmdTypes::OperationType operationType,
+                      IpCmdTypes::DataType dataType,
                       uint8_t sequenceId);
 
     /**

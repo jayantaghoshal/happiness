@@ -17,7 +17,8 @@ LOCAL_SRC_FILES := src/main.cpp \
 # How can we disable these warnings only for these .c files??
 
 # libipcommandbus - not built as static lib due to dependence problems in Android .mk files
-LOCAL_SRC_FILES += libipcommandbus/src/VccIpCmdApi.cpp \
+LOCAL_SRC_FILES += \
+    libipcommandbus/src/IpCmdTypes.cpp \
     libipcommandbus/src/Message.cpp \
     libipcommandbus/src/MessageDispatcher.cpp \
     libipcommandbus/src/Pdu.cpp \

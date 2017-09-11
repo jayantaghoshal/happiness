@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <chrono>
 
-#include "ipcommandbus/VccIpCmdApi.h"
 #include "ipcommandbus/isocket.h"
 
 namespace Connectivity
@@ -33,8 +32,6 @@ public:
     // Response timeouts
     // -----------------
     double getDefaultRespMultiplier();
-    std::chrono::milliseconds getTimeout(VccIpCmd::CombinedId id);
-    uint32_t getRetries(VccIpCmd::CombinedId id);
 
     const std::string &getLocalIpAddress();
     const std::string &getBroadcastIpAddress();
@@ -67,19 +64,6 @@ private:
     bool ReadLocalConfig(const std::string &configId, int &config);
     bool ReadLocalConfig(const std::string &configId, double &config);
     bool ReadLocalConfig(const std::string &configId, std::string &config);
-    // --------------
-    // Timeout values
-    // --------------
-    struct CombinedIdHash
-    {
-        std::uint32_t operator()(const VccIpCmd::CombinedId &id) const
-        {
-            return (static_cast<std::uint16_t>(id.serviceId) << 16) | static_cast<std::uint16_t>(id.operationId);
-        }
-    };
-
-    std::unordered_map<VccIpCmd::CombinedId, std::chrono::milliseconds, CombinedIdHash> timeout_values_;
-    std::unordered_map<VccIpCmd::CombinedId, uint32_t, CombinedIdHash> retries_values_;
 
     // Note: Values will be loaded from localconfig. Default values are just for safety.
     std::chrono::milliseconds defaultAckTimeout_{500};

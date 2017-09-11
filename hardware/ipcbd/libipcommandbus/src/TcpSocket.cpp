@@ -173,7 +173,7 @@ void TcpSocket::packetizer()
 
         // create a sender_handle_id from extracted header and see if it matches with sender_handle_id in header
         // Doc: 31873255 IHU4.0 BT SWRS IP Proto: section 6.8.1.1.2.3.2.5 SenderHandleId
-        VccIpCmd::SenderHandleId sender_handle_id = ((static_cast<uint16_t>(header.service_id) & 0xFF) << 24) |
+        IpCmdTypes::SenderHandleId sender_handle_id = ((static_cast<uint16_t>(header.service_id) & 0xFF) << 24) |
                                                     ((static_cast<uint16_t>(header.operation_id) & 0xFF) << 16) |
                                                     ((static_cast<uint8_t>(header.operation_type) & 0xFF) << 8) | 0x00;
 

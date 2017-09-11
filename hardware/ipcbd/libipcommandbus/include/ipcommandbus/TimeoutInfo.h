@@ -8,7 +8,6 @@
 #include <chrono>
 #include <cstdint>
 #include "ipcommandbus/local_config_parameters.h"
-#include "ipcommandbus/VccIpCmdApi.h"
 
 #ifdef ENABLE_TESTS
 class TransportServicesFixture;
@@ -22,8 +21,6 @@ class TimeoutInfo
   public:
     // Constructor for ACKs
     TimeoutInfo();
-    // Constructor for responses
-    TimeoutInfo(VccIpCmd::CombinedId id);
     // General constructor
     TimeoutInfo(std::chrono::milliseconds baseTimeout, uint32_t maxRetries, float multiplier);
 

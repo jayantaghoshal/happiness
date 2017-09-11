@@ -19,17 +19,6 @@ TimeoutInfo::TimeoutInfo()
 
 }
 
-TimeoutInfo::TimeoutInfo(VccIpCmd::CombinedId id)
-{
-    LocalconfigParameters cfg = LocalconfigParameters::getInstance();
-    std::chrono::milliseconds timeout = cfg.getTimeout(id);
-    baseTimeout_ = timeout;
-    maxRetries_ = cfg.getRetries(id);
-    multiplier_ = cfg.getDefaultRespMultiplier();
-    timeoutValue_ = baseTimeout_;
-    retry_ = 0;
-}
-
 TimeoutInfo::TimeoutInfo(std::chrono::milliseconds bTimeout, uint32_t mRetries, float mult)
     : baseTimeout_(bTimeout), maxRetries_(mRetries), multiplier_(mult), timeoutValue_(bTimeout), retry_(0)
 {
