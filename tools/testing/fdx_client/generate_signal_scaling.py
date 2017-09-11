@@ -129,9 +129,11 @@ def render(signals: List[fdx_description_file_parser.Item],
     def send(self, value):
         self.item.value_raw = self.p2r(value)
         self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value)
 
     def receive(self):
         value = self.r2p(self.item.value_raw)
+        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
         return value
 
 """
@@ -140,8 +142,10 @@ def render(signals: List[fdx_description_file_parser.Item],
     def send(self, value):
         self.item.value_raw = value
         self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value)
 
     def receive(self):
+        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 """
@@ -173,13 +177,22 @@ def main():
         f.write("# Inputs: %s\n" %  " \n#    ".join(sys.argv))
 
         f.write("import os\n")
+        f.write("import logging\n")
         f.write("from fdx import fdx_client\n")
         f.write("from fdx import fdx_description_file_parser\n")
         code = """
+
+# Dummy class used when no real FDX connection is used (debugging on host without any hardware)
+class FDXDummyConnection:
+    def send_data_exchange(self, a, b, c):
+        pass
+
+
 class FrSignalInterface:
     def __init__(self):
 
         self.connected = False
+        self.logger = logging.getLogger(__name__)
 
         (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
             os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../FDXDescriptionFile.xml"))
@@ -200,7 +213,8 @@ class FrSignalInterface:
                 self.connection.close()
                 raise
         else:
-            print "Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to tagret"
+            self.connection = FDXDummyConnection()
+            self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
 
 """
