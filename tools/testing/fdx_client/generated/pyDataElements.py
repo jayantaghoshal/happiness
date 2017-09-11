@@ -924,11 +924,11 @@ class AbsWarnIndcnReq:
         AbsWarnIndcnOffReq = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -962,11 +962,11 @@ class AccAdprSpdLimActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AccAdprSpdLimActvSts:
     de_name     = "AccAdprSpdLimActv.Sts"
@@ -982,11 +982,11 @@ class AccAdprSpdLimActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -1020,11 +1020,11 @@ class AccAdprTurnSpdActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AccAdprTurnSpdActvSts:
     de_name     = "AccAdprTurnSpdActv.Sts"
@@ -1040,11 +1040,11 @@ class AccAdprTurnSpdActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AccAutResuWarnReq:
     de_name     = "AccAutResuWarnReq"
@@ -1060,11 +1060,11 @@ class AccAutResuWarnReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AccSts:
     de_name     = "AccSts"
@@ -1083,11 +1083,11 @@ class AccSts:
         Actv = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ActvOfHorn:
     de_name     = "ActvOfHorn"
@@ -1103,11 +1103,11 @@ class ActvOfHorn:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class ADataRawSafeChks:
@@ -1128,11 +1128,11 @@ class ADataRawSafeChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -1154,11 +1154,11 @@ class ADataRawSafeCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AdjSpdLimnSts:
@@ -1177,11 +1177,11 @@ class AdjSpdLimnSts:
         Ovrd = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AdjSpdLimnWarn:
     de_name     = "AdjSpdLimnWarn"
@@ -1199,11 +1199,11 @@ class AdjSpdLimnWarn:
         SoundAndVisWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class AgDataRawSafeChks:
@@ -1224,11 +1224,11 @@ class AgDataRawSafeChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -1250,11 +1250,11 @@ class AgDataRawSafeCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AirClngReq:
@@ -1272,11 +1272,11 @@ class AirClngReq:
         Off = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
 class ALat1:
@@ -1299,11 +1299,11 @@ class ALat1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ALat1Qf1:
@@ -1322,11 +1322,11 @@ class ALat1Qf1:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
 class ALgt1:
@@ -1349,11 +1349,11 @@ class ALgt1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ALgt1Qf1:
@@ -1372,11 +1372,11 @@ class ALgt1Qf1:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:-100->309.5, Resolution: (0.1*x+-100.0, raw is unsigned, 12 bits )
 class AmbTIndcd:
@@ -1399,11 +1399,11 @@ class AmbTIndcd:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AmbTIndcdQf:
@@ -1422,11 +1422,11 @@ class AmbTIndcdQf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AmbTIndcdUnit:
     de_name     = "AmbTIndcdWithUnit.AmbTIndcdUnit"
@@ -1443,11 +1443,11 @@ class AmbTIndcdUnit:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AmbTRawQly:
     de_name     = "AmbTRaw.Qly"
@@ -1465,11 +1465,11 @@ class AmbTRawQly:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: degC,  Range:-70->134.7, Resolution: (0.1*x+-70.0, raw is unsigned, 11 bits )
 class AmbTRawVal:
@@ -1492,11 +1492,11 @@ class AmbTRawVal:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->7
@@ -1518,11 +1518,11 @@ class AntithftRednReq:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AsyLaneChgPsbl:
@@ -1541,11 +1541,11 @@ class AsyLaneChgPsbl:
         Both = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AsyLaneChgSts:
     de_name     = "AsyLaneChg.Sts"
@@ -1570,11 +1570,11 @@ class AsyLaneChgSts:
         Resd10 = 10
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AsyLaneChgTyp:
     de_name     = "AsyLaneChg.Typ"
@@ -1599,11 +1599,11 @@ class AsyLaneChgTyp:
         Resd10 = 10
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class AsySteerApplyRqrd:
     de_name     = "AsySteerApplyRqrd"
@@ -1620,11 +1620,11 @@ class AsySteerApplyRqrd:
         Lvl2 = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class AudMsgReq:
@@ -1645,11 +1645,11 @@ class AudMsgReq:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AudWarn:
@@ -1667,11 +1667,11 @@ class AudWarn:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -1695,11 +1695,11 @@ class AudWarnActv:
         NotVld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
 class AVert2:
@@ -1722,11 +1722,11 @@ class AVert2:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class AVert2Qf1:
@@ -1745,11 +1745,11 @@ class AVert2Qf1:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class BackCntrForMissCom:
@@ -1770,11 +1770,11 @@ class BackCntrForMissCom:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: %,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )
@@ -1798,11 +1798,11 @@ class BarForFuEco:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: km,  Range:0->2000000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
@@ -1826,11 +1826,11 @@ class BkpOfDstTrvld:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class BltLockStAtDrvrForBltLockSt1:
@@ -1847,11 +1847,11 @@ class BltLockStAtDrvrForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtDrvrForDevErrSts2:
     de_name     = "BltLockStAtDrvr.BltLockSts"
@@ -1867,11 +1867,11 @@ class BltLockStAtDrvrForDevErrSts2:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtPassForBltLockSt1:
     de_name     = "BltLockStAtPass.BltLockSt1"
@@ -1887,11 +1887,11 @@ class BltLockStAtPassForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtPassForBltLockSts:
     de_name     = "BltLockStAtPass.BltLockSts"
@@ -1907,11 +1907,11 @@ class BltLockStAtPassForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Description if a component is equipped or not.
 class BltLockStAtRowSecLeForBltLockEquid:
@@ -1928,11 +1928,11 @@ class BltLockStAtRowSecLeForBltLockEquid:
         NotEquid = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecLeForBltLockSt1:
     de_name     = "BltLockStAtRowSecLe.BltLockSt1"
@@ -1948,11 +1948,11 @@ class BltLockStAtRowSecLeForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecLeForBltLockSts:
     de_name     = "BltLockStAtRowSecLe.BltLockSts"
@@ -1968,11 +1968,11 @@ class BltLockStAtRowSecLeForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Description if a component is equipped or not.
 class BltLockStAtRowSecMidForBltLockEquid:
@@ -1989,11 +1989,11 @@ class BltLockStAtRowSecMidForBltLockEquid:
         NotEquid = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecMidForBltLockSt1:
     de_name     = "BltLockStAtRowSecMid.BltLockSt1"
@@ -2009,11 +2009,11 @@ class BltLockStAtRowSecMidForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecMidForBltLockSts:
     de_name     = "BltLockStAtRowSecMid.BltLockSts"
@@ -2029,11 +2029,11 @@ class BltLockStAtRowSecMidForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Description if a component is equipped or not.
 class BltLockStAtRowSecRiForBltLockEquid:
@@ -2050,11 +2050,11 @@ class BltLockStAtRowSecRiForBltLockEquid:
         NotEquid = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecRiForBltLockSt1:
     de_name     = "BltLockStAtRowSecRi.BltLockSt1"
@@ -2070,11 +2070,11 @@ class BltLockStAtRowSecRiForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowSecRiForBltLockSts:
     de_name     = "BltLockStAtRowSecRi.BltLockSts"
@@ -2090,11 +2090,11 @@ class BltLockStAtRowSecRiForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Description if a component is equipped or not.
 class BltLockStAtRowThrdLeForBltLockEquid:
@@ -2111,11 +2111,11 @@ class BltLockStAtRowThrdLeForBltLockEquid:
         NotEquid = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowThrdLeForBltLockSt1:
     de_name     = "BltLockStAtRowThrdLe.BltLockSt1"
@@ -2131,11 +2131,11 @@ class BltLockStAtRowThrdLeForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowThrdLeForBltLockSts:
     de_name     = "BltLockStAtRowThrdLe.BltLockSts"
@@ -2151,11 +2151,11 @@ class BltLockStAtRowThrdLeForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Description if a component is equipped or not.
 class BltLockStAtRowThrdRiForBltLockEquid:
@@ -2172,11 +2172,11 @@ class BltLockStAtRowThrdRiForBltLockEquid:
         NotEquid = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowThrdRiForBltLockSt1:
     de_name     = "BltLockStAtRowThrdRi.BltLockSt1"
@@ -2192,11 +2192,11 @@ class BltLockStAtRowThrdRiForBltLockSt1:
         Lock = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltLockStAtRowThrdRiForBltLockSts:
     de_name     = "BltLockStAtRowThrdRi.BltLockSts"
@@ -2212,11 +2212,11 @@ class BltLockStAtRowThrdRiForBltLockSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltRmnSound1:
     de_name     = "BltRmnSound1"
@@ -2232,11 +2232,11 @@ class BltRmnSound1:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltRmnSound2:
     de_name     = "BltRmnSound2"
@@ -2252,11 +2252,11 @@ class BltRmnSound2:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltRmnSound3:
     de_name     = "BltRmnSound3"
@@ -2272,11 +2272,11 @@ class BltRmnSound3:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BltRmnSound4:
     de_name     = "BltRmnSound4"
@@ -2292,11 +2292,11 @@ class BltRmnSound4:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class BrkAndAbsWarnIndcnReqChks:
@@ -2317,11 +2317,11 @@ class BrkAndAbsWarnIndcnReqChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -2343,11 +2343,11 @@ class BrkAndAbsWarnIndcnReqCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # 0= High fluid level
@@ -2366,11 +2366,11 @@ class BrkFldLvl:
         FldLvlLo = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
 class BrkFricTqAtWhlFrntLeAct:
@@ -2393,11 +2393,11 @@ class BrkFricTqAtWhlFrntLeAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2421,11 +2421,11 @@ class BrkFricTqAtWhlFrntRiAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2449,11 +2449,11 @@ class BrkFricTqAtWhlReLeAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2477,11 +2477,11 @@ class BrkFricTqAtWhlReRiAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class BrkRelsWarnReq:
@@ -2498,11 +2498,11 @@ class BrkRelsWarnReq:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # PLILJESS:
 # Autosar AI Tables Standard DATA-TYPE.
@@ -2521,11 +2521,11 @@ class BrkWarnIndcnReq:
         Off = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class Btn1ForUsrSwtPanFrntReq:
     de_name     = "Btn1ForUsrSwtPanFrntReq"
@@ -2541,11 +2541,11 @@ class Btn1ForUsrSwtPanFrntReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class Btn2ForUsrSwtPanFrntReq:
     de_name     = "Btn2ForUsrSwtPanFrntReq"
@@ -2561,11 +2561,11 @@ class Btn2ForUsrSwtPanFrntReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class Btn3ForUsrSwtPanFrntReq:
     de_name     = "Btn3ForUsrSwtPanFrntReq"
@@ -2581,11 +2581,11 @@ class Btn3ForUsrSwtPanFrntReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class Btn4ForUsrSwtPanFrntReq:
     de_name     = "Btn4ForUsrSwtPanFrntReq"
@@ -2601,11 +2601,11 @@ class Btn4ForUsrSwtPanFrntReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class Btn5ForUsrSwtPanFrntReq:
     de_name     = "Btn5ForUsrSwtPanFrntReq"
@@ -2621,11 +2621,11 @@ class Btn5ForUsrSwtPanFrntReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BtnAudFbSts:
     de_name     = "BtnAudFbSts"
@@ -2641,11 +2641,11 @@ class BtnAudFbSts:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # SImple representation of  a virtual (multistep) button for adjusting audio volume.
 # 0 = button not pressed. No request to adjust volume
@@ -2668,11 +2668,11 @@ class BtnAudVolSts:
         BtnVolDwnPsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Represents status of a (multilevel) button "Left/Right. 
 # 
@@ -2692,11 +2692,11 @@ class BtnMmedLeRiSts:
         BtnRiPsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class BtnMmedModSts:
     de_name     = "BtnMmedModSts"
@@ -2712,11 +2712,11 @@ class BtnMmedModSts:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Represents status of a button "Set". 
 # 
@@ -2735,11 +2735,11 @@ class BtnMmedSetSts:
         BtnSetPsd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries call presence information. Defined for CallSts range [0-1]
 # 
@@ -2759,11 +2759,11 @@ class CallStsIndcn:
         Active = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CarModSts1:
     de_name     = "VehModMngtGlbSafe1.CarModSts1"
@@ -2782,11 +2782,11 @@ class CarModSts1:
         CarModDyno = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->7
 class CarModSubtypWdCarModSubtyp:
@@ -2807,11 +2807,11 @@ class CarModSubtypWdCarModSubtyp:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -2835,11 +2835,11 @@ class CarTiGlb:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class CCSMBtn6:
@@ -2856,11 +2856,11 @@ class CCSMBtn6:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ChdLockgProtnStsToHmi:
     de_name     = "ChdLockgProtnStsToHmi"
@@ -2878,11 +2878,11 @@ class ChdLockgProtnStsToHmi:
         OnOffSafeInvld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ChdWinProtnStsAtDrvrRe:
     de_name     = "ChdWinProtnStsAtDrvrRe"
@@ -2898,11 +2898,11 @@ class ChdWinProtnStsAtDrvrRe:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ChdWinProtnStsAtPassRe:
     de_name     = "ChdWinProtnStsAtPassRe"
@@ -2918,11 +2918,11 @@ class ChdWinProtnStsAtPassRe:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClimaActv:
     de_name     = "ClimaActv"
@@ -2938,11 +2938,11 @@ class ClimaActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClimaEcoModRqrd:
     de_name     = "PostDrvgClimaReq"
@@ -2958,11 +2958,11 @@ class ClimaEcoModRqrd:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: W,  Range:0->2047, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
 class ClimaPwrCns:
@@ -2985,11 +2985,11 @@ class ClimaPwrCns:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ClimaRqrd:
@@ -3007,11 +3007,11 @@ class ClimaRqrd:
         Off = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
 class ClimaTmr:
@@ -3034,11 +3034,11 @@ class ClimaTmr:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ClimaTmrSts:
@@ -3055,11 +3055,11 @@ class ClimaTmrSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClimaTmrStsRqrd:
     de_name     = "ClimaTmrStsRqrd"
@@ -3075,11 +3075,11 @@ class ClimaTmrStsRqrd:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0=No Warning
 # 1=Fuel Low
@@ -3108,11 +3108,11 @@ class ClimaWarn:
         ActvnLimd = 8
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 24h or 12h indication of clock
 class ClkFmt:
@@ -3130,11 +3130,11 @@ class ClkFmt:
         UkwnClkFmt = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -3168,11 +3168,11 @@ class CllsnFwdWarnActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CllsnFwdWarnActvSts:
     de_name     = "CllsnFwdWarnActv.Sts"
@@ -3188,11 +3188,11 @@ class CllsnFwdWarnActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CllsnFwdWarnReq:
     de_name     = "CllsnFwdWarnReq"
@@ -3208,11 +3208,11 @@ class CllsnFwdWarnReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CllsnWarnReq:
     de_name     = "CllsnWarnReq"
@@ -3228,11 +3228,11 @@ class CllsnWarnReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CllsnWarnSideLe:
     de_name     = "CllsnWarnSide.Le"
@@ -3250,11 +3250,11 @@ class CllsnWarnSideLe:
         Resd3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CllsnWarnSideRi:
     de_name     = "CllsnWarnSide.Ri"
@@ -3272,11 +3272,11 @@ class CllsnWarnSideRi:
         Resd3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClngActv:
     de_name     = "ClngActv"
@@ -3293,11 +3293,11 @@ class ClngActv:
         Off = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClngRqrdFromHmi:
     de_name     = "ClngRqrdFromHmi"
@@ -3314,11 +3314,11 @@ class ClngRqrdFromHmi:
         Off = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ClsAutEna:
     de_name     = "ClsAutEna"
@@ -3334,11 +3334,11 @@ class ClsAutEna:
         Enabled = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CmftFctActv:
     de_name     = "CmftFctActv"
@@ -3354,11 +3354,11 @@ class CmftFctActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -3389,11 +3389,11 @@ class CmftFctSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
 class CmptmtAirTEstimdExtdComptmtT:
@@ -3416,11 +3416,11 @@ class CmptmtAirTEstimdExtdComptmtT:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class CmptmtAirTEstimdExtdQlyFlg:
@@ -3439,11 +3439,11 @@ class CmptmtAirTEstimdExtdQlyFlg:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
 class CmptmtTFrnt:
@@ -3466,11 +3466,11 @@ class CmptmtTFrnt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
@@ -3494,11 +3494,11 @@ class CmptmtTFrnt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Interpretation:
@@ -3522,11 +3522,11 @@ class CmptmtTFrntQf:
         SnsrDataOk = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Interpretation:
 # SnsrDataUndefd - Accuracy of data undefinable
@@ -3549,11 +3549,11 @@ class CmptmtTFrntQf:
         SnsrDataOk = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
 # 0			0			NotVld1		NotValid1		Not valid
@@ -3576,11 +3576,11 @@ class CnclWarnForCrsCtrl:
         NotVld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
 # 0			0			NotVld1		NotValid1		Not valid
@@ -3603,11 +3603,11 @@ class CnclWarnLatForAutDrv:
         NotVld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
 # 0			0			NotVld1		NotValid1		Not valid
@@ -3630,11 +3630,11 @@ class CnclWarnLgtForAutDrv:
         NotVld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CntDwnToManvStrtInDstToManvLocn:
     de_name     = "DstToManvLocn.CntDwnToManvStrt"
@@ -3650,11 +3650,11 @@ class CntDwnToManvStrtInDstToManvLocn:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ComLostExtrSound:
     de_name     = "ComLostExtrSound"
@@ -3671,11 +3671,11 @@ class ComLostExtrSound:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -3697,11 +3697,11 @@ class ConSftyWarnConSftyWarnId:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ConSftyWarnConSftyWarnLvl:
@@ -3720,11 +3720,11 @@ class ConSftyWarnConSftyWarnLvl:
         HiLvl = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ConSftyWarnConSftyWarnSnd:
     de_name     = "ConSftyWarn.ConSftyWarnSnd"
@@ -3740,11 +3740,11 @@ class ConSftyWarnConSftyWarnSnd:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
 class ConSftyWarnConSftyWarnTyp:
@@ -3765,11 +3765,11 @@ class ConSftyWarnConSftyWarnTyp:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m,  Range:0->65535
@@ -3791,11 +3791,11 @@ class ConSftyWarnDistanceToWarning:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Interpretation:
@@ -3817,11 +3817,11 @@ class CoolgReqForDispCen:
         HiReq = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Interpretation:
 # NoCoolgActv - No cooling request received, no actions taken
@@ -3843,11 +3843,11 @@ class CoolgStsForDisp:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CrsCtrlrSts:
     de_name     = "CrsCtrlrSts"
@@ -3864,11 +3864,11 @@ class CrsCtrlrSts:
         Actv = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CrvtSpdAdpvSts:
     de_name     = "CrvtSpdAdpvSts"
@@ -3886,11 +3886,11 @@ class CrvtSpdAdpvSts:
         SrvRqrd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
 # 0			0			NoWarn			No Warning			No warning
@@ -3911,11 +3911,11 @@ class CrvtSpdWarnReq:
         WarnForCmngCrvtRi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -3946,11 +3946,11 @@ class CrvtSpdWarnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CtraIndcnLe:
     de_name     = "CtraIndcnLe"
@@ -3966,11 +3966,11 @@ class CtraIndcnLe:
         CtraWarn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CtraIndcnRi:
     de_name     = "CtraIndcnRi"
@@ -3986,11 +3986,11 @@ class CtraIndcnRi:
         CtraWarn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CtraOn1:
     de_name     = "CtraOn1"
@@ -4008,11 +4008,11 @@ class CtraOn1:
         TrlrOff = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CtraSwOnOff:
     de_name     = "CtraSwOnOff"
@@ -4028,11 +4028,11 @@ class CtraSwOnOff:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class CurtActvnReReq:
     de_name     = "CurtActvnReReq"
@@ -4050,11 +4050,11 @@ class CurtActvnReReq:
         Spare2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class DataSpclDMSMDataIdn:
@@ -4075,11 +4075,11 @@ class DataSpclDMSMDataIdn:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4101,11 +4101,11 @@ class DataSpclDMSMDataNrSpcl1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4127,11 +4127,11 @@ class DataSpclDMSMDataNrSpcl2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4153,11 +4153,11 @@ class DataSpclDMSMDataNrSpcl3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class DateOrTi:
@@ -4176,11 +4176,11 @@ class DateOrTi:
         DateTi = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Days,  Range:1->31
 class Day:
@@ -4201,11 +4201,11 @@ class Day:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Days,  Range:1->31
@@ -4227,11 +4227,11 @@ class Day1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Days,  Range:0->750
@@ -4253,11 +4253,11 @@ class DayToSrv:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class DiagcCCSM:
@@ -4280,11 +4280,11 @@ class DiagcCCSM:
         SnrFltT = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DiagcRCSM:
     de_name     = "DiagcRCSM"
@@ -4306,11 +4306,11 @@ class DiagcRCSM:
         Spare2 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DiagcRSHC:
     de_name     = "DiagcRSHC"
@@ -4332,11 +4332,11 @@ class DiagcRSHC:
         Spare2 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DiagcStsDMSM:
     de_name     = "DiagcStsDMSM"
@@ -4354,11 +4354,11 @@ class DiagcStsDMSM:
         Spare2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DispAndHomeBtnSts:
     de_name     = "DispAndHomeBtnSts"
@@ -4374,11 +4374,11 @@ class DispAndHomeBtnSts:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
 class DispBattEgyIn:
@@ -4401,11 +4401,11 @@ class DispBattEgyIn:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -4429,11 +4429,11 @@ class DispBattEgyOut:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class DispOfPrpsnMod:
@@ -4464,11 +4464,11 @@ class DispOfPrpsnMod:
         NotOfUse4 = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DoorDrvrLockReSts:
     de_name     = "DoorDrvrLockReSts"
@@ -4486,11 +4486,11 @@ class DoorDrvrLockReSts:
         SafeLockd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DoorDrvrLockSts:
     de_name     = "DoorDrvrLockSts"
@@ -4508,11 +4508,11 @@ class DoorDrvrLockSts:
         SafeLockd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class DoorDrvrReSts:
@@ -4530,11 +4530,11 @@ class DoorDrvrReSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class DoorDrvrSts:
@@ -4552,11 +4552,11 @@ class DoorDrvrSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DoorPassLockReSts:
     de_name     = "DoorPassLockReSts"
@@ -4574,11 +4574,11 @@ class DoorPassLockReSts:
         SafeLockd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DoorPassLockSts:
     de_name     = "DoorPassLockSts"
@@ -4596,11 +4596,11 @@ class DoorPassLockSts:
         SafeLockd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class DoorPassReSts:
@@ -4618,11 +4618,11 @@ class DoorPassReSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class DoorPassSts:
@@ -4640,11 +4640,11 @@ class DoorPassSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DriveAwayInfoWarnReqAudWarnReq:
     de_name     = "DriveAwayInfoWarnReq.AudWarnReq"
@@ -4661,11 +4661,11 @@ class DriveAwayInfoWarnReqAudWarnReq:
         LeaveNow = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DriveAwayInfoWarnReqCtrlDirOfTrfcLi:
     de_name     = "DriveAwayInfoWarnReq.CtrlDirOfTrfcLi"
@@ -4687,11 +4687,11 @@ class DriveAwayInfoWarnReqCtrlDirOfTrfcLi:
         All = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DriveAwayInfoWarnReqInterruptionSrc:
     de_name     = "DriveAwayInfoWarnReq.InterruptionSrc"
@@ -4713,11 +4713,11 @@ class DriveAwayInfoWarnReqInterruptionSrc:
         Resd7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DriveAwayInfoWarnReqReqSrc:
     de_name     = "DriveAwayInfoWarnReq.ReqSrc"
@@ -4739,11 +4739,11 @@ class DriveAwayInfoWarnReqReqSrc:
         Resd7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class DriveAwayInfoWarnReqTiToDrvCntDwnTi:
@@ -4764,11 +4764,11 @@ class DriveAwayInfoWarnReqTiToDrvCntDwnTi:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class DriveAwayInfoWarnReqVisWarnReq:
@@ -4786,11 +4786,11 @@ class DriveAwayInfoWarnReqVisWarnReq:
         LeaveNow = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvgInWrgDirOfTrfc:
     de_name     = "DrvgInWrgDirOfTrfc"
@@ -4806,11 +4806,11 @@ class DrvgInWrgDirOfTrfc:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvModReq:
     de_name     = "DrvModReq"
@@ -4840,11 +4840,11 @@ class DrvModReq:
         Err = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrCtrlOfPassSeatFrntReqd:
     de_name     = "DrvrCtrlOfPassSeatFrntReqd"
@@ -4860,11 +4860,11 @@ class DrvrCtrlOfPassSeatFrntReqd:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrCtrlOfPassSeatFrntSts:
     de_name     = "DrvrCtrlOfPassSeatFrntSts"
@@ -4882,11 +4882,11 @@ class DrvrCtrlOfPassSeatFrntSts:
         Actvd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Describes the desired vehicle movement direction from the driver.
 # Contains only the drivers longitudinal direction intent. In which direction shall the car move.
@@ -4910,11 +4910,11 @@ class DrvrDesDir:
         Resd3 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -4948,11 +4948,11 @@ class DrvrDispSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrDispSetgSts:
     de_name     = "DrvrDispSetg.Sts"
@@ -4969,11 +4969,11 @@ class DrvrDispSetgSts:
         Dyn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -5007,11 +5007,11 @@ class DrvrHmiBackGndInfoSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrHmiBackGndInfoSetgSetg:
     de_name     = "DrvrHmiBackGndInfoSetg.Setg"
@@ -5031,11 +5031,11 @@ class DrvrHmiBackGndInfoSetgSetg:
         DrvrHmiBackGndInfoSetg5 = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -5069,11 +5069,11 @@ class DrvrHmiDispdModPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrHmiDispdModSts:
     de_name     = "DrvrHmiDispdMod.Sts"
@@ -5090,11 +5090,11 @@ class DrvrHmiDispdModSts:
         DispNavMod = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -5128,11 +5128,11 @@ class DrvrHmiUsrIfSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrHmiUsrIfSetgSetg:
     de_name     = "DrvrHmiUsrIfSetg.Setg"
@@ -5156,11 +5156,11 @@ class DrvrHmiUsrIfSetgSetg:
         UsrIfVrnt9 = 9
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrMassgRunng:
     de_name     = "DrvrMassgRunng"
@@ -5176,11 +5176,11 @@ class DrvrMassgRunng:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrPfmncLvl:
     de_name     = "DrvrPfmncLvl"
@@ -5200,11 +5200,11 @@ class DrvrPfmncLvl:
         DrvrLvl5 = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -5238,11 +5238,11 @@ class DrvrPfmncMonActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrPfmncMonActvSts:
     de_name     = "DrvrPfmncMonActv.Sts"
@@ -5258,11 +5258,11 @@ class DrvrPfmncMonActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -5293,11 +5293,11 @@ class DrvrPfmncSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
 # 0			0			NoWarn			No Warning			No Warning
@@ -5320,11 +5320,11 @@ class DrvrPfmncWarnReq:
         NotInUse = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatActvSpplFct:
     de_name     = "DrvrSeatActvSpplFct"
@@ -5344,11 +5344,11 @@ class DrvrSeatActvSpplFct:
         MassgFct = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgInten:
     de_name     = "DrvrSeatDispMassgFct.MassgInten"
@@ -5365,11 +5365,11 @@ class DrvrSeatDispMassgFctMassgInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgProg:
     de_name     = "DrvrSeatDispMassgFct.MassgProg"
@@ -5388,11 +5388,11 @@ class DrvrSeatDispMassgFctMassgProg:
         Prog5 = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgSpdLvl:
     de_name     = "DrvrSeatDispMassgFct.MassgSpdLvl"
@@ -5409,11 +5409,11 @@ class DrvrSeatDispMassgFctMassgSpdLvl:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatDispMassgFctOnOff:
     de_name     = "DrvrSeatDispMassgFct.OnOff"
@@ -5429,11 +5429,11 @@ class DrvrSeatDispMassgFctOnOff:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatDispSpplFct:
     de_name     = "DrvrSeatDispSpplFct"
@@ -5453,11 +5453,11 @@ class DrvrSeatDispSpplFct:
         MassgFct = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatMassgFctMassgInten:
     de_name     = "DrvrSeatMassgFct.MassgInten"
@@ -5474,11 +5474,11 @@ class DrvrSeatMassgFctMassgInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatMassgFctMassgProg:
     de_name     = "DrvrSeatMassgFct.MassgProg"
@@ -5497,11 +5497,11 @@ class DrvrSeatMassgFctMassgProg:
         Prog5 = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatMassgFctMassgSpdLvl:
     de_name     = "DrvrSeatMassgFct.MassgSpdLvl"
@@ -5518,11 +5518,11 @@ class DrvrSeatMassgFctMassgSpdLvl:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatMassgFctOnOff:
     de_name     = "DrvrSeatMassgFct.OnOff"
@@ -5538,11 +5538,11 @@ class DrvrSeatMassgFctOnOff:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtAdjmtOfSpplFctHozlSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtAdjmtOfSpplFctHozlSts"
@@ -5559,11 +5559,11 @@ class DrvrSeatSwtAdjmtOfSpplFctHozlSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtAdjmtOfSpplFctVertSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtAdjmtOfSpplFctVertSts"
@@ -5580,11 +5580,11 @@ class DrvrSeatSwtAdjmtOfSpplFctVertSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtHeiFrntSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtHeiFrntSts"
@@ -5601,11 +5601,11 @@ class DrvrSeatSwtHeiFrntSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtHeiSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtHeiSts"
@@ -5622,11 +5622,11 @@ class DrvrSeatSwtHeiSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtInclSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtInclSts"
@@ -5643,11 +5643,11 @@ class DrvrSeatSwtInclSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtSelnOfSpplFctSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtSelnOfSpplFctSts"
@@ -5664,11 +5664,11 @@ class DrvrSeatSwtSelnOfSpplFctSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrSeatSwtSldSts:
     de_name     = "DrvrSeatSwtSts.DrvrSeatSwtSldSts"
@@ -5685,11 +5685,11 @@ class DrvrSeatSwtSldSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DrvrWLoadLvl:
     de_name     = "DrvrWLoadLvl"
@@ -5707,11 +5707,11 @@ class DrvrWLoadLvl:
         HiLvl = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DstLong:
     de_name     = "IndcnUnit.DstLong"
@@ -5728,11 +5728,11 @@ class DstLong:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -5763,11 +5763,11 @@ class DstNotifSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class DstSho:
     de_name     = "IndcnUnit.DstSho"
@@ -5785,11 +5785,11 @@ class DstSho:
         UkwnUnit = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->2000
 class DstToEmpty:
@@ -5810,11 +5810,11 @@ class DstToEmpty:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m,  Range:0->4000
@@ -5836,11 +5836,11 @@ class DstToManvInDstToManvLocn:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: km,  Range:0->32000
@@ -5862,11 +5862,11 @@ class DstToSrv:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -5890,11 +5890,11 @@ class DstTrvld1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -5918,11 +5918,11 @@ class DstTrvld2:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m,  Range:0->255
@@ -5944,11 +5944,11 @@ class DstTrvldHiResl:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Milg,  Range:0->1000000
@@ -5970,11 +5970,11 @@ class DstTrvldMst2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class DstUnit:
@@ -5991,11 +5991,11 @@ class DstUnit:
         miles = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -6029,11 +6029,11 @@ class EasyInOutDrvrSeatAdjmtPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class EasyInOutDrvrSeatAdjmtSts:
     de_name     = "EasyInOutDrvrSeatAdjmt.Sts"
@@ -6049,11 +6049,11 @@ class EasyInOutDrvrSeatAdjmtSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
 class EgyLvlElecMai:
@@ -6074,11 +6074,11 @@ class EgyLvlElecMai:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6100,11 +6100,11 @@ class EgyLvlElecSubtyp:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class EgySave:
@@ -6121,11 +6121,11 @@ class EgySave:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class EmgyAsscSts:
     de_name     = "EmgyAsscSts"
@@ -6144,11 +6144,11 @@ class EmgyAsscSts:
         AsscReqNotAprvd = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -6179,11 +6179,11 @@ class EmgyVehWarnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class EngCooltIndcnReq:
     de_name     = "EngCooltIndcnReq"
@@ -6207,11 +6207,11 @@ class EngCooltIndcnReq:
         MsgSrvRqrd = 9
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0= High fluid level
 # 1= Low fluid level
@@ -6229,11 +6229,11 @@ class EngCooltLvl:
         FldLvlLo = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
 class EngFuCns:
@@ -6256,11 +6256,11 @@ class EngFuCns:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
@@ -6284,11 +6284,11 @@ class EngFuCnsFild:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hours,  Range:0->2000
@@ -6310,11 +6310,11 @@ class EngHrToSrv:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: rpm,  Range:0->16383, Resolution: (0.5*x+0.0, raw is unsigned, 15 bits )
@@ -6338,11 +6338,11 @@ class EngN:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -6364,11 +6364,11 @@ class EngNChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6390,11 +6390,11 @@ class EngNCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: RpmPerSec,  Range:-30000->30000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -6418,11 +6418,11 @@ class EngNSafeEngNGrdt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: %,  Range:0->120, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -6446,11 +6446,11 @@ class EngOilLvl:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Engine oil level warning information
@@ -6472,11 +6472,11 @@ class EngOilLvlSts:
         Resd = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Engine oil pressure warning information
 class EngOilPWarn:
@@ -6493,11 +6493,11 @@ class EngOilPWarn:
         EngOilPNotOk = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rpm,  Range:0->16383.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
 class EngSpdDispd:
@@ -6520,11 +6520,11 @@ class EngSpdDispd:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # PLILJESS:
@@ -6544,11 +6544,11 @@ class EngStrtStopSetg:
         Off = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class EpbLampReq:
     de_name     = "EpbLampReq.EpbLampReq"
@@ -6566,11 +6566,11 @@ class EpbLampReq:
         Flash3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
 class EpbLampReqChks:
@@ -6593,11 +6593,11 @@ class EpbLampReqChks:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 4 bits )
@@ -6621,11 +6621,11 @@ class EpbLampReqCntr:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Information on activation/ deactivation of Electronic Stability Control (ESC)
@@ -6646,11 +6646,11 @@ class EscSt:
         UsrOff = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class EscStChks:
@@ -6671,11 +6671,11 @@ class EscStChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6697,11 +6697,11 @@ class EscStCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class EscWarnIndcnReq:
@@ -6720,11 +6720,11 @@ class EscWarnIndcnReq:
         EscWarnIndcnOffReq = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class EscWarnIndcnReqChks:
@@ -6745,11 +6745,11 @@ class EscWarnIndcnReqChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6771,11 +6771,11 @@ class EscWarnIndcnReqCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -6810,11 +6810,11 @@ class ExtrMirrFoldSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ExtrMirrFoldSetgSts:
     de_name     = "ExtrMirrFoldSetg.Sts"
@@ -6830,11 +6830,11 @@ class ExtrMirrFoldSetgSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -6868,11 +6868,11 @@ class ExtrMirrTiltSetg2IdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # PLILJESS:
 # Autosar AI Tables Standard DATA-TYPE.
@@ -6891,11 +6891,11 @@ class ExtrMirrTiltSetg2MirrDrvr:
         Off = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # PLILJESS:
 # Autosar AI Tables Standard DATA-TYPE.
@@ -6914,11 +6914,11 @@ class ExtrMirrTiltSetg2MirrPass:
         Off = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
 # 		                                                                                                                	1	Set	Flag set: Flag is set (TRUE)
@@ -6936,11 +6936,11 @@ class FanForCmptmtTRunng:
         Set = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
 # 		                                                                                                                	1	Set	Flag set: Flag is set (TRUE)
@@ -6958,11 +6958,11 @@ class FanForCmptmtTRunng:
         Set = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltEgyCnsWdSts:
     de_name     = "VehModMngtGlbSafe1.FltEgyCnsWdSts"
@@ -6978,11 +6978,11 @@ class FltEgyCnsWdSts:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltIndcrTurnLeFrnt:
     de_name     = "FltIndcrTurnLeFrnt"
@@ -6998,11 +6998,11 @@ class FltIndcrTurnLeFrnt:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltIndcrTurnLeRe:
     de_name     = "FltIndcrTurnLeRe"
@@ -7018,11 +7018,11 @@ class FltIndcrTurnLeRe:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltIndcrTurnRiFrnt:
     de_name     = "FltIndcrTurnRiFrnt"
@@ -7038,11 +7038,11 @@ class FltIndcrTurnRiFrnt:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltIndcrTurnRiRe:
     de_name     = "FltIndcrTurnRiRe"
@@ -7058,11 +7058,11 @@ class FltIndcrTurnRiRe:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FltOfLiDaytiRunngRi:
     de_name     = "FltOfLiDaytiRunngRi"
@@ -7078,11 +7078,11 @@ class FltOfLiDaytiRunngRi:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
 class FRNetworkStatus:
@@ -7103,11 +7103,11 @@ class FRNetworkStatus:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class FrntAxleWarn:
@@ -7126,11 +7126,11 @@ class FrntAxleWarn:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FrntWiprLvrReq2FrntWiprLvrCmd1:
     de_name     = "FrntWiprLvrReq2.FrntWiprLvrCmd1"
@@ -7149,11 +7149,11 @@ class FrntWiprLvrReq2FrntWiprLvrCmd1:
         FrntWiprContnsHiSpd = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->3
 class FrntWiprLvrReq2FrntWiprLvrCntr:
@@ -7174,11 +7174,11 @@ class FrntWiprLvrReq2FrntWiprLvrCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -7200,11 +7200,11 @@ class FrntWiprLvrReq2FrntWiprLvrCrc:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class FrntWiprLvrReq2FrntWiprLvrQf:
@@ -7223,11 +7223,11 @@ class FrntWiprLvrReq2FrntWiprLvrQf:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # LperHectoKiloM = L/100Km
 # KiloMPerL = Km/L
@@ -7250,11 +7250,11 @@ class FuCnsUnit:
         UkwnUnit = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FuHeatrActv:
     de_name     = "FuHeatrActv"
@@ -7270,11 +7270,11 @@ class FuHeatrActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
 class FuHeatrFuCns1:
@@ -7297,11 +7297,11 @@ class FuHeatrFuCns1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Litre,  Range:0->1.27, Resolution: (0.01*x+0.0, raw is unsigned, 0 bits )
@@ -7325,11 +7325,11 @@ class FuHeatrFuCnsDurgCyc1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class FuLvlIndcdQly:
@@ -7348,11 +7348,11 @@ class FuLvlIndcdQly:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Litre,  Range:0->204.6, Resolution: (0.2*x+0.0, raw is unsigned, 10 bits )
 class FuLvlIndcdVal:
@@ -7375,11 +7375,11 @@ class FuLvlIndcdVal:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class FuLvlLoIndcn:
@@ -7396,11 +7396,11 @@ class FuLvlLoIndcn:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class FuLvlLoWarn:
     de_name     = "FuLvlLoWarn"
@@ -7416,11 +7416,11 @@ class FuLvlLoWarn:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class GearIndcn:
     de_name     = "GearIndcnRec.GearIndcn"
@@ -7450,11 +7450,11 @@ class GearIndcn:
         Rvs = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class GearShiftIndcn:
     de_name     = "GearIndcnRec.GearShiftIndcn"
@@ -7472,11 +7472,11 @@ class GearShiftIndcn:
         ShiftDwnIndcn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class GearTarIndcn:
     de_name     = "GearIndcnRec.GearTarIndcn"
@@ -7506,11 +7506,11 @@ class GearTarIndcn:
         Rvs = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )
 class GrdForFuEco:
@@ -7533,11 +7533,11 @@ class GrdForFuEco:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class HdrestFoldReq2:
@@ -7555,11 +7555,11 @@ class HdrestFoldReq2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class HeatrDurgDrvgReqd:
@@ -7577,11 +7577,11 @@ class HeatrDurgDrvgReqd:
         Aut = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HiQlyInTireCircumCalByNav:
     de_name     = "TireCircumCalByNav.HiQly"
@@ -7597,11 +7597,11 @@ class HiQlyInTireCircumCalByNav:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Interpretation:
 # 0 - Flr - Floor
@@ -7632,11 +7632,11 @@ class HmiCmptmtAirDistbnFrnt:
         Aut = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiCmptmtCoolgReq:
     de_name     = "HmiCmptmtCoolgReq"
@@ -7652,11 +7652,11 @@ class HmiCmptmtCoolgReq:
         Auto = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
 class HmiCmptmtTSpForRowFirstLe:
@@ -7679,11 +7679,11 @@ class HmiCmptmtTSpForRowFirstLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -7707,11 +7707,11 @@ class HmiCmptmtTSpForRowFirstRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -7735,11 +7735,11 @@ class HmiCmptmtTSpForRowSecLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -7763,11 +7763,11 @@ class HmiCmptmtTSpForRowSecRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class HmiCmptmtTSpSpclForRowFirstLe:
@@ -7785,11 +7785,11 @@ class HmiCmptmtTSpSpclForRowFirstLe:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowFirstRi:
     de_name     = "HmiCmptmtTSp.HmiCmptmtTSpSpclForRowFirstRi"
@@ -7806,11 +7806,11 @@ class HmiCmptmtTSpSpclForRowFirstRi:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowSecLe:
     de_name     = "HmiCmptmtTSp.HmiCmptmtTSpSpclForRowSecLe"
@@ -7827,11 +7827,11 @@ class HmiCmptmtTSpSpclForRowSecLe:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowSecRi:
     de_name     = "HmiCmptmtTSp.HmiCmptmtTSpSpclForRowSecRi"
@@ -7848,11 +7848,11 @@ class HmiCmptmtTSpSpclForRowSecRi:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDefrstElecForMirrReq:
     de_name     = "HmiDefrstElecReq.MirrElecReq"
@@ -7869,11 +7869,11 @@ class HmiDefrstElecForMirrReq:
         AutOn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDefrstElecFrntReq:
     de_name     = "HmiDefrstElecReq.FrntElecReq"
@@ -7890,11 +7890,11 @@ class HmiDefrstElecFrntReq:
         AutOn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDefrstElecReReq:
     de_name     = "HmiDefrstElecReq.ReElecReq"
@@ -7911,11 +7911,11 @@ class HmiDefrstElecReReq:
         AutOn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDefrstFrntSts:
     de_name     = "HmiDefrstElecSts.Frnt"
@@ -7935,11 +7935,11 @@ class HmiDefrstFrntSts:
         AutoCdn = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDefrstMaxReq:
     de_name     = "HmiDefrstMaxReq"
@@ -7956,11 +7956,11 @@ class HmiDefrstMaxReq:
         AutOn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiDfrstReSts:
     de_name     = "HmiDefrstElecSts.Re"
@@ -7980,11 +7980,11 @@ class HmiDfrstReSts:
         AutoCdn = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiHvacFanLvlFrnt:
     de_name     = "HmiHvacFanLvlFrnt"
@@ -8013,11 +8013,11 @@ class HmiHvacFanLvlFrnt:
         Max = 14
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiHvacFanLvlRe:
     de_name     = "HmiHvacFanLvlRe"
@@ -8046,11 +8046,11 @@ class HmiHvacFanLvlRe:
         Max = 14
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Interpretation:
 # 0 - OsaFull - Full OSA
@@ -8074,11 +8074,11 @@ class HmiHvacRecircCmd:
         RecircFull = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiHvacReCtrl:
     de_name     = "HmiHvacReCtrl"
@@ -8095,11 +8095,11 @@ class HmiHvacReCtrl:
         On = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiMirrDefrstSts:
     de_name     = "HmiDefrstElecSts.Mirrr"
@@ -8119,11 +8119,11 @@ class HmiMirrDefrstSts:
         AutoCdn = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatClimaExtdHmiSeatVentnForRowSecLe:
     de_name     = "HmiSeatClimaExtd.HmiSeatVentnForRowSecLe"
@@ -8141,11 +8141,11 @@ class HmiSeatClimaExtdHmiSeatVentnForRowSecLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatClimaExtdHmiSeatVentnForRowSecRi:
     de_name     = "HmiSeatClimaExtd.HmiSeatVentnForRowSecRi"
@@ -8163,11 +8163,11 @@ class HmiSeatClimaExtdHmiSeatVentnForRowSecRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatHeatgForRowFirstLe:
     de_name     = "HmiSeatClima.HmiSeatHeatgForRowFirstLe"
@@ -8185,11 +8185,11 @@ class HmiSeatHeatgForRowFirstLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatHeatgForRowFirstRi:
     de_name     = "HmiSeatClima.HmiSeatHeatgForRowFirstRi"
@@ -8207,11 +8207,11 @@ class HmiSeatHeatgForRowFirstRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatHeatgForRowSecLe:
     de_name     = "HmiSeatClima.HmiSeatHeatgForRowSecLe"
@@ -8229,11 +8229,11 @@ class HmiSeatHeatgForRowSecLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatHeatgForRowSecRi:
     de_name     = "HmiSeatClima.HmiSeatHeatgForRowSecRi"
@@ -8251,11 +8251,11 @@ class HmiSeatHeatgForRowSecRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatVentnForRowFirstLe:
     de_name     = "HmiSeatClima.HmiSeatVentnForRowFirstLe"
@@ -8273,11 +8273,11 @@ class HmiSeatVentnForRowFirstLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HmiSeatVentnForRowFirstRi:
     de_name     = "HmiSeatClima.HmiSeatVentnForRowFirstRi"
@@ -8295,11 +8295,11 @@ class HmiSeatVentnForRowFirstRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class HoodSts:
@@ -8317,11 +8317,11 @@ class HoodSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: hours,  Range:0->23
 class Hr:
@@ -8342,11 +8342,11 @@ class Hr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hours,  Range:0->23
@@ -8368,11 +8368,11 @@ class Hr1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -8407,11 +8407,11 @@ class HudActvReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudActvReqSts:
     de_name     = "HudActvReq.Sts"
@@ -8427,11 +8427,11 @@ class HudActvReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudActvSts:
     de_name     = "HudActvSts"
@@ -8447,11 +8447,11 @@ class HudActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudAdjmtReq:
     de_name     = "HudAdjmtReq"
@@ -8467,11 +8467,11 @@ class HudAdjmtReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudDiagcHudCircShoSts:
     de_name     = "HudDiagc.HudCircShoSts"
@@ -8487,11 +8487,11 @@ class HudDiagcHudCircShoSts:
         Err = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudDiagcHudCricOpenSts:
     de_name     = "HudDiagc.HudCricOpenSts"
@@ -8507,11 +8507,11 @@ class HudDiagcHudCricOpenSts:
         Err = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudDiagcHudTSts:
     de_name     = "HudDiagc.HudTSts"
@@ -8527,11 +8527,11 @@ class HudDiagcHudTSts:
         Err = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudDiagcImgHudErrSts:
     de_name     = "HudDiagc.ImgHudErrSts"
@@ -8547,11 +8547,11 @@ class HudDiagcImgHudErrSts:
         Err = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudDiagcImgHudTmpNotAvlSts:
     de_name     = "HudDiagc.ImgHudTmpNotAvlSts"
@@ -8567,11 +8567,11 @@ class HudDiagcImgHudTmpNotAvlSts:
         NotAvl = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudErgoSetgReq:
     de_name     = "HudErgoSetgReq"
@@ -8587,11 +8587,11 @@ class HudErgoSetgReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudSts:
     de_name     = "HudSts"
@@ -8612,11 +8612,11 @@ class HudSts:
         Resd3 = 6
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct00:
     de_name     = "HudVisFctSetg.HudFct00"
@@ -8632,11 +8632,11 @@ class HudVisFctSetgHudFct00:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct01:
     de_name     = "HudVisFctSetg.HudFct01"
@@ -8652,11 +8652,11 @@ class HudVisFctSetgHudFct01:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct02:
     de_name     = "HudVisFctSetg.HudFct02"
@@ -8672,11 +8672,11 @@ class HudVisFctSetgHudFct02:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct03:
     de_name     = "HudVisFctSetg.HudFct03"
@@ -8692,11 +8692,11 @@ class HudVisFctSetgHudFct03:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct04:
     de_name     = "HudVisFctSetg.HudFct04"
@@ -8712,11 +8712,11 @@ class HudVisFctSetgHudFct04:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct05:
     de_name     = "HudVisFctSetg.HudFct05"
@@ -8732,11 +8732,11 @@ class HudVisFctSetgHudFct05:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct06:
     de_name     = "HudVisFctSetg.HudFct06"
@@ -8752,11 +8752,11 @@ class HudVisFctSetgHudFct06:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct07:
     de_name     = "HudVisFctSetg.HudFct07"
@@ -8772,11 +8772,11 @@ class HudVisFctSetgHudFct07:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct08:
     de_name     = "HudVisFctSetg.HudFct08"
@@ -8792,11 +8792,11 @@ class HudVisFctSetgHudFct08:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct09:
     de_name     = "HudVisFctSetg.HudFct09"
@@ -8812,11 +8812,11 @@ class HudVisFctSetgHudFct09:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct10:
     de_name     = "HudVisFctSetg.HudFct10"
@@ -8832,11 +8832,11 @@ class HudVisFctSetgHudFct10:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct11:
     de_name     = "HudVisFctSetg.HudFct11"
@@ -8852,11 +8852,11 @@ class HudVisFctSetgHudFct11:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct12:
     de_name     = "HudVisFctSetg.HudFct12"
@@ -8872,11 +8872,11 @@ class HudVisFctSetgHudFct12:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct13:
     de_name     = "HudVisFctSetg.HudFct13"
@@ -8892,11 +8892,11 @@ class HudVisFctSetgHudFct13:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct14:
     de_name     = "HudVisFctSetg.HudFct14"
@@ -8912,11 +8912,11 @@ class HudVisFctSetgHudFct14:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct15:
     de_name     = "HudVisFctSetg.HudFct15"
@@ -8932,11 +8932,11 @@ class HudVisFctSetgHudFct15:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct16:
     de_name     = "HudVisFctSetg.HudFct16"
@@ -8952,11 +8952,11 @@ class HudVisFctSetgHudFct16:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct17:
     de_name     = "HudVisFctSetg.HudFct17"
@@ -8972,11 +8972,11 @@ class HudVisFctSetgHudFct17:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct18:
     de_name     = "HudVisFctSetg.HudFct18"
@@ -8992,11 +8992,11 @@ class HudVisFctSetgHudFct18:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class HudVisFctSetgHudFct19:
     de_name     = "HudVisFctSetg.HudFct19"
@@ -9012,11 +9012,11 @@ class HudVisFctSetgHudFct19:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9050,11 +9050,11 @@ class HudVisFctSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Kg / h,  Range:0->1000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
 class HvacAirMFlowEstimd:
@@ -9077,11 +9077,11 @@ class HvacAirMFlowEstimd:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class HznRstExtd:
@@ -9099,11 +9099,11 @@ class HznRstExtd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -9135,11 +9135,11 @@ class HzrdLiWarnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9173,11 +9173,11 @@ class IdPenForUnits:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IndcnOfParkAssiSts:
     de_name     = "IndcnOfParkAssiSts"
@@ -9193,11 +9193,11 @@ class IndcnOfParkAssiSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IndcnOfPrkgAutSts:
     de_name     = "IndcnOfPrkgAutSts"
@@ -9216,11 +9216,11 @@ class IndcnOfPrkgAutSts:
         PrkgOutManv = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # DateFmt1 = YMD
 # DateFmt2 = DMY
@@ -9241,11 +9241,11 @@ class IndcnUnitDateFmt:
         UkwnFmt = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IndcrDisp1WdSts:
     de_name     = "IndcrDisp1WdSts"
@@ -9263,11 +9263,11 @@ class IndcrDisp1WdSts:
         LeAndRiOn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IndcrTurnSts1WdSts:
     de_name     = "IndcrTurnSts1WdSts"
@@ -9285,11 +9285,11 @@ class IndcrTurnSts1WdSts:
         LeAndRiOn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
 class IniValSigCfgIDBackboneFR:
@@ -9310,11 +9310,11 @@ class IniValSigCfgIDBackboneFR:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -9336,11 +9336,11 @@ class IntrBriSts:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class IntrLiAmbLiSetgForLiInten:
@@ -9358,11 +9358,11 @@ class IntrLiAmbLiSetgForLiInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Amibiance LIgt color setting:
 # 0 = Temperature
@@ -9389,11 +9389,11 @@ class IntrLiAmbLiSetgForLiTintg:
         Tintg7 = 8
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9427,11 +9427,11 @@ class IntrLiAmbLiSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IntrLiSurrndgsLiSetgForLiInten:
     de_name     = "IntrLiSurrndgsLiSetgLi.LiInten"
@@ -9448,11 +9448,11 @@ class IntrLiSurrndgsLiSetgForLiInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0 = Full
 # 1 = Reduced
@@ -9470,11 +9470,11 @@ class IntrLiSurrndgsLiSetgForLiLvl:
         LvlReduced = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9508,11 +9508,11 @@ class IntrLiSurrndgsLiSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9546,11 +9546,11 @@ class IntrMirrTintgSetgPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class IntrMirrTintgSetgSts:
     de_name     = "IntrMirrTintgSetg.MirrDimLvl"
@@ -9568,11 +9568,11 @@ class IntrMirrTintgSetgSts:
         Inhibit = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Warning status	                                
 # == 0	Calibration status OK (Normal IHU behavior) 
@@ -9591,11 +9591,11 @@ class iTPMSCalPsbl:
         CalNoPsbl = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Calibration status
 class iTPMSCalSts:
@@ -9617,11 +9617,11 @@ class iTPMSCalSts:
         Resd3 = 6
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # iTPMS system status and warnings
 class iTPMSTirePMSts:
@@ -9644,11 +9644,11 @@ class iTPMSTirePMSts:
         SysFailr = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class KeyLostWarnIndcn:
     de_name     = "KeyLostWarnIndcn"
@@ -9665,11 +9665,11 @@ class KeyLostWarnIndcn:
         KeyMsgLost = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9703,11 +9703,11 @@ class KeyProfMpgUpdForIdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class KeyProfMpgUpdKeyProfMpgUpdOff:
     de_name     = "KeyProfMpgUpd.KeyProfMpgUpdOff"
@@ -9724,11 +9724,11 @@ class KeyProfMpgUpdKeyProfMpgUpdOff:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Data-Type for Key Search Location
@@ -9765,11 +9765,11 @@ class KeyReadReqFromSetgMgr:
         KeyLocnResvIntSimple = 10
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class KeyReadStsToProfCtrlBoolean:
     de_name     = "KeyReadStsToProfCtrl.Boolean"
@@ -9786,11 +9786,11 @@ class KeyReadStsToProfCtrlBoolean:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class KeyReadStsToProfCtrlKeyId:
@@ -9817,11 +9817,11 @@ class KeyReadStsToProfCtrlKeyId:
         Key11 = 11
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class KeyRmnIndcn:
     de_name     = "KeyRmnIndcn"
@@ -9837,11 +9837,11 @@ class KeyRmnIndcn:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class KeySpdWarn:
     de_name     = "KeySpdWarn"
@@ -9857,11 +9857,11 @@ class KeySpdWarn:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Used be Connected service booking to inform Driver information about the current status of a service booking.
 class LampSuppSrv:
@@ -9880,11 +9880,11 @@ class LampSuppSrv:
         SrvPassd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -9918,11 +9918,11 @@ class LaneChgWarnActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LaneChgWarnActvSts:
     de_name     = "LaneChgWarnActv.Sts"
@@ -9938,11 +9938,11 @@ class LaneChgWarnActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -9973,11 +9973,11 @@ class LaneChgWarnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			NoLaneDetd	No Lane Detedcted		No lane tracked
@@ -10000,11 +10000,11 @@ class LaneDetnStsForAutDrv:
         LaneLeAndRiDetd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			NoLaneDetd	No Lane Detedcted		No lane tracked
@@ -10027,11 +10027,11 @@ class LaneDetnStsForLaneKeepAid:
         LaneLeAndRiDetd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10065,11 +10065,11 @@ class LaneKeepAidActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LaneKeepAidActvSts:
     de_name     = "LaneKeepAidActv.Sts"
@@ -10085,11 +10085,11 @@ class LaneKeepAidActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -10120,11 +10120,11 @@ class LaneKeepAidSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LatMovmtWarn:
     de_name     = "LatMovmtWarn"
@@ -10141,11 +10141,11 @@ class LatMovmtWarn:
         WarnRi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LcmaOn1:
     de_name     = "LcmaOn1"
@@ -10163,11 +10163,11 @@ class LcmaOn1:
         TrlrOff = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10201,11 +10201,11 @@ class LiAdpvReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiAdpvReqSts:
     de_name     = "LiExtReq1WdReq1.Sts"
@@ -10221,11 +10221,11 @@ class LiAdpvReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10259,11 +10259,11 @@ class LiAutTranReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # SntvyLo = Sensitivity Low, light transition happens later
 # SntvyLo = Sensitivity Norma 
@@ -10284,11 +10284,11 @@ class LiAutTranReqSts:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10322,11 +10322,11 @@ class LiBeamHiAuxReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiBeamHiAuxReqSts:
     de_name     = "LiExtReq1WdReq4.Sts"
@@ -10342,11 +10342,11 @@ class LiBeamHiAuxReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10380,11 +10380,11 @@ class LiCornrgReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiCornrgReqSts:
     de_name     = "LiExtReq1WdReq6.Sts"
@@ -10400,11 +10400,11 @@ class LiCornrgReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10438,11 +10438,11 @@ class LiDaytiRunngReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiDaytiRunngReqSts:
     de_name     = "LiExtReq1WdReq2.Sts"
@@ -10458,11 +10458,11 @@ class LiDaytiRunngReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiDrvrFltIndcrTurn:
     de_name     = "LiDrvrFltIndcrTurn"
@@ -10478,11 +10478,11 @@ class LiDrvrFltIndcrTurn:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10516,11 +10516,11 @@ class LiExtReq1WdReq5IdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiExtReq1WdReq5SlowNormFast:
     de_name     = "LiExtReq1WdReq5.SlowNormFast"
@@ -10538,11 +10538,11 @@ class LiExtReq1WdReq5SlowNormFast:
         Fast = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10576,11 +10576,11 @@ class LiHomeLvngReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiHomeLvngReqSts:
     de_name     = "LiExtSafe1WdReq2.Sts"
@@ -10596,11 +10596,11 @@ class LiHomeLvngReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10634,11 +10634,11 @@ class LiHomeSafeReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Enumeration for intervals in tenths of seconds.
 # E.g 
@@ -10672,11 +10672,11 @@ class LiHomeSafeReqSts:
         Resd3 = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiLvrSwt1:
     de_name     = "LiLvrSwt1Req"
@@ -10692,11 +10692,11 @@ class LiLvrSwt1:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiPassFltIndcrTurn:
     de_name     = "LiPassFltIndcrTurn"
@@ -10712,11 +10712,11 @@ class LiPassFltIndcrTurn:
         Flt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10750,11 +10750,11 @@ class LiSeldForDrvrPfmncMonPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LiSeldForDrvrPfmncMonSts:
     de_name     = "LiSeldForDrvrPfmncMon.Sts"
@@ -10770,11 +10770,11 @@ class LiSeldForDrvrPfmncMonSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # TrfcSideTmpLe = Traffic Side Temporary Left. Vehicle drives on left side of road
 # TrfcSideTmpRi =  Traffic Side Temporary Right. Vehicle drives on right side of road
@@ -10794,11 +10794,11 @@ class LiTrfcSideReq:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgCenStsForUsrFb:
     de_name     = "LockgCenStsForUsrFb"
@@ -10817,11 +10817,11 @@ class LockgCenStsForUsrFb:
         Safe = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgCenStsLockSt:
     de_name     = "LockgCenSts.LockSt"
@@ -10839,11 +10839,11 @@ class LockgCenStsLockSt:
         LockLockd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgCenStsUpdEve:
     de_name     = "LockgCenSts.UpdEve"
@@ -10860,11 +10860,11 @@ class LockgCenStsUpdEve:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class LockgCenTrigSrc:
@@ -10888,11 +10888,11 @@ class LockgCenTrigSrc:
         Crash = 8
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10926,11 +10926,11 @@ class LockgFbSoundReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgFbSoundReqSts:
     de_name     = "LockgFbSoundReq.Sts"
@@ -10946,11 +10946,11 @@ class LockgFbSoundReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -10984,11 +10984,11 @@ class LockgFbVisReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgFbVisReqSts:
     de_name     = "LockgFbVisReq.Sts"
@@ -11004,11 +11004,11 @@ class LockgFbVisReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgPrsnlReqFromHmi:
     de_name     = "LockgPrsnlReqFromHmi"
@@ -11025,11 +11025,11 @@ class LockgPrsnlReqFromHmi:
         Off = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockgPrsnlSts:
     de_name     = "LockgPrsnlSts"
@@ -11045,11 +11045,11 @@ class LockgPrsnlSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -11083,11 +11083,11 @@ class LockSpdReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LockSpdReqSts:
     de_name     = "LockSpdReq.Sts"
@@ -11103,11 +11103,11 @@ class LockSpdReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class LvlOfClimaCmft:
     de_name     = "LvlOfClimaCmft"
@@ -11129,11 +11129,11 @@ class LvlOfClimaCmft:
         Lvl7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MassgFctActvDrvrMassgFctActv:
     de_name     = "MassgFctActv.DrvrMassgFctActv"
@@ -11149,11 +11149,11 @@ class MassgFctActvDrvrMassgFctActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MassgFctActvPassMassgFctActv:
     de_name     = "MassgFctActv.PassMassgFctActv"
@@ -11169,11 +11169,11 @@ class MassgFctActvPassMassgFctActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MemBtnSound:
     de_name     = "MemBtnSound"
@@ -11190,11 +11190,11 @@ class MemBtnSound:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -11216,11 +11216,11 @@ class Mins:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -11242,11 +11242,11 @@ class Mins1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class MirrDwnStsAtDrvr:
@@ -11266,11 +11266,11 @@ class MirrDwnStsAtDrvr:
         MirrMovgToTiltPosn = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MirrDwnStsAtPass:
     de_name     = "MirrDwnStsAtPass"
@@ -11289,11 +11289,11 @@ class MirrDwnStsAtPass:
         MirrMovgToTiltPosn = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MirrFoldStsAtDrvr:
     de_name     = "MirrFoldStsAtDrvr"
@@ -11312,11 +11312,11 @@ class MirrFoldStsAtDrvr:
         MirrMovgToFold = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MirrFoldStsAtPass:
     de_name     = "MirrFoldStsAtPass"
@@ -11335,11 +11335,11 @@ class MirrFoldStsAtPass:
         MirrMovgToFold = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MmedHmiModStd:
     de_name     = "MmedHmiModStd"
@@ -11357,11 +11357,11 @@ class MmedHmiModStd:
         InfModeWelcome = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class MmedMaiPwrMod:
     de_name     = "MmedHdPwrMod"
@@ -11379,11 +11379,11 @@ class MmedMaiPwrMod:
         IHUStateOn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
 class MstCfgIDBackboneFR:
@@ -11404,11 +11404,11 @@ class MstCfgIDBackboneFR:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Month,  Range:1->12
@@ -11430,11 +11430,11 @@ class Mth:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Month,  Range:1->12
@@ -11456,11 +11456,11 @@ class Mth1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NetCtrlrActvtPrio:
@@ -11477,11 +11477,11 @@ class NetCtrlrActvtPrio:
         PrioHigh = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class NetCtrlrActvtResourceGroup:
@@ -11502,11 +11502,11 @@ class NetCtrlrActvtResourceGroup:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NetHdActvtPrio:
@@ -11523,11 +11523,11 @@ class NetHdActvtPrio:
         PrioHigh = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class NetHdActvtResourceGroup:
@@ -11548,11 +11548,11 @@ class NetHdActvtResourceGroup:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NetTelmActvtPrio:
@@ -11569,11 +11569,11 @@ class NetTelmActvtPrio:
         PrioHigh = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class NetTelmActvtResourceGroup:
@@ -11594,11 +11594,11 @@ class NetTelmActvtResourceGroup:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NewTripCdn:
@@ -11615,11 +11615,11 @@ class NewTripCdn:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class NoEntryWarnReq:
     de_name     = "NoEntryWarnReq"
@@ -11635,11 +11635,11 @@ class NoEntryWarnReq:
         Warn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->31
 class NoOfSatltForSysNo1InPosnFromSatlt:
@@ -11660,11 +11660,11 @@ class NoOfSatltForSysNo1InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -11686,11 +11686,11 @@ class NoOfSatltForSysNo2InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -11712,11 +11712,11 @@ class NoOfSatltForSysNo3InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -11738,11 +11738,11 @@ class NoOfSatltForSysNo4InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -11764,11 +11764,11 @@ class NoOfSatltForSysNo5InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -11790,11 +11790,11 @@ class NoOfSatltForSysNo6InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NoSoundSys:
@@ -11812,11 +11812,11 @@ class NoSoundSys:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -11838,11 +11838,11 @@ class NotifChkDistbn:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->7
@@ -11864,11 +11864,11 @@ class NrOfBltAppld:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class NrOfKeyAvl:
@@ -11886,11 +11886,11 @@ class NrOfKeyAvl:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -11912,11 +11912,11 @@ class NrSerlDMSMNr1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -11938,11 +11938,11 @@ class NrSerlDMSMNr2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -11964,11 +11964,11 @@ class NrSerlDMSMNr3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -11990,11 +11990,11 @@ class NrSerlDMSMNr4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class OffsForDrvrSpprtFctActvSts:
@@ -12011,11 +12011,11 @@ class OffsForDrvrSpprtFctActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfAudSideWarn:
     de_name     = "SnsrParkAssiFrnt.AudSideWarn"
@@ -12033,11 +12033,11 @@ class ParkAssiDstFrntOfAudSideWarn:
         LeftAndRight = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfAudWarnDir:
     de_name     = "SnsrParkAssiFrnt.AudWarnDir"
@@ -12058,11 +12058,11 @@ class ParkAssiDstFrntOfAudWarnDir:
         RightSide = 6
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrInsdRi:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrInsdRi"
@@ -12108,11 +12108,11 @@ class ParkAssiDstFrntOfDstOfSnsrInsdRi:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrLeSide:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrLeSide"
@@ -12158,11 +12158,11 @@ class ParkAssiDstFrntOfDstOfSnsrLeSide:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrOutdRi:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrOutdRi"
@@ -12208,11 +12208,11 @@ class ParkAssiDstFrntOfDstOfSnsrOutdRi:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrRiSide:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrRiSide"
@@ -12258,11 +12258,11 @@ class ParkAssiDstFrntOfDstOfSnsrRiSide:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfSnsrInsdLe:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrInsdLe"
@@ -12308,11 +12308,11 @@ class ParkAssiDstFrntOfSnsrInsdLe:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstFrntOfSnsrOutdLe:
     de_name     = "SnsrParkAssiFrnt.DstOfSnsrOutdLe"
@@ -12358,11 +12358,11 @@ class ParkAssiDstFrntOfSnsrOutdLe:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfAudSideWarn:
     de_name     = "SnsrParkAssiRe.AudSideWarn"
@@ -12380,11 +12380,11 @@ class ParkAssiDstReOfAudSideWarn:
         LeftAndRight = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfAudWarnDir:
     de_name     = "SnsrParkAssiRe.AudWarnDir"
@@ -12405,11 +12405,11 @@ class ParkAssiDstReOfAudWarnDir:
         RightSide = 6
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrInsdLe:
     de_name     = "SnsrParkAssiRe.DstOfSnsrInsdLe"
@@ -12455,11 +12455,11 @@ class ParkAssiDstReOfDstOfSnsrInsdLe:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrInsdRi:
     de_name     = "SnsrParkAssiRe.DstOfSnsrInsdRi"
@@ -12505,11 +12505,11 @@ class ParkAssiDstReOfDstOfSnsrInsdRi:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrLeSide:
     de_name     = "SnsrParkAssiRe.DstOfSnsrLeSide"
@@ -12555,11 +12555,11 @@ class ParkAssiDstReOfDstOfSnsrLeSide:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrOutdLe:
     de_name     = "SnsrParkAssiRe.DstOfSnsrOutdLe"
@@ -12605,11 +12605,11 @@ class ParkAssiDstReOfDstOfSnsrOutdLe:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrOutdRi:
     de_name     = "SnsrParkAssiRe.DstOfSnsrOutdRi"
@@ -12655,11 +12655,11 @@ class ParkAssiDstReOfDstOfSnsrOutdRi:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrRiSide:
     de_name     = "SnsrParkAssiRe.DstOfSnsrRiSide"
@@ -12705,11 +12705,11 @@ class ParkAssiDstReOfDstOfSnsrRiSide:
         Distance30cm = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class PartNrDMSMEndSgn1:
@@ -12730,11 +12730,11 @@ class PartNrDMSMEndSgn1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12756,11 +12756,11 @@ class PartNrDMSMEndSgn2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12782,11 +12782,11 @@ class PartNrDMSMEndSgn3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12808,11 +12808,11 @@ class PartNrDMSMNr1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12834,11 +12834,11 @@ class PartNrDMSMNr2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12860,11 +12860,11 @@ class PartNrDMSMNr3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -12886,11 +12886,11 @@ class PartNrDMSMNr4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PasAlrmDeactvnReq:
@@ -12907,11 +12907,11 @@ class PasAlrmDeactvnReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PasAlrmSts:
     de_name     = "PasAlrmSts"
@@ -12927,11 +12927,11 @@ class PasAlrmSts:
         OffReq = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassMassgRunng:
     de_name     = "PassMassgRunng"
@@ -12947,11 +12947,11 @@ class PassMassgRunng:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatActvSpplFct:
     de_name     = "PassSeatActvSpplFct"
@@ -12971,11 +12971,11 @@ class PassSeatActvSpplFct:
         MassgFct = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatDispMassgFctMassgInten:
     de_name     = "PassSeatDispMassgFct.MassgInten"
@@ -12992,11 +12992,11 @@ class PassSeatDispMassgFctMassgInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatDispMassgFctMassgProg:
     de_name     = "PassSeatDispMassgFct.MassgProg"
@@ -13015,11 +13015,11 @@ class PassSeatDispMassgFctMassgProg:
         Prog5 = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatDispMassgFctMassgSpdLvl:
     de_name     = "PassSeatDispMassgFct.MassgSpdLvl"
@@ -13036,11 +13036,11 @@ class PassSeatDispMassgFctMassgSpdLvl:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatDispMassgFctOnOff:
     de_name     = "PassSeatDispMassgFct.OnOff"
@@ -13056,11 +13056,11 @@ class PassSeatDispMassgFctOnOff:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatDispSpplFct:
     de_name     = "PassSeatDispSpplFct"
@@ -13080,11 +13080,11 @@ class PassSeatDispSpplFct:
         MassgFct = 5
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatMassgFctMassgInten:
     de_name     = "PassSeatMassgFct.MassgInten"
@@ -13101,11 +13101,11 @@ class PassSeatMassgFctMassgInten:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatMassgFctMassgProg:
     de_name     = "PassSeatMassgFct.MassgProg"
@@ -13124,11 +13124,11 @@ class PassSeatMassgFctMassgProg:
         Prog5 = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatMassgFctMassgSpdLvl:
     de_name     = "PassSeatMassgFct.MassgSpdLvl"
@@ -13145,11 +13145,11 @@ class PassSeatMassgFctMassgSpdLvl:
         IntenHi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatMassgFctOnOff:
     de_name     = "PassSeatMassgFct.OnOff"
@@ -13165,11 +13165,11 @@ class PassSeatMassgFctOnOff:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSts:
     de_name     = "PassSeatSts"
@@ -13187,11 +13187,11 @@ class PassSeatSts:
         Ukwn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctHozlSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtAdjmtOfSpplFctHozlSts"
@@ -13208,11 +13208,11 @@ class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctHozlSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctVerSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtAdjmtOfSpplFctVerSts"
@@ -13229,11 +13229,11 @@ class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctVerSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtHeiFrntSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtHeiFrntSts"
@@ -13250,11 +13250,11 @@ class PassSeatSwtSts2PassSeatSwtHeiFrntSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtHeiSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtHeiSts"
@@ -13271,11 +13271,11 @@ class PassSeatSwtSts2PassSeatSwtHeiSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtInclSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtInclSts"
@@ -13292,11 +13292,11 @@ class PassSeatSwtSts2PassSeatSwtInclSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtSelnOfSpplFctStsSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtSelnOfSpplFctStsSts"
@@ -13313,11 +13313,11 @@ class PassSeatSwtSts2PassSeatSwtSelnOfSpplFctStsSts:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtSldSts:
     de_name     = "PassSeatSwtSts2.PassSeatSwtSldSts"
@@ -13334,11 +13334,11 @@ class PassSeatSwtSts2PassSeatSwtSldSts:
         Backw = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )
 class PinionSteerAg1:
@@ -13361,11 +13361,11 @@ class PinionSteerAg1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PinionSteerAg1Qf:
@@ -13384,11 +13384,11 @@ class PinionSteerAg1Qf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 16 bits )
 class PosnAltiInPosnFromSatlt:
@@ -13411,11 +13411,11 @@ class PosnAltiInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 16 bits )
@@ -13439,11 +13439,11 @@ class PosnDirInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 30 bits )
@@ -13467,11 +13467,11 @@ class PosnLatInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 31 bits )
@@ -13495,11 +13495,11 @@ class PosnLgtInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PosnQlyInDstToManvLocn:
@@ -13522,11 +13522,11 @@ class PosnQlyInDstToManvLocn:
         QlyOfLvl7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )
 class PosnSpdInPosnFromSatlt:
@@ -13549,11 +13549,11 @@ class PosnSpdInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )
@@ -13577,11 +13577,11 @@ class PosnVHozlInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:-100->100, Resolution: (0.001*x+0.0, raw is signed, 18 bits )
@@ -13605,11 +13605,11 @@ class PosnVVertInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PostDrvgClimaAvl:
@@ -13626,11 +13626,11 @@ class PostDrvgClimaAvl:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PreClngNotif:
     de_name     = "PreClngNotif"
@@ -13652,11 +13652,11 @@ class PreClngNotif:
         Spare3 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
 class PreHozlDilInPosnFromSatlt:
@@ -13679,11 +13679,11 @@ class PreHozlDilInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -13707,11 +13707,11 @@ class PrePosnDilInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -13735,11 +13735,11 @@ class PreTiDilInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -13763,11 +13763,11 @@ class PreVertDilInPosnFromSatlt:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PrkgAssiFailr:
@@ -13786,11 +13786,11 @@ class PrkgAssiFailr:
         DgrSnsr = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrkgAssiManvActvSts:
     de_name     = "PrkgAssiManvActvSts"
@@ -13806,11 +13806,11 @@ class PrkgAssiManvActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->63
 class PrkgAssiManvProgs:
@@ -13831,11 +13831,11 @@ class PrkgAssiManvProgs:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class PrkgAssiSts:
@@ -13866,11 +13866,11 @@ class PrkgAssiSts:
         Resd2 = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrkgAutSts:
     de_name     = "PrkgAutSts"
@@ -13961,11 +13961,11 @@ class PrkgAutSts:
         EmgyBrkUsrActn = 76
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -13996,11 +13996,11 @@ class PrkgCamSysAvlSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrkgTypVld:
     de_name     = "PrkgTypVld"
@@ -14018,11 +14018,11 @@ class PrkgTypVld:
         ParaAndPerpPrkgDetd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ProfActProf1:
     de_name     = "ProfAct.Prof1"
@@ -14039,11 +14039,11 @@ class ProfActProf1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf10:
@@ -14061,11 +14061,11 @@ class ProfActProf10:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf11:
@@ -14083,11 +14083,11 @@ class ProfActProf11:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf12:
@@ -14105,11 +14105,11 @@ class ProfActProf12:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf2:
@@ -14127,11 +14127,11 @@ class ProfActProf2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf3:
@@ -14149,11 +14149,11 @@ class ProfActProf3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf4:
@@ -14171,11 +14171,11 @@ class ProfActProf4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf5:
@@ -14193,11 +14193,11 @@ class ProfActProf5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf6:
@@ -14215,11 +14215,11 @@ class ProfActProf6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf7:
@@ -14237,11 +14237,11 @@ class ProfActProf7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf8:
@@ -14259,11 +14259,11 @@ class ProfActProf8:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfActProf9:
@@ -14281,11 +14281,11 @@ class ProfActProf9:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -14320,11 +14320,11 @@ class ProfChg:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ProfLimdProf1:
     de_name     = "ProfLimd.Prof1"
@@ -14341,11 +14341,11 @@ class ProfLimdProf1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf10:
@@ -14363,11 +14363,11 @@ class ProfLimdProf10:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf11:
@@ -14385,11 +14385,11 @@ class ProfLimdProf11:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf12:
@@ -14407,11 +14407,11 @@ class ProfLimdProf12:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf2:
@@ -14429,11 +14429,11 @@ class ProfLimdProf2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf3:
@@ -14451,11 +14451,11 @@ class ProfLimdProf3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf4:
@@ -14473,11 +14473,11 @@ class ProfLimdProf4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf5:
@@ -14495,11 +14495,11 @@ class ProfLimdProf5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf6:
@@ -14517,11 +14517,11 @@ class ProfLimdProf6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf7:
@@ -14539,11 +14539,11 @@ class ProfLimdProf7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf8:
@@ -14561,11 +14561,11 @@ class ProfLimdProf8:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class ProfLimdProf9:
@@ -14583,11 +14583,11 @@ class ProfLimdProf9:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -14622,11 +14622,11 @@ class ProfPenSts1:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Propulsion HV Battery usage mode type
 class PrpsnHvBattUsgModAct:
@@ -14649,11 +14649,11 @@ class PrpsnHvBattUsgModAct:
         NotOfUse3 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Propulsion HV Battery usage mode type
 class PrpsnHvBattUsgModReq:
@@ -14676,11 +14676,11 @@ class PrpsnHvBattUsgModReq:
         NotOfUse3 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrpsnHvBattUsgOfChrgBlkd:
     de_name     = "PrpsnHvBattUsgOfChrgBlkd"
@@ -14697,11 +14697,11 @@ class PrpsnHvBattUsgOfChrgBlkd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # HV battery usage function blocked types
@@ -14721,11 +14721,11 @@ class PrpsnHvBattUsgOfChrgBlkd2:
         NotOfUse = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrpsnHvBattUsgOfHldBlkd:
     de_name     = "PrpsnHvBattUsgOfHldBlkd"
@@ -14742,11 +14742,11 @@ class PrpsnHvBattUsgOfHldBlkd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # HV battery usage function blocked types
@@ -14766,11 +14766,11 @@ class PrpsnHvBattUsgOfHldBlkd2:
         NotOfUse = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PrpsnHvBattUsgOfHldSmtBlkd:
     de_name     = "PrpsnHvBattUsgOfHldSmtBlkd"
@@ -14787,11 +14787,11 @@ class PrpsnHvBattUsgOfHldSmtBlkd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # HV battery usage function blocked types
@@ -14811,11 +14811,11 @@ class PrpsnHvBattUsgOfHldSmtBlkd2:
         NotOfUse = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Km/h,  Range:0->150
 class PrpsnHvBattUsgOfHldSpd:
@@ -14836,11 +14836,11 @@ class PrpsnHvBattUsgOfHldSpd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Basic type list
@@ -14865,11 +14865,11 @@ class PrpsnModElecDrvBlkd:
         Typ7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Basic type list
 # 8 types
@@ -14893,11 +14893,11 @@ class PrpsnModOffroadBlkd:
         Typ7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Basic type list
 # 8 types
@@ -14921,11 +14921,11 @@ class PrpsnModOfSaveBlkd:
         Typ7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Basic type list
 # 8 types
@@ -14949,11 +14949,11 @@ class PrpsnModOfTracBlkd:
         Typ7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Basic type list
 # 8 types
@@ -14977,11 +14977,11 @@ class PrpsnModSptBlkd:
         Typ7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
 class PtCluTqPtCluTq:
@@ -15004,11 +15004,11 @@ class PtCluTqPtCluTq:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
@@ -15032,11 +15032,11 @@ class PtCluTqPtCluTqDyn:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # General DATA-TYPE to indicate quality. Each quality deviation value, De0-De7, shall be specified on the DATA-ELEMENT using this DATA-TYPE.
@@ -15060,11 +15060,11 @@ class PtCluTqPtCluTqQly:
         De7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PtGearTar:
     de_name     = "PtGearTar"
@@ -15094,11 +15094,11 @@ class PtGearTar:
         Rvs = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
 class PtTqAtAxleFrntAct:
@@ -15121,11 +15121,11 @@ class PtTqAtAxleFrntAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -15149,11 +15149,11 @@ class PtTqAtWhlFrntLeAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -15177,11 +15177,11 @@ class PtTqAtWhlFrntRiAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # General DATA-TYPE to indicate quality. Each quality deviation value, De0-De7, shall be specified on the DATA-ELEMENT using this DATA-TYPE.
@@ -15205,11 +15205,11 @@ class PtTqAtWhlsFrntQly:
         De7 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PUnit:
     de_name     = "IndcnUnit.PUnit"
@@ -15228,11 +15228,11 @@ class PUnit:
         UkwnUnit = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class PwrChrgDetdForPrkgHeatrElec:
     de_name     = "PwrChrgDetdForPrkgHeatrElec"
@@ -15249,11 +15249,11 @@ class PwrChrgDetdForPrkgHeatrElec:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -15275,11 +15275,11 @@ class PwrLvlElecMai:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -15301,11 +15301,11 @@ class PwrLvlElecSubtyp:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Status of power supply components
@@ -15336,11 +15336,11 @@ class PwrSplyErrSts:
         FltTDcDc = 14
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -15374,11 +15374,11 @@ class RainSenMemdReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RainSenMemdReqSts:
     de_name     = "RainSenMemdReq.Sts"
@@ -15394,11 +15394,11 @@ class RainSenMemdReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class ReAxleWarn:
     de_name     = "ReAxleWarn"
@@ -15416,11 +15416,11 @@ class ReAxleWarn:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RmnLockgPrsnlReq:
     de_name     = "RmnLockgPrsnlReq"
@@ -15436,11 +15436,11 @@ class RmnLockgPrsnlReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -15474,11 +15474,11 @@ class RngbdIllmnCmdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # For running board illumination setting value
 class RngbdIllmnCmdSts:
@@ -15497,11 +15497,11 @@ class RngbdIllmnCmdSts:
         Resd3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -15535,11 +15535,11 @@ class RoadFricIndcnActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RoadFricIndcnActvSts:
     de_name     = "RoadFricIndcnActv.Sts"
@@ -15555,11 +15555,11 @@ class RoadFricIndcnActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -15590,11 +15590,11 @@ class RoadFricIndcnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			NoWarn		No Warning		No warning
@@ -15615,11 +15615,11 @@ class RoadFricWarnReq:
         FricLoCfmd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -15653,11 +15653,11 @@ class RoadSgnInfoActvPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RoadSgnInfoActvSts:
     de_name     = "RoadSgnInfoActv.Sts"
@@ -15673,11 +15673,11 @@ class RoadSgnInfoActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -15708,11 +15708,11 @@ class RoadSgnInfoSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RoadSpdLimActvSts:
     de_name     = "RoadSpdLimActvSts"
@@ -15728,11 +15728,11 @@ class RoadSpdLimActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -15763,11 +15763,11 @@ class RoadUsrProtnSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )
 class RollRate1:
@@ -15790,11 +15790,11 @@ class RollRate1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class RollRate1Qf1:
@@ -15813,11 +15813,11 @@ class RollRate1Qf1:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Signal for CCSM rotary knob
 class RotyDirReq1:
@@ -15836,11 +15836,11 @@ class RotyDirReq1:
         Spare = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RotyDirReq2:
     de_name     = "RotyDirReq2"
@@ -15858,11 +15858,11 @@ class RotyDirReq2:
         Failr = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->31
 class RotyPosReq1:
@@ -15883,11 +15883,11 @@ class RotyPosReq1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -15909,11 +15909,11 @@ class RotyPosReq2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class RsdsSysStsLeCtraSts:
@@ -15930,11 +15930,11 @@ class RsdsSysStsLeCtraSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeCtraSts1:
     de_name     = "RsdsSysStsLe.CtraSts1"
@@ -15950,11 +15950,11 @@ class RsdsSysStsLeCtraSts1:
         Inactive = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeLcmaSts:
     de_name     = "RsdsSysStsLe.LcmaSts"
@@ -15970,11 +15970,11 @@ class RsdsSysStsLeLcmaSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeLcmaSts1:
     de_name     = "RsdsSysStsLe.LcmaSts1"
@@ -15990,11 +15990,11 @@ class RsdsSysStsLeLcmaSts1:
         Inactive = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeRcmSts:
     de_name     = "RsdsSysStsLe.RcmSts"
@@ -16010,11 +16010,11 @@ class RsdsSysStsLeRcmSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeRcwSts:
     de_name     = "RsdsSysStsLe.RcwSts"
@@ -16030,11 +16030,11 @@ class RsdsSysStsLeRcwSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsLeRsdsSts:
     de_name     = "RsdsSysStsLe.RsdsSts"
@@ -16056,11 +16056,11 @@ class RsdsSysStsLeRsdsSts:
         Cal = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiCtraSts:
     de_name     = "RsdsSysStsRi.CtraSts"
@@ -16076,11 +16076,11 @@ class RsdsSysStsRiCtraSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiCtraSts1:
     de_name     = "RsdsSysStsRi.CtraSts1"
@@ -16096,11 +16096,11 @@ class RsdsSysStsRiCtraSts1:
         Inactive = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiLcmaSts:
     de_name     = "RsdsSysStsRi.LcmaSts"
@@ -16116,11 +16116,11 @@ class RsdsSysStsRiLcmaSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiLcmaSts1:
     de_name     = "RsdsSysStsRi.LcmaSts1"
@@ -16136,11 +16136,11 @@ class RsdsSysStsRiLcmaSts1:
         Inactive = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiRcmSts:
     de_name     = "RsdsSysStsRi.RcmSts"
@@ -16156,11 +16156,11 @@ class RsdsSysStsRiRcmSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiRcwSts:
     de_name     = "RsdsSysStsRi.RcwSts"
@@ -16176,11 +16176,11 @@ class RsdsSysStsRiRcwSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class RsdsSysStsRiRsdsSts:
     de_name     = "RsdsSysStsRi.RsdsSts"
@@ -16202,11 +16202,11 @@ class RsdsSysStsRiRsdsSts:
         Cal = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0: No navigation solution
 # 1: 3 satelites solution (2D)
@@ -16228,11 +16228,11 @@ class SatltPosnStsPrm1InPosnFromSatlt:
         PosnStsOfLvl4 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltPosnStsPrm2InPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltPosnStsPrm2"
@@ -16249,11 +16249,11 @@ class SatltPosnStsPrm2InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SatltPosnStsPrm3InPosnFromSatlt:
@@ -16271,11 +16271,11 @@ class SatltPosnStsPrm3InPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SatltSysNo1InUseInPosnFromSatlt:
@@ -16292,11 +16292,11 @@ class SatltSysNo1InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltSysNo2InUseInPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltSysNo2InUse"
@@ -16312,11 +16312,11 @@ class SatltSysNo2InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltSysNo3InUseInPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltSysNo3InUse"
@@ -16332,11 +16332,11 @@ class SatltSysNo3InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltSysNo4InUseInPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltSysNo4InUse"
@@ -16352,11 +16352,11 @@ class SatltSysNo4InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltSysNo5InUseInPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltSysNo5InUse"
@@ -16372,11 +16372,11 @@ class SatltSysNo5InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SatltSysNo6InUseInPosnFromSatlt:
     de_name     = "PosnFromSatlt.SatltSysNo6InUse"
@@ -16392,11 +16392,11 @@ class SatltSysNo6InUseInPosnFromSatlt:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SaveSetgToMemPrmnt:
     de_name     = "SaveSetgToMemPrmnt"
@@ -16413,11 +16413,11 @@ class SaveSetgToMemPrmnt:
         Aut = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: %,  Range:0->100, Resolution: (5.0*x+0.0, raw is unsigned, 0 bits )
 class ScrBarVolIndcn:
@@ -16440,11 +16440,11 @@ class ScrBarVolIndcn:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Litre,  Range:0->31
@@ -16466,11 +16466,11 @@ class ScrMaxFillgVol:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Litre,  Range:0->31
@@ -16492,11 +16492,11 @@ class ScrReagentTankVol:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SeatBackUnlckdThrdLe:
@@ -16514,11 +16514,11 @@ class SeatBackUnlckdThrdLe:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SeatBackUnlckdThrdRi:
@@ -16536,11 +16536,11 @@ class SeatBackUnlckdThrdRi:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SeatDispBtnPsdDrvrSeatDispBtnPsd:
@@ -16558,11 +16558,11 @@ class SeatDispBtnPsdDrvrSeatDispBtnPsd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SeatDispBtnPsdPassSeatDispBtnPsd:
@@ -16580,11 +16580,11 @@ class SeatDispBtnPsdPassSeatDispBtnPsd:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SeatHeatDurgClimaEnad:
@@ -16603,11 +16603,11 @@ class SeatHeatDurgClimaEnad:
         SeatDrvrAndPass = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
 # 		                                                                                                                	1	Set	Flag set: Flag is set (TRUE)
@@ -16625,11 +16625,11 @@ class SeatHeatgAutCdn:
         Set = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SeatHeatLvlReqLe:
     de_name     = "SeatHeatLvlReqLe"
@@ -16647,11 +16647,11 @@ class SeatHeatLvlReqLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SeatHeatLvlReqRi:
     de_name     = "SeatHeatLvlReqRi"
@@ -16669,11 +16669,11 @@ class SeatHeatLvlReqRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SeatSwtLeSigThrd:
     de_name     = "SeatSwtLeSigThrd"
@@ -16690,11 +16690,11 @@ class SeatSwtLeSigThrd:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SeatSwtRiSigThrd:
     de_name     = "SeatSwtRiSigThrd"
@@ -16711,11 +16711,11 @@ class SeatSwtRiSigThrd:
         Dwn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
 # 		                                                                                                                	1	Set	Flag set: Flag is set (TRUE)
@@ -16733,11 +16733,11 @@ class SeatVentnAutCdn:
         Set = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: s,  Range:0->59
 class Sec:
@@ -16758,11 +16758,11 @@ class Sec:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: s,  Range:0->59
@@ -16784,11 +16784,11 @@ class Sec1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -16823,11 +16823,11 @@ class SetOfLangIdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Uknw = Unknown
 # Lang1 = Arabic
@@ -16917,11 +16917,11 @@ class SetOfLangLangTyp:
         Lang37 = 37
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SftyCchAccActvnStsActv:
     de_name     = "SftyCchAccActvnSts.Actv"
@@ -16937,11 +16937,11 @@ class SftyCchAccActvnStsActv:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
 class SftyCchAccActvnStsDay:
@@ -16962,11 +16962,11 @@ class SftyCchAccActvnStsDay:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -16988,11 +16988,11 @@ class SftyCchAccActvnStsMth:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -17014,11 +17014,11 @@ class SftyCchAccActvnStsYr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLaneKeepAidActvnStsActv:
@@ -17035,11 +17035,11 @@ class SftyCchLaneKeepAidActvnStsActv:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
 class SftyCchLaneKeepAidActvnStsDay:
@@ -17060,11 +17060,11 @@ class SftyCchLaneKeepAidActvnStsDay:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -17086,11 +17086,11 @@ class SftyCchLaneKeepAidActvnStsMth:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -17112,11 +17112,11 @@ class SftyCchLaneKeepAidActvnStsYr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -17140,11 +17140,11 @@ class SftyCchLongTermIdxAttention:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLongTermIdxAttentionAvl:
@@ -17162,11 +17162,11 @@ class SftyCchLongTermIdxAttentionAvl:
         Avl = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
 class SftyCchLongTermIdxDstToVeh:
@@ -17189,11 +17189,11 @@ class SftyCchLongTermIdxDstToVeh:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLongTermIdxDstToVehAvl:
@@ -17211,11 +17211,11 @@ class SftyCchLongTermIdxDstToVehAvl:
         Avl = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
 class SftyCchLongTermIdxKeepSpdLim:
@@ -17238,11 +17238,11 @@ class SftyCchLongTermIdxKeepSpdLim:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLongTermIdxKeepSpdLimAvl:
@@ -17260,11 +17260,11 @@ class SftyCchLongTermIdxKeepSpdLimAvl:
         Avl = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
 class SftyCchLongTermIdxLaneKeep:
@@ -17287,11 +17287,11 @@ class SftyCchLongTermIdxLaneKeep:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLongTermIdxLaneKeepAvl:
@@ -17309,11 +17309,11 @@ class SftyCchLongTermIdxLaneKeepAvl:
         Avl = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
 class SftyCchLongTermIdxTot:
@@ -17336,11 +17336,11 @@ class SftyCchLongTermIdxTot:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SftyCchLongTermIdxTotAvl:
@@ -17358,11 +17358,11 @@ class SftyCchLongTermIdxTotAvl:
         Avl = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class SftyWarnGroupFromAsySafeChks:
@@ -17383,11 +17383,11 @@ class SftyWarnGroupFromAsySafeChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -17409,11 +17409,11 @@ class SftyWarnGroupFromAsySafeCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -17448,11 +17448,11 @@ class SpdAlrmActvForRoadSgnInfoPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpdAlrmActvForRoadSgnInfoSts:
     de_name     = "SpdAlrmActvForRoadSgnInfo.Sts"
@@ -17468,11 +17468,11 @@ class SpdAlrmActvForRoadSgnInfoSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -17506,11 +17506,11 @@ class SpdCameraInfoSeldForRoadSgnInfoPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpdCameraInfoSeldForRoadSgnInfoSts:
     de_name     = "SpdCameraInfoSeldForRoadSgnInfo.Sts"
@@ -17526,11 +17526,11 @@ class SpdCameraInfoSeldForRoadSgnInfoSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpdLimAdpvSts:
     de_name     = "SpdLimAdpvSts"
@@ -17548,11 +17548,11 @@ class SpdLimAdpvSts:
         SrvRqrd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
 # 0			0			NoWarn			No Warning			No warning
@@ -17573,11 +17573,11 @@ class SpdLimWarnReq:
         SpdHiAndSpdCtrlPassd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpdUnit:
     de_name     = "IndcnUnit.SpdUnit"
@@ -17594,11 +17594,11 @@ class SpdUnit:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpdWarn:
     de_name     = "SpdWarn"
@@ -17614,11 +17614,11 @@ class SpdWarn:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpprtForFctInDstToManvLocn:
     de_name     = "DstToManvLocn.SpprtForFct"
@@ -17634,11 +17634,11 @@ class SpprtForFctInDstToManvLocn:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SpprtForFctInTireCircumCalByNav:
     de_name     = "TireCircumCalByNav.SpprtForFct"
@@ -17654,11 +17654,11 @@ class SpprtForFctInTireCircumCalByNav:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SrvRst:
     de_name     = "SrvRst"
@@ -17674,11 +17674,11 @@ class SrvRst:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
 class SrvTrig:
@@ -17701,11 +17701,11 @@ class SrvTrig:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -17729,11 +17729,11 @@ class SteerOvrdWarnReqForAutDrv:
         NotVld2 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SteerStsForAutDrv:
     de_name     = "SftyWarnGroupFromAsySafe.SteerStsForAutDrv"
@@ -17752,11 +17752,11 @@ class SteerStsForAutDrv:
         PndStb = 4
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"				Description
 # 0			0			NoWarn			No Warning				No warning
@@ -17779,11 +17779,11 @@ class SteerWarnReqForAutDrv:
         DispGenWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SteerWarnReqForLaneKeepAid:
     de_name     = "SteerWarnReqForLaneKeepAid"
@@ -17800,11 +17800,11 @@ class SteerWarnReqForLaneKeepAid:
         WarnRi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )
 class SteerWhlAgSafe:
@@ -17827,11 +17827,11 @@ class SteerWhlAgSafe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: rad/s,  Range:-50->50, Resolution: (0.0078125*x+0.0, raw is signed, 14 bits )
@@ -17855,11 +17855,11 @@ class SteerWhlAgSpdSafe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SteerWhlHeatgDurgClimaEnad:
@@ -17876,11 +17876,11 @@ class SteerWhlHeatgDurgClimaEnad:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SteerWhlHeatgOnReq:
     de_name     = "SteerWhlHeatgOnReq"
@@ -17898,11 +17898,11 @@ class SteerWhlHeatgOnReq:
         Hi = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SteerWhlHeatgStrtAutCdnOk:
     de_name     = "SteerWhlHeatgStrtAutCdnOk"
@@ -17918,11 +17918,11 @@ class SteerWhlHeatgStrtAutCdnOk:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SteerWhlSnsrQf:
     de_name     = "SteerWhlSnsrSafe.SteerWhlSnsrQf"
@@ -17940,11 +17940,11 @@ class SteerWhlSnsrQf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class SteerWhlSnsrSafeChks:
@@ -17965,11 +17965,11 @@ class SteerWhlSnsrSafeChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -17991,11 +17991,11 @@ class SteerWhlSnsrSafeCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class SteerWhlSwtPwr:
@@ -18012,11 +18012,11 @@ class SteerWhlSwtPwr:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->16777215
 class StopStrtInhb:
@@ -18037,11 +18037,11 @@ class StopStrtInhb:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class StrtInProgs:
@@ -18060,11 +18060,11 @@ class StrtInProgs:
         StrtStsRunng = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SunRoofPosnSts:
     de_name     = "SunRoofPosnSts"
@@ -18110,11 +18110,11 @@ class SunRoofPosnSts:
         Movg = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SwtAcptReq:
     de_name     = "SwtAcptReq"
@@ -18130,11 +18130,11 @@ class SwtAcptReq:
         Psd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class SwtAtCenSts:
     de_name     = "SwtAtCenSts"
@@ -18150,11 +18150,11 @@ class SwtAtCenSts:
         Trig = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # PLILJESS:
 # Autosar AI Tables Standard DATA-TYPE.
@@ -18173,11 +18173,11 @@ class SwtForPassAirbCutOffSt:
         Off = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class TankFlapSts:
@@ -18195,11 +18195,11 @@ class TankFlapSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TelmSts:
     de_name     = "TelmSts"
@@ -18217,11 +18217,11 @@ class TelmSts:
         TelmEnd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TiAndDateVld:
     de_name     = "TiAndDateIndcn.DataValid"
@@ -18237,11 +18237,11 @@ class TiAndDateVld:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Days,  Range:1->31
 class TiForDayInPosnFromSatlt:
@@ -18262,11 +18262,11 @@ class TiForDayInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hours,  Range:0->23
@@ -18288,11 +18288,11 @@ class TiForHrInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -18314,11 +18314,11 @@ class TiForMinsInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Month,  Range:1->12
@@ -18340,11 +18340,11 @@ class TiForMthInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: s,  Range:0->59
@@ -18366,11 +18366,11 @@ class TiForSecInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Year,  Range:0->99
@@ -18392,11 +18392,11 @@ class TiForYrInPosnFromSatlt:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -18431,11 +18431,11 @@ class TiGapLimdPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: s,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
 class TiGapLimdSts:
@@ -18458,11 +18458,11 @@ class TiGapLimdSts:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->4095
@@ -18484,11 +18484,11 @@ class TireCircumInTireCircumCalByNav:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Used for sending a Start or a Stop/Cancel request from HMI to a core function
@@ -18508,11 +18508,11 @@ class TireMonCalReq:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TireMonrDispReq:
     de_name     = "TireMonrDispReq"
@@ -18528,11 +18528,11 @@ class TireMonrDispReq:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
 class TirePAbsltValForFrntLe:
@@ -18555,11 +18555,11 @@ class TirePAbsltValForFrntLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -18583,11 +18583,11 @@ class TirePAbsltValForReLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -18611,11 +18611,11 @@ class TirePAbsltValForReRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -18639,11 +18639,11 @@ class TirePAbsltValFrntRiTirePAbsltVal1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class TirePAbsltValFrntRiTirePPosn:
@@ -18660,11 +18660,11 @@ class TirePAbsltValFrntRiTirePPosn:
         PReadingWithPosn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePAbsltValQFForFrnRi:
     de_name     = "TirePAbsltValFrntRi.TirePAbsltValQF"
@@ -18682,11 +18682,11 @@ class TirePAbsltValQFForFrnRi:
         SnsrFlt = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePAbsltValQfForReLe:
     de_name     = "TirePAbsltValReLe.TirePAbsltValQF"
@@ -18704,11 +18704,11 @@ class TirePAbsltValQfForReLe:
         SnsrFlt = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePAbsltValQfForReRi:
     de_name     = "TirePAbsltValReRi.TirePAbsltValQF"
@@ -18726,11 +18726,11 @@ class TirePAbsltValQfForReRi:
         SnsrFlt = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePAbsltVaQflForFrntLe:
     de_name     = "TirePAbsltValFrntLe.TirePabsltValQF"
@@ -18748,11 +18748,11 @@ class TirePAbsltVaQflForFrntLe:
         SnsrFlt = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePCalSts:
     de_name     = "TirePCalSts"
@@ -18770,11 +18770,11 @@ class TirePCalSts:
         CalCmpl = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePFrntLe:
     de_name     = "TirePMonData.TirePFrntLe"
@@ -18792,11 +18792,11 @@ class TirePFrntLe:
         ResdWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePFrntRi:
     de_name     = "TirePMonData.TirePFrntRe"
@@ -18814,11 +18814,11 @@ class TirePFrntRi:
         ResdWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePMonSts:
     de_name     = "TirePMonData.TirePMonSts1"
@@ -18842,11 +18842,11 @@ class TirePMonSts:
         Resd5 = 9
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePPosnForFrntLe:
     de_name     = "TirePAbsltValFrntLe.TirePPosn"
@@ -18862,11 +18862,11 @@ class TirePPosnForFrntLe:
         PReadingWithPosn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePPosnForReLe:
     de_name     = "TirePAbsltValReLe.TirePPosn"
@@ -18882,11 +18882,11 @@ class TirePPosnForReLe:
         PReadingWithPosn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePPosnForReRi:
     de_name     = "TirePAbsltValReRi.TirePPosn"
@@ -18902,11 +18902,11 @@ class TirePPosnForReRi:
         PReadingWithPosn = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePReLe:
     de_name     = "TirePMonData.TirePReLe"
@@ -18924,11 +18924,11 @@ class TirePReLe:
         ResdWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TirePReRi:
     de_name     = "TirePMonData.TirePReRi"
@@ -18946,11 +18946,11 @@ class TirePReRi:
         ResdWarn = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TnlEntryOrEnd:
     de_name     = "TnlEntryOrEnd"
@@ -18966,11 +18966,11 @@ class TnlEntryOrEnd:
         Yes = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
 # 0			0			Ukwn		Unknown			Unknown
@@ -19001,11 +19001,11 @@ class TrfcLiSpprtSts:
         NotInUse = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Selects trip trip meter type
 # Trip1 - Reset by driver
@@ -19027,11 +19027,11 @@ class TripModSeln:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0 = Trailer Lamp Check not possible to execute
 # 1 = Trailer Lamp Check possible to execute
@@ -19049,11 +19049,11 @@ class TrlrLampActvtChk:
         TrlrLampChkAvl = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -19087,11 +19087,11 @@ class TrlrLampChkAutReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TrlrLampChkAutReqSts:
     de_name     = "TrlrLampChkAutReq.Sts"
@@ -19107,11 +19107,11 @@ class TrlrLampChkAutReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Used for sending a Start or a Stop/Cancel request from HMI to a core function
 class TrlrLampChkRemReq:
@@ -19130,11 +19130,11 @@ class TrlrLampChkRemReq:
         Resd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0 = No status
 # 1 = Trailer Lamp Check started
@@ -19164,11 +19164,11 @@ class TrlrLampChkSts:
         Resd3 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # 0 = Trailer unconnected
 # 1 = Trailer connected to the vehicle
@@ -19186,11 +19186,11 @@ class TrlrPrsnt:
         TrlrPrsnt = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Status of the door.
 class TrSts:
@@ -19208,11 +19208,11 @@ class TrSts:
         Clsd = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TUnit:
     de_name     = "IndcnUnit.TUnit"
@@ -19229,11 +19229,11 @@ class TUnit:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -19267,11 +19267,11 @@ class TurnAutFlsgReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TurnAutFlsgReqSts:
     de_name     = "LiExtReq1WdReq3.Sts"
@@ -19287,11 +19287,11 @@ class TurnAutFlsgReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->10000
 class TwliBriRaw:
@@ -19312,11 +19312,11 @@ class TwliBriRaw:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class TwliBriRawQf:
@@ -19335,11 +19335,11 @@ class TwliBriRawQf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class TwliBriSts:
     de_name     = "TwliBriSts"
@@ -19355,11 +19355,11 @@ class TwliBriSts:
         Day = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class UkwnCptReqToInfoMgrByte0:
@@ -19380,11 +19380,11 @@ class UkwnCptReqToInfoMgrByte0:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19406,11 +19406,11 @@ class UkwnCptReqToInfoMgrByte1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19432,11 +19432,11 @@ class UkwnCptReqToInfoMgrByte2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19458,11 +19458,11 @@ class UkwnCptReqToInfoMgrByte3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19484,11 +19484,11 @@ class UkwnCptReqToInfoMgrByte4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19510,11 +19510,11 @@ class UkwnCptReqToInfoMgrByte5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19536,11 +19536,11 @@ class UkwnCptReqToInfoMgrByte6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19562,11 +19562,11 @@ class UkwnCptReqToInfoMgrByte7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19588,11 +19588,11 @@ class UkwnCptReqToSoundMgrByte0:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19614,11 +19614,11 @@ class UkwnCptReqToSoundMgrByte1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19640,11 +19640,11 @@ class UkwnCptReqToSoundMgrByte2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19666,11 +19666,11 @@ class UkwnCptReqToSoundMgrByte3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19692,11 +19692,11 @@ class UkwnCptReqToSoundMgrByte4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19718,11 +19718,11 @@ class UkwnCptReqToSoundMgrByte5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19744,11 +19744,11 @@ class UkwnCptReqToSoundMgrByte6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19770,11 +19770,11 @@ class UkwnCptReqToSoundMgrByte7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19796,11 +19796,11 @@ class UkwnCptRespFromInfoMgrByte0:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19822,11 +19822,11 @@ class UkwnCptRespFromInfoMgrByte1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19848,11 +19848,11 @@ class UkwnCptRespFromInfoMgrByte2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19874,11 +19874,11 @@ class UkwnCptRespFromInfoMgrByte3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19900,11 +19900,11 @@ class UkwnCptRespFromInfoMgrByte4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19926,11 +19926,11 @@ class UkwnCptRespFromInfoMgrByte5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19952,11 +19952,11 @@ class UkwnCptRespFromInfoMgrByte6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -19978,11 +19978,11 @@ class UkwnCptRespFromInfoMgrByte7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20004,11 +20004,11 @@ class UkwnCptRespFromSoundMgrByte0:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20030,11 +20030,11 @@ class UkwnCptRespFromSoundMgrByte1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20056,11 +20056,11 @@ class UkwnCptRespFromSoundMgrByte2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20082,11 +20082,11 @@ class UkwnCptRespFromSoundMgrByte3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20108,11 +20108,11 @@ class UkwnCptRespFromSoundMgrByte4:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20134,11 +20134,11 @@ class UkwnCptRespFromSoundMgrByte5:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20160,11 +20160,11 @@ class UkwnCptRespFromSoundMgrByte6:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -20186,11 +20186,11 @@ class UkwnCptRespFromSoundMgrByte7:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -20225,11 +20225,11 @@ class UnlckFbVisReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UnlckFbVisReqSts:
     de_name     = "UnlckFbVisReq.Sts"
@@ -20245,11 +20245,11 @@ class UnlckFbVisReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -20283,11 +20283,11 @@ class UnlckKeylsReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UnlckKeylsReqSts:
     de_name     = "UnlckKeylsReq.KeylsCfg"
@@ -20303,11 +20303,11 @@ class UnlckKeylsReqSts:
         UnlckInd = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -20341,11 +20341,11 @@ class UnlckRemReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UnlckRemReqSts:
     de_name     = "UnlckRemReq.Sts"
@@ -20361,11 +20361,11 @@ class UnlckRemReqSts:
         UnlckStep2 = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # UsageMode Data
 class UsgModSts:
@@ -20385,11 +20385,11 @@ class UsgModSts:
         UsgModDrvg = 13
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -20423,11 +20423,11 @@ class UsrSetSpdForKeySpdLimnPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
 class UsrSetSpdForKeySpdLimnSts:
@@ -20450,11 +20450,11 @@ class UsrSetSpdForKeySpdLimnSts:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20478,11 +20478,11 @@ class UsrSetSpdForKeySpdWarn1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20506,11 +20506,11 @@ class UsrSetSpdForKeySpdWarn2:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20534,11 +20534,11 @@ class UsrSetSpdForKeySpdWarn3:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20562,11 +20562,11 @@ class UsrSetSpdForKeySpdWarn4:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20590,11 +20590,11 @@ class UsrSetSpdForKeySpdWarn5:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -20618,11 +20618,11 @@ class UsrSetSpdForKeySpdWarn6:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -20657,11 +20657,11 @@ class UsrSetSpdForKeySpdWarnPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe:
     de_name     = "UsrSwtDispClimaReqForRowSec.UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe"
@@ -20679,11 +20679,11 @@ class UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi:
     de_name     = "UsrSwtDispClimaReqForRowSec.UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi"
@@ -20701,11 +20701,11 @@ class UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
 class UsrSwtDispClimaReqForTSpForRowSecLe:
@@ -20728,11 +20728,11 @@ class UsrSwtDispClimaReqForTSpForRowSecLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -20756,11 +20756,11 @@ class UsrSwtDispClimaReqForTSpForRowSecRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispClimaReqForTSpSpclForRowSecLe:
@@ -20778,11 +20778,11 @@ class UsrSwtDispClimaReqForTSpSpclForRowSecLe:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispClimaReqForTSpSpclForRowSecRi:
     de_name     = "UsrSwtDispClimaReqForRowSec.UsrSwtDispClimaReqForTSpSpclForRowSecRi"
@@ -20799,11 +20799,11 @@ class UsrSwtDispClimaReqForTSpSpclForRowSecRi:
         Hi = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispReqForFanLvlForRowSec:
     de_name     = "UsrSwtDispClimaReqForRowSec.UsrSwtDispReqForFanLvlForRowSec"
@@ -20832,11 +20832,11 @@ class UsrSwtDispReqForFanLvlForRowSec:
         Max = 14
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe:
     de_name     = "UsrSwtDispReqForSecRowSeatVentn.UsrSwtDispReqForSecRowSeatVentnLe"
@@ -20854,11 +20854,11 @@ class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi:
     de_name     = "UsrSwtDispReqForSecRowSeatVentn.UsrSwtDispReqForSecRowSeatVentnRi"
@@ -20876,11 +20876,11 @@ class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe:
     de_name     = "UsrSwtDispReqForSecRowSeatVentn.usrSwtDispUpdReqForSecRowSeatVentnLe"
@@ -20897,11 +20897,11 @@ class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi:
@@ -20919,11 +20919,11 @@ class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe:
@@ -20941,11 +20941,11 @@ class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi:
@@ -20963,11 +20963,11 @@ class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispUpdClimaReqForTSpForRowSecLe:
@@ -20985,11 +20985,11 @@ class UsrSwtDispUpdClimaReqForTSpForRowSecLe:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispUpdClimaReqForTSpForRowSecRi:
@@ -21007,11 +21007,11 @@ class UsrSwtDispUpdClimaReqForTSpForRowSecRi:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class UsrSwtDispUpdReqForFanLvlForRowSec:
@@ -21029,11 +21029,11 @@ class UsrSwtDispUpdReqForFanLvlForRowSec:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # 0  No text
@@ -21056,11 +21056,11 @@ class VehActvMsgToDrvr:
         Msg3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Volt,  Range:0->25, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
 class VehBattUSysU:
@@ -21083,11 +21083,11 @@ class VehBattUSysU:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class VehBattUSysUQf:
@@ -21106,11 +21106,11 @@ class VehBattUSysUQf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
 class VehCfgPrmBlk:
@@ -21133,11 +21133,11 @@ class VehCfgPrmBlk:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21161,11 +21161,11 @@ class VehCfgPrmVal1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21189,11 +21189,11 @@ class VehCfgPrmVal2:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21217,11 +21217,11 @@ class VehCfgPrmVal3:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21245,11 +21245,11 @@ class VehCfgPrmVal4:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21273,11 +21273,11 @@ class VehCfgPrmVal5:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21301,11 +21301,11 @@ class VehCfgPrmVal6:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21329,11 +21329,11 @@ class VehCfgPrmVal7:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: kg,  Range:0->10000, Resolution: (1.0*x+0.0, raw is unsigned, 14 bits )
@@ -21357,11 +21357,11 @@ class VehM:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class VehMNomTrlrM:
@@ -21380,11 +21380,11 @@ class VehMNomTrlrM:
         Lvl3 = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class VehModMngtGlbSafe1Chks:
@@ -21405,11 +21405,11 @@ class VehModMngtGlbSafe1Chks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -21431,11 +21431,11 @@ class VehModMngtGlbSafe1Cntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Main usage shall be to indicate quality for vehicle state estimations, not to be used for failure code setting and function degradation unless absolutely necassary.
@@ -21454,11 +21454,11 @@ class VehMQly:
         Vld = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
 class VehMtnStChks:
@@ -21479,11 +21479,11 @@ class VehMtnStChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -21505,11 +21505,11 @@ class VehMtnStCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class VehMtnStSafe:
@@ -21532,11 +21532,11 @@ class VehMtnStSafe:
         RollgBackwVal2 = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->511
 class VehSpdAvg:
@@ -21557,11 +21557,11 @@ class VehSpdAvg:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class VehSpdAvgUnit:
@@ -21579,11 +21579,11 @@ class VehSpdAvgUnit:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class VehSpdCtrlActvSts:
     de_name     = "VehSpdCtrlActvSts"
@@ -21599,11 +21599,11 @@ class VehSpdCtrlActvSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class VehSpdIndcdUnit:
     de_name     = "VehSpdIndcd.VeSpdIndcdUnit"
@@ -21620,11 +21620,11 @@ class VehSpdIndcdUnit:
         UkwnUnit = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->511
 class VehSpdIndcdVal:
@@ -21645,11 +21645,11 @@ class VehSpdIndcdVal:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.00391*x+0.0, raw is unsigned, 15 bits )
@@ -21673,11 +21673,11 @@ class VehSpdLgtSafe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21699,11 +21699,11 @@ class VehSpdLgtSafeChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -21725,11 +21725,11 @@ class VehSpdLgtSafeCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class VehSpdLgtSafeQf:
@@ -21748,11 +21748,11 @@ class VehSpdLgtSafeQf:
         AccurData = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
 class VFCVectorIHUGrp1:
@@ -21773,11 +21773,11 @@ class VFCVectorIHUGrp1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -21799,11 +21799,11 @@ class VFCVectorIHUGrp2:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -21825,11 +21825,11 @@ class VFCVectorIHUGrp3:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21853,11 +21853,11 @@ class VinBlk:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21881,11 +21881,11 @@ class VinPosn1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21909,11 +21909,11 @@ class VinPosn2:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21937,11 +21937,11 @@ class VinPosn3:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21965,11 +21965,11 @@ class VinPosn4:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -21993,11 +21993,11 @@ class VinPosn5:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22021,11 +22021,11 @@ class VinPosn6:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22049,11 +22049,11 @@ class VinPosn7:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Availability status
@@ -22073,11 +22073,11 @@ class VisnAgWideSts:
         Avl = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class VisnImgAgWideInUse:
     de_name     = "VisnImgAgWideInUse"
@@ -22107,11 +22107,11 @@ class VisnImgAgWideInUse:
         Img15 = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Gallon 1 = UK gallons
 # Gallon 2 = US gallons
@@ -22131,11 +22131,11 @@ class VolUnit:
         UkwnUnit = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Unitless,  Range:0->4095
 class WhlCircum:
@@ -22156,11 +22156,11 @@ class WhlCircum:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: rpm,  Range:-1638.4->1638.3, Resolution: (0.1*x+-1638.4, raw is unsigned, 0 bits )
@@ -22184,11 +22184,11 @@ class WhlMotSysSpdAct:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: NewtonMeter,  Range:-8188->8192, Resolution: (4.0*x+-8188.0, raw is unsigned, 12 bits )
@@ -22212,11 +22212,11 @@ class WhlMotSysTqEst:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22238,11 +22238,11 @@ class WhlMotSysTqEstChks:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -22264,11 +22264,11 @@ class WhlMotSysTqEstCntr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class WhlMotSysTqEstQlyFac:
@@ -22287,11 +22287,11 @@ class WhlMotSysTqEstQlyFac:
         QfSnsrDataOk = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rpm,  Range:0->2550, Resolution: (10.0*x+0.0, raw is unsigned, 8 bits )
 class WhlMotSysTqEstSpdLimn:
@@ -22314,11 +22314,11 @@ class WhlMotSysTqEstSpdLimn:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22342,11 +22342,11 @@ class WhlRotToothCntrFrntLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22370,11 +22370,11 @@ class WhlRotToothCntrFrntRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22398,11 +22398,11 @@ class WhlRotToothCntrReLe:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -22426,11 +22426,11 @@ class WhlRotToothCntrReRi:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class WinPosnStsAtDrvrRe:
@@ -22477,11 +22477,11 @@ class WinPosnStsAtDrvrRe:
         Movg = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WinPosnStsDrv:
     de_name     = "WinPosnStsAtDrv"
@@ -22527,11 +22527,11 @@ class WinPosnStsDrv:
         Movg = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WinPosnStsPass:
     de_name     = "WinPosnStsAtPass"
@@ -22577,11 +22577,11 @@ class WinPosnStsPass:
         Movg = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WinPosnStsRePass:
     de_name     = "WinPosnStsAtPassRe"
@@ -22627,11 +22627,11 @@ class WinPosnStsRePass:
         Movg = 31
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # The signal reflects the actual wiping speed or mode regardless of activation source. Both rain sensor and wiper stalk info are used to create the signal. When in interval mode the wipes are carried out in low speed.
 class WipgInfoWipgSpdInfo:
@@ -22654,11 +22654,11 @@ class WipgInfoWipgSpdInfo:
         WiprErr = 7
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WipgInfoWiprActv:
     de_name     = "WipgInfo.WiprActv"
@@ -22674,11 +22674,11 @@ class WipgInfoWiprActv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WipgInfoWiprInWipgAr:
     de_name     = "WipgInfo.WiprInWipgAr"
@@ -22694,11 +22694,11 @@ class WipgInfoWiprInWipgAr:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WiprFrntSrvModReq:
     de_name     = "WiprFrntSrvModReq"
@@ -22715,11 +22715,11 @@ class WiprFrntSrvModReq:
         DeActvtSrvPosn = 2
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WiprInPosnForSrv:
     de_name     = "WiprInPosnForSrv"
@@ -22735,11 +22735,11 @@ class WiprInPosnForSrv:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
 # 
@@ -22773,11 +22773,11 @@ class WiprReAutReqPen:
         ProfAll = 15
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WiprReAutReqSts:
     de_name     = "WiprReAutReq.Sts"
@@ -22793,11 +22793,11 @@ class WiprReAutReqSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 class WshrFldSts:
     de_name     = "WshrFldSts1WdElmHMI"
@@ -22813,11 +22813,11 @@ class WshrFldSts:
         On = 1
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )
 class YawRate1:
@@ -22840,11 +22840,11 @@ class YawRate1:
         return (physical - cls.offset) / cls.scale
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 class YawRate1Qf1:
@@ -22863,11 +22863,11 @@ class YawRate1Qf1:
         DataCalcdWithDevDefd = 3
 
     def send(self, value):
-        self.item.value_raw(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = value
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        return self.item.value_raw()
+        return self.item.value_raw
         
 # Unit: Year,  Range:0->99
 class Yr:
@@ -22888,11 +22888,11 @@ class Yr:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
 # Unit: Year,  Range:0->99
@@ -22914,10 +22914,10 @@ class Yr1:
         return physical
     
     def send(self, value):
-        self.item.value_raw(self.p2r(value))
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw())
+        self.item.value_raw = self.p2r(value)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
 
     def receive(self):
-        value = self.r2p(self.item.value_raw())
+        value = self.r2p(self.item.value_raw)
         return value
 
