@@ -1,5 +1,15 @@
 package vendor.volvocars.hardware.ipcb@1.0;
 
+enum Ecu : uint8_t
+{
+    ALL,
+    IHU,
+    VCM,
+    TEM,
+    DIM,
+    TCAM
+};
+
 enum OperationType : uint8_t
 {
     /**
@@ -25,10 +35,16 @@ struct Header
     uint8_t       seqNbr;
 };
 
-struct Msg
+struct Pdu
 {
     Header header;
     vec<uint8_t> payload;
+};
+
+struct Msg
+{
+   Ecu ecu;
+   Pdu pdu;
 };
 
 enum Status : int64_t
