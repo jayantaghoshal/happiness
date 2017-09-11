@@ -1,12 +1,50 @@
 #!/bin/bash
 
+WORKING_DIR="$(pwd)"
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR="${SCRIPT_DIR}"/../../../..
 
 DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
 DOCKER_IMAGE=$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")
 
-WORKING_DIR="$(pwd)"
+IS_TERMINAL=false
+# Check if STDIN descriptor (1) is associated with a terminal device
+if [[ -t 1 ]]; then
+    IS_TERMINAL=true
+fi
+
+
+
+C_ERROR="\033[0;31m"
+C_OFF="\033[0m"
+#(curly braces as literals ok because they are templates used by docker ps)
+#shellcheck disable=SC1083
+EXISTING_CONTAINER=$(docker ps --filter "ancestor=$DOCKER_IMAGE" --format={{.ID}})
+if [[ !  -z  $EXISTING_CONTAINER  ]]; then
+    echo -e "${C_ERROR}-------------------------------------------------------------------------------------------"
+    echo "                              WARNING"
+    echo "                              WARNING"
+    echo "                              WARNING"
+    echo ""
+    echo "WARNING: You already have a IHU docker container running with ID=$EXISTING_CONTAINER"
+    echo "  This can interfere with hardware devices in the container such as ADB"
+    echo ""
+    echo "  To view your running docker containers:"
+    echo "       docker ps"
+    echo 
+    echo "  To kill the container in case it is running in the background:"
+    echo "       docker kill $EXISTING_CONTAINER"
+    echo ""
+    echo "  To attach a shell to the already running container:"
+    echo "       docker exec --tty --interactive $EXISTING_CONTAINER /tmp/entrypoint.sh bash"
+    echo "-------------------------------------------------------------------------------------------"    
+    echo -e "${C_OFF}"
+    if [[ $IS_TERMINAL == true ]]; then
+        sleep 3
+    fi
+fi
+
+
 
 # Handle options
 ENV_FILE_OPT=
@@ -43,13 +81,15 @@ fi
 HOST_USER_GROUPS=$(id -G "$USER")
 HOST_USER_GROUPS=${HOST_USER_GROUPS// /_}
 
-# Detect environment of docker command
-INTERACTIVE_OPTS="-"
-# Check if STDIN file is pipe. If not, it is "regular" STDIN
-[[ -p /dev/fd/0 ]] || INTERACTIVE_OPTS="${INTERACTIVE_OPTS}i"
-# Check if STDIN descriptor is associated with a terminal device
-[[ -t 0 ]] && INTERACTIVE_OPTS="${INTERACTIVE_OPTS}t"
-[[ "${INTERACTIVE_OPTS}" == "-" ]] && INTERACTIVE_OPTS=""
+
+INTERACTIVE_OPTS=""
+# Check if STDIN file is NOT pipe. If not, it is "regular" STDIN
+if [[ ! -p /dev/fd/0 ]]; then
+    INTERACTIVE_OPTS="${INTERACTIVE_OPTS} --interactive "
+fi
+if [[ $IS_TERMINAL == true ]]; then
+    INTERACTIVE_OPTS="${INTERACTIVE_OPTS} --tty "
+fi
 
 #shellcheck disable=SC2086
 docker run \
