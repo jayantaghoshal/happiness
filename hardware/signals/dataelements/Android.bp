@@ -2,8 +2,12 @@
 //
 // Generate Mp_Router_crc.h
 //
+
+subdirs = [
+    "tools/signaltrace"
+]
 genrule {
-    name: "libdataelements_crcgen",    
+    name: "libdataelements_crcgen",
     tool_files: ["crc16cmd.py"],
     cmd: "python $(location crc16cmd.py) $(in) MP_ROUTER_CRC > $(out)",
     srcs: [
@@ -71,7 +75,7 @@ cc_library_shared {
 //
 
 cc_library_static {
-    name: "libdataelements_unittest", 
+    name: "libdataelements_unittest",
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
     export_generated_headers: ["libdataelements_crcgen"],

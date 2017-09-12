@@ -1,0 +1,27 @@
+
+cc_binary {
+    name: "signaltrace",
+    vendor: true,
+    srcs: [
+        "signaltrace.cpp" ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libhwbinder",
+        "android.hidl.base@1.0",
+        "vendor.volvocars.hardware.signals@1.0",
+    ],
+
+    // compile_multilib: "64",
+}
