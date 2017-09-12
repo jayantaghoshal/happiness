@@ -8,7 +8,7 @@ interface ISignalsChangedCallback {
     /**
     * Is called when a signal value or state has changed on the server side
     */
-    signalChanged(string signalName, Dir dir, string data);
+    oneway signalChanged(string signalName, Dir dir, string data);
 };
 
 

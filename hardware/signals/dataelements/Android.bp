@@ -18,6 +18,7 @@ cc_library_shared {
     name: "libdataelements",
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
+    //tidy: true,
     srcs: [
         "src/dataelemvalue.cpp",
         "src/dataelementframework.cpp",
@@ -31,6 +32,7 @@ cc_library_shared {
     ],
 
     cppflags: [
+        "-std=c++14",
         "-Wno-non-virtual-dtor",
         "-fexceptions",
         "-Wno-unused-parameter",
@@ -73,7 +75,7 @@ cc_library_static {
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
     export_generated_headers: ["libdataelements_crcgen"],
-    tidy: true,
+    //tidy: true,
 
     srcs: [
         "src/dataelemvalue.cpp",
@@ -83,6 +85,7 @@ cc_library_static {
         "src/vipcomm/VipFramework_crc.cpp",
         "generated/gen_dataelements.cpp",
         "generated/gen_jsonencdec.cpp",
+        "src/signals_server.cpp",
     ],
 
     cppflags: [
@@ -106,6 +109,7 @@ cc_library_static {
         "libutils",
         "libhwbinder",
         "android.hidl.base@1.0",
+        "vendor.volvocars.hardware.signals@1.0",
     ],
 
     local_include_dirs: [
