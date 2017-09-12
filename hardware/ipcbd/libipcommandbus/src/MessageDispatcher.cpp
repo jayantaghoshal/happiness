@@ -55,41 +55,6 @@ void MessageDispatcher::registerResponseCallback(IpCmdTypes::ServiceId serviceId
     }
 }
 
-void MessageDispatcher::registerRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                                IpCmdTypes::OperationId operationId,
-                                                MessageCallback messageCb)
-{
-    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::REQUEST, messageCb);
-}
-
-void MessageDispatcher::registerSetRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                                   IpCmdTypes::OperationId operationId,
-                                                   MessageCallback messageCb)
-{
-    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::SETREQUEST, messageCb);
-}
-
-void MessageDispatcher::registerNotificationCallback(IpCmdTypes::ServiceId serviceId,
-                                                     IpCmdTypes::OperationId operationId,
-                                                     MessageCallback messageCb)
-{
-    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION, messageCb);
-}
-
-void MessageDispatcher::registerNotificationCyclicCallback(IpCmdTypes::ServiceId serviceId,
-                                                           IpCmdTypes::OperationId operationId,
-                                                           MessageCallback messageCb)
-{
-    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, messageCb);
-}
-
-void MessageDispatcher::registerNotificationRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                                            IpCmdTypes::OperationId operationId,
-                                                            MessageCallback messageCb)
-{
-    return registerMessageCallback(serviceId, operationId, IpCmdTypes::OperationType::NOTIFICATION_REQUEST, messageCb);
-}
-
 void MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId serviceId,
                                                 IpCmdTypes::OperationId operationId,
                                                 IpCmdTypes::OperationType operationType,
