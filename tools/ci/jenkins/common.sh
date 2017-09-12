@@ -42,9 +42,10 @@ function docker_run() {
 # might interfer with current job. E.g. it is promplematic to have an adb server
 # running in another container if we want to invoke it in the current job.
 function docker_killall() {
-  local containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1)
+  local containers
+  containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1)
   if [ -n "$containers" ]; then
-    docker kill $containers
+    docker kill "$containers"
   fi
 }
 

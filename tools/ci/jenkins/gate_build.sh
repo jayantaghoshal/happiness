@@ -16,11 +16,7 @@ export USE_CCACHE=true
 #uncommenting the following line
 # docker_run "64bit_sanity.py $REPO_ROOT_DIR/vendor/volvocars/" || die "64 bit build sanity check failed"
 
-docker_run "cd vendor/volvocars/tools/ci/jenkins && ./analyze.sh"
-docker_run "cd vendor/volvocars/tools/ci/shipit && ./analyze.sh"
-docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
-docker_run "cd vendor/volvocars/hardware/signals/dataelements/AutosarCodeGen && ./analyze.sh"
-docker_run "cd vendor/volvocars/tools/testing/fdx_client && ./analyze.sh"
+"$SCRIPT_DIR"/static_analysis.sh
 
 docker_run "lunch ihu_vcc-eng && make -j16 droid" || die "Build image failed"
 
