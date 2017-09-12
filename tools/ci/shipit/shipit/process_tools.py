@@ -91,7 +91,10 @@ async def _run_logged_helper(command: Union[str, List[str]],
 #       Tested on Python 3.5.3 - Error
 #       Tested on Python 3.6 - FIXED (3.6 not available in Ubuntu 16.04 yet though)
 def _close_event_loop():
-    asyncio.get_event_loop().close()
+    try:
+        asyncio.get_event_loop().close()
+    except:
+        pass
 
 atexit.register(_close_event_loop)
 
