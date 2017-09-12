@@ -1,0 +1,108 @@
+#!/bin/bash
+set -uex
+
+die() { echo "$@" 1>&2 ; exit 1; }
+
+
+################################################################################################
+##
+# Configure Docker 
+# During the first steps we run with a fixed revision of the container
+# This is only to get a container with "repo" and "zuul" installed
+# Once we have cloned the vendor/volvocars repo we use the container specified by vendor/volvocars/tools/docker_build
+#
+export DOCKER_HOST="tcp://127.0.0.1:2375" #TODO: Not required after reboot of gotsvl1416
+export DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
+export WORKSPACE_ROOT
+WORKSPACE_ROOT=$(pwd)
+
+docker_run () {
+    docker run \
+    --hostname aic-docker \
+    --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
+    --volume "$HOME":"$HOME":rw \
+    --env=HOST_UID="$(id -u)" \
+    --env=HOST_GID="$(id -g)" \
+    --env=HOST_UNAME="$(id -un)" \
+    --env=HOME="$HOME" \
+    --env ZUUL_UUID \
+    --env ZUUL_REF \
+    --env ZUUL_COMMIT \
+    --env ZUUL_PROJECT \
+    --env ZUUL_PIPELINE \
+    --env ZUUL_URL \
+    --env BASE_LOG_PATH \
+    --env LOG_PATH \
+    --env ZUUL_VOTING \
+    --env ZUUL_BRANCH \
+    --env ZUUL_CHANGE \
+    --env ZUUL_CHANGES \
+    --env ZUUL_CHANGE_IDS \
+    --env ZUUL_PATCHSET \
+    --env ZUUL_OLDREV \
+    --env ZUUL_NEWREV \
+    --env ZUUL_SHORT_OLDREV \
+    --env ZUUL_SHORT_NEWREV \
+    --env ZUUL_PATCHSET \
+    --env ZUUL_CHANGE_IDS_CLEANED \
+    --env ARTIFACTORY_API_KEY \
+    --env WORKSPACE_ROOT \
+    --workdir "${WORKSPACE_ROOT}" \
+    --device /dev/ttyMP \
+    --device /dev/ttyVIP \
+    --privileged \
+    --volume /dev/bus/usb:/dev/bus/usb \
+    "${DOCKER_IMAGE}" \
+    "$@"
+}
+
+
+################################################################################################
+## Initialize Repo and vendor/volvocars
+#
+# Important to initialize the repository with "repo init" "repo sync" instead of standard "git init", 
+# otherwise repo get confused (repo assumes .git-data is in .repo/project-objects/).
+# Reset the manifest-repo in case it was modified in a strange way from last commit
+# shellcheck disable=SC2015
+(cd .repo/manifests && git reset --hard origin/"${ZUUL_BRANCH}" || true)
+
+if [[ ! -d .repo ]]; then
+  # Old jobs cloned vendor/volvocars without using repo. Confuses repo so rm before init.
+  # TODO: rm can be removed once all slaves have run the job that does repo init once.
+  rm -rf vendor/volvocars
+  docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
+fi
+docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars" || die "repo sync failed"
+
+
+
+################################################################################################
+## Download the commit to check (for vendor/volvocars-repo)
+#
+# zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF. 
+docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
+
+
+################################################################################################
+## This check exists to prevent people from pushing code with old ci scripts 
+if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
+    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+    exit -1
+fi
+export REQUIRED_CI_VERSION=2
+DETECTED_CI_VERSION=$(cat ./vendor/volvocars/tools/ci/ci_version)
+if [ $REQUIRED_CI_VERSION != "$DETECTED_CI_VERSION" ]; then 
+    # If you are a CI developer, you should update the CI version both here and in the repo.
+    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+    exit -1
+fi
+
+
+################################################################################################
+# At this point in the script your directory tree should look something like this:
+#   /.repo
+#   /vendor/volvocars   - On branch ZUUL_BRANCH
+#   /other/repos        - On unknown revision (leftovers from previous build in the workspace)
+#
+#
+# It is now up to each build step to define the following steps

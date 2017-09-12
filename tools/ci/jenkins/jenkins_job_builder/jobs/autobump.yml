@@ -1,0 +1,52 @@
+- job:
+    name: icup_android_manifest_bump
+    # TODO: temp_only_high_because_right_now_repo_is_not_installed_on_low
+    # TODO: The script is not even using repo????, node-filter not relevant            
+    node: high 
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    triggers:
+        - gerrit:  
+            server-name: 'iCUP Android Gerrit'
+            silent: true
+            trigger-on: 
+                - change-merged-event 
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'vendor/volvocars'
+                  branches:
+                    - branch-compare-type: 'REG_EXP'
+                      branch-pattern: '.*'
+    builders:
+        - shell: |
+                export WORKSPACE_ROOT=$(pwd)
+
+                ##  Fake the directory structure of "repo" because the bump.py script assumes default AOSP structure.
+                # TODO: Move this inside the autobump.py script
+                # Can't use git clone because directory might exist from last run
+                mkdir -p .repo/manifests
+                cd .repo/manifests
+                git init
+                git remote add origin ssh://gotsvl1415.got.volvocars.net:29421/manifest || true
+                git fetch --tags --progress origin "${GERRIT_BRANCH}"
+                git checkout "${GERRIT_BRANCH}"
+                git reset --hard origin/"${GERRIT_BRANCH}"
+
+                ## This check exists to prevent people from pushing code with old ci scripts 
+                cd "${WORKSPACE_ROOT}"
+
+                if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
+                    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+                    exit -1
+                fi
+                export REQUIRED_CI_VERSION=2
+                export DETECTED_CI_VERSION=`cat ./vendor/volvocars/tools/ci/ci_version`
+                if [ $REQUIRED_CI_VERSION != $DETECTED_CI_VERSION ]; then 
+                    # If you are a CI developer, you should update the CI version both here and in the repo.
+                    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+                    exit -1
+                fi
+
+
+                ## Update the manifests based on the templates and push it
+                python3 ./vendor/volvocars/tools/ci/shipit/bump.py . autobump "${GERRIT_BRANCH}" "${BUILD_URL}"
+

@@ -1,0 +1,135 @@
+- defaults:
+    name: time_job_defaults
+    project-type: freestyle
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    concurrent: false
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+    wrappers:
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+
+
+- job:
+    name: ihu_image_build
+    defaults: time_job_defaults
+    node: high
+    properties:
+        #TODO: Duplicated from the time_job_defaults, don't know how to append things to the default.
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+        - raw:
+            xml: |
+                    <jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl plugin="branch-api@2.0.8">
+                        <durationName>hour</durationName>
+                        <count>1</count>
+                    </jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl>
+    triggers:
+        - gerrit:  
+            server-name: 'iCUP Android Gerrit'
+            silent: true
+            trigger-on: 
+                - change-merged-event 
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'manifest'
+                  branches:
+                    - branch-compare-type: 'PLAIN'
+                      branch-pattern: 'master'
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_image_build.sh
+
+
+- job:
+    name: ihu_hourly_test
+    defaults: time_job_defaults
+    node: rack-rig
+    properties:
+        #TODO: Duplicated from the time_job_defaults, don't know how to append things to the default.
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+        - raw:
+            xml: |
+                    <jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl plugin="branch-api@2.0.8">
+                        <durationName>hour</durationName>
+                        <count>1</count>
+                    </jenkins.branch.RateLimitBranchProperty_-JobPropertyImpl>
+    triggers:
+        - reverse:
+            jobs: 'ihu_image_build'
+            result: 'success'
+    parameters:
+        - run:
+            name: UPSTREAM_JOB        
+            project-name: ihu_image_build
+            description: Image build job
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_hourly_test.sh
+
+
+- job:
+    name: ihu_hourly_test_flexray
+    defaults: time_job_defaults
+    node: rack-rig-flexray
+    triggers:
+        - reverse:
+            jobs: 'ihu_image_build'
+            result: 'success'
+    parameters:
+        - run:
+            name: UPSTREAM_JOB        
+            project-name: ihu_image_build
+            description: Image build job
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_hourly_test_flexray.sh            
+
+- job:
+    name: ihu_daily_test
+    defaults: time_job_defaults
+    node: rack-rig
+    triggers:
+        - timed: '@midnight'
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_test.sh            
