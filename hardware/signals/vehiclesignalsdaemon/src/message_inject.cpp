@@ -37,10 +37,12 @@ void avmpMessageInject(uint8_t *msg_data, const uint32_t data_size)
 
   if (0 != (avmp::controlMsgMask & avmpHeader))
   {
+    ALOGD("handleAvmpCtrlMsg()");
     handleAvmpCtrlMsg(avmpHeader, msg_data, data_size);
   }
   else
   {
+    ALOGV("vsm_inject_inject()");
     vsm_inject_inject((avmp::signalIdMask & avmpHeader) | (avmp::signalGroupMask & avmpHeader),
                       static_cast<void *>(&msg_data[avmp::payloadOffset]), 0 != (avmp::errorMask & avmpHeader),
                       data_size - avmp::avmpHeaderSize);
@@ -51,7 +53,7 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
 {
   uint16_t ctrlMsgId = avmp::controlMsgIdMask & avmpHeader;
 
-  ALOGD("Received AVMP control message with ID %d", ctrlMsgId);
+  ALOGV("Received AVMP control message with ID %d", ctrlMsgId);
 
   if (avmp::heartBeatMsgId == ctrlMsgId)
   {
@@ -134,26 +136,26 @@ static void logMessage(const uint8_t *message, const uint32_t data_size)
 {
   if (data_size > 4)
   {
-    ALOGD("AVMP message data: 0x%02X%02X%02X%02X%02X", message[0], message[1], message[2], message[3], message[4]);
+    ALOGV("AVMP message data: 0x%02X%02X%02X%02X%02X", message[0], message[1], message[2], message[3], message[4]);
   }
   else if (data_size > 3)
   {
-    ALOGD("AVMP message data: 0x%02X%02X%02X%02X", message[0], message[1], message[2], message[3]);
+    ALOGV("AVMP message data: 0x%02X%02X%02X%02X", message[0], message[1], message[2], message[3]);
   }
   else if (data_size > 2)
   {
-    ALOGD("AVMP message data: 0x%02X%02X%02X", message[0], message[1], message[2]);
+    ALOGV("AVMP message data: 0x%02X%02X%02X", message[0], message[1], message[2]);
   }
   else if (data_size > 1)
   {
-    ALOGD("AVMP message data: 0x%02X%02X", message[0], message[1]);
+    ALOGV("AVMP message data: 0x%02X%02X", message[0], message[1]);
   }
   else if (data_size > 0)
   {
-    ALOGD("AVMP message data: 0x%02X", message[0]);
+    ALOGV("AVMP message data: 0x%02X", message[0]);
   }
   else
   {
-    ALOGD("No AVMP message data");
+    ALOGV("No AVMP message data");
   }
 }

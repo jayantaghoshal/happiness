@@ -1,0 +1,37 @@
+cc_library_static {
+    name: "libdesip", 
+    init_rc: ["vehicle-signals-daemon.rc"],
+    proprietary: true,
+    relative_install_path: "hw",
+    vendor: true,
+
+    srcs: [
+         "src/desip_main.cpp",
+         "src/desip_prot.cpp",
+         "src/crc16_chksum.cpp",
+         "src/vibdrvHWlink.cpp"
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined"
+    ],
+
+    shared_libs: [
+        "libc++",
+    ],
+
+
+    local_include_dirs: [
+        "include"
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    // We only build for 64 bit.
+    compile_multilib: "64",
+}

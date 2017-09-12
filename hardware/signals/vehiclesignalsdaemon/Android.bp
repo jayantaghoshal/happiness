@@ -30,6 +30,10 @@ cc_binary {
         "libhidlbase",
         "libhidltransport"
     ],
+    static_libs: [
+        "libdesip"
+        
+    ],
 
     local_include_dirs: [
         "src"
