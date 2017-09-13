@@ -21,15 +21,7 @@ time "$SCRIPT_DIR"/static_analysis.sh
 docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "Build failed"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-echo "TIME BEFORE build_tests"
-date +"%T"
-time_before_build_test=$(date +%s)
-build_tests
-echo "TIME AFTER build_tests"
-time_after_build_test=$(date +%s)
-date +"%T"
-echo "TIME SPENT IN build_tests: $(( time_after_build_test-time_before_build_test )) sec"
-
+docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate" || die "Build Unit and Component tests failed"
 
 
 # Push out files required for gate_test.sh to Artifactory.

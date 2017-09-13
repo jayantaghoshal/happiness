@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# TODO: We should move the test_run.py to ../test-fw directory.
+# TODO: We should move the vts_test_runner.py to ../test-fw directory.
 #       But we want to discuss the structure with CI-guards first.
 
 import argparse

@@ -21,7 +21,7 @@ if [ $status -eq 0 ]; then
 fi
 
 # Run Unit and Component tests for vendor/volvocars
-run_tests
+docker_run "time python3 $REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly -c ihu-generic adb mp-serial vip-serial
 
 # Push logs and reports to Artifactory
 docker_run "artifactory push ihu_hourly_test ${BUILD_NUMBER} ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz"

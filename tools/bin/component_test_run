@@ -1,0 +1,5 @@
+#!/bin/sh
+SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
+REPO_ROOT_DIR="${SCRIPT_DIR}"/../..
+
+python3 "$REPO_ROOT_DIR"/tools/ci/shipit/tester.py run -c ihu-generic adb mp-serial vip-serial --test_component=.

@@ -21,4 +21,4 @@ rm ${OUT_ARCHIVE}
 ihu_update
 
 # Run Unit and Component tests for vendor/volvocars
-run_tests
+docker_run "time python3 $REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial

@@ -11,3 +11,4 @@ docker_run "cd vendor/volvocars/tools/ci/shipit && ./analyze.sh"
 docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
 docker_run "cd vendor/volvocars/hardware/signals/dataelements/AutosarCodeGen && ./analyze.sh"
 docker_run "cd vendor/volvocars/tools/testing/fdx_client && ./analyze.sh"
+docker_run "python3 $REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py analyze

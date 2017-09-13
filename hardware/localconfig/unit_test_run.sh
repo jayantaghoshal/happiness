@@ -1,1 +1,0 @@
-../../tools/ci/test-fw/unit_test_run.sh
