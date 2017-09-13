@@ -12,12 +12,10 @@
 #include <IDispatcher.h>
 #include <sys/signalfd.h>
 
-#include "IpcbCallback.h"
-#include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
+#include "iplmService.h"
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;
-using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb;
 
 //using android::hardware::configureRpcThreadpool;
 //using android::hardware::joinRpcThreadpool;
@@ -110,14 +108,7 @@ int main(void)
 {
     InitSignals();
 
-    //IDispatcher& dispatcher = IDispatcher::GetDefaultDispatcher();
-
-    // Connect to test service
-    auto ipcbServer = IIpcb::getService("iplm");
-
-    // Install callback
-    IpcbCallback cb;
-    ipcbServer.get()->subscribe(1, 1, &cb);
+    IplmService iplmService;
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 
