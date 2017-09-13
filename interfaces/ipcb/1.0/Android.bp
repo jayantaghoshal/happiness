@@ -5,7 +5,8 @@ filegroup {
     srcs: [
         "types.hal",
         "IIpcb.hal",
-        "IIpcbCallback.hal",
+        "IMessageCallback.hal",
+        "IResponseCallback.hal",
     ],
 }
 
@@ -19,7 +20,8 @@ genrule {
     out: [
         "vendor/volvocars/hardware/ipcb/1.0/types.cpp",
         "vendor/volvocars/hardware/ipcb/1.0/IpcbAll.cpp",
-        "vendor/volvocars/hardware/ipcb/1.0/IpcbCallbackAll.cpp",
+        "vendor/volvocars/hardware/ipcb/1.0/MessageCallbackAll.cpp",
+        "vendor/volvocars/hardware/ipcb/1.0/ResponseCallbackAll.cpp",
     ],
 }
 
@@ -38,11 +40,16 @@ genrule {
         "vendor/volvocars/hardware/ipcb/1.0/BnHwIpcb.h",
         "vendor/volvocars/hardware/ipcb/1.0/BpHwIpcb.h",
         "vendor/volvocars/hardware/ipcb/1.0/BsIpcb.h",
-        "vendor/volvocars/hardware/ipcb/1.0/IIpcbCallback.h",
-        "vendor/volvocars/hardware/ipcb/1.0/IHwIpcbCallback.h",
-        "vendor/volvocars/hardware/ipcb/1.0/BnHwIpcbCallback.h",
-        "vendor/volvocars/hardware/ipcb/1.0/BpHwIpcbCallback.h",
-        "vendor/volvocars/hardware/ipcb/1.0/BsIpcbCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/IHwMessageCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BnHwMessageCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BpHwMessageCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BsMessageCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/IResponseCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/IHwResponseCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BnHwResponseCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BpHwResponseCallback.h",
+        "vendor/volvocars/hardware/ipcb/1.0/BsResponseCallback.h",
     ],
 }
 
