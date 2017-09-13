@@ -126,7 +126,10 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
                 auto result = sub->signalChanged(signalname, dir, data);
                 
                 if (result.isDeadObject()) {
-                    subList_it = subList.erase(subList_it);                
+                    subList_it = subList.erase(subList_it);
+                    // isOk will be = false here but we anyway need to check isOk to avoid killing this process
+                    // https://source.android.com/devices/architecture/hidl-cpp/functions
+                    result.isOk();
                     continue;
                 }
                 else 
@@ -153,10 +156,13 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
             }
             auto result = it->callback->signalChanged(signalname, dir, data);            
             if (result.isDeadObject()) {
-                it = wildcard_subscriptions.erase(it);                
+                it = wildcard_subscriptions.erase(it);
+                // isOk will be = false here but we anyway need to check isOk to avoid killing this process
+                // https://source.android.com/devices/architecture/hidl-cpp/functions
+                result.isOk();
                 continue;
             }
-            else 
+            else
             {
                 ++it;
             }

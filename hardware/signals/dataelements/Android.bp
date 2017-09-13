@@ -1,3 +1,6 @@
+subdirs = [
+    "tools"
+]
 
 //
 // Generate Mp_Router_crc.h
