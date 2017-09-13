@@ -130,6 +130,7 @@ void vsm_inject_inject(uint16_t signalId, void *buffer, bool injectError, const 
   }
   else
   {
+    ALOGV("injectIncomingOkSignal");
     vipcomm::injectIncomingOkSignal(signalId, buffer, length);
   }
 }

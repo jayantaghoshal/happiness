@@ -1,5 +1,6 @@
 subdirs = [
     "dataelements",
     "hidl_server",
-    "vehiclesignalsdaemon"
+    "vehiclesignalsdaemon",
+    "desip"
 ]
