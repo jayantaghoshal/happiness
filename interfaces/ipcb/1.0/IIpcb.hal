@@ -1,6 +1,7 @@
 package vendor.volvocars.hardware.ipcb@1.0;
 
-import IIpcbCallback;
+import IMessageCallback;
+import IResponseCallback;
 
 interface IIpcb
 {
@@ -10,7 +11,7 @@ interface IIpcb
      * @param operationID ID of the operation to subscribe to, use 0xFFFF to subscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs
      */
-    subscribe(uint16_t serviceID, uint16_t operationID, IIpcbCallback callbackHandler) generates (Status status);
+    subscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
 
     /**
      * Unsubscribe to messages received on IPCB
@@ -18,11 +19,34 @@ interface IIpcb
      * @param operationID ID of the operation to unsubscribe to, use 0xFFFF to unsubscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs, used to unsubscribe the correct instance if multiple subscribers exist
      */
-    unsubscribe(uint16_t serviceID, uint16_t operationID, IIpcbCallback callbackHandler) generates (Status status);
+    unsubscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
+
+    /**
+     * Send request over IPCB
+     *
+     * Valid request types are messages requiring a response in some way, these are:
+     * REQUEST = 0x00
+     * SETREQUEST = 0x02
+     * NOTIFICATION_REQUEST = 0x03,
+     *
+     * Never send requests with opType ACK, this will be sent automatically by the IPCB daemon instance
+     * @param req Request to send over IPCB.
+     * @param respHandler Handler to handle the response recived over IPCB.
+     */
+    oneway sendRequest(Msg req, IResponseCallback respHandler);
 
     /**
      * Send message over IPCB
-     * Never send messages with opType ACK, this will be sent automatically by IPCB "server"
+     *
+     * Use this to send all massages not requiring a response:
+     * SETREQUEST_NORETURN = 0x01
+     * NOTIFICATION_REQUEST = 0x03
+     * RESPONSE = 0x04
+     * NOTIFICATION = 0x05
+     * NOTIFICATION_CYCLIC = 0x06
+     * ERROR = 0xE0
+     *
+     * Never send messages with opType ACK, this will be sent automatically by the IPCB daemon instance
      * @param msg Message to send over IPCB.
      */
     oneway sendMessage(Msg msg);

@@ -1,6 +1,6 @@
 package vendor.volvocars.hardware.ipcb@1.0;
 
-interface IIpcbCallback
+interface IMessageCallback
 {
     /**
      * Handle messages received over IPCB

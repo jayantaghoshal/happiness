@@ -32,6 +32,7 @@ struct Header
     uint16_t      serviceID;
     uint16_t      operationID;
     OperationType operationType;
+    bool          encoded;
     uint8_t       seqNbr;
 };
 
@@ -45,6 +46,12 @@ struct Msg
 {
    Ecu ecu;
    Pdu pdu;
+};
+
+struct Error
+{
+    uint32_t errorCode;
+    uint32_t errorInfo;
 };
 
 enum Status : int64_t
