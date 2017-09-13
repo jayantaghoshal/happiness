@@ -29,6 +29,23 @@ namespace netman {
 
 #define  LOG_TAG    "Netmand"
 
+namespace {
+
+bool _write_to_file(const char *path, const char *text) {
+    auto fd = std::unique_ptr<FILE, decltype(&fclose)>(fopen(path, "w"), &fclose);
+    if (!fd) {
+        return false;
+    }
+
+    int retval = fputs(text, fd.get());
+    if (retval > 0) {
+        return false;
+    }
+    return true;
+}
+
+} // namespace
+
 /* Declarations */
 
 void ConvertMacAddress(const std::string &mac_address,
@@ -427,6 +444,16 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* i
     return true;
 }
 
+static bool SetProxyArp(const char* interface_name) {
+    ALOGI("Setting proxy arp for interface %s", interface_name);
+    if (!strcmp(interface_name, "meth0")) {
+        return (_write_to_file("/proc/sys/net/ipv4/conf/meth0/proxy_arp", "1"));
+    } else if (!strcmp(interface_name, "eth1")) {
+        return (_write_to_file("/proc/sys/net/ipv4/conf/eth1/proxy_arp", "1"));
+    }
+    return true;
+}
+
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations)
 {
     for (auto &conf : interface_configurations) {
@@ -469,6 +496,11 @@ bool SetupInterface(const char* interface_name,
     else
     {
         ALOGI("%s: MAC address already set", interface_name);
+    }
+
+    // Arp proxy settings
+    if (!SetProxyArp(interface_name)) {
+        ALOGE("Failed to set proxy arp for %s!", interface_name);
     }
 
     // Set ip adress if ethernet interface is up already...

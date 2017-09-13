@@ -93,6 +93,10 @@ class NetmanHelper(BaseHelper):
         cmd = " ".join(["cat", "cat /sys/class/net/{}/operstate".format(interface)])
         return self.execute_cmd(cmd) == "up"
 
+    def get_sys_ctl_parameters(self, parameter):
+        cmd = " ".join(["cat", "/proc/sys/net/{}".format(parameter)])
+        return int(self.execute_cmd(cmd)[const.STDOUT][0].rstrip())
+
     def get_vcm_interface_name(self):
         """
         """
