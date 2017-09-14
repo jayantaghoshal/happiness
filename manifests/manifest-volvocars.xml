@@ -8,9 +8,6 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
-  <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
-  <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars_apps/VolvoLauncher" revision="70db4bf25235134145558656f4dc50765a5a4243"/>
-
   <!-- AOSP Changed by Volvo Cars -->
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
@@ -21,6 +18,15 @@
   <remove-project name="aosp/platform/packages/services/Car"/>
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="5b085f3c9ff37b6d80db7a9115386bfd1cb44e54"/>
 
+  <!-- HMI -->
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/hmi/apps/Internal" revision="2f8fa43a8347c883b48c7880d09862428ef955f3"/>
+  <project name="vendor/volvocars/hmi/apps/Contractual" path="vendor/volvocars/hmi/apps/Contractual" revision="e628b14c8fd57bfcdab52ff0a1178b40646374ae"/>
+  <project name="vendor/volvocars/hmi/apps/PreInstalled" path="vendor/volvocars/hmi/apps/PreInstalled" revision="28685543fd50f524e0d4c5a3b48878147deab0f6"/>
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="b6853f3d0a90a83910ccb9aafe7aa018ea3cf630"/>
+  <project name="vendor/volvocars/hmi/GraphicResources" path="vendor/volvocars/hmi/GraphicResources" revision="8533198113df095f8bfa015367cee5bc16f43b86"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="a1a17db97392d855c1088703b0465a5017f34070"/>
+  <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
+  <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars_apps/VolvoLauncher" revision="70db4bf25235134145558656f4dc50765a5a4243"/>
   <!-- Volvo Cars partner apps -->
   <!-- TODO: Temporary path name due to naming conflict with tools/config git -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars_apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
