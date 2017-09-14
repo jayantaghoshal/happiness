@@ -16,20 +16,25 @@ export USE_CCACHE=true
 #uncommenting the following line
 # docker_run "64bit_sanity.py $REPO_ROOT_DIR/vendor/volvocars/" || die "64 bit build sanity check failed"
 
-"$SCRIPT_DIR"/static_analysis.sh
+time "$SCRIPT_DIR"/static_analysis.sh
 
-docker_run "lunch ihu_vcc-eng && make -j32 droid" || die "Build image failed"
-
-docker_run "lunch ihu_vcc-eng && make -j32 vts" || die "Build VTS failed"
-
-docker_run "lunch ihu_vcc-eng && make -j32 tradefed-all" || die "Build Tradefed failed"
+docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "Build failed"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
+echo "TIME BEFORE build_tests"
+date +"%T"
+time_before_build_test=$(date +%s)
 build_tests
+echo "TIME AFTER build_tests"
+time_after_build_test=$(date +%s)
+date +"%T"
+echo "TIME SPENT IN build_tests: $(( time_after_build_test-time_before_build_test ))"
+
+
 
 # Push out files required for gate_test.sh to Artifactory.
 OUT_ARCHIVE=out.tgz
-docker_run "tar cvfz ${OUT_ARCHIVE} \
+docker_run "time tar cvfz ${OUT_ARCHIVE} \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
