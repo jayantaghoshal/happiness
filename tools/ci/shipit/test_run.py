@@ -47,11 +47,11 @@ def read_module_name(android_test_xml_file: str):
 
     et = ET.parse(android_test_xml_file)
 
-    module_name_option = et.find("/test/option/[@name='module-name']")
+    module_name_option = et.find("./test/option/[@name='module-name']")
     if module_name_option is not None:
         return module_name_option.attrib["value"]
 
-    test_module_name_option = et.find("/test/option/[@name='test-module-name']")
+    test_module_name_option = et.find("./test/option/[@name='test-module-name']")
     if test_module_name_option is not None:
         return test_module_name_option.attrib["value"]
 
