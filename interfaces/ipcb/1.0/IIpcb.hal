@@ -7,11 +7,26 @@ interface IIpcb
 {
     /**
      * Subscribe to messages received on IPCB
+     *
+     * Use this to subscribe to receive messages not related to a request (e.g. notifications)
+     *
+     * @param serviceID ID of the service to subscribe to
+     * @param operationID ID of the operation to subscribe to, use 0xFFFF to subscribe to all operation IDs for the service
+     * @param operationTypes Vector of Operation Types to subscribe to. NOTE! Response is handled separately and MUST not be used here!
+     * @param callbackHandler Instance handling callbacks for subscribed operation IDs
+     */
+    subscribeMessage(uint16_t serviceID, uint16_t operationID, vec<OperationType> operationTypes, IMessageCallback callbackHandler) generates (Status status);
+
+    /**
+     * Subscribe to responses received on IPCB
+     *
+     * Use this to subscribe to receive all responses related to requests (e.g. SetRequest) where a response is expected.
+     *
      * @param serviceID ID of the service to subscribe to
      * @param operationID ID of the operation to subscribe to, use 0xFFFF to subscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs
      */
-    subscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
+    subscribeResponse(uint16_t serviceID, uint16_t operationID, IResponseCallback callbackHandler) generates (Status status);
 
     /**
      * Unsubscribe to messages received on IPCB
@@ -22,30 +37,7 @@ interface IIpcb
     unsubscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
 
     /**
-     * Send request over IPCB
-     *
-     * Valid request types are messages requiring a response in some way, these are:
-     * REQUEST = 0x00
-     * SETREQUEST = 0x02
-     * NOTIFICATION_REQUEST = 0x03,
-     *
-     * Never send requests with opType ACK, this will be sent automatically by the IPCB daemon instance
-     * @param req Request to send over IPCB.
-     * @param respHandler Handler to handle the response recived over IPCB.
-     */
-    oneway sendRequest(Msg req, IResponseCallback respHandler);
-
-    /**
      * Send message over IPCB
-     *
-     * Use this to send all massages not requiring a response:
-     * SETREQUEST_NORETURN = 0x01
-     * NOTIFICATION_REQUEST = 0x03
-     * RESPONSE = 0x04
-     * NOTIFICATION = 0x05
-     * NOTIFICATION_CYCLIC = 0x06
-     * ERROR = 0xE0
-     *
      * Never send messages with opType ACK, this will be sent automatically by the IPCB daemon instance
      * @param msg Message to send over IPCB.
      */
