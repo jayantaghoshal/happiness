@@ -71,7 +71,7 @@ function repo_sync() {
 #
 # TODO: Make this configurable in a JSON config file or somthing when porting to
 #       Python.
-TEST_BLACKLIST="vendor/volvocars/hardware/climate/.*\|vendor/volvocars/hardware/signals/vehiclesignalsdaemon/.*\|vendor/volvocars/hardware/powermoding/.*"
+TEST_BLACKLIST="vendor/volvocars/hardware/climate/.*\|vendor/volvocars/hardware/signals/vehiclesignalsdaemon/.*\|vendor/volvocars/hardware/powermoding/.*\|vendor/volvocars/hardware/localconfig.*"
 
 # TODO: Add to build system, should replace *_test_build.sh
 function build_tests {
