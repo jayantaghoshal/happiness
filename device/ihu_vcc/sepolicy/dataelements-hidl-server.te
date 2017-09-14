@@ -1,0 +1,5 @@
+# dataelements-hidl-server
+type dataelements-hidl-server, domain;
+type dataelements-hidl-server_exec, exec_type, file_type;
+
+init_daemon_domain(dataelements-hidl-server)
