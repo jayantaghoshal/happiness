@@ -6,4 +6,4 @@
 
 /vendor/bin/hw/infotainment-ip-service u:object_r:infotainment-ip-service_exec:s0
 
-
+/vendor/bin/hw/dataelements-hidl-server u:object_r:dataelements-hidl-server_exec:s0
