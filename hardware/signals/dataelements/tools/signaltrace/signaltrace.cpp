@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <chrono>
 
 #include "vendor/volvocars/hardware/signals/1.0/ISignals.h"
 #include "vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h"
@@ -24,6 +26,7 @@ class SignalChangedCallback : public ISignalsChangedCallback
   ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
                                                   const ::android::hardware::hidl_string& data)
   {
+    printf("\n %s %s", signalName.c_str(), data.c_str());
     return ::android::hardware::Void();
   }
 };
@@ -158,5 +161,8 @@ int main(int argc, char* argv[])
           if(!service->subscribe(tag, Dir::INTERNAL, signalChanged).isOk())
             ALOGE("Failed to subscribe to server");
       }
+    }
+    while(true) {
+      std::this_thread::sleep_for (std::chrono::seconds(1));
     }
 }
