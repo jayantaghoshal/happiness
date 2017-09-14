@@ -7,42 +7,61 @@
         # Jenkins require parameters to be explicitly defined, otherwise they are removed
         - string:
             name: ZUUL_UUID
+            description: "Zuul provided key to link builds with Gerrit events."
         - string:
             name: ZUUL_REF
+            description: "Zuul provided ref that includes commit(s) to build."
         - string:
             name: ZUUL_COMMIT
+            description: "The commit SHA1 at the head of ZUUL_REF."
         - string:
             name: ZUUL_PROJECT
+            description: "The project that triggered this build."
         - string:
             name: ZUUL_PIPELINE
+            description: "The Zuul pipeline that is building this job."
         - string:
             name: ZUUL_URL
+            description: "The URL for the zuul server as configured in zuul.conf. A test runner may use this URL as the basis for fetching git commits."
         - string:
             name: BASE_LOG_PATH
+            description: "zuul suggests a path to store and address logs. This is deterministic and hence useful for where you want workers to upload to a specific destination or need them to have a specific final URL you can link to in advanced. For changes it is, (last-two-digits-of-change/change-number/patchset-number). For reference updates it is, (first-two-digits-of-newrev/newrev)"
         - string:
             name: LOG_PATH
+            description: "zuul also suggests a unique path for logs to the worker. This is (BASE_LOG_PATH/pipeline-name/job-name/uuid)"
         - string:
             name: ZUUL_VOTING
+            description: "Whether Zuul considers this job voting or not. Note that if Zuul is reconfigured during the run, the voting status of a job may change and this value will be out of date. Values are 1 if voting, 0 otherwise."
         - string:
             name: ZUUL_BRANCH
+            description: "The target branch for the change that triggered this build."
         - string:
             name: ZUUL_CHANGE
+            description: "The Gerrit change ID for the change that triggered this build."
         - string:
             name: ZUUL_CHANGES
+            description: "A caret character separated list of the changes upon which this build is dependent upon in the form of a colon character separated list consisting of project name, target branch, and revision ref."
         - string:
             name: ZUUL_CHANGE_IDS
+            description: "All of the Gerrit change IDs that are included in this build (useful when the DependentPipelineManager combines changes for testing)."
         - string:
             name: ZUUL_PATCHSET
+            description: "The Gerrit patchset number for the change that triggered this build."
         - string:
             name: ZUUL_OLDREV
+            description: "The SHA1 of the old revision at this ref ,recall the ref name is in ZUUL_REF."
         - string:
             name: ZUUL_NEWREV
+            description: "The SHA1 of the new revision at this ref ,recall the ref name is in ZUUL_REF."
         - string:
             name: ZUUL_SHORT_OLDREV
+            description: "The shortened 7 character SHA1 of the old revision."
         - string:
             name: ZUUL_SHORT_NEWREV
+            description: "The shortened 7 character SHA1 of the new revision."
         - string:
             name: ZUUL_PATCHSET
+            description: "The Gerrit patchset number for the change that triggered this build."
     properties:
         - build-discarder:
             days-to-keep: 40
