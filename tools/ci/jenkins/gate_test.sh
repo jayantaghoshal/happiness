@@ -12,7 +12,7 @@ repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/
 OUT_ARCHIVE=out.tgz
 rm -rf out ${OUT_ARCHIVE}
 
-docker_run artifactory pull ihu_gate_build "${ZUUL_CHANGE_IDS}" ${OUT_ARCHIVE} \
+docker_run "artifactory pull ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}" \
     || die "Could not pull out archive from Artifactory."
 
 tar xvf ${OUT_ARCHIVE} || die "Could not extract out archive."

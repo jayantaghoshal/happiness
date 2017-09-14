@@ -40,7 +40,7 @@ docker_run "tar cvfz ${OUT_ARCHIVE} \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed" || die "Could not create out archive"
 
-docker_run artifactory push ihu_gate_build "${ZUUL_CHANGE_IDS}" ${OUT_ARCHIVE} \
+docker_run "artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}" \
     || die "Could not push out archive to Artifactory."
 
 rm ${OUT_ARCHIVE}
