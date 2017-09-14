@@ -18,11 +18,11 @@ export USE_CCACHE=true
 
 "$SCRIPT_DIR"/static_analysis.sh
 
-docker_run "lunch ihu_vcc-eng && make -j16 droid" || die "Build image failed"
+docker_run "lunch ihu_vcc-eng && make -j32 droid" || die "Build image failed"
 
-docker_run "lunch ihu_vcc-eng && make -j16 vts" || die "Build VTS failed"
+docker_run "lunch ihu_vcc-eng && make -j32 vts" || die "Build VTS failed"
 
-docker_run "lunch ihu_vcc-eng && make -j16 tradefed-all" || die "Build Tradefed failed"
+docker_run "lunch ihu_vcc-eng && make -j32 tradefed-all" || die "Build Tradefed failed"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 build_tests
