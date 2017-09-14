@@ -13,4 +13,4 @@ docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars
 ##
 # Run Tests
 #
-./vendor/volvocars/tools/ci/jenkins/hourly.sh
+./vendor/volvocars/tools/ci/jenkins/hourly_test.sh
