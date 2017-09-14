@@ -4,6 +4,7 @@
     # TODO: The script is not even using repo????, node-filter not relevant            
     node: high 
     description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    
     triggers:
         - gerrit:  
             server-name: 'iCUP Android Gerrit'
@@ -16,6 +17,13 @@
                   branches:
                     - branch-compare-type: 'REG_EXP'
                       branch-pattern: '.*'
+    scm:
+        - git:
+            url: ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars
+            credentials-id: 0cc7da38-6d74-4a55-8773-e706f59cb82f
+            branches:
+                - "*/${GERRIT_BRANCH}"
+            basedir: vendor/volvocars
     builders:
         - shell: |
                 export WORKSPACE_ROOT=$(pwd)
