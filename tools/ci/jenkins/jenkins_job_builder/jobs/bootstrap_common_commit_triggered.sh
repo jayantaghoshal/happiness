@@ -11,7 +11,6 @@ die() { echo "$@" 1>&2 ; exit 1; }
 # This is only to get a container with "repo" and "zuul" installed
 # Once we have cloned the vendor/volvocars repo we use the container specified by vendor/volvocars/tools/docker_build
 #
-export DOCKER_HOST="tcp://127.0.0.1:2375" #TODO: Not required after reboot of gotsvl1416
 export DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
 export WORKSPACE_ROOT
 WORKSPACE_ROOT=$(pwd)
