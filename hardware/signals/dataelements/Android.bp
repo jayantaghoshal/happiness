@@ -6,9 +6,6 @@ subdirs = [
 // Generate Mp_Router_crc.h
 //
 
-subdirs = [
-    "tools/signaltrace"
-]
 genrule {
     name: "libdataelements_crcgen",
     tool_files: ["crc16cmd.py"],
