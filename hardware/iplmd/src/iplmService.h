@@ -10,7 +10,7 @@
 #include <Application_dataelement.h>
 
 #include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
-#include <vendor/volvocars/hardware/ipcb/1.0/IIpcbCallback.h>
+#include <vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h>
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -24,7 +24,7 @@ using ::android::sp;
 using ::tarmac::eventloop::IDispatcher;
 
 using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb;
-using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback;
+using ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
 
 
@@ -53,7 +53,7 @@ enum class XResourceGroupStatus {
 };
 
 
-class IplmService : public IIpcbCallback
+class IplmService : public IMessageCallback
 {
  public:
   /** Enumeration used to track remote ECU availability in resource group
@@ -76,7 +76,7 @@ class IplmService : public IIpcbCallback
   IplmService();
   ~IplmService() = default;
 
-  // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
+  // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback follow.
   Return<void> onMessageRcvd(const Msg &msg) override;
 
   /**

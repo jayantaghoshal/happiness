@@ -40,7 +40,7 @@ IplmService::IplmService() :
     ipcbServer_ = IIpcb::getService("iplm");
 
     // Install callback
-    ipcbServer_.get()->subscribe(0xFFFF, 0xFF01, this); //Change to not use hard coded hex values here?!
+    ipcbServer_.get()->subscribeMessage(0xFFFF, 0xFF01,{ OperationType::NOTIFICATION_CYCLIC},this); //Change to not use hard coded hex values here?!
 }
 
 // Methods from vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
