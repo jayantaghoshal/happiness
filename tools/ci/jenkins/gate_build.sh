@@ -33,8 +33,20 @@ echo "TIME SPENT IN build_tests: $(( time_after_build_test-time_before_build_tes
 
 
 # Push out files required for gate_test.sh to Artifactory.
+#
+# Some measurements of different compression algorithms
+# Compression         Size     Time          Size Reduction rate
+# None                2.3GB -  0m 10sec           N/A
+# gzip -1             950MB -  0m 45sec         30 Mb/s
+# gzip -2             933MB -  0m 50sec         27 Mb/s
+# gzip -6 (Default)   877MB -  1m 45sec         14 Mb/s
+# gzip -9             873MB -  4m 46sec          5 Mb/s
+# pigz -1             943MB -  0m 12sec        113 Mb/s
+# pigz -6             877MB -  0m 18sec         79 Mb/s
+# pigz -9             873MB -  0m 47sec         30 Mb/s
+
 OUT_ARCHIVE=out.tgz
-docker_run "time tar cfz ${OUT_ARCHIVE} \
+docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
