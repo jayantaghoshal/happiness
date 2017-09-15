@@ -22,6 +22,18 @@ First you need to authenticate with Artifactory
 docker login -u $USER swf1.artifactory.cm.volvocars.biz:5002
 ```
 
+If this steps fails, your docker service might not use your system proxy configuration.
+
+It happened on VCC Linux Client, but after adding:
+```bash
+export http_proxy="http://127.0.0.1:3128/"
+export https_proxy="http://127.0.0.1:3128/"
+export HTTP_PROXY="http://127.0.0.1:3128/"
+export HTTPS_PROXY="http://127.0.0.1:3128/"
+```
+
+into /etc/default/docker and restarting service (systemctl restart docker.service) docker was operational.
+
 To run a command inside a container, execute:
 
 ```bash
