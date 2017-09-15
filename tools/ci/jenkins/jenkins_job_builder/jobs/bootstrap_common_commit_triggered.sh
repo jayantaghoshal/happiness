@@ -3,6 +3,8 @@ set -uex
 
 die() { echo "$@" 1>&2 ; exit 1; }
 
+echo "Gerrit commit that is tested"
+echo "https://icup_android.gerrit.cm.volvocars.biz/#/c/${ZUUL_CHANGE}"
 
 ################################################################################################
 ##
