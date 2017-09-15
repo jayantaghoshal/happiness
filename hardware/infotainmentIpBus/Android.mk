@@ -10,7 +10,9 @@ LOCAL_SRC_FILES += \
 generated/infotainmentIpBus.c \
 generated/VccIpCmdApi.cpp \
 asn_base/asn_base.c \
-src/asn_print.cpp
+src/asn_print.cpp \
+src/type_conversion_helpers.cpp
+
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
