@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}/common.sh"
 # Update the manifests based on the templates and download all other
 # repositories. First time this will take a very long time but subsequent
 # downloads are incremental and faster.
-docker_run python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
+docker_run "time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local \"${ZUUL_BRANCH}\""
 
 # Setup ccache
 export USE_CCACHE=true
@@ -28,13 +28,13 @@ build_tests
 echo "TIME AFTER build_tests"
 time_after_build_test=$(date +%s)
 date +"%T"
-echo "TIME SPENT IN build_tests: $(( time_after_build_test-time_before_build_test ))"
+echo "TIME SPENT IN build_tests: $(( time_after_build_test-time_before_build_test )) sec"
 
 
 
 # Push out files required for gate_test.sh to Artifactory.
 OUT_ARCHIVE=out.tgz
-docker_run "time tar cvfz ${OUT_ARCHIVE} \
+docker_run "time tar cfz ${OUT_ARCHIVE} \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
@@ -45,7 +45,8 @@ docker_run "time tar cvfz ${OUT_ARCHIVE} \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed" || die "Could not create out archive"
 
-docker_run "artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}" \
+ls -lh "$OUT_ARCHIVE"
+docker_run "time artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}" \
     || die "Could not push out archive to Artifactory."
 
 rm ${OUT_ARCHIVE}
