@@ -8,8 +8,9 @@ LOCAL_PROPRIETARY_MODULE := true
 
 # ipcb-daemon
 
-LOCAL_SRC_FILES := src/main.cpp \
-    src/util/local_config.cpp
+LOCAL_SRC_FILES := \
+    src/main.cpp \
+    src/service_manager.cpp
 
 # There are a few warnings in these .c files that can be supressed by:
 # LOCAL_CFLAGS += -Wno-unused-parameter
@@ -46,7 +47,7 @@ LOCAL_SHARED_LIBRARIES += \
     libhidltransport \
     libhardware \
     libhwbinder \
-    android.hardware.gnss@1.0
+    vendor.volvocars.hardware.ipcb@1.0
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/ipcbd/src \

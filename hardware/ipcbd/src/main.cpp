@@ -20,9 +20,7 @@
 #include <IDispatcher.h>
 #include <sys/signalfd.h>
 
-
-#include "util/local_config.h"
-//#include "service_manager.h"
+#include "service_manager.h"
 
 using namespace Connectivity;
 using namespace IpCmdTypes;
@@ -150,7 +148,6 @@ bool InitSignals()
 int main(void)
 {
     InitSignals();
-    ipcb::Utils::loadLocalConfig();
 
     IDispatcher& dispatcher = IDispatcher::GetDefaultDispatcher();
 
@@ -172,10 +169,10 @@ int main(void)
         setupSocket(broadcastSock, Message::ALL);
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
-        //Connectivity::ServiceManager    service_manager(dispatcher);
+        Connectivity::ServiceManager service_manager(msgDispatcher);
 
         configureRpcThreadpool(1, true /*callerWillJoin*/);
-        //service_manager.RegisterAllBinderServices(&msgDispatcher);
+
         joinRpcThreadpool();
 
         ALOGI("exiting ...");

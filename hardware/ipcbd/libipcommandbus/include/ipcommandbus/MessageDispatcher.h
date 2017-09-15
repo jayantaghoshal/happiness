@@ -77,59 +77,18 @@ public:
                                   ResponseMessageCallback messageCb);
 
     /**
-     * Registers the callback function to call when a request message is received.
+     * Registers the callback function to call when a specific message is received.
+     * NOTE! Don't use for response messages!
      *
      * @param[in] serviceId                 The service id to match with
      * @param[in] operationId               The operation id  to match with
+     * @param[in] operationType             The operation  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    void registerRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                 IpCmdTypes::OperationId operationId,
-                                 MessageCallback messageCb);
-
-    /**
-     * Registers the callback function to call when a set request message is received.
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerSetRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                    IpCmdTypes::OperationId operationId,
-                                    MessageCallback messageCb);
-
-    /**
-     * Registers the callback function to call when a notification message is received.
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerNotificationCallback(IpCmdTypes::ServiceId serviceId,
-                                      IpCmdTypes::OperationId operationId,
-                                      MessageCallback messageCb);
-
-    /**
-     * Registers the callback function to call when a cyclic notification message is received.
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerNotificationCyclicCallback(IpCmdTypes::ServiceId serviceId,
-                                            IpCmdTypes::OperationId operationId,
-                                            MessageCallback messageCb);
-
-    /**
-     * Registers the callback function to call when a notification request message is received.
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerNotificationRequestCallback(IpCmdTypes::ServiceId serviceId,
-                                             IpCmdTypes::OperationId operationId,
-                                             MessageCallback messageCb);
+     void registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+        IpCmdTypes::OperationId operationId,
+        IpCmdTypes::OperationType operationType,
+        MessageCallback messageCb);
 
     // Note: There is by design no 'registerErrorCallback'.
     //       Errors and timeouts associated with earlier sent requests are returned trough response callback.
@@ -179,20 +138,6 @@ protected:
     };
 
 private:
-    /**
-     * Registers the callback function to call when a specific message is received.
-     * NOTE! Don't use for response messages!
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] operationType             The operation  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerMessageCallback(IpCmdTypes::ServiceId serviceId,
-                                 IpCmdTypes::OperationId operationId,
-                                 IpCmdTypes::OperationType operationType,
-                                 MessageCallback messageCb);
-
     /**
      * Callback funciton called when a new message has been added to the send queue
      *
