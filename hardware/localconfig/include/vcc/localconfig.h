@@ -7,6 +7,7 @@
 #define VCC_LOCALCONFIG_H_
 
 #include <string>
+#include <vector>
 
 namespace vcc
 {
@@ -23,7 +24,13 @@ namespace localconfig
  * @param key string that identifies a local config value
  * @return String with the requested parameter value.
  */
-std::string GetString(const std::string &key);
+std::string GetString(const std::initializer_list<std::string> &keys);
+
+template <class... T>
+std::string GetString(const T &... keys)
+{
+  return GetString({keys...});
+}
 
 /**
  * Get the value of a local config int parameter.
@@ -36,7 +43,13 @@ std::string GetString(const std::string &key);
  * @param key string that identifies a local config value
  * @return int with the requested parameter value.
  */
-int GetInt(const std::string &key);
+int GetInt(const std::initializer_list<std::string> &keys);
+
+template <class... T>
+int GetInt(const T &... keys)
+{
+  return GetInt({keys...});
+}
 
 /**
  * Get the value of a local config bool parameter.
@@ -49,7 +62,13 @@ int GetInt(const std::string &key);
  * @param key string that identifies a local config value
  * @return bool with the requested parameter value.
  */
-bool GetBool(const std::string &key);
+bool GetBool(const std::initializer_list<std::string> &keys);
+
+template <class... T>
+bool GetBool(const T &... keys)
+{
+  return GetBool({keys...});
+}
 
 /**
  * Get the value of a local config double parameter.
@@ -62,7 +81,33 @@ bool GetBool(const std::string &key);
  * @param key string that identifies a local config value
  * @return double with the requested parameter value.
  */
-double GetDouble(const std::string &key);
+double GetDouble(const std::initializer_list<std::string> &keys);
+
+template <class... T>
+double GetDouble(const T &... keys)
+{
+  return GetDouble({keys...});
+}
+
+/**
+ * Get the value of a local config array of string parameter.
+ *
+ * Usage:
+ *   const std::vector<string> my_strings = vcc::localconfig::GetStringArray("MyLcfgValue5");
+ *
+ * If the key is not found a std::runtime_error exception will be thrown.
+ *
+ * @param key string that identifies a local config value
+ * @return vector of strings with requested parameter value
+ */
+
+std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys);
+
+template <class... T>
+std::vector<std::string> GetStringArray(const T &... keys)
+{
+  return GetStringArray({keys...});
+}
 
 }  // namespace localconfig
 }  // namespace vcc
