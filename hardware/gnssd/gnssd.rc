@@ -1,0 +1,6 @@
+service gnssd /vendor/bin/hw/gnssd
+    class main
+    oneshot
+    user root
+    group root
+    seclabel u:r:gnssd:s0
