@@ -53,6 +53,9 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
         if stage_changes:
             manifest_repo.add([dest])
 
+    if not manifest_repo.any_changes(staged=stage_changes):
+        raise RuntimeError('No manifest changes found. Failed to clone/update repo(s)?')
+
 
 def post_merge(aosp_root_dir: str,
                branch: str,
@@ -72,10 +75,7 @@ def post_merge(aosp_root_dir: str,
                                               manifest_repo,
                                               stage_changes=True)
 
-    if manifest_repo.any_changes_staged():
-        # TODO: Include list of changes in commit message and log
-        logging.info("Changes found, pushing new manifest")
-        manifest_repo.commit("Auto bump\n\n" + additional_commit_message)
-        manifest_repo.push(["origin", "HEAD:refs/for/" + branch + "%submit"])
-    else:
-        logging.info("No Changes found")
+    # TODO: Include list of changes in commit message and log
+    logging.info("Changes found, pushing new manifest")
+    manifest_repo.commit("Auto bump\n\n" + additional_commit_message)
+    manifest_repo.push(["origin", "HEAD:refs/for/" + branch + "%submit"])
