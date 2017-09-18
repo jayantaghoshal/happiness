@@ -67,8 +67,11 @@ class Repo:
     def show(self, git_object: str) -> str:
         return self._run_git(['show', git_object]).stdout_str
 
-    def any_changes_staged(self) -> bool:
-        result = self._run_git(['diff', '--cached', '--quiet'], check_exitcode=False)
+    def any_changes(self, staged: bool = False) -> bool:
+        args = ['diff', '--quiet']
+        if staged:
+            args.append('--cached')
+        result = self._run_git(args, check_exitcode=False)
         return result.exitcode == 1
 
     def _run_git(self,
