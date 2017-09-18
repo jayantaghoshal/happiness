@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-This tests verifies the that iips is started and that it can exit properly.
-Actually the consequence that it can exit properly is a proof that it has started as it should.
+This tests verifies the that ipcbd is started in multiple instances.
 -->
-<configuration description="Test that iips is started properly and that it terminates on SIGTERM">
+<configuration description="Test that ipcbd is started properly in three different instances">
 <!--
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
     </target_preparer>
 -->
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsIipsCTCases->/data/local/tmp/VtsIipsCTCases" />
+        <option name="push" value="VtsIpcbCTCases->/data/local/tmp/VtsIpcbCTCases" />
     </target_preparer>
 
     <!-- Run test -->
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsIipsCTCases" />
+        <option name="module-name" value="VtsIpcbCTCases" />
         <option name="runtime-hint" value="10s" />
     </test>
 </configuration>

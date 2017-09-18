@@ -26,12 +26,10 @@ using namespace Connectivity;
 using namespace IpCmdTypes;
 using namespace tarmac::eventloop;
 
-
 // libhwbinder:
 using namespace android::hardware;
-//using android::hardware::configureRpcThreadpool;
-//using android::hardware::joinRpcThreadpool;
-
+// using android::hardware::configureRpcThreadpool;
+// using android::hardware::joinRpcThreadpool;
 
 // #define LOOPBACK_ADDRESS "127.0.0.1"
 // Configure sockets
@@ -69,8 +67,8 @@ void SigTermHandler(int fd)
 
     ALOGD("SIGTERM received...");
 
-    IDispatcher::GetDefaultDispatcher().Stop(); // stop our own IDispatcher mainloop
-    IPCThreadState::self()->stopProcess(); // Stop the binder
+    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
 void SigHupHandler(int fd)
@@ -88,8 +86,8 @@ void SigIntHandler(int fd)
 
     ALOGD("SIGINT received...");
 
-    IDispatcher::GetDefaultDispatcher().Stop(); // stop our own IDispatcher mainloop
-    IPCThreadState::self()->stopProcess(); // Stop the binder
+    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
 bool InitSignals()
@@ -105,7 +103,7 @@ bool InitSignals()
         (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
         (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0))
     {
-        ALOGE("Failed to create signals: %s",strerror(errno));
+        ALOGE("Failed to create signals: %s", strerror(errno));
         return false;
     }
 
@@ -114,59 +112,93 @@ bool InitSignals()
         (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0))
     {
-        ALOGE("Failed to block signals: %s",strerror(errno));
+        ALOGE("Failed to block signals: %s", strerror(errno));
         return false;
     }
 
     int termfd = signalfd(-1, &signal_set_term, 0);
-    int hupfd  = signalfd(-1, &signal_set_hup, 0);
-    int intfd  = signalfd(-1, &signal_set_int, 0);
+    int hupfd = signalfd(-1, &signal_set_hup, 0);
+    int intfd = signalfd(-1, &signal_set_int, 0);
 
-    if (termfd<0 || hupfd<0 || intfd<0) {
-        ALOGE("signalfd failed: %s",strerror(errno));
+    if (termfd < 0 || hupfd < 0 || intfd < 0)
+    {
+        ALOGE("signalfd failed: %s", strerror(errno));
         return false;
     }
 
-    IDispatcher::GetDefaultDispatcher().AddFd(termfd, [termfd]() {
-        SigTermHandler(termfd);
-    });
+    IDispatcher::GetDefaultDispatcher().AddFd(termfd, [termfd]() { SigTermHandler(termfd); });
 
-    IDispatcher::GetDefaultDispatcher().AddFd(hupfd, [hupfd]() {
-        SigHupHandler(hupfd);
-    });
+    IDispatcher::GetDefaultDispatcher().AddFd(hupfd, [hupfd]() { SigHupHandler(hupfd); });
 
-    IDispatcher::GetDefaultDispatcher().AddFd(intfd, [intfd]() {
-        SigIntHandler(intfd);
-    });
+    IDispatcher::GetDefaultDispatcher().AddFd(intfd, [intfd]() { SigIntHandler(intfd); });
 
     return true;
 }
 
-
 // ===============================================================
 // MAIN
-int main(void)
+int main(int argc, char *argv[])
 {
+    if (argc < 3)
+    {
+        ALOGE(
+            "Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
+            "\nExamples:\n 1. infotainment UDP\n"
+            "\n2. iplm UDPB\n3. dim TCP DIM\n");
+        return 1;
+    }
+
+    std::string service_name = argv[1];
+    std::string protocol = argv[2];
     InitSignals();
 
-    IDispatcher& dispatcher = IDispatcher::GetDefaultDispatcher();
+    IDispatcher &dispatcher = IDispatcher::GetDefaultDispatcher();
 
     TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
     try
     {
-        UdpSocket sock(dispatcher);
-        UdpSocket broadcastSock(dispatcher); // Socket for broadcast
-
-        transport.setSocket(&sock);
-        transport.setBroadcastSocket(&broadcastSock);
-
         /*ShutdownClient shutdown_client_(sock);
-        cedric::core::NodeState nsm_client_(NSM_SHUTDOWNTYPE_NORMAL | NSM_SHUTDOWNTYPE_FAST, 2000);
+        cedric::core::NodeState nsm_client_(NSM_SHUTDOWNTYPE_NORMAL |
+        NSM_SHUTDOWNTYPE_FAST, 2000);
         nsm_client_.setShutdownClient(&shutdown_client_);*/
 
-        setupSocket(sock, Message::IHU);
-        setupSocket(broadcastSock, Message::ALL);
+        if (protocol == "UDP")
+        {
+            UdpSocket sock(dispatcher);
+            setupSocket(sock, Message::IHU);
+            transport.setSocket(&sock);
+        }
+        else if (protocol == "UDPB")
+        {
+            UdpSocket broadcastSock(dispatcher);  // Socket for broadcast
+            setupSocket(broadcastSock, Message::ALL);
+            transport.setBroadcastSocket(&broadcastSock);
+        }
+        else if (protocol == "TCP")
+        {
+            if (argc < 4)
+            {
+                ALOGE("Needs ECU name. Check .rc file");
+                return 1;
+            }
+            // TODO: Add DIM and other ECU sockets for TCP communication
+            // if (ECU == "DIM")
+            // {
+            //     // setup atcp socket with port and IP extracted from
+            //     localconfig
+            // }
+            // else
+            // {
+            //     ALOGE("Unknown ECU specified for TCP communication")
+            //     return;
+            // }
+        }
+        else
+        {
+            ALOGE("Unknown protocol specified");
+            return 1;
+        }
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
         Connectivity::ServiceManager service_manager(msgDispatcher);

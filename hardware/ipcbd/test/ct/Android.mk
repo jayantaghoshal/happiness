@@ -3,11 +3,11 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 
-LOCAL_MODULE := VtsIipsCTCases
+LOCAL_MODULE := VtsIpcbCTCases
 
 LOCAL_SRC_FILES := \
-    iips_ct.cpp \
-    iips_test_helpers.cpp
+    ipcb_ct.cpp \
+    ipcb_test_helpers.cpp
 
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
