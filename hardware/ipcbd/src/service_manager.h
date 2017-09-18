@@ -7,7 +7,8 @@
 #include <string>
 
 #include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
-#include <vendor/volvocars/hardware/ipcb/1.0/IIpcbCallback.h>
+#include <vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h>
+#include <vendor/volvocars/hardware/ipcb/1.0/IResponseCallback.h>
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
