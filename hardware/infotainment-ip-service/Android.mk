@@ -91,3 +91,5 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)
+
+include $(call all-makefiles-under,$(LOCAL_PATH))

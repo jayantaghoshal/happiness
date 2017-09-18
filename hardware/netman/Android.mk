@@ -25,5 +25,4 @@ LOCAL_STATIC_LIBRARIES += \
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)
 
-
-
+include $(call all-makefiles-under,$(LOCAL_PATH))

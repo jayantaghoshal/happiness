@@ -24,3 +24,5 @@ LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MULTILIB := 64
 include $(BUILD_SHARED_LIBRARY)
 
+
+include $(call all-makefiles-under,$(LOCAL_PATH))
