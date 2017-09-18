@@ -1,17 +1,13 @@
 
 #include <stdio.h>
+#include <chrono>
 #include <iostream>
 #include <sstream>
 #include <thread>
-#include <chrono>
 
 #include "vendor/volvocars/hardware/signals/1.0/ISignals.h"
 #include "vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h"
 #include "vendor/volvocars/hardware/signals/1.0/types.h"
-
-#undef LOG_TAG
-#define LOG_TAG "SignalTrace"
-#include <cutils/log.h>
 
 using namespace vendor::volvocars::hardware::signals::V1_0;
 
@@ -38,7 +34,9 @@ void printHelp()
   printf("Example: 'signaltrace in' trace all signals received by IHU\n");
   printf("Example: 'signaltrace Prof*' trace all signals that starts with \"Prof\"\n");
   printf("Example: 'signaltrace in *Mod*' trace all in signals that contains string \"Mod\"\n");
-  printf("Example: 'signaltrace -list' Lists all received in signals last received value \n\n");
+  printf(
+      "Example: 'signaltrace in -list' First lists all received in signals last received value then trace all in "
+      "signals \n\n");
 }
 
 bool handleArguments(int argc, char* argv[])
@@ -80,89 +78,91 @@ bool handleArguments(int argc, char* argv[])
 
 void printCurrentSignalsForDir(Dir dir, std::string prefix)
 {
-    ::android::hardware::hidl_vec<Result> result;
-    auto _hidl_cb = [&](const ::android::hardware::hidl_vec<Result>& data) {
-        result = data;
-    };
-    ::android::sp<ISignals> service = ISignals::getService();
-    if(!service->get_all(tag, dir, _hidl_cb).isOk())
-        ALOGE("Failed to call get_all() to server");
-    for (size_t i = 0; i < result.size(); i++)
-    {
-        printf("%s Signal: %s Data: %s\n", prefix.c_str(), result[i].name.c_str(), result[i].value.c_str());
-    }
+  ::android::hardware::hidl_vec<Result> result;
+  auto _hidl_cb = [&](const ::android::hardware::hidl_vec<Result>& data) { result = data; };
+  ::android::sp<ISignals> service = ISignals::getService();
+  auto res = service->get_all(tag, dir, _hidl_cb);
+  if (!res.isOk())
+  {
+    printf("Failed to call get_all() to server. Description: %s", res.description().c_str());
+    return;
+  }
+  for (const auto& r : result)
+  {
+    printf("%s Signal: %s Data: %s\n", prefix.c_str(), r.name.c_str(), r.value.c_str());
+  }
 }
 
 void printCurrentSignals(Dir dir)
 {
   if (!allSignals)
   {
-      switch (dir)
-      {
-          case Dir::IN:
-            printf("List of all current in signals:\n");
-            printCurrentSignalsForDir(dir, "<-");
-            break;
-          case Dir::OUT:
-            printf("List of all current out signals:\n");
-            printCurrentSignalsForDir(dir, "->");
-            break;
-          case Dir::INTERNAL:
-            printf("List of all current internal signals:\n");
-            printCurrentSignalsForDir(dir, "[INTERNAL]");
-            break;
-      }
+    switch (dir)
+    {
+      case Dir::IN:
+        printf("List of all current in signals:\n");
+        printCurrentSignalsForDir(dir, "<-");
+        break;
+      case Dir::OUT:
+        printf("List of all current out signals:\n");
+        printCurrentSignalsForDir(dir, "->");
+        break;
+      case Dir::INTERNAL:
+        printf("List of all current internal signals:\n");
+        printCurrentSignalsForDir(dir, "[INTERNAL]");
+        break;
+    }
   }
   else
   {
-      printf("List of all current signals:\n");
-      printCurrentSignalsForDir(Dir::IN, "<-");
-      printCurrentSignalsForDir(Dir::OUT, "->");
-      printCurrentSignalsForDir(Dir::INTERNAL, "[INTERNAL]");
+    printf("List of all current signals:\n");
+    printCurrentSignalsForDir(Dir::IN, "<-");
+    printCurrentSignalsForDir(Dir::OUT, "->");
+    printCurrentSignalsForDir(Dir::INTERNAL, "[INTERNAL]");
   }
 }
 
 int main(int argc, char* argv[])
 {
-    if (!handleArguments(argc, argv))
-        return 0;
-    ::android::sp<ISignals> service = ISignals::getService();
-    ::android::sp<ISignalsChangedCallback> signalChanged = new SignalChangedCallback();
-    if (listSignals)
+  if (!handleArguments(argc, argv)) return 0;
+  ::android::sp<ISignals> service = ISignals::getService();
+  ::android::sp<ISignalsChangedCallback> signalChanged = new SignalChangedCallback();
+  if (listSignals)
+  {
+    printCurrentSignals(dir);
+  }
+  if (!allSignals)
+  {
+    auto subscribe = service->subscribe(tag, dir, signalChanged);
+    if (!subscribe.isOk())
     {
-      printCurrentSignals(dir);
+      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
+      return 0;
     }
-    else
+  }
+  else
+  {
+    auto subscribe = service->subscribe(tag, Dir::IN, signalChanged);
+    if (!subscribe.isOk())
     {
-      if (!allSignals)
-      {
-          switch (dir)
-          {
-              case Dir::IN:
-                if(!service->subscribe(tag, dir, signalChanged).isOk())
-                    ALOGE("Failed to subscribe to server");
-                break;
-              case Dir::OUT:
-                if(!service->subscribe(tag, dir, signalChanged).isOk())
-                    ALOGE("Failed to subscribe to server");
-                break;
-              case Dir::INTERNAL:
-                if(!service->subscribe(tag, dir, signalChanged).isOk())
-                    ALOGE("Failed to subscribe to server");
-                break;
-          }
-      }
-      else
-      {
-          if(!service->subscribe(tag, Dir::IN, signalChanged).isOk())
-            ALOGE("Failed to subscribe to server");
-          if(!service->subscribe(tag, Dir::OUT, signalChanged).isOk())
-            ALOGE("Failed to subscribe to server");
-          if(!service->subscribe(tag, Dir::INTERNAL, signalChanged).isOk())
-            ALOGE("Failed to subscribe to server");
-      }
+      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
+      return 0;
     }
-    while(true) {
-      std::this_thread::sleep_for (std::chrono::seconds(1));
+    subscribe = service->subscribe(tag, Dir::OUT, signalChanged);
+    if (!subscribe.isOk())
+    {
+      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
+      return 0;
     }
+    subscribe = service->subscribe(tag, Dir::INTERNAL, signalChanged);
+    if (!subscribe.isOk())
+    {
+      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
+      return 0;
+    }
+  }
+  while (true)
+  {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
 }
