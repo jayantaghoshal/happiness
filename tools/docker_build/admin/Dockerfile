@@ -123,6 +123,9 @@ COPY repo /usr/bin/repo
 COPY redis-cli /usr/bin/redis-cli
 RUN pip3 install redis \
     requests \
+    python-jenkins \
+    termcolor \
+    tabulate \
     zuul==2.5.2
 
 ##################################################
