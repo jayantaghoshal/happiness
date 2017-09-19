@@ -20,19 +20,25 @@ std::vector<std::pair<Message::Ecu, ISocket::EcuAddress> > Socket::defaultEcuMap
     const std::string vcm_ip = local_config.getVCMIpAddress();
     const std::string tem_ip = local_config.getTEMIpAddress();
     const std::string dim_ip = local_config.getDIMIpAddress();
+    const std::string tcam_ip = local_config.getTCAMIpAddress();
+    const std::string vgm_ip = local_config.getVGMIpAddress();
 
     const uint16_t local_port = local_config.getLocalPort();
     const uint16_t local_broadcast_port = local_config.getLocalBroadcastPort();
     const uint16_t vcm_port = local_config.getVCMPort();
     const uint16_t tem_port = local_config.getTEMPort();
     const uint16_t dim_port = local_config.getDIMPort();
+    const uint16_t tcam_port = local_config.getTCAMPort();
+    const uint16_t vgm_port = local_config.getVGMPort();
 
     return std::vector<std::pair<Message::Ecu, ISocket::EcuAddress>> {
         std::make_pair(Message::Ecu::IHU, ISocket::EcuAddress{local_ip, local_port}),
         std::make_pair(Message::Ecu::ALL, ISocket::EcuAddress{local_broadcast, local_broadcast_port}),
         std::make_pair(Message::Ecu::VCM, ISocket::EcuAddress{vcm_ip, vcm_port}),
         std::make_pair(Message::Ecu::TEM, ISocket::EcuAddress{tem_ip, tem_port}),
-        std::make_pair(Message::Ecu::DIM, ISocket::EcuAddress{dim_ip, dim_port})
+        std::make_pair(Message::Ecu::DIM, ISocket::EcuAddress{dim_ip, dim_port}),
+        std::make_pair(Message::Ecu::TCAM, ISocket::EcuAddress{tcam_ip, tcam_port}),
+        std::make_pair(Message::Ecu::VGM, ISocket::EcuAddress{vgm_ip, vgm_port})
     };
 }
 

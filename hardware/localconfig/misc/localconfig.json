@@ -8,11 +8,15 @@
   "IIPS_IpAddress_VCM":  "198.18.32.1",
   "IIPS_IpAddress_TEM": "198.18.48.17",
   "IIPS_IpAddress_DIM": "198.18.24.1",
+  "IIPS_IpAddress_TCAM": "198.18.34.1", //TODO add correct adress here
+  "IIPS_IpAddress_VGM": "198.18.34.1", //TODO add correct adress here
   "IIPS_Port_LOCAL": 50000,
   "IIPS_Port_BROADCAST": 50000,
   "IIPS_Port_VCM": 50000,
   "IIPS_Port_TEM": 50000,
   "IIPS_Port_DIM": 50000,
+  "IIPS_Port_TCAM": 50000,
+  "IIPS_Port_VGM": 50000,
   "CONN_DIMKeepAliveTime": 10,
   "CONN_DIMKeepAliveIntvl": 5,
   "CONN_DIMKeepAliveProbes": 2,

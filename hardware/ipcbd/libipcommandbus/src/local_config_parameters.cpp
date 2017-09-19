@@ -77,6 +77,8 @@ void LocalconfigParameters::InitNetworkConfiguration()
     ReadLocalConfig("IIPS_IpAddress_VCM", ip_address_vcm_);
     ReadLocalConfig("IIPS_IpAddress_TEM", ip_address_tem_);
     ReadLocalConfig("IIPS_IpAddress_DIM", ip_address_dim_);
+    ReadLocalConfig("IIPS_IpAddress_TCAM", ip_address_tcam_);
+    ReadLocalConfig("IIPS_IpAddress_VGM", ip_address_vgm_);
 
     int temp_val = 0;
     if (ReadLocalConfig("IIPS_Port_LOCAL", temp_val))
@@ -102,6 +104,16 @@ void LocalconfigParameters::InitNetworkConfiguration()
     if (ReadLocalConfig("IIPS_Port_DIM", temp_val))
     {
         port_dim_ = static_cast<uint16_t>(temp_val);
+    }
+
+    if (ReadLocalConfig("IIPS_Port_TCAM", temp_val))
+    {
+        port_tcam_ = static_cast<uint16_t>(temp_val);
+    }
+
+    if (ReadLocalConfig("IIPS_Port_VGM", temp_val))
+    {
+        port_vgm_ = static_cast<uint16_t>(temp_val);
     }
 
     if (ReadLocalConfig("CONN_DIMKeepAliveTime", temp_val))
@@ -226,6 +238,16 @@ const std::string &LocalconfigParameters::getDIMIpAddress()
     return ip_address_dim_;
 }
 
+const std::string &LocalconfigParameters::getTCAMIpAddress()
+{
+    return ip_address_tcam_;
+}
+
+const std::string &LocalconfigParameters::getVGMIpAddress()
+{
+    return ip_address_vgm_;
+}
+
 uint16_t LocalconfigParameters::getLocalPort()
 {
     return port_local_;
@@ -249,6 +271,15 @@ uint16_t LocalconfigParameters::getTEMPort()
 uint16_t LocalconfigParameters::getDIMPort()
 {
     return port_dim_;
+}
+uint16_t LocalconfigParameters::getTCAMPort()
+{
+    return port_tcam_;
+}
+
+uint16_t LocalconfigParameters::getVGMPort()
+{
+    return port_vgm_;
 }
 
 LocalconfigParameters &LocalconfigParameters::getInstance()
