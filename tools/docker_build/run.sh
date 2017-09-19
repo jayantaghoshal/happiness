@@ -12,36 +12,57 @@ IS_TERMINAL=false
 if [[ -t 1 ]]; then
     IS_TERMINAL=true
 fi
+IS_INTERACTIVE=false
+# Check if STDIN file is NOT pipe. If not, it is "regular" STDIN
+if [[ ! -p /dev/fd/0 ]]; then
+    IS_INTERACTIVE=true
+fi
 
 
+
+# Containers can be left dangling if you close the terminal running a contianer, then
+# docker will not understand that the attached STDIN/OUT is dead and continue running.
+# Might be possible to solve with different INTERACTIVE_OPS or --attach options
 
 C_ERROR="\033[0;31m"
 C_OFF="\033[0m"
 #(curly braces as literals ok because they are templates used by docker ps)
 #shellcheck disable=SC1083
-EXISTING_CONTAINER=$(docker ps --filter "ancestor=$DOCKER_IMAGE" --format={{.ID}})
-if [[ !  -z  $EXISTING_CONTAINER  ]]; then
+EXISTING_CONTAINERS=$(docker ps --filter "ancestor=$DOCKER_IMAGE" --format={{.ID}})
+EXISTING_CONTAINER_ARRAY=( $EXISTING_CONTAINERS )
+if [[ !  -z  $EXISTING_CONTAINERS  ]]; then
     echo -e "${C_ERROR}-------------------------------------------------------------------------------------------"
     echo "                              WARNING"
-    echo "                              WARNING"
-    echo "                              WARNING"
     echo ""
-    echo "WARNING: You already have a IHU docker container running with ID=$EXISTING_CONTAINER"
+    echo "WARNING: You already have a IHU docker container running"
     echo "  This can interfere with hardware devices in the container such as ADB"
+    echo ""
+    echo "  Already running containers:"
+    for c in "${EXISTING_CONTAINER_ARRAY[@]}"
+    do
+        echo "     $c"
+    done
     echo ""
     echo "  To view your running docker containers:"
     echo "       docker ps"
     echo 
     echo "  To kill the container in case it is running in the background:"
-    echo "       docker kill $EXISTING_CONTAINER"
+    echo "       docker kill CONTAINER_ID"
     echo ""
     echo "  To attach a shell to the already running container:"
-    echo "       docker exec --tty --interactive $EXISTING_CONTAINER /tmp/entrypoint.sh bash"
+    echo "       docker exec --tty --interactive CONTAINER_ID /tmp/entrypoint.sh bash"
     echo "-------------------------------------------------------------------------------------------"    
-    echo -e "${C_OFF}"
-    if [[ $IS_TERMINAL == true ]]; then
-        sleep 3
+
+
+    if [[ $IS_TERMINAL == true && $IS_INTERACTIVE == true ]]; then
+        echo ""
+        echo ">>> Interactive mode -- You will now be auto attached to the already running container <<<"
+        echo ""
+        echo -e "${C_OFF}"
+        docker exec --tty --interactive "${EXISTING_CONTAINER_ARRAY[0]}" /tmp/entrypoint.sh bash
+        exit 0
     fi
+    echo -e "${C_OFF}"
 fi
 
 
@@ -83,8 +104,7 @@ HOST_USER_GROUPS=${HOST_USER_GROUPS// /_}
 
 
 INTERACTIVE_OPTS=""
-# Check if STDIN file is NOT pipe. If not, it is "regular" STDIN
-if [[ ! -p /dev/fd/0 ]]; then
+if [[ $IS_INTERACTIVE == true ]]; then
     INTERACTIVE_OPTS="${INTERACTIVE_OPTS} --interactive "
 fi
 if [[ $IS_TERMINAL == true ]]; then
