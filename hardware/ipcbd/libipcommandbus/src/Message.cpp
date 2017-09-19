@@ -1,7 +1,4 @@
-/*===========================================================================*\
- * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
- * Delphi Confidential
-\*===========================================================================*/
+
 #include "ipcommandbus/Message.h"
 
 namespace Connectivity
@@ -22,7 +19,11 @@ const char* Message::EcuStr(Ecu ecu)
             return "TEM";
         case DIM:
             return "DIM";
-        case ENUM_NR_OF_ECUs:
+        case TCAM:
+            return "TCAM";
+        case VGM:
+            return "VGM";
+         case ENUM_NR_OF_ECUs:
             return "UNKNOWN";
 
             // Intentionally left out "default:" since we will then get compile error on unhandled values.

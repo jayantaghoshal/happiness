@@ -27,12 +27,14 @@ struct Message
 {
     enum Ecu
     {
-        UNKNOWN,
-        ALL,
-        IHU,
-        VCM,
-        TEM,
-        DIM,
+        UNKNOWN = 0x00,
+        ALL = 0x01,
+        IHU = 0x02,
+        VCM = 0x03,
+        TEM = 0x04,
+        DIM = 0x05,
+        TCAM = 0x06,
+        VGM  = 0x07,
         ENUM_NR_OF_ECUs
     };
 
