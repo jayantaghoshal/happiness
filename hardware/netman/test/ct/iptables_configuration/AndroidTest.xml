@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This test verifies the functionality of netmand.
+It checks that Ip address, Broadcast address, MAC Address, MTU and Netmask have
+been set on startup and when another process has changed any of the above fields
+during operation.
+-->
+<configuration description="Test standard ethernet is up with 198.18.34.1 after boot">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push" />
+    </target_preparer>
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsNetmandIptablesComponentTest"/>
+        <option name="test-case-path" value="volvocars/hardware/netman/test/ct/iptables_configuration/VtsNetmandIptablesConfigurationComponentTest"/>
+    </test>
+</configuration>

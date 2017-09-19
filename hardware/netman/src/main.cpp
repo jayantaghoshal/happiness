@@ -9,6 +9,7 @@
 
 #include "netlink_event_listener.h"
 #include "netlink_event_handler.h"
+#include "firewall_config.h"
 #include "netman.h"
 
 using namespace vcc::netman;
@@ -18,6 +19,26 @@ int main()
     try
     {
         ALOGI("Netmand 0.1 starting");
+
+        ALOGI("Setting up firewall configuration");
+
+        FirewallConfig fw_conf = FirewallConfig();
+        if (!fw_conf.ParseAndSave(FirewallConfig::kDefaultIptablesRulesPath)) {
+            ALOGE("Error parsing and saving iptables.rules");
+            exit(1);
+        }
+
+        if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv4_)) {
+            ALOGE("Error applying iptables v4 rules");
+            exit(1);
+        }
+
+        if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv6_)) {
+            ALOGE("Error applying iptables v6 rules");
+            exit(1);
+        }
+
+        ALOGI("Firewall configured");
 
         ALOGI("Loading configuration from local config");
 

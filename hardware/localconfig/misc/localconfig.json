@@ -71,5 +71,27 @@
   "eth1.broadcast-address": "198.18.255.255",
   "eth1.netmask": "255.255.240.0",
   "eth1.mac-address": "02:00:00:02:12:01",
-  "eth1.mtu": 1500
+  "eth1.mtu": 1500,
+  "CONN_NhFirewall":
+  {
+    "NAT_TABLE":
+    {
+      "CHAINS":[],
+        "RULES":[
+          "-A POSTROUTING -4 -s 198.18.2.18 -o eth1 -j RETURN",
+          "-A POSTROUTING -o eth1 -j MASQUERADE"
+      ]
+    },
+    "FILTER_TABLE":
+    {
+      "CHAINS":[],
+        "RULES":[
+          "-A INPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT",
+          "-A FORWARD -4 -s 198.18.2.18 -i meth0 -p tcp -o eth1 -j ACCEPT",
+          "-A FORWARD -4 -i eth1 -o meth0 -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT",
+          "-A OUTPUT -4 -o eth1 -p tcp --dport 13400 -m state --state NEW -j ACCEPT",
+          "-A OUTPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT"
+      ]
+    }
+  }
 }

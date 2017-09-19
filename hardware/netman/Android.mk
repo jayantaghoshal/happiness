@@ -13,7 +13,8 @@ LOCAL_SRC_FILES := \
 	src/main.cpp \
 	src/netman.cpp \
 	src/netlink_event_listener.cpp \
-	src/netlink_event_handler.cpp
+	src/netlink_event_handler.cpp \
+	src/firewall_config.cpp
 LOCAL_CPPFLAGS := $(MY_LOCAL_CPPFLAGS)
 LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCAL_EXPORT_C_INCLUDE_DIRS)
