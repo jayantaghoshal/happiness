@@ -20,7 +20,8 @@ LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCAL_EXPORT_C_INCLUDE_DIRS)
 LOCAL_SHARED_LIBRARIES += \
 	liblog \
-	liblocalconfig
+	liblocalconfig \
+	libcutils
 LOCAL_STATIC_LIBRARIES += \
 	libbase
 # Netman depends upon sysctl.conf, which it will initialize during startup

@@ -97,6 +97,14 @@ class NetmanHelper(BaseHelper):
         cmd = " ".join(["cat", "/proc/sys/net/{}".format(parameter)])
         return int(self.execute_cmd(cmd)[const.STDOUT][0].rstrip())
 
+    def get_prop(self, property_name):
+        cmd = " ".join(["getprop", property_name])
+        return self.execute_cmd(cmd)[const.STDOUT][0].rstrip()
+
+    def set_prop(self, property_name, value):
+        cmd = " ".join(["setprop", property_name, value])
+        return self.execute_cmd(cmd)
+
     def get_vcm_interface_name(self):
         """
         """
@@ -133,4 +141,3 @@ class NetmanHelper(BaseHelper):
     def _parse_mac_address(self, ifconfig_output):
         groups = re.search(r"HWaddr (\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{2})", str(ifconfig_output))
         return groups.group(1) if groups else ""
-

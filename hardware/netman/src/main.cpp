@@ -1,6 +1,7 @@
 #define  LOG_TAG    "Netmand"
 
 #include <cutils/log.h>
+#include <cutils/properties.h>
 
 #include <errno.h>
 #include <stdio.h>
@@ -56,6 +57,8 @@ int main()
 
         NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(nl_event_handler);
+
+        property_set("netmand.startup_completed", "1");
 
         if (nl_socket_listener.StartListening()) {
             ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));

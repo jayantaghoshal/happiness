@@ -7,4 +7,3 @@ service netman /system/bin/netman
     user root
     group root
     seclabel u:r:netman:s0
-

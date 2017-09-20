@@ -43,7 +43,7 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
     ## ----------------------------------------
     ## --/ TCAM (eth1) Interface Ip Configuration Tests /--
     ## ----------------------------------------
-    
+
     def testEth1_Startup_IpAddress(self):
         # Arrange
         invalid_ip_address = "198.18.34.6"
@@ -181,6 +181,22 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(mac_address, self.ETH1_MAC_ADDRESS)
 
     ## ----------------------------------------
+    ## --/ Interface Ip Configuration Tests /--
+    ## ----------------------------------------
+
+    def test_WhenStartupComplete_ShouldSetProperty(self):
+        # Arrange
+        self.helper.kill_netman()
+        self.helper.set_prop("netmand.startup_completed", "0")
+
+        # Act
+        self.helper.start_netman()
+
+        # Assert
+        startup_completed = self.helper.get_prop("netmand.startup_completed")
+        asserts.assertEqual(startup_completed, "1")
+
+    ## ----------------------------------------
     ## --/ MOST (meth0) Interface Ip Configuration Tests /--
     ## ----------------------------------------
 
@@ -198,6 +214,7 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
 
         ip_address = self.helper.get_ip_address(self.METH0)
         asserts.assertEqual(ip_address, self.METH0_IP_ADDRESS)
+
 
     def testMeth0_Startup_BroadcastAddress(self):
         # Arrange
