@@ -37,7 +37,7 @@ class ServiceManager : public IIpcb
 public:
     ServiceManager(const ServiceManager&) = delete;
 
-    ServiceManager(::Connectivity::MessageDispatcher& msgDispatcher);
+    ServiceManager(std::string service_name, ::Connectivity::MessageDispatcher& msgDispatcher);
 
     // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb follow.
     Return<Status> subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes, const sp<IMessageCallback>& callbackHandler) override;

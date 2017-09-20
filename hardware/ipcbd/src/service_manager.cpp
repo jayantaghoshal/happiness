@@ -11,10 +11,10 @@ using ::vendor::volvocars::hardware::ipcb::V1_0::Error;
 
 namespace Connectivity
 {
-ServiceManager::ServiceManager(::Connectivity::MessageDispatcher& msgDispatcher)
+ServiceManager::ServiceManager(std::string service_name,::Connectivity::MessageDispatcher& msgDispatcher)
     : messageDispatcher_{msgDispatcher}
 {
-    android::status_t status = registerAsService("ipcb"); //TODO: Need name from main args here!
+    android::status_t status = registerAsService(service_name); //TODO: Need name from main args here!
 
      if (status != android::OK) {
         ALOGE("Failed to register Ipcb binder service: %d",status);
