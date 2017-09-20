@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
         }
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
-        Connectivity::ServiceManager service_manager(msgDispatcher);
+        Connectivity::ServiceManager service_manager(service_name, msgDispatcher);
 
         configureRpcThreadpool(1, true /*callerWillJoin*/);
 
