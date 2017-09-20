@@ -53,4 +53,8 @@
   <remove-project name="bsp/vendor/intel/build"/>
   <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8d73c3d8f2a0f807a70673da40d5cc1a7f57b061"/>
 
+  <!-- TODO: Update this fix when we have established the proper tmpfs for our product or talked too Google about support for /run for iproute2 and namespaces -->
+  <remove-project name="aosp/platform/external/iproute2"/>
+  <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="3bb0da9bb5b1ea0f7b5e685c7775d8a6645094e0"/>
+
 </manifest>
