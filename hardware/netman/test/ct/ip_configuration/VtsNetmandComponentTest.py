@@ -25,6 +25,13 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
     ETH1_MTU=1500
     ETH1_MAC_ADDRESS="02:00:00:02:12:01"
 
+    METH0="meth0"
+    METH0_IP_ADDRESS="198.18.2.1"
+    METH0_BROADCAST_ADDRESS="198.18.255.255"
+    METH0_NETMASK="255.255.240.0"
+    METH0_MTU=1500
+    METH0_MAC_ADDRESS="02:00:00:01:12:01"
+
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
 
@@ -34,9 +41,9 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
         self.helper = nh.NetmanHelper(self.terminal)
 
     ## ----------------------------------------
-    ## --/ Interface Ip Configuration Tests /--
+    ## --/ TCAM (eth1) Interface Ip Configuration Tests /--
     ## ----------------------------------------
-
+    
     def testEth1_Startup_IpAddress(self):
         # Arrange
         invalid_ip_address = "198.18.34.6"
@@ -94,7 +101,6 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
 
         # Assert
         asserts.assertEqual(resulting_mtu, invalid_mtu)
-
         mtu = self.helper.get_mtu(self.ETH1)
         asserts.assertEqual(mtu, self.ETH1_MTU)
 
@@ -173,6 +179,148 @@ class VtsNetmandComponentTest(base_test.BaseTestClass):
         # Assert
         mac_address = self.helper.get_mac_address(self.ETH1)
         asserts.assertEqual(mac_address, self.ETH1_MAC_ADDRESS)
+
+    ## ----------------------------------------
+    ## --/ MOST (meth0) Interface Ip Configuration Tests /--
+    ## ----------------------------------------
+
+    def testMeth0_Startup_IpAddress(self):
+        # Arrange
+        invalid_ip_address = "198.18.34.6"
+        self.helper.kill_netman()
+        resulting_ip_address = self.helper.set_ip_address(self.METH0, "198.18.34.6")
+
+        # Act
+        self.helper.start_netman()
+
+        # Assert
+        asserts.assertEqual(resulting_ip_address, invalid_ip_address)
+
+        ip_address = self.helper.get_ip_address(self.METH0)
+        asserts.assertEqual(ip_address, self.METH0_IP_ADDRESS)
+
+    def testMeth0_Startup_BroadcastAddress(self):
+        # Arrange
+        self.helper.kill_netman()
+        invalid_broadcast_address = "255.255.255.0"
+        resulting_broadcast_address = self.helper.set_broadcast_address(self.METH0, invalid_broadcast_address)
+
+        # Act
+        self.helper.start_netman()
+
+        # Assert
+        asserts.assertEqual(resulting_broadcast_address, invalid_broadcast_address)
+
+        broadcast_address = self.helper.get_broadcast_address(self.METH0)
+        asserts.assertEqual(broadcast_address, self.METH0_BROADCAST_ADDRESS)
+
+
+    def testMeth0_Startup_Netmask(self):
+        # Arrange
+        invalid_netmask = "255.255.255.0"
+        self.helper.kill_netman()
+        resulting_netmask = self.helper.set_netmask(self.METH0, invalid_netmask)
+
+        # Act
+        self.helper.start_netman()
+
+        # Assert
+        asserts.assertEqual(resulting_netmask, invalid_netmask)
+
+        netmask = self.helper.get_netmask(self.METH0)
+        asserts.assertEqual(netmask, self.METH0_NETMASK)
+
+    def testMeth0_Startup_Mtu(self):
+        # Arrange
+        invalid_mtu = 1000
+        self.helper.kill_netman()
+        resulting_mtu = self.helper.set_mtu(self.METH0, 1000)
+
+        # Act
+        self.helper.start_netman()
+
+        # Assert
+        asserts.assertEqual(resulting_mtu, invalid_mtu)
+
+        mtu = self.helper.get_mtu(self.METH0)
+        asserts.assertEqual(mtu, self.METH0_MTU)
+
+    def testMeth0_Startup_MacAddress(self):
+        # Arrange
+        invalid_mac_address = "02:00:00:02:12:05"
+        self.helper.kill_netman()
+        self.helper.interface_down(self.METH0)
+        resulting_mac_address = self.helper.set_mac_address(self.METH0, invalid_mac_address)
+        self.helper.interface_up(self.METH0)
+
+        # Act
+        self.helper.start_netman()
+
+        time.delay(5)
+        # Assert
+        asserts.assertEqual(resulting_mac_address, invalid_mac_address)
+
+        mac_address = self.helper.get_mac_address(self.METH0)
+        asserts.assertEqual(mac_address, self.METH0_MAC_ADDRESS)
+
+    def testMeth0_Runtime_IpAddress(self):
+        # Arrange
+        invalid_ip_address = "192.18.34.5"
+        self.helper.restart_netman()
+
+        # Act
+        self.helper.set_ip_address(self.METH0, invalid_ip_address)
+
+        # Assert
+        ip_address = self.helper.get_ip_address(self.METH0)
+        asserts.assertEqual(ip_address, self.METH0_IP_ADDRESS)
+
+    def testMeth0_RunTime_BroadcastAddress(self):
+        # Arrange
+        invalid_broadcast_address = "198.18.255.240"
+        self.helper.restart_netman()
+
+        # Act
+        self.helper.set_broadcast_address(self.METH0, invalid_broadcast_address)
+
+        # Assert
+        broadcast_address = self.helper.get_broadcast_address(self.METH0)
+        asserts.assertEqual(broadcast_address, self.METH0_BROADCAST_ADDRESS)
+
+    def testMeth0_Runtime_Netmask(self):
+        # Arrange
+        self.helper.restart_netman()
+
+        # Act
+        self.helper.set_netmask(self.METH0, "255.255.255.0")
+
+        # Assert
+        netmask = self.helper.get_netmask(self.METH0)
+        asserts.assertEqual(netmask, self.METH0_NETMASK)
+
+    def testMeth0_Runtime_Mtu(self):
+        # Arrange
+        self.helper.restart_netman()
+
+        # Act
+        self.helper.set_mtu(self.METH0, 1000)
+
+        # Assert
+        mtu = self.helper.get_mtu(self.METH0)
+        asserts.assertEqual(mtu, self.METH0_MTU)
+
+    def testMeth0_Runtime_MacAddress(self):
+        # Arrange
+        self.helper.restart_netman()
+
+        # Act
+        self.helper.interface_down(self.METH0)
+        self.helper.set_mac_address(self.METH0, "02:00:00:02:12:05")
+        self.helper.interface_up(self.METH0)
+
+        # Assert
+        mac_address = self.helper.get_mac_address(self.METH0)
+        asserts.assertEqual(mac_address, self.METH0_MAC_ADDRESS)
 
     def _invoke_terminal(self, name="test_terminal"):
         self.dut.shell.InvokeTerminal(name)
