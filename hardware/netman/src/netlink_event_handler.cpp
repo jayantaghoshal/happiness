@@ -70,7 +70,7 @@ void NetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header,
 
     // IFF_UP = ifconfig eth0 up
     // IFF_RUNNING = cable plugged in
-    // Should if statement around IFF_RUNNING be ! ??? /Philip Werner
+    // TODO Should if statement around IFF_RUNNING be ! ??? /Philip Werner
     if ((if_info_msg != NULL) &&
         (if_indextoname(if_info_msg->ifi_index, name) != NULL) &&
         (if_info_msg->ifi_flags & IFF_UP) &&

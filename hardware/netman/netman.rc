@@ -1,3 +1,6 @@
+on boot
+   exec - root root -- /system/bin/sysctl -p /vendor/etc/sysctl.conf
+
 service netman /system/bin/netman
     class main
     oneshot
