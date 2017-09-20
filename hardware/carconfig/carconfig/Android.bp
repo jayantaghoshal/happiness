@@ -1,0 +1,51 @@
+cc_library_shared {
+    name: "carconfig_reader",
+    vendor: true,
+
+    srcs:[
+        "src/carconfig_reader.cpp",
+        "src/cedric_carconfig.cpp",
+    ],
+    
+    cppflags: [
+        "-std=c++14",
+        "-Wno-non-virtual-dator",
+        "-fexceptions",
+        "-Wno-unused-parameters",
+        "-Wno-macro-redefined",    
+    ],
+    
+    local_include_dirs: [
+        "include",
+        "src",    
+    ],
+    
+    compile_multilib: "64",
+}
+
+
+cc_library_shared {
+    name: "carconfig_writer",
+    vendor: true,
+    
+    srcs:[
+        "src/carconfig_file.cpp",
+        "src/carconfig_writer.cpp",
+    ],
+    
+    cppflags: [
+        "-std=c++14",
+        "-Wno-non-virtual-dator",
+        "-fexceptions",
+        "-Wno-unused-parameters",
+        "-Wno-macro-redefined",
+    ],
+    
+    local_include_dirs: [
+        "include",
+        "src",
+    ],
+    
+    compile_multilib: "64",
+}
+
