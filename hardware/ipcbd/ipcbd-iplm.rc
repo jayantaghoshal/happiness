@@ -1,4 +1,4 @@
-service ipcbd /vendor/bin/hw/ipcbd
+service ipcbd-iplm /vendor/bin/hw/ipcbd iplm UDPB
     class main
     oneshot
     user root

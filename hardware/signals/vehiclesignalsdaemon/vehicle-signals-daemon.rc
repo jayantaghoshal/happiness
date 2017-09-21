@@ -2,4 +2,4 @@ service vehicle-signals-daemon /vendor/bin/hw/vehicle-signals-daemon /dev/ttyACM
     class main
     user root
     group root
-    seclabel u:r:infotainment-ip-service:s0
+    seclabel u:r:vehicle-signals-daemon:s0

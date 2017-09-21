@@ -1,0 +1,5 @@
+# vehicle-signals-daemon
+type vehicle-signals-daemon, domain;
+type vehicle-signals-daemon_exec, exec_type, file_type;
+
+init_daemon_domain(vehicle-signals-daemon)
