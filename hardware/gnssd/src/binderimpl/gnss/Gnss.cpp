@@ -1,5 +1,5 @@
 #include "Gnss.h"
-#define LOG_TAG "Infotainment_IP_Service.binder.gnss"
+#define LOG_TAG "GnssD.binder.gnss"
 #include <cutils/log.h>
 
 #include <IDispatcher.h>

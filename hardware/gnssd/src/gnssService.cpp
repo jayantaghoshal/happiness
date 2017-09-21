@@ -8,6 +8,8 @@ extern "C" {
 #include "type_conversion_helpers.h"
 #include "VccIpCmdApi.h"
 
+#define LOG_TAG "GnssD.service"
+
 using ::vendor::volvocars::hardware::ipcb::V1_0::OperationType;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Ecu;
@@ -26,7 +28,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()}
     location_.timestamp = 0;
     location_.gnssLocationFlags = 0;
 
-    ipcbServer_ = IIpcb::getService("tcam");
+    ipcbServer_ = IIpcb::getService("ipcb");
 
     m_session_msgd = ASN_Session_Create(m_session_buffer_msgd, sizeof(m_session_buffer_msgd));
 
@@ -61,6 +63,9 @@ Return<void> GnssService::onMessageRcvd(const Msg &msg)
 
         return Void();
     }
+
+    // Do we need to deep copy msg here? msg is allocated in lambda function in IpcbD and may be deallocated
+    // if we dispatch it to a new thread?!
 
     if ((int)msg.pdu.header.operationID == (int)VccIpCmd::OperationId::GNSSPositionData)
     {
