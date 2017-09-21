@@ -1,0 +1,20 @@
+package vendor.volvocars.hardware.iplm@1.0;
+
+import vendor.volvocars.hardware.common@1.0::types;
+
+interface IIplmCallback
+{
+    /**
+     * Callback for registerService, onResourceGroupStatus
+     * @param1: ResourceGroup
+     * @param2: ResourceGroupStatus
+     */
+    oneway onResourceGroupStatus(ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus);
+
+    /**
+     * Callback for registerService, onNodeStatus
+     * @param1: ecuType, VCM, VGM, TCam etc
+     * @param2: ecuStatus, Boolean True or False
+     */
+    oneway onNodeStatus(Ecu ecuType, bool ecuStatus);
+};
