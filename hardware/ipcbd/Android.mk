@@ -15,7 +15,8 @@ LOCAL_PROPRIETARY_MODULE := true
 
 LOCAL_SRC_FILES := \
     src/main.cpp \
-    src/service_manager.cpp
+    src/service_manager.cpp \
+    src/diagnostics_client.cpp
 
 # There are a few warnings in these .c files that can be supressed by:
 # LOCAL_CFLAGS += -Wno-unused-parameter
