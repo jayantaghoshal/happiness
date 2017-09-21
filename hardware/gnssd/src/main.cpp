@@ -1,4 +1,4 @@
-#define LOG_TAG "iplmd"
+#define LOG_TAG "GnssD.main"
 
 #include <hidl/HidlTransportSupport.h>
 #include <cstdint>
