@@ -83,6 +83,9 @@ docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF. 
 docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
 
+if [ "$(git -C vendor/volvocars rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
+    die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in vendor/volvocars."
+fi
 
 ################################################################################################
 ## This check exists to prevent people from pushing code with old ci scripts 
