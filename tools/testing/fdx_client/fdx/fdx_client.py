@@ -221,6 +221,7 @@ class FDXConnection:
         self.send_command(struct.pack('=h', kCommandCode.statusRequest))
 
     def send_data_exchange(self, groupId, dataSize, dataBytes):
+        assert(dataSize == len(dataBytes))
         data = struct.pack('=hhh', kCommandCode.dataExchange, groupId, dataSize)
         data += bytes(dataBytes)
         self.send_command(data)

@@ -29,12 +29,13 @@ class Group():
             raise Exception("Size of group not equals to sum(items in group), groupsize=%d, itemsize=%d"% (self.size, summed_size))
 
     def build_data(self):
+        # type: () -> str
         data = [0] * self.size
         for i in self.items:
             # a bit awkward casting to be both py2 and 3 compatible
             item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
             data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
-        return data
+        return str(bytearray(data))
 
     def receive_data(self, data):
         # type: (List[int]) -> None

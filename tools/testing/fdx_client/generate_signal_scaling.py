@@ -53,7 +53,7 @@ def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
 
     fr_and_lin19_signals = [s for s in signals if s.bus_name.lower() in ["backbone", "lin19"]]
 
-    common_signals = []
+    common_signals = [] # type: List[fdx_description_file_parser.Item]
     for signal in sorted(fr_and_lin19_signals, key=lambda s: s.name.lower()):
         if signal.name in rte_name_to_de_name and not isinstance(rte_name_to_de_type[signal.name], model.DE_Array):
             common_signals.append(signal)
@@ -97,39 +97,45 @@ def render(signals: List[fdx_description_file_parser.Item],
         if isinstance(type, model.DE_Identical):
             convstr += "    min = %s\n" % type.limit_min
             convstr += "    max = %s\n" % type.limit_max
+            convstr += "    @classmethod\n"
             convstr += "    def r2p(cls, raw):\n"
             convstr += "        return raw\n"
+            convstr += "    @classmethod\n"
             convstr += "    def p2r(cls, physical):\n"
-            convstr += "        assert(cls.min < physical < cls.max)\n"
+            convstr += "        assert(cls.min <= physical <= cls.max)\n"
             convstr += "        return physical\n"
         elif isinstance(type, model.DE_Value):
             convstr += "    min    = %s\n" % type.limit_min
             convstr += "    max    = %s\n" % type.limit_max
             convstr += "    scale  = %s\n" % type.scale
             convstr += "    offset = %s\n" % type.offset
+            convstr += "    @classmethod\n"
             convstr += "    def r2p(cls, raw):\n"
             convstr += "        return (raw * cls.scale) + cls.offset\n"
+            convstr += "    @classmethod\n"
             convstr += "    def p2r(cls, physical):\n"
-            convstr += "        assert(cls.min < physical < cls.max)\n"
+            convstr += "        assert(cls.min <= physical <= cls.max)\n"
             convstr += "        return (physical - cls.offset) / cls.scale\n"
         elif isinstance(type, model.DE_Enum):
             convstr += "    class map:\n        "
             convstr += "\n        ".join( "%s = %s" %(clean_variable_name(v.name), v.value)  for v in type.values)
             convstr += "\n"
         elif isinstance(type, model.DE_Boolean):
-            convstr += "    def r2p(raw):\n"
+            convstr += "    @classmethod\n"
+            convstr += "    def r2p(cls, raw):\n"
             convstr += "        return raw\n"
-            convstr += "    def p2r(physical):\n"
+            convstr += "    @classmethod\n"
+            convstr += "    def p2r(cls, physical):\n"
             convstr += "        return physical\n"
         else:
             assert(False)
 
         if(isinstance(type, model.DE_Identical) or isinstance(type, model.DE_Value) or isinstance(type, model.DE_Boolean)):
             convstr+="""    
-    def send(self, value):
-        self.item.value_raw = self.p2r(value)
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
-        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value)
+    def send(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
     def receive(self):
         value = self.r2p(self.item.value_raw)
@@ -139,10 +145,10 @@ def render(signals: List[fdx_description_file_parser.Item],
 """
         elif isinstance(type, model.DE_Enum):
             convstr+="""
-    def send(self, value):
-        self.item.value_raw = value
-        self.signal_interface.connection.send_data_exchange(self.item.parent_group, self.item.size, self.item.value_raw)
-        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value)
+    def send(self, value_physical):
+        self.item.value_raw = value_physical
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
     def receive(self):
         self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
