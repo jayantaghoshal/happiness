@@ -79,10 +79,22 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
         return ::android::hardware::Return<void>();
     }
 
+
+    // Add the subscription to the list of subscribers
     if (containsWildcard)
     {
         wildcard_subscriptions.emplace_back(signalName, dir, cb);
         ALOGD("Number of wildcard subscribers: %lu", wildcard_subscriptions.size());
+
+        // Instantly call the callback if we already match the filter
+        auto existingSignalsMatchingFilter = get_all_matching(signalName, dir);
+        for (const auto& r : existingSignalsMatchingFilter) {
+            auto result = cb->signalChanged(r.name, r.dir, r.value);
+            if (!result.isOk())
+            {
+                ALOGE("Failed to notify wildcard subscriber in subscribe, filter: %s, signal: %s, reason: %s", signalName.c_str(), r.name.c_str(), result.description().c_str());
+            }
+        }
     }
     else 
     {
@@ -97,6 +109,19 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
         {
             it->second.push_back(cb);
         }
+
+        // Instantly call the callback if we already have the signal
+        auto store_it = signalStorage.find(key);
+        if (store_it != signalStorage.end())
+        {
+            const std::string& value = store_it->second;
+            auto result = cb->signalChanged(signalName, dir, value);
+            if (!result.isOk())
+            {
+                ALOGE("Failed to notify subscriber in subscribe, signal: %s, reason: %s", signalName.c_str(), value.c_str());
+            }
+        }
+
     }
     return ::android::hardware::Return<void>();
 }
@@ -209,14 +234,19 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     get_all_cb _hidl_cb) 
 {
     ALOGD("SignalsServer::get_all: %s", filter.c_str());
+    std::vector<Result> result = get_all_matching(filter, dir);
+    _hidl_cb(result);
+    return ::android::hardware::Return<void>();
+}
+
+std::vector<Result> SignalsServer::get_all_matching(const ::android::hardware::hidl_string& filter, const Dir dir) {
     bool containsWildcard_ignore;
     if (!isValidFilter(filter, containsWildcard_ignore)) {
-        return ::android::hardware::Return<void>();
+        return std::vector<Result>();
     }
 
     std::regex r = buildRegexFromFilter(filter);
-
-    std::vector<Result> result;    
+    std::vector<Result> result;
     for (const auto& s : signalStorage) {
         std::cmatch match;
         if (dir != s.first.second || !std::regex_search(s.first.first.c_str(), match, r)) {
@@ -226,8 +256,7 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
         r.name = s.first.first;
         r.dir = s.first.second;
         r.value = s.second;
-        result.push_back(r);        
-    }    
-    _hidl_cb(result);
-    return ::android::hardware::Return<void>();
+        result.push_back(r);
+    }
+    return result;
 }
