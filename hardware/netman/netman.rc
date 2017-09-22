@@ -1,9 +1,8 @@
 on boot
    exec - root root -- /system/bin/sysctl -p /vendor/etc/sysctl.conf
 
-service netman /system/bin/netman
-    class main
-    oneshot
+service netman /system/bin/ip netns exec vcc /system/bin/netman
+    class vcc_netmand
     user root
     group root
     seclabel u:r:netman:s0
