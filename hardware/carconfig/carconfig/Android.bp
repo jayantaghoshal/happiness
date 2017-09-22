@@ -1,17 +1,20 @@
 cc_library_shared {
     name: "carconfig_reader",
     vendor: true,
+    cpp_std: "c++14",
+    generated_headers: [
+        "cc_parameterlist_gen"
+    ],
 
     srcs:[
         "src/carconfig_reader.cpp",
-        "src/cedric_carconfig.cpp",
+        "src/carconfig.cpp",
+        "src/carconfig_file_reader.cpp",
     ],
     
     cppflags: [
-        "-std=c++14",
-        "-Wno-non-virtual-dator",
         "-fexceptions",
-        "-Wno-unused-parameters",
+        "-Wno-unused-parameter",
         "-Wno-macro-redefined",    
     ],
     
@@ -19,33 +22,56 @@ cc_library_shared {
         "include",
         "src",    
     ],
+
+    export_include_dirs: [
+        "include"
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+    ],
+    
+    required: [
+       "carconfig-default.csv"
+   ],
     
     compile_multilib: "64",
 }
 
-
+// This lib is to be used from the carconfig_updater
 cc_library_shared {
     name: "carconfig_writer",
     vendor: true,
-    
+    cpp_std: "c++14",
+    generated_headers: ["cc_parameterlist_map_gen"],
+
     srcs:[
-        "src/carconfig_file.cpp",
-        "src/carconfig_writer.cpp",
+        "src/carconfig_file_writer.cpp",
     ],
     
     cppflags: [
-        "-std=c++14",
-        "-Wno-non-virtual-dator",
         "-fexceptions",
-        "-Wno-unused-parameters",
-        "-Wno-macro-redefined",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",    
     ],
     
     local_include_dirs: [
         "include",
-        "src",
+        "src",    
     ],
+    export_include_dirs: [
+        "include"
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+    ],
+    
+    required: [
+       "carconfig-default.csv"
+   ],
     
     compile_multilib: "64",
 }
-

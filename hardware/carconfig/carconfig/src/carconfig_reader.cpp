@@ -1,56 +1,75 @@
 #include <string.h>
-#include <fstream>
-#include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
 #include <stdexcept>
 #include "carconfig_reader.h"
+#include <cutils/log.h>
+#include "carconfig_file_reader.h"
 
-uint8_t CarConfigFileReader::getValue(uint32_t position)
+#undef LOG_TAG
+#define LOG_TAG "CarConfigReader"
+
+CarConfigReader::CarConfigReader()
 {
-    if (!isRead())
-    {
-        throw std::runtime_error{"Trying to get value without calling cedric::core::carconfig::init() first!"};
-    }
-    if ((position < 1) || (position > cc_no_of_variables))
+    read();
+}
+
+// Get the so called substitue value, this is the function normally used by applications.
+// Substitue value is the last received valid value
+uint8_t CarConfigReader::getValue(uint32_t position)
+{
+    if ((position < 1) || (position > cc_no_of_parameters))
     {
         throw std::out_of_range{"Trying to access carconfig value " + std::to_string(position) +
                                  ", which is out of range"};
     }
-    return addr[(position - 1) * sizeof(carConfigObject)];
+    return carConfigValues[(position - 1)].subs;
 }
 
-uint8_t CarConfigFileReader::getRawValue(uint32_t position)
+// Get the so called raw value.
+// Raw value is the last received value, no validation check
+uint8_t CarConfigReader::getRawValue(uint32_t position)
 {
-    if (!isRead())
-    {
-        throw std::runtime_error{"Trying to get RAW value without calling cedric::core::carconfig::init() first!"};
-    }
-    if ((position < 1) || (position > cc_no_of_variables))
+    if ((position < 1) || (position > cc_no_of_parameters))
     {
         throw std::out_of_range{"Trying to access carconfig raw value " + std::to_string(position) +
                                  ", which is out of range"};
     }
-    return addr[(position - 1) * sizeof(carConfigObject) + 1];
+    return carConfigValues[(position - 1)].raw;
 }
 
-void CarConfigFileReader::read()
+ccStatus CarConfigReader::getStatus(uint32_t position)
 {
-    int const fd = shm_open(shm_file_name.c_str(), O_RDONLY, 0777);
-    if (fd == -1)
+    if ((position < 1) || (position > cc_no_of_parameters))
     {
-        throw std::runtime_error{ "shm_open: " + std::string{ strerror(errno) } };
+        throw std::out_of_range{"Trying to access carconfig status value " + std::to_string(position) +
+                                 ", which is out of range"};
     }
-
-    addr = (char *)mmap(0, bufferSize(), PROT_READ, MAP_SHARED, fd, 0);
-    close(fd);
-    if (addr == (void *)-1)
-    {
-        addr = nullptr;
-        throw std::runtime_error{ "mmap failed: " + std::string{ strerror(errno) }};
-    }
+    return carConfigValues[(position - 1)].status;
 }
 
-uint8_t CarConfigFileReader::isRead() { return addr != nullptr; }
+void CarConfigReader::read()
+{
+    CarConfigFileReader ccFileReader;
+    if(fileExists(carconfig_file_name))
+    {
+        ALOGI("CarConfig uses car config file");
+        ccFileReader.open(carconfig_file_name);
+    }
+    else
+    {
+        ALOGI("CarConfig uses default car config file, no config from flexray will be considered");
+        ccFileReader.open(carconfig_default_file_name);
+    }
+    
+    ccValue ccRes;
+
+    carConfigValues.reserve(cc_no_of_parameters);
+    for (uint16_t x = 0; x < cc_no_of_parameters; x++)
+    {
+        ccRes = ccFileReader.getValue(x+1);
+        carConfigValues[x].subs = ccRes.subs;
+        carConfigValues[x].raw = ccRes.raw;
+        carConfigValues[x].status = ccRes.status;
+    }
+}
