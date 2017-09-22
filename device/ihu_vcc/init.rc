@@ -1,3 +1,12 @@
 # Inherit Delphi's init.rc
 import init.ihu_abl_car.rc
 
+on init
+    mkdir /var/
+    mkdir /var/run
+    mkdir /dev/netns
+    symlink /dev/netns /var/run/netns
+
+on post-fs
+    exec -- /system/bin/ip netns add vcc
+    class_start vcc_netmand
