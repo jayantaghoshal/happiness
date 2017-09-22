@@ -106,6 +106,7 @@ int main(void)
     InitSignals();
 
     GnssService gnssService;
+    gnssService.Initialize();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 
