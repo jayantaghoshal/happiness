@@ -5,15 +5,17 @@
 #    --cominputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com.arxml 
 #    --fdxdescriptionfile=FDXDescriptionFile.xml 
 #    --out=generated/pyDataElements.py
+
 import os
 import logging
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
 
-
 # Dummy class used when no real FDX connection is used (debugging on host without any hardware)
 class FDXDummyConnection:
     def send_data_exchange(self, a, b, c):
+        pass
+    def close(self):
         pass
 
 
@@ -49,7 +51,7 @@ class FrSignalInterface:
             self.connection = FDXDummyConnection()
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
-
+        
         name_to_item_map = { i.name : i for i in self.signal_list }
 
         self.AbsWarnIndcnReq = AbsWarnIndcnReq(self, name_to_item_map[AbsWarnIndcnReq.fdx_name])
@@ -921,6 +923,12 @@ class FrSignalInterface:
         self.Yr = Yr(self, name_to_item_map[Yr.fdx_name])
         self.Yr1 = Yr1(self, name_to_item_map[Yr1.fdx_name])
 
+
+        
+    def close(self):
+        if self.connected:
+            self.connection.close()
+        
 # Controls the ABS warning indication to the driver.
 class AbsWarnIndcnReq:
     de_name     = "BrkAndAbsWarnIndcnReq.AbsWarnIndcnReq"
@@ -25276,4 +25284,5 @@ class Yr1:
         value = self.r2p(self.item.value_raw)
         self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
         return value
+
 

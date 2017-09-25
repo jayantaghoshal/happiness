@@ -62,8 +62,8 @@ def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
 
 
 def render_signals(signals: List[fdx_description_file_parser.Item]):
-
-    convstr = "        name_to_item_map = { i.name : i for i in self.signal_list }\n\n"
+    convstr = "\n"
+    convstr += "        name_to_item_map = { i.name : i for i in self.signal_list }\n\n"
     for signal in signals:
         convstr += "        self.%s = %s(self, name_to_item_map[%s.fdx_name])\n" % (signal.name, signal.name, signal.name)
     convstr += "\n"
@@ -178,19 +178,23 @@ def main():
 
     os.makedirs(os.path.dirname(args.outputname), exist_ok=True)
     with open(args.outputname, "w", encoding="utf-8") as f:
-        f.write("# Signal scaling database\n")
-        f.write("# --- AUTO GENERATED ---\n")
-        f.write("# Inputs: %s\n" %  " \n#    ".join(sys.argv))
+        (common_signals, rte_name_to_de_name, rte_name_to_de_type) = get_common_signals(all_types, all_de_elements,
+                                                                                        signals)
 
-        f.write("import os\n")
-        f.write("import logging\n")
-        f.write("from fdx import fdx_client\n")
-        f.write("from fdx import fdx_description_file_parser\n")
-        code = """
+        code = """# Signal scaling database
+# --- AUTO GENERATED ---
+# Inputs: %(inputs)s
+
+import os
+import logging
+from fdx import fdx_client
+from fdx import fdx_description_file_parser
 
 # Dummy class used when no real FDX connection is used (debugging on host without any hardware)
 class FDXDummyConnection:
     def send_data_exchange(self, a, b, c):
+        pass
+    def close(self):
         pass
 
 
@@ -226,12 +230,20 @@ class FrSignalInterface:
             self.connection = FDXDummyConnection()
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
-
+        %(senders_and_receivers)s
+        
+    def close(self):
+        if self.connected:
+            self.connection.close()
+        
+%(signal_classes)s
 """
-        f.write(code)
-        (common_signals, rte_name_to_de_name, rte_name_to_de_type) = get_common_signals(all_types, all_de_elements, signals)
-        f.write(render_signals(common_signals))
-        f.write(render(common_signals, rte_name_to_de_name, rte_name_to_de_type))
+        f.write(code % {
+            "inputs": " \n#    ".join(sys.argv),
+            "senders_and_receivers" : render_signals(common_signals),
+            "signal_classes" : render(common_signals, rte_name_to_de_name, rte_name_to_de_type)
+        })
+
 
 
 if __name__ == "__main__":

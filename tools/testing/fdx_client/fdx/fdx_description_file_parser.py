@@ -1,4 +1,5 @@
 import struct
+import threading
 import xml.etree.ElementTree as ET
 from typing import List, Tuple, Dict
 
@@ -22,6 +23,10 @@ class Group():
         self.name = name
         self.size = size
         self.items = [] # type: List[Item]
+        # Mutex used here because fdx-receiver thread calling receive_data usually not same as reader thread,
+        # which is usually a test case calling Item.value()
+        # Recursive because build_data reads i.value_raw which also grabs a lock
+        self.mutex_lock = threading.RLock()
 
     def validate(self):
         summed_size = sum(i.size for i in self.items)
@@ -31,16 +36,18 @@ class Group():
     def build_data(self):
         # type: () -> str
         data = [0] * self.size
-        for i in self.items:
-            # a bit awkward casting to be both py2 and 3 compatible
-            item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
-            data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
+        with self.mutex_lock:
+            for i in self.items:
+                # a bit awkward casting to be both py2 and 3 compatible
+                item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
+                data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
         return str(bytearray(data))
 
     def receive_data(self, data):
         # type: (List[int]) -> None
-        for i in self.items:
-            (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
+        with self.mutex_lock:
+            for i in self.items:
+                (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
 
 
 class Item():
@@ -68,22 +75,26 @@ class Item():
     @property
     def value_raw(self):
         assert self.is_raw
-        return self._value
+        with self.parent_group.mutex_lock:
+            return self._value
 
     @value_raw.setter
     def value_raw(self, value):
         assert self.is_raw
-        self._value = value
+        with self.parent_group.mutex_lock:
+            self._value = value
 
     @property
     def value_physical(self):
         assert not self.is_raw
-        return self._value
+        with self.parent_group.mutex_lock:
+            return self._value
 
     @value_physical.setter
     def value_physical(self, value):
         assert not self.is_raw
-        self._value = value
+        with self.parent_group.mutex_lock:
+            self._value = value
 
 
 def parse(filename):
