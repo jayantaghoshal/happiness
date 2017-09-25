@@ -20,6 +20,11 @@ test_plan_gate = [
              jira_issue="",
              deadline="2017-09-28"
     ),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/blacklist",    standard_caps),
+             reason="Blacklist functionality not yet implemented",
+             jira_issue="",
+             deadline="2017-10-12"
+    ),
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
     VTSTest("vendor/volvocars/hardware/infotainment-ip-service/test/ct",      standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",         standard_caps),
