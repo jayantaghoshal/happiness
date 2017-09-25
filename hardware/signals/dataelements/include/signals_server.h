@@ -34,6 +34,7 @@ private:
     std::map<signal_key, std::vector<::android::sp<ISignalsChangedCallback>>> subscriptions;
     std::vector<WildCardSubscription> wildcard_subscriptions;
     std::map<signal_key, std::string> signalStorage;
+    std::vector<Result> get_all_matching(const ::android::hardware::hidl_string& filter, const Dir dir);
 
 public:
     ::android::hardware::Return<void> subscribe(
