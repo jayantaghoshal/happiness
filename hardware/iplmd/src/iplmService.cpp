@@ -1,6 +1,8 @@
 #include "iplmService.h"
 #include "local_config.h"
 
+#define LOG_TAG "iplmd.service"
+
 using ::vendor::volvocars::hardware::ipcb::V1_0::OperationType;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Ecu;
@@ -37,23 +39,41 @@ IplmService::IplmService() :
 {
     Iplmd::LocalConfig::loadLocalConfig();
 
-    ipcbServer_ = IIpcb::getService("iplm");
-
-    // Install callback
-    ipcbServer_.get()->subscribeMessage(0xFFFF, 0xFF01,{ OperationType::NOTIFICATION_CYCLIC},this); //Change to not use hard coded hex values here?!
+    StartSubscribe();
 }
 
-// Methods from vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
-Return<void> IplmService::onMessageRcvd(const Msg& msg) {
-  ALOGV("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID,
-        (int)msg.pdu.header.operationID, (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr,
-        (int)msg.pdu.payload.size());
+void IplmService::StartSubscribe()
+{
+    ipcbServer_ = IIpcb::getService("iplm");
 
-  if (OperationType::ERROR == msg.pdu.header.operationType) return Void();
+    if (ipcbServer_ != NULL)
+    {
+        ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
+
+        // Install callback
+        ipcbServer_.get()->subscribeMessage(0xFFFF, 0xFF01,{ OperationType::NOTIFICATION_CYCLIC},this); //Change to not use hard coded hex values here?!
+
+        Initialize();
+    }
+    else
+    {
+        ALOGD("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
+
+        //TODO: Handle return value to be able to abort retries
+        timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
+    }
+}
+
+void IplmService::HandleMessageRcvd(const Msg& msg)
+{
+  ALOGD("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
+        (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
+
+  if (OperationType::ERROR == msg.pdu.header.operationType) return;
 
   first_contact = true;
-  ALOGV("Got IP_Activity(%s,%s) from %d", ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
-        ToString(static_cast<Prio>(msg.pdu.payload.data()[1])), (int)msg.ecu);
+  ALOGD("Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)", ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
+        ToString(static_cast<Prio>(msg.pdu.payload.data()[1])), (int)msg.ecu, (int)Ecu::VCM, (int)Ecu::TEM);
 
   if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE)
   {
@@ -66,12 +86,10 @@ Return<void> IplmService::onMessageRcvd(const Msg& msg) {
   iplm_data_.action_[(int)msg.ecu] = static_cast<Action>(msg.pdu.payload.data()[0]);
   iplm_data_.prio_[(int)msg.ecu] = static_cast<Prio>(msg.pdu.payload.data()[1]);
 
-  iplm_data_.rg1_availabilityStatus_.set(
-      static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
-  iplm_data_.rg3_availabilityStatus_.set(
-      static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
+  iplm_data_.rg1_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
+  iplm_data_.rg3_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
 
-  //Handle session state here?
+  // Handle session state here?
 
   if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE)
   {
@@ -80,7 +98,16 @@ Return<void> IplmService::onMessageRcvd(const Msg& msg) {
     else
       restartTemActivityTimer();
   }
-  return Void();
+}
+
+// Methods from vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
+Return<void> IplmService::onMessageRcvd(const Msg& msg)
+{
+    IDispatcher::EnqueueTask([msg, this]() {
+        HandleMessageRcvd(msg);
+    });
+
+    return Void();
 }
 
 bool IplmService::Initialize()
@@ -193,6 +220,8 @@ void IplmService::restartTemActivityTimer()
 
 void IplmService::ActivityTimeout()
 {
+    ALOGD("+ ActivityTimeout");
+
     bool broadcast_allowed = false;
     bool tem_available = false;
     bool vcm_available = false;
@@ -211,8 +240,14 @@ void IplmService::ActivityTimeout()
 
     if (broadcast_allowed)
     {
+        ALOGD("ActivityTimeout: Sending IP Activity broadcast");
+
         // time to send new activity message
         CreateAndSendIpActivityMessage();
+    }
+    else
+    {
+        ALOGD("ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
     }
 
     // send events to LSCs. Update is sent periodically every second
@@ -222,13 +257,19 @@ void IplmService::ActivityTimeout()
     iplm_service_stub_->fireNodeStatusEvent(generated::IpCommandBusTypes::Infotainment_IP_bus_Ecu::kTem, tem_available);
     iplm_service_stub_->fireNodeStatusEvent(generated::IpCommandBusTypes::Infotainment_IP_bus_Ecu::kVcm, vcm_available);
     */
-    ALOGI("Tem available: %d",tem_available);
-    ALOGI("Vcm available: %d",vcm_available);
+    //ALOGI("Tem available: %d",tem_available);
+    //ALOGI("Vcm available: %d",vcm_available);
+
     for (auto const& notifyAvailabilityToRegisteredService : node_availability_notifications_)
     {
         notifyAvailabilityToRegisteredService(EcuId::ECU_Tem, tem_available);
         notifyAvailabilityToRegisteredService(EcuId::ECU_Vcm, vcm_available);
     }
+
+    //Restart activity timer
+    activityTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { ActivityTimeout(); });
+
+    ALOGD("- ActivityTimeout");
 }
 
 void IplmService::RequestMonitoringTimeout(EcuId ecu)

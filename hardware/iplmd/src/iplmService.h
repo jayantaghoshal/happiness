@@ -183,6 +183,12 @@ class IplmService : public IMessageCallback
    * Services on local ECU are available to use. Ref: REQPROD 347120*/
   static const Action ACTION_AVAILABLE = 0x01;
 
+  // Start subscribing to ipcb
+  void StartSubscribe();
+
+  // Handle received message
+  void HandleMessageRcvd(const Msg& msg);
+
   /*! \brief Timer handler used to trigger a new broadcast to be sent. */
   void ActivityTimeout();
 
