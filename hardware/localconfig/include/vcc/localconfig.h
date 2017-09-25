@@ -6,6 +6,7 @@
 #ifndef VCC_LOCALCONFIG_H_
 #define VCC_LOCALCONFIG_H_
 
+#include <vcc/local_config_reader_interface.h>
 #include <string>
 #include <vector>
 
@@ -13,6 +14,17 @@ namespace vcc
 {
 namespace localconfig
 {
+/**
+ * Get default instance of LocalConfigReader
+ *
+ * This method allows to inject LocalConfig dependency cleanly, by keeping interface as a member,
+ * and initializing it with ObjectDependingOnLcfg(LocalConfigReaderInterface * lcfg = vcc::localconfig::Default())
+ *
+ * But also allows to easilly inject a Mock of the interface, to prevent FileSystem and global data dependency to
+ * spread across all unit tests of LCFG dependent components.
+ */
+const vcc::LocalConfigReaderInterface *Default();
+
 /**
  * Get the value of a local config string parameter.
  *

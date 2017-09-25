@@ -5,13 +5,10 @@
 
 #include <json/json.h>
 #include <fstream>
-#include <initializer_list>
 #include <memory>
 #include <mutex>
 #include <sstream>
 #include <stdexcept>
-#include <string>
-#include <vector>
 
 namespace vcc
 {
