@@ -2,12 +2,13 @@ package vendor.volvocars.hardware.ipcb@1.0;
 
 enum Ecu : uint8_t
 {
-    ALL,
-    IHU,
-    VCM,
-    TEM,
-    DIM,
-    TCAM
+    ALL = 0x01,
+    IHU = 0x02,
+    VCM = 0x03,
+    TEM = 0x04,
+    DIM = 0x05,
+    TCAM = 0x06,
+    VGM  = 0x07
 };
 
 enum OperationType : uint8_t
