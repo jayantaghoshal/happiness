@@ -45,3 +45,4 @@ LOCAL_SRC_FILES := misc/localconfig.json
 # This is probably not needed, please review...
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
+include $(call all-makefiles-under,$(LOCAL_PATH))
