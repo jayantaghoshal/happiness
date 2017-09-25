@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := infotainment-ip-service
-LOCAL_INIT_RC := infotainment-ip-service.rc
+#LOCAL_INIT_RC := infotainment-ip-service.rc
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_PROPRIETARY_MODULE := true
 

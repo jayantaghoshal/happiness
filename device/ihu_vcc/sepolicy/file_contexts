@@ -4,9 +4,14 @@
 # IplmD execution rights
 /vendor/bin/hw/iplmd u:object_r:iplmd_exec:s0
 
-/vendor/bin/hw/infotainment-ip-service u:object_r:infotainment-ip-service_exec:s0
+# IpcbD execution rights
+/vendor/bin/hw/ipcbd u:object_r:ipcbd_exec:s0
+
+# GnssD execution rights
+/vendor/bin/hw/gnssd u:object_r:gnssd_exec:s0
 
 /vendor/bin/hw/dataelements-hidl-server u:object_r:dataelements-hidl-server_exec:s0
+/vendor/bin/hw/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
 
 # iproute2
 /system/bin/ip u:object_r:ip_exec:s0

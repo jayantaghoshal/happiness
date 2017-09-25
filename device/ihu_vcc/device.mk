@@ -4,9 +4,11 @@
 ##############################################################
 PRODUCT_PACKAGES += \
     netman \
-    infotainment-ip-service \
     vehicle-signals-daemon \
-    dataelements-hidl-server
+    dataelements-hidl-server \
+    ipcbd \
+    iplmd \
+    gnssd
 
 ##############################################################
 # System UI

@@ -1,0 +1,7 @@
+service ipcbd-infotainment /vendor/bin/hw/ipcbd ipcb UDP
+    class main
+    oneshot
+    user root
+    group root
+    seclabel u:r:ipcbd:s0
+
