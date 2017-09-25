@@ -1,4 +1,4 @@
-#define LOG_TAG "Infotainment_IP_Service.manager"
+#define LOG_TAG "IpcbD.manager"
 
 #include <set>
 #include <cutils/log.h>
@@ -49,6 +49,7 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
                     msg.pdu.header.operationType =  (OperationType)message.pdu.header.operation_type;
                     msg.pdu.header.encoded = (IpCmdTypes::DataType::ENCODED == message.pdu.header.data_type);
                     msg.pdu.header.seqNbr = uint8_t(message.pdu.header.sender_handle_id & 0xFF);
+                    msg.pdu.payload = std::move(message.pdu.payload);
                     if (callbackHandler->onMessageRcvd(msg).isDeadObject())
                     {  //TODO: make a better error message here, maube unsubscribe?
                         ALOGE("Callback function does not exist!");
@@ -75,6 +76,7 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
                 msg.pdu.header.operationType =  (OperationType)message.pdu.header.operation_type;
                 msg.pdu.header.encoded = (IpCmdTypes::DataType::ENCODED == message.pdu.header.data_type);
                 msg.pdu.header.seqNbr = uint8_t(message.pdu.header.sender_handle_id & 0xFF);
+                msg.pdu.payload = std::move(message.pdu.payload);
                 if (callbackHandler->onResponseRcvd(msg).isDeadObject())
                 {  //TODO: make a better error message here, maube unsubscribe?
                     ALOGE("Callback function does not exist!");

@@ -21,6 +21,7 @@
 #include <sys/signalfd.h>
 
 #include "service_manager.h"
+#include "diagnostics_client.h"
 
 using namespace Connectivity;
 using namespace IpCmdTypes;
@@ -156,6 +157,9 @@ int main(int argc, char *argv[])
 
     TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
+    UdpSocket sock(dispatcher);
+    UdpSocket broadcastSock(dispatcher);  // Socket for broadcast
+
     try
     {
         /*ShutdownClient shutdown_client_(sock);
@@ -165,15 +169,13 @@ int main(int argc, char *argv[])
 
         if (protocol == "UDP")
         {
-            UdpSocket sock(dispatcher);
-            setupSocket(sock, Message::IHU);
             transport.setSocket(&sock);
+            setupSocket(sock, Message::IHU);
         }
         else if (protocol == "UDPB")
         {
-            UdpSocket broadcastSock(dispatcher);  // Socket for broadcast
-            setupSocket(broadcastSock, Message::ALL);
             transport.setBroadcastSocket(&broadcastSock);
+            setupSocket(broadcastSock, Message::ALL);
         }
         else if (protocol == "TCP")
         {
@@ -202,6 +204,9 @@ int main(int argc, char *argv[])
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
         Connectivity::ServiceManager service_manager(service_name, msgDispatcher);
+
+        DiagnosticsClient diagnostics_client_;
+        msgDispatcher.setDiagnostics(&diagnostics_client_);
 
         configureRpcThreadpool(1, true /*callerWillJoin*/);
 
