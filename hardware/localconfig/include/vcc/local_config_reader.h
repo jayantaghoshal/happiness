@@ -4,7 +4,6 @@
 #include "local_config_reader_interface.h"
 
 #include <json/json.h>
-#include <fstream>
 #include <memory>
 #include <mutex>
 #include <sstream>
@@ -18,25 +17,45 @@ namespace vcc
 class LocalConfigReader : public LocalConfigReaderInterface
 {
  public:
-  void TestInit(const std::string &file_path)
-  {
-    std::unique_lock<std::mutex> lock(mutex_);
-    Load(file_path);
-  }
+  typedef std::function<void(Json::Value *root)> LazyLoader;
 
-  std::string GetString(const std::initializer_list<std::string> &keys);
-  int GetInt(const std::initializer_list<std::string> &keys);
-  bool GetBool(const std::initializer_list<std::string> &keys);
-  double GetDouble(const std::initializer_list<std::string> &keys);
-  std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys);
+  LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
+  LocalConfigReader(const LocalConfigReader &) = delete;
+
+  std::string GetString(std::initializer_list<std::string> keys) override;
+  int GetInt(std::initializer_list<std::string> keys) override;
+  bool GetBool(std::initializer_list<std::string> keys) override;
+  double GetDouble(std::initializer_list<std::string> keys) override;
+  std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys) override;
+
+  void Preload();
+
+ protected:
+  static void LoadFile(std::string file_path, Json::Value *value);
 
  private:
-  void Load(const std::string &file_path);
+  const Json::Value &GetValue(std::initializer_list<std::string> keys);
 
-  const Json::Value &GetValue(const std::initializer_list<std::string> &keys);
-
+  LazyLoader loader_;
   std::mutex mutex_;
   Json::Value root_;
 };
+
+class LocalConfigFileReader : public LocalConfigReader
+{
+  typedef LocalConfigReader base;
+
+ public:
+  LocalConfigFileReader(std::string file_path);
+};
+
+class LocalConfigStaticContentReader : public LocalConfigReader
+{
+  typedef LocalConfigReader base;
+
+ public:
+  LocalConfigStaticContentReader(std::string json);
+};
 }
+
 #endif /* VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_SRC_LOCAL_CONFIG_READER_H_ */
