@@ -1,4 +1,7 @@
+# other repos imported by repo tool
 hmi/
+
+# Visual Studio Code
 *.vscode
 
 # Python
@@ -7,3 +10,9 @@ __pycache__/
 *$py.class
 *.mypy_cache
 *.log
+
+# eclipse
+.settings/language.settings.xml
+.settings/org.eclipse.cdt.core.prefs
+.project
+.cproject
