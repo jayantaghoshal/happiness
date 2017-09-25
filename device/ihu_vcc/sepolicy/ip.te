@@ -1,0 +1,5 @@
+# ip
+type ip, domain;
+type ip_exec, exec_type, file_type;
+
+init_daemon_domain(ip)
