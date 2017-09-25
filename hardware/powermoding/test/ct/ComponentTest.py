@@ -39,7 +39,12 @@ class ComponentTest(object):
         # this function shall control the physical power to the whole IHU
         # currently it deos nothing since the API to do this is not clear and the required CI hardware is not in place
         # If it fails to power on/off then log and do exit(1)
+        self.logger.info('Power ' + ('on' if on else 'off'))
         pass
+
+    def sleep(self,duration):
+        self.logger.info('sleep %d seconds',duration)
+        sleep(duration)
 
 
     def assertEqual(self, first, second, msg=None):
@@ -105,11 +110,11 @@ class ComponentTest(object):
         usgModSts.send(usgModSts.map.UsgModAbdnd)
         carModSts1.send(carModSts1.map.CarModNorm)
         doorDrvrSts.send(doorDrvrSts.map.Clsd)
-        sleep(1.0)
+        self.sleep(1.0)
 
         # part 1
         self.power_control_ihu(True)
-        sleep(20.0) # the IHU is up after about 11 secs when it starts up (which it should not do here!!)
+        self.sleep(20.0) # the IHU is up after about 11 secs when it starts up (which it should not do here!!)
         # Verify that we don't have any IHU USB connection to host
         # and that we have MmedMaiPwrMod==Sleep and MmedHmiModStd==OFF
         self.assertEqual(is_ihuconnected(), False, 'IHU USB shall NOT be connected')
@@ -119,21 +124,21 @@ class ComponentTest(object):
         # part 2
         # change to InActive
         usgModSts.send(usgModSts.map.UsgModInActv)
-        sleep(1.0)
+        self.sleep(1.0)
         # Open and close the driver door
         doorDrvrSts.send(doorDrvrSts.map.Opend)
-        sleep(1.0)
+        self.sleep(1.0)
         doorDrvrSts.send(doorDrvrSts.map.Clsd)
         # change to convenience and then to active
         usgModSts.send(usgModSts.map.UsgModCnvinc)
-        sleep(1.0)
+        self.sleep(1.0)
         usgModSts.send(usgModSts.map.UsgModActv)
 
         # Now wait 20+20 secs verify that we have a IHU USB connection to host
         # and that we have received MmedMaiPwrMod==ON and MmedHmiModStd==ON
-        sleep(20.0)
+        self.sleep(20.0)
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
-        sleep(20.0)
+        self.sleep(20.0)
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
         self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
         self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
@@ -161,9 +166,9 @@ class ComponentTest(object):
         usgModSts.send(usgModSts.map.UsgModActv)
         carModSts1.send(carModSts1.map.CarModNorm)
         doorDrvrSts.send(doorDrvrSts.map.Clsd)
-        sleep(0.5)
+        self.sleep(0.5)
         self.power_control_ihu(True) # this should lead to a full start of the IHU
-        sleep(40.0)
+        self.sleep(40.0)
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
         self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
         self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
@@ -171,14 +176,14 @@ class ComponentTest(object):
         # part 1
         # change to InActive
         usgModSts.send(usgModSts.map.UsgModInActv)
-        sleep(1.0)
+        self.sleep(1.0)
         # Open and close the driver door
         doorDrvrSts.send(doorDrvrSts.map.Opend)
-        sleep(1.0)
+        self.sleep(1.0)
         doorDrvrSts.send(doorDrvrSts.map.Clsd)
         # Now wait 30 secs and after that verify that we don't have any IHU USB connection to host
         # and that we have received MmedMaiPwrMod==Sleep and MmedHmiModStd==Off
-        sleep(30.0)
+        self.sleep(30.0)
         self.assertEqual(is_ihuconnected(), False, 'IHU USB shall NOT be connected')
         self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateSleep, 'mmedMaiPwrMod shall be == Sleep')
         self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
