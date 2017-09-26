@@ -42,6 +42,7 @@ class ComponentTest(object):
         self.logger.info('Power ' + ('on' if on else 'off'))
         pass
 
+
     def sleep(self,duration):
         self.logger.info('sleep %d seconds',duration)
         sleep(duration)
