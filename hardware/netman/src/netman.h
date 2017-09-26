@@ -14,6 +14,10 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_c
 
 void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf);
 
+void VccNamespaceInit();
+
+int MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns);
+
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations);
 
 bool SetupInterface(const char* interface_name,
@@ -22,6 +26,10 @@ bool SetupInterface(const char* interface_name,
                     const char* netmask,
                     const char* broadcast_addr,
                     const uint32_t mtu);
+
+void BringInterfaceUp(const std::string &interface_name, const std::string &ns);
+
+bool BringInterfaceUp(const char* interface_name);
 
 }
 }

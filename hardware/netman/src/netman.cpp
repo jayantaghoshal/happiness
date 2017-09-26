@@ -5,6 +5,7 @@
 
 #include <errno.h>
 #include <ios>
+#include <ifaddrs.h>
 
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
@@ -17,6 +18,7 @@
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <vector>
 #include <unistd.h>
 
@@ -26,8 +28,6 @@
 
 namespace vcc {
 namespace netman {
-
-#define  LOG_TAG    "Netmand"
 
 namespace {
 
@@ -104,6 +104,40 @@ void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac
         address >> byte >> skip_byte;
 
         mac_address_out[pos] = byte;
+    }
+}
+
+std::vector<std::string> ListNetworkInterfaces(const std::initializer_list<std::string> &ignored_interfaces)
+{
+    std::vector<std::string> interfaces;
+    struct ifaddrs *addrs,*tmp;
+
+    getifaddrs(&addrs);
+    tmp = addrs;
+
+    while (tmp)
+    {
+        if (tmp->ifa_addr && tmp->ifa_addr->sa_family == AF_PACKET) {
+            if (std::find(std::begin(ignored_interfaces), std::end(ignored_interfaces), tmp->ifa_name) != std::end(ignored_interfaces))
+            interfaces.push_back(tmp->ifa_name);
+        }
+
+        tmp = tmp->ifa_next;
+    }
+
+    freeifaddrs(addrs);
+
+    return interfaces;
+}
+
+void VccNamespaceInit()
+{
+    // TODO (Philip Werner) Refactor to more dynamic behaviour using local config.
+    std::vector<std::string> network_interfaces = ListNetworkInterfaces({"lo", "sit0"});
+    for (auto &network_interface : network_interfaces) {
+        ALOGI("Moving interface: %s", network_interface.c_str());
+        MoveNetworkInterfaceToNamespace(network_interface, "vcc");
+        BringInterfaceUp(network_interface.c_str());
     }
 }
 
@@ -203,7 +237,14 @@ static bool IsInterfaceUp(const char* interface_name)
     return (ifr_req.ifr_flags & IFF_UP);
 }
 
-static bool BringInterfaceUp(const char* interface_name)
+void BringInterfaceUp(const std::string &interface_name, const std::string &ns)
+{
+    std::stringstream cmd;
+    cmd << "/system/bin/ip netns exec " << ns << " ifconfig " << interface_name << " up";
+    system(cmd.str().c_str());
+}
+
+bool BringInterfaceUp(const char* interface_name)
 {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
@@ -452,6 +493,13 @@ static bool SetProxyArp(const char* interface_name) {
         return (_write_to_file("/proc/sys/net/ipv4/conf/eth1/proxy_arp", "1"));
     }
     return true;
+}
+
+int MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns)
+{
+    std::stringstream move_network_interface_cmd;
+    move_network_interface_cmd << "/system/bin/ip link set dev " << network_interface_name << " netns " << ns;
+    return system(move_network_interface_cmd.str().c_str());
 }
 
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations)

@@ -39,6 +39,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",      standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/firewall_configuration",standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
 ]

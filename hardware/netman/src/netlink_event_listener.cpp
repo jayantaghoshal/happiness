@@ -1,5 +1,3 @@
-#define LOG_TAG "Netmand"
-
 #include <stdio.h>
 #include <errno.h>
 

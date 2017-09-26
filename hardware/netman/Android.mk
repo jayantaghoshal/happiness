@@ -14,6 +14,7 @@ LOCAL_SRC_FILES := \
 	src/netman.cpp \
 	src/netlink_event_listener.cpp \
 	src/netlink_event_handler.cpp \
+	src/netman_netlink_event_handler.cpp \
 	src/firewall_config.cpp
 LOCAL_CPPFLAGS := $(MY_LOCAL_CPPFLAGS)
 LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
@@ -27,6 +28,33 @@ LOCAL_STATIC_LIBRARIES += \
 # Netman depends upon sysctl.conf, which it will initialize during startup
 LOCAL_INIT_RC := netman.rc
 LOCAL_REQUIRED_MODULES := sysctl.conf
+# We only build for 64 bit.
+LOCAL_MULTILIB := 64
+include $(BUILD_EXECUTABLE)
+
+
+#
+# Netboyd executable for deployment to system
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := netboyd
+LOCAL_SRC_FILES := \
+	src/netboy_main.cpp \
+	src/netman.cpp \
+	src/netlink_event_listener.cpp \
+	src/netlink_event_handler.cpp \
+	src/netboy_netlink_event_handler.cpp \
+	src/firewall_config.cpp
+LOCAL_CPPFLAGS := $(MY_LOCAL_CPPFLAGS)
+LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCAL_EXPORT_C_INCLUDE_DIRS)
+LOCAL_SHARED_LIBRARIES += \
+	liblog \
+	liblocalconfig \
+	libcutils
+LOCAL_STATIC_LIBRARIES += \
+	libbase
+LOCAL_INIT_RC := netboyd.rc
 # We only build for 64 bit.
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)

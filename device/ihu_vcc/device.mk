@@ -4,6 +4,7 @@
 ##############################################################
 PRODUCT_PACKAGES += \
     netman \
+    netboyd \
     vehicle-signals-daemon \
     dataelements-hidl-server \
     ipcbd \

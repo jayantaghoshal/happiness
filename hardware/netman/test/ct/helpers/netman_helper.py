@@ -122,6 +122,10 @@ class NetmanHelper(BaseHelper):
         cmd = " ".join(["ip", "link", "set", old_interface_name, "name", new_interface_name])
         self.execute_cmd(cmd)
 
+    def namespace_exists(self, namespace):
+        cmd ="ip netns show"
+        return namespace in self.execute_cmd(cmd)[const.STDOUT][0].split("\n")
+
     def _parse_ip_address(self, ifconfig_output):
         groups = re.search(r"inet addr:(\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3})", str(ifconfig_output))
         return groups.group(1) if groups else ""
