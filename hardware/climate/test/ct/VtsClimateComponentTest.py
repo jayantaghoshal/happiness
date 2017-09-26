@@ -285,7 +285,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
     def assert_signal_equals(self, fdx_signal, expected_value):
         if self.flexray.connected:
-            read_value = fdx_signal.receive()
+            read_value = fdx_signal.get()
             asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ))
 
     def testFanLevel(self):

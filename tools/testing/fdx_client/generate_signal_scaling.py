@@ -137,9 +137,9 @@ def render(signals: List[fdx_description_file_parser.Item],
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 """
@@ -150,8 +150,8 @@ def render(signals: List[fdx_description_file_parser.Item],
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 """

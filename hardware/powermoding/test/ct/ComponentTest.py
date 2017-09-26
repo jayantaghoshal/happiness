@@ -119,8 +119,8 @@ class ComponentTest(object):
         # Verify that we don't have any IHU USB connection to host
         # and that we have MmedMaiPwrMod==Sleep and MmedHmiModStd==OFF
         self.assertEqual(is_ihuconnected(), False, 'IHU USB shall NOT be connected')
-        self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateSleep, 'mmedMaiPwrMod shall be == Sleep')
-        self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
+        self.assertEqual(mmedMaiPwrMod.get(), mmedMaiPwrMod.map.IHUStateSleep, 'mmedMaiPwrMod shall be == Sleep')
+        self.assertEqual(mmedHmiModStd.get(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
 
         # part 2
         # change to InActive
@@ -141,8 +141,8 @@ class ComponentTest(object):
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
         self.sleep(20.0)
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
-        self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
-        self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
+        self.assertEqual(mmedMaiPwrMod.get(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
+        self.assertEqual(mmedHmiModStd.get(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
 
 
     '''test2: basic shutdown
@@ -171,8 +171,8 @@ class ComponentTest(object):
         self.power_control_ihu(True) # this should lead to a full start of the IHU
         self.sleep(40.0)
         self.assertEqual(is_ihuconnected(), True, 'IHU USB shall be connected')
-        self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
-        self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
+        self.assertEqual(mmedMaiPwrMod.get(), mmedMaiPwrMod.map.IHUStateOn, 'mmedMaiPwrMod shall be == On')
+        self.assertEqual(mmedHmiModStd.get(), mmedHmiModStd.map.InfModeOn, 'mmedHmiModStd shall be == On')
 
         # part 1
         # change to InActive
@@ -186,8 +186,8 @@ class ComponentTest(object):
         # and that we have received MmedMaiPwrMod==Sleep and MmedHmiModStd==Off
         self.sleep(30.0)
         self.assertEqual(is_ihuconnected(), False, 'IHU USB shall NOT be connected')
-        self.assertEqual(mmedMaiPwrMod.receive(), mmedMaiPwrMod.map.IHUStateSleep, 'mmedMaiPwrMod shall be == Sleep')
-        self.assertEqual(mmedHmiModStd.receive(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
+        self.assertEqual(mmedMaiPwrMod.get(), mmedMaiPwrMod.map.IHUStateSleep, 'mmedMaiPwrMod shall be == Sleep')
+        self.assertEqual(mmedHmiModStd.get(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s   %(message)s')

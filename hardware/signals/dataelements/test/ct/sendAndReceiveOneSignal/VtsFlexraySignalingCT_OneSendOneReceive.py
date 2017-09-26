@@ -18,9 +18,9 @@ logger = logging.getLogger('flexray_test.test')
 
 def wait_for_signal(signal, expectedvalue, timeout_sec):
     end = time.time() + timeout_sec
-    value = signal.receive()
+    value = signal.get()
     while time.time() < end:
-        value = signal.receive()
+        value = signal.get()
         if value == expectedvalue:
             log("Got expected signal %s=%d" % (signal.de_name, value))
             break
@@ -28,7 +28,7 @@ def wait_for_signal(signal, expectedvalue, timeout_sec):
     log("Assert Expected=%d Actual=%d" % (expectedvalue, value))
     asserts.assertEqual(value, expectedvalue,
                         "Expected signal %s to be %d within %d sec, got %d)" %
-                        (signal.de_name, expectedvalue, timeout_sec, signal.receive()))
+                        (signal.de_name, expectedvalue, timeout_sec, signal.get()))
 
 #f = open("/tmp/vtsflexraytest", mode="w")
 def log(s):

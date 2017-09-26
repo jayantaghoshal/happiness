@@ -952,8 +952,8 @@ class AbsWarnIndcnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -992,8 +992,8 @@ class AccAdprSpdLimActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AccAdprSpdLimActvSts:
@@ -1014,8 +1014,8 @@ class AccAdprSpdLimActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -1054,8 +1054,8 @@ class AccAdprTurnSpdActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AccAdprTurnSpdActvSts:
@@ -1076,8 +1076,8 @@ class AccAdprTurnSpdActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AccAutResuWarnReq:
@@ -1098,8 +1098,8 @@ class AccAutResuWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AccSts:
@@ -1123,8 +1123,8 @@ class AccSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ActvOfHorn:
@@ -1145,8 +1145,8 @@ class ActvOfHorn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -1174,9 +1174,9 @@ class ADataRawSafeChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -1204,9 +1204,9 @@ class ADataRawSafeCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AdjSpdLimnSts:
@@ -1229,8 +1229,8 @@ class AdjSpdLimnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AdjSpdLimnWarn:
@@ -1253,8 +1253,8 @@ class AdjSpdLimnWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -1282,9 +1282,9 @@ class AgDataRawSafeChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -1312,9 +1312,9 @@ class AgDataRawSafeCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AirClngReq:
@@ -1336,8 +1336,8 @@ class AirClngReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
@@ -1367,9 +1367,9 @@ class ALat1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ALat1Qf1:
@@ -1392,8 +1392,8 @@ class ALat1Qf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
@@ -1423,9 +1423,9 @@ class ALgt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ALgt1Qf1:
@@ -1448,8 +1448,8 @@ class ALgt1Qf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:-100->309.5, Resolution: (0.1*x+-100.0, raw is unsigned, 12 bits )
@@ -1479,9 +1479,9 @@ class AmbTIndcd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AmbTIndcdQf:
@@ -1504,8 +1504,8 @@ class AmbTIndcdQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AmbTIndcdUnit:
@@ -1527,8 +1527,8 @@ class AmbTIndcdUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AmbTRawQly:
@@ -1551,8 +1551,8 @@ class AmbTRawQly:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: degC,  Range:-70->134.7, Resolution: (0.1*x+-70.0, raw is unsigned, 11 bits )
@@ -1582,9 +1582,9 @@ class AmbTRawVal:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->7
@@ -1612,9 +1612,9 @@ class AntithftRednReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AsyLaneChgPsbl:
@@ -1637,8 +1637,8 @@ class AsyLaneChgPsbl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AsyLaneChgSts:
@@ -1668,8 +1668,8 @@ class AsyLaneChgSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AsyLaneChgTyp:
@@ -1699,8 +1699,8 @@ class AsyLaneChgTyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class AsySteerApplyRqrd:
@@ -1722,8 +1722,8 @@ class AsySteerApplyRqrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -1751,9 +1751,9 @@ class AudMsgReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AudWarn:
@@ -1777,9 +1777,9 @@ class AudWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -1807,8 +1807,8 @@ class AudWarnActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m/s^2,  Range:-139->139, Resolution: (0.0085*x+0.0, raw is signed, 15 bits )
@@ -1838,9 +1838,9 @@ class AVert2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class AVert2Qf1:
@@ -1863,8 +1863,8 @@ class AVert2Qf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -1892,9 +1892,9 @@ class BackCntrForMissCom:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: %,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )
@@ -1924,9 +1924,9 @@ class BarForFuEco:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: km,  Range:0->2000000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
@@ -1956,9 +1956,9 @@ class BkpOfDstTrvld:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class BltLockStAtDrvrForBltLockSt1:
@@ -1979,8 +1979,8 @@ class BltLockStAtDrvrForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtDrvrForDevErrSts2:
@@ -2001,8 +2001,8 @@ class BltLockStAtDrvrForDevErrSts2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtPassForBltLockSt1:
@@ -2023,8 +2023,8 @@ class BltLockStAtPassForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtPassForBltLockSts:
@@ -2045,8 +2045,8 @@ class BltLockStAtPassForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Description if a component is equipped or not.
@@ -2068,8 +2068,8 @@ class BltLockStAtRowSecLeForBltLockEquid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecLeForBltLockSt1:
@@ -2090,8 +2090,8 @@ class BltLockStAtRowSecLeForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecLeForBltLockSts:
@@ -2112,8 +2112,8 @@ class BltLockStAtRowSecLeForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Description if a component is equipped or not.
@@ -2135,8 +2135,8 @@ class BltLockStAtRowSecMidForBltLockEquid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecMidForBltLockSt1:
@@ -2157,8 +2157,8 @@ class BltLockStAtRowSecMidForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecMidForBltLockSts:
@@ -2179,8 +2179,8 @@ class BltLockStAtRowSecMidForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Description if a component is equipped or not.
@@ -2202,8 +2202,8 @@ class BltLockStAtRowSecRiForBltLockEquid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecRiForBltLockSt1:
@@ -2224,8 +2224,8 @@ class BltLockStAtRowSecRiForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowSecRiForBltLockSts:
@@ -2246,8 +2246,8 @@ class BltLockStAtRowSecRiForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Description if a component is equipped or not.
@@ -2269,8 +2269,8 @@ class BltLockStAtRowThrdLeForBltLockEquid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowThrdLeForBltLockSt1:
@@ -2291,8 +2291,8 @@ class BltLockStAtRowThrdLeForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowThrdLeForBltLockSts:
@@ -2313,8 +2313,8 @@ class BltLockStAtRowThrdLeForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Description if a component is equipped or not.
@@ -2336,8 +2336,8 @@ class BltLockStAtRowThrdRiForBltLockEquid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowThrdRiForBltLockSt1:
@@ -2358,8 +2358,8 @@ class BltLockStAtRowThrdRiForBltLockSt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltLockStAtRowThrdRiForBltLockSts:
@@ -2380,8 +2380,8 @@ class BltLockStAtRowThrdRiForBltLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltRmnSound1:
@@ -2402,8 +2402,8 @@ class BltRmnSound1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltRmnSound2:
@@ -2424,8 +2424,8 @@ class BltRmnSound2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltRmnSound3:
@@ -2446,8 +2446,8 @@ class BltRmnSound3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BltRmnSound4:
@@ -2468,8 +2468,8 @@ class BltRmnSound4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -2497,9 +2497,9 @@ class BrkAndAbsWarnIndcnReqChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -2527,9 +2527,9 @@ class BrkAndAbsWarnIndcnReqCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # 0= High fluid level
@@ -2552,8 +2552,8 @@ class BrkFldLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2583,9 +2583,9 @@ class BrkFricTqAtWhlFrntLeAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2615,9 +2615,9 @@ class BrkFricTqAtWhlFrntRiAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2647,9 +2647,9 @@ class BrkFricTqAtWhlReLeAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Nm,  Range:0->8191, Resolution: (1.0*x+0.0, raw is unsigned, 13 bits )
@@ -2679,9 +2679,9 @@ class BrkFricTqAtWhlReRiAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class BrkRelsWarnReq:
@@ -2702,8 +2702,8 @@ class BrkRelsWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # PLILJESS:
@@ -2727,8 +2727,8 @@ class BrkWarnIndcnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class Btn1ForUsrSwtPanFrntReq:
@@ -2749,8 +2749,8 @@ class Btn1ForUsrSwtPanFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class Btn2ForUsrSwtPanFrntReq:
@@ -2771,8 +2771,8 @@ class Btn2ForUsrSwtPanFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class Btn3ForUsrSwtPanFrntReq:
@@ -2793,8 +2793,8 @@ class Btn3ForUsrSwtPanFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class Btn4ForUsrSwtPanFrntReq:
@@ -2815,8 +2815,8 @@ class Btn4ForUsrSwtPanFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class Btn5ForUsrSwtPanFrntReq:
@@ -2837,8 +2837,8 @@ class Btn5ForUsrSwtPanFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BtnAudFbSts:
@@ -2859,8 +2859,8 @@ class BtnAudFbSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # SImple representation of  a virtual (multistep) button for adjusting audio volume.
@@ -2888,8 +2888,8 @@ class BtnAudVolSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Represents status of a (multilevel) button "Left/Right. 
@@ -2914,8 +2914,8 @@ class BtnMmedLeRiSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class BtnMmedModSts:
@@ -2936,8 +2936,8 @@ class BtnMmedModSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Represents status of a button "Set". 
@@ -2961,8 +2961,8 @@ class BtnMmedSetSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries call presence information. Defined for CallSts range [0-1]
@@ -2987,8 +2987,8 @@ class CallStsIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CarModSts1:
@@ -3012,8 +3012,8 @@ class CarModSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->7
@@ -3041,9 +3041,9 @@ class CarModSubtypWdCarModSubtyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -3073,9 +3073,9 @@ class CarTiGlb:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class CCSMBtn6:
@@ -3096,8 +3096,8 @@ class CCSMBtn6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ChdLockgProtnStsToHmi:
@@ -3120,8 +3120,8 @@ class ChdLockgProtnStsToHmi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ChdWinProtnStsAtDrvrRe:
@@ -3142,8 +3142,8 @@ class ChdWinProtnStsAtDrvrRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ChdWinProtnStsAtPassRe:
@@ -3164,8 +3164,8 @@ class ChdWinProtnStsAtPassRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClimaActv:
@@ -3186,8 +3186,8 @@ class ClimaActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClimaEcoModRqrd:
@@ -3208,8 +3208,8 @@ class ClimaEcoModRqrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: W,  Range:0->2047, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
@@ -3239,9 +3239,9 @@ class ClimaPwrCns:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ClimaRqrd:
@@ -3263,8 +3263,8 @@ class ClimaRqrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: s,  Range:0->4.294967294E8, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -3294,9 +3294,9 @@ class ClimaTmr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ClimaTmrSts:
@@ -3317,8 +3317,8 @@ class ClimaTmrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClimaTmrStsRqrd:
@@ -3339,8 +3339,8 @@ class ClimaTmrStsRqrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0=No Warning
@@ -3374,8 +3374,8 @@ class ClimaWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 24h or 12h indication of clock
@@ -3398,8 +3398,8 @@ class ClkFmt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -3438,8 +3438,8 @@ class CllsnFwdWarnActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CllsnFwdWarnActvSts:
@@ -3460,8 +3460,8 @@ class CllsnFwdWarnActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CllsnFwdWarnReq:
@@ -3482,8 +3482,8 @@ class CllsnFwdWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CllsnWarnReq:
@@ -3504,8 +3504,8 @@ class CllsnWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CllsnWarnSideLe:
@@ -3528,8 +3528,8 @@ class CllsnWarnSideLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CllsnWarnSideRi:
@@ -3552,8 +3552,8 @@ class CllsnWarnSideRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClngActv:
@@ -3575,8 +3575,8 @@ class ClngActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClngRqrdFromHmi:
@@ -3598,8 +3598,8 @@ class ClngRqrdFromHmi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ClsAutEna:
@@ -3620,8 +3620,8 @@ class ClsAutEna:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CmftFctActv:
@@ -3642,8 +3642,8 @@ class CmftFctActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -3679,8 +3679,8 @@ class CmftFctSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
@@ -3710,9 +3710,9 @@ class CmptmtAirTEstimdExtdComptmtT:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class CmptmtAirTEstimdExtdQlyFlg:
@@ -3735,8 +3735,8 @@ class CmptmtAirTEstimdExtdQlyFlg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
@@ -3766,9 +3766,9 @@ class CmptmtTFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: degC,  Range:-60->125, Resolution: (0.1*x+-60.0, raw is unsigned, 11 bits )
@@ -3798,9 +3798,9 @@ class CmptmtTFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Interpretation:
@@ -3828,8 +3828,8 @@ class CmptmtTFrntQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Interpretation:
@@ -3857,8 +3857,8 @@ class CmptmtTFrntQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -3886,8 +3886,8 @@ class CnclWarnForCrsCtrl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -3915,8 +3915,8 @@ class CnclWarnLatForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -3944,8 +3944,8 @@ class CnclWarnLgtForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CntDwnToManvStrtInDstToManvLocn:
@@ -3966,8 +3966,8 @@ class CntDwnToManvStrtInDstToManvLocn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ComLostExtrSound:
@@ -3991,9 +3991,9 @@ class ComLostExtrSound:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -4021,9 +4021,9 @@ class ConSftyWarnConSftyWarnId:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ConSftyWarnConSftyWarnLvl:
@@ -4046,8 +4046,8 @@ class ConSftyWarnConSftyWarnLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ConSftyWarnConSftyWarnSnd:
@@ -4068,8 +4068,8 @@ class ConSftyWarnConSftyWarnSnd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
@@ -4097,9 +4097,9 @@ class ConSftyWarnConSftyWarnTyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m,  Range:0->65535
@@ -4127,9 +4127,9 @@ class ConSftyWarnDistanceToWarning:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Interpretation:
@@ -4155,8 +4155,8 @@ class CoolgReqForDispCen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Interpretation:
@@ -4183,8 +4183,8 @@ class CoolgStsForDisp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CrsCtrlrSts:
@@ -4206,8 +4206,8 @@ class CrsCtrlrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CrvtSpdAdpvSts:
@@ -4230,8 +4230,8 @@ class CrvtSpdAdpvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
@@ -4257,8 +4257,8 @@ class CrvtSpdWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -4294,8 +4294,8 @@ class CrvtSpdWarnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CtraIndcnLe:
@@ -4316,8 +4316,8 @@ class CtraIndcnLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CtraIndcnRi:
@@ -4338,8 +4338,8 @@ class CtraIndcnRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CtraOn1:
@@ -4362,8 +4362,8 @@ class CtraOn1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CtraSwOnOff:
@@ -4384,8 +4384,8 @@ class CtraSwOnOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class CurtActvnReReq:
@@ -4408,8 +4408,8 @@ class CurtActvnReReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -4437,9 +4437,9 @@ class DataSpclDMSMDataIdn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4467,9 +4467,9 @@ class DataSpclDMSMDataNrSpcl1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4497,9 +4497,9 @@ class DataSpclDMSMDataNrSpcl2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -4527,9 +4527,9 @@ class DataSpclDMSMDataNrSpcl3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class DateOrTi:
@@ -4552,8 +4552,8 @@ class DateOrTi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Days,  Range:1->31
@@ -4581,9 +4581,9 @@ class Day:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Days,  Range:1->31
@@ -4611,9 +4611,9 @@ class Day1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Days,  Range:0->750
@@ -4641,9 +4641,9 @@ class DayToSrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class DiagcCCSM:
@@ -4670,8 +4670,8 @@ class DiagcCCSM:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DiagcRCSM:
@@ -4698,8 +4698,8 @@ class DiagcRCSM:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DiagcRSHC:
@@ -4726,8 +4726,8 @@ class DiagcRSHC:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DiagcStsDMSM:
@@ -4750,8 +4750,8 @@ class DiagcStsDMSM:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DispAndHomeBtnSts:
@@ -4772,8 +4772,8 @@ class DispAndHomeBtnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -4803,9 +4803,9 @@ class DispBattEgyIn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Wh,  Range:0->127.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -4835,9 +4835,9 @@ class DispBattEgyOut:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class DispOfPrpsnMod:
@@ -4872,8 +4872,8 @@ class DispOfPrpsnMod:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DoorDrvrLockReSts:
@@ -4896,8 +4896,8 @@ class DoorDrvrLockReSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DoorDrvrLockSts:
@@ -4920,8 +4920,8 @@ class DoorDrvrLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -4944,8 +4944,8 @@ class DoorDrvrReSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -4968,8 +4968,8 @@ class DoorDrvrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DoorPassLockReSts:
@@ -4992,8 +4992,8 @@ class DoorPassLockReSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DoorPassLockSts:
@@ -5016,8 +5016,8 @@ class DoorPassLockSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -5040,8 +5040,8 @@ class DoorPassReSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -5064,8 +5064,8 @@ class DoorPassSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DriveAwayInfoWarnReqAudWarnReq:
@@ -5087,8 +5087,8 @@ class DriveAwayInfoWarnReqAudWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DriveAwayInfoWarnReqCtrlDirOfTrfcLi:
@@ -5115,8 +5115,8 @@ class DriveAwayInfoWarnReqCtrlDirOfTrfcLi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DriveAwayInfoWarnReqInterruptionSrc:
@@ -5143,8 +5143,8 @@ class DriveAwayInfoWarnReqInterruptionSrc:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DriveAwayInfoWarnReqReqSrc:
@@ -5171,8 +5171,8 @@ class DriveAwayInfoWarnReqReqSrc:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -5200,9 +5200,9 @@ class DriveAwayInfoWarnReqTiToDrvCntDwnTi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class DriveAwayInfoWarnReqVisWarnReq:
@@ -5224,8 +5224,8 @@ class DriveAwayInfoWarnReqVisWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvgInWrgDirOfTrfc:
@@ -5246,8 +5246,8 @@ class DrvgInWrgDirOfTrfc:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvModReq:
@@ -5282,8 +5282,8 @@ class DrvModReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrCtrlOfPassSeatFrntReqd:
@@ -5304,8 +5304,8 @@ class DrvrCtrlOfPassSeatFrntReqd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrCtrlOfPassSeatFrntSts:
@@ -5328,8 +5328,8 @@ class DrvrCtrlOfPassSeatFrntSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Describes the desired vehicle movement direction from the driver.
@@ -5358,8 +5358,8 @@ class DrvrDesDir:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -5398,8 +5398,8 @@ class DrvrDispSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrDispSetgSts:
@@ -5421,8 +5421,8 @@ class DrvrDispSetgSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -5461,8 +5461,8 @@ class DrvrHmiBackGndInfoSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrHmiBackGndInfoSetgSetg:
@@ -5487,8 +5487,8 @@ class DrvrHmiBackGndInfoSetgSetg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -5527,8 +5527,8 @@ class DrvrHmiDispdModPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrHmiDispdModSts:
@@ -5550,8 +5550,8 @@ class DrvrHmiDispdModSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -5590,8 +5590,8 @@ class DrvrHmiUsrIfSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrHmiUsrIfSetgSetg:
@@ -5620,8 +5620,8 @@ class DrvrHmiUsrIfSetgSetg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrMassgRunng:
@@ -5642,8 +5642,8 @@ class DrvrMassgRunng:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrPfmncLvl:
@@ -5668,8 +5668,8 @@ class DrvrPfmncLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -5708,8 +5708,8 @@ class DrvrPfmncMonActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrPfmncMonActvSts:
@@ -5730,8 +5730,8 @@ class DrvrPfmncMonActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -5767,8 +5767,8 @@ class DrvrPfmncSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
@@ -5796,8 +5796,8 @@ class DrvrPfmncWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatActvSpplFct:
@@ -5822,8 +5822,8 @@ class DrvrSeatActvSpplFct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgInten:
@@ -5845,8 +5845,8 @@ class DrvrSeatDispMassgFctMassgInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgProg:
@@ -5870,8 +5870,8 @@ class DrvrSeatDispMassgFctMassgProg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatDispMassgFctMassgSpdLvl:
@@ -5893,8 +5893,8 @@ class DrvrSeatDispMassgFctMassgSpdLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatDispMassgFctOnOff:
@@ -5915,8 +5915,8 @@ class DrvrSeatDispMassgFctOnOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatDispSpplFct:
@@ -5941,8 +5941,8 @@ class DrvrSeatDispSpplFct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatMassgFctMassgInten:
@@ -5964,8 +5964,8 @@ class DrvrSeatMassgFctMassgInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatMassgFctMassgProg:
@@ -5989,8 +5989,8 @@ class DrvrSeatMassgFctMassgProg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatMassgFctMassgSpdLvl:
@@ -6012,8 +6012,8 @@ class DrvrSeatMassgFctMassgSpdLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatMassgFctOnOff:
@@ -6034,8 +6034,8 @@ class DrvrSeatMassgFctOnOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtAdjmtOfSpplFctHozlSts:
@@ -6057,8 +6057,8 @@ class DrvrSeatSwtAdjmtOfSpplFctHozlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtAdjmtOfSpplFctVertSts:
@@ -6080,8 +6080,8 @@ class DrvrSeatSwtAdjmtOfSpplFctVertSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtHeiFrntSts:
@@ -6103,8 +6103,8 @@ class DrvrSeatSwtHeiFrntSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtHeiSts:
@@ -6126,8 +6126,8 @@ class DrvrSeatSwtHeiSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtInclSts:
@@ -6149,8 +6149,8 @@ class DrvrSeatSwtInclSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtSelnOfSpplFctSts:
@@ -6172,8 +6172,8 @@ class DrvrSeatSwtSelnOfSpplFctSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrSeatSwtSldSts:
@@ -6195,8 +6195,8 @@ class DrvrSeatSwtSldSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DrvrWLoadLvl:
@@ -6219,8 +6219,8 @@ class DrvrWLoadLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DstLong:
@@ -6242,8 +6242,8 @@ class DstLong:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -6279,8 +6279,8 @@ class DstNotifSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class DstSho:
@@ -6303,8 +6303,8 @@ class DstSho:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->2000
@@ -6332,9 +6332,9 @@ class DstToEmpty:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m,  Range:0->4000
@@ -6362,9 +6362,9 @@ class DstToManvInDstToManvLocn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: km,  Range:0->32000
@@ -6392,9 +6392,9 @@ class DstToSrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -6424,9 +6424,9 @@ class DstTrvld1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: km,  Range:0->9999.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )
@@ -6456,9 +6456,9 @@ class DstTrvld2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m,  Range:0->255
@@ -6486,9 +6486,9 @@ class DstTrvldHiResl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Milg,  Range:0->1000000
@@ -6516,9 +6516,9 @@ class DstTrvldMst2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class DstUnit:
@@ -6539,8 +6539,8 @@ class DstUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -6579,8 +6579,8 @@ class EasyInOutDrvrSeatAdjmtPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class EasyInOutDrvrSeatAdjmtSts:
@@ -6601,8 +6601,8 @@ class EasyInOutDrvrSeatAdjmtSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
@@ -6630,9 +6630,9 @@ class EgyLvlElecMai:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6660,9 +6660,9 @@ class EgyLvlElecSubtyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class EgySave:
@@ -6683,8 +6683,8 @@ class EgySave:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class EmgyAsscSts:
@@ -6708,8 +6708,8 @@ class EmgyAsscSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -6745,8 +6745,8 @@ class EmgyVehWarnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class EngCooltIndcnReq:
@@ -6775,8 +6775,8 @@ class EngCooltIndcnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0= High fluid level
@@ -6799,8 +6799,8 @@ class EngCooltLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
@@ -6830,9 +6830,9 @@ class EngFuCns:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
@@ -6862,9 +6862,9 @@ class EngFuCnsFild:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hours,  Range:0->2000
@@ -6892,9 +6892,9 @@ class EngHrToSrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: rpm,  Range:0->16383, Resolution: (0.5*x+0.0, raw is unsigned, 15 bits )
@@ -6924,9 +6924,9 @@ class EngN:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -6954,9 +6954,9 @@ class EngNChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -6984,9 +6984,9 @@ class EngNCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: RpmPerSec,  Range:-30000->30000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -7016,9 +7016,9 @@ class EngNSafeEngNGrdt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: %,  Range:0->120, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -7048,9 +7048,9 @@ class EngOilLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Engine oil level warning information
@@ -7076,8 +7076,8 @@ class EngOilLvlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Engine oil pressure warning information
@@ -7099,8 +7099,8 @@ class EngOilPWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rpm,  Range:0->16383.5, Resolution: (0.5*x+0.0, raw is unsigned, 0 bits )
@@ -7130,9 +7130,9 @@ class EngSpdDispd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # PLILJESS:
@@ -7156,8 +7156,8 @@ class EngStrtStopSetg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class EpbLampReq:
@@ -7180,8 +7180,8 @@ class EpbLampReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -7211,9 +7211,9 @@ class EpbLampReqChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 4 bits )
@@ -7243,9 +7243,9 @@ class EpbLampReqCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Information on activation/ deactivation of Electronic Stability Control (ESC)
@@ -7270,8 +7270,8 @@ class EscSt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -7299,9 +7299,9 @@ class EscStChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -7329,9 +7329,9 @@ class EscStCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class EscWarnIndcnReq:
@@ -7354,8 +7354,8 @@ class EscWarnIndcnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -7383,9 +7383,9 @@ class EscWarnIndcnReqChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -7413,9 +7413,9 @@ class EscWarnIndcnReqCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -7454,8 +7454,8 @@ class ExtrMirrFoldSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ExtrMirrFoldSetgSts:
@@ -7476,8 +7476,8 @@ class ExtrMirrFoldSetgSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -7516,8 +7516,8 @@ class ExtrMirrTiltSetg2IdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # PLILJESS:
@@ -7541,8 +7541,8 @@ class ExtrMirrTiltSetg2MirrDrvr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # PLILJESS:
@@ -7566,8 +7566,8 @@ class ExtrMirrTiltSetg2MirrPass:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
@@ -7590,8 +7590,8 @@ class FanForCmptmtTRunng:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
@@ -7614,8 +7614,8 @@ class FanForCmptmtTRunng:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltEgyCnsWdSts:
@@ -7636,8 +7636,8 @@ class FltEgyCnsWdSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltIndcrTurnLeFrnt:
@@ -7658,8 +7658,8 @@ class FltIndcrTurnLeFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltIndcrTurnLeRe:
@@ -7680,8 +7680,8 @@ class FltIndcrTurnLeRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltIndcrTurnRiFrnt:
@@ -7702,8 +7702,8 @@ class FltIndcrTurnRiFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltIndcrTurnRiRe:
@@ -7724,8 +7724,8 @@ class FltIndcrTurnRiRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FltOfLiDaytiRunngRi:
@@ -7746,8 +7746,8 @@ class FltOfLiDaytiRunngRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
@@ -7775,9 +7775,9 @@ class FRNetworkStatus:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class FrntAxleWarn:
@@ -7800,8 +7800,8 @@ class FrntAxleWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FrntWiprLvrReq2FrntWiprLvrCmd1:
@@ -7825,8 +7825,8 @@ class FrntWiprLvrReq2FrntWiprLvrCmd1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->3
@@ -7854,9 +7854,9 @@ class FrntWiprLvrReq2FrntWiprLvrCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -7884,9 +7884,9 @@ class FrntWiprLvrReq2FrntWiprLvrCrc:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class FrntWiprLvrReq2FrntWiprLvrQf:
@@ -7909,8 +7909,8 @@ class FrntWiprLvrReq2FrntWiprLvrQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # LperHectoKiloM = L/100Km
@@ -7938,8 +7938,8 @@ class FuCnsUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FuHeatrActv:
@@ -7960,8 +7960,8 @@ class FuHeatrActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: MicroL,  Range:0->51000, Resolution: (200.0*x+0.0, raw is unsigned, 0 bits )
@@ -7991,9 +7991,9 @@ class FuHeatrFuCns1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Litre,  Range:0->1.27, Resolution: (0.01*x+0.0, raw is unsigned, 0 bits )
@@ -8023,9 +8023,9 @@ class FuHeatrFuCnsDurgCyc1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class FuLvlIndcdQly:
@@ -8048,8 +8048,8 @@ class FuLvlIndcdQly:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Litre,  Range:0->204.6, Resolution: (0.2*x+0.0, raw is unsigned, 10 bits )
@@ -8079,9 +8079,9 @@ class FuLvlIndcdVal:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class FuLvlLoIndcn:
@@ -8102,8 +8102,8 @@ class FuLvlLoIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class FuLvlLoWarn:
@@ -8124,8 +8124,8 @@ class FuLvlLoWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class GearIndcn:
@@ -8160,8 +8160,8 @@ class GearIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class GearShiftIndcn:
@@ -8184,8 +8184,8 @@ class GearShiftIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class GearTarIndcn:
@@ -8220,8 +8220,8 @@ class GearTarIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->102.3, Resolution: (0.1*x+0.0, raw is unsigned, 10 bits )
@@ -8251,9 +8251,9 @@ class GrdForFuEco:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class HdrestFoldReq2:
@@ -8277,9 +8277,9 @@ class HdrestFoldReq2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class HeatrDurgDrvgReqd:
@@ -8301,8 +8301,8 @@ class HeatrDurgDrvgReqd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HiQlyInTireCircumCalByNav:
@@ -8323,8 +8323,8 @@ class HiQlyInTireCircumCalByNav:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Interpretation:
@@ -8360,8 +8360,8 @@ class HmiCmptmtAirDistbnFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiCmptmtCoolgReq:
@@ -8382,8 +8382,8 @@ class HmiCmptmtCoolgReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -8413,9 +8413,9 @@ class HmiCmptmtTSpForRowFirstLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -8445,9 +8445,9 @@ class HmiCmptmtTSpForRowFirstRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -8477,9 +8477,9 @@ class HmiCmptmtTSpForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -8509,9 +8509,9 @@ class HmiCmptmtTSpForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class HmiCmptmtTSpSpclForRowFirstLe:
@@ -8533,8 +8533,8 @@ class HmiCmptmtTSpSpclForRowFirstLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowFirstRi:
@@ -8556,8 +8556,8 @@ class HmiCmptmtTSpSpclForRowFirstRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowSecLe:
@@ -8579,8 +8579,8 @@ class HmiCmptmtTSpSpclForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiCmptmtTSpSpclForRowSecRi:
@@ -8602,8 +8602,8 @@ class HmiCmptmtTSpSpclForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDefrstElecForMirrReq:
@@ -8625,8 +8625,8 @@ class HmiDefrstElecForMirrReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDefrstElecFrntReq:
@@ -8648,8 +8648,8 @@ class HmiDefrstElecFrntReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDefrstElecReReq:
@@ -8671,8 +8671,8 @@ class HmiDefrstElecReReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDefrstFrntSts:
@@ -8697,8 +8697,8 @@ class HmiDefrstFrntSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDefrstMaxReq:
@@ -8720,8 +8720,8 @@ class HmiDefrstMaxReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiDfrstReSts:
@@ -8746,8 +8746,8 @@ class HmiDfrstReSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiHvacFanLvlFrnt:
@@ -8781,8 +8781,8 @@ class HmiHvacFanLvlFrnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiHvacFanLvlRe:
@@ -8816,8 +8816,8 @@ class HmiHvacFanLvlRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Interpretation:
@@ -8846,8 +8846,8 @@ class HmiHvacRecircCmd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiHvacReCtrl:
@@ -8869,8 +8869,8 @@ class HmiHvacReCtrl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiMirrDefrstSts:
@@ -8895,8 +8895,8 @@ class HmiMirrDefrstSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatClimaExtdHmiSeatVentnForRowSecLe:
@@ -8919,8 +8919,8 @@ class HmiSeatClimaExtdHmiSeatVentnForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatClimaExtdHmiSeatVentnForRowSecRi:
@@ -8943,8 +8943,8 @@ class HmiSeatClimaExtdHmiSeatVentnForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatHeatgForRowFirstLe:
@@ -8967,8 +8967,8 @@ class HmiSeatHeatgForRowFirstLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatHeatgForRowFirstRi:
@@ -8991,8 +8991,8 @@ class HmiSeatHeatgForRowFirstRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatHeatgForRowSecLe:
@@ -9015,8 +9015,8 @@ class HmiSeatHeatgForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatHeatgForRowSecRi:
@@ -9039,8 +9039,8 @@ class HmiSeatHeatgForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatVentnForRowFirstLe:
@@ -9063,8 +9063,8 @@ class HmiSeatVentnForRowFirstLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HmiSeatVentnForRowFirstRi:
@@ -9087,8 +9087,8 @@ class HmiSeatVentnForRowFirstRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -9111,8 +9111,8 @@ class HoodSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: hours,  Range:0->23
@@ -9140,9 +9140,9 @@ class Hr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hours,  Range:0->23
@@ -9170,9 +9170,9 @@ class Hr1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -9211,8 +9211,8 @@ class HudActvReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudActvReqSts:
@@ -9233,8 +9233,8 @@ class HudActvReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudActvSts:
@@ -9255,8 +9255,8 @@ class HudActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudAdjmtReq:
@@ -9277,8 +9277,8 @@ class HudAdjmtReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudDiagcHudCircShoSts:
@@ -9299,8 +9299,8 @@ class HudDiagcHudCircShoSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudDiagcHudCricOpenSts:
@@ -9321,8 +9321,8 @@ class HudDiagcHudCricOpenSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudDiagcHudTSts:
@@ -9343,8 +9343,8 @@ class HudDiagcHudTSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudDiagcImgHudErrSts:
@@ -9365,8 +9365,8 @@ class HudDiagcImgHudErrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudDiagcImgHudTmpNotAvlSts:
@@ -9387,8 +9387,8 @@ class HudDiagcImgHudTmpNotAvlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudErgoSetgReq:
@@ -9409,8 +9409,8 @@ class HudErgoSetgReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudSts:
@@ -9436,8 +9436,8 @@ class HudSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct00:
@@ -9458,8 +9458,8 @@ class HudVisFctSetgHudFct00:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct01:
@@ -9480,8 +9480,8 @@ class HudVisFctSetgHudFct01:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct02:
@@ -9502,8 +9502,8 @@ class HudVisFctSetgHudFct02:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct03:
@@ -9524,8 +9524,8 @@ class HudVisFctSetgHudFct03:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct04:
@@ -9546,8 +9546,8 @@ class HudVisFctSetgHudFct04:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct05:
@@ -9568,8 +9568,8 @@ class HudVisFctSetgHudFct05:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct06:
@@ -9590,8 +9590,8 @@ class HudVisFctSetgHudFct06:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct07:
@@ -9612,8 +9612,8 @@ class HudVisFctSetgHudFct07:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct08:
@@ -9634,8 +9634,8 @@ class HudVisFctSetgHudFct08:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct09:
@@ -9656,8 +9656,8 @@ class HudVisFctSetgHudFct09:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct10:
@@ -9678,8 +9678,8 @@ class HudVisFctSetgHudFct10:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct11:
@@ -9700,8 +9700,8 @@ class HudVisFctSetgHudFct11:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct12:
@@ -9722,8 +9722,8 @@ class HudVisFctSetgHudFct12:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct13:
@@ -9744,8 +9744,8 @@ class HudVisFctSetgHudFct13:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct14:
@@ -9766,8 +9766,8 @@ class HudVisFctSetgHudFct14:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct15:
@@ -9788,8 +9788,8 @@ class HudVisFctSetgHudFct15:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct16:
@@ -9810,8 +9810,8 @@ class HudVisFctSetgHudFct16:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct17:
@@ -9832,8 +9832,8 @@ class HudVisFctSetgHudFct17:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct18:
@@ -9854,8 +9854,8 @@ class HudVisFctSetgHudFct18:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class HudVisFctSetgHudFct19:
@@ -9876,8 +9876,8 @@ class HudVisFctSetgHudFct19:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -9916,8 +9916,8 @@ class HudVisFctSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Kg / h,  Range:0->1000, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
@@ -9947,9 +9947,9 @@ class HvacAirMFlowEstimd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class HznRstExtd:
@@ -9973,9 +9973,9 @@ class HznRstExtd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -10011,8 +10011,8 @@ class HzrdLiWarnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10051,8 +10051,8 @@ class IdPenForUnits:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IndcnOfParkAssiSts:
@@ -10073,8 +10073,8 @@ class IndcnOfParkAssiSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IndcnOfPrkgAutSts:
@@ -10098,8 +10098,8 @@ class IndcnOfPrkgAutSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # DateFmt1 = YMD
@@ -10125,8 +10125,8 @@ class IndcnUnitDateFmt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IndcrDisp1WdSts:
@@ -10149,8 +10149,8 @@ class IndcrDisp1WdSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IndcrTurnSts1WdSts:
@@ -10173,8 +10173,8 @@ class IndcrTurnSts1WdSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
@@ -10202,9 +10202,9 @@ class IniValSigCfgIDBackboneFR:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -10232,9 +10232,9 @@ class IntrBriSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class IntrLiAmbLiSetgForLiInten:
@@ -10256,8 +10256,8 @@ class IntrLiAmbLiSetgForLiInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Amibiance LIgt color setting:
@@ -10289,8 +10289,8 @@ class IntrLiAmbLiSetgForLiTintg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10329,8 +10329,8 @@ class IntrLiAmbLiSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IntrLiSurrndgsLiSetgForLiInten:
@@ -10352,8 +10352,8 @@ class IntrLiSurrndgsLiSetgForLiInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0 = Full
@@ -10376,8 +10376,8 @@ class IntrLiSurrndgsLiSetgForLiLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10416,8 +10416,8 @@ class IntrLiSurrndgsLiSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10456,8 +10456,8 @@ class IntrMirrTintgSetgPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class IntrMirrTintgSetgSts:
@@ -10480,8 +10480,8 @@ class IntrMirrTintgSetgSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Warning status	                                
@@ -10505,8 +10505,8 @@ class iTPMSCalPsbl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Calibration status
@@ -10533,8 +10533,8 @@ class iTPMSCalSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # iTPMS system status and warnings
@@ -10562,8 +10562,8 @@ class iTPMSTirePMSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class KeyLostWarnIndcn:
@@ -10585,8 +10585,8 @@ class KeyLostWarnIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10625,8 +10625,8 @@ class KeyProfMpgUpdForIdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class KeyProfMpgUpdKeyProfMpgUpdOff:
@@ -10650,9 +10650,9 @@ class KeyProfMpgUpdKeyProfMpgUpdOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Data-Type for Key Search Location
@@ -10693,8 +10693,8 @@ class KeyReadReqFromSetgMgr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class KeyReadStsToProfCtrlBoolean:
@@ -10718,9 +10718,9 @@ class KeyReadStsToProfCtrlBoolean:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class KeyReadStsToProfCtrlKeyId:
@@ -10751,8 +10751,8 @@ class KeyReadStsToProfCtrlKeyId:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class KeyRmnIndcn:
@@ -10773,8 +10773,8 @@ class KeyRmnIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class KeySpdWarn:
@@ -10795,8 +10795,8 @@ class KeySpdWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Used be Connected service booking to inform Driver information about the current status of a service booking.
@@ -10820,8 +10820,8 @@ class LampSuppSrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -10860,8 +10860,8 @@ class LaneChgWarnActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LaneChgWarnActvSts:
@@ -10882,8 +10882,8 @@ class LaneChgWarnActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -10919,8 +10919,8 @@ class LaneChgWarnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -10948,8 +10948,8 @@ class LaneDetnStsForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -10977,8 +10977,8 @@ class LaneDetnStsForLaneKeepAid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11017,8 +11017,8 @@ class LaneKeepAidActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LaneKeepAidActvSts:
@@ -11039,8 +11039,8 @@ class LaneKeepAidActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -11076,8 +11076,8 @@ class LaneKeepAidSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LatMovmtWarn:
@@ -11099,8 +11099,8 @@ class LatMovmtWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LcmaOn1:
@@ -11123,8 +11123,8 @@ class LcmaOn1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11163,8 +11163,8 @@ class LiAdpvReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiAdpvReqSts:
@@ -11185,8 +11185,8 @@ class LiAdpvReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11225,8 +11225,8 @@ class LiAutTranReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # SntvyLo = Sensitivity Low, light transition happens later
@@ -11252,8 +11252,8 @@ class LiAutTranReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11292,8 +11292,8 @@ class LiBeamHiAuxReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiBeamHiAuxReqSts:
@@ -11314,8 +11314,8 @@ class LiBeamHiAuxReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11354,8 +11354,8 @@ class LiCornrgReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiCornrgReqSts:
@@ -11376,8 +11376,8 @@ class LiCornrgReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11416,8 +11416,8 @@ class LiDaytiRunngReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiDaytiRunngReqSts:
@@ -11438,8 +11438,8 @@ class LiDaytiRunngReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiDrvrFltIndcrTurn:
@@ -11460,8 +11460,8 @@ class LiDrvrFltIndcrTurn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11500,8 +11500,8 @@ class LiExtReq1WdReq5IdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiExtReq1WdReq5SlowNormFast:
@@ -11524,8 +11524,8 @@ class LiExtReq1WdReq5SlowNormFast:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11564,8 +11564,8 @@ class LiHomeLvngReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiHomeLvngReqSts:
@@ -11586,8 +11586,8 @@ class LiHomeLvngReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11626,8 +11626,8 @@ class LiHomeSafeReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Enumeration for intervals in tenths of seconds.
@@ -11666,8 +11666,8 @@ class LiHomeSafeReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiLvrSwt1:
@@ -11688,8 +11688,8 @@ class LiLvrSwt1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiPassFltIndcrTurn:
@@ -11710,8 +11710,8 @@ class LiPassFltIndcrTurn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11750,8 +11750,8 @@ class LiSeldForDrvrPfmncMonPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LiSeldForDrvrPfmncMonSts:
@@ -11772,8 +11772,8 @@ class LiSeldForDrvrPfmncMonSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # TrfcSideTmpLe = Traffic Side Temporary Left. Vehicle drives on left side of road
@@ -11798,8 +11798,8 @@ class LiTrfcSideReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgCenStsForUsrFb:
@@ -11823,8 +11823,8 @@ class LockgCenStsForUsrFb:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgCenStsLockSt:
@@ -11847,8 +11847,8 @@ class LockgCenStsLockSt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgCenStsUpdEve:
@@ -11872,9 +11872,9 @@ class LockgCenStsUpdEve:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class LockgCenTrigSrc:
@@ -11902,8 +11902,8 @@ class LockgCenTrigSrc:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -11942,8 +11942,8 @@ class LockgFbSoundReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgFbSoundReqSts:
@@ -11964,8 +11964,8 @@ class LockgFbSoundReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -12004,8 +12004,8 @@ class LockgFbVisReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgFbVisReqSts:
@@ -12026,8 +12026,8 @@ class LockgFbVisReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgPrsnlReqFromHmi:
@@ -12049,8 +12049,8 @@ class LockgPrsnlReqFromHmi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockgPrsnlSts:
@@ -12071,8 +12071,8 @@ class LockgPrsnlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -12111,8 +12111,8 @@ class LockSpdReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LockSpdReqSts:
@@ -12133,8 +12133,8 @@ class LockSpdReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class LvlOfClimaCmft:
@@ -12161,8 +12161,8 @@ class LvlOfClimaCmft:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MassgFctActvDrvrMassgFctActv:
@@ -12183,8 +12183,8 @@ class MassgFctActvDrvrMassgFctActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MassgFctActvPassMassgFctActv:
@@ -12205,8 +12205,8 @@ class MassgFctActvPassMassgFctActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MemBtnSound:
@@ -12230,9 +12230,9 @@ class MemBtnSound:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -12260,9 +12260,9 @@ class Mins:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -12290,9 +12290,9 @@ class Mins1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class MirrDwnStsAtDrvr:
@@ -12316,8 +12316,8 @@ class MirrDwnStsAtDrvr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MirrDwnStsAtPass:
@@ -12341,8 +12341,8 @@ class MirrDwnStsAtPass:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MirrFoldStsAtDrvr:
@@ -12366,8 +12366,8 @@ class MirrFoldStsAtDrvr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MirrFoldStsAtPass:
@@ -12391,8 +12391,8 @@ class MirrFoldStsAtPass:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MmedHmiModStd:
@@ -12415,8 +12415,8 @@ class MmedHmiModStd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class MmedMaiPwrMod:
@@ -12439,8 +12439,8 @@ class MmedMaiPwrMod:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
@@ -12468,9 +12468,9 @@ class MstCfgIDBackboneFR:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Month,  Range:1->12
@@ -12498,9 +12498,9 @@ class Mth:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Month,  Range:1->12
@@ -12528,9 +12528,9 @@ class Mth1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NetCtrlrActvtPrio:
@@ -12551,8 +12551,8 @@ class NetCtrlrActvtPrio:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -12580,9 +12580,9 @@ class NetCtrlrActvtResourceGroup:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NetHdActvtPrio:
@@ -12603,8 +12603,8 @@ class NetHdActvtPrio:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -12632,9 +12632,9 @@ class NetHdActvtResourceGroup:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NetTelmActvtPrio:
@@ -12655,8 +12655,8 @@ class NetTelmActvtPrio:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -12684,9 +12684,9 @@ class NetTelmActvtResourceGroup:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NewTripCdn:
@@ -12707,8 +12707,8 @@ class NewTripCdn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class NoEntryWarnReq:
@@ -12729,8 +12729,8 @@ class NoEntryWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->31
@@ -12758,9 +12758,9 @@ class NoOfSatltForSysNo1InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -12788,9 +12788,9 @@ class NoOfSatltForSysNo2InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -12818,9 +12818,9 @@ class NoOfSatltForSysNo3InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -12848,9 +12848,9 @@ class NoOfSatltForSysNo4InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -12878,9 +12878,9 @@ class NoOfSatltForSysNo5InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -12908,9 +12908,9 @@ class NoOfSatltForSysNo6InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NoSoundSys:
@@ -12934,9 +12934,9 @@ class NoSoundSys:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -12964,9 +12964,9 @@ class NotifChkDistbn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->7
@@ -12994,9 +12994,9 @@ class NrOfBltAppld:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class NrOfKeyAvl:
@@ -13020,9 +13020,9 @@ class NrOfKeyAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13050,9 +13050,9 @@ class NrSerlDMSMNr1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13080,9 +13080,9 @@ class NrSerlDMSMNr2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13110,9 +13110,9 @@ class NrSerlDMSMNr3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13140,9 +13140,9 @@ class NrSerlDMSMNr4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class OffsForDrvrSpprtFctActvSts:
@@ -13163,8 +13163,8 @@ class OffsForDrvrSpprtFctActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfAudSideWarn:
@@ -13187,8 +13187,8 @@ class ParkAssiDstFrntOfAudSideWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfAudWarnDir:
@@ -13214,8 +13214,8 @@ class ParkAssiDstFrntOfAudWarnDir:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrInsdRi:
@@ -13266,8 +13266,8 @@ class ParkAssiDstFrntOfDstOfSnsrInsdRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrLeSide:
@@ -13318,8 +13318,8 @@ class ParkAssiDstFrntOfDstOfSnsrLeSide:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrOutdRi:
@@ -13370,8 +13370,8 @@ class ParkAssiDstFrntOfDstOfSnsrOutdRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfDstOfSnsrRiSide:
@@ -13422,8 +13422,8 @@ class ParkAssiDstFrntOfDstOfSnsrRiSide:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfSnsrInsdLe:
@@ -13474,8 +13474,8 @@ class ParkAssiDstFrntOfSnsrInsdLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstFrntOfSnsrOutdLe:
@@ -13526,8 +13526,8 @@ class ParkAssiDstFrntOfSnsrOutdLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfAudSideWarn:
@@ -13550,8 +13550,8 @@ class ParkAssiDstReOfAudSideWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfAudWarnDir:
@@ -13577,8 +13577,8 @@ class ParkAssiDstReOfAudWarnDir:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrInsdLe:
@@ -13629,8 +13629,8 @@ class ParkAssiDstReOfDstOfSnsrInsdLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrInsdRi:
@@ -13681,8 +13681,8 @@ class ParkAssiDstReOfDstOfSnsrInsdRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrLeSide:
@@ -13733,8 +13733,8 @@ class ParkAssiDstReOfDstOfSnsrLeSide:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrOutdLe:
@@ -13785,8 +13785,8 @@ class ParkAssiDstReOfDstOfSnsrOutdLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrOutdRi:
@@ -13837,8 +13837,8 @@ class ParkAssiDstReOfDstOfSnsrOutdRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ParkAssiDstReOfDstOfSnsrRiSide:
@@ -13889,8 +13889,8 @@ class ParkAssiDstReOfDstOfSnsrRiSide:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -13918,9 +13918,9 @@ class PartNrDMSMEndSgn1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13948,9 +13948,9 @@ class PartNrDMSMEndSgn2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -13978,9 +13978,9 @@ class PartNrDMSMEndSgn3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -14008,9 +14008,9 @@ class PartNrDMSMNr1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -14038,9 +14038,9 @@ class PartNrDMSMNr2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -14068,9 +14068,9 @@ class PartNrDMSMNr3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -14098,9 +14098,9 @@ class PartNrDMSMNr4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PasAlrmDeactvnReq:
@@ -14121,8 +14121,8 @@ class PasAlrmDeactvnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PasAlrmSts:
@@ -14143,8 +14143,8 @@ class PasAlrmSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassMassgRunng:
@@ -14165,8 +14165,8 @@ class PassMassgRunng:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatActvSpplFct:
@@ -14191,8 +14191,8 @@ class PassSeatActvSpplFct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatDispMassgFctMassgInten:
@@ -14214,8 +14214,8 @@ class PassSeatDispMassgFctMassgInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatDispMassgFctMassgProg:
@@ -14239,8 +14239,8 @@ class PassSeatDispMassgFctMassgProg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatDispMassgFctMassgSpdLvl:
@@ -14262,8 +14262,8 @@ class PassSeatDispMassgFctMassgSpdLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatDispMassgFctOnOff:
@@ -14284,8 +14284,8 @@ class PassSeatDispMassgFctOnOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatDispSpplFct:
@@ -14310,8 +14310,8 @@ class PassSeatDispSpplFct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatMassgFctMassgInten:
@@ -14333,8 +14333,8 @@ class PassSeatMassgFctMassgInten:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatMassgFctMassgProg:
@@ -14358,8 +14358,8 @@ class PassSeatMassgFctMassgProg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatMassgFctMassgSpdLvl:
@@ -14381,8 +14381,8 @@ class PassSeatMassgFctMassgSpdLvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatMassgFctOnOff:
@@ -14403,8 +14403,8 @@ class PassSeatMassgFctOnOff:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSts:
@@ -14427,8 +14427,8 @@ class PassSeatSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctHozlSts:
@@ -14450,8 +14450,8 @@ class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctHozlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctVerSts:
@@ -14473,8 +14473,8 @@ class PassSeatSwtSts2PassSeatSwtAdjmtOfSpplFctVerSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtHeiFrntSts:
@@ -14496,8 +14496,8 @@ class PassSeatSwtSts2PassSeatSwtHeiFrntSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtHeiSts:
@@ -14519,8 +14519,8 @@ class PassSeatSwtSts2PassSeatSwtHeiSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtInclSts:
@@ -14542,8 +14542,8 @@ class PassSeatSwtSts2PassSeatSwtInclSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtSelnOfSpplFctStsSts:
@@ -14565,8 +14565,8 @@ class PassSeatSwtSts2PassSeatSwtSelnOfSpplFctStsSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PassSeatSwtSts2PassSeatSwtSldSts:
@@ -14588,8 +14588,8 @@ class PassSeatSwtSts2PassSeatSwtSldSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )
@@ -14619,9 +14619,9 @@ class PinionSteerAg1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PinionSteerAg1Qf:
@@ -14644,8 +14644,8 @@ class PinionSteerAg1Qf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 16 bits )
@@ -14675,9 +14675,9 @@ class PosnAltiInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 16 bits )
@@ -14707,9 +14707,9 @@ class PosnDirInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 30 bits )
@@ -14739,9 +14739,9 @@ class PosnLatInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 31 bits )
@@ -14771,9 +14771,9 @@ class PosnLgtInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PosnQlyInDstToManvLocn:
@@ -14800,8 +14800,8 @@ class PosnQlyInDstToManvLocn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )
@@ -14831,9 +14831,9 @@ class PosnSpdInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )
@@ -14863,9 +14863,9 @@ class PosnVHozlInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:-100->100, Resolution: (0.001*x+0.0, raw is signed, 18 bits )
@@ -14895,9 +14895,9 @@ class PosnVVertInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PostDrvgClimaAvl:
@@ -14918,8 +14918,8 @@ class PostDrvgClimaAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PreClngNotif:
@@ -14946,8 +14946,8 @@ class PreClngNotif:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -14977,9 +14977,9 @@ class PreHozlDilInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -15009,9 +15009,9 @@ class PrePosnDilInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -15041,9 +15041,9 @@ class PreTiDilInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->25.5, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -15073,9 +15073,9 @@ class PreVertDilInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PrkgAssiFailr:
@@ -15098,8 +15098,8 @@ class PrkgAssiFailr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrkgAssiManvActvSts:
@@ -15120,8 +15120,8 @@ class PrkgAssiManvActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->63
@@ -15149,9 +15149,9 @@ class PrkgAssiManvProgs:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class PrkgAssiSts:
@@ -15186,8 +15186,8 @@ class PrkgAssiSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrkgAutSts:
@@ -15283,8 +15283,8 @@ class PrkgAutSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -15320,8 +15320,8 @@ class PrkgCamSysAvlSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrkgTypVld:
@@ -15344,8 +15344,8 @@ class PrkgTypVld:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ProfActProf1:
@@ -15369,9 +15369,9 @@ class ProfActProf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf10:
@@ -15395,9 +15395,9 @@ class ProfActProf10:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf11:
@@ -15421,9 +15421,9 @@ class ProfActProf11:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf12:
@@ -15447,9 +15447,9 @@ class ProfActProf12:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf2:
@@ -15473,9 +15473,9 @@ class ProfActProf2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf3:
@@ -15499,9 +15499,9 @@ class ProfActProf3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf4:
@@ -15525,9 +15525,9 @@ class ProfActProf4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf5:
@@ -15551,9 +15551,9 @@ class ProfActProf5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf6:
@@ -15577,9 +15577,9 @@ class ProfActProf6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf7:
@@ -15603,9 +15603,9 @@ class ProfActProf7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf8:
@@ -15629,9 +15629,9 @@ class ProfActProf8:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfActProf9:
@@ -15655,9 +15655,9 @@ class ProfActProf9:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -15696,8 +15696,8 @@ class ProfChg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ProfLimdProf1:
@@ -15721,9 +15721,9 @@ class ProfLimdProf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf10:
@@ -15747,9 +15747,9 @@ class ProfLimdProf10:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf11:
@@ -15773,9 +15773,9 @@ class ProfLimdProf11:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf12:
@@ -15799,9 +15799,9 @@ class ProfLimdProf12:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf2:
@@ -15825,9 +15825,9 @@ class ProfLimdProf2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf3:
@@ -15851,9 +15851,9 @@ class ProfLimdProf3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf4:
@@ -15877,9 +15877,9 @@ class ProfLimdProf4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf5:
@@ -15903,9 +15903,9 @@ class ProfLimdProf5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf6:
@@ -15929,9 +15929,9 @@ class ProfLimdProf6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf7:
@@ -15955,9 +15955,9 @@ class ProfLimdProf7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf8:
@@ -15981,9 +15981,9 @@ class ProfLimdProf8:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class ProfLimdProf9:
@@ -16007,9 +16007,9 @@ class ProfLimdProf9:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -16048,8 +16048,8 @@ class ProfPenSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Propulsion HV Battery usage mode type
@@ -16077,8 +16077,8 @@ class PrpsnHvBattUsgModAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Propulsion HV Battery usage mode type
@@ -16106,8 +16106,8 @@ class PrpsnHvBattUsgModReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrpsnHvBattUsgOfChrgBlkd:
@@ -16131,9 +16131,9 @@ class PrpsnHvBattUsgOfChrgBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # HV battery usage function blocked types
@@ -16157,8 +16157,8 @@ class PrpsnHvBattUsgOfChrgBlkd2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrpsnHvBattUsgOfHldBlkd:
@@ -16182,9 +16182,9 @@ class PrpsnHvBattUsgOfHldBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # HV battery usage function blocked types
@@ -16208,8 +16208,8 @@ class PrpsnHvBattUsgOfHldBlkd2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PrpsnHvBattUsgOfHldSmtBlkd:
@@ -16233,9 +16233,9 @@ class PrpsnHvBattUsgOfHldSmtBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # HV battery usage function blocked types
@@ -16259,8 +16259,8 @@ class PrpsnHvBattUsgOfHldSmtBlkd2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Km/h,  Range:0->150
@@ -16288,9 +16288,9 @@ class PrpsnHvBattUsgOfHldSpd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Basic type list
@@ -16319,8 +16319,8 @@ class PrpsnModElecDrvBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Basic type list
@@ -16349,8 +16349,8 @@ class PrpsnModOffroadBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Basic type list
@@ -16379,8 +16379,8 @@ class PrpsnModOfSaveBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Basic type list
@@ -16409,8 +16409,8 @@ class PrpsnModOfTracBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Basic type list
@@ -16439,8 +16439,8 @@ class PrpsnModSptBlkd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
@@ -16470,9 +16470,9 @@ class PtCluTqPtCluTq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
@@ -16502,9 +16502,9 @@ class PtCluTqPtCluTqDyn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # General DATA-TYPE to indicate quality. Each quality deviation value, De0-De7, shall be specified on the DATA-ELEMENT using this DATA-TYPE.
@@ -16532,8 +16532,8 @@ class PtCluTqPtCluTqQly:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PtGearTar:
@@ -16568,8 +16568,8 @@ class PtGearTar:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -16599,9 +16599,9 @@ class PtTqAtAxleFrntAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -16631,9 +16631,9 @@ class PtTqAtWhlFrntLeAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: NewtonMeter,  Range:-20000->20000, Resolution: (1.0*x+0.0, raw is signed, 16 bits )
@@ -16663,9 +16663,9 @@ class PtTqAtWhlFrntRiAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # General DATA-TYPE to indicate quality. Each quality deviation value, De0-De7, shall be specified on the DATA-ELEMENT using this DATA-TYPE.
@@ -16693,8 +16693,8 @@ class PtTqAtWhlsFrntQly:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PUnit:
@@ -16718,8 +16718,8 @@ class PUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class PwrChrgDetdForPrkgHeatrElec:
@@ -16743,9 +16743,9 @@ class PwrChrgDetdForPrkgHeatrElec:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -16773,9 +16773,9 @@ class PwrLvlElecMai:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -16803,9 +16803,9 @@ class PwrLvlElecSubtyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Status of power supply components
@@ -16840,8 +16840,8 @@ class PwrSplyErrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -16880,8 +16880,8 @@ class RainSenMemdReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RainSenMemdReqSts:
@@ -16902,8 +16902,8 @@ class RainSenMemdReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class ReAxleWarn:
@@ -16926,8 +16926,8 @@ class ReAxleWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RmnLockgPrsnlReq:
@@ -16948,8 +16948,8 @@ class RmnLockgPrsnlReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -16988,8 +16988,8 @@ class RngbdIllmnCmdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # For running board illumination setting value
@@ -17013,8 +17013,8 @@ class RngbdIllmnCmdSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -17053,8 +17053,8 @@ class RoadFricIndcnActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RoadFricIndcnActvSts:
@@ -17075,8 +17075,8 @@ class RoadFricIndcnActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -17112,8 +17112,8 @@ class RoadFricIndcnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -17139,8 +17139,8 @@ class RoadFricWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -17179,8 +17179,8 @@ class RoadSgnInfoActvPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RoadSgnInfoActvSts:
@@ -17201,8 +17201,8 @@ class RoadSgnInfoActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -17238,8 +17238,8 @@ class RoadSgnInfoSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RoadSpdLimActvSts:
@@ -17260,8 +17260,8 @@ class RoadSpdLimActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -17297,8 +17297,8 @@ class RoadUsrProtnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )
@@ -17328,9 +17328,9 @@ class RollRate1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class RollRate1Qf1:
@@ -17353,8 +17353,8 @@ class RollRate1Qf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Signal for CCSM rotary knob
@@ -17378,8 +17378,8 @@ class RotyDirReq1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RotyDirReq2:
@@ -17402,8 +17402,8 @@ class RotyDirReq2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->31
@@ -17431,9 +17431,9 @@ class RotyPosReq1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->31
@@ -17461,9 +17461,9 @@ class RotyPosReq2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class RsdsSysStsLeCtraSts:
@@ -17484,8 +17484,8 @@ class RsdsSysStsLeCtraSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeCtraSts1:
@@ -17506,8 +17506,8 @@ class RsdsSysStsLeCtraSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeLcmaSts:
@@ -17528,8 +17528,8 @@ class RsdsSysStsLeLcmaSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeLcmaSts1:
@@ -17550,8 +17550,8 @@ class RsdsSysStsLeLcmaSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeRcmSts:
@@ -17572,8 +17572,8 @@ class RsdsSysStsLeRcmSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeRcwSts:
@@ -17594,8 +17594,8 @@ class RsdsSysStsLeRcwSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsLeRsdsSts:
@@ -17622,8 +17622,8 @@ class RsdsSysStsLeRsdsSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiCtraSts:
@@ -17644,8 +17644,8 @@ class RsdsSysStsRiCtraSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiCtraSts1:
@@ -17666,8 +17666,8 @@ class RsdsSysStsRiCtraSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiLcmaSts:
@@ -17688,8 +17688,8 @@ class RsdsSysStsRiLcmaSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiLcmaSts1:
@@ -17710,8 +17710,8 @@ class RsdsSysStsRiLcmaSts1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiRcmSts:
@@ -17732,8 +17732,8 @@ class RsdsSysStsRiRcmSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiRcwSts:
@@ -17754,8 +17754,8 @@ class RsdsSysStsRiRcwSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class RsdsSysStsRiRsdsSts:
@@ -17782,8 +17782,8 @@ class RsdsSysStsRiRsdsSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0: No navigation solution
@@ -17810,8 +17810,8 @@ class SatltPosnStsPrm1InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltPosnStsPrm2InPosnFromSatlt:
@@ -17835,9 +17835,9 @@ class SatltPosnStsPrm2InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SatltPosnStsPrm3InPosnFromSatlt:
@@ -17861,9 +17861,9 @@ class SatltPosnStsPrm3InPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SatltSysNo1InUseInPosnFromSatlt:
@@ -17884,8 +17884,8 @@ class SatltSysNo1InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltSysNo2InUseInPosnFromSatlt:
@@ -17906,8 +17906,8 @@ class SatltSysNo2InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltSysNo3InUseInPosnFromSatlt:
@@ -17928,8 +17928,8 @@ class SatltSysNo3InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltSysNo4InUseInPosnFromSatlt:
@@ -17950,8 +17950,8 @@ class SatltSysNo4InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltSysNo5InUseInPosnFromSatlt:
@@ -17972,8 +17972,8 @@ class SatltSysNo5InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SatltSysNo6InUseInPosnFromSatlt:
@@ -17994,8 +17994,8 @@ class SatltSysNo6InUseInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SaveSetgToMemPrmnt:
@@ -18017,8 +18017,8 @@ class SaveSetgToMemPrmnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: %,  Range:0->100, Resolution: (5.0*x+0.0, raw is unsigned, 0 bits )
@@ -18048,9 +18048,9 @@ class ScrBarVolIndcn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Litre,  Range:0->31
@@ -18078,9 +18078,9 @@ class ScrMaxFillgVol:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Litre,  Range:0->31
@@ -18108,9 +18108,9 @@ class ScrReagentTankVol:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SeatBackUnlckdThrdLe:
@@ -18134,9 +18134,9 @@ class SeatBackUnlckdThrdLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SeatBackUnlckdThrdRi:
@@ -18160,9 +18160,9 @@ class SeatBackUnlckdThrdRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SeatDispBtnPsdDrvrSeatDispBtnPsd:
@@ -18186,9 +18186,9 @@ class SeatDispBtnPsdDrvrSeatDispBtnPsd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SeatDispBtnPsdPassSeatDispBtnPsd:
@@ -18212,9 +18212,9 @@ class SeatDispBtnPsdPassSeatDispBtnPsd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SeatHeatDurgClimaEnad:
@@ -18237,8 +18237,8 @@ class SeatHeatDurgClimaEnad:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
@@ -18261,8 +18261,8 @@ class SeatHeatgAutCdn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SeatHeatLvlReqLe:
@@ -18285,8 +18285,8 @@ class SeatHeatLvlReqLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SeatHeatLvlReqRi:
@@ -18309,8 +18309,8 @@ class SeatHeatLvlReqRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SeatSwtLeSigThrd:
@@ -18332,8 +18332,8 @@ class SeatSwtLeSigThrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SeatSwtRiSigThrd:
@@ -18355,8 +18355,8 @@ class SeatSwtRiSigThrd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Flag	Gives the status of a flag to represent a boolean status (true or false)		0	Rst	Flag reset: Flag is not set (FALSE)
@@ -18379,8 +18379,8 @@ class SeatVentnAutCdn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: s,  Range:0->59
@@ -18408,9 +18408,9 @@ class Sec:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: s,  Range:0->59
@@ -18438,9 +18438,9 @@ class Sec1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -18479,8 +18479,8 @@ class SetOfLangIdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Uknw = Unknown
@@ -18575,8 +18575,8 @@ class SetOfLangLangTyp:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SftyCchAccActvnStsActv:
@@ -18597,8 +18597,8 @@ class SftyCchAccActvnStsActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
@@ -18626,9 +18626,9 @@ class SftyCchAccActvnStsDay:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -18656,9 +18656,9 @@ class SftyCchAccActvnStsMth:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -18686,9 +18686,9 @@ class SftyCchAccActvnStsYr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLaneKeepAidActvnStsActv:
@@ -18709,8 +18709,8 @@ class SftyCchLaneKeepAidActvnStsActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15
@@ -18738,9 +18738,9 @@ class SftyCchLaneKeepAidActvnStsDay:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -18768,9 +18768,9 @@ class SftyCchLaneKeepAidActvnStsMth:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -18798,9 +18798,9 @@ class SftyCchLaneKeepAidActvnStsYr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -18830,9 +18830,9 @@ class SftyCchLongTermIdxAttention:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLongTermIdxAttentionAvl:
@@ -18854,8 +18854,8 @@ class SftyCchLongTermIdxAttentionAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -18885,9 +18885,9 @@ class SftyCchLongTermIdxDstToVeh:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLongTermIdxDstToVehAvl:
@@ -18909,8 +18909,8 @@ class SftyCchLongTermIdxDstToVehAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -18940,9 +18940,9 @@ class SftyCchLongTermIdxKeepSpdLim:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLongTermIdxKeepSpdLimAvl:
@@ -18964,8 +18964,8 @@ class SftyCchLongTermIdxKeepSpdLimAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -18995,9 +18995,9 @@ class SftyCchLongTermIdxLaneKeep:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLongTermIdxLaneKeepAvl:
@@ -19019,8 +19019,8 @@ class SftyCchLongTermIdxLaneKeepAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -19050,9 +19050,9 @@ class SftyCchLongTermIdxTot:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SftyCchLongTermIdxTotAvl:
@@ -19074,8 +19074,8 @@ class SftyCchLongTermIdxTotAvl:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -19103,9 +19103,9 @@ class SftyWarnGroupFromAsySafeChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -19133,9 +19133,9 @@ class SftyWarnGroupFromAsySafeCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -19174,8 +19174,8 @@ class SpdAlrmActvForRoadSgnInfoPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpdAlrmActvForRoadSgnInfoSts:
@@ -19196,8 +19196,8 @@ class SpdAlrmActvForRoadSgnInfoSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -19236,8 +19236,8 @@ class SpdCameraInfoSeldForRoadSgnInfoPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpdCameraInfoSeldForRoadSgnInfoSts:
@@ -19258,8 +19258,8 @@ class SpdCameraInfoSeldForRoadSgnInfoSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpdLimAdpvSts:
@@ -19282,8 +19282,8 @@ class SpdLimAdpvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"			Description
@@ -19309,8 +19309,8 @@ class SpdLimWarnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpdUnit:
@@ -19332,8 +19332,8 @@ class SpdUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpdWarn:
@@ -19354,8 +19354,8 @@ class SpdWarn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpprtForFctInDstToManvLocn:
@@ -19376,8 +19376,8 @@ class SpprtForFctInDstToManvLocn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SpprtForFctInTireCircumCalByNav:
@@ -19398,8 +19398,8 @@ class SpprtForFctInTireCircumCalByNav:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SrvRst:
@@ -19420,8 +19420,8 @@ class SrvRst:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->15, Resolution: (1.0*x+0.0, raw is unsigned, 0 bits )
@@ -19451,9 +19451,9 @@ class SrvTrig:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Implementation Value Min	Implementation Value Max	Physical Value	Long name	Description
@@ -19481,8 +19481,8 @@ class SteerOvrdWarnReqForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SteerStsForAutDrv:
@@ -19506,8 +19506,8 @@ class SteerStsForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value		"Long name"				Description
@@ -19535,8 +19535,8 @@ class SteerWarnReqForAutDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SteerWarnReqForLaneKeepAid:
@@ -19558,8 +19558,8 @@ class SteerWarnReqForLaneKeepAid:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rad,  Range:-14.5->14.5, Resolution: (0.0009765625*x+0.0, raw is signed, 15 bits )
@@ -19589,9 +19589,9 @@ class SteerWhlAgSafe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: rad/s,  Range:-50->50, Resolution: (0.0078125*x+0.0, raw is signed, 14 bits )
@@ -19621,9 +19621,9 @@ class SteerWhlAgSpdSafe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SteerWhlHeatgDurgClimaEnad:
@@ -19644,8 +19644,8 @@ class SteerWhlHeatgDurgClimaEnad:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SteerWhlHeatgOnReq:
@@ -19668,8 +19668,8 @@ class SteerWhlHeatgOnReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SteerWhlHeatgStrtAutCdnOk:
@@ -19690,8 +19690,8 @@ class SteerWhlHeatgStrtAutCdnOk:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SteerWhlSnsrQf:
@@ -19714,8 +19714,8 @@ class SteerWhlSnsrQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -19743,9 +19743,9 @@ class SteerWhlSnsrSafeChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -19773,9 +19773,9 @@ class SteerWhlSnsrSafeCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class SteerWhlSwtPwr:
@@ -19796,8 +19796,8 @@ class SteerWhlSwtPwr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->16777215
@@ -19825,9 +19825,9 @@ class StopStrtInhb:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class StrtInProgs:
@@ -19850,8 +19850,8 @@ class StrtInProgs:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SunRoofPosnSts:
@@ -19902,8 +19902,8 @@ class SunRoofPosnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SwtAcptReq:
@@ -19924,8 +19924,8 @@ class SwtAcptReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class SwtAtCenSts:
@@ -19946,8 +19946,8 @@ class SwtAtCenSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # PLILJESS:
@@ -19971,8 +19971,8 @@ class SwtForPassAirbCutOffSt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -19995,8 +19995,8 @@ class TankFlapSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TelmSts:
@@ -20019,8 +20019,8 @@ class TelmSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TiAndDateVld:
@@ -20041,8 +20041,8 @@ class TiAndDateVld:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Days,  Range:1->31
@@ -20070,9 +20070,9 @@ class TiForDayInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hours,  Range:0->23
@@ -20100,9 +20100,9 @@ class TiForHrInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Mins,  Range:0->59
@@ -20130,9 +20130,9 @@ class TiForMinsInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Month,  Range:1->12
@@ -20160,9 +20160,9 @@ class TiForMthInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: s,  Range:0->59
@@ -20190,9 +20190,9 @@ class TiForSecInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Year,  Range:0->99
@@ -20220,9 +20220,9 @@ class TiForYrInPosnFromSatlt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -20261,8 +20261,8 @@ class TiGapLimdPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: s,  Range:0->6.3, Resolution: (0.1*x+0.0, raw is unsigned, 6 bits )
@@ -20292,9 +20292,9 @@ class TiGapLimdSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->4095
@@ -20322,9 +20322,9 @@ class TireCircumInTireCircumCalByNav:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Used for sending a Start or a Stop/Cancel request from HMI to a core function
@@ -20348,8 +20348,8 @@ class TireMonCalReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TireMonrDispReq:
@@ -20370,8 +20370,8 @@ class TireMonrDispReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -20401,9 +20401,9 @@ class TirePAbsltValForFrntLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -20433,9 +20433,9 @@ class TirePAbsltValForReLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -20465,9 +20465,9 @@ class TirePAbsltValForReRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: hPa,  Range:0->637.5, Resolution: (2.5*x+0.0, raw is unsigned, 8 bits )
@@ -20497,9 +20497,9 @@ class TirePAbsltValFrntRiTirePAbsltVal1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class TirePAbsltValFrntRiTirePPosn:
@@ -20520,8 +20520,8 @@ class TirePAbsltValFrntRiTirePPosn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePAbsltValQFForFrnRi:
@@ -20544,8 +20544,8 @@ class TirePAbsltValQFForFrnRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePAbsltValQfForReLe:
@@ -20568,8 +20568,8 @@ class TirePAbsltValQfForReLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePAbsltValQfForReRi:
@@ -20592,8 +20592,8 @@ class TirePAbsltValQfForReRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePAbsltVaQflForFrntLe:
@@ -20616,8 +20616,8 @@ class TirePAbsltVaQflForFrntLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePCalSts:
@@ -20640,8 +20640,8 @@ class TirePCalSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePFrntLe:
@@ -20664,8 +20664,8 @@ class TirePFrntLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePFrntRi:
@@ -20688,8 +20688,8 @@ class TirePFrntRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePMonSts:
@@ -20718,8 +20718,8 @@ class TirePMonSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePPosnForFrntLe:
@@ -20740,8 +20740,8 @@ class TirePPosnForFrntLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePPosnForReLe:
@@ -20762,8 +20762,8 @@ class TirePPosnForReLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePPosnForReRi:
@@ -20784,8 +20784,8 @@ class TirePPosnForReRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePReLe:
@@ -20808,8 +20808,8 @@ class TirePReLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TirePReRi:
@@ -20832,8 +20832,8 @@ class TirePReRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TnlEntryOrEnd:
@@ -20854,8 +20854,8 @@ class TnlEntryOrEnd:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Implementation Value Min	Implementation Value Max	Physical Value	"Long name"		Description
@@ -20891,8 +20891,8 @@ class TrfcLiSpprtSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Selects trip trip meter type
@@ -20919,8 +20919,8 @@ class TripModSeln:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0 = Trailer Lamp Check not possible to execute
@@ -20943,8 +20943,8 @@ class TrlrLampActvtChk:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -20983,8 +20983,8 @@ class TrlrLampChkAutReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TrlrLampChkAutReqSts:
@@ -21005,8 +21005,8 @@ class TrlrLampChkAutReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Used for sending a Start or a Stop/Cancel request from HMI to a core function
@@ -21030,8 +21030,8 @@ class TrlrLampChkRemReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0 = No status
@@ -21066,8 +21066,8 @@ class TrlrLampChkSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # 0 = Trailer unconnected
@@ -21090,8 +21090,8 @@ class TrlrPrsnt:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Status of the door.
@@ -21114,8 +21114,8 @@ class TrSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TUnit:
@@ -21137,8 +21137,8 @@ class TUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -21177,8 +21177,8 @@ class TurnAutFlsgReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TurnAutFlsgReqSts:
@@ -21199,8 +21199,8 @@ class TurnAutFlsgReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->10000
@@ -21228,9 +21228,9 @@ class TwliBriRaw:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class TwliBriRawQf:
@@ -21253,8 +21253,8 @@ class TwliBriRawQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class TwliBriSts:
@@ -21275,8 +21275,8 @@ class TwliBriSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -21304,9 +21304,9 @@ class UkwnCptReqToInfoMgrByte0:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21334,9 +21334,9 @@ class UkwnCptReqToInfoMgrByte1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21364,9 +21364,9 @@ class UkwnCptReqToInfoMgrByte2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21394,9 +21394,9 @@ class UkwnCptReqToInfoMgrByte3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21424,9 +21424,9 @@ class UkwnCptReqToInfoMgrByte4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21454,9 +21454,9 @@ class UkwnCptReqToInfoMgrByte5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21484,9 +21484,9 @@ class UkwnCptReqToInfoMgrByte6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21514,9 +21514,9 @@ class UkwnCptReqToInfoMgrByte7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21544,9 +21544,9 @@ class UkwnCptReqToSoundMgrByte0:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21574,9 +21574,9 @@ class UkwnCptReqToSoundMgrByte1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21604,9 +21604,9 @@ class UkwnCptReqToSoundMgrByte2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21634,9 +21634,9 @@ class UkwnCptReqToSoundMgrByte3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21664,9 +21664,9 @@ class UkwnCptReqToSoundMgrByte4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21694,9 +21694,9 @@ class UkwnCptReqToSoundMgrByte5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21724,9 +21724,9 @@ class UkwnCptReqToSoundMgrByte6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21754,9 +21754,9 @@ class UkwnCptReqToSoundMgrByte7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21784,9 +21784,9 @@ class UkwnCptRespFromInfoMgrByte0:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21814,9 +21814,9 @@ class UkwnCptRespFromInfoMgrByte1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21844,9 +21844,9 @@ class UkwnCptRespFromInfoMgrByte2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21874,9 +21874,9 @@ class UkwnCptRespFromInfoMgrByte3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21904,9 +21904,9 @@ class UkwnCptRespFromInfoMgrByte4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21934,9 +21934,9 @@ class UkwnCptRespFromInfoMgrByte5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21964,9 +21964,9 @@ class UkwnCptRespFromInfoMgrByte6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -21994,9 +21994,9 @@ class UkwnCptRespFromInfoMgrByte7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22024,9 +22024,9 @@ class UkwnCptRespFromSoundMgrByte0:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22054,9 +22054,9 @@ class UkwnCptRespFromSoundMgrByte1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22084,9 +22084,9 @@ class UkwnCptRespFromSoundMgrByte2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22114,9 +22114,9 @@ class UkwnCptRespFromSoundMgrByte3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22144,9 +22144,9 @@ class UkwnCptRespFromSoundMgrByte4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22174,9 +22174,9 @@ class UkwnCptRespFromSoundMgrByte5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22204,9 +22204,9 @@ class UkwnCptRespFromSoundMgrByte6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -22234,9 +22234,9 @@ class UkwnCptRespFromSoundMgrByte7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -22275,8 +22275,8 @@ class UnlckFbVisReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UnlckFbVisReqSts:
@@ -22297,8 +22297,8 @@ class UnlckFbVisReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -22337,8 +22337,8 @@ class UnlckKeylsReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UnlckKeylsReqSts:
@@ -22359,8 +22359,8 @@ class UnlckKeylsReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -22399,8 +22399,8 @@ class UnlckRemReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UnlckRemReqSts:
@@ -22421,8 +22421,8 @@ class UnlckRemReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # UsageMode Data
@@ -22447,8 +22447,8 @@ class UsgModSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -22487,8 +22487,8 @@ class UsrSetSpdForKeySpdLimnPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22518,9 +22518,9 @@ class UsrSetSpdForKeySpdLimnSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22550,9 +22550,9 @@ class UsrSetSpdForKeySpdWarn1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22582,9 +22582,9 @@ class UsrSetSpdForKeySpdWarn2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22614,9 +22614,9 @@ class UsrSetSpdForKeySpdWarn3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22646,9 +22646,9 @@ class UsrSetSpdForKeySpdWarn4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22678,9 +22678,9 @@ class UsrSetSpdForKeySpdWarn5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.03125*x+0.0, raw is unsigned, 12 bits )
@@ -22710,9 +22710,9 @@ class UsrSetSpdForKeySpdWarn6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -22751,8 +22751,8 @@ class UsrSetSpdForKeySpdWarnPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe:
@@ -22775,8 +22775,8 @@ class UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi:
@@ -22799,8 +22799,8 @@ class UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -22830,9 +22830,9 @@ class UsrSwtDispClimaReqForTSpForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Deg,  Range:15->30.5, Resolution: (0.5*x+15.0, raw is unsigned, 5 bits )
@@ -22862,9 +22862,9 @@ class UsrSwtDispClimaReqForTSpForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispClimaReqForTSpSpclForRowSecLe:
@@ -22886,8 +22886,8 @@ class UsrSwtDispClimaReqForTSpSpclForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispClimaReqForTSpSpclForRowSecRi:
@@ -22909,8 +22909,8 @@ class UsrSwtDispClimaReqForTSpSpclForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispReqForFanLvlForRowSec:
@@ -22944,8 +22944,8 @@ class UsrSwtDispReqForFanLvlForRowSec:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe:
@@ -22968,8 +22968,8 @@ class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi:
@@ -22992,8 +22992,8 @@ class UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe:
@@ -23017,9 +23017,9 @@ class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi:
@@ -23043,9 +23043,9 @@ class UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe:
@@ -23069,9 +23069,9 @@ class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi:
@@ -23095,9 +23095,9 @@ class UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispUpdClimaReqForTSpForRowSecLe:
@@ -23121,9 +23121,9 @@ class UsrSwtDispUpdClimaReqForTSpForRowSecLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispUpdClimaReqForTSpForRowSecRi:
@@ -23147,9 +23147,9 @@ class UsrSwtDispUpdClimaReqForTSpForRowSecRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class UsrSwtDispUpdReqForFanLvlForRowSec:
@@ -23173,9 +23173,9 @@ class UsrSwtDispUpdReqForFanLvlForRowSec:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # 0  No text
@@ -23202,8 +23202,8 @@ class VehActvMsgToDrvr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Volt,  Range:0->25, Resolution: (0.1*x+0.0, raw is unsigned, 8 bits )
@@ -23233,9 +23233,9 @@ class VehBattUSysU:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class VehBattUSysUQf:
@@ -23258,8 +23258,8 @@ class VehBattUSysUQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23289,9 +23289,9 @@ class VehCfgPrmBlk:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23321,9 +23321,9 @@ class VehCfgPrmVal1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23353,9 +23353,9 @@ class VehCfgPrmVal2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23385,9 +23385,9 @@ class VehCfgPrmVal3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23417,9 +23417,9 @@ class VehCfgPrmVal4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23449,9 +23449,9 @@ class VehCfgPrmVal5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23481,9 +23481,9 @@ class VehCfgPrmVal6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -23513,9 +23513,9 @@ class VehCfgPrmVal7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: kg,  Range:0->10000, Resolution: (1.0*x+0.0, raw is unsigned, 14 bits )
@@ -23545,9 +23545,9 @@ class VehM:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class VehMNomTrlrM:
@@ -23570,8 +23570,8 @@ class VehMNomTrlrM:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -23599,9 +23599,9 @@ class VehModMngtGlbSafe1Chks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -23629,9 +23629,9 @@ class VehModMngtGlbSafe1Cntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Main usage shall be to indicate quality for vehicle state estimations, not to be used for failure code setting and function degradation unless absolutely necassary.
@@ -23654,8 +23654,8 @@ class VehMQly:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->255
@@ -23683,9 +23683,9 @@ class VehMtnStChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -23713,9 +23713,9 @@ class VehMtnStCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class VehMtnStSafe:
@@ -23742,8 +23742,8 @@ class VehMtnStSafe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->511
@@ -23771,9 +23771,9 @@ class VehSpdAvg:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class VehSpdAvgUnit:
@@ -23795,8 +23795,8 @@ class VehSpdAvgUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class VehSpdCtrlActvSts:
@@ -23817,8 +23817,8 @@ class VehSpdCtrlActvSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class VehSpdIndcdUnit:
@@ -23840,8 +23840,8 @@ class VehSpdIndcdUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->511
@@ -23869,9 +23869,9 @@ class VehSpdIndcdVal:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: m/s,  Range:0->125, Resolution: (0.00391*x+0.0, raw is unsigned, 15 bits )
@@ -23901,9 +23901,9 @@ class VehSpdLgtSafe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -23931,9 +23931,9 @@ class VehSpdLgtSafeChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -23961,9 +23961,9 @@ class VehSpdLgtSafeCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class VehSpdLgtSafeQf:
@@ -23986,8 +23986,8 @@ class VehSpdLgtSafeQf:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->65535
@@ -24015,9 +24015,9 @@ class VFCVectorIHUGrp1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -24045,9 +24045,9 @@ class VFCVectorIHUGrp2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->65535
@@ -24075,9 +24075,9 @@ class VFCVectorIHUGrp3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24107,9 +24107,9 @@ class VinBlk:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24139,9 +24139,9 @@ class VinPosn1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24171,9 +24171,9 @@ class VinPosn2:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24203,9 +24203,9 @@ class VinPosn3:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24235,9 +24235,9 @@ class VinPosn4:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24267,9 +24267,9 @@ class VinPosn5:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24299,9 +24299,9 @@ class VinPosn6:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24331,9 +24331,9 @@ class VinPosn7:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Availability status
@@ -24357,8 +24357,8 @@ class VisnAgWideSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class VisnImgAgWideInUse:
@@ -24393,8 +24393,8 @@ class VisnImgAgWideInUse:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Gallon 1 = UK gallons
@@ -24419,8 +24419,8 @@ class VolUnit:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Unitless,  Range:0->4095
@@ -24448,9 +24448,9 @@ class WhlCircum:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: rpm,  Range:-1638.4->1638.3, Resolution: (0.1*x+-1638.4, raw is unsigned, 0 bits )
@@ -24480,9 +24480,9 @@ class WhlMotSysSpdAct:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: NewtonMeter,  Range:-8188->8192, Resolution: (4.0*x+-8188.0, raw is unsigned, 12 bits )
@@ -24512,9 +24512,9 @@ class WhlMotSysTqEst:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255
@@ -24542,9 +24542,9 @@ class WhlMotSysTqEstChks:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->15
@@ -24572,9 +24572,9 @@ class WhlMotSysTqEstCntr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class WhlMotSysTqEstQlyFac:
@@ -24597,8 +24597,8 @@ class WhlMotSysTqEstQlyFac:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rpm,  Range:0->2550, Resolution: (10.0*x+0.0, raw is unsigned, 8 bits )
@@ -24628,9 +24628,9 @@ class WhlMotSysTqEstSpdLimn:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24660,9 +24660,9 @@ class WhlRotToothCntrFrntLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24692,9 +24692,9 @@ class WhlRotToothCntrFrntRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24724,9 +24724,9 @@ class WhlRotToothCntrReLe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Unitless,  Range:0->255, Resolution: (1.0*x+0.0, raw is unsigned, 8 bits )
@@ -24756,9 +24756,9 @@ class WhlRotToothCntrReRi:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class WinPosnStsAtDrvrRe:
@@ -24809,8 +24809,8 @@ class WinPosnStsAtDrvrRe:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WinPosnStsDrv:
@@ -24861,8 +24861,8 @@ class WinPosnStsDrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WinPosnStsPass:
@@ -24913,8 +24913,8 @@ class WinPosnStsPass:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WinPosnStsRePass:
@@ -24965,8 +24965,8 @@ class WinPosnStsRePass:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # The signal reflects the actual wiping speed or mode regardless of activation source. Both rain sensor and wiper stalk info are used to create the signal. When in interval mode the wipes are carried out in low speed.
@@ -24994,8 +24994,8 @@ class WipgInfoWipgSpdInfo:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WipgInfoWiprActv:
@@ -25016,8 +25016,8 @@ class WipgInfoWiprActv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WipgInfoWiprInWipgAr:
@@ -25038,8 +25038,8 @@ class WipgInfoWiprInWipgAr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WiprFrntSrvModReq:
@@ -25061,8 +25061,8 @@ class WiprFrntSrvModReq:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WiprInPosnForSrv:
@@ -25083,8 +25083,8 @@ class WiprInPosnForSrv:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
@@ -25123,8 +25123,8 @@ class WiprReAutReqPen:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WiprReAutReqSts:
@@ -25145,8 +25145,8 @@ class WiprReAutReqSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 class WshrFldSts:
@@ -25167,8 +25167,8 @@ class WshrFldSts:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: rad/s,  Range:-6->6, Resolution: (0.000244140625*x+0.0, raw is signed, 16 bits )
@@ -25198,9 +25198,9 @@ class YawRate1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 class YawRate1Qf1:
@@ -25223,8 +25223,8 @@ class YawRate1Qf1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, self.item.value_raw)
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
         
 # Unit: Year,  Range:0->99
@@ -25252,9 +25252,9 @@ class Yr:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 # Unit: Year,  Range:0->99
@@ -25282,9 +25282,9 @@ class Yr1:
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
         self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
 
-    def receive(self):
+    def get(self):
         value = self.r2p(self.item.value_raw)
-        self.signal_interface.logger.debug('receive %s=%d',self.fdx_name, value)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
 
