@@ -4,8 +4,7 @@ set -x
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 
-
-./hourly_test_common.sh
+"${SCRIPT_DIR}/hourly_test_common.sh"
 
 # Get properties
 docker_run "adb shell getprop"
