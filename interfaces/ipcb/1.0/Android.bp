@@ -67,6 +67,7 @@ cc_library_shared {
         "libutils",
         "libcutils",
         "android.hidl.base@1.0",
+        "vendor.volvocars.hardware.common@1.0",
     ],
     export_shared_lib_headers: [
         "libhidlbase",
@@ -74,5 +75,6 @@ cc_library_shared {
         "libhwbinder",
         "libutils",
         "android.hidl.base@1.0",
+        "vendor.volvocars.hardware.common@1.0",
     ],
 }

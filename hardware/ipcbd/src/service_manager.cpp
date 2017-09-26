@@ -44,7 +44,7 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
             messageDispatcher_.registerMessageCallback(serviceID, operationID, (IpCmdTypes::OperationType) opType,
                 [callbackHandler](Message& message){
                     Msg msg;
-                    msg.ecu = (vendor::volvocars::hardware::ipcb::V1_0::Ecu)message.ecu;
+                    msg.ecu = (vendor::volvocars::hardware::common::V1_0::Ecu)message.ecu;
                     msg.pdu.header.serviceID =  message.pdu.header.service_id;
                     msg.pdu.header.operationID =  message.pdu.header.operation_id;
                     msg.pdu.header.operationType =  (OperationType)message.pdu.header.operation_type;
@@ -72,7 +72,7 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
             if (callerData->errorType == ITransportServices::ErrorType::OK)
             {
                 Msg msg;
-                msg.ecu = (vendor::volvocars::hardware::ipcb::V1_0::Ecu)message.ecu;
+                msg.ecu = (vendor::volvocars::hardware::common::V1_0::Ecu)message.ecu;
                 msg.pdu.header.serviceID =  message.pdu.header.service_id;
                 msg.pdu.header.operationID =  message.pdu.header.operation_id;
                 msg.pdu.header.operationType =  (OperationType)message.pdu.header.operation_type;

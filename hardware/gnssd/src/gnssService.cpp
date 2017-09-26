@@ -12,7 +12,7 @@ extern "C" {
 
 using ::vendor::volvocars::hardware::ipcb::V1_0::OperationType;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
-using ::vendor::volvocars::hardware::ipcb::V1_0::Ecu;
+using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 using namespace Connectivity;
 

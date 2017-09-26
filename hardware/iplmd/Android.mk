@@ -29,6 +29,7 @@ LOCAL_SHARED_LIBRARIES += \
     libhidlbase \
     libhidltransport \
     libhwbinder \
+    vendor.volvocars.hardware.common@1.0 \
     vendor.volvocars.hardware.ipcb@1.0
 
 LOCAL_MULTILIB := 64
