@@ -27,7 +27,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return String with the requested parameter value.
    */
-  virtual std::string GetString(std::initializer_list<std::string> keys_path) = 0;
+  virtual std::string GetString(std::initializer_list<std::string> keys_path) const = 0;
 
   /**
    * Get the value of a local config int parameter.
@@ -40,7 +40,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return int with the requested parameter value.
    */
-  virtual int GetInt(std::initializer_list<std::string> keys_path) = 0;
+  virtual int GetInt(std::initializer_list<std::string> keys_path) const = 0;
 
   /**
    * Get the value of a local config bool parameter.
@@ -53,7 +53,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return bool with the requested parameter value.
    */
-  virtual bool GetBool(std::initializer_list<std::string> keys_path) = 0;
+  virtual bool GetBool(std::initializer_list<std::string> keys_path) const = 0;
 
   /**
    * Get the value of a local config double parameter.
@@ -66,7 +66,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return double with the requested parameter value.
    */
-  virtual double GetDouble(std::initializer_list<std::string> keys_path) = 0;
+  virtual double GetDouble(std::initializer_list<std::string> keys_path) const = 0;
 
   /**
    * Get the value of a local config array of string parameter.
@@ -79,41 +79,63 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return vector of strings with requested parameter value
    */
-  virtual std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys_path) = 0;
+  virtual std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys_path) const = 0;
 
   // conveniance adapters
 
   template <class... T>
-  std::string GetString(const T &... keys)
+  std::string GetString(const T &... keys) const
   {
     return GetString({keys...});
   }
 
   template <class... T>
-  int GetInt(const T &... keys)
+  int GetInt(const T &... keys) const
   {
     return GetInt({keys...});
   }
 
   template <class... T>
-  bool GetBool(const T &... keys)
+  bool GetBool(const T &... keys) const
   {
     return GetBool({keys...});
   }
 
   template <class... T>
-  double GetDouble(const T &... keys)
+  double GetDouble(const T &... keys) const
   {
     return GetDouble({keys...});
   }
 
   template <class... T>
-  std::vector<std::string> GetStringArray(const T &... keys)
+  std::vector<std::string> GetStringArray(const T &... keys) const
   {
     return GetStringArray({keys...});
   }
 };
 
 } /* namespace vcc */
+
+#ifdef GTEST_OS_LINUX_ANDROID
+#include <gmock/gmock.h>
+
+namespace vcc
+{
+namespace mocks
+{
+class MockLocalConfigReader : public LocalConfigReaderInterface
+{
+ public:
+  MOCK_CONST_METHOD1(GetString, std::string(std::initializer_list<std::string>));
+  MOCK_CONST_METHOD1(GetInt, int(std::initializer_list<std::string>));
+  MOCK_CONST_METHOD1(GetBool, bool(std::initializer_list<std::string>));
+  MOCK_CONST_METHOD1(GetDouble, double(std::initializer_list<std::string>));
+  MOCK_CONST_METHOD1(GetStringArray, std::vector<std::string>(std::initializer_list<std::string>));
+};
+
+}  // namespace mocks
+}  // namespace vcc
+
+#endif
 
 #endif /* VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_ */

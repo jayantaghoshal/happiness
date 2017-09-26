@@ -13,6 +13,7 @@ LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-
 LOCAL_SHARED_LIBRARIES += \
     liblocalconfig
 
+LOCAL_STATIC_LIBRARIES += libgmock
 LOCAL_WHOLE_STATIC_LIBRARIES += \
     libVtsGtestMain
 

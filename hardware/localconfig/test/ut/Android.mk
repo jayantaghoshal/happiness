@@ -16,7 +16,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_MODULE := VtsLocalConfigTestCases
 
 LOCAL_SRC_FILES+= $(localconfig_ut_SRC_FILES)
-LOCAL_STATIC_LIBRARIES += $(localconfig_ut_STATIC_LIBRARIES)
+LOCAL_STATIC_LIBRARIES += $(localconfig_ut_STATIC_LIBRARIES) libgmock
 LOCAL_CPPFLAGS+= $(localconfig_ut_CPPFLAGS)
 
 LOCAL_WHOLE_STATIC_LIBRARIES += \
@@ -29,10 +29,10 @@ include $(BUILD_NATIVE_TEST)
 
 include $(CLEAR_VARS)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-LOCAL_MODULE := vendor_volvocars_
+LOCAL_MODULE := vendor_volvocars_localconfig_ut
 
 LOCAL_SRC_FILES+= $(localconfig_ut_SRC_FILES)
-LOCAL_STATIC_LIBRARIES += $(localconfig_ut_STATIC_LIBRARIES)
+LOCAL_STATIC_LIBRARIES += $(localconfig_ut_STATIC_LIBRARIES) libgmock
 LOCAL_CPPFLAGS+= $(localconfig_ut_CPPFLAGS)
 
 LOCAL_MULTILIB := 64

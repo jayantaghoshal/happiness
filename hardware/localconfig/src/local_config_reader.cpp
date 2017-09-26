@@ -23,7 +23,7 @@ void vcc::LocalConfigReader::Preload()
   loader_(&root_);
 }
 
-std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys)
+std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys) const
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -32,12 +32,12 @@ std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys
   return node_value.asString();
 }
 
-const Json::Value &LocalConfigReader::GetValue(std::initializer_list<std::string> keys)
+const Json::Value &LocalConfigReader::GetValue(std::initializer_list<std::string> keys) const
 {
   if (root_.isNull()) loader_(&root_);
 
-  Json::Value *current_node = &root_;
-  Json::Value *node_value = nullptr;
+  const Json::Value *current_node = &root_;
+  const Json::Value *node_value = nullptr;
   for (auto &key : keys)
   {
     node_value = &(*current_node)[key];
@@ -48,7 +48,7 @@ const Json::Value &LocalConfigReader::GetValue(std::initializer_list<std::string
   return *node_value;
 }
 
-int LocalConfigReader::GetInt(std::initializer_list<std::string> keys)
+int LocalConfigReader::GetInt(std::initializer_list<std::string> keys) const
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -58,7 +58,7 @@ int LocalConfigReader::GetInt(std::initializer_list<std::string> keys)
   return node_value.asInt();
 }
 
-bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys)
+bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys) const
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -68,7 +68,7 @@ bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys)
   return node_value.asBool();
 }
 
-double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys)
+double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys) const
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -78,7 +78,7 @@ double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys)
   return node_value.asDouble();
 }
 
-std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list<std::string> keys)
+std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list<std::string> keys) const
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &array = GetValue(keys);

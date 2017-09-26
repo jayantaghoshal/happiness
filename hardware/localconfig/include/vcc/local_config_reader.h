@@ -22,11 +22,11 @@ class LocalConfigReader : public LocalConfigReaderInterface
   LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
   LocalConfigReader(const LocalConfigReader &) = delete;
 
-  std::string GetString(std::initializer_list<std::string> keys) override;
-  int GetInt(std::initializer_list<std::string> keys) override;
-  bool GetBool(std::initializer_list<std::string> keys) override;
-  double GetDouble(std::initializer_list<std::string> keys) override;
-  std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys) override;
+  std::string GetString(std::initializer_list<std::string> keys) const override;
+  int GetInt(std::initializer_list<std::string> keys) const override;
+  bool GetBool(std::initializer_list<std::string> keys) const override;
+  double GetDouble(std::initializer_list<std::string> keys) const override;
+  std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys) const override;
 
   void Preload();
 
@@ -34,11 +34,11 @@ class LocalConfigReader : public LocalConfigReaderInterface
   static void LoadFile(std::string file_path, Json::Value *value);
 
  private:
-  const Json::Value &GetValue(std::initializer_list<std::string> keys);
+  const Json::Value &GetValue(std::initializer_list<std::string> keys) const;
 
-  LazyLoader loader_;
-  std::mutex mutex_;
-  Json::Value root_;
+  LazyLoader const loader_;
+  mutable std::mutex mutex_;
+  mutable Json::Value root_;
 };
 
 class LocalConfigFileReader : public LocalConfigReader
