@@ -1,24 +1,36 @@
 LOCAL_PATH:= $(call my-dir)
 
-MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-MY_LOCALCONFIG_STATIC_LIBRARIES := libjsoncpp
+localconfig_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
+localconfig_STATIC_LIBRARIES := libjsoncpp
+localconfig_SRC_FILES := \
+    src/localconfig.cpp \
+    src/local_config_reader_interface.cpp \
+    src/local_config_reader.cpp
+
+localconfig_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
 #
 # Static library. Used in shared lib and for unit tests.
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := liblocalconfig_static
-LOCAL_SRC_FILES := src/localconfig.cpp \
-                   src/local_config_reader_interface.cpp \
-                   src/local_config_reader.cpp
-
-LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
-# We only build for 64 bit.
+LOCAL_SRC_FILES := $(localconfig_SRC_FILES)
+LOCAL_CPPFLAGS := $(localconfig_CPPFLAGS)
+LOCAL_C_INCLUDES := $(localconfig_EXPORT_C_INCLUDE_DIRS)
+LOCAL_STATIC_LIBRARIES := $(localconfig_STATIC_LIBRARIES)
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(localconfig_EXPORT_C_INCLUDE_DIRS)
 LOCAL_MULTILIB := 64
 include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := liblocalconfig_static
+LOCAL_SRC_FILES := $(localconfig_SRC_FILES)
+LOCAL_CPPFLAGS := $(localconfig_CPPFLAGS)
+LOCAL_C_INCLUDES := $(localconfig_EXPORT_C_INCLUDE_DIRS)
+LOCAL_STATIC_LIBRARIES := $(localconfig_STATIC_LIBRARIES)
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(localconfig_EXPORT_C_INCLUDE_DIRS)
+LOCAL_MULTILIB := 64
+include $(BUILD_HOST_STATIC_LIBRARY)
 
 #
 # Shared library for deployment to system
@@ -27,12 +39,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := liblocalconfig
 LOCAL_VENDOR_MODULE := true
 LOCAL_WHOLE_STATIC_LIBRARIES := liblocalconfig_static
-LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(MY_LOCALCONFIG_EXPORT_C_INCLUDE_DIRS)
-# We need an init.rc which will initialize with a default localconfig.json if needed.
-LOCAL_INIT_RC := misc/localconfig.rc
-LOCAL_REQUIRED_MODULES := localconfig.json
-# We only build for 64 bit.
+LOCAL_STATIC_LIBRARIES := $(localconfig_STATIC_LIBRARIES)
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(localconfig_EXPORT_C_INCLUDE_DIRS)
 LOCAL_MULTILIB := 64
 include $(BUILD_SHARED_LIBRARY)
 
@@ -45,6 +53,10 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_RELATIVE_PATH := config
 LOCAL_SRC_FILES := misc/localconfig.json
+
+# We need an init.rc which will initialize with a default localconfig.json if needed.
+LOCAL_INIT_RC := misc/localconfig.rc
+
 # This is probably not needed, please review...
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
