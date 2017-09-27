@@ -52,4 +52,9 @@
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/build"/>
   <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8d73c3d8f2a0f807a70673da40d5cc1a7f57b061"/>
+
+  <!-- TODO: Bug fix in soong, should be fixed in O-MR1 according to https://partnerissuetracker.corp.google.com/issues/66930558 -->
+  <remove-project name="aosp/platform/build/soong"/>
+  <project name="aosp/platform/build/soong" path="build/soong" revision="17e739cf72d712978d272ffc89034c911accdd8b"/>
+
 </manifest>
