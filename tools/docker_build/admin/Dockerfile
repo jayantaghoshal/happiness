@@ -127,7 +127,7 @@ RUN pip3 install redis \
 ##################################################
 # Static analysis tools
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
-    shellcheck 
+    shellcheck
 RUN pip3 install mypy \
                  pylint \
                  flake8
@@ -135,6 +135,19 @@ RUN pip install flake8
 # Typing comes built in with python3, but has to be installed with python2
 # Then you can use it together with comment annotations and mypy
 RUN pip install typing
+
+##################################################
+# Preload with python packages required for VTS
+RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
+ && > /usr/local/pip/pip.conf \
+ && echo '[install]' >> /usr/local/pip/pip.conf \
+ && echo 'no-index = true' >> /usr/local/pip/pip.conf \
+ && echo 'find-links = /usr/local/cached_pip_packages' >> /usr/local/pip/pip.conf \
+ && pip download -d /usr/local/cached_pip_packages/ enum \
+ 	future futures google-api-python-client \
+    httplib2 oauth2client pyasn1 pyasn1-modules \
+    rsa six uritemplate protobuf certifi chardet \
+    idna requests urllib3
 
 ##################################################
 # Clean up apt package information to make image smaller

@@ -2,6 +2,7 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 DOCKER_BUILD_DIR=${REPO_ROOT_DIR}/vendor/volvocars/tools/docker_build
+export PIP_CONFIG_FILE="/usr/local/pip/pip.conf"
 
 if [ -z "${WORKSPACE}" ]; then
   WORKSPACE=$(readlink -f "${REPO_ROOT_DIR}"/..)
