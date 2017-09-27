@@ -15,6 +15,9 @@ standard_caps = {
     Capabilities.vip_serial
 }
 
+class TestFailedException(Exception):
+    pass
+
 
 class IhuBaseTest:
     def __init__(self, require_capabilities):
