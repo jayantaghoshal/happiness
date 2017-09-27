@@ -6,39 +6,39 @@ interface IIplm
 {
      /**
      * Register Local Software Component with Link Manager Module, Also notify LSCs about the availability of RGs and external LM modules
-     * @param serviceID ID of the service to be registered
+     * @param lscName name of the service to be registered
      * @param IIplmCallback
-     * @returns status as Success or Fail
+     * @returns status as Success(true) or Fail(false)
      */
-    registerService(uint16_t serviceID, IIplmCallback iIplmCallback) generates (Status status);
+    registerService(string lscName, IIplmCallback iIplmCallback) generates (bool status);
 
     /**
      * Unregister Local Software Component with Link Manager Module
-     * @param serviceID    ID of the service being registered
-     * @returns status as Success or Fail
+     * @param lscName name of the service being registered
+     * @returns status as Success(true) or Fail(false)
      */
-    unregisterService(uint16_t serviceID) generates (Status status);
+    unregisterService(string lscName) generates (bool status);
 
     /**
      * Request resource group
      *
      * Use this to request for resource group
      *
-     * @param serviceID ID for which resource group will be used for
+     * @param lscName name for which resource group will be used for
      * @param resourceGroup
      * @param ResourceGroupPrio sets priority for resource group
-     * @returns status as Success or Fail
+     * @returns status as Success(true) or Fail(false)
      */
-    requestResourceGroup(uint16_t serviceID, ResourceGroup resourceGroup, ResourceGroupPrio resourceGroupPrio) generates (Status status);
+    requestResourceGroup(string lscName, ResourceGroup resourceGroup, ResourceGroupPrio resourceGroupPrio) generates (bool status);
 
     /**
      * Releases resource group
      *
      * Use this to release particular resource group
      *
-     * @param serviceID ID for which resource group will be used for
+     * @param lscName name for which resource group will be used for
      * @param resourceGroup which needs to be released
-     * @returns status as Success or Fail
+     * @returns status as Success(true) or Fail(false)
      */
-    releaseResourceGroup(uint16_t serviceID, ResourceGroup resourceGroup) generates (Status status);
+    releaseResourceGroup(string lscName, ResourceGroup resourceGroup) generates (bool status);
 };

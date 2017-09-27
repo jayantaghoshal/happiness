@@ -12,6 +12,9 @@
 #include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
 #include <vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h>
 
+#include <vendor/volvocars/hardware/iplm/1.0/IIplm.h>
+#include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
+
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
 using ::android::hardware::hidl_array;
@@ -26,34 +29,15 @@ using ::tarmac::eventloop::IDispatcher;
 using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb;
 using ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback;
 using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
+using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
+using ::vendor::volvocars::hardware::iplm::V1_0::IIplm;
+using ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback;
+using XResourceGroup      = ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroup;
+using XResourceGroupPrio  = ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupPrio;
+using XResourceGroupStatus= ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupStatus;
 
-enum class XResourceGroup
-{
-    kResourceGroup1,
-    kResourceGroup2,
-    kResourceGroup3,
-    kResourceGroup4,
-    kResourceGroup5,
-    kResourceGroup6,
-    kResourceGroup7,
-    kResourceGroup8
-};
-
-enum class XResourcePrio
-{
-    kPrioNormal,
-    kPrioHigh
-};
-
-enum class XResourceGroupStatus {
-    kResourceGroupStatus_Unavailable,
-    kResourceGroupStatus_PartlyAvailable,
-    kResourceGroupStatus_Available
-};
-
-
-class IplmService : public IMessageCallback
+class IplmService : public IIplm, public IMessageCallback
 {
  public:
   /** Enumeration used to track remote ECU availability in resource group
@@ -92,42 +76,30 @@ class IplmService : public IMessageCallback
 
   /**
    * description: Request the given Resource Group
-   * @param[in] _client         CommonAPI specific parameter
-   * @param[in] _serviceName    Name of the service making the request
+   * @param[in] lscName         Name of the service making the request
    * @param[in] _rg             Resource group being requested
    * @param[in] _prio           priority for the requested resource group
-   * @param[in] _reply          callback that caller of the function wish to be called
    */
-  void Request(std::string _serviceName, XResourceGroup _rg, XResourcePrio _prio /*,
-                      generated::IpLmServiceStub::RequestReply_t _reply*/); // override;
+  Return<bool> requestResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup, XResourceGroupPrio resourceGroupPrio) override;
 
   /**
    * description: Release the given Resource Group
-   * @param[in] _client         CommonAPI specific parameter
-   * @param[in] _serviceName    Name of the service making the request
+   * @param[in] lscName         Name of the service making the request
    * @param[in] _rg             Resource group being released
-   * @param[in] _reply          callback that caller of the function wish to be called
    */
-  void Release(std::string _serviceName, XResourceGroup _rg /*,
-                      generated::IpLmServiceStub::ReleaseReply_t _reply*/); // override;
+  Return<bool> releaseResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup) override;
 
   /**
    * description: Register Local Software Component with Link Manager
-   * @param[in] _client         CommonAPI specific parameter
-   * @param[in] _serviceName    Name of the service being registered
-   * @param[in] _reply          callback that caller of the function wish to be called
+   * @param[in] lscName         Name of the service being registered
    */
-  void RegisterService(std::string _serviceName /*,
-                              generated::IpLmServiceStub::RegisterServiceReply_t _reply*/); // override;
+  Return<bool> registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback) override;
 
   /**
    * description: Unregister Local Software Component with Link Manager
-   * @param[in] _client         CommonAPI specific parameter
-   * @param[in] _serviceName    Name of the service being de-registered
-   * @param[in] _reply          callback that caller of the function wish to be called
+   * @param[in] lscName         Name of the service being de-registered
    */
-  void UnRegisterService(std::string _serviceName /*,
-                                generated::IpLmServiceStub::UnRegisterServiceReply_t _reply*/); // override;
+  Return<bool> unregisterService(const hidl_string& lscName) override;
 
   /**
    * Get availibility for a specified node
@@ -136,7 +108,7 @@ class IplmService : public IMessageCallback
    * @param [out] prio           Priority
    * @return true on success, false on error
    */
-  bool GetEcuAvailibility(const /*Message::Ecu*/ uint8_t &ecu, uint8_t &resourceGroup, uint8_t &prio); // override;
+  //bool GetEcuAvailibility(Ecu ecu, uint8_t &resourceGroup, uint8_t &prio);
 
   using EcuAvailabilityNotification = std::function<void(EcuId ecu, bool availability)>;
 
@@ -177,7 +149,7 @@ class IplmService : public IMessageCallback
   };
 
   using Action = std::uint8_t;
-  using ServicePrioMap = std::unordered_map<std::string, RGRequestInfo>;
+  using ServicePrioMap = std::map<std::string, RGRequestInfo>;
 
   /*! Constant: ACTION_AVAILABLE
    * Services on local ECU are available to use. Ref: REQPROD 347120*/
@@ -198,9 +170,9 @@ class IplmService : public IMessageCallback
 
   static bool IsRgRequestedLocally(const IplmData &iplm_data, const ResourceGroup rg);
 
-  static bool IsServiceRegistered(const IplmData &iplm_data, const std::string serviceName);
+  static bool IsServiceRegistered(const IplmData &iplm_data, const std::string& lscName);
 
-  static bool IsServiceRegistered(IplmData &iplm_data, const std::string serviceName, ServicePrioMap::iterator &it);
+  static bool IsServiceRegistered(IplmData &iplm_data, const std::string& lscName, ServicePrioMap::iterator &it);
 
   static bool IsRequestedRGValid(XResourceGroup rg);
 
@@ -213,7 +185,7 @@ class IplmService : public IMessageCallback
   static const std::string ToString(Action a);
   static const char *ToString(Prio p);
   static const char *ToString(XResourceGroup r);
-  static const char *ToString(XResourcePrio prio);
+  static const char *ToString(XResourceGroupPrio prio);
 
   /*! \brief Sequence ID as defined by the IP Command Bus Protocol. */
   std::uint8_t sequenceId_ = 0;
@@ -241,39 +213,46 @@ class IplmService : public IMessageCallback
     /*! \brief Keeps record of registered local software componenets (LSC)
      */
     ServicePrioMap registered_LSCs_;
+    std::map<std::string,sp<IIplmCallback>> registered_callbacks_;
+
 
     /*! \brief Keeps the last received/sent Action of all supported ECUs, self
      *  included.
-     * \note Using Message::Ecu as index for convinience. */
-    std::array<Action, 6> action_ = {{
+     * \note Using Ecu as index for convinience. */
+    std::array<Action, 8> action_ = {{
         0,                 // UNKNOWN - not used
         0,                 // ALL - not used
         ACTION_AVAILABLE,  // IHU - SELF (Last sent Action)
         0,                 // VCM - last received Prio from VCM
         0,                 // TEM - last received Prio from TEM
         0,                 // DIM - not used
+        0,                 // TCAM
+        0,                 // VGM
     }};
 
     /*! \brief Keeps the last received/sent Prio of all supported ECUs, self
      *  included.
-     * \note Using Message::Ecu as index for convinience. */
-    std::array<Prio, 6> prio_ = {{
+     * \note Using Ecu as index for convinience. */
+    std::array<Prio, 8> prio_ = {{
         PRIO_NORM,  // UNKNOWN - not used
         PRIO_NORM,  // ALL - not used
         PRIO_NORM,  // IHU - SELF (last sent prio)
         PRIO_NORM,  // VCM - last received Prio from VCM
         PRIO_NORM,  // TEM - last received Prio from TEM
-        PRIO_NORM   // DIM - not used
+        PRIO_NORM,  // DIM - not used
+        PRIO_NORM,  // TCAM
+        PRIO_NORM,  // VGM
     }};
 
     std::bitset<static_cast<int>(EcuId::ECU_Max)> rg1_availabilityStatus_;
     std::bitset<static_cast<int>(EcuId::ECU_Max)> rg3_availabilityStatus_;
-
-    ApplicationDataElement::DESender<autosar::NetHdActvt_info> senderWakeup_;
-    tarmac::eventloop::IDispatcher::JobId senderWakeupTimer_;
   };
 
   IplmData iplm_data_;
+
+  ApplicationDataElement::DESender<autosar::NetHdActvt_info> senderWakeup_;
+  tarmac::eventloop::IDispatcher::JobId senderWakeupTimer_;
+
   void restartVcmActivityTimer();
   void restartTemActivityTimer();
 
