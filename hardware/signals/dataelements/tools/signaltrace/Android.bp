@@ -6,7 +6,6 @@ cc_binary {
         "signaltrace.cpp" ],
 
     cppflags: [
-        "-Wno-non-virtual-dtor",
         "-fexceptions",
         "-Wno-unused-parameter",
         "-Wno-macro-redefined",

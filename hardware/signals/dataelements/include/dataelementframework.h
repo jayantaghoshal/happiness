@@ -25,6 +25,7 @@
 // callback interface to deliver new DataElemValue values and perform callback
 class INewDataElement {
 public:
+    virtual ~INewDataElement() = default;
     virtual void newDataElementValue(const DataElemValueBase& newvalue)=0; // update value
     virtual void performCallback()=0; // do the callback (if callback registered)
 };

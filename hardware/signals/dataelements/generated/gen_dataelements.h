@@ -21,6 +21,7 @@ enum class Dir : uint16_t {
 };
 
 struct DataElemInfo {
+    virtual ~DataElemInfo() = default;
     virtual const char* name() const=0;
     virtual const char* typeName() const=0;
     virtual Dir direction() const=0;

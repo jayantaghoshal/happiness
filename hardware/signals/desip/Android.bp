@@ -13,7 +13,6 @@ cc_library_static {
     ],
 
     cppflags: [
-        "-Wno-non-virtual-dtor",
         "-fexceptions",
         "-Wno-unused-parameter",
         "-Wno-macro-redefined"
