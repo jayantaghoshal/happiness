@@ -1,5 +1,5 @@
 service iplmd /vendor/bin/hw/iplmd
-    class main
+    class vcc_net
     oneshot
     user root
     group root
