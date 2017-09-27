@@ -40,6 +40,8 @@ public:
     GnssService();
     ~GnssService() = default;
 
+    void StartSubscribe();
+
     // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
     Return<void> onMessageRcvd(const Msg &msg) override;
 
