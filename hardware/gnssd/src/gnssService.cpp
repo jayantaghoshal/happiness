@@ -28,20 +28,35 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()}
     location_.timestamp = 0;
     location_.gnssLocationFlags = 0;
 
-    ipcbServer_ = IIpcb::getService("ipcb");
-
     m_session_msgd = ASN_Session_Create(m_session_buffer_msgd, sizeof(m_session_buffer_msgd));
 
-    // Install callback
-    ipcbServer_.get()->subscribeMessage((uint16_t) VccIpCmd::ServiceId::Positioning,
-                                        (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
-                                        {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                        this);
+    StartSubscribe();
+}
 
-    ipcbServer_.get()->subscribeMessage((uint16_t)VccIpCmd::ServiceId::Positioning,
-                                        (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                                        {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                        this);
+void GnssService::StartSubscribe()
+{
+    ipcbServer_ = IIpcb::getService("ipcb");
+
+    if (ipcbServer_ != NULL)
+    {
+        ALOGD("IpcbD found, subscribing");
+        // Install callback
+        ipcbServer_.get()->subscribeMessage((uint16_t) VccIpCmd::ServiceId::Positioning,
+                                            (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
+                                            {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
+                                            this);
+
+        ipcbServer_.get()->subscribeMessage((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                            (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+                                            {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
+                                            this);
+    }
+    else
+    {
+        ALOGD("IpcbD not found, retrying in 1 second");
+
+        timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
+    }
 }
 
 // Methods from vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback follow.
