@@ -17,7 +17,7 @@ LOCAL_STATIC_LIBRARIES += \
     liblocalconfig_static \
     libjsoncpp
 
-LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
+LOCAL_CPPFLAGS := -fexceptions -Wall -Wextra
 
 LOCAL_WHOLE_STATIC_LIBRARIES += \
     libVtsGtestMain
