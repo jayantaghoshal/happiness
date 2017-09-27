@@ -9,4 +9,4 @@ on init
 
 on post-fs
     exec -- /system/bin/ip netns add vcc
-    class_start vcc_netmand
+    class_start vcc_net_init

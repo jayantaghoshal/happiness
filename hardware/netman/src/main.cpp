@@ -1,5 +1,3 @@
-#define  LOG_TAG    "Netmand"
-
 #include <cutils/log.h>
 #include <cutils/properties.h>
 
@@ -9,9 +7,11 @@
 #include <string.h>
 
 #include "netlink_event_listener.h"
-#include "netlink_event_handler.h"
+#include "netman_netlink_event_handler.h"
 #include "firewall_config.h"
 #include "netman.h"
+
+#define  LOG_TAG    "Netmand"
 
 using namespace vcc::netman;
 
@@ -53,7 +53,7 @@ int main()
 
         ALOGI("Initial configurations set");
 
-        NetlinkEventHandler nl_event_handler(interface_configurations);
+        NetmanNetlinkEventHandler nl_event_handler(interface_configurations);
 
         NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(nl_event_handler);

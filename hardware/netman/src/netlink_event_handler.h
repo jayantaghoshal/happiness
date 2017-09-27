@@ -9,17 +9,12 @@ namespace netman {
 
 class NetlinkEventHandler
 {
-    const std::vector<InterfaceConfiguration> &interface_configurations_;
-
 public:
-    NetlinkEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations);
-    ~NetlinkEventHandler();
-
     void HandleEvent(struct nlmsghdr *nl_message_header);
 
 protected:
-    void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg);
-    void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
+    virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg) = 0;
+    virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg) = 0;
 };
 
 } // using netman

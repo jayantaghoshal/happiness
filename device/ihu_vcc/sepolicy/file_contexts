@@ -1,6 +1,9 @@
 # Netman execution rights
 /system/bin/netman u:object_r:netman_exec:s0
 
+# Netboy execution rights
+/system/bin/netboyd u:object_r:netboyd_exec:s0
+
 # IplmD execution rights
 /vendor/bin/hw/iplmd u:object_r:iplmd_exec:s0
 
