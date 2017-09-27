@@ -5,9 +5,11 @@
 #ifndef LOCALCONFIG_PARAMETERS_H
 #define LOCALCONFIG_PARAMETERS_H
 
+#include <chrono>
 #include <string>
 #include <unordered_map>
-#include <chrono>
+
+#include <vcc/localconfig.h>
 
 #include "ipcommandbus/isocket.h"
 
@@ -16,8 +18,7 @@ namespace Connectivity
 class LocalconfigParameters
 {
 public:
-    LocalconfigParameters();
-    ~LocalconfigParameters();
+    LocalconfigParameters(const vcc::LocalConfigReaderInterface *lcfg = vcc::LocalConfigDefault());
 
     static LocalconfigParameters &getInstance();
 
@@ -64,11 +65,6 @@ private:
     void InitNetworkPriority();
     void InitNetworkConfiguration();
 
-    // Local config accessors
-    bool ReadLocalConfig(const std::string &configId, int &config);
-    bool ReadLocalConfig(const std::string &configId, double &config);
-    bool ReadLocalConfig(const std::string &configId, std::string &config);
-
     // Note: Values will be loaded from localconfig. Default values are just for safety.
     std::chrono::milliseconds defaultAckTimeout_{500};
     uint32_t defaultAckNumRetries_ = 7;
@@ -83,8 +79,8 @@ private:
     std::string ip_address_vcm_ = "198.18.32.1";
     std::string ip_address_tem_ = "198.18.48.17";
     std::string ip_address_dim_ = "198.18.24.1";
-    std::string ip_address_tcam_ = "198.18.34.1"; //TODO add correct adress here
-    std::string ip_address_vgm_ = "198.18.34.1"; //TODO add correct adress here
+    std::string ip_address_tcam_ = "198.18.34.1";  // TODO add correct adress here
+    std::string ip_address_vgm_ = "198.18.34.1";   // TODO add correct adress here
 
     uint16_t port_local_ = 50000;
     uint16_t port_broadcast_ = 50000;
@@ -99,6 +95,8 @@ private:
     int dim_keep_alive_probes_{2};
 
     int networkControlPrio_ = 0;
+
+    const vcc::LocalConfigReaderInterface *const lcfg_;
 };
 
 }  // Connectivity
