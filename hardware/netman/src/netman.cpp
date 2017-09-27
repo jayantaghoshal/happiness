@@ -7,6 +7,7 @@
 #include <ios>
 #include <ifaddrs.h>
 
+#include <linux/ethtool.h>
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
 
@@ -213,6 +214,102 @@ static bool IsMacAddressCorrect(const std::vector<uint8_t> &mac_address, const c
     return match;
 }
 
+static inline __u32 ethtool_cmd_speed_(const struct ethtool_cmd *ep)
+{
+    return (ep->speed_hi << 16) | ep->speed;
+}
+
+static bool IsLinkSpeedCorrect(const std::string &interface_name)
+{
+    int sock;
+    struct ifreq ifr;
+    struct ethtool_cmd edata;
+    int rc;
+
+    sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock < 0)
+    {
+        return false;
+    }
+
+    strncpy(ifr.ifr_name, interface_name.c_str(), sizeof(ifr.ifr_name));
+    ifr.ifr_data = &edata;
+
+    edata.cmd = ETHTOOL_GSET;
+
+    rc = ioctl(sock, SIOCETHTOOL, &ifr);
+    if (rc < 0)
+    {
+        close(sock);
+        return false;
+    }
+
+    // TODO (Patrik Moberg): Hard coded link speed, make Local Config a rainy day.
+    switch (ethtool_cmd_speed_(&edata))
+    {
+        case SPEED_100:
+            close(sock);
+            return true;
+        default:
+            close(sock);
+            return false;
+    }
+
+    close(sock);
+    return false;
+}
+
+static inline void ethtool_cmd_speed_set_(struct ethtool_cmd *ep,__u32 speed)
+{
+    ep->speed = (__u16)(speed & 0xFFFF);
+    ep->speed_hi = (__u16)(speed >> 16);
+}
+
+static bool SetLinkSpeed(const std::string &interface_name)
+{
+    int sock;
+    struct ifreq ifr;
+    struct ethtool_cmd edata;
+    int rc;
+
+    sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock < 0)
+    {
+        return false;
+    }
+
+    strncpy(ifr.ifr_name, interface_name.c_str(), sizeof(ifr.ifr_name));
+    ifr.ifr_data = &edata;
+
+    // Some drivers does not allow for these operations. See ethtool.h for more instructions.
+    edata.cmd = ETHTOOL_GSET;
+
+    rc = ioctl(sock, SIOCETHTOOL, &ifr);
+    if (rc < 0)
+    {
+        ALOGI("SetLinkSpeed NOT successful (Get). %s", std::strerror(errno));
+        close(sock);
+        return false;
+    }
+
+    edata.cmd = ETHTOOL_SSET;
+    ethtool_cmd_speed_set_(&edata, SPEED_100);
+    edata.duplex = DUPLEX_FULL;
+    edata.autoneg = AUTONEG_DISABLE;
+
+    rc = ioctl(sock, SIOCETHTOOL, &ifr);
+    if (rc < 0)
+    {
+        close(sock);
+        ALOGI("SetLinkSpeed NOT successful (Set). %s", std::strerror(errno));
+        return false;
+    }
+
+    ALOGI("SetLinkSpeed successful.");
+    close(sock);
+    return true;
+}
+
 static bool IsInterfaceUp(const char* interface_name)
 {
     struct ifreq ifr_req;
@@ -279,7 +376,7 @@ bool BringInterfaceUp(const char* interface_name)
     return true;
 }
 
-static bool TakeInterfaceDown(const char* interface_name)
+bool TakeInterfaceDown(const char* interface_name)
 {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
@@ -527,6 +624,17 @@ bool SetupInterface(const char* interface_name,
     {
         ALOGE("%s: Interface does not appear to exist!", interface_name);
         return false;
+    }
+
+    // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.
+    if (std::strcmp(interface_name, "eth1") == 0 && !IsLinkSpeedCorrect(interface_name))
+    {
+        if (IsInterfaceUp(interface_name))
+        {
+            TakeInterfaceDown(interface_name);
+        }
+
+        SetLinkSpeed(interface_name);
     }
 
     if (!IsMacAddressCorrect(mac_address, interface_name))

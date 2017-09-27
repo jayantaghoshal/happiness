@@ -31,6 +31,8 @@ void BringInterfaceUp(const std::string &interface_name, const std::string &ns);
 
 bool BringInterfaceUp(const char* interface_name);
 
+bool TakeInterfaceDown(const char *interface_name);
+
 }
 }
 
