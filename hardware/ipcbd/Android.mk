@@ -51,6 +51,7 @@ LOCAL_SHARED_LIBRARIES += \
     libhidltransport \
     libhardware \
     libhwbinder \
+    vendor.volvocars.hardware.common@1.0 \
     vendor.volvocars.hardware.ipcb@1.0
 
 LOCAL_C_INCLUDES := \
