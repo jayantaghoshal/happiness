@@ -218,6 +218,7 @@ class FrSignalInterface:
             try:
                 self.connection = fdx_client.FDXConnection(data_exchange, os.environ['VECTOR_FDX_IP'], int(os.environ['VECTOR_FDX_PORT']))
                 self.connection.send_start()
+                self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
                 for g in groups_to_subscribe:                
@@ -234,6 +235,7 @@ class FrSignalInterface:
         
     def close(self):
         if self.connected:
+            self.connection.confirmed_stop()
             self.connection.close()
         
 %(signal_classes)s

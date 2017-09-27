@@ -42,7 +42,7 @@ int main(int argc, char** argv)
   });
 
   // Fallback timeout. Program should be killed anyway from the test case
-  std::this_thread::sleep_for(10s);
+  std::this_thread::sleep_for(20s);
   if (signalReceived)
   {
     ALOGI("Signal %s received at least once, exit test program", REC_SIGNAL::Name());
