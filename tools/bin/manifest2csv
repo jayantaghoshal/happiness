@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+import sys
+import os
+import csv
+from operator import itemgetter
+import xml.etree.ElementTree as ET
+
+class Projects(object):
+
+    def __init__(self):
+        self._projects = list()
+
+    def add(self, project):
+        name = project.attrib.get("name")
+        path = project.attrib.get("path")
+        revision = project.attrib.get("revision")
+        self._projects.append({"name": name, "path": path, "revision": revision})
+
+    def __iter__(self):
+        for project in sorted(self._projects, key=itemgetter("name")):
+            yield project
+
+    def __len__(self):
+        return len(self._projects)
+
+class ManifestParser(object):
+
+    def __init__(self):
+        self._projects = Projects()
+
+    def xml2csv(self, manifest_file, csv_file):
+        self._parse_manifest(manifest_file)
+        with open(csv_file, 'w') as csvfile:
+            fieldnames = ['name', 'path', 'revision']
+            writer = csv.DictWriter(csvfile, delimiter=',', fieldnames=fieldnames)
+            writer.writeheader()
+            for project in self._projects:
+                writer.writerow(project)
+
+    def _parse_manifest(self, filename):
+        tree = ET.parse(filename)
+        root = tree.getroot()
+        for child in root:
+            if child.tag == "include":
+                filename = os.path.dirname(filename) + "/" + child.get("name")
+                self._parse_manifest(filename)
+            if child.tag == "project":
+                self._projects.add(child)
+
+def main(args):
+    if len(args) < 2:
+        raise SystemExit('Usage: manifest2csv <MANIFEST-FILE> <CSV OUT-FILE>')
+
+    manifest_file = os.path.realpath(args[0])
+    csv_file = args[1]
+    parser = ManifestParser()
+    parser.xml2csv(manifest_file, csv_file)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
