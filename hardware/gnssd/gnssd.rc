@@ -1,5 +1,5 @@
 service gnssd /vendor/bin/hw/gnssd
-    class main
+    class vcc_net
     oneshot
     user root
     group root

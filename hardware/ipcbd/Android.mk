@@ -3,10 +3,8 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := ipcbd
 
-# TODO: Uncomment the following lines when the infotainment-ip-service is removed
-# LOCAL_INIT_RC := ipcbd_udp.rc
-# LOCAL_INIT_RC += ipcbd_udpb.rc \
-# ipcbd_tcp.rc
+LOCAL_INIT_RC := ipcbd-infotainment.rc \
+                 ipcbd-iplm.rc
 
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_PROPRIETARY_MODULE := true
