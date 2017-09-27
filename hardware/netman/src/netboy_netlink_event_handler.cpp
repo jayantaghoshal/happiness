@@ -24,6 +24,8 @@ void NetboyNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_h
     if ((if_info_msg != NULL) && if_indextoname(if_info_msg->ifi_index, network_interface_name) != NULL) {
         ALOGI("Moving interface %s to namespace", network_interface_name);
 
+        TakeInterfaceDown(network_interface_name);
+
         MoveNetworkInterfaceToNamespace(network_interface_name, ns);
 
         /*
