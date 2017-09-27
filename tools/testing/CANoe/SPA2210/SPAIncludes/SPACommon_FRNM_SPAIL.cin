@@ -1,0 +1,172 @@
+variables
+{
+  msTimer SPAFrNm_RequestTimer;
+  const long SPAFrNm_REQUEST_REPEAT_TIME = 100;
+  char [30] FRNMNodes [long];
+  long SPAFrNm_NetworkRequested = 0;
+  const long SPA_PNC_BYTES_FR = 6;
+  byte SPAFrNm_PNCData[SPA_PNC_BYTES_FR];
+}
+
+on preStart
+{
+  If (@%NODE_NAME%::FRNM::Control::On)
+  {
+    FrNm_SetAutoStartParam(1);
+    SPAFrNm_NetworkRequested = 1;
+    @_SPACommon::FRWakeUp = 1;
+    SPACommon_Write("FRNM: Automatic network request at measurement start");
+  }
+  Else
+    FrNm_SetAutoStartParam(0);
+  
+  SPAFrNm_InitLUT();
+}
+
+SPAFrNm_InitLUT()
+{
+  strncpy(FRNMNodes[0x51], "DIM", 30);
+  strncpy(FRNMNodes[0x52], "VDDM", 30);
+  strncpy(FRNMNodes[0x53], "CEM", 30);
+  strncpy(FRNMNodes[0x54], "ADSM", 30);
+  strncpy(FRNMNodes[0x55], "SRS", 30);
+  strncpy(FRNMNodes[0x56], "IHU", 30);
+  strncpy(FRNMNodes[0x57], "VCM", 30);
+  strncpy(FRNMNodes[0x58], "PAM", 30);
+}
+
+on start
+{
+  const long PNC_BITS_TOTAL = SPA_PNC_BYTES_FR * 8;
+  dword PNCBits[1];
+  long initCommon;
+  long pncBit;
+  long pncByte;
+  byte pncBitMask;
+
+  SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY, "FRNM node %NODE_NAME% (id 0x%x) started", (long) FrNm_GetLocalNodeIdentifier());
+  If (!(@%NODE_NAME%::FRNM::Control::On || @_SPACommon::FRWakeUp))
+    @%NODE_NAME%::FRIL::Control::IL = sysvar::_SPACommon::SimulationControl::ILWait;
+  SPAFrNm_SetPN(@_SPACommon::PartialNetworkingEnabled);
+  FrNmFI_IgnoreRepeatMessageBit(1);
+  
+  If(SPA_PNC_BYTES != SPA_PNC_BYTES_FR)
+    Write("ERROR %NODE_NAME% SPA_PNC_BYTES(%d) <> SPA_PNC_BYTES_FR(%d)", SPA_PNC_BYTES, SPA_PNC_BYTES_FR);
+  FrNm_GetPnRequestBitsDefault(SPAFrNm_PNCData,SPA_PNC_BYTES_FR,PNCBits);
+  If(PNCBits[0] != PNC_BITS_TOTAL)
+    Write("ERROR %NODE_NAME% FR NM pnRequestBitsLengt(%d) <> SPA_PNC_BYTES_FR(%d)*8", PNCBits[0], SPA_PNC_BYTES_FR);
+  If(PNCBits[0] < SPA_PNC_BITS)
+    Write("ERROR %NODE_NAME% FR NM pnRequestBitsLengt(%d) < SPA_PNC_BITS(%d)", PNCBits[0], SPA_PNC_BITS);
+
+  initCommon = @%NODE_NAME%::FRNM::PNC::InitCOMMON;
+  pncBit = 0;
+  For(pncByte=0; pncByte < SPA_PNC_BYTES_FR; pncByte++)
+  {
+    @%NODE_NAME%::FRNM::PNC::PNCByteArray[pncByte] = (long) SPAFrNm_PNCData[pncByte];
+    If(initCommon)
+    {
+      For(pncBitMask=1; pncBitMask != 0; pncBitMask <<= 1)
+      {
+        @%NODE_NAME%::COMMON::PNC::PNCBitArray[pncBit] = (pncBitMask & SPAFrNm_PNCData[pncByte]) ? 1 : 0;
+        pncBit++;
+      }
+    }
+  } 
+  If(initCommon)
+    SPACommon_InitPNC();
+}
+
+SPAFrNm_NetworkRequestRepeat()
+{
+  If (SPAFrNm_NetworkRequested)
+    SPACommon_WriteWithTime(SPA_WRITE_SEVERITY_ERROR, SPA_WRITE_BASE_PRIORTY+1, "FlexRay net already requested");
+  Else If (FrNm_NetworkRequest())
+  {
+    SPACommon_WriteWithTime("FlexRay net request");
+    SPAFrNm_NetworkRequested = 1;
+  }
+  Else
+  {
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Tried to request FlexRay net, retry in %d ms", timeNow(),SPAFrNm_REQUEST_REPEAT_TIME);
+    SPACommon_Write();
+    setTimer(SPAFrNm_RequestTimer,SPAFrNm_REQUEST_REPEAT_TIME);
+  }
+}
+ 
+on timer SPAFrNm_RequestTimer
+{
+  SPAFrNm_NetworkRequestRepeat();
+}
+
+on sysvar %NODE_NAME%::FRNM::Control::On
+{
+  If(@this)
+  {
+    SPAFrNm_NetworkRequestRepeat();
+    @_SPACommon::FRWakeUp = 1;
+  }
+  else
+  {
+    SPACommon_WriteWithTime("FlexRay net release");
+    FrNm_NetworkRelease();
+    SPAFrNm_NetworkRequested = 0;
+  }
+}
+
+on sysvar %NODE_NAME%::FRNM::PNC::PNCByteArray
+{
+  long pncByte;
+  For(pncByte=0;pncByte < SPA_PNC_BYTES_FR; pncByte++)
+    SPAFrNm_PNCData[pncByte] = (byte) (@this[pncByte] & 0xff);
+
+  FrNm_SetPnRequestBits(SPAFrNm_PNCData);
+}
+
+void FrNm_StateChangeNotification( long previousState,long currentState)
+{
+  @%NODE_NAME%::FRNM::Control::State = currentState;
+}
+
+void FrNm_NetworkModeInd()
+{
+  @%NODE_NAME%::FRIL::Control::IL = sysvar::_SPACommon::SimulationControl::ILResume;
+}
+
+void FrNm_NetworkStartInd()
+{
+  char nameBuffer[30];
+  SPAFrNm_GetNodeName(FrNm_GetNodeIdentifier(), nameBuffer, 30);
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% got FrNm_NetworkStartInd (from %s): FlexRay network started", timeNow(), nameBuffer);
+  SPACommon_Write();
+  FrNm_PassiveStartUp();
+}
+
+SPAFrNm_GetNodeName(long nodeID, char bufferOut[], DWORD bufferSize)
+{
+  If(FRNMNodes.containsKey(nodeID))
+ 	  strncpy(bufferOut, FRNMNodes[nodeID], bufferSize);
+  else
+    snprintf(bufferOut, bufferSize, "UNKNOWN; ID 0x%x", nodeID);
+}
+
+void FrNm_BusSleepModePreInd(long valid, long deltaCycles, long absCycle)
+{
+  If(valid)
+    @%NODE_NAME%::FRIL::Control::IL = sysvar::_SPACommon::SimulationControl::ILWait;
+  Else
+    @%NODE_NAME%::FRIL::Control::IL = sysvar::_SPACommon::SimulationControl::ILResume;
+}
+
+void FrNm_BusSleepModeInd()
+{
+  @_SPACommon::FRWakeUp = 0;
+}
+
+SPAFrNm_SetPN(long setPN)
+{
+  If(setPN)
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "FrNm_EnablePartialNetworking=%d", FrNm_EnablePartialNetworking());
+  Else
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "FrNm_DisablePartialNetworking=%d", FrNm_DisablePartialNetworking());
+  SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+}

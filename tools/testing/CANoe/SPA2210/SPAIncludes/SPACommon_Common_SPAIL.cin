@@ -1,0 +1,397 @@
+variables
+{
+  const long SPA_UB_INIT = 1;
+  const long SPA_QF_INIT = 3;
+  const long SPA_PNC_BYTES = 6;
+  const long SPA_PNC_BYTES_USED = 3;
+  const long SPA_PNC_BITS = SPA_PNC_BYTES_USED * 8;
+  long SPACommon_PNCData[SPA_PNC_BYTES];
+  const dword SPA_WRITE_SINK_SYSTEM = 0;
+  const dword SPA_WRITE_SINK_CAPL = 1;
+  const dword SPA_WRITE_SINK_LOGFILE = -2;
+  const dword SPA_WRITE_SEVERITY_SUCCESS = 0;
+  const dword SPA_WRITE_SEVERITY_INFORMATION = 1;
+  const dword SPA_WRITE_SEVERITY_WARNING = 2;
+  const dword SPA_WRITE_SEVERITY_ERROR = 3;
+  const long SPA_WRITE_LOW_PRIORTY = 6;
+  const long SPA_WRITE_BASE_PRIORTY = 11;
+  const long SPA_WRITE_HIGH_PRIORTY = 16;
+  const long SPA_MAX_WRITE_LENGTH = 1023;
+  char SPACommon_writeString[SPA_MAX_WRITE_LENGTH + 1] = "";
+}
+
+on preStart
+{
+  long i;
+  If (@%NODE_NAME%::COMMON::Control::On)
+  {
+    SPACommon_SetNodeControlOn(1);
+  }
+  for(i = 0; i < SPA_PNC_BYTES; i++)
+    SPACommon_PNCData[i] = 0;
+}
+
+on sysvar %NODE_NAME%::COMMON::Control::On
+{
+  SPACommon_SetNodeControlOn(@this);
+}
+
+SPACommon_SetNodeControlOn (long setValue)
+{
+  long debugNo;
+  debugNo = 0;
+  If (sysSetVariableInt("%NODE_NAME%::CANNM::Control","On",setValue)) debugNo++;
+  If (sysSetVariableInt("%NODE_NAME%::FRNM::Control","On",setValue)) debugNo++;
+  If (debugNo > 1) 
+    SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_HIGH_PRIORTY, "%NODE_NAME%::COMMON::Control::On:%d detected but %NODE_NAME% has no control (FRNM or CANNM))", setValue);
+}
+
+on sysvar_update %NODE_NAME%::COMMON::Control::IL
+{
+  long debugNo;
+  debugNo = 0;
+  If (sysSetVariableInt("%NODE_NAME%::CANIL::Control","IL",@this)) debugNo++;
+  If (sysSetVariableInt("%NODE_NAME%::FRIL::Control","IL",@this)) debugNo++;
+  If (debugNo > 1) 
+  {
+    enum VtSv__SPACommon_SimulationControl controlValue;
+    controlValue = (enum VtSv__SPACommon_SimulationControl) @this;
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%NODE_NAME%::COMMON::Control::IL:%s detected but %NODE_NAME% has no control (CANIL or FRIL))", controlValue.name());
+    SPACommon_Write(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_HIGH_PRIORTY);
+  }
+}
+
+on sysvar_update _SPACommon::SimulationControl
+{
+  @%NODE_NAME%::COMMON::Control::IL = @this;
+}
+
+on sysvar_update _SPACommon::UBControl
+{
+  @%NODE_NAME%::COMMON::Control::UB = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::Control::UB
+{
+  long debugNo;
+  debugNo = 0;
+  If (sysSetVariableInt("%NODE_NAME%::CANIL::Control","UB",@this)) debugNo++;
+  If (sysSetVariableInt("%NODE_NAME%::FRIL::Control","UB",@this)) debugNo++;
+  If (debugNo > 1) 
+  {
+    enum VtSv__SPACommon_UBControl controlValue;
+    controlValue = (enum VtSv__SPACommon_UBControl) @this;
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%NODE_NAME%::COMMON::Control::UB:%s detected but %NODE_NAME% has no control (CANIL or FRIL))", controlValue.name());
+    SPACommon_Write(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_HIGH_PRIORTY);
+  }
+}
+
+on sysvar_update _SPACommon::E2ECntrMode
+{
+  @%NODE_NAME%::COMMON::Control::E2ECntrMode = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::Control::E2ECntrMode
+{
+  long debugNo;
+  debugNo = 0;
+  If (sysSetVariableInt("%NODE_NAME%::CANIL::Control","E2ECntrMode",@this)) debugNo++;
+  If (sysSetVariableInt("%NODE_NAME%::FRIL::Control","E2ECntrMode",@this)) debugNo++;
+  If (debugNo > 1) 
+  {
+    enum VtSv__SPACommon_E2ECntrMode controlValue;
+    controlValue = (enum VtSv__SPACommon_E2ECntrMode) @this;
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%NODE_NAME%::COMMON::Control::E2ECntrMode:%s detected but %NODE_NAME% has no control (CANIL or FRIL))", controlValue.name());
+    SPACommon_Write(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_HIGH_PRIORTY);
+  }
+}
+
+on sysvar %NODE_NAME%::COMMON::PNC::PNCBitArray
+{
+  long pncBit;
+  long pncByte;
+  byte pncBitMask;
+  long newPNCDataByte;
+  long debugNo;
+  
+  pncBit = 0;
+  For(pncByte=0; pncByte < SPA_PNC_BYTES; pncByte++)
+  {
+    newPNCDataByte = 0;
+    For(pncBitMask=1; pncBitMask != 0; pncBitMask <<= 1)
+    {
+      If(@this[pncBit] & 1)
+        newPNCDataByte |= (long) pncBitMask;
+      pncBit++;
+    }
+    SPACommon_PNCData[pncByte] = newPNCDataByte;
+  }
+  //write("%d %NODE_NAME%: PNCBitArray changed", timeNow());
+  debugNo = 0;
+  If (sysSetVariableLongArray("%NODE_NAME%::CANNM::PNC","PNCByteArray", SPACommon_PNCData, SPA_PNC_BYTES)) debugNo++;
+  If (sysSetVariableLongArray("%NODE_NAME%::FRNM::PNC","PNCByteArray", SPACommon_PNCData, SPA_PNC_BYTES)) debugNo++;
+  If (debugNo > 1) 
+    SPACommon_Write(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_HIGH_PRIORTY, "%NODE_NAME%::COMMON::PNC::PNCBitArray changed but %NODE_NAME% has no control (FRNM or CANNM))");
+}
+
+long SPACommon_GetUserFilePath(char moduleName[], char fileName[], char absPath[], long absPathLen)
+{
+  long resultValue;
+  #IF TOOL_MAJOR_VERSION > 7 || ( TOOL_MAJOR_VERSION == 7 && TOOL_MINOR_VERSION == 6 && TOOL_SERVICE_PACK >= 4)
+    resultValue = getUserFilePath(fileName, absPath, absPathLen); // Require 7.6 SP4 or later
+    If (resultValue == -2)
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "File '%s' not registered as 'user file'. Used by '%s' module", fileName,moduleName);
+    Else If (resultValue == -1)
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "File path buffer (%d) exceeded in '%s' module", absPathLen,moduleName);
+  #ELSE
+    resultValue = -3;
+    #pragma message("WARNING: Old versions of CANoe does not support user file handlig ('getUserFilePath') in CAPL")
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%s: To load or store file values from %s (user file) not supported with this CANoe version", moduleName, fileName);
+  #ENDIF
+  If(resultValue < 0)
+    SPACommon_Write(SPA_WRITE_SEVERITY_ERROR);
+  return resultValue;
+}
+
+SPACommon_WriteWithTime(char writeString[])
+{
+  SPACommon_WriteWithTime(SPA_WRITE_SEVERITY_SUCCESS, SPA_WRITE_BASE_PRIORTY, writeString);
+}
+
+SPACommon_WriteWithTime(dword severity, long priority, char writeString[])
+{
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %s", TimeNow(), writeString);
+  SPACommon_Write(severity, priority, SPACommon_writeString);
+}
+
+SPACommon_WriteAddLong(char writeString[], long longToAdd)
+{
+  SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_SUCCESS, SPA_WRITE_BASE_PRIORTY, writeString, longToAdd);
+}
+
+SPACommon_WriteAddLong(dword severity, long priority, char writeString[], long longToAdd)
+{
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, writeString, longToAdd);
+  SPACommon_Write(severity, priority, SPACommon_writeString);
+}
+
+SPACommon_WriteUB(char funcName[], char signalName[], enum VtSv__SPACommon_UBControl controlValue, long resultValue)
+{
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %s(%s, %s) called with result %d", timeNow(), funcName, signalName, controlValue.name(), resultValue);
+  SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_BASE_PRIORTY-1);
+}
+
+SPACommon_WriteE2ECntrMode(char funcName[], enum VtSv__SPACommon_E2ECntrMode controlValue, long resultValue)
+{
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %s(%s) called with result %d", timeNow(), funcName, controlValue.name(), resultValue);
+  SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_BASE_PRIORTY-1);
+}
+
+SPACommon_WriteFunc(char funcName[], char stringPar[], long valuePar, long resultValue)
+{
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %s(%s, %d) called with result %d", timeNow(), funcName, stringPar, valuePar, resultValue);
+  SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_BASE_PRIORTY-1);
+}
+
+SPACommon_Write()
+{
+  SPACommon_Write(SPA_WRITE_SEVERITY_SUCCESS, SPA_WRITE_BASE_PRIORTY, SPACommon_writeString);
+}
+
+SPACommon_Write(dword severity)
+{
+  SPACommon_Write(severity, SPA_WRITE_BASE_PRIORTY, SPACommon_writeString);
+}
+
+SPACommon_Write(char writeString[])
+{
+  SPACommon_Write(SPA_WRITE_SEVERITY_SUCCESS, SPA_WRITE_BASE_PRIORTY, writeString);
+}
+
+SPACommon_Write(dword severity, long priority)
+{
+  SPACommon_Write(severity, priority, SPACommon_writeString);
+}
+
+SPACommon_Write(dword severity, long priority, char writeString[])
+{
+  dword nodeWriteSink = SPA_WRITE_SINK_SYSTEM;
+  
+  If(priority > @_SPACommon::LoggingControl::WriteDbgLevel)
+  {
+    If(@_SPACommon::LoggingControl::WriteToNodeSink)
+    {
+      If(nodeWriteSink == SPA_WRITE_SINK_SYSTEM)
+      {
+        nodeWriteSink = writeCreate("%NODE_NAME%");
+        If(@_SPACommon::LoggingControl::WriteDbgLevel < SPA_WRITE_LOW_PRIORTY)
+          writeLineEx(nodeWriteSink, SPA_WRITE_SEVERITY_INFORMATION, "New Write page for %NODE_NAME%, sinkNo:%d", nodeWriteSink);
+      }
+      writeLineEx(nodeWriteSink, severity, writeString);
+    }
+    Else
+      writeLineEx(SPA_WRITE_SINK_CAPL, severity, "%s (%NODE_NAME%)", writeString);
+  }
+  
+  If(@_SPACommon::LoggingControl::WriteToLogFile)
+  {
+    Switch(severity)
+    {
+      Case(SPA_WRITE_SEVERITY_ERROR) :
+        writeToLog("ERROR - %s (%NODE_NAME%:%d)", writeString, priority); break;
+      Case(SPA_WRITE_SEVERITY_WARNING) :
+        writeToLog("WARNING - %s (%NODE_NAME%:%d)", writeString, priority);; break;
+      Default :
+        writeToLog("%s (%NODE_NAME%:%d)", writeString, priority);
+    }
+  }
+}
+
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC0_DriverInfo
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[0] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC1_Locking
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[1] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC2_Hazard
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[2] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC3_WarningSounds
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[3] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC4_Visibility
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[4] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC5_Body
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[5] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC6_InfotainmentHMI
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[6] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC7_Entrance
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[7] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC8_Start
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[8] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC9_Charging
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[9] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC10_PreClimatization
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[10] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC11_Driving
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[11] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC12_TrailerCaravan
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[12] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC13_Global
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[13] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC14_GSD
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[14] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC15_DriverInfoPoll
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[15] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC16_Spare8
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[16] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC17_Spare7
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[17] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC18_Spare6
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[18] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC19_Spare5
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[19] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC20_Spare4
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[20] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC21_Spare3
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[21] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC22_Spare2
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[22] = @this;
+}
+
+on sysvar_update %NODE_NAME%::COMMON::PNC::PNC23_Spare1
+{
+  @%NODE_NAME%::COMMON::PNC::PNCBitArray[23] = @this;
+}
+
+SPACommon_InitPNC()
+{
+  @%NODE_NAME%::COMMON::PNC::PNC0_DriverInfo = @%NODE_NAME%::COMMON::PNC::PNCBitArray[0];
+  @%NODE_NAME%::COMMON::PNC::PNC1_Locking = @%NODE_NAME%::COMMON::PNC::PNCBitArray[1];
+  @%NODE_NAME%::COMMON::PNC::PNC2_Hazard = @%NODE_NAME%::COMMON::PNC::PNCBitArray[2];
+  @%NODE_NAME%::COMMON::PNC::PNC3_WarningSounds = @%NODE_NAME%::COMMON::PNC::PNCBitArray[3];
+  @%NODE_NAME%::COMMON::PNC::PNC4_Visibility = @%NODE_NAME%::COMMON::PNC::PNCBitArray[4];
+  @%NODE_NAME%::COMMON::PNC::PNC5_Body = @%NODE_NAME%::COMMON::PNC::PNCBitArray[5];
+  @%NODE_NAME%::COMMON::PNC::PNC6_InfotainmentHMI = @%NODE_NAME%::COMMON::PNC::PNCBitArray[6];
+  @%NODE_NAME%::COMMON::PNC::PNC7_Entrance = @%NODE_NAME%::COMMON::PNC::PNCBitArray[7];
+  @%NODE_NAME%::COMMON::PNC::PNC8_Start = @%NODE_NAME%::COMMON::PNC::PNCBitArray[8];
+  @%NODE_NAME%::COMMON::PNC::PNC9_Charging = @%NODE_NAME%::COMMON::PNC::PNCBitArray[9];
+  @%NODE_NAME%::COMMON::PNC::PNC10_PreClimatization = @%NODE_NAME%::COMMON::PNC::PNCBitArray[10];
+  @%NODE_NAME%::COMMON::PNC::PNC11_Driving = @%NODE_NAME%::COMMON::PNC::PNCBitArray[11];
+  @%NODE_NAME%::COMMON::PNC::PNC12_TrailerCaravan = @%NODE_NAME%::COMMON::PNC::PNCBitArray[12];
+  @%NODE_NAME%::COMMON::PNC::PNC13_Global = @%NODE_NAME%::COMMON::PNC::PNCBitArray[13];
+  @%NODE_NAME%::COMMON::PNC::PNC14_GSD = @%NODE_NAME%::COMMON::PNC::PNCBitArray[14];
+  @%NODE_NAME%::COMMON::PNC::PNC15_DriverInfoPoll = @%NODE_NAME%::COMMON::PNC::PNCBitArray[15];
+  @%NODE_NAME%::COMMON::PNC::PNC16_Spare8 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[16];
+  @%NODE_NAME%::COMMON::PNC::PNC17_Spare7 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[17];
+  @%NODE_NAME%::COMMON::PNC::PNC18_Spare6 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[18];
+  @%NODE_NAME%::COMMON::PNC::PNC19_Spare5 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[19];
+  @%NODE_NAME%::COMMON::PNC::PNC20_Spare4 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[20];
+  @%NODE_NAME%::COMMON::PNC::PNC21_Spare3 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[21];
+  @%NODE_NAME%::COMMON::PNC::PNC22_Spare2 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[22];
+  @%NODE_NAME%::COMMON::PNC::PNC23_Spare1 = @%NODE_NAME%::COMMON::PNC::PNCBitArray[23];
+}

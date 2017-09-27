@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+    <namespace name="" comment="">
+        <namespace name="VDDM" comment="NODE">
+            <namespace name="Panel" comment="..\InfotainmentModules\Node_basic_includes\VDDM_speedhandler.cin">
+			    <namespace name="Input" comment="IN">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VDDM_speed_kmh" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VDDM_speed_mph" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+				</namespace>
+			</namespace>
+		</namespace>
+    </namespace>
+</systemvariables>

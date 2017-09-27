@@ -1,0 +1,49 @@
+
+on FRPocState
+{
+  If( this.FR_Info2 == 2
+   || this.FR_Info2 == 7 // Transceiver reports Wakeup
+   || this.FR_Info2 == 16 ) // E-Ray reports WUP
+  {
+    write("%d: FRNM Master detected wakeup %d when FRWakeUp=%d", timeNow(), this.FR_Info2, @_SPACommon::FRWakeUp);
+    @_SPACommon::FRWakeUp=1;
+  }
+}
+
+on start
+{
+  SPAFrNM_FrModeChange(@_SPACommon::FRWakeUp);
+}
+
+on sysvar _SPACommon::FRWakeUp
+{
+  SPAFrNM_FrModeChange(@this);
+}
+
+SPAFrNM_FrModeChange(long modeGoNormal)
+{
+  long clusterOn = 1;
+  If(@CEM::FRNMMaster::Control::On)
+  {
+    long frnmState;
+    frnmState = FrNm_GetState();
+    write("%d: FRNM Master SPAFrNM_FrModeChange(modeGoNormal=%d) called when clusterOn=%d and frnmState=%d", timeNow(),modeGoNormal, clusterOn, frnmState);
+    If(modeGoNormal && !clusterOn)
+    {
+      FRSetPOCState(1, 1, 1); // Goto Normal Active
+      FRSetPOCState(1, 2, 1); // Goto Normal Active
+      clusterOn = 1;
+      If(!SPAFrNm_NetworkRequested)
+        FrNm_PassiveStartUp(); // Sync FRNM
+    }
+    Else If(!modeGoNormal && clusterOn)
+    {
+      FRSetPOCState(1, 1, 3); // Goto Ready
+      FRSetPOCState(1, 2, 3); // Goto Ready
+      clusterOn = 0;
+    }
+     //Else //Do nothing
+  }
+  Else
+    write("%d: FRNM Master SPAFrNM_FrModeChange(modeGoNormal=%d) called when sysvar::CEM::FRNMMaster::Control::On=%d", timeNow(),modeGoNormal, @CEM::FRNMMaster::Control::On);
+}

@@ -1,0 +1,245 @@
+on preStart
+{
+  enum VtSv__SPACommon_SimulationControl ilControlValue;
+  enum VtSv__SPACommon_UBControl ubControlValue;
+  enum VtSv__SPACommon_E2ECntrMode cntrControlValue;
+  
+  If(@_SPACommon::LoggingControl::WriteDbgLevel < SPA_WRITE_LOW_PRIORTY)
+    SetVerbosity(1);
+  Else
+    SetVerbosity(0);
+
+  ilControlValue = (enum VtSv__SPACommon_SimulationControl) @%NODE_NAME%::FRIL::Control::IL;
+  If(ilControlValue == ILStart)
+  {
+    ilControlValue = (enum VtSv__SPACommon_SimulationControl) @%NODE_NAME%::COMMON::Control::IL;
+    If(ilControlValue == ILStart)
+      ilControlValue = (enum VtSv__SPACommon_SimulationControl) @_SPACommon::SimulationControl;
+  }
+  Switch(ilControlValue)
+  {
+    Case(ILInit) :
+    Case(ILStop) :
+      @%NODE_NAME%::FRIL::Control::IL = (long) ILStop; break;
+    Case(ILWait) :
+      @%NODE_NAME%::FRIL::Control::IL = (long) ILWait; break;
+  }
+  
+  ubControlValue = (enum VtSv__SPACommon_UBControl) @%NODE_NAME%::FRIL::Control::UB;
+  If(ubControlValue == UBHandled)
+  {
+    ubControlValue = (enum VtSv__SPACommon_UBControl) @%NODE_NAME%::COMMON::Control::UB;
+    If(ubControlValue == UBHandled)
+      ubControlValue = (enum VtSv__SPACommon_UBControl) @_SPACommon::UBControl;
+  }
+  If(ubControlValue != UBHandled)
+    @%NODE_NAME%::FRIL::Control::UB = (long) ubControlValue;
+  
+  cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @%NODE_NAME%::FRIL::Control::E2ECntrMode;
+  If(cntrControlValue == CntrPnP)
+  {
+    cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @%NODE_NAME%::COMMON::Control::E2ECntrMode;
+    If(cntrControlValue == CntrPnP)
+      cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @_SPACommon::E2ECntrMode;
+  }
+  If(cntrControlValue != CntrPnP)
+    @%NODE_NAME%::FRIL::Control::E2ECntrMode = (long) cntrControlValue;
+}
+
+on sysvar_update %NODE_NAME%::FRIL::Control::E2ECntrMode
+{
+  SPAFRIL_NodeE2ECntrMode((enum VtSv__SPACommon_E2ECntrMode) @this);
+}
+
+SPAFRIL_NodeE2ECntrMode(enum VtSv__SPACommon_E2ECntrMode controlValue)
+{
+  long resultValue;
+  Switch(controlValue)
+  {
+    Case(CntrReal) :
+      resultValue = SetOperationMode(1,0); break;
+    Case(CntrPnP) :
+      resultValue = SetOperationMode(1,1); break;
+    Default :
+      resultValue = -3;
+  }
+  SPACommon_WriteE2ECntrMode("SPAFRIL_NodeE2ECntrMode", controlValue, resultValue);
+}
+
+on sysvar_update %NODE_NAME%::FRIL::Control::IL
+{
+  enum VtSv__SPACommon_SimulationControl controlValue;
+  long resultValue;
+  char implString[50];
+  
+  controlValue = (enum VtSv__SPACommon_SimulationControl) @this;
+  Switch(controlValue)
+  {
+    Case(ILInit) :
+    Case(ILStop) :
+    Case(ILWait) :
+     resultValue = ControlWait();
+     strncpy(implString, "ControlWait()", 50);
+      break;
+    Case(ILResume) :
+    Case(ILStart) :
+     resultValue = ControlResume();
+     strncpy(implString, "ControlResume(), SignalInit = 1", 50);
+      @%NODE_NAME%::COMMON::Control::SignalInit = 1;
+      break;
+    Default :
+      strncpy(implString, "NOTHING", 50);
+      resultValue = -1;
+  }
+      
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %NODE_NAME%::FRIL::Control::IL:%s set with result %d (implemented with %s)", timeNow(), controlValue.name(), resultValue, implString);
+  SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+}
+
+on sysvar_update %NODE_NAME%::FRIL::Control::UB
+{
+  SPAFRIL_NodeUBControl((enum VtSv__SPACommon_UBControl) @this);
+}
+
+SPAFRIL_NodeUBControl(enum VtSv__SPACommon_UBControl controlValue)
+{
+  long resultValue;
+  Switch(controlValue)
+  {
+    Case(UBOFF) :
+      resultValue = DisturbUB(0,0,-1,0); break;
+    Case(UBHandled) :
+      resultValue = DisturbUB(0,0,0,0); break;
+    Case(UBON) :
+      resultValue = DisturbUB(0,0,-1,1); break;
+    Default :
+      resultValue = -3;
+  }
+  SPACommon_WriteUB("SPAFRIL_NodeUBControl", "", controlValue, resultValue);
+}
+
+SPAFRIL_UBInit(char signalName[], long longControlValue)
+{
+  //SPAFRIL_UBInit(signalName, (enum VtSv__SPACommon_UBControl) longControlValue);
+}
+
+/*SPAFRIL_UBInit(char signalName[], enum VtSv__SPACommon_UBControl controlValue)
+{
+  Switch(controlValue)
+  {
+    Case(UBOFF) :
+      SPACommon_WriteUB("SPAFRIL_UBInit", signalName, UBOFF, SetUB(signalName,0)); break;
+    Case(UBON) :
+      SPACommon_WriteUB("SPAFRIL_UBInit", signalName, UBON, SetUB(signalName,1)); break;
+  }
+}
+*/
+long SPAFRIL_UBControl(char signalName[], long longControlValue)
+{
+  return SPAFRIL_UBControl(signalName, (enum VtSv__SPACommon_UBControl) longControlValue);
+}
+
+long SPAFRIL_UBControl(char signalName[], enum VtSv__SPACommon_UBControl controlValue)
+{
+  long resultValue;
+
+  Switch(controlValue)
+  {
+    Case(UBOFF) :
+//      resultValue = DisturbUB(signalName,0,-1,0); break;
+//      resultValue = SetUB(signalName,0); break;
+//    Case(UBHandled) :
+//      resultValue = DisturbUB(signalName,0,0,0); break;
+    Case(UBON) :
+//      resultValue = DisturbUB(signalName,0,-1,1); break;
+//      resultValue = SetUB(signalName,1); break;
+    Default :
+      resultValue = -3;
+  }
+
+  SPACommon_WriteUB("SPAFRIL_UBControl", signalName, controlValue, resultValue);
+  return resultValue;
+}
+
+SPAFRIL_GroupUBInit(char groupName[], long longControlValue)
+{
+  SPAFRIL_GroupUBInit(groupName, (enum VtSv__SPACommon_UBControl) longControlValue);
+}
+
+SPAFRIL_GroupUBInit(char groupName[], enum VtSv__SPACommon_UBControl controlValue)
+{
+  Switch(controlValue)
+  {
+    Case(UBOFF) :
+      SPACommon_WriteUB("SPAFRIL_GroupUBInit", groupName, UBOFF, DisturbUB(groupName,0,-1,0)); break;
+    Case(UBON) :
+      SPACommon_WriteUB("SPAFRIL_GroupUBInit", groupName, UBON, DisturbUB(groupName,0,-1,1)); break;
+  }
+}
+
+long SPAFRIL_GroupUBControl(char groupName[], long longControlValue)
+{
+  return SPAFRIL_GroupUBControl(groupName, (enum VtSv__SPACommon_UBControl) longControlValue);
+}
+
+long SPAFRIL_GroupUBControl(char groupName[], enum VtSv__SPACommon_UBControl controlValue)
+{
+  long resultValue;
+
+  Switch(controlValue)
+  {
+    Case(UBOFF) :
+      resultValue = DisturbUB(groupName,0,-1,0); break;
+    Case(UBHandled) :
+      resultValue = DisturbUB(groupName,0,0,0); break;
+    Case(UBON) :
+      resultValue = DisturbUB(groupName,0,-1,1); break;
+    Default :
+      resultValue = -3;
+  }
+
+  SPACommon_WriteUB("SPAFRIL_GroupUBControl", groupName, controlValue, resultValue);
+  return resultValue;
+}
+
+SPAFRIL_E2ECntrInit(char sigGroupName[], long controlValue)
+{
+  If(controlValue >= 0 && controlValue < 16)
+    SPACommon_WriteFunc("SPAFRIL_E2ECntrInit", sigGroupName, controlValue, DisturbCounter(sigGroupName, 0, -1, controlValue, 0));
+  Else If(controlValue >= 16)
+    SPACommon_WriteFunc("SPAFRIL_E2ECntrInitReal", sigGroupName, controlValue, SetOperationMode(sigGroupName, 1, 0));
+}
+
+long SPAFRIL_E2ECntrControl(char sigGroupName[], long controlValue)
+{
+  long resultValue;
+  If(controlValue >= 0 && controlValue < 16)
+    resultValue = DisturbCounter(sigGroupName, 0, -1, controlValue, 0);
+  Else
+  {
+    resultValue = DisturbCounter(sigGroupName, 0, 0, 0, 0);
+    If(controlValue < 0)
+       SPACommon_WriteFunc("SPAFRIL_SetOperationModePnP", sigGroupName, controlValue,SetOperationMode(sigGroupName, 1, 1));
+    Else
+       SPACommon_WriteFunc("SPAFRIL_SetOperationModeReal", sigGroupName, controlValue,SetOperationMode(sigGroupName, 1, 0));
+  }
+  SPACommon_WriteFunc("SPAFRIL_E2ECntrControl", sigGroupName, controlValue, resultValue);
+  return resultValue;
+}
+
+SPAFRIL_E2EChksInit(char sigGroupName[], long controlValue)
+{
+  If(controlValue >= 0 && controlValue < 256)
+    SPACommon_WriteFunc("SPAFRIL_E2EChksInit", sigGroupName, controlValue, DisturbCRC(sigGroupName, 0, -1, controlValue));
+}
+
+long SPAFRIL_E2EChksControl(char sigGroupName[], long controlValue)
+{
+  long resultValue;
+  If(controlValue >= 0 && controlValue < 256)
+    resultValue = DisturbCRC(sigGroupName, 0, -1, controlValue);
+  Else
+    resultValue = DisturbCRC(sigGroupName, 0, 0, 0);
+  SPACommon_WriteFunc("SPAFRIL_E2EChksControl", sigGroupName, controlValue, resultValue);
+  return resultValue;
+}

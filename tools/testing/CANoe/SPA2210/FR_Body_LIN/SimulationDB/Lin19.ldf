@@ -1,0 +1,593 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                        Mentor Graphics Corporation                         */
+/*                            All rights reserved                             */
+/*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
+/*  Description:   LIN Description file                                       */
+/*  System:        SPA2110plus2210                                            */
+/*  Variant:       ConfigurationsSPA                                          */
+/*  Cluster:       LIN19                                                      */
+/*  Master:        IHUmasterLIN19                                             */
+/*  Generated at:  2016-12-14 17:00:14                                        */
+/*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
+/*                THIS CONFIGURATION MIGHT CONTAIN SOME ERRORS                */
+/*                 IF THE INPUT MODEL WAS NOT PROPERLY FORMED!                */
+/*                       Do Not Use this File directly!                       */
+/*                                                                            */
+/* ************************************************************************** */
+
+LIN_description_file;
+LIN_protocol_version = "2.1";
+LIN_language_version = "2.1";
+LIN_speed = 19.2 kbps;
+
+//Channel_name = "LIN19";
+
+Nodes {
+	Master: IHU, 5.000 ms, 1.000 ms;
+	Slaves: CCSM, RCSM, DMSM, RSHC, TVM;
+}
+
+Signals {
+	ActvnOfSwtIllmnCen: 1, 0, IHU, CCSM;
+	ActvnOfSwtIllmnClima: 1, 0, IHU, RCSM;
+	ActvnOfSwtIllmnDrvMod: 1, 0, IHU, DMSM;
+	ActvnOfSwtIllmnForSeatHeatrRe: 1, 0, IHU, RSHC;
+	Btn1ForUsrSwtPanFrntReq: 1, 0, CCSM, IHU;
+	Btn2ForUsrSwtPanFrntReq: 1, 0, CCSM, IHU;
+	Btn3ForUsrSwtPanFrntReq: 1, 0, CCSM, IHU;
+	Btn4ForUsrSwtPanFrntReq: 1, 0, CCSM, IHU;
+	Btn5ForUsrSwtPanFrntReq: 1, 0, CCSM, IHU;
+	BtnIllmnForWinDefrstFrnt: 1, 1, IHU, CCSM;
+	CCSMBtn6: 1, 0, CCSM, IHU;
+	CmptmtTFrnt: 11, 600, CCSM, IHU;
+	CmptmtTFrntQf: 2, 0, CCSM, IHU;
+	DataSpclDMSMDataIdn: 8, 0, DMSM, IHU;
+	DataSpclDMSMDataNrSpcl1: 8, 0, DMSM, IHU;
+	DataSpclDMSMDataNrSpcl2: 8, 0, DMSM, IHU;
+	DataSpclDMSMDataNrSpcl3: 8, 0, DMSM, IHU;
+	DiagcCCSM: 3, 0, CCSM, IHU;
+	DiagcRCSM: 3, 0, RCSM, IHU;
+	DiagcRSHC: 3, 0, RSHC, IHU;
+	DiagcStsDMSM: 2, 0, DMSM, IHU;
+	FanForCmptmtTRunng: 1, 0, CCSM, IHU;
+	IntrBriSts: 4, 0, IHU, CCSM, DMSM, RCSM;
+	IntrBriStsForSeatHeatrRe: 4, 0, IHU, RSHC;
+	LiForBtn4ForUsrSwtPanFrntCmd: 1, 0, IHU, CCSM;
+	LiForBtn5ForUsrSwtPanFrntCmd: 1, 0, IHU, CCSM;
+	LvlOfClimaCmft: 3, 0, IHU, RCSM;
+	MmedTvmPwerMod: 3, 0, IHU, TVM;
+	NrSerlDMSMNr1: 8, 0, DMSM, IHU;
+	NrSerlDMSMNr2: 8, 0, DMSM, IHU;
+	NrSerlDMSMNr3: 8, 0, DMSM, IHU;
+	NrSerlDMSMNr4: 8, 0, DMSM, IHU;
+	PartNrDMSMEndSgn1: 8, 0, DMSM, IHU;
+	PartNrDMSMEndSgn2: 8, 0, DMSM, IHU;
+	PartNrDMSMEndSgn3: 8, 0, DMSM, IHU;
+	PartNrDMSMNr1: 8, 0, DMSM, IHU;
+	PartNrDMSMNr2: 8, 0, DMSM, IHU;
+	PartNrDMSMNr3: 8, 0, DMSM, IHU;
+	PartNrDMSMNr4: 8, 0, DMSM, IHU;
+	RotyDirReq1: 2, 0, CCSM, IHU;
+	RotyDirReq2: 2, 0, DMSM, IHU;
+	RotyPosReq1: 5, 0, CCSM, IHU;
+	RotyPosReq2: 5, 0, DMSM, IHU;
+	SeatHeatLvlReqLe: 2, 0, RSHC, IHU;
+	SeatHeatLvlReqRi: 2, 0, RSHC, IHU;
+	SeatHeatReLeSts: 2, 0, IHU, RSHC;
+	SeatHeatReRiSts: 2, 0, IHU, RSHC;
+	SwtAcptReq: 1, 0, DMSM, IHU;
+	TwliBriSts: 1, 0, IHU, CCSM, RCSM;
+	TwliBriStsForSeatHeatrRe: 1, 0, IHU, RSHC;
+	UsrSwtDispClimaReq: 2, 0, IHU, RCSM;
+	UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe: 2, 0, RCSM, IHU;
+	UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi: 2, 0, RCSM, IHU;
+	UsrSwtDispClimaReqForTSpForRowSecLe: 5, 0, RCSM, IHU;
+	UsrSwtDispClimaReqForTSpForRowSecRi: 5, 0, RCSM, IHU;
+	UsrSwtDispClimaReqForTSpSpclForRowSecLe: 2, 0, RCSM, IHU;
+	UsrSwtDispClimaReqForTSpSpclForRowSecRi: 2, 0, RCSM, IHU;
+	UsrSwtDispClimaTSpForRowSecLe: 5, 0, IHU, RCSM;
+	UsrSwtDispClimaTSpForRowSecRi: 5, 0, IHU, RCSM;
+	UsrSwtDispClimaTSpSpclForRowSecLe: 2, 0, IHU, RCSM;
+	UsrSwtDispClimaTSpSpclForRowSecRi: 2, 0, IHU, RCSM;
+	UsrSwtDispFanLvlForRowSec: 4, 0, IHU, RCSM;
+	UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnLe: 2, 0, IHU, RCSM;
+	UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnRi: 2, 0, IHU, RCSM;
+	UsrSwtDispReqForFanLvlForRowSec: 4, 0, RCSM, IHU;
+	UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe: 2, 0, RCSM, IHU;
+	UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi: 2, 0, RCSM, IHU;
+	UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe: 1, 0, RCSM, IHU;
+	UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi: 1, 0, RCSM, IHU;
+	UsrSwtDispSeatHeatFct: 1, 0, IHU, RCSM;
+	UsrSwtDispSeatHeatLvlForRowSecLe: 2, 0, IHU, RCSM;
+	UsrSwtDispSeatHeatLvlForRowSecRi: 2, 0, IHU, RCSM;
+	UsrSwtDispTUnit: 1, 0, IHU, RCSM;
+	UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe: 1, 0, RCSM, IHU;
+	UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi: 1, 0, RCSM, IHU;
+	UsrSwtDispUpdClimaReqForTSpForRowSecLe: 1, 0, RCSM, IHU;
+	UsrSwtDispUpdClimaReqForTSpForRowSecRi: 1, 0, RCSM, IHU;
+	UsrSwtDispUpdReqForFanLvlForRowSec: 1, 0, RCSM, IHU;
+	VehCfgPrmBlk: 8, 0, IHU, TVM;
+	VehCfgPrmVal1: 8, 0, IHU, TVM;
+	VehCfgPrmVal2: 8, 0, IHU, TVM;
+	VehCfgPrmVal3: 8, 0, IHU, TVM;
+	VehCfgPrmVal4: 8, 0, IHU, TVM;
+	VehCfgPrmVal5: 8, 0, IHU, TVM;
+	VehCfgPrmVal6: 8, 0, IHU, TVM;
+	VehCfgPrmVal7: 8, 0, IHU, TVM;
+	ErrRespCCSM: 1, 0, CCSM, IHU;
+	ErrRespRCSM: 1, 0, RCSM, IHU;
+	ErrRespDMSM: 1, 0, DMSM, IHU;
+	ErrRespTVM: 1, 0, TVM, IHU;
+}
+
+Diagnostic_signals {
+	MasterReqB0: 8, 0;
+	MasterReqB1: 8, 0;
+	MasterReqB2: 8, 0;
+	MasterReqB3: 8, 0;
+	MasterReqB4: 8, 0;
+	MasterReqB5: 8, 0;
+	MasterReqB6: 8, 0;
+	MasterReqB7: 8, 0;
+	SlaveRespB0: 8, 0;
+	SlaveRespB1: 8, 0;
+	SlaveRespB2: 8, 0;
+	SlaveRespB3: 8, 0;
+	SlaveRespB4: 8, 0;
+	SlaveRespB5: 8, 0;
+	SlaveRespB6: 8, 0;
+	SlaveRespB7: 8, 0;
+}
+
+Frames {
+	CCSMLIN19Fr1: 0x08, CCSM, 5 {
+		Btn1ForUsrSwtPanFrntReq, 22;
+		Btn2ForUsrSwtPanFrntReq, 23;
+		Btn3ForUsrSwtPanFrntReq, 24;
+		Btn4ForUsrSwtPanFrntReq, 25;
+		Btn5ForUsrSwtPanFrntReq, 26;
+		CCSMBtn6, 5;
+		CmptmtTFrnt, 8;
+		CmptmtTFrntQf, 6;
+		DiagcCCSM, 32;
+		FanForCmptmtTRunng, 21;
+		RotyDirReq1, 29;
+		RotyPosReq1, 0;
+		ErrRespCCSM, 31; 
+	}
+	DMSMLIN19Fr01: 0x0A, DMSM, 6 {
+		DataSpclDMSMDataIdn, 16;
+		DataSpclDMSMDataNrSpcl1, 24;
+		DataSpclDMSMDataNrSpcl2, 32;
+		DataSpclDMSMDataNrSpcl3, 40;
+		DiagcStsDMSM, 9;
+		RotyDirReq2, 5;
+		RotyPosReq2, 0;
+		SwtAcptReq, 8;
+		ErrRespDMSM, 7; 
+	}
+	DMSMLIN19Fr02: 0x12, DMSM, 7 {
+		PartNrDMSMEndSgn1, 32;
+		PartNrDMSMEndSgn2, 40;
+		PartNrDMSMEndSgn3, 48;
+		PartNrDMSMNr1, 0;
+		PartNrDMSMNr2, 8;
+		PartNrDMSMNr3, 16;
+		PartNrDMSMNr4, 24;
+	}
+	DMSMLIN19Fr03: 0x14, DMSM, 4 {
+		NrSerlDMSMNr1, 0;
+		NrSerlDMSMNr2, 8;
+		NrSerlDMSMNr3, 16;
+		NrSerlDMSMNr4, 24;
+	}
+	IHULIN19Fr01: 0x04, IHU, 5 {
+		ActvnOfSwtIllmnCen, 14;
+		ActvnOfSwtIllmnClima, 13;
+		ActvnOfSwtIllmnDrvMod, 12;
+		BtnIllmnForWinDefrstFrnt, 15;
+		IntrBriSts, 0;
+		LiForBtn4ForUsrSwtPanFrntCmd, 10;
+		LiForBtn5ForUsrSwtPanFrntCmd, 9;
+		TwliBriSts, 8;
+		UsrSwtDispClimaReq, 4;
+		UsrSwtDispClimaTSpForRowSecLe, 16;
+		UsrSwtDispClimaTSpForRowSecRi, 23;
+		UsrSwtDispClimaTSpSpclForRowSecLe, 21;
+		UsrSwtDispClimaTSpSpclForRowSecRi, 28;
+		UsrSwtDispFanLvlForRowSec, 34;
+		UsrSwtDispSeatHeatFct, 6;
+		UsrSwtDispSeatHeatLvlForRowSecLe, 30;
+		UsrSwtDispSeatHeatLvlForRowSecRi, 32;
+		UsrSwtDispTUnit, 7;
+	}
+	IHULIN19Fr02: 0x06, IHU, 2 {
+		ActvnOfSwtIllmnForSeatHeatrRe, 8;
+		IntrBriStsForSeatHeatrRe, 0;
+		SeatHeatReLeSts, 4;
+		SeatHeatReRiSts, 6;
+		TwliBriStsForSeatHeatrRe, 9;
+	}
+	IHULIN19Fr03: 0x27, IHU, 8 {
+		VehCfgPrmBlk, 0;
+		VehCfgPrmVal1, 8;
+		VehCfgPrmVal2, 16;
+		VehCfgPrmVal3, 24;
+		VehCfgPrmVal4, 32;
+		VehCfgPrmVal5, 40;
+		VehCfgPrmVal6, 48;
+		VehCfgPrmVal7, 56;
+	}
+	IHULIN19Fr04: 0x11, IHU, 1 {
+		MmedTvmPwerMod, 0;
+	}
+	IHULIN19Fr06: 0x23, IHU, 7 {
+		LvlOfClimaCmft, 4;
+		UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnLe, 0;
+		UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnRi, 2;
+	}
+	RCSMLIN19Fr01: 0x02, RCSM, 4 {
+		DiagcRCSM, 27;
+		UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe, 22;
+		UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi, 5;
+		UsrSwtDispClimaReqForTSpForRowSecLe, 0;
+		UsrSwtDispClimaReqForTSpForRowSecRi, 8;
+		UsrSwtDispClimaReqForTSpSpclForRowSecLe, 13;
+		UsrSwtDispClimaReqForTSpSpclForRowSecRi, 20;
+		UsrSwtDispReqForFanLvlForRowSec, 16;
+		UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe, 7;
+		UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi, 15;
+		UsrSwtDispUpdClimaReqForTSpForRowSecLe, 24;
+		UsrSwtDispUpdClimaReqForTSpForRowSecRi, 25;
+		UsrSwtDispUpdReqForFanLvlForRowSec, 26;
+		ErrRespRCSM, 31; 
+	}
+	RCSMLIN19Fr02: 0x25, RCSM, 1 {
+		UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe, 0;
+		UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi, 2;
+		UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe, 4;
+		UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi, 5;
+	}
+	RSHCLIN19Fr01: 0x16, RSHC, 1 {
+		DiagcRSHC, 4;
+		SeatHeatLvlReqLe, 0;
+		SeatHeatLvlReqRi, 2;
+	}
+	TVMLIN19Fr01: 0x20, TVM, 1 {
+		ErrRespTVM, 7; 
+	}
+}
+
+Diagnostic_frames {
+	MasterReq: 60 {
+		MasterReqB0, 0;
+		MasterReqB1, 8;
+		MasterReqB2, 16;
+		MasterReqB3, 24;
+		MasterReqB4, 32;
+		MasterReqB5, 40;
+		MasterReqB6, 48;
+		MasterReqB7, 56;
+	}
+	SlaveResp: 61 {
+		SlaveRespB0, 0;
+		SlaveRespB1, 8;
+		SlaveRespB2, 16;
+		SlaveRespB3, 24;
+		SlaveRespB4, 32;
+		SlaveRespB5, 40;
+		SlaveRespB6, 48;
+		SlaveRespB7, 56;
+	}
+}
+
+Node_attributes {
+	CCSM {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x65;
+		initial_NAD = 0x65;
+		product_id = 0x49, 0x4001, 0;
+		response_error = ErrRespCCSM;
+		configurable_frames {
+			CCSMLIN19Fr1;
+			IHULIN19Fr01;
+		}
+	}
+	RCSM {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x64;
+		initial_NAD = 0x64;
+		product_id = 0x49, 0x4003, 0;
+		response_error = ErrRespRCSM;
+		configurable_frames {
+			RCSMLIN19Fr01;
+			IHULIN19Fr01;
+			IHULIN19Fr06;
+			RCSMLIN19Fr02;
+		}
+	}
+	DMSM {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x66;
+		initial_NAD = 0x66;
+		product_id = 0x49, 0x4002, 0;
+		response_error = ErrRespDMSM;
+		configurable_frames {
+			DMSMLIN19Fr01;
+			DMSMLIN19Fr02;
+			DMSMLIN19Fr03;
+			IHULIN19Fr01;
+		}
+	}
+	RSHC {
+		LIN_protocol = "1.2";
+		configured_NAD = 0x49;
+	}
+	TVM {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x02;
+		initial_NAD = 0x02;
+		product_id = 0x07, 0xFFFE, 0;
+		response_error = ErrRespTVM;
+		configurable_frames {
+			TVMLIN19Fr01;
+			IHULIN19Fr03;
+			IHULIN19Fr04;
+		}
+	}
+}
+
+Schedule_tables {
+	IHULIN19schedule01 {
+		TVMLIN19Fr01 delay 5.000 ms;
+		IHULIN19Fr04 delay 5.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		IHULIN19Fr06 delay 10.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		RCSMLIN19Fr02 delay 5.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+	}
+	IHULIN19schedulePartNo {
+		DMSMLIN19Fr02 delay 10.000 ms;
+		DMSMLIN19Fr03 delay 10.000 ms;
+	}
+	IHULIN19schedule02 {
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		TVMLIN19Fr01 delay 5.000 ms;
+		IHULIN19Fr04 delay 5.000 ms;
+		IHULIN19Fr06 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr02 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		RSHCLIN19Fr01 delay 5.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		IHULIN19Fr02 delay 10.000 ms;
+		RSHCLIN19Fr01 delay 5.000 ms;
+	}
+	IHULin19ScheduleTable_MR {
+		MasterReq delay 15.000 ms;
+	}
+	IHULin19ScheduleTable_SR {
+		SlaveResp delay 15.000 ms;
+	}
+	IHULIN19schedule03 {
+		IHULIN19Fr04 delay 5.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		IHULIN19Fr06 delay 10.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		RCSMLIN19Fr01 delay 10.000 ms;
+	}
+	IHULIN19schedule04 {
+		IHULIN19Fr04 delay 5.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		IHULIN19Fr06 delay 10.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr03 delay 15.000 ms;
+		DMSMLIN19Fr01 delay 10.000 ms;
+		CCSMLIN19Fr1 delay 10.000 ms;
+		IHULIN19Fr01 delay 10.000 ms;
+	}
+}
+
+Signal_encoding_types {
+	Boolean {
+		logical_value, 0, "Boolean_FALSE";
+		logical_value, 1, "Boolean_TRUE";
+	}
+	CmptmtTFrntQf {
+		logical_value, 0, "CmptmtTFrntQf_SnsrDataUndefd";
+		logical_value, 1, "CmptmtTFrntQf_FanNotRunning";
+		logical_value, 2, "CmptmtTFrntQf_SnsrDataNotOk";
+		logical_value, 3, "CmptmtTFrntQf_SnsrDataOk";
+	}
+	DiagcForPanCenCtrl2 {
+		logical_value, 0, "DiagcForPanCenCtrl2_NoFlt";
+		logical_value, 1, "DiagcForPanCenCtrl2_FanErr";
+		logical_value, 2, "DiagcForPanCenCtrl2_OutdURng";
+		logical_value, 3, "DiagcForPanCenCtrl2_TmrErr";
+		logical_value, 4, "DiagcForPanCenCtrl2_MemErr";
+		logical_value, 5, "DiagcForPanCenCtrl2_Spare6";
+		logical_value, 6, "DiagcForPanCenCtrl2_Spare7";
+		logical_value, 7, "DiagcForPanCenCtrl2_SnrFltT";
+	}
+	DiagcForRCSM2 {
+		logical_value, 0, "DiagcForRCSM2_NoFlt";
+		logical_value, 1, "DiagcForRCSM2_SpiErr";
+		logical_value, 2, "DiagcForRCSM2_OutdURng";
+		logical_value, 3, "DiagcForRCSM2_TmrErr";
+		logical_value, 4, "DiagcForRCSM2_MemErr";
+		logical_value, 5, "DiagcForRCSM2_ADErr";
+		logical_value, 6, "DiagcForRCSM2_Spare1";
+		logical_value, 7, "DiagcForRCSM2_Spare2";
+	}
+	DiagcStsTypDMSM {
+		logical_value, 0, "DiagcStsTypDMSM_OK";
+		logical_value, 1, "DiagcStsTypDMSM_CmnFailr";
+		logical_value, 2, "DiagcStsTypDMSM_Spare1";
+		logical_value, 3, "DiagcStsTypDMSM_Spare2";
+	}
+	Flg1 {
+		logical_value, 0, "Flg1_Rst";
+		logical_value, 1, "Flg1_Set";
+	}
+	HmiCmptmtT {
+		physical_value, 0, 31, 0.5, 15.0, "Deg";
+	}
+	HmiCmptmtTSpSpcl {
+		logical_value, 0, "HmiCmptmtTSpSpcl_Norm";
+		logical_value, 1, "HmiCmptmtTSpSpcl_Lo";
+		logical_value, 2, "HmiCmptmtTSpSpcl_Hi";
+	}
+	HmiHvacFanLvl {
+		logical_value, 0, "HmiHvacFanLvl_Off";
+		logical_value, 1, "HmiHvacFanLvl_Min";
+		logical_value, 2, "HmiHvacFanLvl_LvlMan1";
+		logical_value, 3, "HmiHvacFanLvl_LvlMan2";
+		logical_value, 4, "HmiHvacFanLvl_LvlMan3";
+		logical_value, 5, "HmiHvacFanLvl_LvlMan4";
+		logical_value, 6, "HmiHvacFanLvl_LvlMan5";
+		logical_value, 7, "HmiHvacFanLvl_LvlMan6";
+		logical_value, 8, "HmiHvacFanLvl_LvlMan7";
+		logical_value, 9, "HmiHvacFanLvl_LvlAutMinusMinus";
+		logical_value, 10, "HmiHvacFanLvl_LvlAutMinus";
+		logical_value, 11, "HmiHvacFanLvl_LvlAutoNorm";
+		logical_value, 12, "HmiHvacFanLvl_LvlAutPlus";
+		logical_value, 13, "HmiHvacFanLvl_LvlAutPlusPlus";
+		logical_value, 14, "HmiHvacFanLvl_Max";
+	}
+	IntrBriSts1 {
+		physical_value, 0, 15, 1.0, 0.0, "Unitless";
+	}
+	LvlOfClimaCmft {
+		logical_value, 0, "LvlOfClimaCmft_Off";
+		logical_value, 1, "LvlOfClimaCmft_Lvl1";
+		logical_value, 2, "LvlOfClimaCmft_Lvl2";
+		logical_value, 3, "LvlOfClimaCmft_Lvl3";
+		logical_value, 4, "LvlOfClimaCmft_Lvl4";
+		logical_value, 5, "LvlOfClimaCmft_Lvl5";
+		logical_value, 6, "LvlOfClimaCmft_Lvl6";
+		logical_value, 7, "LvlOfClimaCmft_Lvl7";
+	}
+	MmedTvmPwerMod {
+		logical_value, 0, "MmedTvmPwerMod_Sleep";
+		logical_value, 1, "MmedTvmPwerMod_Switch";
+		logical_value, 2, "MmedTvmPwerMod_Standby";
+		logical_value, 3, "MmedTvmPwerMod_TPEG";
+		logical_value, 4, "MmedTvmPwerMod_On";
+	}
+	Nr2 {
+		physical_value, 0, 255, 1.0, 0.0, "Unitless";
+	}
+	OnOff1 {
+		logical_value, 0, "OnOff1_Off";
+		logical_value, 1, "OnOff1_On";
+	}
+	OnOffIdle1 {
+		logical_value, 0, "OnOffIdle1_Off";
+		logical_value, 1, "OnOffIdle1_OffOrSpare1";
+		logical_value, 2, "OnOffIdle1_On";
+		logical_value, 3, "OnOffIdle1_OffOrSpare2";
+	}
+	PsdNotPsd {
+		logical_value, 0, "PsdNotPsd_NotPsd";
+		logical_value, 1, "PsdNotPsd_Psd";
+	}
+	RotyDirUI {
+		logical_value, 0, "RotyDirUI_Idle";
+		logical_value, 1, "RotyDirUI_CW";
+		logical_value, 2, "RotyDirUI_CCW";
+		logical_value, 3, "RotyDirUI_Failr";
+	}
+	RotyDirUI1 {
+		logical_value, 0, "RotyDirUI1_Idle";
+		logical_value, 1, "RotyDirUI1_CW";
+		logical_value, 2, "RotyDirUI1_CCW";
+		logical_value, 3, "RotyDirUI1_Spare";
+	}
+	RotyPos {
+		physical_value, 0, 31, 1.0, 0.0, "Unitless";
+	}
+	SeatClimaLvl {
+		logical_value, 0, "SeatClimaLvl_Off";
+		logical_value, 1, "SeatClimaLvl_Lvl1";
+		logical_value, 2, "SeatClimaLvl_Lvl2";
+		logical_value, 3, "SeatClimaLvl_Lvl3";
+	}
+	TForCmptmt {
+		physical_value, 0, 1850, 0.1, -60.0, "degC";
+	}
+	TwliBriSts1 {
+		logical_value, 0, "TwliBriSts1_Night";
+		logical_value, 1, "TwliBriSts1_Day";
+	}
+	UInt8 {
+		physical_value, 0, 255, 1.0, 0.0, "Unitless";
+	}
+	UsrSwtDispTUnit {
+		logical_value, 0, "UsrSwtDispTUnit_Celcius";
+		logical_value, 1, "UsrSwtDispTUnit_Farenheit";
+	}
+}
+
+Signal_representation {
+	Boolean : ActvnOfSwtIllmnCen, ActvnOfSwtIllmnClima, ActvnOfSwtIllmnDrvMod, ActvnOfSwtIllmnForSeatHeatrRe, UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnLe, UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi, UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecLe, UsrSwtDispUpdClimaReqForSeatHeatLvlForRowSecRi, UsrSwtDispUpdClimaReqForTSpForRowSecLe, UsrSwtDispUpdClimaReqForTSpForRowSecRi, UsrSwtDispUpdReqForFanLvlForRowSec;
+	CmptmtTFrntQf : CmptmtTFrntQf;
+	DiagcForPanCenCtrl2 : DiagcCCSM;
+	DiagcForRCSM2 : DiagcRCSM, DiagcRSHC;
+	DiagcStsTypDMSM : DiagcStsDMSM;
+	Flg1 : FanForCmptmtTRunng;
+	HmiCmptmtT : UsrSwtDispClimaReqForTSpForRowSecLe, UsrSwtDispClimaReqForTSpForRowSecRi, UsrSwtDispClimaTSpForRowSecLe, UsrSwtDispClimaTSpForRowSecRi;
+	HmiCmptmtTSpSpcl : UsrSwtDispClimaReqForTSpSpclForRowSecLe, UsrSwtDispClimaReqForTSpSpclForRowSecRi, UsrSwtDispClimaTSpSpclForRowSecLe, UsrSwtDispClimaTSpSpclForRowSecRi;
+	HmiHvacFanLvl : UsrSwtDispFanLvlForRowSec, UsrSwtDispReqForFanLvlForRowSec;
+	IntrBriSts1 : IntrBriSts, IntrBriStsForSeatHeatrRe;
+	LvlOfClimaCmft : LvlOfClimaCmft;
+	MmedTvmPwerMod : MmedTvmPwerMod;
+	Nr2 : VehCfgPrmBlk, VehCfgPrmVal1, VehCfgPrmVal2, VehCfgPrmVal3, VehCfgPrmVal4, VehCfgPrmVal5, VehCfgPrmVal6, VehCfgPrmVal7;
+	OnOff1 : BtnIllmnForWinDefrstFrnt, LiForBtn4ForUsrSwtPanFrntCmd, LiForBtn5ForUsrSwtPanFrntCmd, UsrSwtDispSeatHeatFct;
+	OnOffIdle1 : UsrSwtDispClimaReq;
+	PsdNotPsd : Btn1ForUsrSwtPanFrntReq, Btn2ForUsrSwtPanFrntReq, Btn3ForUsrSwtPanFrntReq, Btn4ForUsrSwtPanFrntReq, Btn5ForUsrSwtPanFrntReq, CCSMBtn6, SwtAcptReq;
+	RotyDirUI : RotyDirReq2;
+	RotyDirUI1 : RotyDirReq1;
+	RotyPos : RotyPosReq1, RotyPosReq2;
+	SeatClimaLvl : SeatHeatLvlReqLe, SeatHeatLvlReqRi, SeatHeatReLeSts, SeatHeatReRiSts, UsrSwtDispClimaReqForSeatHeatLvlForRowSecLe, UsrSwtDispClimaReqForSeatHeatLvlForRowSecRi, UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnLe, UsrSwtDispForSecRowSeatVentnUsrSwtDispForSecRowSeatVentnRi, UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnLe, UsrSwtDispReqForSecRowSeatVentnUsrSwtDispReqForSecRowSeatVentnRi, UsrSwtDispSeatHeatLvlForRowSecLe, UsrSwtDispSeatHeatLvlForRowSecRi;
+	TForCmptmt : CmptmtTFrnt;
+	TwliBriSts1 : TwliBriSts, TwliBriStsForSeatHeatrRe;
+	UInt8 : DataSpclDMSMDataIdn, DataSpclDMSMDataNrSpcl1, DataSpclDMSMDataNrSpcl2, DataSpclDMSMDataNrSpcl3, NrSerlDMSMNr1, NrSerlDMSMNr2, NrSerlDMSMNr3, NrSerlDMSMNr4, PartNrDMSMEndSgn1, PartNrDMSMEndSgn2, PartNrDMSMEndSgn3, PartNrDMSMNr1, PartNrDMSMNr2, PartNrDMSMNr3, PartNrDMSMNr4;
+	UsrSwtDispTUnit : UsrSwtDispTUnit;
+}
+

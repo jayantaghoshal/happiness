@@ -1,0 +1,39 @@
+variables
+{
+  msTimer SPAFCBody_NetworkTimout;
+  const long SPAFCBody_NETWORK_TIMEOUT = 5000; //ms
+  const long SPAFCBody_UB_RESET_VALUE = 3; //UB always on
+  long SPAFCBody_setFCMUB = 0;
+}
+
+on start
+{
+  SPAFCBody_NetworkTimout.Set(SPAFCBody_NETWORK_TIMEOUT);
+}
+
+SPAFCBody_UpdateCntr(byte cntrValue)
+{
+  If (cntrValue == 255)
+    @CEM::FrameConfigurationBody::Output::BodyCntrForMissCom = 1;
+  Else
+    @CEM::FrameConfigurationBody::Output::BodyCntrForMissCom = cntrValue + 1;
+  
+  SPAFCBody_NetworkTimout.Set(SPAFCBody_NETWORK_TIMEOUT);
+  If(SPAFCBody_setFCMUB)
+  {
+    Write("%d: Body Frame Configuration (%NODE_NAME%): Master UB reset to %d", TimeNow(), SPAFCBody_UB_RESET_VALUE);
+    @ETC::FrameConfigurationMaster::Control::Update = SPAFCBody_UB_RESET_VALUE;
+    SPAFCBody_setFCMUB = 0;
+  }
+}
+
+on timer SPAFCBody_NetworkTimout
+{
+  Write("%d: Body Frame Configuration (%NODE_NAME%) timeout - BodyCntrForMissCom sending not detected for %d ms: BodyCntrForMissCom reset to 0", TimeNow(), SPAFCBody_NETWORK_TIMEOUT);
+  @CEM::FrameConfigurationBody::Output::BodyCntrForMissCom = 0;
+  If(@CEM::FrameConfigurationBody::Control::SetFCMUBAfterReset)
+  {
+    @CEM::FrameConfigurationBody::Output::MstCfgIDBodyCAN_UB = SPAFCBody_UB_RESET_VALUE;
+    SPAFCBody_setFCMUB = 1;
+  }
+}

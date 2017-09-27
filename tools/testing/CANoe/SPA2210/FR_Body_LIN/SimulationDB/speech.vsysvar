@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="DIM" comment="NODE">
+      <namespace name="PTT" comment="..\..\InfotainmentModules\Node_basic_includes\speechDIM.cin">
+        <namespace name="Out_namespace" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnAudFbSts" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4" />
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

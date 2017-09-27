@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="SWSM" comment="NODE">
+      <namespace name="Panel" comment="..\..\InfotainmentModules\Node_basic_includes\SWSM_eventhandler.cin">
+        <namespace name="Input" comment="PANEL">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_DownBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_UpBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_PreviousBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_LongPress_SpeechBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_MenuBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_NextBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_EnterBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SWSM_SpeechBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        </namespace>
+        <namespace name="InputLeft" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL7Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL6Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL5Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL4Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL3Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL2Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BtnL1Req" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

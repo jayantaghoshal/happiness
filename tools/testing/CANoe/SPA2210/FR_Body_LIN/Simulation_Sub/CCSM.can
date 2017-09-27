@@ -1,0 +1,6 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\CCSM_eventhandler.cin" //@SPECINC::Panel@
+  //#include "..\GWIncludes\CCSM_GW.cin" //@GWINC@
+}

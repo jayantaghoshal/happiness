@@ -1,0 +1,72 @@
+variables
+{
+  msTimer SPAFCBack_NetworkTimout;
+  const long SPAFCBack_NETWORK_TIMEOUT = 5000; //ms
+  const long SPAFCBack_UB_RESET_VALUE = 3; //UB always on
+  long SPAFCBack_setFCMUB = 0;
+  long SPAFCBack_useMFCSPeriod = 0;
+  long SPAFCBack_lastCntrValue;
+  const long SPAFCBack_MFCS_PERIOD = 50; //ms, easee:VCC_EEDM,2167604 - Diagnostic trouble code information
+  msTimer SPAFCBack_MFCSTimer;
+}
+
+on start
+{
+  SPAFCBack_useMFCSPeriod = @VCM::FrameConfigurationBackbone::Control::UseMFCSPeriod;
+  SPAFCBack_lastCntrValue = @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom - 1;
+  SPAFCBack_NetworkTimout.Set(SPAFCBack_NETWORK_TIMEOUT);
+  If(SPAFCBack_useMFCSPeriod)
+    setTimerCyclic(SPAFCBack_MFCSTimer, SPAFCBack_MFCS_PERIOD);
+}
+
+SPAFCBack_UpdateCntr(byte cntrValue)
+{
+  If(SPAFCBack_useMFCSPeriod)
+    SPAFCBack_lastCntrValue = cntrValue;
+  Else
+  {
+    If (cntrValue == 255)
+      @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom = 1;
+    Else
+      @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom = cntrValue + 1;
+  }  
+  SPAFCBack_NetworkTimout.Set(SPAFCBack_NETWORK_TIMEOUT);
+  If(SPAFCBack_setFCMUB)
+  {
+    Write("%d: Backbone Frame Configuration (%NODE_NAME%): Master UB reset to %d", TimeNow(), SPAFCBack_UB_RESET_VALUE);
+    @ETC::FrameConfigurationMaster::Control::Update = SPAFCBack_UB_RESET_VALUE;
+    SPAFCBack_setFCMUB = 0;
+  }
+}
+
+on timer SPAFCBack_NetworkTimout
+{
+  Write("%d: Backbone Frame Configuration (%NODE_NAME%) timeout - BackCntrForMissCom sending not detected for %d ms: BackCntrForMissCom reset to 0", TimeNow(), SPAFCBack_NETWORK_TIMEOUT);
+  @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom = 0;
+  SPAFCBack_lastCntrValue = -1;
+  If(@VCM::FrameConfigurationBackbone::Control::SetFCMUBAfterReset)
+  {
+    @VCM::FrameConfigurationBackbone::Output::MstCfgIDBackboneFR_UB = SPAFCBack_UB_RESET_VALUE;
+    SPAFCBack_setFCMUB = 1;
+  }
+}
+
+on sysvar VCM::FrameConfigurationBackbone::Control::UseMFCSPeriod
+{
+  SPAFCBack_useMFCSPeriod = @this;
+  If(SPAFCBack_useMFCSPeriod)
+  {
+    SPAFCBack_lastCntrValue = @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom - 1;
+    setTimerCyclic(SPAFCBack_MFCSTimer, SPAFCBack_MFCS_PERIOD);
+  }
+  Else
+    cancelTimer(SPAFCBack_MFCSTimer);
+}
+
+on timer SPAFCBack_MFCSTimer
+{
+  If (SPAFCBack_lastCntrValue == 255)
+    @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom = 1;
+  Else
+    @VCM::FrameConfigurationBackbone::Output::BackCntrForMissCom = SPAFCBack_lastCntrValue + 1;
+}

@@ -1,0 +1,8 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\SPAModules\SPACommon_FrameConfigurationMaster.cin" //@SPECINC::FrameConfigurationMaster@
+  //#include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  //#include "..\..\SPAIncludes\SPACommon_SPACANIL.cin" //@SPECINC::CANIL@
+  //#include "..\GWIncludes\ETC_GW.cin" //@GWINC@
+}

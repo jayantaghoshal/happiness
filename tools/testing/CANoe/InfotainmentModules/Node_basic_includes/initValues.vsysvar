@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="CEM" comment="NODE">
+      <namespace name="Init" comment="..\..\InfotainmentModules\Node_basic_includes\Initialize\CEM_include.cin">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="initValues" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      </namespace>
+    </namespace>
+    <namespace name="SRS" comment="NODE">
+      <namespace name="Init" comment="..\..\InfotainmentModules\Node_basic_includes\Initialize\SRS_include.cin">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="initValues" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      </namespace>
+    </namespace>
+    <namespace name="ASDM" comment="NODE">
+      <namespace name="Init" comment="..\..\InfotainmentModules\Node_basic_includes\Initialize\ASDM_include.cin">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="initValues" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      </namespace>
+    </namespace>
+    <namespace name="VCM" comment="NODE">
+      <namespace name="Init" comment="..\..\InfotainmentModules\Node_basic_includes\Initialize\VCM_include.cin">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="initValues" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      </namespace>
+    </namespace>
+    <namespace name="VDDM" comment="NODE">
+      <namespace name="Init" comment="..\..\InfotainmentModules\Node_basic_includes\Initialize\VDDM_include.cin">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="initValues" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

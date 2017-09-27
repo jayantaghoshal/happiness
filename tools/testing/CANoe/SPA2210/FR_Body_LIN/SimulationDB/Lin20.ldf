@@ -1,0 +1,454 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                        Mentor Graphics Corporation                         */
+/*                            All rights reserved                             */
+/*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
+/*  Description:   LIN Description file                                       */
+/*  System:        SPA2110plus2210                                            */
+/*  Variant:       ConfigurationsSPA                                          */
+/*  Cluster:       LIN20                                                      */
+/*  Master:        DIMmasterLIN20                                             */
+/*  Generated at:  2016-12-14 17:00:17                                        */
+/*                                                                            */
+/* ************************************************************************** */
+/*                                                                            */
+/*                THIS CONFIGURATION MIGHT CONTAIN SOME ERRORS                */
+/*                 IF THE INPUT MODEL WAS NOT PROPERLY FORMED!                */
+/*                       Do Not Use this File directly!                       */
+/*                                                                            */
+/* ************************************************************************** */
+
+LIN_description_file;
+LIN_protocol_version = "2.1";
+LIN_language_version = "2.1";
+LIN_speed = 19.2 kbps;
+
+//Channel_name = "LIN20";
+
+Nodes {
+	Master: DIM, 5.000 ms, 1.000 ms;
+	Slaves: HUD, SWSM;
+}
+
+Signals {
+	ActvnOfHudIllmn: 1, 0, DIM, HUD;
+	ActvnOfHudIllmnTiOut: 2, 0, HUD, DIM;
+	ActvnOfSteerWhlIllmn: 1, 0, DIM, SWSM;
+	AmbIllmnFwdStsAmbLiIllmn: 16, 0, DIM, HUD;
+	AmbIllmnFwdStsChks: 8, 0, DIM, HUD;
+	AmbIllmnFwdStsCntr: 4, 0, DIM, HUD;
+	BtnL2ReqSteerWhlLeBtnExtReq1: 1, 0, SWSM, DIM;
+	BtnL2ReqSteerWhlLeBtnExtReqChks: 8, 1, SWSM, DIM;
+	BtnL2ReqSteerWhlLeBtnExtReqCntr: 2, 0, SWSM, DIM;
+	BtnL2ReqSteerWhlLeBtnExtReqToUpdQf: 2, 2, SWSM, DIM;
+	BtnL3Req: 1, 0, SWSM, DIM;
+	BtnL4Req: 1, 0, SWSM, DIM;
+	BtnL6Req: 1, 0, SWSM, DIM;
+	BtnL7Req: 1, 0, SWSM, DIM;
+	BtnR1Req: 1, 0, SWSM, DIM;
+	BtnR2Req: 1, 0, SWSM, DIM;
+	BtnR3Req: 1, 0, SWSM, DIM;
+	BtnR4Req: 1, 0, SWSM, DIM;
+	BtnR5Req: 1, 0, SWSM, DIM;
+	BtnR6Req: 1, 0, SWSM, DIM;
+	BtnR7Req: 1, 0, SWSM, DIM;
+	DiagcFailrSWSM: 2, 0, SWSM, DIM;
+	EveMemPosn: 3, 0, DIM, HUD;
+	HudAmbIllmnErr: 2, 0, HUD, DIM;
+	HudAmbIllmnTiOut: 2, 0, HUD, DIM;
+	HudAmbTHi: 1, 0, HUD, DIM;
+	HudCalModActv: 1, 0, DIM, HUD;
+	HudDispBackliteErr: 1, 0, HUD, DIM;
+	HudDispInhbnLvl: 2, 0, HUD, DIM;
+	HudFlashMemDataErr: 1, 0, HUD, DIM;
+	HudIllmnSts: 4, 5, DIM, HUD;
+	HudIllmnTiOut: 2, 0, HUD, DIM;
+	HudIntrBriTiOut: 2, 0, HUD, DIM;
+	HudInvldCfg: 1, 0, HUD, DIM;
+	HudMirrAgAdjmtReq: 2, 0, DIM, HUD;
+	HudMirrAgAdjmtTiOut: 2, 0, HUD, DIM;
+	HudMirrMotErr: 2, 0, HUD, DIM;
+	HudMirrPosnSts: 8, 0, HUD, DIM;
+	HudPin1CircOpenCllsnFwd: 1, 0, HUD, DIM;
+	HudPin1CllsnFwdSho: 1, 0, HUD, DIM;
+	HudPin2CircOpenCllsnFwd: 1, 0, HUD, DIM;
+	HudPin2CllsnFwdSho: 1, 0, HUD, DIM;
+	HudQuiscHiComNotReqd: 1, 0, HUD, DIM;
+	HudQuiscHiComReqd: 1, 0, HUD, DIM;
+	HudRamDataErr: 1, 0, HUD, DIM;
+	HudSpdProgmAllwd: 1, 0, DIM, HUD;
+	HudSplyUHi: 1, 0, HUD, DIM;
+	HudSplyULo: 1, 0, HUD, DIM;
+	HudTnlTiOut: 2, 0, HUD, DIM;
+	HudTReadFailr: 1, 0, HUD, DIM;
+	HudTwliBriTiOut: 2, 0, HUD, DIM;
+	HudUsgModSts: 4, 1, DIM, HUD;
+	HudVisInpErr: 1, 0, HUD, DIM;
+	IntrBriSts: 4, 0, DIM, HUD, SWSM;
+	LoadAndStoreReqIdPen: 4, 0, DIM, HUD;
+	LoadAndStoreReqInOutEasy: 1, 0, DIM, HUD;
+	MemPosn: 2, 0, DIM, HUD;
+	NrSerlSWSMNr1: 8, 0, SWSM, DIM;
+	NrSerlSWSMNr2: 8, 0, SWSM, DIM;
+	NrSerlSWSMNr3: 8, 0, SWSM, DIM;
+	NrSerlSWSMNr4: 8, 0, SWSM, DIM;
+	PartNrSWSMEndSgn1: 8, 0, SWSM, DIM;
+	PartNrSWSMEndSgn2: 8, 0, SWSM, DIM;
+	PartNrSWSMEndSgn3: 8, 0, SWSM, DIM;
+	PartNrSWSMNr1: 8, 0, SWSM, DIM;
+	PartNrSWSMNr2: 8, 0, SWSM, DIM;
+	PartNrSWSMNr3: 8, 0, SWSM, DIM;
+	PartNrSWSMNr4: 8, 0, SWSM, DIM;
+	SaveSetgToMemPrmnt: 2, 2, DIM, HUD;
+	SteerWhlL1BtnExtReq1: 1, 0, SWSM, DIM;
+	SteerWhlL1BtnExtReqChks: 8, 0, SWSM, DIM;
+	SteerWhlL1BtnExtReqCntr: 2, 0, SWSM, DIM;
+	SteerWhlL1BtnExtReqToUpdQf: 2, 2, SWSM, DIM;
+	SteerWhlLeBtn5ExtReq: 1, 0, SWSM, DIM;
+	SteerWhlLeBtn5ExtReqChks: 8, 1, SWSM, DIM;
+	SteerWhlLeBtn5ExtReqCntr: 2, 0, SWSM, DIM;
+	SteerWhlLeBtn5ExtReqToUpdQf: 2, 2, SWSM, DIM;
+	TnlEntryOrEnd: 1, 0, DIM, HUD;
+	TwliBriSts: 1, 0, DIM, HUD;
+	ErrRespHUD: 1, 0, HUD, DIM;
+	ErrRespSWSM: 1, 0, SWSM, DIM;
+}
+
+Diagnostic_signals {
+	MasterReqB0: 8, 0;
+	MasterReqB1: 8, 0;
+	MasterReqB2: 8, 0;
+	MasterReqB3: 8, 0;
+	MasterReqB4: 8, 0;
+	MasterReqB5: 8, 0;
+	MasterReqB6: 8, 0;
+	MasterReqB7: 8, 0;
+	SlaveRespB0: 8, 0;
+	SlaveRespB1: 8, 0;
+	SlaveRespB2: 8, 0;
+	SlaveRespB3: 8, 0;
+	SlaveRespB4: 8, 0;
+	SlaveRespB5: 8, 0;
+	SlaveRespB6: 8, 0;
+	SlaveRespB7: 8, 0;
+}
+
+Frames {
+	DimLin20Fr01: 0x03, DIM, 8 {
+		ActvnOfHudIllmn, 13;
+		ActvnOfSteerWhlIllmn, 55;
+		AmbIllmnFwdStsAmbLiIllmn, 32;
+		AmbIllmnFwdStsChks, 24;
+		AmbIllmnFwdStsCntr, 20;
+		EveMemPosn, 1;
+		HudCalModActv, 52;
+		HudIllmnSts, 48;
+		HudMirrAgAdjmtReq, 14;
+		HudSpdProgmAllwd, 53;
+		HudUsgModSts, 60;
+		IntrBriSts, 56;
+		LoadAndStoreReqIdPen, 4;
+		LoadAndStoreReqInOutEasy, 0;
+		MemPosn, 8;
+		SaveSetgToMemPrmnt, 10;
+		TnlEntryOrEnd, 12;
+		TwliBriSts, 54;
+	}
+	HUDLIN20Fr01: 0x08, HUD, 6 {
+		ActvnOfHudIllmnTiOut, 2;
+		HudAmbIllmnErr, 4;
+		HudAmbIllmnTiOut, 8;
+		HudAmbTHi, 6;
+		HudDispBackliteErr, 10;
+		HudDispInhbnLvl, 0;
+		HudFlashMemDataErr, 11;
+		HudIllmnTiOut, 12;
+		HudIntrBriTiOut, 14;
+		HudInvldCfg, 20;
+		HudMirrAgAdjmtTiOut, 16;
+		HudMirrMotErr, 18;
+		HudMirrPosnSts, 24;
+		HudPin1CircOpenCllsnFwd, 21;
+		HudPin1CllsnFwdSho, 22;
+		HudPin2CircOpenCllsnFwd, 23;
+		HudPin2CllsnFwdSho, 32;
+		HudQuiscHiComNotReqd, 33;
+		HudQuiscHiComReqd, 34;
+		HudRamDataErr, 35;
+		HudSplyUHi, 36;
+		HudSplyULo, 37;
+		HudTnlTiOut, 38;
+		HudTReadFailr, 40;
+		HudTwliBriTiOut, 42;
+		HudVisInpErr, 41;
+		ErrRespHUD, 7; 
+	}
+	SwsmLin20Fr01: 0x07, SWSM, 7 {
+		BtnL2ReqSteerWhlLeBtnExtReq1, 12;
+		BtnL2ReqSteerWhlLeBtnExtReqChks, 0;
+		BtnL2ReqSteerWhlLeBtnExtReqCntr, 10;
+		BtnL2ReqSteerWhlLeBtnExtReqToUpdQf, 8;
+		BtnL3Req, 38;
+		BtnL4Req, 13;
+		BtnL6Req, 14;
+		BtnL7Req, 15;
+		BtnR1Req, 29;
+		BtnR2Req, 30;
+		BtnR3Req, 31;
+		BtnR4Req, 32;
+		BtnR5Req, 33;
+		BtnR6Req, 34;
+		BtnR7Req, 35;
+		DiagcFailrSWSM, 36;
+		SteerWhlL1BtnExtReq1, 28;
+		SteerWhlL1BtnExtReqChks, 16;
+		SteerWhlL1BtnExtReqCntr, 24;
+		SteerWhlL1BtnExtReqToUpdQf, 26;
+		SteerWhlLeBtn5ExtReq, 52;
+		SteerWhlLeBtn5ExtReqChks, 40;
+		SteerWhlLeBtn5ExtReqCntr, 48;
+		SteerWhlLeBtn5ExtReqToUpdQf, 50;
+		ErrRespSWSM, 55; 
+	}
+	SwsmLin20Fr02: 0x09, SWSM, 4 {
+		NrSerlSWSMNr1, 0;
+		NrSerlSWSMNr2, 8;
+		NrSerlSWSMNr3, 16;
+		NrSerlSWSMNr4, 24;
+	}
+	SwsmLin20Fr03: 0x10, SWSM, 7 {
+		PartNrSWSMEndSgn1, 32;
+		PartNrSWSMEndSgn2, 40;
+		PartNrSWSMEndSgn3, 48;
+		PartNrSWSMNr1, 0;
+		PartNrSWSMNr2, 8;
+		PartNrSWSMNr3, 16;
+		PartNrSWSMNr4, 24;
+	}
+}
+
+Diagnostic_frames {
+	MasterReq: 60 {
+		MasterReqB0, 0;
+		MasterReqB1, 8;
+		MasterReqB2, 16;
+		MasterReqB3, 24;
+		MasterReqB4, 32;
+		MasterReqB5, 40;
+		MasterReqB6, 48;
+		MasterReqB7, 56;
+	}
+	SlaveResp: 61 {
+		SlaveRespB0, 0;
+		SlaveRespB1, 8;
+		SlaveRespB2, 16;
+		SlaveRespB3, 24;
+		SlaveRespB4, 32;
+		SlaveRespB5, 40;
+		SlaveRespB6, 48;
+		SlaveRespB7, 56;
+	}
+}
+
+Node_attributes {
+	HUD {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x41;
+		initial_NAD = 0x41;
+		product_id = 0x07, 0xFFFE, 0;
+		response_error = ErrRespHUD;
+		configurable_frames {
+			DimLin20Fr01;
+			HUDLIN20Fr01;
+		}
+	}
+	SWSM {
+		LIN_protocol = "2.1";
+		configured_NAD = 0x43;
+		initial_NAD = 0x43;
+		product_id = 0x49, 0x4001, 0;
+		response_error = ErrRespSWSM;
+		configurable_frames {
+			DimLin20Fr01;
+			SwsmLin20Fr01;
+			SwsmLin20Fr02;
+			SwsmLin20Fr03;
+		}
+	}
+}
+
+Schedule_tables {
+	DIMLIN20schedule01 {
+		DimLin20Fr01 delay 15.000 ms;
+		SwsmLin20Fr01 delay 10.000 ms;
+		HUDLIN20Fr01 delay 10.000 ms;
+		SwsmLin20Fr01 delay 10.000 ms;
+	}
+	DIMLIN20DiagRequestSchedule {
+		MasterReq delay 15.000 ms;
+	}
+	DIMLIN20DiagResponseSchedule {
+		SlaveResp delay 15.000 ms;
+	}
+	DimLIN20schedule02 {
+		DimLin20Fr01 delay 15.000 ms;
+		SwsmLin20Fr01 delay 10.000 ms;
+	}
+	DIMLIN20SWSMInformationSchedule {
+		SwsmLin20Fr02 delay 10.000 ms;
+		SwsmLin20Fr03 delay 10.000 ms;
+	}
+}
+
+Signal_encoding_types {
+	Boolean {
+		logical_value, 0, "Boolean_FALSE";
+		logical_value, 1, "Boolean_TRUE";
+	}
+	DiagcFailrSWSM {
+		logical_value, 0, "DiagcFailrSWSM_NoFailr";
+		logical_value, 1, "DiagcFailrSWSM_CmnFailr";
+		logical_value, 2, "DiagcFailrSWSM_CoupldFailr";
+		logical_value, 3, "DiagcFailrSWSM_Spare";
+	}
+	DispInhbnLvl {
+		logical_value, 0, "DispInhbnLvl_NoInhbn";
+		logical_value, 1, "DispInhbnLvl_InhbnLvl1";
+		logical_value, 2, "DispInhbnLvl_InhbnLvl2";
+	}
+	EveMemPosn {
+		logical_value, 0, "EveMemPosn_Idle";
+		logical_value, 1, "EveMemPosn_Store";
+		logical_value, 2, "EveMemPosn_Load";
+		logical_value, 3, "EveMemPosn_Stop";
+		logical_value, 4, "EveMemPosn_AutMovmt";
+	}
+	FltStsSlaveAdv {
+		logical_value, 0, "FltStsSlaveAdv_NoTest";
+		logical_value, 1, "FltStsSlaveAdv_PrePassd";
+		logical_value, 2, "FltStsSlaveAdv_PreFaild";
+		logical_value, 3, "FltStsSlaveAdv_TestFaild";
+	}
+	FltStsSlaveBasc {
+		logical_value, 0, "FltStsSlaveBasc_FltStsTestPassd";
+		logical_value, 1, "FltStsSlaveBasc_FltStsTestFaild";
+	}
+	IdPen {
+		logical_value, 0, "IdPen_ProfUkwn";
+		logical_value, 1, "IdPen_Prof1";
+		logical_value, 2, "IdPen_Prof2";
+		logical_value, 3, "IdPen_Prof3";
+		logical_value, 4, "IdPen_Prof4";
+		logical_value, 5, "IdPen_Prof5";
+		logical_value, 6, "IdPen_Prof6";
+		logical_value, 7, "IdPen_Prof7";
+		logical_value, 8, "IdPen_Prof8";
+		logical_value, 9, "IdPen_Prof9";
+		logical_value, 10, "IdPen_Prof10";
+		logical_value, 11, "IdPen_Prof11";
+		logical_value, 12, "IdPen_Prof12";
+		logical_value, 13, "IdPen_Prof13";
+		logical_value, 14, "IdPen_Resd14";
+		logical_value, 15, "IdPen_ProfAll";
+	}
+	IllmnSts {
+		physical_value, 0, 10, 1.0, -5.0, "Unitless";
+	}
+	IntrBriSts1 {
+		physical_value, 0, 15, 1.0, 0.0, "Unitless";
+	}
+	LiIllmn {
+		physical_value, 0, 65534, 1.0, 0.0, "Unitless";
+	}
+	MemPosn {
+		logical_value, 0, "MemPosn_ProfPosn";
+		logical_value, 1, "MemPosn_MemBnk1";
+		logical_value, 2, "MemPosn_MemBnk2";
+		logical_value, 3, "MemPosn_MemBnk3";
+	}
+	MirrAgAdjmtReq {
+		logical_value, 0, "MirrAgAdjmtReq_None";
+		logical_value, 1, "MirrAgAdjmtReq_Up";
+		logical_value, 2, "MirrAgAdjmtReq_Down";
+	}
+	MirrPosn {
+		physical_value, 0, 81, 1.0, 0.0, "Unitless";
+	}
+	NoYes1 {
+		logical_value, 0, "NoYes1_No";
+		logical_value, 1, "NoYes1_Yes";
+	}
+	OffOnAut1 {
+		logical_value, 0, "OffOnAut1_Off";
+		logical_value, 1, "OffOnAut1_On";
+		logical_value, 2, "OffOnAut1_Aut";
+	}
+	OnOff1 {
+		logical_value, 0, "OnOff1_Off";
+		logical_value, 1, "OnOff1_On";
+	}
+	PsdNotPsd {
+		logical_value, 0, "PsdNotPsd_NotPsd";
+		logical_value, 1, "PsdNotPsd_Psd";
+	}
+	Qf1 {
+		logical_value, 0, "Qf1_DevOfDataUndefd";
+		logical_value, 1, "Qf1_DataTmpUndefdAndEvlnInProgs";
+		logical_value, 2, "Qf1_DevOfDataNotWithinRngAllwd";
+		logical_value, 3, "Qf1_DataCalcdWithDevDefd";
+	}
+	TwliBriSts1 {
+		logical_value, 0, "TwliBriSts1_Night";
+		logical_value, 1, "TwliBriSts1_Day";
+	}
+	UInt2 {
+		physical_value, 0, 3, 1.0, 0.0, "Unitless";
+	}
+	UInt4 {
+		physical_value, 0, 15, 1.0, 0.0, "Unitless";
+	}
+	UInt8 {
+		physical_value, 0, 255, 1.0, 0.0, "Unitless";
+	}
+	UsgModSts1 {
+		logical_value, 0, "UsgModSts1_UsgModAbdnd";
+		logical_value, 1, "UsgModSts1_UsgModInActv";
+		logical_value, 2, "UsgModSts1_UsgModCnvinc";
+		logical_value, 11, "UsgModSts1_UsgModActv";
+		logical_value, 13, "UsgModSts1_UsgModDrvg";
+	}
+	YesNo1 {
+		logical_value, 0, "YesNo1_Yes";
+		logical_value, 1, "YesNo1_No";
+	}
+}
+
+Signal_representation {
+	Boolean : ActvnOfHudIllmn, ActvnOfSteerWhlIllmn;
+	DiagcFailrSWSM : DiagcFailrSWSM;
+	DispInhbnLvl : HudDispInhbnLvl;
+	EveMemPosn : EveMemPosn;
+	FltStsSlaveAdv : ActvnOfHudIllmnTiOut, HudAmbIllmnErr, HudAmbIllmnTiOut, HudIllmnTiOut, HudIntrBriTiOut, HudMirrAgAdjmtTiOut, HudMirrMotErr, HudTnlTiOut, HudTwliBriTiOut;
+	FltStsSlaveBasc : HudAmbTHi, HudDispBackliteErr, HudFlashMemDataErr, HudInvldCfg, HudPin1CircOpenCllsnFwd, HudPin1CllsnFwdSho, HudPin2CircOpenCllsnFwd, HudPin2CllsnFwdSho, HudQuiscHiComNotReqd, HudQuiscHiComReqd, HudRamDataErr, HudSplyUHi, HudSplyULo, HudTReadFailr, HudVisInpErr;
+	IdPen : LoadAndStoreReqIdPen;
+	IllmnSts : HudIllmnSts;
+	IntrBriSts1 : IntrBriSts;
+	LiIllmn : AmbIllmnFwdStsAmbLiIllmn;
+	MemPosn : MemPosn;
+	MirrAgAdjmtReq : HudMirrAgAdjmtReq;
+	MirrPosn : HudMirrPosnSts;
+	NoYes1 : TnlEntryOrEnd;
+	OffOnAut1 : SaveSetgToMemPrmnt;
+	OnOff1 : HudCalModActv, LoadAndStoreReqInOutEasy;
+	PsdNotPsd : BtnL2ReqSteerWhlLeBtnExtReq1, BtnL3Req, BtnL4Req, BtnL6Req, BtnL7Req, BtnR1Req, BtnR2Req, BtnR3Req, BtnR4Req, BtnR5Req, BtnR6Req, BtnR7Req, SteerWhlL1BtnExtReq1, SteerWhlLeBtn5ExtReq;
+	Qf1 : BtnL2ReqSteerWhlLeBtnExtReqToUpdQf, SteerWhlL1BtnExtReqToUpdQf, SteerWhlLeBtn5ExtReqToUpdQf;
+	TwliBriSts1 : TwliBriSts;
+	UInt2 : BtnL2ReqSteerWhlLeBtnExtReqCntr, SteerWhlL1BtnExtReqCntr, SteerWhlLeBtn5ExtReqCntr;
+	UInt4 : AmbIllmnFwdStsCntr;
+	UInt8 : AmbIllmnFwdStsChks, BtnL2ReqSteerWhlLeBtnExtReqChks, NrSerlSWSMNr1, NrSerlSWSMNr2, NrSerlSWSMNr3, NrSerlSWSMNr4, PartNrSWSMEndSgn1, PartNrSWSMEndSgn2, PartNrSWSMEndSgn3, PartNrSWSMNr1, PartNrSWSMNr2, PartNrSWSMNr3, PartNrSWSMNr4, SteerWhlL1BtnExtReqChks, SteerWhlLeBtn5ExtReqChks;
+	UsgModSts1 : HudUsgModSts;
+	YesNo1 : HudSpdProgmAllwd;
+}
+

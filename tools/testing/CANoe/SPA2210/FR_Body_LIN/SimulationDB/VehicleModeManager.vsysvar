@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="CEM" comment="NODE">
+      <namespace name="VMM" comment="">
+        <namespace name="Out" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="CarModSts1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="5" maxValuePhys="5">
+            <valuetable definesMinMax="true">
+              <valuetableentry value="0" description="CarModNorm_CarModSts1" />
+              <valuetableentry value="1" description="CarModTrnsp_CarModSts1" />
+              <valuetableentry value="2" description="CarModFcy_CarModSts1" />
+              <valuetableentry value="3" description="CarModCrash_CarModSts1" />
+              <valuetableentry value="5" description="CarModDyno_CarModSts1" />
+            </valuetable>
+          </variable>
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UsgModSts" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="13" maxValuePhys="13">
+            <valuetable definesMinMax="true">
+              <valuetableentry value="0" description="UsgModAbdnd_UsgModSts" />
+              <valuetableentry value="1" description="UsgModInActv_UsgModSts" />
+              <valuetableentry value="2" description="UsgModCnvinc_UsgModSts" />
+              <valuetableentry value="11" description="UsgModActv_UsgModSts" />
+              <valuetableentry value="13" description="UsgModDrvg_UsgModSts" />
+            </valuetable>
+          </variable>
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

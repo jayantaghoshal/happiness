@@ -1,0 +1,5 @@
+includes
+{
+  #include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  #include "..\..\SPAIncludes\SPACommon_SPACANIL.cin" //@SPECINC::CANIL@
+}

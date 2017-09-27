@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+	<namespace name="" comment="">
+		<namespace name="ASDM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="CEM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="DIM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="IHU" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="PAM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="SRS" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="VCM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="VDDM" comment="NODE">
+			<namespace name="FRIL" comment="..\SPAIncludes\SPACommon_FRIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRCntrReal"/>
+							<valuetableentry value="1" description="FRCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRILInit"/>
+							<valuetableentry value="1" description="FRILStop"/>
+							<valuetableentry value="2" description="FRILWait"/>
+							<valuetableentry value="3" description="FRILResume"/>
+							<valuetableentry value="4" description="FRILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="FRUBOFF"/>
+							<valuetableentry value="1" description="FRUBHandled"/>
+							<valuetableentry value="3" description="FRUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+			</namespace>
+		</namespace>
+	</namespace>
+</systemvariables>
