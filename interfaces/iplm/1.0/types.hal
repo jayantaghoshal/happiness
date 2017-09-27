@@ -1,0 +1,32 @@
+package vendor.volvocars.hardware.iplm@1.0;
+
+enum ResourceGroup : uint8_t
+{
+    ResourceGroup1 = 0x02,
+    ResourceGroup2 = 0x04,
+    ResourceGroup3 = 0x08,
+    ResourceGroup4 = 0x10,
+    ResourceGroup5 = 0x20,
+    ResourceGroup6 = 0x40,
+    ResourceGroup7 = 0x80
+};
+
+enum ResourceGroupPrio : uint8_t
+{
+    Normal = 0x00,
+    High = 0x01
+};
+
+enum ResourceGroupStatus : uint8_t
+{
+    Unavailable = 0x00,
+    PartlyAvailable = 0x01,
+    Available = 0x02
+};
+
+enum Status : uint8_t
+{
+    Unknown = 0x00 ,
+    Fail = 0x01,
+    Success = 0x02
+};
