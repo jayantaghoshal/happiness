@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import json
 
 from PIL import Image
 _num_measures = 120
@@ -15,6 +16,10 @@ _green_color = (160,254,160)
 _dark_green_color = (81, 163, 157)
 _red_color = (183,105,92)
 _yellow_color = (205,187,121)
+
+_gpu_lost_frames = 0
+_cpu_percentage_load = 0
+_mem_percentage_used = 0
 
 def read_in():
     lines = ""
@@ -34,6 +39,7 @@ def _drawRect(img, start_x, start_y, end_x, end_y, color):
             pix[xpos, yloc] = color
 
 def _generateFpsGraph(lines):
+    global _gpu_lost_frames
     regex = ur"Frame\s([0-9]+)\stime:\s([0-9]+).*"
     matches = re.finditer(regex, lines)
     img = Image.new("RGB", (_graph_width, _graph_height), "white")
@@ -44,6 +50,7 @@ def _generateFpsGraph(lines):
         if xVal < _num_measures:
             if yVal>16:
                 _drawRect(img, xVal*4-3, _graph_height-yVal*4, xVal*4-1, _graph_height, _red_color)
+                _gpu_lost_frames += 1
             else:
                 _drawRect(img, xVal*4-3, _graph_height-yVal*4, xVal*4-1, _graph_height, _dark_green_color)
 
@@ -51,6 +58,7 @@ def _generateFpsGraph(lines):
     img.save(_result_folder + '/frame_performance_img.png', 'png')
 
 def _generateCpuGraph(filename, total, user, nice, kernel, idle):
+    global _cpu_percentage_load
     img = Image.new("RGB", (_graph_width, _graph_height), "white")
     idle_color = _green_color
     user_color = _dark_green_color
@@ -75,6 +83,7 @@ def _generateCpuGraph(filename, total, user, nice, kernel, idle):
         _drawRect(img, x_start+graph_padding, kernel_pos, x_end-graph_padding, user_pos, kernel_color)
         _drawRect(img, x_start+graph_padding, nice_pos, x_end-graph_padding, kernel_pos, nice_color)
 
+    _cpu_percentage_load = (user[0]+kernel[0]+nice[0])/ total[0]
     img.save(_result_folder + '/' + filename, 'png')
 
 def _extract_frame_timing(lines):
@@ -169,6 +178,7 @@ def _extract_mem_usage(lines):
     return toReturn
 
 def _extract_total_mem_usage(lines):
+    global _mem_percentage_used
     toReturn = ""
     imageReturned = "mem_usage.png"
     img = Image.new("RGB", (_mem_graph_width, _graph_height), "white")
@@ -191,6 +201,7 @@ def _extract_total_mem_usage(lines):
             toReturn += "<tr><td>" + str(line) + "</td></tr>\n"
     toReturn = toReturn + "</table>\n"
     percent_free = float(freeValue)/totalValue
+    _mem_percentage_used = 100.0*(1.0-percent_free)
     _drawRect(img, 0, int(_graph_height-(1.0-percent_free)*_graph_height), _mem_graph_width, _graph_height, _red_color)
     _drawRect(img, 0, 0, _mem_graph_width, int(_graph_height*(percent_free)), _dark_green_color)
 
@@ -202,70 +213,76 @@ def _generateMainHtml(lines):
     mem_total, mem_image, total, free = _extract_total_mem_usage(lines)
     mem_details = _extract_mem_usage(lines)
 
-    f = open(_result_folder + '/index.html', 'w')
-    f.write('<html>\n')
-    f.write('<head><link rel="stylesheet" type="text/css" href="styles.css"></head>\n')
-    f.write('<body>\n')
-    f.write('<H1>Performance measurements</H1>\n')
-    f.write('Each graph is clickable for additional details.\n')
-    f.write('<table><tr valign="top"><td valign="top">\n')
-    f.write('<H2>Graphics</H2>\n')
-    f.write('Shows valid frames only, yellow marker indicates 60fps target (16ms)<br>\n')
-    f.write('<a href="graphics.html"><img src="frame_performance_img.png" border=1/></a><br>\n')
-    f.write('<div class="color-box" style="background-color: #CDBB79;"></div>Target time for one frame to render (16ms)<br>\n')
-    f.write('<div class="color-box" style="background-color: #B7695C;"></div>Frame rendering failed (>16ms)<br>\n')
-    f.write('<div class="color-box" style="background-color: #51A39D;"></div>Frame rendering ok<br>\n')
-    f.write('</td><td><H2>CPU</H2>\n')
-    f.write('First bar is average for all CPUs the rest is the individual cores<br>\n')
-    f.write('<a href="cpu.html"><img src="' + cpu_image + '"></a><br>\n')
-    f.write('<div class="color-box" style="background-color: #51A39D; left: 20px;margin-right: 30px;"></div>User<br>\n')
-    f.write('<div class="color-box" style="background-color: #CDBB79; left: 20px;margin-right: 30px;"></div>Nice<br>\n')
-    f.write('<div class="color-box" style="background-color: #B7695C; left: 20px;margin-right: 30px;"></div>Kernel<br>\n')
-    f.write('</td><td><H2>Memory ' + str(int(100.0*(float(free)/float(total)))) + '% free</H2>\n')
-    f.write('Total memory usage, green is free memory<br>\n')
-    f.write('<a href="mem.html"><img src=' + mem_image + '></a><br>')
-    f.write('<div class="color-box" style="background-color: #51A39D;"></div>Free memory<br>\n')
-    f.write('<div class="color-box" style="background-color: #B7695C;"></div>Used memory<br>\n')
-    f.write('</td></tr></table>\n')
-    f.write('</body>\n')
-    f.close()
+    with open(_result_folder + '/index.html', 'w') as f:
+        f.write('<html>\n')
+        f.write('<head><link rel="stylesheet" type="text/css" href="styles.css"></head>\n')
+        f.write('<body>\n')
+        f.write('<H1>Performance measurements</H1>\n')
+        f.write('Each graph is clickable for additional details.\n')
+        f.write('<table><tr valign="top"><td valign="top">\n')
+        f.write('<H2>Graphics</H2>\n')
+        f.write('Shows valid frames only, yellow marker indicates 60fps target (16ms)<br>\n')
+        f.write('<a href="graphics.html"><img src="frame_performance_img.png" border=1/></a><br>\n')
+        f.write('<div class="color-box" style="background-color: #CDBB79;"></div>Target time for one frame to render (16ms)<br>\n')
+        f.write('<div class="color-box" style="background-color: #B7695C;"></div>Frame rendering failed (>16ms)<br>\n')
+        f.write('<div class="color-box" style="background-color: #51A39D;"></div>Frame rendering ok<br>\n')
+        f.write('</td><td><H2>CPU</H2>\n')
+        f.write('First bar is average for all CPUs the rest is the individual cores<br>\n')
+        f.write('<a href="cpu.html"><img src="' + cpu_image + '"></a><br>\n')
+        f.write('<div class="color-box" style="background-color: #51A39D; left: 20px;margin-right: 30px;"></div>User<br>\n')
+        f.write('<div class="color-box" style="background-color: #CDBB79; left: 20px;margin-right: 30px;"></div>Nice<br>\n')
+        f.write('<div class="color-box" style="background-color: #B7695C; left: 20px;margin-right: 30px;"></div>Kernel<br>\n')
+        f.write('</td><td><H2>Memory ' + str(int(100.0*(float(free)/float(total)))) + '% free</H2>\n')
+        f.write('Total memory usage, green is free memory<br>\n')
+        f.write('<a href="mem.html"><img src=' + mem_image + '></a><br>')
+        f.write('<div class="color-box" style="background-color: #51A39D;"></div>Free memory<br>\n')
+        f.write('<div class="color-box" style="background-color: #B7695C;"></div>Used memory<br>\n')
+        f.write('</td></tr></table>\n')
+        f.write('</body>\n')
 
-    css = open(_result_folder + '/styles.css', 'w')
-    css.write('.color-box {\n')
-    css.write('    width: 20px;\n')
-    css.write('    height: 20px;\n')
-    css.write('    display: inline-block;\n')
-    css.write('    background-color: #ccc;\n')
-    css.write('    position: relative;\n')
-    css.write('    left: 0px;\n')
-    css.write('    top: 5px;\n')
-    css.write('    margin-right: 10px;\n')
-    css.write('}\n')
-    css.close()
+    with open(_result_folder + '/styles.css', 'w') as css:
+        css.write('.color-box {\n')
+        css.write('    width: 20px;\n')
+        css.write('    height: 20px;\n')
+        css.write('    display: inline-block;\n')
+        css.write('    background-color: #ccc;\n')
+        css.write('    position: relative;\n')
+        css.write('    left: 0px;\n')
+        css.write('    top: 5px;\n')
+        css.write('    margin-right: 10px;\n')
+        css.write('}\n')
+
     mem_overview = _extract_total_mem_usage(lines)
-    frame_f = open(_result_folder + '/graphics.html', 'w')
-    frame_f.write(_extract_frame_timing(lines))
-    frame_f.close()
-    cpu_f = open(_result_folder + '/cpu.html', 'w')
-    cpu_f.write(cpu_details)
-    cpu_f.close()
 
-    mem_f = open(_result_folder + '/mem.html', 'w')
-    mem_f.write('<h2>Total memory consumption summary</h2>')
-    mem_f.write(mem_total)
-    mem_f.write('<h2>Per process  memory consumption</h2>')
-    mem_f.write(mem_details)
-    mem_f.close()
+    with open(_result_folder + '/graphics.html', 'w') as frame_f:
+        frame_f.write(_extract_frame_timing(lines))
+
+    with open(_result_folder + '/cpu.html', 'w') as cpu_f:
+        cpu_f.write(cpu_details)
+
+    with open(_result_folder + '/mem.html', 'w') as mem_f:
+        mem_f.write('<h2>Total memory consumption summary</h2>')
+        mem_f.write(mem_total)
+        mem_f.write('<h2>Per process  memory consumption</h2>')
+        mem_f.write(mem_details)
+
+def _generateJsonReport():
+    with open(_result_folder + '/perf.json', 'w') as json_f:
+        json_f.write(json.dumps({'cpu_usage_percent':_cpu_percentage_load, 'mem_usage_percent':_mem_percentage_used, 'gpu_frames_above_16_ms':_gpu_lost_frames}, sort_keys=True, indent=4))
 
 def main():
+    global _result_folder
     if (len(sys.argv) < 2):
-        print "usage: " + sys.argv[0] + " <file to analyze>"
+        print "usage: " + sys.argv[0] + " <file to analyze> <output folder (optional)>"
         sys.exit(1)
+    if (len(sys.argv) == 3):
+        _result_folder = sys.argv[2]
     lines = read_in()
     if not os.path.exists(_result_folder):
         os.mkdir(_result_folder)
     _generateFpsGraph(lines)
     _generateMainHtml(lines)
+    _generateJsonReport()
 
 if __name__ == '__main__':
     main()
