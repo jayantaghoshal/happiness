@@ -1,7 +1,7 @@
 - defaults:
     name: commit_job_defaults
     project-type: freestyle
-    concurrent: false
+    concurrent: true
     description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
     parameters:
         # Jenkins require parameters to be explicitly defined, otherwise they are removed
