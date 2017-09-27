@@ -22,6 +22,9 @@ namespace localconfig
  *
  * But also allows to easilly inject a Mock of the interface, to prevent FileSystem and global data dependency to
  * spread across all unit tests of LCFG dependent components.
+ *
+ * @return Target system configured LocalConfig implementation (not-null)
+ * @throws std::runtime_error if initialization is impossible.
  */
 const vcc::LocalConfigReaderInterface *Default();
 

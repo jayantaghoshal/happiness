@@ -27,7 +27,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return String with the requested parameter value.
    */
-  virtual std::string GetString(const std::initializer_list<std::string> &keys_path) = 0;
+  virtual std::string GetString(std::initializer_list<std::string> keys_path) = 0;
 
   /**
    * Get the value of a local config int parameter.
@@ -40,7 +40,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return int with the requested parameter value.
    */
-  virtual int GetInt(const std::initializer_list<std::string> &keys_path) = 0;
+  virtual int GetInt(std::initializer_list<std::string> keys_path) = 0;
 
   /**
    * Get the value of a local config bool parameter.
@@ -53,7 +53,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return bool with the requested parameter value.
    */
-  virtual bool GetBool(const std::initializer_list<std::string> &keys_path) = 0;
+  virtual bool GetBool(std::initializer_list<std::string> keys_path) = 0;
 
   /**
    * Get the value of a local config double parameter.
@@ -66,7 +66,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return double with the requested parameter value.
    */
-  virtual double GetDouble(const std::initializer_list<std::string> &keys_path) = 0;
+  virtual double GetDouble(std::initializer_list<std::string> keys_path) = 0;
 
   /**
    * Get the value of a local config array of string parameter.
@@ -79,7 +79,7 @@ struct LocalConfigReaderInterface
    * @param key string that identifies a local config value
    * @return vector of strings with requested parameter value
    */
-  virtual std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys_path) = 0;
+  virtual std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys_path) = 0;
 
   // conveniance adapters
 

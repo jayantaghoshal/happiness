@@ -5,13 +5,16 @@
 
 #include <vcc/local_config_reader.h>
 #include <vcc/localconfig.h>
-#include <vcc/localconfig_test.h>
+
+#include <json/json.h>
 
 namespace
 {
+const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
+
 vcc::LocalConfigReader &Instance()
 {
-  static vcc::LocalConfigReader instance;
+  static vcc::LocalConfigFileReader instance(kDefaultFilePath);
   return instance;
 }
 }
@@ -21,8 +24,6 @@ namespace vcc
 namespace localconfig
 {
 const vcc::LocalConfigReaderInterface *Default() { return &Instance(); }
-
-void TestInit(const std::string &file_path) { Instance().TestInit(file_path); }
 
 std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
 int GetInt(const std::initializer_list<std::string> &keys) { return Instance().GetInt(keys); }

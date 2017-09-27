@@ -1,5 +1,5 @@
+#include <vcc/local_config_reader.h>
 #include <vcc/localconfig.h>
-#include <vcc/localconfig_test.h>
 
 #include <gtest/gtest.h>
 
@@ -13,61 +13,71 @@ const char *kTestIntKey = "foo";
 const char *kTestStringKey = "bum";
 }  // namespace
 
-TEST(LocalConfigTest, TestInitWithGoodFile) { EXPECT_NO_THROW(vcc::localconfig::TestInit(kGoodTestFilePath)); }
+TEST(LocalConfigTest, TestInitWithGoodFile)
+{
+  vcc::LocalConfigFileReader reader(kGoodTestFilePath);
+  EXPECT_NO_THROW(reader.Preload());
+}
 
 TEST(LocalConfigTest, TestInitFailsWithBadFile)
 {
-  EXPECT_THROW(vcc::localconfig::TestInit(kBadTestFilePath), std::runtime_error);
+  vcc::LocalConfigFileReader reader(kBadTestFilePath);
+  EXPECT_THROW(reader.Preload(), std::runtime_error);
 }
 
 TEST(LocalConfigTest, TestInitFailsWithNonExistingFile)
 {
-  EXPECT_THROW(vcc::localconfig::TestInit(kFileNotFoundTestFilePath), std::runtime_error);
+  vcc::LocalConfigFileReader reader(kFileNotFoundTestFilePath);
+  EXPECT_THROW(reader.Preload(), std::runtime_error);
 }
 
-TEST(LocalConfigTest, GetInt)
+class LocalConfigParsingTest : public ::testing::Test
 {
-  vcc::localconfig::TestInit(kGoodTestFilePath);
-  EXPECT_EQ(42, vcc::localconfig::GetInt(kTestIntKey));
-  EXPECT_THROW(vcc::localconfig::GetInt("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetInt(kTestStringKey), std::runtime_error);
+ private:
+  vcc::LocalConfigFileReader file_reader{kGoodTestFilePath};
+
+ protected:
+  // only accessing through interface gives proper overload resolution
+  vcc::LocalConfigReaderInterface &reader = file_reader;
+};
+
+TEST_F(LocalConfigParsingTest, GetInt)
+{
+  EXPECT_EQ(42, reader.GetInt(kTestIntKey));
+  EXPECT_THROW(reader.GetInt("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(reader.GetInt(kTestStringKey), std::runtime_error);
 }
 
-TEST(LocalConfigTest, GetString)
+TEST_F(LocalConfigParsingTest, GetString)
 {
-  vcc::localconfig::TestInit(kGoodTestFilePath);
-  EXPECT_EQ("mystring", vcc::localconfig::GetString(kTestStringKey));
-  EXPECT_THROW(vcc::localconfig::GetString("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetString(kTestIntKey), std::runtime_error);
+  EXPECT_EQ("mystring", reader.GetString(kTestStringKey));
+  EXPECT_THROW(reader.GetString("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(reader.GetString(kTestIntKey), std::runtime_error);
 }
 
-TEST(LocalConfigTest, GetBoolean)
+TEST_F(LocalConfigParsingTest, GetBoolean)
 {
-  vcc::localconfig::TestInit(kGoodTestFilePath);
-  EXPECT_TRUE(vcc::localconfig::GetBool("bool1"));
-  EXPECT_FALSE(vcc::localconfig::GetBool("bool2"));
-  EXPECT_THROW(vcc::localconfig::GetBool("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetBool(kTestIntKey), std::runtime_error);
+  EXPECT_TRUE(reader.GetBool("bool1"));
+  EXPECT_FALSE(reader.GetBool("bool2"));
+  EXPECT_THROW(reader.GetBool("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(reader.GetBool(kTestIntKey), std::runtime_error);
 }
 
-TEST(LocalConfigTest, GetDouble)
+TEST_F(LocalConfigParsingTest, GetDouble)
 {
-  vcc::localconfig::TestInit(kGoodTestFilePath);
-  EXPECT_DOUBLE_EQ(22.333, vcc::localconfig::GetDouble("double1"));
-  EXPECT_DOUBLE_EQ(22, vcc::localconfig::GetDouble("double2"));
-  EXPECT_THROW(vcc::localconfig::GetDouble("NOT_EXISTING"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetDouble(kTestStringKey), std::runtime_error);
+  EXPECT_DOUBLE_EQ(22.333, reader.GetDouble("double1"));
+  EXPECT_DOUBLE_EQ(22, reader.GetDouble("double2"));
+  EXPECT_THROW(reader.GetDouble("NOT_EXISTING"), std::runtime_error);
+  EXPECT_THROW(reader.GetDouble(kTestStringKey), std::runtime_error);
 }
 
-TEST(LocalConfigTest, GetArray)
+TEST_F(LocalConfigParsingTest, GetArray)
 {
-  vcc::localconfig::TestInit(kGoodTestFilePath);
-  EXPECT_EQ(std::vector<std::string>({"test1"}), vcc::localconfig::GetStringArray("strarray1"));
-  EXPECT_EQ(std::vector<std::string>({"test1"}), vcc::localconfig::GetStringArray("strarray2", "substrarray"));
-  EXPECT_EQ(std::vector<std::string>({"rule1", "rule2"}),
-            vcc::localconfig::GetStringArray("FIREWALL", "NAT_TABLE", "RULES"));
-  EXPECT_EQ(std::vector<std::string>(), vcc::localconfig::GetStringArray("FIREWALL", "NAT_TABLE", "CHAINS"));
-  EXPECT_THROW(vcc::localconfig::GetStringArray("strarray2", "substrarray2"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetStringArray("strarray3", "substrarray3"), std::runtime_error);
-  EXPECT_THROW(vcc::localconfig::GetStringArray("DOES_NOT_EXIST"), std::runtime_error);
+  EXPECT_EQ(std::vector<std::string>({"test1"}), reader.GetStringArray("strarray1"));
+  EXPECT_EQ(std::vector<std::string>({"test1"}), reader.GetStringArray("strarray2", "substrarray"));
+  EXPECT_EQ(std::vector<std::string>({"rule1", "rule2"}), reader.GetStringArray("FIREWALL", "NAT_TABLE", "RULES"));
+  EXPECT_EQ(std::vector<std::string>(), reader.GetStringArray("FIREWALL", "NAT_TABLE", "CHAINS"));
+  EXPECT_THROW(reader.GetStringArray("strarray2", "substrarray2"), std::runtime_error);
+  EXPECT_THROW(reader.GetStringArray("strarray3", "substrarray3"), std::runtime_error);
+  EXPECT_THROW(reader.GetStringArray("DOES_NOT_EXIST"), std::runtime_error);
 }

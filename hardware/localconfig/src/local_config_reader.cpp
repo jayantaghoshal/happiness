@@ -1,12 +1,12 @@
 #include "vcc/local_config_reader.h"
 
+#include <fstream>
+
 using namespace vcc;
 
 namespace
 {
-const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
-
-std::string GetKeyString(const std::initializer_list<std::string> &keys)
+std::string GetKeyString(std::initializer_list<std::string> keys)
 {
   std::stringstream key_string;
   for (auto &k : keys)
@@ -17,7 +17,13 @@ std::string GetKeyString(const std::initializer_list<std::string> &keys)
 }
 }
 
-std::string LocalConfigReader::GetString(const std::initializer_list<std::string> &keys)
+void vcc::LocalConfigReader::Preload()
+{
+  std::unique_lock<std::mutex> lock(mutex_);
+  loader_(&root_);
+}
+
+std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys)
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -26,19 +32,9 @@ std::string LocalConfigReader::GetString(const std::initializer_list<std::string
   return node_value.asString();
 }
 
-void LocalConfigReader::Load(const std::string &file_path)
+const Json::Value &LocalConfigReader::GetValue(std::initializer_list<std::string> keys)
 {
-  std::ifstream ifs(file_path);
-  if (!ifs) throw std::runtime_error("JSON file " + file_path + " could not be opened.");
-
-  Json::Reader reader;
-  if (!reader.parse(ifs, root_))
-    throw std::runtime_error("JSON file " + file_path + " could not be parsed, please check file content.");
-}
-
-const Json::Value &LocalConfigReader::GetValue(const std::initializer_list<std::string> &keys)
-{
-  if (root_.isNull()) Load(kDefaultFilePath);
+  if (root_.isNull()) loader_(&root_);
 
   Json::Value *current_node = &root_;
   Json::Value *node_value = nullptr;
@@ -52,7 +48,7 @@ const Json::Value &LocalConfigReader::GetValue(const std::initializer_list<std::
   return *node_value;
 }
 
-int LocalConfigReader::GetInt(const std::initializer_list<std::string> &keys)
+int LocalConfigReader::GetInt(std::initializer_list<std::string> keys)
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -62,7 +58,7 @@ int LocalConfigReader::GetInt(const std::initializer_list<std::string> &keys)
   return node_value.asInt();
 }
 
-bool LocalConfigReader::GetBool(const std::initializer_list<std::string> &keys)
+bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys)
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -72,7 +68,7 @@ bool LocalConfigReader::GetBool(const std::initializer_list<std::string> &keys)
   return node_value.asBool();
 }
 
-double LocalConfigReader::GetDouble(const std::initializer_list<std::string> &keys)
+double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys)
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &node_value = GetValue(keys);
@@ -82,7 +78,7 @@ double LocalConfigReader::GetDouble(const std::initializer_list<std::string> &ke
   return node_value.asDouble();
 }
 
-std::vector<std::string> LocalConfigReader::GetStringArray(const std::initializer_list<std::string> &keys)
+std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list<std::string> keys)
 {
   std::unique_lock<std::mutex> lock(mutex_);
   const Json::Value &array = GetValue(keys);
@@ -98,4 +94,27 @@ std::vector<std::string> LocalConfigReader::GetStringArray(const std::initialize
   }
 
   return values;
+}
+
+void vcc::LocalConfigReader::LoadFile(std::string file_path, Json::Value *value)
+{
+  std::ifstream ifs(file_path);
+  if (!ifs) throw std::runtime_error("JSON file " + file_path + " could not be opened.");
+
+  Json::Reader reader;
+  if (!reader.parse(ifs, *value))
+    throw std::runtime_error("JSON file " + file_path + " could not be parsed, please check file content.");
+}
+
+vcc::LocalConfigFileReader::LocalConfigFileReader(std::string file_path)
+    : base::LocalConfigReader([file_path](Json::Value *value) { LoadFile(file_path, value); })
+{
+}
+
+vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(std::string json)
+    : base([json](Json::Value *value) {
+      Json::Reader reader;
+      if (!reader.parse(json, *value)) throw std::runtime_error("JSON text could not be parsed, please check content.");
+    })
+{
 }
