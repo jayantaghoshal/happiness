@@ -11,6 +11,6 @@
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
            <option name="test-module-name" value="VtsFlexraySignalingCT_OneSendOneReceive"/>
            <option name="test-case-path" value="volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal/VtsFlexraySignalingCT_OneSendOneReceive"/>
-           <option name="test-timeout" value="1m"/>
+           <option name="test-timeout" value="3m"/>
        </test>
 </configuration>
