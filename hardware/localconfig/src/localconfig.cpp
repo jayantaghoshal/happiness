@@ -4,7 +4,6 @@
 \*===========================================================================*/
 
 #include <vcc/local_config_reader.h>
-#include <vcc/local_config_reader_interface.h>
 #include <vcc/localconfig.h>
 #include <vcc/localconfig_test.h>
 
@@ -21,9 +20,11 @@ namespace vcc
 {
 namespace localconfig
 {
-void TestInit(const std::string &file_path) { Instance().TestInit(file_path); }
-std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
+const vcc::LocalConfigReaderInterface *Default() { return &Instance(); }
 
+void TestInit(const std::string &file_path) { Instance().TestInit(file_path); }
+
+std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
 int GetInt(const std::initializer_list<std::string> &keys) { return Instance().GetInt(keys); }
 bool GetBool(const std::initializer_list<std::string> &keys) { return Instance().GetBool(keys); }
 double GetDouble(const std::initializer_list<std::string> &keys) { return Instance().GetDouble(keys); }
