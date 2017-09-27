@@ -8,7 +8,10 @@ MY_LOCALCONFIG_STATIC_LIBRARIES := libjsoncpp
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := liblocalconfig_static
-LOCAL_SRC_FILES := src/localconfig.cpp
+LOCAL_SRC_FILES := src/localconfig.cpp \
+                   src/local_config_reader_interface.cpp \
+                   src/local_config_reader.cpp
+
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 LOCAL_STATIC_LIBRARIES := $(MY_LOCALCONFIG_STATIC_LIBRARIES)
