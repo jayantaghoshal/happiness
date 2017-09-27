@@ -22,8 +22,8 @@ ihu_update || die "Failed to flash IHU image"
 docker_run "./out/host/linux-x86/bin/adb shell getprop"
 
 # Run tests
-docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64"
-status=$?
+# docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64"
+# status=$?
 
 # Push logs and reports to Artifactory
 docker_run "artifactory push ihu_daily_test ${BUILD_NUMBER} ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz"
