@@ -1,9 +1,11 @@
-#include <cutils/log.h>
-
 #include <linux/rtnetlink.h>
 #include <linux/socket.h>
 
 #include <net/if.h>
+
+#define  LOG_TAG    "Netmand"
+
+#include <cutils/log.h>
 
 #include "netlink_event_handler.h"
 #include "netlink_event_listener.h"

@@ -1,17 +1,17 @@
-#include <cutils/log.h>
-#include <cutils/properties.h>
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#define  LOG_TAG    "Netmand"
+
+#include <cutils/log.h>
+#include <cutils/properties.h>
+
 #include "netlink_event_listener.h"
 #include "netman_netlink_event_handler.h"
 #include "firewall_config.h"
 #include "netman.h"
-
-#define  LOG_TAG    "Netmand"
 
 using namespace vcc::netman;
 

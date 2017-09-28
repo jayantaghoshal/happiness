@@ -1,7 +1,6 @@
 #include <arpa/inet.h>
 
 #include <cstddef>
-#include <cutils/log.h>
 
 #include <errno.h>
 #include <ios>
@@ -22,6 +21,10 @@
 #include <sys/types.h>
 #include <vector>
 #include <unistd.h>
+
+#define  LOG_TAG    "Netmand"
+
+#include <cutils/log.h>
 
 #include <vcc/localconfig.h>
 

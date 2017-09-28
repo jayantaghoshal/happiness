@@ -1,16 +1,16 @@
-#include <cutils/log.h>
-#include <cutils/properties.h>
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#define  LOG_TAG    "Netboyd"
+
+#include <cutils/log.h>
+#include <cutils/properties.h>
+
 #include "netlink_event_listener.h"
 #include "netboy_netlink_event_handler.h"
 #include "netman.h"
-
-#define  LOG_TAG    "Netboyd"
 
 using namespace vcc::netman;
 
@@ -33,13 +33,13 @@ int main()
 
         if (nl_socket_listener.StartListening()) {
             ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
-            exit(1);
+            return 1;
         }
     }
     catch(const std::runtime_error &e)
     {
         ALOGE("ABORTING: Exception thrown: %s", e.what());
-        exit(1);
+        return 1;
     }
 
     return 0;
