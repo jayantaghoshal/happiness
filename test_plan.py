@@ -18,7 +18,7 @@ test_plan_gate = [
     Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
              reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
              jira_issue="",
-             deadline="2017-09-28"
+             deadline="2017-10-14"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/blacklist",    standard_caps),
              reason="Blacklist functionality not yet implemented",
