@@ -13,10 +13,13 @@
 
 #include <net/if.h>
 
+#include <cstring>
 #include <sstream>
 #include <stdbool.h>
+#include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
+#include <system_error>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -137,7 +140,11 @@ void VccNamespaceInit()
     std::vector<std::string> network_interfaces = ListNetworkInterfaces({"lo", "sit0"});
     for (auto &network_interface : network_interfaces) {
         ALOGI("Moving interface: %s", network_interface.c_str());
+
+        TakeInterfaceDown(network_interface.c_str());
+
         MoveNetworkInterfaceToNamespace(network_interface, "vcc");
+
         BringInterfaceUp(network_interface.c_str());
     }
 }
@@ -240,6 +247,7 @@ static bool IsLinkSpeedCorrect(const std::string &interface_name)
     rc = ioctl(sock, SIOCETHTOOL, &ifr);
     if (rc < 0)
     {
+        ALOGE("%s: ioctl call to get link speed failed", interface_name.c_str());
         close(sock);
         return false;
     }
@@ -457,55 +465,155 @@ bool SetBroadcastAddress(int inet_sock_fd, const char *interface_name, const cha
     return true;
 }
 
+static std::string GetIpAddress(const std::string &interface_name)
+{
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (inet_sock_fd == -1)
+    {
+        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
+        throw std::system_error(EFAULT, std::system_category());
+    }
+
+    struct ifreq ifr;
+    std::memset(&ifr, 0, sizeof(ifr));
+
+    ifr.ifr_addr.sa_family = AF_INET;
+    std::strncpy(ifr.ifr_name, interface_name.c_str(), IF_NAMESIZE-1);
+
+    // Get IP address
+    if (ioctl(inet_sock_fd, SIOCGIFADDR, &ifr) == -1)
+    {
+        ALOGE("%s: ioctl call get IP address failed. Error is [%s]", interface_name.c_str(), strerror(errno));
+        close(inet_sock_fd);
+        return "";
+    }
+
+    close(inet_sock_fd);
+
+    return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+}
+
+static std::string GetNetmask(const std::string &interface_name)
+{
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (inet_sock_fd == -1)
+    {
+        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
+        throw std::system_error(EFAULT, std::system_category());
+    }
+
+    struct ifreq ifr;
+    ifr.ifr_addr.sa_family = AF_INET;
+
+    std::strncpy(ifr.ifr_name, interface_name.c_str(), IF_NAMESIZE-1);
+
+    // Get netmask
+    if (ioctl(inet_sock_fd, SIOCGIFNETMASK, &ifr) == -1)
+    {
+        ALOGE("%s: ioctl call get netmask failed. Error is [%s]", interface_name.c_str(), strerror(errno));
+        close(inet_sock_fd);
+        return "";
+    }
+
+    close(inet_sock_fd);
+
+    return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_netmask)->sin_addr);
+}
+
+static std::string GetBroadcastAddress(const std::string &interface_name)
+{
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (inet_sock_fd == -1)
+    {
+        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
+        throw std::system_error(EFAULT, std::system_category());
+    }
+
+    struct ifreq ifr;
+    ifr.ifr_addr.sa_family = AF_INET;
+
+    std::strncpy(ifr.ifr_name, interface_name.c_str(), IF_NAMESIZE-1);
+
+    // Get netmask
+    if (ioctl(inet_sock_fd, SIOCGIFBRDADDR, &ifr) == -1)
+    {
+        ALOGE("%s: ioctl call get broadcast failed. Error is [%s]", interface_name.c_str(), strerror(errno));
+        close(inet_sock_fd);
+        return "";
+    }
+
+    close(inet_sock_fd);
+
+    return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_broadaddr)->sin_addr);
+}
+
 static bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask, const char *broadcast_address)
 {
     // Open AF_INET socket
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1)
     {
-        ALOGE("Failed to open AF_INET socket. Interface will not be cofigured");
+        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
         return false;
     }
 
-    struct sockaddr_in sin_addr;
-    sin_addr.sin_family = AF_INET;
-    sin_addr.sin_port = htons(0);
-
-    // safe to ignore return value as ip address is a const string in correct format
-    inet_aton(ip_addr, (struct in_addr*)&sin_addr.sin_addr.s_addr);
-
-    struct ifreq ifr;
-    memset(&ifr, 0, sizeof(struct ifreq));
-    memcpy(&ifr.ifr_addr, &sin_addr, sizeof(struct sockaddr));
-    strcpy(ifr.ifr_name, interface_name);
-
-    // Set IP address
-    if (ioctl(inet_sock_fd, SIOCSIFADDR, &ifr) == -1)
+    if (std::strcmp(GetIpAddress(interface_name).c_str(), ip_addr) != 0)
     {
-        ALOGE("ioctl call set IP address failed. Error is [%s]", strerror(errno));
-        close(inet_sock_fd);
-        return false;
+        struct sockaddr_in sin_addr;
+        sin_addr.sin_family = AF_INET;
+        sin_addr.sin_port = htons(0);
+
+        // safe to ignore return value as ip address is a const string in correct format
+        inet_aton(ip_addr, (struct in_addr*)&sin_addr.sin_addr.s_addr);
+
+        struct ifreq ifr;
+        std::memset(&ifr, 0, sizeof(struct ifreq));
+        std::memcpy(&ifr.ifr_addr, &sin_addr, sizeof(struct sockaddr));
+        std::strcpy(ifr.ifr_name, interface_name);
+
+        // Set IP address
+        if (ioctl(inet_sock_fd, SIOCSIFADDR, &ifr) == -1)
+        {
+            ALOGE("%s: ioctl call set ip address %s failed for device. Error is [%s]", interface_name, ip_addr, strerror(errno));
+            close(inet_sock_fd);
+            return false;
+        }
+        ALOGI("%s: Ip address set to %s", interface_name, ip_addr);
     }
-
-    ALOGI("%s: Ip address set to %s", interface_name, ip_addr);
-
-    if (!SetBroadcastAddress(inet_sock_fd, interface_name, broadcast_address))
+    else
     {
-        ALOGE("ioctl call to set broadcast address failed. Error is [%s]", strerror(errno));
-        close(inet_sock_fd);
-        return false;
+        ALOGI("%s: Ip address already set", interface_name);
     }
 
-    ALOGI("%s: Broadcast address set to %s", interface_name, broadcast_address);
-
-    if (!SetNetmask(inet_sock_fd, interface_name, netmask))
+    if (std::strcmp(GetBroadcastAddress(interface_name).c_str(), broadcast_address) != 0)
     {
-        ALOGE("ioctl call to set netmask failed. Error is [%s]", strerror(errno));
-        close(inet_sock_fd);
-        return false;
+        if (!SetBroadcastAddress(inet_sock_fd, interface_name, broadcast_address))
+        {
+            ALOGE("ioctl call to set broadcast address failed. Error is [%s]", strerror(errno));
+            close(inet_sock_fd);
+            return false;
+        }
+        ALOGI("%s: Broadcast address set to %s", interface_name, broadcast_address);
+    }
+    else
+    {
+        ALOGI("%s: Broadcast address already set", interface_name);
     }
 
-    ALOGI("%s: Netmask set to %s", interface_name, netmask);
+    if (std::strcmp(GetNetmask(interface_name).c_str(), netmask) != 0)
+    {
+        if (!SetNetmask(inet_sock_fd, interface_name, netmask))
+        {
+            ALOGE("ioctl call to set netmask failed. Error is [%s]", strerror(errno));
+            close(inet_sock_fd);
+            return false;
+        }
+        ALOGI("%s: Netmask set to %s", interface_name, netmask);
+    }
+    else
+    {
+        ALOGI("%s: Netmask already set", interface_name);
+    }
 
     close(inet_sock_fd);
 
@@ -583,7 +691,7 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* i
 }
 
 static bool SetProxyArp(const char* interface_name) {
-    ALOGI("Setting proxy arp for interface %s", interface_name);
+    ALOGI("%s: Setting proxy_arp=1", interface_name);
     if (!strcmp(interface_name, "meth0")) {
         return (_write_to_file("/proc/sys/net/ipv4/conf/meth0/proxy_arp", "1"));
     } else if (!strcmp(interface_name, "eth1")) {
@@ -629,12 +737,13 @@ bool SetupInterface(const char* interface_name,
     // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.
     if (std::strcmp(interface_name, "eth1") == 0 && !IsLinkSpeedCorrect(interface_name))
     {
-        if (IsInterfaceUp(interface_name))
-        {
-            TakeInterfaceDown(interface_name);
-        }
-
         SetLinkSpeed(interface_name);
+
+        ALOGI("%s: Link speed set to 100Mbit", interface_name);
+    }
+    else if (std::strcmp(interface_name, "eth1"))
+    {
+        ALOGI("%s: Link speed already set", interface_name);
     }
 
     if (!IsMacAddressCorrect(mac_address, interface_name))
