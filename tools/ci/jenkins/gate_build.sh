@@ -8,8 +8,20 @@ source "${SCRIPT_DIR}/common.sh"
 # downloads are incremental and faster.
 docker_run "time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local \"${ZUUL_BRANCH}\""
 
-# Setup ccache
+# Setup ccache and put cache and Android out folder in a tmpfs.
+# We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
+# image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
+# failures when building in parallel.
+TMPFS=/dev/shm
+JOB_TMPFS=$TMPFS/$JOB_NAME
+export CCACHE_DIR=$TMPFS/ccache
+export CCACHE_MAXSIZE=50G
+export CC_WRAPPER=/usr/bin/ccache
+export CXX_WRAPPER=/usr/bin/ccache
+export OUT_DIR=$JOB_TMPFS/out
 export USE_CCACHE=true
+
+rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
 
 # Rerun commit check in case it changed before the change was validated first time
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
@@ -35,6 +47,7 @@ docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.
 
 OUT_ARCHIVE=out.tgz
 docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
+            --directory=\"${JOB_TMPFS}\"
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
