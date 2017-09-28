@@ -9,6 +9,8 @@
 
 #include <net/if.h>
 
+#define  LOG_TAG    "Netmand"
+
 #include <cutils/log.h>
 
 #include <sstream>
