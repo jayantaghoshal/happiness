@@ -17,7 +17,6 @@ cc_binary {
     ],
 
     cppflags: [
-        "-Wno-non-virtual-dtor",
         "-fexceptions",
         "-Wno-unused-parameter",
         "-Wno-macro-redefined"

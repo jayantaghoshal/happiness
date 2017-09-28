@@ -22,6 +22,7 @@ cc_library_shared {
     name: "libdataelements",
     vendor: true,
     generated_headers: ["libdataelements_crcgen"],
+    cpp_std: "c++14",
     //tidy: true,
     srcs: [
         "src/dataelemvalue.cpp",
@@ -36,8 +37,6 @@ cc_library_shared {
     ],
 
     cppflags: [
-        "-std=c++14",
-        "-Wno-non-virtual-dtor",
         "-fexceptions",
         "-Wno-unused-parameter",
         "-Wno-macro-redefined",
@@ -80,6 +79,7 @@ cc_library_static {
     generated_headers: ["libdataelements_crcgen"],
     export_generated_headers: ["libdataelements_crcgen"],
     //tidy: true,
+    cpp_std: "c++1z",
 
     srcs: [
         "src/dataelemvalue.cpp",
@@ -93,12 +93,9 @@ cc_library_static {
     ],
 
     cppflags: [
-        "-std=c++1z",
         "-g",
-        "-Wno-non-virtual-dtor",
         "-DUNIT_TEST",
         "-fexceptions",
-        "-Wno-non-virtual-dtor",
         "-Wno-unused-parameter",
         "-Wno-macro-redefined",
     ],
