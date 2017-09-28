@@ -654,6 +654,33 @@ static bool SetMtu(const uint32_t mtu, const char* interface_name)
     return true;
 }
 
+static unsigned int GetMtu(const std::string &interface_name)
+{
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (inet_sock_fd == -1)
+    {
+        ALOGE("Failed to open AF_INET socket.");
+        throw std::system_error(EFAULT, std::system_category());
+    }
+
+    struct ifreq ifr;
+    std::memset(&ifr, 0, sizeof(ifr));
+
+    ifr.ifr_addr.sa_family = AF_INET;
+    std::strncpy(ifr.ifr_name, interface_name.c_str(), IF_NAMESIZE-1);
+
+    if (ioctl(inet_sock_fd, SIOCGIFMTU, &ifr) == -1)
+    {
+        ALOGE("%s: ioctl call get mtu failed. Error is [%s]", interface_name.c_str(), strerror(errno));
+        close(inet_sock_fd);
+        return 0;
+    }
+
+    close(inet_sock_fd);
+
+    return ifr.ifr_mtu;
+}
+
 static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char* interface_name)
 {
     struct ifreq ifr_mac;
@@ -777,9 +804,17 @@ bool SetupInterface(const char* interface_name,
         ALOGE("Failed to configure IP address for %s!", interface_name);
     }
 
-    if (!SetMtu(mtu, interface_name))
+    if (GetMtu(interface_name) != mtu) {
+        if (!SetMtu(mtu, interface_name))
+        {
+            ALOGE("Failed to set MTU for %s!", interface_name);
+        }
+
+        ALOGI("%s: MTU set to %i", interface_name, mtu);
+    }
+    else
     {
-        ALOGE("Failed to set MTU for %s!", interface_name);
+        ALOGI("%s: MTU already set", interface_name);
     }
 
     // All well so far; bring the interface up
