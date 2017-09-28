@@ -23,10 +23,3 @@ enum ResourceGroupStatus : uint8_t
     PartlyAvailable = 0x01,
     Available = 0x02
 };
-
-enum Status : uint8_t
-{
-    Unknown = 0x00 ,
-    Fail = 0x01,
-    Success = 0x02
-};

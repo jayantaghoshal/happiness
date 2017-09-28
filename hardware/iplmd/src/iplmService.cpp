@@ -40,6 +40,8 @@ IplmService::IplmService() :
     Iplmd::LocalConfig::loadLocalConfig();
 
     StartSubscribe();
+
+    IIplm::registerAsService(); // register as handler of the IIplm hidl interface
 }
 
 void IplmService::StartSubscribe()
@@ -165,9 +167,9 @@ void IplmService::FlexrayWakeupTimeout()
     wakeup.ResourceGroup = 0;
     wakeup.Prio = autosar::PrioHighNormal::PrioNormal;
 
-    iplm_data_.senderWakeup_.send(wakeup);
+    senderWakeup_.send(wakeup);
 
-    ALOGI("FlexrayWakeupTimeout TODO");
+    ALOGI("FlexrayWakeupTimeout");
 }
 
 bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio)
@@ -193,15 +195,15 @@ bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio)
     wakeup.Prio = _prio == PRIO_HIGH ? autosar::PrioHighNormal::PrioHigh : autosar::PrioHighNormal::PrioNormal;
 
     auto tmoHandler = std::bind(&IplmService::FlexrayWakeupTimeout, this);
-    iplm_data_.senderWakeup_.send(wakeup);
+    senderWakeup_.send(wakeup);
 
     // Timeout as specified in REQPROD 347896
     ApplicationDataElement::DESender<ActivateVfc_info> activatevfc;
     activatevfc.send({Vfc::IPWakeup, 3});
     flexray_wakeup_attempted = true;
 
-    iplm_data_.senderWakeupTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(3000), tmoHandler);
-    ALOGI("SendFlexrayWakeup rg=%d , prio=%d  TODO",_rg,_prio);
+    senderWakeupTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(3000), tmoHandler);
+    ALOGI("SendFlexrayWakeup rg=%d , prio=%d",_rg,_prio);
     return true;
 }
 
@@ -225,16 +227,16 @@ void IplmService::ActivityTimeout()
     bool broadcast_allowed = false;
     bool tem_available = false;
     bool vcm_available = false;
-    auto rg1_status = XResourceGroupStatus::kResourceGroupStatus_Available;
+    auto rg1_status = XResourceGroupStatus::Available;
 
     broadcast_allowed =
         (LocalCfg::getNofLocalSoftwareComponents() <= static_cast<int>(iplm_data_.registered_LSCs_.size()));
 
     rg1_status = iplm_data_.rg1_availabilityStatus_.all()
-                     ? XResourceGroupStatus::kResourceGroupStatus_Available
+                     ? XResourceGroupStatus::Available
                      : iplm_data_.rg1_availabilityStatus_.any()
-                           ? XResourceGroupStatus::kResourceGroupStatus_PartlyAvailable
-                           : XResourceGroupStatus::kResourceGroupStatus_Unavailable;
+                           ? XResourceGroupStatus::PartlyAvailable
+                           : XResourceGroupStatus::Unavailable;
     tem_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Tem));
     vcm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vcm));
 
@@ -251,12 +253,18 @@ void IplmService::ActivityTimeout()
     }
 
     // send events to LSCs. Update is sent periodically every second
-    /* TODO
-    iplm_service_stub_->fireRgStatusEvent(generated::IpLmService::ResourceGroup::kResourceGroup1, rg1_status);
-    iplm_service_stub_->fireRgStatusEvent(generated::IpLmService::ResourceGroup::kResourceGroup3, rg1_status);
-    iplm_service_stub_->fireNodeStatusEvent(generated::IpCommandBusTypes::Infotainment_IP_bus_Ecu::kTem, tem_available);
-    iplm_service_stub_->fireNodeStatusEvent(generated::IpCommandBusTypes::Infotainment_IP_bus_Ecu::kVcm, vcm_available);
-    */
+    for (auto regs : iplm_data_.registered_callbacks_) {
+        auto callback = regs.second;
+        bool isDead = false;
+        isDead |= callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status).isDeadObject();
+        isDead |= callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status).isDeadObject();
+        isDead |= callback->onNodeStatus(Ecu::TEM, tem_available).isDeadObject();
+        isDead |= callback->onNodeStatus(Ecu::VCM, vcm_available).isDeadObject();
+        if (isDead) {
+            ALOGI("IplmService::ActivityTimeout, %s is dead, lets remove it",regs.first.c_str());
+            unregisterService(regs.first);
+        }
+    }
     //ALOGI("Tem available: %d",tem_available);
     //ALOGI("Vcm available: %d",vcm_available);
 
@@ -345,15 +353,14 @@ bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const Resource
                        [rg](const ServicePrioMap::value_type& item) { return (item.second.rg_ & rg); });
 }
 
-bool IplmService::IsServiceRegistered(const IplmData& iplm_data, const std::string serviceName)
+bool IplmService::IsServiceRegistered(const IplmData& iplm_data, const std::string& lscName)
 {
-    return iplm_data.registered_LSCs_.find(serviceName) != iplm_data.registered_LSCs_.end();
+    return iplm_data.registered_LSCs_.find(lscName) != iplm_data.registered_LSCs_.end();
 }
 
-bool IplmService::IsServiceRegistered(IplmData& iplm_data, const std::string serviceName,
-                                             ServicePrioMap::iterator& it)
+bool IplmService::IsServiceRegistered(IplmData& iplm_data, const std::string& lscName, ServicePrioMap::iterator& it)
 {
-    it = iplm_data.registered_LSCs_.find(serviceName);
+    it = iplm_data.registered_LSCs_.find(lscName);
     if (it == iplm_data.registered_LSCs_.end())
     {
         return false;
@@ -363,7 +370,7 @@ bool IplmService::IsServiceRegistered(IplmData& iplm_data, const std::string ser
 
 bool IplmService::IsRequestedRGValid(XResourceGroup rg)
 {
-    return XResourceGroup::kResourceGroup1 == rg || XResourceGroup::kResourceGroup3 == rg;
+    return XResourceGroup::ResourceGroup1 == rg || XResourceGroup::ResourceGroup3 == rg;
 }
 
 bool IplmService::IsRgRequestedByExternalNode(const IplmData &iplm_data, const ResourceGroup rg)
@@ -400,9 +407,9 @@ const char* IplmService::ToString(const XResourceGroup r)
 {
     switch (r)
     {
-      case XResourceGroup::kResourceGroup1:
+      case XResourceGroup::ResourceGroup1:
         return "RG_1";
-      case XResourceGroup::kResourceGroup3:
+      case XResourceGroup::ResourceGroup3:
         return "RG_3";
       default:
         ALOGW("ToString() called with unsupported ResourceGroup");
@@ -443,16 +450,231 @@ const char* IplmService::ToString(const Prio a)
   }
 }
 
-const char* IplmService::ToString(const XResourcePrio prio)
+const char* IplmService::ToString(const XResourceGroupPrio prio)
 {
     switch (prio)
     {
-      case XResourcePrio::kPrioNormal:
+      case XResourceGroupPrio::Normal:
           return "NORM";
-      case XResourcePrio::kPrioHigh:
+      case XResourceGroupPrio::High:
           return "HIGH";
       default:
           ALOGW("ToString() called with unsupported Prio");
           return "";
     }
+}
+
+Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName, XResourceGroup _rg, XResourceGroupPrio _prio)
+{
+    ALOGI("Request called for service (%s) and RG (%s) and prio (%s)",
+        lscName.c_str(),
+        ToString(_rg),
+        ToString(_prio));
+
+    // IHU is part of RG1 or RG3. Filter out requests for other RGs
+    if (!IsRequestedRGValid(_rg))
+    {
+        ALOGW("unexpected resource group %hhu", _rg);
+        return false;
+    }
+
+    const ResourceGroup rg = (XResourceGroup::ResourceGroup1 == _rg) ? ResourceGroup::RG_1 : ResourceGroup::RG_3;
+    const Prio prio = (XResourceGroupPrio::Normal == _prio) ? PRIO_NORM : PRIO_HIGH;
+
+    // Look for registered service and update requested parameters corresponding to service
+    ServicePrioMap::iterator it;
+    if (!IsServiceRegistered(iplm_data_, lscName, it))
+    {
+        ALOGW("RG request from unregistered service %s",lscName.c_str());
+        return false;
+    }
+
+    // update requested rg in per service record
+    it->second.rg_ = static_cast<ResourceGroup>(rg | it->second.rg_);
+    // update requested prio in per service record
+    if (rg & ResourceGroup::RG_1)
+    {
+        it->second.prio_rg1_ = prio;
+    }
+    else
+    {
+        it->second.prio_rg3_ = prio;
+    }
+
+    // Set requested RG in action_ so that it is included in activity messages sent by IHU
+    iplm_data_.action_[(int)Ecu::IHU] |= rg;
+    if (prio == PRIO_HIGH)
+    {
+        iplm_data_.prio_[(int)Ecu::IHU] = PRIO_HIGH;
+    }
+    else if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH) &&
+             !IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3, PRIO_HIGH))
+    {
+        iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
+    }
+
+    SetNsmSessionState();
+    SendFlexrayWakeup(rg, prio);
+
+    return true;
+}
+
+Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XResourceGroup _rg)
+{
+    ALOGI("Release called for service (%s) and RG (%s)", lscName.c_str(), ToString(_rg));
+
+    // IHU is part of RG1 or RG3. Filter out requests for other RGs
+    if (!IsRequestedRGValid(_rg))
+    {
+        ALOGW("Unexpected resource group %hhu. Ignored", _rg);
+        return false;
+    }
+
+    const ResourceGroup rg = (XResourceGroup::ResourceGroup1 == _rg) ? ResourceGroup::RG_1 : ResourceGroup::RG_3;
+
+    ServicePrioMap::iterator it;
+    if (!IsServiceRegistered(iplm_data_, lscName, it))
+    {
+        ALOGW("RG request from unregistered service (%s). Ignored",lscName.c_str());
+        return false;
+    }
+
+    // Reset corresponding RG bit for the LSC
+    it->second.rg_ = static_cast<ResourceGroup>(it->second.rg_ & (~rg));
+    // Reset prio for the LSC
+    if (rg & ResourceGroup::RG_1)
+    {
+        it->second.prio_rg1_ = PRIO_NORM;
+    }
+    else
+    {
+        it->second.prio_rg3_ = PRIO_NORM;
+    }
+
+    // If no LSC is requesting high prio for any RG locally; reset HIGH PRIO for IHU
+    if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH) &&
+        !IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3, PRIO_HIGH))
+    {
+        iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
+        SetNsmSessionState();
+    }
+
+    // Check if any LSC is still interested in this particular resource_group
+    if (!IsRgRequestedLocally(iplm_data_, rg))
+    {
+        // as no other LSC is requesting this RG; reset corresponding bit
+        iplm_data_.action_[(int)Ecu::IHU] &= (~rg);
+    }
+
+    return true;
+}
+
+Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback)
+{
+    ALOGI("RegisterService: called for service (%s)", lscName.c_str());
+
+    // register a new service
+    if (!IsServiceRegistered(iplm_data_, lscName))
+    {
+        // Insert new service to registered LSCs list
+        iplm_data_.registered_LSCs_[lscName] = RGRequestInfo();
+        iplm_data_.registered_callbacks_[lscName] = iIplmCallback;
+
+        // If all LSCs are registered; mark ACTION_AVAILABLE to start IP_activity broadcast. Ref: REQPROD 347878
+        if (LocalCfg::getNofLocalSoftwareComponents() <= static_cast<int>(iplm_data_.registered_LSCs_.size()))
+        {
+            iplm_data_.action_[(int)Ecu::IHU] |= ACTION_AVAILABLE;
+
+            // As Local IPLinkManager is now available; we should start monitoring remote nodes for activity
+            restartVcmActivityTimer();
+            restartTemActivityTimer();
+        }
+    }
+    else
+    {
+        ALOGW("registration request from already registered service (%s) ", lscName.c_str());
+    }
+
+    return true;
+}
+
+Return<bool> IplmService::unregisterService(const hidl_string& lscName)
+{
+    ALOGI("UnRegisterService: called for service (%s)", lscName.c_str());
+
+    ServicePrioMap::iterator it;
+    if (!IsServiceRegistered(iplm_data_, lscName, it))
+    {
+        ALOGW("UnRegistration request from a not registered service (%s)", lscName.c_str());
+        return false;
+    }
+
+    iplm_data_.registered_LSCs_.erase(it);
+    iplm_data_.registered_callbacks_.erase(lscName);
+
+    // If all LSCs are not registered; reset ACTION_AVAILABLE to STOP IP_activity broadcast. Ref: REQPROD 347878
+    if (LocalCfg::getNofLocalSoftwareComponents() > static_cast<int>(iplm_data_.registered_LSCs_.size()))
+    {
+        iplm_data_.action_[(int)Ecu::IHU] |= (~ACTION_AVAILABLE);
+    }
+
+    if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH) &&
+        !IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3, PRIO_HIGH))
+    {
+        // No LSC needs HIGH prio on RG1 or RG3
+        iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
+        SetNsmSessionState();
+    }
+
+    if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1))
+    {
+        // reset corresponding RG bit as no other LSCs wants this RG
+        iplm_data_.action_[(int)Ecu::IHU] &= (~ResourceGroup::RG_1);
+    }
+
+    if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3))
+    {
+        // reset corresponding RG bit as no other LSCs wants this RG
+        iplm_data_.action_[(int)Ecu::IHU] &= (~ResourceGroup::RG_3);
+    }
+
+    return true;
+}
+
+// Reference: https://delphisweden.atlassian.net/wiki/display/VI/NSM+-+Session+-+IPLM+Resource+Groups
+bool IplmService::SetNsmSessionState()
+{
+    // TODO figure out what this is doing and how we can use our new shutdown prevention API instead
+    if ((iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) != ACTION_AVAILABLE || !first_contact)
+        return false;
+
+    // bit0 reserved and set to true for legacy reasons
+    // bit1 reserved and set to true for legacy reasons
+    std::bitset<8> state = 0b00000011;
+
+    // bit2 external RG1
+    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_GR_1, IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_1));
+    // bit3 external RG3
+    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_GR_3, IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_3));
+    // bit4 external prio
+    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_PRIORITY, GetExternalPrio(iplm_data_));
+    // bit5 iplm value
+    state.set(NsmStateBitMask::MP_IPLM_BIT_VALUE, true);
+    // bit6 internal prio
+    state.set(NsmStateBitMask::MP_IPLM_BIT_INT_PRIORITY,
+              IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH));
+
+    ALOGD("NSM IPLM Session state: %s TODO", state.to_string().c_str());
+
+    //auto retVal = nsmState_.SetSessionState(kIPLMSessionName, kIPLMSessionOwner, NsmSeat_Driver, state.to_ulong());
+
+    // How to handle error -1 which means fails to communicate with NSM. Ponder
+    /*
+    if (retVal < 0 || NsmErrorStatus_Ok != retVal)
+    {
+        ALOGE("Failed to set NSM state with reason %d", retVal);
+        return false;
+    }
+    */
+    return true;
 }
