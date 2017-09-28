@@ -143,6 +143,7 @@ class FDXConnection:
         self.close_pipe = os.pipe()
         self.close_requested = False
         self.recv_thread = threading.Thread(target=self.receiver)
+        self.recv_thread.daemon = True
         self.data_exchange_callback = data_exchange_callback
         self.last_received_measurement_status = kMeasurmentState.NotRunning
         self.recv_thread.start()
