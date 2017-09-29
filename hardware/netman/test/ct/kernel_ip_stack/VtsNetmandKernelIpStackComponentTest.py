@@ -16,7 +16,7 @@ from subprocess import call
 
 from ..helpers import netman_helper as nh
 
-class VtsNetmandComponentTest(base_test.BaseTestClass):
+class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
