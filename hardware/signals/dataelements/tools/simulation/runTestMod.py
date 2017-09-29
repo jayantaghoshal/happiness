@@ -3,8 +3,8 @@ import os
 import sys
 import time
 
-import Tkinter
-import ttk
+import tkinter
+import tkinter.ttk
 import traceback
 
 
@@ -15,8 +15,8 @@ def main():
     sys.path.append(os.getcwd())
 
 
-    root = Tkinter.Tk()
-    root.style = ttk.Style()
+    root = tkinter.Tk()
+    root.style = tkinter.ttk.Style()
     if 'clam' in root.style.theme_names():
         root.style.theme_use("clam")
 
@@ -50,7 +50,7 @@ def load_modules(app, modules):
             imported_module = importlib.import_module("testmodules." + p)
             imported_module.init(app)
         except Exception as e:
-            print("Failed to load module: %s because: %r" % (p, e) )
+            print(("Failed to load module: %s because: %r" % (p, e) ))
             traceback.print_exc()
 
 

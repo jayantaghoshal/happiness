@@ -1,5 +1,5 @@
-import ttk
-import Tkinter
+import tkinter.ttk
+import tkinter
 import random
 import sched
 import time
@@ -211,50 +211,50 @@ class SAPSimulator:
         app.set_filter("VehModMng TrlrPrsnt IndcnOf PrkgTypv Prkgassimanv prkgautsts ActvnOfPrkgAut PrkgOutCfm")
 
         self.autoReplyEnabled = False
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set("off")
-        bEnableAutoReply = ttk.Button(app.master, text="Enable auto reply", command=self.toggle)
-        lEnableAutoReplyStatus = ttk.Label(app.master, textvariable=self.infoBindVar)
+        bEnableAutoReply = tkinter.ttk.Button(app.master, text="Enable auto reply", command=self.toggle)
+        lEnableAutoReplyStatus = tkinter.ttk.Label(app.master, textvariable=self.infoBindVar)
         app.add_external_button_row(bEnableAutoReply, lEnableAutoReplyStatus)
 
-        responseTimeLabel = ttk.Label(app.master, text="Response time (ms)")
-        responseTimeInfoStruct = ttk.Frame(app.master)
-        self.responseTimeBindVar = Tkinter.IntVar(app.master, 1000)
-        self.responseTimescale = ttk.Scale(responseTimeInfoStruct, from_=0, to=5000, orient=Tkinter.HORIZONTAL, variable=self.responseTimeBindVar)
-        responseTimeValueLabel= ttk.Label(responseTimeInfoStruct, textvariable=self.responseTimeBindVar)
-        self.responseTimescale.pack(side=Tkinter.LEFT)
-        responseTimeValueLabel.pack(side=Tkinter.LEFT)
+        responseTimeLabel = tkinter.ttk.Label(app.master, text="Response time (ms)")
+        responseTimeInfoStruct = tkinter.ttk.Frame(app.master)
+        self.responseTimeBindVar = tkinter.IntVar(app.master, 1000)
+        self.responseTimescale = tkinter.ttk.Scale(responseTimeInfoStruct, from_=0, to=5000, orient=tkinter.HORIZONTAL, variable=self.responseTimeBindVar)
+        responseTimeValueLabel= tkinter.ttk.Label(responseTimeInfoStruct, textvariable=self.responseTimeBindVar)
+        self.responseTimescale.pack(side=tkinter.LEFT)
+        responseTimeValueLabel.pack(side=tkinter.LEFT)
         app.add_external_button_row(responseTimeLabel, responseTimeInfoStruct)
 
         self.cancelDueToDriverDeactivation = False
 
-        structframe = ttk.Frame(app.master)
+        structframe = tkinter.ttk.Frame(app.master)
 
-        bDeactivWithLinger = ttk.Button(structframe, text="Deact + Linger", command=lambda: self.sendPrkgAutSts(random.choice(tuple(deactivation_with_lingering))))
-        bDeactivWithLinger.pack(side=Tkinter.LEFT)
+        bDeactivWithLinger = tkinter.ttk.Button(structframe, text="Deact + Linger", command=lambda: self.sendPrkgAutSts(random.choice(tuple(deactivation_with_lingering))))
+        bDeactivWithLinger.pack(side=tkinter.LEFT)
 
-        bDeactivWithoutLinger = ttk.Button(structframe, text="Deact", command=lambda: self.sendPrkgAutSts(random.choice(tuple(deactivation_without_lingering))))
-        bDeactivWithoutLinger.pack(side=Tkinter.LEFT)
+        bDeactivWithoutLinger = tkinter.ttk.Button(structframe, text="Deact", command=lambda: self.sendPrkgAutSts(random.choice(tuple(deactivation_without_lingering))))
+        bDeactivWithoutLinger.pack(side=tkinter.LEFT)
 
-        bUserInteraction = ttk.Button(structframe, text="Userinteraction", command=lambda: self.sendPrkgAutSts(random.choice(tuple(userinteraction_values))))
-        bUserInteraction.pack(side=Tkinter.LEFT)
+        bUserInteraction = tkinter.ttk.Button(structframe, text="Userinteraction", command=lambda: self.sendPrkgAutSts(random.choice(tuple(userinteraction_values))))
+        bUserInteraction.pack(side=tkinter.LEFT)
 
         instruction_not_deactivation = instruction_values - deactivation_with_lingering
-        bInstruction = ttk.Button(structframe, text="Instruction", command=lambda: self.sendPrkgAutSts(random.choice(tuple(instruction_not_deactivation))))
-        bInstruction.pack(side=Tkinter.LEFT)
+        bInstruction = tkinter.ttk.Button(structframe, text="Instruction", command=lambda: self.sendPrkgAutSts(random.choice(tuple(instruction_not_deactivation))))
+        bInstruction.pack(side=tkinter.LEFT)
 
-        bResumable = ttk.Button(structframe, text="Resumable", command=lambda: self.sendPrkgAutSts(random.choice(tuple(resume_values))))
-        bResumable.pack(side=Tkinter.LEFT)
+        bResumable = tkinter.ttk.Button(structframe, text="Resumable", command=lambda: self.sendPrkgAutSts(random.choice(tuple(resume_values))))
+        bResumable.pack(side=tkinter.LEFT)
 
-        bManouver = ttk.Button(structframe, text="Manouver", command=lambda: self.sendPrkgAutSts(random.choice(tuple(manouver_values))))
-        bManouver.pack(side=Tkinter.LEFT)
+        bManouver = tkinter.ttk.Button(structframe, text="Manouver", command=lambda: self.sendPrkgAutSts(random.choice(tuple(manouver_values))))
+        bManouver.pack(side=tkinter.LEFT)
 
         app.add_external_button_row(None, structframe)
 
 
-        self.autoStatusBindVar = Tkinter.StringVar()
+        self.autoStatusBindVar = tkinter.StringVar()
         self.autoStatusBindVar.set("off")
-        autoStatusLabel = ttk.Label(app.master, textvariable=self.autoStatusBindVar)
+        autoStatusLabel = tkinter.ttk.Label(app.master, textvariable=self.autoStatusBindVar)
         app.add_external_button_row(None, autoStatusLabel)
 
     def toggle(self):
@@ -268,13 +268,13 @@ class SAPSimulator:
         actvn_value = msg_data['value']
 
         time_sec = self.responseTimeBindVar.get()/1000.0
-        print("handleactvn: %r" % time_sec)
+        print(("handleactvn: %r" % time_sec))
 
         t = threading.Timer(time_sec, self.handleActvnDelayed, (actvn_value, ))
         t.start()
 
     def handleActvnDelayed(self, actvn_value):
-        print("handleActvnDelayed: %r" % actvn_value)
+        print(("handleActvnDelayed: %r" % actvn_value))
 
         if actvn_value == ActvnOfPrkgAut.PrkgTypAutSeln:
             self.app.external_send('/i/IndcnOfPrkgAutSts', IndOfPrkgAutSts.PrkgTypAutSeln, 'IndOfPrkgAutSts')
@@ -327,7 +327,7 @@ class SAPSimulator:
 
     def parking_sequence(self):
         prkgAutSts=random.choice(tuple(instruction_values-deactivation_without_lingering))
-        print("Sending prkgautsts: %d" % prkgAutSts)
+        print(("Sending prkgautsts: %d" % prkgAutSts))
         self.sendPrkgAutSts(prkgAutSts)
 
     def sendPrkgAutSts(self, value):

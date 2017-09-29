@@ -1,4 +1,4 @@
-import ttk
+import tkinter.ttk
 
 def init(app):
     profile = ProfileApp(app)
@@ -8,11 +8,11 @@ class ProfileApp:
         self.app = app
 
         # Enabled Profile settings
-        bProfAct = ttk.Button(app.master, text="Send 5 enabled profiles", command=self.Send_ProfAct)
+        bProfAct = tkinter.ttk.Button(app.master, text="Send 5 enabled profiles", command=self.Send_ProfAct)
         app.add_external_button_row(bProfAct, None)
 
         # KeyReadResponse
-        bKeyReadSts = ttk.Button(app.master, text="Key Read Sts", command=self.Send_KeyReadResponse)
+        bKeyReadSts = tkinter.ttk.Button(app.master, text="Key Read Sts", command=self.Send_KeyReadResponse)
         app.add_external_button_row(bKeyReadSts, None)
 
         app.register_message_handler("ProfChg", self.ProfileResponse)
@@ -24,7 +24,7 @@ class ProfileApp:
 
     def ProfileResponse(self, msg_data):
         profId = msg_data['value']
-        print("Prof req value ", profId)
+        print(("Prof req value ", profId))
         if profId > 0: #Simulate back a profile change if incoming request is more than 0(ProfUnknown) as that is used as a "invalid" value
               self.app.external_send('/i/ProfPenSts1', profId, "IdPen")
 

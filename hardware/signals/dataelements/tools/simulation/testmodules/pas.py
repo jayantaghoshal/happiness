@@ -1,8 +1,8 @@
 import sched
 import threading
 import time
-import Tkinter
-import ttk
+import tkinter
+import tkinter.ttk
 from .util import toggle
 
 def init(app):

@@ -1,15 +1,15 @@
-import Tkinter
-import ttk
+import tkinter
+import tkinter.ttk
 
 
 class ToggleButton:
     def __init__(self, app, text):
         self.app = app
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set("Off")
 
-        toggle_button = ttk.Button(app.master, text=text, command=self.toggle)
-        info_label = ttk.Label(app.master, textvariable=self.infoBindVar)
+        toggle_button = tkinter.ttk.Button(app.master, text=text, command=self.toggle)
+        info_label = tkinter.ttk.Label(app.master, textvariable=self.infoBindVar)
         app.add_external_button_row(toggle_button, info_label)
         self.enabled = False
 

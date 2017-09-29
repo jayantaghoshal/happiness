@@ -1,7 +1,7 @@
 import sched
 import time
-import ttk
-import Tkinter
+import tkinter.ttk
+import tkinter
 import threading
 
 
@@ -31,17 +31,17 @@ class TurnIndicator:
         t.daemon = True
         t.start()
 
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set("off")
 
-        bKeyReadSts = ttk.Button(app.master, text="Toggle turn indicator", command=self.toggle)
-        eTurnIndicStatus = ttk.Label(app.master, textvariable=self.infoBindVar)
+        bKeyReadSts = tkinter.ttk.Button(app.master, text="Toggle turn indicator", command=self.toggle)
+        eTurnIndicStatus = tkinter.ttk.Label(app.master, textvariable=self.infoBindVar)
         app.add_external_button_row(bKeyReadSts, eTurnIndicStatus)
 
-        self.intervalBindVar = Tkinter.StringVar()
+        self.intervalBindVar = tkinter.StringVar()
         self.intervalBindVar.set("0.5")
-        lTurnIndicatorFrequency= ttk.Label(app.master, text="Turn indicator interval")
-        eTurnIndicatorFrequency = ttk.Entry(app.master, textvariable=self.intervalBindVar)
+        lTurnIndicatorFrequency= tkinter.ttk.Label(app.master, text="Turn indicator interval")
+        eTurnIndicatorFrequency = tkinter.ttk.Entry(app.master, textvariable=self.intervalBindVar)
         app.add_external_button_row(lTurnIndicatorFrequency, eTurnIndicatorFrequency)
 
         app.add_sender_element("IndcrDisp1WdSts")
