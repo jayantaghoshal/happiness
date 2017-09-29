@@ -11,28 +11,13 @@
 namespace
 {
 const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
-
-vcc::LocalConfigReader &Instance()
-{
-  static vcc::LocalConfigFileReader instance(kDefaultFilePath);
-  return instance;
-}
 }
 
 namespace vcc
 {
-const vcc::LocalConfigReaderInterface *LocalConfigDefault() { return &Instance(); }
-namespace localconfig
+const vcc::LocalConfigReaderInterface *LocalConfigDefault()
 {
-
-std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
-int GetInt(const std::initializer_list<std::string> &keys) { return Instance().GetInt(keys); }
-bool GetBool(const std::initializer_list<std::string> &keys) { return Instance().GetBool(keys); }
-double GetDouble(const std::initializer_list<std::string> &keys) { return Instance().GetDouble(keys); }
-std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys)
-{
-  return Instance().GetStringArray(keys);
+  static vcc::LocalConfigFileReader instance(kDefaultFilePath);
+  return &instance;
 }
-
-}  // namespace localconfig
 }  // namespace vcc

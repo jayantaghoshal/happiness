@@ -6,14 +6,25 @@
 
 #include <iostream>
 
-TEST(LocalConfigTest, DefaultLocalConfigFileCopiedToRWPartitionOnBoot)
+struct LocalConfigOnTargetTest : public ::testing::Test
+{
+  const vcc::LocalConfigReaderInterface* lcfg_ = vcc::LocalConfigDefault();
+};
+
+TEST(LocalConfigOnTargetTest, DefaultLocalConfigFileCopiedToRWPartitionOnBoot)
 {
   struct stat sb;
   EXPECT_TRUE(stat("/oem_config/localconfig/localconfig.json", &sb) == 0);
 }
 
-TEST(LocalConfigTest, LocalConfigTestGetInt) { EXPECT_EQ(3, vcc::localconfig::GetInt("IIPS_LM_NofNodesRG1")); }
+TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetInt) { lcfg_->GetInt("IIPS_LM_NofNodesRG1"); }
 
-TEST(LocalConfigTest, LocalConfigTestGetDouble) { EXPECT_EQ(1.5, vcc::localconfig::GetDouble("CONN_increaseTimerValueWFA")); }
+TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetDouble)
+{
+  EXPECT_EQ(1.5, lcfg_->GetDouble("CONN_increaseTimerValueWFA"));
+}
 
-TEST(LocalConfigTest, LocalConfigTestGetString) { EXPECT_EQ("198.18.34.1", vcc::localconfig::GetString("IIPS_IpAddress_LOCAL")); }
+TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetString)
+{
+  EXPECT_EQ("198.18.34.1", lcfg_->GetString("IIPS_IpAddress_LOCAL"));
+}
