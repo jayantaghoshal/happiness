@@ -2,4 +2,5 @@ service netboyd /system/bin/netboyd
     class vcc_net_init
     user root
     group root
+    oneshot
     seclabel u:r:netboyd:s0

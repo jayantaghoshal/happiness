@@ -8,4 +8,5 @@ service netman /system/bin/ip netns exec vcc /system/bin/netman
     class vcc_net_init
     user root
     group root
+    oneshot
     seclabel u:r:netman:s0
