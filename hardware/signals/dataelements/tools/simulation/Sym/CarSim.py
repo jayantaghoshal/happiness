@@ -1,25 +1,22 @@
-import Queue
+import queue
 import time
-import Tkinter
-import ttk
-import tkFont
+import tkinter
+import tkinter.ttk
+import tkinter.font
 import json
 import sys
 import os
 import dbus
 import dbus.exceptions
 import dbus.mainloop.glib
-import thread
+import _thread
 
-sys.path.append(os.path.join("../..", "AutosarCodeGen", "Autosar_Python_src"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen"))
 import autosar.arxml as arxml
 import autosar.components
 import traceback
-from getDatatypes import getIntTypeStr
+from dataelements_generator.getDatatypes import getIntTypeStr
 from gi.repository import GLib
-from gi.repository import GObject
-
-
 
 BG_COLOR_SENT = "#81f963"
 BG_COLOR_INVALIDATED = "#fc931b"
@@ -33,9 +30,9 @@ def j2d(data):
     return  json.loads(data, encoding='utf-8')
 
 
-class DESignalWidget(Tkinter.Frame):
+class DESignalWidget(tkinter.Frame):
     def __init__(self, master, **kw):
-        Tkinter.Frame.__init__(self, master, **kw)
+        tkinter.Frame.__init__(self, master, **kw)
     def on_change(self):
         pass
 
@@ -46,10 +43,10 @@ class PortSender():
         self.isInsignal = isInsignal
         self.autosend_bindvar = autosend_bindvar
         self.senderWidget = senderWidget
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set("x")
         self.infoLabel = info_label
-        self.infoLabel.configure(textvariable=self.infoBindVar, justify=Tkinter.LEFT)
+        self.infoLabel.configure(textvariable=self.infoBindVar, justify=tkinter.LEFT)
         self.infoLabel.config(background=BG_COLOR_NOT_SENT)
         self.send_button = send_button
         self.send_button.configure(command=self.send)
@@ -115,8 +112,8 @@ class BoolSender(DESignalWidget):
     def __init__(self, master, **kw):
         DESignalWidget.__init__(self, master, **kw)
         self.dataElementsDataType = "bool"
-        self.bindVar = Tkinter.IntVar()
-        self.e = ttk.Checkbutton(self, width=10, variable=self.bindVar, command=lambda: self.on_change())
+        self.bindVar = tkinter.IntVar()
+        self.e = tkinter.ttk.Checkbutton(self, width=10, variable=self.bindVar, command=lambda: self.on_change())
         self.e.pack()
 
     def get_value(self):
@@ -127,13 +124,13 @@ class EnumSender(DESignalWidget):
     def __init__(self, master, compuMethod, dataElementsDataType, **kw):
         DESignalWidget.__init__(self, master, **kw)
         self.dataElementsDataType = dataElementsDataType
-        self.bindVar = Tkinter.StringVar()
+        self.bindVar = tkinter.StringVar()
 
         optionDict, defaultOption = enumCompuMethodToOptionMenus(compuMethod)
         self.optionDict = optionDict
         self.bindVar.set(defaultOption)
-        options = (k for (k,v) in sorted(optionDict.iteritems(), key=lambda x: x[1]))
-        e = ttk.OptionMenu(self, self.bindVar, defaultOption, *options, command=lambda x: self.on_change())
+        options = (k for (k,v) in sorted(iter(optionDict.items()), key=lambda x: x[1]))
+        e = tkinter.ttk.OptionMenu(self, self.bindVar, defaultOption, *options, command=lambda x: self.on_change())
         e.pack()
 
     def get_value(self):
@@ -144,18 +141,18 @@ class NumericSender(DESignalWidget):
     def __init__(self, master, dataElementsDataType, arDataTypeValue, **kw):
         DESignalWidget.__init__(self, master, **kw)
         self.dataElementsDataType = dataElementsDataType
-        self.bindVar = Tkinter.StringVar()
+        self.bindVar = tkinter.StringVar()
         self.bindVar.set("0")
-        self.e = ttk.Entry(self, width=10, textvariable=self.bindVar)
+        self.e = tkinter.ttk.Entry(self, width=10, textvariable=self.bindVar)
         self.e.bind("<Return>", lambda x: self.on_change())
         self.bindVar.trace("w", lambda name, index, mode: self.strvarchange())
         self.e.pack()
 
         min, max = arDataTypeValue.getDataConstraint().getLimits()
 
-        self.bindVarInt = Tkinter.IntVar()
+        self.bindVarInt = tkinter.IntVar()
         self.bindVarInt.trace("w", lambda name, index, mode: self.intvarchange())
-        self.scale = ttk.Scale(self, from_=min, to=max, orient=Tkinter.HORIZONTAL, variable=self.bindVarInt)
+        self.scale = tkinter.ttk.Scale(self, from_=min, to=max, orient=tkinter.HORIZONTAL, variable=self.bindVarInt)
         self.scale.pack()
 
     def strvarchange(self):
@@ -218,14 +215,14 @@ class StructSender(DESignalWidget):
 
             self.subElements[signalName] = subWidget
 
-            l = ttk.Label(structframe, text=subEl.shortname, justify=Tkinter.LEFT)
-            l.pack(side=Tkinter.LEFT)
-            subWidget.pack(side=Tkinter.LEFT)
+            l = tkinter.ttk.Label(structframe, text=subEl.shortname, justify=tkinter.LEFT)
+            l.pack(side=tkinter.LEFT)
+            subWidget.pack(side=tkinter.LEFT)
             subWidget.on_change = lambda: self.on_change()
 
     def get_value(self):
         values = {}
-        for signalName, widget in self.subElements.iteritems():
+        for signalName, widget in self.subElements.items():
             values[signalName] = widget.get_value()
         return values
 
@@ -255,7 +252,7 @@ class DataElement:
 
 def enumCompuMethodToOptionMenus(compuMethod):
     name_to_value_dict = compuMethod.getEnumerations()  # NOTE: Value here is a tuple
-    value_to_name_dict = {v[0]: k for k, v in name_to_value_dict.items()}
+    value_to_name_dict = {v[0]: k for k, v in list(name_to_value_dict.items())}
     lookupDict = {}  # keys displayed to user with both name and value,
 
     default = None
@@ -273,13 +270,13 @@ class App:
         self.connected = False
         self.all_senders = []
         self.message_handlers = {}
-        self.labelFont = tkFont.Font(root=master, family="Courier New", size=12)
-        self.valueFont = tkFont.Font(root=master, family="Courier New", size=12, weight=tkFont.BOLD)
+        self.labelFont = tkinter.font.Font(root=master, family="Courier New", size=12)
+        self.valueFont = tkinter.font.Font(root=master, family="Courier New", size=12, weight=tkinter.font.BOLD)
 
         self.knownReceivedMessages = {}
         self.addedSenderElements = set()
 
-        arxmldata = arxml.load("../../AutosarCodeGen/Autosar_Python_src/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml")
+        arxmldata = arxml.load(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml"))
         ihuports = {}
 
         self.element_name_to_data_element = {}
@@ -287,11 +284,11 @@ class App:
         #for dataTypeKey, arDataTypeValue in arxmldata.datatypes.iteritems():
             #print("type: %s, value: %s, category: %s" % (dataTypeKey, arDataTypeValue, arDataTypeValue.getCategory()))
         #print("_--------------------------------------------------------------------")
-        for swcsKey, swcsValue in arxmldata.swcs.iteritems():
+        for swcsKey, swcsValue in arxmldata.swcs.items():
             if swcsValue.shortname != "IHU":
                 continue
             #print("signal: %s, value: %s" % ( swcsKey, swcsValue))
-            for portKey, port in sorted(swcsValue.ports.iteritems()):
+            for portKey, port in sorted(swcsValue.ports.items()):
                 ihuports[portKey] = port
                 elems = port.getDataElements()
 
@@ -302,7 +299,7 @@ class App:
                 #else:
                 #    print ("NOT : isIn: %d port: '%s', elem: '%s'" % (isInSignal, portKey, firstElemKey))
 
-                for de, dataTypeKey in sorted(elems.iteritems()):
+                for de, dataTypeKey in sorted(elems.items()):
 
                     self.element_name_to_data_element[de] = DataElement(de, port, dataTypeKey)
 
@@ -322,18 +319,18 @@ class App:
 
 
         # Scroll widget only works on Canvas so we have to place the frame inside the canvas
-        yScrollbar = Tkinter.Scrollbar(master)
-        yScrollbar.pack(side=Tkinter.RIGHT, fill=Tkinter.Y)
+        yScrollbar = tkinter.Scrollbar(master)
+        yScrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 
-        xScrollbar = Tkinter.Scrollbar(master, orient=Tkinter.HORIZONTAL)
-        xScrollbar.pack(side=Tkinter.BOTTOM, fill=Tkinter.X)
+        xScrollbar = tkinter.Scrollbar(master, orient=tkinter.HORIZONTAL)
+        xScrollbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
-        canvas = Tkinter.Canvas(master, yscrollcommand=yScrollbar.set, xscrollcommand=xScrollbar.set)
+        canvas = tkinter.Canvas(master, yscrollcommand=yScrollbar.set, xscrollcommand=xScrollbar.set)
 
-        masterFrame = ttk.Frame(canvas)
-        masterFrame.pack(side=Tkinter.LEFT, fill=Tkinter.BOTH)
+        masterFrame = tkinter.ttk.Frame(canvas)
+        masterFrame.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
-        canvas.pack(side=Tkinter.LEFT, fill=Tkinter.BOTH, expand=True)
+        canvas.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
         canvas.create_window((0, 0), window=masterFrame, anchor='nw')
 
         def resizecanvas(event):
@@ -377,34 +374,34 @@ class App:
         self.signalsInterfaceOut = None
 
         ## Connection status
-        lConnectionStatus = ttk.Label(master, text="Connection status: ")
-        lConnectionStatus.grid(row=buttonRow, column=0, sticky=Tkinter.W)
+        lConnectionStatus = tkinter.ttk.Label(master, text="Connection status: ")
+        lConnectionStatus.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.bindConnectionStatus = Tkinter.Variable()
+        self.bindConnectionStatus = tkinter.Variable()
         self.bindConnectionStatus.set("disconnected")
-        self.lActualConnectionStatus = ttk.Label(master, textvariable=self.bindConnectionStatus)
-        self.lActualConnectionStatus .grid(row=buttonRow, column=1, sticky=Tkinter.W)
+        self.lActualConnectionStatus = tkinter.ttk.Label(master, textvariable=self.bindConnectionStatus)
+        self.lActualConnectionStatus .grid(row=buttonRow, column=1, sticky=tkinter.W)
         self.lActualConnectionStatus.config(background="#ff0000")
 
 
         ## Connect to remote
         buttonRow += 1
-        self.bConnectToRemote = ttk.Button(master, text="ConnectToRemote", command=self.connectToRemote)
-        self.bConnectToRemote.grid(row=buttonRow, column=0, sticky=Tkinter.W)
-        self.eConnectToRemote = ttk.Entry(master, width=20)
+        self.bConnectToRemote = tkinter.ttk.Button(master, text="ConnectToRemote", command=self.connectToRemote)
+        self.bConnectToRemote.grid(row=buttonRow, column=0, sticky=tkinter.W)
+        self.eConnectToRemote = tkinter.ttk.Entry(master, width=20)
         self.eConnectToRemote.bind("<Return>", lambda x: self.connectToRemote())
         self.eConnectToRemote.insert(0, "198.18.34.1")
-        self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=Tkinter.W)
+        self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
         ## Add from ARXML
         buttonRow += 1
-        self.bAddSenderPort = ttk.Button(master, text="Add new Dataelement", command=self.ui_add_port)
-        self.bAddSenderPort.grid(row=buttonRow, column=0, sticky=Tkinter.W)
+        self.bAddSenderPort = tkinter.ttk.Button(master, text="Add new Dataelement", command=self.ui_add_port)
+        self.bAddSenderPort.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.eAddSenderPort = ttk.Entry(master, width=30)
+        self.eAddSenderPort = tkinter.ttk.Entry(master, width=30)
         self.eAddSenderPort.insert(0, "VehSpdLgt")
-        self.eAddSenderPort.grid(row=buttonRow, column=1, sticky=Tkinter.W)
+        self.eAddSenderPort.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
 
@@ -414,48 +411,48 @@ class App:
         def filterChanged(name, index, mode):
             self.filter(self.filterBindVar.get())
 
-        self.filterLabel = ttk.Label(master, text="Filter")
-        self.filterLabel.grid(row=buttonRow, column=0, sticky=Tkinter.W)
+        self.filterLabel = tkinter.ttk.Label(master, text="Filter")
+        self.filterLabel.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.filterBindVar = Tkinter.StringVar()
+        self.filterBindVar = tkinter.StringVar()
         self.filterBindVar.trace("w", filterChanged)
-        self.eFilter = ttk.Entry(master, width=30, textvariable=self.filterBindVar)
-        self.eFilter.grid(row=buttonRow, column=1, sticky=Tkinter.W)
+        self.eFilter = tkinter.ttk.Entry(master, width=30, textvariable=self.filterBindVar)
+        self.eFilter.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
         ## Auto send on change
         buttonRow += 1
 
-        self.bindAutoSend = Tkinter.BooleanVar()
+        self.bindAutoSend = tkinter.BooleanVar()
         self.bindAutoSend.set(True)
-        self.autoSendLabel = ttk.Label(master, text="Auto send on change")
-        self.autoSendLabel.grid(row=buttonRow, column=0, sticky=Tkinter.W)
+        self.autoSendLabel = tkinter.ttk.Label(master, text="Auto send on change")
+        self.autoSendLabel.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.autoSendCheckbox = Tkinter.Checkbutton(master, width=10, variable=self.bindAutoSend)
-        self.autoSendCheckbox.grid(row=buttonRow, column=1, sticky=Tkinter.W)
+        self.autoSendCheckbox = tkinter.Checkbutton(master, width=10, variable=self.bindAutoSend)
+        self.autoSendCheckbox.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
         ## Send all
         buttonRow += 1
-        self.bSendAll = ttk.Button(master, width=30, text="Send all")
+        self.bSendAll = tkinter.ttk.Button(master, width=30, text="Send all")
         self.bSendAll.configure(command=self.send_all)
-        self.bSendAll.grid(row=buttonRow, column=0, sticky=Tkinter.W)
+        self.bSendAll.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
 
         #################### separator ##########################
         buttonRow += 1
-        separator = ttk.Separator(master)
-        separator.grid(row=buttonRow, sticky=Tkinter.EW)
+        separator = tkinter.ttk.Separator(master)
+        separator.grid(row=buttonRow, sticky=tkinter.EW)
 
 
         self.master = master
         self.buttonRow = buttonRow +1
 
-        self.pending_messages = Queue.Queue()
+        self.pending_messages = queue.Queue()
         self.ever_connected = False
 
     def fade_timer(self):
-        for portname, sink in self.knownReceivedMessages.iteritems():
+        for portname, sink in self.knownReceivedMessages.items():
             for sink in sink.sinkConnections:
 
                 if sink.bg_fadeaway_ratio > 0:
@@ -486,7 +483,7 @@ class App:
 
     def connect(self, address):
         #TODO: Disconnect first? Reconnecting is a bit unstable
-        print("Connecting to %s" % address)
+        print(("Connecting to %s" % address))
 
         # DBUS, "tcp:host=198.18.34.1,port=55556"
         if address == "system":
@@ -505,7 +502,7 @@ class App:
 
                 self.master.after(5000, self.fade_timer)
                 self.master.after(1000, self.incoming_message_dispatcher)
-                thread.start_new_thread(self.startDBUSThread, (None,))
+                _thread.start_new_thread(self.startDBUSThread, (None,))
 
             if connectStr == "system":
                 self.dbus_conn = dbus.SystemBus()
@@ -518,7 +515,7 @@ class App:
             self.connected = True
             self.enable_all_buttons(True)
 
-            print("Connected to " + address)
+            print(("Connected to " + address))
             self.fetchallDBUSProp()
 
             self.dBUSProxyIn = self.dbus_conn.get_object('com.ihu.VehicleSignalsManager.In', '/com/ihu/VehicleSignalsManager/In')
@@ -575,7 +572,7 @@ class App:
         propsIn = signalsInPropInt.GetAll('')
 
 
-        for key, value in propsIn.items():
+        for key, value in list(propsIn.items()):
             #print(key + "," +value)
             sigName = str(key)
             sigData = str(value)
@@ -591,7 +588,7 @@ class App:
         self.pending_messages.put_nowait((signalName, signalData))
 
     def incoming_message_dispatcher(self):
-        maxiter = xrange(100)
+        maxiter = range(100)
         for i in maxiter:
             if self.pending_messages.empty():
                 break
@@ -612,7 +609,7 @@ class App:
         try:
             self.handle_message(signalName,j2d(signalData))
         except Exception as e:
-            print("ERROR parsing message: ", e, signalData)
+            print(("ERROR parsing message: ", e, signalData))
 
     def handle_message(self, dataelement_name, data):
         #print("Handle message " + dataelement_name +  " " + d2j(data))
@@ -626,7 +623,7 @@ class App:
             self.knownReceivedMessages[dataelement_name] = sink
             self.filter(self.filterBindVar.get())               # TODO: This is slow after first connect when all signals come in, investigate
 
-	if data['state'] != 0:
+        if data['state'] != 0:
             sink.portname_label.configure(background="#F55")
             return
 
@@ -651,7 +648,7 @@ class App:
             compuMethod = arType.getCompuMethod()
             if compuMethod.getCategory() == 'TEXTTABLE':
                 name_to_value_dict = compuMethod.getEnumerations()  # NOTE: Value here is a tuple
-                value_to_name_dict = {v[0]: k for k, v in name_to_value_dict.items()}
+                value_to_name_dict = {v[0]: k for k, v in list(name_to_value_dict.items())}
                 name = value_to_name_dict.get(str(data["value"]), "???")
                 newVal = "(%d) %s" % (data["value"], name)
                 if newVal != sc.bindableStringVariable.get():
@@ -678,7 +675,7 @@ class App:
         try:
             dataTypeKey = self.element_name_to_data_element[dataelement_name].datatype_key
         except KeyError:
-            print("WARNING: Input element not found: %s", dataelement_name)
+            print(("WARNING: Input element not found: %s", dataelement_name))
             return
 
         entrySignalConnections = []
@@ -686,19 +683,19 @@ class App:
 
         category = arDataTypeValue.getCategory()
 
-        structframe = ttk.Frame(master)
-        portname_label = ttk.Label(master, text=dataelement_name)
+        structframe = tkinter.ttk.Frame(master)
+        portname_label = tkinter.ttk.Label(master, text=dataelement_name)
         self.add_external_button_row(portname_label, structframe)
 
         if category == "STRUCTURE":
             subElements = arDataTypeValue.getElements()
             for se in subElements:
-                signalname_label = ttk.Label(structframe, text=se.shortname + ": ", justify=Tkinter.LEFT, font=self.labelFont)
-                signalname_label.pack(side=Tkinter.LEFT)
+                signalname_label = tkinter.ttk.Label(structframe, text=se.shortname + ": ", justify=tkinter.LEFT, font=self.labelFont)
+                signalname_label.pack(side=tkinter.LEFT)
 
-                v = Tkinter.StringVar()
-                value_label = ttk.Label(structframe, width=5, textvariable=v, font=self.valueFont)
-                value_label.pack(side=Tkinter.LEFT)
+                v = tkinter.StringVar()
+                value_label = tkinter.ttk.Label(structframe, width=5, textvariable=v, font=self.valueFont)
+                value_label.pack(side=tkinter.LEFT)
 
                 entrySignalConnections.append(SinkConnection(v, se, value_label, signalname_label))
 
@@ -706,18 +703,18 @@ class App:
         elif category == "ARRAY":
             print("    WARNING: ARRAY UNSUPPORTED")
         elif category == "VALUE":
-            v = Tkinter.StringVar()
-            value_label = ttk.Label(structframe, width=50, textvariable=v, font=self.valueFont)
-            value_label.pack(side=Tkinter.LEFT)
+            v = tkinter.StringVar()
+            value_label = tkinter.ttk.Label(structframe, width=50, textvariable=v, font=self.valueFont)
+            value_label.pack(side=tkinter.LEFT)
 
             entrySignalConnections.append(SinkConnection(v, arDataTypeValue, value_label, None))
         elif category == "BOOLEAN":
-            v = Tkinter.StringVar()
-            value_label = ttk.Label(structframe, width=10, textvariable=v, font=self.valueFont)
-            value_label.pack(side=Tkinter.LEFT)
+            v = tkinter.StringVar()
+            value_label = tkinter.ttk.Label(structframe, width=10, textvariable=v, font=self.valueFont)
+            value_label.pack(side=tkinter.LEFT)
             entrySignalConnections.append(SinkConnection(v, arDataTypeValue, value_label, None))
         else:
-            print("    WARNING: Unsupported category: " + category)
+            print(("    WARNING: Unsupported category: " + category))
 
         senderConnection = Sink(arDataTypeValue, entrySignalConnections, dataelement_name, portname_label, structframe)
         return senderConnection
@@ -726,10 +723,10 @@ class App:
         try:
             port = self.ihuports[portName]
         except KeyError:
-            print("Failed to add sender port: %s" % portName)
+            print(("Failed to add sender port: %s" % portName))
             traceback.print_exc()
             return
-        elements_list = port.getDataElements().items()
+        elements_list = list(port.getDataElements().items())
         for (e_name, data_type) in elements_list:
             self.add_sender_element(e_name)
 
@@ -740,7 +737,7 @@ class App:
         try:
             data_element = self.element_name_to_data_element[dataelement_name]
         except KeyError:
-            print("Failed to add sender element: %s" % dataelement_name)
+            print(("Failed to add sender element: %s" % dataelement_name))
             traceback.print_exc()
             return
         port = data_element.parent_port
@@ -763,18 +760,18 @@ class App:
         elif category == "BOOLEAN":
             senderWidget = BoolSender(master)
         else:
-            print("WARNING: adding port for unsupported category: " + category)
+            print(("WARNING: adding port for unsupported category: " + category))
             return
 
-        firstCol = Tkinter.Frame(master)
-        send_button = ttk.Button(firstCol, text="Send", width=4)
-        stop_button = ttk.Button(firstCol, text="Error", width=4)
-        port_name_label = ttk.Label(firstCol, text=dataelement_name)
-        info_label = ttk.Label(firstCol, width=4)
-        info_label.pack(side=Tkinter.LEFT)
-        stop_button.pack(side=Tkinter.LEFT)
-        send_button.pack(side=Tkinter.LEFT)
-        port_name_label.pack(side=Tkinter.LEFT)
+        firstCol = tkinter.Frame(master)
+        send_button = tkinter.ttk.Button(firstCol, text="Send", width=4)
+        stop_button = tkinter.ttk.Button(firstCol, text="Error", width=4)
+        port_name_label = tkinter.ttk.Label(firstCol, text=dataelement_name)
+        info_label = tkinter.ttk.Label(firstCol, width=4)
+        info_label.pack(side=tkinter.LEFT)
+        stop_button.pack(side=tkinter.LEFT)
+        send_button.pack(side=tkinter.LEFT)
+        port_name_label.pack(side=tkinter.LEFT)
 
 
 
@@ -803,9 +800,9 @@ class App:
     def add_external_button_row(self, left, right):
         self.buttonRow += 1
         if left is not None:
-            left.grid(row=self.buttonRow, column=0, sticky=Tkinter.W)
+            left.grid(row=self.buttonRow, column=0, sticky=tkinter.W)
         if right is not None:
-            right.grid(row=self.buttonRow, column=1, sticky=Tkinter.W)
+            right.grid(row=self.buttonRow, column=1, sticky=tkinter.W)
 
     def external_send(self, topic, value, type):
         if self.dbus_conn is None:
@@ -816,8 +813,8 @@ class App:
         #TODO: Update the sender widgets?
         dataelement_name = topic[3:]
 
-        if dataelement_name not in self.element_name_to_data_element.keys():
-            print("WARNING: external_send called with unknown element name: %s", topic)
+        if dataelement_name not in list(self.element_name_to_data_element.keys()):
+            print(("WARNING: external_send called with unknown element name: %s", topic))
 
         data = {
             "state": 0,
@@ -834,7 +831,7 @@ class App:
             dbusObjectName = '/com/ihu/VehicleSignalsManager/In'
             signalsInPropInt = dbus.Interface(self.dBUSProxyIn, 'com.ihu.VehicleSignalsManager.In')
 
-        print ("External Send " + dataelement_name + " " + d2j(data) +  "  " + dbusInterfaceName)
+        print(("External Send " + dataelement_name + " " + d2j(data) +  "  " + dbusInterfaceName))
         dbusdata = dbus.String(d2j(data),variant_level=1)
         #signalsInPropInt.Set(dbusInterfaceName, dataelement_name, dbusdata)
         signalsInPropInt.SetDESignal(dataelement_name, dbusdata)
@@ -851,7 +848,7 @@ class App:
                     return True
             return False
 
-        for key, sink in self.knownReceivedMessages.items():
+        for key, sink in list(self.knownReceivedMessages.items()):
             if matchfunc(key):
                 sink.portname_label.grid()
                 sink.struct_frame.grid()
@@ -868,7 +865,7 @@ class App:
                 portsender.senderWidget.grid_remove()
 
     def enable_all_buttons(self, enable):
-        state = Tkinter.NORMAL if enable else Tkinter.DISABLED
+        state = tkinter.NORMAL if enable else tkinter.DISABLED
         for portsender in self.all_senders:
             portsender.send_button.configure(state=state)
             portsender.stop_button.configure(state=state)

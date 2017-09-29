@@ -1,4 +1,4 @@
-import ttk
+import tkinter.ttk
 
 def init(app):
     lcma = LCMAApp(app)
@@ -21,7 +21,7 @@ class LCMAApp:
 
         lkaValue = msg_data['Sts']
 
-        print("LaneKeepAidActv value ", lkaValue)
+        print(("LaneKeepAidActv value ", lkaValue))
 
         # Calculate the correct status value depending on the received value
         lkaStatusValue = 0
@@ -42,7 +42,7 @@ class LCMAApp:
 
         lcmaStatusRequest = msg_data['value']
 
-        print("LaneChangeMergeAid status request value " + str(lcmaStatusRequest))
+        print(("LaneChangeMergeAid status request value " + str(lcmaStatusRequest)))
 
         # Calculate the correct status value depending on the received value
         lcmaStatusValue = 0

@@ -1,13 +1,13 @@
 import sched
 import threading
 import time
-import Tkinter
-import ttk
-from Tkinter import *
+import tkinter
+import tkinter.ttk
+from tkinter import *
 
 def init(app):
     def CreateLabel(str):
-      label= ttk.Label(app.master, text= str)
+      label= tkinter.ttk.Label(app.master, text= str)
       app.add_external_button_row(label, None)
       return
     def Grouper(str=""):
@@ -87,16 +87,16 @@ class DriveAround:
         self.current_fuel_consumption   = 0
         self.current_energy_consumption   = 0
 
-        self.info_bind_var = Tkinter.StringVar()
+        self.info_bind_var = tkinter.StringVar()
         self.info_bind_var.set("Not driving")
-        self.hybrid_enabled = Tkinter.BooleanVar()
+        self.hybrid_enabled = tkinter.BooleanVar()
         self.hybrid_enabled.set(False)
         self.energy_consumption_entry = {}
 
-        hybrid_enable_button = ttk.Checkbutton(app.master, text="Hybrid", variable = self.hybrid_enabled , command=self.updatehybrid)
+        hybrid_enable_button = tkinter.ttk.Checkbutton(app.master, text="Hybrid", variable = self.hybrid_enabled , command=self.updatehybrid)
         app.add_external_button_row(hybrid_enable_button, None)
-        drive_toggle_button = ttk.Button(app.master, text="Go for a drive", command=self.toggle)
-        drive_label = ttk.Label(app.master, textvariable=self.info_bind_var)
+        drive_toggle_button = tkinter.ttk.Button(app.master, text="Go for a drive", command=self.toggle)
+        drive_label = tkinter.ttk.Label(app.master, textvariable=self.info_bind_var)
         app.add_external_button_row(drive_toggle_button, drive_label)
 
         self.add_speed_entry()
@@ -108,24 +108,24 @@ class DriveAround:
         thread.start()
 
     def add_speed_entry(self):
-        self.speed_bind_var = Tkinter.StringVar()
+        self.speed_bind_var = tkinter.StringVar()
         self.speed_bind_var.set("100")
-        speed_label = ttk.Label(self.app.master, text="Speed (kph)")
-        speed_entry = ttk.Entry(self.app.master, textvariable=self.speed_bind_var)
+        speed_label = tkinter.ttk.Label(self.app.master, text="Speed (kph)")
+        speed_entry = tkinter.ttk.Entry(self.app.master, textvariable=self.speed_bind_var)
         self.app.add_external_button_row(speed_label, speed_entry)
 
     def add_fuel_consumption_entry(self):
-        self.fuel_consumption_bind_var = Tkinter.StringVar()
+        self.fuel_consumption_bind_var = tkinter.StringVar()
         self.fuel_consumption_bind_var.set("5.0")
-        fuel_consumption_label = ttk.Label(self.app.master, text="litres/100km")
-        fuel_consumption_entry = ttk.Entry(self.app.master, textvariable=self.fuel_consumption_bind_var)
+        fuel_consumption_label = tkinter.ttk.Label(self.app.master, text="litres/100km")
+        fuel_consumption_entry = tkinter.ttk.Entry(self.app.master, textvariable=self.fuel_consumption_bind_var)
         self.app.add_external_button_row(fuel_consumption_label, fuel_consumption_entry)
 
     def add_energy_consumption_entry(self):
-        self.energy_consumption_bind_var = Tkinter.StringVar()
+        self.energy_consumption_bind_var = tkinter.StringVar()
         self.energy_consumption_bind_var.set("5.0")
-        energy_consumption_label = ttk.Label(self.app.master, text="kWh/km")
-        self.energy_consumption_entry = ttk.Entry(self.app.master, textvariable=self.energy_consumption_bind_var , state='disabled')
+        energy_consumption_label = tkinter.ttk.Label(self.app.master, text="kWh/km")
+        self.energy_consumption_entry = tkinter.ttk.Entry(self.app.master, textvariable=self.energy_consumption_bind_var , state='disabled')
         self.app.add_external_button_row(energy_consumption_label, self.energy_consumption_entry)
 
     def updatehybrid(self):
@@ -209,13 +209,13 @@ class CEM:
         self.cem_enabled = False
         app.register_message_handler("SetTiAndDate", self.set_time_reply)
         print("CEM callback: ")
-        print(self.set_time_reply)
+        print((self.set_time_reply))
 
-        self.info_bind_var = Tkinter.StringVar()
+        self.info_bind_var = tkinter.StringVar()
         self.info_bind_var.set("Not active")
 
-        cem_toggle_button = ttk.Button(app.master, text="Toggle CEM", command=self.toggle)
-        cem_label = ttk.Label(app.master, textvariable=self.info_bind_var)
+        cem_toggle_button = tkinter.ttk.Button(app.master, text="Toggle CEM", command=self.toggle)
+        cem_label = tkinter.ttk.Label(app.master, textvariable=self.info_bind_var)
         self.app.add_external_button_row(cem_toggle_button, cem_label)
 
     def set_time_reply(self, client, msg_raw, msg_data):
@@ -285,11 +285,11 @@ class Gps:
         self.current_seconds = 0
         self.current_minutes = 0
 
-        self.info_bind_var = Tkinter.StringVar()
+        self.info_bind_var = tkinter.StringVar()
         self.info_bind_var.set("Gps Off")
 
-        gps_toggle_button = ttk.Button(app.master, text="Toggle Gps Reception", command=self.dataToggle)
-        gps_label = ttk.Label(app.master, textvariable=self.info_bind_var)
+        gps_toggle_button = tkinter.ttk.Button(app.master, text="Toggle Gps Reception", command=self.dataToggle)
+        gps_label = tkinter.ttk.Label(app.master, textvariable=self.info_bind_var)
         app.add_external_button_row(gps_toggle_button, gps_label)
 
         thread = threading.Thread(target=self.sch.run)

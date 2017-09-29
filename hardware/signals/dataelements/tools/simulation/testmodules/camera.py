@@ -1,8 +1,8 @@
 import sched
 import threading
 import time
-import Tkinter
-import ttk
+import tkinter
+import tkinter.ttk
 
 def init(app):
     fu = FastUpdates(app)
@@ -51,11 +51,11 @@ class FastUpdates:
         self.current_pinion_angle = 0
         self.pinion_sweep_direction = 0.3
 
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set("off")
 
-        bKeyReadSts = ttk.Button(app.master, text="Enable spam", command=self.toggle)
-        eTurnIndicStatus = ttk.Label(app.master, textvariable=self.infoBindVar)
+        bKeyReadSts = tkinter.ttk.Button(app.master, text="Enable spam", command=self.toggle)
+        eTurnIndicStatus = tkinter.ttk.Label(app.master, textvariable=self.infoBindVar)
         app.add_external_button_row(bKeyReadSts, eTurnIndicStatus)
 
         t = threading.Thread(target=self.sch.run)

@@ -5,8 +5,8 @@ Takes the local time of the host computer and sends it to the IHU using TiAndDat
 import sched
 import threading
 import time
-import ttk
-import Tkinter
+import tkinter.ttk
+import tkinter
 import datetime
 
 
@@ -29,10 +29,10 @@ class DateTimeGateway:
         self.app = app
         self.mode = Mode.SetTime
 
-        self.infoBindVar = Tkinter.StringVar()
+        self.infoBindVar = tkinter.StringVar()
         self.infoBindVar.set(Mode.modestrs[self.mode])
-        toggleButton = ttk.Button(app.master, text="Toggle datetime gateway", command=self.toggle)
-        toggleStatusLabel = ttk.Label(app.master, textvariable=self.infoBindVar)
+        toggleButton = tkinter.ttk.Button(app.master, text="Toggle datetime gateway", command=self.toggle)
+        toggleStatusLabel = tkinter.ttk.Label(app.master, textvariable=self.infoBindVar)
         app.add_external_button_row(toggleButton, toggleStatusLabel)
 
         self.sch = sched.scheduler(time.time, time.sleep, )

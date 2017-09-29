@@ -1,4 +1,4 @@
-import ttk
+import tkinter.ttk
 
 
 def init(app):
