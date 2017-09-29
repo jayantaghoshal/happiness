@@ -1,7 +1,7 @@
 #include <vcc/local_config_reader.h>
 #include <vcc/localconfig.h>
 
-#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 namespace
 {
@@ -72,8 +72,13 @@ class LocalConfigParsingTest : public ::testing::Test
 
 TEST_F(LocalConfigParsingTest, GetInt)
 {
-  EXPECT_EQ(42, reader.GetInt(kTestIntKey));
+  EXPECT_THAT(reader.GetInt(kTestIntKey), 42);
   EXPECT_THROW(reader.GetInt("NOT_EXISTING"), std::runtime_error);
+
+  int value;
+  EXPECT_THAT(reader.TryGetValue(&value, kTestIntKey), true);
+  EXPECT_THAT(value, 42);
+  EXPECT_THAT(reader.TryGetValue(&value, "NOT_EXISTING"), false);
   EXPECT_THROW(reader.GetInt(kTestStringKey), std::runtime_error);
 }
 

@@ -12,8 +12,6 @@
 
 namespace vcc
 {
-namespace localconfig
-{
 /**
  * Get default instance of LocalConfigReader
  *
@@ -26,8 +24,10 @@ namespace localconfig
  * @return Target system configured LocalConfig implementation (not-null)
  * @throws std::runtime_error if initialization is impossible.
  */
-const vcc::LocalConfigReaderInterface *Default();
+const vcc::LocalConfigReaderInterface *LocalConfigDefault();
 
+namespace localconfig
+{
 /**
  * Get the value of a local config string parameter.
  *

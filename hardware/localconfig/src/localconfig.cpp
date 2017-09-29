@@ -21,9 +21,9 @@ vcc::LocalConfigReader &Instance()
 
 namespace vcc
 {
+const vcc::LocalConfigReaderInterface *LocalConfigDefault() { return &Instance(); }
 namespace localconfig
 {
-const vcc::LocalConfigReaderInterface *Default() { return &Instance(); }
 
 std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
 int GetInt(const std::initializer_list<std::string> &keys) { return Instance().GetInt(keys); }

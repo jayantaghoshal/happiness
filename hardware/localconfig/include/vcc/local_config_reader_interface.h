@@ -1,6 +1,8 @@
 #ifndef VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 #define VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 
+#include <stdint.h>
+#include <chrono>
 #include <initializer_list>
 #include <string>
 #include <vector>
@@ -112,7 +114,96 @@ struct LocalConfigReaderInterface
   {
     return GetStringArray({keys...});
   }
+
+  template <class R, class... T>
+  void GetGenericValue(R *value, const T &... keys) const;
+
+  template <class R, class... T>
+  bool TryGetValue(R *value, const T &... keys) const
+  {
+    try
+    {
+      GetGenericValue(value, keys...);
+      return true;
+    }
+    catch (std::runtime_error)
+    {
+      return false;
+    }
+  }
+
+  template <class R, class... T>
+  bool TryGetValueOrDefault(R *value, R default_value, const T &... keys) const
+  {
+    try
+    {
+      GetGenericValue(value, keys...);
+      return true;
+    }
+    catch (std::runtime_error)
+    {
+      *value = default_value;
+      return false;
+    }
+  }
 };
+
+namespace detail
+{
+template <class R, class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, R *value, const T &... keys);
+
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, std::string *value, const T &... keys)
+{
+  *value = lcfg->GetString(keys...);
+}
+
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, int32_t *value, const T &... keys)
+{
+  *value = lcfg->GetInt(keys...);
+}
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, uint32_t *value, const T &... keys)
+{
+  *value = lcfg->GetInt(keys...);
+}
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, int16_t *value, const T &... keys)
+{
+  *value = lcfg->GetInt(keys...);
+}
+
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, uint16_t *value, const T &... keys)
+{
+  *value = lcfg->GetInt(keys...);
+}
+
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::seconds *value, const T &... keys)
+{
+  *value = std::chrono::seconds(lcfg->GetInt(keys...));
+}
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::milliseconds *value, const T &... keys)
+{
+  *value = std::chrono::milliseconds(lcfg->GetInt(keys...));
+}
+
+template <class... T>
+void GetValue(const LocalConfigReaderInterface *lcfg, double *value, const T &... keys)
+{
+  *value = lcfg->GetDouble(keys...);
+}
+}
+
+template <class R, class... T>
+inline void LocalConfigReaderInterface::GetGenericValue(R *value, const T &... keys) const
+{
+  return detail::GetValue(this, value, keys...);
+}
 
 } /* namespace vcc */
 

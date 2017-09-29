@@ -7,7 +7,8 @@ localconfig_ut_SRC_FILES:= \
 
 localconfig_ut_STATIC_LIBRARIES+= \
     liblocalconfig_static \
-    libjsoncpp
+    libjsoncpp \
+    liblog
 
 localconfig_ut_CPPFLAGS:= -fexceptions -Wall -Wextra
 
