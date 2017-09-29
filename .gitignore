@@ -16,3 +16,6 @@ __pycache__/
 .settings/org.eclipse.cdt.core.prefs
 .project
 .cproject
+
+# Meld mergetool
+*.orig
