@@ -43,6 +43,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",       standard_caps),
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                 standard_caps),
 ]
 
 test_plan_nightly = [
