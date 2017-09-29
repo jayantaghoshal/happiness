@@ -9,4 +9,4 @@ source "${SCRIPT_DIR}/common.sh"
 #python3 ./vendor/volvocars/tools/ci/jenkins/verify_commit_message.py ./vendor/volvocars/
 
 
-"$SCRIPT_DIR"/static_analysis.sh
+"$SCRIPT_DIR"/static_analyze_all.sh

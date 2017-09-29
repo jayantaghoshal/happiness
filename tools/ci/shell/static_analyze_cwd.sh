@@ -15,23 +15,21 @@ echo ""
 echo "-------------------------------------------------------------------"
 shellcheck --version
 
-cd ../../../
-shopt -s globstar
 any_errors=false
 
+shopt -s globstar
+shopt -s nullglob
 for f in **/*.sh
 do
   echo "Shellchecking $f"
-  [[ -e $f ]] || break  # handle the case of no *.sh files
   set +e
   shellcheck "$f"
   shellcheck_exitcode=$?
   set -e
-  if [ $shellcheck_exitcode -ne 0 ] 
+  if [ $shellcheck_exitcode -ne 0 ]
   then
     any_errors=true
-  fi  
-  
+  fi
 done
 
 echo "SHELLCHECK Analysis DONE"

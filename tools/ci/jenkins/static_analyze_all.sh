@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}/common.sh"
 
 echo "Analyzing code"
 docker_run "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check \"${ZUUL_BRANCH}\""
-docker_run "cd vendor/volvocars/tools/ci/jenkins && ./analyze.sh"
+docker_run "cd vendor/volvocars && ./tools/ci/shell/static_analyze_cwd.sh"
 docker_run "cd vendor/volvocars/tools/ci/shipit && ./analyze.sh"
 docker_run "cd vendor/volvocars/tools/ci/shipit && python3 -m unittest"
 docker_run "cd vendor/volvocars/hardware/signals/dataelements/AutosarCodeGen && ./analyze.sh"

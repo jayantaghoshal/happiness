@@ -16,7 +16,7 @@ export USE_CCACHE=true
 #uncommenting the following line
 # docker_run "64bit_sanity.py $REPO_ROOT_DIR/vendor/volvocars/" || die "64 bit build sanity check failed"
 
-time "$SCRIPT_DIR"/static_analysis.sh
+time "$SCRIPT_DIR"/static_analyze_all.sh
 
 docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "Build failed"
 
