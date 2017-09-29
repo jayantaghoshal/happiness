@@ -1,7 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 
 localconfig_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-localconfig_STATIC_LIBRARIES := libjsoncpp
+localconfig_STATIC_LIBRARIES := libjsoncpp liblog
 localconfig_SRC_FILES := \
     src/localconfig.cpp \
     src/local_config_reader_interface.cpp \

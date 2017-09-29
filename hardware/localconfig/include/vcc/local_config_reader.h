@@ -34,7 +34,7 @@ class LocalConfigReader : public LocalConfigReaderInterface
   static void LoadFile(std::string file_path, Json::Value *value);
 
  private:
-  const Json::Value &GetValue(std::initializer_list<std::string> keys) const;
+  const Json::Value &GetJsonValue(std::initializer_list<std::string> keys) const;
 
   LazyLoader const loader_;
   mutable std::mutex mutex_;

@@ -27,8 +27,17 @@ Add the liblocalconfig library in your Android.mk file:
 Now you can use LocalConfig in your component:
 
     #include <vcc/localconfig.h>
-    ...
-    int some_param = vcc::localconfig::GetInt("Param1");
+    auto * lcfg = vcc::LocalConfigDefault();
+    int some_param = lcfg->GetInt("Param1");
+
+If you want to provide default value in case parameter is missing you can either
+a) initialize variable before using lcfg, and then call:
+
+    lcfg->TryGetValue(&variable, "PARAM_NAME");
+
+b) directly use TryGetValueOrDefault
+
+    lcfg->TryGetValueOrDefault(&variable, 90, "PARAM_NAME");
 
 ### Testing
 
@@ -42,23 +51,31 @@ Now you can use a test interface to load your own localconfig_mytest.json file, 
 
        LOCAL_STATIC_LIBRARIES += liblocalconfig_static
 
-2. In your test code, initialize LocalConfig before executing the code which depends on
-   LocalConfig:
+2. When testing classes/components relying on LCFG use DependencyInjection instead of relying on singleton. Do not use auto * lcfg = vcc::LocalConfigDefault();, but instead initialize your own vcc::LocalConfig implementation, or use vcc::mocks::MockLocalConfigReader. 
 
-       #include <localconfig_test.h>
+       #include <vcc/localconfig.h>
        ...
-       vcc::localconfig::testInit("/data/local/tmp/localconfig_mytest.json");
+       vcc::LocalConfigFileReader lcfg("/data/local/tmp/localconfig_mytest.json");
+
+       or just vcc::mocks::MockLocalConfigReader lcfg;
+       ... setup expectations
+
+       and use &lcfg instead of vcc::LocalConfigDefault()
+
+Quite convenient balance between convenience and testability:
+
+       class SampleLcfgUser {
+        public:
+         SampleLcfgUser(vcc::LocalConfigReaderInterface * lcfg = vcc::LocalConfigDefault()) {
+           //use or store lcfg
+         }
+       }
+
+This does not require passing pointer through all layers, but also allows testing code relying on lcfg with injected implementation/mock.
 
 3. In your test case, copy your own localconfig_mytest.json to target /data/local/tmp/localconfig_mytest.json.
    Example on how this can be done in VTS is available in the unit test for localconfig.
 
 ## Verification
 
-The unit tests and component tests is implemented using VTS/Trade Federation. To build and run test, please run:
-
-    ./unit_test_build.sh && ./unit_test_run.sh
-    or
-    ./component_test_build.sh && ./component_test_run.sh
-
-Note: that we have separated the build and run stages as this is needed for the CI-machinery where we have seperate
-servers for build and test.
+The unit tests and component tests is implemented for usage with VTS. Unit tests are also host compatible.
