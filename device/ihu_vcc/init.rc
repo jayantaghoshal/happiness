@@ -9,4 +9,5 @@ on init
 
 on post-fs
     exec -- /system/bin/ip netns add vcc
+    exec -- /system/bin/ip netns exec vcc /system/bin/sysctl -p /vendor/etc/sysctl.conf
     class_start vcc_net_init

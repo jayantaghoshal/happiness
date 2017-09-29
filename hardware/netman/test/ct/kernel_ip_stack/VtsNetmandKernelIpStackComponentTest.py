@@ -140,7 +140,7 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
     def test_ProxyArpEth1_ShouldBeOne(self):
         # Force interface up
-        result = self.terminal.Execute("ifconfig eth1 up")
+        result = self.terminal.Execute("ip netns exec vcc ifconfig eth1 up")
         asserts.assertEqual(0, result[const.EXIT_CODE][0])
         proxy_arp_eth1 = \
             int(self.target.get_sys_ctl_parameters("ipv4/conf/eth1/proxy_arp"))
@@ -149,7 +149,7 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
     def test_ProxyArpMeth0_ShouldBeOne(self):
         # Force interface up
-        result = self.terminal.Execute("ifconfig meth0 up")
+        result = self.terminal.Execute("ip netns exec vcc ifconfig meth0 up")
         asserts.assertEqual(0, result[const.EXIT_CODE][0])
         proxy_arp_meth0 = \
             int(self.target.get_sys_ctl_parameters("ipv4/conf/meth0/proxy_arp"))

@@ -1,6 +1,3 @@
-on boot
-    exec - root root -- /system/bin/sysctl -p /vendor/etc/sysctl.conf
-
 on property:netmand.startup_completed=1 && property:netboyd.startup_completed=1
     class_start vcc_net
 

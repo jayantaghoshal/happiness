@@ -18,6 +18,7 @@ class NetmanHelper(BaseHelper):
 
     def __init__(self, terminal):
         BaseHelper.__init__(self, terminal)
+        self.ip_netns_exec_vcc = ["ip netns exec vcc"]
 
     def start_netman(self):
         self.execute_cmd("netman&")
@@ -30,7 +31,7 @@ class NetmanHelper(BaseHelper):
         self.start_netman()
 
     def get_interface_conf(self, interface):
-        cmd = " ".join(["ifconfig", interface])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface])
         ifconfig_output = self.execute_cmd(cmd)
         conf = {}
         conf["ip_address"] = self._parse_ip_address(ifconfig_output)
@@ -42,7 +43,7 @@ class NetmanHelper(BaseHelper):
         return conf
 
     def set_broadcast_address(self, interface, broadcast_address):
-        cmd = " ".join(["ifconfig", interface, "broadcast", broadcast_address])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "broadcast", broadcast_address])
         self.execute_cmd(cmd)
         return self.get_broadcast_address(interface)
 
@@ -50,7 +51,7 @@ class NetmanHelper(BaseHelper):
         return self.get_interface_conf(interface)["broadcast_address"]
 
     def set_netmask(self, interface, netmask):
-        cmd = " ".join(["ifconfig", interface, "netmask", netmask])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "netmask", netmask])
         self.execute_cmd(cmd)
         return self.get_netmask(interface)
 
@@ -58,7 +59,7 @@ class NetmanHelper(BaseHelper):
         return self.get_interface_conf(interface)["netmask"]
 
     def set_ip_address(self, interface, ip_address):
-        cmd = " ".join(["ifconfig", interface, ip_address])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, ip_address])
         self.execute_cmd(cmd)
         return self.get_ip_address(interface)
 
@@ -66,7 +67,7 @@ class NetmanHelper(BaseHelper):
         return self.get_interface_conf(interface)["ip_address"]
 
     def set_mtu(self, interface, mtu):
-        cmd = " ".join(["ifconfig", interface, "mtu", str(mtu)])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "mtu", str(mtu)])
         self.execute_cmd(cmd)
         return self.get_mtu(interface)
 
@@ -74,7 +75,7 @@ class NetmanHelper(BaseHelper):
         return self.get_interface_conf(interface)["mtu"]
 
     def set_mac_address(self, interface, mac_address):
-        cmd = " ".join(["ifconfig", interface, "hw ether", mac_address])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "hw ether", mac_address])
         self.execute_cmd(cmd)
         return self.get_mac_address(interface)
 
@@ -82,19 +83,19 @@ class NetmanHelper(BaseHelper):
         return self.get_interface_conf(interface)["mac_address"]
 
     def interface_down(self, interface):
-        cmd = " ".join(["ifconfig", interface, "down"])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "down"])
         self.execute_cmd(cmd)
 
     def interface_up(self, interface):
-        cmd = " ".join(["ifconfig", interface, "up"])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ifconfig", interface, "up"])
         self.execute_cmd(cmd)
 
     def is_interface_up(self, interface):
-        cmd = " ".join(["cat", "cat /sys/class/net/{}/operstate".format(interface)])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["cat", "cat /sys/class/net/{}/operstate".format(interface)])
         return self.execute_cmd(cmd) == "up"
 
     def get_sys_ctl_parameters(self, parameter):
-        cmd = " ".join(["cat", "/proc/sys/net/{}".format(parameter)])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["cat", "/proc/sys/net/{}".format(parameter)])
         return int(self.execute_cmd(cmd)[const.STDOUT][0].rstrip())
 
     def get_prop(self, property_name):
@@ -119,7 +120,7 @@ class NetmanHelper(BaseHelper):
     def rename_interface(self, old_interface_name, new_interface_name):
         if self.is_interface_up(old_interface_name):
             raise ValueError("Error: Cannot rename {} when interface is up.".format(old_interface_name))
-        cmd = " ".join(["ip", "link", "set", old_interface_name, "name", new_interface_name])
+        cmd = " ".join(self.ip_netns_exec_vcc + ["ip", "link", "set", old_interface_name, "name", new_interface_name])
         self.execute_cmd(cmd)
 
     def namespace_exists(self, namespace):
