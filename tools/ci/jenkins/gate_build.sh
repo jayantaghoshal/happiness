@@ -11,12 +11,8 @@ docker_run "time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local \"${
 # Setup ccache
 export USE_CCACHE=true
 
-#TODO: Move this to commit check when the commit gate is ready
-#TODO: Investigate Hidl tool generator for multilib flag before
-#uncommenting the following line
-# docker_run "64bit_sanity.py $REPO_ROOT_DIR/vendor/volvocars/" || die "64 bit build sanity check failed"
-
-time "$SCRIPT_DIR"/static_analyze_all.sh
+# Rerun commit check in case it changed before the change was validated first time
+time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
 docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "Build failed"
 
