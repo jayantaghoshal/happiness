@@ -18,8 +18,8 @@ class FirewallConfig
     /**
      * @brief Constructor
      */
-    FirewallConfig() {}
-    virtual ~FirewallConfig() {}
+    FirewallConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {}
+  virtual ~FirewallConfig() {}
 
     /**
      * @brief Convert iptables part of LocalConfig to iptables.rules file
@@ -92,6 +92,7 @@ private:
      */
     ruletable filter_;
 
+    const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
 } // namespace netman

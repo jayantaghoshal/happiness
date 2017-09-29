@@ -78,20 +78,18 @@ void FirewallConfig::ParseRules(const ruletable& table, const std::string& table
     file << table.name << std::endl;
     for (std::string it : table.chains) file << it << std::endl;
 
-    std::vector<std::string> chains =
-        vcc::localconfig::GetStringArray(primary_fw_key, table_name, "CHAINS");
-    for (auto item : chains)
-    {
-        file << ":" << item << " - [0:0]" << std::endl;
-    }
+  std::vector<std::string> chains = lcfg_->GetStringArray(primary_fw_key, table_name, "CHAINS");
+  for (auto item : chains)
+  {
+    file << ":" << item << " - [0:0]" << std::endl;
+  }
 
-    std::vector<std::string> rules =
-        vcc::localconfig::GetStringArray(primary_fw_key, table_name, "RULES");
-    for (auto item : rules)
-    {
-        file << item << std::endl;
-    }
-    file << table.final << std::endl;
+  std::vector<std::string> rules = lcfg_->GetStringArray(primary_fw_key, table_name, "RULES");
+  for (auto item : rules)
+  {
+    file << item << std::endl;
+  }
+  file << table.final << std::endl;
 }
 
 void FirewallConfig::InitTables()

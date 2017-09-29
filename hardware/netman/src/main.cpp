@@ -8,6 +8,7 @@
 #include <cutils/log.h>
 #include <cutils/properties.h>
 
+#include "vcc/localconfig.h"
 #include "netlink_event_listener.h"
 #include "netman_netlink_event_handler.h"
 #include "firewall_config.h"
@@ -22,8 +23,9 @@ int main()
         ALOGI("Netmand 0.1 starting");
 
         ALOGI("Setting up firewall configuration");
+        auto * lcfg = vcc::LocalConfigDefault();
 
-        FirewallConfig fw_conf = FirewallConfig();
+        FirewallConfig fw_conf = FirewallConfig(lcfg);
         if (!fw_conf.ParseAndSave(FirewallConfig::kDefaultIptablesRulesPath)) {
             ALOGE("Error parsing and saving iptables.rules");
             exit(1);
@@ -45,7 +47,7 @@ int main()
 
         std::vector<InterfaceConfiguration> interface_configurations;
 
-        LoadInterfaceConfiguration(interface_configurations);
+        LoadInterfaceConfiguration(&interface_configurations, lcfg);
 
         ALOGI("Setting initial configuration on network interfaces");
 

@@ -4,13 +4,16 @@
 #include <string>
 #include <vector>
 
+#include <vcc/localconfig.h>
 #include "netlink_event_handler.h"
 #include "interface_configuration.h"
 
-namespace vcc {
-namespace netman {
-
-void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_configurations);
+namespace vcc
+{
+namespace netman
+{
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_configurations,
+                                const vcc::LocalConfigReaderInterface* lcfg);
 
 void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf);
 

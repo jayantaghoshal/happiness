@@ -77,19 +77,19 @@ void PrintInterfaceConfiguration(const std::string context,
     ALOGI("MTU: %i", conf.mtu);
 }
 
-void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> &interface_configurations)
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations, const  vcc::LocalConfigReaderInterface * lcfg)
 {
     const std::vector<std::string> interface_names = {"eth0", "eth1", "meth0"};
     for (auto &name : interface_names) {
         InterfaceConfiguration conf;
-        conf.name = vcc::localconfig::GetString(name + ".name");
-        conf.ip_address = vcc::localconfig::GetString(name + ".ip-address");
-        conf.netmask = vcc::localconfig::GetString(name + ".netmask");
-        conf.mac_address = vcc::localconfig::GetString(name + ".mac-address");
+        conf.name = lcfg->GetString(name + ".name");
+        conf.ip_address = lcfg->GetString(name + ".ip-address");
+        conf.netmask = lcfg->GetString(name + ".netmask");
+        conf.mac_address = lcfg->GetString(name + ".mac-address");
         ConvertMacAddress(conf.mac_address, conf.mac_address_bytes);
-        conf.broadcast_address = vcc::localconfig::GetString(name + ".broadcast-address");
-        conf.mtu = (uint32_t)vcc::localconfig::GetInt(name + ".mtu");
-        interface_configurations.push_back(conf);
+        conf.broadcast_address = lcfg->GetString(name + ".broadcast-address");
+        conf.mtu = (uint32_t)lcfg->GetInt(name + ".mtu");
+        interface_configurations->push_back(conf);
     }
 }
 
