@@ -36,6 +36,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                  standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",      standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",standard_caps),
