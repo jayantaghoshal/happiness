@@ -3,17 +3,18 @@
 
 #include "netlink_event_handler.h"
 
-namespace vcc {
-namespace netman {
-
+namespace vcc
+{
+namespace netman
+{
 class NetboyNetlinkEventHandler : public NetlinkEventHandler
 {
-protected:
-    virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg);
-    virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
+ protected:
+  virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg);
+  virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
 };
 
-} // using netman
-} // using vcc
+}  // using netman
+}  // using vcc
 
 #endif
