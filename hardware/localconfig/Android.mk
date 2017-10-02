@@ -5,7 +5,8 @@ localconfig_STATIC_LIBRARIES := libjsoncpp liblog
 localconfig_SRC_FILES := \
     src/localconfig.cpp \
     src/local_config_reader_interface.cpp \
-    src/local_config_reader.cpp
+    src/local_config_reader.cpp \
+    src/local_config_file_reader_with_fallback.cpp
 
 localconfig_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
@@ -45,17 +46,14 @@ LOCAL_MULTILIB := 64
 include $(BUILD_SHARED_LIBRARY)
 
 #
-# Copy the default JSON file to /vendor/etc/config
+# Copy the default JSON file to /vendor/etc/localconfig
 #
 include $(CLEAR_VARS)
 LOCAL_MODULE := localconfig.json
 LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_RELATIVE_PATH := config
+LOCAL_MODULE_RELATIVE_PATH := localconfig
 LOCAL_SRC_FILES := misc/localconfig.json
-
-# We need an init.rc which will initialize with a default localconfig.json if needed.
-LOCAL_INIT_RC := misc/localconfig.rc
 
 # This is probably not needed, please review...
 LOCAL_MULTILIB := 64

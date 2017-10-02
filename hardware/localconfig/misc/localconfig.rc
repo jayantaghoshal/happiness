@@ -1,3 +1,0 @@
-on post-fs
-    exec - root root -- /system/bin/mkdir -p -m 0775 /oem_config/localconfig
-    exec - root root -- /system/bin/cp -n /vendor/etc/config/localconfig.json /oem_config/localconfig/localconfig.json

@@ -126,7 +126,7 @@ void vcc::LocalConfigReader::LoadFile(std::string file_path, Json::Value *value)
 }
 
 vcc::LocalConfigFileReader::LocalConfigFileReader(std::string file_path)
-    : base::LocalConfigReader([file_path](Json::Value *value) { LoadFile(file_path, value); })
+    : base([file_path](Json::Value *value) { LoadFile(file_path, value); })
 {
 }
 
