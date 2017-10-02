@@ -1,0 +1,16 @@
+package vendor.volvocars.hardware.vehiclecom@1.0;
+
+interface IResponseCallback
+{
+    /**
+     * Handle response received over Vehicle Communication Bus (e.g. IPCB)
+     * @param resp Response received over Vehicle Communication Bus (e.g. IPCB).
+     */
+    oneway onResponseRcvd(Msg resp);
+
+    /**
+     * Handle error received over Vehicle Communication Bus (e.g. IPCB)
+     * @param error Error received over Vehicle Communication Bus (e.g. IPCB).
+     */
+    oneway onErrorRcvd(Error error);
+};

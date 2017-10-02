@@ -3,8 +3,8 @@
 
 #define LOG_TAG "iplmd.service"
 
-using ::vendor::volvocars::hardware::ipcb::V1_0::OperationType;
-using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 namespace LocalCfg = Iplmd::LocalConfig;
@@ -46,7 +46,7 @@ IplmService::IplmService() :
 
 void IplmService::StartSubscribe()
 {
-    ipcbServer_ = IIpcb::getService("iplm");
+    ipcbServer_ = IVehicleCom::getService("iplm");
 
     if (ipcbServer_ != NULL)
     {
@@ -102,7 +102,7 @@ void IplmService::HandleMessageRcvd(const Msg& msg)
   }
 }
 
-// Methods from vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
+// Methods from vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
 Return<void> IplmService::onMessageRcvd(const Msg& msg)
 {
     IDispatcher::EnqueueTask([msg, this]() {

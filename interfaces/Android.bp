@@ -2,8 +2,8 @@
 subdirs = [
     "common",
     "common/1.0",
-    "ipcb",
-    "ipcb/1.0",
+    "vehiclecom",
+    "vehiclecom/1.0",
     "iplm/1.0",
     "signals",
     "signals/1.0",
