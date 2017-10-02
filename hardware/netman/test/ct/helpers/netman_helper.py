@@ -142,6 +142,11 @@ class NetmanHelper(BaseHelper):
         else:
             return cmd
 
+    def exists_interface(self, interface_name):
+        cmd = " ".join(["ip netns exec vcc grep", interface_name, "/proc/net/dev"])
+        result = self.execute_cmd(cmd)
+        return result[const.EXIT_CODE][0] == 0
+
     def _parse_ip_address(self, ifconfig_output):
         groups = re.search(r"inet addr:(\d{1,3}[.]\d{1,3}[.]\d{1,3}[.]\d{1,3})", str(ifconfig_output))
         return groups.group(1) if groups else ""

@@ -16,7 +16,7 @@ from vts.utils.python.precondition import precondition_utils
 
 from ..helpers import netman_helper as nh
 
-class VtsNetmandIptablesConfigurationComponentTest(base_test.BaseTestClass):
+class VtsNetmandIptablesComponentTest(base_test.BaseTestClass):
 
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
@@ -48,8 +48,11 @@ class VtsNetmandIptablesConfigurationComponentTest(base_test.BaseTestClass):
     def test_WhenIptablesRulesApplied_ShouldEstablishMeth0Eth1Connection(self):
         # Arrange
 
-        is_meth0_available = self.target.exists_interface("meth0")
-        asserts.assertTrue(is_meth0_available, "Interface meth0 not available")
+        """
+        TODO (Philip Werner) Add this test when most driver is operational.
+        """
+        #is_meth0_available = self.target.exists_interface("meth0")
+        #asserts.assertTrue(is_meth0_available, "Interface meth0 not available")
 
         is_eth1_available = self.target.exists_interface("eth1")
         asserts.assertTrue(is_eth1_available, "Interface eth1 not available")
