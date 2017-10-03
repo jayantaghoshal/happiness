@@ -1,0 +1,4 @@
+includes
+{
+  #include "..\GWIncludes\HUD_GW.cin" //@GWINC@
+}

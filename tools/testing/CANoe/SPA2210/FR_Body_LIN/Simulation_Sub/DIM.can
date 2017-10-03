@@ -1,0 +1,9 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\SPAIncludes\SPACommon_FRIL.cin" //@SPECINC::FRIL@
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\speechDIM.cin" //@SPECINC::PTT@
+  //#include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  //#include "..\..\SPAIncludes\SPACommon_FRNM_SPAIL.cin" //@SPECINC::FRNM@
+  //#include "..\GWIncludes\DIM_GW.cin" //@GWINC@
+}

@@ -1,0 +1,227 @@
+variables
+{
+  dword SPACANIL_contextList[33];
+  long SPACANIL_contextListInitiated = 0;
+}
+
+on preStart
+{
+  enum VtSv__SPACommon_SimulationControl ilControlValue;
+  enum VtSv__SPACommon_UBControl ubControlValue;
+  enum VtSv__SPACommon_E2ECntrMode cntrControlValue;
+  
+  ilControlValue = (enum VtSv__SPACommon_SimulationControl) @%NODE_NAME%::CANIL::Control::IL;
+  If(ilControlValue == ILStart)
+  {
+    ilControlValue = (enum VtSv__SPACommon_SimulationControl) @%NODE_NAME%::COMMON::Control::IL;
+    If(ilControlValue == ILStart)
+      ilControlValue = (enum VtSv__SPACommon_SimulationControl) @_SPACommon::SimulationControl;
+  }
+  Switch(ilControlValue)
+  {
+    Case(ILInit) :
+    Case(ILStop) :
+      SPACANIL_ILControl(ILInit); break;
+    Case(ILWait) :
+      @%NODE_NAME%::CANIL::Control::IL = (long) ILWait; break;
+  }
+  
+  ubControlValue = (enum VtSv__SPACommon_UBControl) @%NODE_NAME%::CANIL::Control::UB;
+  If(ubControlValue == UBHandled)
+  {
+    ubControlValue = (enum VtSv__SPACommon_UBControl) @%NODE_NAME%::COMMON::Control::UB;
+    If(ubControlValue == UBHandled)
+      ubControlValue = (enum VtSv__SPACommon_UBControl) @_SPACommon::UBControl;
+  }
+  If(ubControlValue != UBHandled)
+    @%NODE_NAME%::CANIL::Control::UB = (long) ubControlValue;
+    
+  cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @%NODE_NAME%::CANIL::Control::E2ECntrMode;
+  If(cntrControlValue == CntrPnP)
+  {
+    cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @%NODE_NAME%::COMMON::Control::E2ECntrMode;
+    If(cntrControlValue == CntrPnP)
+      cntrControlValue = (enum VtSv__SPACommon_E2ECntrMode) @_SPACommon::E2ECntrMode;
+  }
+  If(cntrControlValue != CntrPnP)
+    @%NODE_NAME%::CANIL::Control::E2ECntrMode = (long) cntrControlValue;
+}
+
+SPACANIL_ContextListInit ()
+{
+  dword firstContext;
+  dword tempContext;
+  long i;
+  if (SPACANIL_contextListInitiated)
+    SPACommon_Write(SPA_WRITE_SEVERITY_WARNING, SPA_WRITE_BASE_PRIORTY+1, "List of bus contextes reinitiated");
+  i = 0;
+  firstContext = getBusContext();
+  if (firstContext > 0x10000 && firstContext < 0x10021)
+    SPACANIL_contextList[i++] = firstContext;
+  
+  for(tempContext = 0x10020; tempContext > 0x10000;tempContext--) 
+  {
+    if(tempContext != firstContext && setBusContext(tempContext) != getBusContext())
+      SPACANIL_contextList[i++] = tempContext;
+  }
+  SPACANIL_contextList[i] = 0;
+
+  if (i == 0)
+    SPACommon_Write(SPA_WRITE_SEVERITY_ERROR, SPA_WRITE_BASE_PRIORTY+1, "CANIL: No CAN bus contextes found");
+  Else if (i == 1)
+    SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY,"Detected CAN bus context 0x%x", SPACANIL_contextList[0]);
+  Else
+  {
+    For(i = 0; SPACANIL_contextList[i] != 0 ;i++)
+      SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY, "Detected CAN bus context 0x%x", SPACANIL_contextList[i]);
+  }
+  SPACANIL_contextListInitiated = 1;
+}
+
+SPACANIL_ILControl (enum VtSv__SPACommon_SimulationControl controlValue)
+{
+  long i;
+  if (!SPACANIL_contextListInitiated)
+    SPACANIL_ContextListInit();
+  for(i = 0; SPACANIL_contextList[i] != 0 ;i++) 
+  {
+    long resultValue;
+    setBusContext(SPACANIL_contextList[i]);
+    Switch(controlValue)
+    {
+      Case(ILInit) :
+        resultValue = ILControlInit(); break;
+      Case(ILStop) :
+        resultValue = ILControlStop(); break;
+      Case(ILWait) :
+        resultValue = ILControlWait(); break;
+      Case(ILResume) :
+        resultValue = ILControlResume(); break;
+      Case(ILStart) :
+        resultValue = ILControlStart(); break;
+      Default :
+        resultValue = -1;
+    }
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: SPACANIL_ILControl(%s) called for bus context 0x%x with result %d", timeNow(), controlValue.name(), SPACANIL_contextList[i], resultValue);
+    SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+  }
+}
+
+on sysvar_update %NODE_NAME%::CANIL::Control::IL
+{
+  SPACANIL_ILControl( (enum VtSv__SPACommon_SimulationControl) @this);
+}
+
+on sysvar_update %NODE_NAME%::CANIL::Control::UB
+{
+  long i;
+  enum VtSv__SPACommon_UBControl controlValue;
+  controlValue = (enum VtSv__SPACommon_UBControl) @this;
+  if (!SPACANIL_contextListInitiated)
+    SPACANIL_ContextListInit();
+  for(i = 0; SPACANIL_contextList[i] != 0 ;i++) 
+  {
+    long resultValue;
+    setBusContext(SPACANIL_contextList[i]);
+    Switch(controlValue)
+    {
+      Case(UBOFF) :
+        resultValue = ILFaultInjectionDisturbNodeUpdateBits(0,0,-1,0); break;
+      Case(UBHandled) :
+        resultValue = ILFaultInjectionDisturbNodeUpdateBits(0,0,0,0); break;
+      Case(UBON) :
+        resultValue = ILFaultInjectionDisturbNodeUpdateBits(0,0,-1,1); break;
+      Default :
+        resultValue = -1;
+    }
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: %NODE_NAME%::CANIL::Control::UB:%s set for bus context 0x%x with result %d", timeNow(), controlValue.name(), SPACANIL_contextList[i], resultValue);
+    SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+  }
+}
+
+on sysvar_update %NODE_NAME%::CANIL::Control::E2ECntrMode
+{
+  SPACANIL_NodeE2ECntrMode((enum VtSv__SPACommon_E2ECntrMode) @this);
+}
+
+SPACANIL_NodeE2ECntrMode(enum VtSv__SPACommon_E2ECntrMode controlValue)
+{
+  long i;
+  if (!SPACANIL_contextListInitiated)
+    SPACANIL_ContextListInit();
+  for(i = 0; SPACANIL_contextList[i] != 0 ;i++) 
+  {
+    long resultValue;
+    setBusContext(SPACANIL_contextList[i]);
+    Switch(controlValue)
+    {
+      Case(CntrReal) :
+        resultValue = ILSetOperationMode(1,0); break;
+      Case(CntrPnP) :
+        resultValue = ILSetOperationMode(1,1); break;
+      Default :
+        resultValue = -3;
+    }
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: SPACANIL_NodeE2ECntrMode(%s) set for bus context 0x%x with result %d", timeNow(), controlValue.name(), SPACANIL_contextList[i], resultValue);
+    SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+    // SPACommon_WriteE2ECntrMode("SPACANIL_NodeE2ECntrMode", controlValue, resultValue);
+  }
+}
+
+/*SPACANIL_UBInit(signal * dbSignal, long longControlValue)
+{
+  const long RETURN_WHEN_HANDLED = -2;
+  long resultValue;
+  enum VtSv__SPACommon_UBControl controlValue;
+  controlValue = (enum VtSv__SPACommon_UBControl) longControlValue;
+  If(controlValue == UBHandled)
+    resultValue = RETURN_WHEN_HANDLED;
+  Else
+    resultValue = SPACANIL_UBControl(dbSignal, controlValue);
+  
+  If(resultValue != RETURN_WHEN_HANDLED)
+    write("CAN %NODE_NAME%: UBInit(%s, %s) called with result %d", dbSignal.name, controlValue.name(), resultValue);
+}
+
+long SPACANIL_UBControl(signal * dbSignal, long longControlValue)
+{
+  return SPAFRIL_UBControl(dbSignal, (enum VtSv__SPACommon_UBControl) longControlValue);
+}
+
+long SPACANIL_UBControl(signal * dbSignal, enum VtSv__SPACommon_UBControl controlValue)
+{
+  long i;
+    long resultValue;
+  if (!SPACANIL_contextListInitiated)
+    SPACANIL_ContextListInit();
+  setSignal(dbSignal, 0);
+  setSignal(SafetyCANprotected::SRSSafeProtFr02::BltLockStAtDrvr_UB, 0);
+  for(i = 0; SPACANIL_contextList[i] != 0 ;i++) 
+  {
+    Switch(controlValue)
+    {
+      Case(UBOFF) :
+        resultValue = ILFaultInjectionDisturbUpdateBit(dbSignal,0,-1,0); break;
+      Case(UBHandled) :
+        resultValue = ILFaultInjectionDisturbUpdateBit(dbSignal,0,0,0); break;
+      Case(UBON) :
+        resultValue = ILFaultInjectionDisturbUpdateBit(dbSignal,0,-1,1); break;
+      Default :
+        resultValue = -1;
+    }
+    write("%d: CAN %NODE_NAME%: UBControl(%s) called for bus context 0x%x with result %d", timeNow(), controlValue.name(), SPACANIL_contextList[i], resultValue);
+  }
+  return resultValue;
+}
+*/
+
+/*long SPACANIL_E2EChksControl(message * dbMessage, char sigGroupName[], long controlValue)
+{
+  long resultValue;
+  If(controlValue > 0 && controlValue < 256)
+    resultValue = ILFaultInjectionDisturbChecksum(dbMessage, sigGroupName, 0, 0, -1, controlValue);
+  Else
+    resultValue = ILFaultInjectionDisturbChecksum(dbMessage, sigGroupName, 0, 0, 0, 0);
+  SPACommon_WriteFunc("SPACANIL_E2EChksControl", sigGroupName, controlValue, resultValue);
+  return resultValue;
+}*/

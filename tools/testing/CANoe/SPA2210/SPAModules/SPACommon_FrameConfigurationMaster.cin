@@ -1,0 +1,84 @@
+variables
+{
+  const long SPAFCM_MSTCFGID_TOTAL = 7; //Total number of SPA networks with Frame Configuration
+  msTimer SPAFCM_UpdateTimer;
+  long SPAFCM_UpdateTime = 10000;
+  long SPAFCM_Update = 0;
+  long SPAFCM_TimedUpdate = 0;
+}
+
+on start
+{
+  long debugNo;
+  debugNo = 0;
+  If(sysSetVariableInt("VCM::FrameConfigurationBackbone::Output","MstCfgIDBackboneFR",SysGetVariableInt("ETC::FrameConfigurationBackboneIni::Output","IniValMstCfgIDBackboneFR"))) debugNo++;
+  If(sysSetVariableInt("CEM::FrameConfigurationBody::Output","MstCfgIDBodyCAN",SysGetVariableInt("ETC::FrameConfigurationBodyIni::Output","IniValMstCfgIDBodyCAN"))) debugNo++;
+  If(sysSetVariableInt("ASDM::FrameConfigurationProtected::Output","MstCfgIDSafetyCANProtected",SysGetVariableInt("ETC::FrameConfigurationProtectedIni::Output","IniValMstCfgIDSafetyCANProtected"))) debugNo++;
+  If(sysSetVariableInt("ASDM::FrameConfigurationExposed::Output","MstCfgIDSafetyCANExposed",SysGetVariableInt("ETC::FrameConfigurationExposedIni::Output","IniValMstCfgIDSafetyCANExposed"))) debugNo++;
+  If(sysSetVariableInt("ASDM::FrameConfigurationExposed2::Output","MstCfgIDSafetyCANExposed2",SysGetVariableInt("ETC::FrameConfigurationExposed2Ini::Output","IniValMstCfgIDSafetyCANExposed2"))) debugNo++;
+  If(sysSetVariableInt("VDDM::FrameConfigurationPropulsion::Output","MstCfgIDPropulsionCAN",SysGetVariableInt("ETC::FrameConfigurationPropulsionIni::Output","IniValMstCfgIDPropulsionCAN"))) debugNo++;
+  If(sysSetVariableInt("VDDM::FrameConfigurationChassis::Output","MstCfgIDChassisCAN",SysGetVariableInt("ETC::FrameConfigurationChassisIni::Output","IniValMstCfgIDChassisCAN"))) debugNo++;
+  If (debugNo >= SPAFCM_MSTCFGID_TOTAL) 
+    write("ERROR, Frame Configuration Master: No MstCfgID signals connected");
+  Else
+    write("Frame Configuration Master initialized %d MstCfgID signals", SPAFCM_MSTCFGID_TOTAL - debugNo);
+  
+  SPAFCM_UpdateTime = @ETC::FrameConfigurationMaster::Control::UpdateTime;
+  SPAFCM_TimedUpdate = @ETC::FrameConfigurationMaster::Control::TimedUpdate;
+  SPAFCM_SetUpdateBits(@ETC::FrameConfigurationMaster::Control::Update);
+}
+
+SPAFCM_SetUpdateBits(long update)
+{
+  long debugNo;
+  SPAFCM_Update = update;
+  debugNo = 0;
+  
+  If (sysSetVariableInt("VCM::FrameConfigurationBackbone::Output","MstCfgIDBackboneFR_UB",update)) debugNo++;
+  If (sysSetVariableInt("ASDM::FrameConfigurationExposed::Output","MstCfgIDSafetyCANExposed_UB",update)) debugNo++;
+  If (sysSetVariableInt("ASDM::FrameConfigurationExposed2::Output","MstCfgIDSafetyCANExposed2_UB",update)) debugNo++;
+  If (sysSetVariableInt("ASDM::FrameConfigurationProtected::Output","MstCfgIDSafetyCANProtected_UB",update)) debugNo++;
+  If (sysSetVariableInt("CEM::FrameConfigurationBody::Output","MstCfgIDBodyCAN_UB",update)) debugNo++;
+  If (sysSetVariableInt("VDDM::FrameConfigurationChassis::Output","MstCfgIDChassisCAN_UB",update)) debugNo++;
+  If (sysSetVariableInt("VDDM::FrameConfigurationPropulsion::Output","MstCfgIDPropulsionCAN_UB",update)) debugNo++;
+  
+  If (debugNo >= SPAFCM_MSTCFGID_TOTAL) 
+    write("ERROR, Frame Configuration Master: UB set (%d) but no UB signals connected", update);
+  
+  If (SPAFCM_Update == 3 && SPAFCM_TimedUpdate)
+  {
+    write("%d Frame Configuration Master (%NODE_NAME%): MstCfgID update bits set, cleared in %d ms", timeNow(), SPAFCM_UpdateTime);
+    setTimer(SPAFCM_UpdateTimer, SPAFCM_UpdateTime);
+  }
+}
+
+on sysvar ETC::FrameConfigurationMaster::Control::Update
+{
+  SPAFCM_SetUpdateBits(@this);
+}
+
+on sysvar ETC::FrameConfigurationMaster::Control::UpdateTime
+{
+  SPAFCM_UpdateTime = @this;
+}
+
+on sysvar ETC::FrameConfigurationMaster::Control::TimedUpdate
+{
+  SPAFCM_TimedUpdate = @this;
+  If (SPAFCM_TimedUpdate && SPAFCM_Update == 3 && timeToElapse(SPAFCM_UpdateTimer) == -1)
+  {
+    write("%d Frame Configuration Master (%NODE_NAME%): MstCfgID update bits cleared in %d ms", timeNow(), SPAFCM_UpdateTime);
+    setTimer(SPAFCM_UpdateTimer, SPAFCM_UpdateTime);
+  }
+  Else If (!SPAFCM_TimedUpdate && SPAFCM_Update == 3 && timeToElapse(SPAFCM_UpdateTimer) > 0)
+  {
+    write("%d Frame Configuration Master (%NODE_NAME%): MstCfgID update bits clearing canceled", timeNow());
+    cancelTimer(SPAFCM_UpdateTimer);
+  }
+}
+
+on timer SPAFCM_UpdateTimer
+{
+  write("%d Frame Configuration Master (%NODE_NAME%): MstCfgID update bits cleared", timeNow());
+  @ETC::FrameConfigurationMaster::Control::Update = 0;
+}

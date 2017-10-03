@@ -1,0 +1,73 @@
+variables
+{
+  msTimer SPA_NMGW_timer;
+  const long  SPA_NMGW_CHECK_TIME = 100;
+  const long  SPA_NMGW_SYNC_TIME = 100;
+  enum SPA_NMGW_STATES { SPA_NMGW_NONE, SPA_NMGW_FR, SPA_NMGW_CAN};
+  enum SPA_NMGW_STATES SPANMGWState = SPA_NMGW_NONE;
+}
+
+on start
+{
+  If(@%NODE_NAME%::CANNM::Control::GWActive)
+  {
+    SPACommon_WriteAddLong("FRNM<->CANNM GW active, synchronized every %d ms", SPA_NMGW_CHECK_TIME);
+    setTimer(SPA_NMGW_timer, SPA_NMGW_CHECK_TIME);
+  }
+}
+
+on timer SPA_NMGW_timer
+{
+  long nextTimout;
+  long canState;
+  long frState;
+  canState = @%NODE_NAME%::CANNM::Control::State;
+  frState = @%NODE_NAME%::FRNM::Control::State;
+  nextTimout = SPA_NMGW_CHECK_TIME;
+
+  if (SPANMGWState == SPA_NMGW_CAN)
+  {
+    if(frState < 3 && canState < 3)
+    {
+      SPANMGWState = SPA_NMGW_NONE;
+    }
+    else if (canState < 3)
+    {
+      @%NODE_NAME%::FRNM::Control::On = 0;
+      nextTimout = SPA_NMGW_SYNC_TIME;
+    }
+    else if(!@%NODE_NAME%::FRNM::Control::On && @%NODE_NAME%::CANNM::Control::On)
+    {
+      @%NODE_NAME%::CANNM::Control::On = 0;
+    }
+  }
+  else if (SPANMGWState == SPA_NMGW_FR)
+  {
+    if (canState < 3 && frState < 3)
+    {
+      SPANMGWState = SPA_NMGW_NONE;
+    }
+    else if (frState < 3)
+    {
+      @%NODE_NAME%::CANNM::Control::On = 0;
+      nextTimout = SPA_NMGW_SYNC_TIME;
+    }
+    else if(@%NODE_NAME%::FRNM::Control::On && !@%NODE_NAME%::CANNM::Control::On)
+    {
+      @%NODE_NAME%::FRNM::Control::On = 0;
+    }
+  }
+  else if (frState > 2)
+  {
+    SPANMGWState = SPA_NMGW_FR;
+    @%NODE_NAME%::CANNM::Control::On = 1;
+    nextTimout = SPA_NMGW_SYNC_TIME;
+  }
+  else if (canState > 2)
+  {
+    SPANMGWState = SPA_NMGW_CAN;
+    @%NODE_NAME%::FRNM::Control::On = 1;
+    nextTimout = SPA_NMGW_SYNC_TIME;
+  }
+  setTimer(SPA_NMGW_timer, nextTimout);
+}

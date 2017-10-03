@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+<namespace name="" comment="">
+	<namespace name="ASDM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="CEM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="DIM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="IHU" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="PAM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="SRS" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="VCM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+	<namespace name="VDDM" comment="NODE">
+		<namespace name="FRNM" comment="..\SPAIncludes\SPACommon_FRNM_SPAIL.cin">
+			<namespace name="Control" comment="PANEL">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="6" maxValuePhys="6">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="NM_STATE_UNINIT" />
+						<valuetableentry value="1" description="NM_STATE_BUS_SLEEP" />
+						<valuetableentry value="2" description="NM_STATE_PREPARE_BUS_SLEEP" />
+						<valuetableentry value="3" description="NM_STATE_READY_SLEEP" />
+						<valuetableentry value="4" description="NM_STATE_NORMAL_OPERATION" />
+						<valuetableentry value="5" description="NM_STATE_REPEAT_MESSAGE" />
+						<valuetableentry value="6" description="NM_STATE_SYNCHRONIZE" />
+					</valuetable>
+				</variable>
+			</namespace>
+			<namespace name="PNC" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="InitCOMMON" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCByteArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="6" minValue="0" minValuePhys="0" maxValue="255" maxValuePhys="255" />
+			</namespace>
+		</namespace>
+	</namespace>
+</namespace>
+</systemvariables>

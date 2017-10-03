@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+	<namespace name="" comment="">
+		<namespace name="_SPACommon" comment="SYSTEM">
+			<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+				<valuetable definesMinMax="true">
+					<valuetableentry value="0" description="CntrReal"/>
+					<valuetableentry value="1" description="CntrPnP"/>
+				</valuetable>
+			</variable>
+			<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="FRWakeUp" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+			<namespace name="LoggingControl" comment="">
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="WriteDbgLevel" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="10"/>
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="WriteToLogFile" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="Off"/>
+						<valuetableentry value="1" description="On"/>
+					</valuetable>
+				</variable>
+				<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="WriteToNodeSink" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+					<valuetable definesMinMax="true">
+						<valuetableentry value="0" description="Off"/>
+						<valuetableentry value="1" description="On"/>
+					</valuetable>
+				</variable>
+			</namespace>
+			<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PartialNetworkingEnabled" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+			<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SimulationControl" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+				<valuetable definesMinMax="true">
+					<valuetableentry value="0" description="ILInit"/>
+					<valuetableentry value="1" description="ILStop"/>
+					<valuetableentry value="2" description="ILWait"/>
+					<valuetableentry value="3" description="ILResume"/>
+					<valuetableentry value="4" description="ILStart"/>
+				</valuetable>
+			</variable>
+			<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UBControl" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+				<valuetable definesMinMax="true">
+					<valuetableentry value="0" description="UBOFF"/>
+					<valuetableentry value="1" description="UBHandled"/>
+					<valuetableentry value="3" description="UBON"/>
+				</valuetable>
+			</variable>
+		</namespace>
+		<namespace name="Vector_XXX" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="Y20CCMV526M1" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="VCM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="TRM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="PSMP" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="PSMD" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="POT" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="PDM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="PAM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="ETC" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="DDM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="CEM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="CCM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="ASDM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="DIM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="IHU" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="SRS" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+		<namespace name="VDDM" comment="NODE">
+			<namespace name="COMMON" comment="..\SPAIncludes\SPACommon_Common_SPAIL.cin">
+				<namespace name="Control" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="E2ECntrMode" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeCntrReal"/>
+							<valuetableentry value="1" description="NodeCntrPnP"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IL" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4" minValue="0" minValuePhys="0" maxValue="4" maxValuePhys="4">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeILInit"/>
+							<valuetableentry value="1" description="NodeILStop"/>
+							<valuetableentry value="2" description="NodeILWait"/>
+							<valuetableentry value="3" description="NodeILResume"/>
+							<valuetableentry value="4" description="NodeILStart"/>
+						</valuetable>
+					</variable>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="On" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SignalInit" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+						<valuetable definesMinMax="true">
+							<valuetableentry value="0" description="NodeUBOFF"/>
+							<valuetableentry value="1" description="NodeUBHandled"/>
+							<valuetableentry value="3" description="NodeUBON"/>
+						</valuetable>
+					</variable>
+				</namespace>
+				<namespace name="PNC" comment="PANEL">
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNCBitArray" comment="" bitcount="32" isSigned="true" encoding="65001" type="intarray" arrayLength="48" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC0_DriverInfo" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC1_Locking" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC2_Hazard" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC3_WarningSounds" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC4_Visibility" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC5_Body" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC6_InfotainmentHMI" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC7_Entrance" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC8_Start" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC9_Charging" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC10_PreClimatization" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC11_Driving" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC12_TrailerCaravan" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC13_Global" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC14_GSD" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC15_DriverInfoPoll" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC16_Spare8" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC17_Spare7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC18_Spare6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC19_Spare5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC20_Spare4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC21_Spare3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC22_Spare2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+					<variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PNC23_Spare1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1"/>
+				</namespace>
+			</namespace>
+		</namespace>
+	</namespace>
+</systemvariables>

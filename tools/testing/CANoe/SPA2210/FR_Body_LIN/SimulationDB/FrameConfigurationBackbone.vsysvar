@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="VCM" comment="NODE">
+      <namespace name="FrameConfigurationBackbone" comment="..\SPAModules\SPACommon_FrameConfigurationBackbone.cin">
+        <namespace name="Control" comment="PANEL">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SetFCMUBAfterReset" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="UseMFCSPeriod" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+        </namespace>
+        <namespace name="Input" comment="IN">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValMstCfgIDBackboneFR" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+        </namespace>
+        <namespace name="Output" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BackCntrForMissCom" comment="SPAFCBack_UpdateCntr((byte) this.raw)@UPDATE" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MstCfgIDBackboneFR" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BackCntrForMissCom_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MstCfgIDBackboneFR_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3" />
+        </namespace>
+      </namespace>
+    </namespace>
+    <namespace name="ETC" comment="NODE">
+      <namespace name="FrameConfigurationBackboneIni" comment="">
+        <namespace name="Output" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValMstCfgIDBackboneFR" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4005" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValSigCfgIDBackboneFR" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4005" />
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>
