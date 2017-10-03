@@ -6,7 +6,7 @@ localconfig_SRC_FILES := \
     src/localconfig.cpp \
     src/local_config_reader_interface.cpp \
     src/local_config_reader.cpp \
-    src/local_config_file_reader_with_fallback.cpp
+    src/local_config_file_reader_android_ihu_behavior.cpp
 
 localconfig_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 

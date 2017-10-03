@@ -3,8 +3,9 @@
  * Delphi Confidential
 \*===========================================================================*/
 
-#include <vcc/local_config_file_reader_with_fallback.h>
 #include <vcc/localconfig.h>
+
+#include "vcc/local_config_file_reader_android_ihu_behavior.h"
 
 namespace
 {
@@ -16,7 +17,9 @@ namespace vcc
 {
 const vcc::LocalConfigReaderInterface *LocalConfigDefault()
 {
-  static vcc::LocalConfigFileReaderWithFallback instance(kProductionFilePath, kDefaultFilePath);
+  // supports environment override, and if it is missing tries production value, with fallback to vendor/engineering
+  static vcc::LocalConfigFileReaderAndroidIhuBehavior instance(kProductionFilePath, kDefaultFilePath,
+                                                               "VCC_LOCALCONFIG_PATH");
   return &instance;
 }
 }  // namespace vcc
