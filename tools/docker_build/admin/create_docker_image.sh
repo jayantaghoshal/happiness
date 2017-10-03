@@ -8,6 +8,13 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
 CHANGE_ID=$(git log -n 1 | grep Change-Id: | sed -r 's/.*Change-Id: (.*)/\1/')
 IMAGE_NAME=vcc_aosp_build
 
-docker build --label org.label-schema.vcs-ref="${CHANGE_ID}" --label org.label-schema.build-date="${TIMESTAMP}" -t "${IMAGE_NAME}" .
+#collect SWF1 username and password(API) for PYPI access
+echo "Enter your credentials for accessing SWF1_PYPI"
+read -p 'CDSID:' pypi_user
+read -sp 'Password:' pypi_pass
+
+docker build \
+--build-arg swf1_pypi_user="${pypi_user}" --build-arg swf1_pypi_pass="${pypi_pass}" \
+--label org.label-schema.vcs-ref="${CHANGE_ID}" --label org.label-schema.build-date="${TIMESTAMP}" -t "${IMAGE_NAME}" .
 
 popd > /dev/null

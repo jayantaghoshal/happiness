@@ -150,6 +150,13 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
     idna requests urllib3
 
 ##################################################
+# Install VCCCI_MESSAGES python package from SWF1
+ARG swf1_pypi_user
+ARG swf1_pypi_pass
+RUN pip install pika
+RUN pip install --user vccci_messages ci_confighub --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+
+##################################################
 # Clean up apt package information to make image smaller
 RUN  rm -rf /var/lib/apt/lists/*
 
