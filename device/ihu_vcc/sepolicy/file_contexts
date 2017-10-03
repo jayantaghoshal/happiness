@@ -21,3 +21,6 @@
 
 # netns device
 /dev/netns u:object_r:netns_device:s0
+
+#carconfig-updater
+/vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0

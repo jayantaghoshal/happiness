@@ -1,0 +1,5 @@
+#carconfig-updater
+type carconfig-updater, domain;
+type carconfig-updater_exec, exec_type, file_type;
+
+init_daemon_domain(carconfig-updater)
