@@ -6,7 +6,8 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/../Android.mk
 LOCAL_MODULE := VtsLibInfotainmentIpBusTests
 
 LOCAL_SRC_FILES := \
-    testASN1.cpp
+    testASN1.cpp \
+    testCodec.cpp
 
 LOCAL_STATIC_LIBRARIES += \
     libinfotainmentbusasn_static
