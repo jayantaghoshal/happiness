@@ -32,6 +32,18 @@ PRODUCT_COPY_FILES += \
     vendor/volvocars/device/ihu_vcc/ueventd.rc:root/ueventd.${TARGET_PRODUCT}.rc
 
 ##############################################################
+# Hardware permissions on target
+##############################################################
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
+
+##############################################################
+# Config overlay
+##############################################################
+PRODUCT_PACKAGE_OVERLAYS := \
+    vendor/volvocars/overlay
+
+##############################################################
 # Configurations for userdebug and engineering build
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
@@ -42,5 +54,8 @@ endif
 
 ##############################################################
 # VCC required Linux kernel modules
+# TODO (Patrik Moberg) make R8152 module conditional for
+# userdebug and eng only. I e create a userdebug + eng
+# diffconfig variant
 ##############################################################
 KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_diffconfig
