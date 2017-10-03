@@ -1,46 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <notice>One_Android_Ring='0'</notice>
-
-
-  <project name="aosp/device/asus/fugu" path="device/asus/fugu" revision="bce73163dfecdda7f7d7df686533d75d2154b7f0"/>
-  <project name="aosp/device/asus/fugu-kernel" path="device/asus/fugu-kernel" revision="d3d8e99d7c301cd1c62cd874da717ebece9127dc"/>
-  <project name="aosp/device/common" path="device/common" revision="699af187e87bab62db3e8c5189a7fb407da4a0eb"/>
+  <remote fetch="ssh://127.0.1.10:29418/" name="origin" review="127.0.1.10:8081"/>
+  <default remote="origin" revision="oa/gordon_peak_preO_MR1/a81/20170927-2017_ww39" sync-c="true" sync-j="5"/>
+  <project name="aosp/device/asus/fugu" path="device/asus/fugu" revision="0d64c8ec3f08612591ef631adf4362517f036c6a"/>
+  <project name="aosp/device/asus/fugu-kernel" path="device/asus/fugu-kernel" revision="471523e38b26929b80748b1839167d626b410133"/>
+  <project name="aosp/device/common" path="device/common" revision="f87323bed1150074fee5a0ad64d76aaed0c58f00"/>
   <project name="aosp/device/generic/arm64" path="device/generic/arm64" revision="392eec3cb4c64721cd5b76fa36535954b5d45309"/>
-  <project name="aosp/device/generic/armv7-a-neon" path="device/generic/armv7-a-neon" revision="5bcf3068f787ec850de0e142d2b1b7cb6aacf42d"/>
-  <project name="aosp/device/generic/car" path="device/generic/car" revision="fe49187fb27f569d18106d682fa42074e44a0aad"/>
-  <project name="aosp/device/generic/common" path="device/generic/common" revision="11c092a6cbfcf6207f07a9a8e3398e747e7f5461"/>
-  <project name="aosp/device/generic/goldfish" path="device/generic/goldfish" revision="c684946dfc121244d2cd2ee8e01c16c75331c249"/>
-  <project name="aosp/device/generic/goldfish-opengl" path="device/generic/goldfish-opengl" revision="1ed8990955c1b0e96e18301fdc2ca0d7fb12c1a2"/>
+  <project name="aosp/device/generic/armv7-a-neon" path="device/generic/armv7-a-neon" revision="9e96e041bf3c9d5b57b11f921c6339e076478a7a"/>
+  <project name="aosp/device/generic/car" path="device/generic/car" revision="3bd7a5f50b540851c1f50d4d913d5305e0123de3"/>
+  <project name="aosp/device/generic/common" path="device/generic/common" revision="2c7931252728d4964adb72283ae3b51a4cebc5a1"/>
+  <project name="aosp/device/generic/goldfish" path="device/generic/goldfish" revision="bde6602b66905f05971a114f90139f9ba657ac28"/>
+  <project name="aosp/device/generic/goldfish-opengl" path="device/generic/goldfish-opengl" revision="377c1f5c41a19f9dcf814cd05ceca1fc78511c9a"/>
   <project name="aosp/device/generic/lionhead" path="device/generic/lionhead" revision="2632d2f2e3565494e2ee3668e93195dc7bba6128"/>
-  <project name="aosp/device/generic/mini-emulator-arm64" path="device/generic/mini-emulator-arm64" revision="4d6074c8558dfe4a4f5cf8b2b531013f17f190ed"/>
+  <project name="aosp/device/generic/mini-emulator-arm64" path="device/generic/mini-emulator-arm64" revision="77d394326f7fc17831ee7702cb8b750fe0b21443"/>
   <project name="aosp/device/generic/mini-emulator-armv7-a-neon" path="device/generic/mini-emulator-armv7-a-neon" revision="258706fc0ddcf2c9be48967f4766ec90efb736a5"/>
   <project name="aosp/device/generic/mini-emulator-mips" path="device/generic/mini-emulator-mips" revision="544e69736cff911c286a5d1d300dac228e23a73f"/>
   <project name="aosp/device/generic/mini-emulator-mips64" path="device/generic/mini-emulator-mips64" revision="b1c36d0847fe6366527efd38fdb29d757ea887ee"/>
   <project name="aosp/device/generic/mini-emulator-x86" path="device/generic/mini-emulator-x86" revision="65d59e2be2cfd713513a05d80a0f75794ab60579"/>
   <project name="aosp/device/generic/mini-emulator-x86_64" path="device/generic/mini-emulator-x86_64" revision="b62205d75073783e171fbcd5f675e25e57833479"/>
-  <project name="aosp/device/generic/mips" path="device/generic/mips" revision="f907c2d4fa2e4d8a72776524821d62ba34b574e2"/>
-  <project name="aosp/device/generic/mips64" path="device/generic/mips64" revision="555f4394915228b3c56e6e278f7b8cadee054e30"/>
+  <project name="aosp/device/generic/mips" path="device/generic/mips" revision="bf27f9bcb56e483310507f78f0a4b93d3f5499c5"/>
+  <project name="aosp/device/generic/mips64" path="device/generic/mips64" revision="34300f7753b7a9fa2f7ba16bdc1f1fb8625dd4e4"/>
   <project name="aosp/device/generic/qemu" path="device/generic/qemu" revision="97ef4f962aec451b00bfe562c1cb67471c4563d9"/>
-  <project name="aosp/device/generic/x86" path="device/generic/x86" revision="6d4527312735e4edae6e2d10b8087a935fee8be6"/>
+  <project name="aosp/device/generic/uml" path="device/generic/uml" revision="8dfdfa09a42e157cd03a6a940919b41863f00d40"/>
+  <project name="aosp/device/generic/x86" path="device/generic/x86" revision="645e6e711b32f94ecbd9b1cc77a51559dfce5ebe"/>
   <project name="aosp/device/generic/x86_64" path="device/generic/x86_64" revision="506952733fdebb5a2ef086b519ceebe86a95ae31"/>
   <project name="aosp/device/google/accessory/arduino" path="device/google/accessory/arduino" revision="abc5159a3ca9dbb5c7e364a1eab99901a4440ac5"/>
   <project name="aosp/device/google/accessory/demokit" path="device/google/accessory/demokit" revision="7dfe7f89a3b174709c773fe319531006e46440d9"/>
-  <project name="aosp/device/google/atv" path="device/google/atv" revision="35592627c1cc695effe77792f81c19236dad6d9e"/>
-  <project name="aosp/device/google/contexthub" path="device/google/contexthub" revision="152a4cced41b89f6d8f1fc9a795a4d8a2675fc86"/>
-  <project name="aosp/device/google/dragon" path="device/google/dragon" revision="7c0256bde09cf69feb0e1fde74eb54e4c658c9db"/>
-  <project name="aosp/device/google/dragon-kernel" path="device/google/dragon-kernel" revision="085eb7e67c111dac0d227927c1d0e9e0a20c0ceb"/>
-  <project name="aosp/device/huawei/angler" path="device/huawei/angler" revision="b6205eb7ebe3c52af86e49b7f67a612edcffb359"/>
-  <project name="aosp/device/huawei/angler-kernel" path="device/huawei/angler-kernel" revision="026032972371c71fe373c9dfd79ef63ad4d3eca2"/>
-  <project name="aosp/device/lge/bullhead" path="device/lge/bullhead" revision="bd6b753cc8c56b673ef3b9730fbde6b297353aca"/>
-  <project name="aosp/device/lge/bullhead-kernel" path="device/lge/bullhead-kernel" revision="f1ee50abe38ca701756c51797dbc04d0206dd260"/>
-  <project name="aosp/device/linaro/hikey" path="device/linaro/hikey" revision="7164de6f3cb6fc251e35687ade755c49f5cf1ffd"/>
-  <project name="aosp/device/linaro/hikey-kernel" path="device/linaro/hikey-kernel" revision="27076caf8cdf671d3104ae7944e92722909d3946"/>
-  <project name="aosp/device/sample" path="device/sample" revision="ccfd73834d5d5ba0b5da5c7b613a1a3f445a0ade"/>
-  <project name="aosp/platform/art" path="art" revision="8699aa361b345c0c8facba0fb9ee836625d12be0"/>
-  <project name="aosp/platform/bionic" path="bionic" revision="cdb4de74fcb07cbae5f17fcc836f193a9894a939"/>
-  <project name="aosp/platform/bootable/recovery" path="bootable/recovery" revision="3fb995d4a1ceda547fe4bafbaf8eb69685b31409"/>
-  <project name="aosp/platform/build" path="build/make" revision="abbd63632d5e06a04fe99e44db26db212e074736">
+  <project name="aosp/device/google/atv" path="device/google/atv" revision="cf1d46b3470ba7bc975164461a4e205aebb0febb"/>
+  <project name="aosp/device/google/contexthub" path="device/google/contexthub" revision="66cca9f7eb9d3692949d229f89b2704fdab52ea3"/>
+  <project name="aosp/device/google/dragon" path="device/google/dragon" revision="13d7aab40d680027d3abaea63d74b4bc5abe9d68"/>
+  <project name="aosp/device/google/dragon-kernel" path="device/google/dragon-kernel" revision="203d333e0f6b77feb93c3a2d7fb5df05d9a01b2f"/>
+  <project name="aosp/device/google/vrservices" path="device/google/vrservices" revision="b290ba549b38447937773e3698e4678015550684"/>
+  <project name="aosp/device/huawei/angler" path="device/huawei/angler" revision="a7c0a83ef9317db8531e4752006ebccc2a604a1a"/>
+  <project name="aosp/device/huawei/angler-kernel" path="device/huawei/angler-kernel" revision="486671860d28684e33c5ccfcfde311ecae195d37"/>
+  <project name="aosp/device/lge/bullhead" path="device/lge/bullhead" revision="a176c2af8df80803c9e684fca112528e75a8db99"/>
+  <project name="aosp/device/lge/bullhead-kernel" path="device/lge/bullhead-kernel" revision="e157c500bedbf968e82b2f1a08e974a8db99420d"/>
+  <project name="aosp/device/linaro/hikey" path="device/linaro/hikey" revision="35d25a2b3e18d16e7ea92f9689165105e7b3a056"/>
+  <project name="aosp/device/linaro/hikey-kernel" path="device/linaro/hikey-kernel" revision="4da02364ca1db069a9e29bd098ffece7dc1a7c3d"/>
+  <project name="aosp/device/sample" path="device/sample" revision="4215cc619cb207f3151e5b85bab63d95542c1966"/>
+  <project name="aosp/platform/art" path="art" revision="aa58afb25c19b54b7c749b6f4c1550cd1f0977ea"/>
+  <project name="aosp/platform/bionic" path="bionic" revision="b04bdacb98df330debf4b64fd99264028205bc4b"/>
+  <project name="aosp/platform/bootable/recovery" path="bootable/recovery" revision="a138b24c8cbe0bc08a065a488db5c1c5831041e3"/>
+  <project name="aosp/platform/build" path="build/make" revision="f1febed22aa72f0fffd6d752bf0ca8e829fd6f73">
     <copyfile dest="Makefile" src="core/root.mk"/>
     <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk"/>
     <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default"/>
@@ -49,632 +51,645 @@
     <linkfile dest="build/target" src="target"/>
     <linkfile dest="build/tools" src="tools"/>
   </project>
-  <project name="aosp/platform/build/blueprint" path="build/blueprint" revision="4fcacd3d193f1e1dfb0f5a9e818dd895eca45427"/>
-  <project name="aosp/platform/build/kati" path="build/kati" revision="96d5d328567607e88c43cb0d895b86d42d864d5e"/>
-  <project name="aosp/platform/build/soong" path="build/soong" revision="c7ea8b494b5030e82582e039646e1de3bd5bc79a">
+  <project name="aosp/platform/build/blueprint" path="build/blueprint" revision="a011038d864e3faa528ec1037a568e5824955a0f"/>
+  <project name="aosp/platform/build/kati" path="build/kati" revision="51f78826f5d431981903ef82c51bdb868438717d"/>
+  <project name="aosp/platform/build/soong" path="build/soong" revision="432625ee6e2301a362528885ac7e5ad6512010fe">
     <linkfile dest="Android.bp" src="root.bp"/>
     <linkfile dest="bootstrap.bash" src="bootstrap.bash"/>
   </project>
-  <project name="aosp/platform/compatibility/cdd" path="compatibility/cdd" revision="7167db2a226de93dad6ce61d56b73506f4a3d0f2"/>
-  <project name="aosp/platform/cts" path="cts" revision="6efeee3912f16592289e412081b1a487bd604547"/>
-  <project name="aosp/platform/dalvik" path="dalvik" revision="2e250c611bf8578ac88a8c73eef1a1cc1bb9cc6d"/>
-  <project name="aosp/platform/development" path="development" revision="be5d2e1dd93fd5765183624a38149e8c2631b1b2"/>
-  <project name="aosp/platform/docs/source.android.com" path="docs/source.android.com" revision="5009ce88ec839a79664011cf4dd4993d7fc4ad2c"/>
-  <project name="aosp/platform/external/ImageMagick" path="external/ImageMagick" revision="6d5e443d5f090be54f0f1623171bf83102c0e688"/>
+  <project name="aosp/platform/compatibility/cdd" path="compatibility/cdd" revision="500e2e0fa96a6eeb5f9dbe415627f4e7cc31270a"/>
+  <project name="aosp/platform/cts" path="cts" revision="8add2f3e4b0f103a50535b2d2038cc84d2aa6083"/>
+  <project name="aosp/platform/dalvik" path="dalvik" revision="b5ec36048efd1925ea099951da8aff99c31d1d73"/>
+  <project name="aosp/platform/development" path="development" revision="20195a0c79182653a039089e2d4b9f3974cb1333"/>
+  <project name="aosp/platform/docs/source.android.com" path="docs/source.android.com" revision="f99a8b31cc407b186dedf0d3bc0c73735995e112"/>
+  <project name="aosp/platform/external/ImageMagick" path="external/ImageMagick" revision="5691a8ecaba367d04b2c2a13ec1e9e05f4f17b7c"/>
   <project name="aosp/platform/external/Microsoft-GSL" path="external/Microsoft-GSL" revision="c7231a8b061cb44839292cf4de1aa2b8d3fc165f"/>
-  <project name="aosp/platform/external/aac" path="external/aac" revision="47dd0b45892a39c9a8b3822745dddb255c3886c4"/>
-  <project name="aosp/platform/external/abi-compliance-checker" path="external/abi-compliance-checker" revision="cb79211e8f7b3b771e4b658a116d0c4e67798863"/>
-  <project name="aosp/platform/external/abi-dumper" path="external/abi-dumper" revision="6151e386f2d930d2f4b227a065982efc9a9d101c"/>
-  <project name="aosp/platform/external/adt-infra" path="external/adt-infra" revision="69d21850d226efc118f7a7353e1a4d366f039c7e"/>
-  <project name="aosp/platform/external/android-clat" path="external/android-clat" revision="42cc91f16023b89ce6da3d7759495fed50f8aff1"/>
+  <project name="aosp/platform/external/aac" path="external/aac" revision="ba14cc5ce9ae6fc7e7211e1a6eb334973a889679"/>
+  <project name="aosp/platform/external/abi-compliance-checker" path="external/abi-compliance-checker" revision="5453ac991183dc8dc856e8beced059edab94acaf"/>
+  <project name="aosp/platform/external/abi-dumper" path="external/abi-dumper" revision="73ee623ee0707f3c741fedf181e19224d0422003"/>
+  <project name="aosp/platform/external/adt-infra" path="external/adt-infra" revision="09f9d910259cebfaf6547a53c1bd5a783b1ef2f3"/>
+  <project name="aosp/platform/external/android-clat" path="external/android-clat" revision="c38b324ab31ae82cef8fe6d6f5621950b7f007d1"/>
   <project name="aosp/platform/external/androidplot" path="external/androidplot" revision="c66727ebf001607cee14521c35bc852b55fd9845"/>
   <project name="aosp/platform/external/ant-glob" path="external/ant-glob" revision="a73228afa9540b9c5518d360c5ae630bb634f975"/>
   <project name="aosp/platform/external/antlr" path="external/antlr" revision="dd5fa6d48b827c5d98b625adbc209f4a05567534"/>
   <project name="aosp/platform/external/apache-commons-math" path="external/apache-commons-math" revision="18f62fca59d387e3c1ccd8f80087d9c9af40bcc8"/>
-  <project name="aosp/platform/external/apache-harmony" path="external/apache-harmony" revision="80f5d2798aba89963a9a260c29f5a7928e0fb648"/>
-  <project name="aosp/platform/external/apache-http" path="external/apache-http" revision="4f1eab48da53c3770282a9b19fc5b03168cae86e"/>
+  <project name="aosp/platform/external/apache-harmony" path="external/apache-harmony" revision="6f5ec3589aca45d3c7cd914005c49594890bb7b0"/>
+  <project name="aosp/platform/external/apache-http" path="external/apache-http" revision="1ceb2520c083757f2dece994b3bd25ede66faac4"/>
   <project name="aosp/platform/external/apache-xml" path="external/apache-xml" revision="31d7642eb8f37a9166db7f1c9e313ab651bdb8ba"/>
-  <project name="aosp/platform/external/archive-patcher" path="external/archive-patcher" revision="984d99fd928ea4ccd1d7d6be02b112b06310d029"/>
-  <project name="aosp/platform/external/autotest" path="external/autotest" revision="f8c2349d1e13b7924e3052c8c48d34c945c91ed3"/>
-  <project name="aosp/platform/external/avb" path="external/avb" revision="2afa76e8859a39cf0ef2b2f96ff092f6ee440a41"/>
+  <project name="aosp/platform/external/archive-patcher" path="external/archive-patcher" revision="12aea8c52797a0737cec47ace88c00cf87a1ebfc"/>
+  <project name="aosp/platform/external/autotest" path="external/autotest" revision="3433323919c21c648262f82306fa224e9703f3dd"/>
+  <project name="aosp/platform/external/avb" path="external/avb" revision="01d724ab7f418a546aa6951c6f78716caeb8b6ce"/>
+  <project name="aosp/platform/external/bart" path="external/bart" revision="232e1a3fdc810f60aedda0e58cd95e47296e0335"/>
   <project name="aosp/platform/external/bison" path="external/bison" revision="7467d52af437dd3dfea237a6865ab84bf258dee0"/>
   <project name="aosp/platform/external/blktrace" path="external/blktrace" revision="d345431f16b8f76f30a58193ff2b26d5853e1109"/>
-  <project name="aosp/platform/external/boringssl" path="external/boringssl" revision="2858dc8fc7c7e39fa4e4f42e5ad1bce3b1a29ad7"/>
-  <project name="aosp/platform/external/bouncycastle" path="external/bouncycastle" revision="95f2c3e39e67403fbcaa30b3a2ac95c97b131cbd"/>
-  <project name="aosp/platform/external/bsdiff" path="external/bsdiff" revision="a8ffb7a5f74684f993d1cd6058aa8871fddd2c59"/>
-  <project name="aosp/platform/external/bzip2" path="external/bzip2" revision="ba3e19c9a567b8fad665936f2b08d5a265861b49"/>
+  <project name="aosp/platform/external/boringssl" path="external/boringssl" revision="d3a4c5684f96eac702d8d34159cf4592d2e18eea"/>
+  <project name="aosp/platform/external/bouncycastle" path="external/bouncycastle" revision="ebf50b6ec1ab2e6a6927f9590b63429ecc5dd0f8"/>
+  <project name="aosp/platform/external/brotli" path="external/brotli" revision="49144a2ca89201605b6b053176c3d8a5546deebc"/>
+  <project name="aosp/platform/external/bsdiff" path="external/bsdiff" revision="1e1767e6fc54db916faf0020e4379756dcc45b9b"/>
+  <project name="aosp/platform/external/bzip2" path="external/bzip2" revision="55bdb20ae48dd0a5afd32d61ab05619d077602a3"/>
   <project name="aosp/platform/external/c-ares" path="external/c-ares" revision="9f1b2827cb88c58a80c470a4bddb2485677ec57f"/>
-  <project name="aosp/platform/external/caliper" path="external/caliper" revision="4c8faefc7ec6ad578ee09c031006bff663c6cc45"/>
-  <project name="aosp/platform/external/cblas" path="external/cblas" revision="53ffe068d9bf5f9b0507a659159dab7bd9c18a49"/>
-  <project name="aosp/platform/external/chromium-libpac" path="external/chromium-libpac" revision="8cdb94f0b2cf0923f65947880adda639c17f8fa9"/>
-  <project name="aosp/platform/external/chromium-trace" path="external/chromium-trace" revision="a0e5c0de428e9dea6d07dd57c5594fb1f1c17c20"/>
-  <project name="aosp/platform/external/chromium-webview" path="external/chromium-webview" revision="b77452f998052ac775162a091740965cc3c4c4d9"/>
-  <project name="aosp/platform/external/clang" path="external/clang" revision="a15c5ee6c8d1dc10ff2c3a0baac850c0c6b1871d"/>
+  <project name="aosp/platform/external/caliper" path="external/caliper" revision="4a0d9aba0856d0aa965d5653bfa4c138f0e8a8ba"/>
+  <project name="aosp/platform/external/cblas" path="external/cblas" revision="d063db8bdddfcde61e4bad3bfe65941fd73e8094"/>
+  <project name="aosp/platform/external/chromium-libpac" path="external/chromium-libpac" revision="8c47eebd81c996f17198edb2fa504c04d48d567e"/>
+  <project name="aosp/platform/external/chromium-trace" path="external/chromium-trace" revision="fdf14d74dd9791b38c8c02a914b7c9c173188872"/>
+  <project name="aosp/platform/external/chromium-webview" path="external/chromium-webview" revision="e70bf35caa2a1f04f25f462bf4b12da1a9db08a2"/>
+  <project name="aosp/platform/external/clang" path="external/clang" revision="751a76679b0fb5798ea6cab75906df07edcab315"/>
   <project name="aosp/platform/external/cmockery" path="external/cmockery" revision="9199c7bfafefea32d1884182fa655b6e4578c1c4"/>
-  <project name="aosp/platform/external/compiler-rt" path="external/compiler-rt" revision="36753a078164af788a3ca1ab4679b805f8dafb93"/>
-  <project name="aosp/platform/external/conscrypt" path="external/conscrypt" revision="d4ac6e2421fb8f48595a9ede79a4186a60619603"/>
+  <project name="aosp/platform/external/compiler-rt" path="external/compiler-rt" revision="0c46c9e892a3f68420635032ef2f6152dabd197c"/>
+  <project name="aosp/platform/external/conscrypt" path="external/conscrypt" revision="db517b15f873efb9f2b65ef938858610b610f00e"/>
   <project name="aosp/platform/external/crcalc" path="external/crcalc" revision="5559610bea3b267abef3273868f2d6b8c01409a5"/>
-  <project name="aosp/platform/external/cros/system_api" path="external/cros/system_api" revision="809b7dcc7e950759f4529d083a93389ce4e8c7de"/>
-  <project name="aosp/platform/external/curl" path="external/curl" revision="5662ebf88890d4749254f34e26b727803afdcb7b"/>
-  <project name="aosp/platform/external/dagger2" path="external/dagger2" revision="0fff30dbb251d3696a06a5ca2baf61bffaff8363"/>
-  <project name="aosp/platform/external/deqp" path="external/deqp" revision="b9870772b3f93d2a237599b50fe7e9f96adb75bc"/>
-  <project name="aosp/platform/external/desugar" path="external/desugar" revision="15f7ee99fc1ab14277834594e0848aeebb1d3e31"/>
-  <project name="aosp/platform/external/dexmaker" path="external/dexmaker" revision="e7776b02e1ec7fec9e4721f4466a5362529c173f"/>
+  <project name="aosp/platform/external/cros/system_api" path="external/cros/system_api" revision="ad8426b3192ec527c2ad6287aeef0e012757e4a0"/>
+  <project name="aosp/platform/external/curl" path="external/curl" revision="ea236a4c433611b55e6cb3a690677771ad4d3f37"/>
+  <project name="aosp/platform/external/dagger2" path="external/dagger2" revision="50daa982cc79418c6b9686d13e447cca1aa6cdea"/>
+  <project name="aosp/platform/external/deqp" path="external/deqp" revision="ee6eb7575b88df5b3fdb89167a3216b75f7e9360"/>
+  <project name="aosp/platform/external/desugar" path="external/desugar" revision="2aa9e2e0961b71f8312e8b88f26354fa8c83de19"/>
+  <project name="aosp/platform/external/devlib" path="external/devlib" revision="0d8ffa979098c9e1bf8eb0f1c76cfbd5df1324cc"/>
+  <project name="aosp/platform/external/dexmaker" path="external/dexmaker" revision="e62dfc0cb516ce70d9b8337a81a585da66c6b88e"/>
   <project name="aosp/platform/external/dhcpcd-6.8.2" path="external/dhcpcd-6.8.2" revision="54d1fc2d574d21f788abb64b10c9a6352eba0b65"/>
   <project name="aosp/platform/external/dlmalloc" path="external/dlmalloc" revision="6661f3ca66b55d8f5a57b96fec97efaf8f3897a5"/>
-  <project name="aosp/platform/external/dng_sdk" path="external/dng_sdk" revision="db570e5785b42bca84779865ae2064e51915f65e"/>
-  <project name="aosp/platform/external/dnsmasq" path="external/dnsmasq" revision="82519d70ba066ba43452f7562155d17287b6c4c9"/>
-  <project name="aosp/platform/external/doclava" path="external/doclava" revision="7971b4a74e0e254d1412f52a095ae7ebb1417dc9"/>
+  <project name="aosp/platform/external/dng_sdk" path="external/dng_sdk" revision="9bbc04196faa97b8b7df2ec6b997a7109a8a209c"/>
+  <project name="aosp/platform/external/dnsmasq" path="external/dnsmasq" revision="203439e43de07fe4c60264b0722b9bf5256be437"/>
+  <project name="aosp/platform/external/doclava" path="external/doclava" revision="f8c9b6c5dd536c5ad3b995be77f7189ca08ae345"/>
   <project name="aosp/platform/external/donuts" path="external/donuts" revision="005389fb31a67841b5de42f0d25fbfab843e208c"/>
-  <project name="aosp/platform/external/drm_gralloc" path="external/drm_gralloc" revision="f2936dc85a5f92d4dcdfa7b46066c9cd64086720"/>
-  <project name="aosp/platform/external/drm_hwcomposer" path="external/drm_hwcomposer" revision="f855ecf217ef686e2bda6a8208faff4635a26cd5"/>
-  <project name="aosp/platform/external/droiddriver" path="external/droiddriver" revision="3f1d5e61500d1898f4431e5e00a1ebd732fd9404"/>
-  <project name="aosp/platform/external/dtc" path="external/dtc" revision="2d5e8f2de4af4f7975274957acacbcecf2fb36ef"/>
-  <project name="aosp/platform/external/e2fsprogs" path="external/e2fsprogs" revision="09fddd4752b0ca3038a830c4c1aa527c770295a2"/>
-  <project name="aosp/platform/external/easymock" path="external/easymock" revision="8bc2748f2850c88ab6b86c6ceed1ce65bed5ee16"/>
-  <project name="aosp/platform/external/eclipse-basebuilder" path="external/eclipse-basebuilder" revision="076f46888ed346775b8efc564d7694063ef5eea7"/>
-  <project name="aosp/platform/external/eclipse-windowbuilder" path="external/eclipse-windowbuilder" revision="c533332008088ee5f61745b724361fbde5b7e770"/>
-  <project name="aosp/platform/external/eigen" path="external/eigen" revision="e648fd8a55e643e5a0db68220352e7b5f4287e25"/>
+  <project name="aosp/platform/external/drm_hwcomposer" path="external/drm_hwcomposer" revision="ff9b7ec9eef776079be91dbac2d0b1ed533ce775"/>
+  <project name="aosp/platform/external/droiddriver" path="external/droiddriver" revision="6a3bdec535b24fc8c1af205a6a2986f881535d2d"/>
+  <project name="aosp/platform/external/drrickorang" path="external/drrickorang" revision="23d02aa32f580d03680aa8f0a62afbb4c915e669"/>
+  <project name="aosp/platform/external/dtc" path="external/dtc" revision="a7e2c24a2f1df4a73c75f5a84a671c59c1089e63"/>
+  <project name="aosp/platform/external/e2fsprogs" path="external/e2fsprogs" revision="b2445b577156fddcd658e415ad82ab2e851d13a5"/>
+  <project name="aosp/platform/external/easymock" path="external/easymock" revision="ae369e1738f81cbcf6118adac03ec0e8bcbb8400"/>
+  <project name="aosp/platform/external/eigen" path="external/eigen" revision="364389e897d64ab9abe9d3d027c608e46df354e8"/>
   <project name="aosp/platform/external/elfutils" path="external/elfutils" revision="f1f212563ee672a1eca4238a5cc6ff1e969ec071"/>
   <project name="aosp/platform/external/emma" path="external/emma" revision="deb5711b2635ee9d332605e2e00b63b32bed6777"/>
   <project name="aosp/platform/external/esd" path="external/esd" revision="943c42b6f8e9afe821744aa4c039f4943ebf29f5"/>
-  <project name="aosp/platform/external/expat" path="external/expat" revision="cea41540d6f933a456d7ce815fc1c5aff9f69f2f"/>
+  <project name="aosp/platform/external/expat" path="external/expat" revision="b8f484c31a840e919d202af03fa00df92e4fd40f"/>
   <project name="aosp/platform/external/eyes-free" path="external/eyes-free" revision="16bd4c7a4d1bfe229068b637614dad7c48dd2ceb"/>
-  <project name="aosp/platform/external/f2fs-tools" path="external/f2fs-tools" revision="a32b1b97037bc6b7b3bd47dcf2a84ac599725f6a"/>
+  <project name="aosp/platform/external/f2fs-tools" path="external/f2fs-tools" revision="bf78928621b377de32e3b4be8eb400cda18ae5d4"/>
   <project name="aosp/platform/external/fdlibm" path="external/fdlibm" revision="fcd17254a9e59ceb0420d4a2faf29db6b004c443"/>
   <project name="aosp/platform/external/fec" path="external/fec" revision="1be76f512a85176bf5c59b6b9acf88a38f4895c8"/>
-  <project name="aosp/platform/external/fio" path="external/fio" revision="872c6e685a978f8c9a497e567a7ed5001c172f3e"/>
-  <project name="aosp/platform/external/flac" path="external/flac" revision="c774eb42a138ff5b0c8f7a8aabb70330b7307b25"/>
+  <project name="aosp/platform/external/fio" path="external/fio" revision="844e05b041d7c9b5617a101ea83ad1d8bd982139"/>
+  <project name="aosp/platform/external/flac" path="external/flac" revision="22d1581f2981107bfe2ee8ea9a45e3fccd0db4a2"/>
+  <project name="aosp/platform/external/flatbuffers" path="external/flatbuffers" revision="83d6225e9b642ea069023e45a943d3e7f916fb62"/>
   <project name="aosp/platform/external/fmtlib" path="external/fmtlib" revision="f4d6768e2595b881a146e41e275f77203db9bc56"/>
   <project name="aosp/platform/external/fonttools" path="external/fonttools" revision="fede58680958e96e6e8f61c3cc6282f798452c53"/>
-  <project name="aosp/platform/external/freetype" path="external/freetype" revision="15d9b7f880e25bdbf2126afd335795ac38bb4499"/>
+  <project name="aosp/platform/external/freetype" path="external/freetype" revision="1397453b0923c953107b70286d2308ce00ab6a72"/>
   <project name="aosp/platform/external/fsck_msdos" path="external/fsck_msdos" revision="4103a4ab7d45b439b4f7297a2129a1ca45ec91dd"/>
-  <project name="aosp/platform/external/gemmlowp" path="external/gemmlowp" revision="583dbde5c404a50ccc0180a963e0af3b8130d41a"/>
-  <project name="aosp/platform/external/giflib" path="external/giflib" revision="35418eae036ff745837b1098ab8d4c606ea577d5"/>
-  <project name="aosp/platform/external/glide" path="external/glide" revision="31e64acd1e65045471124267a06241eff1f55d26"/>
+  <project name="aosp/platform/external/gemmlowp" path="external/gemmlowp" revision="c42f5705d21dae835388d15dd1106028002e66c6"/>
+  <project name="aosp/platform/external/giflib" path="external/giflib" revision="db6d1840bcd6c13cc41456835127d6d7d1b0694c"/>
+  <project name="aosp/platform/external/glide" path="external/glide" revision="bb5ad30aaff77d3e7226133b98c434e9f9cc1a45"/>
   <project name="aosp/platform/external/google-api-services-storage" path="external/google-api-services-storage" revision="29b36ffc866ec32ea01f92ab55100f16bb4b2157"/>
-  <project name="aosp/platform/external/google-benchmark" path="external/google-benchmark" revision="483d43f5f689ce1ea8d864e24fb106c73d24080b"/>
+  <project name="aosp/platform/external/google-benchmark" path="external/google-benchmark" revision="1df04fb57e1320088dc6529eaa55aee379a1f46c"/>
   <project name="aosp/platform/external/google-breakpad" path="external/google-breakpad" revision="4125ccd15f21dbae3d521d0298ce90f1fbc29bdb"/>
   <project name="aosp/platform/external/google-fonts/carrois-gothic-sc" path="external/google-fonts/carrois-gothic-sc" revision="0062a10458d4c357f3082d66bcb129d11913aaae"/>
   <project name="aosp/platform/external/google-fonts/coming-soon" path="external/google-fonts/coming-soon" revision="2c5cb418c690815545bbb0316eae5fd33b9fc859"/>
   <project name="aosp/platform/external/google-fonts/cutive-mono" path="external/google-fonts/cutive-mono" revision="bce2136662854076023066602526ba299e6556b2"/>
   <project name="aosp/platform/external/google-fonts/dancing-script" path="external/google-fonts/dancing-script" revision="7b6623bd54cee3e48ae8a4f477f616366643cc78"/>
-  <project name="aosp/platform/external/google-tv-pairing-protocol" path="external/google-tv-pairing-protocol" revision="7a5b2c7bd1f6c7847fa2dad591788177a59d6f74"/>
-  <project name="aosp/platform/external/googletest" path="external/googletest" revision="f1c590a8e5b13d85d7d92cdd675b47f6ed38003d"/>
-  <project name="aosp/platform/external/gptfdisk" path="external/gptfdisk" revision="6d5a8afcca9976206de55ff73e75f7129693314a"/>
-  <project name="aosp/platform/external/guava" path="external/guava" revision="773c486dafc60161bcae293de4a1c53d8c62a176"/>
+  <project name="aosp/platform/external/google-tv-pairing-protocol" path="external/google-tv-pairing-protocol" revision="c731915e80d9e2ccb755b97e7fdd280bbea07f70"/>
+  <project name="aosp/platform/external/googletest" path="external/googletest" revision="f786916e6f2211c6a64d0333897702463cfdf779"/>
+  <project name="aosp/platform/external/gptfdisk" path="external/gptfdisk" revision="961666278ec6fa9ea2d61b49454bfbfae13c93e5"/>
+  <project name="aosp/platform/external/guava" path="external/guava" revision="96219ea8667672fb9de4908f2ad09329b4cbaabb"/>
   <project name="aosp/platform/external/guice" path="external/guice" revision="2f4c6dfce39d38e64a6e4993a808270e16d7dc1b"/>
-  <project name="aosp/platform/external/hamcrest" path="external/hamcrest" revision="58071a32e4c337735e837a28b67fd49a22c81c8e"/>
-  <project name="aosp/platform/external/harfbuzz_ng" path="external/harfbuzz_ng" revision="78cf924f353c4ef381fac5c6c51cacbae11f2fad"/>
-  <project name="aosp/platform/external/hyphenation-patterns" path="external/hyphenation-patterns" revision="ff853262e0f613e0ba2f677ae8b1f155544bb2ed"/>
-  <project name="aosp/platform/external/icu" path="external/icu" revision="16841ce31f9f611e40e61bb6a39aa87964b3e771"/>
-  <project name="aosp/platform/external/ims" path="external/ims" revision="54b7a780d13c9094e1b20c3c24b612ce09b6c893"/>
-  <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="705d145399cc090d19356b14eaa4543509ca6b5e"/>
-  <project name="aosp/platform/external/ipsec-tools" path="external/ipsec-tools" revision="5f6d228725cc2ef98f14e9bd8081cc2ae7d42f42"/>
-  <project name="aosp/platform/external/iptables" path="external/iptables" revision="655ab485cdb405b3ef3576e096ea585baa40d9f2"/>
-  <project name="aosp/platform/external/iputils" path="external/iputils" revision="b040eb07a270166190dcaa3920a637c2ea383970"/>
+  <project name="aosp/platform/external/hamcrest" path="external/hamcrest" revision="2c2a845e1e8fdda704e4f2ccaa335d69d043ebf3"/>
+  <project name="aosp/platform/external/harfbuzz_ng" path="external/harfbuzz_ng" revision="87f1c7be2c9003b3591a23206d705b6a62b90ae3"/>
+  <project name="aosp/platform/external/hyphenation-patterns" path="external/hyphenation-patterns" revision="aae78c0ed48f3d5ac383d2492af14d81527ac1a8"/>
+  <project name="aosp/platform/external/icu" path="external/icu" revision="2025bbb9b83054a957023f2803a0675a2dc75934"/>
+  <project name="aosp/platform/external/ims" path="external/ims" revision="129b42af2b04a39da53df8da5031526c9a432cc8"/>
+  <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="b6210f9b7f4e7355b04b5298af41f6598876c036"/>
+  <project name="aosp/platform/external/ipsec-tools" path="external/ipsec-tools" revision="16477a409310e8daa3ec5c8ecaa7a2f2d471fb93"/>
+  <project name="aosp/platform/external/iptables" path="external/iptables" revision="00ddcc82b12d8d54a12f6225996efda199919f23"/>
+  <project name="aosp/platform/external/iputils" path="external/iputils" revision="dad856323d1bba2f4518918c27e67c2433d9b9da"/>
   <project name="aosp/platform/external/iw" path="external/iw" revision="63d8bad2a5a8a9b443595762233692c5f6a6d36b"/>
-  <project name="aosp/platform/external/jacoco" path="external/jacoco" revision="6480b3453dca08bece4da67290b79a84c9f2dbc6"/>
-  <project name="aosp/platform/external/jarjar" path="external/jarjar" revision="7290f97b5d5d668d2d5c11249d130728ea8ea326"/>
+  <project name="aosp/platform/external/jacoco" path="external/jacoco" revision="503a120329864b158ed72a07e21155b18e709c21"/>
+  <project name="aosp/platform/external/jarjar" path="external/jarjar" revision="78baf98a5c45dfd99d4d2e6d8a3ad392780219fd"/>
   <project name="aosp/platform/external/javasqlite" path="external/javasqlite" revision="ee41d81872eedc632f42bd231b95bc945690d159"/>
   <project name="aosp/platform/external/javassist" path="external/javassist" revision="f7c4b954072e563b75f6910c25bb689bbf38a3d1"/>
   <project name="aosp/platform/external/jcommander" path="external/jcommander" revision="501341b4efff9c378ac4003899dd064586231550"/>
-  <project name="aosp/platform/external/jdiff" path="external/jdiff" revision="c333235b06c7eec59d6a0d673105b63d77176dfa"/>
-  <project name="aosp/platform/external/jemalloc" path="external/jemalloc" revision="b43ab5d1ba0c131ac0fbf5136c2bfd2bcd5df959"/>
+  <project name="aosp/platform/external/jdiff" path="external/jdiff" revision="9512d1462bf4c3e50a20b177ed54e62442bb0812"/>
+  <project name="aosp/platform/external/jemalloc" path="external/jemalloc" revision="039fa326eb20034d110c4af50efbfc44be1e9d41"/>
   <project name="aosp/platform/external/jline" path="external/jline" revision="74812032f8d8eddbef387f18c96de9e5c38b8fdb"/>
   <project name="aosp/platform/external/jmdns" path="external/jmdns" revision="0c71647deb7f7835c473fd3dfb45943083e47794"/>
   <project name="aosp/platform/external/jsilver" path="external/jsilver" revision="b9b84920ba47ddf7f15baa01c56b28e3d3f951ea"/>
-  <project name="aosp/platform/external/jsmn" path="external/jsmn" revision="35887e6796b73ca8ebbf90d5c5f300899fa1464e"/>
-  <project name="aosp/platform/external/jsoncpp" path="external/jsoncpp" revision="37adfc061603e16fe90709c2ea72af932f76dd7c"/>
+  <project name="aosp/platform/external/jsmn" path="external/jsmn" revision="dcf45032132d2991929b93fe18de2b5d164bdf11"/>
+  <project name="aosp/platform/external/jsoncpp" path="external/jsoncpp" revision="ada32487313a4bf9aa7f6aaa5625f584d713fcfc"/>
   <project name="aosp/platform/external/jsr305" path="external/jsr305" revision="f162f4b5d952208e4b6e0a7b2e1bf01058e429b4"/>
   <project name="aosp/platform/external/jsr330" path="external/jsr330" revision="d15be3f228885ce6ed2098ff2dcbf6c1085d83ba"/>
-  <project name="aosp/platform/external/junit" path="external/junit" revision="c0fd71ef9e4fe8f821fe3d41829d14eb2cfd0dd5"/>
-  <project name="aosp/platform/external/junit-params" path="external/junit-params" revision="af2411168919bcf33aded774058a84d921e85c7e"/>
+  <project name="aosp/platform/external/junit" path="external/junit" revision="df26755a810a785f3ebf21b8aaff6769076f035f"/>
+  <project name="aosp/platform/external/junit-params" path="external/junit-params" revision="8750d8607f95f266a3aeed5dc16d032621f9f40f"/>
   <project name="aosp/platform/external/kernel-headers" path="external/kernel-headers" revision="3d5032f6a22aa4c6de0000400379c4ccccbe31bd"/>
   <project name="aosp/platform/external/kmod" path="external/kmod" revision="4082ee0d1ad5ce92c5ea6fdc5ca08e89cdd9801d"/>
   <project name="aosp/platform/external/ksoap2" path="external/ksoap2" revision="9fdc4a6bb2b882bd1d6c822d2ad0c66585d66ba9"/>
-  <project name="aosp/platform/external/libavc" path="external/libavc" revision="0627bf040576a7bdebfdb430c6d9a49e33bc50e9"/>
-  <project name="aosp/platform/external/libbrillo" path="external/libbrillo" revision="1b53b72c32007d235c83e81b14525d6302bff337"/>
-  <project name="aosp/platform/external/libcap" path="external/libcap" revision="1432b9d3bec7178ca0734c010de91b28dfd76e28"/>
+  <project name="aosp/platform/external/libavc" path="external/libavc" revision="cef797acf0ee6742c69f8dacce4c4d43d3bedb52"/>
+  <project name="aosp/platform/external/libbackup" path="external/libbackup" revision="a645153b0a97663636bacdc5527c0d304fa79657"/>
+  <project name="aosp/platform/external/libbrillo" path="external/libbrillo" revision="c3f3f9e302aaefdfc86cef854a2caa6751b436c7"/>
+  <project name="aosp/platform/external/libcap" path="external/libcap" revision="1d411da723596f52a3110c9974bde9738ad5227b"/>
   <project name="aosp/platform/external/libcap-ng" path="external/libcap-ng" revision="835f318b9785a70415980fba96c34ee5c6b7e415"/>
-  <project name="aosp/platform/external/libchrome" path="external/libchrome" revision="63dbdfc9c0c2140328bca1f5662d8764af8a8f0d"/>
-  <project name="aosp/platform/external/libconstrainedcrypto" path="external/libconstrainedcrypto" revision="fca75c837bebfbd51927156158de36fc517742f7"/>
-  <project name="aosp/platform/external/libcups" path="external/libcups" revision="cbb7946eb39b3ac6c0b60b6b30dd63178594300e"/>
-  <project name="aosp/platform/external/libcxx" path="external/libcxx" revision="d2ee63bf5067ac6deb314d0de69fa63d38796161"/>
-  <project name="aosp/platform/external/libcxxabi" path="external/libcxxabi" revision="90e377618604643527257be33da65469282b19ed"/>
+  <project name="aosp/platform/external/libchrome" path="external/libchrome" revision="cb67332318a8f00c01c6a3627d84a1b247bd18d9"/>
+  <project name="aosp/platform/external/libconstrainedcrypto" path="external/libconstrainedcrypto" revision="c9d382f591a818ce0ac4711f90bc358ed584c5bb"/>
+  <project name="aosp/platform/external/libcups" path="external/libcups" revision="458f980c94e8fc9bb5272b8e293bff9a69513f05"/>
+  <project name="aosp/platform/external/libcxx" path="external/libcxx" revision="86a195a7931405a349ee481a6501a766c08abbc4"/>
+  <project name="aosp/platform/external/libcxxabi" path="external/libcxxabi" revision="38609d8f315f76762e944c62bb4aa54b52ee5aaf"/>
   <project name="aosp/platform/external/libdaemon" path="external/libdaemon" revision="e2f604066d97431c95856c73d7b9ee46b348d37e"/>
   <project name="aosp/platform/external/libdivsufsort" path="external/libdivsufsort" revision="2a896e7033ced391c57ec46c1d772b15417621a4"/>
-  <project name="aosp/platform/external/libdrm" path="external/libdrm" revision="bf630f68179186019d8744adf83151acb0d2f3b2"/>
+  <project name="aosp/platform/external/libdrm" path="external/libdrm" revision="401cff4afaf7198ea54c086cad6305f987afb940"/>
   <project name="aosp/platform/external/libedit" path="external/libedit" revision="67e14dfc833aafa400a3aad8cb329cbaec503445"/>
-  <project name="aosp/platform/external/libese" path="external/libese" revision="0270b4bbf7d57e76c22b8c452142ecb89d4bc6ca"/>
-  <project name="aosp/platform/external/libevent" path="external/libevent" revision="58028d58cd1d8f8e44ef724f684b0bda42d5a155"/>
-  <project name="aosp/platform/external/libexif" path="external/libexif" revision="1689c992265c8f0682a361bbc84f239109a0dc75"/>
-  <project name="aosp/platform/external/libgdx" path="external/libgdx" revision="732653fbfd27a1a6c3b56eb7eb3fa460ef1cf7bf"/>
-  <project name="aosp/platform/external/libgsm" path="external/libgsm" revision="ea0db058810275c21fbf51f8487e0a1f8438a56b"/>
-  <project name="aosp/platform/external/libhevc" path="external/libhevc" revision="18beaf9442c5dd8daa759a624face5d7604b36c4"/>
-  <project name="aosp/platform/external/libjpeg-turbo" path="external/libjpeg-turbo" revision="8a28cdbb2ea206f0d4d0f8edeff55eab05470119"/>
-  <project name="aosp/platform/external/libldac" path="external/libldac" revision="4ff2da9943fa4b61f1ec5d7f06820503f53a16f5"/>
+  <project name="aosp/platform/external/libese" path="external/libese" revision="56a64a38e4dbbf228c92d9184169fe152edd157b"/>
+  <project name="aosp/platform/external/libevent" path="external/libevent" revision="a4c747362f2f0dcc126b7775ecc30a1aada19613"/>
+  <project name="aosp/platform/external/libexif" path="external/libexif" revision="a64e1fb34d12ef69c9774b351b801681d3466928"/>
+  <project name="aosp/platform/external/libgsm" path="external/libgsm" revision="5e0e72ca6c6ffc423ea1f755262d413e899c6a89"/>
+  <project name="aosp/platform/external/libhevc" path="external/libhevc" revision="433d58dd2347e01ce0f70f3e9a2f808f621ee9f4"/>
+  <project name="aosp/platform/external/libjpeg-turbo" path="external/libjpeg-turbo" revision="5bd74b2eca37a941360644f6cc8b11e4dc992253"/>
+  <project name="aosp/platform/external/libldac" path="external/libldac" revision="b1f61dd0e5639572bcc08b0e281337878bbf1b98"/>
   <project name="aosp/platform/external/liblzf" path="external/liblzf" revision="a88b9629447deabe8697d2f8fd4cc70aa6e1b563"/>
   <project name="aosp/platform/external/libmicrohttpd" path="external/libmicrohttpd" revision="1e68f5d827a859ba3b7ab6a70a60247e0b96afa5"/>
-  <project name="aosp/platform/external/libmojo" path="external/libmojo" revision="5925dcbfbb85e3a424af0c45a1252cc5667c1111"/>
-  <project name="aosp/platform/external/libmpeg2" path="external/libmpeg2" revision="25218e3a96e9650abe6835d06ba73ad5e6c52715"/>
-  <project name="aosp/platform/external/libmtp" path="external/libmtp" revision="7ed2065db3ab9851f47426f3a35ba7045ce528b2"/>
-  <project name="aosp/platform/external/libnetfilter_conntrack" path="external/libnetfilter_conntrack" revision="309c9925499d76705157722393680e3d6a054c24"/>
-  <project name="aosp/platform/external/libnfnetlink" path="external/libnfnetlink" revision="615cfe9252e0be626d6b575ec67cc8ccb1c8b39b"/>
-  <project name="aosp/platform/external/libnl" path="external/libnl" revision="bd7a0676292e38df2c9be0d9af7f06d381491ffb"/>
-  <project name="aosp/platform/external/libogg" path="external/libogg" revision="6dba790f3372d03eee07c693789166ca9fa07b0a"/>
-  <project name="aosp/platform/external/libopus" path="external/libopus" revision="2a6d9ad3996763b215d05c803f8c8097584383c0"/>
-  <project name="aosp/platform/external/libpcap" path="external/libpcap" revision="461773e6a373872bf933b8b7664da3cc386fb546"/>
-  <project name="aosp/platform/external/libphonenumber" path="external/libphonenumber" revision="22602f93f942a64fe842da5e02912a3038193cb6"/>
-  <project name="aosp/platform/external/libpng" path="external/libpng" revision="fbe33dc85ac74d19ee15367588bcf7f79fd9c666"/>
-  <project name="aosp/platform/external/libtextclassifier" path="external/libtextclassifier" revision="2628cc2a26ed71efa94c43d17a7358e5edf1934d"/>
-  <project name="aosp/platform/external/libunwind" path="external/libunwind" revision="f4c419ec4240247ae75aa222293b2dbd2876849b"/>
-  <project name="aosp/platform/external/libunwind_llvm" path="external/libunwind_llvm" revision="532752d2969febb959ebe77b00f78960bebfaf97"/>
+  <project name="aosp/platform/external/libmojo" path="external/libmojo" revision="03d018abf828e3c2a068ad7bbc8527af6a8c8c2b"/>
+  <project name="aosp/platform/external/libmpeg2" path="external/libmpeg2" revision="88cd2e19b7a4bdc327a658603922db18b82ab870"/>
+  <project name="aosp/platform/external/libmtp" path="external/libmtp" revision="202b04e58aff23d238dc535271cae33b43ade9c2"/>
+  <project name="aosp/platform/external/libnetfilter_conntrack" path="external/libnetfilter_conntrack" revision="b9e2926f22af91ad4bdd73e51910c8874b2bf8e5"/>
+  <project name="aosp/platform/external/libnfnetlink" path="external/libnfnetlink" revision="5b4836d279762a35b3f5c6034551ffada9b54f6b"/>
+  <project name="aosp/platform/external/libnl" path="external/libnl" revision="133d29d98828b32e1568ee8e74287e9bd185c13e"/>
+  <project name="aosp/platform/external/libogg" path="external/libogg" revision="3011eefea27b7664114f57850923a40bfef15c76"/>
+  <project name="aosp/platform/external/libopus" path="external/libopus" revision="dd8036b66dc3e7b680e647ed8fdf06417dfbd07b"/>
+  <project name="aosp/platform/external/libpcap" path="external/libpcap" revision="1a726f66c98d6a685b0b5da383a3a3fa8254f681"/>
+  <project name="aosp/platform/external/libphonenumber" path="external/libphonenumber" revision="d84b8219fa61329c21dbb50821b9b33dbc79d220"/>
+  <project name="aosp/platform/external/libpng" path="external/libpng" revision="22d57ccb52b5c14ca07029787c4a4fe1a90857d0"/>
+  <project name="aosp/platform/external/libtextclassifier" path="external/libtextclassifier" revision="a0ba2a2a36c8ad2cceea87b6b9781e1b833204b5"/>
+  <project name="aosp/platform/external/libunwind" path="external/libunwind" revision="43dd05e3e53131be126af84accbab1c32e0da897"/>
+  <project name="aosp/platform/external/libunwind_llvm" path="external/libunwind_llvm" revision="a3a975c39cf0610271d65e87e3c031271ce5bbf1"/>
   <project name="aosp/platform/external/libusb" path="external/libusb" revision="723eef28307737e21348b124234c18eba2038764"/>
   <project name="aosp/platform/external/libusb-compat" path="external/libusb-compat" revision="759481ae400d02fe99488dcdcd653b4f8139a39c"/>
   <project name="aosp/platform/external/libutf" path="external/libutf" revision="853ef375ba2ce430f5b13b556812b2d83ccc82e1"/>
   <project name="aosp/platform/external/libvncserver" path="external/libvncserver" revision="ed7c226e0c0c22704da70c2cfe85d8a0043a3ca0"/>
   <project name="aosp/platform/external/libvorbis" path="external/libvorbis" revision="dee2e0a12822ec62c89c2d7582f1a7d32cd0875b"/>
-  <project name="aosp/platform/external/libvpx" path="external/libvpx" revision="3655531c0b091ec70f4eff499ccf733c3b3d5589"/>
-  <project name="aosp/platform/external/libvterm" path="external/libvterm" revision="6d78f36633063dad0689ca42be1ad8d0313ebfab"/>
-  <project name="aosp/platform/external/libweave" path="external/libweave" revision="c70e7b9224e25fcb6993409e8a153187e4e672c0"/>
-  <project name="aosp/platform/external/libxml2" path="external/libxml2" revision="19ad5114d5d778be7017405df3e2d6f25c0a3a56"/>
-  <project name="aosp/platform/external/libyuv" path="external/libyuv" revision="c12e9bd0e44c0cfbda567a972483574de6d4d061"/>
-  <project name="aosp/platform/external/linux-kselftest" path="external/linux-kselftest" revision="ba4f60f6cd8995d0ebaeb2e911f71421693ccd02"/>
+  <project name="aosp/platform/external/libvpx" path="external/libvpx" revision="3c2126676f227e85629e944a9b39312cb13a8163"/>
+  <project name="aosp/platform/external/libvterm" path="external/libvterm" revision="4b7ab84bf9ced02fe8debaacd44724fac7a8f51e"/>
+  <project name="aosp/platform/external/libxml2" path="external/libxml2" revision="accc7f33b72e5332894b00bbfed5dbc94c309afb"/>
+  <project name="aosp/platform/external/libyuv" path="external/libyuv" revision="7ff60119cd2a64f55cda06e499db8ab54470c6e1"/>
+  <project name="aosp/platform/external/linux-kselftest" path="external/linux-kselftest" revision="17400d871dfb00cf45c4f011d26a766f607032e0"/>
+  <project name="aosp/platform/external/lisa" path="external/lisa" revision="48024e3bdcb39528f69bb897a3aff57347535c7d"/>
   <project name="aosp/platform/external/littlemock" path="external/littlemock" revision="4dd43c74801149ded3e18eaba7d43ff6dfa192c8"/>
   <project name="aosp/platform/external/lld" path="external/lld" revision="26c9bb3b51a7ac4bc45f73d532a03cfd9982043a"/>
-  <project name="aosp/platform/external/llvm" path="external/llvm" revision="f101dcff55e81ad23fe5f1f253b5e5de5f7576dc"/>
-  <project name="aosp/platform/external/ltp" path="external/ltp" revision="f344d42bf4daf71a5cc6821681a7e5e6edf267b7"/>
-  <project name="aosp/platform/external/lz4" path="external/lz4" revision="2de7c9ab11e8e65a588adf6c67bbfef137bb526c"/>
-  <project name="aosp/platform/external/lzma" path="external/lzma" revision="4e3bd2dd1745d1600a2975d9aca525bf1a564220"/>
+  <project name="aosp/platform/external/llvm" path="external/llvm" revision="34b5a43378f01aa63f7606371a1fe9d820fc8108"/>
+  <project name="aosp/platform/external/lmfit" path="external/lmfit" revision="cc79822d100938c92bc403706c95f4583af1f60c"/>
+  <project name="aosp/platform/external/ltp" path="external/ltp" revision="317599a28cf983d01f72d93cf1ef425d7bfdf576"/>
+  <project name="aosp/platform/external/lz4" path="external/lz4" revision="fc82a7a16aee5add0bdbc34613ae085192793fb1"/>
+  <project name="aosp/platform/external/lzma" path="external/lzma" revision="2398a1f776e4baab73d714f92bb7af0f93c720b9"/>
   <project name="aosp/platform/external/markdown" path="external/markdown" revision="06a8f8b914d477183f68b84424bce8ff4dae7e84"/>
-  <project name="aosp/platform/external/mdnsresponder" path="external/mdnsresponder" revision="413087c9ba9fddbcd97e29190308c48b62ba40bf"/>
-  <project name="aosp/platform/external/mesa3d" path="external/mesa3d" revision="586cfa78861e71160d5a3dbeaff09554829a1027"/>
+  <project name="aosp/platform/external/mdnsresponder" path="external/mdnsresponder" revision="26eaec83a419dedd544cd1fd6efb04fe5fb8cb6c"/>
+  <project name="aosp/platform/external/mesa3d" path="external/mesa3d" revision="630c22ce9cc5337455a6bf6c80129be0b62b7d75"/>
   <project name="aosp/platform/external/messageformat" path="external/messageformat" revision="7941896999a8a623683b888fd39095f32a7f49b6"/>
-  <project name="aosp/platform/external/minijail" path="external/minijail" revision="cd645115db71c9e9671d96552c43e7b70703881b"/>
-  <project name="aosp/platform/external/mksh" path="external/mksh" revision="18abf9c1f0bde3765d263737a5b1da31fa8aa321"/>
+  <project name="aosp/platform/external/minijail" path="external/minijail" revision="e3de2eb97fdd3d1366b86cf0c557fd4aa0077e5c"/>
+  <project name="aosp/platform/external/mksh" path="external/mksh" revision="56884cc18f4189d91b0bf1b654b68cb8ff6bba6f"/>
   <project name="aosp/platform/external/mmc-utils" path="external/mmc-utils" revision="f105db5bd1934f0c3e5f74bbc9a5aaeac7a6bf2b"/>
   <project name="aosp/platform/external/mockftpserver" path="external/mockftpserver" revision="a98e55fca4d6aa55549f8c2c80034f2d04118cf6"/>
-  <project name="aosp/platform/external/mockito" path="external/mockito" revision="ca1545120fa4b2c0c16cf736ee75b0a02ad42133"/>
+  <project name="aosp/platform/external/mockito" path="external/mockito" revision="c1c96b2f91899660269d7c54bdfe6565e5250f71"/>
   <project name="aosp/platform/external/mockwebserver" path="external/mockwebserver" revision="2440623105409d48ec0a3717bb6f3da711a0f15d"/>
-  <project name="aosp/platform/external/modp_b64" path="external/modp_b64" revision="84a0dad630990a195a8f66f474e41efd0562fb83"/>
+  <project name="aosp/platform/external/modp_b64" path="external/modp_b64" revision="6f11b5c9b4ffb38dc9375f3cf344da4300a2741a"/>
   <project name="aosp/platform/external/mp4parser" path="external/mp4parser" revision="88bd0c6cfa7fcfbbebcc15c2c565f714cb36b065"/>
-  <project name="aosp/platform/external/mtpd" path="external/mtpd" revision="f186ec8a28203780f72ef22997d00c33231b975e"/>
+  <project name="aosp/platform/external/mtpd" path="external/mtpd" revision="cf7afdb28ea47ebe8a6b298a03cf89ba06ca333d"/>
   <project name="aosp/platform/external/nanohttpd" path="external/nanohttpd" revision="c6783c32331b3fe78ffd5077e7f180995d0e268e"/>
-  <project name="aosp/platform/external/nanopb-c" path="external/nanopb-c" revision="b225eb267957f24ca2aa2469bc78d418b2e9b795"/>
+  <project name="aosp/platform/external/nanopb-c" path="external/nanopb-c" revision="5b443aa3a07539deffdc426a335c19777955ad0d"/>
   <project name="aosp/platform/external/naver-fonts" path="external/naver-fonts" revision="91e6e9f94d1d769a8f742649674149ba98ce7d45"/>
   <project name="aosp/platform/external/netcat" path="external/netcat" revision="b023a43765b15f0b0fd5b52b7d8021f515c59c23"/>
   <project name="aosp/platform/external/netperf" path="external/netperf" revision="e100a0c4105b94f7044b243287a5da22f5e8e4e7"/>
-  <project name="aosp/platform/external/neven" path="external/neven" revision="95e6c4663c640c67a69e1d2b44696753282136f8"/>
+  <project name="aosp/platform/external/neven" path="external/neven" revision="646a0338720a183c74de524277fbb542c53ff449"/>
   <project name="aosp/platform/external/nfacct" path="external/nfacct" revision="5df745ccb4ef5356a786bf63e075efd0ccaad333"/>
   <project name="aosp/platform/external/nist-pkits" path="external/nist-pkits" revision="fe530ae2c3d88eb5326151387028507b4949d751"/>
   <project name="aosp/platform/external/nist-sip" path="external/nist-sip" revision="8445067c3b53e5bd56c32f1c4fb688083c4f4005"/>
-  <project name="aosp/platform/external/noto-fonts" path="external/noto-fonts" revision="3f4bd0b1494193dff27d9e82c6151d1383cce069"/>
+  <project name="aosp/platform/external/noto-fonts" path="external/noto-fonts" revision="7479f5663f3ecaf5abbc64c10c8ceadf84b8a4fe"/>
   <project name="aosp/platform/external/oauth" path="external/oauth" revision="49f3624a6d3307b640a012f15b94d04174473501"/>
-  <project name="aosp/platform/external/objenesis" path="external/objenesis" revision="f1f7c1c84133b7f05094c8d57661bc9fd8067b62"/>
-  <project name="aosp/platform/external/okhttp" path="external/okhttp" revision="9aa58c70bbe38e352032a57093d3bb8fe1655e2c"/>
+  <project name="aosp/platform/external/objenesis" path="external/objenesis" revision="73ce7cc738555cfacf3bb6b279e15a5a62b9deb0"/>
+  <project name="aosp/platform/external/okhttp" path="external/okhttp" revision="9f70e5f810180b2f3c8ba02e1682fe7cf6364b1b"/>
   <project name="aosp/platform/external/opencv" path="external/opencv" revision="507669d9a3c8adb2b415488783efe10bf9a6b3a3"/>
-  <project name="aosp/platform/external/openssh" path="external/openssh" revision="efbdff3c75e7ae69de898c1a06991076c1f08fcf"/>
-  <project name="aosp/platform/external/openssl" path="vendor/intel/external/openssl" revision="279f3913c5b0176fa2205ecf39d8bf610b0d7413"/>
+  <project name="aosp/platform/external/openssh" path="external/openssh" revision="e25a792cd6ccd2e2081db5baca0d23f4bec85b88"/>
+  <project name="aosp/platform/external/openssl" path="vendor/intel/external/openssl" revision="b706dc845cefb3c8a32d024ac194cb4aeb148059"/>
   <project name="aosp/platform/external/owasp/sanitizer" path="external/owasp/sanitizer" revision="bbfb25464ff30c5a62dce351d719a8c533afb2a3"/>
   <project name="aosp/platform/external/parameter-framework" path="external/parameter-framework" revision="247231a17211f56a96e6a595a9eedadc06231242"/>
-  <project name="aosp/platform/external/pcre" path="external/pcre" revision="3fb9eb13329413ff42f673bf8276bbdcf9aa415f"/>
-  <project name="aosp/platform/external/pdfium" path="external/pdfium" revision="4d3acf4ec42bf6e838f9060103aff98fbf170794"/>
-  <project name="aosp/platform/external/piex" path="external/piex" revision="3f2875f8c3f8e286c497f5bd3c7f6f42b2310480"/>
+  <project name="aosp/platform/external/pcre" path="external/pcre" revision="3fe64bc73c25a0eb63f880b2ce5d892ebef6da03"/>
+  <project name="aosp/platform/external/pdfium" path="external/pdfium" revision="f0b9ecb9c7908309dd0e417088d13e320350922c"/>
+  <project name="aosp/platform/external/piex" path="external/piex" revision="3369ad3455117d907eaedc515f9bf2c57ac5bc0b"/>
+  <project name="aosp/platform/external/ply" path="external/ply" revision="583d33c593896afeb8486a25fabfcf6e9dc9ca75"/>
   <project name="aosp/platform/external/ppp" path="external/ppp" revision="90da8c8f15db2c82aece6e4085aaf9c116d481f2"/>
   <project name="aosp/platform/external/proguard" path="external/proguard" revision="af893cdc1242e4cfbeeb10e2323f9a689a825177"/>
-  <project name="aosp/platform/external/protobuf" path="external/protobuf" revision="4566a1da7dd83ad573f1778068b0b432ec0e9afc"/>
+  <project name="aosp/platform/external/protobuf" path="external/protobuf" revision="7b77cf5e318d2a69ff2dc928225b0f25d7d222dd"/>
+  <project name="aosp/platform/external/python/cpython2" path="external/python/cpython2" revision="f6f0581de161b429d9dc01c7c28c5d44b9e7af6b"/>
+  <project name="aosp/platform/external/python/cpython3" path="external/python/cpython3" revision="9458f8e38d4fe0d58890c5867485dbbf2d538955"/>
+  <project name="aosp/platform/external/r8" path="external/r8" revision="be69fcefad315b2068a9903019108f879ca4db56"/>
   <project name="aosp/platform/external/regex-re2" path="external/regex-re2" revision="79cce43a82abc1bc56c65de07a7df47d54e163a9"/>
   <project name="aosp/platform/external/replicaisland" path="external/replicaisland" revision="7d9b8c6fd062bc37ee2265010eed37786b76a324"/>
   <project name="aosp/platform/external/rmi4utils" path="external/rmi4utils" revision="d45cae258a3d831cd035ccecb3daa763d26346df"/>
-  <project name="aosp/platform/external/robolectric" path="external/robolectric" revision="a040fada595726f6d047169599b1ae694baca77d"/>
-  <project name="aosp/platform/external/roboto-fonts" path="external/roboto-fonts" revision="33ae3ac65a80195117f91a4bf566e1054218ce98"/>
-  <project name="aosp/platform/external/rootdev" path="external/rootdev" revision="bddf3893836a014e7c2e664a50acd2e640f6f561"/>
+  <project name="aosp/platform/external/robolectric" path="external/robolectric" revision="0af1676e44b9d52ebed8fb0d1c4de609f96c9e9e"/>
+  <project name="aosp/platform/external/roboto-fonts" path="external/roboto-fonts" revision="a40bfa4b73e5e202b2613004b56893e1b2e7c5d4"/>
+  <project name="aosp/platform/external/rootdev" path="external/rootdev" revision="3f7cc435321e5f1f538bbf5464c930857bb90d85"/>
   <project name="aosp/platform/external/safe-iop" path="external/safe-iop" revision="cd76f998688d145235de78ecd5b340d0eac9239d"/>
-  <project name="aosp/platform/external/scrypt" path="external/scrypt" revision="aed3ac4c6bb550db63922831178d32468b4c6440"/>
-  <project name="aosp/platform/external/selinux" path="external/selinux" revision="f5c31c090e16e9e4866e9478b57820246286ae79"/>
-  <project name="aosp/platform/external/sfntly" path="external/sfntly" revision="91fc7bca9a19df7ecef5c46a280f5c82cd32b509"/>
+  <project name="aosp/platform/external/scrypt" path="external/scrypt" revision="ec8343fa34aa79c5aeecda3648ddac6aa326c2a9"/>
+  <project name="aosp/platform/external/seccomp-tests" path="external/seccomp-tests" revision="2d6805a0fe1e328d5281116cd39d250c5d29b049"/>
+  <project name="aosp/platform/external/selinux" path="external/selinux" revision="90efe04c55f82a7ea166c913405758fd91bc9aa9"/>
+  <project name="aosp/platform/external/sfntly" path="external/sfntly" revision="5c0f9b6f883120352ab36637e72f13af0292d107"/>
   <project name="aosp/platform/external/shflags" path="external/shflags" revision="c4876e01829b8cf110ee33267bb1bad1f8ebb51d"/>
-  <project name="aosp/platform/external/skia" path="external/skia" revision="285f5db565ad64f9314025e2c619f3d323c694cc"/>
-  <project name="aosp/platform/external/sl4a" path="external/sl4a" revision="6e4a17b9f156ff94eb14e050280c5973c0f24f98"/>
+  <project name="aosp/platform/external/skia" path="external/skia" revision="01acc5b5edb14a9effa93f9287c698d91f1dfd84"/>
+  <project name="aosp/platform/external/sl4a" path="external/sl4a" revision="1f707a19601bdd23354a6a10766d4483fc0c20b5"/>
   <project name="aosp/platform/external/slf4j" path="external/slf4j" revision="63b140791fbb0bceabc496bdd29e108d9597b044"/>
-  <project name="aosp/platform/external/smali" path="external/smali" revision="2f57904b105e49636d7bc6274750fce490f84971"/>
-  <project name="aosp/platform/external/snakeyaml" path="external/snakeyaml" revision="3a1411741a42e49fdf93fd542d207fbd08ba3f30"/>
-  <project name="aosp/platform/external/sonic" path="external/sonic" revision="0227d834966b304525869d88fd20b2ac835df878"/>
-  <project name="aosp/platform/external/sonivox" path="external/sonivox" revision="5f76661d4276b58d3b001c31addbf004feaec775"/>
-  <project name="aosp/platform/external/speex" path="external/speex" revision="b929dc22dbe742fe348c0127aa21d24e300e5884"/>
-  <project name="aosp/platform/external/sqlite" path="external/sqlite" revision="efbb80f4a23339a3002e19a325a77d2aac17da2d"/>
+  <project name="aosp/platform/external/smali" path="external/smali" revision="77df77eb2635d8dcfb8c15516317582fc9a82e4f"/>
+  <project name="aosp/platform/external/snakeyaml" path="external/snakeyaml" revision="c2d7be0abdbdfae49db372518b7d460f5ac02b5f"/>
+  <project name="aosp/platform/external/sonic" path="external/sonic" revision="c55984da5ea66d0fe4bd4d23855fe3ecaecdec72"/>
+  <project name="aosp/platform/external/sonivox" path="external/sonivox" revision="2025e95c677c6741d0a9879051ce20c25a09d33f"/>
+  <project name="aosp/platform/external/speex" path="external/speex" revision="f80fe69cf62e3b47396b41984f4d6df40bfe1c18"/>
+  <project name="aosp/platform/external/spirv-llvm" path="external/spirv-llvm" revision="08b0dc5ecc4d6063b27153d2bbf4bc20fccd1162"/>
+  <project name="aosp/platform/external/sqlite" path="external/sqlite" revision="cb9eebc3963a1281d6517246e70859779809463f"/>
   <project name="aosp/platform/external/squashfs-tools" path="external/squashfs-tools" revision="8c214c801b59ca22b66a0f5cbb3c61af39311fc3"/>
-  <project name="aosp/platform/external/strace" path="external/strace" revision="5270d443a29a8e82fcc697bb13aa08328dce913c"/>
+  <project name="aosp/platform/external/strace" path="external/strace" revision="5b70c8ffac1eddfa08e3e279cbacf88a62b90093"/>
   <project name="aosp/platform/external/stressapptest" path="external/stressapptest" revision="ea469443e9c2cd1fda87188df2b1ffe0e30656b2"/>
-  <project name="aosp/platform/external/svox" path="external/svox" revision="68406cc3de6a2f0aea279c23bd4d8a836757ba0b"/>
-  <project name="aosp/platform/external/swiftshader" path="external/swiftshader" revision="3d245d5a3dd5c9122b5855878f1f60e62d50365e"/>
+  <project name="aosp/platform/external/svox" path="external/svox" revision="e760e93dae08b13e5ccdb25fd1c385e36e7ba760"/>
+  <project name="aosp/platform/external/swiftshader" path="external/swiftshader" revision="21436fa04d317a016fdf33396592431312d65edd"/>
   <project name="aosp/platform/external/syslinux" path="external/syslinux" revision="76d05dc695b06c4e987bb8078f78032441e1430c"/>
-  <project name="aosp/platform/external/tagsoup" path="external/tagsoup" revision="9c02d9f506855965ec513685788890dfc856a5bc"/>
-  <project name="aosp/platform/external/tcpdump" path="external/tcpdump" revision="60aaf97844d4c21b8618fd50046e036c5f78ebe0"/>
+  <project name="aosp/platform/external/tagsoup" path="external/tagsoup" revision="1302f5f68f0214445e6b7fb188c7759a32e8cf48"/>
+  <project name="aosp/platform/external/tcpdump" path="external/tcpdump" revision="4b3f49ed7fd3a40c71a6fc927ccb91b97903581a"/>
   <project name="aosp/platform/external/testng" path="external/testng" revision="2d09ec828c313edd6f9f5021c9b166854d742521"/>
   <project name="aosp/platform/external/timezonepicker-support" path="external/timezonepicker-support" revision="99e91a76fd74bad10266623d67cdb98d011f709e"/>
-  <project name="aosp/platform/external/tinyalsa" path="external/tinyalsa" revision="3bede09aac8e380312e3bb6191a4f08817c24ddb"/>
-  <project name="aosp/platform/external/tinycompress" path="external/tinycompress" revision="c5b90cd09a33141a55aa7ed27d3efa81a74e04aa"/>
-  <project name="aosp/platform/external/tinyxml" path="external/tinyxml" revision="973b9695a088751f06967715c1a9bfb4f6d73a05"/>
-  <project name="aosp/platform/external/tinyxml2" path="external/tinyxml2" revision="39f4bc648664a70563c04659a41a5aa9c5268040"/>
-  <project name="aosp/platform/external/toybox" path="external/toybox" revision="d033ed823d0d48161241ecc44ade587a1c34f5b4"/>
-  <project name="aosp/platform/external/tpm2" path="external/tpm2" revision="204257160b290c4b6e8849b668810bccb3c9da45"/>
-  <project name="aosp/platform/external/tremolo" path="external/tremolo" revision="0750b65f686687218c798154c37105d18831a5ea"/>
-  <project name="aosp/platform/external/unicode" path="external/unicode" revision="eccbd5dcdb02b3d90ff769df285381e1bb54f788"/>
-  <project name="aosp/platform/external/v8" path="external/v8" revision="922f352287cb099020e33cca3b826ada6fd0efd6"/>
-  <project name="aosp/platform/external/valgrind" path="external/valgrind" revision="d02a1bda402f6e8910ab0803f396ecaf4a300cc9"/>
-  <project name="aosp/platform/external/vboot_reference" path="external/vboot_reference" revision="24ce8504591bbf8cf44dfc1e132ed706daa09536"/>
-  <project name="aosp/platform/external/vixl" path="external/vixl" revision="2759b8b2aae6fa6f84bdf8dd8a82da146029b67f"/>
-  <project name="aosp/platform/external/vogar" path="external/vogar" revision="5f6be89120be2f8a243080cafd8ae9ebfbc498c9"/>
+  <project name="aosp/platform/external/tinyalsa" path="external/tinyalsa" revision="cd8f1bb6db7aa8b58fd25470c9a66a4c351da5e5"/>
+  <project name="aosp/platform/external/tinycompress" path="external/tinycompress" revision="97602540ac538aa20afb4bee3e67b64de0de72e5"/>
+  <project name="aosp/platform/external/tinyxml" path="external/tinyxml" revision="d4acc191fb8df5d1a2956949d088acc781c1b602"/>
+  <project name="aosp/platform/external/tinyxml2" path="external/tinyxml2" revision="9d0bfe82a266d84a731b421427c551bb4c46b4d3"/>
+  <project name="aosp/platform/external/toybox" path="external/toybox" revision="f600cd59d034ecfc84c3848fb557db1259bd0c76"/>
+  <project name="aosp/platform/external/tpm2" path="external/tpm2" revision="9e3a0bf49d35b38bb325f479faa6acf96516b8df"/>
+  <project name="aosp/platform/external/trappy" path="external/trappy" revision="d3ca91dd979b9e89029ae3bfae3f861b0c7bbdc4"/>
+  <project name="aosp/platform/external/tremolo" path="external/tremolo" revision="bf16b0c3d73d729e6375eb6f161df0d3057126b9"/>
+  <project name="aosp/platform/external/unicode" path="external/unicode" revision="1d15b7695581bf8fca39b4486615b014e7b72ce6"/>
+  <project name="aosp/platform/external/v4l2_codec2" path="external/v4l2_codec2" revision="bb9c22af2fd1b338780f95f74bebb56b2df5bba1"/>
+  <project name="aosp/platform/external/v8" path="external/v8" revision="04a3686acaa3ae6a6042beaa41745c4f6a77e276"/>
+  <project name="aosp/platform/external/valgrind" path="external/valgrind" revision="51595f3cd618a6a27d6a359507d3379e3f0f9b3c"/>
+  <project name="aosp/platform/external/vboot_reference" path="external/vboot_reference" revision="668a371cb0b026e207655e7adea09e7eb40a94e9"/>
+  <project name="aosp/platform/external/vixl" path="external/vixl" revision="9f96104a3a3da9344c51c1e8c2a19a330162a892"/>
+  <project name="aosp/platform/external/vogar" path="external/vogar" revision="4c37f73c5965a086bd93b0494a765de473f915b3"/>
   <project name="aosp/platform/external/volley" path="external/volley" revision="fd51dba5e6a4bb935fb4357a445848aee24eba11"/>
-  <project name="aosp/platform/external/vulkan-validation-layers" path="external/vulkan-validation-layers" revision="727ecf10b5c219bf14c82bd1e58d856861f0cb86"/>
-  <project name="aosp/platform/external/webp" path="external/webp" revision="99551b7c6457c20ccdaa0c845cf6163ee4c8704a"/>
-  <project name="aosp/platform/external/webrtc" path="external/webrtc" revision="9306ff459cee79c1491f7dd6ad659eca491dcb4c"/>
-  <project name="aosp/platform/external/wpa_supplicant_8" path="external/wpa_supplicant_8" revision="2c1332dddee1f7d3088387e014ca696f12738573"/>
+  <project name="aosp/platform/external/vulkan-validation-layers" path="external/vulkan-validation-layers" revision="ce54fe72dcb23036a825a003a8a98a7d8eb04722"/>
+  <project name="aosp/platform/external/walt" path="external/walt" revision="52926e018b1a1dad067d25ba0eb2be8dc15d49fd"/>
+  <project name="aosp/platform/external/webp" path="external/webp" revision="c737077efb513cd18b47044c7def726822271db4"/>
+  <project name="aosp/platform/external/webrtc" path="external/webrtc" revision="1fc82666196f76c22e310af85d6cf2e7485b9db6"/>
+  <project name="aosp/platform/external/wpa_supplicant_8" path="external/wpa_supplicant_8" revision="5bb58377403a370ef54d3139a97ee5da9e15ce14"/>
   <project name="aosp/platform/external/wycheproof" path="external/wycheproof" revision="46d28ac44a242d84d610a294a640266d3b0e033b"/>
   <project name="aosp/platform/external/x264" path="external/x264" revision="7bf0b975cdfd5692a4598ab09e1258abe5ea5fff"/>
   <project name="aosp/platform/external/xmlrpcpp" path="external/xmlrpcpp" revision="c79d4eae757a81270915c2a7cf01c81b8d42785e"/>
   <project name="aosp/platform/external/xmlwriter" path="external/xmlwriter" revision="e95d92246ee35273dde2bee8b00485cc14c12be5"/>
   <project name="aosp/platform/external/xmp_toolkit" path="external/xmp_toolkit" revision="42ea4dc6d1fc2206a7778029070ed9213e3b0fbf"/>
-  <project name="aosp/platform/external/zlib" path="external/zlib" revision="06cf32f38d424590246d7d216200fa5be08f8bec"/>
+  <project name="aosp/platform/external/xz-embedded" path="external/xz-embedded" revision="5e2e69cfcf62e18fc8a5096701df8540e040f069"/>
+  <project name="aosp/platform/external/zlib" path="external/zlib" revision="5ce335946fc078f2273cf7bd7ade9b304d816c58"/>
   <project name="aosp/platform/external/zopfli" path="external/zopfli" revision="069cb023c39358bc0e1b3dc0397b8fcdd84b4d44"/>
   <project name="aosp/platform/external/zxing" path="external/zxing" revision="fedf8f2d8099bf7bb85dc3db8699343d56617deb"/>
-  <project name="aosp/platform/frameworks/av" path="frameworks/av" revision="8f3ec867c0b03c1fab50b8886ee21759d9bdd838"/>
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="38c8ba2b9f0cd3a83ce8a704830b42fefbb4e6f1"/>
-  <project name="aosp/platform/frameworks/compile/libbcc" path="frameworks/compile/libbcc" revision="3cfa6a0673124a51dece1e6f2d2d6eaf55396818"/>
-  <project name="aosp/platform/frameworks/compile/mclinker" path="frameworks/compile/mclinker" revision="015cad7d4d05020782c7506649d6d6127185094b"/>
-  <project name="aosp/platform/frameworks/compile/slang" path="frameworks/compile/slang" revision="c06b2a748bd785b12a0899892c8519822ce8d129"/>
-  <project name="aosp/platform/frameworks/data-binding" path="frameworks/data-binding" revision="741b1dc52d437e6dbc4898ae2609230944c22bc9"/>
-  <project name="aosp/platform/frameworks/ex" path="frameworks/ex" revision="bf39f791ab7c79457de2c2f21ac2260a6754c029"/>
-  <project name="aosp/platform/frameworks/hardware/interfaces" path="frameworks/hardware/interfaces" revision="b9c202d33fe9c06921e4ecc9e064a1e3b890b2eb"/>
-  <project name="aosp/platform/frameworks/minikin" path="frameworks/minikin" revision="4e2ca85238cd89529478928f926d494c7542652b"/>
-  <project name="aosp/platform/frameworks/ml" path="frameworks/ml" revision="00cee902ec6ac3d80f3dab80097dbf13e0a475d9"/>
-  <project name="aosp/platform/frameworks/multidex" path="frameworks/multidex" revision="74fde7f748f1847bcbe724d73b6184de1dcba95c"/>
-  <project name="aosp/platform/frameworks/native" path="frameworks/native" revision="636097ec31d77371bbd9c364017e76b52956e1ae"/>
+  <project name="aosp/platform/frameworks/av" path="frameworks/av" revision="8f46c0d69a456539c8b74a5630b8f2b5aef7447e"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="427be04d32c7f045b0208de415cc5561a867f7b9"/>
+  <project name="aosp/platform/frameworks/compile/libbcc" path="frameworks/compile/libbcc" revision="8d1f0d7f4a9fe6611b2a435993e2642250f8bc9b"/>
+  <project name="aosp/platform/frameworks/compile/mclinker" path="frameworks/compile/mclinker" revision="821f636d0b881a930cfc284d4d82ae39862d3a3b"/>
+  <project name="aosp/platform/frameworks/compile/slang" path="frameworks/compile/slang" revision="6a436c154e7942c76a84d937d0df02e575286d81"/>
+  <project name="aosp/platform/frameworks/data-binding" path="frameworks/data-binding" revision="4c310a81c5597b37df535a0c1e579fc6b6216991"/>
+  <project name="aosp/platform/frameworks/ex" path="frameworks/ex" revision="47f5cfc7524b83a317c85b824c7478d2ed793a4d"/>
+  <project name="aosp/platform/frameworks/hardware/interfaces" path="frameworks/hardware/interfaces" revision="89efd37ec3ac957e2190828644c0aa331e604bce"/>
+  <project name="aosp/platform/frameworks/layoutlib" path="frameworks/layoutlib" revision="af970950be638cf64850a72e0b45d637dafb3f44"/>
+  <project name="aosp/platform/frameworks/minikin" path="frameworks/minikin" revision="a00083b07ead0804f70a535fd27b1002e255817c"/>
+  <project name="aosp/platform/frameworks/ml" path="frameworks/ml" revision="181b5968e295deb2d5d8d7a3d8eef251790f92c9"/>
+  <project name="aosp/platform/frameworks/multidex" path="frameworks/multidex" revision="b288c36f55c976dfc1ac47c426b4adf60df4844b"/>
+  <project name="aosp/platform/frameworks/native" path="frameworks/native" revision="569bb98f367c37ae0636ddf6579d26a07a982d9a"/>
   <project name="aosp/platform/frameworks/opt/bitmap" path="frameworks/opt/bitmap" revision="a0d4e3108663202564a6833b76770075b8e5b767"/>
-  <project name="aosp/platform/frameworks/opt/bluetooth" path="frameworks/opt/bluetooth" revision="5032f689a917fedae242251ce250c34e421e5b69"/>
+  <project name="aosp/platform/frameworks/opt/bluetooth" path="frameworks/opt/bluetooth" revision="6dbe3ff8cdcf84bfcf2667300c08f01d938b1c93"/>
   <project name="aosp/platform/frameworks/opt/calendar" path="frameworks/opt/calendar" revision="3f01563afad6b3d2f0546a6260ef958a8173deb6"/>
-  <project name="aosp/platform/frameworks/opt/chips" path="frameworks/opt/chips" revision="9946a6c00a84db92d8c55360511ec6d297a43443"/>
-  <project name="aosp/platform/frameworks/opt/colorpicker" path="frameworks/opt/colorpicker" revision="578f24e997333479fe5ff697d65e994033a62679"/>
-  <project name="aosp/platform/frameworks/opt/datetimepicker" path="frameworks/opt/datetimepicker" revision="60ea909c648e073ade49c4cab7d4a489d5440bd0"/>
-  <project name="aosp/platform/frameworks/opt/emoji" path="frameworks/opt/emoji" revision="92eede13edbf22b501edb9aeb92366f91eab9781"/>
+  <project name="aosp/platform/frameworks/opt/chips" path="frameworks/opt/chips" revision="f26abb263705d720e268f9c9031fc74022b8f0fa"/>
+  <project name="aosp/platform/frameworks/opt/colorpicker" path="frameworks/opt/colorpicker" revision="753d13e43c03ab402ebd01fbbafb110d0a566997"/>
+  <project name="aosp/platform/frameworks/opt/datetimepicker" path="frameworks/opt/datetimepicker" revision="7a9faba997fb8be2f43f5c6a090ea9109f2a382b"/>
   <project name="aosp/platform/frameworks/opt/inputconnectioncommon" path="frameworks/opt/inputconnectioncommon" revision="3baece9b20fa480da46d860acd7320fd9eee3386"/>
   <project name="aosp/platform/frameworks/opt/inputmethodcommon" path="frameworks/opt/inputmethodcommon" revision="990fcb1a6dbb5d1204cc8ec86e4bc3f691f4aeeb"/>
-  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="8e5d9d7c7bc0d0b2410848cf935c756051fb6fcb"/>
-  <project name="aosp/platform/frameworks/opt/net/ims" path="frameworks/opt/net/ims" revision="5a022f1e914fe17fc4a7e73857888b4dc2e36762"/>
-  <project name="aosp/platform/frameworks/opt/net/voip" path="frameworks/opt/net/voip" revision="68a4203ed859d3f4789f1805d0590255827046c4"/>
-  <project name="aosp/platform/frameworks/opt/net/wifi" path="frameworks/opt/net/wifi" revision="00dc03f2758164e1d543d7314e0393bb1e593089"/>
-  <project name="aosp/platform/frameworks/opt/photoviewer" path="frameworks/opt/photoviewer" revision="caf86780914d990808eff852e8f831265e815c2a"/>
-  <project name="aosp/platform/frameworks/opt/setupwizard" path="frameworks/opt/setupwizard" revision="d63846215c76b8d97446ca89b91002fe387586ef"/>
-  <project name="aosp/platform/frameworks/opt/telephony" path="frameworks/opt/telephony" revision="52c21c165218f39a74df6623edf77ab7cbb86f49"/>
-  <project name="aosp/platform/frameworks/opt/timezonepicker" path="frameworks/opt/timezonepicker" revision="1ba301ad0d11dceb046a4fc9460abc07e3d4e90d"/>
-  <project name="aosp/platform/frameworks/opt/vcard" path="frameworks/opt/vcard" revision="eb249f8a417e7e29758abc8ab6dd86f5e3da3114"/>
-  <project name="aosp/platform/frameworks/rs" path="frameworks/rs" revision="bbfc8a772f5ba9fecde529ad76d3ed4a2db49419"/>
-  <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="3c0443ca039ef95b702bf92443dfe5d4066993c5"/>
-  <project name="aosp/platform/frameworks/webview" path="frameworks/webview" revision="c145cb7903d199fe5712b6bb98920caa8a47fddc"/>
-  <project name="aosp/platform/frameworks/wilhelm" path="frameworks/wilhelm" revision="7d6784cfed8f7fb0e0f0ec79cfe7ca368c08c6ce"/>
+  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="9bc5192548c437b9ce61b9c32b9beff3ea9f112a"/>
+  <project name="aosp/platform/frameworks/opt/net/ims" path="frameworks/opt/net/ims" revision="bee8ebda7a5c087360d2d5cd8d5e29d4b912e0b9"/>
+  <project name="aosp/platform/frameworks/opt/net/lowpan" path="frameworks/opt/net/lowpan" revision="f5790bd837a502b64cd038393f3ef1bc0ed4c284"/>
+  <project name="aosp/platform/frameworks/opt/net/voip" path="frameworks/opt/net/voip" revision="78a7feeb2601037bba61aec5f24302896dace6bc"/>
+  <project name="aosp/platform/frameworks/opt/net/wifi" path="frameworks/opt/net/wifi" revision="fe18b4c251efd0258f4c22bc16aef9b25a5fad48"/>
+  <project name="aosp/platform/frameworks/opt/photoviewer" path="frameworks/opt/photoviewer" revision="9f61b8c32c5c15891e59f01ffb4b4eb0144e84bf"/>
+  <project name="aosp/platform/frameworks/opt/setupwizard" path="frameworks/opt/setupwizard" revision="b49149e6e353a699df0cff1cf8502d5a4f0288f2"/>
+  <project name="aosp/platform/frameworks/opt/telephony" path="frameworks/opt/telephony" revision="417c61f7b1e1c0328db03adce7598afa6a7ef879"/>
+  <project name="aosp/platform/frameworks/opt/timezonepicker" path="frameworks/opt/timezonepicker" revision="3b2bc8b6dddbfd46e1c94e755f9156a53a49a600"/>
+  <project name="aosp/platform/frameworks/opt/vcard" path="frameworks/opt/vcard" revision="d90a30beaf9c1e3b7a9633bb32a49f26fdb3b1e2"/>
+  <project name="aosp/platform/frameworks/rs" path="frameworks/rs" revision="c759113b42288ddce68765a04ba20fa5650557e1"/>
+  <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="67575d5e9a7dee9cd43af41caff9c5de259ef6c4"/>
+  <project name="aosp/platform/frameworks/webview" path="frameworks/webview" revision="ce867defdb6a1602a78e5137aed8a7f636d0a3e1"/>
+  <project name="aosp/platform/frameworks/wilhelm" path="frameworks/wilhelm" revision="d99408039ffddbf2e4a17ac30361a36d652c6ef3"/>
   <project name="aosp/platform/hardware/akm" path="hardware/akm" revision="99e8b227cd00678ce863c04ebde0b8d9a6f7df5c"/>
-  <project name="aosp/platform/hardware/broadcom/libbt" path="hardware/broadcom/libbt" revision="c243e871173e777514ec3f300c70ea7a9e15802e"/>
-  <project name="aosp/platform/hardware/broadcom/wlan" path="hardware/broadcom/wlan" revision="afd20c40e2284fbd956aaed6a532aa18c5e330c4"/>
-  <project name="aosp/platform/hardware/google/apf" path="hardware/google/apf" revision="7d4c77d6a1d646e2ec635bef614ab4f5f3a4909f"/>
+  <project name="aosp/platform/hardware/broadcom/libbt" path="hardware/broadcom/libbt" revision="7b8602a3fc26bbad5ee03cd87fd721bdc3e22442"/>
+  <project name="aosp/platform/hardware/broadcom/wlan" path="hardware/broadcom/wlan" revision="9748e61caf9cf42636ccf035f3ce4c4e5717011d"/>
+  <project name="aosp/platform/hardware/google/apf" path="hardware/google/apf" revision="dd1877e2d3520cabaff9a9a6ef3437243a9c81be"/>
   <project name="aosp/platform/hardware/intel/audio_media" path="hardware/intel/audio_media" revision="0e60b77af3fa70393ee9fa0e80811d1b39c5f6fc"/>
   <project name="aosp/platform/hardware/intel/bootstub" path="hardware/intel/bootstub" revision="c759e5127aa582ac515ee1446da15f601b15a99a"/>
   <project name="aosp/platform/hardware/intel/common/bd_prov" path="hardware/intel/common/bd_prov" revision="8af329f2d2b54dfcfa84051d3ce1fae95f79011a"/>
   <project name="aosp/platform/hardware/intel/common/libstagefrighthw" path="hardware/intel/common/libstagefrighthw" revision="bfc9bda74643eedd4414e996d2a089a36d9acb24"/>
-  <project name="aosp/platform/hardware/intel/common/libva" path="hardware/intel/common/libva" revision="d07e32b114801d8631696fd7e88649b5e36ccae5"/>
-  <project name="aosp/platform/hardware/intel/common/libwsbm" path="hardware/intel/common/libwsbm" revision="ac747113d4f6739b1462ca7fb40f2091691e209b"/>
-  <project name="aosp/platform/hardware/intel/common/omx-components" path="hardware/intel/common/omx-components" revision="938672ff659640d56a4ea6e089378ed3d2de8201"/>
-  <project name="aosp/platform/hardware/intel/common/utils" path="hardware/intel/common/utils" revision="3d9c7fd95b997880c8e60c44f1bb7ae921253ce4"/>
-  <project name="aosp/platform/hardware/intel/common/wrs_omxil_core" path="hardware/intel/common/wrs_omxil_core" revision="6a3d9478ea33b4e734cbcbc88d3f258c2cac94bb"/>
-  <project name="aosp/platform/hardware/intel/img/hwcomposer" path="hardware/intel/img/hwcomposer" revision="b4a718c0d8f97a70f1b3fd08a33258df98b837ed"/>
-  <project name="aosp/platform/hardware/intel/img/psb_headers" path="hardware/intel/img/psb_headers" revision="773121911d045e25a4239aa4f0c7b51af7fe9b1e"/>
-  <project name="aosp/platform/hardware/intel/img/psb_video" path="hardware/intel/img/psb_video" revision="76f9c460fdad60c6b670774e55c8001944caabdc"/>
+  <project name="aosp/platform/hardware/intel/common/libva" path="hardware/intel/common/libva" revision="a2ecca468b6b556c8f6ca23ca764424a42ed58d1"/>
+  <project name="aosp/platform/hardware/intel/common/libwsbm" path="hardware/intel/common/libwsbm" revision="48a7d49ceaecce1256f02718e8fba2cfc8288674"/>
+  <project name="aosp/platform/hardware/intel/common/omx-components" path="hardware/intel/common/omx-components" revision="03b21c59d82c8880c1389dc523a77cde5ba54207"/>
+  <project name="aosp/platform/hardware/intel/common/utils" path="hardware/intel/common/utils" revision="8baa909f064fbe5f852edfbcecf8ecec35d30b5d"/>
+  <project name="aosp/platform/hardware/intel/common/wrs_omxil_core" path="hardware/intel/common/wrs_omxil_core" revision="80b810fba464a37568dffbd20a947fa080e92735"/>
+  <project name="aosp/platform/hardware/intel/img/hwcomposer" path="hardware/intel/img/hwcomposer" revision="9e17651fb6abdce42a98fdad8fb4be4133993e77"/>
+  <project name="aosp/platform/hardware/intel/img/psb_headers" path="hardware/intel/img/psb_headers" revision="3b022af1e9dfc016f535849fcbca570e97a06684"/>
+  <project name="aosp/platform/hardware/intel/img/psb_video" path="hardware/intel/img/psb_video" revision="4b31b9f79d8834e74ab2096fd5b88fb976f5e125"/>
   <project name="aosp/platform/hardware/intel/sensors" path="hardware/intel/sensors" revision="68dc9e70b79dacddc4e0bf00af0de7f764b04eed"/>
-  <project name="aosp/platform/hardware/interfaces" path="hardware/interfaces" revision="4002a7b23246815b84b99cf6ed02625edc593574"/>
+  <project name="aosp/platform/hardware/interfaces" path="hardware/interfaces" revision="742a9328028f48b0b325508986c08d1327b3b8ad"/>
   <project name="aosp/platform/hardware/invensense" path="hardware/invensense" revision="11e5ff75af866f91622b6008fa13db1c3685ae69"/>
-  <project name="aosp/platform/hardware/libhardware" path="hardware/libhardware" revision="56e9548bf7bf3d5436df5ac947ea1ac5b6290b8b"/>
-  <project name="aosp/platform/hardware/libhardware_legacy" path="hardware/libhardware_legacy" revision="7a7d6e617f841a8c565d3af9e13bf9a5d5b6b3a2"/>
+  <project name="aosp/platform/hardware/libhardware" path="hardware/libhardware" revision="12dd5a3dc35bb6ae7dd8ee29f91b34e90034453b"/>
+  <project name="aosp/platform/hardware/libhardware_legacy" path="hardware/libhardware_legacy" revision="7e46cfffd8c8db9547b4717b8408dd9b0cb83f29"/>
   <project name="aosp/platform/hardware/marvell/bt" path="hardware/marvell/bt" revision="3f33d194e8300816b94d1d7b68b1d48c8f903251"/>
-  <project name="aosp/platform/hardware/qcom/audio" path="hardware/qcom/audio" revision="4f305ac99c4615daabab2ced984dbb4e8c78cb9b"/>
-  <project name="aosp/platform/hardware/qcom/bootctrl" path="hardware/qcom/bootctrl" revision="53b0ac486f5b1e237ea147666239f5b3917126b1"/>
-  <project name="aosp/platform/hardware/qcom/bt" path="hardware/qcom/bt" revision="fa0ef163a1c2bf6681fd1ba34607d29322754c0e"/>
-  <project name="aosp/platform/hardware/qcom/data/ipacfg-mgr" path="hardware/qcom/data/ipacfg-mgr" revision="5b5af67d19baf862f5a8d6a7226feb630ec2f81a"/>
-  <project name="aosp/platform/hardware/qcom/display" path="hardware/qcom/display" revision="039aea59b08fd1cebee67017d88c656e4cf0ef2d"/>
-  <project name="aosp/platform/hardware/qcom/gps" path="hardware/qcom/gps" revision="31226f09f1933afe8133eead00bf6f2adb621f08"/>
-  <project name="aosp/platform/hardware/qcom/keymaster" path="hardware/qcom/keymaster" revision="47284e8ce552cb090787a906d83dc0e0625921f3"/>
-  <project name="aosp/platform/hardware/qcom/media" path="hardware/qcom/media" revision="2306159da319cd15f5606db3d3e01b00cbba7757"/>
+  <project name="aosp/platform/hardware/qcom/audio" path="hardware/qcom/audio" revision="e3a08776132052618d5edbaf2311072504c2a8df"/>
+  <project name="aosp/platform/hardware/qcom/bootctrl" path="hardware/qcom/bootctrl" revision="2f294e58e7ed7d788d35569022f59cc9fd0d3e30"/>
+  <project name="aosp/platform/hardware/qcom/bt" path="hardware/qcom/bt" revision="526fbb46c9f328ac844ca79b2a996ce6a7bb9c02"/>
+  <project name="aosp/platform/hardware/qcom/data/ipacfg-mgr" path="hardware/qcom/data/ipacfg-mgr" revision="e687ccc286c2e4c5bee86beef7174f7dabd33e1a"/>
+  <project name="aosp/platform/hardware/qcom/display" path="hardware/qcom/display" revision="0f1cbe12ad9cab2214718f29e5de4f10db2ddf13"/>
+  <project name="aosp/platform/hardware/qcom/gps" path="hardware/qcom/gps" revision="0977482b01d5a746e16f0195d3183df8946ab7bc"/>
+  <project name="aosp/platform/hardware/qcom/keymaster" path="hardware/qcom/keymaster" revision="b9d7a35c05cac901a65d09849f90f1b4146d10e8"/>
+  <project name="aosp/platform/hardware/qcom/media" path="hardware/qcom/media" revision="8c33076fc8c7d8b36b7f68e5037c7b5c5c2d3bd7"/>
   <project name="aosp/platform/hardware/qcom/msm8960" path="hardware/qcom/msm8960" revision="c25a431842a26b5756b58a9d4a42c776e0457ba2"/>
   <project name="aosp/platform/hardware/qcom/msm8994" path="hardware/qcom/msm8994" revision="484a77bc26fa8d890d06140ec992144d78b44324"/>
   <project name="aosp/platform/hardware/qcom/msm8x26" path="hardware/qcom/msm8x26" revision="85c1a5282ae28663335e55ce96a4c0487de6c578"/>
   <project name="aosp/platform/hardware/qcom/msm8x27" path="hardware/qcom/msm8x27" revision="8ff5c0057cbdecfa09410c1710ba043e191a2862"/>
   <project name="aosp/platform/hardware/qcom/msm8x84" path="hardware/qcom/msm8x84" revision="582b414269d8472d17eef65d8a8965aa8105042f"/>
   <project name="aosp/platform/hardware/qcom/power" path="hardware/qcom/power" revision="3a098ee1f89c398b9d6e7b5dfae9c694994f8bc4"/>
-  <project name="aosp/platform/hardware/qcom/wlan" path="hardware/qcom/wlan" revision="d454a3755f8490f0849cc24bacdbc36852544deb"/>
-  <project name="aosp/platform/hardware/ril" path="hardware/ril" revision="ad6e45755630c2e13abf5d308adbc3cf7e7cd4a5"/>
-  <project name="aosp/platform/libcore" path="libcore" revision="17e2656281e2f3376b433586b1a8a34d12b3dc90"/>
-  <project name="aosp/platform/libnativehelper" path="libnativehelper" revision="5e5df0f349441e6357f50327c939ef3e0650caf1"/>
-  <project name="aosp/platform/packages/apps/BasicSmsReceiver" path="packages/apps/BasicSmsReceiver" revision="0c03af3e6647531906da6c57fc7884fec65aef3a"/>
-  <project name="aosp/platform/packages/apps/Bluetooth" path="packages/apps/Bluetooth" revision="18bd5c7339dd61bfa584d7a7e8fcba860b11ad0d"/>
-  <project name="aosp/platform/packages/apps/Browser2" path="packages/apps/Browser2" revision="ca271c7361bbaafd6c8e860816836a14274a77b0"/>
+  <project name="aosp/platform/hardware/qcom/wlan" path="hardware/qcom/wlan" revision="8b94981ce47caac688d27fe222c3ce18b046e1ab"/>
+  <project name="aosp/platform/hardware/ril" path="hardware/ril" revision="f76e2dfaba8a7532d631f8a014aee0488106afcc"/>
+  <project name="aosp/platform/libcore" path="libcore" revision="e3cd53671e05d6e861817c21fbc162f8c7fc17be"/>
+  <project name="aosp/platform/libnativehelper" path="libnativehelper" revision="053ebae63c776d01687ce0130d0943aa7043c20a"/>
+  <project name="aosp/platform/packages/apps/BasicSmsReceiver" path="packages/apps/BasicSmsReceiver" revision="40a574c06aaea8e7d89d861cc32d5e2067e3793a"/>
+  <project name="aosp/platform/packages/apps/Bluetooth" path="packages/apps/Bluetooth" revision="49c5a7a3dbaad08e3419715d34d842888b6f9c65"/>
+  <project name="aosp/platform/packages/apps/Browser2" path="packages/apps/Browser2" revision="03b380b3e143b9f75cf53f00018e1554571590a1"/>
   <project name="aosp/platform/packages/apps/Calendar" path="packages/apps/Calendar" revision="956525423e51315015d6902e3b9487e72e9f4885"/>
-  <project name="aosp/platform/packages/apps/Camera2" path="packages/apps/Camera2" revision="8657fe2c95c59da93fad2f30d74efad90a60c0d8"/>
-  <project name="aosp/platform/packages/apps/Car/Dialer" path="packages/apps/Car/Dialer" revision="bf001d63778a73005d9d31c5ee72f497c6c5577a"/>
-  <project name="aosp/platform/packages/apps/Car/Hvac" path="packages/apps/Car/Hvac" revision="abb9e9b35977779ea0774d51e925ba1c52bcd29d"/>
-  <project name="aosp/platform/packages/apps/Car/LatinIME" path="packages/apps/Car/LatinIME" revision="5c96f09d5241d068e900278d176f63e0251a4c86"/>
-  <project name="aosp/platform/packages/apps/Car/LensPicker" path="packages/apps/Car/LensPicker" revision="8545582881d65226854066145ca97647b0c7907f"/>
-  <project name="aosp/platform/packages/apps/Car/LocalMediaPlayer" path="packages/apps/Car/LocalMediaPlayer" revision="f5cc075f3733abb29ea68eda5498c607f86988e0"/>
-  <project name="aosp/platform/packages/apps/Car/Media" path="packages/apps/Car/Media" revision="150196dc5b886731f6355b0cd642968de61fb284"/>
-  <project name="aosp/platform/packages/apps/Car/Messenger" path="packages/apps/Car/Messenger" revision="2740ac100efedd1989c10487fc7851e005e24660"/>
-  <project name="aosp/platform/packages/apps/Car/Overview" path="packages/apps/Car/Overview" revision="f6b3e8ba62d070b0870eb9b0e70aa34bb7c363a9"/>
-  <project name="aosp/platform/packages/apps/Car/Radio" path="packages/apps/Car/Radio" revision="662b0269b06ddcc6f1b80f3dc38d8c5e131cd092"/>
-  <project name="aosp/platform/packages/apps/Car/Settings" path="packages/apps/Car/Settings" revision="7bba74e59b999da1a2bee6019b30188d18139f2a"/>
-  <project name="aosp/platform/packages/apps/Car/Stream" path="packages/apps/Car/Stream" revision="c19ea2d878bf135e36151e6d313eee8b1b743184"/>
+  <project name="aosp/platform/packages/apps/Camera2" path="packages/apps/Camera2" revision="31405b14df7469c134bc4634c5781fe44e87c82e"/>
+  <project name="aosp/platform/packages/apps/Car/Dialer" path="packages/apps/Car/Dialer" revision="7f7c761e2abe29597de0c34a265340336499fcfd"/>
+  <project name="aosp/platform/packages/apps/Car/Hvac" path="packages/apps/Car/Hvac" revision="849c0aa26822983ea9a90290c34bd281cd7a5b69"/>
+  <project name="aosp/platform/packages/apps/Car/LatinIME" path="packages/apps/Car/LatinIME" revision="33aaf7c717b31188d2d56543c3a52bf9e63c5d42"/>
+  <project name="aosp/platform/packages/apps/Car/LensPicker" path="packages/apps/Car/LensPicker" revision="a909e7f4a5cd86cb5f4f3dd92c1f58747e5395dd"/>
+  <project name="aosp/platform/packages/apps/Car/LocalMediaPlayer" path="packages/apps/Car/LocalMediaPlayer" revision="56dc94e864b6489a649483808649b4d5ad8ae0fb"/>
+  <project name="aosp/platform/packages/apps/Car/Media" path="packages/apps/Car/Media" revision="e635970cd98709d0fbb551b6f4e7ba9cf2d5b9d4"/>
+  <project name="aosp/platform/packages/apps/Car/Messenger" path="packages/apps/Car/Messenger" revision="4ccedc36e59bce22aaa1d5d85c7194f711306ea6"/>
+  <project name="aosp/platform/packages/apps/Car/Overview" path="packages/apps/Car/Overview" revision="1c8f3c027ea9c629f6b85151870e21ed1abad5bf"/>
+  <project name="aosp/platform/packages/apps/Car/Radio" path="packages/apps/Car/Radio" revision="7fb43597366192d28775af3dcbb710d84a737905"/>
+  <project name="aosp/platform/packages/apps/Car/Settings" path="packages/apps/Car/Settings" revision="623f808e79a14895377f6a43884fc56ace71b0e0"/>
+  <project name="aosp/platform/packages/apps/Car/Stream" path="packages/apps/Car/Stream" revision="23ddcfe9b1d110fa2718ecff64c59651a660944e"/>
   <project name="aosp/platform/packages/apps/Car/SystemUpdater" path="packages/apps/Car/SystemUpdater" revision="3506f3f39a1328465009ec080a741373b338bead"/>
-  <project name="aosp/platform/packages/apps/Car/UserManagement" path="packages/apps/Car/UserManagement" revision="240360dcbcb2ed46c1f4a16615e87ceafd0d6419"/>
-  <project name="aosp/platform/packages/apps/Car/libs" path="packages/apps/Car/libs" revision="7901432126584be2601424b0969092d0d1374c65"/>
-  <project name="aosp/platform/packages/apps/CarrierConfig" path="packages/apps/CarrierConfig" revision="66404aef3891afc9dbf2c4c31964071bbab28890"/>
-  <project name="aosp/platform/packages/apps/CellBroadcastReceiver" path="packages/apps/CellBroadcastReceiver" revision="05eda55b7c6761cb17ae21a659454d7933f6b8a7"/>
-  <project name="aosp/platform/packages/apps/CertInstaller" path="packages/apps/CertInstaller" revision="2291a770f39cdf7a049ec283af35183cc8a100b3"/>
-  <project name="aosp/platform/packages/apps/Contacts" path="packages/apps/Contacts" revision="81f3a4b745e652d3f22c5304016d4c144b596c65"/>
-  <project name="aosp/platform/packages/apps/ContactsCommon" path="packages/apps/ContactsCommon" revision="30ea15d442ff56ab98970c5560a74e2a36840403"/>
-  <project name="aosp/platform/packages/apps/DeskClock" path="packages/apps/DeskClock" revision="f4398bd3b99e6db0b9c8f15e0c8f8344a94e7c8e"/>
+  <project name="aosp/platform/packages/apps/Car/UserManagement" path="packages/apps/Car/UserManagement" revision="9391baedbf4ad645d7c125279a19d7a2b6b285f9"/>
+  <project name="aosp/platform/packages/apps/Car/libs" path="packages/apps/Car/libs" revision="a691ee57d307ed0fba653d168c5b86eea048548d"/>
+  <project name="aosp/platform/packages/apps/CarrierConfig" path="packages/apps/CarrierConfig" revision="0caad4be0fefbc1445c946cd951c7cb6057e072a"/>
+  <project name="aosp/platform/packages/apps/CellBroadcastReceiver" path="packages/apps/CellBroadcastReceiver" revision="9fddaa1a0310bbe20049097fa39a8ba7a334de03"/>
+  <project name="aosp/platform/packages/apps/CertInstaller" path="packages/apps/CertInstaller" revision="4a96032c01b6d456989e1f7f6a16010a3803b924"/>
+  <project name="aosp/platform/packages/apps/Contacts" path="packages/apps/Contacts" revision="cf9fee990f1ce051c5318529491737101fe845d4"/>
+  <project name="aosp/platform/packages/apps/DeskClock" path="packages/apps/DeskClock" revision="c1043e074db00274d8962d8d307236993cc573d6"/>
   <project name="aosp/platform/packages/apps/DevCamera" path="packages/apps/DevCamera" revision="90fdbf7460fbd255194455331c6a38a7b8f41dd2"/>
-  <project name="aosp/platform/packages/apps/Dialer" path="packages/apps/Dialer" revision="6da3db361f62acf1f344275a69920bca843e503e"/>
-  <project name="aosp/platform/packages/apps/Dialer2Prebuilt/v7" path="packages/apps/Dialer2Prebuilt/v7" revision="c9f1115afbac6183b1e19cbe15e96fb6685dd8e3"/>
-  <project name="aosp/platform/packages/apps/DocumentsUI" path="packages/apps/DocumentsUI" revision="cfe60a444fd1e93f5ce5747eb697008768e893cb"/>
-  <project name="aosp/platform/packages/apps/Email" path="packages/apps/Email" revision="8a550803cd840dfb728a7e9f5a482e7dd8417fee"/>
-  <project name="aosp/platform/packages/apps/EmergencyInfo" path="packages/apps/EmergencyInfo" revision="d70f6f2e57c07031442e1accf5c4cd84905abe3f"/>
-  <project name="aosp/platform/packages/apps/ExactCalculator" path="packages/apps/ExactCalculator" revision="6caf9f387cff85380ddfafa27a3e191a5fb4edec"/>
-  <project name="aosp/platform/packages/apps/Gallery" path="packages/apps/Gallery" revision="575be4c01d58bef2ad9b2f2ee2a71f338d6aa73a"/>
-  <project name="aosp/platform/packages/apps/Gallery2" path="packages/apps/Gallery2" revision="084ef10d7d163ade1f68ead4e3bea9f223d1ce7f"/>
+  <project name="aosp/platform/packages/apps/Dialer" path="packages/apps/Dialer" revision="c873824b2a0fe3a3a8ec7232385641fe3a346f21"/>
+  <project name="aosp/platform/packages/apps/DocumentsUI" path="packages/apps/DocumentsUI" revision="37ddecee1fa7baafe4e3f60abadff4f1b4ed076d"/>
+  <project name="aosp/platform/packages/apps/Email" path="packages/apps/Email" revision="12621e8897d14f3b57eeb5ff09f6bd9cb638d202"/>
+  <project name="aosp/platform/packages/apps/EmergencyInfo" path="packages/apps/EmergencyInfo" revision="6d1b2789305e14247f2d4f379368b4979cf37df2"/>
+  <project name="aosp/platform/packages/apps/ExactCalculator" path="packages/apps/ExactCalculator" revision="56b620547c2121e82a1f29df8abc98bdb8e5c99f"/>
+  <project name="aosp/platform/packages/apps/Gallery" path="packages/apps/Gallery" revision="79a6bbd11a803cb9165e1ebc61367002d5a03884"/>
+  <project name="aosp/platform/packages/apps/Gallery2" path="packages/apps/Gallery2" revision="12a6457ac3a7c8e9c3ecd270fce2d48986f736fd"/>
   <project name="aosp/platform/packages/apps/HTMLViewer" path="packages/apps/HTMLViewer" revision="e3269d171111f474c9240688c3da62e26f6a2093"/>
-  <project name="aosp/platform/packages/apps/KeyChain" path="packages/apps/KeyChain" revision="eced8196542d792ab6fc48befd713dac41be5dd7"/>
-  <project name="aosp/platform/packages/apps/Launcher2" path="packages/apps/Launcher2" revision="7f1d87fa8fcb5cf783bd17f2f08eb4a8b94c0d2b"/>
-  <project name="aosp/platform/packages/apps/Launcher3" path="packages/apps/Launcher3" revision="8ee35a8894fd59d7fa791c24044841dbf1e4da8e"/>
+  <project name="aosp/platform/packages/apps/KeyChain" path="packages/apps/KeyChain" revision="784f5d5ff669f388c0b02eded13acf36de4cf7a3"/>
+  <project name="aosp/platform/packages/apps/Launcher2" path="packages/apps/Launcher2" revision="29a7128376610efd9ad19d121243b2b6ded12af4"/>
+  <project name="aosp/platform/packages/apps/Launcher3" path="packages/apps/Launcher3" revision="f78db7fa5c485433b362b68a497a80cd728faf19"/>
   <project name="aosp/platform/packages/apps/LegacyCamera" path="packages/apps/LegacyCamera" revision="e9ca8e83f940adb42e28a304b4818c9a3b049880"/>
-  <project name="aosp/platform/packages/apps/ManagedProvisioning" path="packages/apps/ManagedProvisioning" revision="0be0ae80691d41d928a62101e9af2c8b8af9cbcd"/>
-  <project name="aosp/platform/packages/apps/Messaging" path="packages/apps/Messaging" revision="54d77beef57da0db32eb12a5c07fa496785814d4"/>
-  <project name="aosp/platform/packages/apps/Music" path="packages/apps/Music" revision="f405a690b6826d39048fb90539d106c59d177865"/>
-  <project name="aosp/platform/packages/apps/MusicFX" path="packages/apps/MusicFX" revision="9ad1671d3bc86aa5da17380846499d7419eb6afc"/>
-  <project name="aosp/platform/packages/apps/Nfc" path="packages/apps/Nfc" revision="44e3c6eb2bcdc79ffb59c511a87975203d583fc4"/>
-  <project name="aosp/platform/packages/apps/OneTimeInitializer" path="packages/apps/OneTimeInitializer" revision="294590270c9149f59d40ee92bed5ff890dfbc983"/>
-  <project name="aosp/platform/packages/apps/PackageInstaller" path="packages/apps/PackageInstaller" revision="7dd6ddc07ea2a2a1ba4f7267080c24268bd6287d"/>
-  <project name="aosp/platform/packages/apps/Phone" path="packages/apps/Phone" revision="79731f02b7009206a01182d2cca15dfc8491da09"/>
-  <project name="aosp/platform/packages/apps/PhoneCommon" path="packages/apps/PhoneCommon" revision="a110c454a4dcc9788ce59867e8f6a9d1147cd84a"/>
+  <project name="aosp/platform/packages/apps/ManagedProvisioning" path="packages/apps/ManagedProvisioning" revision="f0983cbbfddd5a25d5cfec0b860125e276c912ef"/>
+  <project name="aosp/platform/packages/apps/Messaging" path="packages/apps/Messaging" revision="efc3fb8401bee7dc0084baa0306fa15768b225f0"/>
+  <project name="aosp/platform/packages/apps/Music" path="packages/apps/Music" revision="f9fd7c76e87a59ed520247c2736c412f6b4223ad"/>
+  <project name="aosp/platform/packages/apps/MusicFX" path="packages/apps/MusicFX" revision="1b3e3aebfc1d255e2b28a5f808205bb483df5d12"/>
+  <project name="aosp/platform/packages/apps/Nfc" path="packages/apps/Nfc" revision="ef07b8b3e0220ba4b2690e46f457a22b982de4fc"/>
+  <project name="aosp/platform/packages/apps/OneTimeInitializer" path="packages/apps/OneTimeInitializer" revision="725b26593c969a50a6e83f45414e0d46d490ec0f"/>
+  <project name="aosp/platform/packages/apps/PackageInstaller" path="packages/apps/PackageInstaller" revision="27f2ab173ebd2cb6b564b2aa1aebc6ce780c8011"/>
+  <project name="aosp/platform/packages/apps/PhoneCommon" path="packages/apps/PhoneCommon" revision="124af15f0a79665eb43a13035793fb3e0337d780"/>
   <project name="aosp/platform/packages/apps/Protips" path="packages/apps/Protips" revision="1e5d8a500dce6530a99cb952681889042dcfb63a"/>
   <project name="aosp/platform/packages/apps/Provision" path="packages/apps/Provision" revision="6b2548213a9c7cf93ac9dc32f8b82db4ad8e9c4d"/>
-  <project name="aosp/platform/packages/apps/QuickSearchBox" path="packages/apps/QuickSearchBox" revision="011a922223123aa279f6f622da4700307e0dc30d"/>
-  <project name="aosp/platform/packages/apps/RetailDemo" path="packages/apps/RetailDemo" revision="33640608d407e185b2102b4a0c97ffdd440aef97"/>
-  <project name="aosp/platform/packages/apps/SafetyRegulatoryInfo" path="packages/apps/SafetyRegulatoryInfo" revision="8494ea6df0cfd3836499e8b7b4655a21fd8d869b"/>
-  <project name="aosp/platform/packages/apps/Settings" path="packages/apps/Settings" revision="fb0cbf0c61b1a5995e611f3fa0df2d72de364dc1"/>
+  <project name="aosp/platform/packages/apps/QuickSearchBox" path="packages/apps/QuickSearchBox" revision="23a01d1faf34d1834d816fffe6aedbe171909e01"/>
+  <project name="aosp/platform/packages/apps/SafetyRegulatoryInfo" path="packages/apps/SafetyRegulatoryInfo" revision="df647dd103b4c7f875771f04ed9584ec8469bfc3"/>
+  <project name="aosp/platform/packages/apps/Settings" path="packages/apps/Settings" revision="8bf48ef5e119bf6e09290cb72079d94d5e322657"/>
   <project name="aosp/platform/packages/apps/SoundRecorder" path="packages/apps/SoundRecorder" revision="ba7237540f779f1c7e67ae7a36aa7a63da8eb1c5"/>
   <project name="aosp/platform/packages/apps/SpareParts" path="packages/apps/SpareParts" revision="f47fff0421153f4c20d155df8d0864a7036bdb06"/>
-  <project name="aosp/platform/packages/apps/SpeechRecorder" path="packages/apps/SpeechRecorder" revision="51cc8462c082a26810f5d7c5a2648232a77e795c"/>
-  <project name="aosp/platform/packages/apps/Stk" path="packages/apps/Stk" revision="29ea030cdf84cef111d04ff6a262d831aaf3ff83"/>
-  <project name="aosp/platform/packages/apps/StorageManager" path="packages/apps/StorageManager" revision="bf8c93ad84d5a6eaaf0a2cfc8260a3f034fd6af0"/>
-  <project name="aosp/platform/packages/apps/Tag" path="packages/apps/Tag" revision="caab9a7889b7ce6311d221f93494be8af8c965a1"/>
-  <project name="aosp/platform/packages/apps/Terminal" path="packages/apps/Terminal" revision="79b9ef2730ff0acbba9eb4d14d3592e7f2e25e3d"/>
-  <project name="aosp/platform/packages/apps/Test/connectivity" path="packages/apps/Test/connectivity" revision="9f4a644fb4c27bb44729f0546e1ee03729d8f661"/>
-  <project name="aosp/platform/packages/apps/TvSettings" path="packages/apps/TvSettings" revision="acd043ae1650532ab2c184b6c1d88caaa104e1d3"/>
-  <project name="aosp/platform/packages/apps/UnifiedEmail" path="packages/apps/UnifiedEmail" revision="64b1537368f9bc2ccfcb4b9829c85e6998f30923"/>
-  <project name="aosp/platform/packages/apps/WallpaperPicker" path="packages/apps/WallpaperPicker" revision="a3d7a862e3530a48ecd8108a32eb6a6a43795cb7"/>
-  <project name="aosp/platform/packages/inputmethods/LatinIME" path="packages/inputmethods/LatinIME" revision="12aec27863c0de78288aaa22fee9a2ceb52e34c3"/>
+  <project name="aosp/platform/packages/apps/Stk" path="packages/apps/Stk" revision="c31c3fe9476605d496f0db3a2273c6a1591ba1e7"/>
+  <project name="aosp/platform/packages/apps/StorageManager" path="packages/apps/StorageManager" revision="3f9d831ef224c4382fe98aff6a1a0ed70b78e3d1"/>
+  <project name="aosp/platform/packages/apps/Tag" path="packages/apps/Tag" revision="e20ad0a7eeb1464f8e72b78fff8c1d9e4fe44ff0"/>
+  <project name="aosp/platform/packages/apps/Terminal" path="packages/apps/Terminal" revision="365fe89eba70d6f982e643ed49b77e9946a9166c"/>
+  <project name="aosp/platform/packages/apps/Test/connectivity" path="packages/apps/Test/connectivity" revision="f3f1fdd09cd7a9bec348244d05c7ee401168d7b6"/>
+  <project name="aosp/platform/packages/apps/TimeZoneData" path="packages/apps/TimeZoneData" revision="8a8ac7e1832a969d44b76c59201a9bb744a6bf95"/>
+  <project name="aosp/platform/packages/apps/TimeZoneUpdater" path="packages/apps/TimeZoneUpdater" revision="36b631cd7a20520170b25b0b8747b9a4532189e8"/>
+  <project name="aosp/platform/packages/apps/TvSettings" path="packages/apps/TvSettings" revision="11c19cc071496d74f1de2322cd2396353a9e7196"/>
+  <project name="aosp/platform/packages/apps/UnifiedEmail" path="packages/apps/UnifiedEmail" revision="d3136d870f9d4262d2aad2511c57a154a4c97156"/>
+  <project name="aosp/platform/packages/apps/WallpaperPicker" path="packages/apps/WallpaperPicker" revision="db3426b874c2b6ad67770309b5e26291193a9ace"/>
+  <project name="aosp/platform/packages/inputmethods/LatinIME" path="packages/inputmethods/LatinIME" revision="9e0cbfaba8dcafd1c6c3beb73414a2a1f99b1b4b"/>
   <project name="aosp/platform/packages/inputmethods/OpenWnn" path="packages/inputmethods/OpenWnn" revision="85ca997d8265739e94b5bd9d19460c9b87b9ec59"/>
   <project name="aosp/platform/packages/providers/ApplicationsProvider" path="packages/providers/ApplicationsProvider" revision="33d26f5eedb3d3011762ce5b2de66e931bf64b35"/>
-  <project name="aosp/platform/packages/providers/BlockedNumberProvider" path="packages/providers/BlockedNumberProvider" revision="5436724745a2bac145c3aadccd6b4d0b625479ab"/>
-  <project name="aosp/platform/packages/providers/BookmarkProvider" path="packages/providers/BookmarkProvider" revision="6ec4bb392332b12162c5a8a1eaba1ee34d389c5c"/>
-  <project name="aosp/platform/packages/providers/CalendarProvider" path="packages/providers/CalendarProvider" revision="9238bc29e1f09eafd00c214b91c44e78f2f9c07f"/>
-  <project name="aosp/platform/packages/providers/CallLogProvider" path="packages/providers/CallLogProvider" revision="fbfa3ff5a6420bd16aee1c06f3bc04b09c9f0694"/>
-  <project name="aosp/platform/packages/providers/ContactsProvider" path="packages/providers/ContactsProvider" revision="8752ee5eee0c76b6b1bbb6cdcc634cec8060c4c2"/>
-  <project name="aosp/platform/packages/providers/DownloadProvider" path="packages/providers/DownloadProvider" revision="849d2f0e2a61147ba76998eaded68b1c79d0341a"/>
-  <project name="aosp/platform/packages/providers/MediaProvider" path="packages/providers/MediaProvider" revision="d71cd8e936447107ee44a054ee96514714ac1e9a"/>
-  <project name="aosp/platform/packages/providers/PartnerBookmarksProvider" path="packages/providers/PartnerBookmarksProvider" revision="a07b15550949ac233643c16aa698f8c40f30a9be"/>
-  <project name="aosp/platform/packages/providers/TelephonyProvider" path="packages/providers/TelephonyProvider" revision="9bd426ff19c9924632d2f83019026bb73b2fb693"/>
-  <project name="aosp/platform/packages/providers/TvProvider" path="packages/providers/TvProvider" revision="db70382d055b55f7360ba50af06a9ba8dbdc3096"/>
-  <project name="aosp/platform/packages/providers/UserDictionaryProvider" path="packages/providers/UserDictionaryProvider" revision="f246af78fc4e54b508a6bc47cf4b3df5f98c7933"/>
-  <project name="aosp/platform/packages/screensavers/Basic" path="packages/screensavers/Basic" revision="5e259636d49b6f52326478d30437e7de706618b8"/>
-  <project name="aosp/platform/packages/screensavers/PhotoTable" path="packages/screensavers/PhotoTable" revision="67ca304991c07d54cdcae65d12449d11a3a9d44c"/>
+  <project name="aosp/platform/packages/providers/BlockedNumberProvider" path="packages/providers/BlockedNumberProvider" revision="905576afa8c2c5047410a1386c1ccc5f24717e68"/>
+  <project name="aosp/platform/packages/providers/BookmarkProvider" path="packages/providers/BookmarkProvider" revision="7b57971217bca1a43477dda1f0e958c11a3e367a"/>
+  <project name="aosp/platform/packages/providers/CalendarProvider" path="packages/providers/CalendarProvider" revision="36e253b2b7c13dd8f3093e4203898c6ee5dd8415"/>
+  <project name="aosp/platform/packages/providers/CallLogProvider" path="packages/providers/CallLogProvider" revision="7af14040f51f6e70a9c02ce68797325292b8a6b9"/>
+  <project name="aosp/platform/packages/providers/ContactsProvider" path="packages/providers/ContactsProvider" revision="2647bc4dbf2ae8dc2e33be475456e199403abe9c"/>
+  <project name="aosp/platform/packages/providers/DownloadProvider" path="packages/providers/DownloadProvider" revision="485f949cefe1a47e8eee6d0e35d2eacdc6f7ca41"/>
+  <project name="aosp/platform/packages/providers/MediaProvider" path="packages/providers/MediaProvider" revision="192e60d39f273763054cddc13be9d4886445ea6b"/>
+  <project name="aosp/platform/packages/providers/PartnerBookmarksProvider" path="packages/providers/PartnerBookmarksProvider" revision="295c5634dd91013d648113b756dec98521abec00"/>
+  <project name="aosp/platform/packages/providers/TelephonyProvider" path="packages/providers/TelephonyProvider" revision="c302d1eba9e35c394a63d7929c0304c99a961f77"/>
+  <project name="aosp/platform/packages/providers/TvProvider" path="packages/providers/TvProvider" revision="db17f200a73700bbef877111ac01ee7cc8042612"/>
+  <project name="aosp/platform/packages/providers/UserDictionaryProvider" path="packages/providers/UserDictionaryProvider" revision="286a20d0b0d74b3c6c92c48de2003e5615c572eb"/>
+  <project name="aosp/platform/packages/screensavers/Basic" path="packages/screensavers/Basic" revision="6e055df0d1926bbd6411be1f1aaa02ba90da2ec6"/>
+  <project name="aosp/platform/packages/screensavers/PhotoTable" path="packages/screensavers/PhotoTable" revision="27cdf317fb261a3ba80ceb930ca020ee81de6b1c"/>
   <project name="aosp/platform/packages/screensavers/WebView" path="packages/screensavers/WebView" revision="6e0a80f6faed6191acc8ce1b6c79eada09e9e042"/>
-  <project name="aosp/platform/packages/services/BuiltInPrintService" path="packages/services/BuiltInPrintService" revision="e436742cfda8f7cf70c112cdf4bd547a466e36a3"/>
-  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="5b085f3c9ff37b6d80db7a9115386bfd1cb44e54"/>
-  <project name="aosp/platform/packages/services/Mms" path="packages/services/Mms" revision="ea920cf6c982d5fe5974d07e03db077960bd43e2"/>
-  <project name="aosp/platform/packages/services/NetworkRecommendation" path="packages/services/NetworkRecommendation" revision="428a15696de6236db66790a9efb2076c8cb057e1"/>
+  <project name="aosp/platform/packages/services/BuiltInPrintService" path="packages/services/BuiltInPrintService" revision="584f7c99060ceb987ce077188cd8898b83e09925"/>
+  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="1dc37c3fd5b306018677e1263dc86a5201638c37"/>
+  <project name="aosp/platform/packages/services/Mms" path="packages/services/Mms" revision="241b5f6a60066b90411be9d2f8f92c98b5460205"/>
+  <project name="aosp/platform/packages/services/NetworkRecommendation" path="packages/services/NetworkRecommendation" revision="b9c2f130c5f876ca0490c72a366345f6f3ccaa62"/>
   <project name="aosp/platform/packages/services/Rcs" path="packages/services/Rcs" revision="16294256b1b2f2b6c369347122defb1bddcef5ca"/>
-  <project name="aosp/platform/packages/services/Telecomm" path="packages/services/Telecomm" revision="24005606bff945dc9525980ac3412047df036c40"/>
-  <project name="aosp/platform/packages/services/Telephony" path="packages/services/Telephony" revision="b3bfb8089008312958cb3c23922531110995624b"/>
-  <project name="aosp/platform/packages/wallpapers/LivePicker" path="packages/wallpapers/LivePicker" revision="88597e17731c3523e389b143a16c572e1b66c30c"/>
-  <project name="aosp/platform/pdk" path="pdk" revision="5842ac398db382555a69452d2f7fe7f755740bb2"/>
-  <project name="aosp/platform/platform_testing" path="platform_testing" revision="bb796c2004566cee586eeeb4e07f938e813771ad"/>
-  <project name="aosp/platform/prebuilts/android-emulator" path="prebuilts/android-emulator" revision="da073b124d926d21b991d7c2b2ff4b1f95862777"/>
-  <project name="aosp/platform/prebuilts/build-tools" path="prebuilts/build-tools" revision="649ab9d7c482561b9534c98056a00946ac8f9557"/>
+  <project name="aosp/platform/packages/services/Telecomm" path="packages/services/Telecomm" revision="b3b6675e51fbf8effe83b88c722ecdb3790dc0cb"/>
+  <project name="aosp/platform/packages/services/Telephony" path="packages/services/Telephony" revision="f7b339aae1175ba69dd8affa87aeb4fce5a000ff"/>
+  <project name="aosp/platform/packages/wallpapers/LivePicker" path="packages/wallpapers/LivePicker" revision="c5e5b2a61c8df807c17139d6a8ba2ab9b3101e73"/>
+  <project name="aosp/platform/pdk" path="pdk" revision="ae06b572170aa59182bb248a04e83d755de334da"/>
+  <project name="aosp/platform/platform_testing" path="platform_testing" revision="e2169d8dec2a4307d473efbf308329b344db70d5"/>
+  <project name="aosp/platform/prebuilts/abi-dumps/ndk" path="prebuilts/abi-dumps/ndk" revision="9b4c58b905c1c92c1b8630d9da7c96b9a92e5ddc"/>
+  <project name="aosp/platform/prebuilts/abi-dumps/vndk" path="prebuilts/abi-dumps/vndk" revision="6889c3fb50355934edcef473e2aac8f7d50d6832"/>
+  <project name="aosp/platform/prebuilts/android-emulator" path="prebuilts/android-emulator" revision="400cd54dca1c329fd7f1c8cb9e40b1fbbf3f3af3"/>
+  <project name="aosp/platform/prebuilts/build-tools" path="prebuilts/build-tools" revision="88fa20009d5581163b4656d52e2fcc1f56042da6"/>
   <project name="aosp/platform/prebuilts/checkcolor" path="prebuilts/checkcolor" revision="f6f661b424f646bc5ddf9e1b1e644abb492b7547"/>
-  <project name="aosp/platform/prebuilts/checkstyle" path="prebuilts/checkstyle" revision="b782f222d5ad3c1250acb12260f2ddaa0935ca46"/>
-  <project name="aosp/platform/prebuilts/clang/host/darwin-x86" path="prebuilts/clang/host/darwin-x86" revision="6bdbd720989797e8a53237ef3ef213c4114f8694"/>
-  <project name="aosp/platform/prebuilts/clang/host/linux-x86" path="prebuilts/clang/host/linux-x86" revision="1188dcf30923cb444143ffa4b83dc951037e76a5"/>
-  <project name="aosp/platform/prebuilts/deqp" path="prebuilts/deqp" revision="b2b1e334e56afd7478aef228d807bfa65e14a89e"/>
-  <project name="aosp/platform/prebuilts/devtools" path="prebuilts/devtools" revision="4c3b19c11bed6972f2ebf758af4025607b41b11b"/>
-  <project name="aosp/platform/prebuilts/eclipse" path="prebuilts/eclipse" revision="cf9f78f8cf41b16edf9f712598a42743d5cea4af"/>
-  <project name="aosp/platform/prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" revision="47fc68ccb8e302a78517d463f3a016ce73ffcc4d"/>
+  <project name="aosp/platform/prebuilts/checkstyle" path="prebuilts/checkstyle" revision="a8a50e922b39a2dba7e56030c660e1aabca168f3"/>
+  <project name="aosp/platform/prebuilts/clang/host/darwin-x86" path="prebuilts/clang/host/darwin-x86" revision="f59dae743731eef0cf012408603291c253eed5c3"/>
+  <project name="aosp/platform/prebuilts/clang/host/linux-x86" path="prebuilts/clang/host/linux-x86" revision="ce80566d209ef0fba56e5bd4cc4cf11435f83a71"/>
+  <project name="aosp/platform/prebuilts/deqp" path="prebuilts/deqp" revision="c25e80c7660cb1ee2b3e2a50b7e4869894c07a8f"/>
+  <project name="aosp/platform/prebuilts/devtools" path="prebuilts/devtools" revision="2538644348d06278149f8f918930d058cb4f32a7"/>
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" revision="142ca37bf44a67f72f685de5a206bdeda9d09e1e"/>
   <project name="aosp/platform/prebuilts/gcc/darwin-x86/arm/arm-eabi-4.8" path="prebuilts/gcc/darwin-x86/arm/arm-eabi-4.8" revision="6d08ca9f45ff685648fd13c75bf5cac4b11c19bb"/>
-  <project name="aosp/platform/prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" revision="56d529c4f7f81c2b12fe18e172404669e3cbd787"/>
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" revision="dee99e0d92cc5fa88b01612010944d44e8c6f9ab"/>
   <project name="aosp/platform/prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" path="prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" revision="ec5aa66aaa4964c27564d0ec84dc1f18a2d72b7e"/>
   <project name="aosp/platform/prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" revision="d942564c9331f07026a8f78502d8571206eb7be4"/>
-  <project name="aosp/platform/prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" revision="c112c178246b71705b952b850f4c0b8483b467bd"/>
-  <project name="aosp/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" revision="d7d824eaa0690179c4b504209dbb017dfc730cf3"/>
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" revision="6411c6e4dc922d39755045878f9a85b8a1fe3a02"/>
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" revision="f362c7c69576f83c1ce2c620ed2c491e222551d3"/>
   <project name="aosp/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" path="prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" revision="26e93f6af47f7bd3a9beb5c102a5f45e19bfa38a"/>
-  <project name="aosp/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" revision="0f5ac4a0fb21cff9cdd55c858380f426f8e5fd1b"/>
-  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" revision="a93d2d3736c481ed4722b3800233b772da701084"/>
-  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" revision="73ca99196723f810dad42390d154654354f57c16"/>
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" revision="e0094391fef9ad38d06648d2adbe3108276ab820"/>
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.11-4.8" revision="a706ab3bc2ac5168166659d6423da4b8b8e8644b"/>
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" revision="12eccb2e29b05b39fa83e5299b1f4486b9e743a4"/>
   <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" revision="e76a9a506d7ad132f107eb2f7c27b6a8ccb68b91"/>
   <project name="aosp/platform/prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" revision="388fdc4995d374d76a0c4b292afabac91638e134"/>
-  <project name="aosp/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" revision="1de7f0f941efde58c8806a30a8dccfaf6ccece74"/>
-  <project name="aosp/platform/prebuilts/go/darwin-x86" path="prebuilts/go/darwin-x86" revision="4f7f559a4b744258a796dd591b11bd88e4a6dc7a"/>
-  <project name="aosp/platform/prebuilts/go/linux-x86" path="prebuilts/go/linux-x86" revision="efea46b87b2dcc66da02dfbf66fd901d24c7a091"/>
-  <project name="aosp/platform/prebuilts/gradle-plugin" path="prebuilts/gradle-plugin" revision="d1f1aaf649cac3788a261a5380448579f54b5dc7"/>
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" revision="4bc02e217f23f67160a0005ca34c35e242f9704c"/>
+  <project name="aosp/platform/prebuilts/go/darwin-x86" path="prebuilts/go/darwin-x86" revision="d240e4f742d2799a3b4bf1ba4d695d0e28dc9040"/>
+  <project name="aosp/platform/prebuilts/go/linux-x86" path="prebuilts/go/linux-x86" revision="9802e351bf16f8137807da945a4bc36371a16be6"/>
+  <project name="aosp/platform/prebuilts/gradle-plugin" path="prebuilts/gradle-plugin" revision="fe736f5314e958f2baf06b971868d6929f6e29d9"/>
+  <project name="aosp/platform/prebuilts/jdk/jdk8" path="prebuilts/jdk/jdk8" revision="68dabb15582c2e86c9a5ef863e193892b7843792"/>
   <project name="aosp/platform/prebuilts/libs/libedit" path="prebuilts/libs/libedit" revision="d32685dba4011664b590b94ad156bc734c2c9bb5"/>
-  <project name="aosp/platform/prebuilts/maven_repo/android" path="prebuilts/maven_repo/android" revision="1b392d94924cc2c6d3f947224001553bdcc4a34d"/>
-  <project name="aosp/platform/prebuilts/maven_repo/bumptech" path="prebuilts/maven_repo/bumptech" revision="ad29fe1a1b86eacbd04ac4ab23b90f38ca099f77"/>
-  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="57ee0d13da8bd3d04a1a695729b5139857c1b26f"/>
-  <project name="aosp/platform/prebuilts/ndk" path="prebuilts/ndk" revision="11cd02dfb91661c65134cac258cf5924270e9d2b"/>
+  <project name="aosp/platform/prebuilts/maven_repo/android" path="prebuilts/maven_repo/android" revision="de0608095fff0805d8b7092bc8b84db8f67f3cb0"/>
+  <project name="aosp/platform/prebuilts/maven_repo/bumptech" path="prebuilts/maven_repo/bumptech" revision="268c5495b8003e09173a1ae7b1e9dc9b019e300d"/>
+  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="598387341a7104f2bd46fca3e2c1161bce609de3"/>
+  <project name="aosp/platform/prebuilts/ndk" path="prebuilts/ndk" revision="fe3261913478eead2e3c8d3f8ef27f6224ac950b"/>
   <project name="aosp/platform/prebuilts/python/darwin-x86/2.7.5" path="prebuilts/python/darwin-x86/2.7.5" revision="0c5958b1636c47ed7c284f859c8e805fd06a0e63"/>
-  <project name="aosp/platform/prebuilts/python/linux-x86/2.7.5" path="prebuilts/python/linux-x86/2.7.5" revision="edbb763a2b63074cd468a5d33a17908b2cc06541"/>
-  <project name="aosp/platform/prebuilts/qemu-kernel" path="prebuilts/qemu-kernel" revision="1cc2403b87e595402361c264f1affa3231fd1fc1"/>
-  <project name="aosp/platform/prebuilts/sdk" path="prebuilts/sdk" revision="f87de45670601098b4a3329df382e9bd5acce952"/>
-  <project name="aosp/platform/prebuilts/tools" path="prebuilts/tools" revision="4e45924d8675aaf8cf0f60c94ec53962e5dd69ce"/>
-  <project name="aosp/platform/sdk" path="sdk" revision="66f0813aa7b41a5431082dda5ecda4c3abdf5a12"/>
-  <project name="aosp/platform/system/bt" path="system/bt" revision="4bbfdd56a273c1a7dc6406dc621c30eeb67a2e87"/>
-  <project name="aosp/platform/system/ca-certificates" path="system/ca-certificates" revision="db524b256a637f18588c1d5ecc4a7d43cdebf8fd"/>
-  <project name="aosp/platform/system/chre" path="system/chre" revision="0664da45aa510d504918995188d41ef249b0057d"/>
-  <project name="aosp/platform/system/connectivity/wificond" path="system/connectivity/wificond" revision="f33c47843166f30e8e6f37bf29ac6f9289b0adc2"/>
-  <project name="aosp/platform/system/connectivity/wifilogd" path="system/connectivity/wifilogd" revision="c95b2cee999918ee5eacf52e70e55a47c78d7b5c"/>
-  <project name="aosp/platform/system/core" path="system/core" revision="908edc7a053642887aec49d83c887023cce8b788"/>
-  <project name="aosp/platform/system/extras" path="system/extras" revision="dc3738cd00a38d4699ac1e81b50e2eefe8c0ca6d"/>
-  <project name="aosp/platform/system/gatekeeper" path="system/gatekeeper" revision="84f8f9fdc2c779ffd938e730d7e950c3958d799e"/>
-  <project name="aosp/platform/system/hardware/interfaces" path="system/hardware/interfaces" revision="64eba3f09f3f636f1fed6156213f707a79d1d24d"/>
-  <project name="aosp/platform/system/hwservicemanager" path="system/hwservicemanager" revision="169a60ac006ce297b31eb71945e5921bb6ca2eec"/>
-  <project name="aosp/platform/system/keymaster" path="system/keymaster" revision="b927802c5e29a18ccf40d6ddac366d8f2310f075"/>
-  <project name="aosp/platform/system/libfmq" path="system/libfmq" revision="9a5bd7468f96ba10cb9f8de3f1475acfc4d25cdd"/>
-  <project name="aosp/platform/system/libhidl" path="system/libhidl" revision="9a832b17126289e85713dcbece4a2115fb3932d0"/>
-  <project name="aosp/platform/system/libhwbinder" path="system/libhwbinder" revision="6867681ed52729c79369c04779e28f7ebbdc8573"/>
-  <project name="aosp/platform/system/libufdt" path="system/libufdt" revision="1c0a96b294248c75df16062fbcde06450d1a9117"/>
-  <project name="aosp/platform/system/libvintf" path="system/libvintf" revision="4685016bf968e27b4113a4da56f480b882c2567a"/>
-  <project name="aosp/platform/system/media" path="system/media" revision="d449dab5bfd1214fc635ed7adeb44a450e206a66"/>
-  <project name="aosp/platform/system/netd" path="system/netd" revision="e65e7fe0630d7ce44a67fe636797c251879a507b"/>
-  <project name="aosp/platform/system/nfc" path="system/nfc" revision="511690786de4a0212b96ded395d2a71db0a0fca8"/>
-  <project name="aosp/platform/system/security" path="system/security" revision="ef5d1eebf70dc96da4d09f32608e3b99c881351a"/>
-  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="640d921231337e0045e75d5652a89cba9d7e71be"/>
-  <project name="aosp/platform/system/tools/aidl" path="system/tools/aidl" revision="cd8c135d8f4840e628afbb8c83546d94926ef537"/>
-  <project name="aosp/platform/system/tools/hidl" path="system/tools/hidl" revision="ad7e781f70c3cace5fe814940ceda0ff22316a59"/>
-  <project name="aosp/platform/system/update_engine" path="system/update_engine" revision="3e1ed5a1638230bac0ff94327d0f590ff287807a"/>
-  <project name="aosp/platform/system/vold" path="system/vold" revision="f41cf796880ba78467f5cdb9e73eb3808c3928b1"/>
-  <project name="aosp/platform/test/vts" path="test/vts" revision="a0376c55267efc6b2923904615afa29a7a48bbab"/>
-  <project name="aosp/platform/test/vts-testcase/fuzz" path="test/vts-testcase/fuzz" revision="bad2c00fae165fa3058e90fbf276a130444d9d20"/>
-  <project name="aosp/platform/test/vts-testcase/hal" path="test/vts-testcase/hal" revision="92d3c572fdc6ca407998c0d408b614860ec727fd"/>
-  <project name="aosp/platform/test/vts-testcase/hal-trace" path="test/vts-testcase/hal-trace" revision="700814ebd6ebe6453257d9f9cc37f91dc97539b7"/>
-  <project name="aosp/platform/test/vts-testcase/kernel" path="test/vts-testcase/kernel" revision="e8c730a42e1312836578577b80ff55502c667061"/>
-  <project name="aosp/platform/test/vts-testcase/performance" path="test/vts-testcase/performance" revision="7c1c4d0075e4fe90920a05f54ca9625cfa29879f"/>
-  <project name="aosp/platform/test/vts-testcase/vndk" path="test/vts-testcase/vndk" revision="8e03bb556a30aeb5f345181457272340304f2998"/>
+  <project name="aosp/platform/prebuilts/python/linux-x86/2.7.5" path="prebuilts/python/linux-x86/2.7.5" revision="49b50adb1a149100905b368570c2cb56cadc0854"/>
+  <project name="aosp/platform/prebuilts/qemu-kernel" path="prebuilts/qemu-kernel" revision="23af1518c651f811119a7e27ba2983227e2268da"/>
+  <project name="aosp/platform/prebuilts/sdk" path="prebuilts/sdk" revision="51d55fdd8f7f94a7724eb32cb6000cd052f93980"/>
+  <project name="aosp/platform/prebuilts/tools" path="prebuilts/tools" revision="3c6135f0a9f16326941f9027a8654c9b60d727be"/>
+  <project name="aosp/platform/sdk" path="sdk" revision="f5815cfdb76e746412d6c86ba6b0675f5132bd87"/>
+  <project name="aosp/platform/system/bt" path="system/bt" revision="bbbdfb2a67ede0a08961b674a44988dc40d9e173"/>
+  <project name="aosp/platform/system/ca-certificates" path="system/ca-certificates" revision="93fc85e19c5e5ac4c11f893d87a3bc5bbbac4c6d"/>
+  <project name="aosp/platform/system/chre" path="system/chre" revision="0f074bf46778ea9ed78be52720c0d25a80060c3c"/>
+  <project name="aosp/platform/system/connectivity/wificond" path="system/connectivity/wificond" revision="c4b14bca408cd8cfa7fc68865e3ceaf938706e1c"/>
+  <project name="aosp/platform/system/connectivity/wifilogd" path="system/connectivity/wifilogd" revision="7f63780db20de42556d24704fabc3679569a2528"/>
+  <project name="aosp/platform/system/core" path="system/core" revision="1377c607cd9d373ba3c3528304a711fd543b22ce"/>
+  <project name="aosp/platform/system/extras" path="system/extras" revision="1af0c23c7455a8ca5a992c9d5d8e09fa795cf5f3"/>
+  <project name="aosp/platform/system/gatekeeper" path="system/gatekeeper" revision="e21a73530e490999057921c5aad86226967a71a1"/>
+  <project name="aosp/platform/system/hardware/interfaces" path="system/hardware/interfaces" revision="a741a1eaec60b94b00807f9e7c23729545cbd32a"/>
+  <project name="aosp/platform/system/hwservicemanager" path="system/hwservicemanager" revision="c44ad1a4f609116d3a0e224b13ab438c7db594e4"/>
+  <project name="aosp/platform/system/keymaster" path="system/keymaster" revision="65ea380cac308d57022dce68ba9a1d0e9c4f1610"/>
+  <project name="aosp/platform/system/libfmq" path="system/libfmq" revision="46ed3ce70e84aa8fa69fb3c96592dbe13335a721"/>
+  <project name="aosp/platform/system/libhidl" path="system/libhidl" revision="07161c118026475a5e80ded01c16e0f10d9765b1"/>
+  <project name="aosp/platform/system/libhwbinder" path="system/libhwbinder" revision="88378be8a2ff7938dabc2164a20c2421304aa6d4"/>
+  <project name="aosp/platform/system/libufdt" path="system/libufdt" revision="58a7582180f477032cd6c74f8d9afad0038e74c3"/>
+  <project name="aosp/platform/system/libvintf" path="system/libvintf" revision="3650e2fc4e7214b4ac8b243ed4ea60eea824fafb"/>
+  <project name="aosp/platform/system/media" path="system/media" revision="705cb78cc66b08e7e089de12b0d31e51b3722258"/>
+  <project name="aosp/platform/system/netd" path="system/netd" revision="7303021545efeab518b6133ff339a6082e826b41"/>
+  <project name="aosp/platform/system/nfc" path="system/nfc" revision="1c99ae19da5afe5b3b3e45c70cca20ced54f9de5"/>
+  <project name="aosp/platform/system/nvram" path="system/nvram" revision="a2cbda182e4631dc45b3e988db9a6c0a0c36a610"/>
+  <project name="aosp/platform/system/security" path="system/security" revision="48c30d99239f8d96f95d0a3c4f24d58df7f36273"/>
+  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="368bfbacb1d9aab0f30ba7791d93f0c9eaa8e3d2"/>
+  <project name="aosp/platform/system/timezone" path="system/timezone" revision="88fb2b1f0b13149c8b2c456019888c4c5f3be0ff"/>
+  <project name="aosp/platform/system/tools/aidl" path="system/tools/aidl" revision="3cbb4bf3d8d7b9e99ec1d2f75aab93034bdf3f03"/>
+  <project name="aosp/platform/system/tools/hidl" path="system/tools/hidl" revision="e864352e184f7599d56aafd9b8602b9b15bd602e"/>
+  <project name="aosp/platform/system/update_engine" path="system/update_engine" revision="9fe47cddff592656aca0a830301fc1288749ce2c"/>
+  <project name="aosp/platform/system/vold" path="system/vold" revision="f074989f62310a1f3d47fc6e6632314ce6865ca5"/>
+  <project name="aosp/platform/test/framework" path="test/framework" revision="246492cf54d880214952e9cbb1ea490cbdd56f52"/>
+  <project name="aosp/platform/test/vti/alert" path="test/vti/alert" revision="2270d160e38f0623d708cce36754fe14168dce64"/>
+  <project name="aosp/platform/test/vti/dashboard" path="test/vti/dashboard" revision="4b5e68eeff3ed15b38229e9a1af0052455e141bb"/>
+  <project name="aosp/platform/test/vti/fuzz_test_serving" path="test/vti/fuzz_test_serving" revision="8c282aac33bbb047e9feb0645c89ce4079c8d29c"/>
+  <project name="aosp/platform/test/vti/test_serving" path="test/vti/test_serving" revision="0a064803e1ebbfd5e587e9baf677d458a4e3bbd8"/>
+  <project name="aosp/platform/test/vts" path="test/vts" revision="46bac3e517b42664764312c3bd997b1945d58190"/>
+  <project name="aosp/platform/test/vts-testcase/fuzz" path="test/vts-testcase/fuzz" revision="550756ea9fbad2d457572728cb8e90cba88a7607"/>
+  <project name="aosp/platform/test/vts-testcase/hal" path="test/vts-testcase/hal" revision="54a3987f1ea42a6832d7bf4ec0cea7a1c1fd5d8a"/>
+  <project name="aosp/platform/test/vts-testcase/hal-trace" path="test/vts-testcase/hal-trace" revision="369cb6082de1479d0416737dbde6d567fb0194c2"/>
+  <project name="aosp/platform/test/vts-testcase/kernel" path="test/vts-testcase/kernel" revision="12a269e364e218c1ac5ecb22472f3ede5f6d98dd"/>
+  <project name="aosp/platform/test/vts-testcase/performance" path="test/vts-testcase/performance" revision="84a1de4b8ea72ab86f0d94afbd26e07dfcb27efa"/>
+  <project name="aosp/platform/test/vts-testcase/vndk" path="test/vts-testcase/vndk" revision="69fdb035569978319eb451e3551f3c6d71d0b78a"/>
   <project name="aosp/platform/tools/acloud" path="tools/acloud" revision="b34b63ebf5f1677488dd792a8fc8f3341225e8f0"/>
-  <project name="aosp/platform/tools/apksig" path="tools/apksig" revision="27772408e2372f77af264c77be945a7bc2fc910e"/>
-  <project name="aosp/platform/tools/libtf" path="tools/libtf" revision="80a677530bd02969cae697cbb3e2c37e433e8d45"/>
-  <project name="aosp/platform/tools/loganalysis" path="tools/loganalysis" revision="5398f893c964e93434eca28d73d919b5f0445c0f"/>
+  <project name="aosp/platform/tools/apksig" path="tools/apksig" revision="1c40dc60b266ed2f4cc4247128d8feb117ad92c7"/>
+  <project name="aosp/platform/tools/loganalysis" path="tools/loganalysis" revision="67b8a30dfd72a155dee5d77a12755c78daaf9d9e"/>
   <project name="aosp/platform/tools/repohooks" path="tools/repohooks" revision="fe49310df3a905d60ffdc123ad15f826e289e8e5"/>
-  <project name="aosp/platform/tools/test/connectivity" path="tools/test/connectivity" revision="c836160bf9e18cbc423d425894fa5fae2164c184"/>
-  <project name="aosp/platform/tools/tradefederation" path="tools/tradefederation/core" revision="3bb1626c3e371b27edbf22bf8d9398f7ed5b419c"/>
-  <project name="aosp/platform/tools/tradefederation/contrib" path="tools/tradefederation/contrib" revision="44e6254e5f5437324103fb2cad2b1671ff20bafc"/>
-  <project name="aosp/platform/vendor/google_tradefederation" path="vendor/google_tradefederation/core" revision="e77a225fcae0f56f223b3b991f1b3159e53f1460"/>
-  <project name="aosp/platform/vendor/google_tradefederation/contrib" path="vendor/google_tradefederation/contrib" revision="d7ad525433d58ce8a10bb55bf3c43773e216a912"/>
-  <project name="aosp/platform/vendor/google_vts" path="vendor/google_vts" revision="7b9ff69ea8b91174a7ac05e090629699424a17e3"/>
-  <project name="aosp/toolchain/binutils" path="toolchain/binutils" revision="11e295b1c3e3ddd66c5a418dd0f66bfd8184f98d"/>
-  <project name="aosp/trusty/app/gatekeeper" path="trusty/app/gatekeeper" revision="dbd9b955bdf8d2a5b90976e93e9580dda7f7b1ba"/>
-  <project name="aosp/trusty/app/keymaster" path="trusty/app/keymaster" revision="897c1ee03fc02f476d7b0649e463f28bd5f88ed6"/>
+  <project name="aosp/platform/tools/test/connectivity" path="tools/test/connectivity" revision="1b361a2d15c0a89cba8d4af42a5a6502f4c38c34"/>
+  <project name="aosp/platform/tools/tradefederation" path="tools/tradefederation/core" revision="c967ab237b56f14a74fcbabcd07cce6b18605b94"/>
+  <project name="aosp/platform/tools/tradefederation/contrib" path="tools/tradefederation/contrib" revision="8dd3029197cdaa6d9e867d4c645b489a6f9f52b6"/>
+  <project name="aosp/platform/vendor/google_tradefederation" path="vendor/google_tradefederation/core" revision="206b508481c260030fac364fbe0bb7f3a518b0dc"/>
+  <project name="aosp/platform/vendor/google_tradefederation/contrib" path="vendor/google_tradefederation/contrib" revision="510cce7dec67b8944cde963611fb39a459ee7d31"/>
+  <project name="aosp/platform/vendor/google_vts" path="vendor/google_vts" revision="e5d993f235220c70b86c6668968ac750e0b5f0b3"/>
+  <project name="aosp/toolchain/binutils" path="toolchain/binutils" revision="a4125cf8aeab9dfeac00f1bda80645987897152f"/>
+  <project name="aosp/trusty/app/avb" path="trusty/app/avb" revision="051479d1de75a81e9ac5e00ef9d9fbc3ab17b0e6"/>
+  <project name="aosp/trusty/app/gatekeeper" path="trusty/app/gatekeeper" revision="e4b3ce0239be071e0b1a255326131506cba8fd03"/>
+  <project name="aosp/trusty/app/keymaster" path="trusty/app/keymaster" revision="e1cf303999b05c3e57c2d262c5bdb65480032c3f"/>
   <project name="aosp/trusty/app/nvram" path="trusty/app/nvram" revision="16db633a793b04df143d448115d690518228275d"/>
-  <project name="aosp/trusty/app/sample" path="trusty/app/sample" revision="3410ae1cff259a5a8598eca57c440205468b4f41"/>
-  <project name="aosp/trusty/app/storage" path="trusty/app/storage" revision="8aea4928482750bbdf7b7333d1690ac83c2da9ed"/>
+  <project name="aosp/trusty/app/sample" path="trusty/app/sample" revision="aa8b16ec4b893615596c0c66215e99a94469746a"/>
+  <project name="aosp/trusty/app/storage" path="trusty/app/storage" revision="0cb41cb319e02582bba6ca41abb44824ae6510ca"/>
   <project name="aosp/trusty/external/headers" path="trusty/external/headers" revision="fe7222b7341192abe23982374f4fc11061255965"/>
   <project name="aosp/trusty/external/qemu" path="trusty/external/qemu" revision="ec1be239b2e4cdab549ed3356898ba01e32107d1"/>
-  <project name="aosp/trusty/lib" path="trusty/lib" revision="ed567b09d68bde9377a7850d799c80da29de3f8c"/>
-  <project name="aosp/trusty/lk/common" path="trusty/external/lk" revision="f7890a8c6be55d1bf5786f67447564eb019c8104">
+  <project name="aosp/trusty/lib" path="trusty/lib" revision="941227e475782e62daaa0981b899e3a35c1ed788"/>
+  <project name="aosp/trusty/lk/common" path="trusty/external/lk" revision="d06848346bbae9259967db62bb14cc857968512c">
     <copyfile dest="trusty/makefile" src="makefile"/>
   </project>
-  <project name="aosp/trusty/lk/trusty" path="trusty/lk/trusty" revision="53153737be0e05a8d13e355cd81c91407eff5610"/>
+  <project name="aosp/trusty/lk/trusty" path="trusty/lk/trusty" revision="191dba1092c84900a74d75f4b6516d299752755b"/>
   <project name="aosp/trusty/vendor/google/aosp" path="trusty/vendor/google/aosp" revision="3bffac2a629043b97c9ea4fde1519341b212f040">
     <copyfile dest="trusty/lk_inc.mk" src="lk_inc.mk"/>
   </project>
-  <project name="bsp/device/intel/apps/OemTelephony" path="vendor/intel/apps/telephony/OemTelephony" revision="528755c44074f0c460fe974d719e818f9af0e270"/>
-  <project name="bsp/device/intel/broxton" path="device/intel/broxton" revision="ee605909a885920e8803d32fd0e65c6d7956cb5d"/>
+  <project name="bsp/device/intel/broxton" path="device/intel/broxton" revision="e2ebb62096925a9d503a30d417af8393c57abd9c"/>
   <project name="bsp/device/intel/fw/camera" path="vendor/intel/fw/camera" revision="927a5a3a7523c1797bae551f217335d9157327b7"/>
-  <project name="bsp/device/intel/fw/sst" path="vendor/intel/fw/sst" revision="bf34766bf466c8329382f3c5d376469a053ba928"/>
-  <project name="bsp/device/intel/houdini" path="vendor/intel/houdini" revision="99b7b029cfa3d7ece43b2ff2bfb359fc91cb2ae8"/>
-  <project name="bsp/device/intel/log_capture" path="vendor/intel/tools/log_capture" revision="89cda58e31f4f5e57b5f8ce28d6c17f9d76b3e12"/>
-  <project name="bsp/device/intel/rtc" path="vendor/intel/rtc" revision="8269e75fef01664596681e01bdc0a368d93cddef"/>
-  <project name="bsp/device/intel/sepolicy" path="device/intel/sepolicy" revision="2a7fabcf326984074cb3db74ae5900c73c405f04"/>
-  <project name="bsp/external/alac" path="external/alac" revision="9478eab9caadb9bcac05490ef275451d8f65427b"/>
-  <project name="bsp/external/drm-bxt" path="vendor/intel/external/drm-bxt" revision="5e29859a330c5429feb23c25a8562a51c481759b"/>
-  <project name="bsp/external/libpciaccess" path="external/libpciaccess" revision="0c02beb366049fdc3cb1213d502d914a34ca8654"/>
-  <project name="bsp/hardware/intel/PRIVATE/libmix" path="vendor/intel/hardware/libmix" revision="29d9f2d659552dc199a6b185c27e83310a319140"/>
-  <project name="bsp/hardware/intel/PRIVATE/mediasdk_release" path="vendor/intel/mediasdk_release" revision="7d1d15f6a5034130a40205e4c84605307f7b2bb2"/>
-  <project name="bsp/hardware/intel/PRIVATE/parameter-framework" path="vendor/intel/audio/parameter-framework" revision="f2bd977baa78a7bc6516a0e2f341da9f47377145"/>
-  <project name="bsp/hardware/intel/audiocomms/utilities" path="hardware/intel/audio/coe/utilities" revision="e8e5a2d741283b6741b9e0152cc49646a3181904"/>
-  <project name="bsp/hardware/intel/display/libmemtrack" path="hardware/intel/display/libmemtrack" revision="049354626be8b6c11b50eb5cd24209c6817d9165"/>
-  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="c893c47fb8f1c3b2c6ad82e41856c09f32c5a587"/>
-  <project name="bsp/hardware/intel/liblights" path="hardware/intel/lights" revision="03212ac88ce0672bc6368c29ef899ffd259fae16"/>
-  <project name="bsp/hardware/intel/libmedia_utils" path="vendor/intel/hardware/libmedia_utils" revision="9efdd5a02ce4a09d3f241beb6d1bcf5e051fdc85"/>
-  <project name="bsp/hardware/intel/libva" path="external/libva" revision="a40b730f08436044d8cbf2d0cc19a4eb5381bbc0"/>
-  <project name="bsp/hardware/intel/omx-components" path="vendor/intel/hardware/omx-components" revision="da413f02decb8afe69b44714996d049cb3987cda"/>
+  <project name="bsp/device/intel/log_capture" path="vendor/intel/tools/log_capture" revision="31753c9cf540e108d7a479f8b27129aad02cf108"/>
+  <project name="bsp/device/intel/sepolicy" path="device/intel/sepolicy" revision="3faa7ee049cffeaaab9731f8495bd7a9cc6cebba"/>
+  <project name="bsp/external/libpciaccess" path="external/libpciaccess" revision="6e906ca4b21b41dada6e10ac1a1730fc9ca9e890"/>
+  <project name="bsp/hardware/intel/PRIVATE/mediasdk_release" path="vendor/intel/mediasdk_release" revision="63137a69eec18ed2e3e54fdb8d34dc2f122d98ee"/>
+  <project name="bsp/hardware/intel/PRIVATE/parameter-framework" path="vendor/intel/audio/parameter-framework" revision="bff24f49af8e6fb76dc0c94761f96a02577837ee"/>
+  <project name="bsp/hardware/intel/audiocomms/utilities" path="hardware/intel/audio/coe/utilities" revision="740739c02acb582dbd06c0ae60da73d2970d905d"/>
+  <project name="bsp/hardware/intel/bootctrl" path="hardware/intel/bootctrl" revision="ddd563221e4b171cd5112375d2fa58791207a8d8"/>
+  <project name="bsp/hardware/intel/display/libmemtrack" path="hardware/intel/display/libmemtrack" revision="35846d1bfc64bae9eef50a0af3512aae236ca1a9"/>
+  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="59b3e6e25e00cd6897fb42fcbe3c8d0a2e625316"/>
+  <project name="bsp/hardware/intel/evs" path="hardware/intel/evs" revision="c5df1a3efa5f24e18c1e63569f306663be099f02"/>
+  <project name="bsp/hardware/intel/health" path="hardware/intel/health" revision="323d80d04cb500fd467f581ed151a7a9d0182f37"/>
+  <project name="bsp/hardware/intel/interfaces" path="vendor/intel/hardware/interfaces" revision="129de46d0f82dec5bd1a66e86107e6ad553c53f5"/>
+  <project name="bsp/hardware/intel/libcamhal" path="hardware/intel/libcamhal" revision="ca300ffb598abac8fb8c848f5f05ea1b64e07b3f"/>
+  <project name="bsp/hardware/intel/libsensors-input" path="hardware/intel/libsensors-input" revision="74ffa20720c229e1d2f2dd5133245e6de7d8073c"/>
+  <project name="bsp/hardware/intel/libva" path="external/libva" revision="6217fbe8473f9ba9fa92f7809b7c2ec23411969f"/>
   <project name="bsp/hardware/intel/pstore-clean" path="vendor/intel/pstore-clean" revision="6efa2a140270452900a06667a59a23b4756e1cbf"/>
-  <project name="bsp/hardware/intel/sventx" path="vendor/intel/hardware/sventx" revision="e8992b83b41d725698be5991f8a01153dbbf9cff"/>
-  <project name="bsp/hardware/intel/vehicle" path="hardware/intel/vehicle" revision="5167cc2734ab619b608aa37305054aa311746376"/>
-  <project name="bsp/hardware/intel/wlan/hostap_wcs_rel" path="hardware/intel/wlan/hostap_wcs/rel" revision="568da6a6f676a3d69d2f716376610af6788a4b9b"/>
-  <project name="bsp/host/deployment_tools/abl_config_tool" path="vendor/intel/abl/abl_config_tool" revision="2421cdd452777ed97064e2a6f75fc38cb99bad51"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="0f5358f6ca306e8eaea54e58c91ff07a790dabe8"/>
-  <project name="bsp/kernel/modules/bt_intel_fm" path="kernel/modules/intel_fm" revision="8bb465b8ae7838a462f167a3ff61f2830f84dc71"/>
-  <project name="bsp/kernel/modules/intel_ld" path="kernel/modules/intel_ld" revision="1b1e21e435fc83fd654059ee04aadd943aa472a7"/>
-  <project name="bsp/kernel/modules/iwlwifi_rel" path="kernel/modules/iwlwifi/rel" revision="4d511c78b42808d7af67f003242d6cc893ec75c7"/>
-  <project name="bsp/kernel/modules/marvell" path="kernel/modules/marvell" revision="08d66ddd95a2754d569a22b67426d9dfce85478a"/>
-  <project name="bsp/kernel/modules/perftools-external" path="kernel/modules/perftools-external" revision="9bebc22e80d01aac955ba6904da0855a91766f3f"/>
-  <project name="bsp/linux/modules/libkmod" path="external/libkmod" revision="ac0af01986f5dd33b20eeed96ee2d1fe0b82bc1f"/>
-  <project name="bsp/platform/external/bluetooth/hcitools" path="external/bluetooth/hcitools" revision="f592ff0fe012b2890c464c1e3a345f479d472a30"/>
-  <project name="bsp/platform/external/bluetooth/libbt-vendor-linux" path="external/bluetooth/libbt-vendor-linux" revision="1b224c3aa75fbd4fc299b1b47073ae92ebc0a30b"/>
-  <project name="bsp/platform/external/dosfstools" path="external/dosfstools" revision="16fd31f22eff2096587feca89e62252316539222"/>
-  <project name="bsp/platform/external/efitools" path="external/efitools" revision="b17cc804eea541c10bb1abdee01294c21a5f1589"/>
-  <project name="bsp/platform/external/gnu-efi" path="external/gnu-efi" revision="cc8ac46e2a0692b4f8cfb7c165701354ca21273f"/>
+  <project name="bsp/hardware/intel/sventx" path="vendor/intel/hardware/sventx" revision="05e83642ce4644875b4715c72b9b580fe937de1c"/>
+  <project name="bsp/hardware/intel/thermal" path="hardware/intel/thermal" revision="e6bdce8c1178fc25a053808760a0a33fd3b20ea1"/>
+  <project name="bsp/hardware/intel/vehicle" path="hardware/intel/vehicle" revision="8c0493251742efdf3aed3b828f595439e7f269e0"/>
+  <project name="bsp/host/deployment_tools/abl_config_tool" path="vendor/intel/abl/abl_config_tool" revision="9b532be660dab5dd3a4d16ccd3cb0485f8e0ffc0"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="98bb0e6bb64675d3f52fe1b61d4bfe18a876705f"/>
+  <project name="bsp/kernel/config-lts" path="kernel/config-lts" revision="75e1fd1d51fe9ba965009e680d9439c0d09f7474"/>
+  <project name="bsp/kernel/modules/marvell" path="kernel/modules/marvell" revision="982f65c8c898e20a9b59caa17ed8d195e57c41a5"/>
+  <project name="bsp/linux/modules/libkmod" path="external/libkmod" revision="5c0838962e06518ea4b9920d2e60973cef44b075"/>
+  <project name="bsp/platform/external/bluetooth/hcitools" path="external/bluetooth/hcitools" revision="b0fa0853721c18f5e254df3f144c50b74ff95844"/>
+  <project name="bsp/platform/external/bluetooth/libbt-vendor-linux" path="external/bluetooth/libbt-vendor-linux" revision="35b613353bd08eb08567f838f6818a8cafa86534"/>
+  <project name="bsp/platform/external/dosfstools" path="external/dosfstools" revision="ff13cd3af300cc25a2293475eb7e1bd6b672d67a"/>
+  <project name="bsp/platform/external/efitools" path="external/efitools" revision="4e2ece193d5ac42fcc3f818c6ba2ae1eff58cf59"/>
+  <project name="bsp/platform/external/gnu-efi" path="external/gnu-efi" revision="c15e2efc324addd64a3866ea1d0ab45d20b7a40f"/>
   <project name="bsp/platform/external/intel-gpu-tools" path="hardware/intel/intel-gpu-tools" revision="cf1c31153c6ad0104147c75f7875d051fe77bf28"/>
-  <project name="bsp/platform/external/mtools" path="external/mtools" revision="ee8d1e7b9bdfbdc3dec8ca5e97412e45dec4ec7b"/>
-  <project name="bsp/platform/external/pciutils" path="external/pciutils" revision="d2cd5766c42c799a07dab05f1ba3cf94e5addb38"/>
-  <project name="bsp/platform/external/sbsigntool" path="external/sbsigntool" revision="7e1d0dc3d932f71a1b323dc55c24cdea469bff2e"/>
-  <project name="bsp/platform/external/thermal_daemon" path="external/thermal_daemon" revision="025d07f69ed8851681365cd092f48426b826d213"/>
-  <project name="bsp/platform/hardware/intel/common/utils" path="vendor/intel/hardware/utils" revision="1d2d32181dd5096be7b779f2afca197e2d09e55f"/>
-  <project name="bsp/platform/packages/apps/AndroidTerm" path="vendor/intel/apps/AndroidTerm" revision="2de105899a2c75b40317957245f0e6d917a7f5d9"/>
+  <project name="bsp/platform/external/mtools" path="external/mtools" revision="7bf1e8f4e1c68aacd29633b5bab925ae353a05b7"/>
+  <project name="bsp/platform/external/pciutils" path="external/pciutils" revision="bbdd00825f05f5efe7e7bbb70365c22101f62218"/>
+  <project name="bsp/platform/external/sbsigntool" path="external/sbsigntool" revision="de59ea276340a80af014e1edcbef287a762ce3a4"/>
   <project name="bsp/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-poky-1.8" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-poky" revision="c0e6c58b9967c217c73e1a3312d79263fa5e07c7"/>
-  <project name="bsp/platform/vendor/intel/libpower" path="hardware/intel/power" revision="20e9e3445371ffef0050c2355c7b96c14db3068f"/>
-  <project name="bsp/prebuilts/intel_imin" path="prebuilts/intel" revision="2f03152fe4d39c62b8a7a43a8e18c76b0dddff39" sync-c="true"/>
-  <project name="bsp/target/security/ifwi-apl" path="vendor/intel/abl/ifwi-apl" revision="1facde9275568195b9a48be0f38a6aa6ce34aeb8"/>
-  <project name="bsp/vendor/intel/PRIVATE/WFA_Sigma_Agent" path="vendor/intel/hardware/PRIVATE/WFA_Sigma_Agent" revision="a86bd72bc02d804693418f08a6ec5ded903d4203"/>
-  <project name="bsp/vendor/intel/PRIVATE/art-extension" path="vendor/intel/art-extension" revision="6ac6f7019d257b3533a6cd6e2b964bee3408d4e1"/>
-  <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="e7d5f3516c75160bb88ffb14db281b2643b156e0"/>
-  <project name="bsp/vendor/intel/abl/abl_prebuilt/external" path="vendor/intel/abl/abl_prebuilt/external" revision="d074b4ba4bce2416a81fe13cbf5d4fea7e8bf141"/>
-  <project name="bsp/vendor/intel/apps/fota" path="vendor/intel/apps/fota" revision="761ebf8033d9395219ad3a775cf4331d2833ebfd"/>
+  <project name="bsp/platform/vendor/intel/libpower" path="hardware/intel/power" revision="8a6df42dc85c5e0b76ace94b5387576d45b8d68d"/>
+  <project name="bsp/prebuilts/intel_imin" path="prebuilts/intel" revision="ab4f1c63f07a10b41f2f3dd249805ede289cb247" sync-c="true"/>
+  <project name="bsp/target/security/ifwi-apl" path="vendor/intel/abl/ifwi-apl" revision="f029449109d01c3cf9ab969a4e562f55a8111002"/>
+  <project name="bsp/vendor/intel/PRIVATE/art-extension" path="vendor/intel/art-extension" revision="50a8aeee97fe5bcbc02746a02983c7b2059baca6"/>
+  <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="99c504da777e667fb6206456f1c81fd87e91fa80"/>
+  <project name="bsp/vendor/intel/abl/abl_prebuilt/external" path="vendor/intel/abl/abl_prebuilt/external" revision="25fcbc9a8b9e6a73df2829e5fc1fc5bb8fd0e5e2"/>
   <project name="bsp/vendor/intel/apps/ituxd" path="vendor/intel/apps/ituxd" revision="2d8ee6363c3d9b82ee0f28f3c9bcdc178ab59ef0"/>
   <project name="bsp/vendor/intel/apps/rvc" path="vendor/intel/apps/rvc" revision="0c8cfa024470db4759863ade9a754cc6df199a00"/>
-  <project name="bsp/vendor/intel/apps/thermal_lite" path="vendor/intel/apps/thermal_lite" revision="4fc038841144ac8aa583be574b31ce0a6b299985"/>
-  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="c7867ab14b41d56c9ae904d5c5ee9954f6170779"/>
-  <project name="bsp/vendor/intel/common" path="device/intel/common" revision="7b89d8d431c0a8e508415e73d7b6d5f6c2d1ff01"/>
-  <project name="bsp/vendor/intel/efiwrapper" path="vendor/intel/efiwrapper" revision="07c0c33e0f55bb6fa43257f2eaf92eacf60dffa4"/>
-  <project name="bsp/vendor/intel/external/alsa-lib" path="vendor/intel/external/alsa-lib" revision="7ba4ddd799631781e2fa789482edfb3ce9e11f7a"/>
-  <project name="bsp/vendor/intel/external/alsa-utils" path="vendor/intel/external/alsa-utils" revision="df04474ed34c1ad78bafdc2512861a5bf89c731d"/>
+  <project name="bsp/vendor/intel/apps/thermal_lite" path="vendor/intel/apps/thermal_lite" revision="c2293abc8046fee5470509029bf747651c61cdfb"/>
+  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="c0f252761368c058f398d454e32af6e07212e98d"/>
+  <project name="bsp/vendor/intel/common" path="device/intel/common" revision="b9a3deaab6406703830fc554de301a7d9ce9972f">
+    <copyfile dest="vendor/intel/hardware/Android.bp" src="Android_intel.bp"/>
+  </project>
+  <project name="bsp/vendor/intel/efiwrapper" path="vendor/intel/efiwrapper" revision="ed313802fca0a9f20792370f113513b76641f610"/>
+  <project name="bsp/vendor/intel/external/alsa-lib" path="vendor/intel/external/alsa-lib" revision="d9a4e36968db1f61690e4835bbda9f90c3fb3812"/>
+  <project name="bsp/vendor/intel/external/alsa-utils" path="vendor/intel/external/alsa-utils" revision="9aa12d513ee7eaa30399d5c6ab5719db702f10f6"/>
   <project name="bsp/vendor/intel/external/boost" path="vendor/intel/external/boost" revision="ba8aeff2fb86efc3e77e4fd273a10e05e5ce4d29"/>
-  <project name="bsp/vendor/intel/external/can_utils" path="vendor/intel/external/can_utils" revision="f4b45872127457c8266aa125a1c710003cd7ab38"/>
-  <project name="bsp/vendor/intel/external/coreboot" path="vendor/intel/external/coreboot" revision="42b141d40940426a5824c645352210c275b34cdb"/>
+  <project name="bsp/vendor/intel/external/can_utils" path="vendor/intel/external/can_utils" revision="33181f79222988ef989bb8b3bcae31c72ab64b7e"/>
+  <project name="bsp/vendor/intel/external/coreboot" path="vendor/intel/external/coreboot" revision="0c6efea12a625f627cbb182f8780f95eac620425"/>
+  <project name="bsp/vendor/intel/external/drm-intel" path="vendor/intel/external/drm-intel" revision="6149679a83852548e89304907604c88ea0c061e8"/>
   <project name="bsp/vendor/intel/external/efivar" path="external/efivar" revision="2bc64897faf2197e998aae986905d9765744b630"/>
-  <project name="bsp/vendor/intel/external/libsndfile" path="vendor/intel/external/libsndfile" revision="c2b5f7039b31945ed33dd4ddd3b539f2a4575cf5"/>
-  <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="c9cb1d7b851a7d6162b36f76b7e6363e8a1c8514"/>
+  <project name="bsp/vendor/intel/external/hwcomposer" path="vendor/intel/external/hwcomposer-intel" revision="36f341830279c38a26a62495c4e65473bbfff267"/>
+  <project name="bsp/vendor/intel/external/libsndfile" path="vendor/intel/external/libsndfile" revision="ab500dc00edba61c063ce3faa46fec03dd6192b7"/>
+  <project name="bsp/vendor/intel/external/mesa3d" path="vendor/intel/external/mesa3d-intel" revision="0bebc8592dcbbac932634fb25e8acf4427868c45"/>
+  <project name="bsp/vendor/intel/external/minigbm" path="external/minigbm-intel" revision="0576cba0e7b825b72dc418393a6a738d724ce64f"/>
+  <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="00c5152d1c9d129da5e026c6042a285e42cc1246"/>
   <project name="bsp/vendor/intel/external/parameter-framework_plugins_policy" path="vendor/intel/audio/parameter-framework-plugins/policy" revision="fe4126018fc7d569c1d34e05bb1516095757adff"/>
   <project name="bsp/vendor/intel/external/prebuilts/elf" path="vendor/intel/external/prebuilts/elf" revision="a176116a683eca6fa1b9d3ad4ceaa943f10598d1"/>
-  <project name="bsp/vendor/intel/external/tbb" path="vendor/intel/external/tbb" revision="f0356637de321ddf5bf612922a6959f05d400697"/>
-  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="760017f0ed1776b035fa0ef5e938af5107edcef4"/>
-  <project name="bsp/vendor/intel/fw/iwl_rel" path="vendor/intel/fw/iwl/rel" revision="d57b5d2015da08fcdf38e49a8389c5e40cb823c7"/>
-  <project name="bsp/vendor/intel/fw/mwifiex" path="vendor/intel/fw/marvell" revision="da2e9fbdf9f8d838f9195f9ef07483ab92da52d9"/>
-  <project name="bsp/vendor/intel/fw/trusty_app_sand" path="trusty/app/sand" revision="a52a88e95eb25517d5cd2150f50d379e4898d6ce"/>
-  <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="329e29e113cad25d34f4ee1e1100f72632a2730e">
+  <project name="bsp/vendor/intel/external/tbb" path="vendor/intel/external/tbb" revision="81911c652df1c9a63a5a246a2bc8ca01069ea7d5"/>
+  <project name="bsp/vendor/intel/external/vulkan" path="vendor/intel/external/vulkan-intel" revision="e33c3bd00451bdb4d7a5ef0c55c5e264e51f2e4b"/>
+  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="76d1365a64b5d71d402cd84bc28c10c76ac1d233"/>
+  <project name="bsp/vendor/intel/fw/mwifiex" path="vendor/intel/fw/marvell" revision="e3bff9a6658e65b6cf8df419d16844e7d41120e4"/>
+  <project name="bsp/vendor/intel/fw/trusty_app_sand" path="trusty/app/sand" revision="94012016070d868893644ee89d855e1eb4ad5c7d"/>
+  <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="273dd37df49620968ab1a42e3630a984b4294db5">
     <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
   </project>
-  <project name="bsp/vendor/intel/fw/trusty_lk_trusty_platform_sand" path="trusty/platform/sand" revision="1fba0a4a7be99fd3ac83cac5abbf44ce9297c0a6"/>
+  <project name="bsp/vendor/intel/fw/trusty_lk_trusty_platform_sand" path="trusty/platform/sand" revision="b73f49a47e8223092129d6471bcd3e22fc78a44e"/>
   <project name="bsp/vendor/intel/fw/trusty_lk_trusty_target_sand" path="trusty/target/sand" revision="cf2ac65931464980be180b5ccce91de94d453182"/>
-  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/audio-hal" path="hardware/intel/audio/coe/primary" revision="c822460aff048751432f06eb547523b85da9a64d"/>
-  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/parameter-framework/plugins/alsa" path="vendor/intel/audio/parameter-framework-plugins/alsa" revision="3dc8024b3e1157b62ebf240f8569e51209c45a1a"/>
-  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/parameter-framework/plugins/fs" path="vendor/intel/audio/parameter-framework-plugins/fs" revision="0a0effa55bb9f8140a45c493ee7eae9ea5b93089"/>
-  <project name="bsp/vendor/intel/hardware/PRIVATE/ufo/gen9_dev" path="vendor/intel/ufo/gen9_dev" revision="d9474f13cace08937172d89b2c749749f1b976e4"/>
-  <project name="bsp/vendor/intel/hardware/bt_hci_vs_service" path="vendor/intel/hardware/bt_hci_vs_service" revision="ac0d066d19e37a58de909accd809ace4bd9d5a61"/>
-  <project name="bsp/vendor/intel/hardware/healthd" path="vendor/intel/hardware/healthd" revision="a01b1ca35731ecac324cd698393c84b63c268aca"/>
-  <project name="bsp/vendor/intel/hardware/keystore" path="vendor/intel/hardware/keystore" revision="17967461c69d741f66705d036ae7f293873595a6"/>
-  <project name="bsp/vendor/intel/hardware/storage" path="vendor/intel/hardware/storage" revision="0c786199d08488c91a33bd3d29b6f1fbc5a39648"/>
-  <project name="bsp/vendor/intel/ias/ias-wrappers" path="vendor/intel/ias/ias-wrappers" revision="47a971f0431efde5b264d83f2625285f3d3ec7ec"/>
-  <project name="bsp/vendor/intel/iio-sensors" path="vendor/intel/hardware/iio-sensors" revision="0fc9d1b846766b314b95844fa020faa7975cc8ea"/>
-  <project name="bsp/vendor/intel/tools/peeknpoke" path="vendor/intel/tools/peeknpoke" revision="5079fb5a2e0ed9d5625ffdb2096832efc10686cf"/>
-  <project name="bsp/vendor/intel/wifi" path="hardware/intel/wifi" revision="3a1c2d65700141179d50dd07290ef470ccf8a0ad"/>
-  <project name="bsp/wcs/vendor/intel/hardware/PRIVATE/bt/wcs/libbt" path="hardware/intel/libbt-vendor-intel" revision="28216ee116c5bec5d283009b9e4eef505fd726ca"/>
-
+  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/audio-hal" path="hardware/intel/audio/coe/primary" revision="5bc9165e8dc2067b3c8ae0c21841c5d4e1047db1"/>
+  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/parameter-framework/plugins/alsa" path="vendor/intel/audio/parameter-framework-plugins/alsa" revision="e3405d9157a2961449d0ea1b1215f3de8df4135f"/>
+  <project name="bsp/vendor/intel/hardware/PRIVATE/audiocomms/parameter-framework/plugins/fs" path="vendor/intel/audio/parameter-framework-plugins/fs" revision="9b5bcb5f1c847d23ac72eb57c809dbc8bf81cd7c"/>
+  <project name="bsp/vendor/intel/hardware/PRIVATE/ufo/gen9_dev" path="vendor/intel/ufo/gen9_dev" revision="8d7723949c4b1b6fab98462985052fe0eadfc002"/>
+  <project name="bsp/vendor/intel/hardware/keystore" path="vendor/intel/hardware/keystore" revision="a045d1229724824df98b10f38277f72c9b5acb13"/>
+  <project name="bsp/vendor/intel/hardware/storage" path="vendor/intel/hardware/storage" revision="a6261403ba67fd6014d1d26366f00420c0cbc0c7"/>
+  <project name="bsp/vendor/intel/ias/ias-wrappers" path="vendor/intel/ias/ias-wrappers" revision="e75cd5a4d88a8322e7c86193a29624fde555416d"/>
+  <project name="bsp/vendor/intel/tools/itt" path="vendor/intel/tools/itt" revision="f878818eac4247f81824dcd69ccf04f80259c2db"/>
+  <project name="bsp/vendor/intel/tools/peeknpoke" path="vendor/intel/tools/peeknpoke" revision="d0c2a7de1d5dacd18385bd0690dfd3b86461282c"/>
+  <project name="yocto/target/audio/common" path="vendor/intel/ias/ias-audio-common" revision="63277cbb42e1b573817b8fcc241d0b3ec760830e"/>
+  <project name="yocto/target/audio/daemon2" path="vendor/intel/ias/ias-audio-smartx" revision="4de6796f47f1b0849aae0bdd02081b081177bbe6"/>
+  <project name="yocto/target/core_libraries/base" path="vendor/intel/ias/core_libraries/base" revision="452c6230f82c9640bd35198528de8faf6edaed00"/>
+  <project name="yocto/target/core_libraries/foundation" path="vendor/intel/ias/core_libraries/foundation" revision="e892ee272fe19a1c27d2a9e58c6d12ce91891dc6"/>
+  <project name="yocto/target/media_transport/avb_streamhandler" path="vendor/intel/ias/media_transport/avb_streamhandler" revision="e3e6178af6c5ef6dcd2c6e1a7f4a57fa4b9cf1cf"/>
 </manifest>
-
