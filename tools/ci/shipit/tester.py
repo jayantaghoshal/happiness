@@ -9,7 +9,7 @@ import sys
 import tempfile
 import traceback
 from os.path import join as pathjoin
-from typing import List, Set
+from typing import List, Set, Tuple
 
 import shipit.test_runner.test_types
 from shipit.process_tools import check_output_logged as run
@@ -57,7 +57,7 @@ def run_test(test: IhuBaseTest):
         vts_test_run.vts_tradefed_run_module(module_name)
     elif isinstance(test, shipit.test_runner.test_types.Disabled):
         if datetime.datetime.now() > test.deadline:
-            raise Exception("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
+            raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
                             (test.disabled_test, test.jira_issue, test.reason))
     else:
         raise Exception("Unknown test case: %s" % test)
@@ -73,20 +73,31 @@ def build_testcases(tests_to_run: List[IhuBaseTest]):
         run_in_env("make vts -j7", cwd=aosp_root)
         run_in_env("mmma -j7 %s" % test_modules_space_separated, cwd=aosp_root)
 
+def print_indented(s: str, indent="    "):
+    lines = s.split("\n")
+    for l in lines:
+        print(indent + l)
+
 def run_testcases(tests_to_run: List[IhuBaseTest]):
-    failing_testcases = []  # type: List[IhuBaseTest]
+    failing_testcases = []  # type: List[Tuple[IhuBaseTest, str]]
     for t in tests_to_run:
         try:
             run_test(t)
+        except test_types.TestFailedException as te:
+            failing_testcases.append((t, str(te)))
+            logger.error(str(te))
         except Exception as e:
-            failing_testcases.append(t)
+            failing_testcases.append((t, str(e)))
             logger.exception(traceback.format_exc())
 
     print("All tests completed")
     if len(failing_testcases) > 0:
+        print("#####################################################################")
         print("Failing test cases:")
-        for t in failing_testcases:
-            print(" --- %s" % t)
+        for (test, error) in failing_testcases:
+            print(" * %s" % test)
+            print_indented(error, "      >> ")
+        print("#####################################################################")
         sys.exit(1)
 
 
