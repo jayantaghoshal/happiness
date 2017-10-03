@@ -7,7 +7,7 @@
 
 using namespace tarmac::eventloop;
 
-using ::vendor::volvocars::hardware::ipcb::V1_0::Error;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::Error;
 
 namespace Connectivity
 {
@@ -23,7 +23,7 @@ ServiceManager::ServiceManager(std::string service_name,::Connectivity::MessageD
     }
 }
 
-// Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb follow.
+// Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
 Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes, const sp<IMessageCallback>& callbackHandler) {
     ALOGD("+ Ipcb::subscribeMessage");
 
@@ -33,7 +33,7 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
     if (0 == operationTypes.size())
     {
         ALOGD("- Ipcb::subscribeMessage (FAIL)");
-        return ::vendor::volvocars::hardware::ipcb::V1_0::Status::FAIL;
+        return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::FAIL;
     }
 
     std::set<OperationType> subscribedTypes = {OperationType::RESPONSE, OperationType::ERROR};  //Do not allow RESPONSE or ERRORS to be added!
@@ -61,7 +61,7 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
     }
 
     ALOGD("- Ipcb::subscribeMessage (SUCCESS)");
-    return ::vendor::volvocars::hardware::ipcb::V1_0::Status::SUCCESS;
+    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::SUCCESS;
 }
 
 Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t operationID, const sp<IResponseCallback>& callbackHandler) {
@@ -97,7 +97,7 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
         });
 
     ALOGD("- Ipcb::subscribeResponse (SUCCESS)");
-    return ::vendor::volvocars::hardware::ipcb::V1_0::Status::SUCCESS;
+    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::SUCCESS;
 }
 
 Return<Status> ServiceManager::unsubscribe(uint16_t serviceID, uint16_t operationID, const sp<IMessageCallback>& callbackHandler) {
@@ -110,7 +110,7 @@ Return<Status> ServiceManager::unsubscribe(uint16_t serviceID, uint16_t operatio
 
     // TODO There is no unsubscribe currently, implement it!!
 
-    return ::vendor::volvocars::hardware::ipcb::V1_0::Status {};
+    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status {};
 }
 
 Return<void> ServiceManager::sendMessage(const Msg& msg) {

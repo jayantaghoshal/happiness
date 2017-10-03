@@ -1,12 +1,12 @@
-package vendor.volvocars.hardware.ipcb@1.0;
+package vendor.volvocars.hardware.vehiclecom@1.0;
 
 import IMessageCallback;
 import IResponseCallback;
 
-interface IIpcb
+interface IVehicleCom
 {
     /**
-     * Subscribe to messages received on IPCB
+     * Subscribe to messages received on Vehicle Communication Bus (e.g. IPCB)
      *
      * Use this to subscribe to receive messages not related to a request (e.g. notifications)
      *
@@ -18,7 +18,7 @@ interface IIpcb
     subscribeMessage(uint16_t serviceID, uint16_t operationID, vec<OperationType> operationTypes, IMessageCallback callbackHandler) generates (Status status);
 
     /**
-     * Subscribe to responses received on IPCB
+     * Subscribe to responses received on Vehicle Communication Bus (e.g. IPCB)
      *
      * Use this to subscribe to receive all responses related to requests (e.g. SetRequest) where a response is expected.
      *
@@ -29,7 +29,7 @@ interface IIpcb
     subscribeResponse(uint16_t serviceID, uint16_t operationID, IResponseCallback callbackHandler) generates (Status status);
 
     /**
-     * Unsubscribe to messages received on IPCB
+     * Unsubscribe to messages received on Vehicle Communication Bus (e.g. IPCB)
      * @param serviceID ID of the service to unsubscribe to
      * @param operationID ID of the operation to unsubscribe to, use 0xFFFF to unsubscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs, used to unsubscribe the correct instance if multiple subscribers exist
@@ -37,9 +37,9 @@ interface IIpcb
     unsubscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
 
     /**
-     * Send message over IPCB
-     * Never send messages with opType ACK, this will be sent automatically by the IPCB daemon instance
-     * @param msg Message to send over IPCB.
+     * Send message over Vehicle Communication Bus (e.g. IPCB)
+     * Never send messages with opType ACK, this will be sent automatically by the Vehicle Communication Bus daemon (e.g. IpcbD) instance
+     * @param msg Message to send over Vehicle Communication Bus (e.g. IPCB).
      */
     oneway sendMessage(Msg msg);
 };

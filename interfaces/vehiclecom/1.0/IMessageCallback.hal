@@ -1,0 +1,10 @@
+package vendor.volvocars.hardware.vehiclecom@1.0;
+
+interface IMessageCallback
+{
+    /**
+     * Handle messages received over Vehicle Communication Bus (e.g. IPCB)
+     * @param msg Message received over Vehicle Communication Bus (e.g. IPCB).
+     */
+    oneway onMessageRcvd(Msg msg);
+};

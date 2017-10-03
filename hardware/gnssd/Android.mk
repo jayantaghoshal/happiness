@@ -48,7 +48,7 @@ LOCAL_SHARED_LIBRARIES += \
     libinfotainmentbusasn \
     android.hardware.gnss@1.0 \
     vendor.volvocars.hardware.common@1.0 \
-    vendor.volvocars.hardware.ipcb@1.0
+    vendor.volvocars.hardware.vehiclecom@1.0
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/gnssd/src \

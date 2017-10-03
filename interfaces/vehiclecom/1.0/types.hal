@@ -1,4 +1,4 @@
-package vendor.volvocars.hardware.ipcb@1.0;
+package vendor.volvocars.hardware.vehiclecom@1.0;
 
 import vendor.volvocars.hardware.common@1.0::types;
 

@@ -11,8 +11,8 @@ extern "C" {
 }
 
 #include "binderimpl/gnss/Gnss.h"
-#include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
-#include <vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -25,9 +25,9 @@ using ::android::hardware::Void;
 using ::android::sp;
 using ::tarmac::eventloop::IDispatcher;
 
-using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb;
-using ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback;
-using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 
 using namespace android::hardware::gnss::V1_0::implementation;
 using namespace android::hardware::gnss::V1_0;
@@ -42,7 +42,7 @@ public:
 
     void StartSubscribe();
 
-    // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IIpcbCallback follow.
+    // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
     Return<void> onMessageRcvd(const Msg &msg) override;
 
     /**
@@ -54,7 +54,7 @@ public:
     void GNSSPositionDataAccuracyNotificationHandler(const Msg &msg);
 
 private:
-    sp<IIpcb> ipcbServer_;
+    sp<IVehicleCom> ipcbServer_;
 
     tarmac::eventloop::IDispatcher &timeProvider_;
 

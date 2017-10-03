@@ -1,5 +1,5 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_IPCB_V1_0_IPCBCALLBACK_H
-#define VENDOR_VOLVOCARS_HARDWARE_IPCB_V1_0_IPCBCALLBACK_H
+#ifndef VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
+#define VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
 
 #define LOG_TAG "iplm_daemon"
 
@@ -9,8 +9,8 @@
 
 #include <Application_dataelement.h>
 
-#include <vendor/volvocars/hardware/ipcb/1.0/IIpcb.h>
-#include <vendor/volvocars/hardware/ipcb/1.0/IMessageCallback.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
 
 #include <vendor/volvocars/hardware/iplm/1.0/IIplm.h>
 #include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
@@ -26,9 +26,9 @@ using ::android::hardware::Void;
 using ::android::sp;
 using ::tarmac::eventloop::IDispatcher;
 
-using ::vendor::volvocars::hardware::ipcb::V1_0::IIpcb;
-using ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback;
-using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 using ::vendor::volvocars::hardware::iplm::V1_0::IIplm;
@@ -60,7 +60,7 @@ class IplmService : public IIplm, public IMessageCallback
   IplmService();
   ~IplmService() = default;
 
-  // Methods from ::vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback follow.
+  // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
   Return<void> onMessageRcvd(const Msg &msg) override;
 
   /**
@@ -122,7 +122,7 @@ class IplmService : public IIplm, public IMessageCallback
   }
 
  private:
-  sp<IIpcb> ipcbServer_;
+  sp<IVehicleCom> ipcbServer_;
 
   /*! Action, bit-field of ResourceGroup(s). */
   struct IplmData;
@@ -259,4 +259,4 @@ class IplmService : public IIplm, public IMessageCallback
   std::vector<EcuAvailabilityNotification> node_availability_notifications_;
 };
 
-#endif  // VENDOR_VOLVOCARS_HARDWARE_IPCB_V1_0_IPCBCALLBACK_H
+#endif  // VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H

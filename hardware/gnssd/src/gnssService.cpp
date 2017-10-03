@@ -10,8 +10,8 @@ extern "C" {
 
 #define LOG_TAG "GnssD.service"
 
-using ::vendor::volvocars::hardware::ipcb::V1_0::OperationType;
-using ::vendor::volvocars::hardware::ipcb::V1_0::Msg;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 using namespace Connectivity;
@@ -35,7 +35,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()}
 
 void GnssService::StartSubscribe()
 {
-    ipcbServer_ = IIpcb::getService("ipcb");
+    ipcbServer_ = IVehicleCom::getService("ipcb");
 
     if (ipcbServer_ != NULL)
     {
@@ -59,7 +59,7 @@ void GnssService::StartSubscribe()
     }
 }
 
-// Methods from vendor::volvocars::hardware::ipcb::V1_0::IMessageCallback follow.
+// Methods from vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
 Return<void> GnssService::onMessageRcvd(const Msg &msg)
 {
     ALOGV("onMessageRcvd %04X.%04X.%02d 0x%08X(size: %d)",
