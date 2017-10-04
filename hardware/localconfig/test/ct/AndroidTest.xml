@@ -15,11 +15,11 @@ The test if the file exists is done in the actual test.
     </target_preparer>
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsLocalConfigCTTestCases->/data/local/tmp/VtsLocalConfigCTTestCases" />
+        <option name="push" value="liblocalconfig_ct->/data/local/tmp/liblocalconfig_ct" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsLocalConfigCTTestCases" />
+        <option name="module-name" value="liblocalconfig_ct" />
         <option name="runtime-hint" value="75s" />
     </test>
 </configuration>

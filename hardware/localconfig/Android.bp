@@ -1,0 +1,34 @@
+cc_defaults {
+    name: "liblocalconfig_defaults",
+    compile_multilib: "64",
+    export_include_dirs: ["include"],
+    cflags: ["-fexceptions"],
+    static_libs: [
+        "libjsoncpp",
+        "liblog",
+    ],
+    vendor: true,
+}
+
+// Static library. Used in shared lib and for unit tests.
+cc_library_static {
+    name: "liblocalconfig_static",
+    defaults: ["liblocalconfig_defaults"],
+    srcs: [
+        "src/local_config_file_reader_android_ihu_behavior.cpp",
+        "src/local_config_reader.cpp",
+        "src/local_config_reader_interface.cpp",
+        "src/localconfig.cpp",
+    ],
+    host_supported: true,
+}
+
+// Shared library for deployment to system
+cc_library_shared {
+    name: "liblocalconfig",
+    defaults: ["liblocalconfig_defaults"],
+    whole_static_libs: ["liblocalconfig_static"],
+    required: ["localconfig_default"], //consider removing from user builds when VBFs are ready
+}
+
+subdirs = ["test"]

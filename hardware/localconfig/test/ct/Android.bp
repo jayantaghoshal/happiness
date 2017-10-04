@@ -1,0 +1,15 @@
+cc_test {
+    name: "liblocalconfig_ct",
+
+    srcs: ["localconfig_ct_test.cpp"],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    shared_libs: ["liblocalconfig"],
+    static_libs: ["libgmock"],
+    test_suites: ["vts"],
+    compile_multilib: "64",
+
+}
