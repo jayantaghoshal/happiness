@@ -5,12 +5,16 @@
 
 namespace vcc
 {
-class LocalConfigFileReaderWithFallback : public LocalConfigReader
+class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader
 {
   typedef LocalConfigReader base;
 
  public:
-  LocalConfigFileReaderWithFallback(std::string production_path, std::string fallback_path);
+  LocalConfigFileReaderAndroidIhuBehavior(std::string production_path, std::string fallback_path,
+                                          const char* environment_override);
+
+ private:
+  static void LoadWithFallback(std::string production_path, std::string fallback_path, Json::Value* value);
 };
 
 } /* namespace vcc */
