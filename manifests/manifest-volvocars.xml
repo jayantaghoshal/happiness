@@ -55,6 +55,9 @@
 
   <!-- TODO: Bug fix in soong, should be fixed in O-MR1 according to https://partnerissuetracker.corp.google.com/issues/66930558 -->
   <remove-project name="aosp/platform/build/soong"/>
-  <project name="aosp/platform/build/soong" path="build/soong" revision="17e739cf72d712978d272ffc89034c911accdd8b"/>
+  <project name="aosp/platform/build/soong" path="build/soong" revision="17e739cf72d712978d272ffc89034c911accdd8b">
+    <linkfile dest="Android.bp" src="root.bp"/>
+    <linkfile dest="bootstrap.bash" src="bootstrap.bash"/>
+  </project>
 
 </manifest>
