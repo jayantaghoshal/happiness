@@ -131,7 +131,10 @@ def render(signals: List[fdx_description_file_parser.Item],
             assert(False)
 
         if(isinstance(type, model.DE_Identical) or isinstance(type, model.DE_Value) or isinstance(type, model.DE_Boolean)):
-            convstr+="""    
+            convstr+="""
+    def set(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+
     def send(self, value_physical):
         self.item.value_raw = self.p2r(value_physical)
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
@@ -145,6 +148,9 @@ def render(signals: List[fdx_description_file_parser.Item],
 """
         elif isinstance(type, model.DE_Enum):
             convstr+="""
+    def set(self, value_physical):
+        self.item.value_raw = value_physical
+
     def send(self, value_physical):
         self.item.value_raw = value_physical
         self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
@@ -153,7 +159,7 @@ def render(signals: List[fdx_description_file_parser.Item],
     def get(self):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
-        
+
 """
     return convstr
 
@@ -207,7 +213,7 @@ class FrSignalInterface:
 
         (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
             os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../FDXDescriptionFile.xml"))
-                
+
         self.group_id_map = {g.group_id: g for g in self.groups}
 
         def data_exchange(group_id, data):
@@ -221,7 +227,7 @@ class FrSignalInterface:
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
-                for g in groups_to_subscribe:                
+                for g in groups_to_subscribe:
                     self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
                 self.connected = True
             except:
@@ -232,12 +238,12 @@ class FrSignalInterface:
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
         %(senders_and_receivers)s
-        
+
     def close(self):
         if self.connected:
             self.connection.confirmed_stop()
             self.connection.close()
-        
+
 %(signal_classes)s
 """
         f.write(code % {
