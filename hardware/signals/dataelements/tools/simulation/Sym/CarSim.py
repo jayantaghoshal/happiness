@@ -6,28 +6,28 @@ import tkinter.font
 import json
 import sys
 import os
-import dbus
-import dbus.exceptions
-import dbus.mainloop.glib
-import _thread
+import socket
+import select
+import threading
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen"))
 import autosar.arxml as arxml
 import autosar.components
 import traceback
 from dataelements_generator.getDatatypes import getIntTypeStr
-from gi.repository import GLib
+
 
 BG_COLOR_SENT = "#81f963"
 BG_COLOR_INVALIDATED = "#fc931b"
 BG_COLOR_NOT_SENT = "#8e8d8b"
 
+
 def d2j(data):
-    return json.dumps(data,encoding='utf-8')
+    return json.dumps(data)
 
 
 def j2d(data):
-    return  json.loads(data, encoding='utf-8')
+    return json.loads(data)
 
 
 class DESignalWidget(tkinter.Frame):
@@ -39,8 +39,9 @@ class DESignalWidget(tkinter.Frame):
 
 class PortSender():
     #Note: This class is not a widget of its own, because the sub-widgets are commonly used in a grid view
-    def __init__(self, info_label, send_button, stop_button, senderWidget, portName, dataElementName, isInsignal, first_col, autosend_bindvar):
-        self.isInsignal = isInsignal
+    #TODO add is_connected instead of connection as parameter
+    def __init__(self, info_label, send_button, stop_button, senderWidget, portName,
+                 dataElementName, first_col, is_insignal, autosend_bindvar, connection, send_queue):
         self.autosend_bindvar = autosend_bindvar
         self.senderWidget = senderWidget
         self.infoBindVar = tkinter.StringVar()
@@ -48,15 +49,18 @@ class PortSender():
         self.infoLabel = info_label
         self.infoLabel.configure(textvariable=self.infoBindVar, justify=tkinter.LEFT)
         self.infoLabel.config(background=BG_COLOR_NOT_SENT)
+        self.is_insignal = is_insignal
         self.send_button = send_button
         self.send_button.configure(command=self.send)
         self.stop_button = stop_button
         self.stop_button.configure(command=self.set_signal_to_error)
+        self.send_queue = send_queue
 
         self.portName = portName
         self.senderWidget.on_change = lambda : self.on_change()
         self.dataElementName = dataElementName
         self.first_col = first_col
+        self.connection = connection
 
     def on_change(self):
         self.infoLabel.config(background=BG_COLOR_INVALIDATED)
@@ -65,48 +69,38 @@ class PortSender():
             self.send()
 
     def send(self):
-        self.infoBindVar.set("Sent")
-        self.infoLabel.config(background=BG_COLOR_SENT)
-        toSend = {
-            "state": 0,
-            "timestamp": int(time.time()),
-            "type": self.senderWidget.dataElementsDataType,
-            "value": self.senderWidget.get_value()
-        }
-        self.write_dbus_property(toSend)
+        if self.connection.connected():
+            self.infoBindVar.set("Sent")
+            self.infoLabel.config(background=BG_COLOR_SENT)
+            if self.is_insignal:
+                dir = 1
+            else:
+                dir = 0
+            toSend = {
+                "SignalName": self.portName,
+                "Dir": dir,
+                "Data":{
+                "state": 0,
+                "timestamp": int(time.time()),
+                "type": self.senderWidget.dataElementsDataType,
+                "value": self.senderWidget.get_value()
+                }
+            }
+            self.send_queue.put(d2j(toSend))
 
     def set_signal_to_error(self):
-        self.infoBindVar.set("x")
-        self.infoLabel.config(background=BG_COLOR_NOT_SENT)
-        toSend = {
-            "state": 1,
-            "errorCode": 0,
-            "timestamp": int(time.time()),
-            "type": self.senderWidget.dataElementsDataType,
-            "value": self.senderWidget.get_value()
-        }
+        if self.connection.connected():
+            self.infoBindVar.set("x")
+            self.infoLabel.config(background=BG_COLOR_NOT_SENT)
+            toSend = {
+                "state": 1,
+                "errorCode": 0,
+                "timestamp": int(time.time()),
+                "type": self.senderWidget.dataElementsDataType,
+                "value": self.senderWidget.get_value()
+            }
+            self.send_queue.put(d2j(toSend))
 
-        self.write_dbus_property(toSend)
-
-    def write_dbus_property(self,dataToSend):
-        if self.dbus_conn:
-            if self.isInsignal:
-                signalsDBUSInterface = self.signalsInterfaceIn
-            else:
-                signalsDBUSInterface = self.signalsInterfaceOut
-
-            signalsDBUSInterface.SetDESignal(self.dataElementName, d2j(dataToSend))
-        else:
-            print ("No DBUS connection in sender object")
-
-    def setdbusconn(self,dbusconn):
-        self.dbus_conn = dbusconn
-
-    def setProxies(self,proxyIn,proxyOut):
-        self.dBUSProxyIn = proxyIn
-        self.dBUSProxyOut = proxyOut
-        self.signalsInterfaceIn = dbus.Interface(proxyIn, 'com.ihu.VehicleSignalsManager.In')
-        self.signalsInterfaceOut = dbus.Interface(proxyOut, 'com.ihu.VehicleSignalsManager.Out')
 
 class BoolSender(DESignalWidget):
     def __init__(self, master, **kw):
@@ -244,11 +238,13 @@ class Sink:
         self.portname_label = portname_label
         self.struct_frame = struct_frame
 
+
 class DataElement:
     def __init__(self, de_name, parent_port, datatype_key):
         self.de_name = de_name
         self.parent_port = parent_port
         self.datatype_key = datatype_key
+
 
 def enumCompuMethodToOptionMenus(compuMethod):
     name_to_value_dict = compuMethod.getEnumerations()  # NOTE: Value here is a tuple
@@ -265,6 +261,99 @@ def enumCompuMethodToOptionMenus(compuMethod):
     return lookupDict, default
 
 
+#This class starts a thread to handle receiving and sending data.
+class Connection():
+    def __init__(self, send_queue = None, receive_queue = None):
+        self.send_queue = send_queue
+        self.receive_queue = receive_queue
+        self.socket = socket.socket()
+        self._connected = False
+        self.lock = threading.RLock()
+        self.thread = threading.Thread(target=self.run)
+        self.thread.daemon =True
+        self.thread.start()
+
+    def run(self):
+        received_data = b''
+        while True:
+            if self.connected():
+                try:
+                    send_sockets = []
+                    if not self.send_queue.empty():
+                        send_sockets.append(self.socket)
+
+                    ready_to_read, ready_to_write, in_error = \
+                        select.select([self.socket, ], send_sockets, [self.socket], 1)
+                    if self.socket in in_error:
+                        self._disconnect()
+                        continue
+                    if self.socket in ready_to_read:
+                        received_data = received_data + self.socket.recv(1024)
+                        if len(received_data) == 0: #The python way to say that the socket is closed
+                            self._disconnect()
+                            continue
+                        if len(received_data) >= 6:
+                            identifier = received_data[:6].decode('ascii')
+                            if identifier == 'CarSim':
+                                length_element = received_data [6:10].decode('ascii')
+                                if len(received_data) >= int(length_element):
+                                    self._receive(received_data)
+                                    received_data = received_data[int(length_element):]
+                            else:
+                                #Got trash, lets reset buffer
+                                received_data = b''
+
+                    if self.socket in ready_to_write and not self.send_queue.empty():
+                        item = self.send_queue.get()
+                        self._send(item)
+                        self.send_queue.task_done()
+                except select.error:
+                    self._disconnect()
+            else:
+                time.sleep(1)
+
+    def connect(self, address):
+        print(("Connecting to %s" % address))
+        if self.connected() is False:
+            # create an INET, STREAMing socket
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                self.socket.connect((address, 8080))
+                self._set_connected(True)
+                print("Connected to " + address)
+            except:
+                raise
+
+    def connected(self):
+        with self.lock:
+            return self._connected
+
+    def _set_connected(self, value):
+        with self.lock:
+            self._connected = value
+
+    def _send(self, data: str):
+        buffer = data.encode(encoding='ascii')
+        #Yea, the lenght is encoded in ascii...
+        lengthString = '{0:04d}'.format(len(buffer))
+        self.socket.sendall('CarSim'.encode(encoding='ascii') + lengthString.encode(encoding='ascii') + buffer)
+
+    # The expected message have the following format:
+    #  [6 bytes, ascii "CarSim"][4 bytes,ascii message length ][<<message length>> bytes,ascii message]
+    def _receive(self, data):
+        decoded_data = data.decode('ascii')
+        print(decoded_data)  # Just for debugging
+        length = data[6:10].decode('ascii')
+        message = data[10:10+length].decode('ascii')
+        assert (len(message) == length)
+        self.receive_queue.put(message)
+
+    def _disconnect(self):
+        self.socket.shutdown(socket.SHUT_RDWR)
+        self.socket.close()
+        self._set_connected(False)
+
+
 class App:
     def __init__(self, master):
         self.connected = False
@@ -275,48 +364,27 @@ class App:
 
         self.knownReceivedMessages = {}
         self.addedSenderElements = set()
+        self.receive_queue = queue.Queue()
+        self.send_queue = queue.Queue()
+        self.connection = Connection(self.send_queue, self.receive_queue)
 
-        arxmldata = arxml.load(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml"))
-        ihuports = {}
+        #arxmldata
+        arxmldata = arxml.load(os.path.join(os.path.dirname(__file__),
+                                           "../../../", "AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml"))
 
         self.element_name_to_data_element = {}
 
-        #for dataTypeKey, arDataTypeValue in arxmldata.datatypes.iteritems():
-            #print("type: %s, value: %s, category: %s" % (dataTypeKey, arDataTypeValue, arDataTypeValue.getCategory()))
-        #print("_--------------------------------------------------------------------")
         for swcsKey, swcsValue in arxmldata.swcs.items():
             if swcsValue.shortname != "IHU":
                 continue
             #print("signal: %s, value: %s" % ( swcsKey, swcsValue))
             for portKey, port in sorted(swcsValue.ports.items()):
-                ihuports[portKey] = port
                 elems = port.getDataElements()
 
-                #firstElemKey, firstElemValue = elems.items()[0]
-                #isInSignal = isinstance(port, autosar.components.AR_RPort)
-                #if firstElemKey == portKey:
-                #    print ("SAME: %s" % firstElemKey)
-                #else:
-                #    print ("NOT : isIn: %d port: '%s', elem: '%s'" % (isInSignal, portKey, firstElemKey))
-
                 for de, dataTypeKey in sorted(elems.items()):
-
                     self.element_name_to_data_element[de] = DataElement(de, port, dataTypeKey)
 
-                    #print("  Port: %s : elems: %s, DataTypeKey: %s " %(portKey, de, dataTypeKey))
-                    arDataTypeValue = arxmldata.datatypes[dataTypeKey]
-                    category = arDataTypeValue.getCategory()
-                    #if category == "STRUCTURE":
-                    #    subElements = arDataTypeValue.getElements()
-                    #    print("    structure %s" % ( ", ".join([r.shortname + " " + r.getCategory() for r in subElements]))   )
-                    #elif category == "ARRAY":
-                    #    print("    array")
-                    #else:
-                    #    print("    " + category)
-
         self.arxmldata = arxmldata
-        self.ihuports = ihuports
-
 
         # Scroll widget only works on Canvas so we have to place the frame inside the canvas
         yScrollbar = tkinter.Scrollbar(master)
@@ -360,18 +428,9 @@ class App:
         canvas.bind_all("<Shift-Button-4>", on_mousewheel_left)    #linux
         canvas.bind_all("<Shift-Button-5>", on_mousewheel_right)  #linux
 
-
-
-
         master = masterFrame
         self.master = masterFrame
         buttonRow = 0
-
-        self.dbus_conn = None
-        self.dBUSProxyIn = None
-        self.dBUSProxyOut = None
-        self.signalsInterfaceIn = None
-        self.signalsInterfaceOut = None
 
         ## Connection status
         lConnectionStatus = tkinter.ttk.Label(master, text="Connection status: ")
@@ -390,7 +449,7 @@ class App:
         self.bConnectToRemote.grid(row=buttonRow, column=0, sticky=tkinter.W)
         self.eConnectToRemote = tkinter.ttk.Entry(master, width=20)
         self.eConnectToRemote.bind("<Return>", lambda x: self.connectToRemote())
-        self.eConnectToRemote.insert(0, "198.18.34.1")
+        self.eConnectToRemote.insert(0, "127.0.0.1")
         self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
@@ -402,7 +461,6 @@ class App:
         self.eAddSenderPort = tkinter.ttk.Entry(master, width=30)
         self.eAddSenderPort.insert(0, "VehSpdLgt")
         self.eAddSenderPort.grid(row=buttonRow, column=1, sticky=tkinter.W)
-
 
 
         ## Filter Entry
@@ -448,7 +506,6 @@ class App:
         self.master = master
         self.buttonRow = buttonRow +1
 
-        self.pending_messages = queue.Queue()
         self.ever_connected = False
 
     def fade_timer(self):
@@ -475,141 +532,62 @@ class App:
 
     def ui_add_port(self):
         self.add_sender_element(self.eAddSenderPort.get())
-        #self.add_sender_port(self.eAddSenderPort.get())
 
     def connectToRemote(self):
         self.connect(self.eConnectToRemote.get())
 
-
     def connect(self, address):
-        #TODO: Disconnect first? Reconnecting is a bit unstable
-        print(("Connecting to %s" % address))
-
-        # DBUS, "tcp:host=198.18.34.1,port=55556"
-        if address == "system":
-            connectStr = "system"
-        else:
-            connectStr = "tcp:host=" + address + ",port=55556"
-        try:
-            if not self.ever_connected:
-                self.ever_connected = True
-                # Delay the fade timer because at start up ALL signals will be new
-                # and this causes the program to run slow
-
-                #GObject.threads_init()
-                dbus.mainloop.glib.threads_init()
-                dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
+        if not self.connection.connected():
+            try:
+                self.connection.connect(address)
                 self.master.after(5000, self.fade_timer)
+                self.enable_all_buttons(True)
+                self.bindConnectionStatus.set("Connected - " + address)
+                self.lActualConnectionStatus.config(background="#00ff00")
                 self.master.after(1000, self.incoming_message_dispatcher)
-                _thread.start_new_thread(self.startDBUSThread, (None,))
+                self.master.after(1000, self.check_connection)
+            except:
+                print("Could not connect")
 
-            if connectStr == "system":
-                self.dbus_conn = dbus.SystemBus()
-            else:
-                self.dbus_conn=dbus.bus.BusConnection(connectStr)
-            self.dbus_conn.call_on_disconnection(self.onDisconnect)
 
-            self.bindConnectionStatus.set("Connected - " + address)
-            self.lActualConnectionStatus.config(background="#00ff00")
-            self.connected = True
-            self.enable_all_buttons(True)
-
-            print(("Connected to " + address))
-            self.fetchallDBUSProp()
-
-            self.dBUSProxyIn = self.dbus_conn.get_object('com.ihu.VehicleSignalsManager.In', '/com/ihu/VehicleSignalsManager/In')
-            self.dBUSProxyIn.connect_to_signal("DESignalChanged", self.deinsignalchanged_handler,
-                                        dbus_interface="com.ihu.VehicleSignalsManager.In")
-
-            self.dBUSProxyOut = self.dbus_conn.get_object('com.ihu.VehicleSignalsManager.Out',
-                                                  '/com/ihu/VehicleSignalsManager/Out')
-            self.dBUSProxyOut.connect_to_signal("DESignalChanged", self.deoutsignalchanged_handler,
-                                        dbus_interface="com.ihu.VehicleSignalsManager.Out")
-
-            self.signalsInterfaceIn = dbus.Interface(self.dBUSProxyIn, 'org.freedesktop.DBus.Properties')
-            self.signalsInterfaceOut = dbus.Interface(self.dBUSProxyOut, 'org.freedesktop.DBus.Properties')
-
-            self.update_all_sender_objects()
-#            thread.start_new_thread(self.startDBUSThread, (None,))
-
-        except(Exception):
-            raise
-
-    def onDisconnect(self,self2):
-        print("disconnected")
+    def onDisconnect(self):
         self.bindConnectionStatus.set("disconnected")
         self.lActualConnectionStatus.config(background="#ff0000")
-        self.dbus_conn = None
         self.connected = False
         self.enable_all_buttons(False)
-        self.dBUSProxyIn = None
-        self.dBUSProxyOut = None
-        self.signalsInterfaceIn = None
-        self.signalsInterfaceOut = None
-
-    def startDBUSThread(self,Ignore):
-        loop = GLib.MainLoop()
-        loop.run()
-
-    def deinsignalchanged_handler(self, signalStr):
-        signalData = self.readSignalDataProxy(signalStr, self.dBUSProxyIn, self.signalsInterfaceIn, 'com.ihu.VehicleSignalsManager.In')
-        self.on_message_dbus(signalStr,signalData)
-
-    def deoutsignalchanged_handler(self, signalStr):
-        signalData = self.readSignalDataProxy(signalStr, self.dBUSProxyOut, self.signalsInterfaceOut, 'com.ihu.VehicleSignalsManager.Out')
-        self.on_message_dbus(signalStr, signalData)
-
-    #DBUS
-    def fetchallDBUSProp(self):
-        self.fetchDBUSPropForInterface('com.ihu.VehicleSignalsManager.In','/com/ihu/VehicleSignalsManager/In')
-        #self.fetchDBUSPropForInterface('com.ihu.VehicleSignalsManager.Out', '/com/ihu/VehicleSignalsManager/Out')
-        #self.fetchDBUSPropForInterface('com.ihu.VehicleSignalsManager.Internal', '/com/ihu/VehicleSignalsManager/Internal')
-
-    def fetchDBUSPropForInterface(self, dbusinterface, dbusobject):
-        dBUSProxy = self.dbus_conn.get_object(dbusinterface,dbusobject)
-        signalsInPropInt = dbus.Interface(dBUSProxy,'org.freedesktop.DBus.Properties')
-        propsIn = signalsInPropInt.GetAll('')
-
-
-        for key, value in list(propsIn.items()):
-            #print(key + "," +value)
-            sigName = str(key)
-            sigData = str(value)
-            if sigData:
-                 self.on_message_dbus(sigName,sigData);
-
-    def readSignalDataProxy(self,signalName, dBUSProxy, signalsInPropInt, dbusInterface):
-        propertyData = signalsInPropInt.Get(dbusInterface,signalName)
-        return propertyData
-
-    def on_message_dbus(self,signalName, signalData):
-        #print("on_message_dbus "  + signalName + " " + signalData)
-        self.pending_messages.put_nowait((signalName, signalData))
 
     def incoming_message_dispatcher(self):
         maxiter = range(100)
         for i in maxiter:
-            if self.pending_messages.empty():
+            if self.receive_queue.empty():
                 break
-            msg = self.pending_messages.get()
-            self.handle_message_dbus(*msg)
-            self.pending_messages.task_done()
+            msg = self.receive_queue.get()
+            print(msg)
+            self.handle_message(*msg)
+            self.receive_queue.task_done()
         self.master.after(50, self.incoming_message_dispatcher)
 
 
-    def handle_message_dbus(self, signalName, signalData):
-        data = j2d(signalData)
+    def handle_message(self, msg):
+        decoded_msg = j2d(msg)
+        signal_name = decoded_msg['SignalName']
         try:
-            handler = self.message_handlers[signalName]
-            handler(data)
+            handler = self.message_handlers[signal_name]
+            handler(decoded_msg)
         except(KeyError):
             pass
 
         try:
-            self.handle_message(signalName,j2d(signalData))
+            self.handle_message(signal_name, decoded_msg)
         except Exception as e:
-            print(("ERROR parsing message: ", e, signalData))
+            print(("ERROR parsing message: ", e, decoded_msg))
+
+
+    def check_connection(self):
+        if not self.connection.connected():
+            self.onDisconnect()
+        else:
+            self.master.after(1000, self.check_connection)
 
     def handle_message(self, dataelement_name, data):
         #print("Handle message " + dataelement_name +  " " + d2j(data))
@@ -628,7 +606,6 @@ class App:
             return
 
         sink.portname_label.configure(background="")
-
 
         arType = sink.arxmltype
         if arType.getCategory() == "STRUCTURE":
@@ -719,18 +696,8 @@ class App:
         senderConnection = Sink(arDataTypeValue, entrySignalConnections, dataelement_name, portname_label, structframe)
         return senderConnection
 
-    def add_sender_port(self, portName):
-        try:
-            port = self.ihuports[portName]
-        except KeyError:
-            print(("Failed to add sender port: %s" % portName))
-            traceback.print_exc()
-            return
-        elements_list = list(port.getDataElements().items())
-        for (e_name, data_type) in elements_list:
-            self.add_sender_element(e_name)
-
     def add_sender_element(self, dataelement_name):
+
         if dataelement_name in self.addedSenderElements:
             return
         self.addedSenderElements.add(dataelement_name)
@@ -741,7 +708,7 @@ class App:
             traceback.print_exc()
             return
         port = data_element.parent_port
-        isInsignal = isinstance(port, autosar.components.AR_RPort)
+        is_insignal = isinstance(port, autosar.components.AR_RPort)
 
         master = self.master
 
@@ -773,8 +740,6 @@ class App:
         send_button.pack(side=tkinter.LEFT)
         port_name_label.pack(side=tkinter.LEFT)
 
-
-
         portSender = PortSender(
             info_label,
             send_button,
@@ -782,17 +747,14 @@ class App:
             senderWidget,
             dataelement_name,
             data_element.de_name,
-            isInsignal,
+            is_insignal,
             firstCol,
-            self.bindAutoSend)
-
-        if self.dbus_conn:
-            portSender.setdbusconn(self.dbus_conn)
-            portSender.setProxies(self.dBUSProxyIn,self.dBUSProxyOut)
+            self.bindAutoSend,
+            self.connection,
+            self.send_queue)
 
         self.add_external_button_row(firstCol, senderWidget)
         self.all_senders.append(portSender)
-        self.enable_all_buttons(self.connected)
 
     def register_message_handler(self, message_id, callback):
         self.message_handlers[message_id] = callback
@@ -803,38 +765,6 @@ class App:
             left.grid(row=self.buttonRow, column=0, sticky=tkinter.W)
         if right is not None:
             right.grid(row=self.buttonRow, column=1, sticky=tkinter.W)
-
-    def external_send(self, topic, value, type):
-        if self.dbus_conn is None:
-            # TODO: Need connected-callback to testmodules or queuing to solve this properly
-            print("WARNING: external_send called before client was connected")
-            return
-        #TODO: Auto parse the type based on the name
-        #TODO: Update the sender widgets?
-        dataelement_name = topic[3:]
-
-        if dataelement_name not in list(self.element_name_to_data_element.keys()):
-            print(("WARNING: external_send called with unknown element name: %s", topic))
-
-        data = {
-            "state": 0,
-            "timestamp": 1447941240073,
-            "type": type,
-            "value": value
-        }
-        if topic[0:3] == "/o/":
-            dbusInterfaceName = 'com.ihu.VehicleSignalsManager.Out'
-            dbusObjectName = '/com/ihu/VehicleSignalsManager/Out'
-            signalsInPropInt = dbus.Interface(self.dBUSProxyOut, 'com.ihu.VehicleSignalsManager.Out')
-        else:
-            dbusInterfaceName = 'com.ihu.VehicleSignalsManager.In'
-            dbusObjectName = '/com/ihu/VehicleSignalsManager/In'
-            signalsInPropInt = dbus.Interface(self.dBUSProxyIn, 'com.ihu.VehicleSignalsManager.In')
-
-        print(("External Send " + dataelement_name + " " + d2j(data) +  "  " + dbusInterfaceName))
-        dbusdata = dbus.String(d2j(data),variant_level=1)
-        #signalsInPropInt.Set(dbusInterfaceName, dataelement_name, dbusdata)
-        signalsInPropInt.SetDESignal(dataelement_name, dbusdata)
 
     def filter(self, filterString):
         filters = filterString.lower().split()
@@ -871,15 +801,9 @@ class App:
             portsender.stop_button.configure(state=state)
         self.bSendAll.configure(state=state)
 
-
     def send_all(self):
         for portsender in self.all_senders:
             portsender.send()
-
-    def update_all_sender_objects(self):
-        for portsender in self.all_senders:
-            portsender.setdbusconn(self.dbus_conn)
-            portsender.setProxies(self.dBUSProxyIn, self.dBUSProxyOut)
 
     def set_filter(self, filter):
         self.filterBindVar.set(filter)
