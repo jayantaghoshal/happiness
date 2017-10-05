@@ -65,17 +65,16 @@ docker_run () {
 # otherwise repo get confused (repo assumes .git-data is in .repo/project-objects/).
 # Reset the manifest-repo in case it was modified in a strange way from last commit
 # shellcheck disable=SC2015
-(cd .repo/manifests && git reset --hard origin/"${ZUUL_BRANCH}" || true)
-
-if [[ ! -d .repo ]]; then
-  # Old jobs cloned vendor/volvocars without using repo. Confuses repo so rm before init.
-  # TODO: rm can be removed once all slaves have run the job that does repo init once.
-  rm -rf vendor/volvocars
-  docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
+if [[ -d .repo ]]; then
+    # Abort rebase if manifest repo has merge conflicts and is still in rebase state
+    if [[ -d .repo/manifests/.git/rebase-apply ]]; then
+        (cd .repo/manifests && git rebase --abort || true)
+    fi
+    # Hard reset manifest repo (current branch)
+    (cd .repo/manifests && git reset --hard HEAD || true)
 fi
+docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
 docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars" || die "repo sync failed"
-
-
 
 ################################################################################################
 ## Download the commit to check (for vendor/volvocars-repo)
