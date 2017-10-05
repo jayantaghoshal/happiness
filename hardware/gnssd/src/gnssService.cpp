@@ -1,10 +1,6 @@
 #include "gnssService.h"
 
-extern "C" {
-  #include "infotainmentIpBus.h"
-}
-
-#include "asn_decoder.h"
+#include "asn_codec.h"
 #include "type_conversion_helpers.h"
 #include "VccIpCmdApi.h"
 
