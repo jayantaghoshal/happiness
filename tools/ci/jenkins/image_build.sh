@@ -10,16 +10,13 @@ source "${SCRIPT_DIR}/common.sh"
 TMPFS=/dev/shm
 JOB_TMPFS=$TMPFS/$JOB_NAME
 export CCACHE_DIR=$TMPFS/ccache
-export CCACHE_MAXSIZE=50G
+export CCACHE_MAXSIZE=30G
 export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
-export OUT_DIR=$JOB_TMPFS/out
 export USE_CCACHE=true
 
-rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
-
 # Build image, vts & tradefed
-docker_run "lunch ihu_vcc-eng && time make -j -l32 droid vts tradefed-all" || die "AOSP build failed"
+docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "AOSP build failed"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly" || die "Build Unit and Component tests failed"
