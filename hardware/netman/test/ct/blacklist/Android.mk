@@ -9,7 +9,8 @@ LOCAL_MODULE := ihuInterfaceTestJava
 LOCAL_MODULE_STEM := DATA/ihuInterfaceTestAPK.apk
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_ETC)
-MY_STIMULI_SRC := out/target/product/ihu_vcc/data/app/ihuInterfaceTestAPK/ihuInterfaceTestAPK.apk
+# TODO(mejdesti): Why is this needed? It looks like a hack... ?
+MY_STIMULI_SRC := $(PRODUCT_OUT)/data/app/ihuInterfaceTestAPK/ihuInterfaceTestAPK.apk
 
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts
