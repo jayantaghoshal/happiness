@@ -25,8 +25,16 @@ test_plan_gate = [
              jira_issue="",
              deadline="2017-10-12"
     ),
-    VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
-    VTSTest("vendor/volvocars/hardware/infotainment-ip-service/test/ct",      standard_caps),
+    Disabled(VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
+             reason="Dead code in repo",
+             jira_issue="",
+             deadline="2017-11-01"
+    ),
+    Disabled(VTSTest("vendor/volvocars/hardware/infotainment-ip-service/test/ct",      standard_caps),
+             reason="Dead code in repo",
+             jira_issue="",
+             deadline="2017-11-01"
+    ),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",         standard_caps),
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",             standard_caps),
 ]
