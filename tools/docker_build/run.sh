@@ -125,6 +125,10 @@ docker run \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \
     --env CCACHE_DIR \
+    --env CCACHE_MAXSIZE \
+    --env CC_WRAPPER \
+    --env CXX_WRAPPER \
+    --env OUT_DIR \
     --env USE_CCACHE \
     --env=HOST_USER_GROUPS="${HOST_USER_GROUPS}" \
     --env=REPO_ROOT_DIR="${REPO_ROOT_DIR}" \
