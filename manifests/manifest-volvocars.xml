@@ -38,7 +38,7 @@
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <!-- TODO: Also contains fix that removes use of PWD in Android-Board-common.mk that prevents changing OUT_DIR. Delphi has been notified but no fix received yet. -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="a5dc5beedb146d468c0e884e3a6b7f81bfe71093"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="f93e31ce61fa66b72a9189645a739f3f44ca6a74"/>
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
