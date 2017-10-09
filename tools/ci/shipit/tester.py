@@ -5,42 +5,23 @@ import json
 import logging
 import logging.config
 import os
+import shlex
 import sys
-import tempfile
 import traceback
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
 
 import shipit.test_runner.test_types
-from shipit.process_tools import check_output_logged as run
 from shipit.test_runner import vts_test_runner as vts_test_run
-from shipit.test_runner.test_types import VTSTest, IhuBaseTest
+from shipit.test_runner import tradefed_test_runner
+from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest
 from shipit.test_runner import test_types
-import stat
-
-vcc_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
-aosp_root = os.path.abspath(os.path.join(vcc_root, "../../"))
+from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 
 sys.path.append(vcc_root)
 import test_plan    # NOQA
 
 logger = logging.getLogger(__name__)
-
-
-def run_in_env(command: str, cwd: str):
-    to_execute = """
-source build/envsetup.sh
-lunch ihu_vcc-eng
-cd \"%s\"
-%s""" % (os.path.abspath(cwd), command)
-    logger.info("Executing command in shell: %s" % to_execute)
-
-    with tempfile.NamedTemporaryFile("w") as f:
-        f.write(to_execute)
-        f.flush()
-        os.chmod(f.name, os.stat(f.name).st_mode | stat.S_IXUSR)
-        run(["/bin/bash", f.name], cwd=aosp_root)
-
 
 
 def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
@@ -52,9 +33,12 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 
 def run_test(test: IhuBaseTest):
     if isinstance(test, VTSTest):
-        print(test.test_xml_path)
+        print(test)
         module_name = vts_test_run.read_module_name(pathjoin(aosp_root, test.test_xml_path, "AndroidTest.xml"))
         vts_test_run.vts_tradefed_run_module(module_name)
+    elif isinstance(test, TradefedTest):
+        print(test)
+        tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
     elif isinstance(test, shipit.test_runner.test_types.Disabled):
         if datetime.datetime.now() > test.deadline:
             raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
@@ -65,13 +49,30 @@ def run_test(test: IhuBaseTest):
 
 def build_testcases(tests_to_run: List[IhuBaseTest]):
     all_vts_tests = [t for t in tests_to_run if isinstance(t, VTSTest)]
+    all_tradefed_tests = [t for t in tests_to_run if isinstance(t, TradefedTest)]
+    logging.debug("VTS tests: %r" % all_vts_tests)
+    logging.debug("Tradefed tests: %r" % all_vts_tests)
+
+    test_modules_to_build = (
+        [t.test_xml_path for t in all_vts_tests] +
+        [t.test_root_dir for t in all_tradefed_tests])
+
     if len(all_vts_tests) > 0:
         logger.info("Found VTS test cases, building VTS")
-        test_modules_to_build = [t.test_xml_path for t in all_vts_tests]
         test_modules_to_build.append("test/vts/runners/target/gtest")
-        test_modules_space_separated = " ".join(test_modules_to_build)
-        run_in_env("make vts -j7", cwd=aosp_root)
-        run_in_env("mmma -j7 %s" % test_modules_space_separated, cwd=aosp_root)
+        # TODO: Increase -j flag on build server
+        run_in_lunched_env("make vts -j7", cwd=aosp_root)
+
+    if len(all_tradefed_tests) > 0:
+        logger.info("Found Tradefed test cases, building tradefed-all")
+        # TODO: Increase -j flag on build server
+        run_in_lunched_env("make tradefed-all -j7", cwd=aosp_root)
+
+    if len(test_modules_to_build) > 0:
+        print(test_modules_to_build)
+        test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
+        #TODO: Increase -j flag on build server
+        run_in_lunched_env("mmma -j7 %s" % test_modules_space_separated, cwd=aosp_root)
 
 def print_indented(s: str, indent="    "):
     lines = s.split("\n")
@@ -141,7 +142,11 @@ def main():
             return test_plan.test_plan_nightly
         else:
             if args.test_component:
-                return [VTSTest(os.path.relpath(args.test_component, aosp_root), set())]
+                androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")
+                if os.path.isfile(androidtest_xml_path):
+                    return [VTSTest(os.path.relpath(args.test_component, aosp_root), set())]
+                else:
+                    return [TradefedTest(os.path.relpath(args.test_component, aosp_root), set())]
             else:
                 run_parser.print_usage()
                 sys.exit(1)
