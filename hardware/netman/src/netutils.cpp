@@ -31,7 +31,7 @@
 
 #include <vcc/localconfig.h>
 
-#include "netman.h"
+#include "netutils.h"
 
 namespace vcc
 {

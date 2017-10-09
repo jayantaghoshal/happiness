@@ -1,5 +1,5 @@
-#ifndef _NETMAN_H_
-#define _NETMAN_H_
+#ifndef _NETUTILS_H_
+#define _NETUTILS_H_
 
 #include <string>
 #include <vector>
@@ -34,4 +34,4 @@ bool TakeInterfaceDown(const char *interface_name);
 }
 }
 
-#endif
+#endif // _NETUTILS_H_

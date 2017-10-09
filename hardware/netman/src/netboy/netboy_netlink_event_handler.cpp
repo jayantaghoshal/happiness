@@ -11,7 +11,7 @@
 #include "netboy_netlink_event_handler.h"
 #include "netlink_event_handler.h"
 #include "netlink_event_listener.h"
-#include "netman.h"
+#include "netutils.h"
 
 namespace vcc {
 namespace netman {
