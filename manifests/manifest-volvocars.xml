@@ -47,7 +47,7 @@
   <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="329e29e113cad25d34f4ee1e1100f72632a2730e">
           <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
   </project>
-  
+
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/build"/>
   <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8d73c3d8f2a0f807a70673da40d5cc1a7f57b061"/>
@@ -58,5 +58,10 @@
     <linkfile dest="Android.bp" src="root.bp"/>
     <linkfile dest="bootstrap.bash" src="bootstrap.bash"/>
   </project>
+
+  <!-- TODO: Will upstream this later in Jira issue PSS370-3539 -->
+  <remove-project name="aosp/platform/system/netd"/>
+  <project name="aosp/platform/system/netd" path="system/netd" revision="d7ba832024b153ad7ed513351562e4d5aa1a1bc2" />
+
 
 </manifest>
