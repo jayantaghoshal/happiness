@@ -34,6 +34,11 @@ test_plan_gate = [
 test_plan_hourly = [
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps | {cp.flexray}),
+    Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix_gate",       standard_caps),
+             reason="APIX driver not yet integrated on Master",
+             jira_issue="",
+             deadline="2017-10-12"
+    ),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",      standard_caps),
