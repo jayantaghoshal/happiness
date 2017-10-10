@@ -10,8 +10,7 @@
 #include <string>
 #include <vector>
 
-namespace vcc
-{
+namespace vcc {
 /**
  * Get default instance of LocalConfigReader
  *
@@ -26,8 +25,7 @@ namespace vcc
  */
 const vcc::LocalConfigReaderInterface *LocalConfigDefault();
 
-namespace localconfig
-{
+namespace localconfig {
 /**
  * Get the value of a local config string parameter.
  *
@@ -42,8 +40,7 @@ namespace localconfig
 std::string GetString(const std::initializer_list<std::string> &keys);
 
 template <class... T>
-std::string GetString(const T &... keys)
-{
+std::string GetString(const T &... keys) {
   return GetString({keys...});
 }
 
@@ -61,8 +58,7 @@ std::string GetString(const T &... keys)
 int GetInt(const std::initializer_list<std::string> &keys);
 
 template <class... T>
-int GetInt(const T &... keys)
-{
+int GetInt(const T &... keys) {
   return GetInt({keys...});
 }
 
@@ -80,8 +76,7 @@ int GetInt(const T &... keys)
 bool GetBool(const std::initializer_list<std::string> &keys);
 
 template <class... T>
-bool GetBool(const T &... keys)
-{
+bool GetBool(const T &... keys) {
   return GetBool({keys...});
 }
 
@@ -99,8 +94,7 @@ bool GetBool(const T &... keys)
 double GetDouble(const std::initializer_list<std::string> &keys);
 
 template <class... T>
-double GetDouble(const T &... keys)
-{
+double GetDouble(const T &... keys) {
   return GetDouble({keys...});
 }
 
@@ -119,8 +113,7 @@ double GetDouble(const T &... keys)
 std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys);
 
 template <class... T>
-std::vector<std::string> GetStringArray(const T &... keys)
-{
+std::vector<std::string> GetStringArray(const T &... keys) {
   return GetStringArray({keys...});
 }
 
