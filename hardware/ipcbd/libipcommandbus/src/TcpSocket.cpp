@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "TCP_Socket"
-
 #include "ipcommandbus/TcpSocket.h"
 #include <cassert>
 #include <cutils/log.h>
@@ -15,6 +13,8 @@
 
 #include <string.h>
 #include <algorithm>
+
+#define LOG_TAG "TCP_Socket"
 
 using namespace tarmac::eventloop;
 

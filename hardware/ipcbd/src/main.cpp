@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "Ipcb.main"
-
 #include <ipcommandbus/MessageDispatcher.h>
 #include <ipcommandbus/TransportServices.h>
 #include <ipcommandbus/UdpSocket.h>
@@ -22,6 +20,8 @@
 
 #include "service_manager.h"
 #include "diagnostics_client.h"
+
+#define LOG_TAG "Ipcb.main"
 
 using namespace Connectivity;
 using namespace IpCmdTypes;

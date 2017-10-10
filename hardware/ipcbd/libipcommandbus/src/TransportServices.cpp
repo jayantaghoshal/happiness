@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "Transport_Services"
-
 #include "ipcommandbus/TransportServices.h"
 
 #include <algorithm>
@@ -15,6 +13,8 @@
 
 #include "ipcommandbus/Pdu.h"
 #include "ipcommandbus/net_serializer.h"
+
+#define LOG_TAG "Transport_Services"
 
 using namespace tarmac::eventloop;
 

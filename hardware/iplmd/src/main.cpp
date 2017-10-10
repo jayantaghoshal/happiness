@@ -13,6 +13,8 @@
 #include "iplmService.h"
 #define LOG_TAG "iplmd"
 
+#define LOG_TAG "iplmd"
+
 using namespace tarmac::eventloop;
 using namespace android::hardware;
 
