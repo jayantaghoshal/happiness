@@ -42,7 +42,7 @@ void UdpSocket::setup(const Message::Ecu &ecu)
     sa.sin_family = AF_INET;
     sa.sin_port = htons(it->second.port);
 
-    ALOGI("UdpSocket setup %s:%d - ecu %d",it->second.ip.c_str(),it->second.port,ecu);
+    ALOGV("UdpSocket setup %s:%d - ecu %d",it->second.ip.c_str(),it->second.port,ecu);
 
     if (1 != inet_pton(AF_INET, it->second.ip.c_str(), &sa.sin_addr))
     {

@@ -75,11 +75,10 @@ private:
     {
         try {
             config = localconfig::GetInt(configId);
-        } catch (std::runtime_error e) {
-            ALOGE("Error: Could not get parameter: %s", configId.c_str());
+        } catch (const std::runtime_error& e) {
+            ALOGE("Error: Could not get parameter: %s, reason: %s", configId.c_str(), e.what());
             return false;
         }
-        ALOGI("%s %i", configId.c_str(), config);
         return true;
     }
 
@@ -87,11 +86,10 @@ private:
     {
         try {
             config = localconfig::GetString(configId);
-        } catch (std::runtime_error e) {
-            ALOGE("Error: Could not get parameter: %s", configId.c_str());
+        } catch (const std::runtime_error& e) {
+            ALOGE("Error: Could not get parameter: %s, reason: %s", configId.c_str(), e.what());
             return false;
         }
-        ALOGI("%s %s", configId.c_str(), config.c_str());
         return true;
     }
 

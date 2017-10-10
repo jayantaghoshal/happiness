@@ -28,12 +28,10 @@ bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, int &co
 {
     try {
         config = localconfig::GetInt(configId);
-    } catch (std::runtime_error e) {
-        ALOGE("Error: Could not get parameter: %s", configId.c_str());
+    } catch (const std::runtime_error& e) {
+        ALOGW("Could not get parameter: %s, reason: %s", configId.c_str(), e.what());
         return false;
     }
-
-    ALOGI("%s %d", configId.c_str(), config);
     return true;
 }
 
@@ -41,12 +39,10 @@ bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, double 
 {
     try {
         config = localconfig::GetDouble(configId);
-    } catch (std::runtime_error e) {
-        ALOGE("Error: Could not get parameter: %s", configId.c_str());
+    } catch (const std::runtime_error& e) {
+        ALOGW("Could not get parameter: %s, reason: %s", configId.c_str(), e.what());
         return false;
     }
-
-    ALOGI("%s %lf", configId.c_str(), config);
     return true;
 }
 
@@ -54,12 +50,10 @@ bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, std::st
 {
     try {
         config = localconfig::GetString(configId);
-    } catch (std::runtime_error e) {
-        ALOGE("Error: Could not get parameter: %s", configId.c_str());
+    } catch (const std::runtime_error& e) {
+        ALOGW("Could not get parameter: %s, reason: %s", configId.c_str(), e.what());
         return false;
     }
-
-    ALOGI("%s %s", configId.c_str(), config.c_str());
     return true;
 }
 
@@ -81,7 +75,6 @@ uint32_t LocalconfigParameters::getRetries(const VccIpCmd::CombinedId id)
     const auto it = retries_values_.find(id);
     if (it != retries_values_.end())
     {
-        ALOGD("0 numOfRetries here");
         return it->second;
     }
     else
@@ -174,15 +167,6 @@ void LocalconfigParameters::InitTimeoutValues()
     {
         defaultRespMultiplier_ = dValue;
     }
-
-    ALOGD("Ack: timeout: %lli retries: %i multiplier: %f\n",
-                               defaultAckTimeout_.count(),
-                               defaultAckNumRetries_,
-                               defaultAckMultiplier_);
-    ALOGD("Resp: timeout: %lli retires: %i multiplier: %f\n",
-                               defaultRespTimeout_.count(),
-                               defaultRespNumRetries_,
-                               defaultRespMultiplier_);
 
     // Mapping from the internal enums to the parameter name in Localconfig
     std::unordered_map<VccIpCmd::CombinedId, std::string, CombinedIdHash> temporaryMap = {
@@ -282,10 +266,6 @@ void LocalconfigParameters::InitNetworkPriority()
         {
             ALOGW("Network control prioity level out of range, setting to default");
         }
-    }
-    else
-    {
-        ALOGE("Failed to read network control priority level from local config");
     }
 }
 
