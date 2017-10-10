@@ -8,7 +8,6 @@ source "${SCRIPT_DIR}/common.sh"
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
 TMPFS=/dev/shm
-JOB_TMPFS=$TMPFS/$JOB_NAME
 export CCACHE_DIR=$TMPFS/ccache
 export CCACHE_MAXSIZE=30G
 export CC_WRAPPER=/usr/bin/ccache
@@ -28,7 +27,6 @@ rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.confi
 # Create archive out.tgz 
 OUT_ARCHIVE=out.tgz
 docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
-            --directory=\"${JOB_TMPFS}\"
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
