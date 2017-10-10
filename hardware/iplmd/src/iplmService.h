@@ -1,7 +1,6 @@
 #ifndef VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
 #define VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
 
-#define LOG_TAG "iplm_daemon"
 
 #include <unordered_map>
 #include <IDispatcher.h>
