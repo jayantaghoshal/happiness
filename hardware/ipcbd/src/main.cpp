@@ -37,25 +37,26 @@ using namespace android::hardware;
 void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
 {
     const std::uint32_t sleep_time = 100000;  // sleep 100 ms
-    std::uint32_t sleep_counter = 0;
 
     // Wait for-ever, no need to stop since service is dependent on this to work
+    std::string previousError;
+    ALOGI("Setup socket for ecu %u", ecu);
     do
     {
         try
         {
             sock.setup(ecu);
+            ALOGI("Setup socket for Ecu %u successfully", ecu);
             return;
         }
         catch (const SocketException &e)
         {
-            usleep(sleep_time);
-            sleep_counter++;
-
-            if (sleep_counter % (1000000 / sleep_time) == 0)
+            if (e.what() != previousError)
             {
-                ALOGW("Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
+                previousError = e.what();
+                ALOGE("Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
             }
+            usleep(sleep_time);
         }
     } while (true);
 }
