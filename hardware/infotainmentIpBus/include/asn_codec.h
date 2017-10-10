@@ -1,7 +1,7 @@
 #ifndef INFOTAINMENT_IP_BUS_ASN_DECODER_H
 #define INFOTAINMENT_IP_BUS_ASN_DECODER_H
 
-#define LOG_TAG "InfotainmentIPBus.decode"
+#define ASN_LOG_TAG "InfotainmentIPBus.decode"
 
 extern "C" {
     #include "infotainmentIpBus.h"
@@ -29,7 +29,7 @@ bool DecodeMessage(
 
     if (!pDecodedMsg)
     {
-        ALOGE("ERROR: Session buffer is too small!");
+        ALOG(LOG_ERROR, ASN_LOG_TAG, "ERROR: Session buffer is too small!");
 
         return false;
     }
@@ -44,7 +44,8 @@ bool DecodeMessage(
         const ASN_Result ASN_retcode = decodeFunc(pDecodedMsg, m_session_msgd, m_stream_msgd);
         if (ASN_retcode)
         {
-            ALOGE(
+            ALOG(LOG_ERROR,
+                ASN_LOG_TAG,
                 "Payload decoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)(size: %d)",
                 AsnErrCodeToString(ASN_retcode->error).c_str(),
                 ASN_retcode->linenumber,
@@ -77,7 +78,8 @@ void encodeMessage(
     ASN_Result res = encodeFunc(pMsg, stream);
     if (res != ASN_RESULT_OK)
     {
-        ALOGE(
+        ALOG(LOG_ERROR,
+            ASN_LOG_TAG,
             "%s: ASN1 encoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)",
             __FUNCTION__,
             InfotainmentIpBus::Utils::AsnErrCodeToString(res->error).c_str(),
