@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "UDP_Socket"
-
 #include "ipcommandbus/UdpSocket.h"
 #include <cassert>
 #include <cutils/log.h>
@@ -13,6 +11,8 @@
 
 #include <string.h>
 #include <algorithm>
+
+#define LOG_TAG "UDP_Socket"
 
 using namespace tarmac::eventloop;
 

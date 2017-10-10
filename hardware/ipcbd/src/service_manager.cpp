@@ -1,9 +1,9 @@
-#define LOG_TAG "IpcbD.manager"
-
 #include <set>
 #include <cutils/log.h>
 
 #include "service_manager.h"
+
+#define LOG_TAG "IpcbD.manager"
 
 using namespace tarmac::eventloop;
 

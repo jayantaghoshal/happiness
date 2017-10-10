@@ -2,12 +2,12 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "lipcb.Pdu"
-
 #include "ipcommandbus/Pdu.h"
 #include <iomanip>
 #include <cutils/log.h>
 #include <sstream>
+
+#define LOG_TAG "lipcb.Pdu"
 
 namespace Connectivity
 {

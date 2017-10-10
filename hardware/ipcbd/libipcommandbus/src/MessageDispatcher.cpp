@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "lipcb.MessageDispatcher"
-
 #include "ipcommandbus/MessageDispatcher.h"
 
 #include <cassert>
@@ -11,6 +9,8 @@
 #include <cutils/log.h>
 
 #include "ipcommandbus/net_serializer.h"
+
+#define LOG_TAG "lipcb.MessageDispatcher"
 
 using namespace tarmac::eventloop;
 

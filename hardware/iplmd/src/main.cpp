@@ -1,5 +1,3 @@
-#define LOG_TAG "iplmd"
-
 #include <hidl/HidlTransportSupport.h>
 #include <cstdint>
 #include <functional>
@@ -13,6 +11,8 @@
 #include <sys/signalfd.h>
 
 #include "iplmService.h"
+
+#define LOG_TAG "iplmd"
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;
