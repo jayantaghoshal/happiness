@@ -3,7 +3,7 @@
 #include "ECD_dataelement.h"
 
 #undef LOG_TAG
-#define LOG_TAG "dataelements-test-client@1.0"
+#define LOG_TAG "DataelementsSignalEcho"
 
 using namespace ApplicationDataElement;
 using namespace ECDDataElement;

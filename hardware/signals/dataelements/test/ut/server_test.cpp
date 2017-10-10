@@ -12,7 +12,7 @@
 #include <vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h>
 
 #undef LOG_TAG
-#define LOG_TAG "Dataelements Server UnitTest"
+#define LOG_TAG "DataelementsServerUT"
 
 
 using namespace vendor::volvocars::hardware::signals::V1_0;
