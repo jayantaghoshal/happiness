@@ -1,0 +1,6 @@
+# hwservicemanager.te
+
+allow hwservicemanager dataelements-hidl-server:binder call;
+allow hwservicemanager dataelements-hidl-server:dir search;
+allow hwservicemanager dataelements-hidl-server:file { open read };
+allow hwservicemanager dataelements-hidl-server:process getattr;

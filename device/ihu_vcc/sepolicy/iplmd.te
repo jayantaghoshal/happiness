@@ -3,3 +3,7 @@ type iplmd, domain;
 type iplmd_exec, exec_type, file_type;
 
 init_daemon_domain(iplmd)
+
+allow iplmd hwservicemanager:binder call;
+allow iplmd system_file:dir r_dir_perms;
+allow iplmd system_file:file r_file_perms;
