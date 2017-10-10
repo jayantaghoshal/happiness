@@ -3,10 +3,8 @@
 
 #include "local_config_reader.h"
 
-namespace vcc
-{
-class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader
-{
+namespace vcc {
+class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader {
   typedef LocalConfigReader base;
 
  public:

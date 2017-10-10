@@ -9,13 +9,11 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace vcc
-{
+namespace vcc {
 // Extracting values is thread safe. Loads default configuration when first accessed. Tests may
 // load a different configuration. This should be done prior to accessing any node_value if loading of
 // default configuration is to be avoided.
-class LocalConfigReader : public LocalConfigReaderInterface
-{
+class LocalConfigReader : public LocalConfigReaderInterface {
  public:
   typedef std::function<void(Json::Value *root)> LazyLoader;
 
@@ -41,16 +39,14 @@ class LocalConfigReader : public LocalConfigReaderInterface
   mutable Json::Value root_;
 };
 
-class LocalConfigFileReader : public LocalConfigReader
-{
+class LocalConfigFileReader : public LocalConfigReader {
   typedef LocalConfigReader base;
 
  public:
   LocalConfigFileReader(std::string file_path);
 };
 
-class LocalConfigStaticContentReader : public LocalConfigReader
-{
+class LocalConfigStaticContentReader : public LocalConfigReader {
   typedef LocalConfigReader base;
 
  public:
