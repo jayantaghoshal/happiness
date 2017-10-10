@@ -1,45 +1,37 @@
-#ifndef CARCONFIG_UPDATER_H
-#define CARCONFIG_UPDATER_H
+#pragma once
 
 #include <array>
 #include <vector>
-#include "carconfig_file.h"
-#include "diagnostics_client.h"
-#include "vipcom_client.h"
+#include <string>
+//#include "diagnostics_client.h"
+//#include "vipcom_client.h"
 #include <map>
+#include "carconfig_base.h"
 
-// The internal type that represent 504 received carconfig frames
-typedef struct
+class CarConfigUpdater
 {
-    bool received = false;
-    bool ok = false;
-    uint8_t value = 0;
-    bool subscribed = false;
-} ccFlexrayValue;
+public:
+    static int32_t runUpdater();
 
-typedef std::array<ccFlexrayValue, 504> ccBuffer;
+private:
+    static void frameReceiver(CarConfigList &buff, uint32_t timeout);
 
-extern bool debugMode;
+    static void writeEmptyFile(std::string filePath);
 
-void frameReceiver(ccBuffer &buff, uint32_t timeout);
+    static void checkReceivedValues(const std::map<int, std::vector<int>> ccParamList, CarConfigList &buff, bool &allParamsReceived,
+                            bool &allParamsOK, std::map<uint32_t, uint8_t> &errorList);
 
-bool fileExists(std::string filePath);
+    static void checkExistingParams(const std::map<int, std::vector<int>> ccParamList, bool &allParamsOK,
+                            std::map<uint32_t, uint8_t> &errorList);
 
-void writeEmptyFile(std::string filePath);
+    static bool storeReceivedParameter(CarConfigList &buffer);
 
-void checkReceivedValues(const std::map<int, std::vector<int>> ccParamList, ccBuffer &buff, bool &allParamsReceived,
-                         bool &allParamsOK, std::map<uint32_t, uint8_t> &errorList);
+    static bool setStateAndSendDiagnostics(bool stateConfigured, bool allParamsReceived, bool allParamsOk, bool paramsChanged,
+        bool allStoredParamsOk, std::map<uint32_t, uint8_t> receivedBadParams,
+        std::map<uint32_t, uint8_t> storedBadParams, //diagnosticsClient &diagClient, //TODO add diagnostics
+        bool &rebootNeeded);
 
-void checkExistingParams(CarconfigFile &ccFile, const std::string ccFileName,
-                         const std::map<int, std::vector<int>> ccParamList, bool &allParamsOK,
-                         std::map<uint32_t, uint8_t> &errorList);
+    static std::vector<uint8_t> carconfigParamFaultsPack(std::map<uint32_t, uint8_t> params);
 
-bool storeReceivedParameter(CarconfigFile &ccFile, std::string outputFile, ccBuffer &buffer);
-
-std::vector<uint8_t> carconfigParamFaultsPack(std::map<uint32_t, uint8_t> params);
-
-void updateVipParameters(CarconfigFile &ccFile, CarConfigVipCom &vipcomClient);
-
-int32_t runUpdater(void);
-
-#endif  // CARCONFIG_UPDATER_H
+    //static void updateVipParameters(CarConfigVipCom &vipcomClient);
+};

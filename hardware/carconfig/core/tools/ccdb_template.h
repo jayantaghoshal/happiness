@@ -1,5 +1,4 @@
-#ifndef CEDRIC_PARAMETER_LIST_H
-#define CEDRIC_PARAMETER_LIST_H
+#pragma once
 
 namespace CarConfigParams
 {
@@ -23,4 +22,4 @@ namespace CarConfigParams
 
 ##PARAMTEMPLATEEND##
 }
-#endif
+

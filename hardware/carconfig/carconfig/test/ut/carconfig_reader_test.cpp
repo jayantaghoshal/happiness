@@ -36,7 +36,7 @@ class CarConfigReaderTestFixture : public ::testing::Test
         csvPath = tmp.str();
 
         CarConfigFileWriter writer = CarConfigFileWriter(csvPath + "carconfig_file_ok.csv");
-        writer.commitToSharedMemory();
+        writer.commitToBinaryMemory();
     }
 
     virtual void TearDown() {}

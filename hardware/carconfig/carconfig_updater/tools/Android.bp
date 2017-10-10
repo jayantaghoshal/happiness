@@ -1,19 +1,13 @@
-
-subdirs = [
-    "tools"
-]
 cc_binary{
-   name: "carconfig-updater",
+   name: "carconfig-client-tester",
    proprietary: true,
    vendor: true,
    relative_install_path: "hw",
    generated_headers: ["cc_parameterlist_map_gen"],
-   cpp_std: "c++14",
    tidy: true,
    
    srcs: [
-      "src/carconfig_updater.cpp",
-      "src/carconfig_updater_main.cpp",
+      "carConfigClientTester.cpp",
    ],
    
    cppflags: [
@@ -22,19 +16,9 @@ cc_binary{
       "-Wno-macro-redefined",
    ],
 
-   required: [
-       "carconfig-default.csv"
-   ],
-   
-   local_include_dirs: [
-      "src",
-   ],
-
    shared_libs: [
-       "libdataelements",
        "liblog",
        "carconfig_reader",
-       "carconfig_writer"
    ],
    
    compile_multilib: "64",

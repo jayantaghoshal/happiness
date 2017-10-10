@@ -1,5 +1,7 @@
-#ifndef CEDRIC_CCDB_PARAMETER_LIST_H
-#define CEDRIC_CCDB_PARAMETER_LIST_H
+#pragma once
+
+#include <map>
+#include <vector>
 
 namespace CarConfigParamList
 {
@@ -20,4 +22,3 @@ namespace CarConfigParamList
         ##PARAMTEMPLATEEND##
     };
 }
-#endif

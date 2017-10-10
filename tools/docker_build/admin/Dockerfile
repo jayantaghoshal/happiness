@@ -65,6 +65,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     openjdk-8-jdk \
     python-libxml2 \
     python-markdown \
+    python-xlrd \
     squashfs-tools \
     sudo \
     tesseract-ocr \

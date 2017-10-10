@@ -49,7 +49,8 @@ PRODUCT_PACKAGE_OVERLAYS := \
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
 	signaltrace \
-	signalecho
+	signalecho \
+    carconfig-client-tester
 endif
 
 ##############################################################
