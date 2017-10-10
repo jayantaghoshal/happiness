@@ -14,9 +14,6 @@
 
 #include "gen_dataelements.h"
 #include "internalsignals.h"
-
-#undef LOG_TAG
-#define LOG_TAG "DataElementValue"
 #include <cutils/log.h>
 
 /*!
@@ -146,7 +143,7 @@ public:
     value_type value() const {
       if (isError())
       {
-        ALOGE("DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
+        ALOG(LOG_ERROR, "DataElementValue", "DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
       }
       return m_value;
     }
