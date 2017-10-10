@@ -4,12 +4,11 @@
 \*===========================================================================*/
 
 #include "dataelementframework.h"
+#include <cutils/log.h>
+#include <sys/types.h>
 
 #undef LOG_TAG
 #define LOG_TAG "DataElementFramework"
-#include <cutils/log.h>
-
-#include <sys/types.h>
 
 
 DataElementFramework& DataElementFramework::instance() {

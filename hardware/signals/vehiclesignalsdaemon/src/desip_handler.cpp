@@ -14,10 +14,9 @@
 #include "getopt.h"
 
 #include "message_api.h"
-
+#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-#include <cutils/log.h>
 
 static unsigned int convertToBaudrateIntType(const char *uartSpeed);
 

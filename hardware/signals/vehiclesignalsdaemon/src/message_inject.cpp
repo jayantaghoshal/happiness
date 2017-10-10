@@ -4,10 +4,9 @@
 #include <vipcomm/VipFramework.h>
 #include <vsm_inject.h>
 #include <vsm_sink.h>
-
+#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-#include <cutils/log.h>
 
 extern bool avmpVersionCheckOk;
 extern bool avmpHeartbeatReceived;
