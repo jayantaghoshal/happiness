@@ -3,7 +3,7 @@ LOCAL_PATH:= $(call my-dir)
 # Copy the default JSON file to /vendor/etc/localconfig
 # Convert to BP when somepne figures that out 
 include $(CLEAR_VARS)
-LOCAL_MODULE := localconfig_default
+LOCAL_MODULE := localconfig.json
 LOCAL_VENDOR_MODULE := true
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_RELATIVE_PATH := localconfig
