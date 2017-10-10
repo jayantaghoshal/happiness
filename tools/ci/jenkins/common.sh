@@ -36,7 +36,7 @@ function docker_run() {
   # create them with root.root ownership.
   mkdir -p "${CCACHE_DIR}"
 
-  if [ -n "${OUT_DIR}" ]; then
+  if [ -n "${OUT_DIR:-}" ]; then
     volumes=${volumes}\ --volume="${OUT_DIR}":"${OUT_DIR}"
     mkdir -p "${OUT_DIR}"
   fi
