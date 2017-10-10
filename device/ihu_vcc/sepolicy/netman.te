@@ -9,3 +9,6 @@ init_daemon_domain(netman)
 allow netman self:udp_socket { create ioctl };
 
 allow netman self:capability { net_admin net_raw kill };
+allow netman netns_device:dir { read open };
+allow netman netman_exec:file execute_no_trans;
+allow netman rootfs:dir mounton;

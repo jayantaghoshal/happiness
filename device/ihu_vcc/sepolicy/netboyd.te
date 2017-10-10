@@ -7,3 +7,5 @@ init_daemon_domain(netboyd)
 allow netboyd self:udp_socket { create ioctl };
 
 allow netboyd self:capability { net_admin net_raw kill };
+
+#allow netboyd self:netlink_route_socket create_socket_perms;

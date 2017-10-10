@@ -3,3 +3,9 @@ type vehicle-signals-daemon, domain;
 type vehicle-signals-daemon_exec, exec_type, file_type;
 
 init_daemon_domain(vehicle-signals-daemon)
+
+allow vehicle-signals-daemon socket_device:dir { write add_name };
+allow vehicle-signals-daemon socket_device:sock_file { create read getattr write setattr };
+allow vehicle-signals-daemon hwservicemanager_prop:file r_file_perms;
+allow vehicle-signals-daemon hwservicemanager:binder { call transfer };
+#allow vehicle-signals-daemon self:capability dac_override;

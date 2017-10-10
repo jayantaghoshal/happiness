@@ -1,0 +1,2 @@
+# netns device, used by ip
+type netns_device, dev_type;

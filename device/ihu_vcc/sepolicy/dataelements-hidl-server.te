@@ -1,13 +1,8 @@
 # dataelements-hidl-server
 type dataelements-hidl-server, domain;
 type dataelements-hidl-server_exec, exec_type, file_type;
-    
+
 allow dataelements-hidl-server hwservicemanager:binder { call transfer };
 allow dataelements-hidl-server hwservicemanager_prop:file { getattr open read };
-
-allow hwservicemanager dataelements-hidl-server:binder call;
-allow hwservicemanager dataelements-hidl-server:dir search;
-allow hwservicemanager dataelements-hidl-server:file { open read };
-allow hwservicemanager dataelements-hidl-server:process getattr;
 
 init_daemon_domain(dataelements-hidl-server)

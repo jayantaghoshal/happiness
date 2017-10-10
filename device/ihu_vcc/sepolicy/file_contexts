@@ -18,3 +18,6 @@
 
 # iproute2
 /system/bin/ip u:object_r:ip_exec:s0
+
+# netns device
+/dev/netns u:object_r:netns_device:s0
