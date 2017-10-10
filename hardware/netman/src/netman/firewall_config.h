@@ -5,18 +5,11 @@
 #include <fstream>
 #include "vcc/localconfig.h"
 
-namespace vcc
-{
-namespace netman
-{
-class FirewallConfig
-{
+namespace vcc {
+namespace netman {
+class FirewallConfig {
  public:
-  enum class IP
-  {
-    IPv4_,
-    IPv6_
-  };
+  enum class IP { IPv4_, IPv6_ };
   static const std::string kDefaultIptablesRulesPath;
 
   /**
@@ -43,8 +36,7 @@ class FirewallConfig
   /**
    * @brief iptables-style rules structure implementation
    */
-  struct ruletable
-  {
+  struct ruletable {
     std::string top_comment;
     std::string name;
     std::forward_list<std::string> chains;

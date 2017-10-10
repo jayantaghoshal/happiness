@@ -14,10 +14,8 @@
 
 using namespace vcc::netman;
 
-int main()
-{
-  try
-  {
+int main() {
+  try {
     ALOGI("Net Boy 0.1 starting");
 
     ALOGI("Moving initial network interfaces");
@@ -31,14 +29,11 @@ int main()
 
     property_set("netboyd.startup_completed", "1");
 
-    if (nl_socket_listener.StartListening())
-    {
+    if (nl_socket_listener.StartListening()) {
       ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
       return 1;
     }
-  }
-  catch (const std::runtime_error &e)
-  {
+  } catch (const std::runtime_error &e) {
     ALOGE("ABORTING: Exception thrown: %s", e.what());
     return 1;
   }

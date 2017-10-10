@@ -21,16 +21,12 @@
 #include "netlink_event_listener.h"
 #include "netutils.h"
 
-namespace vcc
-{
-namespace netman
-{
-void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
-{
+namespace vcc {
+namespace netman {
+void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header) {
   struct rtmsg *rt_msg = (struct rtmsg *)NLMSG_DATA(nl_message_header);
 
-  switch (nl_message_header->nlmsg_type)
-  {
+  switch (nl_message_header->nlmsg_type) {
     case NLMSG_DONE:
       ALOGI("NLMSG_DONE handler.");
       break;
@@ -54,5 +50,5 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
       break;
   }
 }
-}
-}
+}  // namespace netman
+}  // namespace vcc

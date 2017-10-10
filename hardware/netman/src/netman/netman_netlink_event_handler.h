@@ -3,12 +3,9 @@
 
 #include "netlink_event_handler.h"
 
-namespace vcc
-{
-namespace netman
-{
-class NetmanNetlinkEventHandler : public NetlinkEventHandler
-{
+namespace vcc {
+namespace netman {
+class NetmanNetlinkEventHandler : public NetlinkEventHandler {
   const std::vector<InterfaceConfiguration> &interface_configurations_;
 
  public:
@@ -19,7 +16,7 @@ class NetmanNetlinkEventHandler : public NetlinkEventHandler
   virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
 };
 
-}  // using netman
-}  // using vcc
+}  // namespace netman
+}  // namespace vcc
 
 #endif

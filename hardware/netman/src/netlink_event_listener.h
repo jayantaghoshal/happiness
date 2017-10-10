@@ -5,14 +5,11 @@
 
 #include "netutils.h"
 
-namespace vcc
-{
-namespace netman
-{
+namespace vcc {
+namespace netman {
 class NetlinkEventHandler;
 
-class NetlinkSocketListener
-{
+class NetlinkSocketListener {
  private:
   NetlinkEventHandler *netlink_event_handler_ = nullptr;
   int netlink_socket_ = -1;
@@ -37,7 +34,7 @@ class NetlinkSocketListener
   int RecvMessage();
 };
 
-}  // netman namespace
-}  // vcc namespace
+}  // namespace netman
+}  // namespace vcc
 
 #endif
