@@ -1,5 +1,3 @@
-#define LOG_TAG "GnssD.main"
-
 #include <hidl/HidlTransportSupport.h>
 #include <cstdint>
 #include <functional>
@@ -13,6 +11,8 @@
 #include <sys/signalfd.h>
 
 #include "gnssService.h"
+
+#define LOG_TAG "GnssD.main"
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;

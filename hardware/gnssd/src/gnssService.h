@@ -1,8 +1,6 @@
 #ifndef VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
 #define VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
 
-#define LOG_TAG "gnss_daemon"
-
 #include <IDispatcher.h>
 #include <cutils/log.h>
 
@@ -64,6 +62,7 @@ private:
 
     ASN_BYTE m_session_buffer_msgd[ASN_SESSION_SIZE + 2048];
     ASN_Session m_session_msgd;
+    bool connectionError = false;
 };
 
 #endif  // VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
