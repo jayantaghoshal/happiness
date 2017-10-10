@@ -3,10 +3,10 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <utils/String16.h>
+#include <cutils/log.h>
 
 #define LOG_TAG "NetdSocketTest"
 
-#include <cutils/log.h>
 
 int main(int argc, char **argv) {
   int mChannel = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);

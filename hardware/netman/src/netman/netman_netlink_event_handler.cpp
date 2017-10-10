@@ -3,7 +3,6 @@
 
 #include <net/if.h>
 
-#define LOG_TAG "Netmand"
 
 #include <cutils/log.h>
 
@@ -11,6 +10,8 @@
 #include "netlink_event_listener.h"
 #include "netman_netlink_event_handler.h"
 #include "netutils.h"
+
+#define LOG_TAG "Netmand"
 
 namespace vcc {
 namespace netman {

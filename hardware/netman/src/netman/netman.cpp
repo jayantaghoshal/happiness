@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LOG_TAG "Netmand"
 
 #include <cutils/log.h>
 #include <cutils/properties.h>
@@ -13,6 +12,8 @@
 #include "netman_netlink_event_handler.h"
 #include "netutils.h"
 #include "vcc/localconfig.h"
+
+#define LOG_TAG "Netmand"
 
 using namespace vcc::netman;
 
