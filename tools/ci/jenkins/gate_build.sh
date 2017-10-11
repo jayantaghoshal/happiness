@@ -3,6 +3,9 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 
+# Rerun commit check in case merge effect changed after the change was validated at the check step
+docker_run "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check \"${ZUUL_BRANCH}\""
+
 # Update the manifests based on the templates and download all other
 # repositories. First time this will take a very long time but subsequent
 # downloads are incremental and faster.
@@ -23,14 +26,17 @@ export USE_CCACHE=true
 
 rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
 
-# Rerun commit check in case it changed before the change was validated first time
+# Rerun commit check in case it changed after the change was validated at the check step
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
-docker_run "lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all" || die "Build failed"
+# Ensure our repo can be build with mma
+docker_run "time mmma -j32 vendor/volvocars"
+
+# Build image and test utils
+docker_run "time make -j32 droid vts tradefed-all"
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate" || die "Build Unit and Component tests failed"
-
+docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate"
 
 # Push out files required for gate_test.sh to Artifactory.
 #
@@ -56,10 +62,9 @@ docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
             ./out/host/linux-x86/bin/tradefed.sh \
             ./out/host/linux-x86/bin/vts-tradefed \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed" || die "Could not create out archive"
+            ./out/host/linux-x86/tradefed"
 
 ls -lh "$OUT_ARCHIVE"
-docker_run "time artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}" \
-    || die "Could not push out archive to Artifactory."
+docker_run "time artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}"
 
 rm ${OUT_ARCHIVE}
