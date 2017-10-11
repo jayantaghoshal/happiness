@@ -50,7 +50,8 @@ LOCAL_SRC_FILES := \
 	src/netutils.cpp \
 	src/netlink_event_listener.cpp \
 	src/netlink_event_handler.cpp \
-	src/netboy/netboy_netlink_event_handler.cpp
+	src/netboy/netboy_netlink_event_handler.cpp \
+	src/netboy/rule_handler.cpp
 
 LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/

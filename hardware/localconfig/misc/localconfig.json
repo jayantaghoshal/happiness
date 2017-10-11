@@ -72,6 +72,7 @@
   "eth1.netmask": "255.255.240.0",
   "eth1.mac-address": "02:00:00:02:12:01",
   "eth1.mtu": 1500,
+  "NetboyRules": [],
   "CONN_NhFirewall":
   {
     "NAT_TABLE":
