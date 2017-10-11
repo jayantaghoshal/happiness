@@ -62,5 +62,7 @@
   <!-- Upstream to Delphi -->
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
+  <remove-project name="android_vehicle-hal"/>
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f6db97e26e2118550bd12648475c41e824f28d40"/>
 
 </manifest>

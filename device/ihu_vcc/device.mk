@@ -12,7 +12,8 @@ PRODUCT_PACKAGES += \
     gnssd \
     carconfig-updater \
     desip_service \
-    android.hardware.automotive.vehicle.delphi@2.0-service
+    android.hardware.automotive.vehicle.vcc@2.0-service
+    
 
 ##############################################################
 # System UI
