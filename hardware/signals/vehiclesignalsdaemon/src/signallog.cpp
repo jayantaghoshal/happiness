@@ -1,8 +1,8 @@
 
 #include "signallog.h"
+#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-#include <cutils/log.h>
 
 SignalLog::SignalLog(const std::string& logFile0, const std::string& logFile1)
     : _logFiles{logFile0, logFile1}, MAX_LOG_SIZE(200000)

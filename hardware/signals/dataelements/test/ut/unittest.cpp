@@ -37,10 +37,10 @@ using uint16 = uint16_t;
 using uint32 = uint32_t;
 using boolean = bool;
 #include "gen/MpRouter_Signals.h"
+#include <cutils/log.h>
 
 #undef LOG_TAG
 #define LOG_TAG "Dataelements UnitTest"
-#include <cutils/log.h>
 
 // This is the namespace for ARSender and ARReceiver (found in Application_dataelement.h>
 using namespace ApplicationDataElement;
