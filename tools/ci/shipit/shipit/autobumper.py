@@ -5,8 +5,6 @@ from . import manifest
 from . import process_tools
 from . import git
 
-
-
 def check_manifest(aosp_root_dir: str, branch: str):
     # Zuul will have already cloned vendor/volvocars
 
@@ -17,6 +15,13 @@ def check_manifest(aosp_root_dir: str, branch: str):
     for manifest_template_file in vcc_manifest_files:
         manifest.verify_no_floating_branches(manifest_template_file, branch)
 
+def repo_init(aosp_root_dir: str, branch: str):
+    process_tools.check_output_logged(
+        ["repo", "init",
+         "-u", "ssh://gotsvl1415.got.volvocars.net:29421/manifest",
+         "-b", branch],
+        cwd=os.path.abspath(aosp_root_dir))
+
 def on_commit(aosp_root_dir: str, branch: str):
     # Zuul will have already cloned vendor/volvocars
 
@@ -24,11 +29,7 @@ def on_commit(aosp_root_dir: str, branch: str):
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
     volvocars_repo = git.Repo(volvocars_repo_path)
 
-    process_tools.check_output_logged(
-        ["repo", "init",
-         "-u", "ssh://gotsvl1415.got.volvocars.net:29421/manifest",
-         "-b", branch],
-        cwd=os.path.abspath(aosp_root_dir))
+    repo_init(aosp_root_dir, branch)
 
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo)
     process_tools.check_output_logged(["repo", "sync",
@@ -64,11 +65,7 @@ def post_merge(aosp_root_dir: str,
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
     volvocars_repo = git.Repo(volvocars_repo_path)
 
-    process_tools.check_output_logged(
-        ["repo", "init",
-         "-u", "ssh://gotsvl1415.got.volvocars.net:29421/manifest",
-         "-b", branch],
-        cwd=os.path.abspath(aosp_root_dir))
+    repo_init(aosp_root_dir, branch)
 
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir,
                                               volvocars_repo,
