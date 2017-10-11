@@ -91,6 +91,9 @@ void IplmService::HandleMessageRcvd(const Msg& msg)
   iplm_data_.rg1_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
   iplm_data_.rg3_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
 
+  if (flexray_wakeup_attempted && iplm_data_.rg1_availabilityStatus_.all() && iplm_data_.rg3_availabilityStatus_.all()) {
+    flexray_wakeup_attempted = false;
+  }
   // Handle session state here?
 
   if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE)

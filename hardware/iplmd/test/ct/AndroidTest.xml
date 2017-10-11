@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies implmd
+-->
+<configuration description="Test Iplmd">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsIplmdTestCases->/data/local/tmp/VtsIplmdTestCases" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsIplmdTestCases" />
+         <option name="runtime-hint" value="2s" />
+    </test>
+</configuration>

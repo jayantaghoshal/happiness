@@ -47,6 +47,7 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2017-10-12"
     ),
+    VTSTest("vendor/volvocars/hardware/iplmd/test/ct",                        standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                  standard_caps),
