@@ -25,13 +25,14 @@
 #include <system_error>
 #include <vector>
 
-#define LOG_TAG "Netmand"
 
 #include <cutils/log.h>
 
 #include <vcc/localconfig.h>
 
 #include "netutils.h"
+
+#define LOG_TAG "Netmand"
 
 namespace vcc {
 namespace netman {

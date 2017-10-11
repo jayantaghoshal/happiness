@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LOG_TAG "Netboyd"
 
 #include <cutils/log.h>
 #include <cutils/properties.h>
@@ -11,6 +10,8 @@
 #include "netboy_netlink_event_handler.h"
 #include "netlink_event_listener.h"
 #include "netutils.h"
+
+#define LOG_TAG "Netboyd"
 
 using namespace vcc::netman;
 
