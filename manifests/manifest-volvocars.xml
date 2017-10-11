@@ -11,8 +11,6 @@
   <!-- AOSP Changed by Volvo Cars -->
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
-  <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
-  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="bc820c71d876e99af286dbdd53e1e224d7bba732"/>
   <remove-project name="aosp/platform/frameworks/support"/>
   <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="bb7e331b58f05b0cb71c8a022e495c917145674c"/>
   <remove-project name="aosp/platform/packages/services/Car"/>
