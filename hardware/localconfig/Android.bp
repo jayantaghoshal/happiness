@@ -1,6 +1,6 @@
 cc_defaults {
     name: "liblocalconfig_defaults",
-    defaults: ["volvocars_cc_defaults"],
+    defaults: ["volvocars_cc_defaults_hq"],
     export_include_dirs: ["include"],
     static_libs: [
         "libjsoncpp",
