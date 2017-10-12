@@ -1,13 +1,11 @@
 cc_defaults {
     name: "liblocalconfig_defaults",
-    compile_multilib: "64",
+    defaults: ["volvocars_cc_defaults"],
     export_include_dirs: ["include"],
-    cflags: ["-fexceptions"],
     static_libs: [
         "libjsoncpp",
         "liblog",
     ],
-    vendor: true,
 }
 
 // Static library. Used in shared lib and for unit tests.
