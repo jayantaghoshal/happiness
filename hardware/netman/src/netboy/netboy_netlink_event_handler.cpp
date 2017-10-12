@@ -4,11 +4,9 @@
 #include <net/if.h>
 #include <cstdlib>
 
-
 #include <cutils/log.h>
 
 #include "netboy_netlink_event_handler.h"
-#include "netlink_event_handler.h"
 #include "netlink_event_listener.h"
 #include "netutils.h"
 

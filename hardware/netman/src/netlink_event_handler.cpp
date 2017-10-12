@@ -1,14 +1,7 @@
-#include <errno.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <linux/rtnetlink.h>
 #include <linux/socket.h>
 
 #include <net/if.h>
-
 
 #include <cutils/log.h>
 

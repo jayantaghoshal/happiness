@@ -1,8 +1,6 @@
 #ifndef _NETLINK_SOCKET_LISTENER_H_
 #define _NETLINK_SOCKET_LISTENER_H_
 
-#include <atomic>
-
 #include "netutils.h"
 
 namespace vcc {
@@ -37,4 +35,4 @@ class NetlinkSocketListener {
 }  // namespace netman
 }  // namespace vcc
 
-#endif
+#endif  // _NETLINK_SOCKET_LISTENER_H_

@@ -1,8 +1,4 @@
 #include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 #include <cutils/log.h>
 #include <cutils/properties.h>
@@ -19,7 +15,7 @@ int main() {
   try {
     ALOGI("Net Boy 0.1 starting");
 
-    ALOGI("Moving initial network interfaces");
+    ALOGV("Moving initial network interfaces");
 
     VccNamespaceInit();
 
