@@ -9,7 +9,8 @@ PRODUCT_PACKAGES += \
     dataelements-hidl-server \
     ipcbd \
     iplmd \
-    gnssd
+    gnssd \
+    carconfig-updater
 
 ##############################################################
 # System UI

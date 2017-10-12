@@ -2,4 +2,5 @@ service carconfig_updater /vendor/bin/hw/carconfig-updater
     class main
     user root
     group root
-    seclabel u:r:carconfig-service:s0
+    oneshot
+    seclabel u:r:carconfig-updater:s0
