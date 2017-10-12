@@ -40,7 +40,7 @@ NetlinkSocketListener::~NetlinkSocketListener() { StopListening(); }
 
 int NetlinkSocketListener::SetupSocket() {
   if (netlink_socket_ != -1) {
-    ALOGI("Trying to setup the already opened netlink socket.");
+    ALOGE("Trying to setup the already opened netlink socket.");
     return 0;
   }
 
@@ -77,9 +77,9 @@ int NetlinkSocketListener::StartListening() {
     return -1;
   }
 
-  ALOGI("Netlink socket successfully setup.");
+  ALOGV("Netlink socket successfully setup.");
 
-  ALOGI("Waiting for netlink messages to arrive...");
+  ALOGV("Waiting for netlink messages to arrive...");
 
   for (;;) {
     if (RecvMessage() == -1) {

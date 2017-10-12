@@ -16,7 +16,7 @@ NetmanNetlinkEventHandler::NetmanNetlinkEventHandler(
     : interface_configurations_(interface_configurations) {}
 
 void NetmanNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg) {
-  ALOGI("Message received: RTM_NEWLINK");
+  ALOGV("Message received: RTM_NEWLINK");
 
   char name[IF_NAMESIZE];
 
@@ -36,7 +36,7 @@ void NetmanNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_h
 
 void NetmanNetlinkEventHandler::HandleNewAddressEvent(struct nlmsghdr *nl_message_header,
                                                       struct ifaddrmsg *if_addr_msg) {
-  ALOGI("Message received: RTM_NEWADDR");
+  ALOGV("Message received: RTM_NEWADDR");
   char name[IF_NAMESIZE];
 
   // TODO: Refactor common parts in HandleNewLinkEvent and HandleNewAddressEvent

@@ -171,7 +171,7 @@ bool SetLinkSpeed(const std::string &interface_name) {
 
   rc = ioctl(sock, SIOCETHTOOL, &ifr);
   if (rc < 0) {
-    ALOGI("SetLinkSpeed NOT successful (Get). %s", std::strerror(errno));
+    ALOGE("SetLinkSpeed NOT successful (Get). %s", std::strerror(errno));
     close(sock);
     return false;
   }
@@ -184,11 +184,11 @@ bool SetLinkSpeed(const std::string &interface_name) {
   rc = ioctl(sock, SIOCETHTOOL, &ifr);
   if (rc < 0) {
     close(sock);
-    ALOGI("SetLinkSpeed NOT successful (Set). %s", std::strerror(errno));
+    ALOGE("SetLinkSpeed NOT successful (Set). %s", std::strerror(errno));
     return false;
   }
 
-  ALOGI("SetLinkSpeed successful.");
+  ALOGD("SetLinkSpeed successful.");
   close(sock);
   return true;
 }
@@ -356,9 +356,9 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
       close(inet_sock_fd);
       return false;
     }
-    ALOGI("%s: Ip address set to %s", interface_name, ip_addr);
+    ALOGV("%s: Ip address set to %s", interface_name, ip_addr);
   } else {
-    ALOGI("%s: Ip address already set", interface_name);
+    ALOGV("%s: Ip address already set", interface_name);
   }
 
   if (std::strcmp(GetBroadcastAddress(interface_name).c_str(), broadcast_address) != 0) {
@@ -367,9 +367,9 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
       close(inet_sock_fd);
       return false;
     }
-    ALOGI("%s: Broadcast address set to %s", interface_name, broadcast_address);
+    ALOGV("%s: Broadcast address set to %s", interface_name, broadcast_address);
   } else {
-    ALOGI("%s: Broadcast address already set", interface_name);
+    ALOGV("%s: Broadcast address already set", interface_name);
   }
 
   if (std::strcmp(GetNetmask(interface_name).c_str(), netmask) != 0) {
@@ -378,9 +378,9 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
       close(inet_sock_fd);
       return false;
     }
-    ALOGI("%s: Netmask set to %s", interface_name, netmask);
+    ALOGV("%s: Netmask set to %s", interface_name, netmask);
   } else {
-    ALOGI("%s: Netmask already set", interface_name);
+    ALOGV("%s: Netmask already set", interface_name);
   }
 
   close(inet_sock_fd);
@@ -406,7 +406,7 @@ bool SetMtu(const uint32_t mtu, const char *interface_name) {
     close(sockfd);
     return false;
   } else {
-    ALOGI("%s: MTU set to %i", interface_name, mtu);
+    ALOGV("%s: MTU set to %i", interface_name, mtu);
   }
 
   close(sockfd);
@@ -464,7 +464,7 @@ bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char *interfac
     return false;
   }
 
-  ALOGI("%s: MAC address set to %s", interface_name, printable_mac_address.c_str());
+  ALOGV("%s: MAC address set to %s", interface_name, printable_mac_address.c_str());
 
   close(sockfd);
 
@@ -482,16 +482,16 @@ void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac
 /** Public Functions **/
 
 void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf) {
-  ALOGI("--------------------------------------------------------");
-  ALOGI("Interface configuration: %s", context.c_str());
-  ALOGI("Interface name: %s", conf.name.c_str());
-  ALOGI("Mac address: %s", conf.mac_address.c_str());
-  ALOGI("Mac address bytes: %02x:%02x:%02x:%02x:%02x:%02x", conf.mac_address_bytes[0], conf.mac_address_bytes[1],
+  ALOGV("--------------------------------------------------------");
+  ALOGV("Interface configuration: %s", context.c_str());
+  ALOGV("Interface name: %s", conf.name.c_str());
+  ALOGV("Mac address: %s", conf.mac_address.c_str());
+  ALOGV("Mac address bytes: %02x:%02x:%02x:%02x:%02x:%02x", conf.mac_address_bytes[0], conf.mac_address_bytes[1],
         conf.mac_address_bytes[2], conf.mac_address_bytes[3], conf.mac_address_bytes[4], conf.mac_address_bytes[5]);
-  ALOGI("IP address: %s", conf.ip_address.c_str());
-  ALOGI("Broadcast address: %s", conf.broadcast_address.c_str());
-  ALOGI("Netmask: %s", conf.netmask.c_str());
-  ALOGI("MTU: %i", conf.mtu);
+  ALOGV("IP address: %s", conf.ip_address.c_str());
+  ALOGV("Broadcast address: %s", conf.broadcast_address.c_str());
+  ALOGV("Netmask: %s", conf.netmask.c_str());
+  ALOGV("MTU: %i", conf.mtu);
 }
 
 void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations,
@@ -555,7 +555,7 @@ void VccNamespaceInit() {
   // TODO (Philip Werner) Refactor to more dynamic behaviour using local config.
   std::vector<std::string> network_interfaces = ListNetworkInterfaces({"lo", "sit0"});
   for (auto &network_interface : network_interfaces) {
-    ALOGI("Moving interface: %s", network_interface.c_str());
+    ALOGV("Moving interface: %s", network_interface.c_str());
 
     TakeInterfaceDown(network_interface.c_str());
 
@@ -648,7 +648,7 @@ void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configu
 
 bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_address, const char *ip_addr,
                     const char *netmask, const char *broadcast_addr, const uint32_t mtu) {
-  ALOGI("%s: Setting configuration for network interface", interface_name);
+  ALOGD("%s: Setting configuration for network interface", interface_name);
 
   if (!InterfaceExists(interface_name)) {
     ALOGE("%s: Interface does not appear to exist!", interface_name);
@@ -659,9 +659,9 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
   if (std::strcmp(interface_name, "eth1") == 0 && !IsLinkSpeedCorrect(interface_name)) {
     SetLinkSpeed(interface_name);
 
-    ALOGI("%s: Link speed set to 100Mbit", interface_name);
+    ALOGV("%s: Link speed set to 100Mbit", interface_name);
   } else if (std::strcmp(interface_name, "eth1")) {
-    ALOGI("%s: Link speed already set", interface_name);
+    ALOGV("%s: Link speed already set", interface_name);
   }
 
   if (!IsMacAddressCorrect(mac_address, interface_name)) {
@@ -673,7 +673,7 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
       ALOGE("Failed to set MAC address for %s!", interface_name);
     }
   } else {
-    ALOGI("%s: MAC address already set", interface_name);
+    ALOGV("%s: MAC address already set", interface_name);
   }
 
   // Arp proxy settings
@@ -695,7 +695,7 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
 
     ALOGI("%s: MTU set to %i", interface_name, mtu);
   } else {
-    ALOGI("%s: MTU already set", interface_name);
+    ALOGV("%s: MTU already set", interface_name);
   }
 
   // All well so far; bring the interface up

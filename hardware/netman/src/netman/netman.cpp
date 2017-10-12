@@ -17,7 +17,7 @@ int main() {
   try {
     ALOGI("Netmand 0.1 starting");
 
-    ALOGI("Setting up firewall configuration");
+    ALOGV("Setting up firewall configuration");
     auto *lcfg = vcc::LocalConfigDefault();
 
     FirewallConfig fw_conf = FirewallConfig(lcfg);
@@ -36,19 +36,17 @@ int main() {
       exit(1);
     }
 
-    ALOGI("Firewall configured");
-
-    ALOGI("Loading configuration from local config");
+    ALOGV("Firewall configured");
 
     std::vector<InterfaceConfiguration> interface_configurations;
 
     LoadInterfaceConfiguration(&interface_configurations, lcfg);
 
-    ALOGI("Setting initial configuration on network interfaces");
+    ALOGV("Setting initial configuration on network interfaces");
 
     SetupInterface(interface_configurations);
 
-    ALOGI("Initial configurations set");
+    ALOGV("Initial configurations set");
 
     NetmanNetlinkEventHandler nl_event_handler(interface_configurations);
 
@@ -61,8 +59,6 @@ int main() {
       ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
       exit(1);
     }
-
-    exit(0);
   } catch (const std::runtime_error &e) {
     ALOGE("ABORTING: Exception thrown: %s", e.what());
   }
