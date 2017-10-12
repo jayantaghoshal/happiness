@@ -13,6 +13,7 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 #include <cstring>
 #include <fstream>
@@ -22,6 +23,12 @@
 #define LOG_TAG "Netmand"
 
 namespace {
+
+void ValidateReturnStatus(const int command_status) {
+  if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
+    throw std::system_error(command_status, std::system_category());
+  }
+}
 
 bool WriteFile(const std::string &path, const std::string &text) {
   std::fstream file(path);
@@ -626,10 +633,10 @@ bool TakeInterfaceDown(const char *interface_name) {
   return true;
 }
 
-int MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns) {
+void MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns) {
   std::stringstream move_network_interface_cmd;
   move_network_interface_cmd << "/system/bin/ip link set dev " << network_interface_name << " netns " << ns;
-  return system(move_network_interface_cmd.str().c_str());
+  ValidateReturnStatus(system(move_network_interface_cmd.str().c_str()));
 }
 
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations) {

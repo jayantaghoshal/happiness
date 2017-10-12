@@ -17,7 +17,7 @@ void PrintInterfaceConfiguration(const std::string context, const InterfaceConfi
 
 void VccNamespaceInit();
 
-int MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns);
+void MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns);
 
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations);
 
