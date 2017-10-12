@@ -15,7 +15,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, stand
 # These should mainly be used for system stability, ie when a failing module will
 # block other developers from continuing development. Such as "unit not booting", "adb not working", "black screen", etc
 test_plan_gate = [
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                  standard_caps),
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",          standard_caps),
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                   standard_caps),
@@ -25,6 +25,7 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/uds/test/ct",                           standard_caps),
     VTSTest("vendor/volvocars/tools/test/daemon_test",                         standard_caps),
+
 ]
 
 test_plan_hourly = [
