@@ -51,7 +51,7 @@ std::string malformed_json_input = R"(
 
 const char *kTestIntKey = "foo";
 const char *kTestStringKey = "bum";
-}
+}  // namespace
 
 TEST(LocalConfigParsingTestMalformed, MalformedInput) {
   vcc::LocalConfigStaticContentReader underlying_reader{malformed_json_input};

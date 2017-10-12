@@ -5,7 +5,7 @@
 
 namespace vcc {
 class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader {
-  typedef LocalConfigReader base;
+  using base = LocalConfigReader;
 
  public:
   LocalConfigFileReaderAndroidIhuBehavior(std::string production_path, std::string fallback_path,

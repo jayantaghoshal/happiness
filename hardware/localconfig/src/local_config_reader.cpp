@@ -1,11 +1,11 @@
-#include "vcc/local_config_reader.h"
+#include "local_config_reader.h"
 
 #include <fstream>
 
 #define LOG_TAG "localconfig"
 #include <cutils/log.h>
 
-using namespace vcc;
+using vcc::LocalConfigReader;
 
 namespace {
 std::string GetKeyString(std::initializer_list<std::string> keys) {
@@ -44,7 +44,7 @@ const Json::Value &LocalConfigReader::GetJsonValue(std::initializer_list<std::st
     auto message = "Parameter " + GetKeyString(keys) + " is not a " expected_typename "."; \
     ALOGE("%s", message.c_str());                                                          \
     throw std::runtime_error(message);                                                     \
-  } while (0)
+  } while (false)
 
 std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys) const {
   std::unique_lock<std::mutex> lock(mutex_);
@@ -115,6 +115,7 @@ vcc::LocalConfigFileReader::LocalConfigFileReader(std::string file_path)
 vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(std::string json)
     : base([json](Json::Value *value) {
         Json::Reader reader;
-        if (!reader.parse(json, *value))
+        if (!reader.parse(json, *value)) {
           throw std::runtime_error("JSON text could not be parsed, please check content.");
+        }
       }) {}

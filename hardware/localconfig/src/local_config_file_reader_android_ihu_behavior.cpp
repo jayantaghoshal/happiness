@@ -1,4 +1,4 @@
-#include "vcc/local_config_file_reader_android_ihu_behavior.h"
+#include "local_config_file_reader_android_ihu_behavior.h"
 
 #define LOG_TAG "localconfig"
 #include <cutils/log.h>
