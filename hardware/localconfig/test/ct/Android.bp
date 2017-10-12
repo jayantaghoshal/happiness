@@ -11,5 +11,4 @@ cc_test {
     static_libs: ["libgmock"],
     test_suites: ["vts"],
     compile_multilib: "64",
-
 }

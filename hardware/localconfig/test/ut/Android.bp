@@ -17,10 +17,6 @@ cc_test {
     ],
 
     compile_multilib: "64",
-    host_supported: true,
-
-    // Not available for host
-    // whole_static_libs: ["libVtsGtestMain"],
-
+    host_supported: false,
     test_suites: ["vts"],
 }

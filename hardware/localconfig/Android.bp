@@ -29,6 +29,7 @@ cc_library_shared {
     defaults: ["liblocalconfig_defaults"],
     whole_static_libs: ["liblocalconfig_static"],
     required: ["localconfig.json"], //consider removing from user builds when VBFs are ready
+    host_supported: true,
 }
 
 subdirs = ["test"]
