@@ -15,14 +15,16 @@ docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_6
 status=$?
 
 docker_run "lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64 --module BinderThroughputBenchmark"
+result=$?
 if [ $status -eq 0 ]; then
-    status=$?
+    status=$result
 fi
 
 # Run Unit and Component tests for vendor/volvocars
 docker_run "time python3 $REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly -c ihu-generic adb mp-serial vip-serial
+result=$?
 if [ $status -eq 0 ]; then
-    status=$?
+    status=$result
 fi
 
 # Push logs and reports to Artifactory
