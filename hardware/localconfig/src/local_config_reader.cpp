@@ -23,6 +23,8 @@ void vcc::LocalConfigReader::Preload() {
 }
 
 const Json::Value &LocalConfigReader::GetJsonValue(std::initializer_list<std::string> keys) const {
+  if (keys.size() == 0) throw std::runtime_error("At least one key must be requested from LocalConfig");
+
   if (root_.isNull()) loader_(&root_);
 
   const Json::Value *current_node = &root_;
@@ -36,7 +38,8 @@ const Json::Value &LocalConfigReader::GetJsonValue(std::initializer_list<std::st
     }
     current_node = node_value;
   }
-  return *node_value;
+
+  return *node_value;  // NOLINT (loop is runs at least once due to arguments validation, it is not null then)
 }
 
 #define THROW_TYPE_MISMATCH(expected_typename)                                             \
@@ -102,11 +105,14 @@ std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list
 
 void vcc::LocalConfigReader::LoadFile(std::string file_path, Json::Value *value) {
   std::ifstream ifs(file_path);
-  if (!ifs) throw std::runtime_error("JSON file " + file_path + " could not be opened.");
+  if (!ifs) {
+    throw std::runtime_error("JSON file " + file_path + " could not be opened.");
+  }
 
   Json::Reader reader;
-  if (!reader.parse(ifs, *value))
+  if (!reader.parse(ifs, *value)) {
     throw std::runtime_error("JSON file " + file_path + " could not be parsed, please check file content.");
+  }
 }
 
 vcc::LocalConfigFileReader::LocalConfigFileReader(std::string file_path)

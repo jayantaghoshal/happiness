@@ -116,7 +116,7 @@ struct LocalConfigReaderInterface {
     try {
       GetGenericValue(value, keys...);
       return true;
-    } catch (std::runtime_error) {
+    } catch (const std::runtime_error &) {
       return false;
     }
   }
@@ -126,7 +126,7 @@ struct LocalConfigReaderInterface {
     try {
       GetGenericValue(value, keys...);
       return true;
-    } catch (std::runtime_error) {
+    } catch (const std::runtime_error &) {
       *value = default_value;
       return false;
     }
