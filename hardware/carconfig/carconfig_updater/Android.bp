@@ -34,8 +34,8 @@ cc_binary{
    shared_libs: [
        "libdataelements",
        "liblog",
-       "carconfig_reader",
-       "carconfig_writer"
+       "libcarconfig_reader",
+       "libcarconfig_writer"
    ],
    
    compile_multilib: "64",

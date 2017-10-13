@@ -1,8 +1,7 @@
-Car Config Backend
-==============
+Car Config
+============
 
-The Car Config backend is a set of libraries to enable reading and writing Car Config parameters. A helper format reads a backend file and loads that
-into shared memory(/dev/shm/carconfig).  The reader libraries reads from the shared memory and maintains a local cache of the shared memory.
+The Car Config is a set of libraries to enable reading and writing Car Config parameters. libcarconfig_reader is used by applications for reading configuration data. libcarconfig_writer is used by CarConfigUpdater to write received carconfig to disk.
 
 Backend File Format
 -------------

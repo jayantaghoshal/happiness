@@ -6,11 +6,11 @@ subdirs = [
 // Used by carconfig clients
 genrule {
     name: "cc_parameterlist_gen",
-    tool_files: ["core/tools/parse_ccdb.py"],
-    cmd: "python $(location core/tools/parse_ccdb.py) $(in) $(out)",
+    tool_files: ["tools/parse_ccdb.py"],
+    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
     srcs: [
-        "core/docs/carconfigspec.xls",
-        "core/tools/ccdb_template.h"
+        "tools/carconfigspec.xls",
+        "tools/ccdb_template.h"
     ],
     out: [
         "cc_parameterlist.h"
@@ -20,11 +20,11 @@ genrule {
 // Used by carconfig_updater
 genrule {
     name: "cc_parameterlist_map_gen",
-    tool_files: ["core/tools/parse_ccdb.py"],
-    cmd: "python $(location core/tools/parse_ccdb.py) $(in) $(out)",
+    tool_files: ["tools/parse_ccdb.py"],
+    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
     srcs: [
-        "core/docs/carconfigspec.xls",
-        "core/tools/ccdb_paramlist_template.h"
+        "tools/carconfigspec.xls",
+        "tools/ccdb_paramlist_template.h"
     ],
     out: [
         "cc_parameterlist_map.h"
