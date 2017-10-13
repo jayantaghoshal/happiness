@@ -155,7 +155,7 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
 ARG swf1_pypi_user
 ARG swf1_pypi_pass
 RUN pip install pika
-RUN pip install --user vccci_messages ci_confighub --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+RUN pip install vccci_messages==1.4.1 ci_confighub==0.1.6 --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 ##################################################
 # Clean up apt package information to make image smaller
