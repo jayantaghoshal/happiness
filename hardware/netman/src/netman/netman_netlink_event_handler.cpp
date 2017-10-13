@@ -1,13 +1,9 @@
 #include <linux/rtnetlink.h>
 #include <linux/socket.h>
 
+#include <cutils/log.h>
 #include <net/if.h>
 
-
-#include <cutils/log.h>
-
-#include "netlink_event_handler.h"
-#include "netlink_event_listener.h"
 #include "netman_netlink_event_handler.h"
 #include "netutils.h"
 

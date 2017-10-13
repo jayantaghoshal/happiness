@@ -1,8 +1,4 @@
 #include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 #include <cutils/log.h>
 #include <cutils/properties.h>

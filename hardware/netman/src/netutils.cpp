@@ -1,56 +1,46 @@
+#include "netutils.h"
+
+#include <cutils/log.h>
+#include <vcc/localconfig.h>
+
 #include <arpa/inet.h>
-
-#include <cstddef>
-
 #include <errno.h>
 #include <ifaddrs.h>
-#include <ios>
-
 #include <linux/ethtool.h>
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
-
 #include <net/if.h>
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <unistd.h>
+
 #include <cstring>
+#include <fstream>
 #include <sstream>
-#include <stdexcept>
 #include <system_error>
-#include <vector>
-
-
-#include <cutils/log.h>
-
-#include <vcc/localconfig.h>
-
-#include "netutils.h"
 
 #define LOG_TAG "Netmand"
 
-namespace vcc {
-namespace netman {
 namespace {
-bool _write_to_file(const char *path, const char *text) {
-  auto fd = std::unique_ptr<FILE, decltype(&fclose)>(fopen(path, "w"), &fclose);
-  if (!fd) {
-    return false;
-  }
 
-  int retval = fputs(text, fd.get());
-  if (retval > 0) {
-    return false;
+bool WriteFile(const std::string &path, const std::string &text) {
+  std::fstream file(path);
+  if (file.is_open()) {
+    file << text;
+    if (file) return true;
   }
-  return true;
+  return false;
+}
+
+bool SetProxyArp(const char *interface_name) {
+  ALOGV("%s: Setting proxy_arp = 1", interface_name);
+  return WriteFile(std::string("/proc/sys/net/ipv4/conf/") + interface_name + "/proxy_arp", "1");
 }
 
 }  // namespace
+
+namespace vcc {
+namespace netman {
 
 /* Declarations */
 
@@ -639,16 +629,6 @@ static bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char *i
   return true;
 }
 
-static bool SetProxyArp(const char *interface_name) {
-  ALOGI("%s: Setting proxy_arp=1", interface_name);
-  if (!strcmp(interface_name, "meth0")) {
-    return (_write_to_file("/proc/sys/net/ipv4/conf/meth0/proxy_arp", "1"));
-  } else if (!strcmp(interface_name, "eth1")) {
-    return (_write_to_file("/proc/sys/net/ipv4/conf/eth1/proxy_arp", "1"));
-  }
-  return true;
-}
-
 int MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns) {
   std::stringstream move_network_interface_cmd;
   move_network_interface_cmd << "/system/bin/ip link set dev " << network_interface_name << " netns " << ns;
@@ -693,8 +673,10 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
   }
 
   // Arp proxy settings
-  if (!SetProxyArp(interface_name)) {
-    ALOGE("Failed to set proxy arp for %s!", interface_name);
+  if (!strcmp(interface_name, "meth0") || !strcmp(interface_name, "eth1")) {
+    if (!SetProxyArp(interface_name)) {
+      ALOGE("Failed to set proxy arp for %s!", interface_name);
+    }
   }
 
   // Set ip adress if ethernet interface is up already...

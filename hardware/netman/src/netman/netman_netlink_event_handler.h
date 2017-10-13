@@ -1,5 +1,5 @@
-#ifndef _NETMAN_NETLINK_EVENT_HANDLER_H
-#define _NETMAN_NETLINK_EVENT_HANDLER_H
+#ifndef _NETMAN_NETLINK_EVENT_HANDLER_H_
+#define _NETMAN_NETLINK_EVENT_HANDLER_H_
 
 #include "netlink_event_handler.h"
 
@@ -19,4 +19,4 @@ class NetmanNetlinkEventHandler : public NetlinkEventHandler {
 }  // namespace netman
 }  // namespace vcc
 
-#endif
+#endif  // _NETMAN_NETLINK_EVENT_HANDLER_H_

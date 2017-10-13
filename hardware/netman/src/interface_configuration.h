@@ -20,4 +20,4 @@ struct InterfaceConfiguration {
 }  // namespace netman
 }  // namespace vcc
 
-#endif
+#endif  // _INTERFACE_CONFIGURATION_H_
