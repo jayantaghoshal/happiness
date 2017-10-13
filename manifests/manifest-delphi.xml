@@ -47,5 +47,6 @@
   <project name="bsp/external/devmem2" path="external/devmem2" revision="8784c6a33ff12923b7ee12ef1be14f3a56fb76ce"/>
   <project name="bsp/external/bcm89230" path="external/bcm89230" revision="41b450916ffdb338037f38c58eb912461ca4aece"/>
 
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="07e6141b40c020744835fd3dc5e6488d52aae0ef"/>
+  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="b5c1e524f87cb5910112c03e4d77dcbb34b1b434"/>
 </manifest>
-
