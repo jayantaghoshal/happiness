@@ -60,19 +60,19 @@ ccValue CarConfigFileReader::getValue(int id)
     std::getline(lineStream, cell, ',');
     if (!validateValue(std::stoi(cell), value.raw))
     {
-        throw std::runtime_error("Out of range 'Raw'' value carconfig parameter " + std::to_string(filePos_));
+        throw std::runtime_error("Out of range 'Raw' value CC" + std::to_string(id));
     }
 
     std::getline(lineStream, cell, ',');
     if (!validateValue(std::stoi(cell), value.subs))
     {
-        throw std::runtime_error("Out of range 'Substitute' value carconfig parameter " + std::to_string(filePos_));
+        throw std::runtime_error("Out of range 'Substitute' value CC" + std::to_string(id));
     }
 
     std::getline(lineStream, cell, ',');
     if (!validateStatus(std::stoi(cell), value.status))
     {
-        throw std::runtime_error("Out of range 'Status' value carconfig parameter " + std::to_string(filePos_));
+        throw std::runtime_error("Out of range 'Status' value CC" + std::to_string(id));
     }
 
     return value;

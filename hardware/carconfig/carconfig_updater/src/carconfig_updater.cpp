@@ -208,8 +208,9 @@ bool CarConfigUpdater::storeReceivedParameter(CarConfigList &buffer)
         bufferPos++;
     }
 
-    if(paramsChanged)
+    if(paramsChanged || !fileExists(carconfig_file_name))
     {
+        ALOGI("Writing received values to: %s", carconfig_file_name.c_str());
         CarConfigFileWriter::writeCarConfig(carConfigs);
     }
     return paramsChanged;
@@ -382,7 +383,7 @@ int32_t CarConfigUpdater::runUpdater()
     bool paramsChanged = false;
     if (allParamsReceived)
     {
-        ALOGI("Got all parameters, updating carconfig file");
+        ALOGI("Got all carconfig parameters");
         try
         {
             paramsChanged = storeReceivedParameter(buffer);
