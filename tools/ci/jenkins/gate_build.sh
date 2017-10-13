@@ -65,6 +65,6 @@ docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
             ./out/host/linux-x86/tradefed"
 
 ls -lh "$OUT_ARCHIVE"
-docker_run "time artifactory push ihu_gate_build \"${ZUUL_CHANGE_IDS}\" ${OUT_ARCHIVE}"
+docker_run "time artifactory push ihu_gate_build \"${ZUUL_COMMIT}\" ${OUT_ARCHIVE}"
 
 rm ${OUT_ARCHIVE}
