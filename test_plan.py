@@ -32,6 +32,11 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2017-10-19"
     ),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/netd_blacklist_test",   standard_caps),
+             reason="Blacklist functionality not yet implemented",
+             jira_issue="",
+             deadline="2017-11-13"
+    ),
     Disabled(VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
              reason="Dead code in repo",
              jira_issue="",
@@ -54,7 +59,6 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",        standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables_configuration",  standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",         standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/netd_blacklist_test",     standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
