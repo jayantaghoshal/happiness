@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "libdesip", 
+    name: "libdesip_static",
     init_rc: ["vehicle-signals-daemon.rc"],
     proprietary: true,
     relative_install_path: "hw",

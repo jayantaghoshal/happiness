@@ -1,5 +1,5 @@
 cc_binary {
-    name: "vehicle-signals-daemon", 
+    name: "vehicle-signals-daemon",
     init_rc: ["vehicle-signals-daemon.rc"],
     proprietary: true,
     relative_install_path: "hw",
@@ -30,8 +30,7 @@ cc_binary {
         "libhidltransport"
     ],
     static_libs: [
-        "libdesip"
-        
+        "libdesip_static"
     ],
 
     local_include_dirs: [
