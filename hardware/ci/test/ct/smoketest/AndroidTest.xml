@@ -8,7 +8,7 @@
     </target_preparer>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="VtsCiSmokeTest"/>
-	<option name="test-case-path" value="volvocars/hardware/ci/test/ct/smoketest/VtsCiSmokeTest" />
+	<option name="test-case-path" value="VtsCiSmokeTest" />
         <option name="test-timeout" value="1m"/>
     </test>
 </configuration>
