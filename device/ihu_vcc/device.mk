@@ -10,7 +10,9 @@ PRODUCT_PACKAGES += \
     ipcbd \
     iplmd \
     gnssd \
-    carconfig-updater
+    carconfig-updater \
+    desip_service \
+    android.hardware.automotive.vehicle.delphi@2.0-service
 
 ##############################################################
 # System UI
@@ -51,7 +53,8 @@ ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
 	signaltrace \
 	signalecho \
-    carconfig-client-tester
+    carconfig-client-tester \
+    hisipcmd
 endif
 
 ##############################################################
