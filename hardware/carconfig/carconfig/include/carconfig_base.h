@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <string>
+#include <array>
 #include <sys/stat.h>
+
+namespace Carconfig_base
+{
 
 constexpr int cc_no_of_parameters = 1778;
 
@@ -50,8 +52,8 @@ const std::string carconfig_configured_filename {"/oem_config/CARCONFIG_CONFIGUR
 
 static bool fileExists(const std::string &filePath)
 {
-    bool status = false;
     struct stat st;
+    bool status = false;
     if (stat(filePath.c_str(), &st) == 0)
     {
         if (st.st_size > 0)
@@ -60,4 +62,12 @@ static bool fileExists(const std::string &filePath)
         }
     }
     return status;
+}
+
+static bool emptyFileExists(const std::string &filePath)
+{
+    struct stat st;
+    return stat(filePath.c_str(), &st) == 0;
+}
+
 }

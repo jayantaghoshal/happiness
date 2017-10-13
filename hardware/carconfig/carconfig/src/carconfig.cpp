@@ -1,8 +1,9 @@
 #include <sys/stat.h>
-#include <stdexcept>
 #include "carconfig.h"
 #include "carconfig_reader.h"
 #include "carconfig_base.h"
+
+using namespace Carconfig_base;
 
 namespace  // Anonymous namespace for carconfig internal stuff..
 {

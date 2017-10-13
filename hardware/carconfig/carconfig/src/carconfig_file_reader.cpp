@@ -3,10 +3,11 @@
 #include <sstream>
 #include <istream>
 #include <stdexcept>
-#include <iostream>
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+using namespace Carconfig_base;
 
 CarConfigFileReader::CarConfigFileReader()
 {

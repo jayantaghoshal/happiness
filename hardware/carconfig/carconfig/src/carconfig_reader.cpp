@@ -2,12 +2,14 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdexcept>
-#include "carconfig_reader.h"
 #include <cutils/log.h>
+#include "carconfig_reader.h"
 #include "carconfig_file_reader.h"
 
 #undef LOG_TAG
 #define LOG_TAG "CarConfigReader"
+
+using namespace Carconfig_base;
 
 CarConfigReader::CarConfigReader()
 {

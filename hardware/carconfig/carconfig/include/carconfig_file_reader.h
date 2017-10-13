@@ -11,7 +11,7 @@ class CarConfigFileReader
    public:
     CarConfigFileReader();
     void open(const std::string path);
-    ccValue getValue(int id);
+    Carconfig_base::ccValue getValue(int id);
 
 
    private:
@@ -20,5 +20,5 @@ class CarConfigFileReader
     std::string filePath_;
     int filePos_;
     bool validateValue(int unvalidatedValue, uint8_t &validatedValue);
-    bool validateStatus(int unvalidatedStatus, ccStatus &validatedStatus);
+    bool validateStatus(int unvalidatedStatus, Carconfig_base::ccStatus &validatedStatus);
 };
