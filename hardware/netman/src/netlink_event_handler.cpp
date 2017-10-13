@@ -22,10 +22,10 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header) {
 
   switch (nl_message_header->nlmsg_type) {
     case NLMSG_DONE:
-      ALOGI("NLMSG_DONE handler.");
+      ALOGV("NLMSG_DONE handler.");
       break;
     case NLMSG_ERROR:
-      ALOGI("NLMSG_ERROR handler.");
+      ALOGE("NLMSG_ERROR handler.");
       break;           // TODO: Handle error
     case RTM_NEWLINK:  // Interface up/down
     {

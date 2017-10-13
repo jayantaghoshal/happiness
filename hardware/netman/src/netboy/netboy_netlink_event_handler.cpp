@@ -42,7 +42,7 @@ static bool HasDriverR8152(const char *network_interface_name) {
 }
 
 void NetboyNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg) {
-  ALOGI("Message received: RTM_NEWLINK.");
+  ALOGV("Message received: RTM_NEWLINK.");
 
   char network_interface_name[IF_NAMESIZE];
   const std::string ns = "vcc";
@@ -57,7 +57,7 @@ void NetboyNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_h
       return;
     }
 
-    ALOGI("Moving interface %s to namespace", network_interface_name);
+    ALOGD("Moving interface %s to namespace", network_interface_name);
 
     TakeInterfaceDown(network_interface_name);
 
@@ -74,7 +74,7 @@ void NetboyNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_h
 
 void NetboyNetlinkEventHandler::HandleNewAddressEvent(struct nlmsghdr *nl_message_header,
                                                       struct ifaddrmsg *if_addr_msg) {
-  ALOGI("Message received: RTM_NEWADDR");
+  ALOGV("Message received: RTM_NEWADDR");
 }
 
 }  // namespace netman
