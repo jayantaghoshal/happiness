@@ -176,8 +176,8 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled){
 
     if (status == std::future_status::ready) {
         std::chrono::duration<double> diff = end-start;
-        EXPECT_NEAR(diff.count(), 0.5f, 0.01f);
-        ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.01s", diff.count());
+        EXPECT_NEAR(diff.count(), 0.5f, 0.1f);
+        ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.1s", diff.count());
     }
 
     ALOGI("Finished...");
