@@ -169,13 +169,15 @@ def flash_image(port_mapping: PortMapping,
         then = time.time()
         while (True):
             try:
-                output = check_output_logged([adb_executable, "shell", 'logcat', '-d', '|', 'grep', 'BOOT_COMPLETE'], timeout_sec=4).decode().strip(" \n\r\t")
+                output = check_output_logged([adb_executable,
+                                              "shell", 'getprop', 'sys.boot_completed'],
+                                             timeout_sec=7).decode().strip(" \n\r\t")
             except:
-                pass # Ignore if the command times out
-            if output.find("Running on action: android.intent.action.BOOT_COMPLETED") != -1:
+                output = "0" # Ignore if the command times out
+            if output == "1":
                 return
             if time.time() > then + 60 * 4: #Wait four minutes after the ADB sevice becomes available.
-                raise RuntimeError("BOOT_COMPLETE intent not detected!")
+                raise RuntimeError("Wait for boot timeout. property sys.boot_completed==1 not found.")
             time.sleep(4)
 
         serial_mapping.verify_serial_is_mp_android(ihu_serials.mp)
