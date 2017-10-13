@@ -9,6 +9,7 @@
 #include <string>
 #include <array>
 
+using namespace Carconfig_base;
 
 void CarConfigFileWriter::writeCarConfig(const std::array<ccValue, cc_no_of_parameters>& allParams) {
 

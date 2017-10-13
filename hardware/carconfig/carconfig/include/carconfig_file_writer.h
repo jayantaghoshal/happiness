@@ -5,6 +5,6 @@
 class CarConfigFileWriter
 {
    public:
-    static void writeCarConfig(const std::array<ccValue, cc_no_of_parameters>& allParams);
+    static void writeCarConfig(const std::array<Carconfig_base::ccValue, Carconfig_base::cc_no_of_parameters>& allParams);
 };
 

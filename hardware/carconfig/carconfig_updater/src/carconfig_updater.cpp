@@ -2,6 +2,8 @@
 #include <sys/stat.h>
 #include <fstream>
 #include <chrono>
+#include <utils/Log.h>
+#include <array>
 #include "Application_dataelement.h"
 #include "cc_parameterlist_map.h"
 //#include "diagnostics_client.h"
@@ -9,7 +11,6 @@
 //#include "restart_client.h"
 #include "carconfig_reader.h"
 #include "carconfig_file_writer.h"
-#include <utils/Log.h>
 
 #undef LOG_TAG
 #define LOG_TAG "CarConfigUpdater"
@@ -18,6 +19,7 @@ using namespace ApplicationDataElement;
 using namespace autosar;
 using namespace CarConfigParamList;
 using namespace std::chrono;
+using namespace Carconfig_base;
 
 const uint32_t kCCFrames = 72;    // Total number of carconfig Frames
 const uint32_t kCCBytes = 7;      // The number of parameters in each frame
@@ -259,14 +261,18 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(bool stateConfigured, bool all
         // All parameters received in time
         if (allParamsReceived && allParamsOk)
         {
-            ALOGI("Bulk state: Got ok parameters, switching to Configured.");
+            ALOGI("Got all valid parameters, leaving Bulk state and switching to Configured state.");
             NewStateConfigured = true;
-            rebootNeeded = true;
+            if (paramsChanged)
+            {
+                rebootNeeded = true;
+            }
+            // TODO Here we should probably report "pass" on MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS to diagnostics
         }
         // All parameters received in time but some are not ok.
         else if (allParamsReceived && !allParamsOk)
         {
-            ALOGW("Bulk state: Got some ok parameters, updating and staying in Bulk state");
+            ALOGW("Bulk state: All parameters are not in range, staying in Bulk state");
             // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(receivedBadParams));
             // diagClient.sendDiagnosticsMessage(
                 // MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS,
@@ -294,18 +300,18 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(bool stateConfigured, bool all
         // All parameters received in time without updates.
         if (allParamsReceived && allParamsOk && !paramsChanged)
         {
-            ALOGI("Configured state: Got ok parameters, but no updated, doing nothing");
+            ALOGI("Configured state: Got all valid parameters, but no updated, doing nothing");
         }
         // Parameters received in time with updated, valid data.
         else if (allParamsReceived && allParamsOk && paramsChanged)
         {
-            ALOGI("Configured state: Got ok parameters, updated parameters");
+            ALOGI("Configured state: Got updated and valid parameters");
             rebootNeeded = true;
         }
         // Parameters received in time, updated but with at least one invalid value
         else if (allParamsReceived && !allParamsOk)
         {
-            ALOGW("Configured state: Got some ok parameters");
+            ALOGW("Configured state: Got some invalid parameters");
             // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(receivedBadParams));
             // diagClient.sendDiagnosticsMessage(
                 // MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS,
@@ -398,7 +404,7 @@ int32_t CarConfigUpdater::runUpdater()
     // diagClient.connect();
     bool rebootIsRequired = false;
     bool configured =
-        setStateAndSendDiagnostics(fileExists(carconfig_configured_filename), allParamsReceived, allParamsOk, paramsChanged,
+        setStateAndSendDiagnostics(emptyFileExists(carconfig_configured_filename), allParamsReceived, allParamsOk, paramsChanged,
                                    allOldParamsOk, receivedBadParams, storedBadParams, /*diagClient,*/ rebootIsRequired);
     // Set state to configured
     if (configured)
@@ -426,8 +432,8 @@ int32_t CarConfigUpdater::runUpdater()
     if (rebootIsRequired)
     {
         ALOGI("Signaling node state manager that a restart is needed");
-        ALOGW("Rebooot request is not yet implemented. Rebooting with system call");
-        system("/system/bin/reboot");
+        ALOGW("Proper rebooot request is not yet implemented. Rebooting with system call directly to MP");
+        system("/system/bin/reboot"); //TODO change this to a call to "power manager"
 
         //restartClient r;
         //r.restart();
