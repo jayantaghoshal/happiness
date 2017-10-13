@@ -7,7 +7,7 @@ import json
 import sys
 import os
 import socket
-import select
+import logging
 import threading
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen"))
@@ -20,14 +20,6 @@ from dataelements_generator.getDatatypes import getIntTypeStr
 BG_COLOR_SENT = "#81f963"
 BG_COLOR_INVALIDATED = "#fc931b"
 BG_COLOR_NOT_SENT = "#8e8d8b"
-
-
-def d2j(data):
-    return json.dumps(data)
-
-
-def j2d(data):
-    return json.loads(data)
 
 
 class DESignalWidget(tkinter.Frame):
@@ -86,7 +78,7 @@ class PortSender():
                 "value": self.senderWidget.get_value()
                 }
             }
-            self.send_queue.put(d2j(toSend))
+            self.connection.send(json.dumps(toSend))
 
     def set_signal_to_error(self):
         if self.connection.connected():
@@ -99,7 +91,7 @@ class PortSender():
                 "type": self.senderWidget.dataElementsDataType,
                 "value": self.senderWidget.get_value()
             }
-            self.send_queue.put(d2j(toSend))
+            self.connection.send(json.dumps(toSend))
 
 
 class BoolSender(DESignalWidget):
@@ -277,50 +269,54 @@ class Connection():
         received_data = b''
         while True:
             if self.connected():
-                try:
-                    send_sockets = []
-                    if not self.send_queue.empty():
-                        send_sockets.append(self.socket)
+                # This now waits until data is available
+                received_data = received_data + self.socket.recv(1024)
+                if len(received_data) == 0: #The socket is closed?
+                    self._disconnect()
+                    continue
+                logging.debug("Got data %s, len %d" % (received_data.decode('ascii'), len(received_data)))
+                if len(received_data) >= 6:
+                    if received_data[:6] == b'CarSim':
+                        if len(received_data) >= 10:
+                            try:
+                                length_element = int(received_data[6:10].decode('ascii'))
+                            except:
+                                # Convert to int failed, incorrect data
+                                self._disconnect()
+                                continue
+                        if len(received_data) >= length_element+10:
+                            json_str = received_data[10:10+length_element].decode('ascii')
+                            logging.debug("json str: %s" % json_str)
+                            try:
+                                json_obj = json.loads(json_str)
+                            except:
+                                #something went wrong!
+                                logging.error("json.loads() failed for str %s" % json_str)
+                                self._disconnect()
+                                continue
+                            if 'Data' in json_obj and isinstance(json_obj['Data'], str):
+                                json_obj['Data'] = json.loads(json_obj['Data'])
 
-                    ready_to_read, ready_to_write, in_error = \
-                        select.select([self.socket, ], send_sockets, [self.socket], 1)
-                    if self.socket in in_error:
+                            logging.debug("json obj: %s" % json.dumps(json_obj))
+                            self.receive_queue.put(json_obj)
+                            received_data = received_data[length_element+10:]
+                    else:
+                        #Got trash, lets disconnect to start over
                         self._disconnect()
                         continue
-                    if self.socket in ready_to_read:
-                        received_data = received_data + self.socket.recv(1024)
-                        if len(received_data) == 0: #The python way to say that the socket is closed
-                            self._disconnect()
-                            continue
-                        if len(received_data) >= 6:
-                            identifier = received_data[:6].decode('ascii')
-                            if identifier == 'CarSim':
-                                length_element = received_data [6:10].decode('ascii')
-                                if len(received_data) >= int(length_element):
-                                    self._receive(received_data)
-                                    received_data = received_data[int(length_element):]
-                            else:
-                                #Got trash, lets reset buffer
-                                received_data = b''
-
-                    if self.socket in ready_to_write and not self.send_queue.empty():
-                        item = self.send_queue.get()
-                        self._send(item)
-                        self.send_queue.task_done()
-                except select.error:
-                    self._disconnect()
             else:
-                time.sleep(1)
+                received_data = b''
+                time.sleep(0.1)
 
-    def connect(self, address):
-        print(("Connecting to %s" % address))
+    def connect(self, address, port):
+        logging.info("Connecting to %s" % address)
         if self.connected() is False:
             # create an INET, STREAMing socket
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
-                self.socket.connect((address, 8080))
+                self.socket.connect((address, port))
                 self._set_connected(True)
-                print("Connected to " + address)
+                logging.info("Connected to %s" % address)
             except:
                 raise
 
@@ -332,21 +328,14 @@ class Connection():
         with self.lock:
             self._connected = value
 
+    def send(self, json_data: str):
+        self._send(json_data)
+
     def _send(self, data: str):
         buffer = data.encode(encoding='ascii')
         #Yea, the lenght is encoded in ascii...
         lengthString = '{0:04d}'.format(len(buffer))
         self.socket.sendall('CarSim'.encode(encoding='ascii') + lengthString.encode(encoding='ascii') + buffer)
-
-    # The expected message have the following format:
-    #  [6 bytes, ascii "CarSim"][4 bytes,ascii message length ][<<message length>> bytes,ascii message]
-    def _receive(self, data):
-        decoded_data = data.decode('ascii')
-        print(decoded_data)  # Just for debugging
-        length = data[6:10].decode('ascii')
-        message = data[10:10+length].decode('ascii')
-        assert (len(message) == length)
-        self.receive_queue.put(message)
 
     def _disconnect(self):
         self.socket.shutdown(socket.SHUT_RDWR)
@@ -355,7 +344,7 @@ class Connection():
 
 
 class App:
-    def __init__(self, master):
+    def __init__(self, master, server_addr):
         self.connected = False
         self.all_senders = []
         self.message_handlers = {}
@@ -367,6 +356,8 @@ class App:
         self.receive_queue = queue.Queue()
         self.send_queue = queue.Queue()
         self.connection = Connection(self.send_queue, self.receive_queue)
+        self._server_ip = server_addr[0]  #first element of tuple is ip-address
+        self._server_port = int(server_addr[1])  # second element of tuple is tcp-port
 
         #arxmldata
         arxmldata = arxml.load(os.path.join(os.path.dirname(__file__),
@@ -449,7 +440,7 @@ class App:
         self.bConnectToRemote.grid(row=buttonRow, column=0, sticky=tkinter.W)
         self.eConnectToRemote = tkinter.ttk.Entry(master, width=20)
         self.eConnectToRemote.bind("<Return>", lambda x: self.connectToRemote())
-        self.eConnectToRemote.insert(0, "127.0.0.1")
+        self.eConnectToRemote.insert(0, self._server_ip)
         self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
@@ -525,8 +516,8 @@ class App:
                         rgb.append(sX + (fX - sX) * sink.bg_fadeaway_ratio)
 
                     r, g, b = rgb
-                    colorStr = "#%02x%02x%02x" % (r,g,b)
-                    sink.value_label.configure(background=colorStr)
+                    color_str = "#%02x%02x%02x" % (int(r), int(g), int(b))
+                    sink.value_label.configure(background=color_str)
 
         self.master.after(60, self.fade_timer)
 
@@ -539,7 +530,7 @@ class App:
     def connect(self, address):
         if not self.connection.connected():
             try:
-                self.connection.connect(address)
+                self.connection.connect(address, self._server_port)
                 self.master.after(5000, self.fade_timer)
                 self.enable_all_buttons(True)
                 self.bindConnectionStatus.set("Connected - " + address)
@@ -547,7 +538,7 @@ class App:
                 self.master.after(1000, self.incoming_message_dispatcher)
                 self.master.after(1000, self.check_connection)
             except:
-                print("Could not connect")
+                logging.error("Could not connect to %s:%s" % (address, self._server_port))
 
 
     def onDisconnect(self):
@@ -557,30 +548,33 @@ class App:
         self.enable_all_buttons(False)
 
     def incoming_message_dispatcher(self):
-        maxiter = range(100)
-        for i in maxiter:
+        for i in range(100):
             if self.receive_queue.empty():
                 break
             msg = self.receive_queue.get()
-            print(msg)
-            self.handle_message(*msg)
+            self.handle_message(msg)
             self.receive_queue.task_done()
+        # Register for another call in 50 ms
         self.master.after(50, self.incoming_message_dispatcher)
 
 
     def handle_message(self, msg):
-        decoded_msg = j2d(msg)
-        signal_name = decoded_msg['SignalName']
         try:
-            handler = self.message_handlers[signal_name]
-            handler(decoded_msg)
-        except(KeyError):
-            pass
+            signal_name = msg['SignalName']
+        except KeyError:
+            logging.error("No key 'SignalName' in json: %s - invalid data!", json.dumps(msg))
+            return
+        # If there is a registered handler, call that first
+        if signal_name in self.message_handlers:
+            try:
+                self.message_handlers[signal_name](msg)
+            except Exception as e:
+                logging.error("Exception %s in message_handler for signal %s" % (e, signal_name))
 
         try:
-            self.handle_message(signal_name, decoded_msg)
+            self.handle_signal(signal_name, msg)
         except Exception as e:
-            print(("ERROR parsing message: ", e, decoded_msg))
+            logging.error("Exception %s in handle_signal %s" % (e, msg))
 
 
     def check_connection(self):
@@ -589,17 +583,16 @@ class App:
         else:
             self.master.after(1000, self.check_connection)
 
-    def handle_message(self, dataelement_name, data):
-        #print("Handle message " + dataelement_name +  " " + d2j(data))
+    def handle_signal(self, dataelement_name, msg):
+        data = msg['Data']
         if dataelement_name == "ActivateVfc":
             return  # internal signal not in arxml
 
-        try:
-            sink = self.knownReceivedMessages[dataelement_name]
-        except KeyError:
-            sink = self.create_sink(dataelement_name)           # TODO: This is slow after first connect when all signals come in, investigate
-            self.knownReceivedMessages[dataelement_name] = sink
+        if dataelement_name not in self.knownReceivedMessages:
+            self.knownReceivedMessages[dataelement_name] = self.create_sink(dataelement_name)  # TODO: This is slow after first connect when all signals come in, investigate
             self.filter(self.filterBindVar.get())               # TODO: This is slow after first connect when all signals come in, investigate
+
+        sink = self.knownReceivedMessages[dataelement_name]
 
         if data['state'] != 0:
             sink.portname_label.configure(background="#F55")
@@ -607,66 +600,66 @@ class App:
 
         sink.portname_label.configure(background="")
 
-        arType = sink.arxmltype
-        if arType.getCategory() == "STRUCTURE":
-           for sc in sink.sinkConnections:
-              signalName = sc.arDataTypeValue.shortname
-              dataElementsDataType = getDataElementsDatTypeFromCompuMethod(sc.arDataTypeValue.getDataType())
-              if signalName != "Boolean" and dataElementsDataType == signalName:
-                  signalName += "_"
-              signalValue = data["value"][signalName]
-              newVal = str(signalValue)
-              if newVal != sc.bindableStringVariable.get():
-                 sc.bg_fadeaway_ratio = 1
-              sc.bindableStringVariable.set(newVal)
+        ar_type = sink.arxmltype
+        if ar_type.getCategory() == "STRUCTURE":
+            for sc in sink.sinkConnections:
+                signal_name = sc.arDataTypeValue.shortname
+                data_elements_data_type = getDataElementsDatTypeFromCompuMethod(sc.arDataTypeValue.getDataType())
+                if signal_name != "Boolean" and data_elements_data_type == signal_name:
+                    signal_name += "_"
+                signal_value = data["value"][signal_name]
+                new_val = str(signal_value)
+                if new_val != sc.bindableStringVariable.get():
+                    sc.bg_fadeaway_ratio = 1
+                sc.bindableStringVariable.set(new_val)
 
-        elif arType.getCategory() == "VALUE":
+        elif ar_type.getCategory() == "VALUE":
             sc = sink.sinkConnections[0]
-            compuMethod = arType.getCompuMethod()
-            if compuMethod.getCategory() == 'TEXTTABLE':
-                name_to_value_dict = compuMethod.getEnumerations()  # NOTE: Value here is a tuple
+            compu_method = ar_type.getCompuMethod()
+            if compu_method.getCategory() == 'TEXTTABLE':
+                name_to_value_dict = compu_method.getEnumerations()  # NOTE: Value here is a tuple
                 value_to_name_dict = {v[0]: k for k, v in list(name_to_value_dict.items())}
                 name = value_to_name_dict.get(str(data["value"]), "???")
-                newVal = "(%d) %s" % (data["value"], name)
-                if newVal != sc.bindableStringVariable.get():
+                new_val = "(%d) %s" % (data["value"], name)
+                if new_val != sc.bindableStringVariable.get():
                     sc.bg_fadeaway_ratio = 1
-                sc.bindableStringVariable.set(newVal)
+                sc.bindableStringVariable.set(new_val)
             else:
-                newVal = str(data["value"])
-                if newVal != sc.bindableStringVariable.get():
+                new_val = str(data["value"])
+                if new_val != sc.bindableStringVariable.get():
                     sc.bg_fadeaway_ratio = 1
-                sc.bindableStringVariable.set(newVal)
-        elif arType.getCategory() == "BOOLEAN":
+                sc.bindableStringVariable.set(new_val)
+        elif ar_type.getCategory() == "BOOLEAN":
             sc = sink.sinkConnections[0]
-            newVal = str(data["value"])
-            if newVal != sc.bindableStringVariable.get():
+            new_val = str(data["value"])
+            if new_val != sc.bindableStringVariable.get():
                 sc.bg_fadeaway_ratio = 1
             sc.bindableStringVariable.set(str(data["value"]))
         else:
-            pass # not supported by carsim
+            pass  # not supported by carsim
 
 
     def create_sink(self, dataelement_name):
         master = self.master
 
         try:
-            dataTypeKey = self.element_name_to_data_element[dataelement_name].datatype_key
+            data_type_key = self.element_name_to_data_element[dataelement_name].datatype_key
         except KeyError:
-            print(("WARNING: Input element not found: %s", dataelement_name))
+            logging.warning("Input element not found: %s" % dataelement_name)
             return
 
-        entrySignalConnections = []
-        arDataTypeValue = self.arxmldata.datatypes[dataTypeKey]
+        entry_signal_connections = []
+        ar_data_type_value = self.arxmldata.datatypes[data_type_key]
 
-        category = arDataTypeValue.getCategory()
+        category = ar_data_type_value.getCategory()
 
         structframe = tkinter.ttk.Frame(master)
         portname_label = tkinter.ttk.Label(master, text=dataelement_name)
         self.add_external_button_row(portname_label, structframe)
 
         if category == "STRUCTURE":
-            subElements = arDataTypeValue.getElements()
-            for se in subElements:
+            sub_elements = ar_data_type_value.getElements()
+            for se in sub_elements:
                 signalname_label = tkinter.ttk.Label(structframe, text=se.shortname + ": ", justify=tkinter.LEFT, font=self.labelFont)
                 signalname_label.pack(side=tkinter.LEFT)
 
@@ -674,27 +667,27 @@ class App:
                 value_label = tkinter.ttk.Label(structframe, width=5, textvariable=v, font=self.valueFont)
                 value_label.pack(side=tkinter.LEFT)
 
-                entrySignalConnections.append(SinkConnection(v, se, value_label, signalname_label))
+                entry_signal_connections.append(SinkConnection(v, se, value_label, signalname_label))
 
             #print("    structure %s" % ( ", ".join([r.shortname + " " + r.getCategory() for r in subElements])))
         elif category == "ARRAY":
-            print("    WARNING: ARRAY UNSUPPORTED")
+            logging.error("ARRAY UNSUPPORTED")
         elif category == "VALUE":
             v = tkinter.StringVar()
             value_label = tkinter.ttk.Label(structframe, width=50, textvariable=v, font=self.valueFont)
             value_label.pack(side=tkinter.LEFT)
 
-            entrySignalConnections.append(SinkConnection(v, arDataTypeValue, value_label, None))
+            entry_signal_connections.append(SinkConnection(v, ar_data_type_value, value_label, None))
         elif category == "BOOLEAN":
             v = tkinter.StringVar()
             value_label = tkinter.ttk.Label(structframe, width=10, textvariable=v, font=self.valueFont)
             value_label.pack(side=tkinter.LEFT)
-            entrySignalConnections.append(SinkConnection(v, arDataTypeValue, value_label, None))
+            entry_signal_connections.append(SinkConnection(v, ar_data_type_value, value_label, None))
         else:
-            print(("    WARNING: Unsupported category: " + category))
+            logging.warning("Unsupported category: %s" % category)
 
-        senderConnection = Sink(arDataTypeValue, entrySignalConnections, dataelement_name, portname_label, structframe)
-        return senderConnection
+        sender_connection = Sink(ar_data_type_value, entry_signal_connections, dataelement_name, portname_label, structframe)
+        return sender_connection
 
     def add_sender_element(self, dataelement_name):
 
@@ -704,57 +697,57 @@ class App:
         try:
             data_element = self.element_name_to_data_element[dataelement_name]
         except KeyError:
-            print(("Failed to add sender element: %s" % dataelement_name))
-            traceback.print_exc()
+            logging.error("Failed to add sender element: %s" % dataelement_name)
+            logging.error(traceback.format_exc())
             return
         port = data_element.parent_port
         is_insignal = isinstance(port, autosar.components.AR_RPort)
 
         master = self.master
 
-        arDataTypeValue = self.arxmldata.datatypes[data_element.datatype_key]
-        category = arDataTypeValue.getCategory()
-        compuMethod = arDataTypeValue.getCompuMethod()
+        ar_data_type_value = self.arxmldata.datatypes[data_element.datatype_key]
+        category = ar_data_type_value.getCategory()
+        compu_method = ar_data_type_value.getCompuMethod()
 
         if category == "STRUCTURE":
-            senderWidget = StructSender(master, arDataTypeValue.shortname, arDataTypeValue)
+            sender_widget = StructSender(master, ar_data_type_value.shortname, ar_data_type_value)
         elif category == "VALUE":
-            if compuMethod.getCategory() == 'TEXTTABLE':
-                senderWidget = EnumSender(master, compuMethod, arDataTypeValue.shortname)
+            if compu_method.getCategory() == 'TEXTTABLE':
+                sender_widget = EnumSender(master, compu_method, ar_data_type_value.shortname)
             else:
-                dataElementsDataType = getDataElementsDatTypeFromCompuMethod(arDataTypeValue)
-                senderWidget = NumericSender(master, dataElementsDataType, arDataTypeValue)
+                data_elements_data_type = getDataElementsDatTypeFromCompuMethod(ar_data_type_value)
+                sender_widget = NumericSender(master, data_elements_data_type, ar_data_type_value)
         elif category == "BOOLEAN":
-            senderWidget = BoolSender(master)
+            sender_widget = BoolSender(master)
         else:
-            print(("WARNING: adding port for unsupported category: " + category))
+            logging.warning("Adding port for unsupported category: %s" % category)
             return
 
-        firstCol = tkinter.Frame(master)
-        send_button = tkinter.ttk.Button(firstCol, text="Send", width=4)
-        stop_button = tkinter.ttk.Button(firstCol, text="Error", width=4)
-        port_name_label = tkinter.ttk.Label(firstCol, text=dataelement_name)
-        info_label = tkinter.ttk.Label(firstCol, width=4)
+        first_col = tkinter.Frame(master)
+        send_button = tkinter.ttk.Button(first_col, text="Send", width=4)
+        stop_button = tkinter.ttk.Button(first_col, text="Error", width=4)
+        port_name_label = tkinter.ttk.Label(first_col, text=dataelement_name)
+        info_label = tkinter.ttk.Label(first_col, width=4)
         info_label.pack(side=tkinter.LEFT)
         stop_button.pack(side=tkinter.LEFT)
         send_button.pack(side=tkinter.LEFT)
         port_name_label.pack(side=tkinter.LEFT)
 
-        portSender = PortSender(
+        port_sender = PortSender(
             info_label,
             send_button,
             stop_button,
-            senderWidget,
+            sender_widget,
             dataelement_name,
             data_element.de_name,
+            first_col,
             is_insignal,
-            firstCol,
             self.bindAutoSend,
             self.connection,
             self.send_queue)
 
-        self.add_external_button_row(firstCol, senderWidget)
-        self.all_senders.append(portSender)
+        self.add_external_button_row(first_col, sender_widget)
+        self.all_senders.append(port_sender)
 
     def register_message_handler(self, message_id, callback):
         self.message_handlers[message_id] = callback
@@ -766,8 +759,8 @@ class App:
         if right is not None:
             right.grid(row=self.buttonRow, column=1, sticky=tkinter.W)
 
-    def filter(self, filterString):
-        filters = filterString.lower().split()
+    def filter(self, filter_string):
+        filters = filter_string.lower().split()
 
         def matchfunc(name):
             if len(filters) == 0:
