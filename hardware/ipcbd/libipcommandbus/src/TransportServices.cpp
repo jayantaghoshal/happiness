@@ -68,7 +68,7 @@ void TransportServices::registerErrorOnRequestCallback(std::function<void(Messag
 
 void TransportServices::sendMessage(Message &&msg)
 {
-    ALOGV("TransportServices::sendMessage - %s", Pdu::toString(msg.pdu).c_str());
+    ALOGV("TransportServices::sendMessage - %s to ECU %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     // Need to set the proper protocol version
     msg.pdu.header.protocol_version = TransportServices::PROTOCOL_VERSION;

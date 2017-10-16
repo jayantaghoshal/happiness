@@ -147,4 +147,10 @@ void Socket::setHandler(std::function<void(void)> readEventHandler)
 {
     read_ready_cb_ = std::move(readEventHandler);
 }
+
+uint32_t Socket::getTestSimPort()
+{
+    uint32_t test_port = local_config.getTestPort();
+    return test_port;
+}
 }

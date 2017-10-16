@@ -129,7 +129,7 @@ Return<void> ServiceManager::sendMessage(const Msg& msg) {
 
     // Create message and set pdu.
     Message message(std::move(pdu));
-    message.ecu = (Message::Ecu)((int)msg.ecu + 1);
+    message.ecu = (Message::Ecu)((int)msg.ecu);
 
     ALOGI(" Sending message (%04X.%04X) to %s",
         message.pdu.header.service_id,

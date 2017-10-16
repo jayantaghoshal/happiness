@@ -49,6 +49,7 @@ public:
     uint16_t getDIMPort();
     uint16_t getTCAMPort();
     uint16_t getVGMPort();
+    uint32_t getTestPort();
 
     std::chrono::seconds getDIMKeepAliveTime();
     std::chrono::seconds getDIMKeepAliveInterval();
@@ -89,6 +90,7 @@ private:
     uint16_t port_dim_ = 50000;
     uint16_t port_tcam_ = 50000;
     uint16_t port_vgm_ = 50000;
+    uint32_t port_test_ = 70000;
 
     std::chrono::seconds dim_keep_alive_time_{10};
     std::chrono::seconds dim_keep_alive_interval_{5};
