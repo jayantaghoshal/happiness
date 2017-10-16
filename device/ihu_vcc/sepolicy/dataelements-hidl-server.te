@@ -5,4 +5,6 @@ type dataelements-hidl-server_exec, exec_type, file_type;
 allow dataelements-hidl-server hwservicemanager:binder { call transfer };
 allow dataelements-hidl-server hwservicemanager_prop:file { getattr open read };
 
+allow dataelements-hidl-server carconfig-updater:binder call;
+
 init_daemon_domain(dataelements-hidl-server)
