@@ -1,0 +1,10 @@
+cc_defaults {
+    name: "volvocars_cc_defaults",
+    compile_multilib: "64",
+    cflags: [
+        "-fexceptions",
+        "-Wall",
+        "-Wextra",
+    ],
+    vendor: true,
+}
