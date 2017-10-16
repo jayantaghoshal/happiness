@@ -1,0 +1,42 @@
+cc_defaults {
+    name: "libipcommandbus_defaults",
+    compile_multilib: "64",
+    export_include_dirs: ["include"],
+    cflags: ["-fexceptions"],
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libtarmac",
+    ],
+    vendor: true,
+}
+
+// Static library. Used in shared lib and for unit tests.
+cc_library_static {
+    name: "libipcommandbus_static",
+    defaults: ["libipcommandbus_defaults"],
+    srcs: [
+        "src/IpCmdTypes.cpp",
+        "src/Message.cpp",
+        "src/MessageDispatcher.cpp",
+        "src/Pdu.cpp",
+        "src/socket.cpp",
+        "src/UdpSocket.cpp",
+        "src/TcpSocket.cpp",
+        "src/vcc_pdu_header.cpp",
+        "src/net_serializer.cpp",
+        "src/net_deserializer.cpp",
+        "src/TimeoutInfo.cpp",
+        "src/TransportServices.cpp",
+        "src/local_config_parameters.cpp",
+    ],
+    host_supported: true,
+}
+
+// Shared library for deployment to system
+cc_library_shared {
+    name: "libipcommandbus",
+    defaults: ["libipcommandbus_defaults"],
+    whole_static_libs: ["libipcommandbus_static"],
+    host_supported: true,
+}
