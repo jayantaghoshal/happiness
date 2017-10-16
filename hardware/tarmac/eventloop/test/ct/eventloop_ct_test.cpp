@@ -87,6 +87,8 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
     usleep(500000);
     EXPECT_EQ(task_exec_count, 1);
 
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().RemoveFd(fd[0]);
+
     close(fd[0]);
     close(fd[1]);
 
@@ -138,6 +140,8 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial){
 
     EXPECT_EQ(nbytes, strlen(string)+1);
     EXPECT_EQ(strcmp(string, readbuffer), 0);
+
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().RemoveFd(fd[0]);
 
     close(fd[0]);
     close(fd[1]);

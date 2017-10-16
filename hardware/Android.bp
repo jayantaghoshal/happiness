@@ -1,1 +1,1 @@
-subdirs = ["signals", "localconfig", "carconfig"]
+subdirs = ["signals", "localconfig", "carconfig", "tarmac"]
