@@ -17,8 +17,7 @@
 
 */
 
-namespace carconfig
-{
+namespace carconfig {
 
 /**
  * Get the value given the car config parameter number.
@@ -60,9 +59,8 @@ bool isConfigured();
  * @exception throws std::runtime_error if init has not been called prior to this function
  */
 template <typename T>
-T getValue()
-{
-    return static_cast<T>(getValue(static_cast<std::uint32_t>(T::ParamNumber)));
+T getValue() {
+  return static_cast<T>(getValue(static_cast<std::uint32_t>(T::ParamNumber)));
 }
 
 /**
@@ -74,8 +72,7 @@ T getValue()
  * @exception throws std::runtime_error if init has not been called prior to this function
  */
 template <typename T>
-bool checkValue(T paramValue)
-{
-    return (paramValue == getValue<T>());
+bool checkValue(T paramValue) {
+  return (paramValue == getValue<T>());
 }
 }
