@@ -10,11 +10,11 @@
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
 #include <net/if.h>
+
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
 #include <cstring>
 #include <fstream>
 #include <sstream>
@@ -24,14 +24,15 @@
 
 namespace {
 
-void ValidateReturnStatus(const int command_status) {
+void ValidateReturnStatus(const int command_status, const std::string &what) {
   if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
-    throw std::system_error(command_status, std::system_category());
+    throw std::system_error(command_status, std::generic_category(), what.c_str());
   }
 }
 
 bool WriteFile(const std::string &path, const std::string &text) {
   std::fstream file(path);
+
   if (file.is_open()) {
     file << text;
     if (file) return true;
@@ -69,6 +70,22 @@ bool InterfaceExists(const char *interface_name) {
 
   close(inet_sock_fd);
   return true;
+}
+
+void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac_address_out) {
+  int byte;
+  char skip_byte;
+
+  mac_address_out.resize(6);
+
+  std::stringstream address(mac_address, std::ios_base::in);
+
+  address >> std::hex;
+
+  for (int pos = 0; pos <= 5; ++pos) {
+    address >> byte >> skip_byte;
+    mac_address_out[pos] = byte;
+  }
 }
 
 bool IsMacAddressCorrect(const std::vector<uint8_t> &mac_address, const char *interface_name) {
@@ -283,7 +300,6 @@ std::string GetBroadcastAddress(const std::string &interface_name) {
   }
 
   close(inet_sock_fd);
-
   return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_broadaddr)->sin_addr);
 }
 
@@ -384,7 +400,6 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
   }
 
   close(inet_sock_fd);
-
   return true;
 }
 
@@ -410,11 +425,10 @@ bool SetMtu(const uint32_t mtu, const char *interface_name) {
   }
 
   close(sockfd);
-
   return true;
 }
 
-unsigned int GetMtu(const std::string &interface_name) {
+std::uint32_t GetMtu(const std::string &interface_name) {
   int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
   if (inet_sock_fd == -1) {
     ALOGE("Failed to open AF_INET socket.");
@@ -465,21 +479,14 @@ bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char *interfac
   }
 
   ALOGV("%s: MAC address set to %s", interface_name, printable_mac_address.c_str());
-
   close(sockfd);
-
   return true;
 }
+
 }  // namespace
 
 namespace vcc {
 namespace netman {
-
-/* Declarations */
-
-void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac_address_out);
-
-/** Public Functions **/
 
 void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf) {
   ALOGV("--------------------------------------------------------");
@@ -507,61 +514,6 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_c
     conf.broadcast_address = lcfg->GetString(name + ".broadcast-address");
     conf.mtu = (uint32_t)lcfg->GetInt(name + ".mtu");
     interface_configurations->push_back(conf);
-  }
-}
-
-/** Private Functions */
-
-void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac_address_out) {
-  int byte;
-  char skip_byte;
-
-  mac_address_out.resize(6);
-
-  std::stringstream address(mac_address, std::ios_base::in);
-
-  address >> std::hex;
-
-  for (int pos = 0; pos <= 5; ++pos) {
-    address >> byte >> skip_byte;
-
-    mac_address_out[pos] = byte;
-  }
-}
-
-std::vector<std::string> ListNetworkInterfaces(const std::initializer_list<std::string> &ignored_interfaces) {
-  std::vector<std::string> interfaces;
-  struct ifaddrs *addrs, *tmp;
-
-  getifaddrs(&addrs);
-  tmp = addrs;
-
-  while (tmp) {
-    if (tmp->ifa_addr && tmp->ifa_addr->sa_family == AF_PACKET) {
-      if (std::find(std::begin(ignored_interfaces), std::end(ignored_interfaces), tmp->ifa_name) !=
-          std::end(ignored_interfaces))
-        interfaces.push_back(tmp->ifa_name);
-    }
-
-    tmp = tmp->ifa_next;
-  }
-
-  freeifaddrs(addrs);
-
-  return interfaces;
-}
-
-void VccNamespaceInit() {
-  // TODO (Philip Werner) Refactor to more dynamic behaviour using local config.
-  std::vector<std::string> network_interfaces = ListNetworkInterfaces({"lo", "sit0"});
-  for (auto &network_interface : network_interfaces) {
-    ALOGV("Moving interface: %s", network_interface.c_str());
-
-    TakeInterfaceDown(network_interface.c_str());
-
-    MoveNetworkInterfaceToNamespace(network_interface, "vcc");
-
-    BringInterfaceUp(network_interface.c_str());
   }
 }
 
@@ -629,14 +581,20 @@ bool TakeInterfaceDown(const char *interface_name) {
   }
 
   close(inet_sock_fd);
-
   return true;
 }
 
-void MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns) {
+void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std::string &ns,
+                                     const std::string &new_name) {
   std::stringstream move_network_interface_cmd;
-  move_network_interface_cmd << "/system/bin/ip link set dev " << network_interface_name << " netns " << ns;
-  ValidateReturnStatus(system(move_network_interface_cmd.str().c_str()));
+
+  move_network_interface_cmd << "/system/bin/ip link set dev " << current_name;
+
+  if (!new_name.empty()) move_network_interface_cmd << " name " << new_name;
+
+  move_network_interface_cmd << " netns " << ns;
+
+  ValidateReturnStatus(system(move_network_interface_cmd.str().c_str()), std::string("Failed to move ") + current_name);
 }
 
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations) {
@@ -656,12 +614,9 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
   }
 
   // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.
-  if (std::strcmp(interface_name, "eth1") == 0 && !IsLinkSpeedCorrect(interface_name)) {
+  if (std::strcmp(interface_name, "tcam0") == 0 && !IsLinkSpeedCorrect(interface_name)) {
     SetLinkSpeed(interface_name);
-
     ALOGV("%s: Link speed set to 100Mbit", interface_name);
-  } else if (std::strcmp(interface_name, "eth1")) {
-    ALOGV("%s: Link speed already set", interface_name);
   }
 
   if (!IsMacAddressCorrect(mac_address, interface_name)) {
@@ -677,7 +632,7 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
   }
 
   // Arp proxy settings
-  if (!strcmp(interface_name, "meth0") || !strcmp(interface_name, "eth1")) {
+  if (!strcmp(interface_name, "meth0") || !strcmp(interface_name, "tcam0")) {
     if (!SetProxyArp(interface_name)) {
       ALOGE("Failed to set proxy arp for %s!", interface_name);
     }
@@ -692,15 +647,12 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
     if (!SetMtu(mtu, interface_name)) {
       ALOGE("Failed to set MTU for %s!", interface_name);
     }
-
-    ALOGI("%s: MTU set to %i", interface_name, mtu);
   } else {
     ALOGV("%s: MTU already set", interface_name);
   }
 
   // All well so far; bring the interface up
   if (!IsInterfaceUp(interface_name)) {
-    // All well so far; bring the interface up
     if (!BringInterfaceUp(interface_name)) {
       ALOGE("Failed to bring ethernet port up for %s!", interface_name);
     }
@@ -708,5 +660,6 @@ bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_
 
   return true;
 }
+
 }  // namespace netman
 }  // namespace vcc

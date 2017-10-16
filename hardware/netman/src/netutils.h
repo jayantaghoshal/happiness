@@ -10,14 +10,14 @@
 
 namespace vcc {
 namespace netman {
+
 void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations,
                                 const vcc::LocalConfigReaderInterface *lcfg);
 
-void PrintInterfaceConfiguration(const std::string context, const InterfaceConfiguration &conf);
+void PrintInterfaceConfiguration(const std::string &context, const InterfaceConfiguration &conf);
 
-void VccNamespaceInit();
-
-void MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns);
+void MoveNetworkInterfaceToNamespace(const std::string &network_interface_name, const std::string &ns,
+                                     const std::string &new_name = "");
 
 void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations);
 
@@ -29,6 +29,7 @@ void BringInterfaceUp(const std::string &interface_name, const std::string &ns);
 bool BringInterfaceUp(const char *interface_name);
 
 bool TakeInterfaceDown(const char *interface_name);
+
 }  // namespace netman
 }  // namespace vcc
 

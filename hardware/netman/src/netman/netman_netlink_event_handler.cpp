@@ -1,7 +1,6 @@
+#include <cutils/log.h>
 #include <linux/rtnetlink.h>
 #include <linux/socket.h>
-
-#include <cutils/log.h>
 #include <net/if.h>
 
 #include "netman_netlink_event_handler.h"
@@ -11,14 +10,32 @@
 
 namespace vcc {
 namespace netman {
+
 NetmanNetlinkEventHandler::NetmanNetlinkEventHandler(
     const std::vector<InterfaceConfiguration> &interface_configurations)
     : interface_configurations_(interface_configurations) {}
 
-void NetmanNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg) {
-  ALOGV("Message received: RTM_NEWLINK");
+void NetmanNetlinkEventHandler::HandleEvent(NetlinkEventData *eventData) {
+  switch (eventData->eventType) {
+    case NetlinkEventType::NETLINK_NEW_LINK: {
+      NetlinkNewLinkEvent *pData = static_cast<NetlinkNewLinkEvent *>(eventData);
+      if (pData) HandleNewLinkEvent(pData->info_msg);
+      break;
+    }
+    case NetlinkEventType::NETLINK_NEW_ADDRESS: {
+      NetlinkNewAddrEvent *pData = static_cast<NetlinkNewAddrEvent *>(eventData);
+      if (pData) HandleNewAddressEvent(pData->addr_msg);
+      break;
+    }
+    default:
+      break;
+  }
+}
 
+void NetmanNetlinkEventHandler::HandleNewLinkEvent(const struct ifinfomsg *if_info_msg) {
   char name[IF_NAMESIZE];
+
+  ALOGD("Message received: RTM_NEWLINK");
 
   // IFF_UP = ifconfig eth0 up
   // IFF_RUNNING = cable plugged in
@@ -34,10 +51,10 @@ void NetmanNetlinkEventHandler::HandleNewLinkEvent(struct nlmsghdr *nl_message_h
   }
 }
 
-void NetmanNetlinkEventHandler::HandleNewAddressEvent(struct nlmsghdr *nl_message_header,
-                                                      struct ifaddrmsg *if_addr_msg) {
-  ALOGV("Message received: RTM_NEWADDR");
+void NetmanNetlinkEventHandler::HandleNewAddressEvent(const struct ifaddrmsg *if_addr_msg) {
   char name[IF_NAMESIZE];
+
+  ALOGD("Message received: RTM_NEWADDR");
 
   // TODO: Refactor common parts in HandleNewLinkEvent and HandleNewAddressEvent
   if ((if_addr_msg != NULL) && (if_indextoname(if_addr_msg->ifa_index, name) != NULL)) {

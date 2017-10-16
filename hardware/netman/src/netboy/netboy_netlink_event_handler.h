@@ -1,17 +1,24 @@
-#ifndef _NETBOY_NETLINK_EVENT_HANDLER_H
-#define _NETBOY_NETLINK_EVENT_HANDLER_H
+#ifndef _NETBOY_NETLINK_EVENT_HANDLER_H_
+#define _NETBOY_NETLINK_EVENT_HANDLER_H_
 
 #include "netlink_event_handler.h"
 
 namespace vcc {
 namespace netman {
-class NetboyNetlinkEventHandler : public NetlinkEventHandler {
+
+class NetboyNetlinkEventHandler final : public NetlinkEventHandler {
+ public:
+  static int SysfsNetSubsystemWalker();
+
  protected:
-  virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg);
-  virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
+  void HandleEvent(NetlinkEventData* eventData) override;
+
+ private:
+  void HandleUevent(const char* uevent, const int message_length);
+  static int HandleSysfsEntry(const char* filepath, const struct stat* info, const int typeflag, struct FTW* pathinfo);
 };
 
 }  // namespace netman
 }  // namespace vcc
 
-#endif
+#endif  // _NETBOY_NETLINK_EVENT_HANDLER_H_
