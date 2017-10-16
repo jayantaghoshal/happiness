@@ -23,7 +23,7 @@ LOCAL_JAVA_RESOURCE_DIRS := res
 
 LOCAL_JAVACFLAGS += -g -Xlint
 
-LOCAL_MODULE := vccLogTestsssss
+LOCAL_MODULE := vccLogTests
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_JAVA_LIBRARIES := tradefed loganalysis
