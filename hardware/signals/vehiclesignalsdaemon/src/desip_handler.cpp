@@ -1,6 +1,8 @@
-#include <desip.h>
+#include <desip_api.h>
 
 #include "desip_handler.h"
+#include "hisip_router.h"
+#include "hisip_router_api.h"
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -24,24 +26,33 @@ static void printStartupErrorMessage(ECD_Error_Codes error)
 {
   switch (error)
   {
-    case ECD_ERROR_NO_TX_CREATION:
+    case ECD_ERROR_NO_ERROR:
     {
-      ALOGE("Creation of Desip-Worker-Thread failed");
       break;
     }
-    case ECD_ERROR_NO_RX_CREATION:
+    case ECD_ERROR_NO_CONNECTION_ESTABLISHED:
     {
-      ALOGE("Creation of Desip-Reader-Thread failed");
+      ALOGE("ECD_ERROR_NO_CONNECTION_ESTABLISHED");
       break;
     }
-    case ECD_ERROR_NO_TX_CONNECTION:
+    case ECD_ERROR_NO_CALLBACK_FUNCTION:
     {
-      ALOGE("Opening of LAYER1-Driver to UART failed - exit main()");
+      ALOGE("ECD_ERROR_NO_CALLBACK_FUNCTION");
       break;
     }
-    case ECD_ERROR_IPC_FAILURE:
+    case ECD_ERROR_CONNECTION_ALREADY_ESTABLISHED:
     {
-      ALOGE("Configuration of IPC failed - exit main() of vipcommunication");
+      ALOGE("ECD_ERROR_CONNECTION_ALREADY_ESTABLISHED");
+      break;
+    }
+    case ECD_ERROR_TRANSMIT:
+    {
+      ALOGE("ECD_ERROR_TRANSMIT");
+      break;
+    }
+    case ECD_ERROR_HW_FD_CLOSE:
+    {
+      ALOGE("ECD_ERROR_HW_FD_CLOSE");
       break;
     }
     default:
@@ -59,7 +70,7 @@ void messageSend(Message_Send_T *msg_data)
   ROUTER_MESSAGE out_msg;
   void *payloadPointer;
   int msg_size;
-  char *transmitBufferPtr;
+
 
   if (nullptr == msg_data)
   {
@@ -68,7 +79,7 @@ void messageSend(Message_Send_T *msg_data)
   }
 
   msg_size = msg_data->data_size;
-  transmitBufferPtr = (char *)malloc(msg_size);
+  uint8_t *transmitBufferPtr = (uint8_t *)malloc(msg_size);
   if (transmitBufferPtr == NULL)
   {
     ALOGE("messageSend(): Unable to allocate Transmit-Buffer");
@@ -89,9 +100,9 @@ void messageSend(Message_Send_T *msg_data)
   }
 
   out_msg.data_size = msg_size;
-  out_msg.data = (void *)transmitBufferPtr;
+  out_msg.data = transmitBufferPtr;
 
-  error = transmit_Layer2Connection(&out_msg, DESIP_LINK_IDX1);
+  error = transmit_Layer2Connection(&out_msg);
   if (error != ECD_ERROR_NO_ERROR)
   {
     ALOGE("messageSend(): Unable to transmit data to Layer2-Component");
@@ -109,7 +120,7 @@ bool initDesip(const char *pathname, const char *uartSpeed)
   //===  Open Connection to DESIP-Layer = Layer2
   //===  Open Connection to UART-Driver = Layer1
   //==========================================================================
-  result = open_Layer2Connection(&tx_state, &rx_state, pathname, DESIP_LINK_IDX1, convertToBaudrateIntType(uartSpeed));
+  result = open_Layer2Connection(&tx_state, &rx_state, pathname);
   if ((result != ECD_ERROR_NO_ERROR) || (tx_state == ECD_CONNECTION_NO_CONNECTION))
   {
     // DESIP initialization failed
