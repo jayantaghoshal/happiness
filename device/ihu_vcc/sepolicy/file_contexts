@@ -20,7 +20,7 @@
 /system/bin/ip u:object_r:ip_exec:s0
 
 # netns device
-/dev/netns u:object_r:netns_device:s0
+/dev/netns(/.*)? u:object_r:netns_device:s0
 
 #carconfig-updater
 /vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0

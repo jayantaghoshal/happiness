@@ -5,7 +5,18 @@ type netboyd_exec, exec_type, file_type;
 init_daemon_domain(netboyd)
 
 allow netboyd self:udp_socket { create ioctl };
+allowxperm netboyd self:udp_socket ioctl { SIOCGIFNAME SIOCGIFFLAGS SIOCSIFFLAGS SIOCETHTOOL };
 
 allow netboyd self:capability { net_admin net_raw kill };
 
-#allow netboyd self:netlink_route_socket create_socket_perms;
+allow netboyd self:netlink_route_socket { create write nlmsg_read read setopt bind getattr nlmsg_write };
+
+allow netboyd shell_exec:file { read open execute execute_no_trans getattr };
+allow netboyd ip_exec:file { read open execute execute_no_trans getattr };
+allow netboyd toolbox_exec:file { read open execute execute_no_trans getattr };
+
+r_dir_file(netboyd, netns_device)
+
+set_prop(netboyd, netboyd_prop)
+
+allow netboyd proc:file r_file_perms;
