@@ -54,7 +54,7 @@
   "WLAN_VCM_WLANSTAStatus_TimeoutMs": 1000,
   "WLAN_VCM_WLANSTAForgetRememberedNetwk_TimeoutMs": 1500,
   "CONN_IpNetworkPrioNetworkControl": 7,
-  "eth0.name": "eth0",
+  "eth0.name": "apix0",
   "eth0.ip-address": "198.18.18.1",
   "eth0.broadcast-address": "198.18.255.255",
   "eth0.netmask": "255.255.240.0",
@@ -66,7 +66,7 @@
   "meth0.netmask": "255.255.240.0",
   "meth0.mac-address": "02:00:00:01:12:01",
   "meth0.mtu": 1500,
-  "eth1.name": "eth1",
+  "eth1.name": "tcam0",
   "eth1.ip-address": "198.18.34.1",
   "eth1.broadcast-address": "198.18.255.255",
   "eth1.netmask": "255.255.240.0",
@@ -78,8 +78,8 @@
     {
       "CHAINS":[],
         "RULES":[
-          "-A POSTROUTING -4 -s 198.18.2.18 -o eth1 -j RETURN",
-          "-A POSTROUTING -o eth1 -j MASQUERADE"
+          "-A POSTROUTING -4 -s 198.18.2.18 -o tcam0 -j RETURN",
+          "-A POSTROUTING -o tcam0 -j MASQUERADE"
       ]
     },
     "FILTER_TABLE":
@@ -87,9 +87,9 @@
       "CHAINS":[],
         "RULES":[
           "-A INPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT",
-          "-A FORWARD -4 -s 198.18.2.18 -i meth0 -p tcp -o eth1 -j ACCEPT",
-          "-A FORWARD -4 -i eth1 -o meth0 -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT",
-          "-A OUTPUT -4 -o eth1 -p tcp --dport 13400 -m state --state NEW -j ACCEPT",
+          "-A FORWARD -4 -s 198.18.2.18 -i meth0 -p tcp -o tcam0 -j ACCEPT",
+          "-A FORWARD -4 -i tcam0 -o meth0 -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT",
+          "-A OUTPUT -4 -o tcam0 -p tcp --dport 13400 -m state --state NEW -j ACCEPT",
           "-A OUTPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT"
       ]
     }

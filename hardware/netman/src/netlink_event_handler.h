@@ -6,13 +6,39 @@
 
 namespace vcc {
 namespace netman {
+
 class NetlinkEventHandler {
  public:
-  void HandleEvent(struct nlmsghdr *nl_message_header);
+  enum class NetlinkEventType { NETLINK_NEW_LINK, NETLINK_NEW_ADDRESS, NETLINK_UEVENT };
+
+  void HandleEvent(struct nlmsghdr* nl_message_header);
+  void HandleEvent(char* message, const int length);
 
  protected:
-  virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg) = 0;
-  virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg) = 0;
+  struct NetlinkEventData {
+    NetlinkEventData(NetlinkEventType evtType) : eventType(evtType) {}
+    virtual ~NetlinkEventData() = default;
+    NetlinkEventType eventType;
+  };
+
+  struct NetlinkNewLinkEvent : NetlinkEventData {
+    NetlinkNewLinkEvent(struct ifinfomsg* msg) : NetlinkEventData(NetlinkEventType::NETLINK_NEW_LINK), info_msg(msg) {}
+    const struct ifinfomsg* info_msg;
+  };
+
+  struct NetlinkNewAddrEvent : NetlinkEventData {
+    NetlinkNewAddrEvent(struct ifaddrmsg* msg)
+        : NetlinkEventData(NetlinkEventType::NETLINK_NEW_ADDRESS), addr_msg(msg) {}
+    const struct ifaddrmsg* addr_msg;
+  };
+
+  struct NetlinkUevent : NetlinkEventData {
+    NetlinkUevent(char* msg, int len) : NetlinkEventData(NetlinkEventType::NETLINK_UEVENT), uevent(msg), length(len) {}
+    const char* uevent;
+    const int length;
+  };
+
+  virtual void HandleEvent(NetlinkEventData* eventData) = 0;
 };
 
 }  // namespace netman

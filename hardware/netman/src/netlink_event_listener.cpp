@@ -9,7 +9,6 @@
 #include <sys/types.h>
 #include <sys/un.h>
 
-
 #include <cutils/log.h>
 
 #include <net/if.h>
@@ -31,8 +30,9 @@
 
 namespace vcc {
 namespace netman {
-NetlinkSocketListener &NetlinkSocketListener::Instance() {
-  static NetlinkSocketListener instance;
+
+NetlinkSocketListener &NetlinkSocketListener::Instance(const SocketType type) {
+  static NetlinkSocketListener instance(type);
   return instance;
 }
 
@@ -45,15 +45,23 @@ int NetlinkSocketListener::SetupSocket() {
   }
 
   struct sockaddr_nl nladdr;
-  int sz = 64 * 1024;
-  int on = 1;
 
   memset(&nladdr, 0, sizeof(nladdr));
   nladdr.nl_family = AF_NETLINK;
   nladdr.nl_pid = getpid();
-  nladdr.nl_groups = RTMGRP_LINK | RTMGRP_IPV4_IFADDR | RTMGRP_IPV6_IFADDR;
 
-  if ((netlink_socket_ = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE)) < 0) {
+  int socket_type = SOCK_RAW;
+  int socket_protocol = NETLINK_ROUTE;
+
+  if (SocketType::NLSOC_TYPE_UEVENT == sock_type_) {
+    nladdr.nl_groups = -1;
+    socket_type = SOCK_DGRAM;
+    socket_protocol = NETLINK_KOBJECT_UEVENT;
+  } else if (SocketType::NLSOC_TYPE_ROUTE == sock_type_) {
+    nladdr.nl_groups = RTMGRP_LINK | RTMGRP_IPV4_IFADDR | RTMGRP_IPV6_IFADDR;
+  }
+
+  if ((netlink_socket_ = socket(AF_NETLINK, socket_type, socket_protocol)) < 0) {
     ALOGE("Unable to create netlink socket: %s", strerror(errno));
     return -1;
   }
@@ -74,15 +82,15 @@ int NetlinkSocketListener::StartListening() {
   }
 
   if (SetupSocket() == -1) {
+    ALOGE("Netlink event handler failed to setup socket");
     return -1;
   }
-
-  ALOGV("Netlink socket successfully setup.");
 
   ALOGV("Waiting for netlink messages to arrive...");
 
   for (;;) {
     if (RecvMessage() == -1) {
+      ALOGE("Netlink event handler failed on RecvMessage");
       return -1;
     }
   }
@@ -124,12 +132,17 @@ int NetlinkSocketListener::RecvMessage() {
   }
 
   // Parse message
-  for (nl_message_header = (struct nlmsghdr *)buf; NLMSG_OK(nl_message_header, (unsigned int)message_length);
-       nl_message_header = NLMSG_NEXT(nl_message_header, message_length)) {
-    netlink_event_handler_->HandleEvent(nl_message_header);
+  if (sock_type_ == SocketType::NLSOC_TYPE_ROUTE) {
+    for (nl_message_header = (struct nlmsghdr *)buf; NLMSG_OK(nl_message_header, (unsigned int)message_length);
+         nl_message_header = NLMSG_NEXT(nl_message_header, message_length)) {
+      netlink_event_handler_->HandleEvent(nl_message_header);
+    }
+  } else if (sock_type_ == SocketType::NLSOC_TYPE_UEVENT) {
+    netlink_event_handler_->HandleEvent(buf, message_length);
   }
 
   return 0;
 }
+
 }  // namespace netman
 }  // namespace vcc

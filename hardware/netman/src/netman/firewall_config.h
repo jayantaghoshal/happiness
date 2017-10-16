@@ -7,6 +7,7 @@
 
 namespace vcc {
 namespace netman {
+
 class FirewallConfig {
  public:
   enum class IP { IPv4_, IPv6_ };

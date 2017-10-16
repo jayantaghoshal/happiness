@@ -5,15 +5,19 @@
 
 namespace vcc {
 namespace netman {
-class NetmanNetlinkEventHandler : public NetlinkEventHandler {
+
+class NetmanNetlinkEventHandler final : public NetlinkEventHandler {
   const std::vector<InterfaceConfiguration> &interface_configurations_;
 
  public:
   NetmanNetlinkEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations);
 
  protected:
-  virtual void HandleNewLinkEvent(struct nlmsghdr *nl_message_header, struct ifinfomsg *if_info_msg);
-  virtual void HandleNewAddressEvent(struct nlmsghdr *nl_message_header, struct ifaddrmsg *if_addr_msg);
+  void HandleEvent(NetlinkEventData *eventData) override;
+
+ private:
+  void HandleNewLinkEvent(const struct ifinfomsg *if_info_msg);
+  void HandleNewAddressEvent(const struct ifaddrmsg *if_addr_msg);
 };
 
 }  // namespace netman

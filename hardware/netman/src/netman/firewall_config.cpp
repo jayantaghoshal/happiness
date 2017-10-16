@@ -5,6 +5,7 @@
 
 namespace vcc {
 namespace netman {
+
 const std::string FirewallConfig::kDefaultIptablesRulesPath = "/data/local/tmp/iptables.rules";
 
 bool FirewallConfig::ParseAndSave(const std::string& output_path) {
