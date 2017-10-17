@@ -1,0 +1,30 @@
+cc_defaults {
+    name: "libtarmac_defaults",
+    compile_multilib: "64",
+    export_include_dirs: ["eventloop/include"],
+    cflags: ["-fexceptions"],
+    shared_libs: [
+        "liblog",
+    ],
+    vendor: true,
+}
+
+// Static library. Used in shared lib and for unit tests.
+cc_library_static {
+    name: "libtarmac_static",
+    defaults: ["libtarmac_defaults"],
+    srcs: [
+        "eventloop/src/Dispatcher.cpp",
+    ],
+    host_supported: true,
+}
+
+// Shared library for deployment to system
+cc_library_shared {
+    name: "libtarmac",
+    defaults: ["libtarmac_defaults"],
+    whole_static_libs: ["libtarmac_static"],
+    host_supported: true,
+}
+
+subdirs = ["eventloop"]

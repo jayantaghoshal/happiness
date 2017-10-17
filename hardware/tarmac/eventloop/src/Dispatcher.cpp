@@ -66,14 +66,18 @@ public:
     {
         std::lock_guard<std::mutex> lock(mutex_);
         int r=0;
-        if ( fdTasks_.find(fd)==fdTasks_.end() ) {
-            // fd has not previously been added so lets do it
-            epoll_event event;
-            event.events  = EPOLLIN;
-            event.data.fd = fd;
-            r = epoll_ctl (epollfd_, EPOLL_CTL_ADD, fd, &event);
-            ALOGE_IF(r!=0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+
+        // fd already added so lets remove it first
+        if ( fdTasks_.find(fd)!=fdTasks_.end() ) {
+            removeFd(fd);
         }
+
+        epoll_event event;
+        event.events  = EPOLLIN;
+        event.data.fd = fd;
+        r = epoll_ctl (epollfd_, EPOLL_CTL_ADD, fd, &event);
+        ALOGE_IF(r!=0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+
         if (r==0) {
             fdTasks_[fd] = t;
         }
