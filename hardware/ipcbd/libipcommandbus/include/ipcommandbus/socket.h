@@ -30,7 +30,7 @@ public:
 
     void set_option(int level, int option, int value);
     int get_option(int level, int option);
-
+    uint32_t getTestSimPort();
     static std::vector<std::pair<Message::Ecu, ISocket::EcuAddress> > defaultEcuMap();
 protected:
     void setup(int domain, int type, int protocol);

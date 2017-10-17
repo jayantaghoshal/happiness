@@ -125,8 +125,17 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
 
     struct sockaddr_in sa;
     sa.sin_family = AF_INET;
-    sa.sin_port = htons(it->second.port);
 
+    if(getenv("VCC_LOCALCONFIG_PATH") != NULL)
+    {
+        ALOGD("Send on Test port: %d",Socket::getTestSimPort());
+        sa.sin_port = htons(Socket::getTestSimPort());
+    }
+    else
+    {
+        ALOGD("Send on production port: %d",it->second.port);
+        sa.sin_port = htons(it->second.port);
+    }
     if (1 != inet_pton(AF_INET, it->second.ip.c_str(), &sa.sin_addr))
     {
         throw SocketException(errno, "Address not in correct format");
