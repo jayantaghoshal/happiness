@@ -1,3 +1,4 @@
+// generic defaults
 cc_defaults {
     name: "volvocars_cc_defaults",
     compile_multilib: "64",
@@ -7,4 +8,42 @@ cc_defaults {
         "-Wextra",
     ],
     vendor: true,
+}
+
+// high quality implementation
+cc_defaults {
+    name: "volvocars_cc_defaults_hq",
+    defaults: ["volvocars_cc_defaults"],
+
+    cflags: [
+        "-Werror",
+    ],
+
+    tidy: true,
+    tidy_checks: [
+        "android-*",
+        "clang-analyzer-*",
+        "-clang-analyzer-alpha*",
+        "google-*",
+        "-google-build-using-namespace", // its really fine in cpp files, save a lot of typing
+        "cert-*",
+        "modernize-*",
+        "-modernize-raw-string-literal", //for short ones it is pointless
+        "readability-*",
+        "-readability-braces-around-statements", //some are short enough/oneliners
+        "-readability-redundant-declaration", //clang does not filters out errors in external/libcxx/include/new
+    ],
+    tidy_flags: [
+        "-header-filter=^vendor/volvocars/.*",
+    ],
+}
+
+// high quality test cases
+cc_defaults {
+    name: "volvocars_cc_defaults_hq_tests",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    tidy_checks: [
+        "-cert-err58-cpp", //all gtest test cases creates static objects
+    ],
 }
