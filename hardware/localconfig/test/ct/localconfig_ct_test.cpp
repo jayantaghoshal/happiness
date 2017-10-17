@@ -2,7 +2,6 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <stdio.h>
 #include <sys/stat.h>
 
 #include <iostream>

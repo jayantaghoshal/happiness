@@ -1,8 +1,8 @@
 #ifndef VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 #define VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 
-#include <stdint.h>
 #include <chrono>
+#include <cstdint>
 #include <initializer_list>
 #include <string>
 #include <vector>
@@ -173,14 +173,14 @@ template <class... T>
 void GetValue(const LocalConfigReaderInterface *lcfg, double *value, const T &... keys) {
   *value = lcfg->GetDouble(keys...);
 }
-}
+}  // namespace detail
 
 template <class R, class... T>
 inline void LocalConfigReaderInterface::GetGenericValue(R *value, const T &... keys) const {
   return detail::GetValue(this, value, keys...);
 }
 
-} /* namespace vcc */
+}  // namespace vcc
 
 #ifdef GTEST_OS_LINUX_ANDROID
 #include <gmock/gmock.h>

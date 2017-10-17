@@ -15,10 +15,11 @@ namespace vcc {
 // default configuration is to be avoided.
 class LocalConfigReader : public LocalConfigReaderInterface {
  public:
-  typedef std::function<void(Json::Value *root)> LazyLoader;
+  using LazyLoader = std::function<void(Json::Value *root)>;
 
-  LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
+  explicit LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
   LocalConfigReader(const LocalConfigReader &) = delete;
+  const LocalConfigReader &operator=(const LocalConfigReader &) = delete;
 
   std::string GetString(std::initializer_list<std::string> keys) const override;
   int GetInt(std::initializer_list<std::string> keys) const override;
@@ -40,18 +41,18 @@ class LocalConfigReader : public LocalConfigReaderInterface {
 };
 
 class LocalConfigFileReader : public LocalConfigReader {
-  typedef LocalConfigReader base;
+  using base = LocalConfigReader;
 
  public:
-  LocalConfigFileReader(std::string file_path);
+  explicit LocalConfigFileReader(std::string file_path);
 };
 
 class LocalConfigStaticContentReader : public LocalConfigReader {
-  typedef LocalConfigReader base;
+  using base = LocalConfigReader;
 
  public:
-  LocalConfigStaticContentReader(std::string json);
+  explicit LocalConfigStaticContentReader(std::string json);
 };
-}
+}  // namespace vcc
 
 #endif /* VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_SRC_LOCAL_CONFIG_READER_H_ */

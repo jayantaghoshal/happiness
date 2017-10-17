@@ -2,6 +2,7 @@ cc_defaults {
     name: "liblocalconfig_defaults",
     defaults: ["volvocars_cc_defaults_hq"],
     export_include_dirs: ["include"],
+    local_include_dirs: ["include/vcc"],
     static_libs: [
         "libjsoncpp",
         "liblog",

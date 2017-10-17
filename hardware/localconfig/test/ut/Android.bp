@@ -1,5 +1,6 @@
 cc_test {
     name: "liblocalconfig_ut",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
 
     srcs: ["local_config_parsing_test.cpp"],
 
@@ -10,13 +11,6 @@ cc_test {
         "liblog",
     ],
 
-    cppflags: [
-        "-Wall",
-        "-Wextra",
-        "-fexceptions",
-    ],
-
-    compile_multilib: "64",
     host_supported: false,
     test_suites: ["vts"],
 }
