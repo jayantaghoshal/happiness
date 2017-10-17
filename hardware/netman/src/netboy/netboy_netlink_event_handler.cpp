@@ -11,7 +11,7 @@
 
 #include "netboy_netlink_event_handler.h"
 
-#define LOG_TAG "Netboy"
+#define LOG_TAG "Netboyd"
 
 namespace {
 

@@ -5,6 +5,8 @@
 
 #include "netboy_netlink_event_handler.h"
 #include "netlink_event_listener.h"
+#include "rule_handler.h"
+#include "vcc/localconfig.h"
 
 #define LOG_TAG "Netboyd"
 
@@ -13,6 +15,14 @@ using namespace vcc::netman;
 int main() {
   try {
     ALOGI("Net Boy 0.1 starting");
+
+    auto *lcfg = vcc::LocalConfigDefault();
+
+    RuleHandler rule_handler;
+    if (!rule_handler.loadRules(lcfg)) {
+      ALOGE("Unable to read rules from local config");
+      return 1;
+    }
 
     NetboyNetlinkEventHandler::SysfsNetSubsystemWalker();
 
