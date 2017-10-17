@@ -83,9 +83,10 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
                         listener.testFailed(testId, err);
                     }
 
+
                     Increase(allByPid, e.getPid());
                     Increase(allByTag, e.getTag());
-                    Increase(categoryByTag.get(e.getCategory()), e.getTag());
+                    Increase(categoryByTag.get(e.getCategory()), e.getTag());   //TODO getCategory is NOT verbosity
                     Increase(categoryByPid.get(e.getCategory()), e.getPid());
                 }
             }

@@ -1,4 +1,4 @@
-from shipit.test_runner.test_types import VTSTest, Disabled, standard_caps, Capabilities as cp
+from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
 
 #
 # Rules to simplify merge errors as many people will be editing this file:
@@ -64,6 +64,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
+    TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
 ]
 
 test_plan_nightly = [
