@@ -4,11 +4,19 @@ type netman_exec, exec_type, file_type;
 
 init_daemon_domain(netman)
 
-#allow netman self:netlink_route_socket {create create_socket_perms nlmsg_write};
-#allow netman self:netlink_socket {create create_socket_perms};
+allow netman self:netlink_route_socket { create read write getattr bind setopt nlmsg_read };
 allow netman self:udp_socket { create ioctl };
+allowxperm netman self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
 
 allow netman self:capability { net_admin net_raw kill };
 allow netman netns_device:dir { read open };
 allow netman netman_exec:file execute_no_trans;
 allow netman rootfs:dir mounton;
+
+domain_auto_trans(netman, ip_exec, ip)
+allow netman self:rawip_socket { create getopt setopt };
+allow netman proc_net:file getattr;
+
+allow netman ip_exec:file entrypoint;
+
+set_prop(netman, netman_prop)

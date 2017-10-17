@@ -1,2 +1,3 @@
 # properties
 type netboyd_prop, property_type;
+type netman_prop, property_type;
