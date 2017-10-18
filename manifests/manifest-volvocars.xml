@@ -59,10 +59,6 @@
     <linkfile dest="bootstrap.bash" src="bootstrap.bash"/>
   </project>
 
-  <!-- TODO: Will upstream this later in Jira issue PSS370-3539 -->
-  <remove-project name="aosp/platform/system/netd"/>
-  <project name="aosp/platform/system/netd" path="system/netd" revision="d7ba832024b153ad7ed513351562e4d5aa1a1bc2" />
-
   <!-- Upstream to Delphi -->
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
