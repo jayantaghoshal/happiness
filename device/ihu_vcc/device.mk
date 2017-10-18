@@ -1,8 +1,8 @@
-
 ##############################################################
 # Native daemons
 ##############################################################
 PRODUCT_PACKAGES += \
+    var_run_directory_structure \
     netman \
     netboyd \
     vehicle-signals-daemon \
