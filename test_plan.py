@@ -56,6 +56,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
+    VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
 ]
 
 test_plan_nightly = [

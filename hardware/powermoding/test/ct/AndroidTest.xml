@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="PowerModing Basic Component Test">
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsPowerModing_Basic"/>
+        <option name="test-case-path" value="volvocars/hardware/powermoding/test/ct/VtsPowerModing_Basic"/>
+        <option name="test-timeout" value="3m"/>
+        <option name="runtime-hint" value="180s" />
+    </test>
+</configuration>
