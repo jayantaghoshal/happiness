@@ -1,6 +1,0 @@
-<config>
-  <isWhitelist>false</isWhitelist>
-  <interfaceList>
-    <item>eth1</item>
-  </interfaceList>
-</config>
