@@ -1,0 +1,164 @@
+component-test-spec-ip-service.txt
+Created on: Jun 7, 2016
+
+
+Prerequisites
+-------------
+
+Build the command line client (enhanced_pos_cli_server)
+Upload to VCM. Suggested placement: /home/root (~)
+
+
+Abbreviations
+-------------
+
+'System' =
+IHU with working connection to VCM, TEM, and YOUR PC, unless otherwise stated.
+Success of the first two test cases "common_api_connection" + "subscription" is assumed for all other test cases.
+No point in going on with other tests otherwise.
+
+
+TEST_CASE("common_api_connection")
+
+Start system.
+
+Run DLT log viewer connected to the system.
+Ensure DEBUG level logging is enabled for diagnostics client in infotainment-ip-service application.
+(DIAG context id, IIPS application id)
+
+NOTE!!
+Since the interesting information is most often logged very soon after start of application,
+the only practical way to get the log level setting to take 'in time' is through dlt-control command on shell:
+"dlt-control -a IIPS -c DIAG -d 5 localhost"
+(Setting it through dlt-viewer does in practice not work since setting is lost upon app restart / reboot.)
+
+Also enable info (default) logging level for the diagnostics server application.
+(DIAG application id)
+
+
+Start cli server.
+
+infotainment-ip-service (enhanced_pos_client.cpp) does continuously check for service availability.
+Upon successful connection to server, it logs (DLT):
+"Diagnostics service is available."
+
+Ensure the above message is seen!
+
+Upon failing connection the DLT logs for enhanced position service will either contain
+a: nothing at all, or 
+b: "Diagnostics service is not (no longer) available."
+(a ==> Wrong DLT log levels, or notification of service availability never received, e.g. server not running)
+(b ==> Attempt to connect to service fail or connection interrupted, e.g. server has stopped or crashed)
+
+
+TEST_CASE("subscription")
+
+Look at logs from previous test case.
+
+To be able to send diagnostics info for a specific key, our client must 'subscribe' on these keys from diagnostics server.
+
+Ensure you see logs for all the keys that infotainment-ip-service needs to report:
+
+"Subscribing on key 12029."   (12029 = Invalid Data Received From Telematics Module)
+"Subscribing on key 12030."   (12030 = Invalid Data Received From Vehicle Connectivity Module)
+
+Verify that diagnostics server accepts the subscriptions:
+"Client subscribed on keys: [ 12029 , 12030 , ]"
+
+Ensure the subscription call completes:
+"Diagnostic service init sequence completed."
+
+
+TEST_CASE("invalid_data_from_tem")
+
+Start system.
+
+Run DLT log viewer connected to the system.
+Ensure DEBUG level logging is enabled for diagnostics client and messagedispatcher in infotainment-ip-service application.
+(DIAG + MD00 context id:s, IIPS application id)
+
+NOTE!!
+Since the interesting information is most often logged very soon after start of application,
+the only practical way to get the log level setting to take 'in time' is through dlt-control command on shell:
+"dlt-control -a IIPS -c DIAG -d 5 localhost"
+"dlt-control -a IIPS -c MD00 -d 5 localhost"
+
+Also enable info (default) logging level for the diagnostics server application.
+(DIAG application id)
+
+Wait for at least 15 seconds after seeing log "Diagnostic service init sequence completed".
+
+Assuming having a working link to TEM, diagnostics condition(s) should have triggered.
+
+Verify that you find a log of either or both of
+"SetInvalidDataFromTEM - no error"
+"SetInvalidDataFromTEM - error"
+
+Verify that diagnostics server accepts the message.
+For each reported invalid data condition you should see following logs from diagnostics server (DIAG application id):
+"Received message on key: 12029"
+"Sending 3 byte(s) to VIP, FID: xx"
+Ensure you get the above logs and no associated errors.
+
+Verify that (possible) log of "no error" occurs before (possible) log of "error".
+(If error condition has already been set, it shall not be possible to 'heal'.)
+
+Verify that you do NOT FIND MORE THAN one log of either of the above.
+(We shall only call diagnostics server at first occurance of the respective diagnostic condition.)
+
+Upon subsequent received messages from TEM, you should see logs like
+"Not reporting diagnostics (xxx) since xxx already set."
+
+
+TEST_CASE("invalid_data_from_vcm")
+
+Perform test case 'invalid_data_from_tem',
+but instead look at corresponding logs for _VCM_,
+i.e. look for "SendInvalidDataFromVCM" and "Received message on key: 12029".
+
+
+TEST_CASE("invalid_data_early")
+
+Start system.
+
+Run DLT log viewer connected to the system.
+Ensure DEBUG level logging is enabled for diagnostics client and messagedispatcher in infotainment-ip-service application.
+(DIAG + MD00 context id:s, IIPS application id)
+
+NOTE!!
+Since the interesting information is most often logged very soon after start of application,
+the only practical way to get the log level setting to take 'in time' is through dlt-control command on shell:
+"dlt-control -a IIPS -c DIAG -d 5 localhost"
+"dlt-control -a IIPS -c MD00 -d 5 localhost"
+
+Also enable DIAG level logging for the diagnostics server application.
+(DIAG application id)
+
+Wait for at least 15 seconds after seeing log "Diagnostic service init sequence completed".
+
+The invalid data condition may occur 'early' before we have connected to diagnostics server and completed subscriptions.
+In this case the sending of invalid data information to server should occur later upon completing subscriptions.
+
+The easiest way of triggering this is to stop and then restart diagnostics server.
+
+Log into ihu shell and type
+'systemctl stop diagnostics'
+
+You should now see log "Diagnostics server is not (no longer) available"
+
+Wait for a few seconds.
+Then type
+'systemctl start diagnostics'
+
+You should soon see log
+"Diagnostic service init sequence completed."
+
+Assuming having link to VCM+TEM and having waited the specified time upon start of system you should see logs
+about notifying the diagnostics server of already occured diagnostics conditions:
+
+"Reporting already detected 'invalid data from TEM' condition '<error/no error>'.
+"Reporting already detected 'invalid data from VCM' condition '<error/no error>'.
+
+
+
+
