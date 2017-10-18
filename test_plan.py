@@ -42,11 +42,6 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2017-11-01"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/infotainment-ip-service/test/ct",      standard_caps),
-             reason="Dead code in repo",
-             jira_issue="",
-             deadline="2017-11-01"
-    ),
     Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix_gate",       standard_caps),
              reason="APIX driver not yet integrated on Master",
              jira_issue="",
