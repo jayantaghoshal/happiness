@@ -59,8 +59,9 @@ endif
 
 ##############################################################
 # VCC required Linux kernel modules
-# TODO (Patrik Moberg) make R8152 module conditional for
-# userdebug and eng only. I e create a userdebug + eng
-# diffconfig variant
 ##############################################################
 KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_diffconfig
+
+ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
+    KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_eng_diffconfig
+endif

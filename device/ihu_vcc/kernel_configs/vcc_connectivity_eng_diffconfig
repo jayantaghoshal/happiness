@@ -1,0 +1,2 @@
+# Support for RTL driver based devices
+CONFIG_USB_RTL8152=y
