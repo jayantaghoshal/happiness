@@ -1,5 +1,7 @@
 #include "LscMocker.h"
 
+#define LOG_TAG "LscMocker"
+
 LscMocker::LscMocker(){
   try{
     ALOGD("IIplm getService!");

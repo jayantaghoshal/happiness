@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "LscMocker.h"
+#include "src/LscMocker.h"
 #include <cutils/log.h>
 #include <ECD_dataelement.h>
 #include <iostream>

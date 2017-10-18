@@ -20,8 +20,6 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::sp;
 
-#define LOG_TAG "LscMocker"
-
 class LscMocker : public IIplmCallback
 {
     public:

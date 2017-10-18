@@ -1,0 +1,38 @@
+cc_test {
+
+    name: "VtsIplmdTestCases",
+
+    srcs: [
+        "iplmd_ct_test.cpp",
+        "src/LscMocker.cpp",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+
+    shared_libs: [
+        "libdataelements",
+        "liblog",
+        "liblocalconfig",
+        "libtarmac",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhardware",
+        "libhwbinder",
+        "vendor.volvocars.hardware.iplm@1.0",
+    ],
+
+    static_libs: ["libgmock"],
+
+    // Tag this module as a vts test artifact
+    test_suites: ["vts"],
+
+    // We only build for 64 bit.
+    compile_multilib: "64",
+
+}

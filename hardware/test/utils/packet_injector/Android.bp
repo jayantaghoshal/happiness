@@ -1,0 +1,31 @@
+//
+// Static library. Used in shared lib and for unit tests.
+//
+cc_library_static {
+    name: "libpacketinjector_static",
+
+    srcs: ["src/udp_packet_injector.cpp"],
+
+    shared_libs: [
+        "libtarmac",
+        "liblog",
+        "libipcommandbus",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+
+    local_include_dirs: ["include"],
+
+    export_include_dirs: ["include"],
+
+    compile_multilib: "64",
+}
