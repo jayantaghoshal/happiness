@@ -592,7 +592,7 @@ void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std:
 
   if (!new_name.empty()) move_network_interface_cmd << " name " << new_name;
 
-  move_network_interface_cmd << " netns " << ns;
+  if (!ns.empty()) move_network_interface_cmd << " netns " << ns;
 
   ValidateReturnStatus(system(move_network_interface_cmd.str().c_str()), std::string("Failed to move ") + current_name);
 }

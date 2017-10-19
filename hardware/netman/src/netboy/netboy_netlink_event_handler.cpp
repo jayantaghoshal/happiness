@@ -10,6 +10,7 @@
 #include "netutils.h"
 
 #include "netboy_netlink_event_handler.h"
+#include "rule_handler.h"
 
 #define LOG_TAG "Netboyd"
 
@@ -93,17 +94,43 @@ void ReadParentDeviceAttr(NetDeviceAttr &child_device) {
   }
 }
 
-// TODO: This function will need to be adapted once rule parsing from local_config is available
 void RuleMatchAndRun(const NetDeviceAttr &device) {
   using namespace vcc::netman;
-  if (device.driver == "igb_avb") {
+  // Create and fill structure for rule matching
+  NetboyRule rule{device.devpath, device.subsystem, device.devtype, device.interface_name, device.driver, nullptr};
+  std::shared_ptr<RuleAction> action;
+
+  if (RuleHandler::getInstance().getMatchingRule(rule, action)) {
+    if (!action) {
+      ALOGE("Found a matching rule but ACTION is NULL");
+      return;
+    }
+
+    if (!(action->intent_ == Intent::MOVE || action->intent_ == Intent::MOVE_AND_RENAME ||
+          action->intent_ == Intent::RENAME))
+      return;
+
     TakeInterfaceDown(device.interface_name.c_str());
-    MoveNetworkInterfaceToNamespace(device.interface_name, "vcc", "tcam0");
-    BringInterfaceUp("tcam0", "vcc");
-  } else if (device.driver == "smsc95xx") {
-    TakeInterfaceDown(device.interface_name.c_str());
-    MoveNetworkInterfaceToNamespace(device.interface_name, "vcc", "apix0");
-    BringInterfaceUp("apix0", "vcc");
+
+    if (action->intent_ == Intent::MOVE) {
+      std::string ns = std::static_pointer_cast<RuleActionMove>(action)->NEW_NS;
+
+      MoveNetworkInterfaceToNamespace(device.interface_name, ns);
+      BringInterfaceUp(device.interface_name.c_str(), ns);
+
+    } else if (action->intent_ == Intent::RENAME) {
+      std::string name = std::static_pointer_cast<RuleActionRename>(action)->NEW_NAME;
+
+      MoveNetworkInterfaceToNamespace(device.interface_name, "", name);
+      BringInterfaceUp(name.c_str());
+
+    } else if (action->intent_ == Intent::MOVE_AND_RENAME) {
+      std::string ns = std::static_pointer_cast<RuleActionMoveAndRename>(action)->NEW_NS;
+      std::string name = std::static_pointer_cast<RuleActionMoveAndRename>(action)->NEW_NAME;
+
+      MoveNetworkInterfaceToNamespace(device.interface_name, ns, name);
+      BringInterfaceUp(name, ns);
+    }
   }
 }
 

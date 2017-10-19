@@ -72,7 +72,10 @@
   "eth1.netmask": "255.255.240.0",
   "eth1.mac-address": "02:00:00:02:12:01",
   "eth1.mtu": 1500,
-  "NetboyRules": [],
+  "NetboyRules": [
+      "DRIVER=smsc95xx,ACTION=MOVE_AND_RENAME,NEW_NAME=apix0,NEW_NS=vcc",
+      "DRIVER=igb_avb,ACTION=MOVE_AND_RENAME,NEW_NAME=tcam0,NEW_NS=vcc"
+  ],
   "CONN_NhFirewall":
   {
     "NAT_TABLE":
