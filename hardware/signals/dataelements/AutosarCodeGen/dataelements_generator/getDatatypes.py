@@ -6,7 +6,6 @@ import os
 import uuid
 import logging
 logger = logging.getLogger(__name__)
-from datetime import datetime
 from typing import Dict, List, cast, Tuple
 
 from . import render_json
@@ -237,7 +236,6 @@ def generate(swc_input_file, options):
     header = "// clang-format off\n"
     header += "/*!\n * \\file\n * " + DESCRIPTION + " " + VERSION + "\n"
     header += " * " + COPYRIGHT + "\n"
-    header += " * Generated at: " + datetime.now().isoformat() + "\n"
     header += " * Source: " + options.swcinputfile + "\n */\n"
 
     footer = "\n// clang-format on\n"
