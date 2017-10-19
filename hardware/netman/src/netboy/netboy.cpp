@@ -18,10 +18,10 @@ int main() {
 
     auto *lcfg = vcc::LocalConfigDefault();
 
-    RuleHandler rule_handler;
+    RuleHandler& rule_handler = RuleHandler::getInstance();
     if (!rule_handler.loadRules(lcfg)) {
       ALOGE("Unable to read rules from local config");
-      return 1;
+      return EXIT_FAILURE;
     }
 
     NetboyNetlinkEventHandler::SysfsNetSubsystemWalker();
