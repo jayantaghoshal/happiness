@@ -244,7 +244,6 @@ IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay,
             RemoveFd(tfd);
             close(tfd);
         }
-        return void();
     });
     return this_id;
 }
