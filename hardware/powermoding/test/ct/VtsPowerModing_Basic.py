@@ -3,13 +3,14 @@
 from vts.runners.host import asserts
 from vts.runners.host import base_test
 from vts.runners.host import test_runner
-from vts.utils.python.controllers import android_device
 
 import logging
 from subprocess import check_output
 from time import sleep,time
-from generated.pyDataElements import FrSignalInterface
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 
+from generated.pyDataElements import FrSignalInterface
 
 # execute and fetch the output from the 'lsusb' command
 def dolsusb():
@@ -23,18 +24,21 @@ def is_ihuconnected():
     # 8087:09ef is the vendor:product usb code for the IHU (Intel:xyz)
     return lsusb.find('8087:09ef') != -1
 
+# f = open("/tmp/vtstest.txt", mode="w")
 
 class ComponentTest(base_test.BaseTestClass):
     def setUpClass(self):
-        pass
-#        self.dut = self.registerController(android_device)[0]
-#        self.dut.shell.InvokeTerminal("one")
-#        self.shell = self.dut.shell.one
-#        self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
+        self.logger=logging.getLogger('powermoding_basic')
+
+
+    def log(self,s):
+        self.logger.info(s)
+#        f.write("%d - %s\n" % (time(), s))
+#        f.flush()
 
 
     def setUp(self):
-        self.logger.info("setUp()")
+        self.log("setUp()")
         # Starting CANoe simulation might trigger a reboot,
         # Set up required signals for unit to boot and ensure it is booted
         #
@@ -54,12 +58,11 @@ class ComponentTest(base_test.BaseTestClass):
 
 
     def tearDown(self):
-        self.logger.info('tearDown()')
-        self.flexray.close()
-
-
-    def __init__(self):
-        self.logger=logging.getLogger('powermoding_basic')
+        try:
+            self.log('tearDown()')
+            self.flexray.close()
+        except:
+            pass
 
 
     def power_control_ihu(self,on):
@@ -69,32 +72,32 @@ class ComponentTest(base_test.BaseTestClass):
         # this function shall control the physical power to the whole IHU
         # currently it does nothing since the API to do this is not clear and the required CI hardware is not in place
         # If it fails to power on/off then log and do exit(1)
-        self.logger.info('Power ' + ('on' if on else 'off'))
+        self.log('Power ' + ('on' if on else 'off'))
         pass
 
 
     def waitForIhuUp(self, maxwaittime):
         # Wait for IHU(MP) to come up
         startt = time()
-        self.logger.info('Wait for IHU to go up (%d)', maxwaittime)
+        self.log('Wait for IHU to go up (%d)' % maxwaittime)
         while not is_ihuconnected() and (time()-startt < maxwaittime):
             sleep(1)
-        self.logger.info('IHU %s after %d secs, should be up', ('up' if is_ihuconnected() else 'down' ), time()-startt)
+        self.log('IHU %s after %f secs, should be up' % (('up' if is_ihuconnected() else 'down' ), time()-startt))
         return is_ihuconnected()
 
 
     def waitForIhuDown(self, maxwaittime):
         # Wait for IHU(MP) to power off
         startt = time()
-        self.logger.info('Wait for IHU to go down (%d)', maxwaittime)
+        self.log('Wait for IHU to go down (%d)', maxwaittime)
         while is_ihuconnected() and (time()-startt < maxwaittime):
             sleep(1)
-        self.logger.info('IHU %s after %d secs, should be down', ('up' if is_ihuconnected() else 'down' ), time()-startt)
+        self.log('IHU %s after %f secs, should be down' % (('up' if is_ihuconnected() else 'down' ), time()-startt))
         return not is_ihuconnected()
 
 
     def sleep(self,duration):
-        self.logger.info('sleep %d seconds',duration)
+        self.log('sleep %d seconds',duration)
         sleep(duration)
 
 
@@ -118,7 +121,7 @@ class ComponentTest(base_test.BaseTestClass):
         mmedMaiPwrMod = self.flexray.MmedMaiPwrMod
         mmedHmiModStd = self.flexray.MmedHmiModStd
         self.logger=logging.getLogger('powermoding.test1')
-        self.logger.info('starting')
+        self.log('starting')
 
         # pre-req
         self.power_control_ihu(False)
@@ -176,8 +179,8 @@ class ComponentTest(base_test.BaseTestClass):
         mmedMaiPwrMod = self.flexray.MmedMaiPwrMod
         mmedHmiModStd = self.flexray.MmedHmiModStd
 
-        logger = logging.getLogger('powermoding.test2')
-        logger.info('starting')
+        self.logger = logging.getLogger('powermoding.test2')
+        log('starting')
 
         # pre-req
         usgModSts.send(usgModSts.map.UsgModActv)
@@ -225,11 +228,11 @@ class ComponentTest(base_test.BaseTestClass):
         mmedMaiPwrMod = self.flexray.MmedMaiPwrMod
         mmedHmiModStd = self.flexray.MmedHmiModStd
 
-        logger = logging.getLogger('powermoding.test3')
-        logger.info('starting')
+        self.logger = logging.getLogger('powermoding.test3')
+        self.log('starting')
 
         # pre-req
-        logger.info('pre-req...')
+        self.log('pre-req...')
         usgModSts.send(usgModSts.map.UsgModActv)
         carModSts1.send(carModSts1.map.CarModNorm)
         doorDrvrSts.send(doorDrvrSts.map.Clsd)
@@ -240,7 +243,7 @@ class ComponentTest(base_test.BaseTestClass):
 
         # part 1
         # change to InActive
-        logger.info('part 1...')
+        self.log('part 1...')
         usgModSts.send(usgModSts.map.UsgModInActv)
         self.sleep(1.0)
         # Open and close the driver door
@@ -256,7 +259,7 @@ class ComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(mmedHmiModStd.get(), mmedHmiModStd.map.InfModeOff, 'mmedHmiModStd shall be == Off')
 
         # part 2
-        logger.info('part 2...')
+        self.log('part 2...')
         # change to InActive
         usgModSts.send(usgModSts.map.UsgModInActv)
         self.sleep(1.0)
@@ -280,4 +283,6 @@ class ComponentTest(base_test.BaseTestClass):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s   %(message)s')
+#    f.write("%d - %s\n" % (time(), '__main__'))
+#    f.flush()
     test_runner.main()
