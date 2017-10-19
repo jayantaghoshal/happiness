@@ -77,7 +77,7 @@ class ComponentTest(base_test.BaseTestClass):
         # Wait for IHU(MP) to come up
         startt = time()
         self.logger.info('Wait for IHU to go up (%d)', maxwaittime)
-        while not is_ihuconnected() or (time()-startt >= maxwaittime):
+        while not is_ihuconnected() and (time()-startt < maxwaittime):
             sleep(1)
         self.logger.info('IHU %s after %d secs, should be up', ('up' if is_ihuconnected() else 'down' ), time()-startt)
         return is_ihuconnected()
@@ -87,7 +87,7 @@ class ComponentTest(base_test.BaseTestClass):
         # Wait for IHU(MP) to power off
         startt = time()
         self.logger.info('Wait for IHU to go down (%d)', maxwaittime)
-        while is_ihuconnected() or (time()-startt >= maxwaittime):
+        while is_ihuconnected() and (time()-startt < maxwaittime):
             sleep(1)
         self.logger.info('IHU %s after %d secs, should be down', ('up' if is_ihuconnected() else 'down' ), time()-startt)
         return not is_ihuconnected()
