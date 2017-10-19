@@ -3,8 +3,9 @@
 #define LOG_TAG "localconfig"
 #include <cutils/log.h>
 
-void vcc::LocalConfigFileReaderAndroidIhuBehavior::LoadWithFallback(std::string production_path,
-                                                                    std::string fallback_path, Json::Value* value) {
+void vcc::LocalConfigFileReaderAndroidIhuBehavior::LoadWithFallback(const std::string& production_path,
+                                                                    const std::string& fallback_path,
+                                                                    Json::Value* value) {
   try {
     LoadFile(production_path, value);
   } catch (std::exception& ex) {

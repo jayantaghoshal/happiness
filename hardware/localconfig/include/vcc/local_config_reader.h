@@ -30,7 +30,7 @@ class LocalConfigReader : public LocalConfigReaderInterface {
   void Preload();
 
  protected:
-  static void LoadFile(std::string file_path, Json::Value *value);
+  static void LoadFile(const std::string &file_path, Json::Value *value);
 
  private:
   const Json::Value &GetJsonValue(std::initializer_list<std::string> keys) const;

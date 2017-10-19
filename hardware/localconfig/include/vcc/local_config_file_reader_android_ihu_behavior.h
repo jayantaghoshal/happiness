@@ -12,7 +12,8 @@ class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader {
                                           const char* environment_override);
 
  private:
-  static void LoadWithFallback(std::string production_path, std::string fallback_path, Json::Value* value);
+  static void LoadWithFallback(const std::string& production_path, const std::string& fallback_path,
+                               Json::Value* value);
 };
 
 } /* namespace vcc */
