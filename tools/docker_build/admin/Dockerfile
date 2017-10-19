@@ -118,7 +118,8 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python3-venv \
     python3-serial \
     adb \
-    pigz
+    pigz \
+    usbutils
 COPY repo /usr/bin/repo
 COPY redis-cli /usr/bin/redis-cli
 RUN pip3 install redis \
