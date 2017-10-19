@@ -103,7 +103,7 @@ std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list
   return values;
 }
 
-void vcc::LocalConfigReader::LoadFile(std::string file_path, Json::Value *value) {
+void vcc::LocalConfigReader::LoadFile(const std::string &file_path, Json::Value *value) {
   std::ifstream ifs(file_path);
   if (!ifs) {
     throw std::runtime_error("JSON file " + file_path + " could not be opened.");

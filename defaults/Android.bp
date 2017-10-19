@@ -29,6 +29,7 @@ cc_defaults {
         "cert-*",
         "modernize-*",
         "-modernize-raw-string-literal", //for short ones it is pointless
+        "performance-*",
         "readability-*",
         "-readability-braces-around-statements", //some are short enough/oneliners
         "-readability-redundant-declaration", //clang does not filters out errors in external/libcxx/include/new
