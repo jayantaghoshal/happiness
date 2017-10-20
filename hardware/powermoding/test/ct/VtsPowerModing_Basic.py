@@ -89,7 +89,7 @@ class ComponentTest(base_test.BaseTestClass):
     def waitForIhuDown(self, maxwaittime):
         # Wait for IHU(MP) to power off
         startt = time()
-        self.log('Wait for IHU to go down (%d)', maxwaittime)
+        self.log('Wait for IHU to go down (%d)' % maxwaittime)
         while is_ihuconnected() and (time()-startt < maxwaittime):
             sleep(1)
         self.log('IHU %s after %f secs, should be down' % (('up' if is_ihuconnected() else 'down' ), time()-startt))
@@ -97,7 +97,7 @@ class ComponentTest(base_test.BaseTestClass):
 
 
     def sleep(self,duration):
-        self.log('sleep %d seconds',duration)
+        self.log('sleep %d seconds' % duration)
         sleep(duration)
 
 
