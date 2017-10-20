@@ -134,15 +134,15 @@ bool RuleHandler::getMatchingRule(const NetboyRule& attributes_to_match, std::sh
 
 bool RuleHandler::compareRule(const NetboyRule& attributes_to_match, const NetboyRule& rule) {
   // An empty (or nonexistent) attribute in a rule
-  if (!(attributes_to_match.DEVPATH == rule.DEVPATH || rule.DEVPATH.empty())) {
+  if (!(rule.DEVPATH.empty() || attributes_to_match.DEVPATH == rule.DEVPATH)) {
     return false;
-  } else if (!(attributes_to_match.SUBSYSTEM == rule.SUBSYSTEM || rule.SUBSYSTEM.empty())) {
+  } else if (!(rule.SUBSYSTEM.empty() || attributes_to_match.SUBSYSTEM == rule.SUBSYSTEM)) {
     return false;
-  } else if (!(attributes_to_match.DEVTYPE == rule.DEVTYPE || rule.DEVTYPE.empty())) {
+  } else if (!(rule.DEVTYPE.empty() || attributes_to_match.DEVTYPE == rule.DEVTYPE)) {
     return false;
-  } else if (!(attributes_to_match.INTERFACE_NAME == rule.INTERFACE_NAME || rule.INTERFACE_NAME.empty())) {
+  } else if (!(rule.INTERFACE_NAME.empty() || attributes_to_match.INTERFACE_NAME == rule.INTERFACE_NAME)) {
     return false;
-  } else if (!(attributes_to_match.DRIVER == rule.DRIVER || rule.DRIVER.empty())) {
+  } else if (!(rule.DRIVER.empty() || attributes_to_match.DRIVER == rule.DRIVER)) {
     return false;
   }
 
