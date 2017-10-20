@@ -1,0 +1,29 @@
+
+cc_binary {
+    name: "carsim_bridge",
+    vendor: true,
+    cpp_std: "c++14",
+    srcs: [
+        "carsim_bridge.cpp",
+        "socketserver.cpp", ],
+
+    cppflags: [
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libhwbinder",
+        "android.hidl.base@1.0",
+        "vendor.volvocars.hardware.signals@1.0",
+        "libdataelements",
+    ],
+
+    // compile_multilib: "64",
+}
