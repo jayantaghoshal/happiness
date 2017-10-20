@@ -79,7 +79,8 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     x11proto-core-dev \
     xsltproc \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    kmod=22-1ubuntu5
 
 ##################################################
 # Tools required for testing with VTS, see:
