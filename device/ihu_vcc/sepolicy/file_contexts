@@ -24,6 +24,9 @@
 
 #carconfig-updater
 /vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0
+#carconfig files
+/vendor/etc/carconfig-default.csv u:object_r:carconfig_default_config_file:s0
+/oem_config/carconfig(/.*)? u:object_r:carconfig_config_files:s0
 
 # desip_service execution rights, TODO remove when properly integrated by Delphi
 /vendor/bin/hw/desip_service u:object_r:desip_service_exec:s0

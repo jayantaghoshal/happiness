@@ -4,3 +4,9 @@ allow hwservicemanager dataelements-hidl-server:binder call;
 allow hwservicemanager dataelements-hidl-server:dir search;
 allow hwservicemanager dataelements-hidl-server:file { open read };
 allow hwservicemanager dataelements-hidl-server:process getattr;
+
+allow hwservicemanager carconfig-updater:binder { call transfer };
+allow hwservicemanager carconfig-updater:dir search;
+allow hwservicemanager carconfig-updater:file { open read };
+allow hwservicemanager carconfig-updater:process getattr;
+
