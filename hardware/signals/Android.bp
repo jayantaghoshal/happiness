@@ -1,4 +1,4 @@
 subdirs = [
     "dataelements",
-    "hidl_server"
+    "hidl_server",
 ]
