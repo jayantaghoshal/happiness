@@ -2,18 +2,14 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-
 #include <cutils/log.h>
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vsm.h>
-#include <chrono>
 #include <thread>
 #include "desip_handler.h"
 
-// TBD Remove when HIDL impl is done
-#include <chrono>
 
 #undef LOG_TAG
 #define LOG_TAG "VSD"
@@ -22,12 +18,12 @@ int main(int argc, char* argv[])
 {
   bool startOnlyDBUS = false;
 
-  if (3 > argc)
+  if (2 > argc)
   {
-    ALOGE("Serial port and/or UART speed not specified when starting the Vehicle Signals Manager.");
+    ALOGE("Serial port not specified when starting the Vehicle Signals Manager.");
     return EXIT_FAILURE;
   }
-  else if (3 < argc)
+  else if (2 < argc)
   {
     ALOGE(
         "Wrong number of parameters specified when starting "
@@ -42,11 +38,11 @@ int main(int argc, char* argv[])
   vsm_init();
 
   // Init desip with path to UART diver and UART speed
-  bool result = initDesip(argv[1], argv[2]);
+  bool result = initDesip(argv[1]);
 
   if (!result)
   {
-    ALOGE("Failed to initialize DESIP with uart=%s and speed=%s", argv[1], argv[2]);
+    ALOGE("Failed to initialize DESIP with uart=%s", argv[1]);
     return EXIT_FAILURE;
   }
 
