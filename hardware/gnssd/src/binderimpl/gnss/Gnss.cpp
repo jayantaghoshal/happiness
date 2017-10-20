@@ -21,8 +21,11 @@ Gnss::Gnss() {
 void Gnss::updateLocation(const GnssLocation& location) {
     if (started_) {
         if (callback_!=nullptr) {
-            if ( callback_->gnssLocationCb(location).isDeadObject() ) {
-                // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
+            auto result = callback_->gnssLocationCb(location);
+            // isOk() ALWAYS has to be called
+            // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
+            result.isOk();
+            if ( result.isDeadObject() ) {
                 callback_ = nullptr;
                 ALOGI("callback=null due to dead client");
             }
@@ -41,12 +44,15 @@ Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
         if (callback_!=nullptr)
         {
             ALOGD("Cap+SysInfo callback");
-            bool dead1 = callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING).isDeadObject();
+            auto result1 = callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING);
+            // We always have to call isOk() even though we don't care about the result. We use care about isDeadObject()
+            // https://source.android.com/devices/architecture/hidl-cpp/functions
+            result1.isOk();
             IGnssCallback::GnssSystemInfo systeminfo;
             systeminfo.yearOfHw = 2016;
-            bool dead2 = callback_->gnssSetSystemInfoCb(systeminfo).isDeadObject();
-            if (dead1 || dead2) {
-                // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
+            auto result2 = callback_->gnssSetSystemInfoCb(systeminfo);
+            result2.isOk();
+            if (result1.isDeadObject() || result2.isDeadObject()) {
                 callback_=nullptr;
                 ALOGI("callback=null due to dead client");
             }

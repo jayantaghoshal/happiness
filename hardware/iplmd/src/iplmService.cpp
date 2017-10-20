@@ -258,11 +258,17 @@ void IplmService::ActivityTimeout()
     // send events to LSCs. Update is sent periodically every second
     for (auto regs : iplm_data_.registered_callbacks_) {
         auto callback = regs.second;
-        bool isDead = false;
-        isDead |= callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status).isDeadObject();
-        isDead |= callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status).isDeadObject();
-        isDead |= callback->onNodeStatus(Ecu::TEM, tem_available).isDeadObject();
-        isDead |= callback->onNodeStatus(Ecu::VCM, vcm_available).isDeadObject();
+        auto result1 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status);
+        auto result2 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status);
+        auto result3 = callback->onNodeStatus(Ecu::TEM, tem_available);
+        auto result4 = callback->onNodeStatus(Ecu::VCM, vcm_available);
+        // We always have to call isOk() eventthough we don't need it
+        // https://source.android.com/devices/architecture/hidl-cpp/functions
+        result1.isOk();
+        result2.isOk();
+        result3.isOk();
+        result4.isOk();
+        bool isDead = result1.isDeadObject() || result2.isDeadObject() || result3.isDeadObject() || result4.isDeadObject();
         if (isDead) {
             ALOGI("IplmService::ActivityTimeout, %s is dead, lets remove it",regs.first.c_str());
             unregisterService(regs.first);
