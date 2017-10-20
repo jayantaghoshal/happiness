@@ -51,7 +51,11 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
                     msg.pdu.header.encoded = (IpCmdTypes::DataType::ENCODED == message.pdu.header.data_type);
                     msg.pdu.header.seqNbr = uint8_t(message.pdu.header.sender_handle_id & 0xFF);
                     msg.pdu.payload = std::move(message.pdu.payload);
-                    if (callbackHandler->onMessageRcvd(msg).isDeadObject())
+                    auto result = callbackHandler->onMessageRcvd(msg);
+                    // We always have to call isOk() eventthough we don't need it
+                    // https://source.android.com/devices/architecture/hidl-cpp/functions
+                    result.isOk();
+                    if (result.isDeadObject())
                     {  //TODO: make a better error message here, maube unsubscribe?
                         ALOGE("Callback function does not exist!");
                     }
@@ -79,7 +83,11 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
                 msg.pdu.header.encoded = (IpCmdTypes::DataType::ENCODED == message.pdu.header.data_type);
                 msg.pdu.header.seqNbr = uint8_t(message.pdu.header.sender_handle_id & 0xFF);
                 msg.pdu.payload = std::move(message.pdu.payload);
-                if (callbackHandler->onResponseRcvd(msg).isDeadObject())
+                auto result = callbackHandler->onResponseRcvd(msg);
+                // We always have to call isOk() eventthough we don't need it
+                // https://source.android.com/devices/architecture/hidl-cpp/functions
+                result.isOk();
+                if (result.isDeadObject())
                 {  //TODO: make a better error message here, maube unsubscribe?
                     ALOGE("Callback function does not exist!");
                 }
@@ -89,7 +97,11 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
                 Error err;
                 err.errorCode = callerData->errorInfo.errorCode;
                 err.errorInfo = callerData->errorInfo.errorInfo;
-                if (callbackHandler->onErrorRcvd(err).isDeadObject())
+                auto result = callbackHandler->onErrorRcvd(err);
+                // We always have to call isOk() eventthough we don't need it
+                // https://source.android.com/devices/architecture/hidl-cpp/functions
+                result.isOk();
+                if (result.isDeadObject())
                 {  //TODO: make a better error message here, maube unsubscribe?
                     ALOGE("Callback function does not exist!");
                 }
