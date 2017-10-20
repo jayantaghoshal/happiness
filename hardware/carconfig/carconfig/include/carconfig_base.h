@@ -36,12 +36,12 @@ typedef struct {
   ccStatus status;
 } ccValue;
 
-const std::string carconfig_file_name{"/oem_config/carconfig.csv"};
+const std::string carconfig_file_name{"/oem_config/carconfig/carconfig.csv"};
 
 // Default carconfig for first time execution in a vehicle
 const std::string carconfig_default_file_name{"/vendor/etc/config/carconfig-default.csv"};
 
-const std::string carconfig_configured_filename{"/oem_config/CARCONFIG_CONFIGURED"};
+const std::string carconfig_configured_filename{"/oem_config/carconfig/CARCONFIG_CONFIGURED"};
 
 static bool fileExists(const std::string &filePath) {
   struct stat st;
