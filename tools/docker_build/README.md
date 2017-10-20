@@ -26,10 +26,11 @@ If this steps fails, your docker service might not use your system proxy configu
 
 It happened on VCC Linux Client, but after adding:
 ```bash
-export http_proxy="http://127.0.0.1:3128/"
-export https_proxy="http://127.0.0.1:3128/"
+
 export HTTP_PROXY="http://127.0.0.1:3128/"
 export HTTPS_PROXY="http://127.0.0.1:3128/"
+export http_proxy="${HTTP_PROXY}"
+export https_proxy="${HTTPS_PROXY}"
 ```
 
 into /etc/default/docker and restarting service (systemctl restart docker.service) docker was operational.
@@ -78,6 +79,12 @@ Update the image configuration and build it:
 ```bash
 vendor/volvocars/tools/docker_build/admin/create_docker_image.sh
 ```
+
+If it fails due to not connecting to https://registry-1.docker.io/v2/, your composer might not
+use proper proxy settings - for configuration see:
+https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy
+
+and for proxy address refer above (especially when using VPN Linux Client).
 
 Now you can test the local image using the --local option
 
