@@ -140,21 +140,24 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
     def test_ProxyArpEth1_ShouldBeOne(self):
         # Force interface up
-        result = self.terminal.Execute("ip netns exec vcc ifconfig eth1 up")
+        result = self.terminal.Execute("ip netns exec vcc ifconfig tcam0 up")
         asserts.assertEqual(0, result[const.EXIT_CODE][0])
         proxy_arp_eth1 = \
-            int(self.target.get_sys_ctl_parameters("ipv4/conf/eth1/proxy_arp"))
+            int(self.target.get_sys_ctl_parameters("ipv4/conf/tcam0/proxy_arp"))
 
         asserts.assertEqual(1, proxy_arp_eth1)
 
-    def test_ProxyArpMeth0_ShouldBeOne(self):
-        # Force interface up
-        result = self.terminal.Execute("ip netns exec vcc ifconfig meth0 up")
-        asserts.assertEqual(0, result[const.EXIT_CODE][0])
-        proxy_arp_meth0 = \
-            int(self.target.get_sys_ctl_parameters("ipv4/conf/meth0/proxy_arp"))
+    """
+    TODO: (Abhi) enable below test after MOST intergration is complete
+    """
+    # def test_ProxyArpMeth0_ShouldBeOne(self):
+    #     # Force interface up
+    #     result = self.terminal.Execute("ip netns exec vcc ifconfig meth0 up")
+    #     asserts.assertEqual(0, result[const.EXIT_CODE][0])
+    #     proxy_arp_meth0 = \
+    #         int(self.target.get_sys_ctl_parameters("ipv4/conf/meth0/proxy_arp"))
 
-        asserts.assertEqual(1, proxy_arp_meth0)
+    #     asserts.assertEqual(1, proxy_arp_meth0)
 
     def _invoke_terminal(self, name="test_terminal"):
         self.dut.shell.InvokeTerminal(name)

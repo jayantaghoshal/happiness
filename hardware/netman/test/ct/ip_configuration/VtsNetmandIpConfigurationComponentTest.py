@@ -18,7 +18,7 @@ from ..helpers import netman_helper as nh
 
 class VtsNetmandIpConfigurationComponentTest(base_test.BaseTestClass):
 
-    ETH1="eth1"
+    ETH1="tcam0"
     ETH1_IP_ADDRESS="198.18.34.1"
     ETH1_BROADCAST_ADDRESS="198.18.255.255"
     ETH1_NETMASK="255.255.240.0"
@@ -106,7 +106,7 @@ class VtsNetmandIpConfigurationComponentTest(base_test.BaseTestClass):
     def testEth1_Startup_MacAddress(self):
         # Arrange
         invalid_mac_address = "02:00:00:02:12:05"
-        logging.info("Setting incorrect mac address on eth1 to: {}".format(invalid_mac_address))
+        logging.info("Setting incorrect mac address on tcam0 to: {}".format(invalid_mac_address))
         self.target.kill_netman()
         self.target.interface_down(self.ETH1)
         resulting_mac_address = self.target.set_mac_address(self.ETH1, invalid_mac_address)
