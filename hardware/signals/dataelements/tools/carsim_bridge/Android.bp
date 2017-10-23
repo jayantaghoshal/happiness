@@ -1,11 +1,11 @@
-
 cc_binary {
     name: "carsim_bridge",
     vendor: true,
     cpp_std: "c++14",
     srcs: [
         "carsim_bridge.cpp",
-        "socketserver.cpp", ],
+        "socketserver.cpp",
+    ],
 
     cppflags: [
         "-fexceptions",

@@ -3,39 +3,39 @@ cc_library_shared {
     vendor: true,
     cpp_std: "c++14",
     generated_headers: [
-        "cc_parameterlist_gen"
+        "cc_parameterlist_gen",
     ],
 
-    srcs:[
+    srcs: [
         "src/carconfig_reader.cpp",
         "src/carconfig.cpp",
         "src/carconfig_file_reader.cpp",
     ],
-    
+
     cppflags: [
         "-fexceptions",
         "-Wno-unused-parameter",
-        "-Wno-macro-redefined",    
+        "-Wno-macro-redefined",
     ],
-    
+
     local_include_dirs: [
         "include",
-        "src",    
+        "src",
     ],
 
     export_include_dirs: [
-        "include"
+        "include",
     ],
 
     shared_libs: [
         "liblog",
         "libcutils",
     ],
-    
+
     required: [
-       "carconfig-default.csv"
-   ],
-    
+        "carconfig-default.csv",
+    ],
+
     compile_multilib: "64",
 }
 
@@ -46,32 +46,32 @@ cc_library_shared {
     cpp_std: "c++14",
     generated_headers: ["cc_parameterlist_map_gen"],
 
-    srcs:[
+    srcs: [
         "src/carconfig_file_writer.cpp",
     ],
-    
+
     cppflags: [
         "-fexceptions",
         "-Wno-unused-parameter",
-        "-Wno-macro-redefined",    
+        "-Wno-macro-redefined",
     ],
-    
+
     local_include_dirs: [
         "include",
-        "src",    
+        "src",
     ],
     export_include_dirs: [
-        "include"
+        "include",
     ],
 
     shared_libs: [
         "liblog",
         "libcutils",
     ],
-    
+
     required: [
-       "carconfig-default.csv"
-   ],
-    
+        "carconfig-default.csv",
+    ],
+
     compile_multilib: "64",
 }

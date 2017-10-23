@@ -1,9 +1,9 @@
-
 cc_binary {
     name: "signaltrace",
     vendor: true,
     srcs: [
-        "signaltrace.cpp" ],
+        "signaltrace.cpp",
+    ],
 
     cppflags: [
         "-fexceptions",
