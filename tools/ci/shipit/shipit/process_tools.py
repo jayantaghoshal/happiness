@@ -48,13 +48,15 @@ async def _run_logged_helper(command: Union[str, List[str]],
         s = await asyncio.create_subprocess_shell(command,
                                                   stdout=subprocess.PIPE,
                                                   stderr=subprocess.PIPE,
-                                                  cwd=cwd)
+                                                  cwd=cwd,
+                                                  limit=2**20)
     else:
         command = typing.cast(List[str], command)
         s = await asyncio.create_subprocess_exec(command[0], *command[1:],
                                                  stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE,
-                                                 cwd=cwd)
+                                                 cwd=cwd,
+                                                 limit=2**20)
     logging.info("Executing command: %r, started PID=%d", command, s.pid)
     logger = logging.getLogger("PID%d" % s.pid)
     try:
