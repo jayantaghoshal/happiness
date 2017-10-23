@@ -4,8 +4,9 @@ cc_binary {
     cpp_std: "c++14",
     srcs: [
         "carsim_bridge.cpp",
-        "socketserver.cpp",
-    ],
+        "socket_server.cpp",
+        "socket_connection.cpp",
+        "hidl_handler.cpp", ],
 
     cppflags: [
         "-fexceptions",
