@@ -18,7 +18,7 @@ from ..helpers import netman_helper as nh
 
 class VtsNetmandBootComponentTest(base_test.BaseTestClass):
 
-    ETH1="eth1"
+    ETH1="tcam0"
     ETH1_IP_ADDRESS="198.18.34.1"
     ETH1_BROADCAST_ADDRESS="198.18.255.255"
     ETH1_NETMASK="255.255.240.0"
