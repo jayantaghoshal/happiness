@@ -2,14 +2,14 @@
 // Static library. Used in shared lib and for unit tests.
 //
 cc_library_static {
-    name: "libpacketinjector_static",
+    name: "libipcb_simulator_static",
 
-    srcs: ["src/udp_packet_injector.cpp"],
+    srcs: ["src/ipcb_simulator.cpp"],
 
     shared_libs: [
+        "libipcommandbus",
         "libtarmac",
         "liblog",
-        "libipcommandbus",
         "libutils",
         "libhidlbase",
         "libhidltransport",

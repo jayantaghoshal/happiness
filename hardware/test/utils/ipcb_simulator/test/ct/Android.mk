@@ -14,13 +14,13 @@ LOCAL_SRC_FILES := \
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
 LOCAL_STATIC_LIBRARIES += \
-    libpacketinjector_static
+    libipcb_simulator_static
 
 LOCAL_SHARED_LIBRARIES += \
+    libipcommandbus \
     liblog \
     libtarmac \
     libutils \
-    libipcommandbus \
     libhidlbase \
     libhidltransport \
     libhwbinder \
@@ -29,8 +29,8 @@ LOCAL_SHARED_LIBRARIES += \
 #LOCAL_WHOLE_STATIC_LIBRARIES += \
     libVtsGtestMain
 
-# Tag this module as a vts test artifact
-#LOCAL_COMPATIBILITY_SUITE := vts
+#Tag this module as a vts test artifact
+# LOCAL_COMPATIBILITY_SUITE := vts
 
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)

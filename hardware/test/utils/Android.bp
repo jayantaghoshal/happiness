@@ -1,1 +1,1 @@
-subdirs = ["packet_injector"]
+subdirs = ["ipcb_simulator"]

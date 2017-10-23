@@ -17,7 +17,7 @@
   "IIPS_Port_DIM": 50000,
   "IIPS_Port_TCAM": 60000,
   "IIPS_Port_VGM": 50000,
-  "IIPS_Port_TEST": 70000,
+  "IIPS_Port_TEST": 60000,
   "CONN_DIMKeepAliveTime": 10,
   "CONN_DIMKeepAliveIntvl": 5,
   "CONN_DIMKeepAliveProbes": 2,
