@@ -8,28 +8,31 @@ using namespace Connectivity;
 class IpcbSimulator
 {
 public:
-    IpcbSimulator(uint32_t dst_port,uint32_t src_port, int bcast_enable);
+    IpcbSimulator(std::string local_ip, uint32_t local_port,uint32_t remote_port, int bcast_enable);
+    ~IpcbSimulator();
 
+    bool SendPdu(Pdu pdu);
+    bool ReceivePdu(Pdu& pdu);
+    void CreateAndSendIpActivityMessage();  //TODO: Consider removing, this is per implementation specific code
 
-    void setup();
-    void read();
-    void CreateAndSendIpActivityMessage();
-    void SendPdu(Pdu pdu);
-    Pdu ReceivePdu();
-    void StartActivityMessageTimer();
-    void StopActivityMessageTimer();
+private:
+    void Setup();
+    void Read();
+    void StartActivityMessageTimer();   //TODO: Consider removing, this is per implementation specific code
+    void StopActivityMessageTimer();    //TODO: Consider removing, this is per implementation specific code
 
-
-    struct sockaddr_in sa,srcaddr,sa_out;
-    socklen_t addrlen;
-    int local_socket,read_socket, slen=sizeof(sa);
-    int broadcastEnable;
-    std::string SEND_ADDR;
-    uint32_t DST_PORT;      //Port to which to send data
-    uint32_t SRC_PORT;   //The default port from which to send data
-    std::vector<uint8_t> buffer;
+    std::string local_ip_;
+    uint32_t local_port_;      //The default port from which to send data
+    uint32_t remote_port_;      //Port to which to send data
+    int broadcastEnable_;
+    int local_socket_;
     std::uint8_t sequenceId_ = 0;
+    std::vector<uint8_t> buffer_;
 
-    tarmac::eventloop::IDispatcher &timer;
-    tarmac::eventloop::IDispatcher::JobId activityPacketInjector;
+    struct sockaddr_in remote_addr_;
+    struct sockaddr_in local_addr_;
+    socklen_t addrlen_;
+
+    tarmac::eventloop::IDispatcher &timer_;
+    tarmac::eventloop::IDispatcher::JobId activityPacketInjectorId_;
 };
