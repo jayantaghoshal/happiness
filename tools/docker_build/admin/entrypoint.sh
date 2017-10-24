@@ -23,6 +23,7 @@ BUILD_ENV_SETUP="${REPO_ROOT_DIR}/build/envsetup.sh"
 VOLVO_ENV_SETUP="${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 BASHRC_FILE="/home/ihu/.bashrc"
 
+PYTHONUSERBASE="/tmp/${CONTAINER_USERNAME}/.local"
 
 function Failed() {
     echo "$*"
@@ -120,5 +121,6 @@ sudo -E \
     BUILD_ENV_SETUP="$BUILD_ENV_SETUP" \
     LD_LIBRARY_PATH="$LD_LIBRARY_PATH" \
     PATH=/sbin:"$PATH" \
+    PYTHONUSERBASE="${PYTHONUSERBASE}" \
     ${COMMAND_IN_DOCKER}
 
