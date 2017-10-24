@@ -73,9 +73,13 @@ if [[ -d .repo ]]; then
     # Hard reset manifest repo (current branch)
     (cd .repo/manifests && git reset --hard HEAD || true)
 fi
-docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
-docker_run "cd vendor/volvocars && git reset --hard && git clean -xdf"
-docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars" || die "repo sync failed"
+docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
+docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars"
+
+################################################################################################
+# repo sync would leave uncommited changes, but zuul cloner below would fail
+# if there are unstaged changes. And we want builds to be reproducible so better to reset repos.
+docker_run "repo forall -c 'git reset --hard ; git clean -fdx'"
 
 ################################################################################################
 ## Download the commit to check (for vendor/volvocars-repo)
@@ -106,7 +110,8 @@ fi
 # At this point in the script your directory tree should look something like this:
 #   /.repo
 #   /vendor/volvocars   - On branch ZUUL_BRANCH
-#   /other/repos        - On unknown revision (leftovers from previous build in the workspace)
+#   /other/repos        - On unknown revision (leftovers from previous build in the workspace,
+#                         but in reset/clean state)
 #
 #
 # It is now up to each build step to define the following steps
