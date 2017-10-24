@@ -25,7 +25,6 @@ cc_binary {
         "libdataelements",
         "vendor.volvocars.hardware.signals@1.0",
         "libutils",
-        "android.hidl.base@1.0",
     ],
 
     local_include_dirs: [

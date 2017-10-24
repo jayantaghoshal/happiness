@@ -50,7 +50,6 @@ cc_library_shared {
         "liblog",
         "libutils",
         "libhwbinder",
-        "android.hidl.base@1.0",
         "vendor.volvocars.hardware.signals@1.0",
     ],
 
@@ -109,7 +108,6 @@ cc_library_static {
         "liblog",
         "libutils",
         "libhwbinder",
-        "android.hidl.base@1.0",
         "vendor.volvocars.hardware.signals@1.0",
     ],
 
