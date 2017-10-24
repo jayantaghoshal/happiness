@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <notice>One_Android_Ring='0'</notice>
-  <remote fetch="ssh://127.0.1.10:29418/" name="origin" review="127.0.1.10:8081"/>
-  <default remote="origin" revision="oa/gordon_peak_preO_MR1/a81/20170927-2017_ww39" sync-c="true" sync-j="5"/>
   <project name="aosp/device/asus/fugu" path="device/asus/fugu" revision="0d64c8ec3f08612591ef631adf4362517f036c6a"/>
   <project name="aosp/device/asus/fugu-kernel" path="device/asus/fugu-kernel" revision="471523e38b26929b80748b1839167d626b410133"/>
   <project name="aosp/device/common" path="device/common" revision="f87323bed1150074fee5a0ad64d76aaed0c58f00"/>
