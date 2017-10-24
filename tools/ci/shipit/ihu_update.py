@@ -172,7 +172,7 @@ def flash_image(port_mapping: PortMapping,
                 output = check_output_logged([adb_executable,
                                               "shell", 'getprop', 'sys.boot_completed'],
                                              timeout_sec=7).decode().strip(" \n\r\t")
-            except:
+            except Exception:
                 output = "0" # Ignore if the command times out
             if output == "1":
                 return

@@ -59,7 +59,7 @@ def load(filename):
     printProgress("Loading %s.."%(filename))
     try:
         return arxml_files[filename]
-    except:
+    except Exception:
         arxml_files[filename] = ARXml(filename)
         return arxml_files[filename]
 

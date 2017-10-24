@@ -95,7 +95,7 @@ async def _run_logged_helper(command: Union[str, List[str]],
 def _close_event_loop():
     try:
         asyncio.get_event_loop().close()
-    except:
+    except Exception:
         pass
 
 atexit.register(_close_event_loop)
