@@ -1,0 +1,14 @@
+package vendor.volvocars.hardware.uds@1.0;
+
+typedef uint16_t Did;
+
+enum DidReadStatusCode : uint8_t {
+    SUCCESS, //data was read and is valid
+    CONDITIONS_NOT_CORRECT, // The provider is not able to fulfill this request due too its state.
+    NOT_SUPPORTED, // this provider should never be asked for this value
+};
+
+struct DidReadResult {
+    DidReadStatusCode status;
+    vec<uint8_t> data;
+};
