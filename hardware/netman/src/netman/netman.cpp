@@ -54,7 +54,7 @@ int main() {
 
     property_set("netmand.startup_completed", "1");
 
-    if (nl_socket_listener.StartListening() < -1) {
+    if (nl_socket_listener.StartListening() < 0) {
       ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
       return EXIT_FAILURE;
     }
