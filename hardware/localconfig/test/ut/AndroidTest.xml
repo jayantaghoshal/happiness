@@ -16,13 +16,11 @@
 <configuration description="Config for VCC Local Config test cases">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsLocalConfigTestCases->/data/local/tmp/VtsLocalConfigTestCases" />
-        <option name="push" value="DATA/localconfig_good.json->/data/local/tmp/localconfig_good.json" />
-        <option name="push" value="DATA/localconfig_bad.json->/data/local/tmp/localconfig_bad.json" />
+        <option name="push" value="liblocalconfig_ut->/data/local/tmp/liblocalconfig_ut" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsLocalConfigTestCases" />
+        <option name="module-name" value="liblocalconfig_ut" />
         <option name="runtime-hint" value="500ms" />
     </test>
 </configuration>

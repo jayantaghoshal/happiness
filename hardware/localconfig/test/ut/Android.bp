@@ -1,0 +1,16 @@
+cc_test {
+    name: "liblocalconfig_ut",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: ["local_config_parsing_test.cpp"],
+
+    static_libs: [
+        "libgmock",
+        "liblocalconfig_static",
+        "libjsoncpp",
+        "liblog",
+    ],
+
+    host_supported: false,
+    test_suites: ["vts"],
+}

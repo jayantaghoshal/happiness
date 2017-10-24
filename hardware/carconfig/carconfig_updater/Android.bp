@@ -1,28 +1,41 @@
-cc_binary{
-   name: "carconfig-updater",
-   proprietary: true,
-   vendor: true,
-   tidy: true,
-   
-   srcs: [
-      "src/carconfig_updater.cpp",
-      "src/carconfig_updater_main.cpp",
-      "src/diagnostics_client.cpp",
-      "src/restart_client.cpp",
-      "src/vipcom_client.cpp",
-   ],
-   
-   cppflags: [
-      "-std=c++14",
-      "-Wno-non-virtual-dator",
-      "-fexceptions",
-      "-Wno-unused-parameters",
-      "-Wno-macro-redefined",
-   ],
-   
-   local_include_dirs: [
-      "src",
-   ],
-   
-   compile_multilib: "64",
+subdirs = [
+    "tools",
+]
+cc_binary {
+    name: "carconfig-updater",
+    proprietary: true,
+    vendor: true,
+    relative_install_path: "hw",
+    init_rc: ["carconfig-updater.rc"],
+    generated_headers: ["cc_parameterlist_map_gen"],
+    cpp_std: "c++14",
+    tidy: true,
+
+    srcs: [
+        "src/carconfig_updater.cpp",
+        "src/carconfig_updater_main.cpp",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+
+    required: [
+        "carconfig-default.csv",
+    ],
+
+    local_include_dirs: [
+        "src",
+    ],
+
+    shared_libs: [
+        "libdataelements",
+        "liblog",
+        "libcarconfig_reader",
+        "libcarconfig_writer",
+    ],
+
+    compile_multilib: "64",
 }

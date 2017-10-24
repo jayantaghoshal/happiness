@@ -2,10 +2,10 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "ipcb_socket"
-
 #include <cutils/log.h>
 #include "ipcommandbus/socket.h"
+
+#define LOG_TAG "ipcb_socket"
 
 using namespace tarmac::eventloop;
 
@@ -146,5 +146,11 @@ void Socket::setup(int domain, int type, int protocol)
 void Socket::setHandler(std::function<void(void)> readEventHandler)
 {
     read_ready_cb_ = std::move(readEventHandler);
+}
+
+uint32_t Socket::getTestSimPort()
+{
+    uint32_t test_port = local_config.getTestPort();
+    return test_port;
 }
 }

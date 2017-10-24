@@ -1,0 +1,291 @@
+variables
+{
+  const long SPA_PNC_BYTES_CAN = 6;
+  char [30] SPANm_Nodes [long];
+  long SPANm_contextState [long];
+  byte SPANm_PNCData[SPA_PNC_BYTES_CAN];
+}
+
+on preStart
+{
+  long i;
+  long initCANNMState;
+
+  if (!SPACANIL_contextListInitiated)
+    SPACANIL_ContextListInit();
+  initCANNMState = @%NODE_NAME%::CANNM::Control::On;
+  for(i = 0; SPACANIL_contextList[i] != 0 ;i++) 
+  {
+    dword ilContext;
+    ilContext = SPACANIL_contextList[i];
+    setBusContext(ilContext);
+    If(initCANNMState)
+    {
+      Nm_SetAutoStartParam(1);
+      SPACommon_WriteAddLong("CAN NM: Automatic network request at measurement start for context 0x%x", (long) ilContext);
+    }
+    else
+    {
+      Nm_SetAutoStartParam(0);
+    }
+    SPANm_contextState[ilContext] = initCANNMState;
+  }
+  SPANm_InitLUT();
+}
+
+SPANm_InitLUT()
+{
+  // REQPROD 130742 / MAIN ; 9 "Network management CAN frame identifiers"
+  strncpy(SPANm_Nodes[0x01], "BodyCANhs::CEM", 30);
+  strncpy(SPANm_Nodes[0x02], "BodyCANhs::CCM", 30);
+  strncpy(SPANm_Nodes[0x03], "BodyCANhs::DDM", 30);
+  strncpy(SPANm_Nodes[0x04], "BodyCANhs::PDM", 30);
+  strncpy(SPANm_Nodes[0x05], "BodyCANhs::PSMD", 30);
+  strncpy(SPANm_Nodes[0x06], "BodyCANhs::PSMP", 30);
+  strncpy(SPANm_Nodes[0x07], "BodyCANhs::POT", 30);
+  strncpy(SPANm_Nodes[0x08], "SafetyCANprotected::FLC", 30);
+  strncpy(SPANm_Nodes[0x09], "BodyCANhs::TEM0", 30);
+  strncpy(SPANm_Nodes[0x0A], "BodyCANhs::TRM", 30);
+  strncpy(SPANm_Nodes[0x0B], "SafetyCANprotected::SRS", 30);
+  strncpy(SPANm_Nodes[0x0C], "SafetyCANprotected::ASDM", 30);
+  strncpy(SPANm_Nodes[0x0D], "SafetyCANprotected::RMR", 30);
+  strncpy(SPANm_Nodes[0x0E], "SafetyCANprotected::RML", 30);
+  strncpy(SPANm_Nodes[0x0F], "SafetyCANprotected::DMM", 30);
+  strncpy(SPANm_Nodes[0x10], "SafetyCANprotected::TBD_L", 30);
+  strncpy(SPANm_Nodes[0x11], "SafetyCANprotected::TBD_R", 30);
+  strncpy(SPANm_Nodes[0x12], "SafetyCANexposed::ASDM", 30);
+  strncpy(SPANm_Nodes[0x13], "SafetyCANexposed::WAM", 30);
+  strncpy(SPANm_Nodes[0x14], "SafetyCANexposed::SODL", 30);
+  strncpy(SPANm_Nodes[0x15], "SafetyCANexposed::SODR", 30);
+  strncpy(SPANm_Nodes[0x16], "PropulsionCANhs::EGSM", 30);
+  strncpy(SPANm_Nodes[0x17], "PropulsionCANhs::TCM", 30);
+  strncpy(SPANm_Nodes[0x18], "PropulsionCANhs::OBC", 30);
+  strncpy(SPANm_Nodes[0x19], "PropulsionCANhs::BECM", 30);
+  strncpy(SPANm_Nodes[0x1A], "PropulsionCANhs::SRS", 30);
+  strncpy(SPANm_Nodes[0x1B], "PropulsionCANhs::IGM", 30);
+  strncpy(SPANm_Nodes[0x1C], "PropulsionCANhs::IEM", 30);
+  strncpy(SPANm_Nodes[0x1D], "ChassisCANhs::TDMR", 30);
+  strncpy(SPANm_Nodes[0x1E], "PropulsionCANhs::DEM", 30);
+  strncpy(SPANm_Nodes[0x1F], "ChassisCANhs::ECM", 30);
+  strncpy(SPANm_Nodes[0x20], "PropulsionCANhs::ECM", 30);
+  strncpy(SPANm_Nodes[0x21], "ChassisCANhs::VDDM", 30);
+  strncpy(SPANm_Nodes[0x22], "PropulsionCANhs::VDDM", 30);
+  strncpy(SPANm_Nodes[0x23], "ChassisCANhs::PSCM", 30);
+  strncpy(SPANm_Nodes[0x24], "ChassisCANhs::PSCR", 30);
+  strncpy(SPANm_Nodes[0x25], "ChassisCANhs::SUM", 30);
+  strncpy(SPANm_Nodes[0x26], "ChassisCANhs::SCL", 30);
+  strncpy(SPANm_Nodes[0x27], "ChassisCANhs::SAS", 30);
+  strncpy(SPANm_Nodes[0x28], "PropulsionCANhs::ESM", 30);
+  strncpy(SPANm_Nodes[0x29], "SafetyCANexposed2::ASDM", 30);
+  strncpy(SPANm_Nodes[0x2A], "PropulsionCANhs::AEMM", 30);
+  strncpy(SPANm_Nodes[0x2B], "PropulsionCANhs::TACM", 30);
+  strncpy(SPANm_Nodes[0x2C], "SafetyCANexposed3::ASDM", 30);
+  strncpy(SPANm_Nodes[0x2D], "SafetyCANprotected::FRM", 30);
+  strncpy(SPANm_Nodes[0x2E], "SafetyCANexposed3::FSRL", 30);
+  strncpy(SPANm_Nodes[0x2F], "SafetyCANexposed2::FLR", 30);
+  strncpy(SPANm_Nodes[0x30], "SafetyCANexposed3::FSRR", 30);
+  strncpy(SPANm_Nodes[0x31], "PropulsionCANhs::VCM", 30);
+  strncpy(SPANm_Nodes[0x3B], "Spare #1", 30);
+  strncpy(SPANm_Nodes[0x3C], "Spare #2", 30);
+  strncpy(SPANm_Nodes[0x3D], "Spare #3", 30);
+  strncpy(SPANm_Nodes[0x3E], "Spare #4", 30);
+  strncpy(SPANm_Nodes[0x3F], "Spare #5", 30);
+}
+
+on start
+{
+  const long PNC_BITS_TOTAL = SPA_PNC_BYTES_CAN * 8;
+  dword PNCBits[1];
+  long initCommon;
+  long pncBit;
+  long pncByte;
+  byte pncBitMask;
+  
+  SPACommon_WriteAddLong(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY, "CAN NM node %NODE_NAME% (id 0x%x) started", (long) Nm_GetLocalNodeIdentifier());
+  If (!@%NODE_NAME%::CANNM::Control::On)
+  {
+    @%NODE_NAME%::CANIL::Control::IL = sysvar::_SPACommon::SimulationControl::ILWait;
+  }
+  SPANm_SetPN(@_SPACommon::PartialNetworkingEnabled);
+  NmFI_IgnoreRepeatMessageBit(1);
+  
+  If(SPA_PNC_BYTES != SPA_PNC_BYTES_CAN)
+    Write("ERROR %NODE_NAME% SPA_PNC_BYTES(%d) <> SPA_PNC_BYTES_CAN(%d)", SPA_PNC_BYTES, SPA_PNC_BYTES_CAN);
+  Nm_GetPnRequestBitsDefault(SPANm_PNCData,SPA_PNC_BYTES_CAN,PNCBits);
+  If(PNCBits[0] != PNC_BITS_TOTAL)
+    Write("ERROR %NODE_NAME% CAN NM pnRequestBitsLengt(%d) <> SPA_PNC_BYTES_CAN(%d)*8", PNCBits[0], SPA_PNC_BYTES_CAN);
+  If(PNCBits[0] < SPA_PNC_BITS)
+    Write("ERROR %NODE_NAME% CAN NM pnRequestBitsLengt(%d) < SPA_PNC_BITS(%d)", PNCBits[0], SPA_PNC_BITS);
+
+  initCommon = @%NODE_NAME%::CANNM::PNC::InitCOMMON && !sysGetVariableInt("%NODE_NAME%::FRNM::PNC","InitCOMMON");
+  pncBit = 0;
+  For(pncByte=0; pncByte < SPA_PNC_BYTES_CAN; pncByte++)
+  {
+    @%NODE_NAME%::CANNM::PNC::PNCByteArray[pncByte] = (long) SPANm_PNCData[pncByte];
+    If(initCommon)
+    {
+      For(pncBitMask=1; pncBitMask != 0; pncBitMask <<= 1)
+      {
+        @%NODE_NAME%::COMMON::PNC::PNCBitArray[pncBit] = (pncBitMask & SPANm_PNCData[pncByte]) ? 1 : 0;
+        pncBit++;
+      }
+    }
+  } 
+  If(initCommon)
+    SPACommon_InitPNC();
+}
+
+on sysvar %NODE_NAME%::CANNM::Control::On
+{
+  long noContexts;
+  noContexts = 0;
+  If(@this)
+  {
+    If (@%NODE_NAME%::CANNM::Control::State  > 3)
+    {
+      For (long contextCheckSet : SPANm_contextState)
+      {
+        SPANm_contextState[contextCheckSet] = 1;
+        noContexts++;
+      }
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% set request state = 1 for CAN net in %d contexts" , timeNow(), noContexts);
+      SPACommon_Write();
+    }
+    Else
+    {
+      For (long contextCheckReq : SPANm_contextState)
+      {
+        setBusContext(contextCheckReq);
+        SPANm_contextState[contextCheckReq] = 1;
+        Nm_NetworkRequest();
+        noContexts++;
+      }
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% request CAN net in %d contexts" , timeNow(), noContexts);
+      SPACommon_Write();
+    }
+  }
+  else
+  {
+    For (long contextCheckRel : SPANm_contextState)
+    {
+      SPANm_contextState[contextCheckRel] = 0;
+      setBusContext(contextCheckRel);
+      Nm_NetworkRelease();
+      noContexts++;
+    }
+    snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% release CAN net in %d contexts" , timeNow(), noContexts);
+    SPACommon_Write();
+  }
+}
+
+on sysvar %NODE_NAME%::CANNM::PNC::PNCByteArray
+{
+  long pncByte;
+  For(pncByte=0;pncByte < SPA_PNC_BYTES_CAN; pncByte++)
+    SPANm_PNCData[pncByte] = (byte) (@this[pncByte] & 0xff);
+
+  for(long contextCheck : SPANm_contextState) 
+  {
+    setBusContext(contextCheck);
+    Nm_SetPnRequestBits(SPANm_PNCData);
+  }
+}
+
+void Nm_StateChangeNotification( long previousState,long currentState)
+{
+    long time;
+    dword context;
+    time = timeNow();
+    context = getBusContext();
+    If (time > 0 && !SPANm_contextState.containsKey(context)) 
+    {
+      If (elcount(SPACANIL_contextList) == 2)
+      {// FR/LIN GW fix
+        SPANm_contextState.remove(SPACANIL_contextList[0]);
+        SPACANIL_contextList[0]=context;
+      }
+      SPANm_contextState[context] = @%NODE_NAME%::CANNM::Control::On;
+    }
+      
+    @%NODE_NAME%::CANNM::Control::State = currentState;
+    
+    If (currentState == 3 && SPANm_contextState[context])
+    {
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% request CAN net in bus context 0x%x: %d ", time, context, Nm_NetworkRequest());
+      SPACommon_Write();
+    }
+/*    else if (time > 0 && currentState > 3 && previousState <= 3)
+      write("%d: CANNM %NODE_NAME%: ILControlResume called for bus context 0x%x  with result %d", time, context, ILControlResume());*/
+    else if (currentState < 3 && previousState >= 3)
+    {
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: CANNM ILControlWait called for bus context 0x%x with result %d", time, context, ILControlWait());
+      SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+    }
+}
+
+void Nm_NetworkStartInd()
+{
+  char nameBuffer[30];
+  dword context;
+  context = getBusContext();
+  SPANm_GetNodeName(Nm_GetNodeIdentifier(), nameBuffer, 30);
+  
+  snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% got Nm_NetworkStartInd (from %s) in context 0x%x: CAN network started", timeNow(), nameBuffer, context);
+  SPACommon_Write();
+  Nm_PassiveStartUp();
+  If (SPANm_contextState.size() > 1 && @%NODE_NAME%::CANNM::Control::GWActive)
+  { //CAN GW nodes only
+    For (long contextCheck : SPANm_contextState)
+    {
+      If (contextCheck != context)
+      {
+        snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% request CAN net in context 0x%x when other context started" , timeNow(), contextCheck);
+        SPACommon_Write();
+        SPANm_contextState[contextCheck] = 1;
+        setBusContext(contextCheck);
+        Nm_NetworkRequest();
+      }
+    }
+  }
+}
+
+SPANm_GetNodeName(long nodeID, char bufferOut[], DWORD bufferSize)
+{
+  If(SPANm_Nodes.containsKey(nodeID))
+ 	  strncpy(bufferOut, SPANm_Nodes[nodeID], bufferSize);
+  else
+    snprintf(bufferOut, bufferSize, "UNKNOWN; ID 0x%x", nodeID);
+}
+
+Nm_PrepareBusSleepModeInd()
+{
+  If(SPANm_contextState.size() > 1 && @%NODE_NAME%::CANNM::Control::GWActive)
+  {
+    dword context;
+    context = getBusContext();
+    For (long contextCheck : SPANm_contextState)
+    {
+      If(contextCheck != context && SPANm_contextState[contextCheck] == 1)
+      {
+        setBusContext(contextCheck);
+        snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "%d: Node %NODE_NAME% release CAN net in context 0x%x when other context stopped" , timeNow(), contextCheck);
+        SPACommon_Write();
+        SPANm_contextState[contextCheck] = 0;
+        Nm_NetworkRelease();
+      }
+    }
+  }
+}
+
+SPANm_SetPN(long setPN)
+{
+  for(long contextCheck : SPANm_contextState) 
+  {
+    setBusContext(contextCheck);
+    If(setPN)
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "Nm_EnablePartialNetworking=%d in context 0x%x", Nm_EnablePartialNetworking(), contextCheck);
+    Else
+      snprintf(SPACommon_writeString, SPA_MAX_WRITE_LENGTH, "Nm_DisablePartialNetworking=%d in context 0x%x", Nm_DisablePartialNetworking(), contextCheck);
+    SPACommon_Write(SPA_WRITE_SEVERITY_INFORMATION, SPA_WRITE_LOW_PRIORTY);
+  }
+}

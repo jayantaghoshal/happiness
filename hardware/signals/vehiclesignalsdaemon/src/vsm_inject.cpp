@@ -7,9 +7,9 @@
 
 #include <thread>
 
+#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-#include <cutils/log.h>
 
 // variables used to monitor avmp communication status
 static bool avmpSignalErrorLogged = false;

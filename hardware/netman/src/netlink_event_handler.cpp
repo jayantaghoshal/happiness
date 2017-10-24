@@ -1,15 +1,6 @@
-#include <errno.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <linux/rtnetlink.h>
 #include <linux/socket.h>
-
 #include <net/if.h>
-
-#define LOG_TAG "Netmand"
 
 #include <cutils/log.h>
 
@@ -18,35 +9,30 @@
 #include <vector>
 
 #include "netlink_event_handler.h"
-#include "netlink_event_listener.h"
-#include "netman.h"
 
-namespace vcc
-{
-namespace netman
-{
-void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
-{
-  struct rtmsg *rt_msg = (struct rtmsg *)NLMSG_DATA(nl_message_header);
+#define LOG_TAG "Netmand"
 
-  switch (nl_message_header->nlmsg_type)
-  {
+namespace vcc {
+namespace netman {
+
+void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header) {
+  switch (nl_message_header->nlmsg_type) {
     case NLMSG_DONE:
-      ALOGI("NLMSG_DONE handler.");
+      ALOGV("NLMSG_DONE handler.");
       break;
     case NLMSG_ERROR:
-      ALOGI("NLMSG_ERROR handler.");
+      ALOGE("NLMSG_ERROR handler.");
       break;           // TODO: Handle error
     case RTM_NEWLINK:  // Interface up/down
     {
-      struct ifinfomsg *if_info_msg = (struct ifinfomsg *)NLMSG_DATA(nl_message_header);
-      HandleNewLinkEvent(nl_message_header, if_info_msg);
+      NetlinkNewLinkEvent eventData((struct ifinfomsg *)NLMSG_DATA(nl_message_header));
+      HandleEvent(&eventData);
       break;
     }
     case RTM_NEWADDR:  // Name, Ip address, Broadcast address, Netmask, Mtu, MAC
     {
-      struct ifaddrmsg *if_addr_msg = (struct ifaddrmsg *)NLMSG_DATA(nl_message_header);
-      HandleNewAddressEvent(nl_message_header, if_addr_msg);
+      NetlinkNewAddrEvent eventData((struct ifaddrmsg *)NLMSG_DATA(nl_message_header));
+      HandleEvent(&eventData);
       break;
     }
     default:
@@ -54,5 +40,11 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header)
       break;
   }
 }
+
+void NetlinkEventHandler::HandleEvent(char *message, const int length) {
+  NetlinkUevent eventData(message, length);
+  HandleEvent(&eventData);
 }
-}
+
+}  // namespace netman
+}  // namespace vcc

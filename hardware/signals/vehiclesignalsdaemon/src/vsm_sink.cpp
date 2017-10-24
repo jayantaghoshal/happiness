@@ -9,6 +9,8 @@
 #include <vipcomm/VipFramework.h>
 #include "vfc_handler.h"
 
+#define LOG_TAG "VSD"
+
 // This is the namespace for ARInjector and ARSink (found in ECD_dataelement.h) used for VFC
 using namespace ECDDataElement;
 

@@ -11,8 +11,6 @@
   <!-- AOSP Changed by Volvo Cars -->
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
-  <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
-  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="bc820c71d876e99af286dbdd53e1e224d7bba732"/>
   <remove-project name="aosp/platform/frameworks/support"/>
   <project name="aosp/platform/frameworks/support" path="frameworks/support" revision="bb7e331b58f05b0cb71c8a022e495c917145674c"/>
   <remove-project name="aosp/platform/packages/services/Car"/>
@@ -36,8 +34,9 @@
   -->
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
+  <!-- TODO: Also contains fix that removes use of PWD in Android-Board-common.mk that prevents changing OUT_DIR. Delphi has been notified but no fix received yet. -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="80757f67b2269855d3a41a67df55c0d1b928c830"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="f93e31ce61fa66b72a9189645a739f3f44ca6a74"/>
 
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
@@ -48,8 +47,22 @@
   <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="329e29e113cad25d34f4ee1e1100f72632a2730e">
           <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
   </project>
-  
+
   <!-- TODO: When we have upstreamed the build config decoupling support, then we should remove this fix. -->
   <remove-project name="bsp/vendor/intel/build"/>
   <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8d73c3d8f2a0f807a70673da40d5cc1a7f57b061"/>
+
+  <!-- TODO: Bug fix in soong, should be fixed in O-MR1 according to https://partnerissuetracker.corp.google.com/issues/66930558 -->
+  <remove-project name="aosp/platform/build/soong"/>
+  <project name="aosp/platform/build/soong" path="build/soong" revision="17e739cf72d712978d272ffc89034c911accdd8b">
+    <linkfile dest="Android.bp" src="root.bp"/>
+    <linkfile dest="bootstrap.bash" src="bootstrap.bash"/>
+  </project>
+
+  <!-- Upstream to Delphi -->
+  <remove-project name="bb_android_hisip_desip"/>
+  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
+  <remove-project name="android_vehicle-hal"/>
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f6db97e26e2118550bd12648475c41e824f28d40"/>
+
 </manifest>

@@ -3,8 +3,7 @@
 
 #include <gmock/gmock.h>
 
-namespace
-{
+namespace {
 std::string good_json_input = R"(
 {
     "foo" : 42,
@@ -52,16 +51,14 @@ std::string malformed_json_input = R"(
 
 const char *kTestIntKey = "foo";
 const char *kTestStringKey = "bum";
-}
+}  // namespace
 
-TEST(LocalConfigParsingTestMalformed, MalformedInput)
-{
+TEST(LocalConfigParsingTestMalformed, MalformedInput) {
   vcc::LocalConfigStaticContentReader underlying_reader{malformed_json_input};
   EXPECT_THROW(underlying_reader.Preload(), std::runtime_error);
 }
 
-class LocalConfigParsingTest : public ::testing::Test
-{
+class LocalConfigParsingTest : public ::testing::Test {
  private:
   vcc::LocalConfigStaticContentReader underlying_reader{good_json_input};
 
@@ -70,8 +67,7 @@ class LocalConfigParsingTest : public ::testing::Test
   vcc::LocalConfigReaderInterface &reader = underlying_reader;
 };
 
-TEST_F(LocalConfigParsingTest, GetInt)
-{
+TEST_F(LocalConfigParsingTest, GetInt) {
   EXPECT_THAT(reader.GetInt(kTestIntKey), 42);
   EXPECT_THROW(reader.GetInt("NOT_EXISTING"), std::runtime_error);
 
@@ -82,31 +78,27 @@ TEST_F(LocalConfigParsingTest, GetInt)
   EXPECT_THROW(reader.GetInt(kTestStringKey), std::runtime_error);
 }
 
-TEST_F(LocalConfigParsingTest, GetString)
-{
+TEST_F(LocalConfigParsingTest, GetString) {
   EXPECT_EQ("mystring", reader.GetString(kTestStringKey));
   EXPECT_THROW(reader.GetString("NOT_EXISTING"), std::runtime_error);
   EXPECT_THROW(reader.GetString(kTestIntKey), std::runtime_error);
 }
 
-TEST_F(LocalConfigParsingTest, GetBoolean)
-{
+TEST_F(LocalConfigParsingTest, GetBoolean) {
   EXPECT_TRUE(reader.GetBool("bool1"));
   EXPECT_FALSE(reader.GetBool("bool2"));
   EXPECT_THROW(reader.GetBool("NOT_EXISTING"), std::runtime_error);
   EXPECT_THROW(reader.GetBool(kTestIntKey), std::runtime_error);
 }
 
-TEST_F(LocalConfigParsingTest, GetDouble)
-{
+TEST_F(LocalConfigParsingTest, GetDouble) {
   EXPECT_DOUBLE_EQ(22.333, reader.GetDouble("double1"));
   EXPECT_DOUBLE_EQ(22, reader.GetDouble("double2"));
   EXPECT_THROW(reader.GetDouble("NOT_EXISTING"), std::runtime_error);
   EXPECT_THROW(reader.GetDouble(kTestStringKey), std::runtime_error);
 }
 
-TEST_F(LocalConfigParsingTest, GetArray)
-{
+TEST_F(LocalConfigParsingTest, GetArray) {
   EXPECT_EQ(std::vector<std::string>({"test1"}), reader.GetStringArray("strarray1"));
   EXPECT_EQ(std::vector<std::string>({"test1"}), reader.GetStringArray("strarray2", "substrarray"));
   EXPECT_EQ(std::vector<std::string>({"rule1", "rule2"}), reader.GetStringArray("FIREWALL", "NAT_TABLE", "RULES"));

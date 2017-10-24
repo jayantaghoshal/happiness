@@ -5,22 +5,20 @@
 #include <string>
 #include <vector>
 
-namespace vcc
-{
-namespace netman
-{
-struct InterfaceConfiguration
-{
+namespace vcc {
+namespace netman {
+
+struct InterfaceConfiguration {
   std::string name;
   std::string ip_address;
   std::string netmask;
   std::string broadcast_address;
   std::string mac_address;
   std::vector<std::uint8_t> mac_address_bytes;
-  int mtu = 0;
+  std::uint32_t mtu = 0;
 };
 
-}  // netman namespace
-}  // vcc namespace
+}  // namespace netman
+}  // namespace vcc
 
-#endif
+#endif  // _INTERFACE_CONFIGURATION_H_

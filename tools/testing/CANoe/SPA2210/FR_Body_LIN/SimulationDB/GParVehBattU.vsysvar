@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="CEM" comment="NODE">
+      <namespace name="GParVehBattU" comment="..\SPAModules\SPACommon_VehBattU.cin">
+        <namespace name="Main" comment="OUT_PHYS">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="V" name="VehBattUSysU" comment="" bitcount="64" isSigned="true" encoding="65001" type="float" startValue="12" minValue="0" maxValue="25" />
+        </namespace>
+        <namespace name="Panel" comment="PANEL">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="GenPhysSysU" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="GenPhysSysUAmp" comment="" bitcount="64" isSigned="true" encoding="65001" type="float" startValue="0.2" minValue="0" maxValue="12" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="GenPhysSysUOffs" comment="" bitcount="64" isSigned="true" encoding="65001" type="float" startValue="12" minValue="0" maxValue="25" />
+        </namespace>
+        <namespace name="Sup" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VehBattUGroup_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VehBattUSysUQf" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="3" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3">
+            <valuetable definesMinMax="false">
+              <valuetableentry value="0" description="UndefindDataAccur" />
+              <valuetableentry value="1" description="TmpUndefdData" />
+              <valuetableentry value="2" description="DataAccurNotWithinSpcn" />
+              <valuetableentry value="3" description="AccurData" />
+            </valuetable>
+          </variable>
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

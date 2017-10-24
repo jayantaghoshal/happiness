@@ -2,8 +2,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "Transport_Services"
-
 #include "ipcommandbus/TransportServices.h"
 
 #include <algorithm>
@@ -15,6 +13,8 @@
 
 #include "ipcommandbus/Pdu.h"
 #include "ipcommandbus/net_serializer.h"
+
+#define LOG_TAG "Transport_Services"
 
 using namespace tarmac::eventloop;
 
@@ -68,7 +68,7 @@ void TransportServices::registerErrorOnRequestCallback(std::function<void(Messag
 
 void TransportServices::sendMessage(Message &&msg)
 {
-    ALOGV("TransportServices::sendMessage - %s", Pdu::toString(msg.pdu).c_str());
+    ALOGV("TransportServices::sendMessage - %s to ECU %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     // Need to set the proper protocol version
     msg.pdu.header.protocol_version = TransportServices::PROTOCOL_VERSION;

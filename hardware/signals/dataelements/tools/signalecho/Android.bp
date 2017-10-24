@@ -1,23 +1,23 @@
 cc_binary {
-    name: "signalecho", 
+    name: "signalecho",
     proprietary: true,
     vendor: true,
     tidy: true,
 
     srcs: [
-        "signalecho.cpp"
+        "signalecho.cpp",
     ],
 
     cppflags: [
         "-fexceptions",
         "-Wno-unused-parameter",
-        "-Wno-macro-redefined"
+        "-Wno-macro-redefined",
     ],
 
     shared_libs: [
-        "libc++", 
+        "libc++",
         "liblog",
-        "libdataelements"
+        "libdataelements",
     ],
 
     // We only build for 64 bit.

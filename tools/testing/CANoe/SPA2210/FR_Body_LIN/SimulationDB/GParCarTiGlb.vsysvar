@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="CEM" comment="NODE">
+      <namespace name="GParCarTiGlb" comment="..\SPAModules\SPACommon_CarTiGlb.cin">
+        <namespace name="Main" comment="OUT_PHYS">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="s" name="CarTiGlb" comment="" bitcount="64" isSigned="true" encoding="65001" type="float" startValue="0" minValue="0" />
+        </namespace>
+        <namespace name="Panel" comment="PANEL">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="GenPhysCarTiGlb" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+        </namespace>
+        <namespace name="Sup" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="CarTiGlb_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="1" maxValuePhys="1" />
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

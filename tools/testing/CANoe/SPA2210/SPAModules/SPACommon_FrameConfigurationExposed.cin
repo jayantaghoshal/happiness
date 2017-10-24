@@ -1,0 +1,39 @@
+variables
+{
+  msTimer SPAFCSfty_NetworkTimout;
+  const long SPAFCSfty_NETWORK_TIMEOUT = 5000; //ms
+  const long SPAFCSfty_UB_RESET_VALUE = 3; //UB always on
+  long SPAFCSfty_setFCMUB = 0;
+}
+
+on start
+{
+  SPAFCSfty_NetworkTimout.Set(SPAFCSfty_NETWORK_TIMEOUT);
+}
+
+SPAFCSfty_UpdateCntr(byte cntrValue)
+{
+  If (cntrValue == 255)
+    @ASDM::FrameConfigurationExposed::Output::SftyCntrForMissCom = 1;
+  Else
+    @ASDM::FrameConfigurationExposed::Output::SftyCntrForMissCom = cntrValue + 1;
+  
+  SPAFCSfty_NetworkTimout.Set(SPAFCSfty_NETWORK_TIMEOUT);
+  If(SPAFCSfty_setFCMUB)
+  {
+    Write("%d: SafetyCANExposed Frame Configuration (%NODE_NAME%): Master UB reset to %d", TimeNow(), SPAFCSfty_UB_RESET_VALUE);
+    @ETC::FrameConfigurationMaster::Control::Update = SPAFCSfty_UB_RESET_VALUE;
+    SPAFCSfty_setFCMUB = 0;
+  }
+}
+
+on timer SPAFCSfty_NetworkTimout
+{
+  Write("%d: SafetyCANExposed Frame Configuration (%NODE_NAME%) timeout - SftyCntrForMissCom sending not detected for %d ms: SftyCntrForMissCom reset to 0", TimeNow(), SPAFCSfty_NETWORK_TIMEOUT);
+  @ASDM::FrameConfigurationExposed::Output::SftyCntrForMissCom = 0;
+  If(@ASDM::FrameConfigurationExposed::Control::SetFCMUBAfterReset)
+  {
+    @ASDM::FrameConfigurationExposed::Output::MstCfgIDSafetyCANExposed_UB = SPAFCSfty_UB_RESET_VALUE;
+    SPAFCSfty_setFCMUB = 1;
+  }
+}

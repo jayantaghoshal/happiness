@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+import sys
+import os.path
+import textwrap
+import argparse
+from remote_power_control import ipm # IP Power Management
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog=os.path.basename(__file__),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''\
+            Command line tool to interact with IPM-8220 (IP Power Manager)
+            ''')
+        )
+
+    ##
+    # Global options
+    #
+    parser.add_argument('ip',
+                        metavar='IP',
+                        help='IP address on IPM'
+    )
+
+    parser.add_argument('port',
+                        metavar='PORT',
+                        help='Port (outlet) on IPM to controll'
+    )
+
+    parser.add_argument('state',
+                        metavar='STATE',
+                        help='Set outlet to on/off/reboot'
+    )
+
+    args = parser.parse_args()
+
+    if args.state.lower() == 'on':
+        json_out = ipm.Client(args.ip).on(args.port)
+        if json_out == True:
+            print("Port %s is powered ON!!!" % str(args.port))
+        else:
+            print("Something went wrong on port %s" % str(args.port))
+
+    elif args.state.lower() == 'off':
+        json_out = ipm.Client(args.ip).off(args.port)
+        if json_out == True:
+            print("Port %s is powered OFF!!!" % str(args.port))
+        else:
+            print("Something went wrong on port %s" % str(args.port))
+
+    elif args.state.lower() == 'reboot':
+        sleep_time=10
+        ipm.Client(args.ip).reboot(args.port, sleep_time)
+
+    elif args.state.lower() == 'status':
+        json_out = ipm.Client(args.ip).get_status()
+        print("IPM Temperature: %s C" % str(json_out['InTemp'][0]['Temp']))
+        print("Port %s switch is %s" % (str(args.port), str('ON' if json_out['OutSwitch'][int(args.port) - 1]['OutStat'] else'OFF')))
+        print("     Watt:%s" % str(json_out['OutMeter'][int(args.port)-1]['Watt']))
+        print("     Amp:%s" % str(json_out['OutMeter'][int(args.port)-1]['Amp']))
+        print("     Voltage:%s" % str(json_out['OutMeter'][int(args.port)-1]['Voltage']))
+        print("     CurStat:%s" % str(json_out['OutMeter'][int(args.port)-1]['CurStat']))
+        
+    else:
+        print("ERROR: Unsupported state - %s" % args.state)
+        parser.print_help()
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()

@@ -4,10 +4,10 @@
 \*===========================================================================*/
 
 #include "dataelementcommbus.h"
+#include <cutils/log.h>
 
 #undef LOG_TAG
 #define LOG_TAG "DataElementDBus"
-#include <cutils/log.h>
 
 class DataElementCommBus_standalone : public IDataElementCommBus {
 public:

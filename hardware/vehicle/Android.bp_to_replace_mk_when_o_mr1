@@ -1,0 +1,41 @@
+cc_binary {
+    name: "vehicle-hal-daemon", 
+    init_rc: ["vehicle-hal-daemon.rc"],
+    proprietary: true,
+    relative_install_path: "hw",
+    vendor: true,
+    tidy: true,
+
+    srcs: [
+        "src/VehicleHalImpl.cpp",
+        "src/VehicleHALServiceMain.cpp"
+    ],
+
+    cppflags: [
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined"
+    ],
+
+    shared_libs: [
+          "android.hardware.automotive.vehicle@2.0"
+//        "libc++", 
+//        "liblog",
+//        "libhidlbase",
+//        "libhidltransport",
+//        "libhwbinder",
+//        "libdataelements",
+//        "android.hidl.base@1.0"
+    ],
+
+   static_libs: [
+        "android.hardware.automotive.vehicle@2.0-manager-lib"
+   ],
+    
+    local_include_dirs: [
+        "include"
+    ],
+
+    // We only build for 64 bit.
+    compile_multilib: "64",
+}

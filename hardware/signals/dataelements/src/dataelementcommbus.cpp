@@ -6,15 +6,15 @@
 #include "dataelementcommbus.h"
 #include <mosquittopp.h>
 
-#undef LOG_TAG
-#define LOG_TAG "DataElementDBus"
 #include <cutils/log.h>
-
 #include <unistd.h>
 #include <mutex>
 #include <vector>
 #include <map>
 #include <set>
+
+#undef LOG_TAG
+#define LOG_TAG "DataElementDBus"
 
 LOG_SET_DEFAULT_CONTEXT(deleContext)
 

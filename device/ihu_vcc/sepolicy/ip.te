@@ -3,3 +3,14 @@ type ip, domain;
 type ip_exec, exec_type, file_type;
 
 init_daemon_domain(ip)
+
+allow ip netns_device:dir { create_dir_perms mounton };
+allow ip netns_device:file { create_file_perms mounton };
+
+allow ip self:netlink_route_socket { create setopt bind getattr write read nlmsg_read};
+allow ip self:capability net_raw;
+allow ip rootfs:dir mounton;
+#allow ip sysfs:filesystem { mount unmount };
+allow ip toolbox_exec:file { read open getattr execute execute_no_trans };
+allow ip proc_net:file rw_file_perms;
+allow ip proc:file r_file_perms;

@@ -15,6 +15,9 @@ standard_caps = {
     Capabilities.vip_serial
 }
 
+class TestFailedException(Exception):
+    pass
+
 
 class IhuBaseTest:
     def __init__(self, require_capabilities):
@@ -29,6 +32,15 @@ class VTSTest(IhuBaseTest):
 
     def __str__(self):
         return self.test_xml_path
+
+class TradefedTest(IhuBaseTest):
+    def __init__(self, test_root_dir, require_capabilities):
+        # type: (str, Set[str]) -> None
+        super().__init__(require_capabilities)
+        self.test_root_dir = test_root_dir  # Relative to AOSP root
+
+    def __str__(self):
+        return self.test_root_dir
 
 class Disabled(IhuBaseTest):
     def __init__(self, disabled_test: IhuBaseTest, reason: str, jira_issue: str, deadline: str) -> None:

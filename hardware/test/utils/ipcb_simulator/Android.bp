@@ -1,0 +1,33 @@
+//
+// Static library. Used in shared lib and for unit tests.
+//
+cc_library_static {
+    name: "libipcb_simulator_static",
+
+    srcs: ["src/ipcb_simulator.cpp"],
+
+    shared_libs: [
+        "libipcommandbus",
+        "libtarmac",
+        "liblog",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+
+    local_include_dirs: ["include"],
+
+    export_include_dirs: ["include"],
+
+    compile_multilib: "64",
+}
+
+subdirs = ["test"]

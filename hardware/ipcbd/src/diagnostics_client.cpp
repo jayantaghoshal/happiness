@@ -1,8 +1,7 @@
-#define LOG_TAG "IpcbD.diagnostics"
-
 #include <cutils/log.h>
-
 #include "diagnostics_client.h"
+
+#define LOG_TAG "IpcbD.diagnostics"
 
 namespace Connectivity
 {

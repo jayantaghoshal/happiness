@@ -1,0 +1,14 @@
+#carconfig-updater
+type carconfig-updater, domain;
+type carconfig-updater_exec, exec_type, file_type;
+type carconfig_config_files, file_type;
+type carconfig_default_config_file, file_type;
+
+init_daemon_domain(carconfig-updater)
+allow carconfig-updater carconfig_config_files:dir { create_file_perms };
+allow carconfig-updater carconfig_default_config_file:file { r_file_perms };
+
+
+allow carconfig-updater dataelements-hidl-server:binder { call transfer };
+allow carconfig-updater hwservicemanager:binder { call transfer };
+allow carconfig-updater hwservicemanager_prop:file { getattr open read };

@@ -1,5 +1,43 @@
 subdirs = [
-   "carconfig",
-   "carconfig_updater",
-   "carconfig_oneshot"
+    "carconfig",
+    "carconfig_updater",
 ]
+
+// Used by carconfig clients
+genrule {
+    name: "cc_parameterlist_gen",
+    tool_files: ["tools/parse_ccdb.py"],
+    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
+    srcs: [
+        "tools/carconfigspec.xls",
+        "tools/ccdb_template.h",
+    ],
+    out: [
+        "cc_parameterlist.h",
+    ],
+}
+
+// Used by carconfig_updater
+genrule {
+    name: "cc_parameterlist_map_gen",
+    tool_files: ["tools/parse_ccdb.py"],
+    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
+    srcs: [
+        "tools/carconfigspec.xls",
+        "tools/ccdb_paramlist_template.h",
+    ],
+    out: [
+        "cc_parameterlist_map.h",
+    ],
+}
+
+// This lib is only used as a workaround to import the generated_headers from mk-files
+cc_library_static
+{
+    name: "libccparameterlistgen",
+    vendor: true,
+    generated_headers: ["cc_parameterlist_map_gen", "cc_parameterlist_gen"],
+    export_generated_headers: ["cc_parameterlist_map_gen", "cc_parameterlist_gen"],
+
+    compile_multilib: "64",
+}

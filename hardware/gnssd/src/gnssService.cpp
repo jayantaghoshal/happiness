@@ -1,10 +1,6 @@
 #include "gnssService.h"
 
-extern "C" {
-  #include "infotainmentIpBus.h"
-}
-
-#include "asn_decoder.h"
+#include "asn_codec.h"
 #include "type_conversion_helpers.h"
 #include "VccIpCmdApi.h"
 
@@ -39,6 +35,7 @@ void GnssService::StartSubscribe()
 
     if (ipcbServer_ != NULL)
     {
+        connectionError = false;
         ALOGD("IpcbD found, subscribing");
         // Install callback
         ipcbServer_.get()->subscribeMessage((uint16_t) VccIpCmd::ServiceId::Positioning,
@@ -53,7 +50,10 @@ void GnssService::StartSubscribe()
     }
     else
     {
-        ALOGD("IpcbD not found, retrying in 1 second");
+        if (!connectionError) {
+            ALOGD("IpcbD not found, retrying every 1 second");
+        }
+        connectionError = true;
 
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
     }
@@ -131,7 +131,7 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg)
 {
     Icb_OpGNSSPositionData_Response p = nullptr;
 
-    ALOGD("cbGNSSPositionDataNotification %04X.%04X.%02d 0x%08X. size: %d",
+    ALOGV("cbGNSSPositionDataNotification %04X.%04X.%02d 0x%08X. size: %d",
           (int)msg.pdu.header.serviceID,
           (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType,
@@ -146,7 +146,7 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg)
     {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionData->utcTime);
-        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
               p->gnssPositionData->utcTime->year,
               p->gnssPositionData->utcTime->month,
               p->gnssPositionData->utcTime->day,
@@ -192,11 +192,11 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg)
         location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;    // dm -> meters
         location_.speedMetersPerSec = p->gnssPositionData->movement->speed / 1000.0;  // mm/s -> m/s
         location_.bearingDegrees = p->gnssPositionData->heading / 100.0;              // 1/100 degrees -> degrees
-        ALOGD("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
+        ALOGV("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
 
         if (sendnow)
         {
-            ALOGD("location send to gnss, triggered by location");
+            ALOGV("location send to gnss, triggered by location");
             gnss_.updateLocation(location_);
             location_.timestamp = 0;
             location_.gnssLocationFlags = 0;
@@ -208,7 +208,7 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg &msg)
 {
     Icb_OpGNSSPositionDataAccuracy_Response p = nullptr;
 
-    ALOGD("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d",
+    ALOGV("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d",
           (int)msg.pdu.header.serviceID,
           (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType,
@@ -223,7 +223,7 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg &msg)
     {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
-        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
               p->gnssPositionDataAccuracy->utcTime->year,
               p->gnssPositionDataAccuracy->utcTime->month,
               p->gnssPositionDataAccuracy->utcTime->day,
@@ -262,7 +262,7 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg &msg)
 
         if (sendnow)
         {
-            ALOGD("location send to gnss, triggered by accuracy");
+            ALOGV("location send to gnss, triggered by accuracy");
             gnss_.updateLocation(location_);
             location_.timestamp = 0;
             location_.gnssLocationFlags = 0;

@@ -4,10 +4,9 @@
 #include <vipcomm/VipFramework.h>
 #include <vsm_inject.h>
 #include <vsm_sink.h>
-
+#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-#include <cutils/log.h>
 
 extern bool avmpVersionCheckOk;
 extern bool avmpHeartbeatReceived;
@@ -37,12 +36,10 @@ void avmpMessageInject(uint8_t *msg_data, const uint32_t data_size)
 
   if (0 != (avmp::controlMsgMask & avmpHeader))
   {
-    ALOGD("handleAvmpCtrlMsg()");
     handleAvmpCtrlMsg(avmpHeader, msg_data, data_size);
   }
   else
   {
-    ALOGV("vsm_inject_inject()");
     vsm_inject_inject((avmp::signalIdMask & avmpHeader) | (avmp::signalGroupMask & avmpHeader),
                       static_cast<void *>(&msg_data[avmp::payloadOffset]), 0 != (avmp::errorMask & avmpHeader),
                       data_size - avmp::avmpHeaderSize);
@@ -71,7 +68,7 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
     message.data_ptr = msg_data;
     message.data_size = avmp::avmpHeaderSize + avmp::heartBeatPayloadSize;
 
-    ALOGD("Sending AVMP heartbeat %d", msg_data[2]);
+    ALOGV("Sending AVMP heartbeat %d", msg_data[2]);
 
     messageSend(&message);
 

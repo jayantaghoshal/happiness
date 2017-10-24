@@ -1,0 +1,5 @@
+includes
+{
+  #include "..\..\..\InfotainmentModules\Node_basic_includes\SWSM_eventhandler.cin" //@SPECINC::Panel@
+  #include "..\GWIncludes\SWSM_GW.cin" //@GWINC@
+}

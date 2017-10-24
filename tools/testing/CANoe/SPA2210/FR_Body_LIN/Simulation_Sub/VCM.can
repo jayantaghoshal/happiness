@@ -1,0 +1,14 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\SPAModules\SPACommon_FrameConfigurationBackbone.cin" //@SPECINC::FrameConfigurationBackbone@
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\Initialize\VCM_include.cin" //@SPECINC::Init@
+  //#include "..\..\SPAModules\SPACommon_CarConfigRead.cin" //@SPECINC::CCRead@
+  //#include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  //#include "..\..\SPAIncludes\SPACommon_FRNM_SPAIL.cin" //@SPECINC::FRNM@
+  //#include "..\..\SPAIncludes\SPACommon_FRIL.cin" //@SPECINC::FRIL@
+  //#include "..\..\SPAIncludes\SPACommon_CANNM.cin" //@SPECINC::CANNM@
+  //#include "..\..\SPAIncludes\SPACommon_SPACANIL.cin" //@SPECINC::CANIL@
+  //#include "..\GWIncludes\VCM_GW.cin" //@GWINC@
+  //#include "..\..\SPAIncludes\SPACommon_NMGW.cin" //@NMGW@
+}

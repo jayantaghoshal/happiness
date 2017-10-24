@@ -2,13 +2,13 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#define LOG_TAG "libipcb_localconfig"
-
 #include <cutils/log.h>
 #include <vcc/localconfig.h>
 
 #include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/local_config_parameters.h"
+
+#define LOG_TAG "libipcb_localconfig"
 
 using namespace vcc;
 
@@ -44,6 +44,7 @@ void LocalconfigParameters::InitNetworkConfiguration()
     lcfg_->TryGetValue(&port_dim_, "IIPS_Port_DIM");
     lcfg_->TryGetValue(&port_tcam_, "IIPS_Port_TCAM");
     lcfg_->TryGetValue(&port_vgm_, "IIPS_Port_VGM");
+    lcfg_->TryGetValue(&port_test_, "IIPS_Port_TEST");
 
     lcfg_->TryGetValue(&dim_keep_alive_time_, "CONN_DIMKeepAliveTime");
     lcfg_->TryGetValue(&dim_keep_alive_interval_, "CONN_DIMKeepAliveIntvl");
@@ -181,6 +182,13 @@ uint16_t LocalconfigParameters::getVGMPort()
 {
     return port_vgm_;
 }
+
+
+uint32_t LocalconfigParameters::getTestPort()
+{
+    return port_test_;
+}
+
 
 LocalconfigParameters &LocalconfigParameters::getInstance()
 {

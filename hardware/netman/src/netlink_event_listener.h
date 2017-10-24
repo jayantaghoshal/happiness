@@ -1,27 +1,21 @@
 #ifndef _NETLINK_SOCKET_LISTENER_H_
 #define _NETLINK_SOCKET_LISTENER_H_
 
-#include <atomic>
+#include "netutils.h"
 
-#include "netman.h"
-
-namespace vcc
-{
-namespace netman
-{
+namespace vcc {
+namespace netman {
 class NetlinkEventHandler;
 
-class NetlinkSocketListener
-{
- private:
-  NetlinkEventHandler *netlink_event_handler_ = nullptr;
-  int netlink_socket_ = -1;
-
+class NetlinkSocketListener final {
  public:
-  NetlinkSocketListener() = default;
+  enum class SocketType { NLSOC_TYPE_UNKNOWN, NLSOC_TYPE_UEVENT, NLSOC_TYPE_ROUTE };
+
+  NetlinkSocketListener() = delete;
+  ~NetlinkSocketListener();
+
   NetlinkSocketListener(NetlinkSocketListener &other) = delete;
   NetlinkSocketListener(NetlinkSocketListener &&other) = delete;
-  ~NetlinkSocketListener();
 
   NetlinkSocketListener &operator=(NetlinkSocketListener &other) = delete;
   NetlinkSocketListener &operator=(NetlinkSocketListener &&other) = delete;
@@ -30,14 +24,19 @@ class NetlinkSocketListener
   void StopListening();
   void SetNetlinkEventHandler(NetlinkEventHandler &nl_event_handler);
 
-  static NetlinkSocketListener &Instance();
+  static NetlinkSocketListener &Instance(const SocketType type);
 
  private:
+  NetlinkSocketListener(SocketType type) : sock_type_(type) {}
   int SetupSocket();
   int RecvMessage();
+
+  NetlinkEventHandler *netlink_event_handler_ = nullptr;
+  int netlink_socket_ = -1;
+  SocketType sock_type_;
 };
 
-}  // netman namespace
-}  // vcc namespace
+}  // namespace netman
+}  // namespace vcc
 
-#endif
+#endif  // _NETLINK_SOCKET_LISTENER_H_

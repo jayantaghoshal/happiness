@@ -1,0 +1,25 @@
+cc_binary {
+    name: "carconfig-client-tester",
+    proprietary: true,
+    vendor: true,
+    relative_install_path: "hw",
+    generated_headers: ["cc_parameterlist_map_gen"],
+    tidy: true,
+
+    srcs: [
+        "carConfigClientTester.cpp",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcarconfig_reader",
+    ],
+
+    compile_multilib: "64",
+}

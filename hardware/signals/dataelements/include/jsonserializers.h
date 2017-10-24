@@ -7,9 +7,6 @@
 #define JSONSERIALIZERS_H
 
 #include "gen_jsonencdec.h"
-
-#undef LOG_TAG
-#define LOG_TAG "JsonSerializer"
 #include <cutils/log.h>
 
 // ==================================================================
@@ -43,7 +40,7 @@ DataElemValue<S> deserialize(const std::string& ba) {
 
     const std::string typeName = typeIter.value().get<std::string>();
     if (typeName!=S::TypeName()) {
-        ALOGW("Is trying to deserialize %s into %s", typeName.c_str(), S::TypeName());
+        ALOG(LOG_WARN, "DE_JsonSerializer", "Is trying to deserialize %s into %s", typeName.c_str(), S::TypeName());
         return DataElemValue<S>::ERROR(-1, timestamp);
     }
 

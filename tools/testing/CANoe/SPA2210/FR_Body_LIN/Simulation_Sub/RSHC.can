@@ -1,0 +1,5 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\GWIncludes\RSHC_GW.cin" //@GWINC@
+}

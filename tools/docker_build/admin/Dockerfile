@@ -65,6 +65,9 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     openjdk-8-jdk \
     python-libxml2 \
     python-markdown \
+    python-xlrd \
+    python-autopep8 \
+    python-pep8 \
     squashfs-tools \
     sudo \
     tesseract-ocr \
@@ -76,7 +79,8 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     x11proto-core-dev \
     xsltproc \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    kmod=22-1ubuntu5
 
 ##################################################
 # Tools required for testing with VTS, see:
@@ -117,17 +121,21 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python3-venv \
     python3-serial \
     adb \
-    pigz
+    pigz \
+    usbutils
 COPY repo /usr/bin/repo
 COPY redis-cli /usr/bin/redis-cli
 RUN pip3 install redis \
     requests \
+    python-jenkins \
+    termcolor \
+    tabulate \
     zuul==2.5.2
 
 ##################################################
 # Static analysis tools
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
-    shellcheck 
+    shellcheck
 RUN pip3 install mypy \
                  pylint \
                  flake8
@@ -135,6 +143,26 @@ RUN pip install flake8
 # Typing comes built in with python3, but has to be installed with python2
 # Then you can use it together with comment annotations and mypy
 RUN pip install typing
+
+##################################################
+# Preload with python packages required for VTS
+RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
+ && > /usr/local/pip/pip.conf \
+ && echo '[install]' >> /usr/local/pip/pip.conf \
+ && echo 'no-index = true' >> /usr/local/pip/pip.conf \
+ && echo 'find-links = /usr/local/cached_pip_packages' >> /usr/local/pip/pip.conf \
+ && pip download -d /usr/local/cached_pip_packages/ enum \
+ 	future futures google-api-python-client \
+    httplib2 oauth2client pyasn1 pyasn1-modules \
+    rsa six uritemplate protobuf certifi chardet \
+    idna requests urllib3
+
+##################################################
+# Install VCCCI_MESSAGES python package from SWF1
+ARG swf1_pypi_user
+ARG swf1_pypi_pass
+RUN pip install pika
+RUN pip install vccci_messages==1.4.1 ci_confighub==0.1.6 --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 ##################################################
 # Clean up apt package information to make image smaller

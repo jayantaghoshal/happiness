@@ -69,7 +69,7 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     Dir dir,
     const ::android::sp<ISignalsChangedCallback>& cb)
 {    
-    ALOGD("SignalsServer::subscribe %s", signalName.c_str());
+    ALOGV("SignalsServer::subscribe %s", signalName.c_str());
     
 
     bool containsWildcard = false;
@@ -84,7 +84,7 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     if (containsWildcard)
     {
         wildcard_subscriptions.emplace_back(signalName, dir, cb);
-        ALOGD("Number of wildcard subscribers: %lu", wildcard_subscriptions.size());
+        ALOGV("Number of wildcard subscribers: %lu", wildcard_subscriptions.size());
 
         // Instantly call the callback if we already match the filter
         auto existingSignalsMatchingFilter = get_all_matching(signalName, dir);
@@ -131,7 +131,7 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     Dir dir,
     const ::android::hardware::hidl_string& data)
 {
-    ALOGD("SignalsServer::send name %s", signalname.c_str());
+    ALOGV("SignalsServer::send name %s", signalname.c_str());
     if (!isValidName(signalname)) {        
         return ::android::hardware::Return<void>();
     }
@@ -208,20 +208,17 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     Dir dir, 
     get_cb _hidl_cb) 
 {
-    ALOGD("SignalsServer::get name: %s", signalname.c_str());
-
-    const auto key = make_key(signalname, dir); 
-
+    const auto key = make_key(signalname, dir);
     auto it = signalStorage.find(key);
     if (it != signalStorage.end())
     {
         const std::string& value = it->second;
-        ALOGV("SignalsServer::get value: %s", value.c_str());
+        ALOGV("SignalsServer::get name: %s, value: %s", signalname.c_str(), value.c_str());
         _hidl_cb(value);
     }
     else
     {
-        ALOGD("SignalsServer::get name not existing: %s", signalname.c_str());
+        ALOGV("SignalsServer::get name not existing: %s", signalname.c_str());
         _hidl_cb("");
     }
 
@@ -233,7 +230,7 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     const Dir dir, 
     get_all_cb _hidl_cb) 
 {
-    ALOGD("SignalsServer::get_all: %s", filter.c_str());
+    ALOGV("SignalsServer::get_all: %s", filter.c_str());
     std::vector<Result> result = get_all_matching(filter, dir);
     _hidl_cb(result);
     return ::android::hardware::Return<void>();

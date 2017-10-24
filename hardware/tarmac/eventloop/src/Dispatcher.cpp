@@ -9,6 +9,7 @@
 #include <cutils/log.h>
 #include <errno.h>
 #include <pthread.h>
+#include <sys/timerfd.h>
 
 #include "IDispatcher.h"
 
@@ -66,27 +67,31 @@ public:
     {
         std::lock_guard<std::mutex> lock(mutex_);
         int r=0;
-        if ( fdTasks_.find(fd)==fdTasks_.end() ) {
-            // fd has not previously been added so lets do it
-            epoll_event event;
-            event.events  = EPOLLIN;
-            event.data.fd = fd;
-            r = epoll_ctl (epollfd_, EPOLL_CTL_ADD, fd, &event);
-            ALOGE_IF(r!=0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+
+        // fd already added so lets remove it first
+        if ( fdTasks_.find(fd)!=fdTasks_.end() ) {
+            removeFd(fd);
         }
+
+        epoll_event event;
+        event.events  = EPOLLIN;
+        event.data.fd = fd;
+        r = epoll_ctl (epollfd_, EPOLL_CTL_ADD, fd, &event);
+        ALOGE_IF(r!=0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+
         if (r==0) {
             fdTasks_[fd] = t;
         }
     }
 
-    void removeFd(int fd)
+    bool removeFd(int fd)
     {
         epoll_event event;
         event.data.fd = fd;
         int r = epoll_ctl (epollfd_, EPOLL_CTL_DEL, fd, &event);
         ALOGE_IF(r!=0, "EPOLL_CTL_DEL fd failed: %s", strerror(errno));
         std::lock_guard<std::mutex> lock(mutex_);
-        fdTasks_.erase(fd);
+        return fdTasks_.erase(fd);
     }
 
     std::vector<Task> dequeue(void)
@@ -165,7 +170,7 @@ class Dispatcher : public IDispatcher
     std::thread eventthread_;
     JobId       next_job_id_;
     mutable std::mutex mutex_;
-    std::set<JobId>    delayed_jobs_;
+    std::map<JobId,int>    delayed_jobs_;
 };
 
 // static helpers
@@ -202,36 +207,65 @@ void Dispatcher::Enqueue(std::function<void()> &&f) {
 }
 
 IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) {
+    struct itimerspec ts;
+    int tfd, usec;
     JobId this_id;
-    { // lock scope
+
+    usec = delay.count();
+    ts.it_interval.tv_sec = 0;
+    ts.it_interval.tv_nsec = 0;
+    ts.it_value.tv_sec = usec / 1000000;
+    ts.it_value.tv_nsec = (usec % 1000000) * 1000;
+
+    tfd = timerfd_create(CLOCK_MONOTONIC,0);
+
+    { //lock scope
         std::lock_guard<std::mutex> lock(mutex_);
         this_id = next_job_id_++; // obtain the new jobid
-        delayed_jobs_.insert(this_id); // and add this id to the set of running timers
+        delayed_jobs_[this_id] = tfd; // and add this id to the set of running timers
     }
 
-    // start thread that will sleep for the requested time
-    std::thread sleep_thread([this_id, delay, f, this]() mutable {
-        std::this_thread::sleep_for(delay);
-        bool dispatch_job_now;
+    timerfd_settime(tfd, 0, &ts, NULL);
+
+    AddFd(tfd, [this,tfd,f,this_id](){
+        bool dispatch_job_now = false;
         { // lock scope
             std::lock_guard<std::mutex> lock(mutex_);
             auto iter = delayed_jobs_.find(this_id);
             // see if job shall continue, which means it has NOT been cancelled
-            dispatch_job_now = (iter!=delayed_jobs_.end()); 
+            dispatch_job_now = (iter!=delayed_jobs_.end());
             if (dispatch_job_now)
                 delayed_jobs_.erase(iter); // job has not been cancelled
         }
-        if (dispatch_job_now)
-            Enqueue(std::move(f)); // job has not been cancelled so dispatch it now
+        if (dispatch_job_now){
+            uint64_t dummy;
+            read(tfd, &dummy, sizeof(dummy));
+            f();
+            RemoveFd(tfd);
+            close(tfd);
+        }
     });
-
-    sleep_thread.detach();
     return this_id;
 }
 
 bool Dispatcher::Cancel(JobId jobid) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    return (delayed_jobs_.erase(jobid)>0);
+    bool dispatch_job_now = false;
+    int tfd =-1;
+    { // lock scope
+        std::lock_guard<std::mutex> lock(mutex_);
+        auto iter = delayed_jobs_.find(jobid);
+        dispatch_job_now = (iter!=delayed_jobs_.end());
+        if (dispatch_job_now){
+            tfd = iter->second;
+            delayed_jobs_.erase(iter);
+        }
+    }
+    if (dispatch_job_now && queue_.removeFd(tfd)){
+        close(tfd);
+        return true;
+    }
+
+    return false;
 }
 
 void Dispatcher::AddFd(int fd, std::function<void()> &&f) {

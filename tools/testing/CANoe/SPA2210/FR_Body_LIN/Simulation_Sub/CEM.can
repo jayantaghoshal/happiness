@@ -1,0 +1,27 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\SPAModules\SPACommon_TiAndDate.cin" //@SPECINC::GParTiAndDate@
+  //#include "..\..\SPAModules\SPACommon_VIN.cin" //@SPECINC::VIN@
+  //#include "..\..\SPAModules\SPACommon_CarConfig.cin" //@SPECINC::CC@
+  //#include "..\..\SPAModules\SPACommon_FrameConfigurationBody.cin" //@SPECINC::FrameConfigurationBody@
+  //#include "..\..\SPAModules\SPACommon_CarTiGlb.cin" //@SPECINC::GParCarTiGlb@
+  //#include "..\..\SPAModules\SPACommon_VehBattU.cin" //@SPECINC::GParVehBattU@
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\Initialize\CEM_include.cin" //@SPECINC::Init@
+  #include "..\..\SPAIncludes\SPACommon_FRIL.cin" //@SPECINC::FRIL@
+  #include "..\..\SPAModules\SPACommon_FRNM_Master.cin" //@SPECINC::FRNMMaster@
+  #include "..\..\SPAIncludes\SPACommon_FRNM_SPAIL.cin" //@SPECINC::FRNM@
+  //#include "..\..\SPAIncludes\SPACommon_CANNM.cin" //@SPECINC::CANNM@
+  #include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  //#include "..\..\SPAIncludes\SPACommon_SPACANIL.cin" //@SPECINC::CANIL@
+  //#include "..\..\SPAModules\AmbIllmnFwdSts.cin" //@SPECINC::AmbIllmnFwdSts@
+  //#include "..\GWIncludes\CEM_GW.cin" //@GWINC@
+  //#include "..\..\SPAIncludes\SPACommon_NMGW.cin" //@NMGW@
+}
+
+on start 
+{
+    @sysvar::CEM::COMMON::Control::On=1;
+    @sysvar::CEM::FRNM::Control::On=1;
+  
+}

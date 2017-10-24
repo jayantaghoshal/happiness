@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
   ALOGI("Registering as service...");
   service.registerAsService();
 
-  ALOGI("Ready");
+  ALOGI("Registering as service done.");
   android::hardware::joinRpcThreadpool();
 
 }

@@ -10,12 +10,13 @@ import json
 import os
 import re
 from shipit.process_tools import check_output_logged
+from shipit.test_runner.test_types import TestFailedException
 import xml.etree.cElementTree as ET
-
-logger = logging.getLogger(__name__)
+import concurrent.futures
 
 def vts_tradefed_run_module(module_name: str):
     logging.info("Running test module %s" % module_name)
+    max_test_time_sec = 60 * 60
     try:
         test_result = check_output_logged(["vts-tradefed",
                                            "run",
@@ -29,18 +30,20 @@ def vts_tradefed_run_module(module_name: str):
                                            "x86_64",
                                            "--module",
                                            module_name],
-                                           timeout_sec=120).decode().strip(" \n\r\t")
+                                           timeout_sec=max_test_time_sec).decode().strip(" \n\r\t")
+    except concurrent.futures.TimeoutError as te:
+        raise TestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
     except Exception as e:
-        raise Exception(
+        raise TestFailedException(
             "Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
     fail_pattern1 = "fail:|PASSED: 0"
     if re.search(fail_pattern1, test_result):
-        raise Exception("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+        raise TestFailedException("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
 
     fail_pattern2 = "PASSED: [1-9][0-9]*"
     if not re.search(fail_pattern2, test_result):
-        raise Exception("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
+        raise TestFailedException("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
 
 def read_module_name(android_test_xml_file: str):
     logging.info("Reading module name from %s" % android_test_xml_file)

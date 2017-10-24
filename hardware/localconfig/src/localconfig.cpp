@@ -3,36 +3,21 @@
  * Delphi Confidential
 \*===========================================================================*/
 
-#include <vcc/local_config_reader.h>
-#include <vcc/localconfig.h>
+#include "localconfig.h"
 
-#include <json/json.h>
+#include "vcc/local_config_file_reader_android_ihu_behavior.h"
 
-namespace
-{
-const char *kDefaultFilePath = "/oem_config/localconfig/localconfig.json";
-
-vcc::LocalConfigReader &Instance()
-{
-  static vcc::LocalConfigFileReader instance(kDefaultFilePath);
-  return instance;
-}
+namespace {
+const char *kProductionFilePath = "/oem_config/localconfig/localconfig.json";
+const char *kDefaultFilePath = "/vendor/etc/localconfig/localconfig.json";
+const char *kEnvironmentVariableOverridingPath = "VCC_LOCALCONFIG_PATH";
 }
 
-namespace vcc
-{
-const vcc::LocalConfigReaderInterface *LocalConfigDefault() { return &Instance(); }
-namespace localconfig
-{
-
-std::string GetString(const std::initializer_list<std::string> &keys) { return Instance().GetString(keys); }
-int GetInt(const std::initializer_list<std::string> &keys) { return Instance().GetInt(keys); }
-bool GetBool(const std::initializer_list<std::string> &keys) { return Instance().GetBool(keys); }
-double GetDouble(const std::initializer_list<std::string> &keys) { return Instance().GetDouble(keys); }
-std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys)
-{
-  return Instance().GetStringArray(keys);
+namespace vcc {
+const vcc::LocalConfigReaderInterface *LocalConfigDefault() {
+  // supports environment override, and if it is missing tries production value, with fallback to vendor/engineering
+  static vcc::LocalConfigFileReaderAndroidIhuBehavior instance(kProductionFilePath, kDefaultFilePath,
+                                                               kEnvironmentVariableOverridingPath);
+  return &instance;
 }
-
-}  // namespace localconfig
 }  // namespace vcc

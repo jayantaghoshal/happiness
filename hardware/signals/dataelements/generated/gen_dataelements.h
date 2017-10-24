@@ -3,7 +3,6 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Generated at: 2017-09-01T07:54:52.466719
  * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
 #ifndef _DATAELEMENTS_H

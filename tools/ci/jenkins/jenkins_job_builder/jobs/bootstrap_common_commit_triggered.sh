@@ -8,7 +8,7 @@ echo "https://icup_android.gerrit.cm.volvocars.biz/#/c/${ZUUL_CHANGE}"
 
 ################################################################################################
 ##
-# Configure Docker 
+# Configure Docker
 # During the first steps we run with a fixed revision of the container
 # This is only to get a container with "repo" and "zuul" installed
 # Once we have cloned the vendor/volvocars repo we use the container specified by vendor/volvocars/tools/docker_build
@@ -61,26 +61,26 @@ docker_run () {
 ################################################################################################
 ## Initialize Repo and vendor/volvocars
 #
-# Important to initialize the repository with "repo init" "repo sync" instead of standard "git init", 
+# Important to initialize the repository with "repo init" "repo sync" instead of standard "git init",
 # otherwise repo get confused (repo assumes .git-data is in .repo/project-objects/).
 # Reset the manifest-repo in case it was modified in a strange way from last commit
 # shellcheck disable=SC2015
-(cd .repo/manifests && git reset --hard origin/"${ZUUL_BRANCH}" || true)
-
-if [[ ! -d .repo ]]; then
-  # Old jobs cloned vendor/volvocars without using repo. Confuses repo so rm before init.
-  # TODO: rm can be removed once all slaves have run the job that does repo init once.
-  rm -rf vendor/volvocars
-  docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
+if [[ -d .repo ]]; then
+    # Abort rebase if manifest repo has merge conflicts and is still in rebase state
+    if [[ -d .repo/manifests/.git/rebase-apply ]]; then
+        (cd .repo/manifests && git rebase --abort || true)
+    fi
+    # Hard reset manifest repo (current branch)
+    (cd .repo/manifests && git reset --hard HEAD || true)
 fi
+docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || die "repo init failed"
+docker_run "cd vendor/volvocars && git reset --hard && git clean -xdf"
 docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars" || die "repo sync failed"
-
-
 
 ################################################################################################
 ## Download the commit to check (for vendor/volvocars-repo)
 #
-# zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF. 
+# zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
 docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
 
 if [ "$(git -C vendor/volvocars rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
@@ -88,14 +88,14 @@ if [ "$(git -C vendor/volvocars rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
 fi
 
 ################################################################################################
-## This check exists to prevent people from pushing code with old ci scripts 
+## This check exists to prevent people from pushing code with old ci scripts
 if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
     echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
     exit -1
 fi
 export REQUIRED_CI_VERSION=2
 DETECTED_CI_VERSION=$(cat ./vendor/volvocars/tools/ci/ci_version)
-if [ $REQUIRED_CI_VERSION != "$DETECTED_CI_VERSION" ]; then 
+if [ $REQUIRED_CI_VERSION != "$DETECTED_CI_VERSION" ]; then
     # If you are a CI developer, you should update the CI version both here and in the repo.
     echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
     exit -1

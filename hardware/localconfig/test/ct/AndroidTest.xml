@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-This tests verifies the functionallity in localconfig that copies the a default localconfig.json
-file from /system/etc/ to /oem_config/localconfig on startup. We test this by deleting the
-copied file and then issue a restart (timeout assumed to be 1 minute).
-The test if the file exists is done in the actual test.
+This tests verifies the localconfig to be available for applications
+It relies on Localconfig to fallback or on correct default to be present in oem_config
 -->
 <configuration description="Test automatic deployment of localconfig on first boot">
-    <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
-        <option name="run-command" value="rm /oem_config/localconfig/localconfig.json" />
-    </target_preparer>
-    <target_preparer class="com.android.tradefed.targetprep.TimeWaster">
-        <option name="delay" value="60" />
-        <option name="reboot-before-sleep" value="true" />
-    </target_preparer>
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsLocalConfigCTTestCases->/data/local/tmp/VtsLocalConfigCTTestCases" />
+        <option name="push" value="liblocalconfig_ct->/data/local/tmp/liblocalconfig_ct" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsLocalConfigCTTestCases" />
-        <option name="runtime-hint" value="75s" />
+        <option name="module-name" value="liblocalconfig_ct" />
+        <option name="runtime-hint" value="5s" />
     </test>
 </configuration>

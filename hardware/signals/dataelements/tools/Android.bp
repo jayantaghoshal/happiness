@@ -1,4 +1,5 @@
 subdirs = [
     "signalecho",
-    "signaltrace"
+    "signaltrace",
+    "carsim_bridge",
 ]

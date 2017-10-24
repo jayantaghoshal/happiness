@@ -1,19 +1,17 @@
 #ifndef VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 #define VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_READER_INTERFACE_H_
 
-#include <stdint.h>
 #include <chrono>
+#include <cstdint>
 #include <initializer_list>
 #include <string>
 #include <vector>
 
-namespace vcc
-{
+namespace vcc {
 /*
  * Describes contract for using LCFG without relying on global state
  */
-struct LocalConfigReaderInterface
-{
+struct LocalConfigReaderInterface {
   virtual ~LocalConfigReaderInterface() = default;
 
   // actual backend reaching methods
@@ -86,32 +84,27 @@ struct LocalConfigReaderInterface
   // conveniance adapters
 
   template <class... T>
-  std::string GetString(const T &... keys) const
-  {
+  std::string GetString(const T &... keys) const {
     return GetString({keys...});
   }
 
   template <class... T>
-  int GetInt(const T &... keys) const
-  {
+  int GetInt(const T &... keys) const {
     return GetInt({keys...});
   }
 
   template <class... T>
-  bool GetBool(const T &... keys) const
-  {
+  bool GetBool(const T &... keys) const {
     return GetBool({keys...});
   }
 
   template <class... T>
-  double GetDouble(const T &... keys) const
-  {
+  double GetDouble(const T &... keys) const {
     return GetDouble({keys...});
   }
 
   template <class... T>
-  std::vector<std::string> GetStringArray(const T &... keys) const
-  {
+  std::vector<std::string> GetStringArray(const T &... keys) const {
     return GetStringArray({keys...});
   }
 
@@ -119,103 +112,82 @@ struct LocalConfigReaderInterface
   void GetGenericValue(R *value, const T &... keys) const;
 
   template <class R, class... T>
-  bool TryGetValue(R *value, const T &... keys) const
-  {
-    try
-    {
+  bool TryGetValue(R *value, const T &... keys) const {
+    try {
       GetGenericValue(value, keys...);
       return true;
-    }
-    catch (std::runtime_error)
-    {
+    } catch (const std::runtime_error &) {
       return false;
     }
   }
 
   template <class R, class... T>
-  bool TryGetValueOrDefault(R *value, R default_value, const T &... keys) const
-  {
-    try
-    {
+  bool TryGetValueOrDefault(R *value, R default_value, const T &... keys) const {
+    try {
       GetGenericValue(value, keys...);
       return true;
-    }
-    catch (std::runtime_error)
-    {
+    } catch (const std::runtime_error &) {
       *value = default_value;
       return false;
     }
   }
 };
 
-namespace detail
-{
+namespace detail {
 template <class R, class... T>
 void GetValue(const LocalConfigReaderInterface *lcfg, R *value, const T &... keys);
 
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, std::string *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, std::string *value, const T &... keys) {
   *value = lcfg->GetString(keys...);
 }
 
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, int32_t *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, int32_t *value, const T &... keys) {
   *value = lcfg->GetInt(keys...);
 }
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, uint32_t *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, uint32_t *value, const T &... keys) {
   *value = lcfg->GetInt(keys...);
 }
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, int16_t *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, int16_t *value, const T &... keys) {
   *value = lcfg->GetInt(keys...);
 }
 
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, uint16_t *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, uint16_t *value, const T &... keys) {
   *value = lcfg->GetInt(keys...);
 }
 
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::seconds *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::seconds *value, const T &... keys) {
   *value = std::chrono::seconds(lcfg->GetInt(keys...));
 }
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::milliseconds *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, std::chrono::milliseconds *value, const T &... keys) {
   *value = std::chrono::milliseconds(lcfg->GetInt(keys...));
 }
 
 template <class... T>
-void GetValue(const LocalConfigReaderInterface *lcfg, double *value, const T &... keys)
-{
+void GetValue(const LocalConfigReaderInterface *lcfg, double *value, const T &... keys) {
   *value = lcfg->GetDouble(keys...);
 }
-}
+}  // namespace detail
 
 template <class R, class... T>
-inline void LocalConfigReaderInterface::GetGenericValue(R *value, const T &... keys) const
-{
+inline void LocalConfigReaderInterface::GetGenericValue(R *value, const T &... keys) const {
   return detail::GetValue(this, value, keys...);
 }
 
-} /* namespace vcc */
+}  // namespace vcc
 
 #ifdef GTEST_OS_LINUX_ANDROID
 #include <gmock/gmock.h>
 
-namespace vcc
-{
-namespace mocks
-{
-class MockLocalConfigReader : public LocalConfigReaderInterface
-{
+namespace vcc {
+namespace mocks {
+class MockLocalConfigReader : public LocalConfigReaderInterface {
  public:
   MOCK_CONST_METHOD1(GetString, std::string(std::initializer_list<std::string>));
   MOCK_CONST_METHOD1(GetInt, int(std::initializer_list<std::string>));

@@ -15,7 +15,8 @@ LOCAL_STATIC_LIBRARIES += \
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 
 LOCAL_WHOLE_STATIC_LIBRARIES += \
-    libVtsGtestMain
+    libVtsGtestMain \
+    liblog
 
 # Tag this module as a vts test artifact
 LOCAL_COMPATIBILITY_SUITE := vts

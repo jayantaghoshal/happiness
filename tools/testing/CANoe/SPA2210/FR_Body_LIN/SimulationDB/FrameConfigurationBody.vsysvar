@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="CEM" comment="NODE">
+      <namespace name="FrameConfigurationBody" comment="..\SPAModules\SPACommon_FrameConfigurationBody.cin">
+        <namespace name="Control" comment="PANEL">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="SetFCMUBAfterReset" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" />
+        </namespace>
+        <namespace name="Input" comment="IN">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValMstCfgIDBodyCAN" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+        </namespace>
+        <namespace name="Output" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MstCfgIDBodyCAN" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BodyCntrForMissCom" comment="SPAFCBody_UpdateCntr((byte) this.raw)@UPDATE" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MstCfgIDBodyCAN_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="BodyCntrForMissCom_UB" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="1" minValue="0" minValuePhys="0" maxValue="3" maxValuePhys="3" />
+        </namespace>
+      </namespace>
+    </namespace>
+    <namespace name="ETC" comment="NODE">
+      <namespace name="FrameConfigurationBodyIni" comment="">
+        <namespace name="Output" comment="OUT">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValMstCfgIDBodyCAN" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4105" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="IniValSigCfgIDBodyCAN" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="4105" />
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

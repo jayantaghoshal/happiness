@@ -1,0 +1,10 @@
+/*@!Encoding:1252*/
+includes
+{
+  //#include "..\..\SPAIncludes\SPACommon_Common_SPAIL.cin" //@SPECINC::COMMON@
+  //#include "..\..\SPAIncludes\SPACommon_FRNM_SPAIL.cin" //@SPECINC::FRNM@
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\ASDM_roadfriction.cin" //@SPECINC::ASDM@
+  //#include "..\..\..\InfotainmentModules\Node_basic_includes\Initialize\ASDM_include.cin" //@SPECINC::Init@
+  //#include "..\..\SPAIncludes\SPACommon_FRIL.cin" //@SPECINC::FRIL@
+  //#include "..\GWIncludes\ASDM_GW.cin" //@GWINC@
+}

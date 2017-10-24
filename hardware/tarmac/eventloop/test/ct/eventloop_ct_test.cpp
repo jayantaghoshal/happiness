@@ -87,6 +87,8 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadAll){
     usleep(500000);
     EXPECT_EQ(task_exec_count, 1);
 
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().RemoveFd(fd[0]);
+
     close(fd[0]);
     close(fd[1]);
 
@@ -139,6 +141,8 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial){
     EXPECT_EQ(nbytes, strlen(string)+1);
     EXPECT_EQ(strcmp(string, readbuffer), 0);
 
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().RemoveFd(fd[0]);
+
     close(fd[0]);
     close(fd[1]);
 
@@ -176,8 +180,8 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled){
 
     if (status == std::future_status::ready) {
         std::chrono::duration<double> diff = end-start;
-        EXPECT_NEAR(diff.count(), 0.5f, 0.01f);
-        ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.01s", diff.count());
+        EXPECT_NEAR(diff.count(), 0.5f, 0.1f);
+        ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.1s", diff.count());
     }
 
     ALOGI("Finished...");

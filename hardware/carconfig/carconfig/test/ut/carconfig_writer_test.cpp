@@ -23,7 +23,7 @@ class CarConfigWriterTestFixture : public ::testing::Test
         csvPath = tmp.str();
 
         CarConfigFileWriter writer = CarConfigFileWriter(csvPath + "carconfig_file_ok.csv");
-        writer.commitToSharedMemory();
+        writer.commitToBinaryMemory();
 
         shmFile = fopen("/dev/shm/carconfig", "rb");
         ASSERT_TRUE(shmFile);

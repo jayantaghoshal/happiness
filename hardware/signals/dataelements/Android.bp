@@ -1,5 +1,5 @@
 subdirs = [
-    "tools"
+    "tools",
 ]
 
 //
@@ -11,10 +11,10 @@ genrule {
     tool_files: ["crc16cmd.py"],
     cmd: "python $(location crc16cmd.py) $(in) MP_ROUTER_CRC > $(out)",
     srcs: [
-        "vector/gen/MpRouter_Signals.h"
+        "vector/gen/MpRouter_Signals.h",
     ],
     out: [
-        "Mp_Router_crc.h"
+        "Mp_Router_crc.h",
     ],
 }
 

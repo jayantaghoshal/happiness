@@ -1,0 +1,25 @@
+cc_test {
+    name: "IpcbSimulatorCTTestCases",
+
+    srcs: ["src/IpcbSimulatorTest.cpp"],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    shared_libs: ["liblog",
+                  "libipcommandbus",
+                  "libtarmac",
+                  "libutils",
+                  "libhidlbase",
+                  "libhidltransport",
+                  "libhwbinder",
+                  "vendor.volvocars.hardware.iplm@1.0"
+    ],
+
+    static_libs: [
+        "libipcb_simulator_static",
+    ],
+
+    compile_multilib: "64",
+}

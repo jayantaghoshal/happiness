@@ -1,0 +1,17 @@
+cc_test {
+    name: "VtsEventLoopCTTestCases",
+
+    srcs: ["eventloop_ct_test.cpp"],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    shared_libs: ["liblog"],
+    static_libs: [
+        "libgmock",
+        "libtarmac_static",
+    ],
+    test_suites: ["vts"],
+    compile_multilib: "64",
+}
