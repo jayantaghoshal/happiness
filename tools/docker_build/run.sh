@@ -124,6 +124,7 @@ docker run \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \
+    --env=HOST_HOSTNAME="$(hostname)" \
     --env CCACHE_DIR \
     --env CCACHE_MAXSIZE \
     --env CC_WRAPPER \
