@@ -7,64 +7,63 @@
 #include <unistd.h>
 #include <cutils/log.h>
 #include <stdexcept>
+#include <errno.h>
+
 #include "include/ipcb_simulator.h"
 
-#define LOG_TAG "ipcb_simulator"
-
-#define SERVER_BCAST_IP "198.18.255.255"
-#define SERVER_ADDR "127.0.0.1"
+#define LOG_TAG "IpcbSimulator"
 
 using ::tarmac::eventloop::IDispatcher;
 
-
-
-IpcbSimulator::IpcbSimulator(uint32_t dst_port, uint32_t src_port, int bcast_enable) :
-DST_PORT(dst_port),SRC_PORT(src_port),broadcastEnable(bcast_enable),timer{IDispatcher::GetDefaultDispatcher()}
+IpcbSimulator::IpcbSimulator(std::string local_ip, uint32_t local_port, uint32_t remote_port, int bcast_enable) :
+    local_ip_(local_ip),
+    local_port_(local_port),
+    remote_port_(remote_port),
+    broadcastEnable_(bcast_enable),
+    timer_{IDispatcher::GetDefaultDispatcher()}
 {
-    if(broadcastEnable)
-        SEND_ADDR = SERVER_BCAST_IP;
-    else
-        SEND_ADDR = SERVER_ADDR;
-
     ALOGD("Packet Injector started");
-    IpcbSimulator::setup();
+    IpcbSimulator::Setup();
 }
 
-void IpcbSimulator::setup()
+IpcbSimulator::~IpcbSimulator()
 {
+    if (local_socket_ != 0) {
+        close(local_socket_);
+    }
+}
+
+void IpcbSimulator::Setup()
+{
+    addrlen_ = static_cast<socklen_t>(sizeof(struct sockaddr_in));
+
     //Setup local socket socket
-    if ( (local_socket=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
-    {
-        ALOGD("Failed to create local socket...die now!");
+    if ((local_socket_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
+        ALOGE("Failed to create local socket, terminating!");
         exit(1);
     }
 
+    int ret=setsockopt(local_socket_, SOL_SOCKET, SO_BROADCAST, &broadcastEnable_, sizeof(broadcastEnable_));
 
-    int ret=setsockopt(local_socket, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable));
-
-    memset(&sa, 0, sizeof(sa));
-    sa.sin_family = AF_INET;
-    sa.sin_port = htons(DST_PORT);
-    if (inet_aton(SEND_ADDR.c_str() , &sa.sin_addr) == 0)
-    {
-        fprintf(stderr, "inet_aton() failed\n");
+    memset(&remote_addr_, 0, sizeof(remote_addr_));
+    remote_addr_.sin_family = AF_INET;
+    remote_addr_.sin_port = htons(remote_port_);
+    if (inet_aton(local_ip_.c_str() , &remote_addr_.sin_addr) == 0) {
+        ALOGE("inet_aton() failed, terminating!");
         exit(1);
     }
 
     //Bind local socket to local port
-    memset(&srcaddr, 0, sizeof(srcaddr));
-    srcaddr.sin_family = AF_INET;
-    srcaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    srcaddr.sin_port = htons(SRC_PORT);
+    memset(&local_addr_, 0, sizeof(local_addr_));
+    local_addr_.sin_family = AF_INET;
+    local_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
+    local_addr_.sin_port = htons(local_port_);
 
-
-    if (bind(local_socket, (struct sockaddr *) &srcaddr, sizeof(srcaddr)) < 0) {
-        ALOGD("bind error...die now!");
-        perror("bind error");
+    if (bind(local_socket_, (struct sockaddr *) &local_addr_, sizeof(local_addr_)) < 0) {
+        ALOGE("Bind error, terminating!");
         exit(1);
     }
 }
-
 
 void IpcbSimulator::CreateAndSendIpActivityMessage()
 {
@@ -79,11 +78,11 @@ void IpcbSimulator::CreateAndSendIpActivityMessage()
 
     pdu.setPayload(std::vector<uint8_t>({0x01, (uint8_t)0x00, 0, 0}));
 
-    buffer.clear();
-    pdu.toData(buffer);
-    if (sendto(local_socket, reinterpret_cast<const void *> (&buffer[0]), buffer.size(), 0 , reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)))==-1)
-    {
-        ALOGD("Failed to send UDP packet...Try again now!");
+    buffer_.clear();
+    pdu.toData(buffer_);
+    if (sendto(local_socket_, reinterpret_cast<const void *> (&buffer_[0]), buffer_.size(), 0 ,
+                 reinterpret_cast<struct sockaddr *>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_)))==-1) {
+        ALOGD("Failed to send UDP packet!");
     }
 
     StartActivityMessageTimer();
@@ -91,50 +90,53 @@ void IpcbSimulator::CreateAndSendIpActivityMessage()
 
 void IpcbSimulator::StartActivityMessageTimer()
 {
-    activityPacketInjector = timer.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { CreateAndSendIpActivityMessage(); });
+    activityPacketInjectorId_ = timer_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { CreateAndSendIpActivityMessage(); });
 }
 
 void IpcbSimulator::StopActivityMessageTimer()
 {
-    timer.Cancel(activityPacketInjector);
+    timer_.Cancel(activityPacketInjectorId_);
 }
 
-void IpcbSimulator::SendPdu(Pdu pdu)
+bool IpcbSimulator::SendPdu(Pdu pdu)
 {
     ALOGD("Send pdu");
-    buffer.clear();
-    pdu.toData(buffer);
-    // buffer.push_back(1);
-    if (sendto(local_socket, reinterpret_cast<const void *> (&buffer[0]), buffer.size(), 0 , reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)))==-1)
+
+    buffer_.clear();
+    pdu.toData(buffer_);
+
+    if (sendto(local_socket_, reinterpret_cast<const void *> (&buffer_[0]), buffer_.size(), 0 ,
+                reinterpret_cast<struct sockaddr *>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_)))==-1)
     {
-        ALOGD("Failed to send UDP packet...Try again now!");
+        ALOGE("sendto failed with error: %s", strerror(errno));
+        return false;
     }
+    return true;
 }
 
-Pdu IpcbSimulator::ReceivePdu()
+bool IpcbSimulator::ReceivePdu(Pdu& pdu)
 {
     std::vector<uint8_t> rd_buffer;
 
-    ssize_t packet_length = recv(local_socket, nullptr, 0, MSG_PEEK | MSG_TRUNC);
-    if (packet_length <= 0)
-    {
-        throw std::runtime_error("Failed to get size of pending Datagram");
+    ssize_t packet_length = recv(local_socket_, nullptr, 0, MSG_PEEK | MSG_TRUNC);
+    if (packet_length <= 0) {
+        ALOGE("recv failed with error: %s", strerror(errno));
+        return false;
     }
 
     rd_buffer.resize(packet_length);
 
 
-    if (0 > recvfrom(local_socket,
+    if (0 > recvfrom(local_socket_,
                         static_cast<void *>(rd_buffer.data()),
                         packet_length,
                         0,
-                        reinterpret_cast<struct sockaddr *>(&sa_out),
-                        &addrlen))
-    {
-        throw std::runtime_error("Failed to receive");
+                        reinterpret_cast<struct sockaddr *>(&local_addr_),
+                        &addrlen_)) {
+        ALOGE("recvfrom failed with error: %s", strerror(errno));
+        return false;
     }
 
-    Pdu temp_pdu;
-    temp_pdu.fromData(rd_buffer);
-    return temp_pdu;
+    pdu.fromData(rd_buffer);
+    return true;
 }
