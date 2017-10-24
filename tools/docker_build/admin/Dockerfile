@@ -68,6 +68,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     python-xlrd \
     python-autopep8 \
     python-pep8 \
+    python-mako \
     squashfs-tools \
     sudo \
     tesseract-ocr \
