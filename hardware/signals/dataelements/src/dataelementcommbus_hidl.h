@@ -4,6 +4,7 @@
 #include <functional>
 #include <map>
 #include <mutex>
+#include <set>
 #include <string>
 #include "dataelementcommbus.h"
 
@@ -15,8 +16,7 @@ namespace dataElemHidl = vendor::volvocars::hardware::signals::V1_0;
 class DataElementCommBusHIDL final : public IDataElementCommBus,
                                      public ::android::hidl::manager::V1_0::IServiceNotification,
                                      public andrHw::hidl_death_recipient,
-                                     public dataElemHidl::ISignalsChangedCallback
-{
+                                     public dataElemHidl::ISignalsChangedCallback {
  public:
   void setNewDataElementHandler(
       std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) override;
@@ -34,14 +34,19 @@ class DataElementCommBusHIDL final : public IDataElementCommBus,
  private:
   DataElementCommBusHIDL();
 
-  void resendMessages(::android::sp<dataElemHidl::ISignals> vsd_proxy);
+  void resendMessages(::android::sp<dataElemHidl::ISignals>& vsd_proxy);
+  void resendSubscriptions(::android::sp<dataElemHidl::ISignals>& vsd_proxy_local);
   void connectToVsdProxyAndResend();
-  void sendWithoutProxyMutex(const std::string& name, const std::string& payload, autosar::Dir dir,
-                             ::android::sp<dataElemHidl::ISignals> vsd_proxy);
+  void sendWithoutProxyMutex(const std::string& name, const std::string& payload, const autosar::Dir dir,
+                             ::android::sp<dataElemHidl::ISignals>& vsd_proxy);
+  void addNameWithoutProxyMutex(const autosar::Dir dir, const std::string& name,
+                                ::android::sp<dataElemHidl::ISignals>& vsd_proxy_local);
 
   std::mutex pendingMessageMutex_;
+  std::mutex pendingSubscriptionsMutex_;
   std::mutex vsdProxyMutex_;
   std::map<std::tuple<std::string, autosar::Dir>, std::string> pendingSendMessages_;
+  std::set<std::tuple<std::string, autosar::Dir>> pendingSubscriptions_;
   ::android::sp<dataElemHidl::ISignals> vsd_proxy_;
   std::function<void(const std::string& name, const std::string& payload)> dataElementCallback_;
 
