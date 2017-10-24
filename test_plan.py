@@ -15,10 +15,13 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, stand
 # These should mainly be used for system stability, ie when a failing module will
 # block other developers from continuing development. Such as "unit not booting", "adb not working", "black screen", etc
 test_plan_gate = [
-    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",         standard_caps),
-    VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",             standard_caps),
-    VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                  standard_caps),
-    VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                  standard_caps),
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",          standard_caps),
+    VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",              standard_caps),
+    VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                   standard_caps),
+    VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                   standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",       standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables",               standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
 ]
 
 test_plan_hourly = [
@@ -47,10 +50,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/test/iplm",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                  standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",      standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables",standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",        standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
