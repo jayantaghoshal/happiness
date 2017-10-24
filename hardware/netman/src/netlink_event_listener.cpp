@@ -66,6 +66,12 @@ int NetlinkSocketListener::SetupSocket() {
     return -1;
   }
 
+  int on = 1;
+  if (0 != setsockopt(netlink_socket_, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
+    ALOGE("Failed to set credentials option for socket %s", strerror(errno));
+    return -1;
+  }
+
   if (bind(netlink_socket_, (struct sockaddr *)&nladdr, sizeof(nladdr)) < 0) {
     ALOGE("Unable to bind netlink socket: %s", strerror(errno));
     close(netlink_socket_);
@@ -109,17 +115,19 @@ void NetlinkSocketListener::SetNetlinkEventHandler(NetlinkEventHandler &nl_event
   netlink_event_handler_ = &nl_event_handler;
 }
 
+// TODO : This function should not return plain int. Need to defind enum for error codes
 int NetlinkSocketListener::RecvMessage() {
   const int kRecvBufferSize = 4096;
   char buf[kRecvBufferSize] = {0};
-  struct iovec iov = {.iov_base = buf, .iov_len = sizeof(buf)};
+  struct iovec iov = {.iov_base = buf, .iov_len = sizeof(buf) - 1};
+  char cred_control[CMSG_SPACE(sizeof(struct ucred))];
   struct sockaddr_nl sa;
   struct msghdr msg = {.msg_name = (void *)&sa,
                        .msg_namelen = sizeof(sa),
                        .msg_iov = &iov,
                        .msg_iovlen = 1,
-                       .msg_control = NULL,
-                       .msg_controllen = 0,
+                       .msg_control = cred_control,
+                       .msg_controllen = sizeof(cred_control),
                        .msg_flags = 0};
 
   struct nlmsghdr *nl_message_header;
@@ -131,18 +139,48 @@ int NetlinkSocketListener::RecvMessage() {
     return -1;
   }
 
+  // NOTE: Code below is to safe guard us from changes in future.
+  // Strictly speaking CMSG loop below is not needed for present code where we only have enabled single auxillary
+  // message to request credentials. But to avoid the trap in future where we may enable additional auxillary messages,
+  // below code is needed.
+  struct ucred *cred = nullptr;
+  for (struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+    if (cmsg->cmsg_type == SCM_CREDENTIALS) {
+      cred = reinterpret_cast<struct ucred *>(CMSG_DATA(cmsg));
+      break;
+    }
+  }
+
+  if (cred == nullptr) {
+    ALOGV("Message received without sender's credentials. Ignored");
+    return 0;  // DO NOT return error. just ignore and let RecvMessage loop continue
+  }
+
+  if (cred->uid != 0) {
+    ALOGV("Ignoring message from non-root user");
+    return 0;  // DO NOT return error. just ignore and let RecvMessage loop continue
+  }
+
+  if (sa.nl_pid != 0) {
+    ALOGV("Ignoring message as not received from kernel");
+    return 0;  // DO NOT return error. just ignore and let RecvMessage loop continue
+  }
+
   // Parse message
   if (sock_type_ == SocketType::NLSOC_TYPE_ROUTE) {
-    for (nl_message_header = (struct nlmsghdr *)buf; NLMSG_OK(nl_message_header, (unsigned int)message_length);
+    for (nl_message_header = reinterpret_cast<struct nlmsghdr *>(buf);
+         NLMSG_OK(nl_message_header, static_cast<unsigned int>(message_length));
          nl_message_header = NLMSG_NEXT(nl_message_header, message_length)) {
       netlink_event_handler_->HandleEvent(nl_message_header);
     }
   } else if (sock_type_ == SocketType::NLSOC_TYPE_UEVENT) {
+    // explicitly null terminate as it is not gurenteed that buffer is null terminated from kernel
+    buf[kRecvBufferSize - 1] = '\0';
     netlink_event_handler_->HandleEvent(buf, message_length);
   }
 
   return 0;
-}
+}  // namespace netman
 
 }  // namespace netman
 }  // namespace vcc
