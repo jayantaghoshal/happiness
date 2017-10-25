@@ -1,8 +1,11 @@
 package com.volvocars;
 
 import com.android.ddmlib.testrunner.TestIdentifier;
+import com.android.loganalysis.item.AnrItem;
+import com.android.loganalysis.item.JavaCrashItem;
 import com.android.loganalysis.item.LogcatItem;
 import com.android.loganalysis.item.MiscLogcatItem;
+import com.android.loganalysis.item.NativeCrashItem;
 import com.android.tradefed.device.DeviceNotAvailableException;
 import com.android.tradefed.device.ITestDevice;
 import com.android.tradefed.log.LogUtil;
@@ -12,6 +15,7 @@ import com.android.tradefed.testtype.IRemoteTest;
 import com.android.tradefed.testtype.IDeviceTest;
 import com.android.tradefed.device.LogcatReceiver;
 import com.android.tradefed.util.FileUtil;
+import com.android.tradefed.util.Pair;
 import com.android.tradefed.util.RunUtil;
 import com.android.loganalysis.parser.LogcatParser;
 
@@ -24,8 +28,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -34,6 +42,36 @@ import java.util.Map;
  */
 public class LogAnalyzer implements IRemoteTest, IDeviceTest {
     private ITestDevice mDevice;
+
+    // LogcatParser requires you to setup match-patterns which it will place into "categories"
+    // I call these magic categories. They are setup with addPattern and can be extracted with getMiscEvents.
+    // It is not possible to filter by log level in any other way
+    private final String MAGIC_CATEGORY_VERBOSE = "LogAnalyzerCategory_verbose";
+    private final String MAGIC_CATEGORY_DEBUG = "LogAnalyzerCategory_debug";
+    private final String MAGIC_CATEGORY_INFO = "LogAnalyzerCategory_info";
+    private final String MAGIC_CATEGORY_WARNING = "LogAnalyzerCategory_warning";
+    private final String MAGIC_CATEGORY_ERROR = "LogAnalyzerCategory_warning";
+    private final String MAGIC_CATEGORY_FATAL = "LogAnalyzerCategory_fatal";
+    private final String MAGIC_CATEGORY_CHATTY = "LogAnalyzerCategory_chatty";
+
+    private final List<Pair<String,String>> verbosityToMagicCategoryMap = Arrays.asList(
+            new Pair<String,String>("V", MAGIC_CATEGORY_VERBOSE),
+            new Pair<String,String>("D", MAGIC_CATEGORY_DEBUG),
+            new Pair<String,String>("I", MAGIC_CATEGORY_INFO),
+            new Pair<String,String>("W", MAGIC_CATEGORY_WARNING),
+            new Pair<String,String>("E", MAGIC_CATEGORY_ERROR),
+            new Pair<String,String>("F", MAGIC_CATEGORY_FATAL)
+    );
+
+    private final float measurementTime_sec = 20;
+    private final List<String> verbosityLevels = Arrays.asList(
+            "F",
+            "E",
+            "W",
+            "I",
+            "D",
+            "V"
+    );
 
     @Override
     public void setDevice(ITestDevice device) {
@@ -51,100 +89,23 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
         TestIdentifier testId = new TestIdentifier(getClass().getCanonicalName(), "LogSpamDetector");
         listener.testRunStarted("LogSpamDetector", 1);
         listener.testStarted(testId);
-        final float measurementTime_sec = 10;
-        final List<String> levels = Arrays.asList("F", "E", "W", "I", "D", "V");
-
-        Map<String, Integer> allByTag = new HashMap<>();
-        Map<String, Map<String, Integer>> categoryByTag = new HashMap<>();
-        for (String l : levels)
-            categoryByTag.put(l, new HashMap<>());
-
-        Map<Integer, Integer> allByPid = new HashMap<>();
-        Map<String, Map<Integer, Integer>> categoryByPid = new HashMap<>();
-        for (String l : levels)
-            categoryByPid.put(l, new HashMap<>());
 
         try {
-            List<MiscLogcatItem> logcatItems = getLogcat(measurementTime_sec);
+            LogcatItem logcat = getLogcat(measurementTime_sec);
 
             List<String> failures = new ArrayList<>();
 
-            for (MiscLogcatItem e : logcatItems) {
-                if (e.getTag().equals("")) {
-                    String err = String.format("Log entry without log tag. PID: %d", e.getPid());
-                    failures.add(err);
-                } else if (e.getTag().equals("chatty")) {
-                    //TODO: We could also disable pruning before running this test with logcat -P ?
-                    String err = String.format("Chatty classified logspam: %s", e.getStack());
-                    failures.add(err);
-                } else {
-                    if (e.getTag().length() > 40) {
-                        String err = String.format("Too long log tag: %s", e.getTag());
-                        listener.testFailed(testId, err);
-                    }
+            LogUtil.CLog.d("LOGCATITEM: %s", logcat.toString());
+            LogUtil.CLog.d("LOGCATITEM.events: %d", logcat.getEvents().size());
+            LogUtil.CLog.d("LOGCATITEM.anrs: %d", logcat.getAnrs().size());
+            LogUtil.CLog.d("LOGCATITEM.nativecrashes: %d", logcat.getNativeCrashes().size());
+            LogUtil.CLog.d("LOGCATITEM.javaCrashes: %d", logcat.getJavaCrashes().size());
+            LogUtil.CLog.d("LOGCATITEM.stop: %s", logcat.getStopTime().toString());
+            LogUtil.CLog.d("LOGCATITEM.start: %s", logcat.getStartTime().toString());
 
-
-                    Increase(allByPid, e.getPid());
-                    Increase(allByTag, e.getTag());
-                    Increase(categoryByTag.get(e.getCategory()), e.getTag());   //TODO getCategory is NOT verbosity
-                    Increase(categoryByPid.get(e.getCategory()), e.getPid());
-                }
-            }
-
-            Map<String, Float> maxLogsPerSecPerLevelGlobally = new HashMap<>();
-            maxLogsPerSecPerLevelGlobally.put("F", 0.0f);
-            maxLogsPerSecPerLevelGlobally.put("E", 5.0f);
-            maxLogsPerSecPerLevelGlobally.put("W", 5.0f);
-            maxLogsPerSecPerLevelGlobally.put("I", 10.0f);
-            maxLogsPerSecPerLevelGlobally.put("D", 30.0f);
-            maxLogsPerSecPerLevelGlobally.put("V", 50.0f);
-
-            Map<String, Float> maxLogsPerSecPerLevelPerTag = new HashMap<>();
-            maxLogsPerSecPerLevelPerTag.put("F", 0.0f);
-            maxLogsPerSecPerLevelPerTag.put("E", 5.0f);
-            maxLogsPerSecPerLevelPerTag.put("W", 5.0f);
-            maxLogsPerSecPerLevelPerTag.put("I", 10.0f);
-            maxLogsPerSecPerLevelPerTag.put("D", 30.0f);
-            maxLogsPerSecPerLevelPerTag.put("V", 50.0f);
-
-            Map<String, Float> maxLogsPerSecPerLevelPerPid = new HashMap<>();
-            maxLogsPerSecPerLevelPerPid.put("F", 0.0f);
-            maxLogsPerSecPerLevelPerPid.put("E", 0.5f);
-            maxLogsPerSecPerLevelPerPid.put("W", 1.0f);
-            maxLogsPerSecPerLevelPerPid.put("I", 10.0f);
-            maxLogsPerSecPerLevelPerPid.put("D", 30.0f);
-            maxLogsPerSecPerLevelPerPid.put("V", 50.0f);
-
-
-            for (String l : levels) {
-                Map<String, Integer> logsByTagForThisLevel = categoryByTag.get(l);
-                for (Map.Entry<String, Integer> v : logsByTagForThisLevel.entrySet()) {
-                    String tag = v.getKey();
-                    int nrOfEntries = v.getValue();
-                    float entriesPerSec = nrOfEntries / measurementTime_sec;
-                    float max = maxLogsPerSecPerLevelPerTag.get(l);
-
-                    if (entriesPerSec > max) {
-                        String err = String.format("Log tag='%s' is exceeding max logs per sec for level=%s. Max=%.2f, Measured=%.2f",
-                                tag, l, max, entriesPerSec);
-                        failures.add(err);
-                    }
-                }
-
-                Map<Integer, Integer> logsByPidForThisLevel = categoryByPid.get(l);
-                for (Map.Entry<Integer, Integer> v : logsByPidForThisLevel.entrySet()) {
-                    Integer pid = v.getKey();
-                    int nrOfEntries = v.getValue();
-                    float entriesPerSec = nrOfEntries / measurementTime_sec;
-                    float max = maxLogsPerSecPerLevelPerPid.get(l);
-                    if (entriesPerSec > max) {
-                        String err = String.format("Process %s is exceeding max logs per sec for level=%s. Max=%.2f, Measured=%.2f",
-                                getProcessNameFromPid(pid), l, max, entriesPerSec);
-                        failures.add(err);
-                    }
-                }
-            }
-
+            failures.addAll(analyzeChatty(logcat));
+            failures.addAll(analyzeCrashItems(logcat));
+            failures.addAll(analyzePlainLogEntries(logcat));
 
             if (failures.size() > 0) {
                 StringBuilder errMsg = new StringBuilder();
@@ -152,19 +113,298 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
                 errMsg.append("See https://c1.confluence.cm.volvocars.biz/display/IHUA/Logging for logging guidelines\n");
                 errMsg.append("---------------------------------------------------------------------------------------\n");
                 errMsg.append("List of violations: \n");
-                for (String s : failures)
-                    errMsg.append(" - ").append(s).append("\n");
+                for (String s : failures) {
+                    boolean firstLine = true;
+                    for (String line : s.split("\\r?\\n")) {
+                        if (firstLine) {
+                            firstLine = false;
+                            errMsg.append(" - ");
+                        } else {
+                            errMsg.append(".    ");
+                        }
+                        errMsg.append(line).append("\n");
+                    }
+                }
                 listener.testFailed(testId, errMsg.toString());
             }
 
-            listener.testEnded(testId, Collections.emptyMap());
-            listener.testRunEnded(0, Collections.emptyMap());
+            listener.testEnded(testId, Collections.<String, String>emptyMap());
+            listener.testRunEnded(0, Collections.<String, String>emptyMap());
         } catch (Exception e) {
             LogUtil.CLog.e(e);
             listener.testFailed(testId, String.format("Exception occured during test run: %s", e.getMessage()));
-            listener.testEnded(testId, Collections.emptyMap());
-            listener.testRunEnded(0, Collections.emptyMap());
+            listener.testEnded(testId, Collections.<String, String>emptyMap());
+            listener.testRunEnded(0, Collections.<String, String>emptyMap());
         }
+    }
+
+
+    //NOTE: There is a similar tool in AOSP/development/tools/logblame/analyze_logs.py
+    //      It does very similar analysis but it does not have any hard limits, just printing.
+    private  List<String> analyzePlainLogEntries(LogcatItem logcat) throws DeviceNotAvailableException {
+        List<String> failures = new ArrayList<>();
+        Map<String, Integer> logCountByTag = new HashMap<>();
+        Map<String, Map<String, Integer>> logCountByCategoryByTag = new HashMap<>();
+        for (String level : verbosityLevels)
+            logCountByCategoryByTag.put(level, new HashMap<>());
+
+        Map<Integer, Integer> logCountByPid = new HashMap<>();
+        Map<String, Map<Integer, Integer>> logCountByCategoryAndPid = new HashMap<>();
+        for (String level : verbosityLevels)
+            logCountByCategoryAndPid.put(level, new HashMap<>());
+
+
+        for (Pair<String,String> verbosityLevel : verbosityToMagicCategoryMap) {
+            final String verbosity = verbosityLevel.first;
+            final String category = verbosityLevel.first;
+
+            for (MiscLogcatItem e : logcat.getMiscEvents(category)) {
+                if (e.getTag().trim().equals("")) {
+                    String process = getProcessNameFromPid(e.getPid());
+                    if ("zygote".equals(process) || "zygote64".equals(process))
+                        continue;
+                    String err = String.format(Locale.ROOT, "Log entry without log tag. PID: %d, cmd:%s, Msg:%s",
+                            e.getPid(),
+                            process,
+                            e.getStack());
+                    failures.add(err);
+                } else {
+                    if ("F".equals(verbosity) && "libc".equals(e.getTag()) && e.getStack() != null
+                            && "FORTIFY: FD_SET: file descriptor -1 < 0".equals(e.getStack().trim()))
+                    {
+                        //TODO: Temporary exclusion
+                        LogUtil.CLog.i("Ignoring fatal in libc: %s", e.getStack());
+                        continue;
+                    }
+
+                    Increase(logCountByPid, e.getPid());
+                    Increase(logCountByTag, e.getTag());
+                    Increase(logCountByCategoryByTag.get(verbosity), e.getTag());
+                    Increase(logCountByCategoryAndPid.get(verbosity), e.getPid());
+                }
+            }
+        }
+
+        Map<String, Float> maxLogsPerSecPerLevelPerTag = new HashMap<>();
+        for (String level : verbosityLevels)
+            maxLogsPerSecPerLevelPerTag.put(level, 0.0f);
+        maxLogsPerSecPerLevelPerTag.put("F", 0.0f);
+        maxLogsPerSecPerLevelPerTag.put("E", 5.0f);
+        maxLogsPerSecPerLevelPerTag.put("W", 5.0f);
+        maxLogsPerSecPerLevelPerTag.put("I", 10.0f);
+        maxLogsPerSecPerLevelPerTag.put("D", 30.0f);
+        maxLogsPerSecPerLevelPerTag.put("V", 50.0f);
+
+        Map<String, Float> maxLogsPerSecPerLevelPerPid = new HashMap<>();
+        for (String level : verbosityLevels)
+            maxLogsPerSecPerLevelPerPid.put(level, 0.0f);
+        maxLogsPerSecPerLevelPerPid.put("F", 0.0f);
+        maxLogsPerSecPerLevelPerPid.put("E", 5.0f);
+        maxLogsPerSecPerLevelPerPid.put("W", 5.0f);
+        maxLogsPerSecPerLevelPerPid.put("I", 10.0f);
+        maxLogsPerSecPerLevelPerPid.put("D", 30.0f);
+        maxLogsPerSecPerLevelPerPid.put("V", 50.0f);
+
+
+        //TODO: Temporary exclusions
+        HashSet<String> tempExcludedTags = new HashSet<String>(Arrays.asList(
+                "##PollingService##rvc##",
+                "StreamHAL",
+                "SLCANProto",
+                "libc",
+                "iplmd.service",
+                "DPTF",
+                "chatty",
+                "/system/bin/hwservicemanager",  // https://flow.jira.cm.volvocars.biz/browse/PSS370-4236
+                "IptablesRestoreController",
+                "android.hardware.power@1.0::Power"
+
+        ));
+        //TODO: Temporary exclusions
+        HashSet<String> tempExcludedProcesses = new HashSet<String>(Arrays.asList(
+                "/vendor/bin/hw/android.hardware.audio@2.0-service",
+                "/vendor/bin/hw/android.hardware.automotive.vehicle@2.0-service",
+                "com.intel.rvc",
+                "system_server",
+                "/vendor/bin/hw/iplmd",
+                "/system/vendor/bin/esif_ufd",
+                "/system/bin/netd",
+                "/system/bin/hwservicemanager"  // https://flow.jira.cm.volvocars.biz/browse/PSS370-4236
+        ));
+
+
+        for (String level : verbosityLevels) {
+            Map<String, Integer> logsByTagForThisLevel = logCountByCategoryByTag.get(level);
+            Map<Integer, Integer> logsByPidForThisLevel = logCountByCategoryAndPid.get(level);
+
+
+            for (Map.Entry<String, Integer> tagAndCount : logsByTagForThisLevel.entrySet()) {
+                final String tag = tagAndCount.getKey();
+                final int nrOfEntries = tagAndCount.getValue();
+
+                float entriesPerSec = nrOfEntries / measurementTime_sec;
+                float max = maxLogsPerSecPerLevelPerTag.get(level);
+
+                if (entriesPerSec > max) {
+                    String err = String.format(Locale.ROOT, "Log tag='%s' is exceeding max logs per sec for level=%s. Max=%.2f, Measured=%.2f",
+                            tag, level, max, entriesPerSec);
+                    if (tempExcludedTags.contains(tag.trim())) {
+                        LogUtil.CLog.d("Ignoring violation in log tag %s: %s", tag, err);
+                        continue;
+                    }
+
+                    failures.add(err);
+                }
+            }
+
+            for (Map.Entry<Integer, Integer> pidAndCount : logsByPidForThisLevel.entrySet()) {
+                final Integer pid = pidAndCount.getKey();
+                final int nrOfEntries = pidAndCount.getValue();
+
+                String processName = getProcessNameFromPid(pid);
+                float entriesPerSec = nrOfEntries / measurementTime_sec;
+                float max = maxLogsPerSecPerLevelPerPid.get(level);
+
+                if (entriesPerSec > max) {
+                    String err = String.format(Locale.ROOT, "Process pid=%d cmd=%s is exceeding max logs per sec for level=%s. Max=%.2f, Measured=%.2f",
+                            pid, processName, level, max, entriesPerSec);
+
+                    if (tempExcludedProcesses.contains(processName)) {
+                        LogUtil.CLog.i("Ignoring violation in process %s: %s", processName, err);
+                        continue;
+                    }
+
+                    failures.add(err);
+                }
+            }
+        }
+        return failures;
+    }
+
+
+    private  List<String> analyzeCrashItems(LogcatItem logcat) {
+        List<String> failures = new ArrayList<>();
+
+        //ANR = Application Not Responding
+        for (AnrItem anrItem : logcat.getAnrs()) {
+
+            //TODO: Temporary exclusions
+            if (anrItem.getReason() != null && anrItem.getReason().contains("com.android.server.telecom/.components.TelecomService"))
+                continue;
+            if (anrItem.getActivity() == null && anrItem.getReason() == null && anrItem.getTrace() == null && anrItem.getStack() != null && anrItem.getStack().trim().equals("ANR in system"))
+                continue;
+
+            String err = String.format(("ANR.CPU: %s \n" +
+                            "ANR.Load: %s\n" +
+                            "ANR.Activity: %s\n" +
+                            "ANR.Reason: %s\n" +
+                            "ANR.trace: %s\n" +
+                            "ANR.stack: %s\n"),
+                    anrItem.getCpuUsage(AnrItem.CpuUsageCategory.TOTAL),
+                    anrItem.getLoad(AnrItem.LoadCategory.LOAD_5),
+                    anrItem.getActivity(),
+                    anrItem.getReason(),
+                    anrItem.getTrace(),
+                    anrItem.getStack());
+            failures.add(err);
+        }
+        for (NativeCrashItem ci : logcat.getNativeCrashes()) {
+            String err = String.format("NativeCrashItem: %s", ci.getStack());
+            failures.add(err);
+        }
+        for (JavaCrashItem ci : logcat.getJavaCrashes()) {
+            String err = String.format("JavaCrashItem: %s", ci.getStack());
+            failures.add(err);
+        }
+        return failures;
+    }
+
+
+    private List<String> analyzeChatty(LogcatItem logcat) {
+        //TODO: We could also disable chatty pruning before running this test with logcat -P ?
+
+
+        List<String> failures = new ArrayList<>();
+        //TODO: Temporary exclusions
+        HashSet<String> tempExcludedChattyUids = new HashSet<String>(Arrays.asList(
+                "audioserver"
+        ));
+
+        //TODO: Temporary exclusions
+        HashSet<String> tempExcludedChattyProcesses = new HashSet<String>(Arrays.asList(
+                "Thread-1",
+                "system_server",
+                "/system/bin/audioserver",
+                "audio@2.0-servi",
+                "AudioOut_D",
+                "VolumeDialogCon",
+                "system-server-i",
+                "sensors@1.0-ser",
+                "SensorService",
+                "InputReader",
+                "hwservicemanage"
+        ));
+
+        /* Chatty is a component of the logging system detecting log spam in run time
+           When spam is detected, multiple log entries from the spammy process will be replaced with a
+           single log entry only containing the number of logs.
+           Example of chatty output:
+                11-11 11:21:58.611  2367  2374 I chatty  : uid=0(root) vehicle-signals expire 153 lines
+                11-11 11:21:58.687  2957  3065 I chatty  : uid=1000(system) Thread-1 identical 5 lines
+                11-11 11:21:58.947  2306  2318 I chatty  : uid=0(root) /vendor/bin/hw/ipcbd expire 6 lines
+                11-11 11:21:58.948  2308  2310 I chatty  : uid=0(root) /vendor/bin/hw/iplmd expire 7 lines
+
+            This regexp will match: uid, process and "expire" vs "identical"
+            LogCatReceiver will parse the time/pid/thread/etc and only give us the message with getStacK()
+        */
+        Pattern chattyPattern = Pattern.compile(
+                "uid=(\\d+)(\\(\\S*\\))?\\s+" +
+                "(.*?)\\s+" +
+                "(expire|identical)\\s+" +
+                "(\\d+)\\s+lines?"
+        );
+        for (MiscLogcatItem e : logcat.getMiscEvents(MAGIC_CATEGORY_CHATTY)) {
+
+            Matcher match = chattyPattern.matcher(e.getStack());
+            String process = "unknown";
+            String uidMatch = "";
+            String type = "unknown";
+            int nrOf = 0;
+
+            if (match.matches())
+            {
+                uidMatch = match.group(2);
+                process = match.group(3);
+                type = match.group(4);
+                nrOf = Integer.parseInt(match.group(5));
+            }
+
+            if ("identical".equals(type)) {
+                // give some slack :)
+                if (nrOf < 3) {
+                    continue;
+                }
+            }
+
+            if (tempExcludedChattyUids.contains(uidMatch)) {
+                LogUtil.CLog.i("Ignoring chatty violation from uid=%s", uidMatch);
+                continue;
+            }
+
+            if (tempExcludedChattyProcesses.contains(process)) {
+                LogUtil.CLog.i("Ignoring chatty violation from %s", process);
+                continue;
+            }
+            if (process.startsWith("Binder") || process.startsWith("HwBinder"))
+            {
+                LogUtil.CLog.i("Ignoring chatty violation from %s", process);
+                continue;
+            }
+
+            String err = String.format("Chatty classified logspam: %s", e.getStack());
+            failures.add(err);
+        }
+        return failures;
     }
 
     private <TKey> void Increase(Map<TKey, Integer> map, TKey key) {
@@ -173,17 +413,20 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
     }
 
 
-    private List<MiscLogcatItem> parseLogCat(InputStreamSource logcatStream) throws IOException {
+    private LogcatItem parseLogCat(InputStreamSource logcatStream) throws IOException {
         LogcatParser parser = new LogcatParser();
+
+        for (Pair<String, String> p: verbosityToMagicCategoryMap)
+            parser.addPattern(null, p.first, null, p.second);
+        parser.addPattern(null, null, "chatty", MAGIC_CATEGORY_CHATTY);
         try (InputStream stream = logcatStream.createInputStream()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(stream))) {
-                LogcatItem item = parser.parse(br);
-                return item.getEvents();
+                return  parser.parse(br);
             }
         }
     }
 
-    private List<MiscLogcatItem> getLogcat(final float measurementTime_sec) throws IOException {
+    private LogcatItem getLogcat(final float measurementTime_sec) throws IOException {
         final long avgLogEntrySize_bytes = 113;
         final long maxFileSize = (long) (avgLogEntrySize_bytes * 1000 * measurementTime_sec);
         final int logStartDelay = 0;
@@ -203,17 +446,16 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
 
     private String getProcessNameFromPid(final int pid) throws DeviceNotAvailableException {
         try {
-            File f = getDevice().pullFile(String.format("/proc/%d/cmdline", pid));
+            File f = getDevice().pullFile(String.format(Locale.ROOT, "/proc/%d/cmdline", pid));
             if (f == null) {
-                LogUtil.CLog.e("Failed to read cmdline for pid: %d. File does not exist.", pid);
-                return String.format("pid=%d", pid);
+                LogUtil.CLog.w("Failed to read cmdline for pid: %d. File does not exist.", pid);
+                return "unknown";
             } else {
-                String cmd = FileUtil.readStringFromFile(f);
-                return String.format("pid=%d (cmd=%s)", pid, cmd);
+                return FileUtil.readStringFromFile(f).split("\0")[0];
             }
         } catch (IOException e) {
-            LogUtil.CLog.e("Failed to read cmdline for pid: %d. %s", pid, e.toString());
-            return String.format("pid=%d", pid);
+            LogUtil.CLog.w("Failed to read cmdline for pid: %d. %s", pid, e.toString());
+            return "unknown";
         }
     }
 }
