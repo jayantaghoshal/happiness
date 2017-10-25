@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
+#include <set>
 
 #include "vendor/volvocars/hardware/signals/1.0/ISignals.h"
 #include "vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h"
@@ -11,25 +12,31 @@
 
 using namespace vendor::volvocars::hardware::signals::V1_0;
 
-static bool listSignals = false;
-static bool allSignals = true;
-static std::string tag = "*";
-static Dir dir;
+const char* dirStr(Dir dir) {
+  switch(dir) {
+    case Dir::IN: return "IN";
+    case Dir::OUT: return "OUT";
+    case Dir::INTERNAL: return "INTERNAL";
+    default: return "???";
+  }
+}
 
 class SignalChangedCallback : public ISignalsChangedCallback
 {
- public:
-  ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
-                                                  const ::android::hardware::hidl_string& data)
+public:
+ ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
+                                                 const ::android::hardware::hidl_string& data) override
   {
-    printf("\n %s %s", signalName.c_str(), data.c_str());
-    return ::android::hardware::Void();
+      printf("[%s] %s %s\n", dirStr(dir), signalName.c_str(), data.c_str());
+      fflush(stdout); //Important, when piping through grep (non interative terminal), \n does not flush the output.
+      return ::android::hardware::Void();
   }
 };
 
 void printHelp()
 {
-  printf("\nUsage: [in|out|internal] [SIGNALS] [-l, -list]\n");
+  printf("\n");
+  printf("Usage: [in|out|internal] [SIGNALS] [-l, -list]\n");
   printf("Example: 'signaltrace' trace all signals\n");
   printf("Example: 'signaltrace in' trace all signals received by IHU\n");
   printf("Example: 'signaltrace Prof*' trace all signals that starts with \"Prof\"\n");
@@ -37,27 +44,137 @@ void printHelp()
   printf(
       "Example: 'signaltrace in -list' First lists all received in signals last received value then trace all in "
       "signals \n\n");
+  printf("NOTE: Signal filters are case sensitive\n\n");
 }
 
-bool handleArguments(int argc, char* argv[])
+void printCurrentSignalsForDir(ISignals& service, Dir dir, const std::string& filter)
 {
+  printf("Get all %s signals with filter %s\n", dirStr(dir), filter.c_str());
+
+  ::android::hardware::hidl_vec<Result> result;
+  auto _hidl_cb = [&](const ::android::hardware::hidl_vec<Result>& data) { result = data; };  
+  auto res = service.get_all(filter, dir, _hidl_cb);
+  if (!res.isOk())
+  {
+    printf("Failed to call get_all() to server. Description: %s\n", res.description().c_str());
+    return;
+  }
+  for (const auto& r : result)
+  {
+    printf("[%s] %s %s\n", dirStr(dir), r.name.c_str(), r.value.c_str());
+  }
+  fflush(stdout);
+}
+
+class DeathRecipientToFunction : public android::hardware::hidl_death_recipient
+{
+public:
+  DeathRecipientToFunction(const std::function<void()> onDeath) : onDeath{onDeath} {}
+  void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override {
+    onDeath();
+  }
+private: 
+  const std::function<void()> onDeath;
+};
+
+class HidlSubscriber { 
+  public:
+    HidlSubscriber(
+      ::android::sp<ISignals> alreadyConnectedService,
+      const std::string& filter, 
+      const std::set<Dir>& dirs);
+  
+  private:
+    bool resubscribe();
+
+    std::mutex serviceMutex;
+    ::android::sp<ISignals> service;
+    const ::android::sp<SignalChangedCallback> signalChangedListener;
+    const ::android::sp<DeathRecipientToFunction> deathSubscriber;
+    const std::string filter;
+    const std::set<Dir> dirs;
+};
+
+bool HidlSubscriber::resubscribe() {  
+  auto result = service->linkToDeath(deathSubscriber, 1234);
+  if (!result.isOk())
+  {
+    printf("ERROR: Signaling service not available, link to death not possible: %s\n", result.description().c_str());
+    return false;
+  }
+  for (const Dir& d : dirs) { 
+    auto subscribe = service->subscribe(filter, d, signalChangedListener);
+    if (!subscribe.isOk())
+    {
+      printf("ERROR: Failed to subscribe to server with dir=%s and filter=%s . Description: %s\n", dirStr(d), filter.c_str(), subscribe.description().c_str());
+      return false;
+    }
+  }  
+  return true;
+}
+
+
+HidlSubscriber::HidlSubscriber(::android::sp<ISignals> alreadyConnectedService,
+  const std::string& filter, 
+  const std::set<Dir>& dirs) :
+    service{alreadyConnectedService},
+    signalChangedListener{new SignalChangedCallback()},
+    deathSubscriber{new DeathRecipientToFunction([&] { 
+      printf("ERROR: Lost connection to HIDL server\n");
+      fflush(stdout);
+      {
+        std::lock_guard<std::mutex> lock(serviceMutex);
+        service = nullptr;
+      }
+    })},
+    filter{filter}, 
+    dirs{dirs} 
+{   
+  if (service != nullptr) {  
+    resubscribe();
+  }
+
+  while(true) 
+  {    
+    {
+      std::lock_guard<std::mutex> lock2(serviceMutex);
+      while (service == nullptr) {
+        service = ISignals::getService();
+        if (service != nullptr) {
+          printf("Reconnected to HIDL server\n");
+          fflush(stdout);
+          if (!resubscribe()) {
+              service = nullptr;
+              printf("Failed to reconnect to HIDL server\n");
+              fflush(stdout);
+          }
+        }        
+        std::this_thread::sleep_for(std::chrono::seconds(2)); //TODO: Could use ISignals::registerForNotifications instead
+      }
+    }    
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+}
+
+int main(int argc, char* argv[])
+{
+  bool listSignals = false;
+  std::string filter = "*";
+  std::set<Dir> dirs{Dir::IN, Dir::OUT, Dir::INTERNAL};  
   for (int i = 1; i < argc; i++)
   {
     std::string arg = argv[i];
     if (arg == "in" || arg == "IN")
     {
-      dir = Dir::IN;
-      allSignals = false;
+      dirs = std::set<Dir>{Dir::IN};
     }
     else if (arg == "out" || arg == "OUT")
     {
-      dir = Dir::OUT;
-      allSignals = false;
+      dirs = std::set<Dir>{Dir::OUT};
     }
     else if (arg == "internal" || arg == "INTERNAL")
     {
-      dir = Dir::INTERNAL;
-      allSignals = false;
+      dirs = std::set<Dir>{Dir::INTERNAL};
     }
     else if (arg == "-l" || arg == "--list" || arg == "-list")
     {
@@ -66,103 +183,29 @@ bool handleArguments(int argc, char* argv[])
     else if (arg == "--help" || arg == "-help" || arg == "-h")
     {
       printHelp();
-      return false;
+      return 0;
     }
     else
     {
-      tag = arg;
+      filter = arg;
     }
   }
-  return true;
-}
 
-void printCurrentSignalsForDir(Dir dir, std::string prefix)
-{
-  ::android::hardware::hidl_vec<Result> result;
-  auto _hidl_cb = [&](const ::android::hardware::hidl_vec<Result>& data) { result = data; };
+
   ::android::sp<ISignals> service = ISignals::getService();
-  auto res = service->get_all(tag, dir, _hidl_cb);
-  if (!res.isOk())
-  {
-    printf("Failed to call get_all() to server. Description: %s", res.description().c_str());
-    return;
+  if (service == nullptr) {
+    printf("Service is null, is dataelements-hidl-server running?\n");
+    return 1;
   }
-  for (const auto& r : result)
-  {
-    printf("%s Signal: %s Data: %s\n", prefix.c_str(), r.name.c_str(), r.value.c_str());
-  }
-}
 
-void printCurrentSignals(Dir dir)
-{
-  if (!allSignals)
-  {
-    switch (dir)
-    {
-      case Dir::IN:
-        printf("List of all current in signals:\n");
-        printCurrentSignalsForDir(dir, "<-");
-        break;
-      case Dir::OUT:
-        printf("List of all current out signals:\n");
-        printCurrentSignalsForDir(dir, "->");
-        break;
-      case Dir::INTERNAL:
-        printf("List of all current internal signals:\n");
-        printCurrentSignalsForDir(dir, "[INTERNAL]");
-        break;
-    }
-  }
-  else
-  {
-    printf("List of all current signals:\n");
-    printCurrentSignalsForDir(Dir::IN, "<-");
-    printCurrentSignalsForDir(Dir::OUT, "->");
-    printCurrentSignalsForDir(Dir::INTERNAL, "[INTERNAL]");
-  }
-}
-
-int main(int argc, char* argv[])
-{
-  if (!handleArguments(argc, argv)) return 0;
-  ::android::sp<ISignals> service = ISignals::getService();
-  ::android::sp<ISignalsChangedCallback> signalChanged = new SignalChangedCallback();
   if (listSignals)
   {
-    printCurrentSignals(dir);
-  }
-  if (!allSignals)
-  {
-    auto subscribe = service->subscribe(tag, dir, signalChanged);
-    if (!subscribe.isOk())
-    {
-      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
-      return 0;
+    for (const Dir& d : dirs) {
+      printCurrentSignalsForDir(*service, d, filter);
     }
+    return 0;
   }
-  else
-  {
-    auto subscribe = service->subscribe(tag, Dir::IN, signalChanged);
-    if (!subscribe.isOk())
-    {
-      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
-      return 0;
-    }
-    subscribe = service->subscribe(tag, Dir::OUT, signalChanged);
-    if (!subscribe.isOk())
-    {
-      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
-      return 0;
-    }
-    subscribe = service->subscribe(tag, Dir::INTERNAL, signalChanged);
-    if (!subscribe.isOk())
-    {
-      printf("Failed to subscribe to server. Description: %s", subscribe.description().c_str());
-      return 0;
-    }
-  }
-  while (true)
-  {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
+
+  HidlSubscriber runsForever(service, filter, dirs);
+  
 }
