@@ -11,6 +11,12 @@ LscMocker::LscMocker(){
     ALOGE("Couldnt getService : Exception thrown: %s", e.what());
   }
 }
+
+LscMocker::~LscMocker()
+{
+  ALOGD("~LscMocker");
+}
+
 void LscMocker::RegisterLSC(std::string LSCName){
   if(iplmservice != nullptr)
     iplmservice->registerService(LSCName,this);

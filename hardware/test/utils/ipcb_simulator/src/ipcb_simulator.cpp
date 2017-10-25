@@ -140,3 +140,9 @@ bool IpcbSimulator::ReceivePdu(Pdu& pdu)
     pdu.fromData(rd_buffer);
     return true;
 }
+
+void IpcbSimulator::CloseSocket()
+{
+    int result = shutdown(local_socket_, SHUT_RDWR);
+    ALOGD("IpcbSimulator::CloseSocket: %d", result);
+}
