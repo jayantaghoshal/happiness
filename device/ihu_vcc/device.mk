@@ -54,6 +54,7 @@ ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
     signaltrace \
     signalecho \
+    carsim_bridge \
     carconfig-client-tester \
     hisipcmd
 endif

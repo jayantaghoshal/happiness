@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <atomic>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -27,6 +28,10 @@ class HidlHandler : public ISignalsChangedCallback {
 
  private:
   std::shared_ptr<CarSim::SocketConnection> connection_;
+
+  // TODO remove when client is more robust.
+  bool first_run_{true};
+  std::chrono::steady_clock::time_point connection_timestamp_{};
 };
 
 }  // CarSim

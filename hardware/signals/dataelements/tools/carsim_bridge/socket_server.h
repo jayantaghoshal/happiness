@@ -12,15 +12,13 @@ namespace CarSim {
 
 class SocketServer {
  public:
-  void Init(int port);
+  SocketServer(int port);
   std::shared_ptr<CarSim::SocketConnection> Connect();
 
  private:
-  int server_fd_{-1};    // server socket
-  sockaddr_in address_;  // struct
+  // int server_fd_{-1};    // server socket
+  std::unique_ptr<int, decltype(&close_wrapper)> server_socket_fd_Ptr_{new int(), &close_wrapper};
 
-  const std::string SOF{"CarSim"};
-  static constexpr std::uint8_t SOF_length{6};
-  static constexpr std::uint8_t messageLength_length{4};  // fixed 4 bytes describing an int32
+  sockaddr_in address_;  // struct
 };
 }
