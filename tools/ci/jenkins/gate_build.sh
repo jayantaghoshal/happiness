@@ -2,14 +2,7 @@
 set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
-
-# Rerun commit check in case merge effect changed after the change was validated at the check step
-docker_run "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check \"${ZUUL_BRANCH}\""
-
-# Update the manifests based on the templates and download all other
-# repositories. First time this will take a very long time but subsequent
-# downloads are incremental and faster.
-docker_run "time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local \"${ZUUL_BRANCH}\""
+REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -21,8 +14,24 @@ export CCACHE_DIR=$TMPFS/ccache
 export CCACHE_MAXSIZE=50G
 export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
+# Setting OUT_DIR must be done BEFORE sourcing envsetup.sh !!!!!!!!!!!!
 export OUT_DIR=$JOB_TMPFS/out
 export USE_CCACHE=true
+
+source "$REPO_ROOT_DIR"/build/envsetup.sh
+lunch ihu_vcc-eng
+
+
+# Rerun commit check in case merge effect changed after the change was validated at the check step
+python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
+
+# Update the manifests based on the templates and download all other
+# repositories. First time this will take a very long time but subsequent
+# downloads are incremental and faster.
+time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
+
+
+
 
 rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
 
@@ -30,13 +39,13 @@ rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
 # Ensure our repo can be build with mma
-docker_run "time mmma -j32 vendor/volvocars"
+time mmma -j32 vendor/volvocars
 
 # Build image and test utils
-docker_run "time make -j32 droid vts tradefed-all"
+time make -j32 droid vts tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate || die "Build Unit and Component tests failed"
 
 # Push out files required for gate_test.sh to Artifactory.
 #
@@ -52,8 +61,8 @@ docker_run "time python3 $REPO_ROOT_DIR/vendor/volvocars/tools/ci/shipit/tester.
 # pigz -9             873MB -  0m 47sec         30 Mb/s
 
 OUT_ARCHIVE=out.tgz
-docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
-            --directory=\"${JOB_TMPFS}\"
+time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
+            --directory="${JOB_TMPFS}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
@@ -62,9 +71,9 @@ docker_run "time tar -c --use-compress-program='pigz -1' -f ${OUT_ARCHIVE} \
             ./out/host/linux-x86/bin/tradefed.sh \
             ./out/host/linux-x86/bin/vts-tradefed \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed"
+            ./out/host/linux-x86/tradefed || die "Could not create out archive"
 
 ls -lh "$OUT_ARCHIVE"
-docker_run "time artifactory push ihu_gate_build \"${ZUUL_COMMIT}\" ${OUT_ARCHIVE}"
+time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
 
 rm ${OUT_ARCHIVE}

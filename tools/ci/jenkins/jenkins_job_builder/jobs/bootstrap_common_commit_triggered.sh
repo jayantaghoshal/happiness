@@ -13,11 +13,11 @@ echo "https://icup_android.gerrit.cm.volvocars.biz/#/c/${ZUUL_CHANGE}"
 # This is only to get a container with "repo" and "zuul" installed
 # Once we have cloned the vendor/volvocars repo we use the container specified by vendor/volvocars/tools/docker_build
 #
-export DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
+BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
 export WORKSPACE_ROOT
 WORKSPACE_ROOT=$(pwd)
 
-docker_run () {
+bootstrap_docker_run () {
     docker run \
     --hostname aic-docker \
     --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
@@ -53,7 +53,7 @@ docker_run () {
     --device /dev/ttyVIP \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
-    "${DOCKER_IMAGE}" \
+    "${BOOTSTRAP_DOCKER_IMAGE}" \
     "$@"
 }
 
@@ -73,19 +73,19 @@ if [[ -d .repo ]]; then
     # Hard reset manifest repo (current branch)
     (cd .repo/manifests && git reset --hard HEAD || true)
 fi
-docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
-docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars"
+bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
+bootstrap_docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars"
 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail
 # if there are unstaged changes. And we want builds to be reproducible so better to reset repos.
-docker_run "repo forall -c 'git reset --hard ; git clean -fdx'"
+bootstrap_docker_run "repo forall -c 'git reset --hard ; git clean -fdx'"
 
 ################################################################################################
 ## Download the commit to check (for vendor/volvocars-repo)
 #
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
-docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
+bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
 
 if [ "$(git -C vendor/volvocars rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
     die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in vendor/volvocars."

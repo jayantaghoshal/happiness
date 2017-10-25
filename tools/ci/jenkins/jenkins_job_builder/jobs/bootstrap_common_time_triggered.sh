@@ -18,11 +18,11 @@ cd $build_dir
 ##
 # Configure Docker 
 #
-export DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
+export BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
 export WORKSPACE_ROOT
 WORKSPACE_ROOT=$(pwd)
 
-docker_run () {
+bootstrap_docker_run () {
     docker run \
     --hostname aic-docker \
     --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
@@ -36,7 +36,7 @@ docker_run () {
     --env LOG_PATH \
     --env WORKSPACE_ROOT \
     --workdir "${WORKSPACE_ROOT}" \
-    "${DOCKER_IMAGE}" \
+    "${BOOTSTRAP_DOCKER_IMAGE}" \
     "$@"
 }
 
