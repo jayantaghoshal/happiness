@@ -3,7 +3,7 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 
-docker_run "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check \"${ZUUL_BRANCH}\""
+python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 
 # Disabled commit check because Zuul seems to confuse it by creating temporary
 # merge-commits with "invalid" commit message.

@@ -2,6 +2,9 @@
 set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
+REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
+source "$REPO_ROOT_DIR"/build/envsetup.sh
+lunch ihu_vcc-eng
 
 docker_killall
 
@@ -12,7 +15,7 @@ repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/
 OUT_ARCHIVE=out.tgz
 rm -rf out ${OUT_ARCHIVE}
 
-docker_run "artifactory pull ihu_gate_build \"${ZUUL_COMMIT}\" ${OUT_ARCHIVE}" \
+artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
     || die "Could not pull out archive from Artifactory."
 
 tar xvf ${OUT_ARCHIVE} || die "Could not extract out archive."
@@ -26,4 +29,4 @@ export VECTOR_FDX_PORT=2809
 ping -c1 ${VECTOR_FDX_IP}
 
 # Run Unit and Component tests for vendor/volvocars
-docker_run "time python3 $REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial flexray -o flexray
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial flexray -o flexray
