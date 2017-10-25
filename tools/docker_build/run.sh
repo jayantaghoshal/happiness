@@ -8,13 +8,13 @@ DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
 DOCKER_IMAGE=$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")
 
 IS_TERMINAL=false
-# Check if STDIN descriptor (1) is associated with a terminal device
+# Check if STDOUT descriptor (1) is associated with a terminal device
 if [[ -t 1 ]]; then
     IS_TERMINAL=true
 fi
 IS_INTERACTIVE=false
-# Check if STDIN file is NOT pipe. If not, it is "regular" STDIN
-if [[ ! -p /dev/fd/0 ]]; then
+# Check if STDIN descriptior is interactive.
+if [[ -t 0 ]]; then
     IS_INTERACTIVE=true
 fi
 
@@ -45,13 +45,13 @@ if [[ !  -z  $EXISTING_CONTAINERS  ]]; then
     echo ""
     echo "  To view your running docker containers:"
     echo "       docker ps"
-    echo 
+    echo
     echo "  To kill the container in case it is running in the background:"
     echo "       docker kill CONTAINER_ID"
     echo ""
     echo "  To attach a shell to the already running container:"
     echo "       docker exec --tty --interactive CONTAINER_ID /tmp/entrypoint.sh bash"
-    echo "-------------------------------------------------------------------------------------------"    
+    echo "-------------------------------------------------------------------------------------------"
 
 
     if [[ $IS_TERMINAL == true && $IS_INTERACTIVE == true ]]; then
