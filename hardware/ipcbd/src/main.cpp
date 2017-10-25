@@ -5,6 +5,7 @@
 #include <ipcommandbus/MessageDispatcher.h>
 #include <ipcommandbus/TransportServices.h>
 #include <ipcommandbus/UdpSocket.h>
+#include <ipcommandbus/TcpSocket.h>
 #include <ipcommandbus/isocket.h>
 #include <hidl/HidlTransportSupport.h>
 #include <cstdint>
@@ -34,7 +35,7 @@ using namespace android::hardware;
 
 // #define LOOPBACK_ADDRESS "127.0.0.1"
 // Configure sockets
-void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
+void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu)
 {
     const std::uint32_t sleep_time = 100000;  // sleep 100 ms
 
@@ -45,7 +46,7 @@ void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
     {
         try
         {
-            sock.setup(ecu);
+            sock->setup(ecu);
             ALOGI("Setup socket for Ecu %u successfully", ecu);
             return;
         }
@@ -158,8 +159,7 @@ int main(int argc, char *argv[])
 
     TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
-    UdpSocket sock(dispatcher);
-    UdpSocket broadcastSock(dispatcher);  // Socket for broadcast
+    std::shared_ptr<Socket> sock;
 
     try
     {
@@ -170,13 +170,15 @@ int main(int argc, char *argv[])
 
         if (protocol == "UDP")
         {
-            transport.setSocket(&sock);
+            sock = std::make_shared<UdpSocket>(dispatcher);
+            transport.setSocket(sock.get());
             setupSocket(sock, Message::IHU);
         }
         else if (protocol == "UDPB")
         {
-            transport.setBroadcastSocket(&broadcastSock);
-            setupSocket(broadcastSock, Message::ALL);
+            sock = std::make_shared<UdpSocket>(dispatcher);
+            transport.setBroadcastSocket(sock.get());
+            setupSocket(sock, Message::ALL);
         }
         else if (protocol == "TCP")
         {
@@ -185,17 +187,17 @@ int main(int argc, char *argv[])
                 ALOGE("Needs ECU name. Check .rc file");
                 return 1;
             }
-            // TODO: Add DIM and other ECU sockets for TCP communication
-            // if (ECU == "DIM")
-            // {
-            //     // setup atcp socket with port and IP extracted from
-            //     localconfig
-            // }
-            // else
-            // {
-            //     ALOGE("Unknown ECU specified for TCP communication")
-            //     return;
-            // }
+            if (std::string(argv[3]) == "DIM")
+            {
+                sock = std::make_shared<TcpSocket>(dispatcher);
+                transport.setSocket(sock.get());
+                setupSocket(sock, Message::DIM);
+            }
+            else
+            {
+                ALOGE("Only DIM is supported currently");
+                return 1;
+            }
         }
         else
         {
