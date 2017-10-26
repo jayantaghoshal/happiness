@@ -9,6 +9,9 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- AOSP Changed by Volvo Cars -->
+  <remove-project name="aosp/platform/system/sepolicy"/>
+  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="13d7cfcea9b415656aa922e2c0e6e11c71bf45f6"/>
+
   <!-- Integration Ongoing
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
@@ -58,6 +61,7 @@
 
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
+
   <remove-project name="android_vehicle-hal"/>
   <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="5c49dd5db8c685944c31ffa3e79fd827d7102557"/>
 
