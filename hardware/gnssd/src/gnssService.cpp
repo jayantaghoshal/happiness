@@ -7,6 +7,7 @@
 #define LOG_TAG "GnssD.service"
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
@@ -38,15 +39,26 @@ void GnssService::StartSubscribe()
         connectionError = false;
         ALOGD("IpcbD found, subscribing");
         // Install callback
+        CommandResult result;
         ipcbServer_.get()->subscribeMessage((uint16_t) VccIpCmd::ServiceId::Positioning,
                                             (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
                                             {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                            this);
+                                            this,
+                                            [&result](CommandResult cr) { result = cr; });
+        if (!result.success)
+        {
+            ALOGE("Subscribe message returned an error: %s", result.errMsg.c_str());
+        }
 
         ipcbServer_.get()->subscribeMessage((uint16_t)VccIpCmd::ServiceId::Positioning,
                                             (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
                                             {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                            this);
+                                            this,
+                                            [&result](CommandResult cr) { result = cr; });
+        if (!result.success)
+        {
+            ALOGE("Subscribe message returned an error: %s", result.errMsg.c_str());
+        }
     }
     else
     {

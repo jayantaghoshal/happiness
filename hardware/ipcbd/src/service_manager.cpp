@@ -24,7 +24,13 @@ ServiceManager::ServiceManager(std::string service_name,::Connectivity::MessageD
 }
 
 // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
-Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes, const sp<IMessageCallback>& callbackHandler) {
+Return<void> ServiceManager::subscribeMessage(
+    uint16_t serviceID,
+    uint16_t operationID,
+    const hidl_vec<OperationType>& operationTypes,
+    const sp<IMessageCallback>& callbackHandler,
+    subscribeMessage_cb _hidl_cb)
+{
     ALOGD("+ Ipcb::subscribeMessage");
 
     std::vector<OperationType> opTypes = (std::vector<OperationType>) operationTypes;
@@ -33,7 +39,8 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
     if (0 == operationTypes.size())
     {
         ALOGD("- Ipcb::subscribeMessage (FAIL)");
-        return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::FAIL;
+        _hidl_cb({false, "No operation type(s) provided!"});
+        return Void();
     }
 
     std::set<OperationType> subscribedTypes = {OperationType::RESPONSE, OperationType::ERROR};  //Do not allow RESPONSE or ERRORS to be added!
@@ -65,10 +72,16 @@ Return<Status> ServiceManager::subscribeMessage(uint16_t serviceID, uint16_t ope
     }
 
     ALOGD("- Ipcb::subscribeMessage (SUCCESS)");
-    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::SUCCESS;
+    _hidl_cb({true, ""});
+    return Void();
 }
 
-Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t operationID, const sp<IResponseCallback>& callbackHandler) {
+Return<void> ServiceManager::subscribeResponse(
+    uint16_t serviceID,
+    uint16_t operationID,
+    const sp<IResponseCallback>& callbackHandler,
+    subscribeResponse_cb _hidl_cb)
+{
     ALOGD("+ Ipcb::subscribeResponse");
 
     messageDispatcher_.registerResponseCallback(serviceID, operationID,
@@ -109,10 +122,16 @@ Return<Status> ServiceManager::subscribeResponse(uint16_t serviceID, uint16_t op
         });
 
     ALOGD("- Ipcb::subscribeResponse (SUCCESS)");
-    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status::SUCCESS;
+    _hidl_cb({true, ""});
+    return Void();
 }
 
-Return<Status> ServiceManager::unsubscribe(uint16_t serviceID, uint16_t operationID, const sp<IMessageCallback>& callbackHandler) {
+Return<void> ServiceManager::unsubscribe(
+    uint16_t serviceID,
+    uint16_t operationID,
+    const sp<IMessageCallback>& callbackHandler,
+    unsubscribe_cb _hidl_cb)
+{
 
     ALOGD("+ Ipcb::unsubscribe (NOT IMPLEMENTED!)");
 
@@ -122,10 +141,13 @@ Return<Status> ServiceManager::unsubscribe(uint16_t serviceID, uint16_t operatio
 
     // TODO There is no unsubscribe currently, implement it!!
 
-    return ::vendor::volvocars::hardware::vehiclecom::V1_0::Status {};
+    _hidl_cb({true, ""});
+    return Void();
 }
 
-Return<void> ServiceManager::sendMessage(const Msg& msg) {
+Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryInfo)
+{
+    (void)retryInfo; //TODO: Implement according to PSS370-3695
 
     ALOGD("+ Ipcb::sendMessage");
     // Prepare header

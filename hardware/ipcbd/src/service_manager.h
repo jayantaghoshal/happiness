@@ -16,8 +16,9 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IResponseCallback;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::Status;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
@@ -40,10 +41,13 @@ public:
     ServiceManager(std::string service_name, ::Connectivity::MessageDispatcher& msgDispatcher);
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
-    Return<Status> subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes, const sp<IMessageCallback>& callbackHandler) override;
-    Return<Status> subscribeResponse(uint16_t serviceID, uint16_t operationID, const sp<IResponseCallback>& callbackHandler) override;
-    Return<Status> unsubscribe(uint16_t serviceID, uint16_t operationID, const sp<IMessageCallback>& callbackHandler) override;
-    Return<void> sendMessage(const Msg& msg) override;
+    Return<void> subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes,
+                                  const sp<IMessageCallback>& callbackHandler, subscribeMessage_cb _hidl_cb) override;
+    Return<void> subscribeResponse(uint16_t serviceID, uint16_t operationID, const sp<IResponseCallback>& callbackHandler,
+                                   subscribeResponse_cb _hidl_cb) override;
+    Return<void> unsubscribe(uint16_t serviceID, uint16_t operationID, const sp<IMessageCallback>& callbackHandler,
+                                   unsubscribe_cb _hidl_cb) override;
+    Return<void> sendMessage(const Msg& msg, const RetryInfo& retryInfo) override;
 
 private:
     MessageDispatcher& messageDispatcher_;

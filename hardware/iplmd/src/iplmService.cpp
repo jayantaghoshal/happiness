@@ -4,6 +4,8 @@
 #define LOG_TAG "iplmd.service"
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
@@ -53,7 +55,14 @@ void IplmService::StartSubscribe()
         ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
 
         // Install callback
-        ipcbServer_.get()->subscribeMessage(0xFFFF, 0xFF01,{ OperationType::NOTIFICATION_CYCLIC},this); //Change to not use hard coded hex values here?!
+        CommandResult result;
+        ipcbServer_.get()->subscribeMessage(0xFFFF, 0xFF01, {OperationType::NOTIFICATION_CYCLIC},
+            this, [&result](CommandResult cr) { result = cr; });
+
+        if (!result.success)
+        {
+            ALOGE("Subscribe message returned an error: %s", result.errMsg.c_str());
+        }
 
         Initialize();
     }
@@ -334,7 +343,7 @@ void IplmService::CreateAndSendIpActivityMessage()
 
     ALOGD("Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
 
-    ipcbServer_.get()->sendMessage(message);
+    ipcbServer_.get()->sendMessage(message, {false, 0, 0});
 }
 
 bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg, const Prio prio)
