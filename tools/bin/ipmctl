@@ -35,15 +35,15 @@ def main():
     args = parser.parse_args()
 
     if args.state.lower() == 'on':
-        json_out = ipm.Client(args.ip).on(args.port)
-        if json_out == True:
+        out = ipm.Client(args.ip).on(args.port)
+        if out == True:
             print("Port %s is powered ON!!!" % str(args.port))
         else:
             print("Something went wrong on port %s" % str(args.port))
 
     elif args.state.lower() == 'off':
-        json_out = ipm.Client(args.ip).off(args.port)
-        if json_out == True:
+        out = ipm.Client(args.ip).off(args.port)
+        if out == True:
             print("Port %s is powered OFF!!!" % str(args.port))
         else:
             print("Something went wrong on port %s" % str(args.port))
