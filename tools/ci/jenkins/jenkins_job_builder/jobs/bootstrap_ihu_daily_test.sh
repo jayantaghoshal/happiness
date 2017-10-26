@@ -2,8 +2,8 @@
 ##
 # Repo sync
 #
-LATEST_IMAGE_BUILD=$(docker_run "redis-cli get icup_android.jenkins.ihu_image_build.latest.job_number") || die "Failed to get latest image_build job number from Redis"
-IHU_IMAGE_BUILD_COMMIT=$(docker_run "redis-cli get icup_android.jenkins.ihu_image_build.${LATEST_IMAGE_BUILD}.commit") || die "Failed to get commit from Redis"
+LATEST_IMAGE_BUILD=$(bootstrap_docker_run "redis-cli get icup_android.jenkins.ihu_image_build.latest.job_number") || die "Failed to get latest image_build job number from Redis"
+IHU_IMAGE_BUILD_COMMIT=$(bootstrap_docker_run "redis-cli get icup_android.jenkins.ihu_image_build.${LATEST_IMAGE_BUILD}.commit") || die "Failed to get commit from Redis"
 
 
 if [[ ! -d .repo ]]; then
@@ -14,5 +14,6 @@ bootstrap_docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor
 ##
 # Run Tests
 #
+docker_killall
 export UPSTREAM_JOB_NUMBER=${LATEST_IMAGE_BUILD}
 ./vendor/volvocars/tools/ci/jenkins/ci_docker_run.sh ./vendor/volvocars/tools/ci/jenkins/daily.sh

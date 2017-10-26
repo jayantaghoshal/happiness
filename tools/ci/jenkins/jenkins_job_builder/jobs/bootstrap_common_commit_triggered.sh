@@ -57,6 +57,17 @@ bootstrap_docker_run () {
     "$@"
 }
 
+# Make sure there are no other Docker containers left running on slaves that
+# might interfer with current job. E.g. it is promplematic to have an adb server
+# running in another container if we want to invoke it in the current job.
+function docker_killall() {
+  local containers
+  containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1 )
+  if [ -n "$containers" ]; then
+    #shellcheck disable=SC2086
+    docker kill $containers
+  fi
+}
 
 ################################################################################################
 ## Initialize Repo and vendor/volvocars
@@ -97,11 +108,15 @@ if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
     echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
     exit -1
 fi
-export REQUIRED_CI_VERSION=2
+export REQUIRED_CI_VERSION=I0a72d73f2bb7925ccde548e2e834792700920f4e
 DETECTED_CI_VERSION=$(cat ./vendor/volvocars/tools/ci/ci_version)
 if [ $REQUIRED_CI_VERSION != "$DETECTED_CI_VERSION" ]; then
     # If you are a CI developer, you should update the CI version both here and in the repo.
-    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+    echo "***************************************************************************************
+    echo "*"
+    echo "* Your CI version in vendor/volvocars is too old, you will have to rebase your change."
+    echo "* Min changeset version required: $REQUIRED_CI_VERSION"
+    echo "***************************************************************************************
     exit -1
 fi
 

@@ -40,3 +40,14 @@ bootstrap_docker_run () {
     "$@"
 }
 
+# Make sure there are no other Docker containers left running on slaves that
+# might interfer with current job. E.g. it is promplematic to have an adb server
+# running in another container if we want to invoke it in the current job.
+function docker_killall() {
+  local containers
+  containers=$(docker ps -q --format="{{.ID}} {{.Image}}" | grep vcc_aosp_build | cut -d " " -f 1 )
+  if [ -n "$containers" ]; then
+    #shellcheck disable=SC2086
+    docker kill $containers
+  fi
+}
