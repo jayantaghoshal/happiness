@@ -3,8 +3,6 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
-source "$REPO_ROOT_DIR"/build/envsetup.sh
-lunch ihu_vcc-eng
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -17,8 +15,11 @@ export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
 export USE_CCACHE=true
 
+source "$REPO_ROOT_DIR"/build/envsetup.sh
+lunch ihu_vcc-eng
+
 # Build image, vts & tradefed
-lunch ihu_vcc-eng && time make -j32 droid vts tradefed-all
+time make -j32 droid vts tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly || die "Build Unit and Component tests failed"
