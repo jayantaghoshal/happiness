@@ -147,8 +147,6 @@ Return<void> ServiceManager::unsubscribe(
 
 Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryInfo)
 {
-    (void)retryInfo; //TODO: Implement according to PSS370-3695
-
     ALOGD("+ Ipcb::sendMessage");
     // Prepare header
     Pdu pdu;
@@ -164,6 +162,8 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
     // Create message and set pdu.
     Message message(std::move(pdu));
     message.ecu = (Message::Ecu)((int)msg.ecu);
+
+    message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
     ALOGI(" Sending message (%04X.%04X) to %s",
         message.pdu.header.service_id,

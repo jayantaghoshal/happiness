@@ -7,20 +7,18 @@
 
 namespace Connectivity
 {
-TimeoutInfo::TimeoutInfo()
+TimeoutInfo::TimeoutInfo() :
+    TimeoutInfo(LocalconfigParameters::getInstance().getDefaultAckTimeout(),
+                LocalconfigParameters::getInstance().getDefaultAckNumRetries())
 {
-    LocalconfigParameters cfg = LocalconfigParameters::getInstance();
-    std::chrono::milliseconds timeout = cfg.getDefaultAckTimeout();
-    baseTimeout_ = timeout;
-    maxRetries_ = cfg.getDefaultAckNumRetries();
-    multiplier_ = cfg.getDefaultAckMultiplier();
-    timeoutValue_ = timeout;
-    retry_ = 0;
-
 }
 
-TimeoutInfo::TimeoutInfo(std::chrono::milliseconds bTimeout, uint32_t mRetries, float mult)
-    : baseTimeout_(bTimeout), maxRetries_(mRetries), multiplier_(mult), timeoutValue_(bTimeout), retry_(0)
+TimeoutInfo::TimeoutInfo(std::chrono::milliseconds timeout, uint32_t max_retries) :
+    baseTimeout_(timeout),
+    timeoutValue_(timeout),
+    maxRetries_(max_retries),
+    multiplier_(LocalconfigParameters::getInstance().getDefaultAckMultiplier()),
+    retry_(0)
 {
 }
 

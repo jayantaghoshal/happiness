@@ -38,6 +38,13 @@ struct Message
         ENUM_NR_OF_ECUs
     };
 
+    struct RetryInfo
+    {
+        bool override_default;
+        uint8_t max_retries;
+        uint16_t retry_timeout_ms;
+    };
+
     Message() = default;
 
     Message(const Message &) = default;
@@ -65,6 +72,8 @@ struct Message
     Pdu pdu;
 
     Ecu ecu = UNKNOWN;
+
+    RetryInfo retry_info = {false, 0, 0};
 };
 }
 
