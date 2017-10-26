@@ -131,17 +131,20 @@ class NumericSender(DESignalWidget):
         self.bindVar.set("0")
         self.e = tkinter.ttk.Entry(self, width=10, textvariable=self.bindVar)
         self.e.bind("<Return>", lambda x: self.on_change())
-        self.bindVar.trace("w", lambda name, index, mode: self.strvarchange())
+        self.bindVar.trace("w", lambda name, index, mode: self.entry_text_changed())
         self.e.pack()
 
         min, max = arDataTypeValue.getDataConstraint().getLimits()
 
-        self.bindVarInt = tkinter.IntVar()
-        self.bindVarInt.trace("w", lambda name, index, mode: self.intvarchange())
+        self.bindVarInt = tkinter.DoubleVar()
+        self.bindVarInt.trace("w", lambda name, index, mode: self.slider_value_changed())
         self.scale = tkinter.ttk.Scale(self, from_=min, to=max, orient=tkinter.HORIZONTAL, variable=self.bindVarInt)
         self.scale.pack()
 
-    def strvarchange(self):
+    # Be careful here, there are some details required to get changes from both textfield and slider to propagate to
+    # each other without getting into an infinite loop of data binding triggers.
+
+    def entry_text_changed(self):
         try:
             newIntVar = int(self.bindVar.get())
         except ValueError as v:
@@ -153,8 +156,14 @@ class NumericSender(DESignalWidget):
             # this means slider changed before entry
             self.on_change()
 
-    def intvarchange(self):
-        self.bindVar.set(str(self.bindVarInt.get()))
+    def slider_value_changed(self):
+        double_value = self.bindVarInt.get()
+        rounded_value = int(round(double_value))
+        self.bindVar.set(str(rounded_value))
+        if double_value != rounded_value:
+            # Round to closest integer
+            # Hack because ttk.Scale does not support resolution-parameter
+            self.bindVarInt.set(rounded_value)
 
     def get_value(self):
         return int(self.bindVar.get())
