@@ -1,0 +1,9 @@
+package vendor.volvocars.hardware.uds@1.0;
+
+import DidReadResult;
+import Did;
+
+interface IUdsDataProvider
+{
+    readDidValue(Did did) generates (DidReadResult result);
+};
