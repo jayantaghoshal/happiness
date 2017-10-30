@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.usb2ethernet">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+        <activity android:name=".Usb2EthernetActivity" />
+    </application>
+
+    <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
+                     android:targetPackage="com.volvocars.usb2ethernet"
+                     android:label="Tradefed test for basic usb2ethernet connectivity">
+    </instrumentation>
+</manifest>

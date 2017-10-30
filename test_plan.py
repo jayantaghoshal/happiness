@@ -56,6 +56,11 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
+             reason="Manual test which require usb2eth dongel",
+             jira_issue="",
+             deadline="2019-11-17"
+    ),
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
