@@ -29,7 +29,6 @@ class NetmanNetlinkEventHandler final : public NetlinkEventHandler {
 
  private:
   void HandleNewLinkEvent(const struct ifinfomsg *if_info_msg);
-  void HandleNewAddressEvent(const struct ifaddrmsg *if_addr_msg);
 };
 
 }  // namespace netman

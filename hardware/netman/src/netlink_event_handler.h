@@ -21,7 +21,7 @@ namespace netman {
 
 class NetlinkEventHandler {
  public:
-  enum class NetlinkEventType { NETLINK_NEW_LINK, NETLINK_NEW_ADDRESS, NETLINK_UEVENT };
+  enum class NetlinkEventType { NETLINK_NEW_LINK, NETLINK_UEVENT };
 
   void HandleEvent(struct nlmsghdr* nl_message_header);
   void HandleEvent(char* message, const int length);
@@ -36,12 +36,6 @@ class NetlinkEventHandler {
   struct NetlinkNewLinkEvent : NetlinkEventData {
     NetlinkNewLinkEvent(struct ifinfomsg* msg) : NetlinkEventData(NetlinkEventType::NETLINK_NEW_LINK), info_msg(msg) {}
     const struct ifinfomsg* info_msg;
-  };
-
-  struct NetlinkNewAddrEvent : NetlinkEventData {
-    NetlinkNewAddrEvent(struct ifaddrmsg* msg)
-        : NetlinkEventData(NetlinkEventType::NETLINK_NEW_ADDRESS), addr_msg(msg) {}
-    const struct ifaddrmsg* addr_msg;
   };
 
   struct NetlinkUevent : NetlinkEventData {

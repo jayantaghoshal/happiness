@@ -41,12 +41,6 @@ void NetlinkEventHandler::HandleEvent(struct nlmsghdr *nl_message_header) {
       HandleEvent(&eventData);
       break;
     }
-    case RTM_NEWADDR:  // Name, Ip address, Broadcast address, Netmask, Mtu, MAC
-    {
-      NetlinkNewAddrEvent eventData((struct ifaddrmsg *)NLMSG_DATA(nl_message_header));
-      HandleEvent(&eventData);
-      break;
-    }
     default:
       // ALOGI("Unknown event arrived: (%i)", nl_message_header->nlmsg_type);
       break;

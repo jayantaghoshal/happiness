@@ -34,11 +34,6 @@ void NetmanNetlinkEventHandler::HandleEvent(NetlinkEventData *eventData) {
       if (pData) HandleNewLinkEvent(pData->info_msg);
       break;
     }
-    case NetlinkEventType::NETLINK_NEW_ADDRESS: {
-      NetlinkNewAddrEvent *pData = static_cast<NetlinkNewAddrEvent *>(eventData);
-      if (pData) HandleNewAddressEvent(pData->addr_msg);
-      break;
-    }
     default:
       break;
   }
@@ -54,22 +49,6 @@ void NetmanNetlinkEventHandler::HandleNewLinkEvent(const struct ifinfomsg *if_in
   // TODO Should if statement around IFF_RUNNING be ! ??? /Philip Werner
   if ((if_info_msg != NULL) && (if_indextoname(if_info_msg->ifi_index, name) != NULL) &&
       (if_info_msg->ifi_flags & IFF_UP) && !(if_info_msg->ifi_flags & IFF_RUNNING)) {
-    for (const auto &ic : interface_configurations_) {
-      if (name == ic.name) {
-        SetupInterface(ic.name.c_str(), ic.mac_address_bytes, ic.ip_address.c_str(), ic.netmask.c_str(),
-                       ic.broadcast_address.c_str(), ic.mtu);
-      }
-    }
-  }
-}
-
-void NetmanNetlinkEventHandler::HandleNewAddressEvent(const struct ifaddrmsg *if_addr_msg) {
-  char name[IF_NAMESIZE];
-
-  ALOGD("Message received: RTM_NEWADDR");
-
-  // TODO: Refactor common parts in HandleNewLinkEvent and HandleNewAddressEvent
-  if ((if_addr_msg != NULL) && (if_indextoname(if_addr_msg->ifa_index, name) != NULL)) {
     for (const auto &ic : interface_configurations_) {
       if (name == ic.name) {
         SetupInterface(ic.name.c_str(), ic.mac_address_bytes, ic.ip_address.c_str(), ic.netmask.c_str(),
