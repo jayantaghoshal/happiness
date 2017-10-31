@@ -96,9 +96,14 @@ void TransportServices::sendMessage(Message &&msg)
             // Set up timers and states
             std::unique_ptr<TrackMessage> pTm(new TrackMessage);
             pTm->wfa = TimeoutInfo();
-            pTm->wfr = TimeoutInfo();
-            //TODO: FLOW PSS370-3695
-            //pTm->wfr = TimeoutInfo(IpCmdTypes::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
+            if (msg.retry_info.override_default)
+            {
+                pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms, msg.retry_info.max_retries);
+            }
+            else
+            {
+                pTm->wfr = TimeoutInfo();
+            }
             pTm->msg = std::move(msg);
             auto pTmRef = std::ref(*pTm);
             std::chrono::milliseconds timeoutValue;
@@ -164,9 +169,14 @@ void TransportServices::sendMessage(Message &&msg)
                 std::unique_ptr<TrackMessage> pTm(new TrackMessage);
                 pTm->state = TrackMessage::WAIT_FOR_NOTIFICATION_ACK;
                 pTm->wfa = TimeoutInfo();
-                pTm->wfr = TimeoutInfo();
-                //TODO: FLOW PSS370-3695
-                //pTm->wfr = TimeoutInfo(IpCmdTypes::CombinedId(msg.pdu.header.service_id, msg.pdu.header.operation_id));
+                if (msg.retry_info.override_default)
+                {
+                    pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms, msg.retry_info.max_retries);
+                }
+                else
+                {
+                    pTm->wfr = TimeoutInfo();
+                }
                 pTm->msg = std::move(msg);
                 auto pTmRef = std::ref(*pTm);
                 pTm->timer = timeProvider.EnqueueWithDelay(
