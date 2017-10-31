@@ -15,7 +15,7 @@ interface IVehicleCom
      * @param operationTypes Vector of Operation Types to subscribe to. NOTE! Response is handled separately and MUST not be used here!
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs
      */
-    subscribeMessage(uint16_t serviceID, uint16_t operationID, vec<OperationType> operationTypes, IMessageCallback callbackHandler) generates (Status status);
+    subscribeMessage(uint16_t serviceID, uint16_t operationID, vec<OperationType> operationTypes, IMessageCallback callbackHandler) generates (CommandResult result);
 
     /**
      * Subscribe to responses received on Vehicle Communication Bus (e.g. IPCB)
@@ -26,7 +26,7 @@ interface IVehicleCom
      * @param operationID ID of the operation to subscribe to, use 0xFFFF to subscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs
      */
-    subscribeResponse(uint16_t serviceID, uint16_t operationID, IResponseCallback callbackHandler) generates (Status status);
+    subscribeResponse(uint16_t serviceID, uint16_t operationID, IResponseCallback callbackHandler) generates (CommandResult result);
 
     /**
      * Unsubscribe to messages received on Vehicle Communication Bus (e.g. IPCB)
@@ -34,12 +34,13 @@ interface IVehicleCom
      * @param operationID ID of the operation to unsubscribe to, use 0xFFFF to unsubscribe to all operation IDs for the service
      * @param callbackHandler Instance handling callbacks for subscribed operation IDs, used to unsubscribe the correct instance if multiple subscribers exist
      */
-    unsubscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (Status status);
+    unsubscribe(uint16_t serviceID, uint16_t operationID, IMessageCallback callbackHandler) generates (CommandResult result);
 
     /**
      * Send message over Vehicle Communication Bus (e.g. IPCB)
      * Never send messages with opType ACK, this will be sent automatically by the Vehicle Communication Bus daemon (e.g. IpcbD) instance
      * @param msg Message to send over Vehicle Communication Bus (e.g. IPCB).
+     * @param retryInfo Info about retry handling, set overrideDefault to false to use default settings
      */
-    oneway sendMessage(Msg msg);
+    oneway sendMessage(Msg msg, RetryInfo retryInfo);
 };
