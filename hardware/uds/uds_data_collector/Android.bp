@@ -1,0 +1,25 @@
+cc_binary {
+    name: "vendor.volvocars.hardware.uds@1.0-service",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    shared_libs: [
+        "vendor.volvocars.hardware.uds@1.0",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+    ],
+
+    static_libs: [
+        "liblog",
+    ],
+
+    relative_install_path: "hw",
+
+    init_rc: [
+        "uds_data_collector.rc",
+    ],
+}

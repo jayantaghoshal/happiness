@@ -22,6 +22,7 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",       standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables",               standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
+    VTSTest("vendor/volvocars/hardware/uds/test/ct",                           standard_caps),
     VTSTest("vendor/volvocars/tools/test/daemon_test",                         standard_caps),
 
 ]
