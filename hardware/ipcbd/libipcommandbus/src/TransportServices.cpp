@@ -543,6 +543,7 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
 
             if (pTm)
             {
+                timeProvider.Cancel(pTm->timer);
                 this->sendAck(sourceEcu, pdu);
 
                 // Deliver response
@@ -608,6 +609,9 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
     if (TrackMessage::WAIT_FOR_REQUEST_ACK == pTm->state)
     {
         ALOGV("ACK received for pending outgoing request message");
+
+        timeProvider.Cancel(pTm->timer);
+
         // Reset timer
         pTm->wfa.reset();
         auto pTmRef = std::ref(*pTm);
