@@ -30,7 +30,7 @@ int main() {
 
     auto *lcfg = vcc::LocalConfigDefault();
 
-    RuleHandler& rule_handler = RuleHandler::getInstance();
+    RuleHandler &rule_handler = RuleHandler::getInstance();
     if (!rule_handler.loadRules(lcfg)) {
       ALOGE("Unable to read rules from local config");
       return EXIT_FAILURE;
