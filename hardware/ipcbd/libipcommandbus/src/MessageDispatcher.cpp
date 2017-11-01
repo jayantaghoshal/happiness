@@ -48,7 +48,7 @@ void MessageDispatcher::registerResponseCallback(IpCmdTypes::ServiceId serviceId
                                (unsigned int)serviceId,
                                (unsigned int)operationId);
 
-    RegInfo ri(serviceId, operationId, messageCb);
+    RegInfo ri(serviceId, operationId, m_registeredReceiverIds++, messageCb);
     {
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
         m_registeredReceivers.push_back(ri);
@@ -65,10 +65,22 @@ void MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId serviceId,
                                (unsigned int)operationId,
                                (unsigned int)operationType,
                                IpCmdTypes::toString(operationType));
-    RegInfo ri(serviceId, operationId, operationType, messageCb);
+    RegInfo ri(serviceId, operationId, operationType, m_registeredReceiverIds++, messageCb);
     {
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
         m_registeredReceivers.push_back(ri);
+    }
+}
+
+void MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId)
+{
+    //Find id and remove from list!
+    auto it = FindReceiver([&registeredReceiverId](const RegInfo &ri) {
+        return registeredReceiverId == ri.registeredReceiverId;});
+
+    if (m_registeredReceivers.end() != it)
+    {
+        m_registeredReceivers.erase(it);
     }
 }
 
@@ -162,6 +174,11 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg)
                 m_diagnostics->SetInvalidData(ecu, false);
             });
             cb = it->messageCb;
+
+            RegInfo &ri = *it;
+            wakeUpApplicationThread.Enqueue([this, ri, m2=msg]() mutable {
+                AppThread_cbIncomingRequest(ri, m2);
+            });
         }
         else
         {
@@ -169,9 +186,6 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg)
             serviceExists = ReceiverExists(service_id_predicate);
         }
     }
-    wakeUpApplicationThread.Enqueue([this, cb, m2=msg]() mutable {
-        AppThread_cbIncomingRequest(cb, m2);
-    });
 
     if (cb)
     {
@@ -216,11 +230,22 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg)
 
 }
 
-void MessageDispatcher::AppThread_cbIncomingRequest(MessageCallback cb, Message &msg)
+void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message &msg)
 {
-    if (cb)
+    if (ri.messageCb)
     {
-        cb(msg);
+        ALOGD("MessageDispatcher::AppThread_cbIncomingRequest, Call messageCb()");
+        if (!ri.messageCb(msg, ri.registeredReceiverId))
+        {
+            // The operation id is supported but we do not support requests.
+            ALOGW("Application registered to handle incoming request died (%s). Responding 'invalid op. type'.",
+            Pdu::toString(msg.pdu).c_str());
+
+            m_transport->sendError(msg.ecu,
+                msg.pdu,
+                ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
+                static_cast<std::uint16_t>(msg.pdu.header.operation_type));
+        }
     }
     else
     {
@@ -248,27 +273,27 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message &msg)
         if (m_registeredReceivers.end() != it)
         {
             cb = it->messageCb;
+
+            if (it->messageCb)
+            {
+                ALOGV("MessageDispatcher::cbIncomingNotification, Notification callback for service found");
+                assert(m_diagnostics);
+                m_diagnostics->SetInvalidData(msg.ecu, false);
+                it->messageCb(msg, it->registeredReceiverId);
+            }
+            else
+            {
+                ALOGW("No notification callback registered for service %s",Pdu::toString(msg.pdu).c_str());
+
+                // NOTE! We shall NOT send error message on ip bus here!
+                //       Ip Command Protocol specification says [VCC IP Prot: 0037/;-1]
+                //       'Req : Notification messages (no matter which type) shall never be followed up with an ERROR message.'
+
+                assert(m_diagnostics);
+                Message::Ecu ecu = msg.ecu;
+                m_diagnostics->SetInvalidData(ecu, true);
+            }
         }
-    }
-
-    if (cb)
-    {
-        ALOGV("MessageDispatcher::cbIncomingNotification, Notification callback for service found");
-        assert(m_diagnostics);
-        m_diagnostics->SetInvalidData(msg.ecu, false);
-        cb(msg);
-    }
-    else
-    {
-        ALOGW("No notification callback registered for service %s",Pdu::toString(msg.pdu).c_str());
-
-        // NOTE! We shall NOT send error message on ip bus here!
-        //       Ip Command Protocol specification says [VCC IP Prot: 0037/;-1]
-        //       'Req : Notification messages (no matter which type) shall never be followed up with an ERROR message.'
-
-        assert(m_diagnostics);
-        Message::Ecu ecu = msg.ecu;
-        m_diagnostics->SetInvalidData(ecu, true);
     }
 }
 
@@ -294,17 +319,17 @@ void MessageDispatcher::IPCBThread_cbIncomingResponse(Message &msg)
             });
             return;
         }
-        cb = it->messageCbResp;
+
+        ALOGV("MessageDispatcher::cbIncomingResponse, Response callback for service found");
+
+        RegInfo &ri = *it;
+        wakeUpApplicationThread.Enqueue([this, ri, m2=msg]() mutable {
+            AppThread_cbIncomingResponse(m2, ri);
+        });
     }
-
-    ALOGV("MessageDispatcher::cbIncomingResponse, Response callback for service found");
-
-    wakeUpApplicationThread.Enqueue([this, cb, m2=msg]() mutable {
-        AppThread_cbIncomingResponse(m2, cb);
-    });
 }
 
-void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg, ResponseMessageCallback cb)
+void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg, RegInfo ri)
 {
     std::shared_ptr<CallerData> pCallerData = nullptr;
 
@@ -331,7 +356,7 @@ void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg, ResponseMessa
     wakeUpApplicationThread.Enqueue([this, ecu] () {
         m_diagnostics->SetInvalidData(ecu, false);
     });
-    cb(msg, pCallerData);
+    ri.messageCbResp(msg, ri.registeredReceiverId, pCallerData);
 }
 
 
@@ -380,7 +405,6 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
         return;
     }
 
-    ResponseMessageCallback cb;
     {
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
         auto it = FindReceiver([&msg](const RegInfo &ri) {
@@ -393,7 +417,8 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
         if (m_registeredReceivers.end() != it)
         {
             ALOGV("MessageDispatcher::cbIncomingError, Reponse callback for service found");
-            cb = it->messageCbResp;
+
+            it->messageCbResp(msg, it->registeredReceiverId, pCallerData);
 
         }
         else
@@ -403,7 +428,6 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
             return;
         }
     }
-    cb(msg, pCallerData);
 }
 
 void MessageDispatcher::DecodeGenericError(Message &msg, Icb_OpGeneric_Error_t &errorReturn)

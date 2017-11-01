@@ -12,7 +12,7 @@
     "IIPS_IpAddress_VGM": "198.18.34.3",
     "IIPS_Port_LOCAL": 50010,
     "IIPS_Port_BROADCAST": 50000,
-    "IIPS_Port_VCM": 50011,
+    "IIPS_Port_VCM": 70000,
     "IIPS_Port_TEST": 70000,
     "IIPS_Port_TEM": 50000,
     "IIPS_Port_DIM": 50000,
