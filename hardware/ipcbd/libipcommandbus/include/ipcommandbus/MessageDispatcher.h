@@ -57,9 +57,9 @@ public:
         Icb_OpGeneric_Error_t errorInfo;
     };
 
-    typedef std::function<void(Message &)> MessageCallback;
+    typedef std::function<bool(Message &, uint64_t &)> MessageCallback;
 
-    typedef std::function<void(Message &, std::shared_ptr<CallerData>)> ResponseMessageCallback;
+    typedef std::function<void(Message &, uint64_t &, std::shared_ptr<CallerData>)> ResponseMessageCallback;
 
 
     MessageDispatcher(ITransportServices *transport, tarmac::eventloop::IDispatcher& dispatcher);
@@ -90,6 +90,9 @@ public:
         IpCmdTypes::OperationType operationType,
         MessageCallback messageCb);
 
+
+    void unregisterCallback(uint64_t registeredReceiverId);
+
     // Note: There is by design no 'registerErrorCallback'.
     //       Errors and timeouts associated with earlier sent requests are returned trough response callback.
     //       (Errors associated with earlier sent responses are currently not handled above TransportServices level...)
@@ -112,10 +115,14 @@ protected:
      */
     struct RegInfo
     {
-        RegInfo(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId, ResponseMessageCallback messageCb)
+        RegInfo(IpCmdTypes::ServiceId serviceId,
+                IpCmdTypes::OperationId operationId,
+                uint64_t registeredReceiverId,
+                ResponseMessageCallback messageCb)
             : serviceId(serviceId),
               operationId(operationId),
               operationType(IpCmdTypes::OperationType::RESPONSE),
+              registeredReceiverId(registeredReceiverId),
               messageCbResp(messageCb)
         {
             assert(messageCbResp);
@@ -124,8 +131,13 @@ protected:
         RegInfo(IpCmdTypes::ServiceId serviceId,
                 IpCmdTypes::OperationId operationId,
                 IpCmdTypes::OperationType operationType,
+                uint64_t registeredReceiverId,
                 MessageCallback messageCb)
-            : serviceId(serviceId), operationId(operationId), operationType(operationType), messageCb(messageCb)
+            : serviceId(serviceId),
+              operationId(operationId),
+              operationType(operationType),
+              registeredReceiverId(registeredReceiverId),
+              messageCb(messageCb)
         {
             assert(messageCb);
         }
@@ -133,6 +145,7 @@ protected:
         IpCmdTypes::ServiceId serviceId;
         IpCmdTypes::OperationId operationId;
         IpCmdTypes::OperationType operationType;
+        uint64_t registeredReceiverId;
         ResponseMessageCallback messageCbResp;  // Responses and errors
         MessageCallback messageCb;              // All other message types
     };
@@ -174,6 +187,7 @@ private:
 
     std::mutex m_registeredReceiversMutex;
     std::vector<RegInfo> m_registeredReceivers;  ///< Contain all registered receivers of messages. (Accessed from both TransportService-thread and App-thread)
+    uint64_t m_registeredReceiverIds = 1;  ///< Id to find lambda receiver function (Start at 1, 0 == error)
 
     typedef std::map<IpCmdTypes::SenderHandleId, std::shared_ptr<CallerData>> RequestsMap;
     RequestsMap m_requestsMap;  //USed to associate pCallerData (Only accessed from App-thread)
@@ -181,13 +195,13 @@ private:
 
 
     bool IPCBThread_cbIncomingRequest(Message &msg);
-    void AppThread_cbIncomingRequest(MessageCallback cb, Message &msg);
+    void AppThread_cbIncomingRequest(RegInfo ri, Message &msg);
 
     void IPCBThread_cbIncomingNotification(Message &msg);
     void Appthread_cbIncomingNotification(Message &msg);
 
     void IPCBThread_cbIncomingResponse(Message &msg);
-    void AppThread_cbIncomingResponse(Message &msg, ResponseMessageCallback cb);
+    void AppThread_cbIncomingResponse(Message &msg, RegInfo ri);
 
     void IPCBThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType);
     void AppThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType);

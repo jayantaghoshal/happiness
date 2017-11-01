@@ -49,7 +49,8 @@ Return<void> ServiceManager::subscribeMessage(
         if (0 == subscribedTypes.count(opType))
         {
             messageDispatcher_.registerMessageCallback(serviceID, operationID, (IpCmdTypes::OperationType) opType,
-                [callbackHandler](Message& message){
+                [this, callbackHandler](Message& message, uint64_t& registeredReceiverId){
+                    ALOGD("+ Ipcb::registerMessageCallback called");
                     Msg msg;
                     msg.ecu = (vendor::volvocars::hardware::common::V1_0::Ecu)message.ecu;
                     msg.pdu.header.serviceID =  message.pdu.header.service_id;
@@ -65,7 +66,10 @@ Return<void> ServiceManager::subscribeMessage(
                     if (result.isDeadObject())
                     {  //TODO: make a better error message here, maube unsubscribe?
                         ALOGE("Callback function does not exist!");
+                        messageDispatcher_.unregisterCallback(registeredReceiverId);
+                        return false;
                     }
+                    return true;
                 });
         }
         subscribedTypes.insert(opType);
@@ -85,7 +89,7 @@ Return<void> ServiceManager::subscribeResponse(
     ALOGD("+ Ipcb::subscribeResponse");
 
     messageDispatcher_.registerResponseCallback(serviceID, operationID,
-        [callbackHandler](Message& message, std::shared_ptr<::Connectivity::MessageDispatcher::CallerData> callerData){
+        [this, callbackHandler](Message& message, uint64_t& registeredReceiverId, std::shared_ptr<::Connectivity::MessageDispatcher::CallerData> callerData){
             if (callerData->errorType == ITransportServices::ErrorType::OK)
             {
                 Msg msg;
@@ -103,6 +107,7 @@ Return<void> ServiceManager::subscribeResponse(
                 if (result.isDeadObject())
                 {  //TODO: make a better error message here, maube unsubscribe?
                     ALOGE("Callback function does not exist!");
+                    messageDispatcher_.unregisterCallback(registeredReceiverId);
                 }
             }
             else
@@ -117,6 +122,7 @@ Return<void> ServiceManager::subscribeResponse(
                 if (result.isDeadObject())
                 {  //TODO: make a better error message here, maube unsubscribe?
                     ALOGE("Callback function does not exist!");
+                    messageDispatcher_.unregisterCallback(registeredReceiverId);
                 }
             }
         });
