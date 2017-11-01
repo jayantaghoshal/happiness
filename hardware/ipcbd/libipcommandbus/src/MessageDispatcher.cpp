@@ -40,39 +40,45 @@ void MessageDispatcher::setDiagnostics(IDiagnosticsClient *diagnostics)
     m_transport->setDiagnostics(diagnostics, &wakeUpApplicationThread);
 }
 
-void MessageDispatcher::registerResponseCallback(IpCmdTypes::ServiceId serviceId,
-                                                 IpCmdTypes::OperationId operationId,
-                                                 ResponseMessageCallback messageCb)
-{
-    ALOGD("Register response callback for %04X.%04X",
-                               (unsigned int)serviceId,
-                               (unsigned int)operationId);
-
-    RegInfo ri(serviceId, operationId, m_registeredReceiverIds++, messageCb);
-    {
-        std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        m_registeredReceivers.push_back(ri);
-    }
-}
-
-void MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId serviceId,
-                                                IpCmdTypes::OperationId operationId,
-                                                IpCmdTypes::OperationType operationType,
-                                                MessageCallback messageCb)
+uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+                                                    IpCmdTypes::OperationId operationId,
+                                                    IpCmdTypes::OperationType operationType,
+                                                    MessageCallback messageCb)
 {
     ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'",
                                (unsigned int)serviceId,
                                (unsigned int)operationId,
                                (unsigned int)operationType,
                                IpCmdTypes::toString(operationType));
+
+    // If operation type is REQUEST, SETREQUEST or NOTIFICATION_REQUEST,
+    // only one subscriber is allowed. Check if that is the case and fail if so.
+    if (IpCmdTypes::OperationType::REQUEST == operationType ||
+        IpCmdTypes::OperationType::SETREQUEST == operationType ||
+        IpCmdTypes::OperationType::NOTIFICATION_REQUEST == operationType)
+    {
+        auto it = FindReceiver(
+            [&serviceId, &operationId, &operationType](const RegInfo &ri) {
+              return (serviceId == ri.serviceId &&
+                      operationId == ri.operationId &&
+                      operationType == ri.operationType);});
+        if (it != m_registeredReceivers.end())
+        {
+            return 0;
+        }
+    }
+
+    //Create receiver and store it in list
     RegInfo ri(serviceId, operationId, operationType, m_registeredReceiverIds++, messageCb);
     {
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
         m_registeredReceivers.push_back(ri);
     }
+
+    return ri.registeredReceiverId;
 }
 
-void MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId)
+bool MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId)
 {
     //Find id and remove from list!
     auto it = FindReceiver([&registeredReceiverId](const RegInfo &ri) {
@@ -82,6 +88,12 @@ void MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId)
     {
         m_registeredReceivers.erase(it);
     }
+    else
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void MessageDispatcher::sendMessage(Message &&msg, std::shared_ptr<CallerData> pCallerData)
@@ -152,43 +164,53 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg)
 {
     ALOGD("Incoming request %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
-    // Proper callback not found. Create error message and call diagnostics.
-    auto service_id_and_op_id_predicate = [&msg](const RegInfo &ri) {
-        return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId;
-    };
-    auto service_id_predicate = [&msg](const RegInfo &ri) { return msg.pdu.header.service_id == ri.serviceId; };
-
-
-    MessageCallback cb;
+    bool receiverExists = false;
     bool serviceAndOpExists = true;
     bool serviceExists = true;
-    {
+    {  //Mutex scope
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        auto it = FindReceiver(msg);
-        if (m_registeredReceivers.end() != it)
+
+        //Find all receivers for the message
+        std::vector<RegInfo> receivers = FindReceivers(msg);
+        ALOGE_IF(receivers.size() > 1,
+            "More than one receiver registered for request! This should not be possible, calling only first receiver!");
+
+        if (1 == receivers.size())
         {
             ALOGV("MessageDispatcher::cbIncomingRequest, Request callback for service found");
-            assert(m_diagnostics);
-            Message::Ecu ecu = msg.ecu;
-            wakeUpApplicationThread.Enqueue([this, ecu] () {
-                m_diagnostics->SetInvalidData(ecu, false);
-            });
-            cb = it->messageCb;
 
-            RegInfo &ri = *it;
+            //Indicate that we found at least one subscriber to this message
+            receiverExists = true;
+
+            RegInfo ri = receivers[0];
             wakeUpApplicationThread.Enqueue([this, ri, m2=msg]() mutable {
                 AppThread_cbIncomingRequest(ri, m2);
             });
         }
         else
         {
-            serviceAndOpExists = ReceiverExists(service_id_and_op_id_predicate);
-            serviceExists = ReceiverExists(service_id_predicate);
+            //Called here inside scope of m_registeredReceiversMutex
+
+            //Check if we have a subscriber for the Service ID and Operation ID
+            serviceAndOpExists = ReceiverExists(
+                [&msg](const RegInfo &ri) { return msg.pdu.header.service_id == ri.serviceId &&
+                                                   msg.pdu.header.operation_id == ri.operationId;
+                                          });
+
+            //Check if we have a subscriber for the Service ID
+            serviceExists = ReceiverExists(
+                [&msg](const RegInfo &ri) { return msg.pdu.header.service_id == ri.serviceId; });
         }
     }
 
-    if (cb)
+    if (receiverExists)
     {
+        assert(m_diagnostics);
+        Message::Ecu ecu = msg.ecu;
+        wakeUpApplicationThread.Enqueue([this, ecu] () {
+            m_diagnostics->SetInvalidData(ecu, false);
+        });
+
         return true;
     }
     else
@@ -266,33 +288,36 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message &msg)
 {
     ALOGD("Incoming notification %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
-    MessageCallback cb;
-    {
+    { //Mutex scope
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        auto it = FindReceiver(msg);
-        if (m_registeredReceivers.end() != it)
+
+        //Find all receivers for the message
+        std::vector<RegInfo> receivers = FindReceivers(msg);
+
+        //Loop over all receivers and call them
+        for (std::vector<RegInfo>::iterator it = receivers.begin(); it != receivers.end(); it++)
         {
-            cb = it->messageCb;
+            it->messageCb(msg, it->registeredReceiverId);
+        }
 
-            if (it->messageCb)
-            {
-                ALOGV("MessageDispatcher::cbIncomingNotification, Notification callback for service found");
-                assert(m_diagnostics);
-                m_diagnostics->SetInvalidData(msg.ecu, false);
-                it->messageCb(msg, it->registeredReceiverId);
-            }
-            else
-            {
-                ALOGW("No notification callback registered for service %s",Pdu::toString(msg.pdu).c_str());
+        //If there were at least one receiver, report "No invalid data" to diagnostics
+        if (receivers.size() != 0)
+        {
+            ALOGV("MessageDispatcher::cbIncomingNotification, Notification callback for service found");
+            assert(m_diagnostics);
+            m_diagnostics->SetInvalidData(msg.ecu, false);
+        }
+        else //If there were no receivers, report "Invalid data" to diagnostics
+        {
+            ALOGW("No notification callback registered for service %s",Pdu::toString(msg.pdu).c_str());
 
-                // NOTE! We shall NOT send error message on ip bus here!
-                //       Ip Command Protocol specification says [VCC IP Prot: 0037/;-1]
-                //       'Req : Notification messages (no matter which type) shall never be followed up with an ERROR message.'
+            // NOTE! We shall NOT send error message on ip bus here!
+            //       Ip Command Protocol specification says [VCC IP Prot: 0037/;-1]
+            //       'Req : Notification messages (no matter which type) shall never be followed up with an ERROR message.'
 
-                assert(m_diagnostics);
-                Message::Ecu ecu = msg.ecu;
-                m_diagnostics->SetInvalidData(ecu, true);
-            }
+            assert(m_diagnostics);
+            Message::Ecu ecu = msg.ecu;
+            m_diagnostics->SetInvalidData(ecu, true);
         }
     }
 }
@@ -301,44 +326,48 @@ void MessageDispatcher::IPCBThread_cbIncomingResponse(Message &msg)
 {
     ALOGD("Incoming response %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
-    ResponseMessageCallback cb;
-    {
-        std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        auto it = FindReceiver(msg);
-
-        if (m_registeredReceivers.end() == it)
-        {
-            ALOGE("No response callback registered for service %s", Pdu::toString(msg.pdu).c_str());
-
-            // Note: Ip-bus error message shall NOT be sent for responses.
-
-            assert(m_diagnostics);
-            Message::Ecu ecu = msg.ecu;
-            wakeUpApplicationThread.Enqueue([this, ecu] () {
-                m_diagnostics->SetInvalidData(ecu, true);
-            });
-            return;
-        }
-
-        ALOGV("MessageDispatcher::cbIncomingResponse, Response callback for service found");
-
-        RegInfo &ri = *it;
-        wakeUpApplicationThread.Enqueue([this, ri, m2=msg]() mutable {
-            AppThread_cbIncomingResponse(m2, ri);
-        });
-    }
+    wakeUpApplicationThread.Enqueue([this, m2=msg]() mutable {
+        AppThread_cbIncomingResponse(m2);
+    });
 }
 
-void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg, RegInfo ri)
+void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg)
 {
-    std::shared_ptr<CallerData> pCallerData = nullptr;
-
     auto itc = m_requestsMap.find(msg.pdu.header.sender_handle_id);
     if (itc != m_requestsMap.end())
     {
-        pCallerData = itc->second;
+        std::shared_ptr<CallerData> pCallerData = itc->second;
         m_requestsMap.erase(itc);
         pCallerData->errorType = ITransportServices::ErrorType::OK;
+
+        /* TODO: Check locig here since it changed a bit when refactoring (ABENGT34)
+          Looking at the old code it seems like:
+            1. If we can't find receiver in list, report error
+            2. If we have a receiver but no caller data, do nothing
+            3. If we have receiver and caller data, report OK and call handler.
+
+            In the new code i do the same, but i also check if we actually can call the
+            receiver successfully. If not, report an error...
+        */
+        if (pCallerData)
+        {
+            if (pCallerData->responseCallback(msg))
+            {
+                assert(m_diagnostics);
+                Message::Ecu ecu = msg.ecu;
+                wakeUpApplicationThread.Enqueue([this, ecu] () {
+                    m_diagnostics->SetInvalidData(ecu, false);
+                });
+
+                return;
+            }
+        }
+
+        assert(m_diagnostics);
+        Message::Ecu ecu = msg.ecu;
+        wakeUpApplicationThread.Enqueue([this, ecu] () {
+            m_diagnostics->SetInvalidData(ecu, true);
+        });
     }
     else
     {
@@ -348,15 +377,6 @@ void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg, RegInfo ri)
         // the response maps to.
         return;
     }
-
-
-    // All ok. Forward the response to service layer callback.
-    assert(m_diagnostics);
-    Message::Ecu ecu = msg.ecu;
-    wakeUpApplicationThread.Enqueue([this, ecu] () {
-        m_diagnostics->SetInvalidData(ecu, false);
-    });
-    ri.messageCbResp(msg, ri.registeredReceiverId, pCallerData);
 }
 
 
@@ -373,13 +393,10 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
                                Pdu::toString(msg.pdu).c_str(),
                                Message::EcuStr(msg.ecu));
 
-    std::shared_ptr<CallerData> pCallerData = nullptr;
-
-
     RequestsMap::iterator itc = m_requestsMap.find(msg.pdu.header.sender_handle_id);
     if (itc != m_requestsMap.end())
     {
-        pCallerData = itc->second;
+        std::shared_ptr<CallerData> pCallerData = itc->second;
         m_requestsMap.erase(itc);
         pCallerData->errorType = eType;
 
@@ -393,6 +410,15 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
             pCallerData->errorInfo.errorCode = 0;
             pCallerData->errorInfo.errorInfo = 0;
         }
+
+        if (pCallerData->responseCallback(msg))
+        {
+            ALOGV("MessageDispatcher::cbIncomingError, Reponse callback for service found");
+        }
+        else
+        {
+            ALOGW("No error/response callback registered for service %s", Pdu::toString(msg.pdu).c_str());
+        }
     }
     else
     {
@@ -403,30 +429,6 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
         // There should be no point in service specific handling in case we don't (any longer) know which request
         // the error maps to.
         return;
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        auto it = FindReceiver([&msg](const RegInfo &ri) {
-            // Note: We shall call the regular response callback at the service layer.
-            //       (Thus the last condition looking as it does.)
-            return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId &&
-                   IpCmdTypes::OperationType::RESPONSE == ri.operationType;
-        });
-
-        if (m_registeredReceivers.end() != it)
-        {
-            ALOGV("MessageDispatcher::cbIncomingError, Reponse callback for service found");
-
-            it->messageCbResp(msg, it->registeredReceiverId, pCallerData);
-
-        }
-        else
-        {
-            ALOGW("No error/response callback registered for service %s",
-                                         Pdu::toString(msg.pdu).c_str());
-            return;
-        }
     }
 }
 

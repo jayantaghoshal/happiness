@@ -43,11 +43,16 @@ public:
         Icb_ErrorCode errorCode;
         std::uint32_t errorInfo;
     };
+
+    typedef std::function<bool(Message &)> ResponseMessageCallback;
+
     // CallerData structure is provided as argument by service specific layer when sending a request
     // and is returned back upon receive of the belonging response/error/timeout.
     struct CallerData
     {
         virtual ~CallerData() = default;
+
+        ResponseMessageCallback responseCallback;
 
         // In case of error response or timeout, errorType is set accordingly.
         // Otherwise (regular response), errorType is set to OK.
@@ -59,22 +64,9 @@ public:
 
     typedef std::function<bool(Message &, uint64_t &)> MessageCallback;
 
-    typedef std::function<void(Message &, uint64_t &, std::shared_ptr<CallerData>)> ResponseMessageCallback;
-
 
     MessageDispatcher(ITransportServices *transport, tarmac::eventloop::IDispatcher& dispatcher);
     void setDiagnostics(IDiagnosticsClient *diagnostics);
-
-    /**
-     * Registers the callback function to call when a response message is received.
-     *
-     * @param[in] serviceId                 The service id to match with
-     * @param[in] operationId               The operation id  to match with
-     * @param[in] messageCb                 The callback function to call
-     */
-    void registerResponseCallback(IpCmdTypes::ServiceId serviceId,
-                                  IpCmdTypes::OperationId operationId,
-                                  ResponseMessageCallback messageCb);
 
     /**
      * Registers the callback function to call when a specific message is received.
@@ -85,13 +77,13 @@ public:
      * @param[in] operationType             The operation  to match with
      * @param[in] messageCb                 The callback function to call
      */
-     void registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+    uint64_t registerMessageCallback(IpCmdTypes::ServiceId serviceId,
         IpCmdTypes::OperationId operationId,
         IpCmdTypes::OperationType operationType,
         MessageCallback messageCb);
 
 
-    void unregisterCallback(uint64_t registeredReceiverId);
+    bool unregisterCallback(uint64_t registeredReceiverId);
 
     // Note: There is by design no 'registerErrorCallback'.
     //       Errors and timeouts associated with earlier sent requests are returned trough response callback.
@@ -117,19 +109,6 @@ protected:
     {
         RegInfo(IpCmdTypes::ServiceId serviceId,
                 IpCmdTypes::OperationId operationId,
-                uint64_t registeredReceiverId,
-                ResponseMessageCallback messageCb)
-            : serviceId(serviceId),
-              operationId(operationId),
-              operationType(IpCmdTypes::OperationType::RESPONSE),
-              registeredReceiverId(registeredReceiverId),
-              messageCbResp(messageCb)
-        {
-            assert(messageCbResp);
-        }
-
-        RegInfo(IpCmdTypes::ServiceId serviceId,
-                IpCmdTypes::OperationId operationId,
                 IpCmdTypes::OperationType operationType,
                 uint64_t registeredReceiverId,
                 MessageCallback messageCb)
@@ -146,8 +125,7 @@ protected:
         IpCmdTypes::OperationId operationId;
         IpCmdTypes::OperationType operationType;
         uint64_t registeredReceiverId;
-        ResponseMessageCallback messageCbResp;  // Responses and errors
-        MessageCallback messageCb;              // All other message types
+        MessageCallback messageCb;
     };
 
 private:
@@ -164,9 +142,36 @@ private:
         return std::find_if(m_registeredReceivers.begin(), m_registeredReceivers.end(), predicate);
     }
 
+    std::vector<RegInfo> FindReceivers(const std::function<bool(const RegInfo &)> &predicate)
+    {
+        std::vector<RegInfo> foundReceivers;
+        std::vector<RegInfo>::iterator start = m_registeredReceivers.begin();
+        while (true)
+        {
+            std::vector<RegInfo>::iterator receiver = std::find_if(start, m_registeredReceivers.end(), predicate);
+            if (receiver == m_registeredReceivers.end())
+            {
+                break;
+            }
+
+            foundReceivers.push_back(*receiver);
+            start = receiver + 1;
+        }
+
+        return foundReceivers;
+    }
+
     std::vector<RegInfo>::iterator FindReceiver(const Message &msg)
     {
         return FindReceiver([&msg](const RegInfo &ri) {
+            return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId &&
+                   msg.pdu.header.operation_type == ri.operationType;
+        });
+    }
+
+    std::vector<RegInfo> FindReceivers(const Message &msg)
+    {
+        return FindReceivers([&msg](const RegInfo &ri) {
             return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId &&
                    msg.pdu.header.operation_type == ri.operationType;
         });
@@ -201,7 +206,7 @@ private:
     void Appthread_cbIncomingNotification(Message &msg);
 
     void IPCBThread_cbIncomingResponse(Message &msg);
-    void AppThread_cbIncomingResponse(Message &msg, RegInfo ri);
+    void AppThread_cbIncomingResponse(Message &msg);
 
     void IPCBThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType);
     void AppThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType);
