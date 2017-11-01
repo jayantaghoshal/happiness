@@ -529,12 +529,6 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_c
   }
 }
 
-void BringInterfaceUp(const std::string &interface_name, const std::string &ns) {
-  std::stringstream cmd;
-  cmd << "/system/bin/ip netns exec " << ns << " ifconfig " << interface_name << " up";
-  system(cmd.str().c_str());
-}
-
 bool BringInterfaceUp(const char *interface_name) {
   struct ifreq ifr_req;
   memset(&ifr_req, 0, sizeof(struct ifreq));
@@ -609,21 +603,9 @@ void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std:
   ValidateReturnStatus(system(move_network_interface_cmd.str().c_str()), std::string("Failed to move ") + current_name);
 }
 
-void SetupInterface(const std::vector<InterfaceConfiguration> &interface_configurations) {
-  for (auto &conf : interface_configurations) {
-    SetupInterface(conf.name.c_str(), conf.mac_address_bytes, conf.ip_address.c_str(), conf.netmask.c_str(),
-                   conf.broadcast_address.c_str(), conf.mtu);
-  }
-}
-
 bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_address, const char *ip_addr,
                     const char *netmask, const char *broadcast_addr, const uint32_t mtu) {
   ALOGD("%s: Setting configuration for network interface", interface_name);
-
-  if (!InterfaceExists(interface_name)) {
-    ALOGE("%s: Interface does not appear to exist!", interface_name);
-    return false;
-  }
 
   // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.
   if (std::strcmp(interface_name, "tcam0") == 0 && !IsLinkSpeedCorrect(interface_name)) {

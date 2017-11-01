@@ -10,14 +10,14 @@
  * permission is obtained from Volvo Car Corporation.
  */
 
-#include <errno.h>
-
 #include <cutils/log.h>
 #include <cutils/properties.h>
 
+#include <vector>
 #include "firewall_config.h"
-#include "netman_netlink_event_handler.h"
+#include "netman_event_handler.h"
 #include "netutils.h"
+#include "uevent_listener.h"
 #include "vcc/localconfig.h"
 
 #define LOG_TAG "Netmand"
@@ -46,34 +46,27 @@ int main() {
       return EXIT_FAILURE;
     }
 
-    ALOGD("Firewall configured");
-
     std::vector<InterfaceConfiguration> interface_configurations;
 
     LoadInterfaceConfiguration(&interface_configurations, lcfg);
 
     ALOGV("Setting initial configuration on network interfaces");
 
-    SetupInterface(interface_configurations);
+    NetmanEventHandler event_handler(interface_configurations);
 
-    ALOGV("Initial configurations set");
-
-    NetmanNetlinkEventHandler nl_event_handler(interface_configurations);
-
-    NetlinkSocketListener &nl_socket_listener =
-        NetlinkSocketListener::Instance(NetlinkSocketListener::SocketType::NLSOC_TYPE_ROUTE);
-    nl_socket_listener.SetNetlinkEventHandler(nl_event_handler);
+    NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
+    nl_socket_listener.SetNetlinkEventHandler(event_handler);
 
     property_set("netmand.startup_completed", "1");
 
     if (nl_socket_listener.StartListening() < 0) {
-      ALOGE("Unable to start NetlinkSocketListener (%s)", strerror(errno));
-      return EXIT_FAILURE;
+      ALOGE("Unable to recv on  Netlink socket");
     }
+
   } catch (const std::runtime_error &e) {
     ALOGE("ABORTING: Exception thrown: %s", e.what());
-    return EXIT_FAILURE;
   }
 
-  return EXIT_SUCCESS;
+  // Netman is never expected to quit listening for events. So if control reaches here; it's a failure
+  return EXIT_FAILURE;
 }
