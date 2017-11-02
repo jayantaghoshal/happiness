@@ -4,4 +4,3 @@ service ipcbd-iplm /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd iplm UDPB
     user root
     group root
     seclabel u:r:ipcbd:s0
-

@@ -3,8 +3,8 @@
 ##############################################################
 PRODUCT_PACKAGES += \
     var_run_directory_structure \
-    netman \
     netboyd \
+    netman \
     vehicle-signals-daemon \
     dataelements-hidl-server \
     ipcbd \
@@ -13,7 +13,7 @@ PRODUCT_PACKAGES += \
     carconfig-updater \
     desip_service \
     android.hardware.automotive.vehicle.vcc@2.0-service
-    
+
 
 ##############################################################
 # System UI

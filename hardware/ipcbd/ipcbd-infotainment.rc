@@ -4,4 +4,3 @@ service ipcbd-infotainment /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd ip
     user root
     group root
     seclabel u:r:ipcbd:s0
-

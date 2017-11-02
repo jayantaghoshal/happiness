@@ -1,9 +1,10 @@
 # Inherit Delphi's init.rc
 import init.ihu_abl_car.rc
 
+
 #setup network namespaces
 on post-fs
-    mkdir /dev/netns
-    exec -- /system/bin/ip netns add vcc
-    exec -- /system/bin/ip netns exec vcc /system/bin/sysctl -p /vendor/etc/sysctl.conf
-    class_start vcc_net_init
+   mkdir /dev/netns
+   exec - root root -- /system/bin/ip netns add vcc
+   exec -- /system/bin/ip netns exec vcc /system/bin/sysctl -p /vendor/etc/sysctl.conf
+   class_start vcc_net_init

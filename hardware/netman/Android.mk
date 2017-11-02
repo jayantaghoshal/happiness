@@ -35,6 +35,7 @@ LOCAL_STATIC_LIBRARIES += \
 # Netman depends upon sysctl.conf, which it will initialize during startup
 LOCAL_INIT_RC := netman.rc
 LOCAL_REQUIRED_MODULES := sysctl.conf netd_config.xml
+LOCAL_VENDOR_MODULE := true
 # We only build for 64 bit.
 LOCAL_MULTILIB := 64
 include $(BUILD_EXECUTABLE)
@@ -71,6 +72,7 @@ LOCAL_STATIC_LIBRARIES += \
 LOCAL_INIT_RC := netboyd.rc
 # We only build for 64 bit.
 LOCAL_MULTILIB := 64
+LOCAL_VENDOR_MODULE := true
 include $(BUILD_EXECUTABLE)
 
 #

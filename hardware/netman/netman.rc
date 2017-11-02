@@ -1,7 +1,7 @@
 on property:netmand.startup_completed=1 && property:netboyd.startup_completed=1
     class_start vcc_net
 
-service netman /system/bin/ip netns exec vcc /system/bin/netman
+service netman /system/bin/ip netns exec vcc /vendor/bin/netman
     class vcc_net_init
     user root
     group root

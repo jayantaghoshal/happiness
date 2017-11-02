@@ -1,6 +1,6 @@
 # dataelements-hidl-server
 type dataelements-hidl-server, domain;
-type dataelements-hidl-server_exec, exec_type, file_type;
+type dataelements-hidl-server_exec, exec_type, file_type, vendor_file_type;
 
 allow dataelements-hidl-server hwservicemanager:binder { call transfer };
 allow dataelements-hidl-server hwservicemanager_prop:file { getattr open read };

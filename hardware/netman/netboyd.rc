@@ -1,4 +1,4 @@
-service netboyd /system/bin/netboyd
+service netboyd /vendor/bin/netboyd
     class vcc_net_init
     user root
     group root

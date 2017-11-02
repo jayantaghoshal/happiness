@@ -1,8 +1,9 @@
 # netman service
 type netman, domain;
-type netman_exec, exec_type, file_type;
+type netman_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(netman)
+#permissive netman;
 
 allow netman self:netlink_route_socket { create read write getattr bind setopt nlmsg_read };
 allow netman self:udp_socket { create ioctl };
@@ -13,10 +14,10 @@ allow netman netns_device:dir { read open };
 allow netman netman_exec:file execute_no_trans;
 allow netman rootfs:dir mounton;
 
-domain_auto_trans(netman, ip_exec, ip)
+#domain_auto_trans(netman, ip_exec, ip)
 allow netman self:rawip_socket { create getopt setopt };
 allow netman proc_net:file getattr;
 
-allow netman ip_exec:file entrypoint;
+#allow netman ip_exec:file entrypoint;
 
 set_prop(netman, netman_prop)

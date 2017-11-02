@@ -1,5 +1,5 @@
 # desip_service service
 type desip_service, domain;
-type desip_service_exec, exec_type, file_type;
+type desip_service_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(desip_service)
