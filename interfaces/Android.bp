@@ -8,4 +8,5 @@ subdirs = [
     "uds/1.0",
     "vehiclecom",
     "vehiclecom/1.0",
+    "vehiclehal/1.0",
 ]

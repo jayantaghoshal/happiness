@@ -1,0 +1,21 @@
+
+package vendor.volvocars.hardware.vehiclehal@1.0;
+
+import android.hardware.automotive.vehicle@2.0;
+
+/**
+ * Extension of VehicleProperty enum declared in Vehicle HAL 2.0
+ */
+enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
+    /**
+     * CarConfigValues. First position in array equals CC01, second position equals CC02 and so on.
+     *
+     * @change_mode TODO add info
+     * @access TODO add info
+     */
+    CARCONFIG = (
+      0x0001
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BYTES
+      | VehicleArea:GLOBAL),
+};

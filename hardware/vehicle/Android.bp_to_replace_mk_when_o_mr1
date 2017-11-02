@@ -8,7 +8,8 @@ cc_binary {
 
     srcs: [
         "src/VehicleHalImpl.cpp",
-        "src/VehicleHALServiceMain.cpp"
+        "src/VehicleHALServiceMain.cpp",
+        "src/carconfigmodule.cpp",
     ],
 
     cppflags: [
@@ -26,6 +27,9 @@ cc_binary {
 //        "libhwbinder",
 //        "libdataelements",
 //        "android.hidl.base@1.0"
+          "android.hardware.automotive.vehicle@2.0",
+          "vendor.volvocars.hardware.vehiclehal@1.0",
+          "libcarconfig_reader"
     ],
 
    static_libs: [

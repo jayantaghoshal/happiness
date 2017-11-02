@@ -2,6 +2,7 @@
 LOCAL_PATH := $(call my-dir)
 
 vhal_v2_0 = android.hardware.automotive.vehicle@2.0
+vccvhal_v1_0 = vendor.volvocars.hardware.vehiclehal@1.0
 service_name = android.hardware.automotive.vehicle.vcc@2.0
 
 include $(CLEAR_VARS)
@@ -11,10 +12,12 @@ LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
 PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle@2.0-service
 
-SERVICE_SRC := src/VehicleHALServiceMain.cpp
-
 LOCAL_SRC_FILES := \
-     $(SERVICE_SRC)
+     src/VehicleHALServiceMain.cpp \
+     src/carconfigmodule.cpp
+
+LOCAL_C_INCLUDES := \
+    src/
 
 LOCAL_SHARED_LIBRARIES := \
     libbase \
@@ -29,7 +32,9 @@ LOCAL_SHARED_LIBRARIES := \
     libdesip \
     libdesipservice \
     libbinder \
-    $(vhal_v2_0)
+    $(vhal_v2_0) \
+    $(vccvhal_v1_0) \
+    libcarconfig_reader
 
 
 LOCAL_STATIC_LIBRARIES := \

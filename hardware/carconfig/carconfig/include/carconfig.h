@@ -26,7 +26,6 @@ namespace carconfig {
  * Return value is in the range 0x00..0xFF (0..255). Meaning is dependent on
  * the parameter number.
  * @exception throws std::out_of_range if parameterNumber is out of range
- * @exception throws std::runtime_error if init has not been called prior to this function
  */
 std::uint8_t getValue(std::uint32_t parameterNumber);
 
@@ -38,7 +37,6 @@ std::uint8_t getValue(std::uint32_t parameterNumber);
 * Return value is in the range 0x00..0xFF (0..255). Meaning is dependent on
 * the parameter number.
 * @exception throws std::out_of_range if parameterNumber is out of range
- * @exception throws std::runtime_error if init has not been called prior to this function
 */
 std::uint8_t getRawValue(std::uint32_t parameterNumber);
 
@@ -56,7 +54,6 @@ bool isConfigured();
  *        e.g. auto value = carconfig::getValue<CC1_VehicleTypeType>();
  * @return value (and type) from the same enum class as the parameterNumber came from
  * @exception throws std::out_of_range if parameterNumber is out of range
- * @exception throws std::runtime_error if init has not been called prior to this function
  */
 template <typename T>
 T getValue() {
@@ -69,10 +66,14 @@ T getValue() {
  * e.g. if (carconfig::checkValue(CC1_VehicleTypeType::L541)) ...
  * @return true if the corresponding car config parameter has the value indicated by the input parameter.
  * @exception throws std::out_of_range if parameterNumber is out of range
- * @exception throws std::runtime_error if init has not been called prior to this function
  */
 template <typename T>
 bool checkValue(T paramValue) {
     return (paramValue == getValue<T>());
 }
+
+/**
+ * Get the number of car config parameters
+ */
+int getNumberOfCCParameters();
 }
