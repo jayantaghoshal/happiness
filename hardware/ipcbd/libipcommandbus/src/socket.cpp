@@ -41,16 +41,11 @@ std::vector<std::pair<Message::Ecu, ISocket::EcuAddress>> Socket::defaultEcuMap(
 
 Socket::Socket(IDispatcher& dispatcher, int domain, int type, int protocol, EcuIpMap ecu_ip_map)
     : dispatcher_(dispatcher), ecu_ip_map_{ecu_ip_map} {
+    backoffReset();
     setup(domain, type, protocol);
 }
 
-Socket::~Socket() {
-    if (socket_fd_ > 0) {
-        // Not advised to handle EINTR error for close
-        close(socket_fd_);
-        socket_fd_ = -1;
-    }
-}
+Socket::~Socket() { teardown(); }
 
 void Socket::set_option(int level, int option, int value) {
     socklen_t length = sizeof value;
@@ -114,18 +109,18 @@ void Socket::setup(int domain, int type, int protocol) {
     set_option(IPPROTO_IP, IP_TOS,
                getIpPrecedenceValue(LocalconfigParameters::getInstance().getNetworkControlPriority()));
 
-    /*sd_event_source *source;
-    struct epoll_event event;
-    event.events = EPOLLIN;
-    event.data.fd = socket_fd_;
-    int sdstatus = sd_event_add_io(&sd_event_, &source, socket_fd_, event.events, wakeup_cb, this);
-
-    assert_sd_throw(sdstatus >= 0, "Failed to add socket fd to event loop");
-    io_event_source_.reset(source);*/
-    dispatcher_.AddFd(socket_fd_, [this]() {
-        if (this->read_ready_cb_) this->read_ready_cb_();
+    dispatcher_.AddFd(socket_fd_, [this] {
+        if (read_ready_cb_) read_ready_cb_();
     });
     ALOGD("Socket created %d/%d/%d", domain, type, protocol);
+}
+
+void Socket::teardown() {
+    if (socket_fd_ > 0) {
+        dispatcher_.RemoveFd(socket_fd_);
+        close(socket_fd_);
+        socket_fd_ = -1;
+    }
 }
 
 void Socket::setHandler(std::function<void(void)> readEventHandler) { read_ready_cb_ = std::move(readEventHandler); }
@@ -133,5 +128,14 @@ void Socket::setHandler(std::function<void(void)> readEventHandler) { read_ready
 uint32_t Socket::getTestSimPort() {
     uint32_t test_port = local_config.getTestPort();
     return test_port;
+}
+
+void Socket::backoffReset() { backoff_timeout_ = std::chrono::milliseconds(100); }
+
+// get the current backoff timeout and then backoff with a factor 2 upto a max value
+std::chrono::milliseconds Socket::backoffGet() {
+    const auto result = backoff_timeout_;
+    backoff_timeout_ = std::min(2 * backoff_timeout_, std::chrono::milliseconds(2000));
+    return result;
 }
 }

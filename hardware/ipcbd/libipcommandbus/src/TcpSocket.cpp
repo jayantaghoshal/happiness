@@ -22,7 +22,7 @@ namespace Connectivity {
 
 TcpSocket::TcpSocket(IDispatcher &dispatcher, EcuIpMap ecu_ip_map)
     : Socket(dispatcher, AF_INET, SOCK_STREAM, IPPROTO_TCP, ecu_ip_map) {
-    setHandler(std::bind(&TcpSocket::readEventHandler, this));
+    setHandler([this] { readEventHandler(); });
 }
 
 TcpSocket::~TcpSocket() {
@@ -107,13 +107,6 @@ void TcpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
     }
 }
 
-int TcpSocket::reconnectionRetryHandler(std::uint64_t /*usec*/, void *userdata) {
-    // retry connection
-    static_cast<TcpSocket *>(userdata)->reconnect();
-
-    return 0;
-}
-
 void TcpSocket::readEventHandler() {
     // Resize buffer to a value larger than header length
     std::vector<std::uint8_t> buffer(4000, 0);
@@ -178,26 +171,18 @@ void TcpSocket::resetConnection() {
     std::queue<std::vector<std::uint8_t>> empty_queue;
     std::swap(read_frame_buffer_, empty_queue);
 
-    close(socket_fd_);
-    socket_fd_ = -1;
+    teardown();
 }
 
 void TcpSocket::reconnect() {
     try {
-        if (socket_fd_ >= 0) close(socket_fd_);
+        teardown();
 
         Socket::setup(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setup(peer_ecu_);
+        backoffReset();
     } catch (const SocketException &e) {
-        /*std::uint64_t now;
-        sd_event_now(&sd_event_, CLOCK_MONOTONIC, &now);
-        sd_event_source *time_event_source;
-        int ret = sd_event_add_time(
-            &sd_event_, &time_event_source, CLOCK_MONOTONIC, now + 100, 1, reconnectionRetryHandler, this);
-        assert_sd_throw(ret >= 0, "Failed to add timer event source to event loop");
-        time_event_source_.reset(time_event_source);*/
-
-        dispatcher_.EnqueueWithDelay(std::chrono::microseconds(100), [this]() { reconnectionRetryHandler(100, this); });
+        dispatcher_.EnqueueWithDelay(backoffGet(), [this] { reconnect(); });
     }
 }
 }

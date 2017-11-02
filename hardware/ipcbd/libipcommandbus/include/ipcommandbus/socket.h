@@ -33,11 +33,15 @@ class Socket : public ISocket {
 
   protected:
     void setup(int domain, int type, int protocol);
+    void teardown();
     void setHandler(std::function<void(void)> readEvenHandler);
     int getIpPrecedenceValue(IpPrecedence ipPrecedence);
 
+    void backoffReset();  // set backoff timer to default/start value
+    // get the current backoff timeout and then backoff with a factor 2 upto a max value
+    std::chrono::milliseconds backoffGet();
+
     int socket_fd_ = -1;
-    // TODO remove SdEventSourceReference io_event_source_;
     tarmac::eventloop::IDispatcher &dispatcher_;
 
     // ToDo Abhi: When local_config object is created; everything is read. This need to split
@@ -47,6 +51,6 @@ class Socket : public ISocket {
 
   private:
     std::function<void(void)> read_ready_cb_ = nullptr;
-    // static int wakeup_cb(/*sd_event_source *event_source_, */int fd, uint32_t revents, void *userdata);
+    std::chrono::milliseconds backoff_timeout_;
 };
 }

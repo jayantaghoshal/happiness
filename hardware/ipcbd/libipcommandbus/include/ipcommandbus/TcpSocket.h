@@ -22,8 +22,6 @@ class TcpSocket final : public Socket {
     void endConnection() override;
 
   private:
-    static int reconnectionRetryHandler(std::uint64_t usec, void* userdata);
-
     void readEventHandler();
     void packetizer();
     void resetConnection();
@@ -33,7 +31,6 @@ class TcpSocket final : public Socket {
     std::queue<std::vector<std::uint8_t>> read_frame_buffer_;
     std::function<void(void)> ready_cb_ = nullptr;
 
-    // SdEventSourceReference time_event_source_;
     Message::Ecu peer_ecu_;
 };
 
