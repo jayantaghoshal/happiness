@@ -57,7 +57,7 @@
 
   <!-- Delphi Overrides -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="4153058126c51744ce5baa0c41def1958ecae959"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="82b3a8f1883e8b0485d060621bc78631046256aa"/>
 
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
