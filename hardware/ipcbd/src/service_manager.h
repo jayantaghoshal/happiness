@@ -16,7 +16,6 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IResponseCallback;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
 using ::android::hardware::hidl_array;
@@ -41,13 +40,12 @@ public:
     ServiceManager(std::string service_name, ::Connectivity::MessageDispatcher& msgDispatcher);
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
-    Return<void> subscribeMessage(uint16_t serviceID, uint16_t operationID, const hidl_vec<OperationType>& operationTypes,
-                                  const sp<IMessageCallback>& callbackHandler, subscribeMessage_cb _hidl_cb) override;
-    Return<void> subscribeResponse(uint16_t serviceID, uint16_t operationID, const sp<IResponseCallback>& callbackHandler,
-                                   subscribeResponse_cb _hidl_cb) override;
-    Return<void> unsubscribe(uint16_t serviceID, uint16_t operationID, const sp<IMessageCallback>& callbackHandler,
-                                   unsubscribe_cb _hidl_cb) override;
-    Return<void> sendMessage(const Msg& msg, const RetryInfo& retryInfo) override;
+    Return<void> subscribe(uint16_t serviceID, uint16_t operationID, OperationType operationType,
+                               const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) override;
+    Return<void> unsubscribe(uint64_t subscriberId, unsubscribe_cb _hidl_cb) override;
+    Return<void> sendMessage(const Msg& msg, const RetryInfo& retryInfo, sendMessage_cb _hidl_cb) override;
+    Return<void> sendRequest(const Msg& msg, const RetryInfo& retryInfo, const sp<IResponseCallback>& callbackHandler,
+                                 sendRequest_cb _hidl_cb) override;
 
 private:
     MessageDispatcher& messageDispatcher_;

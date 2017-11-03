@@ -60,3 +60,7 @@ struct CommandResult {
     string errMsg;
 };
 
+struct SubscribeResult {
+    CommandResult commandResult;
+    uint64_t subscriberId;
+};

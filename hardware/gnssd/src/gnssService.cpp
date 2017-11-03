@@ -7,7 +7,7 @@
 #define LOG_TAG "GnssD.service"
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
@@ -39,25 +39,47 @@ void GnssService::StartSubscribe()
         connectionError = false;
         ALOGD("IpcbD found, subscribing");
         // Install callback
-        CommandResult result;
-        ipcbServer_.get()->subscribeMessage((uint16_t) VccIpCmd::ServiceId::Positioning,
-                                            (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
-                                            {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                            this,
-                                            [&result](CommandResult cr) { result = cr; });
-        if (!result.success)
+
+        SubscribeResult result;
+        //TODO: Handle subscription ID returned from subscribe in order to unsubscribe?
+        ipcbServer_.get()->subscribe((uint16_t) VccIpCmd::ServiceId::Positioning,
+                                     (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
+                                     OperationType::NOTIFICATION,
+                                     this,
+                                     [&result](SubscribeResult sr) { result = sr; });
+        if (!result.commandResult.success)
         {
-            ALOGE("Subscribe message returned an error: %s", result.errMsg.c_str());
+            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
         }
 
-        ipcbServer_.get()->subscribeMessage((uint16_t)VccIpCmd::ServiceId::Positioning,
-                                            (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                                            {OperationType::NOTIFICATION, OperationType::NOTIFICATION_CYCLIC},
-                                            this,
-                                            [&result](CommandResult cr) { result = cr; });
-        if (!result.success)
+        ipcbServer_.get()->subscribe((uint16_t) VccIpCmd::ServiceId::Positioning,
+                                     (uint16_t) VccIpCmd::OperationId::GNSSPositionData,
+                                     OperationType::NOTIFICATION_CYCLIC,
+                                     this,
+                                     [&result](SubscribeResult sr) { result = sr; });
+        if (!result.commandResult.success)
         {
-            ALOGE("Subscribe message returned an error: %s", result.errMsg.c_str());
+            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+        }
+
+        ipcbServer_.get()->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                     (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+                                     OperationType::NOTIFICATION,
+                                     this,
+                                     [&result](SubscribeResult sr) { result = sr; });
+        if (!result.commandResult.success)
+        {
+            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+        }
+
+        ipcbServer_.get()->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                     (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+                                     OperationType::NOTIFICATION_CYCLIC,
+                                     this,
+                                     [&result](SubscribeResult sr) { result = sr; });
+        if (!result.commandResult.success)
+        {
+            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
         }
     }
     else
