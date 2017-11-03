@@ -24,6 +24,7 @@ class LscMocker : public IIplmCallback
 {
     public:
         LscMocker();
+        ~LscMocker();
         void RegisterLSC(std::string LSCName);
         void UnregisterLSC(std::string LSCName);
         void ReleaseResourceGroup(const hidl_string& lscName, ResourceGroup _rg);

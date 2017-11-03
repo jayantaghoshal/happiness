@@ -14,6 +14,7 @@ public:
     bool SendPdu(Pdu pdu);
     bool ReceivePdu(Pdu& pdu);
     void CreateAndSendIpActivityMessage();  //TODO: Consider removing, this is per implementation specific code
+    void CloseSocket();
 
 private:
     void Setup();
