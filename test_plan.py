@@ -37,6 +37,11 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2017-10-19"
     ),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
+             reason="MR1 not yet on master",
+             jira_issue="",
+             deadline="2018-01-21"
+    ),
     Disabled(VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
              reason="Dead code in repo",
              jira_issue="",
