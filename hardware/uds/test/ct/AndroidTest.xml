@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Test UDS data aggregation">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="udsdatacollector_ct->/data/local/tmp/udsdatacollector_ct" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="udsdatacollector_ct" />
+        <option name="runtime-hint" value="5s" />
+    </test>
+</configuration>

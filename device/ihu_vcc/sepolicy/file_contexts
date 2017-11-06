@@ -34,3 +34,5 @@
 
 # hal_vehicle_default, TODO remove when properly integrated by Delphi
 /vendor/bin/hw/android.hardware.automotive.vehicle.vcc@2.0-service u:object_r:hal_vehicle_default_exec:s0
+
+/vendor/bin/hw/vendor.volvocars.hardware.uds@1.0-service u:object_r:uds_diagnostics_default_exec:s0

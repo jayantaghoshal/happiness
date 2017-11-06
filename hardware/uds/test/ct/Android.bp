@@ -1,0 +1,15 @@
+cc_test {
+    name: "udsdatacollector_ct",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: ["*.cpp"],
+
+    shared_libs: [
+        "vendor.volvocars.hardware.uds@1.0",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+    ],
+    static_libs: ["libgmock"],
+    test_suites: ["vts"],
+}
