@@ -5,30 +5,30 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <utils/Log.h>
+#include <memory>
 #include <string>
 
 // Message is sent/received as:
 // [tag][number of chars in msg][message]
+
 namespace CarSim {
+
+void close_wrapper(int* socket_fd_ptr);
 
 class SocketConnection {
  public:
   // Created by and returned by when connection is established SocketServer.
   SocketConnection(int socket_fd);
-  ~SocketConnection();
   std::string Read();
-  size_t Send(std::string message);
+  void Send(std::string message);
 
  private:
   const std::string kHeaderTag{"CarSim"};
-  static constexpr std::uint8_t kHeaderTagLength{6};
   static constexpr std::uint8_t kHeaderMessageLength{4};  // fixed 4 bytes describing an int32
 
-  int socket_fd_{-1};
+  std::unique_ptr<int, decltype(&close_wrapper)> socket_fd_Ptr_;
 
-  // Header contains tag + the char/byte length of the payload.
-  int GetPayloadMessageLengthFromHeader();
-  std::string GetPayloadMessage(int messageLength);
+  std::string ReadMessage(int messageLength);
 };
 
 }  // CarSim
