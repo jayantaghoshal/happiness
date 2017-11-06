@@ -1,5 +1,4 @@
 subdirs = [
     "utils",
     "iplm",
-    "ipcbd_retry",
 ]

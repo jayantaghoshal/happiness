@@ -14,7 +14,7 @@
 #include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/vcc_pdu_header.h"
 
-#define LOG_TAG "VtsIpcbdRetryTest"
+#define LOG_TAG "VtsIpcbdComponentTest"
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -83,7 +83,7 @@ public:
 };
 
 
-class VtsIpcbdRetryTest : public ::Test
+class VtsIpcbdComponentTest : public ::Test
 {
 protected:
     static void SetUpTestCase(){
@@ -97,7 +97,7 @@ protected:
 /**
 
  **/
-TEST_F(VtsIpcbdRetryTest, TestSubscribeUnsubscribeRequest){
+TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest){
 
     ALOGI("TestSubscribeUnsubscribeRequest, setting up");
 
@@ -189,7 +189,7 @@ TEST_F(VtsIpcbdRetryTest, TestSubscribeUnsubscribeRequest){
 /**
 
  **/
-TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeSuccess){
+TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess){
 
     ALOGI("TestMultipleSubscribeSuccess, setting up");
 
@@ -255,7 +255,7 @@ TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeSuccess){
     ALOGI("TestMultipleSubscribeSuccess, test complete");
 }
 
-TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeFail){
+TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail){
 
     ALOGI("TestMultipleSubscribeFail, setting up");
 
@@ -277,7 +277,7 @@ TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeFail){
         ++message_received;
     };
 
-    // ** Test add subscriber (NOTIFICATION)  ** //
+    // ** Test add subscriber (REQUEST)  ** //
     ALOGI("TestMultipleSubscribeFail, starting test");
 
     //Register two subscribers
@@ -289,7 +289,7 @@ TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeFail){
     ipcb_daemon_->subscribe(0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
     EXPECT_FALSE(result.commandResult.success);
 
-    //Setup a notification PDU to send from Ipcb simulator to IpcbD
+    //Setup a request PDU to send from Ipcb simulator to IpcbD
     Pdu request;
     request.header.service_id = 0x1;
     request.header.operation_id = 0x1;
@@ -320,7 +320,7 @@ TEST_F(VtsIpcbdRetryTest, TestMultipleSubscribeFail){
 /**
 
  **/
-TEST_F(VtsIpcbdRetryTest, TestRequestResponse){
+TEST_F(VtsIpcbdComponentTest, TestRequestResponse){
 
     ALOGI("TestRequestResponse, setting up");
 
@@ -396,7 +396,7 @@ TEST_F(VtsIpcbdRetryTest, TestRequestResponse){
 
  **/
 /*
-TEST_F(VtsIpcbdRetryTest, TestNoAckRetry){
+TEST_F(VtsIpcbdComponentTest, TestNoAckRetry){
     system(SHELLSCRIPT);
 
     ALOGI("TestNoAckRetry, setting up");
@@ -451,7 +451,7 @@ TEST_F(VtsIpcbdRetryTest, TestNoAckRetry){
 /**
 
  **/
-TEST_F(VtsIpcbdRetryTest, TestNoResponseRetry){
+TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry){
 
     ALOGI("TestNoResponseRetry, setting up");
 
@@ -550,9 +550,6 @@ TEST_F(VtsIpcbdRetryTest, TestNoResponseRetry){
 
     //Expect error to be recived
     EXPECT_EQ(error_received, 1);
-/*
-    ipcb_daemon_->unsubscribeResponse(vehicle_com_client,
-        [&result](CommandResult cr) { result = cr; });
-*/
+
     ALOGI("TestNoResponseRetry, finished test");
 }

@@ -1,7 +1,7 @@
 cc_test {
-    name: "VtsIpcbdRetryTest",
+    name: "VtsIpcbdComponentTest",
 
-    srcs: ["VtsIpcbdRetryTest.cpp"],
+    srcs: ["VtsIpcbdComponentTest.cpp"],
 
     cppflags: [
         "-fexceptions",
