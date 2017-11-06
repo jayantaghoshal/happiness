@@ -23,9 +23,10 @@ services_to_test = [
 
 # Add specific HALs to check with lshal
 hals_to_check = [
-    "vendor.volvocars.hardware.iplm",
-    "vendor.volvocars.hardware.signals",
-    "vendor.volvocars.hardware.vehiclecom"
+    "vendor.volvocars.hardware.iplm@1.0::IIplm/default",
+    "vendor.volvocars.hardware.signals@1.0::ISignals/default",
+    "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/ipcb",
+    "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/iplm"
 ]
 
 # Add specific propperties and expected value to check with getprop
@@ -48,10 +49,54 @@ class ComponentTest(base_test.BaseTestClass):
             retval = self.dut.adb.shell('getprop init.svc.%s' % service)
             asserts.assertEqual(retval.strip(), "running", 'Service {0} is not running'.format(service))
 
-    def testHals(self):
-        retval = self.dut.adb.shell('lshal')
+
+    def testHalsExisting(self):
+
+        missing_hal_list = list()
+
         for hal in hals_to_check:
-            asserts.assertTrue(retval.find(hal) >= 0, 'HAL {0} not found'.format(hal))
+            hal_process_name = self.dut.adb.shell('lshal | grep --fixed-strings {0} | cut -f1'.format(hal)).strip()
+
+            if (hal_process_name == ''):
+                missing_hal_list.append(' [' + hal + ']')
+ 
+        if(len(missing_hal_list) > 0):
+            asserts.fail('HALs missing: ' + ''.join(missing_hal_list))
+
+
+    def testHalProcessessNotChanging(self):
+
+        halDictionary = {}
+        missing_hal_list = list()
+        halErrorDictionary = {}
+
+        # Store away the initial processes for comparison
+        for hal in hals_to_check:
+            hal_process_name = self.dut.adb.shell('lshal | grep --fixed-strings {0} | cut -f1'.format(hal)).strip()
+            hal_process_id = self.dut.adb.shell('lshal | grep --fixed-strings {0} | cut -f2'.format(hal)).strip()
+            halDictionary[hal_process_name] = hal_process_id
+
+        # Compare for 10 seconds that the process id stays the same
+        end = time.time() + 10
+        while time.time() < end:
+            for hal in hals_to_check:
+                try:
+                    hal_process_id = self.dut.adb.shell('lshal | grep --fixed-strings {0} | cut -f2'.format(hal)).strip()
+
+                    if (hal_process_id != halDictionary[hal]):
+                          halErrorDictionary[hal] = hal_process_id
+                except:
+                    pass
+                     
+            time.sleep(0.1)
+        
+        if(halErrorDictionary):
+            text = 'HAL processes restarted'
+            for key, value in halErrorDictionary.items():
+                text += ': ' + key + ' ( ' + halDictionary[key] + ' -> ' + value + ' ) '
+
+            asserts.fail(text)
+
 
     def testServicesNotRestart(self):
         process = {}
