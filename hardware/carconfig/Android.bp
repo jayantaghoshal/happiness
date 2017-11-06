@@ -32,12 +32,17 @@ genrule {
 }
 
 // This lib is only used as a workaround to import the generated_headers from mk-files
-cc_library_static
-{
+cc_library_static {
     name: "libccparameterlistgen",
     vendor: true,
-    generated_headers: ["cc_parameterlist_map_gen", "cc_parameterlist_gen"],
-    export_generated_headers: ["cc_parameterlist_map_gen", "cc_parameterlist_gen"],
+    generated_headers: [
+        "cc_parameterlist_map_gen",
+        "cc_parameterlist_gen",
+    ],
+    export_generated_headers: [
+        "cc_parameterlist_map_gen",
+        "cc_parameterlist_gen",
+    ],
 
     compile_multilib: "64",
 }

@@ -25,11 +25,11 @@ using ::android::sp;
 
 struct GnssNavigationMessage : public IGnssNavigationMessage {
     // Methods from ::android::hardware::gnss::V1_0::IGnssNavigationMessage follow.
-    Return<IGnssNavigationMessage::GnssNavigationMessageStatus> setCallback(const sp<IGnssNavigationMessageCallback>& callback) override;
+    Return<IGnssNavigationMessage::GnssNavigationMessageStatus> setCallback(
+            const sp<IGnssNavigationMessageCallback>& callback) override;
     Return<void> close() override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssNavigationMessage* HIDL_FETCH_IGnssNavigationMessage(const char* name);

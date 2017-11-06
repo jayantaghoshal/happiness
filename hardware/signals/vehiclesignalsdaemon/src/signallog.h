@@ -9,19 +9,18 @@
  * Log signals to a ring-like buffer.
  *
  */
-class SignalLog
-{
- public:
-  SignalLog(const std::string& logFile0, const std::string& logFile1);
-  void log(const char* signalName, const char* value, autosar::Dir direction);
+class SignalLog {
+  public:
+    SignalLog(const std::string& logFile0, const std::string& logFile1);
+    void log(const char* signalName, const char* value, autosar::Dir direction);
 
- private:
-  SignalLog();
+  private:
+    SignalLog();
 
-  void setActiveLogFile(int newActiveLogFileIndex);
+    void setActiveLogFile(int newActiveLogFileIndex);
 
-  const std::string _logFiles[2];  // The two files used for logging
-  int _activeLogFileIndex;
-  std::ofstream _activeLogFileStream;
-  const int MAX_LOG_SIZE;
+    const std::string _logFiles[2];  // The two files used for logging
+    int _activeLogFileIndex;
+    std::ofstream _activeLogFileStream;
+    const int MAX_LOG_SIZE;
 };

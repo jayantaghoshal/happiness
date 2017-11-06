@@ -652,5 +652,4 @@
 
     iTPMSTirePMSts_de = new DEInjector<autosar::iTPMSTirePMSts_info>();
 
-
 // clang-format on

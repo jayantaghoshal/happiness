@@ -4,12 +4,12 @@
 \*===========================================================================*/
 #include "ipcommandbus/TransportServices.h"
 
+#include <cutils/log.h>
 #include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <cstdint>
 #include <memory>
-#include <cutils/log.h>
 
 #include "ipcommandbus/Pdu.h"
 #include "ipcommandbus/net_serializer.h"
@@ -18,69 +18,56 @@
 
 using namespace tarmac::eventloop;
 
-namespace Connectivity
-{
+namespace Connectivity {
 
-TransportServices::TransportServices(IDispatcher &timeProvider, IDispatcher &threadDispatcher, Message::Ecu selfEcu, bool useWfaTimer)
-    : timeProvider{timeProvider}, threadDispatcher{threadDispatcher}, m_useWfaTimer(useWfaTimer), selfEcu{selfEcu}
-{
-}
+TransportServices::TransportServices(IDispatcher &timeProvider, IDispatcher &threadDispatcher, Message::Ecu selfEcu,
+                                     bool useWfaTimer)
+    : timeProvider{timeProvider}, threadDispatcher{threadDispatcher}, m_useWfaTimer(useWfaTimer), selfEcu{selfEcu} {}
 
-void TransportServices::setSocket(ISocket *pSocket)
-{
+void TransportServices::setSocket(ISocket *pSocket) {
     m_pSocket = pSocket;
     m_pSocket->registerReadReadyCb(std::bind(&TransportServices::handleInUnicastData, this));
 }
 
-void TransportServices::setBroadcastSocket(ISocket *pSocket)
-{
+void TransportServices::setBroadcastSocket(ISocket *pSocket) {
     m_pBroadcastSocket = pSocket;
     m_pBroadcastSocket->registerReadReadyCb(std::bind(&TransportServices::handleInBroadcastData, this));
 }
 
-void TransportServices::setDiagnostics(IDiagnosticsClient *diagnostics, IDispatcher *dispatcher)
-{
+void TransportServices::setDiagnostics(IDiagnosticsClient *diagnostics, IDispatcher *dispatcher) {
     assert(diagnostics);
     assert(dispatcher);
     m_diagnostics = diagnostics;
     m_applicationThreadDispatcher = dispatcher;
 }
 
-void TransportServices::registerIncomingRequestCallback(std::function<bool(Message &)> messageCb)
-{
+void TransportServices::registerIncomingRequestCallback(std::function<bool(Message &)> messageCb) {
     m_incomingRequestCb = messageCb;
 }
 
-void TransportServices::registerIncomingNotificationCallback(std::function<void(Message &)> messageCb)
-{
+void TransportServices::registerIncomingNotificationCallback(std::function<void(Message &)> messageCb) {
     m_incomingNotificationCb = messageCb;
 }
 
-void TransportServices::registerIncomingResponseCallback(std::function<void(Message &)> messageCb)
-{
+void TransportServices::registerIncomingResponseCallback(std::function<void(Message &)> messageCb) {
     m_incomingResponseCb = messageCb;
 }
 
-void TransportServices::registerErrorOnRequestCallback(std::function<void(Message &, ErrorType)> messageCb)
-{
+void TransportServices::registerErrorOnRequestCallback(std::function<void(Message &, ErrorType)> messageCb) {
     m_errorOnRequestCb = messageCb;
 }
 
-void TransportServices::sendMessage(Message &&msg)
-{
+void TransportServices::sendMessage(Message &&msg) {
     ALOGV("TransportServices::sendMessage - %s to ECU %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     // Need to set the proper protocol version
     msg.pdu.header.protocol_version = TransportServices::PROTOCOL_VERSION;
 
-    switch (msg.pdu.header.operation_type)
-    {
+    switch (msg.pdu.header.operation_type) {
         case IpCmdTypes::OperationType::SETREQUEST_NORETURN:
-        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST:
-        {
+        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST: {
             ALOGV("Send request (0x%02x): ", (int)msg.pdu.header.operation_type);
-            if (!m_useWfaTimer)
-            {
+            if (!m_useWfaTimer) {
                 // Does not require book keeping
                 this->sendPdu(msg.ecu, msg.pdu);
                 break;
@@ -90,51 +77,42 @@ void TransportServices::sendMessage(Message &&msg)
         }
 
         case IpCmdTypes::OperationType::REQUEST:
-        case IpCmdTypes::OperationType::SETREQUEST:
-        {
+        case IpCmdTypes::OperationType::SETREQUEST: {
             ALOGV("Send request (0x%02x): ", (int)msg.pdu.header.operation_type);
             // Set up timers and states
             std::unique_ptr<TrackMessage> pTm(new TrackMessage);
             pTm->wfa = TimeoutInfo();
-            if (msg.retry_info.override_default)
-            {
-                pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms, msg.retry_info.max_retries);
-            }
-            else
-            {
+            if (msg.retry_info.override_default) {
+                pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms,
+                                       msg.retry_info.max_retries);
+            } else {
                 pTm->wfr = TimeoutInfo();
             }
             pTm->msg = std::move(msg);
             auto pTmRef = std::ref(*pTm);
             std::chrono::milliseconds timeoutValue;
-            if (m_useWfaTimer)
-            {
+            if (m_useWfaTimer) {
                 timeoutValue = pTm->wfa.getTimeoutValue();
                 pTm->state = msg.pdu.header.operation_type == IpCmdTypes::OperationType::SETREQUEST_NORETURN
-                                 ? TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK
-                                 : TrackMessage::WAIT_FOR_REQUEST_ACK;
-            }
-            else
-            {
+                                     ? TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK
+                                     : TrackMessage::WAIT_FOR_REQUEST_ACK;
+            } else {
                 timeoutValue = pTm->wfr.getTimeoutValue();
                 pTm->state = TrackMessage::WAIT_FOR_REQUEST_RESPONSE;
             }
             pTm->timer = timeProvider.EnqueueWithDelay(
-                timeoutValue,
-                [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
+                    timeoutValue,
+                    [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
             // Add the message to pending and send it
             m_pendingMessages.push_back(std::move(pTm));
             std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
             this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
-        }
-        break;
+        } break;
 
-        case IpCmdTypes::OperationType::RESPONSE:
-        {
+        case IpCmdTypes::OperationType::RESPONSE: {
             ALOGV("Send response: 0x%08X", msg.pdu.header.sender_handle_id);
 
-            if(m_useWfaTimer)
-            {
+            if (m_useWfaTimer) {
                 // Setup timers and states
                 std::unique_ptr<TrackMessage> pTm(new TrackMessage);
                 pTm->state = TrackMessage::WAIT_FOR_RESPONSE_ACK;
@@ -142,59 +120,49 @@ void TransportServices::sendMessage(Message &&msg)
                 pTm->msg = std::move(msg);
                 auto pTmRef = std::ref(*pTm);
                 pTm->timer = timeProvider.EnqueueWithDelay(
-                            pTm->wfa.getTimeoutValue(),
-                            [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ](){ messageTimeout(pTmRef, id); });
+                        pTm->wfa.getTimeoutValue(),
+                        [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
 
-                //Add to pending message and send it
+                // Add to pending message and send it
                 m_pendingMessages.push_back((std::move(pTm)));
                 std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
                 this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
-            }
-            else
-            {
+            } else {
                 // No book keeping needed since ack timer is not used.
                 this->sendPdu(msg.ecu, msg.pdu);
             }
 
-        }
-        break;
+        } break;
 
-        case IpCmdTypes::OperationType::NOTIFICATION:
-        {
+        case IpCmdTypes::OperationType::NOTIFICATION: {
             ALOGV("Send notification (0x%02x): ", (int)msg.pdu.header.operation_type);
 
-            if (m_useWfaTimer)
-            {
+            if (m_useWfaTimer) {
                 // Set up timers and states
                 std::unique_ptr<TrackMessage> pTm(new TrackMessage);
                 pTm->state = TrackMessage::WAIT_FOR_NOTIFICATION_ACK;
                 pTm->wfa = TimeoutInfo();
-                if (msg.retry_info.override_default)
-                {
-                    pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms, msg.retry_info.max_retries);
-                }
-                else
-                {
+                if (msg.retry_info.override_default) {
+                    pTm->wfr = TimeoutInfo((std::chrono::milliseconds)msg.retry_info.retry_timeout_ms,
+                                           msg.retry_info.max_retries);
+                } else {
                     pTm->wfr = TimeoutInfo();
                 }
                 pTm->msg = std::move(msg);
                 auto pTmRef = std::ref(*pTm);
                 pTm->timer = timeProvider.EnqueueWithDelay(
-                    pTm->wfa.getTimeoutValue(),
-                    [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
+                        pTm->wfa.getTimeoutValue(),
+                        [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
 
                 // Add the message to pending and send it
                 m_pendingMessages.push_back(std::move(pTm));
                 std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
                 this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
-            }
-            else
-            {
+            } else {
                 // No book keeping needed as we are not using the ack timer
                 this->sendPdu(msg.ecu, msg.pdu);
             }
-        }
-        break;
+        } break;
 
         case IpCmdTypes::OperationType::ERROR:
         case IpCmdTypes::OperationType::NOTIFICATION_CYCLIC:
@@ -210,8 +178,7 @@ void TransportServices::sendMessage(Message &&msg)
     }
 }
 
-TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId)
-{
+TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId) {
     // TODO: What if same operation (operationid+operation+type+service) happens to be sent by two different nodes with
     // same seq nr...
     //       Can we rule out this ever happens?
@@ -220,29 +187,25 @@ TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId)
     //    >> Req: The applications shall use the SenderHandleID and the IP-source address to distinguish between
     //    >> different messages.
 
+    auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
+                           [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
+                               return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
+                           });
 
-    auto it = std::find_if(
-        m_pendingMessages.begin(), m_pendingMessages.end(), [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
-            return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
-        });
-
-    if (m_pendingMessages.end() != it)
-    {
+    if (m_pendingMessages.end() != it) {
         return (*it).get();
     }
 
     return nullptr;
 }
 
-std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t senderHandleId)
-{
-    auto it = std::find_if(
-        m_pendingMessages.begin(), m_pendingMessages.end(), [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
-            return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
-        });
+std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t senderHandleId) {
+    auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
+                           [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
+                               return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
+                           });
 
-    if (m_pendingMessages.end() != it)
-    {
+    if (m_pendingMessages.end() != it) {
         std::unique_ptr<TrackMessage> pTm = std::move(*it);
         m_pendingMessages.erase(it);
         return pTm;
@@ -250,59 +213,45 @@ std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t sen
     return std::unique_ptr<TrackMessage>();
 }
 
-void TransportServices::sendPdu(Message::Ecu destination, const Pdu &pdu)
-{
+void TransportServices::sendPdu(Message::Ecu destination, const Pdu &pdu) {
     ALOGD("Send PDU: %s to %s", Pdu::toString(pdu).c_str(), Message::EcuStr(destination));
 
-    if (destination == Message::Ecu::UNKNOWN || destination == selfEcu)
-    {
+    if (destination == Message::Ecu::UNKNOWN || destination == selfEcu) {
         ALOGE("Sending pdu to self or unknown");
         return;
     }
 
     std::vector<uint8_t> buffer;
     pdu.toData(buffer);
-    try
-    {
-        if (buffer.size() > 1400)
-        {
+    try {
+        if (buffer.size() > 1400) {
             //[VCC IP Prot: 0006/;-0]
             ALOGW("Sending PDU larger than 1400 bytes on UDP");
         }
 
-        if (destination == Message::Ecu::ALL)
-        {
+        if (destination == Message::Ecu::ALL) {
             m_pBroadcastSocket->writeTo(buffer, destination);
-        }
-        else
-        {
+        } else {
             m_pSocket->writeTo(buffer, destination);
         }
-    }
-    catch (const SocketException &e)
-    {
+    } catch (const SocketException &e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
     }
 }
-void TransportServices::sendAck(Message::Ecu destination, const Pdu &pdu)
-{
-    if (m_useWfaTimer)
-    {
+void TransportServices::sendAck(Message::Ecu destination, const Pdu &pdu) {
+    if (m_useWfaTimer) {
         ALOGV("Send ACK for: 0x%08X", pdu.header.sender_handle_id);
         Pdu ackPdu;
         ackPdu.header = pdu.header;
         ackPdu.header.length = VCCPDUHeader::BASE_LENGTH;
         ackPdu.header.operation_type = IpCmdTypes::OperationType::ACK;
         this->sendPdu(destination, ackPdu);
-    }
-    else
-    {
+    } else {
         ALOGV("ACK not sent, m_useWfaTimer=false");
     }
 }
 
-void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo)
-{
+void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo) {
     // Payload for error PDUs have the following bit layout (1 character is one bit):
     //
     // ECCC CIII IIII IIII IIII I000
@@ -341,16 +290,14 @@ void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCod
 
     errorPdu.payload[0] = (error_info_available ? 1 : 0) << 7;
     errorPdu.payload[0] |= (static_cast<std::uint8_t>(errorCode) & 0x0F) << 3;
-    if (error_info_available)
-    {
+    if (error_info_available) {
         errorPdu.payload[0] |= (errorInfo >> 13) & 0x07;
         errorPdu.payload[1] = (errorInfo >> 5) & 0xFF;
         errorPdu.payload[2] = (errorInfo << 3) & 0xF8;
     }
 }
 
-void TransportServices::sendError(Message::Ecu destination, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo)
-{
+void TransportServices::sendError(Message::Ecu destination, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo) {
     Pdu errorPdu;
 
     generateErrorPdu(errorPdu, pdu, errorCode, errorInfo);
@@ -358,53 +305,42 @@ void TransportServices::sendError(Message::Ecu destination, const Pdu &pdu, Erro
     this->sendPdu(destination, errorPdu);
 }
 
-void TransportServices::handleInUnicastData(void)
-{
-    if (m_pSocket)
-    {
+void TransportServices::handleInUnicastData(void) {
+    if (m_pSocket) {
         handleInData(m_pSocket);
     }
 }
 
-void TransportServices::handleInBroadcastData(void)
-{
-    if (m_pBroadcastSocket)
-    {
+void TransportServices::handleInBroadcastData(void) {
+    if (m_pBroadcastSocket) {
         handleInData(m_pBroadcastSocket);
     }
 }
 
-void TransportServices::handleInData(ISocket *socket)
-{
+void TransportServices::handleInData(ISocket *socket) {
     std::vector<uint8_t> buffer;
 
     // Read one UDP message
     Message::Ecu sourceEcu = Message::Ecu::UNKNOWN;
 
-    try
-    {
+    try {
         socket->read(buffer, sourceEcu);
-    }
-    catch (const SocketException &e)
-    {
+    } catch (const SocketException &e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
         return;
     }
 
-    if (sourceEcu == selfEcu)
-    {
+    if (sourceEcu == selfEcu) {
         // Ignore broadcasts from this unit
         return;
     }
 
     ALOGV("Received data from %s", Message::EcuStr(sourceEcu));
 
-    while (buffer.size() > 0)
-    {
+    while (buffer.size() > 0) {
         // Extract PDUs from the data
         // Do we have enough data to extract a header?
-        if (buffer.size() < VCCPDUHeader::DATA_SIZE)
-        {
+        if (buffer.size() < VCCPDUHeader::DATA_SIZE) {
             ALOGE("Not enough data in buffer");
             // Since we're not able to trust the sender handle id (it might not even be present)
             // we can't respond with an error here.
@@ -420,35 +356,31 @@ void TransportServices::handleInData(ISocket *socket)
         // be ignored and discarded.
         uint32_t sender_handle_mask = ((static_cast<uint16_t>(pdu.header.service_id) & 0xFF) << 24) |
                                       ((static_cast<uint16_t>(pdu.header.operation_id) & 0xFF) << 16) | 0xFFFF;
-        if ((sender_handle_mask & pdu.header.sender_handle_id) != pdu.header.sender_handle_id)
-        {
+        if ((sender_handle_mask & pdu.header.sender_handle_id) != pdu.header.sender_handle_id) {
             ALOGE("Invalid sender handle ID: 0x%08X", pdu.header.sender_handle_id);
             this->sendError(sourceEcu, pdu, NOT_OK);
             return;
         }
 
         // Check protocol version
-        if (pdu.header.protocol_version != PROTOCOL_VERSION)
-        {
-            ALOGE(
-                "Invalid protocol version: %d (expected %d)", pdu.header.protocol_version, PROTOCOL_VERSION);
+        if (pdu.header.protocol_version != PROTOCOL_VERSION) {
+            ALOGE("Invalid protocol version: %d (expected %d)", pdu.header.protocol_version, PROTOCOL_VERSION);
             this->sendError(sourceEcu, pdu, INVALID_PROTOCOL_VERSION, pdu.header.protocol_version);
             assert(m_diagnostics);
             assert(m_applicationThreadDispatcher);
             m_applicationThreadDispatcher->Enqueue(
-                [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
+                    [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
             return;
         }
 
         // Check header length and payload size
-        if (!pduDataValid || pdu.header.length - VCCPDUHeader::BASE_LENGTH != pdu.payload.size())
-        {
+        if (!pduDataValid || pdu.header.length - VCCPDUHeader::BASE_LENGTH != pdu.payload.size()) {
             ALOGE("Invalid PDU length");
             this->sendError(sourceEcu, pdu, INVALID_LENGTH);
             assert(m_diagnostics);
             assert(m_applicationThreadDispatcher);
             m_applicationThreadDispatcher->Enqueue(
-                [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
+                    [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
             return;
         }
 
@@ -457,13 +389,11 @@ void TransportServices::handleInData(ISocket *socket)
     }
 }
 
-void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
-{
+void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu) {
     ALOGD("Recv PDU: %s", Pdu::toString(pdu).c_str());
 
     // Handle PDU
-    switch (pdu.header.operation_type)
-    {
+    switch (pdu.header.operation_type) {
         case IpCmdTypes::OperationType::ERROR:
             // Handle incoming error
             this->handleIncomingError(pdu);
@@ -474,8 +404,7 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
             break;
         case IpCmdTypes::OperationType::REQUEST:
         case IpCmdTypes::OperationType::SETREQUEST:
-        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST:
-        {
+        case IpCmdTypes::OperationType::NOTIFICATION_REQUEST: {
             // * An incoming request shall be responded to by an ACK followed by the RESPONSE or an ERROR.
             // * The RESPONSE might be sent by higher layers in the call to m_incomingRequestCb or at a later time.
             // * In either case we need to ensure that the ACK is sent before WFA timeout
@@ -495,75 +424,59 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
             // Add message to pending
             // Check if PDU can be handled
             assert(m_incomingRequestCb);
-            if (m_incomingRequestCb(m))
-            {
+            if (m_incomingRequestCb(m)) {
                 // TODO: Maybe delay the ack a few 50ms in case we send a RESPONSE quickly?
                 // [VCC IP Prot: 0028/;-1] + [VCC IP Prot: 0032/;-1]
                 //   Kindof says otherwise but it also covers the "reply before ack" case
                 //   so we could actually cheat here to save bandwidth.
                 ALOGD("Request validated OK, but no response sent yet. So, send the ACK now...");
                 this->sendAck(sourceEcu, m.pdu);
-            }
-            else
-            {
+            } else {
                 // NOTE! We rely on callback (MessageDispatcher::cbIncomingRequest) to have already sent the mandatory
                 // error message...
-                ALOGW("Incoming request 0x%08X can not be handled by upper layers",
-                                             pdu.header.sender_handle_id);
+                ALOGW("Incoming request 0x%08X can not be handled by upper layers", pdu.header.sender_handle_id);
                 return;
             }
-        }
-        break;
+        } break;
 
-        case IpCmdTypes::OperationType::SETREQUEST_NORETURN:
-        {
+        case IpCmdTypes::OperationType::SETREQUEST_NORETURN: {
             Message msg(std::move(pdu));
             msg.ecu = sourceEcu;
 
             // Check if PDU can be handled
             assert(m_incomingRequestCb);
-            if (m_incomingRequestCb(msg))
-            {
+            if (m_incomingRequestCb(msg)) {
                 this->sendAck(sourceEcu, msg.pdu);
-            }
-            else
-            {
+            } else {
                 // NOTE! We rely on callback (MessageDispatcher::cbIncomingRequest) to have already sent the mandatory
                 // error message...
                 ALOGW("Incoming set-request-no-return 0x%08X can not be handled by upper layers",
-                                             pdu.header.sender_handle_id);
+                      pdu.header.sender_handle_id);
                 return;
             }
-        }
-        break;
+        } break;
 
-        case IpCmdTypes::OperationType::RESPONSE:
-        {
+        case IpCmdTypes::OperationType::RESPONSE: {
             std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(pdu.header.sender_handle_id);
 
-            if (pTm)
-            {
+            if (pTm) {
                 timeProvider.Cancel(pTm->timer);
                 this->sendAck(sourceEcu, pdu);
 
                 // Deliver response
                 ALOGV("Deliver response");
                 assert(m_incomingResponseCb);
-                if (m_incomingResponseCb)
-                {
+                if (m_incomingResponseCb) {
                     Message msg(std::move(pdu));
                     msg.ecu = sourceEcu;
                     m_incomingResponseCb(msg);
                 }
-            }
-            else
-            {
+            } else {
                 ALOGW("Unexpected remote response: 0x%08X", pdu.header.sender_handle_id);
                 this->sendAck(sourceEcu, pdu);
                 return;
             }
-        }
-        break;
+        } break;
 
         case IpCmdTypes::OperationType::NOTIFICATION:
             // Acknowledge the NOTIFICATION
@@ -571,43 +484,37 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu)
         case IpCmdTypes::OperationType::NOTIFICATION_CYCLIC:
             // Incoming notification shall just be forwarded
             // Cyclic notifications shall not be acknowledged...
-            if (m_incomingNotificationCb)
-            {
+            if (m_incomingNotificationCb) {
                 Message msg(std::move(pdu));
                 msg.ecu = sourceEcu;
                 assert(m_incomingNotificationCb);
                 m_incomingNotificationCb(msg);
             }
             break;
-        default:
-        {
+        default: {
             ALOGE("Unknown operation type: %s", IpCmdTypes::toString(pdu.header.operation_type));
-            this->sendError(
-                sourceEcu, pdu, INVALID_OPERATION_TYPE, static_cast<std::uint16_t>(pdu.header.operation_type));
+            this->sendError(sourceEcu, pdu, INVALID_OPERATION_TYPE,
+                            static_cast<std::uint16_t>(pdu.header.operation_type));
             assert(m_diagnostics);
             assert(m_applicationThreadDispatcher);
             m_applicationThreadDispatcher->Enqueue(
-                [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
-        }
-        break;
+                    [this, sourceEcu]() { m_diagnostics->SetInvalidData(sourceEcu, true); });
+        } break;
     }
 }
 
-void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu)
-{
+void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu) {
     (void)(sourceEcu);
     TrackMessage *pTm = this->getTrackMessage(pdu.header.sender_handle_id);
 
     // Did we find something that matches the ACK?
-    if (nullptr == pTm)
-    {
+    if (nullptr == pTm) {
         // No match... nothing to do
         ALOGW("Unknown ACK received: 0x%08X", pdu.header.sender_handle_id);
         return;
     }
 
-    if (TrackMessage::WAIT_FOR_REQUEST_ACK == pTm->state)
-    {
+    if (TrackMessage::WAIT_FOR_REQUEST_ACK == pTm->state) {
         ALOGV("ACK received for pending outgoing request message");
 
         timeProvider.Cancel(pTm->timer);
@@ -616,16 +523,15 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
         pTm->wfa.reset();
         auto pTmRef = std::ref(*pTm);
         pTm->timer = timeProvider.EnqueueWithDelay(
-            pTm->wfr.getTimeoutValue(),
-            [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
+                pTm->wfr.getTimeoutValue(),
+                [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
         // Update state
         pTm->state = TrackMessage::WAIT_FOR_REQUEST_RESPONSE;
         return;
     }
 
     // Is this an ACK to a sent set-request-no-return?
-    if (TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK == pTm->state)
-    {
+    if (TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK == pTm->state) {
         ALOGD("ACK received for pending outgoing set-request-no-return message");
         // Delete timer
         timeProvider.Cancel(pTm->timer);
@@ -635,8 +541,7 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
     }
 
     // Is this an ACK to a sent response?
-    if (TrackMessage::WAIT_FOR_RESPONSE_ACK == pTm->state)
-    {
+    if (TrackMessage::WAIT_FOR_RESPONSE_ACK == pTm->state) {
         ALOGV("ACK received for pending outgoing response message");
         // Delete timer
         timeProvider.Cancel(pTm->timer);
@@ -646,8 +551,7 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
     }
 
     // Is this an ACK to a sent notification?
-    if (TrackMessage::WAIT_FOR_NOTIFICATION_ACK == pTm->state)
-    {
+    if (TrackMessage::WAIT_FOR_NOTIFICATION_ACK == pTm->state) {
         ALOGV("ACK received for pending outgoing notification message");
         // Delete timer
         timeProvider.Cancel(pTm->timer);
@@ -659,28 +563,25 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
     ALOGW("Unexpected ACK received for managed message: 0x%08X", pdu.header.sender_handle_id);
 }
 
-void TransportServices::handleIncomingError(const Pdu &pdu)
-{
+void TransportServices::handleIncomingError(const Pdu &pdu) {
     TrackMessage *pTm = this->getTrackMessage(pdu.header.sender_handle_id);
 
     // Did we find something that matches the ERROR?
-    if (nullptr == pTm)
-    {
+    if (nullptr == pTm) {
         // No match... nothing to do
         ALOGW("Unknown ERROR received: 0x%08X", pdu.header.sender_handle_id);
         return;
     }
 
-
-    if (pdu.payload.size() >= 1)
-    {
-        //NOTE: Message unpacking, deviation from spec due to VCM compatiblity, see justification in generateErrorPdu()
-        const TransportServices::ErrorCode errorCode = static_cast<TransportServices::ErrorCode>((pdu.payload[0] & 0b01111000) >> 3);
+    if (pdu.payload.size() >= 1) {
+        // NOTE: Message unpacking, deviation from spec due to VCM compatiblity, see justification in generateErrorPdu()
+        const TransportServices::ErrorCode errorCode =
+                static_cast<TransportServices::ErrorCode>((pdu.payload[0] & 0b01111000) >> 3);
 
         // Handle the busy error
-        if (errorCode == TransportServices::ErrorCode::BUSY_ERROR)
-        {
-            ALOGI("Response=BUSY_ERROR. Let the timeout handling resend the message. SenderhandleID=0x%08X", pdu.header.sender_handle_id);
+        if (errorCode == TransportServices::ErrorCode::BUSY_ERROR) {
+            ALOGI("Response=BUSY_ERROR. Let the timeout handling resend the message. SenderhandleID=0x%08X",
+                  pdu.header.sender_handle_id);
             return;
         }
     }
@@ -690,8 +591,7 @@ void TransportServices::handleIncomingError(const Pdu &pdu)
     // Always delete timer
     timeProvider.Cancel(pRemovedTm->timer);
 
-    switch (pRemovedTm->state)
-    {
+    switch (pRemovedTm->state) {
         // We expected an ACK for the request operation, but received an ERROR instead.
         case TrackMessage::WAIT_FOR_REQUEST_ACK:
             ALOGW("ERROR received instead of request ACK: 0x%08X", pdu.header.sender_handle_id);
@@ -704,8 +604,7 @@ void TransportServices::handleIncomingError(const Pdu &pdu)
 
         // We expected an ACK for the set-request-no-return operation, but received an ERROR instead.
         case TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK:
-            ALOGD("ERROR received instead of set-request-no-return ACK: 0x%08X",
-                                       pdu.header.sender_handle_id);
+            ALOGD("ERROR received instead of set-request-no-return ACK: 0x%08X", pdu.header.sender_handle_id);
             // Not doing anything here in accordance with VCC IP COMMAND PROTOCOL specification section "2.1.2.4.3
             // OperationType SetRequestNoReturn":
             // 'The received ERROR message shall be interpreted by the client as a correct ACK message.'
@@ -730,8 +629,7 @@ void TransportServices::handleIncomingError(const Pdu &pdu)
             break;
 
         case TrackMessage::WAIT_FOR_NOTIFICATION_ACK:
-            ALOGW("ERROR received instead of notification ACK: 0x%08X",
-                                         pdu.header.sender_handle_id);
+            ALOGW("ERROR received instead of notification ACK: 0x%08X", pdu.header.sender_handle_id);
             // Report the error to higher layers?
             // if (m_errorOnNotificationCb)
             //{
@@ -751,39 +649,30 @@ void TransportServices::handleIncomingError(const Pdu &pdu)
             break;
 
         default:
-            ALOGW("Unexpected ERROR received for managed message: 0x%08X",
-                                         pdu.header.sender_handle_id);
+            ALOGW("Unexpected ERROR received for managed message: 0x%08X", pdu.header.sender_handle_id);
             break;
     }
 }
 
-void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id)
-{
-    ALOGI("MessageTimeout: senderid: %d",id);
+void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id) {
+    ALOGI("MessageTimeout: senderid: %d", id);
     // TrackMessage &tm = *pTm;
 
     // ALOGD("Timeout on message 0x%08X, state: 0x%02X", pMsg->pPdu->header.sender_handle_id,
     //                            pMsg->state);
-    switch (tm.state)
-    {
+    switch (tm.state) {
         case TrackMessage::WAIT_FOR_RESPONSE_ACK:
             ALOGW("Timed out while waiting for ACK on sent response: %s, state: 0x%02X",
-                                         Pdu::toString(tm.msg.pdu).c_str(),
-                                         tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
             // We expected an ACK on the response we sent, but got a timeout.
             // Update timeout levels and resend message
-            if(!tm.wfa.increaseTimeout())
-            {
-                ALOGW(
-                            "Max ACK timeouts. No more resends allowed for response: %s, state: 0x%02X",
-                            Pdu::toString(tm.msg.pdu).c_str(),
-                            tm.state);
+            if (!tm.wfa.increaseTimeout()) {
+                ALOGW("Max ACK timeouts. No more resends allowed for response: %s, state: 0x%02X",
+                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
                 this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
-            }
-            else
-            {
+            } else {
                 // Resend message with updated timeout
                 ALOGV("Resending request...");
                 tm.timer = timeProvider.EnqueueWithDelay(
@@ -796,23 +685,18 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
 
         case TrackMessage::WAIT_FOR_NOTIFICATION_ACK:
             ALOGW("Timed out while waiting for ACK on sent notification: %s, state: 0x%02X",
-                                         Pdu::toString(tm.msg.pdu).c_str(),
-                                         tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
             break;
 
         case TrackMessage::WAIT_FOR_REQUEST_ACK:
         case TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK:
             ALOGW("Timed out while waiting for ACK on sent request: %s, state: 0x%02X",
-                                         Pdu::toString(tm.msg.pdu).c_str(),
-                                         tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
             // Update timeout levels and resend message
-            if (!tm.wfa.increaseTimeout())
-            {
-                ALOGW(
-                    "Max ACK timeouts. No more resends allowed for request: %s', state: 0x%02X",
-                    Pdu::toString(tm.msg.pdu).c_str(),
-                    tm.state);
+            if (!tm.wfa.increaseTimeout()) {
+                ALOGW("Max ACK timeouts. No more resends allowed for request: %s', state: 0x%02X",
+                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
                 //  Remove message from pending list
                 std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
@@ -831,30 +715,25 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
                 m_errorOnRequestCb(m, LOCAL_TIMEOUT);
 
                 // pTm will go out of scope and die here
-            }
-            else
-            {
+            } else {
                 // Resend message with updated timeout
                 ALOGV("Resending request...");
-                tm.timer = timeProvider.EnqueueWithDelay(
-                    tm.wfa.getTimeoutValue(), [ this, &tm, id = tm.msg.pdu.header.sender_handle_id ]() {
-                        messageTimeout(tm, id);
-                    });  // TODO OK to capture tm like this???
+                tm.timer = timeProvider.EnqueueWithDelay(tm.wfa.getTimeoutValue(),
+                                                         [ this, &tm, id = tm.msg.pdu.header.sender_handle_id ]() {
+                                                             messageTimeout(tm, id);
+                                                         });  // TODO OK to capture tm like this???
                 this->sendPdu(tm.msg.ecu, tm.msg.pdu);
             }
 
             break;
 
         case TrackMessage::WAIT_FOR_REQUEST_RESPONSE:
-            ALOGW(
-                "Timed out while waiting for response: %s, state: 0x%02X", Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+            ALOGW("Timed out while waiting for response: %s, state: 0x%02X", Pdu::toString(tm.msg.pdu).c_str(),
+                  tm.state);
             // Update timeout levels and resend message
-            if (!tm.wfr.increaseTimeout())
-            {
-                ALOGW(
-                    "Max response timeouts. No more resends allowed for request: %s , state: 0x%02X",
-                    Pdu::toString(tm.msg.pdu).c_str(),
-                    tm.state);
+            if (!tm.wfr.increaseTimeout()) {
+                ALOGW("Max response timeouts. No more resends allowed for request: %s , state: 0x%02X",
+                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
                 //  Remove message from pending list
                 std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
@@ -873,18 +752,13 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
                 m_errorOnRequestCb(m, LOCAL_TIMEOUT);
 
                 // pTm will go out of scope and die here
-            }
-            else
-            {
+            } else {
                 std::chrono::milliseconds timeoutValue;
-                if (m_useWfaTimer)
-                {
+                if (m_useWfaTimer) {
                     // Since the response timed out we restart the send cycle. I.e. send message again and wait for ACK
                     timeoutValue = tm.wfa.getTimeoutValue();
                     tm.state = TrackMessage::WAIT_FOR_REQUEST_ACK;
-                }
-                else
-                {
+                } else {
                     // Since the response timed out we restart the send cycle. I.e. send message again and wait for
                     // RESPONSE
                     timeoutValue = tm.wfr.getTimeoutValue();
@@ -892,7 +766,8 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
                 }
                 // Resend message with updated timeout
                 tm.timer = timeProvider.EnqueueWithDelay(
-                    timeoutValue, [ this, &tm, id = tm.msg.pdu.header.sender_handle_id ]() { messageTimeout(tm, id); });
+                        timeoutValue,
+                        [ this, &tm, id = tm.msg.pdu.header.sender_handle_id ]() { messageTimeout(tm, id); });
 
                 this->sendPdu(tm.msg.ecu, tm.msg.pdu);
             }
@@ -901,16 +776,13 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
 
         default:
             // Do nothing
-            ALOGW(
-                "Unknown time out reason for: %s, state: 0x%02X", Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+            ALOGW("Unknown time out reason for: %s, state: 0x%02X", Pdu::toString(tm.msg.pdu).c_str(), tm.state);
             break;
     }
 }
 
-const char *TransportServices::ErrorTypeToCString(ErrorType error_type)
-{
-    switch (error_type)
-    {
+const char *TransportServices::ErrorTypeToCString(ErrorType error_type) {
+    switch (error_type) {
         case ErrorType::OK:
             return "OK";
         case ErrorType::REMOTE_ERROR:
@@ -923,9 +795,6 @@ const char *TransportServices::ErrorTypeToCString(ErrorType error_type)
     return "Unknown error type";
 }
 
-IDispatcher &TransportServices::getThreadDispatcher()
-{
-    return threadDispatcher;
-}
+IDispatcher &TransportServices::getThreadDispatcher() { return threadDispatcher; }
 
 }  // namespace Connectivity

@@ -14,13 +14,10 @@
 #include <thread>
 #include "connectivity-sd/sd_event_dispatcher.h"
 
-namespace Connectivity
-{
-class SdEventThread
-{
-public:
-    SdEventThread()
-    {
+namespace Connectivity {
+class SdEventThread {
+  public:
+    SdEventThread() {
         std::promise<void> dispatcherCreated;
         std::future<void> dispatcherCreatedFut = dispatcherCreated.get_future();
         t = std::thread{[&]() {
@@ -31,13 +28,12 @@ public:
         }};
         dispatcherCreatedFut.wait();
     }
-    ~SdEventThread()
-    {
+    ~SdEventThread() {
         d->enqueueForDispatch([&]() { sd_event_exit(sd, 0); });
         t.join();
     }
 
-private:
+  private:
     std::thread t;
     sd_event* sd;
     std::unique_ptr<SdEventDispatcher> d;

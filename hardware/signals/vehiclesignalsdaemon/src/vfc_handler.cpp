@@ -2,8 +2,7 @@
 #include "vfc_handler.h"
 #include <chrono>
 
-namespace
-{
+namespace {
 // The amount of time during which no new VFCs are sent
 const std::chrono::milliseconds passiveInterval(500);
 
@@ -21,27 +20,20 @@ uint8_t userInputSettings_activeTime(0);
  * Currently we only handle the UserInputSettings since that is the one
  * imposing problems.
  */
-bool shallSendVfcToVIP(const ActivateVfc &vfc)
-{
-  if (vfc.vfcToActivate == Vfc::UserInputSettings)
-  {
-    const auto now = std::chrono::steady_clock::now();
-    const auto timeSinceLastActivation = now - userInputSettings_timestamp;
-    if ((timeSinceLastActivation > passiveInterval) || (vfc.secondsToKeepActive > userInputSettings_activeTime))
-    {
-      // this vfc was activated more than 500ms ago or
-      // the new activation time is longer so lets issue a new request
-      userInputSettings_timestamp = now;
-      userInputSettings_activeTime = vfc.secondsToKeepActive;
-      return true;
+bool shallSendVfcToVIP(const ActivateVfc &vfc) {
+    if (vfc.vfcToActivate == Vfc::UserInputSettings) {
+        const auto now = std::chrono::steady_clock::now();
+        const auto timeSinceLastActivation = now - userInputSettings_timestamp;
+        if ((timeSinceLastActivation > passiveInterval) || (vfc.secondsToKeepActive > userInputSettings_activeTime)) {
+            // this vfc was activated more than 500ms ago or
+            // the new activation time is longer so lets issue a new request
+            userInputSettings_timestamp = now;
+            userInputSettings_activeTime = vfc.secondsToKeepActive;
+            return true;
+        } else {
+            return false;  // Dont send since we did it very recently
+        }
+    } else {
+        return true;  // Always send for these VFCs
     }
-    else
-    {
-      return false;  // Dont send since we did it very recently
-    }
-  }
-  else
-  {
-    return true;  // Always send for these VFCs
-  }
 }

@@ -11,15 +11,12 @@ extern "C" {
 #include <NodeStateTypes.h>
 }
 
-namespace Connectivity
-{
+namespace Connectivity {
 
-int ShutdownClient::onLifeCycleRequest(unsigned int request, unsigned int requestId)
-{
+int ShutdownClient::onLifeCycleRequest(unsigned int request, unsigned int requestId) {
     (void)requestId;
 
-    if (request == NSM_SHUTDOWNTYPE_NORMAL || request == NSM_SHUTDOWNTYPE_FAST)
-    {
+    if (request == NSM_SHUTDOWNTYPE_NORMAL || request == NSM_SHUTDOWNTYPE_FAST) {
         socket_.endConnection();
     }
 

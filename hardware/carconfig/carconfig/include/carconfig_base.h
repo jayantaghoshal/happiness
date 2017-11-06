@@ -10,10 +10,10 @@ constexpr int cc_no_of_parameters = 1778;
 
 // The internal type that represent 504 received carconfig frames
 typedef struct {
-  bool received = false;
-  bool ok = false;
-  uint8_t value = 0;
-  bool subscribed = false;
+    bool received = false;
+    bool ok = false;
+    uint8_t value = 0;
+    bool subscribed = false;
 } ccFlexrayValue;
 
 using CarConfigList = std::array<ccFlexrayValue, cc_no_of_parameters>;
@@ -31,9 +31,9 @@ using CarConfigList = std::array<ccFlexrayValue, cc_no_of_parameters>;
 enum class ccStatus : uint8_t { GOOD = 0, INVALID = 1 };
 
 typedef struct {
-  uint8_t raw = 0x00;
-  uint8_t subs = 0x00;
-  ccStatus status;
+    uint8_t raw = 0x00;
+    uint8_t subs = 0x00;
+    ccStatus status;
 } ccValue;
 
 const std::string carconfig_file_name{"/oem_config/carconfig/carconfig.csv"};
@@ -44,18 +44,18 @@ const std::string carconfig_default_file_name{"/vendor/etc/config/carconfig-defa
 const std::string carconfig_configured_filename{"/oem_config/carconfig/CARCONFIG_CONFIGURED"};
 
 static bool fileExists(const std::string &filePath) {
-  struct stat st;
-  bool status = false;
-  if (stat(filePath.c_str(), &st) == 0) {
-    if (st.st_size > 0) {
-      status = true;
+    struct stat st;
+    bool status = false;
+    if (stat(filePath.c_str(), &st) == 0) {
+        if (st.st_size > 0) {
+            status = true;
+        }
     }
-  }
-  return status;
+    return status;
 }
 
 static bool emptyFileExists(const std::string &filePath) {
-  struct stat st;
-  return stat(filePath.c_str(), &st) == 0;
+    struct stat st;
+    return stat(filePath.c_str(), &st) == 0;
 }
 }

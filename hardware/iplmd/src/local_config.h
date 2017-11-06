@@ -3,10 +3,8 @@
 
 #include <string>
 
-namespace Iplmd
-{
-namespace LocalConfig
-{
+namespace Iplmd {
+namespace LocalConfig {
 void loadLocalConfig();
 
 int getResourceGroups();

@@ -18,19 +18,14 @@
 #include <vector>
 #include "ipcommandbus/Message.h"
 
-namespace Connectivity
-{
-class SocketException : public std::system_error
-{
-public:
-    SocketException(int ev, const std::string &what_arg) : std::system_error(ev, std::system_category(), what_arg)
-    {
-    }
+namespace Connectivity {
+class SocketException : public std::system_error {
+  public:
+    SocketException(int ev, const std::string &what_arg) : std::system_error(ev, std::system_category(), what_arg) {}
 };
 
-class ISocket
-{
-public:
+class ISocket {
+  public:
     /**
      * Enumeration for IP Precedence, used for Type of Service.
      *
@@ -72,8 +67,7 @@ public:
      * (Table from https://en.wikipedia.org/wiki/Type_of_service)
      *
      */
-    enum class IpPrecedence : std::uint8_t
-    {
+    enum class IpPrecedence : std::uint8_t {
         kRoutine,
         kPriority,
         kImmediate,
@@ -84,8 +78,7 @@ public:
         kNetworkControl
     };
 
-    struct EcuAddress
-    {
+    struct EcuAddress {
         std::string ip;
         uint16_t port;
     };

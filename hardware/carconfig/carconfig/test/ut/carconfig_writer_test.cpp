@@ -6,18 +6,16 @@
  *
  */
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "carconfig_writer.h"
-#include "carconfig_reader.h"
-#include <sstream>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <unistd.h>
+#include <sstream>
+#include "carconfig_reader.h"
 
-class CarConfigWriterTestFixture : public ::testing::Test
-{
-   public:
-    virtual void SetUp()
-    {
+class CarConfigWriterTestFixture : public ::testing::Test {
+  public:
+    virtual void SetUp() {
         std::stringstream tmp;
         tmp << _CSVFOLDER;
         csvPath = tmp.str();
@@ -31,14 +29,13 @@ class CarConfigWriterTestFixture : public ::testing::Test
 
     virtual void TearDown() {}
 
-   protected:
+  protected:
     FILE *shmFile = nullptr;
     std::string csvPath;
 };
 
 TEST_F(CarConfigWriterTestFixture,
-       commitToSharedMemory_GivenGoodFileWithStatusFLagGood_SharedMemoryFilePositionShouldBeRealValue)
-{
+       commitToSharedMemory_GivenGoodFileWithStatusFLagGood_SharedMemoryFilePositionShouldBeRealValue) {
     char result[2];
 
     // Status flag is GOOD so the value should be 1 and the raw value the same.
@@ -48,8 +45,7 @@ TEST_F(CarConfigWriterTestFixture,
 }
 
 TEST_F(CarConfigWriterTestFixture,
-       commitToSharedMemory_GivenGoodFileWithStatusFLagBad_SharedMemoryFilePositionShouldBeRawValue)
-{
+       commitToSharedMemory_GivenGoodFileWithStatusFLagBad_SharedMemoryFilePositionShouldBeRawValue) {
     char result[2];
 
     // Status  flag is BAD so the value should be 255 and the raw value
@@ -60,8 +56,7 @@ TEST_F(CarConfigWriterTestFixture,
     ASSERT_TRUE((result[1] & 0xFF) == 0x02);
 }
 
-TEST_F(CarConfigWriterTestFixture, commitToSharedMemory_GivenGoodFile_SharedMemoryFileShouldBeOk)
-{
+TEST_F(CarConfigWriterTestFixture, commitToSharedMemory_GivenGoodFile_SharedMemoryFileShouldBeOk) {
     char result[2];
 
     // Check the last position of the file. The file is 1778 long but since it's
@@ -72,8 +67,7 @@ TEST_F(CarConfigWriterTestFixture, commitToSharedMemory_GivenGoodFile_SharedMemo
     ASSERT_TRUE((result[1] & 0xFF) == 0xFE);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

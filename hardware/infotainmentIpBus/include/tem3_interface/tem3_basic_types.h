@@ -5,19 +5,19 @@
  * @{
  *
  * Copyright (C) 2011 Actia Nordic AB. All rights reserved
- * 
+ *
  * \par    Project:
  *         TEM3
- * 
+ *
  * \par    Module:
  *         TEM3 Basic types
- * 
+ *
  * \par    Purpose:
  *         Export basic types.
- * 
+ *
  * \par    Usage Notes:
  *         None
- * 
+ *
  *****************************************************************************
  */
 
@@ -25,12 +25,12 @@
 #define TEM3_BASIC_TYPES_H
 
 #include <stdbool.h> /* For better C++ interoperability. Not in original code. */
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /**
  * \par Description
- *  The general status type for TEM. Should be used by platform modules 
+ *  The general status type for TEM. Should be used by platform modules
  *  interface functions to signal their status.
  *  - \c E_TEM_OK:            Success.
  *  - \c E_TEM_ERROR:         Unspecified error.
@@ -40,17 +40,15 @@
  *  - \c E_TEM_EMPTY:         There is no data to receive from the resource.
  *  - \c E_TEM_NOT_AVAILABLE  The requested operation is not available.
  */
-typedef enum
-{
-   E_TEM_OK,
-   E_TEM_ERROR,
-   E_TEM_ILLEGAL_PARAM,
-   E_TEM_BUSY,
-   E_TEM_NOT_READY,
-   E_TEM_EMPTY,
-   E_TEM_NOT_AVAILABLE
+typedef enum {
+    E_TEM_OK,
+    E_TEM_ERROR,
+    E_TEM_ILLEGAL_PARAM,
+    E_TEM_BUSY,
+    E_TEM_NOT_READY,
+    E_TEM_EMPTY,
+    E_TEM_NOT_AVAILABLE
 } TEM_Status;
-
 
 /** \defgroup TEM3_BASIC_TYPES_INTERFACE_INTS Integer types.
 *** \ingroup TEM3_BASIC_TYPES_INTERFACE
@@ -96,7 +94,6 @@ typedef signed long long S64;
 
 //@}
 
-
 /** \defgroup TEM3_BASIC_TYPES_INTERFACE_NOINIT No initialize attribute.
 *** \ingroup TEM3_BASIC_TYPES_INTERFACE
 *** @{
@@ -117,7 +114,7 @@ typedef signed long long S64;
 #endif
 #endif
 
-/** 
+/**
  * Use the macro to append new line characters to a string.
  * \par Description
  * "my text that has no end of line characters" EOL
@@ -126,5 +123,5 @@ typedef signed long long S64;
 
 //@}
 
- /** @} */ /* End Doxygen defgroup */
+/** @} */ /* End Doxygen defgroup */
 #endif

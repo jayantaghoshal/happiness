@@ -4,10 +4,9 @@
 
 #include <reuse.h>
 
-typedef struct Message_Send_Tag
-{
-  uint32_t data_size;
-  uint8_t *data_ptr;
+typedef struct Message_Send_Tag {
+    uint32_t data_size;
+    uint8_t *data_ptr;
 } Message_Send_T;
 
 // Use this function to send messages from common components into the vehicle data driver module.

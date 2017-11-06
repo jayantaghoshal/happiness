@@ -15,9 +15,9 @@ const char *kEnvironmentVariableOverridingPath = "VCC_LOCALCONFIG_PATH";
 
 namespace vcc {
 const vcc::LocalConfigReaderInterface *LocalConfigDefault() {
-  // supports environment override, and if it is missing tries production value, with fallback to vendor/engineering
-  static vcc::LocalConfigFileReaderAndroidIhuBehavior instance(kProductionFilePath, kDefaultFilePath,
-                                                               kEnvironmentVariableOverridingPath);
-  return &instance;
+    // supports environment override, and if it is missing tries production value, with fallback to vendor/engineering
+    static vcc::LocalConfigFileReaderAndroidIhuBehavior instance(kProductionFilePath, kDefaultFilePath,
+                                                                 kEnvironmentVariableOverridingPath);
+    return &instance;
 }
 }  // namespace vcc

@@ -14,10 +14,8 @@ class TransportServicesFixture;
 class TimeoutInfoFixture;
 #endif  // ENABLE_TESTS
 
-namespace Connectivity
-{
-class TimeoutInfo
-{
+namespace Connectivity {
+class TimeoutInfo {
   public:
     // Constructor for ACKs
     TimeoutInfo();

@@ -16,15 +16,13 @@
 
 #include <vector>
 
-namespace Connectivity
-{
+namespace Connectivity {
 /**
  * Container of the IP command bus PDU.
  * The data in this container is data actually sent on the bus.
  */
-class Pdu
-{
-public:
+class Pdu {
+  public:
     /**
      * Initializes this Pdu from data in the provided vector. Used data will be removed from the vector.
      *
@@ -51,11 +49,8 @@ public:
      * @param[in] sequenceId                    Unique number for this specific triplet(srvId, opId, opType). Typically
      * this is just a number that is increased by one each time the triplet is sent.
      */
-    void createHeader(IpCmdTypes::ServiceId serviceId,
-                      IpCmdTypes::OperationId operationId,
-                      IpCmdTypes::OperationType operationType,
-                      IpCmdTypes::DataType dataType,
-                      uint8_t sequenceId);
+    void createHeader(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId,
+                      IpCmdTypes::OperationType operationType, IpCmdTypes::DataType dataType, uint8_t sequenceId);
 
     /**
      * Assign Pdu payload.

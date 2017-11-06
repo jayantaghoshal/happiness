@@ -10,16 +10,14 @@
 #include "cedric/cedric_nodestate.h"
 #include "isocket.h"
 
-namespace Connectivity
-{
-class ShutdownClient : public cedric::core::IShutdownClient
-{
-public:
+namespace Connectivity {
+class ShutdownClient : public cedric::core::IShutdownClient {
+  public:
     ShutdownClient(ISocket& socket) : socket_(socket){};
 
     int onLifeCycleRequest(unsigned int request, unsigned int requestId) override;
 
-private:
+  private:
     ISocket& socket_;
 };
 

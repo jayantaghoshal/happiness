@@ -25,48 +25,48 @@
 using namespace vcc::netman;
 
 int main() {
-  try {
-    ALOGI("Netmand 0.1 starting");
+    try {
+        ALOGI("Netmand 0.1 starting");
 
-    auto *lcfg = vcc::LocalConfigDefault();
+        auto *lcfg = vcc::LocalConfigDefault();
 
-    FirewallConfig fw_conf = FirewallConfig(lcfg);
-    if (!fw_conf.ParseAndSave(FirewallConfig::kDefaultIptablesRulesPath)) {
-      ALOGE("Error parsing and saving iptables.rules");
-      return EXIT_FAILURE;
+        FirewallConfig fw_conf = FirewallConfig(lcfg);
+        if (!fw_conf.ParseAndSave(FirewallConfig::kDefaultIptablesRulesPath)) {
+            ALOGE("Error parsing and saving iptables.rules");
+            return EXIT_FAILURE;
+        }
+
+        if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv4_)) {
+            ALOGE("Error applying iptables v4 rules");
+            return EXIT_FAILURE;
+        }
+
+        if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv6_)) {
+            ALOGE("Error applying iptables v6 rules");
+            return EXIT_FAILURE;
+        }
+
+        std::vector<InterfaceConfiguration> interface_configurations;
+
+        LoadInterfaceConfiguration(&interface_configurations, lcfg);
+
+        ALOGV("Setting initial configuration on network interfaces");
+
+        NetmanEventHandler event_handler(interface_configurations);
+
+        NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
+        nl_socket_listener.SetNetlinkEventHandler(event_handler);
+
+        property_set("netmand.startup_completed", "1");
+
+        if (nl_socket_listener.StartListening() < 0) {
+            ALOGE("Unable to recv on  Netlink socket");
+        }
+
+    } catch (const std::runtime_error &e) {
+        ALOGE("ABORTING: Exception thrown: %s", e.what());
     }
 
-    if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv4_)) {
-      ALOGE("Error applying iptables v4 rules");
-      return EXIT_FAILURE;
-    }
-
-    if (!fw_conf.ApplyRules(FirewallConfig::IP::IPv6_)) {
-      ALOGE("Error applying iptables v6 rules");
-      return EXIT_FAILURE;
-    }
-
-    std::vector<InterfaceConfiguration> interface_configurations;
-
-    LoadInterfaceConfiguration(&interface_configurations, lcfg);
-
-    ALOGV("Setting initial configuration on network interfaces");
-
-    NetmanEventHandler event_handler(interface_configurations);
-
-    NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
-    nl_socket_listener.SetNetlinkEventHandler(event_handler);
-
-    property_set("netmand.startup_completed", "1");
-
-    if (nl_socket_listener.StartListening() < 0) {
-      ALOGE("Unable to recv on  Netlink socket");
-    }
-
-  } catch (const std::runtime_error &e) {
-    ALOGE("ABORTING: Exception thrown: %s", e.what());
-  }
-
-  // Netman is never expected to quit listening for events. So if control reaches here; it's a failure
-  return EXIT_FAILURE;
+    // Netman is never expected to quit listening for events. So if control reaches here; it's a failure
+    return EXIT_FAILURE;
 }

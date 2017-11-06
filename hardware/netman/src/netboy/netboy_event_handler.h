@@ -7,11 +7,11 @@ namespace vcc {
 namespace netman {
 
 class NetboyEventHandler final : public UeventHandler {
- protected:
-  void HandleEvent(const char *uevent, const int message_length) override;
+  protected:
+    void HandleEvent(const char *uevent, const int message_length) override;
 
- private:
-  void RuleMatchAndRun(const UeventHandler::NetDeviceAttr &device);
+  private:
+    void RuleMatchAndRun(const UeventHandler::NetDeviceAttr &device);
 };
 
 }  // namespace netman

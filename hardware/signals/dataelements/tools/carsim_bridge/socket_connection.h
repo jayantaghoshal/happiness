@@ -16,19 +16,19 @@ namespace CarSim {
 void close_wrapper(int* socket_fd_ptr);
 
 class SocketConnection {
- public:
-  // Created by and returned by when connection is established SocketServer.
-  SocketConnection(int socket_fd);
-  std::string Read();
-  void Send(std::string message);
+  public:
+    // Created by and returned by when connection is established SocketServer.
+    SocketConnection(int socket_fd);
+    std::string Read();
+    void Send(std::string message);
 
- private:
-  const std::string kHeaderTag{"CarSim"};
-  static constexpr std::uint8_t kHeaderMessageLength{4};  // fixed 4 bytes describing an int32
+  private:
+    const std::string kHeaderTag{"CarSim"};
+    static constexpr std::uint8_t kHeaderMessageLength{4};  // fixed 4 bytes describing an int32
 
-  std::unique_ptr<int, decltype(&close_wrapper)> socket_fd_Ptr_;
+    std::unique_ptr<int, decltype(&close_wrapper)> socket_fd_Ptr_;
 
-  std::string ReadMessage(int messageLength);
+    std::string ReadMessage(int messageLength);
 };
 
 }  // CarSim

@@ -19,25 +19,22 @@ Return<void> AGnssRil::setRefLocation(const IAGnssRil::AGnssRefLocation& agnssRe
 
 Return<bool> AGnssRil::setSetId(IAGnssRil::SetIDType type, const hidl_string& setid) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<bool> AGnssRil::updateNetworkState(bool connected, IAGnssRil::NetworkType type, bool roaming) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<bool> AGnssRil::updateNetworkAvailability(bool available, const hidl_string& apn) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
-
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnssRil* HIDL_FETCH_IAGnssRil(const char* /* name */) {
-    return new AGnssRil();
-}
+IAGnssRil* HIDL_FETCH_IAGnssRil(const char* /* name */) { return new AGnssRil(); }
 
 }  // namespace implementation
 }  // namespace V1_0

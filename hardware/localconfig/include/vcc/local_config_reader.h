@@ -14,44 +14,44 @@ namespace vcc {
 // load a different configuration. This should be done prior to accessing any node_value if loading of
 // default configuration is to be avoided.
 class LocalConfigReader : public LocalConfigReaderInterface {
- public:
-  using LazyLoader = std::function<void(Json::Value *root)>;
+  public:
+    using LazyLoader = std::function<void(Json::Value *root)>;
 
-  explicit LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
-  LocalConfigReader(const LocalConfigReader &) = delete;
-  const LocalConfigReader &operator=(const LocalConfigReader &) = delete;
+    explicit LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
+    LocalConfigReader(const LocalConfigReader &) = delete;
+    const LocalConfigReader &operator=(const LocalConfigReader &) = delete;
 
-  std::string GetString(std::initializer_list<std::string> keys) const override;
-  int GetInt(std::initializer_list<std::string> keys) const override;
-  bool GetBool(std::initializer_list<std::string> keys) const override;
-  double GetDouble(std::initializer_list<std::string> keys) const override;
-  std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys) const override;
+    std::string GetString(std::initializer_list<std::string> keys) const override;
+    int GetInt(std::initializer_list<std::string> keys) const override;
+    bool GetBool(std::initializer_list<std::string> keys) const override;
+    double GetDouble(std::initializer_list<std::string> keys) const override;
+    std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys) const override;
 
-  void Preload();
+    void Preload();
 
- protected:
-  static void LoadFile(const std::string &file_path, Json::Value *value);
+  protected:
+    static void LoadFile(const std::string &file_path, Json::Value *value);
 
- private:
-  const Json::Value &GetJsonValue(std::initializer_list<std::string> keys) const;
+  private:
+    const Json::Value &GetJsonValue(std::initializer_list<std::string> keys) const;
 
-  LazyLoader const loader_;
-  mutable std::mutex mutex_;
-  mutable Json::Value root_;
+    LazyLoader const loader_;
+    mutable std::mutex mutex_;
+    mutable Json::Value root_;
 };
 
 class LocalConfigFileReader : public LocalConfigReader {
-  using base = LocalConfigReader;
+    using base = LocalConfigReader;
 
- public:
-  explicit LocalConfigFileReader(std::string file_path);
+  public:
+    explicit LocalConfigFileReader(std::string file_path);
 };
 
 class LocalConfigStaticContentReader : public LocalConfigReader {
-  using base = LocalConfigReader;
+    using base = LocalConfigReader;
 
- public:
-  explicit LocalConfigStaticContentReader(std::string json);
+  public:
+    explicit LocalConfigStaticContentReader(std::string json);
 };
 }  // namespace vcc
 

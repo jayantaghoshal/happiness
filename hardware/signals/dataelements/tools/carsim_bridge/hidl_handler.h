@@ -18,20 +18,20 @@ using namespace vendor::volvocars::hardware::signals::V1_0;
 namespace CarSim {
 
 class HidlHandler : public ISignalsChangedCallback {
- public:
-  // The callbackfunction for HIDL
-  ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
-                                                  const ::android::hardware::hidl_string& data) override;
+  public:
+    // The callbackfunction for HIDL
+    ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
+                                                    const ::android::hardware::hidl_string& data) override;
 
-  // The handle to client connection.
-  void SetSocketConnection(std::shared_ptr<SocketConnection> connection);
+    // The handle to client connection.
+    void SetSocketConnection(std::shared_ptr<SocketConnection> connection);
 
- private:
-  std::shared_ptr<CarSim::SocketConnection> connection_;
+  private:
+    std::shared_ptr<CarSim::SocketConnection> connection_;
 
-  // TODO remove when client is more robust.
-  bool first_run_{true};
-  std::chrono::steady_clock::time_point connection_timestamp_{};
+    // TODO remove when client is more robust.
+    bool first_run_{true};
+    std::chrono::steady_clock::time_point connection_timestamp_{};
 };
 
 }  // CarSim

@@ -12,17 +12,17 @@
  * \brief This file contains signal and signal value classes and enums
  */
 
+#include <cutils/log.h>
 #include "gen_dataelements.h"
 #include "internalsignals.h"
-#include <cutils/log.h>
 
 /*!
  * \enum SignalErrorCode
  * \brief The SignalErrorCode enum provides valid errorCodes for DataElemValue/DataElemValueBase
  */
 enum class SignalErrorCode {
-    NEVER_RECEIVED=-1,  /*!< The signal has never been received     */
-    TIMEOUT = 0         /*!< There has been a timeout on the signal */
+    NEVER_RECEIVED = -1, /*!< The signal has never been received     */
+    TIMEOUT = 0          /*!< There has been a timeout on the signal */
 };
 
 /*!
@@ -36,13 +36,13 @@ enum class SignalErrorCode {
  *    timestamp (in milliseconds since Jan 1, 1970 UTC - https://en.wikipedia.org/wiki/Unix_time)
  */
 class DataElemValueBase {
-public:
+  public:
     DataElemValueBase();
     virtual ~DataElemValueBase();
 
     enum class State {
-        OK, // the signal value is ok and available
-        ERROR // some kind of error state for the signal, like timeout or other conditions. See SignalErrorCode enum.
+        OK,    // the signal value is ok and available
+        ERROR  // some kind of error state for the signal, like timeout or other conditions. See SignalErrorCode enum.
     };
 
     virtual std::string serialize() const = 0;
@@ -81,28 +81,27 @@ public:
     int errorCode() const;
 
 #ifndef UNIT_TEST
-private:
+  private:
 #endif
     // Signal content and state etc
     long long _timestamp;
     State _state;
     int _errorCode;
 
-protected:
+  protected:
     DataElemValueBase(long long timestamp, State state, int errorCode);
 };
 
-
-
 // ====================================================
 // Serializers - these are implemented else-where
-template<typename S> class DataElemValue;
+template <typename S>
+class DataElemValue;
 
 // The impl of these two functions shall be in a file separated from DataElemValue
-template<typename S> std::string serialize(const DataElemValue<S>& dev);
-template<typename S> DataElemValue<S> deserialize(const std::string& ba);
-
-
+template <typename S>
+std::string serialize(const DataElemValue<S>& dev);
+template <typename S>
+DataElemValue<S> deserialize(const std::string& ba);
 
 /*!
  * \brief DataElemValue, provides basic information about a signal.
@@ -113,19 +112,23 @@ template<typename S> DataElemValue<S> deserialize(const std::string& ba);
  *    direction (in, out, internal)
  *    value (the signal value)
  */
-template<typename S>
+template <typename S>
 class DataElemValue : public DataElemValueBase {
-friend class DataElementFramework;
+    friend class DataElementFramework;
 
-public:
+  public:
     using value_type = typename S::data_elem_type;
 
-    static DataElemValue OK(const value_type& value, long long timestamp=-1) { return DataElemValue(value, timestamp, State::OK, 0); }
-    static DataElemValue ERROR(int errorCode, long long timestamp=-1) { return DataElemValue(value_type(), timestamp, State::ERROR, errorCode); }
+    static DataElemValue OK(const value_type& value, long long timestamp = -1) {
+        return DataElemValue(value, timestamp, State::OK, 0);
+    }
+    static DataElemValue ERROR(int errorCode, long long timestamp = -1) {
+        return DataElemValue(value_type(), timestamp, State::ERROR, errorCode);
+    }
     virtual ~DataElemValue() {}
-  
+
     virtual std::string serialize() const { return ::serialize(*this); }
-    virtual void deserialize(const std::string &ba) { *this = ::deserialize<S>(ba); }
+    virtual void deserialize(const std::string& ba) { *this = ::deserialize<S>(ba); }
     /*!
      * \brief name
      * \return A unique signal name
@@ -141,19 +144,20 @@ public:
      * \return the signal value. Only valid if state==ok. The type of value depends on the signal (S::data_elem_type).
      */
     value_type value() const {
-      if (isError())
-      {
-        ALOG(LOG_ERROR, "DataElementValue", "DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
-      }
-      return m_value;
+        if (isError()) {
+            ALOG(LOG_ERROR, "DataElementValue",
+                 "DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
+        }
+        return m_value;
     }
 
-private:
+  private:
     DataElemValue() {}
-    DataElemValue(const value_type& value, long long timestamp, State state, int errorCode) : DataElemValueBase(timestamp,state,errorCode), m_value(value) {}
+    DataElemValue(const value_type& value, long long timestamp, State state, int errorCode)
+        : DataElemValueBase(timestamp, state, errorCode), m_value(value) {}
 
     // Signal content
     value_type m_value;
 };
 
-#endif // DATAELEMVALUE_H
+#endif  // DATAELEMVALUE_H

@@ -7,22 +7,20 @@
 #include <limits>
 #include "ipcommandbus/socket.h"
 
-namespace Connectivity
-{
+namespace Connectivity {
 /**
  * Wraps some socket functions as creation, read and write.
  */
-class UdpSocket final : public Socket
-{
-public:
-    UdpSocket(tarmac::eventloop::IDispatcher & dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
+class UdpSocket final : public Socket {
+  public:
+    UdpSocket(tarmac::eventloop::IDispatcher& dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
     ~UdpSocket();
 
     void setup(const Message::Ecu& ecu) override;
     void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) override;
     void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) override;
 
-private:
+  private:
     void registerReadReadyCb(std::function<void(void)> readReadyCb);
 
     std::function<void(void)> read_cb_ = nullptr;

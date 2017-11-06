@@ -7,11 +7,11 @@ namespace V1_0 {
 namespace implementation {
 
 // Methods from ::android::hardware::gnss::V1_0::IGnssNavigationMessageCallback follow.
-Return<void> GnssNavigationMessageCallback::gnssNavigationMessageCb(const IGnssNavigationMessageCallback::GnssNavigationMessage& message) {
+Return<void> GnssNavigationMessageCallback::gnssNavigationMessageCb(
+        const IGnssNavigationMessageCallback::GnssNavigationMessage& message) {
     // TODO implement
     return Void();
 }
-
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 

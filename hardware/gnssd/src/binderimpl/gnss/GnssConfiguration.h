@@ -33,7 +33,6 @@ struct GnssConfiguration : public IGnssConfiguration {
     Return<bool> setEmergencySuplPdn(bool enable) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssConfiguration* HIDL_FETCH_IGnssConfiguration(const char* name);

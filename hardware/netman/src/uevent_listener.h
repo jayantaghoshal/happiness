@@ -20,27 +20,27 @@ namespace netman {
 class UeventHandler;
 
 class NetlinkSocketListener final {
- public:
-  static NetlinkSocketListener &Instance();
-  ~NetlinkSocketListener();
+  public:
+    static NetlinkSocketListener &Instance();
+    ~NetlinkSocketListener();
 
-  NetlinkSocketListener(NetlinkSocketListener &other) = delete;
-  NetlinkSocketListener(NetlinkSocketListener &&other) = delete;
+    NetlinkSocketListener(NetlinkSocketListener &other) = delete;
+    NetlinkSocketListener(NetlinkSocketListener &&other) = delete;
 
-  NetlinkSocketListener &operator=(NetlinkSocketListener &other) = delete;
-  NetlinkSocketListener &operator=(NetlinkSocketListener &&other) = delete;
+    NetlinkSocketListener &operator=(NetlinkSocketListener &other) = delete;
+    NetlinkSocketListener &operator=(NetlinkSocketListener &&other) = delete;
 
-  int StartListening();
-  void StopListening();
-  void SetNetlinkEventHandler(UeventHandler &event_handler);
+    int StartListening();
+    void StopListening();
+    void SetNetlinkEventHandler(UeventHandler &event_handler);
 
- private:
-  NetlinkSocketListener() = default;
-  int SetupSocket();
-  int RecvMessage();
+  private:
+    NetlinkSocketListener() = default;
+    int SetupSocket();
+    int RecvMessage();
 
-  UeventHandler *event_handler_ = nullptr;
-  int netlink_socket_ = -1;
+    UeventHandler *event_handler_ = nullptr;
+    int netlink_socket_ = -1;
 };
 
 }  // namespace netman

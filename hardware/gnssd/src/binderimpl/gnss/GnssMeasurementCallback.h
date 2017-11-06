@@ -27,7 +27,6 @@ struct GnssMeasurementCallback : public IGnssMeasurementCallback {
     Return<void> GnssMeasurementCb(const IGnssMeasurementCallback::GnssData& data) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssMeasurementCallback* HIDL_FETCH_IGnssMeasurementCallback(const char* name);

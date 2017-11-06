@@ -11,21 +11,20 @@
 
 #include <IDispatcher.h>
 
-#include "ipcommandbus/IpCmdTypes.h"
 #include "TransportServicesIf.h"
+#include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/TrackMessage.h"
 #include "ipcommandbus/idiagnostics_client.h"
 #include "ipcommandbus/isocket.h"
 
-namespace Connectivity
-{
+namespace Connectivity {
 /**
  * Transport layer implementation of the IP command bus.
  */
-class TransportServices : public ITransportServices
-{
-public:
-    TransportServices(tarmac::eventloop::IDispatcher &timeProvider, tarmac::eventloop::IDispatcher &threadDispatcher, Message::Ecu selfEcu, bool useWfaTimer = true);
+class TransportServices : public ITransportServices {
+  public:
+    TransportServices(tarmac::eventloop::IDispatcher &timeProvider, tarmac::eventloop::IDispatcher &threadDispatcher,
+                      Message::Ecu selfEcu, bool useWfaTimer = true);
 
     static const char *ErrorTypeToCString(ErrorType error_type);
 
@@ -50,7 +49,7 @@ public:
     *
     * @param[in] diagnostics                pointer to an IDiagnostics object
     */
-    void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher* dispatcher) override;
+    void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher *dispatcher) override;
 
     /**
      * Register a callback that will be called upon well formed incoming
@@ -103,7 +102,7 @@ public:
 
     static const uint8_t PROTOCOL_VERSION = 2;  ///< Which protocol version that is implemented with this class.
 
-protected:
+  protected:
     /**
      * Get the TrackMessage for a given sender handle id.
      *

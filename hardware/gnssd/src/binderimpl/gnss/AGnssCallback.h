@@ -28,7 +28,6 @@ struct AGnssCallback : public IAGnssCallback {
     Return<void> agnssStatusIpV6Cb(const IAGnssCallback::AGnssStatusIpV6& status) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IAGnssCallback* HIDL_FETCH_IAGnssCallback(const char* name);

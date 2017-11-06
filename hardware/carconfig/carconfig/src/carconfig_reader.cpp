@@ -16,47 +16,48 @@ CarConfigReader::CarConfigReader() { read(); }
 // Get the so called substitue value, this is the function normally used by applications.
 // Substitue value is the last received valid value
 uint8_t CarConfigReader::getValue(uint32_t position) {
-  if ((position < 1) || (position > cc_no_of_parameters)) {
-    throw std::out_of_range{"Trying to access carconfig value " + std::to_string(position) + ", which is out of range"};
-  }
-  return carConfigValues[(position - 1)].subs;
+    if ((position < 1) || (position > cc_no_of_parameters)) {
+        throw std::out_of_range{"Trying to access carconfig value " + std::to_string(position) +
+                                ", which is out of range"};
+    }
+    return carConfigValues[(position - 1)].subs;
 }
 
 // Get the so called raw value.
 // Raw value is the last received value, no validation check
 uint8_t CarConfigReader::getRawValue(uint32_t position) {
-  if ((position < 1) || (position > cc_no_of_parameters)) {
-    throw std::out_of_range{"Trying to access carconfig raw value " + std::to_string(position) +
-                            ", which is out of range"};
-  }
-  return carConfigValues[(position - 1)].raw;
+    if ((position < 1) || (position > cc_no_of_parameters)) {
+        throw std::out_of_range{"Trying to access carconfig raw value " + std::to_string(position) +
+                                ", which is out of range"};
+    }
+    return carConfigValues[(position - 1)].raw;
 }
 
 ccStatus CarConfigReader::getStatus(uint32_t position) {
-  if ((position < 1) || (position > cc_no_of_parameters)) {
-    throw std::out_of_range{"Trying to access carconfig status value " + std::to_string(position) +
-                            ", which is out of range"};
-  }
-  return carConfigValues[(position - 1)].status;
+    if ((position < 1) || (position > cc_no_of_parameters)) {
+        throw std::out_of_range{"Trying to access carconfig status value " + std::to_string(position) +
+                                ", which is out of range"};
+    }
+    return carConfigValues[(position - 1)].status;
 }
 
 void CarConfigReader::read() {
-  CarConfigFileReader ccFileReader;
-  if (fileExists(carconfig_file_name)) {
-    ALOGI("CarConfig uses car config file");
-    ccFileReader.open(carconfig_file_name);
-  } else {
-    ALOGI("CarConfig uses default car config file, no config from flexray will be considered");
-    ccFileReader.open(carconfig_default_file_name);
-  }
+    CarConfigFileReader ccFileReader;
+    if (fileExists(carconfig_file_name)) {
+        ALOGI("CarConfig uses car config file");
+        ccFileReader.open(carconfig_file_name);
+    } else {
+        ALOGI("CarConfig uses default car config file, no config from flexray will be considered");
+        ccFileReader.open(carconfig_default_file_name);
+    }
 
-  ccValue ccRes;
+    ccValue ccRes;
 
-  carConfigValues.reserve(cc_no_of_parameters);
-  for (uint16_t x = 0; x < cc_no_of_parameters; x++) {
-    ccRes = ccFileReader.getValue(x + 1);
-    carConfigValues[x].subs = ccRes.subs;
-    carConfigValues[x].raw = ccRes.raw;
-    carConfigValues[x].status = ccRes.status;
-  }
+    carConfigValues.reserve(cc_no_of_parameters);
+    for (uint16_t x = 0; x < cc_no_of_parameters; x++) {
+        ccRes = ccFileReader.getValue(x + 1);
+        carConfigValues[x].subs = ccRes.subs;
+        carConfigValues[x].raw = ccRes.raw;
+        carConfigValues[x].status = ccRes.status;
+    }
 }

@@ -60,7 +60,7 @@ bool isConfigured();
  */
 template <typename T>
 T getValue() {
-  return static_cast<T>(getValue(static_cast<std::uint32_t>(T::ParamNumber)));
+    return static_cast<T>(getValue(static_cast<std::uint32_t>(T::ParamNumber)));
 }
 
 /**
@@ -73,6 +73,6 @@ T getValue() {
  */
 template <typename T>
 bool checkValue(T paramValue) {
-  return (paramValue == getValue<T>());
+    return (paramValue == getValue<T>());
 }
 }

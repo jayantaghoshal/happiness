@@ -32,7 +32,6 @@ struct AGnss : public IAGnss {
     Return<bool> dataConnOpen(const hidl_string& apn, IAGnss::ApnIpType apnIpType) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IAGnss* HIDL_FETCH_IAGnss(const char* name);

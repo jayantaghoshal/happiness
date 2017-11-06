@@ -2,13 +2,13 @@
 #define SERVICE_MANAGER_H
 
 #include <IDispatcher.h>
-#include <ipcommandbus/MessageDispatcher.h>
 #include <cutils/log.h>
+#include <ipcommandbus/MessageDispatcher.h>
 #include <string>
 
-#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IResponseCallback.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -26,28 +26,26 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::sp;
 
-namespace Connectivity
-{
+namespace Connectivity {
 /**
  * Service manager for managing Common API service instances.
  *
  */
-class ServiceManager : public IVehicleCom
-{
-public:
+class ServiceManager : public IVehicleCom {
+  public:
     ServiceManager(const ServiceManager&) = delete;
 
     ServiceManager(std::string service_name, ::Connectivity::MessageDispatcher& msgDispatcher);
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
     Return<void> subscribe(uint16_t serviceID, uint16_t operationID, OperationType operationType,
-                               const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) override;
+                           const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) override;
     Return<void> unsubscribe(uint64_t subscriberId, unsubscribe_cb _hidl_cb) override;
     Return<void> sendMessage(const Msg& msg, const RetryInfo& retryInfo, sendMessage_cb _hidl_cb) override;
     Return<void> sendRequest(const Msg& msg, const RetryInfo& retryInfo, const sp<IResponseCallback>& callbackHandler,
-                                 sendRequest_cb _hidl_cb) override;
+                             sendRequest_cb _hidl_cb) override;
 
-private:
+  private:
     MessageDispatcher& messageDispatcher_;
 };
 

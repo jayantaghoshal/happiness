@@ -6,20 +6,20 @@
  *
  */
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-#include <sstream>
-#include <iostream>
-#include <string>
-#include <map>
-#include <fstream>
-#include <unistd.h>
-#include <cstdio>
 #include "carconfig_updater.h"
-#include "carconfig_file.h"
-#include "carconfig_parameterlist.h"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <mock_diagnostic_client.h>
 #include <mock_vipcom_client.h>
+#include <unistd.h>
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <sstream>
+#include <string>
+#include "carconfig_file.h"
+#include "carconfig_parameterlist.h"
 
 using ::testing::_;
 using ::testing::Return;
@@ -34,11 +34,9 @@ extern bool setStateAndSendDiagnostics(bool stateConfigured, bool allParamsRecei
 
 typedef std::map<uint32_t, uint8_t> paramMap_t;
 
-class CarConfigUpdaterTestFixture : public ::testing::Test
-{
-   public:
-    virtual void SetUp()
-    {
+class CarConfigUpdaterTestFixture : public ::testing::Test {
+  public:
+    virtual void SetUp() {
         std::stringstream tmp;
         tmp << _TESTFOLDER;
         testFolderPath = tmp.str();
@@ -55,20 +53,17 @@ class CarConfigUpdaterTestFixture : public ::testing::Test
     bool mRebootNeeded = false;
     paramMap_t mReceivedParam, mStoredBadParams;
 
-    virtual void TearDown()
-    {
+    virtual void TearDown() {
         std::remove(testFolderPath.c_str());
         delete mockCarconfigFile;
     }
 
-   protected:
+  protected:
 };
 
-class CarConfigUpdateSetStateLogicBulkF : public CarConfigUpdaterTestFixture
-{
-   public:
-    virtual void SetUp()
-    {
+class CarConfigUpdateSetStateLogicBulkF : public CarConfigUpdaterTestFixture {
+  public:
+    virtual void SetUp() {
         CarConfigUpdaterTestFixture::SetUp();
         mIsConfigured = false;
     }
@@ -79,37 +74,31 @@ class CarConfigUpdateSetStateLogicBulkF : public CarConfigUpdaterTestFixture
 // Needed for V-table to be generated.
 ICarconfigFile::~ICarconfigFile(){};
 
-TEST_F(CarConfigUpdaterTestFixture, framereceiver_emptyBufferAndZeroTimeout_theFunctionShouldReturnImmediately)
-{
+TEST_F(CarConfigUpdaterTestFixture, framereceiver_emptyBufferAndZeroTimeout_theFunctionShouldReturnImmediately) {
     ccBuffer buff;
     frameReceiver(buff, 0);
     ASSERT_TRUE(1);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, fileExists_givenMissingFile_theFunctionShouldReturnFalse)
-{
+TEST_F(CarConfigUpdaterTestFixture, fileExists_givenMissingFile_theFunctionShouldReturnFalse) {
     ASSERT_FALSE(fileExists(testFolderPath + "/x"));
 }
 
-TEST_F(CarConfigUpdaterTestFixture, fileExists_givenExistingFile_theFunctionShouldReturnTrue)
-{
+TEST_F(CarConfigUpdaterTestFixture, fileExists_givenExistingFile_theFunctionShouldReturnTrue) {
     ASSERT_TRUE(fileExists(testFolderPath + "carconfig_updater_test.cpp"));
 }
 
-TEST_F(CarConfigUpdaterTestFixture, writeEmptyFile_givenExistingFile_theFunctionShouldWriteAFile)
-{
+TEST_F(CarConfigUpdaterTestFixture, writeEmptyFile_givenExistingFile_theFunctionShouldWriteAFile) {
     writeEmptyFile(tmpFilePath);
     ASSERT_TRUE(fileExists(tmpFilePath));
 }
 
 TEST_F(CarConfigUpdaterTestFixture,
-       checkReceivedValues_givenCompleteBuffer_theFunctionShouldReturnAllParamsReceivedAndallParamsOK)
-{
+       checkReceivedValues_givenCompleteBuffer_theFunctionShouldReturnAllParamsReceivedAndallParamsOK) {
     ccBuffer buff;
     bool allReceived;
     bool allOk;
-    for (int i = 0; i < 504; i++)
-    {
+    for (int i = 0; i < 504; i++) {
         buff[i].received = true;
         buff[i].value = 1;
     }
@@ -118,10 +107,8 @@ TEST_F(CarConfigUpdaterTestFixture,
     ASSERT_TRUE(allReceived);
     ASSERT_TRUE(allOk);
 
-    for (int i = 1; i <= 504; i++)
-    {
-        if (CarConfigParamList::paramList.count(i) > 0)
-        {
+    for (int i = 1; i <= 504; i++) {
+        if (CarConfigParamList::paramList.count(i) > 0) {
             ASSERT_TRUE(buff[i - 1].ok);
             ASSERT_TRUE(buff[i - 1].subscribed);
         }
@@ -129,13 +116,11 @@ TEST_F(CarConfigUpdaterTestFixture,
 }
 
 TEST_F(CarConfigUpdaterTestFixture,
-       checkReceivedValues_givenCompleteBufferWithSomeBadValues_theFunctionShouldReturnAllParamsReceived)
-{
+       checkReceivedValues_givenCompleteBufferWithSomeBadValues_theFunctionShouldReturnAllParamsReceived) {
     ccBuffer buff;
     bool allReceived;
     bool allOk;
-    for (int i = 0; i < 504; i++)
-    {
+    for (int i = 0; i < 504; i++) {
         buff[i].received = true;
         buff[i].value = 1;
     }
@@ -148,8 +133,7 @@ TEST_F(CarConfigUpdaterTestFixture,
     ASSERT_FALSE(buff[198].ok);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenEmptyBuffer_theFunctionShouldReturnAllFalse)
-{
+TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenEmptyBuffer_theFunctionShouldReturnAllFalse) {
     ccBuffer buff;
     bool allReceived;
     bool allOk;
@@ -159,23 +143,19 @@ TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenEmptyBuffer_theFunc
     ASSERT_FALSE(allReceived);
     ASSERT_FALSE(allOk);
 
-    for (int i = 1; i <= 504; i++)
-    {
-        if (CarConfigParamList::paramList.count(i) > 0)
-        {
+    for (int i = 1; i <= 504; i++) {
+        if (CarConfigParamList::paramList.count(i) > 0) {
             ASSERT_FALSE(buff[i - 1].ok);
             ASSERT_TRUE(buff[i - 1].subscribed);
         }
     }
 }
 
-TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenBadParameters_receivedBadParametersAreConsistent)
-{
+TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenBadParameters_receivedBadParametersAreConsistent) {
     ccBuffer buff;
     bool allReceived;
     bool allOk;
-    for (int i = 0; i < 504; i++)
-    {
+    for (int i = 0; i < 504; i++) {
         buff[i].received = true;
         buff[i].value = 1;
     }
@@ -189,15 +169,13 @@ TEST_F(CarConfigUpdaterTestFixture, checkReceivedValues_givenBadParameters_recei
     ASSERT_FALSE(buff[198].ok);
 
     // We expect the errors to be designated as in positions 18 and 199
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 18, 1, 0, 199, 1, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 18, 1, 0, 199, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     ASSERT_EQ(expectedStoredContent, carconfigParamFaultsPack(receivedBadParams));
 }
 
-TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenAllInParamsOk_allParamsOKVariableSholdBeTrue)
-{
-
+TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenAllInParamsOk_allParamsOKVariableSholdBeTrue) {
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
 
     ccValue ccVal;
@@ -206,8 +184,8 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenAllInParamsOk_allPa
     ccVal.status = ccStatus::GOOD;
 
     EXPECT_CALL(*mockCarconfigFile, getValue(_))
-        .Times(CarConfigParamList::paramList.size())
-        .WillRepeatedly(Return(ccVal));
+            .Times(CarConfigParamList::paramList.size())
+            .WillRepeatedly(Return(ccVal));
 
     bool allOk;
     std::map<uint32_t, uint8_t> storedBadParams;
@@ -215,9 +193,7 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenAllInParamsOk_allPa
     ASSERT_TRUE(allOk);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenSomeInParamsBad_allParamsOKVariableShouldBeFalse)
-{
-
+TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenSomeInParamsBad_allParamsOKVariableShouldBeFalse) {
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
 
     ccValue ccVal;
@@ -226,8 +202,8 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenSomeInParamsBad_all
     ccVal.status = ccStatus::GOOD;
 
     EXPECT_CALL(*mockCarconfigFile, getValue(_))
-        .Times(CarConfigParamList::paramList.size())
-        .WillRepeatedly(Return(ccVal));
+            .Times(CarConfigParamList::paramList.size())
+            .WillRepeatedly(Return(ccVal));
 
     bool allOk;
     std::map<uint32_t, uint8_t> storedBadParams;
@@ -235,15 +211,13 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistingParams_givenSomeInParamsBad_all
     ASSERT_FALSE(allOk);
 
     // We expect the errors to be designated as in positions 18 and 199
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 18, 2, 0, 199, 2, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 18, 2, 0, 199, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0, 0, 0,   0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     ASSERT_EQ(expectedStoredContent, carconfigParamFaultsPack(storedBadParams));
 }
 
-TEST_F(CarConfigUpdaterTestFixture, checkExistinParameters_givenSomeInParamsBad_returnedParamsInPackageAreConsistent)
-{
-
+TEST_F(CarConfigUpdaterTestFixture, checkExistinParameters_givenSomeInParamsBad_returnedParamsInPackageAreConsistent) {
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
 
     ccValue ccVal;
@@ -262,17 +236,14 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistinParameters_givenSomeInParamsBad_
     badValHigh.status = ccStatus::GOOD;
 
     EXPECT_CALL(*mockCarconfigFile, getValue(_))
-        .Times(CarConfigParamList::paramList.size() - 3)
-        .WillRepeatedly(Return(ccVal));
+            .Times(CarConfigParamList::paramList.size() - 3)
+            .WillRepeatedly(Return(ccVal));
 
-    EXPECT_CALL(*mockCarconfigFile, getValue(1))
-        .WillOnce(Return(badValLow));
+    EXPECT_CALL(*mockCarconfigFile, getValue(1)).WillOnce(Return(badValLow));
 
-    EXPECT_CALL(*mockCarconfigFile, getValue(7))
-        .WillOnce(Return(badValLow));
+    EXPECT_CALL(*mockCarconfigFile, getValue(7)).WillOnce(Return(badValLow));
 
-    EXPECT_CALL(*mockCarconfigFile, getValue(24))
-        .WillOnce(Return(badValHigh));
+    EXPECT_CALL(*mockCarconfigFile, getValue(24)).WillOnce(Return(badValHigh));
 
     bool allOk;
     std::map<uint32_t, uint8_t> storedBadParams;
@@ -280,14 +251,13 @@ TEST_F(CarConfigUpdaterTestFixture, checkExistinParameters_givenSomeInParamsBad_
     ASSERT_FALSE(allOk);
 
     // We expect the errors in positions 1,7 and 24. No error in 4, as that parameter does not exist in the list
-    std::vector<uint8_t> expectedStoredContent = {3, 0, 1, 0, 0, 7, 0, 0, 24, 0xFF,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {3, 0, 1, 0, 0, 7, 0, 0, 24, 0xFF, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0, 0, 0, 0, 0, 0, 0,  0,    0, 0, 0, 0, 0};  // expected values
 
     ASSERT_EQ(expectedStoredContent, carconfigParamFaultsPack(storedBadParams));
 }
 
-TEST_F(CarConfigUpdaterTestFixture, storeReceivedParameter_givenValidUpdatedParameter_outputFileShouldBeReplaced)
-{
+TEST_F(CarConfigUpdaterTestFixture, storeReceivedParameter_givenValidUpdatedParameter_outputFileShouldBeReplaced) {
     ccBuffer buff;
     int i;
 
@@ -298,8 +268,7 @@ TEST_F(CarConfigUpdaterTestFixture, storeReceivedParameter_givenValidUpdatedPara
     ccVal.subs = 1;
     ccVal.status = ccStatus::GOOD;
 
-    for (i = 0; i < 504; i++)
-    {
+    for (i = 0; i < 504; i++) {
         buff[i].subscribed = true;
         buff[i].value = 2;
         buff[i].ok = true;
@@ -308,14 +277,14 @@ TEST_F(CarConfigUpdaterTestFixture, storeReceivedParameter_givenValidUpdatedPara
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(504).WillRepeatedly(Return(ccVal));
 
     EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 2),
-                                                 Field(&ccValue::status, ccStatus::GOOD)))).Times(504);
+                                                 Field(&ccValue::status, ccStatus::GOOD))))
+            .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
 }
 
 TEST_F(CarConfigUpdaterTestFixture,
-       storeReceivedParameter_givenBadParameters_onlyRawParameterInOutputFileShouldBeReplaced)
-{
+       storeReceivedParameter_givenBadParameters_onlyRawParameterInOutputFileShouldBeReplaced) {
     ccBuffer buff;
     int i;
 
@@ -326,8 +295,7 @@ TEST_F(CarConfigUpdaterTestFixture,
     ccVal.subs = 1;
     ccVal.status = ccStatus::GOOD;
 
-    for (i = 0; i < 504; i++)
-    {
+    for (i = 0; i < 504; i++) {
         buff[i].subscribed = true;
         buff[i].value = 2;
         buff[i].ok = false;
@@ -336,43 +304,41 @@ TEST_F(CarConfigUpdaterTestFixture,
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(504).WillRepeatedly(Return(ccVal));
 
     EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 1),
-                                                 Field(&ccValue::status, ccStatus::INVALID)))).Times(504);
+                                                 Field(&ccValue::status, ccStatus::INVALID))))
+            .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
 }
 
 TEST_F(CarConfigUpdaterTestFixture,
-       storeReceivedParameter_givenUnsubscribedParameters_onlyRawParameterShouldBeReplacedAndSubTo255)
-{
+       storeReceivedParameter_givenUnsubscribedParameters_onlyRawParameterShouldBeReplacedAndSubTo255) {
     ccBuffer buff;
     int i;
 
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
 
-    for (i = 0; i < 504; i++)
-    {
+    for (i = 0; i < 504; i++) {
         buff[i].subscribed = false;
         buff[i].received = true;
         buff[i].value = 2;
     }
 
     EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 255),
-                                                 Field(&ccValue::status, ccStatus::INVALID)))).Times(504);
+                                                 Field(&ccValue::status, ccStatus::INVALID))))
+            .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_givenNoParameters_ExpectedSizeShouldBeZero)
-{
+TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_givenNoParameters_ExpectedSizeShouldBeZero) {
     std::map<uint32_t, uint8_t> params;
     std::vector<uint8_t> result;
     result = carconfigParamFaultsPack(params);
     ASSERT_EQ(result[0], 0);
-    ASSERT_EQ(result.size(), (size_t)31); // Size should be always 31 (10*3 bytes for parameters + 1 for length)
+    ASSERT_EQ(result.size(), (size_t)31);  // Size should be always 31 (10*3 bytes for parameters + 1 for length)
 }
 
-TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_givenTwoParameters_thePackedListContainsValidFormat)
-{
+TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_givenTwoParameters_thePackedListContainsValidFormat) {
     std::map<uint32_t, uint8_t> params;
     std::vector<uint8_t> result;
     params.insert(std::pair<uint32_t, uint8_t>(0x12C, 0xFF));
@@ -388,31 +354,27 @@ TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_givenTwoParameters_
     ASSERT_EQ(result[4], 0x1);
     ASSERT_EQ(result[5], 0x2C);
     ASSERT_EQ(result[6], 0xFF);
-    ASSERT_EQ(result.size(), (size_t)31); // Size should be always 31 (10*3 bytes for parameters + 1 for length)
+    ASSERT_EQ(result.size(), (size_t)31);  // Size should be always 31 (10*3 bytes for parameters + 1 for length)
 }
 
-TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_ReportLessThan10InvalidParameters)
-{
+TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_ReportLessThan10InvalidParameters) {
     std::map<uint32_t, uint8_t> params;
     std::vector<uint8_t> result;
-    for (int idx = 0; idx < 9; idx++)
-    {
+    for (int idx = 0; idx < 9; idx++) {
         params.insert(std::pair<uint32_t, uint8_t>(3 + (idx * 0x2A), 3 + idx));
     }
 
     // call UT
     result = carconfigParamFaultsPack(params);
 
-    ASSERT_EQ(result[0], 9);  // stores the total size
-    ASSERT_EQ(result.size(), (size_t)31); // Size should be always 31 (10*3 bytes for parameters + 1 for length)
+    ASSERT_EQ(result[0], 9);               // stores the total size
+    ASSERT_EQ(result.size(), (size_t)31);  // Size should be always 31 (10*3 bytes for parameters + 1 for length)
 }
 
-TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_ReportExactly10InvalidParameters)
-{
+TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_ReportExactly10InvalidParameters) {
     std::map<uint32_t, uint8_t> params;
     std::vector<uint8_t> result;
-    for (int idx = 0; idx < 10; idx++)
-    {
+    for (int idx = 0; idx < 10; idx++) {
         params.insert(std::pair<uint32_t, uint8_t>(3 + (idx * 0x2A), 3 + idx));
     }
 
@@ -420,16 +382,14 @@ TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_ReportExactly10Inva
     result = carconfigParamFaultsPack(params);
 
     // we expect 10 items, length == 10, and 31 bytes stored in vector
-    ASSERT_EQ(result[0], 10);  // stores the total size
-    ASSERT_EQ(result.size(), (size_t)31); // Size should be always 31 (10*3 bytes for parameters + 1 for length)
+    ASSERT_EQ(result[0], 10);              // stores the total size
+    ASSERT_EQ(result.size(), (size_t)31);  // Size should be always 31 (10*3 bytes for parameters + 1 for length)
 }
 
-TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_DoNotReportMoreThen10InvalidParameters)
-{
+TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_DoNotReportMoreThen10InvalidParameters) {
     std::map<uint32_t, uint8_t> params;
     std::vector<uint8_t> result;
-    for (int idx = 0; idx < 11; idx++)
-    {
+    for (int idx = 0; idx < 11; idx++) {
         params.insert(std::pair<uint32_t, uint8_t>(3 + (idx * 0x2A), 3 + idx));
     }
 
@@ -437,12 +397,11 @@ TEST_F(CarConfigUpdaterTestFixture, carconfigParamFaultsPack_DoNotReportMoreThen
     result = carconfigParamFaultsPack(params);
 
     // we expect to total amount of invalid frames, but not more than 10*3 bytes attached
-    ASSERT_EQ(result[0], 10);  // stores the total size
-    ASSERT_EQ(result.size(), (size_t)31); // Size should be always 31 (10*3 bytes for parameters + 1 for length)
+    ASSERT_EQ(result[0], 10);              // stores the total size
+    ASSERT_EQ(result.size(), (size_t)31);  // Size should be always 31 (10*3 bytes for parameters + 1 for length)
 }
 
-TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseNotOk_FailedSendingValues)
-{
+TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseNotOk_FailedSendingValues) {
     CarConfigVipComMock vipcomClient;
 
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
@@ -452,32 +411,29 @@ TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseNotOk_FailedS
     updateVipParameters(*mockCarconfigFile, vipcomClient);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseNotOk_FailedReceivingAck)
-{
+TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseNotOk_FailedReceivingAck) {
     CarConfigVipComMock vipcomClient;
 
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(2);
-    EXPECT_CALL(vipcomClient, sendConfig(_)).Times(1).WillOnce(Return(3)); // sent 3 bytes
+    EXPECT_CALL(vipcomClient, sendConfig(_)).Times(1).WillOnce(Return(3));  // sent 3 bytes
     EXPECT_CALL(vipcomClient, waitForVipAcknowledge()).Times(1).WillOnce(Return(-1));
 
     updateVipParameters(*mockCarconfigFile, vipcomClient);
 }
 
-TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseOk_ReceivedAck)
-{
+TEST_F(CarConfigUpdaterTestFixture, updateVipParameters_VipResponseOk_ReceivedAck) {
     CarConfigVipComMock vipcomClient;
 
     EXPECT_CALL(*mockCarconfigFile, open(_)).Times(1);
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(2);
-    EXPECT_CALL(vipcomClient, sendConfig(_)).Times(1).WillOnce(Return(3)); // sent 3 bytes
+    EXPECT_CALL(vipcomClient, sendConfig(_)).Times(1).WillOnce(Return(3));  // sent 3 bytes
     EXPECT_CALL(vipcomClient, waitForVipAcknowledge()).Times(1).WillOnce(Return(0));
 
     updateVipParameters(*mockCarconfigFile, vipcomClient);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAndOkExpectedReboot)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAndOkExpectedReboot) {
     /*
      * we expect that in BULK mode, all params
      */
@@ -498,8 +454,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
     EXPECT_TRUE(mRebootNeeded);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAndFailed)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAndFailed) {
     /*
      * in BULK mode, receiving bad parameters should end up in setting a DTC
      * and requesting an REBOOT
@@ -511,8 +466,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
     mIsConfigured = false;  // BULK mode
     bool result;
     std::vector<uint8_t> registerValues = {0};
-    std::vector<uint8_t> updateValues = {1, 0, 32, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<uint8_t> updateValues = {1, 0, 32, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                         0, 0, 0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     std::vector<uint8_t> expDidStatusCodes = {0b0001 | 0b0100};
 
     // add some invalid values
@@ -531,8 +486,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
     EXPECT_FALSE(mRebootNeeded);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceivedExpectStoredAreSendToDTC)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceivedExpectStoredAreSendToDTC) {
     /*
      * in BULK mode, receiving bad parameters should end up in setting a DTC
      * and requesting an REBOOT
@@ -545,8 +499,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     mStoredParamOk = false;      // we've stored bad parameters
     bool result;
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0,  0, 0,  0,  0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     // add some invalid values to the listOfStored parameters
     mStoredBadParams.insert(std::pair<uint32_t, uint8_t>(30, 14));
@@ -564,8 +518,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     EXPECT_FALSE(mRebootNeeded);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceivedNoBadParamsStoredDoNotUpdateDID)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceivedNoBadParamsStoredDoNotUpdateDID) {
     /*
      * in BULK mode, receiving bad parameters should end up in setting a DTC
      * and requesting an REBOOT
@@ -578,8 +531,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     mStoredParamOk = true;       // no wrong parameters stored
     bool result;
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0,  0, 0,  0,  0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     // add some invalid values to the listOfStored parameters
     mStoredBadParams.insert(std::pair<uint32_t, uint8_t>(30, 14));
@@ -597,8 +550,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     EXPECT_FALSE(mRebootNeeded);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllReceivedAllOkNothingChanged_ExpectDoNothing)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF,
+       setStateLogic_ConfiguredState_AllReceivedAllOkNothingChanged_ExpectDoNothing) {
     /*
      * in BULK mode, receiving bad parameters should end up in setting a DTC
      * and requesting an REBOOT
@@ -611,8 +564,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     mIsConfigured = true;       // Configured mode
     mParamsChanged = false;     // nothing changed
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0,  0, 0,  0,  0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     // add some invalid values to the listOfStored parameters
     mStoredBadParams.insert(std::pair<uint32_t, uint8_t>(30, 14));
@@ -635,8 +588,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     EXPECT_FALSE(mRebootNeeded);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllReceivedAllOkValuesChanged_RequestReboot)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllReceivedAllOkValuesChanged_RequestReboot) {
     /*
      * in Configured mode
      * receiving valid values and received updates should lead to a _reboot_
@@ -650,8 +602,8 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     mParamsChanged = true;      // nothing changed
 
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedStoredContent = {2, 0, 30, 14, 0, 32, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                                  0, 0, 0,  0,  0, 0,  0,  0, 0, 0, 0, 0, 0, 0, 0};  // expected values
 
     // add some invalid values to the listOfStored parameters
     mStoredBadParams.insert(std::pair<uint32_t, uint8_t>(30, 14));
@@ -674,8 +626,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     EXPECT_EQ(mRebootNeeded, true);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllReceivedButNotAllOk_ReportDIDRequestReboot)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllReceivedButNotAllOk_ReportDIDRequestReboot) {
     /*
      * in Configured mode
      * receiving valid values and received updates should lead to a _reboot_
@@ -688,8 +639,9 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     mAllParamsOk = false;       // __invalid__ parameters received
 
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedReceivedParams = {1, 0x1, 0x2E, 0x03, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedReceivedParams = {
+            1, 0x1, 0x2E, 0x03, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,   0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
     std::vector<uint8_t> expDiagnosticCodes = {0b01};
 
     // add some invalid values received from FlexRay
@@ -711,8 +663,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     EXPECT_EQ(mRebootNeeded, false);
 }
 
-TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllReceivedStoredOk_ExpectNothing)
-{
+TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllReceivedStoredOk_ExpectNothing) {
     /*
      * in Configured mode
      * receiving valid values and received updates should lead to a _reboot_
@@ -726,8 +677,9 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllRe
     mStoredParamOk = true;       // no errors stored
 
     std::vector<uint8_t> expectedRegisterContent = {0};
-    std::vector<uint8_t> expectedReceivedParams = {1, 0x1, 0x2E, 0x03, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
+    std::vector<uint8_t> expectedReceivedParams = {
+            1, 0x1, 0x2E, 0x03, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,   0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // expected values
     std::vector<uint8_t> expDiagnosticCodes = {0b01};
 
     // add some invalid values received from FlexRay
@@ -750,8 +702,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllRe
 }
 
 TEST_F(CarConfigUpdateSetStateLogicBulkF,
-       setStateLogic_ConfiguredState_NotAllReceivedStoredNotOk_ExpectStoredBeingReportedToDID)
-{
+       setStateLogic_ConfiguredState_NotAllReceivedStoredNotOk_ExpectStoredBeingReportedToDID) {
     /*
      * in Configured mode
      * receiving valid values and received updates should lead to a _reboot_
@@ -764,10 +715,11 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
     mAllParamsOk = false;        // __invalid__ parameters received
     mStoredParamOk = false;      // no errors stored
 
-    std::vector<uint8_t> expectedRegisterContent = {0};                 // register is always zero
-    std::vector<uint8_t> expectedStoredResults = {1, 0x1, 0x2E, 0x03, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // contains expected stored bad parameters
-    std::vector<uint8_t> expDiagnosticCodes = {0b01};                   // not configured error
+    std::vector<uint8_t> expectedRegisterContent = {0};  // register is always zero
+    std::vector<uint8_t> expectedStoredResults = {
+            1, 0x1, 0x2E, 0x03, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0,   0,    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};  // contains expected stored bad parameters
+    std::vector<uint8_t> expDiagnosticCodes = {0b01};              // not configured error
 
     // add some invalid values received from FlexRay
     mStoredBadParams.insert(std::pair<uint32_t, uint8_t>(0x12E, 0x03));
@@ -789,8 +741,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
     EXPECT_EQ(mRebootNeeded, false);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

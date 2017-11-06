@@ -12,7 +12,6 @@ Return<void> GnssMeasurementCallback::GnssMeasurementCb(const IGnssMeasurementCa
     return Void();
 }
 
-
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
 IGnssMeasurementCallback* HIDL_FETCH_IGnssMeasurementCallback(const char* /* name */) {

@@ -32,7 +32,6 @@ struct AGnssRil : public IAGnssRil {
     Return<bool> updateNetworkAvailability(bool available, const hidl_string& apn) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IAGnssRil* HIDL_FETCH_IAGnssRil(const char* name);

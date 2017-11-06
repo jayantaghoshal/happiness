@@ -9,17 +9,17 @@ namespace implementation {
 // Methods from ::android::hardware::gnss::V1_0::IGnssBatching follow.
 Return<bool> GnssBatching::init(const sp<IGnssBatchingCallback>& callback) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<uint16_t> GnssBatching::getBatchSize() {
     // TODO implement
-    return uint16_t {};
+    return uint16_t{};
 }
 
 Return<bool> GnssBatching::start(const IGnssBatching::Options& options) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<void> GnssBatching::flush() {
@@ -29,7 +29,7 @@ Return<void> GnssBatching::flush() {
 
 Return<bool> GnssBatching::stop() {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<void> GnssBatching::cleanup() {
@@ -37,12 +37,9 @@ Return<void> GnssBatching::cleanup() {
     return Void();
 }
 
-
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssBatching* HIDL_FETCH_IGnssBatching(const char* /* name */) {
-    return new GnssBatching();
-}
+IGnssBatching* HIDL_FETCH_IGnssBatching(const char* /* name */) { return new GnssBatching(); }
 
 }  // namespace implementation
 }  // namespace V1_0

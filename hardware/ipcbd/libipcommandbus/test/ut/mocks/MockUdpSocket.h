@@ -10,9 +10,8 @@
 
 #include "ipcommandbus/isocket.h"
 
-class MockUdpSocket : public Connectivity::ISocket
-{
-public:
+class MockUdpSocket : public Connectivity::ISocket {
+  public:
     MOCK_METHOD1(setup, void(const Message::Ecu& ecu));
     MOCK_METHOD1(registerReadReadyCb, void(std::function<void(void)> readReadyCb));
     MOCK_METHOD2(read, void(std::vector<uint8_t>& buffer, Message::Ecu& ecu));

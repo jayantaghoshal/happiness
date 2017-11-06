@@ -17,12 +17,9 @@ Return<void> AGnssRilCallback::requestRefLocCb() {
     return Void();
 }
 
-
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnssRilCallback* HIDL_FETCH_IAGnssRilCallback(const char* /* name */) {
-    return new AGnssRilCallback();
-}
+IAGnssRilCallback* HIDL_FETCH_IAGnssRilCallback(const char* /* name */) { return new AGnssRilCallback(); }
 
 }  // namespace implementation
 }  // namespace V1_0

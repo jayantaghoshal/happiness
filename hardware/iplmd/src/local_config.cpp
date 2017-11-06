@@ -5,58 +5,52 @@
 
 #define LOG_TAG "Iplmd.lco0"
 
-namespace Iplmd
-{
-namespace LocalConfig
-{
+namespace Iplmd {
+namespace LocalConfig {
 using namespace vcc;
 
-class Configuration
-{
- public:
-  Configuration(const vcc::LocalConfigReaderInterface* lcfg = vcc::LocalConfigDefault())
-      : nof_nodes_in_RG1_(3), nof_nodes_in_RG3_(3), request_monitoring_tmo_(3000), nof_LSCs_(0), lcfg_(lcfg)
-  {
-  }
+class Configuration {
+  public:
+    Configuration(const vcc::LocalConfigReaderInterface* lcfg = vcc::LocalConfigDefault())
+        : nof_nodes_in_RG1_(3), nof_nodes_in_RG3_(3), request_monitoring_tmo_(3000), nof_LSCs_(0), lcfg_(lcfg) {}
 
-  void init()
-  {
-    lcfg_->TryGetValue(&nof_nodes_in_RG1_, NodesInRG1_Id);
-    lcfg_->TryGetValue(&nof_nodes_in_RG3_, NodesInRG3_Id);
-    lcfg_->TryGetValue(&request_monitoring_tmo_, RequestMonitoringTmo_Id);
-    lcfg_->TryGetValue(&nof_LSCs_, NofLSCs_Id);
-  }
+    void init() {
+        lcfg_->TryGetValue(&nof_nodes_in_RG1_, NodesInRG1_Id);
+        lcfg_->TryGetValue(&nof_nodes_in_RG3_, NodesInRG3_Id);
+        lcfg_->TryGetValue(&request_monitoring_tmo_, RequestMonitoringTmo_Id);
+        lcfg_->TryGetValue(&nof_LSCs_, NofLSCs_Id);
+    }
 
-  int getNofNodesInRG1() { return nof_nodes_in_RG1_; }
+    int getNofNodesInRG1() { return nof_nodes_in_RG1_; }
 
-  int getNofNodesInRG3() { return nof_nodes_in_RG3_; }
+    int getNofNodesInRG3() { return nof_nodes_in_RG3_; }
 
-  int getRequestMonitoringTmo() { return request_monitoring_tmo_; }
+    int getRequestMonitoringTmo() { return request_monitoring_tmo_; }
 
-  int getNofLSCs() { return nof_LSCs_; }
+    int getNofLSCs() { return nof_LSCs_; }
 
-  std::string getLocalIpAddress() { return ip_address_local_; }
-  std::string getBroadcastIpAddress() { return ip_address_broadcast_; }
-  std::string getVCMIpAddress() { return ip_address_vcm_; }
-  std::string getTEMIpAddress() { return ip_address_tem_; }
+    std::string getLocalIpAddress() { return ip_address_local_; }
+    std::string getBroadcastIpAddress() { return ip_address_broadcast_; }
+    std::string getVCMIpAddress() { return ip_address_vcm_; }
+    std::string getTEMIpAddress() { return ip_address_tem_; }
 
- private:
-  int nof_nodes_in_RG1_;
-  int nof_nodes_in_RG3_;
-  int request_monitoring_tmo_;
-  int nof_LSCs_;
-  std::string ip_address_local_;
-  std::string ip_address_broadcast_;
-  std::string ip_address_vcm_;
-  std::string ip_address_tem_;
+  private:
+    int nof_nodes_in_RG1_;
+    int nof_nodes_in_RG3_;
+    int request_monitoring_tmo_;
+    int nof_LSCs_;
+    std::string ip_address_local_;
+    std::string ip_address_broadcast_;
+    std::string ip_address_vcm_;
+    std::string ip_address_tem_;
 
-  // Config ID strings
-  const std::string NodesInRG1_Id = "IIPS_LM_NofNodesRG1";
-  const std::string NodesInRG3_Id = "IIPS_LM_NofNodesRG3";
-  const std::string RequestMonitoringTmo_Id = "IIPS_LM_RequestMonitoringTimeout";
-  const std::string NofLSCs_Id = "IIPS_LM_NofLSCs";
+    // Config ID strings
+    const std::string NodesInRG1_Id = "IIPS_LM_NofNodesRG1";
+    const std::string NodesInRG3_Id = "IIPS_LM_NofNodesRG3";
+    const std::string RequestMonitoringTmo_Id = "IIPS_LM_RequestMonitoringTimeout";
+    const std::string NofLSCs_Id = "IIPS_LM_NofLSCs";
 
-  const vcc::LocalConfigReaderInterface* const lcfg_;
+    const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
 static Configuration config;

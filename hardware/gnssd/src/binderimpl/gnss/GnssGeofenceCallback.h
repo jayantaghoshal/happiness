@@ -25,15 +25,17 @@ using ::android::sp;
 
 struct GnssGeofenceCallback : public IGnssGeofenceCallback {
     // Methods from ::android::hardware::gnss::V1_0::IGnssGeofenceCallback follow.
-    Return<void> gnssGeofenceTransitionCb(int32_t geofenceId, const GnssLocation& location, IGnssGeofenceCallback::GeofenceTransition transition, int64_t timestamp) override;
-    Return<void> gnssGeofenceStatusCb(IGnssGeofenceCallback::GeofenceAvailability status, const GnssLocation& lastLocation) override;
+    Return<void> gnssGeofenceTransitionCb(int32_t geofenceId, const GnssLocation& location,
+                                          IGnssGeofenceCallback::GeofenceTransition transition,
+                                          int64_t timestamp) override;
+    Return<void> gnssGeofenceStatusCb(IGnssGeofenceCallback::GeofenceAvailability status,
+                                      const GnssLocation& lastLocation) override;
     Return<void> gnssGeofenceAddCb(int32_t geofenceId, IGnssGeofenceCallback::GeofenceStatus status) override;
     Return<void> gnssGeofenceRemoveCb(int32_t geofenceId, IGnssGeofenceCallback::GeofenceStatus status) override;
     Return<void> gnssGeofencePauseCb(int32_t geofenceId, IGnssGeofenceCallback::GeofenceStatus status) override;
     Return<void> gnssGeofenceResumeCb(int32_t geofenceId, IGnssGeofenceCallback::GeofenceStatus status) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssGeofenceCallback* HIDL_FETCH_IGnssGeofenceCallback(const char* name);

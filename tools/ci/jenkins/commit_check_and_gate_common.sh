@@ -9,9 +9,10 @@ source "${SCRIPT_DIR}/common.sh"
 # 64bit_sanity.py "$REPO_ROOT_DIR"/vendor/volvocars/ || die "64 bit build sanity check failed"
 
 (repo sync prebuilts/clang/host/linux-x86)
+(repo sync prebuilts/build-tools)
 
-(fix_cpp_format.sh vendor/volvocars --verify) || echo "Detected misformatted files"
-(fix_bp_format.sh vendor/volvocars --verify) || echo "Detected misformatted files"
+(fix_cpp_format.sh vendor/volvocars --verify)
+(fix_bp_format.sh vendor/volvocars --verify)
 
 (cd vendor/volvocars && ./tools/ci/shell/static_analyze_cwd.sh)
 (cd vendor/volvocars/tools/ci/shipit && ./analyze.sh)

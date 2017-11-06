@@ -6,37 +6,28 @@
 
 #include <string>
 
-MockLocalconfig::MockLocalconfig()
-{
-}
+MockLocalconfig::MockLocalconfig() {}
 
-namespace cedric
-{
-namespace core
-{
-namespace localconfig
-{
+namespace cedric {
+namespace core {
+namespace localconfig {
 
-bool init()
-{
-    return g_mock_local_config->init();
-}
+bool init() { return g_mock_local_config->init(); }
 
-template<>
+template <>
 const int* getValue(const std::string& key) {
     return g_mock_local_config->getValueInt(key);
 }
 
-template<>
+template <>
 const double* getValue(const std::string& key) {
     return g_mock_local_config->getValueDouble(key);
 }
 
-template<>
+template <>
 const std::string* getValue(const std::string& key) {
     return g_mock_local_config->getValueString(key);
 }
-
 }
 }
 }

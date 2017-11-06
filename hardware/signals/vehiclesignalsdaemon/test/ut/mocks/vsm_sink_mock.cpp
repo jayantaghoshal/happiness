@@ -6,15 +6,11 @@
 #include <gmock/gmock.h>
 #include <vsm_sink_mock.h>
 
-static VsmSinkMock *vsmSinkMock;
+static VsmSinkMock* vsmSinkMock;
 
-void vsm_sink_mock_init(VsmSinkMock* mockInstance)
-{
-   vsmSinkMock = mockInstance;
-}
+void vsm_sink_mock_init(VsmSinkMock* mockInstance) { vsmSinkMock = mockInstance; }
 
-void vsm_sink_init(void)
-{
-   ASSERT_TRUE(vsmSinkMock != nullptr);
-   vsmSinkMock->vsm_sink_init();
+void vsm_sink_init(void) {
+    ASSERT_TRUE(vsmSinkMock != nullptr);
+    vsmSinkMock->vsm_sink_init();
 }

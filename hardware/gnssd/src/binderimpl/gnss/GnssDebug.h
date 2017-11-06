@@ -27,7 +27,6 @@ struct GnssDebug : public IGnssDebug {
     Return<void> getDebugData(getDebugData_cb _hidl_cb) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssDebug* HIDL_FETCH_IGnssDebug(const char* name);

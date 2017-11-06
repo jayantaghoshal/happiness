@@ -13,28 +13,28 @@
 namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 
 int main(int /* argc */, char* /* argv */ []) {
-  // auto store = std::make_unique<VehiclePropertyStore>();
-  auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
-  auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
+    // auto store = std::make_unique<VehiclePropertyStore>();
+    auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
+    auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
 
-  // Create Modules
-  auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
-  auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
+    // Create Modules
+    auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
+    auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
 
-  // Register modules
-  powerModule->registerToVehicleHal();
-  audioModule->registerToVehicleHal();
+    // Register modules
+    powerModule->registerToVehicleHal();
+    audioModule->registerToVehicleHal();
 
-  auto service = std::make_unique<vhal_20::VehicleHalManager>(hal.get());
+    auto service = std::make_unique<vhal_20::VehicleHalManager>(hal.get());
 
-  // Configured to only use 1 thread as the VHAL Manager and Implementation is not threadsafe.
-  android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
+    // Configured to only use 1 thread as the VHAL Manager and Implementation is not threadsafe.
+    android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
 
-  ALOGI("Registering as service...");
-  service->registerAsService();
+    ALOGI("Registering as service...");
+    service->registerAsService();
 
-  ALOGI("Ready starting VCC VHAL Daemon");
-  android::hardware::joinRpcThreadpool();
+    ALOGI("Ready starting VCC VHAL Daemon");
+    android::hardware::joinRpcThreadpool();
 
-  return 0;
+    return 0;
 }

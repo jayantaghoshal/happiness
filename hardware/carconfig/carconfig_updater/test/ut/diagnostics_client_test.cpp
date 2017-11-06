@@ -6,29 +6,27 @@
  *
  */
 
-#include <gtest/gtest.h>
+#include "diagnostics_client.h"
 #include <gmock/gmock.h>
-#include <sstream>
-#include <iostream>
-#include <fstream>
+#include <gtest/gtest.h>
 #include <unistd.h>
 #include <cstdio>
-#include "diagnostics_client.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 using ::testing::_;
 using ::testing::Return;
 using ::testing::Field;
 
-class diagnosticsClientTestFixture : public ::testing::Test
-{
-   public:
+class diagnosticsClientTestFixture : public ::testing::Test {
+  public:
     virtual void SetUp() {}
 
     virtual void TearDown() {}
 };
 
-TEST_F(diagnosticsClientTestFixture, registerDID_givenDID_theDIDShouldBeStoredOk)
-{
+TEST_F(diagnosticsClientTestFixture, registerDID_givenDID_theDIDShouldBeStoredOk) {
     std::map<uint16_t, std::vector<uint8_t>> DIDList;
     diagnosticsClient diagClient;
     diagClient.registerDID(0x01, {0xFF});
@@ -39,8 +37,7 @@ TEST_F(diagnosticsClientTestFixture, registerDID_givenDID_theDIDShouldBeStoredOk
     ASSERT_TRUE(testDID[0] == 0xFF);
 }
 
-TEST_F(diagnosticsClientTestFixture, updateDID_givenUpdatedDID_theDIDShouldBeUpdated)
-{
+TEST_F(diagnosticsClientTestFixture, updateDID_givenUpdatedDID_theDIDShouldBeUpdated) {
     std::map<uint16_t, std::vector<uint8_t>> DIDList;
     diagnosticsClient diagClient;
     diagClient.registerDID(0x01, {0xFF});
@@ -52,8 +49,7 @@ TEST_F(diagnosticsClientTestFixture, updateDID_givenUpdatedDID_theDIDShouldBeUpd
     ASSERT_TRUE(testDID[0] == 0x22);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

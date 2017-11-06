@@ -29,7 +29,6 @@ struct GnssNi : public IGnssNi {
     Return<void> respond(int32_t notifId, IGnssNiCallback::GnssUserResponseType userResponse) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssNi* HIDL_FETCH_IGnssNi(const char* name);

@@ -33,7 +33,6 @@ struct GnssBatching : public IGnssBatching {
     Return<void> cleanup() override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssBatching* HIDL_FETCH_IGnssBatching(const char* name);

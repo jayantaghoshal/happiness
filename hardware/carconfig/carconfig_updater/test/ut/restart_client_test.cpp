@@ -6,31 +6,22 @@
  *
  */
 
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "restart_client.h"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-class RestartClientTestFixture : public ::testing::Test
-{
+class RestartClientTestFixture : public ::testing::Test {
   public:
     restartClient r;
 
-    virtual void SetUp()
-    {
-    }
+    virtual void SetUp() {}
 
-    virtual void TearDown()
-    {
-    }
+    virtual void TearDown() {}
 };
 
-TEST_F(RestartClientTestFixture, restart)
-{
-    EXPECT_TRUE(r.restart());
-}
+TEST_F(RestartClientTestFixture, restart) { EXPECT_TRUE(r.restart()); }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

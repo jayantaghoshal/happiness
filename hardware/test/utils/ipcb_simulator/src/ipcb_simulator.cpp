@@ -1,13 +1,13 @@
-#include <string.h> //memset
-#include <stdlib.h> //exit(0);
-#include <stdio.h>
 #include <arpa/inet.h>
-#include <sys/socket.h>
-#include <iostream>
-#include <unistd.h>
 #include <cutils/log.h>
-#include <stdexcept>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>  //exit(0);
+#include <string.h>  //memset
+#include <sys/socket.h>
+#include <unistd.h>
+#include <iostream>
+#include <stdexcept>
 
 #include "include/ipcb_simulator.h"
 
@@ -15,63 +15,58 @@
 
 using ::tarmac::eventloop::IDispatcher;
 
-IpcbSimulator::IpcbSimulator(std::string local_ip, uint32_t local_port, uint32_t remote_port, int bcast_enable) :
-    local_ip_(local_ip),
-    local_port_(local_port),
-    remote_port_(remote_port),
-    broadcastEnable_(bcast_enable),
-    timer_{IDispatcher::GetDefaultDispatcher()}
-{
+IpcbSimulator::IpcbSimulator(std::string local_ip, uint32_t local_port, uint32_t remote_port, int bcast_enable)
+    : local_ip_(local_ip),
+      local_port_(local_port),
+      remote_port_(remote_port),
+      broadcastEnable_(bcast_enable),
+      timer_{IDispatcher::GetDefaultDispatcher()} {
     ALOGD("Packet Injector started");
     IpcbSimulator::Setup();
 }
 
-IpcbSimulator::~IpcbSimulator()
-{
+IpcbSimulator::~IpcbSimulator() {
     if (local_socket_ != 0) {
         close(local_socket_);
     }
 }
 
-void IpcbSimulator::Setup()
-{
+void IpcbSimulator::Setup() {
     addrlen_ = static_cast<socklen_t>(sizeof(struct sockaddr_in));
 
-    //Setup local socket socket
+    // Setup local socket socket
     if ((local_socket_ = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
         ALOGE("Failed to create local socket, terminating!");
         exit(1);
     }
 
-    int ret=setsockopt(local_socket_, SOL_SOCKET, SO_BROADCAST, &broadcastEnable_, sizeof(broadcastEnable_));
+    int ret = setsockopt(local_socket_, SOL_SOCKET, SO_BROADCAST, &broadcastEnable_, sizeof(broadcastEnable_));
 
     memset(&remote_addr_, 0, sizeof(remote_addr_));
     remote_addr_.sin_family = AF_INET;
     remote_addr_.sin_port = htons(remote_port_);
-    if (inet_aton(local_ip_.c_str() , &remote_addr_.sin_addr) == 0) {
+    if (inet_aton(local_ip_.c_str(), &remote_addr_.sin_addr) == 0) {
         ALOGE("inet_aton() failed, terminating!");
         exit(1);
     }
 
-    //Bind local socket to local port
+    // Bind local socket to local port
     memset(&local_addr_, 0, sizeof(local_addr_));
     local_addr_.sin_family = AF_INET;
     local_addr_.sin_addr.s_addr = htonl(INADDR_ANY);
     local_addr_.sin_port = htons(local_port_);
 
-    if (bind(local_socket_, (struct sockaddr *) &local_addr_, sizeof(local_addr_)) < 0) {
+    if (bind(local_socket_, (struct sockaddr *)&local_addr_, sizeof(local_addr_)) < 0) {
         ALOGE("Bind error, terminating!");
         exit(1);
     }
 }
 
-void IpcbSimulator::CreateAndSendIpActivityMessage()
-{
+void IpcbSimulator::CreateAndSendIpActivityMessage() {
     Pdu pdu;
     ALOGD("Send Activity Message");
-    pdu.createHeader(0xFFFF,0xFF01,
-        IpCmdTypes::OperationType::NOTIFICATION_CYCLIC,IpCmdTypes::DataType::NOT_ENCODED,
-        sequenceId_);
+    pdu.createHeader(0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, IpCmdTypes::DataType::NOT_ENCODED,
+                     sequenceId_);
 
     pdu.header.protocol_version = 2;
     sequenceId_++;
@@ -80,42 +75,38 @@ void IpcbSimulator::CreateAndSendIpActivityMessage()
 
     buffer_.clear();
     pdu.toData(buffer_);
-    if (sendto(local_socket_, reinterpret_cast<const void *> (&buffer_[0]), buffer_.size(), 0 ,
-                 reinterpret_cast<struct sockaddr *>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_)))==-1) {
+    if (sendto(local_socket_, reinterpret_cast<const void *>(&buffer_[0]), buffer_.size(), 0,
+               reinterpret_cast<struct sockaddr *>(&remote_addr_),
+               static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
         ALOGD("Failed to send UDP packet!");
     }
 
     StartActivityMessageTimer();
 }
 
-void IpcbSimulator::StartActivityMessageTimer()
-{
-    activityPacketInjectorId_ = timer_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { CreateAndSendIpActivityMessage(); });
+void IpcbSimulator::StartActivityMessageTimer() {
+    activityPacketInjectorId_ =
+            timer_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { CreateAndSendIpActivityMessage(); });
 }
 
-void IpcbSimulator::StopActivityMessageTimer()
-{
-    timer_.Cancel(activityPacketInjectorId_);
-}
+void IpcbSimulator::StopActivityMessageTimer() { timer_.Cancel(activityPacketInjectorId_); }
 
-bool IpcbSimulator::SendPdu(Pdu pdu)
-{
+bool IpcbSimulator::SendPdu(Pdu pdu) {
     ALOGD("Send pdu");
 
     buffer_.clear();
     pdu.toData(buffer_);
 
-    if (sendto(local_socket_, reinterpret_cast<const void *> (&buffer_[0]), buffer_.size(), 0 ,
-                reinterpret_cast<struct sockaddr *>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_)))==-1)
-    {
+    if (sendto(local_socket_, reinterpret_cast<const void *>(&buffer_[0]), buffer_.size(), 0,
+               reinterpret_cast<struct sockaddr *>(&remote_addr_),
+               static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
         ALOGE("sendto failed with error: %s", strerror(errno));
         return false;
     }
     return true;
 }
 
-bool IpcbSimulator::ReceivePdu(Pdu& pdu)
-{
+bool IpcbSimulator::ReceivePdu(Pdu &pdu) {
     std::vector<uint8_t> rd_buffer;
 
     ssize_t packet_length = recv(local_socket_, nullptr, 0, MSG_PEEK | MSG_TRUNC);
@@ -126,13 +117,8 @@ bool IpcbSimulator::ReceivePdu(Pdu& pdu)
 
     rd_buffer.resize(packet_length);
 
-
-    if (0 > recvfrom(local_socket_,
-                        static_cast<void *>(rd_buffer.data()),
-                        packet_length,
-                        0,
-                        reinterpret_cast<struct sockaddr *>(&local_addr_),
-                        &addrlen_)) {
+    if (0 > recvfrom(local_socket_, static_cast<void *>(rd_buffer.data()), packet_length, 0,
+                     reinterpret_cast<struct sockaddr *>(&local_addr_), &addrlen_)) {
         ALOGE("recvfrom failed with error: %s", strerror(errno));
         return false;
     }
@@ -141,8 +127,7 @@ bool IpcbSimulator::ReceivePdu(Pdu& pdu)
     return true;
 }
 
-void IpcbSimulator::CloseSocket()
-{
+void IpcbSimulator::CloseSocket() {
     int result = shutdown(local_socket_, SHUT_RDWR);
     ALOGD("IpcbSimulator::CloseSocket: %d", result);
 }

@@ -12,9 +12,8 @@ namespace Connectivity {
 /**
  * Interface for reporting to diagnostics service.
  */
-class IDiagnosticsClient
-{
- public:
+class IDiagnosticsClient {
+  public:
     virtual ~IDiagnosticsClient() = default;
     /**
      *   Set 'invalid data from <ecu>' diagnostic condition.
@@ -22,12 +21,9 @@ class IDiagnosticsClient
      *   for ok and error status respectively.
      *   Also ok status may only be reported if error has not been reported already!
      */
-    virtual void SetInvalidData(const Message::Ecu ecu,
-                                const bool error) = 0;
+    virtual void SetInvalidData(const Message::Ecu ecu, const bool error) = 0;
 };
-
 
 }  // namespace
 
-#endif // IDIAGNOSTICS_CLIENT_H
-
+#endif  // IDIAGNOSTICS_CLIENT_H

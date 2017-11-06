@@ -13,13 +13,11 @@
 // directory
 #include "Mp_Router_crc.h"
 
-namespace vipcomm
-{
-void getFileCrc(uint16_t& com_arxml, uint16_t& swc_arxml, uint16_t& mprouter, uint16_t& notused)
-{
+namespace vipcomm {
+void getFileCrc(uint16_t& com_arxml, uint16_t& swc_arxml, uint16_t& mprouter, uint16_t& notused) {
     com_arxml = COM_CRC;
     swc_arxml = SWC_CRC;
-    mprouter  = MP_ROUTER_CRC;
-    notused   = 0; // not used anymore
+    mprouter = MP_ROUTER_CRC;
+    notused = 0;  // not used anymore
 }
 }

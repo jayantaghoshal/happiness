@@ -9,8 +9,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "mocks/cedric/mock_cedric_localconfig.h"
 #include "ipcommandbus/local_config_parameters.h"
+#include "mocks/cedric/mock_cedric_localconfig.h"
 
 using ::testing::_;
 using ::testing::NiceMock;
@@ -32,41 +32,28 @@ const int defaultTimeout = 5800;
 
 MockLocalconfig *g_mock_local_config = nullptr;
 
-class LocalconfigParametersFixture : public ::testing::Test
-{
+class LocalconfigParametersFixture : public ::testing::Test {
   public:
-    virtual void SetUp()
-    {
-        g_mock_local_config = new MockLocalconfig();
-    }
+    virtual void SetUp() { g_mock_local_config = new MockLocalconfig(); }
 
-    virtual void TearDown()
-    {
-        delete g_mock_local_config;
-    }
+    virtual void TearDown() { delete g_mock_local_config; }
 
   protected:
-    virtual void VerifyAndClear()
-    {
-    }
+    virtual void VerifyAndClear() {}
 };
 
-TEST_F(LocalconfigParametersFixture, construction_fault)
-{
-    EXPECT_CALL(*g_mock_local_config, init())
-        .WillOnce(Return(false));
+TEST_F(LocalconfigParametersFixture, construction_fault) {
+    EXPECT_CALL(*g_mock_local_config, init()).WillOnce(Return(false));
     LocalconfigParameters lcfg;
 }
 
-TEST_F(LocalconfigParametersFixture, construction_init_and_read)
-{
-    EXPECT_CALL(*g_mock_local_config, init())
-        .WillOnce(Return(true));
-    EXPECT_CALL(*g_mock_local_config, getValueInt(_))
-        .WillRepeatedly(Return(&testValue));
-    EXPECT_CALL(*g_mock_local_config, getValueInt("CONN_defaultTimeoutWFR"))
-        .WillRepeatedly(Return(&defaultTimeout));
+TEST_F(LocalconfigParametersFixture, construction_init_and_read) {
+    EXPECT_CALL(*g_mock_local_config, init()).WillOnce(Return(true));
+    EXPECT_CALL(*g_mock_local_config, getValueInt(_)).WillRepeatedly(Return(&testValue));
+    EXPECT_CALL(*g_mock_local_config, getValueInt("CONN_defaultTimeoutWFR")).WillRepeatedly(Return(&defaultTimeout));
     LocalconfigParameters lcfg;
-    EXPECT_EQ(std::chrono::milliseconds(5555), lcfg.getTimeout(VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANMode)));
-    EXPECT_EQ(std::chrono::milliseconds(5800), lcfg.getTimeout(VccIpCmd::CombinedId(VccIpCmd::ServiceId::Undefined, VccIpCmd::OperationId::Undefined)));
+    EXPECT_EQ(std::chrono::milliseconds(5555),
+              lcfg.getTimeout(VccIpCmd::CombinedId(VccIpCmd::ServiceId::WLAN, VccIpCmd::OperationId::WLANMode)));
+    EXPECT_EQ(std::chrono::milliseconds(5800),
+              lcfg.getTimeout(VccIpCmd::CombinedId(VccIpCmd::ServiceId::Undefined, VccIpCmd::OperationId::Undefined)));
 }

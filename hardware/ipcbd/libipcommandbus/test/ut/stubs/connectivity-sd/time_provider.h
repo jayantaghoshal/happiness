@@ -6,53 +6,47 @@
 #include <chrono>
 #include <functional>
 #include <memory>
-namespace Connectivity
-{
-class TimerSubscriptionHandle
-{
-public:
-    TimerSubscriptionHandle()                               = default;
-    virtual ~TimerSubscriptionHandle()                      = default;
+namespace Connectivity {
+class TimerSubscriptionHandle {
+  public:
+    TimerSubscriptionHandle() = default;
+    virtual ~TimerSubscriptionHandle() = default;
     TimerSubscriptionHandle(const TimerSubscriptionHandle&) = delete;
-    TimerSubscriptionHandle(TimerSubscriptionHandle&&)      = delete;
+    TimerSubscriptionHandle(TimerSubscriptionHandle&&) = delete;
     TimerSubscriptionHandle& operator=(const TimerSubscriptionHandle&) = delete;
     TimerSubscriptionHandle& operator=(TimerSubscriptionHandle&&) = delete;
 };
 
-class ITimeProvider
-{
+class ITimeProvider {
     class ProxyHandle;
 
-private:
-    class PeriodicTimerSubscriptionHandle : public TimerSubscriptionHandle
-    {
+  private:
+    class PeriodicTimerSubscriptionHandle : public TimerSubscriptionHandle {
         // This is a helper class to enable periodic_timer when the implementation only supports single shot timer
-    public:
+      public:
         const std::shared_ptr<ProxyHandle> handle;
         explicit PeriodicTimerSubscriptionHandle(std::shared_ptr<ProxyHandle> handle);
         virtual ~PeriodicTimerSubscriptionHandle();
     };
 
-    class ProxyHandle final : public std::enable_shared_from_this<ProxyHandle>
-    {
-    public:
-        explicit ProxyHandle(std::chrono::milliseconds interval,
-                             std::function<void()>     func,
-                             ITimeProvider&            timeProvider);
+    class ProxyHandle final : public std::enable_shared_from_this<ProxyHandle> {
+      public:
+        explicit ProxyHandle(std::chrono::milliseconds interval, std::function<void()> func,
+                             ITimeProvider& timeProvider);
         virtual ~ProxyHandle() = default;
         void executeAndRegisterNextPeriod();
 
-        const std::chrono::milliseconds          interval;
-        const std::function<void()>              func;
-        ITimeProvider&                           timeProvider;
+        const std::chrono::milliseconds interval;
+        const std::function<void()> func;
+        ITimeProvider& timeProvider;
         std::unique_ptr<TimerSubscriptionHandle> handle;
     };
 
-public:
-    ITimeProvider()                     = default;
-    virtual ~ITimeProvider()            = default;
+  public:
+    ITimeProvider() = default;
+    virtual ~ITimeProvider() = default;
     ITimeProvider(const ITimeProvider&) = delete;
-    ITimeProvider(ITimeProvider&&)      = delete;
+    ITimeProvider(ITimeProvider&&) = delete;
     ITimeProvider& operator=(const ITimeProvider&) = delete;
     ITimeProvider& operator=(ITimeProvider&&) = delete;
 
@@ -61,10 +55,9 @@ public:
     virtual std::chrono::system_clock::time_point system_clock_now() const = 0;
 
     virtual std::unique_ptr<TimerSubscriptionHandle> add_single_shot_timer(std::chrono::milliseconds time,
-                                                                           std::function<void()>     func)
-        = 0;
+                                                                           std::function<void()> func) = 0;
 
     virtual std::unique_ptr<TimerSubscriptionHandle> add_periodic_timer(std::chrono::milliseconds interval,
-                                                                        std::function<void()>     func);
+                                                                        std::function<void()> func);
 };
 }

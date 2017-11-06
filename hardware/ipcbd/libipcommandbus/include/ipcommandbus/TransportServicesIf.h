@@ -13,23 +13,20 @@
 #include "ipcommandbus/idiagnostics_client.h"
 #include "ipcommandbus/isocket.h"
 
-namespace Connectivity
-{
+namespace Connectivity {
 
 /**
  * Transport layer implementation of the IP command bus.
  */
-class ITransportServices
-{
-public:
+class ITransportServices {
+  public:
     virtual ~ITransportServices() = default;
 
     /**
      * Possible error codes that can be sent to/received from peer.
      * Note that the codes are ranked and a lower value have precedence over a higher one.
      */
-    enum ErrorCode
-    {
+    enum ErrorCode {
         NOT_OK = 0x00,  ///< Generic error
         INVALID_SERVICE_ID = 0x01,
         INVALID_OPERATION_ID = 0x02,
@@ -42,8 +39,7 @@ public:
         BUSY_ERROR = 0x09
     };
 
-    enum ErrorType
-    {
+    enum ErrorType {
         OK,
         REMOTE_ERROR,
         LOCAL_TIMEOUT,
@@ -57,7 +53,7 @@ public:
     *
     * @param[in] diagnostics                pointer to an IDiagnostics object
     */
-    virtual void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher* dispatcher) = 0;
+    virtual void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher *dispatcher) = 0;
 
     /**
      * Register a callback that will be called upon well formed incoming
@@ -94,7 +90,7 @@ public:
     /**
      * Sends a message to the default target (set in the assigned socket).
      *
-     * @param[in] msg                       Message to send. TransportServices takes ownership of the message.     
+     * @param[in] msg                       Message to send. TransportServices takes ownership of the message.
      */
     virtual void sendMessage(Message &&msg) = 0;
 

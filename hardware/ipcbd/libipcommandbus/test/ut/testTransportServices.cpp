@@ -29,11 +29,9 @@ using ::testing::InSequence;
 using namespace Connectivity;
 using namespace VccIpCmd;
 
-class TransportServicesFixture : public ::testing::Test
-{
-public:
-    TransportServicesFixture() : transport{timeProvider, toIpcbThreadDispatcher, Message::Ecu::IHU}
-    {
+class TransportServicesFixture : public ::testing::Test {
+  public:
+    TransportServicesFixture() : transport{timeProvider, toIpcbThreadDispatcher, Message::Ecu::IHU} {
         // Fetch the callback
         EXPECT_CALL(sock, registerReadReadyCb(_)).WillOnce(SaveArg<0>(&readyReadCb));
 
@@ -42,46 +40,34 @@ public:
         transport.setDiagnostics(&diagnostics, &toAppthreadDispatcher);
     }
 
-public:
+  public:
     /**
      * Pass-through methods for private members of
      * class Connectivity::TransportServices.
      */
-    void messageTimeout(TrackMessage &tm)
-    {
+    void messageTimeout(TrackMessage &tm) {
         (void)tm;
         timeProvider.sleep_for(std::chrono::milliseconds(800));
     }
 
-public:
+  public:
     /**
      * Accessor methods for private and protected members
      * of class Connectivity::TransportServices.
      */
-    uint8_t getProtocolVersion()
-    {
-        return transport.PROTOCOL_VERSION;
-    }
+    uint8_t getProtocolVersion() { return transport.PROTOCOL_VERSION; }
 
-    void setRetry(int value, TrackMessage &tm)
-    {
-        tm.wfr.retry_ = value;
-    }
+    void setRetry(int value, TrackMessage &tm) { tm.wfr.retry_ = value; }
 
-    void setMaxRetries(int value, TrackMessage &tm)
-    {
-        tm.wfr.maxRetries_ = value;
-    }
+    void setMaxRetries(int value, TrackMessage &tm) { tm.wfr.maxRetries_ = value; }
 
-protected:
-    void verifyAndClear(void)
-    {
+  protected:
+    void verifyAndClear(void) {
         Mock::VerifyAndClearExpectations(&sock);
         Mock::VerifyAndClearExpectations(&diagnostics);
     }
 
-    void getResponseSendAck(const Message &msg)
-    {
+    void getResponseSendAck(const Message &msg) {
         std::vector<uint8_t> respData, expectData;
         Connectivity::Pdu respPdu, ackPdu;
         respPdu.header = msg.pdu.header;
@@ -169,13 +155,10 @@ protected:
                                              0x00,
                                              0x00};
 
-    Connectivity::Message createMsg(VccIpCmd::ServiceId srvId,
-                                    VccIpCmd::OperationId opId,
-                                    VccIpCmd::OperationType opType,
-                                    uint8_t seqNr,
+    Connectivity::Message createMsg(VccIpCmd::ServiceId srvId, VccIpCmd::OperationId opId,
+                                    VccIpCmd::OperationType opType, uint8_t seqNr,
                                     std::vector<uint8_t> &&data = std::vector<uint8_t>(),
-                                    VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED)
-    {
+                                    VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED) {
         Pdu pdu;
         pdu.createHeader(srvId, opId, opType, dataType, seqNr);
         pdu.setPayload(std::move(data));
@@ -185,8 +168,7 @@ protected:
     }
 };
 
-MATCHER_P(LambdaMatcher, func, "")
-{
+MATCHER_P(LambdaMatcher, func, "") {
     bool ret = false;
     *result_listener << func(arg, ret);
     return ret;
@@ -197,8 +179,7 @@ MATCHER_P(LambdaMatcher, func, "")
  * Expect:
  *      Set callback upon provided socket is called.
  */
-TEST_F(TransportServicesFixture, ReadCallbackAssignment)
-{
+TEST_F(TransportServicesFixture, ReadCallbackAssignment) {
     auto pSock = std::make_shared<NiceMock<MockUdpSocket> >();
 
     std::function<void(void)> readyReadCb;
@@ -214,10 +195,9 @@ TEST_F(TransportServicesFixture, ReadCallbackAssignment)
  *      1. Shall send data on socket
  *      2. After receiving an ACK and a response an ack shall be sent
  */
-TEST_F(TransportServicesFixture, SendRequest_Success)
-{
+TEST_F(TransportServicesFixture, SendRequest_Success) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = 2;
     Connectivity::Message respAndAck;
@@ -256,11 +236,10 @@ TEST_F(TransportServicesFixture, SendRequest_Success)
  *      3. Shall resend data on socket
  *      4. After receiving second ACK a response and ACK shall be sent
  */
-TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout)
-{
+TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout) {
     // Create request message
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = 2;
     Connectivity::Message respAndAck(std::move(msg.pdu));
@@ -297,11 +276,10 @@ TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout)
  *      4. Repeat from 1 default number of times.
  *      5. Report error to higher layers.
  */
-TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout_No_Resends)
-{
+TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout_No_Resends) {
     // Create request message
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     // NOTE: Exact number just for testing purposes
     const uint32_t MAX_RETRIES = 7;
@@ -327,8 +305,7 @@ TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout_No_Resends)
     this->verifyAndClear();
 
     uint32_t timeout_ms = 510;
-    for (uint32_t i = 0; i < MAX_RETRIES; ++i)
-    {
+    for (uint32_t i = 0; i < MAX_RETRIES; ++i) {
         // 2. The ACK will time out
         // 3. Resend of message
         EXPECT_CALL(sock, writeTo(requestData_, _));
@@ -356,11 +333,10 @@ TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout_No_Resends)
  *      4. Response timeout, resend data on socket: Ack timeout shall now be reset
  *      5. Receive ACK, response timeout shall now be increased
  */
-TEST_F(TransportServicesFixture, SendRequest_Resp_Timeout_Reset_Ack)
-{
+TEST_F(TransportServicesFixture, SendRequest_Resp_Timeout_Reset_Ack) {
     // Create request message
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
 
     // 1. Send the request
@@ -395,10 +371,9 @@ TEST_F(TransportServicesFixture, SendRequest_Resp_Timeout_Reset_Ack)
  *      1. Shall send data on socket
  *      2. After receiving an ACK and a response an ack shall be sent
  */
-TEST_F(TransportServicesFixture, SendRequest_NewRequestOnResponse)
-{
+TEST_F(TransportServicesFixture, SendRequest_NewRequestOnResponse) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
 
     // 1. send request
@@ -447,7 +422,7 @@ TEST_F(TransportServicesFixture, SendRequest_NewRequestOnResponse)
     transport.registerIncomingResponseCallback([&](Connectivity::Message &m) {
         (void)(m);
         Connectivity::Message msg2 =
-            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xBB);
+                createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xBB);
         msg2.ecu = Message::VCM;
 
         transport.sendMessage(std::move(msg2));
@@ -463,10 +438,9 @@ TEST_F(TransportServicesFixture, SendRequest_NewRequestOnResponse)
  *      1. Send request
  *      2. Response is ERROR
  */
-TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfAck)
-{
+TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfAck) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = 2;
 
@@ -519,10 +493,9 @@ TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfAck)
  *      2. Receive ACK
  *      3. Receive ERROR instead of response
  */
-TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfResponse)
-{
+TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfResponse) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = 2;
 
@@ -578,10 +551,9 @@ TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfResponse)
  *      1. Send request
  *      2. Response is busy (ERROR)
  */
-TEST_F(TransportServicesFixture, SendRequest_BusyError)
-{
+TEST_F(TransportServicesFixture, SendRequest_BusyError) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = 2;
 
@@ -638,8 +610,7 @@ TEST_F(TransportServicesFixture, SendRequest_BusyError)
  *      6. ACK already sent, so transport will not send it again..
  *      7. Receive response ACK
  */
-TEST_F(TransportServicesFixture, IncomingRequestImmResp_Success)
-{
+TEST_F(TransportServicesFixture, IncomingRequestImmResp_Success) {
     // Register a request function that immediately sends a response
     transport.registerIncomingRequestCallback([&](Connectivity::Message &m) {
         Connectivity::Message msg;
@@ -683,8 +654,7 @@ TEST_F(TransportServicesFixture, IncomingRequestImmResp_Success)
  *      4. Response is sent
  *      5. Receive response ACK
  */
-TEST_F(TransportServicesFixture, IncomingRequestDelayedResp_Success)
-{
+TEST_F(TransportServicesFixture, IncomingRequestDelayedResp_Success) {
     Pdu requestPdu;
     // Register a request function that immediately sends a response
     transport.registerIncomingRequestCallback([&requestPdu](Connectivity::Message &m) {
@@ -728,8 +698,7 @@ TEST_F(TransportServicesFixture, IncomingRequestDelayedResp_Success)
  *      2. Send error message from request callback
  *      3. Request callback return false, indicating that request is not supported.
  */
-TEST_F(TransportServicesFixture, IncomingRequest_NotSupported)
-{
+TEST_F(TransportServicesFixture, IncomingRequest_NotSupported) {
     // Register a request function that immediately sends a response
     transport.registerIncomingRequestCallback([&](Connectivity::Message &m) {
         Connectivity::Message msg;
@@ -781,15 +750,13 @@ TEST_F(TransportServicesFixture, IncomingRequest_NotSupported)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestHandleInData_ReadError)
-{
+TEST_F(TransportServicesFixture, TestHandleInData_ReadError) {
     EXPECT_CALL(sock, read(_, _));
 
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestHandleInData_BufferTooSmall)
-{
+TEST_F(TransportServicesFixture, TestHandleInData_BufferTooSmall) {
     std::vector<uint8_t> readData = {0, 0, 0};
 
     EXPECT_CALL(sock, read(_, _)).WillOnce(DoAll(SetArgReferee<0>(readData), SetArgReferee<1>(Message::VCM)));
@@ -797,8 +764,7 @@ TEST_F(TransportServicesFixture, TestHandleInData_BufferTooSmall)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestHandleInData_HeaderSanityChecks)
-{
+TEST_F(TransportServicesFixture, TestHandleInData_HeaderSanityChecks) {
     std::vector<uint8_t> readData;
 
     // Create a PDU inside the read buffer
@@ -846,16 +812,15 @@ TEST_F(TransportServicesFixture, TestHandleInData_HeaderSanityChecks)
     //    readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Setrequest_Noreturn)
-{
+TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Setrequest_Noreturn) {
     std::vector<uint8_t> readData;
 
     // Create a PDU inside the read buffer
     Pdu pdu;
 
     // Wrong sender_handle_id
-    pdu.createHeader(
-        ServiceId::Connectivity, OperationId::LocalStorage, OperationType::SETREQUEST_NORETURN, DataType::ENCODED, 1);
+    pdu.createHeader(ServiceId::Connectivity, OperationId::LocalStorage, OperationType::SETREQUEST_NORETURN,
+                     DataType::ENCODED, 1);
     pdu.header.protocol_version = getProtocolVersion();
     pdu.toData(readData);
 
@@ -882,16 +847,15 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Setrequest_Noreturn)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Notification)
-{
+TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Notification) {
     std::vector<uint8_t> readData;
 
     // Create a PDU inside the read buffer
     Pdu pdu;
 
     // Wrong sender_handle_id
-    pdu.createHeader(
-        ServiceId::Connectivity, OperationId::LocalStorage, OperationType::NOTIFICATION, DataType::ENCODED, 1);
+    pdu.createHeader(ServiceId::Connectivity, OperationId::LocalStorage, OperationType::NOTIFICATION, DataType::ENCODED,
+                     1);
     pdu.header.protocol_version = getProtocolVersion();
     pdu.toData(readData);
 
@@ -915,16 +879,15 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Notification)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Invalid_operation_type)
-{
+TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Invalid_operation_type) {
     std::vector<uint8_t> readData;
 
     // Create a PDU inside the read buffer
     Pdu pdu;
 
     // Wrong sender_handle_id
-    pdu.createHeader(
-        ServiceId::Connectivity, OperationId::LocalStorage, OperationType::UNDEFINED, DataType::ENCODED, 1);
+    pdu.createHeader(ServiceId::Connectivity, OperationId::LocalStorage, OperationType::UNDEFINED, DataType::ENCODED,
+                     1);
     pdu.header.protocol_version = getProtocolVersion();
     pdu.toData(readData);
 
@@ -940,8 +903,7 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Invalid_operation_type)
  * Test that ack is not sent on receiving error pdu
  */
 
-TEST_F(TransportServicesFixture, TestprocessIncomingPdu_error_handle_no_ack)
-{
+TEST_F(TransportServicesFixture, TestprocessIncomingPdu_error_handle_no_ack) {
     std::vector<uint8_t> readData;
     // Create a PDU inside the read buffer
     Pdu pdu;
@@ -956,8 +918,7 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_error_handle_no_ack)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TesthandleIncomingAck_no_matching_message)
-{
+TEST_F(TransportServicesFixture, TesthandleIncomingAck_no_matching_message) {
     std::vector<uint8_t> readData;
 
     // Create a PDU inside the read buffer
@@ -972,10 +933,9 @@ TEST_F(TransportServicesFixture, TesthandleIncomingAck_no_matching_message)
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, TesthandleIncomingAck_set_request_no_return)
-{
-    Connectivity::Message msg = createMsg(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::SETREQUEST_NORETURN, 0xAA);
+TEST_F(TransportServicesFixture, TesthandleIncomingAck_set_request_no_return) {
+    Connectivity::Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                          OperationType::SETREQUEST_NORETURN, 0xAA);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = getProtocolVersion();
 
@@ -998,10 +958,9 @@ TEST_F(TransportServicesFixture, TesthandleIncomingAck_set_request_no_return)
 /**
  * Test handleIncomingAck with NOTIFICATION
  */
-TEST_F(TransportServicesFixture, TesthandleIncomingAck_notification)
-{
+TEST_F(TransportServicesFixture, TesthandleIncomingAck_notification) {
     Connectivity::Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::NOTIFICATION, 0xAB);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::NOTIFICATION, 0xAB);
     msg.ecu = Message::VCM;
     msg.pdu.header.protocol_version = getProtocolVersion();
 
@@ -1024,8 +983,7 @@ TEST_F(TransportServicesFixture, TesthandleIncomingAck_notification)
 /**
  * Test SendRequest with notification.
  */
-TEST_F(TransportServicesFixture, Test_SendRequest_Notification)
-{
+TEST_F(TransportServicesFixture, Test_SendRequest_Notification) {
     Pdu notificationPdu;
     Connectivity::Message msg;
     msg.ecu = Message::VCM;
@@ -1038,8 +996,7 @@ TEST_F(TransportServicesFixture, Test_SendRequest_Notification)
 /**
  * Test SendRequest with an undefined operation type
  */
-TEST_F(TransportServicesFixture, test_SendRequest_Undefined)
-{
+TEST_F(TransportServicesFixture, test_SendRequest_Undefined) {
     Pdu notificationPdu;
     Connectivity::Message msg;
     msg.ecu = Message::VCM;
@@ -1055,8 +1012,7 @@ TEST_F(TransportServicesFixture, test_SendRequest_Undefined)
 /**
  * Test ErrorTypeToCString
  */
-TEST_F(TransportServicesFixture, TestErrorTypeToCString)
-{
+TEST_F(TransportServicesFixture, TestErrorTypeToCString) {
     EXPECT_STREQ("OK", transport.ErrorTypeToCString(TransportServices::ErrorType::OK));
     EXPECT_STREQ("REMOTE_ERROR", transport.ErrorTypeToCString(TransportServices::ErrorType::REMOTE_ERROR));
     EXPECT_STREQ("LOCAL_TIMEOUT", transport.ErrorTypeToCString(TransportServices::ErrorType::LOCAL_TIMEOUT));
@@ -1068,16 +1024,14 @@ TEST_F(TransportServicesFixture, TestErrorTypeToCString)
 /**
  * Test MessageTimeout in different ways
  */
-TEST_F(TransportServicesFixture, TestmessageTimeout)
-{
+TEST_F(TransportServicesFixture, TestmessageTimeout) {
     // TODO: Rewrite this test without exposing internals
 }
 
 /**
  * Test invalid pdu length in Pdu::fromData
  */
-TEST_F(TransportServicesFixture, TestPdu_from_data_invalid_pdu_length)
-{
+TEST_F(TransportServicesFixture, TestPdu_from_data_invalid_pdu_length) {
     std::vector<uint8_t> data;
     Pdu pdu;
 
@@ -1088,48 +1042,45 @@ TEST_F(TransportServicesFixture, TestPdu_from_data_invalid_pdu_length)
     EXPECT_EQ(pdu.fromData(data), false);
 }
 
-TEST_F(TransportServicesFixture, ServiceIDUnknown)
-{
-    const std::vector<uint8_t> invalid_service_id_data = {
-        0x12, 0x34, 0x03, 0x08, 0, 0, 0, 0x09, 0x34, 0x08, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
+TEST_F(TransportServicesFixture, ServiceIDUnknown) {
+    const std::vector<uint8_t> invalid_service_id_data = {0x12, 0x34, 0x03, 0x08, 0,    0, 0, 0x09, 0x34,
+                                                          0x08, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
 
-    const std::vector<uint8_t> error_data = {
-        0x12, 0x34, 0x03, 0x08, 0, 0, 0, 0x0b, 0x34, 0x08, 0x02, 0x7d, 0x02, 0xe0, 0, 0, 0x88, 0x91, 0xa0};
+    const std::vector<uint8_t> error_data = {0x12, 0x34, 0x03, 0x08, 0, 0, 0,    0x0b, 0x34, 0x08,
+                                             0x02, 0x7d, 0x02, 0xe0, 0, 0, 0x88, 0x91, 0xa0};
 
     EXPECT_CALL(sock, read(_, _))
-        .WillOnce(DoAll(SetArgReferee<0>(invalid_service_id_data), SetArgReferee<1>(Message::VCM)));
+            .WillOnce(DoAll(SetArgReferee<0>(invalid_service_id_data), SetArgReferee<1>(Message::VCM)));
 
     EXPECT_CALL(sock, writeTo(error_data, Message::VCM));
 
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, SenderHandleIDDoesNotMatchLowerServiceIDByte)
-{
-    const std::vector<uint8_t> invalid_sender_handle_id_data = {
-        0, 0xa3, 0x03, 0x08, 0, 0, 0, 0x09, 0xb4, 0x08, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
+TEST_F(TransportServicesFixture, SenderHandleIDDoesNotMatchLowerServiceIDByte) {
+    const std::vector<uint8_t> invalid_sender_handle_id_data = {0,    0xa3, 0x03, 0x08, 0,    0, 0, 0x09, 0xb4,
+                                                                0x08, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
 
-    const std::vector<uint8_t> error_data = {
-        0, 0xa3, 0x03, 0x08, 0, 0, 0, 0x09, 0xb4, 0x08, 0x02, 0x7d, 0x02, 0xe0, 0, 0, 0};
+    const std::vector<uint8_t> error_data = {0,    0xa3, 0x03, 0x08, 0,    0, 0, 0x09, 0xb4,
+                                             0x08, 0x02, 0x7d, 0x02, 0xe0, 0, 0, 0};
 
     EXPECT_CALL(sock, read(_, _))
-        .WillOnce(DoAll(SetArgReferee<0>(invalid_sender_handle_id_data), SetArgReferee<1>(Message::VCM)));
+            .WillOnce(DoAll(SetArgReferee<0>(invalid_sender_handle_id_data), SetArgReferee<1>(Message::VCM)));
 
     EXPECT_CALL(sock, writeTo(error_data, Message::VCM));
 
     readyReadCb();
 }
 
-TEST_F(TransportServicesFixture, SenderHandleIDDoesNotMatchLowerOperationIDByte)
-{
-    const std::vector<uint8_t> invalid_sender_handle_id_data = {
-        0, 0xa3, 0x03, 0x08, 0, 0, 0, 0x09, 0xa3, 0x09, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
+TEST_F(TransportServicesFixture, SenderHandleIDDoesNotMatchLowerOperationIDByte) {
+    const std::vector<uint8_t> invalid_sender_handle_id_data = {0,    0xa3, 0x03, 0x08, 0,    0, 0, 0x09, 0xa3,
+                                                                0x09, 0x02, 0x7d, 0x02, 0x02, 0, 0, 0};
 
-    const std::vector<uint8_t> error_data = {
-        0, 0xa3, 0x03, 0x08, 0, 0, 0, 0x09, 0xa3, 0x09, 0x02, 0x7d, 0x02, 0xe0, 0, 0, 0};
+    const std::vector<uint8_t> error_data = {0,    0xa3, 0x03, 0x08, 0,    0, 0, 0x09, 0xa3,
+                                             0x09, 0x02, 0x7d, 0x02, 0xe0, 0, 0, 0};
 
     EXPECT_CALL(sock, read(_, _))
-        .WillOnce(DoAll(SetArgReferee<0>(invalid_sender_handle_id_data), SetArgReferee<1>(Message::VCM)));
+            .WillOnce(DoAll(SetArgReferee<0>(invalid_sender_handle_id_data), SetArgReferee<1>(Message::VCM)));
 
     EXPECT_CALL(sock, writeTo(error_data, Message::VCM));
 

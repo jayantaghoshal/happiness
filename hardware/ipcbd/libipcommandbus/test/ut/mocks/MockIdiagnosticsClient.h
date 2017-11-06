@@ -11,9 +11,8 @@
 
 using namespace Connectivity;
 
-class MockIDiagnosticsClient : public IDiagnosticsClient
-{
-public:
+class MockIDiagnosticsClient : public IDiagnosticsClient {
+  public:
     MOCK_METHOD2(SetInvalidData, void(const Message::Ecu ecu, const bool error));
 };
 

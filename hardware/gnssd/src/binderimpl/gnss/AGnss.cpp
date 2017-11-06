@@ -14,30 +14,27 @@ Return<void> AGnss::setCallback(const sp<IAGnssCallback>& callback) {
 
 Return<bool> AGnss::dataConnClosed() {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<bool> AGnss::dataConnFailed() {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<bool> AGnss::setServer(IAGnssCallback::AGnssType type, const hidl_string& hostname, int32_t port) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
 
 Return<bool> AGnss::dataConnOpen(const hidl_string& apn, IAGnss::ApnIpType apnIpType) {
     // TODO implement
-    return bool {};
+    return bool{};
 }
-
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnss* HIDL_FETCH_IAGnss(const char* /* name */) {
-    return new AGnss();
-}
+IAGnss* HIDL_FETCH_IAGnss(const char* /* name */) { return new AGnss(); }
 
 }  // namespace implementation
 }  // namespace V1_0

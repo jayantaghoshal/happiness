@@ -28,7 +28,7 @@ cc_test {
 
     static_libs: [
         "libgmock",
-        "libipcb_simulator_static"
+        "libipcb_simulator_static",
     ],
 
     // Tag this module as a vts test artifact

@@ -7,7 +7,8 @@ cc_binary {
         "carsim_bridge.cpp",
         "socket_server.cpp",
         "socket_connection.cpp",
-        "hidl_handler.cpp", ],
+        "hidl_handler.cpp",
+    ],
 
     cppflags: [
         "-fexceptions",

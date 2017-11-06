@@ -7,9 +7,10 @@ namespace V1_0 {
 namespace implementation {
 
 // Methods from ::android::hardware::gnss::V1_0::IGnssMeasurement follow.
-Return<IGnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback(const sp<IGnssMeasurementCallback>& callback) {
+Return<IGnssMeasurement::GnssMeasurementStatus> GnssMeasurement::setCallback(
+        const sp<IGnssMeasurementCallback>& callback) {
     // TODO implement
-    return ::android::hardware::gnss::V1_0::IGnssMeasurement::GnssMeasurementStatus {};
+    return ::android::hardware::gnss::V1_0::IGnssMeasurement::GnssMeasurementStatus{};
 }
 
 Return<void> GnssMeasurement::close() {
@@ -17,12 +18,9 @@ Return<void> GnssMeasurement::close() {
     return Void();
 }
 
-
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssMeasurement* HIDL_FETCH_IGnssMeasurement(const char* /* name */) {
-    return new GnssMeasurement();
-}
+IGnssMeasurement* HIDL_FETCH_IGnssMeasurement(const char* /* name */) { return new GnssMeasurement(); }
 
 }  // namespace implementation
 }  // namespace V1_0

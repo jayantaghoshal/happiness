@@ -29,7 +29,6 @@ struct GnssXtra : public IGnssXtra {
     Return<bool> injectXtraData(const hidl_string& xtraData) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssXtra* HIDL_FETCH_IGnssXtra(const char* name);
