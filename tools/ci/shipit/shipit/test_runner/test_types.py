@@ -7,6 +7,7 @@ class Capabilities:
     adb         = "adb"
     mp_serial   = "mp-serial"
     vip_serial  = "vip-serial"
+    audio       = "audio"
 
 standard_caps = {
     Capabilities.ihu_generic,

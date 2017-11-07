@@ -118,6 +118,25 @@
                 - bootstrap_ihu_hourly_test_flexray.sh            
 
 - job:
+    name: ihu_hourly_test_audio
+    defaults: time_job_defaults
+    node: rack-rig-audio
+    triggers:
+        - reverse:
+            jobs: 'ihu_image_build'
+            result: 'success'
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_image_build
+            description: Image build job
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_hourly_test_audio.sh
+
+- job:
     name: ihu_daily_test
     defaults: time_job_defaults
     node: rack-rig
