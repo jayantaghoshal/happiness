@@ -34,8 +34,7 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 def run_test(test: IhuBaseTest):
     if isinstance(test, VTSTest):
         print(test)
-        module_name = vts_test_run.read_module_name(pathjoin(aosp_root, test.test_xml_path, "AndroidTest.xml"))
-        vts_test_run.vts_tradefed_run_module(module_name)
+        vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_xml_path))
     elif isinstance(test, TradefedTest):
         print(test)
         tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
