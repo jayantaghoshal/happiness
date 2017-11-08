@@ -50,3 +50,5 @@ redis-cli set icup_android.jenkins.ihu_image_build."${BUILD_NUMBER}".commit "${G
 
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins.ihu_image_build.latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
+
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_image_build "${BUILD_NUMBER}" pass

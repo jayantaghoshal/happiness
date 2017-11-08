@@ -10,6 +10,10 @@ class Error(Exception):
     pass
 
 
+#
+# NOTE: Avoid extending this class too much, prefer using libgit2 instead
+#
+
 class Repo:
     def __init__(self, path: str) -> None:
         self.path = os.path.abspath(path)
@@ -99,3 +103,6 @@ class Repo:
                         .format(' '.join(args), result.exitcode, error_msg.decode()))
 
         return result
+
+    def run_git(self, git_args: List[str]) -> str:
+        return self._run_git(git_args).stdout_str

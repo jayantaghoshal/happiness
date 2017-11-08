@@ -37,10 +37,13 @@ artifactory push ihu_hourly_test "${BUILD_NUMBER}" ./out/host/linux-x86/vts/andr
 
 echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory/webapp/#/artifacts/browse/tree/General/ICUP_ANDROID_CI/ihu_hourly_test/${BUILD_NUMBER}"
 
+
 # Check status
 if [ $status -eq 0 ]; then
     # Mark image as LSV if hourly passed
+    time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_hourly_test "${BUILD_NUMBER}" pass
     redis-cli set icup_android.jenkins.ihu_image_build.lsv.job_number "${UPSTREAM_JOB_NUMBER}"
 else
+    time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_hourly_test "${BUILD_NUMBER}" fail
     die "Test failed"
 fi
