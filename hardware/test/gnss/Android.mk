@@ -1,10 +1,9 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := localconfig
+LOCAL_MODULE := localconfig_test_gnss
 LOCAL_SRC_FILES := localconfig.json
 LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_SUFFIX := .json
 LOCAL_MULTILIB := 64
 LOCAL_COMPATIBILITY_SUITE := vts
 include $(BUILD_PREBUILT)

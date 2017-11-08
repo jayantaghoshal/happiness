@@ -20,7 +20,7 @@ This tests verifies iplmd
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
         <option name="push" value="VtsIplmdTestCases->/data/local/tmp/VtsIplmdTestCases" />
-        <option name="push" value="localconfig.json->/data/local/tmp/localconfig.json" />
+        <option name="push" value="localconfig_test_iplm->/data/local/tmp/localconfig.json" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />

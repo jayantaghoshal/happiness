@@ -55,6 +55,7 @@ test_plan_hourly = [
     ),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
+    VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                          standard_caps),
     VTSTest("vendor/volvocars/hardware/test/iplm",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),

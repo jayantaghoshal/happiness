@@ -13,15 +13,18 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<configuration description="Config for VCC Local Config test cases">
+<!--
+This tests verifies ipcbd
+-->
+<configuration description="Config for ipcbd component test">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsGnssIntegrationTest->/data/local/tmp/VtsGnssIntegrationTest" />
-        <option name="push" value="localconfig_test_gnss->/data/local/tmp/localconfig.json" />
+        <option name="push" value="VtsIpcbdComponentTest->/data/local/tmp/VtsIpcbdComponentTest" />
+        <option name="push" value="localconfig_ipcbd_test_ct->/data/local/tmp/localconfig.json" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsGnssIntegrationTest" />
+        <option name="module-name" value="VtsIpcbdComponentTest" />
         <option name="native-test-flag" value="--no-isolate" />
         <option name="runtime-hint" value="5000ms" />
     </test>
