@@ -4,9 +4,11 @@ set -x
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
+
+"${SCRIPT_DIR}/hourly_test_common.sh"
+
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
-"${SCRIPT_DIR}/hourly_test_common.sh"
 
 # Get properties
 adb shell getprop
