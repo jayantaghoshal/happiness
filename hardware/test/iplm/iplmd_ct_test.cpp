@@ -3,59 +3,160 @@
 #include <ipcb_simulator.h>
 #include <signal.h>
 #include <sys/types.h>
+#include <fstream>
 #include <future>
 #include <iomanip>
 #include <iostream>
 #include <memory>
 #include <thread>
+
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
+
 #include "gtest/gtest.h"
 #include "src/LscMocker.h"
 
 #define LOG_TAG "iplm_daemon_test"
 
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
+
+using ::vendor::volvocars::hardware::iplm::V1_0::IIplm;
 using ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback;
 using ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroup;
 using ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupStatus;
 
-static int pid;
+static int new_ipcb_pid = -1;
+static int new_iplm_pid = -1;
+
+static bool setup_test_case_successful = false;
 
 class IplmTestFixture : public ::testing::Test {
   protected:
     IplmTestFixture() {}
 
-    void SetUp() {
-        lscMocker = new LscMocker();
-        onNodeStatusCallbackCounter = 0;
-        onResourceGroupStatusCallbackCounter = 0;
-    }
-
     static void SetUpTestCase() {
         ALOGD("+ SetUpTestCase ");
 
-        // run a process and create a streambuf that reads its stdout and stderr
-        std::string pid_str = getCmdOut(
+        // Expected that all tests would be aborted here, but that is not the case.
+        // For now, abort all tests manually
+        ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
+
+        // Kill conflicting IpcbD
+        int ipcb_pid = getProcIdByName("/vendor/bin/hw/ipcbd iplm UDPB");
+        if (-1 != ipcb_pid) {
+            kill(ipcb_pid, SIGTERM);
+        }
+
+        // Kill conflicting IplmD
+        int iplm_pid = getProcIdByName("/vendor/bin/hw/iplmd");
+        if (-1 != iplm_pid) {
+            kill(iplm_pid, SIGTERM);
+        }
+
+        // Start IpcbD for test with mocked localconfig
+        std::string new_ipcb_pid_str = getCmdOut(
                 "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /system/bin/ip netns exec vcc "
-                "/vendor/bin/hw/ipcbd iplm "
-                "UDPB & echo $!");
+                "/vendor/bin/hw/ipcbd iplm UDPB "
+                "& echo $!");
 
         std::string::size_type sz;  // alias of size_t
-        pid = std::stoi(pid_str, &sz);
+        new_ipcb_pid = std::stoi(new_ipcb_pid_str, &sz);
 
-        ALOGD("\n Process int id: %d \n", pid);
+        // Wait for service to start
+        uint8_t count = 0;
+        while (NULL == IVehicleCom::getService("iplm").get()) {
+            usleep(100000);
 
+            if (!processExists(new_ipcb_pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        // Start IpcbD for test with mocked localconfig
+        std::string new_iplm_pid_str = getCmdOut("/vendor/bin/hw/iplmd & echo $!");
+
+        new_iplm_pid = std::stoi(new_iplm_pid_str, &sz);
+
+        // Wait for service to start
+        count = 0;
+        while (NULL == IIplm::getService().get()) {
+            usleep(100000);
+
+            if (!processExists(new_iplm_pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        // Move test case into namespace for network mocks to work
         int fileDescriptor;
         std::string nameSpace = "/var/run/netns/vcc";
 
         fileDescriptor = open(nameSpace.c_str(), O_RDONLY);
         if (fileDescriptor > 0) {
-            if (setns(fileDescriptor, CLONE_NEWNET))
-                ALOGE("Set NS failed!");
-            else
+            if (setns(fileDescriptor, CLONE_NEWNET)) {
+                ASSERT_TRUE(false) << "Set NS failed!";
+            } else {
                 ALOGD("+ SetUpTestCase - Namespace is: %s", nameSpace.c_str());
-        } else
-            ALOGE("Open NS filedescriptor failed!");
+            }
+        } else {
+            ASSERT_TRUE(false) << "Open NS filedescriptor failed!";
+        }
+
+        setup_test_case_successful = true;
 
         ALOGD("- SetUpTestCase ");
+    }
+
+    static bool processExists(int pid) {
+        // Calling kill with signal 0 will just return 0 if prcess is running
+        return (0 == kill(pid, 0));
+    }
+
+    static bool fileExists(const std::string& name) {
+        if (FILE* file = fopen(name.c_str(), "r")) {
+            fclose(file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static int getProcIdByName(std::string procName) {
+        int pid = -1;
+
+        // Open the /proc directory
+        DIR* dp = opendir("/proc");
+        if (dp != NULL) {
+            // Enumerate all entries in directory until process found
+            struct dirent* dirp;
+            while (pid < 0 && (dirp = readdir(dp))) {
+                // Skip non-numeric entries
+                int id = atoi(dirp->d_name);
+                if (id > 0) {
+                    // Read contents of virtual /proc/{pid}/cmdline file
+                    std::string cmdPath = std::string("/proc/") + dirp->d_name + "/cmdline";
+                    std::ifstream cmdFile(cmdPath.c_str());
+                    std::string cmdLine;
+                    getline(cmdFile, cmdLine);
+                    replace(cmdLine.begin(), cmdLine.end(), '\0', ' ');
+                    if (!cmdLine.empty()) {
+                        cmdLine.erase(cmdLine.end() - 1);  // Remove the last character
+                        if (procName == cmdLine) pid = id;
+                    }
+                }
+            }
+        }
+
+        closedir(dp);
+
+        return pid;
     }
 
     static std::string getCmdOut(const char* cmd) {
@@ -75,8 +176,35 @@ class IplmTestFixture : public ::testing::Test {
     }
 
     static void TearDownTestCase() {
-        int result = kill(pid, SIGTERM);
-        ALOGD("- TearDownTestCase: %d \n", result);
+        ALOGD("+ TearDownTestCase");
+
+        // Clean up, kill started processes
+        if (-1 != new_ipcb_pid) {
+            kill(new_ipcb_pid, SIGTERM);
+        }
+
+        if (-1 != new_iplm_pid) {
+            kill(new_iplm_pid, SIGTERM);
+        }
+
+        ALOGD("- TearDownTestCase");
+    }
+
+    void SetUp() {
+        ALOGD("+ SetUp ");
+
+        lscMocker = new LscMocker();
+        onNodeStatusCallbackCounter = 0;
+        onResourceGroupStatusCallbackCounter = 0;
+
+        // Make sure Test Case Setup was executed correctly
+        ASSERT_TRUE(setup_test_case_successful) << "Setup Test Case failed, failing test";
+
+        // Make sure IpcbD is still running
+        ASSERT_TRUE(processExists(new_ipcb_pid)) << "IpcbD is not running anymore, did it crash?";
+
+        // Make sure IplmD is still running
+        ASSERT_TRUE(processExists(new_iplm_pid)) << "IplmD is not running anymore, did it crash?";
     }
 
     void TearDown() {
