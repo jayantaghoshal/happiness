@@ -30,7 +30,7 @@ class UdsDataCollector : public IUdsDataCollector,
     Return<bool> registerProvider(const sp<IUdsDataProvider>& provider,
                                   const hidl_vec<uint16_t>& supported_dids) override;
 
-    Return<void> unregisterProvider(const sp<IUdsDataProvider>& provider) override;
+    Return<bool> unregisterProvider(const sp<IUdsDataProvider>& provider) override;
 
     // IUdsDataProvider
     Return<void> readDidValue(uint16_t did, readDidValue_cb _hidl_cb) override;
@@ -55,7 +55,7 @@ class UdsDataCollector : public IUdsDataCollector,
     std::mutex providers_mtx_;
 
     std::set<ProviderDecl>::iterator findProviderByBase(IBase*);
-    void removeProvider(IBase*);
+    bool removeProvider(IBase*);
 };
 
 #endif  // VENDOR_VOLVOCARS_HARDWARE_UDS_V1_0_UDSDATACOLLECTOR_H

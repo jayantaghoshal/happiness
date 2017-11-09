@@ -54,11 +54,11 @@ Return<void> UdsDataCollector::readDidValue(uint16_t did, readDidValue_cb _hidl_
     return Return<void>();
 }
 
-Return<void> UdsDataCollector::unregisterProvider(const sp<IUdsDataProvider>& provider) {
-    removeProvider(provider.get());
+Return<bool> UdsDataCollector::unregisterProvider(const sp<IUdsDataProvider>& provider) {
+    bool removed = removeProvider(provider.get());
     hidl_death_recipient* this_as_recipient = this;
     provider->unlinkToDeath(this_as_recipient);
-    return Void();
+    return removed;
 }
 
 void UdsDataCollector::serviceDied(uint64_t cookie, const android::wp<IBase>& who) {
@@ -76,14 +76,15 @@ std::set<UdsDataCollector::ProviderDecl>::iterator UdsDataCollector::findProvide
     return found_it;
 }
 
-void UdsDataCollector::removeProvider(IBase* died_service_ptr) {
+bool UdsDataCollector::removeProvider(IBase* service_ptr) {
     std::unique_lock<std::mutex> lock(providers_mtx_);
 
-    auto found_it = findProviderByBase(died_service_ptr);
+    auto found_it = findProviderByBase(service_ptr);
 
     if (found_it != providers_decls_.end()) {
         providers_decls_.erase(found_it);
-    } else {
-        ALOGE("Service was not subscribed during unsubscribe attempt");
+        return true;
     }
+    ALOGE("Service was not subscribed during unsubscribe attempt");
+    return false;
 }
