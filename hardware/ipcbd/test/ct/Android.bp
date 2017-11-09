@@ -22,5 +22,6 @@ cc_test {
         "libipcb_simulator_static",
     ],
 
+    test_suites: ["vts"],
     compile_multilib: "64",
 }
