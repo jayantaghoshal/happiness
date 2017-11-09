@@ -131,7 +131,8 @@ RUN pip3 install redis \
     python-jenkins \
     termcolor \
     tabulate \
-    zuul==2.5.2
+    zuul==2.5.2 \
+    Jinja2
 
 ##################################################
 # Static analysis tools
