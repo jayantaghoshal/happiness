@@ -19,7 +19,8 @@ void CarConfigFileReader::open(const std::string filePath) {
     filePath_ = filePath;
     ccFile_->open(filePath_, std::ios::in);
     if (ccFile_->fail()) {
-        throw std::runtime_error("CarConfigFileReader could not open carconfig file: " + filePath);
+        throw std::runtime_error("CarConfigFileReader could not open carconfig file: " + filePath + " errno: " +
+                                 strerror(errno));
     }
     *fileBuf_ << ccFile_->rdbuf();
 }

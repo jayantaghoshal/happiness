@@ -6,4 +6,5 @@ subdirs = [
     "ipcbd",
     "uds",
     "test",
+    "vehicle",
 ]
