@@ -15,6 +15,15 @@ PRODUCT_PACKAGES += \
     android.hardware.automotive.vehicle.vcc@2.0-service \
     vendor.volvocars.hardware.uds@1.0-service
 
+
+##############################################################
+# Engineering SWDL
+##############################################################
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+    vbf_flasher \
+    vbf_flashing_service
+endif
 ##############################################################
 # System UI
 ##############################################################
