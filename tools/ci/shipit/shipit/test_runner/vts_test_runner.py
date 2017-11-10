@@ -9,8 +9,10 @@ import logging.config
 import json
 import os
 import re
+import datetime
+from shipit.test_runner.test_types import ResultData
 from shipit.process_tools import check_output_logged
-from shipit.test_runner.test_types import TestFailedException
+from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
 from typing import Dict
@@ -46,18 +48,51 @@ def vts_tradefed_run(test_module_dir_path: str):
                                           timeout_sec=max_test_time_sec,
                                           env=_create_env(test_module_dir_path)).decode().strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
-        raise TestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
+        raise VtsTestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
     except Exception as e:
-        raise TestFailedException(
+        raise VtsTestFailedException(
             "Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
     fail_pattern1 = "fail:|PASSED: 0"
     if re.search(fail_pattern1, test_result):
-        raise TestFailedException("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+        exception_string = ("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+        raise VtsTestFailedException(exception_string, get_json_object(module_name), get_json_change_time(module_name))
 
     fail_pattern2 = "PASSED: [1-9][0-9]*"
     if not re.search(fail_pattern2, test_result):
-        raise TestFailedException("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
+        exception_string2 = ("Test failed! This pattern was missing in the output:  \"%s\"" % fail_pattern2)
+        raise VtsTestFailedException(exception_string2, get_json_object(module_name), get_json_change_time(module_name))
+
+    return ResultData(test_result, get_json_object(module_name), get_json_change_time(module_name))
+
+
+def get_json_change_time(module_name):
+    try:
+        with open('/tmp/test_run_summary.json') as test_result:
+            results = json.load(test_result)
+            if module_name == results["Results"][0]["Test Class"]:
+                time = os.path.getmtime("/tmp/test_run_summary.json")
+                last_mod_date = datetime.datetime.fromtimestamp(time)
+                return last_mod_date
+            else:
+                return None
+    except (EnvironmentError, TypeError, IndexError) as error:
+        print("Error: Cannot find JSON result file that matches running module.")
+        return None
+
+
+def get_json_object(module_name):
+    try:
+        with open('/tmp/test_run_summary.json') as test_result:
+            results = json.load(test_result)
+            if module_name == results["Results"][0]["Test Class"]:
+                return results
+            else:
+                return None
+    except (EnvironmentError, TypeError, IndexError) as error:
+        print("Error: Cannot find JSON result file that matches running module.")
+        return None
+
 
 def read_module_name(android_test_xml_file: str):
     logging.info("Reading module name from %s" % android_test_xml_file)
@@ -73,6 +108,7 @@ def read_module_name(android_test_xml_file: str):
         return test_module_name_option.attrib["value"]
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Run a VTS tradefed module")

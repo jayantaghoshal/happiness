@@ -8,6 +8,7 @@ import os
 import shlex
 import sys
 import traceback
+import re
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
 
@@ -16,6 +17,7 @@ from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner import tradefed_test_runner
 from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest
 from shipit.test_runner import test_types
+from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 
 sys.path.append(vcc_root)
@@ -34,7 +36,7 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 def run_test(test: IhuBaseTest):
     if isinstance(test, VTSTest):
         print(test)
-        vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_xml_path))
+        return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_xml_path))
     elif isinstance(test, TradefedTest):
         print(test)
         tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
@@ -44,6 +46,25 @@ def run_test(test: IhuBaseTest):
                             (test.disabled_test, test.jira_issue, test.reason))
     else:
         raise Exception("Unknown test case: %s" % test)
+
+
+def check_result(test_result):
+    results = test_result.json_result
+
+    if results is not None:
+        print("Test class: " + results["Results"][0]["Test Class"])
+        for result in results["Results"]:
+            print("\tTest name: " + result["Test Name"])
+            print("\tResult: " + result["Result"])
+
+        for result in results["Results"]:
+            if result["Result"] != "PASS":
+                print("Details: " + result["Details"])
+                print("Test failed! The result from " + result["Test Class"] + ", " + result["Test Name"] + " is " + result["Result"])
+
+        print("Number of executed tests in JSON file: " + str(results["Summary"]["Executed"]))
+    else:
+        print("The current test case does not generate at JSON file")
 
 
 def build_testcases(tests_to_run: List[IhuBaseTest]):
@@ -73,23 +94,58 @@ def build_testcases(tests_to_run: List[IhuBaseTest]):
         #TODO: Increase -j flag on build server
         run_in_lunched_env("mmma -j7 %s" % test_modules_space_separated, cwd=aosp_root)
 
+
 def print_indented(s: str, indent="    "):
     lines = s.split("\n")
     for l in lines:
         print(indent + l)
 
+
+def print_test_summary(test_results):
+    print("*** VTS Python Test summary ***")
+    for test_result in test_results:
+        results = test_result.json_result
+        if results is not None:
+            print("****************************************************")
+            print("Test class: " + results["Results"][0]["Test Class"])
+
+            print("\tError: " + str(results["Summary"]["Error"]))
+            print("\tExecuted: " + str(results["Summary"]["Executed"]))
+            print("\tFailed: " + str(results["Summary"]["Failed"]))
+            print("\tPassed: " + str(results["Summary"]["Passed"]))
+            print("\tRequested: " + str(results["Summary"]["Requested"]))
+            print("\tSkipped: " + str(results["Summary"]["Skipped"]))
+            print("\tJson creation time: " + str(test_result.json_change_time))
+            print("****************************************************")
+            print("")
+
+
 def run_testcases(tests_to_run: List[IhuBaseTest]):
     failing_testcases = []  # type: List[Tuple[IhuBaseTest, str]]
+    test_results = []
     for t in tests_to_run:
         try:
-            run_test(t)
+            test_result = run_test(t)
+            if test_result is not None:
+                check_result(test_result)
+                test_results.append(test_result)
+
+        except test_types.VtsTestFailedException as exception:
+            result = test_types.ResultData(exception.message, exception.json_result, exception.json_change_time)
+            check_result(result)
+            test_results.append(result)
+            failing_testcases.append((t, str(exception.message)))
+            logger.error(str(exception.message))
+
         except test_types.TestFailedException as te:
             failing_testcases.append((t, str(te)))
             logger.error(str(te))
+
         except Exception as e:
             failing_testcases.append((t, str(e)))
             logger.exception(traceback.format_exc())
 
+    print_test_summary(test_results)
     print("All tests completed")
     if len(failing_testcases) > 0:
         print("#####################################################################")
@@ -209,7 +265,6 @@ def detect_loose_test_cases():
         for a in tests_in_plan_but_not_on_disk:
             print("ERROR: vendor/volvocars/test_plan.py contains test not found in repo. Path: %s" % a)
         sys.exit(1)
-
 
 
 if __name__ == "__main__":
