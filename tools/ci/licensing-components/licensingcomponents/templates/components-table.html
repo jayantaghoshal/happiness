@@ -1,0 +1,52 @@
+{% macro render(component_sources) %}
+<table class="table table-striped" data-page-length="50">
+    <thead>
+    <tr>
+        <th>Functional Area</th>
+        <th>Component</th>
+        <th>Deployment</th>
+        <th>License</th>
+        <th>Source code</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cs in component_sources %}
+    <tr>
+        <td>{{ cs.info.description.functional_area }}</td>
+        <td>{{ cs.info.description.component }}</td>
+        <td>{{ cs.info.description.deployment|join(", ") }}</td>
+        <td>{{ cs.info.description.license }}</td>
+        <td>
+            <a type="button"
+               tabindex="0"
+               data-trigger="focus"
+               class="btn btn-sm btn-outline-primary btn-block"
+               data-placement="left"
+               data-toggle="popover"
+               title="Coming from: {{cs.info.path}}"
+               data-html="true"
+               data-content="
+               {% if cs.exclusions %}
+                   <strong>Exceptions:</strong>
+                   <br />
+
+                   {% for dir in cs.exclusions %}
+                       {{ dir }}/* <br />
+                   {%- endfor %}
+
+                   <br />
+               {% endif %}
+
+               <strong>Sources:</strong> <br />
+
+               {% for dir in cs.directories %}
+                {{ dir }}/* <br />
+               {%- endfor %}
+
+            ">{{cs.info.path}}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

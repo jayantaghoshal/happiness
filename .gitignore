@@ -19,3 +19,6 @@ __pycache__/
 
 # Meld mergetool
 *.orig
+
+#PyCharm / Android Studio / Jetbrains Tools
+.idea
