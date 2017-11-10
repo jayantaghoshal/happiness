@@ -125,7 +125,6 @@ class IplmTestFixture : public ::testing::Test {
             return true;
         } else {
             return false;
-            Pdu temp_pdu;
         }
     }
 
@@ -194,7 +193,6 @@ class IplmTestFixture : public ::testing::Test {
     void SetUp() {
         ALOGD("+ SetUp ");
 
-        lscMocker.clear();
         lscMocker = new LscMocker();
         onNodeStatusCallbackCounter = 0;
         onResourceGroupStatusCallbackCounter = 0;

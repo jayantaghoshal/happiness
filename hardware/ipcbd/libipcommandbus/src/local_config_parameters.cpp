@@ -38,7 +38,6 @@ void LocalconfigParameters::InitNetworkConfiguration() {
     lcfg_->TryGetValue(&port_dim_, "IIPS_Port_DIM");
     lcfg_->TryGetValue(&port_tcam_, "IIPS_Port_TCAM");
     lcfg_->TryGetValue(&port_vgm_, "IIPS_Port_VGM");
-    lcfg_->TryGetValue(&port_test_, "IIPS_Port_TEST");
 
     lcfg_->TryGetValue(&dim_keep_alive_time_, "CONN_DIMKeepAliveTime");
     lcfg_->TryGetValue(&dim_keep_alive_interval_, "CONN_DIMKeepAliveIntvl");
@@ -99,7 +98,7 @@ const std::string &LocalconfigParameters::getVGMIpAddress() { return ip_address_
 
 uint16_t LocalconfigParameters::getLocalPort() { return port_local_; }
 
-uint16_t LocalconfigParameters::getLocalBroadcastPort() { return port_broadcast_; }
+uint16_t LocalconfigParameters::getBroadcastPort() { return port_broadcast_; }
 
 uint16_t LocalconfigParameters::getVCMPort() { return port_vcm_; }
 

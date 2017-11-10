@@ -13,7 +13,6 @@
     "IIPS_Port_LOCAL": 60001,
     "IIPS_Port_BROADCAST": 50000,
     "IIPS_Port_VCM": 60607,
-    "IIPS_Port_TEST": 69999,
     "IIPS_Port_TEM": 50000,
     "IIPS_Port_DIM": 50000,
     "IIPS_Port_TCAM": 60000,

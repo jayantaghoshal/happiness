@@ -41,7 +41,7 @@ class LocalconfigParameters {
     const std::string &getTCAMIpAddress();
 
     uint16_t getLocalPort();
-    uint16_t getLocalBroadcastPort();
+    uint16_t getBroadcastPort();
     uint16_t getVCMPort();
     uint16_t getTEMPort();
     uint16_t getDIMPort();

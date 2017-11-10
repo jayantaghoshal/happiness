@@ -9,7 +9,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.mypy_cache
-*.log
+
+#Ignore component_test_build logs
+build.log
+build.log.*
 
 # eclipse
 .settings/language.settings.xml
