@@ -15,6 +15,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, stand
 # These should mainly be used for system stability, ie when a failing module will
 # block other developers from continuing development. Such as "unit not booting", "adb not working", "black screen", etc
 test_plan_gate = [
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                  standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",          standard_caps),
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                   standard_caps),
@@ -24,10 +25,10 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/uds/test/ct",                           standard_caps),
     VTSTest("vendor/volvocars/tools/test/daemon_test",                         standard_caps),
-
 ]
 
 test_plan_hourly = [
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
     Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
              reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
              jira_issue="",
@@ -69,7 +70,6 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2019-11-17"
     ),
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                   standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
 ]
