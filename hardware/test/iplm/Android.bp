@@ -24,6 +24,7 @@ cc_test {
         "libhidltransport",
         "libipcommandbus",
         "vendor.volvocars.hardware.iplm@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
     ],
 
     static_libs: [

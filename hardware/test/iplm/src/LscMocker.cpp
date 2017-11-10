@@ -3,11 +3,11 @@
 #define LOG_TAG "LscMocker"
 
 LscMocker::LscMocker() {
-    try {
-        ALOGD("IIplm getService!");
-        iplmservice = IIplm::getService();
-    } catch (const std::runtime_error& e) {
-        ALOGE("Couldnt getService : Exception thrown: %s", e.what());
+    ALOGD("IIplm getService!");
+    iplmservice = IIplm::getService();
+
+    if (nullptr == iplmservice.get()) {
+        ALOGE("Couldn't find interface to IplmD service");
     }
 }
 
