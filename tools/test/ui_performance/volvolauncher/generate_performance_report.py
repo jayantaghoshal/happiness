@@ -19,7 +19,7 @@ _yellow_color = (205,187,121)
 
 _gpu_lost_frames = 0
 _cpu_percentage_load = 0
-_mem_percentage_used = 0
+_mem_percentage_used = 0.0
 
 def read_in():
     lines = ""
@@ -110,10 +110,10 @@ def _extract_cpu_usage(lines):
     nice = [0,0,0,0,0,0,0,0,0]
     idle = [0,0,0,0,0,0,0,0,0]
     totalDiff = [1.0,1.0,1.0,1.0,1.0]
-    userDiff = [0,0,0,0,0]
-    niceDiff = [0,0,0,0,0]
-    systemDiff = [0,0,0,0,0]
-    idleDiff = [0,0,0,0,0]
+    userDiff = [0.0, 0, 0, 0, 0]
+    niceDiff = [0.0, 0, 0, 0, 0]
+    systemDiff = [0.0, 0, 0, 0, 0]
+    idleDiff = [0.0, 0, 0, 0, 0]
     for matchNum, match in enumerate(matches):
         cpu_regex = ur"cpu(\d)*\s*(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)\s(\d*)"
         cpu_matches = re.finditer(cpu_regex, match.group(2))

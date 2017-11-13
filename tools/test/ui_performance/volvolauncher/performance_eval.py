@@ -45,7 +45,7 @@ if _enable_cpu_proc:
 # Measure CPU for the given amount of seconds, make separate thread in order to be able
 # to do things in the UI while the measurement is ongoing
 if _enable_cpu:
-    cpu_measure_thread = threading.Thread(target=make_cpu_performance_measurement, args=[_seconds_to_measure_cpu], kwargs={})
+    cpu_measure_thread = threading.Thread(target=make_cpu_performance_measurement, args=(_seconds_to_measure_cpu,), kwargs={})
     cpu_measure_thread.start()
 
 # Do some swipes back and forward and then measure framerate

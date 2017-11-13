@@ -25,7 +25,7 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",standard_caps),
     VTSTest("vendor/volvocars/hardware/uds/test/ct",                           standard_caps),
     VTSTest("vendor/volvocars/tools/test/daemon_test",                         standard_caps),
-
+    VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
 ]
 
 test_plan_hourly = [
@@ -65,7 +65,6 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",        standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
-    VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",         standard_caps),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
              reason="Manual test which require usb2eth dongel",
              jira_issue="",

@@ -4,7 +4,7 @@
     <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="GeneralPerformanceTest"/>
-        <option name="test-case-path" value="volvocars/tools/test/ui_performance/volvolauncher"/>
+        <option name="test-case-path" value="GeneralPerformanceTest"/>
         <option name="test-timeout" value="1m"/>
     </test>
 </configuration>

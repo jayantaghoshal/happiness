@@ -13,13 +13,22 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
+import subprocess
 
 class GeneralPerformanceTest(base_test.BaseTestClass):
     """Running performance tests"""
 
+
     def testPerformance(self):
-        os.system("performance_eval.py > logoutput.txt")
-        os.system("generate_performance_report.py logoutput.txt html")
+        d = os.path.dirname(__file__)
+
+        abstemp = os.path.abspath("temp.txt")
+
+        with open(abstemp, "w") as f:
+            f.write(subprocess.check_output(
+                ["python", "performance_eval.py"], cwd=d))
+        subprocess.check_output(
+                ["python", "generate_performance_report.py", abstemp], cwd=d)
 
 if __name__ == "__main__":
     test_runner.main()
