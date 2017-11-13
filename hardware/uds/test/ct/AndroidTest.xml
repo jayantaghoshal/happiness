@@ -7,6 +7,6 @@
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="udsdatacollector_ct" />
-        <option name="runtime-hint" value="5s" />
+        <option name="runtime-hint" value="305ms" />
     </test>
 </configuration>
