@@ -125,6 +125,7 @@ class IplmTestFixture : public ::testing::Test {
             return true;
         } else {
             return false;
+            Pdu temp_pdu;
         }
     }
 
@@ -193,6 +194,7 @@ class IplmTestFixture : public ::testing::Test {
     void SetUp() {
         ALOGD("+ SetUp ");
 
+        lscMocker.clear();
         lscMocker = new LscMocker();
         onNodeStatusCallbackCounter = 0;
         onResourceGroupStatusCallbackCounter = 0;
@@ -224,6 +226,78 @@ class IplmTestFixture : public ::testing::Test {
     std::future<bool> fOnResource = pOnResource.get_future();
     std::future<bool> fOnNodeStatus = pOnNodeStatus.get_future();
 };
+
+/**
+ Test that we recive a activitymessage
+ **/
+TEST_F(IplmTestFixture, ReciveActivityMessage) {
+    ALOGD("+ ReciveActivityMessage");
+
+    // Setup iplm. Wait for internal properties to clear.
+    {
+        std::promise<int> promise;
+        std::future<int> future = promise.get_future();
+
+        lscMocker->RegisterLSC("iplmd-test");
+        lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+            ALOGD("+ onNodeStatusCallback");
+            onResourceGroupStatusCallbackCounter++;
+            if (!ecuStatus && onResourceGroupStatusCallbackCounter == 1) {
+                promise.set_value(true);
+            }
+            ALOGD("- onNodeStatusCallback");
+        };
+
+        std::future_status status = future.wait_for(std::chrono::milliseconds(3000));
+        if (status == std::future_status::deferred) {
+            ASSERT_TRUE(false) << "Preconditions not met. Promise deferred exiting";
+        } else if (status == std::future_status::timeout) {
+            ASSERT_TRUE(false)
+                    << "Preconditions not met. Timeout: Didn't recive any keep alive message within timelimit. Exiting";
+        }
+        ALOGD("- Setup complete");
+    }
+
+    ALOGD("- Starting test");
+    bool promise_complete = false;
+    Pdu temp_pdu;
+
+    // Create activity message
+    IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
+    temp_pdu.createHeader(0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC,
+                          IpCmdTypes::DataType::NOT_ENCODED, 1);
+    temp_pdu.header.protocol_version = 2;
+    temp_pdu.setPayload(std::vector<uint8_t>({0x01, (uint8_t)0x00, 0, 0}));
+    ipcbSimulator.SendPdu(temp_pdu);
+
+    {
+        std::promise<int> promise;
+        std::future<int> future = promise.get_future();
+
+        lscMocker->RegisterLSC("iplmd-test");
+        lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+            ALOGD("+ onNodeStatusCallback ecuStatus: %s, completed: %s", ecuStatus ? "true" : "false",
+                  promise_complete ? "true" : "false");
+            if (ecuStatus && !promise_complete) {
+                promise_complete = true;
+                promise.set_value(true);
+            }
+
+            ALOGD("- onNodeStatusCallback");
+        };
+
+        std::future_status status = future.wait_for(std::chrono::milliseconds(3000));
+        if (status == std::future_status::deferred) {
+            ASSERT_TRUE(false) << "Promise deferred exiting";
+        } else if (status == std::future_status::timeout) {
+            ASSERT_TRUE(false) << "Timeout:Didn't recive any keep alive message within timelimit. Exiting";
+        } else if (status == std::future_status::ready) {
+            ALOGD("Success!");
+        }
+    }
+    lscMocker->UnregisterLSC("iplmd-test");
+    ALOGD("- ReciveActivityMessage");
+}
 
 /*
  Register and Unregister Local software Components.
