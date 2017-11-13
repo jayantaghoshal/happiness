@@ -24,6 +24,9 @@ PRODUCT_PACKAGES += \
     vbf_flasher \
     vbf_flashing_service
 endif
+
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,vendor/delphi/swdl/vip-update,vendor/vip-update)
+
 ##############################################################
 # System UI
 ##############################################################
