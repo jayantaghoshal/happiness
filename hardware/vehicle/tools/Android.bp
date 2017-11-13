@@ -18,7 +18,6 @@ cc_binary {
         "libhidltransport",
         "libutils",
         "libhwbinder",
-        "android.hidl.base@1.0",
         "vendor.volvocars.hardware.vehiclehal@1.0",
         "android.hardware.automotive.vehicle@2.0",
     ],

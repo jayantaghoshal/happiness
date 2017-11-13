@@ -14,7 +14,6 @@ HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
 LOCAL_JAVA_LIBRARIES := \
     android.hardware.automotive.vehicle-V2.0-java \
-    android.hidl.base-V1.0-java \
 
 
 #
@@ -51,7 +50,6 @@ HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android.hardware.automotive.vehicle-V2.0-java-static \
-    android.hidl.base-V1.0-java-static \
 
 
 #
