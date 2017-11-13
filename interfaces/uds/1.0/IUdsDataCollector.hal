@@ -1,0 +1,9 @@
+package vendor.volvocars.hardware.uds@1.0;
+
+import IUdsDataProvider;
+
+interface IUdsDataCollector
+{
+    registerProvider(IUdsDataProvider provider, vec<Did> supported_dids) generates (bool success);
+    unregisterProvider(IUdsDataProvider provider);
+};

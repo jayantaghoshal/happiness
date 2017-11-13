@@ -126,7 +126,17 @@
             !include-raw: 
                 - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_gate_test_flexray.sh            
-         
+
+- job:
+    name: ihu_gate_test_audio
+    defaults: commit_job_defaults
+    node: rack-rig-audio
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_test_audio.sh
+
 - project:
     name: ihu
     node: master
@@ -135,4 +145,5 @@
       - ihu_gate_build
       - ihu_gate_test
       - ihu_gate_test_flexray
+      - ihu_gate_test_audio
       

@@ -9,4 +9,5 @@ source system/tools/hidl/update-makefiles-helper.sh
 
 do_makefiles_update \
   "vendor.volvocars.hardware:vendor/volvocars/interfaces" \
-  "android.hidl:system/libhidl/transport"
+  "android.hidl:system/libhidl/transport" \
+  "android.hardware:hardware/interfaces"

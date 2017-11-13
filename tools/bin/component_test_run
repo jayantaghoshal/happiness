@@ -1,11 +1,16 @@
 #!/bin/sh
+set -ue
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR="${SCRIPT_DIR}"/../..
 
-# Add pwd to the PYTHONPATH because VTS runs in its own environment with different working directory
-# than where we launch it.
-# It then translates the <option name="test-case-path" value="x/y/z" /> into a python module import by replacing / with .
-# To avoid cluttering the whole repo with __init__.py files we set the test-case-path relative to the AndroidTest.xml
-# directory and add that directory to the PYTHONPATH here
-export PYTHONPATH=$PYTHONPATH:$(pwd)
+# Always run mypy for type checking on files in current dir before running VTS.
+# Running VTS is slow and error messages from inside VTS are super confusing so better to catch silly mistakes early
+export MYPYPATH=$PYTHONPATH:$(pwd)
+export MYPYPATH=$MYPYPATH:$ANDROID_BUILD_TOP/test
+PY_FILES=$(find . -name "*.py" -printf '%P\n')
+if [ ! -z "$PY_FILES" ]; then
+    mypy --py2 --config="${SCRIPT_DIR}/mypy_component_test_run.ini" $PY_FILES
+fi
+
+# Run the test
 python3 "$REPO_ROOT_DIR"/tools/ci/shipit/tester.py run -c ihu-generic adb mp-serial vip-serial --test_component=.

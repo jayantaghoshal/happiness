@@ -41,7 +41,7 @@ std::string GetString(const std::initializer_list<std::string> &keys);
 
 template <class... T>
 std::string GetString(const T &... keys) {
-  return GetString({keys...});
+    return GetString({keys...});
 }
 
 /**
@@ -59,7 +59,7 @@ int GetInt(const std::initializer_list<std::string> &keys);
 
 template <class... T>
 int GetInt(const T &... keys) {
-  return GetInt({keys...});
+    return GetInt({keys...});
 }
 
 /**
@@ -77,7 +77,7 @@ bool GetBool(const std::initializer_list<std::string> &keys);
 
 template <class... T>
 bool GetBool(const T &... keys) {
-  return GetBool({keys...});
+    return GetBool({keys...});
 }
 
 /**
@@ -95,7 +95,7 @@ double GetDouble(const std::initializer_list<std::string> &keys);
 
 template <class... T>
 double GetDouble(const T &... keys) {
-  return GetDouble({keys...});
+    return GetDouble({keys...});
 }
 
 /**
@@ -114,7 +114,7 @@ std::vector<std::string> GetStringArray(const std::initializer_list<std::string>
 
 template <class... T>
 std::vector<std::string> GetStringArray(const T &... keys) {
-  return GetStringArray({keys...});
+    return GetStringArray({keys...});
 }
 
 }  // namespace localconfig

@@ -3,19 +3,17 @@
 * Delphi Confidential
 \*===========================================================================*/
 
-#include <vsm_sink.h>
 #include <gmock/gmock.h>
+#include <vsm_sink.h>
 
-class IVsmSink
-{
-public:
-   virtual void vsm_sink_init(void) = 0;
+class IVsmSink {
+  public:
+    virtual void vsm_sink_init(void) = 0;
 };
 
-class VsmSinkMock: public IVsmSink
-{
-public:
-   MOCK_METHOD0(vsm_sink_init, void());
+class VsmSinkMock : public IVsmSink {
+  public:
+    MOCK_METHOD0(vsm_sink_init, void());
 };
 
 void vsm_sink_mock_init(VsmSinkMock* mockInstance);

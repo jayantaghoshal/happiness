@@ -14,18 +14,18 @@ namespace implementation {
 
 Gnss::Gnss() {
     ALOGD("Gnss::Gnss");
-    started_=false;
+    started_ = false;
 }
 
 // The assumption is that this method is called on our dispatcher mainloop
 void Gnss::updateLocation(const GnssLocation& location) {
     if (started_) {
-        if (callback_!=nullptr) {
+        if (callback_ != nullptr) {
             auto result = callback_->gnssLocationCb(location);
             // isOk() ALWAYS has to be called
             // see https://source.android.com/devices/architecture/hidl-cpp/interfaces (Death recipients)
             result.isOk();
-            if ( result.isDeadObject() ) {
+            if (result.isDeadObject()) {
                 callback_ = nullptr;
                 ALOGI("callback=null due to dead client");
             }
@@ -37,15 +37,15 @@ void Gnss::updateLocation(const GnssLocation& location) {
 
 // Methods from ::android::hardware::gnss::V1_0::IGnss follow.
 Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
-    ALOGD("setCallback %d",callback!=nullptr);
+    ALOGD("setCallback %d", callback != nullptr);
 
-    IDispatcher::EnqueueTask([this,callback](){
+    IDispatcher::EnqueueTask([this, callback]() {
         callback_ = callback;
-        if (callback_!=nullptr)
-        {
+        if (callback_ != nullptr) {
             ALOGD("Cap+SysInfo callback");
             auto result1 = callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING);
-            // We always have to call isOk() even though we don't care about the result. We use care about isDeadObject()
+            // We always have to call isOk() even though we don't care about the result. We use care about
+            // isDeadObject()
             // https://source.android.com/devices/architecture/hidl-cpp/functions
             result1.isOk();
             IGnssCallback::GnssSystemInfo systeminfo;
@@ -53,7 +53,7 @@ Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
             auto result2 = callback_->gnssSetSystemInfoCb(systeminfo);
             result2.isOk();
             if (result1.isDeadObject() || result2.isDeadObject()) {
-                callback_=nullptr;
+                callback_ = nullptr;
                 ALOGI("callback=null due to dead client");
             }
         }
@@ -90,13 +90,13 @@ Return<void> Gnss::cleanup() {
 Return<bool> Gnss::injectTime(int64_t /*timeMs*/, int64_t /*timeReferenceMs*/, int32_t /*uncertaintyMs*/) {
     // TODO implement
     ALOGD("injectTime");
-    return bool {};
+    return bool{};
 }
 
 Return<bool> Gnss::injectLocation(double /*latitudeDegrees*/, double /*longitudeDegrees*/, float /*accuracyMeters*/) {
     // TODO implement
     ALOGD("injectLocation");
-    return bool {};
+    return bool{};
 }
 
 Return<void> Gnss::deleteAidingData(IGnss::GnssAidingData /*aidingDataFlags*/) {
@@ -104,76 +104,77 @@ Return<void> Gnss::deleteAidingData(IGnss::GnssAidingData /*aidingDataFlags*/) {
     return Void();
 }
 
-Return<bool> Gnss::setPositionMode(IGnss::GnssPositionMode mode, IGnss::GnssPositionRecurrence recurrence, uint32_t minIntervalMs, uint32_t preferredAccuracyMeters, uint32_t preferredTimeMs) {
-    ALOGD("setPositionMode %hhu %u %u %u %u",mode,recurrence,minIntervalMs,preferredAccuracyMeters,preferredTimeMs);
+Return<bool> Gnss::setPositionMode(IGnss::GnssPositionMode mode, IGnss::GnssPositionRecurrence recurrence,
+                                   uint32_t minIntervalMs, uint32_t preferredAccuracyMeters, uint32_t preferredTimeMs) {
+    ALOGD("setPositionMode %hhu %u %u %u %u", mode, recurrence, minIntervalMs, preferredAccuracyMeters,
+          preferredTimeMs);
     return true;
 }
 
 Return<sp<IAGnssRil>> Gnss::getExtensionAGnssRil() {
     // TODO implement
     ALOGD("getExtensionAGnssRil");
-    return ::android::sp<::android::hardware::gnss::V1_0::IAGnssRil> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IAGnssRil>{};
 }
 
 Return<sp<IGnssGeofencing>> Gnss::getExtensionGnssGeofencing() {
     // TODO implement
     ALOGD("getExtensionGnssGeofencing");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssGeofencing> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssGeofencing>{};
 }
 
 Return<sp<IAGnss>> Gnss::getExtensionAGnss() {
     // TODO implement
     ALOGD("getExtensionAGnss");
-    return ::android::sp<::android::hardware::gnss::V1_0::IAGnss> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IAGnss>{};
 }
 
 Return<sp<IGnssNi>> Gnss::getExtensionGnssNi() {
     // TODO implement
     ALOGD("getExtensionGnssNi");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssNi> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssNi>{};
 }
 
 Return<sp<IGnssMeasurement>> Gnss::getExtensionGnssMeasurement() {
     // TODO implement
     ALOGD("getExtensionGnssMeasurement");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssMeasurement> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssMeasurement>{};
 }
 
 Return<sp<IGnssNavigationMessage>> Gnss::getExtensionGnssNavigationMessage() {
     // TODO implement
     ALOGD("getExtensionGnssNavigationMessage");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssNavigationMessage> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssNavigationMessage>{};
 }
 
 Return<sp<IGnssXtra>> Gnss::getExtensionXtra() {
     // TODO implement
     ALOGD("getExtensionXtra");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssXtra> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssXtra>{};
 }
 
 Return<sp<IGnssConfiguration>> Gnss::getExtensionGnssConfiguration() {
     // TODO implement
     ALOGD("getExtensionGnssConfiguration");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssConfiguration> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssConfiguration>{};
 }
 
 Return<sp<IGnssDebug>> Gnss::getExtensionGnssDebug() {
     // TODO implement
     ALOGD("getExtensionGnssDebug");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssDebug> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssDebug>{};
 }
 
 Return<sp<IGnssBatching>> Gnss::getExtensionGnssBatching() {
     // TODO implement
     ALOGD("getExtensionGnssBatching");
-    return ::android::sp<::android::hardware::gnss::V1_0::IGnssBatching> {};
+    return ::android::sp<::android::hardware::gnss::V1_0::IGnssBatching>{};
 }
-
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnss* HIDL_FETCH_IGnss(const char* name ) {
-    ALOGD("HIDL_FETCH_IGnss %s",name);
+IGnss* HIDL_FETCH_IGnss(const char* name) {
+    ALOGD("HIDL_FETCH_IGnss %s", name);
     return new Gnss();
 }
 

@@ -7,55 +7,41 @@
 #include <cutils/log.h>
 #include "date.h"
 
-namespace InfotainmentIpBus
-{
-namespace Utils
-{
-//using namespace Connectivity;
+namespace InfotainmentIpBus {
+namespace Utils {
+// using namespace Connectivity;
 using namespace std::chrono;
 
-int64_t ToMsSince1970(const Icb_DateTime_t* utc_time)
-{
+int64_t ToMsSince1970(const Icb_DateTime_t* utc_time) {
     // create the epoch as a time_point
     static const date::year_month_day ymd1970(date::year(1970), date::month(1), date::day(1));
     static const std::chrono::system_clock::time_point tp1970((date::sys_days(ymd1970)));
 
     // create received time as a time_point
     const date::year_month_day ymd(date::year(utc_time->year), date::month(utc_time->month), date::day(utc_time->day));
-    const std::chrono::system_clock::time_point tp(date::sys_days(ymd) + hours(utc_time->hour) + minutes(utc_time->minute) + seconds(utc_time->second));
+    const std::chrono::system_clock::time_point tp(date::sys_days(ymd) + hours(utc_time->hour) +
+                                                   minutes(utc_time->minute) + seconds(utc_time->second));
 
     return duration_cast<milliseconds>(tp - tp1970).count();
 }
 
-std::string FixTypeToString(Icb_GnssFixType_t fix_type)
-{
-    switch (fix_type)
-    {
-        case e_Icb_GnssFixType_notAvailable:
-        {
+std::string FixTypeToString(Icb_GnssFixType_t fix_type) {
+    switch (fix_type) {
+        case e_Icb_GnssFixType_notAvailable: {
             return "Not available";
-        }
-        break;
-        case e_Icb_GnssFixType_noFix:
-        {
+        } break;
+        case e_Icb_GnssFixType_noFix: {
             return "No fix";
-        }
-        break;
-        case e_Icb_GnssFixType_fix2D:
-        {
+        } break;
+        case e_Icb_GnssFixType_fix2D: {
             return "Fix 2D";
-        }
-        break;
-        case e_Icb_GnssFixType_fix3D:
-        {
+        } break;
+        case e_Icb_GnssFixType_fix3D: {
             return "Fix 3D";
-        }
-        break;
-        case e_Icb_GnssFixType_startupMode:
-        {
+        } break;
+        case e_Icb_GnssFixType_startupMode: {
             return "Startup mode";
-        }
-        break;
+        } break;
         default:
             assert(false);
             return "No fix";
@@ -72,28 +58,20 @@ Icb_GnssFixType_t FixStatusToIpcbType(const uint64_t gnss_fix_status)
     const uint64_t d2_fix = 0x02;
     const uint64_t d3_fix = 0x03;
 
-    switch (gnss_fix_status)
-    {
-        case no_fix:
-        {
+    switch (gnss_fix_status) {
+        case no_fix: {
             return e_Icb_GnssFixType_noFix;
-        }
-        break;
+        } break;
 
-        case d2_fix:
-        {
+        case d2_fix: {
             return e_Icb_GnssFixType_fix2D;
-        }
-        break;
+        } break;
 
-        case d3_fix:
-        {
+        case d3_fix: {
             return e_Icb_GnssFixType_fix3D;
-        }
-        break;
+        } break;
 
-        default:
-        {
+        default: {
             // NOTE!! DON'T assert here!
             //        The remote endpoint application (Enhanced Position server) is developer by external location team.
             //        and the value provided by CommonAPI is a regular uint64 (not an enum, and no constants declared)
@@ -105,45 +83,29 @@ Icb_GnssFixType_t FixStatusToIpcbType(const uint64_t gnss_fix_status)
     }
 }
 
-std::string AsnErrCodeToString(ASN_Errcode code)
-{
-    switch (code)
-    {
-        case ASN_ERROR_NO_ERROR:
-        {
+std::string AsnErrCodeToString(ASN_Errcode code) {
+    switch (code) {
+        case ASN_ERROR_NO_ERROR: {
             return "No error";
-        }
-        break;
-        case ASN_ERROR_MEMORY:
-        {
+        } break;
+        case ASN_ERROR_MEMORY: {
             return "Memory";
-        }
-        break;
-        case ASN_ERROR_BUFFER_FULL:
-        {
+        } break;
+        case ASN_ERROR_BUFFER_FULL: {
             return "Buffer full";
-        }
-        break;
-        case ASN_ERROR_BUFFER_STARVING:
-        {
+        } break;
+        case ASN_ERROR_BUFFER_STARVING: {
             return "Buffer starving";
-        }
-        break;
-        case ASN_ERROR_NO_VALID_CHOICE:
-        {
+        } break;
+        case ASN_ERROR_NO_VALID_CHOICE: {
             return "No valid choice";
-        }
-        break;
-        case ASN_ERROR_VALUE_NOT_WITHIN_RANGE:
-        {
+        } break;
+        case ASN_ERROR_VALUE_NOT_WITHIN_RANGE: {
             return "Parameter value out of range (of ASN spec. Bad param from CommonAPI?)";
-        }
-        break;
-        case ASN_ERROR_SIZE_NOT_SUPPORTED:
-        {
+        } break;
+        case ASN_ERROR_SIZE_NOT_SUPPORTED: {
             return "Size not supported";
-        }
-        break;
+        } break;
         default:
             return "Unknown error code";
     }
@@ -1855,8 +1817,7 @@ bool PinPukCommandToIpcbType(ASN_Session session,
     return true;
 }
 */
-Icb_DateTime TimeToIpcbType(ASN_Session session, std::time_t time)
-{
+Icb_DateTime TimeToIpcbType(ASN_Session session, std::time_t time) {
     std::tm* pTime;
     pTime = gmtime(&time);
 

@@ -8,14 +8,9 @@
 #include <gtest/gtest.h>
 #include <functional>
 
-namespace Connectivity
-{
-class MockThreadDispatcher final : public ThreadDispatcher
-{
-public:
-    void enqueueForDispatch(std::function<void()>&& f)
-    {
-        f();
-    }
+namespace Connectivity {
+class MockThreadDispatcher final : public ThreadDispatcher {
+  public:
+    void enqueueForDispatch(std::function<void()>&& f) { f(); }
 };
 }

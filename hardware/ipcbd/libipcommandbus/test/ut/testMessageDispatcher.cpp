@@ -37,12 +37,9 @@ using namespace VccIpCmd;
 
 LocalconfigStub local_config_stub;
 
-class MessageDispatcherFixture : public ::testing::Test
-{
-public:
-
-    MessageDispatcherFixture()
-    {
+class MessageDispatcherFixture : public ::testing::Test {
+  public:
+    MessageDispatcherFixture() {
         logging::ConsoleLogContext::setGlobalLogLevel(logging::LogLevel::None);
 
         EXPECT_CALL(transport, registerIncomingResponseCallback(_)).WillOnce(SaveArg<0>(&respMsgCb));
@@ -50,13 +47,13 @@ public:
         EXPECT_CALL(transport, registerIncomingNotificationCallback(_)).WillOnce(SaveArg<0>(&notMsgCb));
         EXPECT_CALL(transport, registerErrorOnRequestCallback(_)).WillOnce(SaveArg<0>(&errMsgCb));
         ON_CALL(transport, getThreadDispatcher()).WillByDefault(ReturnRef(mockThreadDispatcher));
-        dispatcher = std::make_unique<Connectivity::MessageDispatcher>(&transport, &mockThreadDispatcher);  //Must be created after EXPECT_CALLS on transport
+        dispatcher = std::make_unique<Connectivity::MessageDispatcher>(
+                &transport, &mockThreadDispatcher);  // Must be created after EXPECT_CALLS on transport
         dispatcher->setDiagnostics(&diagnostics);
     }
 
-protected:
-    void verifyAndClear(void)
-    {
+  protected:
+    void verifyAndClear(void) {
         Mock::VerifyAndClearExpectations(&transport);
         Mock::VerifyAndClearExpectations(&diagnostics);
     }
@@ -73,35 +70,29 @@ protected:
     std::function<void(Message &, ITransportServices::ErrorType)> errMsgCb;
 
     std::vector<uint8_t> expectErrData = {
-        0x00,
-        0x01,  // service id
-        0x00,
-        0x02,  // operation id
-        0x00,
-        0x00,
-        0x00,
-        0x0B,  // length
-        0x01,
-        0x02,  // service handle id
-        static_cast<uint8_t>(VccIpCmd::OperationType::REQUEST),
-        0xAA,
-        0x02,                                                   // protocol version
-        static_cast<uint8_t>(VccIpCmd::OperationType::ERROR),   // operation type
-        static_cast<uint8_t>(VccIpCmd::DataType::NOT_ENCODED),  // data type
-        0x00,                                                   // reserved
-        /* data */
-        static_cast<uint8_t>(ITransportServices::INVALID_OPERATION_ID),  // error code
-        0x00,
-        0x00  // error info
+            0x00,
+            0x01,  // service id
+            0x00,
+            0x02,  // operation id
+            0x00, 0x00, 0x00,
+            0x0B,  // length
+            0x01,
+            0x02,  // service handle id
+            static_cast<uint8_t>(VccIpCmd::OperationType::REQUEST), 0xAA,
+            0x02,                                                   // protocol version
+            static_cast<uint8_t>(VccIpCmd::OperationType::ERROR),   // operation type
+            static_cast<uint8_t>(VccIpCmd::DataType::NOT_ENCODED),  // data type
+            0x00,                                                   // reserved
+            /* data */
+            static_cast<uint8_t>(ITransportServices::INVALID_OPERATION_ID),  // error code
+            0x00,
+            0x00  // error info
     };
 
-    Connectivity::Message createMsg(VccIpCmd::ServiceId srvId,
-                                    VccIpCmd::OperationId opId,
-                                    VccIpCmd::OperationType opType,
-                                    uint8_t seqNr,
+    Connectivity::Message createMsg(VccIpCmd::ServiceId srvId, VccIpCmd::OperationId opId,
+                                    VccIpCmd::OperationType opType, uint8_t seqNr,
                                     std::vector<uint8_t> &&data = std::vector<uint8_t>(),
-                                    VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED)
-    {
+                                    VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED) {
         Pdu pdu;
         pdu.createHeader(srvId, opId, opType, dataType, seqNr);
         pdu.setPayload(std::move(data));
@@ -110,40 +101,34 @@ protected:
         return msg;
     }
 
-public:
+  public:
     /**
      * Accessor methods to private members of MessageDispatcher
      */
-    MessageDispatcher::RequestsMap getRequestMap()
-    {
-        return dispatcher->m_requestsMap;
-    }
+    MessageDispatcher::RequestsMap getRequestMap() { return dispatcher->m_requestsMap; }
 };
 
-MATCHER_P(LambdaMatcher, func, "")
-{
+MATCHER_P(LambdaMatcher, func, "") {
     bool ret = false;
     *result_listener << func(arg, ret);
     return ret;
 }
 
-TEST_F(MessageDispatcherFixture, ReceiveResponse)
-{
+TEST_F(MessageDispatcherFixture, ReceiveResponse) {
     bool msgReceived = false;
 
-    dispatcher->registerResponseCallback(ServiceId::Connectivity,
-                                        OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
-                                            (void)(m);
-                                            (void)(c);
-                                            msgReceived = true;
-                                        });
+    dispatcher->registerResponseCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                         [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
+                                             (void)(m);
+                                             (void)(c);
+                                             msgReceived = true;
+                                         });
 
     // We must first 'send' a request so that there is a match upon receiving the response.
     // (Otherwise the service specific callback will intentionally not be called.)
     std::shared_ptr<MessageDispatcher::CallerData> pCallerData = std::make_shared<MessageDispatcher::CallerData>();
     Message msgReq =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
     dispatcher->sendMessage(std::move(msgReq), pCallerData);
 
     // 'Receive' response
@@ -158,17 +143,15 @@ TEST_F(MessageDispatcherFixture, ReceiveResponse)
     ASSERT_EQ(true, msgReceived);
 }
 
-TEST_F(MessageDispatcherFixture, ReceiveResponse_NoReceiver)
-{
+TEST_F(MessageDispatcherFixture, ReceiveResponse_NoReceiver) {
     bool msgReceived = false;
 
-    dispatcher->registerResponseCallback(ServiceId::Connectivity,
-                                        OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
-                                            (void)(m);
-                                            (void)(c);
-                                            msgReceived = true;
-                                        });
+    dispatcher->registerResponseCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                         [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
+                                             (void)(m);
+                                             (void)(c);
+                                             msgReceived = true;
+                                         });
 
     Message msg = createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::RESPONSE, 0x04);
 
@@ -180,15 +163,14 @@ TEST_F(MessageDispatcherFixture, ReceiveResponse_NoReceiver)
     ASSERT_NE(true, msgReceived);
 }
 
-TEST_F(MessageDispatcherFixture, ReceiveRequest)
-{
+TEST_F(MessageDispatcherFixture, ReceiveRequest) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
 
@@ -200,24 +182,21 @@ TEST_F(MessageDispatcherFixture, ReceiveRequest)
     ASSERT_EQ(true, msgReceived);
 }
 
-TEST_F(MessageDispatcherFixture, ReceiveRequest_NoReceiver)
-{
+TEST_F(MessageDispatcherFixture, ReceiveRequest_NoReceiver) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg;
 
     msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::NOTIFICATION, 0x04);
     msg.ecu = Message::Ecu::VCM;
     EXPECT_CALL(transport,
-                sendError(Message::Ecu::VCM,
-                          Ref(msg.pdu),
-                          ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
+                sendError(Message::Ecu::VCM, Ref(msg.pdu), ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
                           static_cast<std::uint16_t>(OperationType::NOTIFICATION)));
     EXPECT_CALL(diagnostics, SetInvalidData(_, _)).Times(1);
     reqMsgCb(msg);
@@ -226,9 +205,7 @@ TEST_F(MessageDispatcherFixture, ReceiveRequest_NoReceiver)
     msg = createMsg(ServiceId::Connectivity, OperationId::GNSSPositionData, OperationType::REQUEST, 0x04);
     msg.ecu = Message::Ecu::VCM;
     EXPECT_CALL(transport,
-                sendError(Message::Ecu::VCM,
-                          Ref(msg.pdu),
-                          ITransportServices::ErrorCode::INVALID_OPERATION_ID,
+                sendError(Message::Ecu::VCM, Ref(msg.pdu), ITransportServices::ErrorCode::INVALID_OPERATION_ID,
                           static_cast<std::uint16_t>(OperationId::GNSSPositionData)));
     EXPECT_CALL(diagnostics, SetInvalidData(_, _)).Times(1);
     reqMsgCb(msg);
@@ -236,66 +213,57 @@ TEST_F(MessageDispatcherFixture, ReceiveRequest_NoReceiver)
 
     msg = createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::REQUEST, 0x04);
     msg.ecu = Message::Ecu::VCM;
-    EXPECT_CALL(transport,
-                sendError(Message::Ecu::VCM,
-                          Ref(msg.pdu),
-                          ITransportServices::ErrorCode::INVALID_SERVICE_ID,
-                          static_cast<std::uint16_t>(ServiceId::Positioning)));
+    EXPECT_CALL(transport, sendError(Message::Ecu::VCM, Ref(msg.pdu), ITransportServices::ErrorCode::INVALID_SERVICE_ID,
+                                     static_cast<std::uint16_t>(ServiceId::Positioning)));
     EXPECT_CALL(diagnostics, SetInvalidData(_, _)).Times(1);
     reqMsgCb(msg);
     ASSERT_NE(true, msgReceived);
 }
 
-TEST_F(MessageDispatcherFixture, SendMessage)
-{
+TEST_F(MessageDispatcherFixture, SendMessage) {
     MockThreadDispatcher mtd;
     Message expectedMsg =
-        createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::RESPONSE, 0x04);
+            createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::RESPONSE, 0x04);
 
     EXPECT_CALL(transport, getThreadDispatcher()).WillOnce(ReturnRef(mtd));
 
     EXPECT_CALL(transport,
                 sendMessage_mocked(LambdaMatcher([&expectedMsg](const Connectivity::Message &msg, bool &ret) {
-                    if (msg.pdu.header.service_id != expectedMsg.pdu.header.service_id)
-                    {
+                    if (msg.pdu.header.service_id != expectedMsg.pdu.header.service_id) {
                         ret = false;
                         return "ServiceId mismatch";
                     }
-                    if (msg.pdu.header.operation_id != expectedMsg.pdu.header.operation_id)
-                    {
+                    if (msg.pdu.header.operation_id != expectedMsg.pdu.header.operation_id) {
                         ret = false;
                         return "OperationId mismatch";
                     }
-                    if (msg.pdu.header.operation_type != expectedMsg.pdu.header.operation_type)
-                    {
+                    if (msg.pdu.header.operation_type != expectedMsg.pdu.header.operation_type) {
                         ret = false;
                         return "OperationType mismatch";
                     }
-                    if (msg.pdu.header.sender_handle_id != expectedMsg.pdu.header.sender_handle_id)
-                    {
+                    if (msg.pdu.header.sender_handle_id != expectedMsg.pdu.header.sender_handle_id) {
                         ret = false;
                         return "SenderHandleId mismatch";
                     }
                     ret = true;
                     return "";
                 })))
-        .Times(1);
+            .Times(1);
 
     dispatcher->sendMessage(std::move(expectedMsg));
 }
 
-TEST_F(MessageDispatcherFixture, TestNotification)
-{
+TEST_F(MessageDispatcherFixture, TestNotification) {
     bool msgReceived = false;
 
-    dispatcher->registerNotificationCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerNotificationCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                             [&msgReceived](Message &m) {
+                                                 (void)(m);
+                                                 msgReceived = true;
+                                             });
 
     Message msg =
-        createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::NOTIFICATION, 0x04);
+            createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::NOTIFICATION, 0x04);
 
     // Expectation to make SetInvalidData execute once.
     EXPECT_CALL(diagnostics, SetInvalidData(_, _)).Times(1);
@@ -305,15 +273,14 @@ TEST_F(MessageDispatcherFixture, TestNotification)
     ASSERT_EQ(true, msgReceived);
 }
 
-TEST_F(MessageDispatcherFixture, TestNotification_no_receiver)
-{
+TEST_F(MessageDispatcherFixture, TestNotification_no_receiver) {
     bool msgReceived = false;
 
-    dispatcher->registerNotificationCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerNotificationCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                             [&msgReceived](Message &m) {
+                                                 (void)(m);
+                                                 msgReceived = true;
+                                             });
 
     Message msg = createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::NOTIFICATION, 0x04);
 
@@ -325,15 +292,14 @@ TEST_F(MessageDispatcherFixture, TestNotification_no_receiver)
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError)
-{
+TEST_F(MessageDispatcherFixture, TestError) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::ERROR, 0x04);
 
@@ -342,15 +308,14 @@ TEST_F(MessageDispatcherFixture, TestError)
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError_no_receiver)
-{
+TEST_F(MessageDispatcherFixture, TestError_no_receiver) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg = createMsg(ServiceId::Positioning, OperationId::GNSSPositionData, OperationType::NOTIFICATION, 0x04);
 
@@ -359,15 +324,14 @@ TEST_F(MessageDispatcherFixture, TestError_no_receiver)
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload)
-{
+TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
 
@@ -381,15 +345,14 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload)
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload_no_extra_errorinfo)
-{
+TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload_no_extra_errorinfo) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
 
@@ -403,15 +366,14 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload_no_ex
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_correct_size_payload)
-{
+TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_correct_size_payload) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     std::vector<uint8_t> payload;
     payload.reserve(5);
@@ -420,12 +382,8 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_correct_siz
     serializer.write_uint32(0xdeadbeef);  // ErrorInfo
     serializer.write_uint32(0xfeedface);  // ErrorInfo
 
-    Message msg = createMsg(ServiceId::Connectivity,
-                            OperationId::CurrentInternetSource,
-                            OperationType::REQUEST,
-                            0x04,
-                            std::move(payload),
-                            VccIpCmd::DataType::NOT_ENCODED);
+    Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04,
+                            std::move(payload), VccIpCmd::DataType::NOT_ENCODED);
     msg.ecu = Message::IHU;
 
     std::shared_ptr<MessageDispatcher::CallerData> pCallerData = std::make_shared<MessageDispatcher::CallerData>();
@@ -440,15 +398,14 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_correct_siz
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_incorrect_size_payload)
-{
+TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_incorrect_size_payload) {
     bool msgReceived = false;
 
-    dispatcher->registerRequestCallback(
-        ServiceId::Connectivity, OperationId::CurrentInternetSource, [&msgReceived](Message &m) {
-            (void)(m);
-            msgReceived = true;
-        });
+    dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
+                                        [&msgReceived](Message &m) {
+                                            (void)(m);
+                                            msgReceived = true;
+                                        });
 
     std::vector<uint8_t> payload;
     payload.reserve(3);
@@ -456,12 +413,8 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_incorrect_s
     serializer.write_uint8(static_cast<uint8_t>(ITransportServices::ErrorCode::INVALID_OPERATION_ID));
     serializer.write_uint16(0xdead);  // ErrorInfo
 
-    Message msg = createMsg(ServiceId::Connectivity,
-                            OperationId::CurrentInternetSource,
-                            OperationType::REQUEST,
-                            0x04,
-                            std::move(payload),
-                            VccIpCmd::DataType::NOT_ENCODED);
+    Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04,
+                            std::move(payload), VccIpCmd::DataType::NOT_ENCODED);
     msg.ecu = Message::IHU;
 
     std::shared_ptr<MessageDispatcher::CallerData> pCallerData = std::make_shared<MessageDispatcher::CallerData>();
@@ -476,8 +429,7 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_incorrect_s
     ASSERT_EQ(msgReceived, false);
 }
 
-TEST_F(MessageDispatcherFixture, TestSendMessage_existing_sequence_number)
-{
+TEST_F(MessageDispatcherFixture, TestSendMessage_existing_sequence_number) {
     Message msg = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
     Message msg2 = createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0x04);
     msg.ecu = Message::IHU;

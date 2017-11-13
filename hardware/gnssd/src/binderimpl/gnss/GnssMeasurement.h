@@ -29,7 +29,6 @@ struct GnssMeasurement : public IGnssMeasurement {
     Return<void> close() override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssMeasurement* HIDL_FETCH_IGnssMeasurement(const char* name);

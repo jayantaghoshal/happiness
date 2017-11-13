@@ -36,7 +36,6 @@ struct GnssCallback : public IGnssCallback {
     Return<void> gnssSetSystemInfoCb(const IGnssCallback::GnssSystemInfo& info) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssCallback* HIDL_FETCH_IGnssCallback(const char* name);

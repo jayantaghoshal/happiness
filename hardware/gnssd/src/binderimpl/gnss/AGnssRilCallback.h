@@ -28,7 +28,6 @@ struct AGnssRilCallback : public IAGnssRilCallback {
     Return<void> requestRefLocCb() override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IAGnssRilCallback* HIDL_FETCH_IAGnssRilCallback(const char* name);

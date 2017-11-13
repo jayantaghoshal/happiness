@@ -9,12 +9,27 @@ import logging.config
 import json
 import os
 import re
+import datetime
+from shipit.test_runner.test_types import ResultData
 from shipit.process_tools import check_output_logged
-from shipit.test_runner.test_types import TestFailedException
+from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
+from typing import Dict
 
-def vts_tradefed_run_module(module_name: str):
+# Add pwd to the PYTHONPATH because VTS runs in its own environment with different working directory
+# than where we launch it. It then translates the <option name="test-case-path" value="x/y/z" />
+# into a python module import by replacing / with . To avoid cluttering the whole repo with
+# __init__.py files we set the test-case-path relative to the AndroidTest.xml directory and add that
+# directory to the PYTHONPATH here.
+def _create_env(test_module_dir_path: str) -> Dict[str, str]:
+    env = os.environ.copy()
+    orig_value = env.get("PYTHONPATH")
+    env['PYTHONPATH'] = orig_value + os.pathsep + test_module_dir_path if orig_value else test_module_dir_path
+    return env
+
+def vts_tradefed_run(test_module_dir_path: str):
+    module_name = read_module_name(os.path.join(test_module_dir_path, "AndroidTest.xml"))
     logging.info("Running test module %s" % module_name)
     max_test_time_sec = 60 * 60
     try:
@@ -30,20 +45,54 @@ def vts_tradefed_run_module(module_name: str):
                                            "x86_64",
                                            "--module",
                                            module_name],
-                                           timeout_sec=max_test_time_sec).decode().strip(" \n\r\t")
+                                          timeout_sec=max_test_time_sec,
+                                          env=_create_env(test_module_dir_path)).decode().strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
-        raise TestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
+        raise VtsTestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
     except Exception as e:
-        raise TestFailedException(
+        raise VtsTestFailedException(
             "Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
     fail_pattern1 = "fail:|PASSED: 0"
     if re.search(fail_pattern1, test_result):
-        raise TestFailedException("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+        exception_string = ("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+        raise VtsTestFailedException(exception_string, get_json_object(module_name), get_json_change_time(module_name))
 
     fail_pattern2 = "PASSED: [1-9][0-9]*"
     if not re.search(fail_pattern2, test_result):
-        raise TestFailedException("Test failed! This pattern was missing in the output: \"%s\"" % fail_pattern2)
+        exception_string2 = ("Test failed! This pattern was missing in the output:  \"%s\"" % fail_pattern2)
+        raise VtsTestFailedException(exception_string2, get_json_object(module_name), get_json_change_time(module_name))
+
+    return ResultData(test_result, get_json_object(module_name), get_json_change_time(module_name))
+
+
+def get_json_change_time(module_name):
+    try:
+        with open('/tmp/test_run_summary.json') as test_result:
+            results = json.load(test_result)
+            if module_name == results["Results"][0]["Test Class"]:
+                time = os.path.getmtime("/tmp/test_run_summary.json")
+                last_mod_date = datetime.datetime.fromtimestamp(time)
+                return last_mod_date
+            else:
+                return None
+    except (EnvironmentError, TypeError, IndexError) as error:
+        print("Error: Cannot find JSON result file that matches running module.")
+        return None
+
+
+def get_json_object(module_name):
+    try:
+        with open('/tmp/test_run_summary.json') as test_result:
+            results = json.load(test_result)
+            if module_name == results["Results"][0]["Test Class"]:
+                return results
+            else:
+                return None
+    except (EnvironmentError, TypeError, IndexError) as error:
+        print("Error: Cannot find JSON result file that matches running module.")
+        return None
+
 
 def read_module_name(android_test_xml_file: str):
     logging.info("Reading module name from %s" % android_test_xml_file)
@@ -60,6 +109,7 @@ def read_module_name(android_test_xml_file: str):
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
 
+
 def main():
     parser = argparse.ArgumentParser(description="Run a VTS tradefed module")
     parser.add_argument("test-module-dir",
@@ -71,9 +121,7 @@ def main():
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
-    android_test_xml_file = "%s/AndroidTest.xml" % getattr(parsed_args, "test-module-dir")
-    test_module_name = read_module_name(android_test_xml_file)
-    vts_tradefed_run_module(test_module_name)
+    vts_tradefed_run(getattr(parsed_args, "test-module-dir"))
 
     logging.info("Test completed")
 

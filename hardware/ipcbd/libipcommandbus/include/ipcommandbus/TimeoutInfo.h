@@ -14,15 +14,13 @@ class TransportServicesFixture;
 class TimeoutInfoFixture;
 #endif  // ENABLE_TESTS
 
-namespace Connectivity
-{
-class TimeoutInfo
-{
+namespace Connectivity {
+class TimeoutInfo {
   public:
     // Constructor for ACKs
     TimeoutInfo();
     // General constructor
-    TimeoutInfo(std::chrono::milliseconds baseTimeout, uint32_t maxRetries, float multiplier);
+    TimeoutInfo(std::chrono::milliseconds timeout, uint32_t max_retries);
 
     bool increaseTimeout();
     std::chrono::milliseconds getTimeoutValue(void);

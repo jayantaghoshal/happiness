@@ -14,4 +14,6 @@ namespace carconfig {
 std::uint8_t getValue(std::uint32_t parameterNumber) { return cc.getValue(parameterNumber); }
 std::uint8_t getRawValue(std::uint32_t parameterNumber) { return cc.getRawValue(parameterNumber); }
 bool isConfigured() { return fileExists(carconfig_configured_filename); }
+
+int getNumberOfCCParameters() { return cc_no_of_parameters; }
 }  // namespace::carconfig

@@ -5,8 +5,8 @@ type carconfig_config_files, file_type;
 type carconfig_default_config_file, file_type;
 
 init_daemon_domain(carconfig-updater)
-
-allow carconfig-updater carconfig_config_files:dir { create_file_perms };
+allow carconfig-updater carconfig_config_files:dir { rw_dir_perms };
+allow carconfig-updater carconfig_config_files:file { rw_file_perms rename };
 allow carconfig-updater carconfig_default_config_file:file { r_file_perms };
 
 

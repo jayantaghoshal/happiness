@@ -3,24 +3,21 @@
  * Delphi Confidential
 \*===========================================================================*/
 #include "ipcommandbus/Pdu.h"
-#include <iomanip>
 #include <cutils/log.h>
+#include <iomanip>
 #include <sstream>
 
 #define LOG_TAG "lipcb.Pdu"
 
-namespace Connectivity
-{
+namespace Connectivity {
 
-//TODO: Why is fromData not const?
-bool Pdu::fromData(std::vector<uint8_t> &fromData)
-{
+// TODO: Why is fromData not const?
+bool Pdu::fromData(std::vector<uint8_t> &fromData) {
     header = VCCPDUHeader::from_data(fromData);
 
     // Sanity check of header length field
     if (header.length < VCCPDUHeader::BASE_LENGTH ||
-        header.length > fromData.end() - fromData.begin() - VCCPDUHeader::BASE_LENGTH)
-    {
+        header.length > fromData.end() - fromData.begin() - VCCPDUHeader::BASE_LENGTH) {
         ALOGE("Invalid header length parameter, some packets might be lost");
         fromData.erase(fromData.begin(), fromData.end());
         return false;
@@ -28,8 +25,7 @@ bool Pdu::fromData(std::vector<uint8_t> &fromData)
 
     // Check header length
     uint32_t pduSize = VCCPDUHeader::DATA_SIZE + header.length - 8;
-    if (fromData.size() < pduSize)
-    {
+    if (fromData.size() < pduSize) {
         ALOGE("Not enough data in PDU buffer. Expected %d, but have %zu", pduSize, fromData.size());
         return false;
     }
@@ -43,18 +39,13 @@ bool Pdu::fromData(std::vector<uint8_t> &fromData)
     return true;
 }
 
-void Pdu::toData(std::vector<uint8_t> &buffer) const
-{
+void Pdu::toData(std::vector<uint8_t> &buffer) const {
     header.to_data(buffer);
     buffer.insert(buffer.end(), payload.begin(), payload.end());
 }
 
-void Pdu::createHeader(IpCmdTypes::ServiceId serviceId,
-                       IpCmdTypes::OperationId operationId,
-                       IpCmdTypes::OperationType operationType,
-                       IpCmdTypes::DataType dataType,
-                       uint8_t sequenceId)
-{
+void Pdu::createHeader(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId,
+                       IpCmdTypes::OperationType operationType, IpCmdTypes::DataType dataType, uint8_t sequenceId) {
     header.service_id = serviceId;
     header.operation_id = operationId;
     header.length = VCCPDUHeader::DATA_SIZE - 8;
@@ -67,14 +58,12 @@ void Pdu::createHeader(IpCmdTypes::ServiceId serviceId,
     header.process_flag_and_reserved = 0;
 }
 
-void Pdu::setPayload(std::vector<uint8_t> &&data)
-{
+void Pdu::setPayload(std::vector<uint8_t> &&data) {
     payload = std::move(data);
     header.length = VCCPDUHeader::DATA_SIZE - 8 + payload.size();
 }
 
-std::string Pdu::toString(const Pdu &pdu)
-{
+std::string Pdu::toString(const Pdu &pdu) {
     std::stringstream ss;
     ss << "[" << std::setfill('0') << std::setw(8) << std::hex << pdu.header.sender_handle_id << "] ";
     ss << "(";

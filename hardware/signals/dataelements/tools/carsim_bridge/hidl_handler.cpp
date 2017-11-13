@@ -19,31 +19,40 @@ namespace CarSim {
 
 ::android::hardware::Return<void> HidlHandler::signalChanged(const ::android::hardware::hidl_string& signalName,
                                                              Dir dir, const ::android::hardware::hidl_string& data) {
-  nlohmann::json j;
-  j["SignalName"] = nlohmann::json(std::string(signalName));
-  j["Dir"] = nlohmann::json((int)dir);
-  j["Data"] = nlohmann::json(std::string(data));
-
-  std::string jsonData = j.dump();
-  ALOGV("<server to client> %s\n", jsonData.c_str());
-
-  try {
-    std::shared_ptr<CarSim::SocketConnection> keepConnAlive = connection_;
-    if (keepConnAlive != nullptr) {
-      size_t bytes_sent = keepConnAlive->Send(jsonData);
-      if (bytes_sent == 0) {
-        ALOGV("DEBUG-HidlHandler::signalChanged: No connection to send message to.\n");
-      }
+    // Avoid spamming the tender client by keeping shut for half a second
+    // TODO REMOVE when client can handle it.
+    if (first_run_) {
+        first_run_ = false;
+        connection_timestamp_ = std::chrono::steady_clock::now();
     }
-  } catch (const std::exception& ex) {
-    printf("Error: HidlHandler::signalChanged\n");
-  }
+    if ((std::chrono::steady_clock::now() - connection_timestamp_) < std::chrono::milliseconds(500)) {
+        return ::android::hardware::Void();
+    }
 
-  return ::android::hardware::Void();
+    // Send the data if connection.
+    try {
+        std::shared_ptr<CarSim::SocketConnection> keepConnAlive = connection_;
+        if (keepConnAlive != nullptr) {
+            nlohmann::json j;
+            j["SignalName"] = nlohmann::json(std::string(signalName));
+            j["Dir"] = nlohmann::json((int)dir);
+            j["Data"] = nlohmann::json(std::string(data));
+
+            std::string jsonData = j.dump();
+            ALOGV("<server to client> %s", jsonData.c_str());
+
+            keepConnAlive->Send(jsonData);
+        }
+    } catch (const std::exception& ex) {
+        printf("Error: HidlHandler::signalChanged (internal ex: %s), exiting...\n", ex.what());
+        ALOGD("Error: HidlHandler::signalChanged (internal ex: %s), exiting...", ex.what());
+    }
+
+    return ::android::hardware::Void();
 }
 
 void HidlHandler::SetSocketConnection(std::shared_ptr<CarSim::SocketConnection> connection) {
-  connection_ = connection;
+    connection_ = connection;
 }
 
 }  // CarSim

@@ -2,8 +2,7 @@
 #ifndef AVMP_H
 #define AVMP_H
 #include <stdint.h>
-namespace avmp
-{
+namespace avmp {
 // Version and CRC constants used in version handshaking
 const uint8_t avmpVersion = 0;
 

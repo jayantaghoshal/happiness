@@ -34,62 +34,87 @@
 #define TRUE (BOOL)1
 #endif
 
-#define ASN_Null		void *
+#define ASN_Null void *
 
-#define ASN_RESULT_OK	0
+#define ASN_RESULT_OK 0
 
 //#define ASN_PER_ALIGN   1
-#define ASN_PER_ALIGN   0
-#define ASN_ALIGNMENT   4
+#define ASN_PER_ALIGN 0
+#define ASN_ALIGNMENT 4
 
-typedef unsigned char	ASN_BYTE;
-typedef bool			   BOOL;
-typedef U8				   ASN_Errcode;
+typedef unsigned char ASN_BYTE;
+typedef bool BOOL;
+typedef U8 ASN_Errcode;
 
-typedef struct ASN_Result_t
-{
-   ASN_Errcode	error;
-   U32			linenumber;
+typedef struct ASN_Result_t {
+    ASN_Errcode error;
+    U32 linenumber;
 } * ASN_Result;
 
-#define ASN_SESSION_SIZE (3*sizeof(ASN_BYTE*)+sizeof(U32)+sizeof(struct ASN_Result_t))
-#define ASN_STREAM_SIZE (2*sizeof(ASN_BYTE*)+2*sizeof(U32)+sizeof(struct ASN_Result_t))
+#define ASN_SESSION_SIZE (3 * sizeof(ASN_BYTE *) + sizeof(U32) + sizeof(struct ASN_Result_t))
+#define ASN_STREAM_SIZE (2 * sizeof(ASN_BYTE *) + 2 * sizeof(U32) + sizeof(struct ASN_Result_t))
 
 #ifdef ASN_ALIGNMENT
-#define _ASN_ALIGN(SIZE,W) SIZE % W? ((SIZE / W ) + 1 ) * W: SIZE
-#define ASN_ALIGN(SIZE) _ASN_ALIGN(SIZE,ASN_ALIGNMENT)
+#define _ASN_ALIGN(SIZE, W) SIZE % W ? ((SIZE / W) + 1) * W : SIZE
+#define ASN_ALIGN(SIZE) _ASN_ALIGN(SIZE, ASN_ALIGNMENT)
 #endif
 
-#define ASN_DECODE_CHECK(fn) result = fn; if ( result != (ASN_Result)ASN_RESULT_OK ) { if (result->linenumber == 0) result->linenumber = __LINE__; return result; }
-#define ASN_ENCODE_CHECK(fn) result = fn; if ( result != (ASN_Result)ASN_RESULT_OK ) { if (result->linenumber == 0) result->linenumber = __LINE__; return result; }
-#define ASN_SETSIZE_CHECK(fn) result = fn; if ( result != (ASN_Result)ASN_RESULT_OK ) { if (result->linenumber == 0) result->linenumber = __LINE__; return result; }
-#define ASN_SETTYPE_CHECK(fn) result = fn; if ( result != (ASN_Result)ASN_RESULT_OK ) { if (result->linenumber == 0) result->linenumber = __LINE__; return result; }
-#define ASN_MEM_CHECK(v) if ( v == NULL ) { result = ASN_Session_GetResult( session ); result->error = ASN_ERROR_MEMORY; result->linenumber = __LINE__; return result; }
+#define ASN_DECODE_CHECK(fn)                                        \
+    result = fn;                                                    \
+    if (result != (ASN_Result)ASN_RESULT_OK) {                      \
+        if (result->linenumber == 0) result->linenumber = __LINE__; \
+        return result;                                              \
+    }
+#define ASN_ENCODE_CHECK(fn)                                        \
+    result = fn;                                                    \
+    if (result != (ASN_Result)ASN_RESULT_OK) {                      \
+        if (result->linenumber == 0) result->linenumber = __LINE__; \
+        return result;                                              \
+    }
+#define ASN_SETSIZE_CHECK(fn)                                       \
+    result = fn;                                                    \
+    if (result != (ASN_Result)ASN_RESULT_OK) {                      \
+        if (result->linenumber == 0) result->linenumber = __LINE__; \
+        return result;                                              \
+    }
+#define ASN_SETTYPE_CHECK(fn)                                       \
+    result = fn;                                                    \
+    if (result != (ASN_Result)ASN_RESULT_OK) {                      \
+        if (result->linenumber == 0) result->linenumber = __LINE__; \
+        return result;                                              \
+    }
+#define ASN_MEM_CHECK(v)                         \
+    if (v == NULL) {                             \
+        result = ASN_Session_GetResult(session); \
+        result->error = ASN_ERROR_MEMORY;        \
+        result->linenumber = __LINE__;           \
+        return result;                           \
+    }
 
-typedef struct ASN_Session_t * ASN_Session;
-typedef struct ASN_ObjectId_t * ASN_ObjectId;
-typedef struct ASN_ObjectId_t * ASN_RelativeObjectId;
-typedef struct ASN_String_t * ASN_OctetString;
-typedef struct ASN_PrintableString_t * ASN_PrintableString;
-typedef struct ASN_String_t * ASN_UTF8String;
-typedef struct ASN_Stream_t * ASN_Stream;
+typedef struct ASN_Session_t *ASN_Session;
+typedef struct ASN_ObjectId_t *ASN_ObjectId;
+typedef struct ASN_ObjectId_t *ASN_RelativeObjectId;
+typedef struct ASN_String_t *ASN_OctetString;
+typedef struct ASN_PrintableString_t *ASN_PrintableString;
+typedef struct ASN_String_t *ASN_UTF8String;
+typedef struct ASN_Stream_t *ASN_Stream;
 
 /// The memory for these primitive types are allocated with the struct itself
 #define ASN_Null_SessionSize() (0)
 #define ASN_Null_EncodedSize(a) (0)
-#define ASN_Null_Decode(a,b,c) (ASN_RESULT_OK)
-#define ASN_Null_Encode(a,b) (ASN_RESULT_OK)
+#define ASN_Null_Decode(a, b, c) (ASN_RESULT_OK)
+#define ASN_Null_Encode(a, b) (ASN_RESULT_OK)
 
 // --------------------------------------------------------------------------
 // Type Declarations.
 enum {
-   ASN_ERROR_NO_ERROR,
-   ASN_ERROR_MEMORY,
-   ASN_ERROR_BUFFER_FULL,
-   ASN_ERROR_BUFFER_STARVING,
-   ASN_ERROR_NO_VALID_CHOICE,
-   ASN_ERROR_VALUE_NOT_WITHIN_RANGE,
-   ASN_ERROR_SIZE_NOT_SUPPORTED
+    ASN_ERROR_NO_ERROR,
+    ASN_ERROR_MEMORY,
+    ASN_ERROR_BUFFER_FULL,
+    ASN_ERROR_BUFFER_STARVING,
+    ASN_ERROR_NO_VALID_CHOICE,
+    ASN_ERROR_VALUE_NOT_WITHIN_RANGE,
+    ASN_ERROR_SIZE_NOT_SUPPORTED
 };
 
 // --------------------------------------------------------------------------
@@ -114,7 +139,7 @@ enum {
 *** @return ASN_RESULT_OK if OK or a ASN_Result with the the error and line-number
 ***         in the generated code.
 ***/
-ASN_Result ASN_Length_Decode( ASN_Stream stream, U32 *length, U32 low, U32 high);
+ASN_Result ASN_Length_Decode(ASN_Stream stream, U32 *length, U32 low, U32 high);
 
 /** Encode a length on stream
 ***
@@ -133,7 +158,7 @@ ASN_Result ASN_Length_Decode( ASN_Stream stream, U32 *length, U32 low, U32 high)
 *** @return ASN_RESULT_OK if OK or a ASN_Result with the the error and line-number
 ***         in the generated code.
 ***/
-ASN_Result ASN_Length_Encode( ASN_Stream stream, U32 length, U32 low, U32 high);
+ASN_Result ASN_Length_Encode(ASN_Stream stream, U32 length, U32 low, U32 high);
 
 /** Allocates memory from session buffer
 ***
@@ -150,7 +175,7 @@ ASN_Result ASN_Length_Encode( ASN_Stream stream, U32 length, U32 low, U32 high);
 *** in the session.
 ***
 ***/
-void * ASN_Malloc(  ASN_Session session, U32 size );
+void *ASN_Malloc(ASN_Session session, U32 size);
 
 /** Decode a multibyte
 ***
@@ -165,7 +190,7 @@ void * ASN_Malloc(  ASN_Session session, U32 size );
 *** in the generated code.
 ***
 ***/
-ASN_Result ASN_MultiByte_Decode( ASN_Stream stream, U32 *value);
+ASN_Result ASN_MultiByte_Decode(ASN_Stream stream, U32 *value);
 
 /** Encode a multibyte
 ***
@@ -180,7 +205,7 @@ ASN_Result ASN_MultiByte_Decode( ASN_Stream stream, U32 *value);
 *** in the generated code.
 ***
 ***/
-ASN_Result ASN_MultiByte_Encode( ASN_Stream stream, U32 value);
+ASN_Result ASN_MultiByte_Encode(ASN_Stream stream, U32 value);
 
 /** Get size in bits to store a multibyte in ASN_Stream
 ***
@@ -193,7 +218,7 @@ ASN_Result ASN_MultiByte_Encode( ASN_Stream stream, U32 value);
 *** @return Number of bits needed for encoding value as a multibyte.
 ***
 ***/
-U32 ASN_MultiByte_EncodedSize( U32 value);
+U32 ASN_MultiByte_EncodedSize(U32 value);
 
 /** Associate a U16 array with ASN_ObjectId
 ***
@@ -207,7 +232,7 @@ U32 ASN_MultiByte_EncodedSize( U32 value);
 *** @param  The number of elements (arcs) of this 16-bit array..
 ***
 ***/
-void ASN_ObjectId_Associate( ASN_ObjectId ThisPtr, U16 * data, U16 arcs );
+void ASN_ObjectId_Associate(ASN_ObjectId ThisPtr, U16 *data, U16 arcs);
 
 /** Create an ASN_ObjectId
 ***
@@ -216,12 +241,12 @@ void ASN_ObjectId_Associate( ASN_ObjectId ThisPtr, U16 * data, U16 arcs );
 ***
 *** @param  session Session handle.
 ***
-*** @return A pointer to the newly created string or NULL if 
+*** @return A pointer to the newly created string or NULL if
 ***         there where not enough memory in the session.
 ***         The generated code will propagate the "right" error.
 ***
 ***/
-ASN_ObjectId ASN_ObjectId_Create( ASN_Session session );
+ASN_ObjectId ASN_ObjectId_Create(ASN_Session session);
 
 /** Decode an ASN_ObjectId
 ***
@@ -238,7 +263,7 @@ ASN_ObjectId ASN_ObjectId_Create( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_ObjectId_Decode( ASN_ObjectId ThisPtr, ASN_Session session, ASN_Stream stream );
+ASN_Result ASN_ObjectId_Decode(ASN_ObjectId ThisPtr, ASN_Session session, ASN_Stream stream);
 
 /** Encode an ASN_ObjectId
 ***
@@ -253,7 +278,7 @@ ASN_Result ASN_ObjectId_Decode( ASN_ObjectId ThisPtr, ASN_Session session, ASN_S
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_ObjectId_Encode( ASN_ObjectId ThisPtr, ASN_Stream stream );
+ASN_Result ASN_ObjectId_Encode(ASN_ObjectId ThisPtr, ASN_Stream stream);
 
 /** Get size in bits to store a encoded ASN_ObjectId
 ***
@@ -265,8 +290,7 @@ ASN_Result ASN_ObjectId_Encode( ASN_ObjectId ThisPtr, ASN_Stream stream );
 *** @return The size in bits needed for encoding.
 ***
 ***/
-U32 ASN_ObjectId_EncodedSize( ASN_ObjectId ThisPtr );
-
+U32 ASN_ObjectId_EncodedSize(ASN_ObjectId ThisPtr);
 
 #ifdef ENABLE_ASN_SESSION_SIZE
 /** Get size in bytes needed to store an ASN_ObjectId in a session
@@ -277,7 +301,7 @@ U32 ASN_ObjectId_EncodedSize( ASN_ObjectId ThisPtr );
 *** @return The size in bytes needed to decode this string into a session.
 ***
 ***/
-U32 ASN_ObjectId_SessionSize(  );
+U32 ASN_ObjectId_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 /** Associate a byte array with string
@@ -292,7 +316,7 @@ U32 ASN_ObjectId_SessionSize(  );
 *** @param  length String length.
 ***
 ***/
-void ASN_OctetString_Associate( ASN_OctetString ThisPtr, ASN_BYTE * data, U32 length );
+void ASN_OctetString_Associate(ASN_OctetString ThisPtr, ASN_BYTE *data, U32 length);
 
 /** Associate a null-terminated array with string
 ***
@@ -304,7 +328,7 @@ void ASN_OctetString_Associate( ASN_OctetString ThisPtr, ASN_BYTE * data, U32 le
 *** @param  text Pointer to a null-terminated string
 ***
 ***/
-void ASN_OctetString_AssociateText( ASN_OctetString ThisPtr, char * text );
+void ASN_OctetString_AssociateText(ASN_OctetString ThisPtr, char *text);
 
 /** Create an ASN_OctetString
 ***
@@ -313,12 +337,12 @@ void ASN_OctetString_AssociateText( ASN_OctetString ThisPtr, char * text );
 ***
 *** @param  session A string handle.
 ***
-*** @return A pointer to the newly created string or NULL if 
+*** @return A pointer to the newly created string or NULL if
 ***         there where not enough memory in the session.
 ***         The generated code will propagate the "right" error.
 ***
 ***/
-ASN_OctetString ASN_OctetString_Create( ASN_Session session );
+ASN_OctetString ASN_OctetString_Create(ASN_Session session);
 
 /** Decode an ASN_OctetString
 ***
@@ -339,7 +363,7 @@ ASN_OctetString ASN_OctetString_Create( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_OctetString_Decode( ASN_OctetString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high );
+ASN_Result ASN_OctetString_Decode(ASN_OctetString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high);
 
 /** Encode an ASN_OctetString
 ***
@@ -358,7 +382,7 @@ ASN_Result ASN_OctetString_Decode( ASN_OctetString ThisPtr, ASN_Session session,
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_OctetString_Encode( ASN_OctetString ThisPtr, ASN_Stream stream, U32 low, U32 high );
+ASN_Result ASN_OctetString_Encode(ASN_OctetString ThisPtr, ASN_Stream stream, U32 low, U32 high);
 
 /** Get size in bits to store a encoded ASN_OctetString
 ***
@@ -374,7 +398,7 @@ ASN_Result ASN_OctetString_Encode( ASN_OctetString ThisPtr, ASN_Stream stream, U
 *** @return The size in bits needed to encode this string.
 ***
 ***/
-U32 ASN_OctetString_EncodedSize( ASN_OctetString ThisPtr, U32 low, U32 high );
+U32 ASN_OctetString_EncodedSize(ASN_OctetString ThisPtr, U32 low, U32 high);
 
 /** Get string
 ***
@@ -388,7 +412,7 @@ U32 ASN_OctetString_EncodedSize( ASN_OctetString ThisPtr, U32 low, U32 high );
 *** @return Length of string.
 ***
 ***/
-U32 ASN_OctetString_Get( ASN_OctetString ThisPtr, ASN_BYTE * * data );
+U32 ASN_OctetString_Get(ASN_OctetString ThisPtr, ASN_BYTE **data);
 
 /** Get c-string
 ***
@@ -404,7 +428,7 @@ U32 ASN_OctetString_Get( ASN_OctetString ThisPtr, ASN_BYTE * * data );
 *** @return Pointer to an null-terminated byte array.
 ***
 ***/
-char * ASN_OctetString_GetText( ASN_OctetString ThisPtr );
+char *ASN_OctetString_GetText(ASN_OctetString ThisPtr);
 
 #ifdef ENABLE_ASN_SESSION_SIZE
 /** Get size in bytes needed to store an ASN_OctetString in a session
@@ -419,8 +443,8 @@ char * ASN_OctetString_GetText( ASN_OctetString ThisPtr );
 *** @return The size in bytes needed to decode this string into a session.
 ***
 ***/
-U32 ASN_OctetString_SessionSize( U32 low, U32 high );
-#endif // #ifdef ENABLE_ASN_SESSION_SIZE
+U32 ASN_OctetString_SessionSize(U32 low, U32 high);
+#endif  // #ifdef ENABLE_ASN_SESSION_SIZE
 
 /** Set a string
 ***
@@ -440,7 +464,7 @@ U32 ASN_OctetString_SessionSize( U32 low, U32 high );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_OctetString_Set( ASN_OctetString ThisPtr, ASN_Session session, ASN_BYTE * data, U32 length );
+ASN_Result ASN_OctetString_Set(ASN_OctetString ThisPtr, ASN_Session session, ASN_BYTE *data, U32 length);
 
 /** Set as c-string
 ***
@@ -458,7 +482,7 @@ ASN_Result ASN_OctetString_Set( ASN_OctetString ThisPtr, ASN_Session session, AS
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_OctetString_SetText( ASN_OctetString ThisPtr, ASN_Session session, char * text );
+ASN_Result ASN_OctetString_SetText(ASN_OctetString ThisPtr, ASN_Session session, char *text);
 
 /** Associate a byte array with string
 ***
@@ -472,7 +496,7 @@ ASN_Result ASN_OctetString_SetText( ASN_OctetString ThisPtr, ASN_Session session
 *** @param  length String length.
 ***
 ***/
-void ASN_PrintableString_Associate( ASN_PrintableString ThisPtr, ASN_BYTE * data, U32 length );
+void ASN_PrintableString_Associate(ASN_PrintableString ThisPtr, ASN_BYTE *data, U32 length);
 
 /** Associate a null-terminated array with string
 ***
@@ -484,7 +508,7 @@ void ASN_PrintableString_Associate( ASN_PrintableString ThisPtr, ASN_BYTE * data
 *** @param  text Pointer to a null-terminated string
 ***
 ***/
-void ASN_PrintableString_AssociateText( ASN_PrintableString ThisPtr, char * text );
+void ASN_PrintableString_AssociateText(ASN_PrintableString ThisPtr, char *text);
 
 /** Get number of bits required to represent one character in a ASN_PrintableString
 ***
@@ -507,12 +531,12 @@ U32 ASN_PrintableString_BitsPerCharacter(U32 low, U32 high);
 ***
 *** @param  session A string handle.
 ***
-*** @return A pointer to the newly created string or NULL if 
+*** @return A pointer to the newly created string or NULL if
 ***         there where not enough memory in the session.
 ***         The generated code will propagate the "right" error.
 ***
 ***/
-ASN_PrintableString ASN_PrintableString_Create( ASN_Session session );
+ASN_PrintableString ASN_PrintableString_Create(ASN_Session session);
 
 /** Decode an ASN_PrintableString
 ***
@@ -535,7 +559,8 @@ ASN_PrintableString ASN_PrintableString_Create( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_Decode( ASN_PrintableString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high, const char * characterSet );
+ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low,
+                                      U32 high, const char *characterSet);
 
 /** Encode an ASN_PrintableString
 ***
@@ -556,7 +581,8 @@ ASN_Result ASN_PrintableString_Decode( ASN_PrintableString ThisPtr, ASN_Session 
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_Encode( ASN_PrintableString ThisPtr, ASN_Stream stream, U32 low, U32 high, const char * characterSet );
+ASN_Result ASN_PrintableString_Encode(ASN_PrintableString ThisPtr, ASN_Stream stream, U32 low, U32 high,
+                                      const char *characterSet);
 
 /** Get size in bits to store a encoded ASN_PrintableString
 ***
@@ -574,7 +600,7 @@ ASN_Result ASN_PrintableString_Encode( ASN_PrintableString ThisPtr, ASN_Stream s
 *** @return The size in bits needed to encode this string.
 ***
 ***/
-U32 ASN_PrintableString_EncodedSize( ASN_PrintableString ThisPtr, U32 low, U32 high, const char * characterSet );
+U32 ASN_PrintableString_EncodedSize(ASN_PrintableString ThisPtr, U32 low, U32 high, const char *characterSet);
 
 /** Finds character set position for character in string
 ***
@@ -602,7 +628,7 @@ ASN_BYTE ASN_PrintableString_FindIndexing(ASN_PrintableString ThisPtr, U32 index
 *** @return Length of string.
 ***
 ***/
-U32 ASN_PrintableString_Get( ASN_PrintableString ThisPtr, ASN_BYTE * * data );
+U32 ASN_PrintableString_Get(ASN_PrintableString ThisPtr, ASN_BYTE **data);
 
 /** Get c-string
 ***
@@ -618,7 +644,7 @@ U32 ASN_PrintableString_Get( ASN_PrintableString ThisPtr, ASN_BYTE * * data );
 *** @return Pointer to an null-terminated byte array.
 ***
 ***/
-char * ASN_PrintableString_GetText( ASN_PrintableString ThisPtr );
+char *ASN_PrintableString_GetText(ASN_PrintableString ThisPtr);
 
 /** Check if chars has a valid ASN_PrintableString alphabet
 ***
@@ -651,7 +677,7 @@ BOOL ASN_PrintableString_IsInCharacterSet(ASN_PrintableString ThisPtr, ASN_BYTE 
 ***         in the generated code.
 ***
 ***/
-void ASN_PrintableString_MinMax(ASN_BYTE *charSetMinValue, ASN_BYTE *charSetMaxValue, ASN_BYTE * charSet);
+void ASN_PrintableString_MinMax(ASN_BYTE *charSetMinValue, ASN_BYTE *charSetMaxValue, ASN_BYTE *charSet);
 
 #ifdef ENABLE_ASN_SESSION_SIZE
 /** Get size in bytes needed to store an ASN_PrintableString in a session
@@ -668,7 +694,7 @@ void ASN_PrintableString_MinMax(ASN_BYTE *charSetMinValue, ASN_BYTE *charSetMaxV
 *** @return The size in bytes needed to decode this string into a session.
 ***
 ***/
-U32 ASN_PrintableString_SessionSize(U32 low, U32 high, const char * characterSet );
+U32 ASN_PrintableString_SessionSize(U32 low, U32 high, const char *characterSet);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 /** Set a string
@@ -689,7 +715,7 @@ U32 ASN_PrintableString_SessionSize(U32 low, U32 high, const char * characterSet
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_Set( ASN_PrintableString ThisPtr, ASN_Session session, ASN_BYTE * data, U32 length );
+ASN_Result ASN_PrintableString_Set(ASN_PrintableString ThisPtr, ASN_Session session, ASN_BYTE *data, U32 length);
 
 /** Set the allowed character set ( alphabet )
 ***
@@ -724,7 +750,7 @@ ASN_Result ASN_PrintableString_SetCharacterSet(ASN_PrintableString ThisPtr, ASN_
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_SetText( ASN_PrintableString ThisPtr, ASN_Session session, char * data );
+ASN_Result ASN_PrintableString_SetText(ASN_PrintableString ThisPtr, ASN_Session session, char *data);
 
 /** Associate a U16 array with ASN_RelativeObjectId
 ***
@@ -738,7 +764,7 @@ ASN_Result ASN_PrintableString_SetText( ASN_PrintableString ThisPtr, ASN_Session
 *** @param  The number of elements (arcs) of this 16-bit array..
 ***
 ***/
-void ASN_RelativeObjectId_Associate( ASN_RelativeObjectId ThisPtr, U16 * data, U16 arcs );
+void ASN_RelativeObjectId_Associate(ASN_RelativeObjectId ThisPtr, U16 *data, U16 arcs);
 
 /** Create an ASN_RelativeObjectId
 ***
@@ -747,12 +773,12 @@ void ASN_RelativeObjectId_Associate( ASN_RelativeObjectId ThisPtr, U16 * data, U
 ***
 *** @param  session Session handle.
 ***
-*** @return A pointer to the newly created string or NULL if 
+*** @return A pointer to the newly created string or NULL if
 ***         there where not enough memory in the session.
 ***         The generated code will propagate the "right" error.
 ***
 ***/
-ASN_RelativeObjectId ASN_RelativeObjectId_Create( ASN_Session session );
+ASN_RelativeObjectId ASN_RelativeObjectId_Create(ASN_Session session);
 
 /** Decode an ASN_RelativeObjectId
 ***
@@ -769,7 +795,7 @@ ASN_RelativeObjectId ASN_RelativeObjectId_Create( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_RelativeObjectId_Decode( ASN_RelativeObjectId ThisPtr, ASN_Session session, ASN_Stream stream );
+ASN_Result ASN_RelativeObjectId_Decode(ASN_RelativeObjectId ThisPtr, ASN_Session session, ASN_Stream stream);
 
 /** Encode an ASN_RelativeObjectId
 ***
@@ -784,7 +810,7 @@ ASN_Result ASN_RelativeObjectId_Decode( ASN_RelativeObjectId ThisPtr, ASN_Sessio
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_RelativeObjectId_Encode( ASN_RelativeObjectId ThisPtr, ASN_Stream stream );
+ASN_Result ASN_RelativeObjectId_Encode(ASN_RelativeObjectId ThisPtr, ASN_Stream stream);
 
 /** Get size in bits to store a encoded ASN_RelativeObjectId
 ***
@@ -796,7 +822,7 @@ ASN_Result ASN_RelativeObjectId_Encode( ASN_RelativeObjectId ThisPtr, ASN_Stream
 *** @return The size in bits needed for encoding.
 ***
 ***/
-U32 ASN_RelativeObjectId_EncodedSize( ASN_RelativeObjectId ThisPtr );
+U32 ASN_RelativeObjectId_EncodedSize(ASN_RelativeObjectId ThisPtr);
 
 #ifdef ENABLE_ASN_SESSION_SIZE
 /** Get size in bytes needed to store an ASN_RelativeObjectId in a session
@@ -807,7 +833,7 @@ U32 ASN_RelativeObjectId_EncodedSize( ASN_RelativeObjectId ThisPtr );
 *** @return The size in bytes needed to decode this string into a session.
 ***
 ***/
-U32 ASN_RelativeObjectId_SessionSize(  );
+U32 ASN_RelativeObjectId_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 /** Count number of bits required for representing low to high range of numbers.
@@ -822,7 +848,7 @@ U32 ASN_RelativeObjectId_SessionSize(  );
 *** @return The minimum number of bits needed to encode this range of numbers.
 ***
 ***/
-U32 ASN_S32CountBits( S32 low, S32 high);
+U32 ASN_S32CountBits(S32 low, S32 high);
 
 /** Checks the amount of free memory in a session.
 ***
@@ -834,7 +860,7 @@ U32 ASN_S32CountBits( S32 low, S32 high);
 *** @return The size in bytes of the remaining memory for session.
 ***
 ***/
-U32 ASN_Session_BytesLeft( ASN_Session session );
+U32 ASN_Session_BytesLeft(ASN_Session session);
 
 /** Creates an ASN Session
 ***
@@ -850,7 +876,7 @@ U32 ASN_Session_BytesLeft( ASN_Session session );
 *** @return ASN_Session The handle (pointer) for the session.
 ***
 ***/
-ASN_Session ASN_Session_Create( ASN_BYTE * decoded_buffer, U32 buf_size );
+ASN_Session ASN_Session_Create(ASN_BYTE *decoded_buffer, U32 buf_size);
 
 /** Resets an ASN Session
 ***
@@ -860,7 +886,7 @@ ASN_Session ASN_Session_Create( ASN_BYTE * decoded_buffer, U32 buf_size );
 *** @param  session The session pointer.
 ***
 ***/
-void ASN_Session_Reset( ASN_Session session );
+void ASN_Session_Reset(ASN_Session session);
 
 /** Decode a normally small unsigned
 ***
@@ -875,7 +901,7 @@ void ASN_Session_Reset( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_SmallUnsigned_Decode( ASN_Stream stream, U32 *value);
+ASN_Result ASN_SmallUnsigned_Decode(ASN_Stream stream, U32 *value);
 
 /** Encode a normally small unsigned
 ***
@@ -890,7 +916,7 @@ ASN_Result ASN_SmallUnsigned_Decode( ASN_Stream stream, U32 *value);
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_SmallUnsigned_Encode( ASN_Stream stream, U32 value);
+ASN_Result ASN_SmallUnsigned_Encode(ASN_Stream stream, U32 value);
 
 /** Get size in bits to store a normally small unsigned in ASN_Stream
 ***
@@ -902,7 +928,7 @@ ASN_Result ASN_SmallUnsigned_Encode( ASN_Stream stream, U32 value);
 *** @return The size in bits needed to encode a normally small unsigned on a stream.
 ***
 ***/
-U32 ASN_SmallUnsigned_EncodedSize( U32 value );
+U32 ASN_SmallUnsigned_EncodedSize(U32 value);
 
 /** Align internal bit/byte pointer on byte.
 ***
@@ -913,13 +939,13 @@ U32 ASN_SmallUnsigned_EncodedSize( U32 value );
 *** @param  stream A stream handle.
 ***
 ***/
-void ASN_Stream_AlignOnByte( ASN_Stream stream );
+void ASN_Stream_AlignOnByte(ASN_Stream stream);
 
 /** Attach a memory buffer to a stream
 ***
 *** @par Purpose:
 *** If stream was created with size ASN_STREAM_SIZE then attaching a
-*** buffer will be necessary in order to decode/encode with that stream. 
+*** buffer will be necessary in order to decode/encode with that stream.
 ***
 *** @param  stream A stream handle.
 ***
@@ -928,7 +954,7 @@ void ASN_Stream_AlignOnByte( ASN_Stream stream );
 *** @param  size The size in bytes of the pre-allocated buffer.
 ***
 ***/
-void ASN_Stream_AttachBuffer( ASN_Stream stream, ASN_BYTE * buffer, U32 size );
+void ASN_Stream_AttachBuffer(ASN_Stream stream, ASN_BYTE *buffer, U32 size);
 
 /** Get number of free bits in stream
 ***
@@ -942,7 +968,7 @@ void ASN_Stream_AttachBuffer( ASN_Stream stream, ASN_BYTE * buffer, U32 size );
 *** @return  The space/memory left in the stream buffer to encode into, measured in bits.
 ***
 ***/
-U32 ASN_Stream_BitsLeft( ASN_Stream stream );
+U32 ASN_Stream_BitsLeft(ASN_Stream stream);
 
 /** Get number of used bytes in stream
 ***
@@ -955,7 +981,7 @@ U32 ASN_Stream_BitsLeft( ASN_Stream stream );
 *** @return  Number of bytes consumed by encoding.
 ***
 ***/
-U32 ASN_Stream_BytesUsed( ASN_Stream stream );
+U32 ASN_Stream_BytesUsed(ASN_Stream stream);
 
 /** Create an ASN_Stream
 ***
@@ -975,12 +1001,12 @@ U32 ASN_Stream_BytesUsed( ASN_Stream stream );
 *** @return A pointer to an ASN_Stream_t struct, i.e an ASN_Stream.
 ***
 ***/
-ASN_Stream ASN_Stream_Create( ASN_BYTE * buffer, U32 size );
+ASN_Stream ASN_Stream_Create(ASN_BYTE *buffer, U32 size);
 
 /** Get stream buffer
 ***
 *** @par Purpose:
-*** This function is useful if using a combined buffer for 
+*** This function is useful if using a combined buffer for
 *** stream-internals and the encoding/decoding buffer itself,
 *** or when passing only the stream handle to a function.
 ***
@@ -991,7 +1017,7 @@ ASN_Stream ASN_Stream_Create( ASN_BYTE * buffer, U32 size );
 *** @return A pointer to the buffer.
 ***
 ***/
-ASN_BYTE * ASN_Stream_GetBuffer( ASN_Stream stream, U32 * size );
+ASN_BYTE *ASN_Stream_GetBuffer(ASN_Stream stream, U32 *size);
 
 /** Reset an ASN_Stream to its original state
 ***
@@ -1001,7 +1027,7 @@ ASN_BYTE * ASN_Stream_GetBuffer( ASN_Stream stream, U32 * size );
 *** @param stream The stream handle.
 ***
 ***/
-void ASN_Stream_Reset( ASN_Stream stream );
+void ASN_Stream_Reset(ASN_Stream stream);
 
 /** Count number of bits required for representing low to high range of numbers.
 ***
@@ -1015,7 +1041,7 @@ void ASN_Stream_Reset( ASN_Stream stream );
 *** @return The minimum number of bits needed to encode this range of numbers.
 ***
 ***/
-U32 ASN_U32CountBits( U32 low, U32 high);
+U32 ASN_U32CountBits(U32 low, U32 high);
 
 /** Associate a byte array with string
 ***
@@ -1029,7 +1055,7 @@ U32 ASN_U32CountBits( U32 low, U32 high);
 *** @param  length String length.
 ***
 ***/
-void ASN_UTF8String_Associate( ASN_UTF8String ThisPtr, ASN_BYTE * data, U32 length );
+void ASN_UTF8String_Associate(ASN_UTF8String ThisPtr, ASN_BYTE *data, U32 length);
 
 /** Associate a null-terminated array with string
 ***
@@ -1041,7 +1067,7 @@ void ASN_UTF8String_Associate( ASN_UTF8String ThisPtr, ASN_BYTE * data, U32 leng
 *** @param  text Pointer to a null-terminated string
 ***
 ***/
-void ASN_UTF8String_AssociateText( ASN_UTF8String ThisPtr, char * text );
+void ASN_UTF8String_AssociateText(ASN_UTF8String ThisPtr, char *text);
 
 /** Create an ASN_UTF8String
 ***
@@ -1050,12 +1076,12 @@ void ASN_UTF8String_AssociateText( ASN_UTF8String ThisPtr, char * text );
 ***
 *** @param  session A string handle.
 ***
-*** @return A pointer to the newly created string or NULL if 
+*** @return A pointer to the newly created string or NULL if
 ***         there where not enough memory in the session.
 ***         The generated code will propagate the "right" error.
 ***
 ***/
-ASN_UTF8String ASN_UTF8String_Create( ASN_Session session );
+ASN_UTF8String ASN_UTF8String_Create(ASN_Session session);
 
 /** Decode an ASN_UTF8String
 ***
@@ -1076,7 +1102,7 @@ ASN_UTF8String ASN_UTF8String_Create( ASN_Session session );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_UTF8String_Decode( ASN_UTF8String ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high );
+ASN_Result ASN_UTF8String_Decode(ASN_UTF8String ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high);
 
 /** Encode an ASN_UTF8String
 ***
@@ -1095,7 +1121,7 @@ ASN_Result ASN_UTF8String_Decode( ASN_UTF8String ThisPtr, ASN_Session session, A
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_UTF8String_Encode( ASN_UTF8String ThisPtr, ASN_Stream stream, U32 low, U32 high );
+ASN_Result ASN_UTF8String_Encode(ASN_UTF8String ThisPtr, ASN_Stream stream, U32 low, U32 high);
 
 /** Get size in bits to store a encoded ASN_UTF8String
 ***
@@ -1111,7 +1137,7 @@ ASN_Result ASN_UTF8String_Encode( ASN_UTF8String ThisPtr, ASN_Stream stream, U32
 *** @return The size in bits needed to encode this string.
 ***
 ***/
-U32 ASN_UTF8String_EncodedSize( ASN_UTF8String ThisPtr, U32 low, U32 high );
+U32 ASN_UTF8String_EncodedSize(ASN_UTF8String ThisPtr, U32 low, U32 high);
 
 /** Get string
 ***
@@ -1125,7 +1151,7 @@ U32 ASN_UTF8String_EncodedSize( ASN_UTF8String ThisPtr, U32 low, U32 high );
 *** @return Length of string.
 ***
 ***/
-U32 ASN_UTF8String_Get( ASN_UTF8String ThisPtr, ASN_BYTE * * data );
+U32 ASN_UTF8String_Get(ASN_UTF8String ThisPtr, ASN_BYTE **data);
 
 /** Get c-string
 ***
@@ -1141,7 +1167,7 @@ U32 ASN_UTF8String_Get( ASN_UTF8String ThisPtr, ASN_BYTE * * data );
 *** @return Pointer to an null-terminated byte array.
 ***
 ***/
-char * ASN_UTF8String_GetText( ASN_UTF8String ThisPtr );
+char *ASN_UTF8String_GetText(ASN_UTF8String ThisPtr);
 
 #ifdef ENABLE_ASN_SESSION_SIZE
 /** Get size in bytes needed to store an ASN_UTF8String in a session
@@ -1156,7 +1182,7 @@ char * ASN_UTF8String_GetText( ASN_UTF8String ThisPtr );
 *** @return The size in bytes needed to decode this string into a session.
 ***
 ***/
-U32 ASN_UTF8String_SessionSize( U32 low, U32 high );
+U32 ASN_UTF8String_SessionSize(U32 low, U32 high);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 /** Set a string
@@ -1177,7 +1203,7 @@ U32 ASN_UTF8String_SessionSize( U32 low, U32 high );
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_UTF8String_Set( ASN_UTF8String ThisPtr, ASN_Session session, ASN_BYTE * data, U32 length );
+ASN_Result ASN_UTF8String_Set(ASN_UTF8String ThisPtr, ASN_Session session, ASN_BYTE *data, U32 length);
 
 /** Set as c-string
 ***
@@ -1195,7 +1221,7 @@ ASN_Result ASN_UTF8String_Set( ASN_UTF8String ThisPtr, ASN_Session session, ASN_
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_UTF8String_SetText( ASN_UTF8String ThisPtr, ASN_Session session, char * data );
+ASN_Result ASN_UTF8String_SetText(ASN_UTF8String ThisPtr, ASN_Session session, char *data);
 
 /** Decode a BOOL value from stream
 ***
@@ -1212,7 +1238,7 @@ ASN_Result ASN_UTF8String_SetText( ASN_UTF8String ThisPtr, ASN_Session session, 
 ***         in the generated code.
 ***
 ***/
-ASN_Result BOOL_Decode( BOOL * value, ASN_Session session, ASN_Stream stream );
+ASN_Result BOOL_Decode(BOOL *value, ASN_Session session, ASN_Stream stream);
 
 /** Encode a BOOL on stream
 ***
@@ -1227,7 +1253,7 @@ ASN_Result BOOL_Decode( BOOL * value, ASN_Session session, ASN_Stream stream );
 ***         in the generated code.
 ***
 ***/
-ASN_Result BOOL_Encode( BOOL value, ASN_Stream stream );
+ASN_Result BOOL_Encode(BOOL value, ASN_Stream stream);
 
 /** Get size in bits to store a BOOL (always 1)
 ***
@@ -1262,7 +1288,7 @@ U32 BOOL_EncodedSize(BOOL a);
 ***         in the generated code.
 ***
 ***/
-ASN_Result ENUM_Decode( U32 *value, ASN_Session session, ASN_Stream stream,U32 low, U32 maxEnumValue, BOOL extensions);
+ASN_Result ENUM_Decode(U32 *value, ASN_Session session, ASN_Stream stream, U32 low, U32 maxEnumValue, BOOL extensions);
 
 /** Encode a ENUM
 ***
@@ -1283,7 +1309,7 @@ ASN_Result ENUM_Decode( U32 *value, ASN_Session session, ASN_Stream stream,U32 l
 ***         in the generated code.
 ***
 ***/
-ASN_Result ENUM_Encode( U32 value,  ASN_Stream stream,U32 low, U32 maxEnumValue, BOOL extensions);
+ASN_Result ENUM_Encode(U32 value, ASN_Stream stream, U32 low, U32 maxEnumValue, BOOL extensions);
 
 /** Get size in bits to store an encoded enum
 ***
@@ -1301,7 +1327,7 @@ ASN_Result ENUM_Encode( U32 value,  ASN_Stream stream,U32 low, U32 maxEnumValue,
 *** @return The size in bits needed to encode this enum on a stream.
 ***
 ***/
-U32 ENUM_EncodedSize(U32 value,U32 low, U32 maxEnumValue, BOOL extensions);
+U32 ENUM_EncodedSize(U32 value, U32 low, U32 maxEnumValue, BOOL extensions);
 
 /** Get size in bytes needed to store an enum in a session
 ***
@@ -1336,7 +1362,7 @@ U32 ENUM_SessionSize(U32 low, U32 high, BOOL extensions);
 ***         in the generated code.
 ***
 ***/
-ASN_Result S32_Decode( S32 * value, ASN_Session session, ASN_Stream stream, S32 low, S32 high );
+ASN_Result S32_Decode(S32 *value, ASN_Session session, ASN_Stream stream, S32 low, S32 high);
 
 /** Encode an signed value
 ***
@@ -1355,7 +1381,7 @@ ASN_Result S32_Decode( S32 * value, ASN_Session session, ASN_Stream stream, S32 
 ***         in the generated code.
 ***
 ***/
-ASN_Result S32_Encode( S32 value, ASN_Stream stream, S32 low, S32 high );
+ASN_Result S32_Encode(S32 value, ASN_Stream stream, S32 low, S32 high);
 
 /** Get size in bits to store a size constrained signed
 ***
@@ -1373,7 +1399,7 @@ ASN_Result S32_Encode( S32 value, ASN_Stream stream, S32 low, S32 high );
 *** @return The size in bits needed to encode a signed on a stream.
 ***
 ***/
-U32 S32_EncodedSize(S32 a,S32 low, S32 high);
+U32 S32_EncodedSize(S32 a, S32 low, S32 high);
 
 /** Get size in bytes needed to store a signed in a session
 ***
@@ -1389,7 +1415,7 @@ U32 S32_EncodedSize(S32 a,S32 low, S32 high);
 *** @return The size in bytes needed to decode a signed into a session.
 ***
 ***/
-U32 S32_SessionSize(S32 a,S32 b);
+U32 S32_SessionSize(S32 a, S32 b);
 
 /** Decode an unsigned value
 ***
@@ -1408,7 +1434,7 @@ U32 S32_SessionSize(S32 a,S32 b);
 ***         in the generated code.
 ***
 ***/
-ASN_Result U32_Decode( U32 * value, ASN_Session session, ASN_Stream stream, U32 low, U32 high );
+ASN_Result U32_Decode(U32 *value, ASN_Session session, ASN_Stream stream, U32 low, U32 high);
 
 /** Encode an unsigned value
 ***
@@ -1427,7 +1453,7 @@ ASN_Result U32_Decode( U32 * value, ASN_Session session, ASN_Stream stream, U32 
 ***         in the generated code.
 ***
 ***/
-ASN_Result U32_Encode( U32 value, ASN_Stream stream, U32 low, U32 high );
+ASN_Result U32_Encode(U32 value, ASN_Stream stream, U32 low, U32 high);
 
 /** Get size in bits to store a size constrained unsigned
 ***
@@ -1445,7 +1471,7 @@ ASN_Result U32_Encode( U32 value, ASN_Stream stream, U32 low, U32 high );
 *** @return The size in bits needed to encode an unsigned on a stream.
 ***
 ***/
-U32 U32_EncodedSize(U32 value,U32 low, U32 high);
+U32 U32_EncodedSize(U32 value, U32 low, U32 high);
 
 /** Get size in bytes needed to store an unsigned in a session
 ***
@@ -1461,12 +1487,12 @@ U32 U32_EncodedSize(U32 value,U32 low, U32 high);
 *** @return The size in bytes needed to decode an unsigned into a session.
 ***
 ***/
-U32 U32_SessionSize(U32 low,U32 high);
+U32 U32_SessionSize(U32 low, U32 high);
 
 #ifdef ASN_ENABLE_TESTCODE
 
 /* Executes all internal test code */
-void ASN_TestCode( void );
+void ASN_TestCode(void);
 /* If testcode is enabled, the printing must be enabled to. */
 #ifndef ASN_PRINT
 #define ASN_PRINT
@@ -1476,19 +1502,19 @@ void ASN_TestCode( void );
 
 #ifdef ASN_PRINT
 /* Must be implemented from the "outside" if printing AND tests are enabled */
-int ASN_PrintSetIndent( int i );
-int ASN_Print( const char * format, ... );
-int ASN_PrintIndented( const char * format, ... );
+int ASN_PrintSetIndent(int i);
+int ASN_Print(const char *format, ...);
+int ASN_PrintIndented(const char *format, ...);
 /* End of the "Must be implemented" */
 
-#define U32_Print(a) ASN_PrintIndented("%lu" EOL, ( unsigned long)a)
-#define S32_Print(a) ASN_PrintIndented("%ld" EOL, ( long)a)
-#define BOOL_Print(a) ASN_PrintIndented("%s" EOL, (a)?"true":"false")
+#define U32_Print(a) ASN_PrintIndented("%lu" EOL, (unsigned long)a)
+#define S32_Print(a) ASN_PrintIndented("%ld" EOL, (long)a)
+#define BOOL_Print(a) ASN_PrintIndented("%s" EOL, (a) ? "true" : "false")
 #define ASN_Null_Print(a) ASN_PrintIndented("NULL" EOL)
-void ASN_ObjectId_Print( ASN_ObjectId ThisPtr );
-void ASN_OctetString_Print( ASN_OctetString ThisPtr );
-void ASN_PrintableString_Print( ASN_PrintableString ThisPtr );
-void ASN_UTF8String_Print( ASN_UTF8String ThisPtr );
+void ASN_ObjectId_Print(ASN_ObjectId ThisPtr);
+void ASN_OctetString_Print(ASN_OctetString ThisPtr);
+void ASN_PrintableString_Print(ASN_PrintableString ThisPtr);
+void ASN_UTF8String_Print(ASN_UTF8String ThisPtr);
 #endif /* #ifdef ASN_PRINT */
 
 /// @}

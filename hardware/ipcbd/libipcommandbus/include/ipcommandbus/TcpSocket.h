@@ -4,17 +4,15 @@
 \*===========================================================================*/
 #pragma once
 #include <cstdint>
+#include <deque>
 #include <limits>
 #include <queue>
-#include <deque>
 #include "ipcommandbus/socket.h"
 
-namespace Connectivity
-{
-class TcpSocket final : public Socket
-{
-public:
-    TcpSocket(tarmac::eventloop::IDispatcher & dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
+namespace Connectivity {
+class TcpSocket final : public Socket {
+  public:
+    TcpSocket(tarmac::eventloop::IDispatcher& dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
     ~TcpSocket();
 
     void registerReadReadyCb(std::function<void(void)> readReadyCb);
@@ -23,9 +21,7 @@ public:
     void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) override;
     void endConnection() override;
 
-private:
-    static int reconnectionRetryHandler(std::uint64_t usec, void* userdata);
-
+  private:
     void readEventHandler();
     void packetizer();
     void resetConnection();
@@ -35,7 +31,6 @@ private:
     std::queue<std::vector<std::uint8_t>> read_frame_buffer_;
     std::function<void(void)> ready_cb_ = nullptr;
 
-    //SdEventSourceReference time_event_source_;
     Message::Ecu peer_ecu_;
 };
 

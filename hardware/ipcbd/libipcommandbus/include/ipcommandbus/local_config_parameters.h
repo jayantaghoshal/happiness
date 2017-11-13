@@ -13,11 +13,9 @@
 
 #include "ipcommandbus/isocket.h"
 
-namespace Connectivity
-{
-class LocalconfigParameters
-{
-public:
+namespace Connectivity {
+class LocalconfigParameters {
+  public:
     LocalconfigParameters(const vcc::LocalConfigReaderInterface *lcfg = vcc::LocalConfigDefault());
 
     static LocalconfigParameters &getInstance();
@@ -60,7 +58,7 @@ public:
     // ----------------
     ISocket::IpPrecedence getNetworkControlPriority();
 
-private:
+  private:
     void Init();
     void InitTimeoutValues();
     void InitNetworkPriority();

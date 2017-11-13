@@ -28,7 +28,6 @@ struct GnssBatchingCallback : public IGnssBatchingCallback {
     Return<void> gnssLocationBatchCb(const hidl_vec<GnssLocation>& locations) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssBatchingCallback* HIDL_FETCH_IGnssBatchingCallback(const char* name);

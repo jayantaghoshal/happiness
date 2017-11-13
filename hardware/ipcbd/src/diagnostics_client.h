@@ -3,29 +3,26 @@
 
 #include "ipcommandbus/idiagnostics_client.h"
 
-namespace Connectivity
-{
+namespace Connectivity {
 
 class DiagnosticsClient :
-//    public IpService,
-    public IDiagnosticsClient
-{
-public:
+        //    public IpService,
+        public IDiagnosticsClient {
+  public:
     /**
      * Constructor
      * @param timeout
      * @param sender
      */
-    DiagnosticsClient()
-    {
-//        IpService::service_name_ = "DIAG";
+    DiagnosticsClient() {
+        //        IpService::service_name_ = "DIAG";
     }
 
     /**
      * Initialize the client
      * @param msg_dispatcher Message dispatcher
      */
-//    void Initialize(MessageDispatcher *msg_dispatcher);
+    //    void Initialize(MessageDispatcher *msg_dispatcher);
 
     /**
      *   Set 'invalid data from <ecu>' diagnostic condition.

@@ -2,11 +2,13 @@ cc_binary {
     name: "carsim_bridge",
     vendor: true,
     cpp_std: "c++14",
+    init_rc: ["carsim_bridge.rc"],
     srcs: [
         "carsim_bridge.cpp",
         "socket_server.cpp",
         "socket_connection.cpp",
-        "hidl_handler.cpp", ],
+        "hidl_handler.cpp",
+    ],
 
     cppflags: [
         "-fexceptions",

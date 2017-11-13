@@ -1,0 +1,50 @@
+{
+  "_comment": "This file copy in jenkins config file is the only valid/used file and for the reason of backup, it will be stored in vendor/volvocars/tools/ci/",
+  "IPM1": {
+    "hostname": "ipm1.volvocars.net",
+    "ip": "10.251.167.39",
+    "model": "IPM-8220",
+    "ihu1": 1,
+    "ihu2": 2,
+    "ihu3": 3,
+    "ihu4": 4,
+    "ihu5": 5,
+    "ihu6": 6
+  },
+  "nuc1": {
+    "hostname": "nuc1.volvocars.net",
+    "ip": "10.251.167.30",
+    "ihu": "ihu1",
+    "remote-power-switch": "IPM1"
+  },
+  "nuc2": {
+    "hostname": "nuc2.volvocars.net",
+    "ip": "10.251.167.31",
+    "ihu": "ihu2",
+    "remote-power-switch": "IPM1"
+  },
+  "nuc3": {
+    "hostname": "nuc3.volvocars.net",
+    "ip": "10.251.167.32",
+    "ihu": "ihu3",
+    "remote-power-switch": "IPM1"
+  },
+  "nuc4": {
+    "hostname": "nuc4.volvocars.net",
+    "ip": "10.251.167.33",
+    "ihu": "ihu4",
+    "remote-power-switch": "IPM1"
+  },
+  "nuc5": {
+    "hostname": "nuc5.volvocars.net",
+    "ip": "10.251.167.34",
+    "ihu": "ihu5",
+    "remote-power-switch": "IPM1"
+  },
+  "nuc6": {
+    "hostname": "nuc6.volvocars.net",
+    "ip": "10.251.167.35",
+    "ihu": "ihu6",
+    "remote-power-switch": "IPM1"
+  }
+}

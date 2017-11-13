@@ -15,19 +15,21 @@ from vts.runners.host import base_test
 from vts.runners.host import const
 from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
+import ihu_base_test
 
-class VtsCiSmokeTest(base_test.BaseTestClass):
+class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     """
        Smoke tests to run first to check the sanity of the device.
        The old smoke test requirements for earlier projects was at
        90 % load and 90 % free memory.
     """
-
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
 
 
     def testCpuLoad(self):
+        #requirement = 1 
+        requirement = 90
         self.dut.shell.InvokeTerminal("my_shell3")
         my_shell = getattr(self.dut.shell, "my_shell3")
         shell_response = my_shell.Execute(["cat /proc/cpuinfo"])
@@ -40,21 +42,21 @@ class VtsCiSmokeTest(base_test.BaseTestClass):
         second_cpu_data = self.get_data(int(number_of_cores))
         total_load = self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
 
-        requirement = 90
-
         for core in range(int(number_of_cores)):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
             if total_load[core] > requirement:
                 process_running = my_shell.Execute(["top -n1"])
                 logging.info("top -n1")
                 logging.info(process_running[const.STDOUT][0])
-                asserts.assertLess(total_load[core], requirement, "The load on the core is over 90 %")
+                asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%")
 
         logging.info("Cpu cores: " + number_of_cores)
         logging.info("model_name: " + model_name)
 
 
     def testMemory(self):
+        requirement = 10
+        #requirement = 99
         self.dut.shell.InvokeTerminal("my_shell4")
         my_shell = getattr(self.dut.shell, "my_shell4")
         shell_response = my_shell.Execute(["free -m"])
@@ -65,7 +67,7 @@ class VtsCiSmokeTest(base_test.BaseTestClass):
         used_memory = float(memory_list[1])
         free = 100 * (1 - used_memory/total_memory)
 
-        asserts.assertLess(10, free, "The used memory is over 90 %")
+        asserts.assertLess(requirement, free, "The free memory is less than" + str(requirement) + "%")
 
         logging.info("The used memory is: " + str(used_memory) + " M")
         logging.info("The total memory is: " + str(total_memory) + " M")

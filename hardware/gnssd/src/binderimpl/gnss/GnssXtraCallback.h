@@ -27,7 +27,6 @@ struct GnssXtraCallback : public IGnssXtraCallback {
     Return<void> downloadRequestCb() override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssXtraCallback* HIDL_FETCH_IGnssXtraCallback(const char* name);

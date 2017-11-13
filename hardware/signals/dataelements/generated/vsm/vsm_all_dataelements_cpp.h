@@ -544,4 +544,4 @@ new autosar::iTPMSCalReq_info(),
 new autosar::iTPMSCalSts_info(),
 new autosar::iTPMSTirePMSts_info(),
 
-// clang-format on
+        // clang-format on

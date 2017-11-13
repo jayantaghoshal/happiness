@@ -5,30 +5,21 @@
 #include "ipcommandbus/TimeoutInfo.h"
 #include <cmath>
 
-namespace Connectivity
-{
+namespace Connectivity {
 TimeoutInfo::TimeoutInfo()
-{
-    LocalconfigParameters cfg = LocalconfigParameters::getInstance();
-    std::chrono::milliseconds timeout = cfg.getDefaultAckTimeout();
-    baseTimeout_ = timeout;
-    maxRetries_ = cfg.getDefaultAckNumRetries();
-    multiplier_ = cfg.getDefaultAckMultiplier();
-    timeoutValue_ = timeout;
-    retry_ = 0;
+    : TimeoutInfo(LocalconfigParameters::getInstance().getDefaultAckTimeout(),
+                  LocalconfigParameters::getInstance().getDefaultAckNumRetries()) {}
 
-}
+TimeoutInfo::TimeoutInfo(std::chrono::milliseconds timeout, uint32_t max_retries)
+    : baseTimeout_(timeout),
+      timeoutValue_(timeout),
+      maxRetries_(max_retries),
+      multiplier_(LocalconfigParameters::getInstance().getDefaultAckMultiplier()),
+      retry_(0) {}
 
-TimeoutInfo::TimeoutInfo(std::chrono::milliseconds bTimeout, uint32_t mRetries, float mult)
-    : baseTimeout_(bTimeout), maxRetries_(mRetries), multiplier_(mult), timeoutValue_(bTimeout), retry_(0)
-{
-}
-
-bool TimeoutInfo::increaseTimeout()
-{
+bool TimeoutInfo::increaseTimeout() {
     retry_++;
-    if (retry_ > maxRetries_)
-    {
+    if (retry_ > maxRetries_) {
         return false;
     }
     // Note: While overflow is a potential issue here, the realistic values used
@@ -37,13 +28,9 @@ bool TimeoutInfo::increaseTimeout()
     return true;
 }
 
-std::chrono::milliseconds TimeoutInfo::getTimeoutValue(void)
-{
-    return timeoutValue_;
-}
+std::chrono::milliseconds TimeoutInfo::getTimeoutValue(void) { return timeoutValue_; }
 
-void TimeoutInfo::reset(void)
-{
+void TimeoutInfo::reset(void) {
     retry_ = 0;
     timeoutValue_ = baseTimeout_;
 }

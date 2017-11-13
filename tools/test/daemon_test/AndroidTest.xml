@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Test if a specific daemon is running at startup -->
+<configuration description="Test if a specific daemon is running at startup">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+    </target_preparer>
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+           <option name="test-module-name" value="VtsDaemonTest"/>
+           <option name="test-case-path" value="volvocars/tools/test/daemon_test/VtsDaemonTest"/>
+           <option name="test-timeout" value="3m"/>
+       </test>
+</configuration>

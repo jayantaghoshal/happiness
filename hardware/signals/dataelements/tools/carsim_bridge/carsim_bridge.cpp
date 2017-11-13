@@ -19,66 +19,72 @@ using namespace vendor::volvocars::hardware::signals::V1_0;
 const int PORT{8080};
 
 int main(int argc, char* argv[]) {
-  // Connect to HIDL and point it to a function for callback
-  ::android::sp<ISignals> service = ISignals::getService();
-  ::android::sp<CarSim::HidlHandler> myCallBackObj(new CarSim::HidlHandler());
+    static std::string tag = "*";
+    static Dir dir;
+    CarSim::SocketServer server{PORT};
 
-  printf("Subscribe to HIDL signals.\n");
-  static std::string tag = "*";
-  static Dir dir;
-  auto subscribe = service->subscribe(tag, dir, myCallBackObj);
-  if (!subscribe.isOk()) {
-    printf("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...", subscribe.description().c_str());
-    return 0;
-  }
-
-  // Wait for client to connect and forward anty messages to HIDL.
-  // Also any messages from HIDL in callback will be sent to client.
-  CarSim::SocketServer server;
-  server.Init(PORT);
-
-  try {
-    while (true) {
-      printf("Listen to client connection request...\n");
-      auto connection = server.Connect();
-      // When connection is established, give a handle to the HIDL callback function
-      myCallBackObj->SetSocketConnection(connection);
-
-      printf("Connected.\n");
-      try {
+    try {
         while (true) {
-          std::string message = connection->Read();
+            // Connect to client
+            printf("Listen to client connection request...\n");
+            auto connection = server.Connect();
+            printf("Connected.\n");
 
-          if (message.empty()) {
-            printf("Connection closed by client.\n");
-            break;  // break out to reconnect while-loop
-          }
+            // Subscribe HIDL
+            printf("Subscribe to HIDL signals.\n");
+            ::android::sp<ISignals> service = ISignals::getService();
+            ::android::sp<CarSim::HidlHandler> myCallBackObj(new CarSim::HidlHandler());
+            myCallBackObj->SetSocketConnection(connection);
 
-          nlohmann::json j = nlohmann::json::parse(message);  // Parse the message to a json object
-          std::string jsonData = j.dump();
-          printf("<client to server> %s\n", jsonData.c_str());  // Should be the same as the message
+            auto subscribe = service->subscribe(tag, dir, myCallBackObj);
+            if (!subscribe.isOk()) {
+                printf("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...\n",
+                       subscribe.description().c_str());
+                ALOGD("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
+                      subscribe.description().c_str());
+                return 0;
+            }
 
-          std::string signal_name = j["SignalName"];
-          Dir signal_dir = static_cast<Dir>(std::uint16_t(j["Dir"]));
-          nlohmann::json jdata = j["Data"];
-          std::string signal_data = jdata.dump();
+            try {
+                while (true) {
+                    std::string message = connection->Read();
 
-          ALOGV("signal_name:%s\nsignal_dir:%zd\nsignal_data:%s\n", signal_name.c_str(), signal_dir,
-                signal_data.c_str());
+                    if (message.empty()) {
+                        printf("Connection closed by client.\n");
+                        ALOGV("Connection closed by client.");
+                        break;  // break out to reconnect while-loop
+                    }
 
-          // Send message to HIDL
-          ::android::hardware::Return<void> retcode = service->send(signal_name, signal_dir, signal_data);
-          (void)retcode.isOk();
+                    nlohmann::json j = nlohmann::json::parse(message);  // Parse the message to a json object
+                    std::string signal_name = j["SignalName"];
+                    Dir signal_dir = static_cast<Dir>(std::uint16_t(j["Dir"]));
+                    nlohmann::json jdata = j["Data"];
+                    std::string signal_data = jdata.dump();
 
-          std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    ALOGV("signal_name:%s\nsignal_dir:%zd\nsignal_data:%s", signal_name.c_str(), signal_dir,
+                          signal_data.c_str());
+
+                    // Send message to HIDL
+                    ::android::hardware::Return<void> retcode = service->send(signal_name, signal_dir, signal_data);
+                    (void)retcode.isOk();
+
+                    // Give other threads a chance
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                }
+            } catch (const std::exception& ex) {
+                printf("Error reading (inner ex: %s), trying to reconnect...\n", ex.what());
+                ALOGD("Error reading (inner ex: %s), trying to reconnect...", ex.what());
+
+                // Make it clear that no connection exists.
+                myCallBackObj->SetSocketConnection(nullptr);
+
+                // TODO: When the HIDL service supports unsubscribe, put it here
+                // (and move the subscribe into the first while-loop)
+            }
         }
-      } catch (const std::exception& ex) {
-        printf("Error reading (inner ex: %s), trying to reconnect...\n", ex.what());
-        myCallBackObj->SetSocketConnection(nullptr);
-      }
+    } catch (const std::exception& ex) {
+        printf("Error: No connection established (internal ex: %s), exiting...\n", ex.what());
+        ALOGD("Error: No connection established (internal ex: %s), exiting...", ex.what());
+        return 0;
     }
-  } catch (const std::exception& ex) {
-    printf("Error: No connection established, exiting...\n");
-    return 0;
-  }
 }

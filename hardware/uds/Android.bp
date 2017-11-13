@@ -1,0 +1,4 @@
+subdirs = [
+    "uds_data_collector",
+    "test/ct",
+]

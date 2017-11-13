@@ -2,21 +2,18 @@
 #define TYPE_CONVERSION_HELPER_H
 
 //#include <cstring>
-#include <string>
 #include <chrono>
+#include <string>
 
 #include <cstring>
 
 extern "C" {
-    #include "infotainmentIpBus.h"
-    #include "pl/asn_base/asn_base.h"
+#include "infotainmentIpBus.h"
+#include "pl/asn_base/asn_base.h"
 }
 
-
-namespace InfotainmentIpBus
-{
-namespace Utils
-{
+namespace InfotainmentIpBus {
+namespace Utils {
 
 /*
 Convert from UTC time Icb_DateTime_t to ms since 1970-01-01 00:00:00
@@ -43,13 +40,11 @@ std::string AsnErrCodeToString(ASN_Errcode code);
 
 //// CommonAPI <-> ASN conversion functions
 
-inline void AsnOctetStringToCapiType(ASN_OctetString p_string, ASN_BYTE* byte_data, U32& length)
-{
+inline void AsnOctetStringToCapiType(ASN_OctetString p_string, ASN_BYTE* byte_data, U32& length) {
     ASN_BYTE* data = nullptr;
     length = ASN_OctetString_Get(p_string, &data);
 
-    if (!data)
-    {
+    if (!data) {
         // log_error().writeFormatted("%s - ASN_OctetString_Get returned NULL pointer in data!", __FUNCTION__);
         return;
     }
@@ -75,13 +70,11 @@ inline StringType AsnOctetStringToCapiType(ASN_OctetString p_string)
 }
 */
 
-inline std::string AsnUtf8StringToCapiType(Icb_UUID p_string)
-{
+inline std::string AsnUtf8StringToCapiType(Icb_UUID p_string) {
     ASN_BYTE* data = nullptr;
     const U32 length = ASN_UTF8String_Get(p_string->uuid, &data);
 
-    if (!data)
-    {
+    if (!data) {
         return "";
     }
 
@@ -89,13 +82,11 @@ inline std::string AsnUtf8StringToCapiType(Icb_UUID p_string)
     return ret;
 }
 
-inline std::string AsnUtf8StringToCapiType(Icb_PartIdentifier p_string)
-{
+inline std::string AsnUtf8StringToCapiType(Icb_PartIdentifier p_string) {
     ASN_BYTE* data = nullptr;
     const U32 length = ASN_UTF8String_Get(p_string->partID, &data);
 
-    if (!data)
-    {
+    if (!data) {
         return "";
     }
 
@@ -103,13 +94,11 @@ inline std::string AsnUtf8StringToCapiType(Icb_PartIdentifier p_string)
     return ret;
 }
 
-inline std::string AsnUtf8StringToCapiType(ASN_UTF8String p_string)
-{
+inline std::string AsnUtf8StringToCapiType(ASN_UTF8String p_string) {
     ASN_BYTE* data = nullptr;
     const U32 length = ASN_UTF8String_Get(p_string, &data);
 
-    if (!data)
-    {
+    if (!data) {
         return "";
     }
 
@@ -117,23 +106,20 @@ inline std::string AsnUtf8StringToCapiType(ASN_UTF8String p_string)
     return ret;
 }
 
-inline ASN_OctetString CapiStringTypeToAsnOctetString(ASN_Session session, ASN_BYTE* data, U32 length)
-{
+inline ASN_OctetString CapiStringTypeToAsnOctetString(ASN_Session session, ASN_BYTE* data, U32 length) {
     ASN_OctetString str_ptr = ASN_OctetString_Create(session);
     ASN_OctetString_Set(str_ptr, session, data, length);
 
     return str_ptr;
 }
 
-inline ASN_OctetString CapiStringTypeToAsnOctetString(ASN_Session session, std::string string)
-{
+inline ASN_OctetString CapiStringTypeToAsnOctetString(ASN_Session session, std::string string) {
     ASN_OctetString str_ptr = ASN_OctetString_Create(session);
     ASN_OctetString_SetText(str_ptr, session, const_cast<char*>(string.c_str()));
 
     return str_ptr;
 }
-inline ASN_UTF8String CapiStringTypeToAsnUtf8String(ASN_Session session, const std::string& string)
-{
+inline ASN_UTF8String CapiStringTypeToAsnUtf8String(ASN_Session session, const std::string& string) {
     ASN_UTF8String str_ptr = ASN_UTF8String_Create(session);
     ASN_UTF8String_SetText(str_ptr, session, const_cast<char*>(string.c_str()));
 

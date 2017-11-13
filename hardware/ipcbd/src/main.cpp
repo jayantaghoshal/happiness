@@ -2,11 +2,15 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
+#include <IDispatcher.h>
+#include <cutils/log.h>
+#include <hidl/HidlTransportSupport.h>
 #include <ipcommandbus/MessageDispatcher.h>
+#include <ipcommandbus/TcpSocket.h>
 #include <ipcommandbus/TransportServices.h>
 #include <ipcommandbus/UdpSocket.h>
 #include <ipcommandbus/isocket.h>
-#include <hidl/HidlTransportSupport.h>
+#include <sys/signalfd.h>
 #include <cstdint>
 #include <functional>
 #include <future>
@@ -14,12 +18,9 @@
 #include <memory>
 #include <string>
 #include <utility>
-#include <cutils/log.h>
-#include <IDispatcher.h>
-#include <sys/signalfd.h>
 
-#include "service_manager.h"
 #include "diagnostics_client.h"
+#include "service_manager.h"
 
 #define LOG_TAG "Ipcb.main"
 
@@ -34,25 +35,19 @@ using namespace android::hardware;
 
 // #define LOOPBACK_ADDRESS "127.0.0.1"
 // Configure sockets
-void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
-{
+void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu) {
     const std::uint32_t sleep_time = 100000;  // sleep 100 ms
 
     // Wait for-ever, no need to stop since service is dependent on this to work
     std::string previousError;
     ALOGI("Setup socket for ecu %u", ecu);
-    do
-    {
-        try
-        {
-            sock.setup(ecu);
+    do {
+        try {
+            sock->setup(ecu);
             ALOGI("Setup socket for Ecu %u successfully", ecu);
             return;
-        }
-        catch (const SocketException &e)
-        {
-            if (e.what() != previousError)
-            {
+        } catch (const SocketException &e) {
+            if (e.what() != previousError) {
                 previousError = e.what();
                 ALOGE("Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
             }
@@ -62,8 +57,7 @@ void setupSocket(Connectivity::UdpSocket &sock, Message::Ecu ecu)
 }
 
 // Setup signal handlers
-void SigTermHandler(int fd)
-{
+void SigTermHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
@@ -73,16 +67,14 @@ void SigTermHandler(int fd)
     IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
-void SigHupHandler(int fd)
-{
+void SigHupHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
     ALOGD("SIGHUP received...");
 }
 
-void SigIntHandler(int fd)
-{
+void SigIntHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
@@ -92,8 +84,7 @@ void SigIntHandler(int fd)
     IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
-bool InitSignals()
-{
+bool InitSignals() {
     int ret_val;
 
     sigset_t signal_set_term;
@@ -103,8 +94,7 @@ bool InitSignals()
     // Create signals
     if ((sigemptyset(&signal_set_term) < 0) || (sigemptyset(&signal_set_hup) < 0) ||
         (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
-        (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0))
-    {
+        (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0)) {
         ALOGE("Failed to create signals: %s", strerror(errno));
         return false;
     }
@@ -112,8 +102,7 @@ bool InitSignals()
     // Block signals until we have added support for them
     if ((sigprocmask(SIG_BLOCK, &signal_set_term, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
-        (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0))
-    {
+        (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0)) {
         ALOGE("Failed to block signals: %s", strerror(errno));
         return false;
     }
@@ -122,8 +111,7 @@ bool InitSignals()
     int hupfd = signalfd(-1, &signal_set_hup, 0);
     int intfd = signalfd(-1, &signal_set_int, 0);
 
-    if (termfd < 0 || hupfd < 0 || intfd < 0)
-    {
+    if (termfd < 0 || hupfd < 0 || intfd < 0) {
         ALOGE("signalfd failed: %s", strerror(errno));
         return false;
     }
@@ -139,14 +127,11 @@ bool InitSignals()
 
 // ===============================================================
 // MAIN
-int main(int argc, char *argv[])
-{
-    if (argc < 3)
-    {
-        ALOGE(
-            "Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
-            "\nExamples:\n 1. infotainment UDP\n"
-            "\n2. iplm UDPB\n3. dim TCP DIM\n");
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        ALOGE("Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
+              "\nExamples:\n 1. infotainment UDP\n"
+              "\n2. iplm UDPB\n3. dim TCP DIM\n");
         return 1;
     }
 
@@ -158,47 +143,36 @@ int main(int argc, char *argv[])
 
     TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
-    UdpSocket sock(dispatcher);
-    UdpSocket broadcastSock(dispatcher);  // Socket for broadcast
+    std::shared_ptr<Socket> sock;
 
-    try
-    {
+    try {
         /*ShutdownClient shutdown_client_(sock);
         cedric::core::NodeState nsm_client_(NSM_SHUTDOWNTYPE_NORMAL |
         NSM_SHUTDOWNTYPE_FAST, 2000);
         nsm_client_.setShutdownClient(&shutdown_client_);*/
 
-        if (protocol == "UDP")
-        {
-            transport.setSocket(&sock);
+        if (protocol == "UDP") {
+            sock = std::make_shared<UdpSocket>(dispatcher);
+            transport.setSocket(sock.get());
             setupSocket(sock, Message::IHU);
-        }
-        else if (protocol == "UDPB")
-        {
-            transport.setBroadcastSocket(&broadcastSock);
-            setupSocket(broadcastSock, Message::ALL);
-        }
-        else if (protocol == "TCP")
-        {
-            if (argc < 4)
-            {
+        } else if (protocol == "UDPB") {
+            sock = std::make_shared<UdpSocket>(dispatcher);
+            transport.setBroadcastSocket(sock.get());
+            setupSocket(sock, Message::ALL);
+        } else if (protocol == "TCP") {
+            if (argc < 4) {
                 ALOGE("Needs ECU name. Check .rc file");
                 return 1;
             }
-            // TODO: Add DIM and other ECU sockets for TCP communication
-            // if (ECU == "DIM")
-            // {
-            //     // setup atcp socket with port and IP extracted from
-            //     localconfig
-            // }
-            // else
-            // {
-            //     ALOGE("Unknown ECU specified for TCP communication")
-            //     return;
-            // }
-        }
-        else
-        {
+            if (std::string(argv[3]) == "DIM") {
+                sock = std::make_shared<TcpSocket>(dispatcher);
+                transport.setSocket(sock.get());
+                setupSocket(sock, Message::DIM);
+            } else {
+                ALOGE("Only DIM is supported currently");
+                return 1;
+            }
+        } else {
             ALOGE("Unknown protocol specified");
             return 1;
         }
@@ -214,9 +188,7 @@ int main(int argc, char *argv[])
         joinRpcThreadpool();
 
         ALOGI("exiting ...");
-    }
-    catch (const SocketException &e)
-    {
+    } catch (const SocketException &e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
     }
 }

@@ -27,7 +27,6 @@ struct GnssNiCallback : public IGnssNiCallback {
     Return<void> niNotifyCb(const IGnssNiCallback::GnssNiNotification& notification) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssNiCallback* HIDL_FETCH_IGnssNiCallback(const char* name);

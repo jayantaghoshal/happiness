@@ -20,16 +20,22 @@
 /system/bin/ip u:object_r:ip_exec:s0
 
 # netns device
-/dev/netns(/.*)? u:object_r:netns_device:s0
+/dev/vendor/netns(/.*)? u:object_r:netns_device:s0
 
 #carconfig-updater
 /vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0
+
 #carconfig files
 /vendor/etc/carconfig-default.csv u:object_r:carconfig_default_config_file:s0
 /oem_config/carconfig(/.*)? u:object_r:carconfig_config_files:s0
+
+#carsim_bridge
+/vendor/bin/carsim_bridge u:object_r:carsim_bridge_exec:s0
 
 # desip_service execution rights, TODO remove when properly integrated by Delphi
 /vendor/bin/hw/desip_service u:object_r:desip_service_exec:s0
 
 # hal_vehicle_default, TODO remove when properly integrated by Delphi
 /vendor/bin/hw/android.hardware.automotive.vehicle.vcc@2.0-service u:object_r:hal_vehicle_default_exec:s0
+
+/vendor/bin/hw/vendor.volvocars.hardware.uds@1.0-service u:object_r:uds_diagnostics_default_exec:s0

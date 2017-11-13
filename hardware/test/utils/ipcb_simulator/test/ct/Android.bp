@@ -7,14 +7,15 @@ cc_test {
         "-fexceptions",
     ],
 
-    shared_libs: ["liblog",
-                  "libipcommandbus",
-                  "libtarmac",
-                  "libutils",
-                  "libhidlbase",
-                  "libhidltransport",
-                  "libhwbinder",
-                  "vendor.volvocars.hardware.iplm@1.0"
+    shared_libs: [
+        "liblog",
+        "libipcommandbus",
+        "libtarmac",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "vendor.volvocars.hardware.iplm@1.0",
     ],
 
     static_libs: [

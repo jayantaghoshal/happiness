@@ -412,5 +412,4 @@
 
     static DESink<autosar::iTPMSCalReq_info>* iTPMSCalReq_de=nullptr;
 
-
 // clang-format on

@@ -773,7 +773,7 @@ class AR_RPort(base.ARObject):
             self.initvalue = (None, None)
         try:
             self.initvalue = arxml.constants[const_ref[0].text].getValue()
-        except:
+        except Exception:
             # No comspec exists on the port
             self.initvalue = None
 
@@ -784,7 +784,7 @@ class AR_RPort(base.ARObject):
     def getDataElements(self):
         try:
             return self.arxml.port_interfaces[self.port_interface.text].data_elements
-        except:
+        except Exception:
             return None
 
     def __repr__(self):
@@ -842,7 +842,7 @@ class AR_PPort(base.ARObject):
             self.initvalue = (None, None)
         try:
             self.initvalue = arxml.constants[const_ref[0].text].getValue()
-        except:
+        except Exception:
             # No initvalue exists on the port
             self.initvalue = None
 
@@ -853,7 +853,7 @@ class AR_PPort(base.ARObject):
     def getDataElements(self):
         try:
             return self.arxml.port_interfaces[self.port_interface.text].data_elements
-        except:
+        except Exception:
             return None
 
     def __repr__(self):
@@ -1368,13 +1368,13 @@ class ARIsignal(base.ARObject):
         self.length = self.getSubElem('LENGTH').text
         try:
             self.initialvalue = self.getSubElem('INIT-VALUE/NUMERICAL-VALUE-SPECIFICATION/VALUE').text
-        except:
+        except Exception:
             self.initialvalue = None
 
         try:
             self.compumethodref = self.getSubElem(
                 'NETWORK-REPRESENTATION-PROPS/SW-DATA-DEF-PROPS-VARIANTS/SW-DATA-DEF-PROPS-CONDITIONAL/COMPU-METHOD-REF').text
-        except:
+        except Exception:
             self.compumethodref = None
         if (self.compumethodref and self.initialvalue) is not None:
             try:  # MATS
@@ -1384,7 +1384,7 @@ class ARIsignal(base.ARObject):
                         compumethod.getCompuNumerator()[0]))
                 else:
                     self.applinitvalue = None
-            except:
+            except Exception:
                 self.applinitvalue = None
         else:
             self.applinitvalue = None
@@ -1434,7 +1434,7 @@ class ARConstant(base.ARObject):
                         for f in fields[:]:
                             try:
                                 shortLabel = f.findall('.//' + base.add_schema('SHORT-LABEL'))[0].text
-                            except:
+                            except Exception:
                                 shortLabel = None
                                 if options.verbose:
                                     print("" + self.shortname + " lack SHORT-LABEL elements")

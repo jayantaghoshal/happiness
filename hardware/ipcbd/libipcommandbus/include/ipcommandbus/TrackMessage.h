@@ -5,23 +5,20 @@
 #ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_TRACKMESSAGE_H_
 #define _CONNECTIVITY_LIBIPCOMMANDBUS_TRACKMESSAGE_H_
 
-#include <memory>
 #include <IDispatcher.h>
+#include <memory>
 
 #include "ipcommandbus/Message.h"
 #include "ipcommandbus/TimeoutInfo.h"
 
-namespace Connectivity
-{
+namespace Connectivity {
 /**
  * Container for a Message and some extra meta data (I.e. timers and states...).
  * Used to keep track of the Pdu throughout the transfer cycle.
  */
-class TrackMessage
-{
-public:
-    enum State
-    {
+class TrackMessage {
+  public:
+    enum State {
         UNKNOWN,                             ///< Message created, but no state yet
         WAIT_FOR_REQUEST_ACK,                ///< Waiting for server to ACK the request
         WAIT_FOR_SET_REQUEST_NO_RETURN_ACK,  ///< Waiting for server to ACK the set-request-no-return

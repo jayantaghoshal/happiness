@@ -1,0 +1,17 @@
+# uds diagnostic services
+
+attribute uds_diagnostics;
+attribute uds_diagnostics_client;
+attribute uds_diagnostics_server;
+
+type uds_diagnostics_default, domain;
+type uds_diagnostics_default_exec, exec_type, file_type;
+
+hal_server_domain(uds_diagnostics_default, uds_diagnostics)
+
+# HwBinder IPC from client to server
+binder_call(uds_diagnostics_client, uds_diagnostics_server)
+
+
+hwbinder_use(uds_diagnostics_default)
+init_daemon_domain(uds_diagnostics_default)

@@ -10,11 +10,11 @@ MY_LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -W
 include $(CLEAR_VARS)
 LOCAL_MODULE := netman
 LOCAL_SRC_FILES := \
-	src/netman/netman.cpp \
 	src/netutils.cpp \
-	src/netlink_event_listener.cpp \
-	src/netlink_event_handler.cpp \
-	src/netman/netman_netlink_event_handler.cpp \
+	src/uevent_listener.cpp \
+	src/uevent_handler.cpp \
+	src/netman/netman.cpp \
+	src/netman/netman_event_handler.cpp \
 	src/netman/firewall_config.cpp
 
 LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)
@@ -47,11 +47,11 @@ include $(BUILD_EXECUTABLE)
 include $(CLEAR_VARS)
 LOCAL_MODULE := netboyd
 LOCAL_SRC_FILES := \
-	src/netboy/netboy.cpp \
 	src/netutils.cpp \
-	src/netlink_event_listener.cpp \
-	src/netlink_event_handler.cpp \
-	src/netboy/netboy_netlink_event_handler.cpp \
+	src/uevent_listener.cpp \
+	src/uevent_handler.cpp \
+	src/netboy/netboy.cpp \
+	src/netboy/netboy_event_handler.cpp \
 	src/netboy/rule_handler.cpp
 
 LOCAL_C_INCLUDES := $(MY_LOCAL_C_INCLUDES)

@@ -652,5 +652,4 @@
 
     static DEInjector<autosar::iTPMSTirePMSts_info>* iTPMSTirePMSts_de=nullptr;
 
-
 // clang-format on

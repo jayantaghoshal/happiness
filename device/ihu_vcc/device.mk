@@ -12,8 +12,8 @@ PRODUCT_PACKAGES += \
     gnssd \
     carconfig-updater \
     desip_service \
-    android.hardware.automotive.vehicle.vcc@2.0-service
-
+    android.hardware.automotive.vehicle.vcc@2.0-service \
+    vendor.volvocars.hardware.uds@1.0-service
 
 ##############################################################
 # System UI
@@ -52,8 +52,9 @@ PRODUCT_PACKAGE_OVERLAYS := \
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
-	signaltrace \
-	signalecho \
+    signaltrace \
+    signalecho \
+    carsim_bridge \
     carconfig-client-tester \
     hisipcmd
 endif

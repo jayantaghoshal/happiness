@@ -13,15 +13,15 @@
 #include <systemd/sd-bus.h>
 
 class restartClient {
- public:
-  restartClient();
-  ~restartClient();
-  bool restart();
+  public:
+    restartClient();
+    ~restartClient();
+    bool restart();
 
- private:
-  sd_bus_error error;
-  sd_bus_message *m;
-  sd_bus *bus;
+  private:
+    sd_bus_error error;
+    sd_bus_message *m;
+    sd_bus *bus;
 };
 
 #endif

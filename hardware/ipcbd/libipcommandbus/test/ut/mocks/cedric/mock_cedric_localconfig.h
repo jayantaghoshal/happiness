@@ -8,9 +8,8 @@
 #include <gmock/gmock.h>
 #include <string>
 
-class MockLocalconfig
-{
-public:
+class MockLocalconfig {
+  public:
     MockLocalconfig();
 
     MOCK_METHOD0(init, bool());
@@ -22,18 +21,14 @@ public:
 
 extern MockLocalconfig* g_mock_local_config;
 
-namespace cedric
-{
-namespace core
-{
-namespace localconfig
-{
+namespace cedric {
+namespace core {
+namespace localconfig {
 
 bool init();
 
 template <typename T>
-const T *getValue(const std::string &key);
-
+const T* getValue(const std::string& key);
 }
 }
 }

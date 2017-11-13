@@ -7,7 +7,6 @@
 #include <systemd/sd-event.h>
 #include <string>
 
-namespace Connectivity
-{
+namespace Connectivity {
 int assert_sd_throw(const int sdStatus, const std::string& message);
 }  // namespace Connectivity

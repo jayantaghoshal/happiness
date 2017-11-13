@@ -1286,5 +1286,4 @@
         iTPMSTirePMSts_de->error(errorCode);
         break;
 
-
-// clang-format on
+    // clang-format on

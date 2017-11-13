@@ -3,15 +3,11 @@
 #include <cstdio>
 #include <vector>
 
-namespace Connectivity
-{
-namespace IpCmdTypes
-{
+namespace Connectivity {
+namespace IpCmdTypes {
 
-const char *toString(OperationType ot)
-{
-    switch (ot)
-    {
+const char *toString(OperationType ot) {
+    switch (ot) {
         case OperationType::REQUEST:
             return "REQUEST";
         case OperationType::SETREQUEST_NORETURN:
@@ -37,10 +33,8 @@ const char *toString(OperationType ot)
     }
 }
 
-const char *toString(DataType dt)
-{
-    switch (dt)
-    {
+const char *toString(DataType dt) {
+    switch (dt) {
         case DataType::ENCODED:
             return "ENCODED";
         case DataType::NOT_ENCODED:

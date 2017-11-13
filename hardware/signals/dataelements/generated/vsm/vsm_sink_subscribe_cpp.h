@@ -2014,5 +2014,4 @@ iTPMSCalReq_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isiTPMSCalReq_mtx, &rteValue, sizeof(rteValue) ); 
 });
 
-
 // clang-format on

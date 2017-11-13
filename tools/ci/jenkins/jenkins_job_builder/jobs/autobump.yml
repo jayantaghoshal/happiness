@@ -38,22 +38,7 @@
                 git fetch --tags --progress origin "${GERRIT_BRANCH}"
                 git checkout "${GERRIT_BRANCH}"
                 git reset --hard origin/"${GERRIT_BRANCH}"
-
-                ## This check exists to prevent people from pushing code with old ci scripts 
                 cd "${WORKSPACE_ROOT}"
-
-                if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
-                    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
-                    exit -1
-                fi
-                export REQUIRED_CI_VERSION=2
-                export DETECTED_CI_VERSION=`cat ./vendor/volvocars/tools/ci/ci_version`
-                if [ $REQUIRED_CI_VERSION != $DETECTED_CI_VERSION ]; then 
-                    # If you are a CI developer, you should update the CI version both here and in the repo.
-                    echo "Your CI version in vendor/volvocars is too old, you will have to rebase your change."
-                    exit -1
-                fi
-
 
                 ## Update the manifests based on the templates and push it
                 python3 ./vendor/volvocars/tools/ci/shipit/bump.py . autobump "${GERRIT_BRANCH}" "${BUILD_URL}"

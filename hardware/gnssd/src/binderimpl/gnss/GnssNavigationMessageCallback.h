@@ -27,7 +27,6 @@ struct GnssNavigationMessageCallback : public IGnssNavigationMessageCallback {
     Return<void> gnssNavigationMessageCb(const IGnssNavigationMessageCallback::GnssNavigationMessage& message) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
-
 };
 
 extern "C" IGnssNavigationMessageCallback* HIDL_FETCH_IGnssNavigationMessageCallback(const char* name);

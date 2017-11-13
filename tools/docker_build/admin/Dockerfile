@@ -28,7 +28,7 @@ ENV NO_PROXY '.got.volvocars.net'
 RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
 
 ##################################################
-# Tools required for building Andriod image
+# Tools required for building AOSP image
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     bc \
     bison \
@@ -65,9 +65,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     openjdk-8-jdk \
     python-libxml2 \
     python-markdown \
-    python-xlrd \
-    python-autopep8 \
-    python-pep8 \
+    python-mako \
     squashfs-tools \
     sudo \
     tesseract-ocr \
@@ -83,28 +81,47 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     kmod=22-1ubuntu5
 
 ##################################################
+# Tools required for building Volvo components
+RUN apt-get install -y \
+    python-pip \
+    python3 \
+    python3-pip \
+    python-xlrd \
+    python3-xlrd
+RUN pip3 install \
+    Jinja2>=2.10 \
+    pyyaml \
+    six
+RUN pip install \
+    six \
+    pillow
+
+##################################################
 # Tools required for testing with VTS, see:
 # https://source.android.com/devices/tech/test_infra/tradefed/fundamentals/vts
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+RUN apt-get install -y \
     python-dev \
     python-protobuf \
     protobuf-compiler \
-    python-virtualenv \
-    python-pip
+    python-virtualenv
 
+
+##################################################
 # Install android view client, used for android test automation
 # https://github.com/dtmilano/AndroidViewClient/wiki
 # RUN pip install git+https://github.com/dtmilano/AndroidViewClient.git
 RUN pip install androidviewclient
 
 
+##################################################
+# TODO: Motivate this
 RUN mkdir  /usr/lib/i386-linux-gnu \
     && ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 \
        /usr/lib/i386-linux-gnu/libGL.so
 
 ##################################################
 # Debug packages
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+RUN apt-get install -y \
     iputils-ping \
     dnsutils \
     net-tools \
@@ -113,11 +130,9 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
 
 ##################################################
 # Tools required for CI test environment
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+RUN apt-get install -y \
     git-all \
     picocom \
-    python3 \
-    python3-pip \
     python3-venv \
     python3-serial \
     adb \
@@ -132,10 +147,13 @@ RUN pip3 install redis \
     tabulate \
     zuul==2.5.2
 
+
 ##################################################
 # Static analysis tools
-RUN apt-get update && apt-get -y upgrade && apt-get install -y \
-    shellcheck
+RUN apt-get install -y \
+    shellcheck \
+    python-autopep8 \
+    python-pep8
 RUN pip3 install mypy \
                  pylint \
                  flake8
@@ -146,6 +164,8 @@ RUN pip install typing
 
 ##################################################
 # Preload with python packages required for VTS
+# This is because VTS does pip intall and by having them locally it's faster and
+# doesn't require Internet access
 RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
  && > /usr/local/pip/pip.conf \
  && echo '[install]' >> /usr/local/pip/pip.conf \

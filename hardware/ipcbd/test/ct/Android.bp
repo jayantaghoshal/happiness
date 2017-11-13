@@ -1,0 +1,27 @@
+cc_test {
+    name: "VtsIpcbdComponentTest",
+
+    srcs: ["VtsIpcbdComponentTest.cpp"],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libipcommandbus",
+        "libtarmac",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
+    ],
+
+    static_libs: [
+        "libipcb_simulator_static",
+    ],
+
+    test_suites: ["vts"],
+    compile_multilib: "64",
+}

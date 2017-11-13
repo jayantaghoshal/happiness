@@ -98,18 +98,18 @@ def flash_image(port_mapping: PortMapping,
 
     try:
         ihu_serials.vip.writeline("sm alw 1")
-        expect_line(ihu_serials.vip, ".*SysM- Always_On: 1.*", 5)
+        expect_line(ihu_serials.vip, ".*SysM- Always_On: 1.*", 15)
         logger.info("Set boot mode to ELK")
         boot_mp_to_elk(ihu_serials.vip)
-        expect_line(ihu_serials.mp, "Android", 5,
+        expect_line(ihu_serials.mp, "Android", 30,
                     "Is the MP UART connected? Or do you have the TTY open already?")
-        expect_line(ihu_serials.mp, "auto-boot ...", 5)
-        expect_line(ihu_serials.mp, ">>>.*", 5)
+        expect_line(ihu_serials.mp, "auto-boot ...", 30)
+        expect_line(ihu_serials.mp, ">>>.*", 30)
         logger.info("ELK confirmed, boot elk to fastboot")
         ihu_serials.mp.writeline("boot elk")
-        expect_line(ihu_serials.mp, "==> jump to image.*", 5)
+        expect_line(ihu_serials.mp, "==> jump to image.*", 30)
         expect_line(ihu_serials.mp,
-                    "USB for fastboot transport layer selected", 5)
+                    "USB for fastboot transport layer selected", 30)
         logger.info("Fastboot confirmed on console")
 
         # Verify that the Fastboot protocol is working between host and target.
@@ -172,7 +172,7 @@ def flash_image(port_mapping: PortMapping,
                 output = check_output_logged([adb_executable,
                                               "shell", 'getprop', 'sys.boot_completed'],
                                              timeout_sec=7).decode().strip(" \n\r\t")
-            except:
+            except Exception:
                 output = "0" # Ignore if the command times out
             if output == "1":
                 return

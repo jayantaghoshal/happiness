@@ -1,104 +1,590 @@
-#include <gtest/gtest.h>
-#include "src/LscMocker.h"
-#include <cutils/log.h>
 #include <ECD_dataelement.h>
-#include <iostream>
+#include <cutils/log.h>
+#include <ipcb_simulator.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <fstream>
 #include <future>
+#include <iomanip>
+#include <iostream>
+#include <memory>
 #include <thread>
+
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
+
+#include "gtest/gtest.h"
+#include "src/LscMocker.h"
 
 #define LOG_TAG "iplm_daemon_test"
 
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
+
+using ::vendor::volvocars::hardware::iplm::V1_0::IIplm;
 using ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback;
-using ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroup;
 using ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroup;
 using ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupStatus;
 
-TEST(ImplmdTest, RegisterUnRegisterLSCTest){
-  LscMocker* lscMocker = new LscMocker();
-  int onNodeStatusCallbackCounter = 0;
-  int onResourceGroupStatusCallbackCounter = 0;
-  std::promise<bool> pOnResource;
-  std::promise<bool> pOnNodeStatus;
-  std::future<bool> fOnResource = pOnResource.get_future();
-  std::future<bool> fOnNodeStatus = pOnNodeStatus.get_future();
+static int new_ipcb_pid = -1;
+static int new_iplm_pid = -1;
 
-  lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus)
-  {
-    EXPECT_TRUE(resourceGroup == ResourceGroup::ResourceGroup1 || resourceGroup == ResourceGroup::ResourceGroup3);
-    onResourceGroupStatusCallbackCounter++;
-    if(onResourceGroupStatusCallbackCounter == 1){
-      pOnResource.set_value(true);
+static bool setup_test_case_successful = false;
+
+class IplmTestFixture : public ::testing::Test {
+  protected:
+    IplmTestFixture() {}
+
+    static void SetUpTestCase() {
+        ALOGD("+ SetUpTestCase ");
+
+        // Expected that all tests would be aborted here, but that is not the case.
+        // For now, abort all tests manually
+        ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
+
+        // Kill conflicting IpcbD
+        int ipcb_pid = getProcIdByName("/vendor/bin/hw/ipcbd iplm UDPB");
+        if (-1 != ipcb_pid) {
+            kill(ipcb_pid, SIGTERM);
+        }
+
+        // Kill conflicting IplmD
+        int iplm_pid = getProcIdByName("/vendor/bin/hw/iplmd");
+        if (-1 != iplm_pid) {
+            kill(iplm_pid, SIGTERM);
+        }
+
+        // Start IpcbD for test with mocked localconfig
+        std::string new_ipcb_pid_str = getCmdOut(
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /system/bin/ip netns exec vcc "
+                "/vendor/bin/hw/ipcbd iplm UDPB "
+                "& echo $!");
+
+        std::string::size_type sz;  // alias of size_t
+        new_ipcb_pid = std::stoi(new_ipcb_pid_str, &sz);
+
+        // Wait for service to start
+        uint8_t count = 0;
+        while (NULL == IVehicleCom::getService("iplm").get()) {
+            usleep(100000);
+
+            if (!processExists(new_ipcb_pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        // Start IpcbD for test with mocked localconfig
+        std::string new_iplm_pid_str = getCmdOut("/vendor/bin/hw/iplmd & echo $!");
+
+        new_iplm_pid = std::stoi(new_iplm_pid_str, &sz);
+
+        // Wait for service to start
+        count = 0;
+        while (NULL == IIplm::getService().get()) {
+            usleep(100000);
+
+            if (!processExists(new_iplm_pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        // Move test case into namespace for network mocks to work
+        int fileDescriptor;
+        std::string nameSpace = "/var/run/netns/vcc";
+
+        fileDescriptor = open(nameSpace.c_str(), O_RDONLY);
+        if (fileDescriptor > 0) {
+            if (setns(fileDescriptor, CLONE_NEWNET)) {
+                ASSERT_TRUE(false) << "Set NS failed!";
+            } else {
+                ALOGD("+ SetUpTestCase - Namespace is: %s", nameSpace.c_str());
+            }
+        } else {
+            ASSERT_TRUE(false) << "Open NS filedescriptor failed!";
+        }
+
+        setup_test_case_successful = true;
+
+        ALOGD("- SetUpTestCase ");
     }
-  };
-  lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus){
-    EXPECT_TRUE(ecuType == Ecu::TEM || ecuType == Ecu::VCM);
-    onNodeStatusCallbackCounter++;
-    if(onNodeStatusCallbackCounter == 1){
-      pOnNodeStatus.set_value(true);
+
+    static bool processExists(int pid) {
+        // Calling kill with signal 0 will just return 0 if prcess is running
+        return (0 == kill(pid, 0));
     }
-  };
 
-  ALOGD("registerService iplmdtest");
-  lscMocker->RegisterLSC("iplmd-test");
+    static bool fileExists(const std::string& name) {
+        if (FILE* file = fopen(name.c_str(), "r")) {
+            fclose(file);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-  fOnResource.wait_for(std::chrono::seconds(2));
-  bool calledOnResource = fOnResource.get();
-  ALOGD("Called fOnResource %d",calledOnResource);
-  EXPECT_TRUE(calledOnResource);
+    static int getProcIdByName(std::string procName) {
+        int pid = -1;
 
-  fOnNodeStatus.wait_for(std::chrono::seconds(2));
-  bool calledNodeStatus = fOnNodeStatus.get();
-  ALOGD("Called fOnNodeStatus %d",calledNodeStatus);
-  EXPECT_TRUE(calledNodeStatus);
+        // Open the /proc directory
+        DIR* dp = opendir("/proc");
+        if (dp != NULL) {
+            // Enumerate all entries in directory until process found
+            struct dirent* dirp;
+            while (pid < 0 && (dirp = readdir(dp))) {
+                // Skip non-numeric entries
+                int id = atoi(dirp->d_name);
+                if (id > 0) {
+                    // Read contents of virtual /proc/{pid}/cmdline file
+                    std::string cmdPath = std::string("/proc/") + dirp->d_name + "/cmdline";
+                    std::ifstream cmdFile(cmdPath.c_str());
+                    std::string cmdLine;
+                    getline(cmdFile, cmdLine);
+                    replace(cmdLine.begin(), cmdLine.end(), '\0', ' ');
+                    if (!cmdLine.empty()) {
+                        cmdLine.erase(cmdLine.end() - 1);  // Remove the last character
+                        if (procName == cmdLine) pid = id;
+                    }
+                }
+            }
+        }
 
-  ALOGD("unregisterService iplmdtest");
-  lscMocker->UnregisterLSC("iplmd-test");
-  int onResourceGroupStatusCallbackCounterBefore = onResourceGroupStatusCallbackCounter;
-  int onNodeStatusCallbackCounterBefore = onNodeStatusCallbackCounter;
+        closedir(dp);
 
-  ALOGD("Sleeping for 2 sec");
-  usleep(1000000*2);
+        return pid;
+    }
 
-  //Shouldnt have increased counter since we have unregistered the LSC
-  EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
-  EXPECT_TRUE(onNodeStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
+    static std::string getCmdOut(const char* cmd) {
+        std::array<char, 128> buffer;
+        std::string result;
+        std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+        if (!pipe) {
+            ALOGE("popen() FAILED");
+        }
+        while (!feof(pipe.get())) {
+            if (fgets(buffer.data(), 128, pipe.get()) != NULL) {
+                result += buffer.data();
+                break;  // break it since we just interested to get process id
+            }
+        }
+        return result;
+    }
+
+    static void TearDownTestCase() {
+        ALOGD("+ TearDownTestCase");
+
+        // Clean up, kill started processes
+        if (-1 != new_ipcb_pid) {
+            kill(new_ipcb_pid, SIGTERM);
+        }
+
+        if (-1 != new_iplm_pid) {
+            kill(new_iplm_pid, SIGTERM);
+        }
+
+        ALOGD("- TearDownTestCase");
+    }
+
+    void SetUp() {
+        ALOGD("+ SetUp ");
+
+        lscMocker = new LscMocker();
+        onNodeStatusCallbackCounter = 0;
+        onResourceGroupStatusCallbackCounter = 0;
+
+        // Make sure Test Case Setup was executed correctly
+        ASSERT_TRUE(setup_test_case_successful) << "Setup Test Case failed, failing test";
+
+        // Make sure IpcbD is still running
+        ASSERT_TRUE(processExists(new_ipcb_pid)) << "IpcbD is not running anymore, did it crash?";
+
+        // Make sure IplmD is still running
+        ASSERT_TRUE(processExists(new_iplm_pid)) << "IplmD is not running anymore, did it crash?";
+    }
+
+    void TearDown() {
+        // code here will be called just after the test completes
+        // ok to through exceptions from here if need be
+    }
+
+    ~IplmTestFixture() {}
+
+    // put in any custom data members that you need
+    sp<LscMocker> lscMocker;
+    int onNodeStatusCallbackCounter;
+    int onResourceGroupStatusCallbackCounter;
+    std::future_status status;
+    std::promise<bool> pOnResource;
+    std::promise<bool> pOnNodeStatus;
+    std::future<bool> fOnResource = pOnResource.get_future();
+    std::future<bool> fOnNodeStatus = pOnNodeStatus.get_future();
+};
+
+/*
+ Register and Unregister Local software Components.
+ */
+TEST_F(IplmTestFixture, RegisterUnRegisterLSC) {
+    ALOGD("+ RegisterUnRegisterLSC");
+
+    lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup,
+                                                   ResourceGroupStatus resourceGroupStatus) {
+        ALOGD("+ onResourceGroupStatusCallback");
+        EXPECT_TRUE(resourceGroup == ResourceGroup::ResourceGroup1 || resourceGroup == ResourceGroup::ResourceGroup3);
+        onResourceGroupStatusCallbackCounter++;
+        if (onResourceGroupStatusCallbackCounter == 1) {
+            pOnResource.set_value(true);
+        }
+
+        ALOGD("- onResourceGroupStatusCallback");
+    };
+
+    lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+        ALOGD("+ onNodeStatusCallback");
+        EXPECT_TRUE(ecuType == Ecu::TEM || ecuType == Ecu::VCM);
+        onNodeStatusCallbackCounter++;
+        if (onNodeStatusCallbackCounter == 1) {
+            pOnNodeStatus.set_value(true);
+        }
+        ALOGD("- onNodeStatusCallback");
+    };
+
+    ALOGD("registerService iplmdtest");
+    lscMocker->RegisterLSC("iplmd-test");
+    status = fOnResource.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledOnResource = fOnResource.get();
+    ALOGD("Called fOnResource %d", calledOnResource);
+    EXPECT_TRUE(calledOnResource);
+
+    status = fOnNodeStatus.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledNodeStatus = fOnNodeStatus.get();
+    ALOGD("Called fOnNodeStatus %d", calledNodeStatus);
+    EXPECT_TRUE(calledNodeStatus);
+
+    ALOGD("unregisterService iplmdtest");
+    lscMocker->UnregisterLSC("iplmd-test");
+    int onResourceGroupStatusCallbackCounterBefore = onResourceGroupStatusCallbackCounter;
+    int onNodeStatusCallbackCounterBefore = onNodeStatusCallbackCounter;
+
+    ALOGD("Sleeping for 2 sec");
+    usleep(1000000 * 2);
+
+    // Shouldnt have increased counter since we have unregistered the LSC
+    EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
+    EXPECT_TRUE(onNodeStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
+
+    ALOGD("- RegisterUnRegisterLSC");
 }
 
-/* Needs packet injector tool, will enable later  */
 /*
-TEST(ImplmdTest, WakeUpOnFlexRayTest){
+IPLM Inform other LM modules across the vehicle internal IP network when the ECU has all its services available.
+Following test will register 3 Local Software components and will exepect broad case messages from IPLM
+*/
+TEST_F(IplmTestFixture, RecieveBroadCast_SUCCESS) {
+    ALOGD("+ RecieveBroadCast_SUCCESS");
 
-  std::promise<bool> pFlexrayWakeUp;
-  std::future<bool> fFlexrayWakeUp = pFlexrayWakeUp.get_future();
+    lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup,
+                                                   ResourceGroupStatus resourceGroupStatus) {
+        EXPECT_TRUE(resourceGroup == ResourceGroup::ResourceGroup1 || resourceGroup == ResourceGroup::ResourceGroup3);
+        onResourceGroupStatusCallbackCounter++;
+        if (onResourceGroupStatusCallbackCounter == 1) {
+            pOnResource.set_value(true);
+        }
+    };
 
-  LscMocker* lscMocker = new LscMocker();
-  ECDDataElement::DESink<autosar::NetHdActvt_info> flexraySink;
-  flexraySink.subscribe(
-    [&](){
-    auto value = flexraySink.get().value();
-    EXPECT_TRUE(value.Prio== autosar::PrioHighNormal::PrioNormal);
-    EXPECT_TRUE(value.ResourceGroup == 2);
-    ALOGD("ResourceGroup %d",value.ResourceGroup);
-    ALOGD("Prio %d",value.Prio);
-    pFlexrayWakeUp.set_value(true);
-    return Void();
-  });
+    lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+        EXPECT_TRUE(ecuType == Ecu::TEM || ecuType == Ecu::VCM);
+        onNodeStatusCallbackCounter++;
+        if (onNodeStatusCallbackCounter == 1) {
+            pOnNodeStatus.set_value(true);
+        }
+    };
 
-  ALOGD("registerService iplmdtest1");
-  lscMocker->RegisterLSC("iplmd-test1");
-  ALOGD("registerService iplmdtest2");
-  lscMocker->RegisterLSC("iplmd-test2");
-  ALOGD("registerService iplmdtest3");
-  lscMocker->RegisterLSC("iplmd-test3");
+    // Lets register 3 services for IPLM to start broadcasting messages from iplm
+    for (int i = 0; i < 3; i++) {
+        lscMocker->RegisterLSC("lsc-" + std::to_string(i));
+        ALOGD("RegisterLSC: %d", i);
+    }
 
-  fFlexrayWakeUp.wait_for(std::chrono::seconds(2));
-  bool called = fFlexrayWakeUp.get();
-  ALOGD("Called fFlexrayWakeUp %d",called);
+    status = fOnResource.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
 
-  ALOGD("unregisterService iplmd-test1");
-  lscMocker->UnregisterLSC("iplmd-test1");
-  ALOGD("unregisterService iplmd-test2");
-  lscMocker->UnregisterLSC("iplmd-test2");
-  ALOGD("unregisterService iplmd-test3");
-  lscMocker->UnregisterLSC("iplmd-test3");
-}*/
+    bool calledOnResource = fOnResource.get();
+    ALOGD("Called fOnResource %d", calledOnResource);
+    EXPECT_TRUE(calledOnResource);
+
+    status = fOnNodeStatus.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledNodeStatus = fOnNodeStatus.get();
+    ALOGD("Called fOnNodeStatus %d", calledNodeStatus);
+    EXPECT_TRUE(calledNodeStatus);
+
+    // After 3 registered LSCs we should receive broadcast messages.
+    IpcbSimulator* ipcbSimulator = new IpcbSimulator("198.18.255.255", 60000, 70000, 1);
+
+    Pdu pdu;
+
+    bool result = false;
+    for (int i = 0; i < 10; i++) {
+        // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
+        std::future<bool> fut = std::async([&]() { return ipcbSimulator->ReceivePdu(pdu); });
+
+        std::chrono::milliseconds span(3000);
+        if (fut.wait_for(span) == std::future_status::timeout) {
+            ipcbSimulator->CloseSocket();
+            fut.get();
+            delete ipcbSimulator;
+            break;
+        } else {
+            result = fut.get();
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        lscMocker->UnregisterLSC("lsc-" + std::to_string(i));
+        ALOGD("UnregisterLSC - %d", i);
+    }
+
+    if (result) {
+        ipcbSimulator->CloseSocket();
+        delete ipcbSimulator;
+    }
+
+    EXPECT_EQ(result, true);
+    ALOGD("- RecieveBroadCast_SUCCESS");
+}
+
+// IPLM broadcast messages if less than 3 LSc registered
+TEST_F(IplmTestFixture, RecieveBroadCast_FAIL) {
+    ALOGD("+ RecieveBroadCast_FAIL");
+    // TODO: Implemenet test case where less than 3 LSCs are registered, in this case IPLM shall not broadcast message.
+    bool flag = false;
+    EXPECT_EQ(flag, false);
+    ALOGD("- RecieveBroadCast_FAIL");
+}
+
+// Request services by Resource Group 1 and Prio Normal
+TEST_F(IplmTestFixture, RequestResourceGroup_RG1_NORM) {
+    // Need to register atleast three LSCs in order IPLM to star broadcasting message
+    ALOGD("+ RequestResourceGroup_RG1_NORM");
+
+    lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup,
+                                                   ResourceGroupStatus resourceGroupStatus) {
+        ALOGD("+ onResourceGroupStatusCallback");
+        EXPECT_TRUE(resourceGroup == ResourceGroup::ResourceGroup1 || resourceGroup == ResourceGroup::ResourceGroup3);
+        onResourceGroupStatusCallbackCounter++;
+        if (onResourceGroupStatusCallbackCounter == 1) {
+            pOnResource.set_value(true);
+        }
+
+        ALOGD("- onResourceGroupStatusCallback");
+    };
+
+    lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+        ALOGD("+ onNodeStatusCallback");
+        EXPECT_TRUE(ecuType == Ecu::TEM || ecuType == Ecu::VCM);
+        onNodeStatusCallbackCounter++;
+        if (onNodeStatusCallbackCounter == 1) {
+            pOnNodeStatus.set_value(true);
+        }
+        ALOGD("- onNodeStatusCallback");
+    };
+
+    lscMocker->RegisterLSC("VOC");
+    lscMocker->RegisterLSC("OTA");
+    lscMocker->RegisterLSC("CSB");
+
+    status = fOnResource.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledOnResource = fOnResource.get();
+    ALOGD("Called fOnResource %d", calledOnResource);
+    EXPECT_TRUE(calledOnResource);
+
+    status = fOnNodeStatus.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledNodeStatus = fOnNodeStatus.get();
+    ALOGD("Called fOnNodeStatus %d", calledNodeStatus);
+    EXPECT_TRUE(calledNodeStatus);
+
+    const hidl_string& lscName("VOC");
+    ResourceGroup _rg = ResourceGroup::ResourceGroup1;
+    ResourceGroupPrio _prio = ResourceGroupPrio::Normal;
+    IpcbSimulator IpcbSimulator("198.18.255.255", 60000, 70000, 1);
+    bool flag = false;
+    Pdu pdu;
+
+    lscMocker->RequestResourceGroup(lscName, _rg, _prio);
+
+    // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
+    bool IsPduRecevied = IpcbSimulator.ReceivePdu(pdu);
+
+    if (IsPduRecevied) {
+        std::vector<uint8_t> payload(pdu.payload);
+
+        // get resource group bit which is stored in first bit
+        uint8_t received_action = payload[0];
+        uint8_t received_prio = payload[1];
+
+        if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
+            flag = true;
+        }
+    }
+
+    // Unregistering LSCs
+    lscMocker->UnregisterLSC("VOC");
+    lscMocker->UnregisterLSC("OTA");
+    lscMocker->UnregisterLSC("CSB");
+
+    EXPECT_EQ(flag, true);
+}
+
+// Request services by Resource Group 3 and Prio High
+TEST_F(IplmTestFixture, RequestResourceGroup_RG3_HIGH) {
+    ALOGD("+ RequestResourceGroup_RG3_HIGH");
+
+    lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup,
+                                                   ResourceGroupStatus resourceGroupStatus) {
+        ALOGD("+ onResourceGroupStatusCallback");
+        EXPECT_TRUE(resourceGroup == ResourceGroup::ResourceGroup1 || resourceGroup == ResourceGroup::ResourceGroup3);
+        onResourceGroupStatusCallbackCounter++;
+        if (onResourceGroupStatusCallbackCounter == 1) {
+            pOnResource.set_value(true);
+        }
+        ALOGD("- onResourceGroupStatusCallback");
+    };
+
+    lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
+        ALOGD("+ onNodeStatusCallback");
+        EXPECT_TRUE(ecuType == Ecu::TEM || ecuType == Ecu::VCM);
+        onNodeStatusCallbackCounter++;
+        if (onNodeStatusCallbackCounter == 1) {
+            pOnNodeStatus.set_value(true);
+        }
+        ALOGD("- onNodeStatusCallback");
+    };
+
+    // Need to register atleast three LSCs in order IPLM to star broadcasting message
+    lscMocker->RegisterLSC("VOC");
+    lscMocker->RegisterLSC("OTA");
+    lscMocker->RegisterLSC("CSB");
+
+    status = fOnResource.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledOnResource = fOnResource.get();
+    ALOGD("Called fOnResource %d", calledOnResource);
+    EXPECT_TRUE(calledOnResource);
+
+    status = fOnNodeStatus.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool calledNodeStatus = fOnNodeStatus.get();
+    ALOGD("Called fOnNodeStatus %d", calledNodeStatus);
+    EXPECT_TRUE(calledNodeStatus);
+
+    const hidl_string& lscName("VOC");
+    ResourceGroup _rg = ResourceGroup::ResourceGroup3;
+    ResourceGroupPrio _prio = ResourceGroupPrio::High;
+    IpcbSimulator IpcbSimulator("198.18.255.255", 60000, 70000, 1);
+    bool flag = false;
+    Pdu pdu;
+
+    lscMocker->RequestResourceGroup(lscName, _rg, _prio);
+
+    // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
+    bool IsPduRecevied = IpcbSimulator.ReceivePdu(pdu);
+
+    if (IsPduRecevied) {
+        std::vector<uint8_t> payload(pdu.payload);
+
+        // get resource group bit which is stored in first bit
+        uint8_t received_action = payload[0];
+        uint8_t received_prio = payload[1];
+
+        if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
+            flag = true;
+        }
+    }
+
+    // Unregistering LSCs
+    lscMocker->UnregisterLSC("VOC");
+    lscMocker->UnregisterLSC("OTA");
+    lscMocker->UnregisterLSC("CSB");
+
+    EXPECT_EQ(flag, true);
+}
+
+// TODO: Verify if this test case is producing correct result.
+TEST_F(IplmTestFixture, WakeUpOnFlexRayTest) {
+    std::promise<bool> pFlexrayWakeUp;
+    std::future<bool> fFlexrayWakeUp = pFlexrayWakeUp.get_future();
+
+    ECDDataElement::DESink<autosar::NetHdActvt_info> flexraySink;
+    flexraySink.subscribe([&]() {
+        auto value = flexraySink.get().value();
+        EXPECT_TRUE(value.Prio == autosar::PrioHighNormal::PrioNormal);
+        // EXPECT_TRUE(value.ResourceGroup == 2);
+        ALOGD("ResourceGroup %d", value.ResourceGroup);
+        ALOGD("Prio %d", value.Prio);
+        pFlexrayWakeUp.set_value(true);
+        return Void();
+    });
+
+    ALOGD("registerService iplmdtest1");
+    lscMocker->RegisterLSC("iplmd-test1");
+    ALOGD("registerService iplmdtest2");
+    lscMocker->RegisterLSC("iplmd-test2");
+    ALOGD("registerService iplmdtest3");
+    lscMocker->RegisterLSC("iplmd-test3");
+
+    status = fFlexrayWakeUp.wait_for(std::chrono::seconds(2));
+    if (status == std::future_status::deferred || status == std::future_status::timeout) {
+        ALOGE("Timout or deferred!");
+        ASSERT_TRUE(false);
+    }
+
+    bool called = fFlexrayWakeUp.get();
+    ALOGD("Called fFlexrayWakeUp %d", called);
+
+    ALOGD("unregisterService iplmd-test1");
+    lscMocker->UnregisterLSC("iplmd-test1");
+    ALOGD("unregisterService iplmd-test2");
+    lscMocker->UnregisterLSC("iplmd-test2");
+    ALOGD("unregisterService iplmd-test3");
+    lscMocker->UnregisterLSC("iplmd-test3");
+}

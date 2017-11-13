@@ -4,5 +4,7 @@ subdirs = [
     "carconfig",
     "tarmac",
     "ipcbd",
+    "uds",
     "test",
+    "vehicle",
 ]

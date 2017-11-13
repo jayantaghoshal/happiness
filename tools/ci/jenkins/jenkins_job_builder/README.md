@@ -32,7 +32,7 @@ This can be useful if you want to diff your generated files with the existing co
 # Get your token at https://icup_android.jenkins.cm.volvocars.biz/me/configure after logging in
 CDSID=
 TOKEN=
-JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_hourly_test ihu_image_build icup_android_manifest_bump)
+JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_gate_test_flexray ihu_gate_test_audio ihu_hourly_test ihu_hourly_test_flexray ihu_hourly_test_audio ihu_image_build icup_android_manifest_bump)
 
 mkdir -p old
 for job in "${JOBS[@]}"; do
@@ -43,15 +43,28 @@ done
 
 ## Pushing the config to Jenkins
 
-* User is CDSID
-* Get your token at https://icup_android.jenkins.cm.volvocars.biz/me/configure after logging in
+1. Make your changes to the config, try to make the bootstrap-scripts backwards compatible, or prepare the scripts
+   in the repository in a first commit to ensure that the next commit can be backwards compatible without breaking
+   the CI between step 6 and 9 below.
+2. Test things locally. Thoroughly
+3. Push your change as review to gerrit. (it might get Verified-1 if your change is not backwards compatible)
+   Do NOT set Automerge+1
+4. If your change is not backwards compatible or if you have added important static analyzers that shouldn't be avoided by using old CI:
+    4a. Take the Gerrit Change-ID (not commit hash) and put into vendor/volvocars/tools/ci/ci_version
+    4b. Take the Gerrit Change-ID (not commit hash) and put into the REQUIRED_CI_VERSION variable in ./jobs/bootstrap_common_commit_triggered.sh
+5. Wait for your change to get Code review +2
+6. Upload the new jobs to jenkins:
+    ```bash
+    export CDSID=
+    export TOKEN=    #<<<-- Get your API Token from https://icup_android.jenkins.cm.volvocars.biz/me/configure
+    jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs
+    ```
+7. If you got -1 in step3, add a comment in gerrit containing "!recheck" to get Jenkins to run it again with new jobs.
+8. Press Automerge+1 in Gerrit
+9. Ensure it builds and is merged to master by zuul
 
-```bash
-jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs
-```
 
 ## Quirks
-
 
 * The !include-raw command can't be used inline together with plain strings, we want to 
 share some common shell-functions across all jobs and then run some job-specific code.

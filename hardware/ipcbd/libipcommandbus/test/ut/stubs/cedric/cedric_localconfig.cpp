@@ -6,40 +6,31 @@
 
 #include <string>
 
-LocalconfigStub::LocalconfigStub()
-{
-}
+LocalconfigStub::LocalconfigStub() {}
 
-namespace cedric
-{
-namespace core
-{
-namespace localconfig
-{
+namespace cedric {
+namespace core {
+namespace localconfig {
 
-bool init()
-{
-    return true;
-}
+bool init() { return true; }
 
-template<>
+template <>
 const int* getValue(const std::string& key) {
-    (void) key;
+    (void)key;
     return local_config_stub.getInt;
 }
 
-template<>
+template <>
 const double* getValue(const std::string& key) {
-    (void) key;
+    (void)key;
     return local_config_stub.getDouble;
 }
 
-template<>
+template <>
 const std::string* getValue(const std::string& key) {
-    (void) key;
+    (void)key;
     return const_cast<const std::string*>(&(local_config_stub.getString));
 }
-
 }
 }
 }

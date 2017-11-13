@@ -66,11 +66,7 @@ typedef uint8_t bool_t;
 /* The 'bool' type is used by the XSAL
  */
 typedef uint8_t bool;
-enum bool_Tag
-{
-  false = 0,
-  true = 1
-};
+enum bool_Tag { false = 0, true = 1 };
 
 #endif /* __cplusplus */
 

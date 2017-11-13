@@ -44,9 +44,23 @@ struct Error
     uint32_t errorInfo;
 };
 
-enum Status : int64_t
+struct RetryInfo
 {
-    SUCCESS,
-    FAIL,
-    UNKNOWN,
+   bool overrideDefault;
+   uint8_t maxRetries;
+   uint16_t retryTimeoutMs;
+};
+
+/**
+ * A command result encapsulating whether the command succeeded and
+ * an error string.
+ */
+struct CommandResult {
+    bool success;
+    string errMsg;
+};
+
+struct SubscribeResult {
+    CommandResult commandResult;
+    uint64_t subscriberId;
 };

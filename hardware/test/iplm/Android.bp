@@ -22,12 +22,15 @@ cc_test {
         "libutils",
         "libhidlbase",
         "libhidltransport",
-        "libhardware",
-        "libhwbinder",
+        "libipcommandbus",
         "vendor.volvocars.hardware.iplm@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
     ],
 
-    static_libs: ["libgmock"],
+    static_libs: [
+        "libgmock",
+        "libipcb_simulator_static",
+    ],
 
     // Tag this module as a vts test artifact
     test_suites: ["vts"],

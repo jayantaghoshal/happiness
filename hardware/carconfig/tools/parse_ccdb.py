@@ -69,11 +69,11 @@ class PrintToTerminal:
     @staticmethod
     def printc(level, text):
         if level == 'warning':
-            print PrintToTerminal.WARN + text + PrintToTerminal.ENDC
+            print(PrintToTerminal.WARN + text + PrintToTerminal.ENDC)
         elif level == 'error':
             print >> sys.stderr, PrintToTerminal.FAIL + 'ERROR:' + text + PrintToTerminal.ENDC
         else:
-            print text + PrintToTerminal.ENDC
+            print(text + PrintToTerminal.ENDC)
 
 # Class for storing Parameters
 class CC_Param:
@@ -122,22 +122,22 @@ def parse_ccdb(filename, template_file, output_file, caller = ""):
 
     ##Checking paths
     if not os.path.exists(filename):
-        print "Carconfig file: " + filename + " is missing"
+        print("Carconfig file: " + filename + " is missing")
         return 0
     if not os.path.exists(template_file):
-        print "Template file: " + template_file + " is missing"
+        print("Template file: " + template_file + " is missing")
         return 0
 
     extension = os.path.splitext(filename)[1]
 
     if extension not in VALID_EXTENSIONS:
-        print caller + " needs a car config database spreadsheet with formats:",
+        print(caller + " needs a car config database spreadsheet with formats:")
         for ext in VALID_EXTENSIONS:
             if ext == VALID_EXTENSIONS[-1]:
-                print "or " + ext
+                print ("or " + ext)
             else:
-                print ext,
-        print ""
+                print (ext)
+        print ("")
         return 0
 
     rows = None
@@ -158,7 +158,7 @@ def parse_ccdb(filename, template_file, output_file, caller = ""):
     ## Handle Excel >=2010 files (xlsx, xlsm)
     if extension == ".xlsx" or extension == ".xlsm":
         if extension == ".xlsm":
-            print "Warning, " + extension + " has not been tested"
+            print ("Warning, " + extension + " has not been tested")
         try:
             import openpyxl
         except ImportError:
@@ -202,8 +202,8 @@ def parse_ccdb(filename, template_file, output_file, caller = ""):
 
     ## Simple check of aquired data
     if rows == None:
-        print "ERROR: Unsupported extension of " + filename
-        print " please use a supported format!"
+        print ("ERROR: Unsupported extension of " + filename)
+        print (" please use a supported format!")
         return 1
 
     ## Parse the parameter list
@@ -324,21 +324,21 @@ if __name__ == '__main__':
     if 'docopt' in sys.modules:
         arguments = docopt.docopt(__doc__, version=PARSER_VERSION)
         if not os.path.exists(arguments['CCDB']) or not os.path.exists(arguments['TEMPLATE']):
-            print __doc__
+            print (__doc__)
             sys.exit(0)
     else:
         #very simple docopt replacement, does not handle all combinations of options.
         if len(sys.argv) < 2 or len(sys.argv) > 6:
-            print __doc__
+            print (__doc__)
             sys.exit(0)
         if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-            print __doc__
+            print (__doc__)
             sys.exit(0)
         if sys.argv[1] == '--version':
-            print PARSER_VERSION
+            print (PARSER_VERSION)
             sys.exit(0)
         if not os.path.exists(sys.argv[-2]) or not os.path.exists(sys.argv[-3]):
-            print __doc__
+            print (__doc__)
             sys.exit(0)
 
         arguments = {'CCDB':sys.argv[-3], 'TEMPLATE':sys.argv[-2], 'OUTPUTFILE':sys.argv[-1]}

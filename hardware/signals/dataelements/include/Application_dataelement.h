@@ -15,9 +15,9 @@
  * DESender (used to send out flexray and LIN signals).
  */
 
+#include "callbackwrapper.h"
 #include "dataelementframework.h"
 #include "jsonserializers.h"
-#include "callbackwrapper.h"
 
 namespace ApplicationDataElement {
 
@@ -36,22 +36,21 @@ namespace ApplicationDataElement {
  * myOutSignal.send(myValue);
  * \endcode
  */
-template<typename S>
+template <typename S>
 class DESender {
-static_assert(std::is_base_of<autosar::OutTag, S>::value, "Only for data elements that are out.");
-public:
+    static_assert(std::is_base_of<autosar::OutTag, S>::value, "Only for data elements that are out.");
+
+  public:
     /*!
      * \brief Send out a value for the signal represented by the DESender instance.
      *
      * \param deValue The value to send out. Its type is given from the DESender template class S::data_elem_type
-     * Most of these types are declared in gen_datatypes.h but for simple types like bool, int etc the type is shown directly
+     * Most of these types are declared in gen_datatypes.h but for simple types like bool, int etc the type is shown
+     * directly
      * in gen_dataelements.h
      */
-    void send( const typename S::data_elem_type& deValue ) {
-        DataElementFramework::instance().inject<S>(deValue,-1);
-    }
+    void send(const typename S::data_elem_type& deValue) { DataElementFramework::instance().inject<S>(deValue, -1); }
 };
-
 
 /*!
  * \brief DEReceiver, template class used to receive (get + subscribe) signals from flexray and LIN.
@@ -59,17 +58,14 @@ public:
  * The class is template instantiated with the classes declared in gen_dataelements.h
  * that inherits from the InTag or the InternalTag.
  */
-template<typename S>
+template <typename S>
 class DEReceiver : public INewDataElement {
-static_assert(std::is_base_of<autosar::InTag, S>::value, "Only for data elements that are out.");
-public:
-    DEReceiver() : _value(DataElemValue<S>::ERROR(-1)) {
-        _value = DataElementFramework::instance().subscribe<S>(this);
-    }
+    static_assert(std::is_base_of<autosar::InTag, S>::value, "Only for data elements that are out.");
 
-    virtual ~DEReceiver() {
-        DataElementFramework::instance().unsubscribe(S::Name(), this);
-    }
+  public:
+    DEReceiver() : _value(DataElemValue<S>::ERROR(-1)) { _value = DataElementFramework::instance().subscribe<S>(this); }
+
+    virtual ~DEReceiver() { DataElementFramework::instance().unsubscribe(S::Name(), this); }
 
     virtual void newDataElementValue(const DataElemValueBase& newvalue) {
         // rtti not supported -> static_cast used instead of dynaic_cast.
@@ -96,15 +92,15 @@ public:
      * });
      * \endcode
      */
-    void subscribe( const std::function<void()>& callback ) {
-        const bool hasValidValue = (_value.isOk() || (_value.isError() && _value.errorCode()!=-1));
+    void subscribe(const std::function<void()>& callback) {
+        const bool hasValidValue = (_value.isOk() || (_value.isError() && _value.errorCode() != -1));
 
         {
             std::unique_lock<std::mutex> protectCallback(setCallbackMutex);
             _callback.set(callback);
         }
 
-        if ( callback != nullptr && hasValidValue) {
+        if (callback != nullptr && hasValidValue) {
             // performing direct callback since we have a valid value
             callback();
         }
@@ -138,15 +134,15 @@ public:
      * });
      * \endcode
      */
-    void subscribeVal( const std::function<void(const DataElemValue<S>&)>& callback ) {
-        const bool hasValidValue = (_value.isOk() || (_value.isError() && _value.errorCode()!=-1));
+    void subscribeVal(const std::function<void(const DataElemValue<S>&)>& callback) {
+        const bool hasValidValue = (_value.isOk() || (_value.isError() && _value.errorCode() != -1));
 
         {
             std::unique_lock<std::mutex> protectCallback(setCallbackMutex);
             _callback.set(callback);
         }
 
-        if ( callback != nullptr && hasValidValue) {
+        if (callback != nullptr && hasValidValue) {
             // performing direct callback since we have a valid value
             callback(_value);
         }
@@ -168,22 +164,19 @@ public:
      * }
      * \endcode
      */
-    DataElemValue<S> get() const {
-        return _value;
-    }
+    DataElemValue<S> get() const { return _value; }
 
-private:
+  private:
     // These have no meaning really
-    DEReceiver(const DEReceiver&)=delete;
-    DEReceiver(const DEReceiver&&)=delete;
-    DEReceiver& operator=(const DEReceiver&)=delete;
-    DEReceiver& operator=(const DEReceiver&&)=delete;
+    DEReceiver(const DEReceiver&) = delete;
+    DEReceiver(const DEReceiver&&) = delete;
+    DEReceiver& operator=(const DEReceiver&) = delete;
+    DEReceiver& operator=(const DEReceiver&&) = delete;
 
     std::mutex setCallbackMutex;
     CallbackWrapper<DataElemValue<S>> _callback;
     DataElemValue<S> _value;
 };
 
-} // end of namespace
-#endif // APPLICATIONDATAELEMENT_H
-
+}  // end of namespace
+#endif  // APPLICATIONDATAELEMENT_H

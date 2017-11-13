@@ -5,12 +5,12 @@
 #include <cutils/log.h>
 
 extern "C" {
-    #include <pl/asn_base/asn_base.h>
+#include <pl/asn_base/asn_base.h>
 }
 
-#include "binderimpl/gnss/Gnss.h"
-#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
+#include "binderimpl/gnss/Gnss.h"
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -29,12 +29,10 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 
 using namespace android::hardware::gnss::V1_0::implementation;
 using namespace android::hardware::gnss::V1_0;
-//using namespace InfotainmentIpService::Utils;
+// using namespace InfotainmentIpService::Utils;
 
-
-class GnssService : public IMessageCallback
-{
-public:
+class GnssService : public IMessageCallback {
+  public:
     GnssService();
     ~GnssService() = default;
 
@@ -51,7 +49,7 @@ public:
     void GNSSPositionDataNotificationHandler(const Msg &msg);
     void GNSSPositionDataAccuracyNotificationHandler(const Msg &msg);
 
-private:
+  private:
     sp<IVehicleCom> ipcbServer_;
 
     tarmac::eventloop::IDispatcher &timeProvider_;

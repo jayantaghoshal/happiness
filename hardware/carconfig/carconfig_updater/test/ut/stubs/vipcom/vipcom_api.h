@@ -89,11 +89,9 @@ END EXAMPLE */
  * @brief Interface a client should implement in order to get asynchronous requests/events from the vehicle data driver
  * Note: Callbacks will execute in a different thread than the clients regular thread.
  */
-class IVipComClient
-{
+class IVipComClient {
   public:
-    enum class ConnectionError
-    {
+    enum class ConnectionError {
         OK,
         CONNECT_FAILED,  // Failed making initial connection. Not possible to recover.
         CONNECTION_LOST  // Problems with existing connection. Not possible to recover.
@@ -104,20 +102,13 @@ class IVipComClient
     virtual void onConnectionError(ConnectionError e) = 0;
 };
 
-class VipCom
-{
+class VipCom {
   public:
     // @brief return values for getStatus()
-    enum class Status
-    {
-        INITIALIZING,
-        OK,
-        ERROR
-    };
+    enum class Status { INITIALIZING, OK, ERROR };
 
     // @brief Values for specifying type of VDD communication when creating a VipCom object.
-    enum class Application
-    {
+    enum class Application {
         amfmIpcIndex = 0,
         diagnosticsIpcIndex,
         earlyAudioIpcIndex,
@@ -152,6 +143,7 @@ class VipCom
      * @return  0 if OK, -1 if object is dead and passive (NOK)
      */
     Status getStatus() { return status; };
+
   private:
     std::thread thread_;
     int efd_;  // file descriptor for event notification in order to exit main_loop()

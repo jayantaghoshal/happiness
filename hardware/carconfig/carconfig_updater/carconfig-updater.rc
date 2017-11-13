@@ -1,10 +1,9 @@
-on boot
+on nonencrypted
     mkdir /oem_config/carconfig
     restorecon /oem_config/carconfig
-    class_start carconfig_updater_class
+    start carconfig_updater
 
 service carconfig_updater /vendor/bin/hw/carconfig-updater
-    class carconfig_updater_class
     user root
     group root
     oneshot

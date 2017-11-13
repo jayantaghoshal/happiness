@@ -29,12 +29,9 @@ using namespace Connectivity;
 
 LocalconfigStub local_config_stub;
 
-class TimeoutInfoFixture : public ::testing::Test
-{
-};
+class TimeoutInfoFixture : public ::testing::Test {};
 
-TEST_F(TimeoutInfoFixture, construction)
-{
+TEST_F(TimeoutInfoFixture, construction) {
     TimeoutInfo ti_constr_default;
     EXPECT_EQ(ti_constr_default.getTimeoutValue(), std::chrono::milliseconds(500U));
 
@@ -42,8 +39,7 @@ TEST_F(TimeoutInfoFixture, construction)
     EXPECT_EQ(ti_constr_full.getTimeoutValue(), std::chrono::milliseconds(800U));
 }
 
-TEST_F(TimeoutInfoFixture, increase_timeout)
-{
+TEST_F(TimeoutInfoFixture, increase_timeout) {
     TimeoutInfo ti(std::chrono::milliseconds(800), 2, 2.0);
     EXPECT_EQ(ti.getTimeoutValue(), std::chrono::milliseconds(800U));
 
@@ -56,8 +52,7 @@ TEST_F(TimeoutInfoFixture, increase_timeout)
     EXPECT_FALSE(ti.increaseTimeout());
 }
 
-TEST_F(TimeoutInfoFixture, reset)
-{
+TEST_F(TimeoutInfoFixture, reset) {
     TimeoutInfo ti(std::chrono::milliseconds(800), 2, 2.0);
     EXPECT_EQ(ti.getTimeoutValue(), std::chrono::milliseconds(800U));
 

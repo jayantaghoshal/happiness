@@ -42,21 +42,24 @@ async def _log_and_concat(logger: logging.Logger,
 async def _run_logged_helper(command: Union[str, List[str]],
                        encoding: str,
                        shell: bool,
-                       cwd: str = None) -> Result:
+                       cwd: str = None,
+                       **kwargs) -> Result:
     if shell:
         command = typing.cast(str, command)
         s = await asyncio.create_subprocess_shell(command,
                                                   stdout=subprocess.PIPE,
                                                   stderr=subprocess.PIPE,
                                                   cwd=cwd,
-                                                  limit=2**20)
+                                                  limit=2**20,
+                                                  **kwargs)
     else:
         command = typing.cast(List[str], command)
         s = await asyncio.create_subprocess_exec(command[0], *command[1:],
                                                  stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE,
                                                  cwd=cwd,
-                                                 limit=2**20)
+                                                 limit=2**20,
+                                                 **kwargs)
     logging.info("Executing command: %r, started PID=%d", command, s.pid)
     logger = logging.getLogger("PID%d" % s.pid)
     try:
@@ -95,7 +98,7 @@ async def _run_logged_helper(command: Union[str, List[str]],
 def _close_event_loop():
     try:
         asyncio.get_event_loop().close()
-    except:
+    except Exception:
         pass
 
 atexit.register(_close_event_loop)
@@ -105,11 +108,12 @@ def run(command,
         encoding="utf-8",
         shell=False,
         timeout_sec: int = None,
-        cwd: str = None) -> Result:
+        cwd: str = None,
+        **kwargs) -> Result:
     loop = asyncio.get_event_loop()
     r = loop.run_until_complete(
         asyncio.wait_for(
-            _run_logged_helper(command, encoding, shell, cwd=cwd),
+            _run_logged_helper(command, encoding, shell, cwd=cwd, **kwargs),
             timeout_sec
         ))
     return r
@@ -119,8 +123,9 @@ def check_output_logged(command,
                         encoding="utf-8",
                         shell=False,
                         timeout_sec: int = None,
-                        cwd: str = None) -> bytes:
-    result = run(command, encoding=encoding, shell=shell, timeout_sec=timeout_sec, cwd=cwd)
+                        cwd: str = None,
+                        **kwargs) -> bytes:
+    result = run(command, encoding=encoding, shell=shell, timeout_sec=timeout_sec, cwd=cwd, **kwargs)
     if result.exitcode != 0:
         logging.info("PID%d exit with non-0 exitcode: %d", result.pid, result.exitcode)
         raise subprocess.CalledProcessError(result.exitcode, command, result.stdout, result.stderr)
