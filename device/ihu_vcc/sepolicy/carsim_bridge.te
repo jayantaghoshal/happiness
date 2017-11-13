@@ -1,5 +1,5 @@
 #carsim_bridge
 type carsim_bridge, domain;
-type carsim_bridge_exec, exec_type, file_type;
+type carsim_bridge_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(carsim_bridge)

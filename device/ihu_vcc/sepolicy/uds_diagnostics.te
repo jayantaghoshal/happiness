@@ -5,7 +5,7 @@ attribute uds_diagnostics_client;
 attribute uds_diagnostics_server;
 
 type uds_diagnostics_default, domain;
-type uds_diagnostics_default_exec, exec_type, file_type;
+type uds_diagnostics_default_exec, exec_type, file_type, vendor_file_type;
 
 hal_server_domain(uds_diagnostics_default, uds_diagnostics)
 
