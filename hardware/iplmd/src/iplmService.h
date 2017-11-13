@@ -3,6 +3,7 @@
 
 #include <IDispatcher.h>
 #include <cutils/log.h>
+#include <mutex>
 #include <unordered_map>
 
 #include <Application_dataelement.h>
@@ -202,6 +203,7 @@ class IplmService : public IIplm, public IMessageCallback {
          */
         ServicePrioMap registered_LSCs_;
         std::map<std::string, sp<IIplmCallback>> registered_callbacks_;
+        std::mutex registered_callbacks_mutex_;
 
         /*! \brief Keeps the last received/sent Action of all supported ECUs, self
          *  included.
