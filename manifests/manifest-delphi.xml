@@ -3,7 +3,7 @@
   <include name="manifest-intel.xml"/>
 
   <!-- Delphi device tree (config files for IHU platform, cherry-pick commits from Intel) -->
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="141624fd01c0dbe449277e5218515a8f12506e78"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="c408bff8f60b98f4ca11327aa8a2ad14fdf54ee2"/>
   <project name="bsp/device/delphi/dash.2" path="device/delphi/dash.2" revision="e3babfe1417167ef752c41bf223364cd3a06a91f"/>
 
   <!-- modifications / bug fixes implemented for IHU (rebase for each new release from Intel) -->
@@ -11,7 +11,7 @@
   <project name="bsp/device/intel/broxton" path="device/intel/broxton" revision="44b8265617ecb445f7275c548486183e1cb10365"/>
 
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="d369776a8b1f89cfcd3895820d4200c3c9fd22b9"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="8962628c2a4b129085092caa69176aedcc86bd40"/>
 
   <remove-project name="bsp/vendor/intel/abl/abl_build_tools"/>
   <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="770b3f5f43349daa571301d3b16295a25f86d522"/>
@@ -45,7 +45,7 @@
   </project>
 
   <remove-project name="bsp/vendor/intel/fw/mwifiex"/>
-  <project name="bsp/vendor/intel/fw/mwifiex" path="vendor/intel/fw/marvell" revision="90d65f6ff190ee983f014a2bc22bd7cb22c3733a"/>
+  <project name="bsp/vendor/intel/fw/mwifiex" path="vendor/intel/fw/marvell" revision="50a23cc8ec3a3333eae288c7ec7cbade6f6b6210"/>
 
   <remove-project name="bsp/vendor/intel/apps/rvc"/>
   <project name="bsp/vendor/intel/apps/rvc" path="vendor/intel/apps/rvc" revision="9311630263269b0740d3f3c72915ea918facc3a3"/>
@@ -57,13 +57,16 @@
   </project>
 
   <remove-project name="bsp/vendor/intel/build"/>
-  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="8ce83abc52b0e1b61a5b8f545c2040732297c3be"/>
+  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="245da4b7781a56d79a8d7cd52ba94389ba846ef9"/>
 
   <remove-project name="aosp/platform/system/core"/>
   <project name="aosp/platform/system/core" path="system/core" revision="826ac8f47a0b3441eedbd0082b8ee26bc5812437"/>
 
   <remove-project name="bsp/vendor/intel/tools/itt"/>
   <project name="bsp/vendor/intel/tools/itt" path="vendor/intel/tools/itt" revision="a9f55093fed6a677693adeeecd7e5c0fbe68e59d"/>
+
+  <remove-project name="aosp/platform/system/bt"/>
+  <project name="aosp/platform/system/bt" path="system/bt" revision="463c5d959ef661adaf559f4f1f13817313168d70"/>
 
   <!-- Delphi platform extensions (no equivalent shipped by Intel) -->
   <project name="bsp/external/libncurses" path="external/libncurses" revision="067ae32f7e4b45bb1cb7ba37d0ffe618905e049f"/>
@@ -73,11 +76,12 @@
   <project name="bsp/external/spi-tools" path="external/spi-tools" revision="7f80b51344e36e4437c7aa447985772f0d6843cc"/>
   <project name="bsp/external/devmem2" path="external/devmem2" revision="8784c6a33ff12923b7ee12ef1be14f3a56fb76ce"/>
   <project name="bsp/external/bcm89230" path="external/bcm89230" revision="41b450916ffdb338037f38c58eb912461ca4aece"/>
-  <project name="bsp/external/88W8897P" path="external/88W8897P" revision="a2b2c32c2d62cf254f19c14ce1e116e58eaa47fd"/>
+  <project name="bsp/external/88W8897P" path="external/88W8897P" revision="4a3dfcf7a42f25ad20ddad2e9f2cbfee3ff44317"/>
   <project name="bsp/vendor/delphi/wifi/marvell/mfgbridge" path="vendor/delphi/wifi/marvell/mfgbridge" revision="3d100edf5050f7b42100334f0447f45a581be96c"/>
-  <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="c436c2135bc8df6ddf20cf165d440535117ccea0"/>
+  <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="1fac88bd3ed008808df46febeef8208249196d88"/>
   <project name="bsp/vendor/delphi/bcm89501_spi" path="vendor/delphi/bcm89501_spi" revision="cfa0e876f4ac36bc14b2051e4fdf30167b718f59"/>
+  <project name="bsp/external/mxt-app" path="external/mxt-app" revision="d911bb52a4774e9be9dd1664ea0d27c9e5ed843e"/>
 
-  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="07e6141b40c020744835fd3dc5e6488d52aae0ef"/>
-  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="b5c1e524f87cb5910112c03e4d77dcbb34b1b434"/>
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f7461150a665954e12be305163515339a943ff20"/>
+  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="306a508485c04c98ff9762bd88f273b15ae919fe"/>
 </manifest>

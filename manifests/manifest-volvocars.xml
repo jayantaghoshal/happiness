@@ -8,10 +8,6 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
-  <!-- AOSP Changed by Volvo Cars -->
-  <remove-project name="aosp/platform/system/sepolicy"/>
-  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="13d7cfcea9b415656aa922e2c0e6e11c71bf45f6"/>
-
   <!-- Integration Ongoing
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="9277d34f3d387732cacf1c780eea33568dcfbe9c"/>
@@ -42,31 +38,28 @@
 
   <!-- Intel Overrides -->
   <remove-project name="bsp/vendor/intel/build"/>
-  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="32c2ea6f3941735907191bf8074fbfb50772b442"/>
+  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="20394c58bf97d62059f36422876fff77ff5ad1d7"/>
 
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
-  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="390f04e6bcad1ea049e594e0fd0120be6f491ef0"/>
+  <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="b9be9956ba38c5e9531ae441f7f62b91ab371a45"/>
 
   <remove-project name="bsp/vendor/intel/fw/trusty_device_x86_sand"/>
-  <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="6a71e7ecba3f06cfcecc7ec82286aa44cd2203f3">
+  <project name="bsp/vendor/intel/fw/trusty_device_x86_sand" path="trusty/device/x86/sand" revision="642d0e3fff9659b139e6a892bcf85e373ab1bea6">
           <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
   </project>
 
-  <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="f6b4da20f326885c2782c163c21c892293b7b659"/>
-
   <!-- Delphi Overrides -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="82b3a8f1883e8b0485d060621bc78631046256aa"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="b61a6c661be439f4e52e821247185f01ceac866b"/>
 
   <!-- Upstream to Delphi -->
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
   <remove-project name="android_vehicle-hal"/>
-  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="45b5335fccd394b57961042c544245e7f920e169"/>
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="7ae808ca056a35d0a05e2b2ef7ef9af84c371edb"/>
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="4cb0e0a092d899233c79266a2e45cc5c48ab4d87"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="4c3e431ccdec6ef2eb77e2dff4a400bf3ad7beb8"/>
 
 </manifest>
