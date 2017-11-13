@@ -6,6 +6,7 @@ cc_test {
 
     shared_libs: [
         "vendor.volvocars.hardware.uds@1.0",
+        "liblog",
         "libutils",
         "libhidlbase",
         "libhidltransport",

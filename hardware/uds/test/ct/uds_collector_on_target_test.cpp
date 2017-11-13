@@ -37,27 +37,27 @@ TEST(UdsCollectorOnTargetTest, TestPointCanRead0xFFFF) {
 
     EXPECT_TRUE(ret.isOk());
 }
-// TODO(krzysztof.wesolowski@volvocars.com) Fix after O-MR1 intergration
-// TODO(b/32172906)
-TEST(UdsCollectorOnTargetTest, DISABLED_SubscriptionResubscriptionAndUnsubscriptionOfProvider) {
+
+TEST(UdsCollectorOnTargetTest, SubscriptionResubscriptionAndUnsubscriptionOfProvider) {
     auto collector = IUdsDataCollector::getService();
     sp<IUdsDataProvider> provider = new testing::StrictMock<MockUdsProvider>();
+    auto handle_0x0000 = collector->registerDidProvider(provider, {0x0000u});
+    EXPECT_TRUE(handle_0x0000);
 
-    auto registered = collector->registerProvider(provider, {0x0000u});
-    EXPECT_TRUE(registered);
+    auto handle_0x0001 = collector->registerDidProvider(provider, {0x0001u});
+    EXPECT_TRUE(handle_0x0001);
 
-    auto reregistered_different_did_same_provider = collector->registerProvider(provider, {0x0001u});
-    EXPECT_FALSE(reregistered_different_did_same_provider);
-
-    auto reregistered_same_did_same_provider = collector->registerProvider(provider, {0x0001u});
+    auto reregistered_same_did_same_provider = collector->registerDidProvider(provider, {0x0001u});
     EXPECT_FALSE(reregistered_same_did_same_provider);
 
-    auto unregistered_provider = collector->unregisterProvider(provider);
-    EXPECT_TRUE(registered);
+    auto unregistered_provider_0x0000 = collector->unregister(handle_0x0000);
+    EXPECT_TRUE(unregistered_provider_0x0000);
+    auto unregistered_provider_0x0001 = collector->unregister(handle_0x0001);
+    EXPECT_TRUE(unregistered_provider_0x0001);
 
-    auto reregistered_after_unregister = collector->registerProvider(provider, {0x0000u});
-    EXPECT_TRUE(reregistered_after_unregister);
+    auto handle_0x0000_again = collector->registerDidProvider(provider, {0x0000u});
+    EXPECT_TRUE(handle_0x0000_again);
 
-    auto unregistered_provider_again = collector->unregisterProvider(provider);
-    EXPECT_TRUE(registered);
+    auto unregistered_provider_0x0000_again = collector->unregister(handle_0x0000_again);
+    EXPECT_TRUE(unregistered_provider_0x0000_again);
 }
