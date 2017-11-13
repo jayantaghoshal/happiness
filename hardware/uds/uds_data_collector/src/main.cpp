@@ -14,8 +14,16 @@ int main() {
     auto* collector = static_cast<IUdsDataCollector*>(data_collector.get());
     auto* aggregated_provider = static_cast<IUdsDataProvider*>(data_collector.get());
 
-    collector->registerAsService();
-    aggregated_provider->registerAsService("test-point");
+    android::status_t status;
+    status = collector->registerAsService();
+    if (status != android::OK) {
+      ALOGE("Could not register collector as service, %d", status);
+    }
+
+    status = aggregated_provider->registerAsService("test-point");
+    if (status != android::OK) {
+      ALOGE("Could not register aggregated_provider as service, %d", status);
+    }
 
     joinRpcThreadpool();
 }

@@ -37,7 +37,10 @@ int main(int /* argc */, char* /* argv */ []) {
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
 
     ALOGI("Registering as service...");
-    service->registerAsService();
+    android::status_t status = service->registerAsService();
+    if (status != OK) {
+      ALOGE("Could not register service, %d", status);
+    }
 
     ALOGI("Ready starting VCC VHAL Daemon");
     android::hardware::joinRpcThreadpool();
