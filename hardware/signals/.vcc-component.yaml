@@ -1,0 +1,4 @@
+functional_area: 'Vehicle Functions'
+component: 'Signals'
+deployment: ['native-suite', 'host', 'src-gen']
+license: 'Proprietary'
