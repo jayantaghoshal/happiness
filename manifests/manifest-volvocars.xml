@@ -65,8 +65,4 @@
   <remove-project name="android_vehicle-hal"/>
   <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f6db97e26e2118550bd12648475c41e824f28d40"/>
 
-  <!-- Upstream to Intel -->
-  <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="4cb0e0a092d899233c79266a2e45cc5c48ab4d87"/>
-
 </manifest>
