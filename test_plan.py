@@ -38,7 +38,7 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/blacklist",    standard_caps),
              reason="Blacklist functionality not yet implemented",
              jira_issue="",
-             deadline="2017-10-19"
+             deadline="2017-11-30"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
              reason="MR1 not yet on master",
@@ -61,8 +61,16 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/test/iplm",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                  standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",        standard_caps),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",       standard_caps),
+             reason="Reboot is still unstable",
+             jira_issue="",
+             deadline="2017-12-15"
+    ),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",       standard_caps),
+             reason="Reboot is still unstable",
+             jira_issue="",
+             deadline="2017-12-15"
+    ),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),

@@ -14,7 +14,7 @@ from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
-from ..helpers import netman_helper as nh
+from volvocars.hardware.netman.test.ct.helpers import netman_helper as nh
 
 class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
