@@ -4,7 +4,7 @@ from xml.etree import cElementTree as ET
 
 import subprocess
 
-from shipit import process_tools, git, smtp
+from shipit import process_tools, git, smtp, paths
 from collections import namedtuple
 import shlex
 
@@ -21,6 +21,7 @@ DISALLOWED_EMAILS = {
     "zuul@icup_android.gerrit.cm.volvocars.biz",
     "no-reply@volvocars.com"
 }
+
 
 
 def _gerrit_vote_confidence_level(commit_hash: str, message: str, cl_vote: int):
@@ -51,7 +52,7 @@ def _collect_commit_hashes(repo: git.Repo, commit_range: str) -> Iterable[str]:
 
 
 def _get_volvocars_diff_in_manifest_since(branch: str):
-    manifest_repo = git.Repo("../../../../../.repo/manifests")
+    manifest_repo = git.Repo(paths.manifest())
     manifest_repo.run_git(['fetch', '--all'])
     A = manifest_repo.show("origin/%s:manifest-volvocars.xml" % branch)
     B = manifest_repo.show('HEAD:manifest-volvocars.xml')
@@ -75,13 +76,13 @@ def report_build_success(jenkins_job_name, jenkins_build_nr):
     revision_range = _get_volvocars_diff_in_manifest_since(config.branch)
 
     # Send status-vote in gerrit
-    volvocars_repo = git.Repo("../../../")
+    volvocars_repo = git.Repo(paths.volvocars())
     commits = _collect_commit_hashes(volvocars_repo, revision_range)
     for c in commits:
         _gerrit_vote_confidence_level(c, jenkins_job_name + " " + log_link, config.vote)
 
     # Push the ci/xxx branch
-    manifest_repo = git.Repo("../../../../../.repo/manifests")
+    manifest_repo = git.Repo(paths.manifest())
     manifest_repo.run_git(['fetch', '--all'])
     revMaster = manifest_repo.run_git(['rev-parse', 'HEAD']).strip()
     manifest_repo.run_git(['branch', '-f', config.branch, revMaster])
@@ -94,7 +95,7 @@ def report_build_failed(jenkins_job_name, jenkins_build_nr):
 
     revision_range = _get_volvocars_diff_in_manifest_since(config.branch)
 
-    volvocars_repo = git.Repo("../../../")
+    volvocars_repo = git.Repo(paths.volvocars())
 
     # Send status-vote in gerrit
     commits = _collect_commit_hashes(volvocars_repo, revision_range)
