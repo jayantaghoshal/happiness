@@ -19,7 +19,8 @@ PRODUCT_PACKAGES += \
 # System UI
 ##############################################################
 PRODUCT_PACKAGES += \
-    VolvoLauncher
+    VolvoLauncher \
+    VccLauncher
 
 ##############################################################
 # Vendor apps
