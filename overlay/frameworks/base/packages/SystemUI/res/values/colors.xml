@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <drawable name="system_bar_background">@color/system_bar_background_transparent</drawable>
-    <color name="system_bar_background_opaque">#FF0D0E10</color>
+    <color name="system_bar_background_opaque">#00000000</color>
     <color name="system_bar_background_transparent">#00000000</color>
 </resources>
