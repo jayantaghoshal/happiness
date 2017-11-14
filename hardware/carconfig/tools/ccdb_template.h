@@ -7,19 +7,22 @@ namespace CarConfigParams
      on ##DATE## with the tool ##TOOL##
    */
 
-##PARAMTEMPLATESTART##
+
   /* Car config parameter number ##PARAMNUMBER## and defined values
       Parameter Description:
        ##PARAMDESC##
    */
-
-  enum class CC##PARAMNUMBER##_##PARAMNAME##Type
+  
+  {% for param in paramlist %}
+  enum class CC{{param.number}}_{{param.name}}Type
   {
-      ParamNumber = ##PARAMNUMBER##,
-      ##PARAMVALUE## = 0x##PARAMVALUENUMBER##,
+      ParamNumber = {{param.number}},
+      {% for value in param.values -%}
+      
+      {{value.desc}} = 0x{{value.value}},
+      {% endfor %}
       InvalidValue = 0xFF
   };
-
-##PARAMTEMPLATEEND##
+  {% endfor %}
 }
 
