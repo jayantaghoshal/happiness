@@ -18,8 +18,8 @@ lunch ihu_vcc-eng
 
 rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
 
-# Build image, dist, vts & tradefed (dist output will be used to create a OTA package, that is requisite to generate VBF) 
-time make -j32 droid dist vts tradefed-all
+# Build image, vts & tradefed 
+time make -j32 droid vts tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly || die "Build Unit and Component tests failed"
@@ -48,9 +48,6 @@ du -sh "$OUT_ARCHIVE"
 # Upload to Artifactory
 time artifactory push ihu_image_build "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
 redis-cli set icup_android.jenkins.ihu_image_build."${BUILD_NUMBER}".commit "${GIT_COMMIT}" || die "redis-cli set failed"
-
-# Upload dist package to Artifactory, requisite for building incremental OTA package
-time artifactory push ihu_image_build "${BUILD_NUMBER}" "${OUT_DIR}"/dist/ihu_vcc-target_files-eng.ihu.zip || die "Could not push dist target file to Artifactory."
 
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins.ihu_image_build.latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
