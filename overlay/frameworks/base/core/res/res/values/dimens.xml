@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="status_bar_height">150dp</dimen>
+    <dimen name="navigation_bar_height">100dp</dimen>
+
+</resources>
