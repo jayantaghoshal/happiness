@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- DataElements unit test -->
-<configuration description="Config for flexray signaling component test case, full vertical send and receive">
+<configuration description="Flexray signaling component test case, full vertical send and receive
+        Send one flexray signal, 'signalToIhu' that will end up in a DEReceiver
+        in the test program flexray_test.cpp which will in turn send back 'signalFromIhu' with the same value as the one sent.
+
+        Also restart the VehicleSignalsDaemon(VSD) to test that the MP-VIP communication can recover communication
+        and restart handshake when the sequence number has gotten out of sync.
+
+        Smoke test for basic flexray signaling working.
+        Regression test for [ARTINFO-1633] [ARTINFO-1581] [ARTINFO-1609]
+">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="push-group" value="HostDrivenTest.push"/>
         <option name="abort-on-push-failure" value="true"/>
@@ -11,6 +20,6 @@
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
            <option name="test-module-name" value="VtsFlexraySignalingCT_OneSendOneReceive"/>
            <option name="test-case-path" value="volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal/VtsFlexraySignalingCT_OneSendOneReceive"/>
-           <option name="test-timeout" value="3m"/>
+           <option name="test-timeout" value="5m"/>
        </test>
 </configuration>

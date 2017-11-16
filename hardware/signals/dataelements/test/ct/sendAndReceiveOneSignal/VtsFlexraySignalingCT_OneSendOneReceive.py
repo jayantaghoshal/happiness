@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 from vts.runners.host import asserts
@@ -9,35 +9,30 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 import sys
 import logging
-from time import sleep
 import time
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from generated.pyDataElements import \
     FrSignalInterface, \
-    UsgModSts
+    AccAutResuWarnReq, \
+    ClimaTmrStsRqrd
 
 logger = logging.getLogger('flexray_test.test')
 
 
-def wait_for_signal(signal, expectedvalue, timeout_sec):
+def wait_for_signal(signal, expectedvalue, timeout_sec, message):
     end = time.time() + timeout_sec
     value = signal.get()
     while time.time() < end:
         value = signal.get()
         if value == expectedvalue:
-            log("Got expected signal %s=%d" % (signal.de_name, value))
+            logger.info("Got expected signal %s=%d" % (signal.de_name, value))
             break
         time.sleep(0.2)
-    log("Assert Expected=%d Actual=%d" % (expectedvalue, value))
+    logger.error("Assert Expected=%d Actual=%d" % (expectedvalue, value))
     asserts.assertEqual(value, expectedvalue,
-                        "Expected signal %s to be %d within %d sec, got %d)" %
-                        (signal.de_name, expectedvalue, timeout_sec, signal.get()))
+                        "Expected signal %s to be %d within %d sec, got %d. %s)" %
+                        (signal.de_name, expectedvalue, timeout_sec, signal.get(), message))
 
-#f = open("/tmp/vtsflexraytest", mode="w")
-def log(s):
-    logger.info(s)
-    #f.write("%d - %s" % (time.time(), s) + "\n")
-    #f.flush()
 
 class ComponentTest(base_test.BaseTestClass):
     def setUpClass(self):
@@ -47,34 +42,50 @@ class ComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
 
     def setUp(self):
-        log("Init FR")
+        logger.info("Init FR")
         self.flexray = FrSignalInterface()
 
     def tearDown(self):
-        log('Teardown')
+        logger.info('Teardown')
         try:
             self.shell.Execute("pkill flexray_test")
         except Exception as e:
-            log("ERROR In teardown: %r" % e)
+            logger.exception("ERROR In teardown: %r" % e)
         self.flexray.close()
 
-    '''test1: Send and receive a flexray signal
-        Send one flexray signal, "signalToIhu" that will end up in a DEReceiver
-        in the test program flexray_test.cpp which will in turn send back "signalFromIhu" with the same value as the one sent.
-    '''
-    def testFlexray2(self):
-        AccAutResuWarnReq  = self.flexray.AccAutResuWarnReq
-        ClimaTmrStsRqrd = self.flexray.ClimaTmrStsRqrd
-
-        log('starting test program: flexray_test')
+    def _runPingPongTest(self, iteration):
+        logger.info('starting test program: flexray_test')
         self.shell.Execute("/data/local/tmp/flexray_test&")
 
+        self.flexray.AccAutResuWarnReq.send(AccAutResuWarnReq.map.On)
+        wait_for_signal(self.flexray.ClimaTmrStsRqrd, ClimaTmrStsRqrd.map.On, 10, "Iteration %d" % iteration)
 
-        AccAutResuWarnReq.send(AccAutResuWarnReq.map.On)
-        wait_for_signal(ClimaTmrStsRqrd, ClimaTmrStsRqrd.map.On, timeout_sec=10)
+        self.flexray.AccAutResuWarnReq.send(AccAutResuWarnReq.map.Off)
+        wait_for_signal(self.flexray.ClimaTmrStsRqrd, ClimaTmrStsRqrd.map.Off, 10, "Iteration %d" % iteration)
+        self.shell.Execute("pkill flexray_test")
 
-        AccAutResuWarnReq.send(AccAutResuWarnReq.map.Off)
-        wait_for_signal(ClimaTmrStsRqrd, ClimaTmrStsRqrd.map.Off, timeout_sec=10)
+
+    def testFlexrayPingPong(self):
+        for i in range(5):
+            logger.info('Iteration %d' % i)
+            self._runPingPongTest(i)
+            time.sleep(1)
+
+    def testFlexrayPingPongAfterRestartOfVSD(self):
+        for i in range(200):
+            logger.info('Iteration %d' % i)
+            self._runPingPongTest(i)
+
+            # Restart VSD to ensure VSD and VIP can recover desip handshake
+            self.shell.Execute("stop vehicle-signals-daemon")
+            if i < 100:
+                pass
+            elif i < 150:
+                time.sleep(1)   # 50*1=50sec
+            else:
+                time.sleep(3)   # 50*3=150sec, => total 200sec = 3,3min
+            self.shell.Execute("start vehicle-signals-daemon")
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s   %(message)s')

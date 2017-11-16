@@ -56,6 +56,8 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
     VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Jayanta Ghoshal
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
+        tests_to_run=["testFlexrayPingPong"]),  # Torbjorn Sandsgard
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -70,7 +72,8 @@ test_plan_staging_hourly = [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission",            standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}), #Torbjorn Sandsgard
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
+            tests_to_run=["testFlexrayPingPong", "testFlexrayPingPongAfterRestartOfVSD"]),       #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/toggleTest", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
