@@ -1,4 +1,4 @@
-on nonencrypted
+on boot
     mkdir /oem_config/carconfig
     restorecon /oem_config/carconfig
     start carconfig_updater

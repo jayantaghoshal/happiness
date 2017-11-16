@@ -29,9 +29,9 @@ void CarConfigFileWriter::writeCarConfig(const std::array<ccValue, cc_no_of_para
         }
     }
     ccTempFile.close();
-    // Swap in the temp file. fd = -1 since they are anyway ignored when file paths are absolute
-    renameat(-1, ccTempFilePath.c_str(), -1, carconfig_file_name.c_str());
     // CarConfig is read by other components, set read for group and others
     // SE-Linux will restrict access to the car-config file
-    chmod(carconfig_file_name.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    chmod(ccTempFilePath.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    // Swap in the temp file. fd = -1 since they are anyway ignored when file paths are absolute
+    renameat(-1, ccTempFilePath.c_str(), -1, carconfig_file_name.c_str());
 }
