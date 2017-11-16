@@ -6,5 +6,5 @@ def manifest(aosp_root=AOSP_ROOT):
     return os.path.join(aosp_root, ".repo/manifests")
 
 def volvocars(aosp_root=AOSP_ROOT):
-    return os.path.join(aosp_root, "vendor/volocars")
+    return os.path.join(aosp_root, "vendor/volvocars")
 
