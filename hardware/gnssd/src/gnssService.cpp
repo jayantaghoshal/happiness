@@ -7,6 +7,7 @@
 #define LOG_TAG "GnssD.service"
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
@@ -29,50 +30,127 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
     StartSubscribe();
 }
 
+void GnssService::serviceDied(uint64_t cookie, const wp<IBase> &who) {
+    ALOGI("ipcbD died, Trying to reconnect");
+    StartSubscribe();
+}
+
 void GnssService::StartSubscribe() {
     ipcbServer_ = IVehicleCom::getService("ipcb");
 
     if (ipcbServer_ != NULL) {
         connectionError = false;
+        bool subscriptionsfailed = false;
         ALOGD("IpcbD found, subscribing");
         // Install callback
-
-        SubscribeResult result;
+        IMessageCallback *this_as_callback = this;
+        SubscribeResult resultPosNotification, resultPosCyclic, resultAccNotification, resultAccCyclic;
         // TODO: Handle subscription ID returned from subscribe in order to unsubscribe?
-        ipcbServer_.get()->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
-                                     (uint16_t)VccIpCmd::OperationId::GNSSPositionData, OperationType::NOTIFICATION,
-                                     this, [&result](SubscribeResult sr) { result = sr; });
-        if (!result.commandResult.success) {
-            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
-        }
 
-        ipcbServer_.get()->subscribe(
+        auto returnPosNotification = ipcbServer_->subscribe(
                 (uint16_t)VccIpCmd::ServiceId::Positioning, (uint16_t)VccIpCmd::OperationId::GNSSPositionData,
-                OperationType::NOTIFICATION_CYCLIC, this, [&result](SubscribeResult sr) { result = sr; });
-        if (!result.commandResult.success) {
-            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+                OperationType::NOTIFICATION, this_as_callback,
+                [&resultPosNotification](SubscribeResult sr) { resultPosNotification = sr; });
+        if (returnPosNotification.isOk() && resultPosNotification.commandResult.success) {
+            // Save subscription ID
+            pos_notification_id = resultPosNotification.subscriberId;
+        } else {
+            ALOGD("Failed to subscribe to GNSSPositionData with notification");
+            subscriptionsfailed = true;
         }
 
-        ipcbServer_.get()->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
-                                     (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                                     OperationType::NOTIFICATION, this, [&result](SubscribeResult sr) { result = sr; });
-        if (!result.commandResult.success) {
-            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+        auto returnPosCyclic = ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                                      (uint16_t)VccIpCmd::OperationId::GNSSPositionData,
+                                                      OperationType::NOTIFICATION_CYCLIC, this_as_callback,
+                                                      [&resultPosCyclic](SubscribeResult sr) { resultPosCyclic = sr; });
+        if (returnPosCyclic.isOk() && resultPosCyclic.commandResult.success) {
+            // Save subscription ID
+            pos_cyclic_id = resultPosCyclic.subscriberId;
+        } else {
+            ALOGD("Failed to subscribe to GNSSPositionData with notification_cyclic");
+            subscriptionsfailed = true;
         }
 
-        ipcbServer_.get()->subscribe(
+        auto returnAccNotification = ipcbServer_->subscribe(
                 (uint16_t)VccIpCmd::ServiceId::Positioning, (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                OperationType::NOTIFICATION_CYCLIC, this, [&result](SubscribeResult sr) { result = sr; });
-        if (!result.commandResult.success) {
-            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+                OperationType::NOTIFICATION, this_as_callback,
+                [&resultAccNotification](SubscribeResult sr) { resultAccNotification = sr; });
+
+        if (returnAccNotification.isOk() && resultAccNotification.commandResult.success) {
+            // Save subscription ID
+            acc_notification_id = resultAccNotification.subscriberId;
+        } else {
+            ALOGD("Failed to subscribe to GNSSPositionDataAccuracy with notification");
+            subscriptionsfailed = true;
+        }
+
+        auto returnAccCyclic = ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                                      (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+                                                      OperationType::NOTIFICATION_CYCLIC, this_as_callback,
+                                                      [&resultAccCyclic](SubscribeResult sr) { resultAccCyclic = sr; });
+        if (returnAccCyclic.isOk() && resultAccCyclic.commandResult.success) {
+            // Save subscription ID
+            acc_cyclic_id = resultAccCyclic.subscriberId;
+        } else {
+            ALOGD("Failed to subscribe to GNSSPositionDataAccuracy with notification_cyclic");
+            subscriptionsfailed = true;
+        }
+
+        // Check if all subscriptions was successful
+        if (subscriptionsfailed || returnPosNotification.isDeadObject() || returnPosCyclic.isDeadObject() ||
+            returnAccNotification.isDeadObject() || returnAccCyclic.isDeadObject()) {
+            unsubscribeAll();
+            connectionError = true;
+            ALOGE("Failed to subscribe to ipcbD, retrying every 1 second");
+            timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
+        } else {
+            // Great success, all subscriptions set
+            hidl_death_recipient *this_as_recipient = this;
+            ipcbServer_->linkToDeath(this_as_recipient, 0);
         }
     } else {
         if (!connectionError) {
             ALOGD("IpcbD not found, retrying every 1 second");
         }
         connectionError = true;
-
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
+    }
+}
+
+void GnssService::unsubscribeAll() {
+    if (ipcbServer_ != NULL) {
+        CommandResult cresult;
+        if (pos_notification_id != 0) {
+            ipcbServer_->unsubscribe(pos_notification_id, [&cresult](CommandResult cr) { cresult = cr; });
+            pos_notification_id = 0;
+            if (!cresult.success) {
+                ALOGD("Failed to unsubscribe position notification");
+            }
+        }
+
+        if (pos_cyclic_id != 0) {
+            ipcbServer_->unsubscribe(pos_cyclic_id, [&cresult](CommandResult cr) { cresult = cr; });
+            pos_cyclic_id = 0;
+            if (!cresult.success) {
+                ALOGD("Failed to unsubscribe position cyclic");
+            }
+        }
+
+        if (acc_notification_id != 0) {
+            ipcbServer_->unsubscribe(acc_notification_id, [&cresult](CommandResult cr) { cresult = cr; });
+            acc_notification_id = 0;
+            if (!cresult.success) {
+                ALOGD("Failed to unsubscribe accuracy notification");
+            }
+        }
+
+        if (acc_cyclic_id != 0) {
+            ipcbServer_->unsubscribe(acc_cyclic_id, [&cresult](CommandResult cr) { cresult = cr; });
+            acc_cyclic_id = 0;
+            if (!cresult.success) {
+                ALOGD("Failed to unsubscribe accuracy cyclic");
+            }
+        }
     }
 }
 
@@ -110,11 +188,10 @@ bool GnssService::Initialize() {
     // IpService::setDispatcher(IDispatcher::GetDefaultDispatcher());
 
     // Subscribe to ipcbd
-
     android::status_t status = gnss_.registerAsService();
-
     if (status != android::OK) {
         ALOGE("Failed to register Gnss binder service: %d", status);
+        return false;
     } else {
         ALOGI("Gnss binder service register ok");
     }
