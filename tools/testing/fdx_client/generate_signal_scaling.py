@@ -220,9 +220,12 @@ class FrSignalInterface:
             group = self.group_id_map[group_id]
             group.receive_data(data)
 
-        if "VECTOR_FDX_PORT" and "VECTOR_FDX_IP" in os.environ:
+        if "VECTOR_FDX_IP" in os.environ:
             try:
-                self.connection = fdx_client.FDXConnection(data_exchange, os.environ['VECTOR_FDX_IP'], int(os.environ['VECTOR_FDX_PORT']))
+                self.connection = fdx_client.FDXConnection(
+                    data_exchange, 
+                    os.environ['VECTOR_FDX_IP'], 
+                    int(os.environ.get('VECTOR_FDX_PORT', '2809')))
                 self.connection.send_start()
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
