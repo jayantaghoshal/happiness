@@ -45,7 +45,7 @@ PRODUCT_COPY_FILES += \
 ##############################################################
 # Config overlay
 ##############################################################
-PRODUCT_PACKAGE_OVERLAYS := \
+PRODUCT_PACKAGE_OVERLAYS += \
     vendor/volvocars/overlay
 
 ##############################################################
