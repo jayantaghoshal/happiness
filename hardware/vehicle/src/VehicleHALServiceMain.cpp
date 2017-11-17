@@ -39,7 +39,7 @@ int main(int /* argc */, char* /* argv */ []) {
     ALOGI("Registering as service...");
     android::status_t status = service->registerAsService();
     if (status != OK) {
-      ALOGE("Could not register service, %d", status);
+        ALOGE("Could not register service, %d", status);
     }
 
     ALOGI("Ready starting VCC VHAL Daemon");
