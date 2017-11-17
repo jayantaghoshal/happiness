@@ -21,6 +21,35 @@ if [[ -t 0 ]]; then
     IS_INTERACTIVE=true
 fi
 
+# Handle options
+ENV_FILE_OPT=
+VOLUMES="--volume=$HOME:$HOME --volume=$PWD:$PWD --volume=/dev/bus/usb:/dev/bus/usb"
+
+for i in "$@"
+do
+case $i in
+    --env-file=*)
+    ENV_FILE_OPT=$i
+    shift
+    ;;
+    --multiuser)
+    MULTIUSER="true"
+    shift # past argument with no value
+    ;;
+    --local)
+    DOCKER_IMAGE="vcc_aosp_build"
+    shift # past argument with no value
+    ;;
+    --volume=*)
+    VOLUMES="$VOLUMES $i"
+    shift
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+done
+
 
 # Containers can be left dangling if you close the terminal running a contianer, then
 # docker will not understand that the attached STDIN/OUT is dead and continue running.
@@ -32,7 +61,7 @@ C_OFF="\033[0m"
 #shellcheck disable=SC1083
 EXISTING_CONTAINERS=$(docker ps --filter "ancestor=$DOCKER_IMAGE" --format={{.ID}})
 EXISTING_CONTAINER_ARRAY=( $EXISTING_CONTAINERS )
-if [[ !  -z  $EXISTING_CONTAINERS  ]]; then
+if [[ !  -z  $EXISTING_CONTAINERS && "${MULTIUSER}" != "true" ]]; then
     echo -e "${C_ERROR}-------------------------------------------------------------------------------------------"
     echo "                              WARNING"
     echo ""
@@ -42,7 +71,8 @@ if [[ !  -z  $EXISTING_CONTAINERS  ]]; then
     echo "  Already running containers:"
     for c in "${EXISTING_CONTAINER_ARRAY[@]}"
     do
-        echo "     $c"
+        echo -n "     $c  owner: "
+        docker inspect "$c" --format '{{.Config.Env}}' | perl -pe 's,.*HOST_UNAME=(.*?)\s.*,\1,'
     done
     echo ""
     echo "  To view your running docker containers:"
@@ -68,31 +98,6 @@ if [[ !  -z  $EXISTING_CONTAINERS  ]]; then
 fi
 
 
-
-# Handle options
-ENV_FILE_OPT=
-VOLUMES="--volume=$HOME:$HOME --volume=$PWD:$PWD --volume=/dev/bus/usb:/dev/bus/usb"
-
-for i in "$@"
-do
-case $i in
-    --env-file=*)
-    ENV_FILE_OPT=$i
-    shift
-    ;;
-    --local)
-    DOCKER_IMAGE="vcc_aosp_build"
-    shift # past argument with no value
-    ;;
-    --volume=*)
-    VOLUMES="$VOLUMES $i"
-    shift
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
-done
 
 # Default to using ccache
 # Technically unnecessary (the build system only checks for "not false") but explicit for clarity
