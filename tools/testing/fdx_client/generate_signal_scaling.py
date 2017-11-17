@@ -61,11 +61,19 @@ def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
     return (common_signals, rte_name_to_de_name, rte_name_to_de_type)
 
 
+def unambiguate_name(s: fdx_description_file_parser.Item, all_signals):
+    items_with_same_name = [x for x in all_signals if x.name == s.name]
+    if len(items_with_same_name) > 1:
+        return s.name + "_" + s.msg_or_namespace
+    else:
+        return s.name
+
 def render_signals(signals: List[fdx_description_file_parser.Item]):
     convstr = "\n"
     convstr += "        name_to_item_map = { i.name : i for i in self.signal_list }\n\n"
     for signal in signals:
-        convstr += "        self.%s = %s(self, name_to_item_map[%s.fdx_name])\n" % (signal.name, signal.name, signal.name)
+        name = unambiguate_name(signal, signals)
+        convstr += "        self.%s = %s(self, name_to_item_map[%s.fdx_name])\n" % (name, name, name)
     convstr += "\n"
 
     return convstr
@@ -78,16 +86,16 @@ def render(signals: List[fdx_description_file_parser.Item],
     convstr = ""
 
     for signal in signals:
-        s = signal.name
-        type = rte_name_to_de_type[s]
+        name = unambiguate_name(signal, signals)
+        type = rte_name_to_de_type[signal.name]
 
         if isinstance(type, model.DE_Array):
             continue # Unsupported, for now...
 
         convstr += py_comment(type.desc)
-        convstr += "class %s:\n" % s
-        convstr += "    de_name     = \"%s\"\n" % rte_name_to_de_name[s]
-        convstr += "    fdx_name    = \"%s\"\n" % s
+        convstr += "class %s:\n" % name
+        convstr += "    de_name     = \"%s\"\n" % rte_name_to_de_name[signal.name]
+        convstr += "    fdx_name    = \"%s\"\n" % signal.name
         convstr += "    fdx_groupid = %s\n\n" % signal.parent_group.group_id
         convstr += "    def __init__(self, signal_interface, item):\n"
         convstr += "        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None\n"
@@ -212,7 +220,7 @@ class FrSignalInterface:
         self.logger = logging.getLogger(__name__)
 
         (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
-            os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../FDXDescriptionFile.xml"))
+            os.environ.get('FDX_DESCRIPTION_FILE_PATH', os.path.dirname(__file__)+"/../../CANoe/SPA2210/FR_Body_LIN/FDXDescriptionFile.xml"))
 
         self.group_id_map = {g.group_id: g for g in self.groups}
 
