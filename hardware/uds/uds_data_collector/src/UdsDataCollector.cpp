@@ -1,40 +1,35 @@
 #include "UdsDataCollector.h"
+#include <mutex>
+
+#include <cutils/log.h>
+#undef LOG_TAG
+#define LOG_TAG "uds-collector"
 
 using ::vendor::volvocars::hardware::uds::V1_0::DidReadResult;
 using ::vendor::volvocars::hardware::uds::V1_0::DidReadStatusCode;
 using ::android::hidl::base::V1_0::IBase;
 using ::android::hardware::hidl_death_recipient;
 
-#include <cutils/log.h>
-#undef LOG_TAG
-#define LOG_TAG "uds-collector"
-
-Return<bool> UdsDataCollector::registerProvider(const sp<IUdsDataProvider>& provider,
-                                                const hidl_vec<uint16_t>& supported_dids) {
+Return<void> UdsDataCollector::readDidValue(Did did, readDidValue_cb _hidl_cb) {
+    sp<IUdsDataProvider> provider = nullptr;
+    // Locked part of the function, requires atomic access to providers, important for performance
     {
-        std::unique_lock<std::mutex> lock(providers_mtx_);
-        auto pre_existing_it = findProviderByBase(provider.get());
-        if (pre_existing_it != providers_decls_.end()) {
-            ALOGE("This provider is already registered");
-            return false;
+        std::lock_guard<std::mutex> lock(providers_mtx_);
+
+        auto sit = this->findStaticByDid(did);
+
+        if (sit != static_providers_.end()) {
+            DidReadResult result;
+            result.status = DidReadStatusCode::SUCCESS;
+            result.data = sit->second.value;
+            _hidl_cb(result);
+            return Return<void>();
         }
 
-        hidl_death_recipient* this_as_recipient = this;
-        provider->linkToDeath(this_as_recipient, 0);
-
-        providers_decls_.emplace(provider, supported_dids);
-    }
-    return true;
-}
-
-Return<void> UdsDataCollector::readDidValue(uint16_t did, readDidValue_cb _hidl_cb) {
-    sp<IUdsDataProvider> provider = nullptr;
-    {
-        std::unique_lock<std::mutex> lock(providers_mtx_);
-        for (const ProviderDecl& p : providers_decls_) {
-            if (p.SupportsDid(did)) {
-                provider = p.provider_;
-            }
+        auto dit = this->findDynamicByDid(did);
+        if (dit != dynamic_providers_.end()) {
+            provider = dit->second.provider_;
+            // will do actual call when out of lock
         }
     }
 
@@ -49,42 +44,103 @@ Return<void> UdsDataCollector::readDidValue(uint16_t did, readDidValue_cb _hidl_
     } else {
         result.status = DidReadStatusCode::NOT_SUPPORTED;
     }
-
     _hidl_cb(result);
     return Return<void>();
 }
 
-Return<bool> UdsDataCollector::unregisterProvider(const sp<IUdsDataProvider>& provider) {
-    bool removed = removeProvider(provider.get());
-    hidl_death_recipient* this_as_recipient = this;
-    provider->unlinkToDeath(this_as_recipient);
-    return removed;
+Return<uint64_t> UdsDataCollector::provideStaticDidValue(uint16_t did, const hidl_vec<uint8_t>& value) {
+    std::lock_guard<std::mutex> lock(providers_mtx_);
+    bool preexisting_did_handler = PreexistingHandlerExists({did});
+
+    if (not preexisting_did_handler) {
+        providers_handle_gen_++;
+        static_providers_.emplace(providers_handle_gen_, StaticProvider(did, value));
+        return providers_handle_gen_;
+    }
+    return 0ul;
+}
+
+// TODO(krzysztof.wesolowski@volvocars.com) either map key or reuse, forward to Delphi Diagnostics
+Return<bool> UdsDataCollector::reportDiagnosticTestResult(DtcId id, const DiagnosticCheckReport& report) {
+    (void)report;
+    (void)id;
+    return true;
+}
+
+bool UdsDataCollector::PreexistingHandlerExists(const hidl_vec<Did>& supported_dids) {
+    // This is O(n^2) but it should be fine with amount of actual dids/handlers
+    // its also optional, but without this - happy debugging...
+    for (Did ndid : std::vector<Did>(supported_dids)) {
+        auto sit = this->findStaticByDid(ndid);
+        if (sit != static_providers_.end()) {
+            ALOGE("Provider for DID %u already registered as static at handle %lu", ndid, sit->first);
+            return true;
+        }
+    }
+    for (Did ndid : std::vector<Did>(supported_dids)) {
+        auto sit = this->findDynamicByDid(ndid);
+        if (sit != dynamic_providers_.end()) {
+            ALOGE("Provider for DID %u already registered as dynamic at handle %lu", ndid, sit->first);
+            return true;
+        }
+    }
+    return false;
+}
+
+Return<SubscriptionHandle> UdsDataCollector::registerDidProvider(const sp<IUdsDataProvider>& provider,
+                                                                 const hidl_vec<Did>& supported_dids) {
+    std::lock_guard<std::mutex> lock(providers_mtx_);
+    bool preexisting_did_handler = PreexistingHandlerExists(supported_dids);
+
+    if (not preexisting_did_handler) {
+        providers_handle_gen_++;
+        hidl_death_recipient* this_as_recipient = this;
+        provider->linkToDeath(this_as_recipient, providers_handle_gen_);
+        dynamic_providers_.emplace(providers_handle_gen_, DynamicProvider(provider, supported_dids));
+        return providers_handle_gen_;
+    }
+    return 0ul;
+}
+
+Return<bool> UdsDataCollector::unregister(SubscriptionHandle handle) {
+    std::lock_guard<std::mutex> lock(providers_mtx_);
+
+    auto dit = dynamic_providers_.find(handle);
+    if (dit != dynamic_providers_.end()) {
+        hidl_death_recipient* this_as_recipient = this;
+        dit->second.provider_->unlinkToDeath(this_as_recipient);
+        dynamic_providers_.erase(dit);
+        return true;
+    }
+
+    auto sit = static_providers_.find(handle);
+    if (sit != static_providers_.end()) {
+        static_providers_.erase(sit);
+        return true;
+    }
+
+    ALOGE("Handle %lu was not registered before call to %s", handle, __FUNCTION__);
+    return false;
 }
 
 void UdsDataCollector::serviceDied(uint64_t cookie, const android::wp<IBase>& who) {
-    (void)cookie;
-    auto died_service = who.promote();
-    removeProvider(died_service.get());
+    (void)who;
+    auto it = dynamic_providers_.find(cookie);
+    if (it != dynamic_providers_.end()) {
+        dynamic_providers_.erase(it);
+    } else {
+        ALOGE("Handle %lu was not registered before call to %s", cookie, __FUNCTION__);
+    }
 }
 
-std::set<UdsDataCollector::ProviderDecl>::iterator UdsDataCollector::findProviderByBase(IBase* iface) {
-    auto iface_matcher = [iface](const ProviderDecl& p) {
-        IBase* stored_service_ptr = p.provider_.get();
-        return stored_service_ptr == iface;
-    };
-    auto found_it = std::find_if(providers_decls_.begin(), providers_decls_.end(), iface_matcher);
+UdsDataCollector::StaticMap::const_iterator UdsDataCollector::findStaticByDid(Did did) const {
+    auto matcher = [did](const StaticMap::value_type& p) { return did == p.second.did; };
+    auto found_it = std::find_if(static_providers_.begin(), static_providers_.end(), matcher);
     return found_it;
 }
 
-bool UdsDataCollector::removeProvider(IBase* service_ptr) {
-    std::unique_lock<std::mutex> lock(providers_mtx_);
-
-    auto found_it = findProviderByBase(service_ptr);
-
-    if (found_it != providers_decls_.end()) {
-        providers_decls_.erase(found_it);
-        return true;
-    }
-    ALOGE("Service was not subscribed during unsubscribe attempt");
-    return false;
+UdsDataCollector::DynamicMap::const_iterator UdsDataCollector::findDynamicByDid(Did did) const {
+    auto matcher = [did](const DynamicMap::value_type& v) { return v.second.SupportsDid(did); };
+    auto found_it = std::find_if(dynamic_providers_.begin(), dynamic_providers_.end(), matcher);
+    return found_it;
 }

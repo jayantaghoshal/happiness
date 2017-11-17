@@ -10,6 +10,8 @@ using ::vendor::volvocars::hardware::uds::V1_0::IUdsDataCollector;
 using ::vendor::volvocars::hardware::uds::V1_0::IUdsDataProvider;
 using ::vendor::volvocars::hardware::uds::V1_0::DidReadResult;
 using ::vendor::volvocars::hardware::uds::V1_0::DidReadStatusCode;
+using ::vendor::volvocars::hardware::uds::V1_0::SubscriptionHandle;
+
 using ::android::sp;
 using ::android::hardware::Void;
 using ::android::hardware::Return;
@@ -20,21 +22,26 @@ struct UdsCollectorProperForwardingTest : public ::testing::Test {
         provider1 = new ::testing::StrictMock<MockUdsProvider>();
         provider2 = new ::testing::StrictMock<MockUdsProvider>();
         collector = IUdsDataCollector::getService();
-        collector->registerProvider(provider1, {0x0001});
-        collector->registerProvider(provider2, {0x0002});
-
         provider_test_point = IUdsDataProvider::getService("test-point");
+
+        h1 = collector->registerDidProvider(provider1, {0x0001});
+        h2 = collector->registerDidProvider(provider2, {0x0002});
     }
 
     void TearDown() override {
-        collector->unregisterProvider(provider1);
-        collector->unregisterProvider(provider2);
+        auto ret1 = collector->unregister(h1);
+        EXPECT_TRUE(ret1);
+        auto ret2 = collector->unregister(h2);
+        EXPECT_TRUE(ret2);
     }
 
     sp<MockUdsProvider> provider1;
     sp<MockUdsProvider> provider2;
     sp<IUdsDataProvider> provider_test_point;
     sp<IUdsDataCollector> collector;
+
+    SubscriptionHandle h1;
+    SubscriptionHandle h2;
 };
 
 TEST_F(UdsCollectorProperForwardingTest, UnknownDidReturnNotSupported) {

@@ -1,14 +1,42 @@
 package vendor.volvocars.hardware.uds@1.0;
 
 typedef uint16_t Did;
+typedef uint16_t DtcId;
+typedef uint16_t RoutineId;
+typedef uint64_t SubscriptionHandle;
 
+/**
+ * Describes whether DID read operation on component was succesful
+ */
 enum DidReadStatusCode : uint8_t {
     SUCCESS, //data was read and is valid
     CONDITIONS_NOT_CORRECT, // The provider is not able to fulfill this request due too its state.
     NOT_SUPPORTED, // this provider should never be asked for this value
 };
 
+/**
+ * Complete result of DID read operation
+ */
 struct DidReadResult {
-    DidReadStatusCode status;
-    vec<uint8_t> data;
+    DidReadStatusCode status; // status of DID read operation
+    vec<uint8_t> data; // data read, valid only for status == SUCCESS
+};
+
+/**
+ * What is current state, which in full report represents:
+ * - result of the first state
+ * - new state after change
+ * - old state if component to decide to send report without actual
+ */
+enum DagnosticCheckStatus : uint8_t {
+    PASSED, // test passed
+    FAILED, // tast failed
+};
+
+/**
+ * Complete result of diagnostic check
+ */
+struct DiagnosticCheckReport {
+    DagnosticCheckStatus status; // current status
+    uint16_t checks_since_last_report; // checks since last report
 };

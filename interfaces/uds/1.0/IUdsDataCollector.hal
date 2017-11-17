@@ -1,9 +1,43 @@
 package vendor.volvocars.hardware.uds@1.0;
 
 import IUdsDataProvider;
+import SubscriptionHandle;
+import Did;
+import DiagnosticCheckReport;
+import DtcId;
 
 interface IUdsDataCollector
 {
-    registerProvider(IUdsDataProvider provider, vec<Did> supported_dids) generates (bool success);
-    unregisterProvider(IUdsDataProvider provider) generates (bool success);
+    /**
+     * Register Provider for multiple DIDs
+     * @param provider to call for getting values
+     * @param supported_dids list of DIDs supported by provider
+     * @return subhandle to be used for unregistering if needed
+     */
+    registerDidProvider(IUdsDataProvider provider, vec<Did> supported_dids) generates (SubscriptionHandle subhandle);
+
+    /**
+     * Unregister single handle
+     * @param subhandle Handle to registration which should be removed
+     */
+    unregister(SubscriptionHandle subhandle) generates (bool success);
+
+    /**
+     * Alternative to register provider, allowing for simpler flow in case
+     * of components handling dids, where following condition make it better approach:
+     * - DID value is already computed without added effort (typically it would be not asked for)
+     * - It is impossible to change, so reporting it upfront is simpler/better than being Provider
+     * - It is expected for the provided value to be returned until changed or manually unsubscribed.
+     * - the data to store is below 256B (estimated size of subscription storing structure)
+     *
+     * In other cases becoming provider is cheaper (i.e. no calls will be typically made at runtime,
+     * unless car is in the workshop).
+     */
+    provideStaticDidValue(Did did, vec<uint8_t> value) generates (SubscriptionHandle subhandle);
+
+    /**
+     * Reporting data for usage with DTCs.
+     * @param report Summary of checks since last report
+     */
+    reportDiagnosticTestResult(DtcId id, DiagnosticCheckReport report) generates (bool success);
 };
