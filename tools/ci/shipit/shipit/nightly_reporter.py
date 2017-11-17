@@ -25,6 +25,8 @@ DISALLOWED_EMAILS = {
 
 
 def _gerrit_vote_confidence_level(commit_hash: str, message: str, cl_vote: int):
+    # TODO: Requires Gerrit version 2.14, we only have 2.13, for https://gerrit-review.googlesource.com/Documentation/config-labels.html#label_allowPostSubmit
+    return
     # https://gerrit-documentation.storage.googleapis.com/Documentation/2.14.5.1/cmd-review.html
 
     try:

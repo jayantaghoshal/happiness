@@ -1,6 +1,8 @@
 import sys
 from shipit import nightly_reporter
-
+import os
+import json
+import logging.config
 
 # Used to report hourly/nightly test status from Jenkins
 
@@ -16,4 +18,7 @@ def main():
 
 
 if __name__ == "__main__":
+    with open(os.path.join(os.path.dirname(__file__), "logging.json"), "rt") as f:
+        log_config = json.load(f)
+    logging.config.dictConfig(log_config)
     main()
