@@ -18,10 +18,6 @@ export CXX_WRAPPER=/usr/bin/ccache
 export OUT_DIR=$JOB_TMPFS/out
 export USE_CCACHE=true
 
-source "$REPO_ROOT_DIR"/build/envsetup.sh
-lunch ihu_vcc-eng
-
-
 # Rerun commit check in case merge effect changed after the change was validated at the check step
 python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 
@@ -30,10 +26,10 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # downloads are incremental and faster.
 time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
 
-
-
-
 rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
+
+source "$REPO_ROOT_DIR"/build/envsetup.sh
+lunch ihu_vcc-eng
 
 # Rerun commit check in case it changed after the change was validated at the check step
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
