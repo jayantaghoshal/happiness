@@ -22,6 +22,7 @@
 #include "diagnostics_client.h"
 #include "service_manager.h"
 
+#undef LOG_TAG
 #define LOG_TAG "Ipcb.main"
 
 using namespace Connectivity;
