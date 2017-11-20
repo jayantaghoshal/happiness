@@ -8,13 +8,15 @@ DataElementCommBusHIDL::DataElementCommBusHIDL()
     : pendingSendMessages_{}, vsd_proxy_{nullptr}, dataElementCallback_{nullptr} {}
 
 IDataElementCommBus* IDataElementCommBus::create() {
-    ALOGI("DataElementCommBus::create()");
+    ALOGV("DataElementCommBus::create()");
     return &DataElementCommBusHIDL::instance();
 }
 
 DataElementCommBusHIDL& DataElementCommBusHIDL::instance() noexcept {
-    static DataElementCommBusHIDL theInstance{};
-    return theInstance;
+    // Create hidl client, theInstance, as android sp to handle shared ownership during e.g. subscriptions to hidl
+    // correctly.
+    static ::android::sp<DataElementCommBusHIDL> theInstance = new DataElementCommBusHIDL{};
+    return *(theInstance.get());
 }
 void DataElementCommBusHIDL::send(const std::string& name, const std::string& payload, autosar::Dir dir) {
     // Store all send request in the map to resend if VSD restarts or starts later

@@ -1,10 +1,4 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
-
-#ifndef DATAELEMENTCOMMBUS_H
-#define DATAELEMENTCOMMBUS_H
+#pragma once
 
 #include <functional>
 #include <string>
@@ -14,7 +8,7 @@
 
 class IDataElementCommBus {
   public:
-    static IDataElementCommBus* create();  // the caller of create is responsible to delete when done
+    static IDataElementCommBus* create();  // the caller of create shall NOT delete the instance when done
 
     virtual void setNewDataElementHandler(
             std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) = 0;
@@ -25,5 +19,3 @@ class IDataElementCommBus {
 
     virtual ~IDataElementCommBus() {}
 };
-
-#endif

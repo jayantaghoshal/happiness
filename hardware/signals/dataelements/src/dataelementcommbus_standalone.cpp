@@ -1,13 +1,8 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
-
 #include <cutils/log.h>
 #include "dataelementcommbus.h"
 
 #undef LOG_TAG
-#define LOG_TAG "DataElementDBus"
+#define LOG_TAG "DataElementCommbusSta"
 
 class DataElementCommBus_standalone : public IDataElementCommBus {
   public:
