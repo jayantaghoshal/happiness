@@ -7,6 +7,7 @@
 
 #include "ipcb_simulator.h"
 
+#undef LOG_TAG
 #define LOG_TAG "IpcbSimulator_Test.main"
 
 /**
