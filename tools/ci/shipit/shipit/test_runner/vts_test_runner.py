@@ -39,8 +39,6 @@ def vts_tradefed_run(test_module_dir_path: str):
                                            "vts",
                                            "--skip-all-system-status-check",
                                            "--skip-preconditions",
-                                           "-l",
-                                           "INFO",
                                            "--abi",
                                            "x86_64",
                                            "--module",
