@@ -33,7 +33,7 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
              reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
              jira_issue="",
-             deadline="2017-10-14"
+             deadline="2017-12-04"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/blacklist",    standard_caps),
              reason="Blacklist functionality not yet implemented",
@@ -48,12 +48,12 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",            standard_caps),
              reason="Dead code in repo",
              jira_issue="",
-             deadline="2017-11-01"
+             deadline="2017-12-04"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix_gate",       standard_caps),
              reason="APIX driver not yet integrated on Master",
              jira_issue="",
-             deadline="2017-10-12"
+             deadline="2017-12-04"
     ),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
