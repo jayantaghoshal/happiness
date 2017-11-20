@@ -368,8 +368,7 @@ int32_t CarConfigUpdater::runUpdater() {
     if (rebootIsRequired) {
         ALOGI("Signaling node state manager that a restart is needed");
         ALOGW("Proper rebooot request is not yet implemented. Rebooting with system call directly to MP");
-        system("/system/bin/reboot");  // TODO change this to a call to "power manager"
-
+        system("printf 'da 0\nexit\n' | hisipcmd 4");  // TODO change this to a call to "power manager"
         // restartClient r;
         // r.restart();
     } else {
