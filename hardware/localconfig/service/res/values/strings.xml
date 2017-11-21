@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  For permissions -->
+    <!-- Permission text: apps can control Local Config -->
+    <string name="volvocars_permission_label_lcfg"> Local Configuration</string>
+    <string name="volvocars_permission_desc_lcfg"> Read Local config file </string>
+</resources>
