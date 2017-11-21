@@ -59,19 +59,23 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         #requirement = 99
         self.dut.shell.InvokeTerminal("my_shell4")
         my_shell = getattr(self.dut.shell, "my_shell4")
-        shell_response = my_shell.Execute(["free -m"])
+        shell_response = my_shell.Execute(["cat /proc/meminfo"])
 
-        memory_list = re.findall('.*Mem:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0].split( )
+        mem_free_kb = float(re.findall('MemFree:\s*(\d+)', shell_response[const.STDOUT][0])[0])
+        buffers_kb = float(re.findall('Buffers:\s*(\d+)', shell_response[const.STDOUT][0])[0])
+        cached_kb  = float(re.findall('Cached:\s*(\d+)', shell_response[const.STDOUT][0])[0])
+        s_reclaimable_kb  = float(re.findall('SReclaimable:\s*(\d+)', shell_response[const.STDOUT][0])[0])
+        total_mem_kb  = float(re.findall('MemTotal:\s*(\d+)', shell_response[const.STDOUT][0])[0])
 
-        total_memory = float(memory_list[0])
-        used_memory = float(memory_list[1])
-        free = 100 * (1 - used_memory/total_memory)
+        total_free_memory_kb = mem_free_kb + buffers_kb + cached_kb + s_reclaimable_kb
+        free_percent = 100 * (total_free_memory_kb/total_mem_kb)
 
-        asserts.assertLess(requirement, free, "The free memory is less than" + str(requirement) + "%")
+        asserts.assertLess(requirement, free_percent, "The free memory is less than" + str(requirement) + "%")
 
-        logging.info("The used memory is: " + str(used_memory) + " M")
-        logging.info("The total memory is: " + str(total_memory) + " M")
-        logging.info("Free memory is: {:.2f}".format(free) + "%")
+        logging.info("The free memory is: " + str(total_free_memory_kb) + " kB")
+        logging.info("The used memory is: " + str(total_mem_kb - total_free_memory_kb) + " kB")
+        logging.info("The total memory is: " + str(total_mem_kb) + " kB")
+        logging.info("Free memory is: {:.2f}".format(free_percent) + "%")
 
 
     def get_data(self, cores):
