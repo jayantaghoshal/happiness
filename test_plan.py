@@ -35,11 +35,6 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2017-12-04"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/blacklist",    standard_caps),
-             reason="Blacklist functionality not yet implemented",
-             jira_issue="",
-             deadline="2017-11-30"
-    ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
              reason="MR1 not yet on master",
              jira_issue="",
@@ -73,6 +68,11 @@ test_plan_hourly = [
              reason="Manual test which require usb2eth dongel",
              jira_issue="",
              deadline="2019-11-17"
+    ),
+    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
+             reason="We are currently unable to run tradefed tests correctly",
+             jira_issue="",
+             deadline="2017-12-04"
     ),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),

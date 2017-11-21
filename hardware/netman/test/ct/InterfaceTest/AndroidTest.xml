@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration description="Test whether we are able to hide/restrict interfaces">
+    <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
+        <option name="apk-name" value="networkInterfaceTest.apk" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.AndroidJUnitTest" >
+        <option name="package" value="com.volvocars.networkinterfacetest" />
+        <option name="runtime-hint" value="2s" />
+    </test>
+</configuration>
