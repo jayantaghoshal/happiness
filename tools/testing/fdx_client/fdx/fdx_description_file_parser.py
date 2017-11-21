@@ -1,7 +1,7 @@
 import struct
 import threading
 import xml.etree.ElementTree as ET
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 
 
 #https://docs.python.org/2/library/struct.html#format-characters
@@ -38,16 +38,27 @@ class Group():
         data = [0] * self.size
         with self.mutex_lock:
             for i in self.items:
-                # a bit awkward casting to be both py2 and 3 compatible
-                item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
-                data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
+                if i.type == "bytearray":
+                    len_bytes = struct.pack("I", len(i.value_raw))
+                    to_send = [ord(c) for c in len_bytes] + i.value_raw
+                    data[i.offset:(i.offset + i.size)] = to_send
+                else:
+                    # a bit awkward casting to be both py2 and 3 compatible
+                    item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
+                    data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
         return str(bytearray(data))
 
     def receive_data(self, data):
         # type: (List[int]) -> None
         with self.mutex_lock:
             for i in self.items:
-                (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
+                if i.type == "bytearray":
+                    raw = data[i.offset:(i.offset + i.size)]
+                    array_length =  struct.unpack("I", bytearray(raw[0:4]))[0]
+                    i.value_raw = raw[4:4+array_length]
+
+                else:
+                    (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
 
 
 class Item():
@@ -69,7 +80,8 @@ class Item():
         self.size = size
         self.type = datatype
         self.is_raw = is_raw   # If is_raw is false, then CANoe will handle scaling conversion
-        self._value = 0        # NOTE: Value can be either raw or physical depending on the FDXDescriptionFile
+        # NOTE: Value can be either raw or physical depending on the FDXDescriptionFile
+        self._value = 0        # type: Union[float, int, List[int]]
         self.bus_name = bus_name
 
     @property

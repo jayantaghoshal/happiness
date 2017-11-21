@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+	<namespace name="SimulationVersion">
+	<namespace name="SimulationVersion">
+		  <variable anlyzLocal="2" readOnly="true" valueSequence="false" unit="" name="SimulationVersion" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" startValue="2" minValue="0" minValuePhys="0" maxValue="1024" maxValuePhys="1024" />
+		</namespace>
+	</namespace>
+	</namespace>
+</systemvariables>
