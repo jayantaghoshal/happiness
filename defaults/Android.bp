@@ -29,6 +29,7 @@ cc_defaults {
         "modernize-*",
         "-modernize-raw-string-literal", //for short ones it is pointless
         "-modernize-use-auto", // This is not always an improvement
+        "-modernize-loop-convert", // Gives false positives on std::array
         "performance-*",
         "readability-*",
         "-readability-braces-around-statements", //some are short enough/oneliners

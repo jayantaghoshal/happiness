@@ -91,6 +91,7 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
     VTSTest("vendor/volvocars/hardware/profiles/test/ct",                           standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                           standard_caps), #Erik Elmeke
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/array_spam",    standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",       standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/test/gnss",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/iplm",                                  standard_caps), #Andreas Bengtsson

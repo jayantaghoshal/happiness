@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Flexray signaling component test case testing big arrays. 
+    Purpose of the test is 
+    1. Verify sending dataelements of array type works
+    2. Try all combinations of 2-byte sequences over DESIP as desip escape sequences has shown problems in the past.
+    
+    Testing [ARTINFO-1591] and [ARTINFO-3222]">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+        <option name="push" value="flexray_array_spam_sender->/data/nativetest64/flexray_array_spam" />
+    </target_preparer>
+    <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+           <option name="test-module-name" value="VtsFlexraySignalingCT_ArraySpam"/>
+           <option name="test-case-path" value="VtsFlexraySignalingCT_ArraySpam"/>
+           <option name="test-timeout" value="3m"/>
+       </test>
+</configuration>
