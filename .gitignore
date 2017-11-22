@@ -1,6 +1,6 @@
 # other repos imported by repo tool
-hmi/
-apps/
+hmi/*/
+apps/*/
 
 # Visual Studio Code
 *.vscode
