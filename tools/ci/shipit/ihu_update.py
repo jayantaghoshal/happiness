@@ -22,19 +22,31 @@ from shipit.process_tools import check_output_logged
 logger = logging.getLogger(__name__)
 
 
-def boot_mp_to_abl_cmdline(vip_serial: recording_serial.RecordingSerial):
-    logging.info("Boot into ABL CMD line")
+def mp_reset_low(vip_serial: recording_serial.RecordingSerial):
     vip_serial.writeline("gpio 1.10 0 o")
-    vip_serial.writeline("gpio 8.10 0 o")
+
+def mp_reset_high(vip_serial: recording_serial.RecordingSerial):
     vip_serial.writeline("gpio 1.10 1 o")
 
+def mp_bootpin_abl(vip_serial: recording_serial.RecordingSerial):
+    vip_serial.writeline("gpio 8.10 0 o")
+
+def mp_bootpin_prod(vip_serial: recording_serial.RecordingSerial):
+    vip_serial.writeline("gpio 8.10 1 o")
+
+def boot_mp_to_abl_cmdline(vip_serial: recording_serial.RecordingSerial):
+    logging.info("Boot into ABL CMD line")
+
+    mp_reset_low(vip_serial)
+    mp_bootpin_abl(vip_serial)
+    mp_reset_high(vip_serial)
 
 def boot_mp_to_android(vip_serial: recording_serial.RecordingSerial):
     logging.info("Boot into android")
-    vip_serial.writeline("gpio 1.10 0 o")
-    vip_serial.writeline("gpio 8.10 1 o")
-    vip_serial.writeline("gpio 1.10 1 o")
 
+    mp_reset_low(vip_serial)
+    mp_bootpin_prod(vip_serial)
+    mp_reset_high(vip_serial)
 
 def expect_line(s: recording_serial.RecordingSerial, pattern: str, timeout_sec: int, hint: str=None):
     stop_time = time.time() + timeout_sec
@@ -134,7 +146,13 @@ def flash_image(port_mapping: PortMapping,
                                                     "fast_flashfiles")
 
         logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
-        check_output_logged(['bash', 'fastboot.sh'],
+
+        # Ensure that after flashing completes the pin is in correct state
+        # fastboot reboot boots into android anyway, but toggling reset afterwards should not cause
+        # booting to abl
+        mp_bootpin_prod(ihu_serials.vip)
+
+        check_output_logged(['bash', 'fastboot.sh', '--abl'],
                             cwd=bsp_provided_flashfiles_path).decode().strip(" \n\r\t")
 
         # boot_mp_to_android(ihu_serials.vip)
