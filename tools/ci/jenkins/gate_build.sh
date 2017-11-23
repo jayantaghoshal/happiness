@@ -61,12 +61,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             --directory="${JOB_TMPFS}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
-            ./out/host/linux-x86/bin/fastboot \
-            ./out/host/linux-x86/bin/adb \
-            ./out/host/linux-x86/bin/aapt \
-            ./out/host/linux-x86/bin/tradefed.sh \
-            ./out/host/linux-x86/bin/script_help.sh \
-            ./out/host/linux-x86/bin/vts-tradefed \
+            ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed || die "Could not create out archive"
 
