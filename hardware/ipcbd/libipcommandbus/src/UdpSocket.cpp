@@ -28,35 +28,61 @@ UdpSocket::~UdpSocket() {
 }
 
 void UdpSocket::setup(const Message::Ecu &ecu) {
-    auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                           [ecu](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == ecu; });
+    // NOTE! Unlike TCP, the ecu provided here is used to setup the local port.
+    // Therefore it is only allowed to use ALL (for broadcast socket) and IHU (for normal socket)
 
-    if (it == ecu_ip_map_.end()) {
-        ALOGW("No matching ecu found:%d", ecu);
-        return;
+    if ((Message::Ecu::ALL == ecu) || (Message::Ecu::IHU == ecu)) {
+        // Look up IHU info from ECU map
+        auto it = std::find_if(
+                ecu_ip_map_.begin(), ecu_ip_map_.end(),
+                [](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == Message::Ecu::IHU; });
+
+        if (it == ecu_ip_map_.end()) {
+            ALOGW("IHU not found in ECU map!");
+            return;
+        }
+
+        std::string local_ip = it->second.ip;
+        uint16_t local_port = it->second.port;
+
+        // If we are setting up a broadcast socket
+        if (Message::Ecu::ALL == ecu) {
+            // Look up ALL (broadcast) info from ECU map
+            it = std::find_if(
+                    ecu_ip_map_.begin(), ecu_ip_map_.end(),
+                    [](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == Message::Ecu::ALL; });
+
+            if (it == ecu_ip_map_.end()) {
+                ALOGW("\"ALL\" (broadcast) not found in ECU map!");
+                return;
+            }
+
+            // Use broadcast address for broadcast socket
+            local_ip = it->second.ip;
+
+            set_option(SOL_SOCKET, SO_BROADCAST, true);
+        }
+
+        struct sockaddr_in sa;
+        sa.sin_family = AF_INET;
+        sa.sin_port = htons(local_port);
+
+        ALOGD("UdpSocket setup %s:%d - ecu %d", local_ip.c_str(), local_port, ecu);
+
+        if (1 != inet_pton(AF_INET, local_ip.c_str(), &sa.sin_addr)) {
+            throw SocketException(errno, "Address not in correct format");
+        }
+
+        const int bindStatus =
+                bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)));
+        if (0 != bindStatus) {
+            throw SocketException(errno, "Failed to bind to socket");
+        }
+
+        ecu_ = ecu;
+    } else {
+        ALOGE("Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : %d)", ecu);
     }
-
-    struct sockaddr_in sa;
-    sa.sin_family = AF_INET;
-    sa.sin_port = htons(it->second.port);
-
-    ALOGV("UdpSocket setup %s:%d - ecu %d", it->second.ip.c_str(), it->second.port, ecu);
-
-    if (1 != inet_pton(AF_INET, it->second.ip.c_str(), &sa.sin_addr)) {
-        throw SocketException(errno, "Address not in correct format");
-    }
-
-    if (Message::Ecu::ALL == ecu) {
-        set_option(SOL_SOCKET, SO_BROADCAST, true);
-    }
-
-    const int bindStatus =
-            bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)));
-    if (0 != bindStatus) {
-        throw SocketException(errno, "Failed to bind to socket");
-    }
-
-    ecu_ = ecu;
 }
 
 void UdpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { read_cb_ = std::move(readReadyCb); }
@@ -73,6 +99,36 @@ void UdpSocket::read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) {
 }
 
 void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &ecu) {
+    // Protect from trying to send to a bad ECU
+    if (Message::Ecu::UNKNOWN == ecu) {
+        ALOGE("Can not send to UNKNOWN socket!");
+        return;
+    }
+
+    // Protect from trying to send to self
+    if (Message::Ecu::IHU == ecu) {
+        ALOGE("Can not send to self!");
+        return;
+    }
+
+    // Protect from trying to send broadcast from normal socket
+    if (Message::Ecu::ALL == ecu) {
+        if (Message::Ecu::ALL != ecu_) {
+            ALOGE("Can not send broadcast on ordinary socket! (socket set up for %d and trying to send to %d", ecu_,
+                  ecu);
+            return;
+        }
+    }
+
+    // Protect from trying to send normal message from broadcast socket
+    if (Message::Ecu::ALL != ecu) {
+        if (Message::Ecu::ALL == ecu_) {
+            ALOGE("Can not send normal packet on broadcast socket! (socket set up for %d and trying to send to %d",
+                  ecu_, ecu);
+            return;
+        }
+    }
+
     auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
                            [ecu](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == ecu; });
 
@@ -82,14 +138,8 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
 
     struct sockaddr_in sa;
     sa.sin_family = AF_INET;
+    sa.sin_port = htons(it->second.port);
 
-    if (getenv("VCC_LOCALCONFIG_PATH") != NULL) {
-        ALOGD("Send on Test port: %d", Socket::getTestSimPort());
-        sa.sin_port = htons(Socket::getTestSimPort());
-    } else {
-        ALOGD("Send on production port: %d", it->second.port);
-        sa.sin_port = htons(it->second.port);
-    }
     if (1 != inet_pton(AF_INET, it->second.ip.c_str(), &sa.sin_addr)) {
         throw SocketException(errno, "Address not in correct format");
     }

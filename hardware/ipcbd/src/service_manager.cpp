@@ -3,6 +3,7 @@
 
 #include "service_manager.h"
 
+#undef LOG_TAG
 #define LOG_TAG "IpcbD.manager"
 
 using namespace tarmac::eventloop;

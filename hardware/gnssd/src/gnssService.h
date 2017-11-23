@@ -20,26 +20,27 @@ using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
+using ::android::RefBase;
 using ::android::sp;
+using ::android::wp;
 using ::tarmac::eventloop::IDispatcher;
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 
+using ::android::hardware::hidl_death_recipient;
+
 using namespace android::hardware::gnss::V1_0::implementation;
 using namespace android::hardware::gnss::V1_0;
-// using namespace InfotainmentIpService::Utils;
 
-class GnssService : public IMessageCallback {
+// Only refcounting and public methods should be visible externally
+class GnssService : public virtual RefBase, private IMessageCallback, private hidl_death_recipient {
   public:
     GnssService();
     ~GnssService() = default;
 
     void StartSubscribe();
-
-    // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
-    Return<void> onMessageRcvd(const Msg &msg) override;
 
     /**
        * Initialize IpLmService and the internal Link Manager functional block.
@@ -50,13 +51,25 @@ class GnssService : public IMessageCallback {
     void GNSSPositionDataAccuracyNotificationHandler(const Msg &msg);
 
   private:
+    // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
+    Return<void> onMessageRcvd(const Msg &msg) override;
+
+    // Methods from hidl_death_recipient follow.
+    void serviceDied(uint64_t cookie, const wp<IBase> &who) override;
+    void unsubscribeAll();
     sp<IVehicleCom> ipcbServer_;
 
     tarmac::eventloop::IDispatcher &timeProvider_;
 
-    android::hardware::gnss::V1_0::implementation::Gnss gnss_;
-    android::hardware::gnss::V1_0::GnssLocation location_;
+    Gnss gnss_;
+    GnssLocation location_;
     bool expect_location_accuracy_;
+
+    // Subscription Id's
+    uint64_t pos_notification_id;
+    uint64_t pos_cyclic_id;
+    uint64_t acc_notification_id;
+    uint64_t acc_cyclic_id;
 
     ASN_BYTE m_session_buffer_msgd[ASN_SESSION_SIZE + 2048];
     ASN_Session m_session_msgd;

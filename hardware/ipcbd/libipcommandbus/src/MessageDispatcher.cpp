@@ -44,6 +44,8 @@ uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId servic
     ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'", (unsigned int)serviceId,
           (unsigned int)operationId, (unsigned int)operationType, IpCmdTypes::toString(operationType));
 
+    std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
+
     // If operation type is REQUEST, SETREQUEST or NOTIFICATION_REQUEST,
     // only one subscriber is allowed. Check if that is the case and fail if so.
     if (IpCmdTypes::OperationType::REQUEST == operationType || IpCmdTypes::OperationType::SETREQUEST == operationType ||
@@ -58,15 +60,14 @@ uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId servic
 
     // Create receiver and store it in list
     RegInfo ri(serviceId, operationId, operationType, m_registeredReceiverIds++, messageCb);
-    {
-        std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
-        m_registeredReceivers.push_back(ri);
-    }
+    { m_registeredReceivers.push_back(ri); }
 
     return ri.registeredReceiverId;
 }
 
 bool MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId) {
+    std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
+
     // Find id and remove from list!
     auto it = FindReceiver(
             [&registeredReceiverId](const RegInfo &ri) { return registeredReceiverId == ri.registeredReceiverId; });

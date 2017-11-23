@@ -1,0 +1,4 @@
+functional_area: 'IP Command Bus'
+component: 'IP Command Bus Deamon'
+deployment: 'native-binary'
+license: 'Proprietary'

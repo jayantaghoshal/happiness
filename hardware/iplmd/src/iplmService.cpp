@@ -239,8 +239,15 @@ void IplmService::ActivityTimeout() {
         ALOGD("ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
     }
 
+    // Copy map of callbacks
+    std::map<std::string, sp<IIplmCallback>> registered_callbacks_to_call;
+    {
+        std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
+        registered_callbacks_to_call = iplm_data_.registered_callbacks_;
+    }
+
     // send events to LSCs. Update is sent periodically every second
-    for (auto regs : iplm_data_.registered_callbacks_) {
+    for (auto regs : registered_callbacks_to_call) {
         auto callback = regs.second;
         auto result1 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status);
         auto result2 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status);
@@ -522,6 +529,9 @@ Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XReso
 Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback) {
     ALOGI("RegisterService: called for service (%s)", lscName.c_str());
 
+    // Guard with mutex
+    std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
+
     // register a new service
     if (!IsServiceRegistered(iplm_data_, lscName)) {
         // Insert new service to registered LSCs list
@@ -546,14 +556,17 @@ Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<I
 Return<bool> IplmService::unregisterService(const hidl_string& lscName) {
     ALOGI("UnRegisterService: called for service (%s)", lscName.c_str());
 
-    ServicePrioMap::iterator it;
-    if (!IsServiceRegistered(iplm_data_, lscName, it)) {
-        ALOGW("UnRegistration request from a not registered service (%s)", lscName.c_str());
-        return false;
-    }
+    {  // Guard list access with mutex
+        std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
+        ServicePrioMap::iterator it;
+        if (!IsServiceRegistered(iplm_data_, lscName, it)) {
+            ALOGW("UnRegistration request from a not registered service (%s)", lscName.c_str());
+            return false;
+        }
 
-    iplm_data_.registered_LSCs_.erase(it);
-    iplm_data_.registered_callbacks_.erase(lscName);
+        iplm_data_.registered_LSCs_.erase(it);
+        iplm_data_.registered_callbacks_.erase(lscName);
+    }
 
     // If all LSCs are not registered; reset ACTION_AVAILABLE to STOP IP_activity broadcast. Ref: REQPROD 347878
     if (LocalCfg::getNofLocalSoftwareComponents() > static_cast<int>(iplm_data_.registered_LSCs_.size())) {

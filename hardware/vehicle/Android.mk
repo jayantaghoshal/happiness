@@ -14,7 +14,9 @@ PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle@2.0-se
 
 LOCAL_SRC_FILES := \
      src/VehicleHALServiceMain.cpp \
-     src/carconfigmodule.cpp
+     src/carconfigmodule.cpp \
+     src/hvacmodule.cpp \
+     src/fanlevelimpl.cpp
 
 LOCAL_C_INCLUDES := \
     src/
@@ -34,7 +36,9 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     $(vhal_v2_0) \
     $(vccvhal_v1_0) \
-    libcarconfig_reader
+    libcarconfig_reader \
+    libtarmac \
+    libdataelements
 
 
 LOCAL_STATIC_LIBRARIES := \
@@ -49,7 +53,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
     audio_vehicle-hal-impl-lib
      
 
-LOCAL_CFLAGS += -Wall -Wextra -Werror
+LOCAL_CFLAGS += -Wall -Wextra -Werror -fexceptions
 
 include $(BUILD_EXECUTABLE)
 

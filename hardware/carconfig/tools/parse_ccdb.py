@@ -31,6 +31,8 @@ try:
 except ImportError:
     pass
 
+import jinja2
+
 PARSER_VERSION = "0.2"
 
 VALID_EXTENSIONS = (".xls", ".xlsx", ".xlsm", ".csv", ".ods") #Update __doc__ if this changes
@@ -251,73 +253,16 @@ def parse_ccdb(filename, template_file, output_file, caller = ""):
             if string.digits.find(value.desc[0]) > -1:
                 value.desc = DIGITS[value.desc[0]] + value.desc[1:]
 
-    ## Read the template
-    with open(template_file, 'r') as template:
-        h_rows = []
-        param_template = []
-        appen_param = False
-        for row in template:
-            h_rows.append(row)
-            if row.strip() == '##PARAMTEMPLATEEND##':
-                appen_param = False
-            if appen_param:
-                param_template.append(row)
-            if row.strip() == '##PARAMTEMPLATESTART##':
-                appen_param = True
-        template.close()
-
-    ## Write the output
-    with open (output_file, 'w') as h_file:
-        write_params = False
-        for row in h_rows:
-            if row.find("##FILENAME##") > -1:
-                row = row.replace("##FILENAME##", filename)
-            if row.find("##DATE##") > -1:
-                row = row.replace("##DATE##", str(datetime.datetime.now().replace(microsecond=0)))
-            if row.find("##TOOL##") > -1:
-                row = row.replace("##TOOL##", caller)
-            if row.strip() == '##PARAMTEMPLATESTART##':
-                row = ''
-                write_params = True
-                lastparam = paramlist[-1]
-                for param in paramlist:
-                    for template_row in param_template:
-                        if template_row.find('##COMMASEPARATOR##') > -1:
-                            if param != lastparam:
-                                template_row = template_row.replace('##COMMASEPARATOR##', ",")
-                            else:
-                                template_row = template_row.replace('##COMMASEPARATOR##', "")
-                        if template_row.find('##PARAMNUMBER##') > -1:
-                            template_row = template_row.replace('##PARAMNUMBER##', str(param.number))
-                        if template_row.find('##PARAMNAME##') > -1:
-                            template_row = template_row.replace('##PARAMNAME##', param.name)
-                        if template_row.find('##PARAMDESC##') > -1:
-                            template_row = template_row.replace('##PARAMDESC##', param.desc)
-                            template_row = template_row.rstrip()
-                        if template_row.find('##PARAMVALUE##') > -1:
-                            for value in param.values:
-                                temp_row = template_row.replace('##PARAMVALUE##', value.desc)
-                                temp_row = temp_row.replace('##PARAMVALUENUMBER##', value.value)
-                                try:
-                                    h_file.write(temp_row)
-                                except UnicodeEncodeError:
-                                    h_file.write(fixUnicode(temp_row))
-                            template_row = ''
-                        try:
-                            h_file.write(template_row)
-                        except UnicodeEncodeError:
-                            h_file.write(fixUnicode(template_row))
-            if row.strip() == '##PARAMTEMPLATEEND##':
-                row = ''
-                write_params = False
-            if write_params:
-                row = ''
-            try:
-                h_file.write(row)
-            except UnicodeEncodeError:
-                h_file.write(fixUnicode(row))
-
-
+    with open(output_file, 'w') as file:
+        with open(template_file, 'r') as template_f:
+            template_contents = template_f.read()
+        template = jinja2.Template(template_contents)
+        file.write(
+            template.render(
+                filename=filename,
+                paramlist=paramlist
+                ))
+    
 ## MAIN with some error checking.
 if __name__ == '__main__':
     #use docopt if installed.

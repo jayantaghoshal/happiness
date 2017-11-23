@@ -17,7 +17,7 @@ allowed_deployments = set([
     'complete-image'
 ])
 
-allowed_licenses = set(['Undecided'])
+allowed_licenses = set(['Proprietary'])
 
 ComponentDescription = namedtuple('ComponentDescription',
                                   ['functional_area',

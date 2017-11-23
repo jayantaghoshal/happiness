@@ -68,6 +68,7 @@ PRODUCT_PACKAGES += \
     signaltrace \
     signalecho \
     carsim_bridge \
+    signal_toggle_sender \
     carconfig-client-tester \
     hisipcmd
 endif

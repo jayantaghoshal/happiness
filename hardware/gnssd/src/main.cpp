@@ -91,8 +91,8 @@ bool InitSignals() {
 int main(void) {
     InitSignals();
 
-    GnssService gnssService;
-    gnssService.Initialize();
+    sp<GnssService> gnssService = new GnssService();
+    gnssService->Initialize();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 

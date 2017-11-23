@@ -6,6 +6,7 @@
 
 #include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
+#include "hvacmodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
@@ -25,10 +26,12 @@ int main(int /* argc */, char* /* argv */ []) {
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
     auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
+    auto hvacModule = std::make_unique<HvacModule>(hal.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
     audioModule->registerToVehicleHal();
+    hvacModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
 
     auto service = std::make_unique<vhal_20::VehicleHalManager>(hal.get());

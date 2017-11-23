@@ -47,6 +47,9 @@
   <remove-project name="bsp/kernel/bxt"/>
   <project name="bsp/kernel/bxt" path="kernel/bxt" revision="4c3e431ccdec6ef2eb77e2dff4a400bf3ad7beb8"/>
 
+  <remove-project name="bsp/vendor/intel/external/open-avb"/>
+  <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="48f5dc51a6ff92327ea2db5ce2d5d2625dd5c48c"/>
+
   <!-- SWDL, to be decided which layer it belongs -->
   <project name="bsp/vendor/delphi/swdl" path="vendor/delphi/swdl" revision="484a2de25e89514a46746e2a0b9771211736a5cf"/>
 </manifest>

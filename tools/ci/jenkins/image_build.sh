@@ -9,16 +9,16 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
 TMPFS=/dev/shm
-export CCACHE_DIR=$TMPFS/ccache
-export CCACHE_MAXSIZE=30G
-export CC_WRAPPER=/usr/bin/ccache
-export CXX_WRAPPER=/usr/bin/ccache
-export USE_CCACHE=true
+JOB_TMPFS=$TMPFS/$JOB_NAME
+export USE_CCACHE=false
+export OUT_DIR=$JOB_TMPFS/out
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
-# Build image, vts & tradefed
+rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
+
+# Build image, vts & tradefed 
 time make -j32 droid vts tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
@@ -31,6 +31,7 @@ rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.confi
 # Create archive out.tgz 
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
+            --directory="${JOB_TMPFS}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin/fastboot \
@@ -50,3 +51,8 @@ redis-cli set icup_android.jenkins.ihu_image_build."${BUILD_NUMBER}".commit "${G
 
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins.ihu_image_build.latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
+
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_image_build "${BUILD_NUMBER}" pass || true
+
+# Cleanup
+rm ${OUT_ARCHIVE}

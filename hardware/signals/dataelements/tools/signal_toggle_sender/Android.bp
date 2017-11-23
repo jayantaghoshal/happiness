@@ -1,0 +1,25 @@
+cc_binary {
+    name: "signal_toggle_sender",
+    cpp_std: "c++14",
+    vendor: true,
+    srcs: [
+        "simple_sender.cpp",
+    ],
+    cppflags: [
+        "-fexceptions",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "liblog",
+        "libutils",
+        "libhwbinder",
+        "libdataelements",
+        "vendor.volvocars.hardware.signals@1.0",
+    ],
+
+    compile_multilib: "64",
+}

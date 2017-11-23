@@ -7,7 +7,7 @@ subdirs = [
 genrule {
     name: "cc_parameterlist_gen",
     tool_files: ["tools/parse_ccdb.py"],
-    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
+    cmd: "python3 $(location tools/parse_ccdb.py) $(in) $(out)",
     srcs: [
         "tools/carconfigspec.xls",
         "tools/ccdb_template.h",
@@ -21,7 +21,7 @@ genrule {
 genrule {
     name: "cc_parameterlist_map_gen",
     tool_files: ["tools/parse_ccdb.py"],
-    cmd: "python $(location tools/parse_ccdb.py) $(in) $(out)",
+    cmd: "python3 $(location tools/parse_ccdb.py) $(in) $(out)",
     srcs: [
         "tools/carconfigspec.xls",
         "tools/ccdb_paramlist_template.h",

@@ -9,16 +9,17 @@ namespace CarConfigParamList
     The values below is extracted from the file ##FILENAME##
     on ##DATE## with the tool ##TOOL##
     */
-
     const std::map<int,std::vector<int>> paramList =
     {
-        ##PARAMTEMPLATESTART##
+        {% for param in paramlist %}
         {
-            ##PARAMNUMBER##, //##PARAMNAME##
+            {{param.number}}, //{{param.name}}
             {
-                0x##PARAMVALUENUMBER##, //##PARAMVALUE##
+                {% for value in param.values %}
+                0x{{value.value}},//{{value.desc}}
+                {% endfor %}
             }
-        }##COMMASEPARATOR##
-        ##PARAMTEMPLATEEND##
+        },
+        {% endfor %}
     };
 }

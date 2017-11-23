@@ -1,7 +1,10 @@
 cc_defaults {
     name: "libtarmac_defaults",
     compile_multilib: "64",
-    export_include_dirs: ["eventloop/include"],
+    export_include_dirs: [
+        "eventloop/include",
+        "common/include",
+    ],
     cflags: ["-fexceptions"],
     shared_libs: [
         "liblog",
