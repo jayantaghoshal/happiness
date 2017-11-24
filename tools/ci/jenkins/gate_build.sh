@@ -9,13 +9,11 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
 TMPFS=/dev/shm
-JOB_TMPFS=$TMPFS/$JOB_NAME
 export CCACHE_DIR=$TMPFS/ccache
 export CCACHE_MAXSIZE=50G
 export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
 # Setting OUT_DIR must be done BEFORE sourcing envsetup.sh !!!!!!!!!!!!
-export OUT_DIR=$JOB_TMPFS/out
 export USE_CCACHE=true
 
 # Rerun commit check in case merge effect changed after the change was validated at the check step
@@ -26,7 +24,7 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # downloads are incremental and faster.
 time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
 
-rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
+rm -rf out  # Remove previous OUT_DIR for clean build.
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
@@ -58,7 +56,6 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build -
 
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
-            --directory="${JOB_TMPFS}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin \
@@ -67,5 +64,3 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
-
-rm ${OUT_ARCHIVE}
