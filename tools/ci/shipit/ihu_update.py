@@ -111,12 +111,11 @@ def flash_image(port_mapping: PortMapping,
         ihu_serials.vip.writeline("sm alw 1")
         expect_line(ihu_serials.vip, ".*SysM- Always_On: 1.*", 15)
         logger.info("Starting ABL command line")
+
         boot_mp_to_abl_cmdline(ihu_serials.vip)
-        expect_line(ihu_serials.mp, "abl-APL.*", 30,
-                    "Is the MP UART connected? Or do you have the TTY open already?")
-        expect_line(ihu_serials.mp, "auto-boot ...", 30)
-        expect_line(ihu_serials.mp, ">>>.*", 30)
+        expect_line(ihu_serials.mp, ">>>.*", 30, "Is the MP UART connected? Or do you have the TTY open already?")
         logger.info("ABL command line confirmed, boot into fastboot")
+
         ihu_serials.mp.writeline("boot elk")
         expect_line(ihu_serials.mp, "==> jump to image.*", 30)
         expect_line(ihu_serials.mp,
