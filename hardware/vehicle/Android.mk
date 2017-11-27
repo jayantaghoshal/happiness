@@ -16,7 +16,8 @@ LOCAL_SRC_FILES := \
      src/VehicleHALServiceMain.cpp \
      src/carconfigmodule.cpp \
      src/hvacmodule.cpp \
-     src/fanlevelimpl.cpp
+     src/fanlevelimpl.cpp \
+     src/tempimpl.cpp
 
 LOCAL_C_INCLUDES := \
     src/
