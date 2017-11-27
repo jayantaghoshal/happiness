@@ -26,6 +26,7 @@ cc_defaults {
         "cert-*",
         "modernize-*",
         "-modernize-raw-string-literal", //for short ones it is pointless
+        "-modernize-use-auto", // This is not always an improvement
         "performance-*",
         "readability-*",
         "-readability-braces-around-statements", //some are short enough/oneliners

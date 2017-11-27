@@ -64,6 +64,7 @@ test_plan_incubator_hourly = [
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/toggleTest", standard_caps | {cp.flexray}), #Erik Elmeke
 ]
 
 #This is for unstable tests that does not need to be run often

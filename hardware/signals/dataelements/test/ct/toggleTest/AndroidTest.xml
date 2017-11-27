@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Toggle sending flexray signal quickly and see if IHU can receive all changes">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+        <option name="push" value="flexray_toggle_test_receiver->/vendor/bin/flexray_toggle_test_receiver" />
+    </target_preparer>
+    <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+           <option name="test-module-name" value="flexray_toggle_test_sender"/>
+           <option name="test-case-path" value="flexray_toggle_test_sender"/>
+           <option name="test-timeout" value="3m"/>
+       </test>
+</configuration>
