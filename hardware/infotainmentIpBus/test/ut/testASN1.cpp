@@ -88,7 +88,7 @@ TEST_F(ASN1Test, EncodeError) {
 
     ASN_retcode = Icb_OpSendToCarConfirmation_SetRequest_Encode(p, m_stream);
     ASSERT_TRUE(ASN_retcode != ASN_RESULT_OK) << ASN_retcode;
-    EXPECT_EQ(ASN_ERROR_VALUE_NOT_WITHIN_RANGE, ASN_retcode->error) << "error = " + ASN_retcode->error;
+    EXPECT_EQ(ASN_ERROR_VALUE_NOT_WITHIN_RANGE, ASN_retcode->error) << "error = " << ASN_retcode->error;
 
     m_encodedBufPtr = ASN_Stream_GetBuffer(m_stream, &m_encodedBufLen);
 }
@@ -131,7 +131,7 @@ TEST_F(ASN1Test, DecodeError) {
 
     ASN_retcode = Icb_OpSendToCarConfirmation_SetRequest_Decode(p, m_session, m_stream);
     ASSERT_TRUE(ASN_retcode != ASN_RESULT_OK) << ASN_retcode;
-    EXPECT_EQ(ASN_ERROR_VALUE_NOT_WITHIN_RANGE, ASN_retcode->error) << "error = " + ASN_retcode->error;
+    EXPECT_EQ(ASN_ERROR_VALUE_NOT_WITHIN_RANGE, ASN_retcode->error) << "error = " << ASN_retcode->error;
 
     ASSERT_EQ(6U, p->confirmation);  // Not a valid enum
     ASSERT_EQ(0U, p->confirmedId);
