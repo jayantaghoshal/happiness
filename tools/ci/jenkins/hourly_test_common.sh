@@ -12,6 +12,3 @@ artifactory pull ihu_image_build "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifa
 
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
-
-# Update IHU
-ihu_update || die "Failed to flash IHU image"

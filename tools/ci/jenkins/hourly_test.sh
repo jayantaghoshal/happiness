@@ -10,15 +10,18 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
+# Update IHU
+ihu_update || die "Failed to flash IHU image"
+
 # Get properties
 adb shell getprop
 
 # Run tests
 # TODO: Create a config file with tests to run instead of calling vts-tradefed for each test
-lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64 --module SampleShellTest
+vts-tradefed run commandAndExit vts --abi x86_64 --module SampleShellTest
 status=$?
 
-lunch ihu_vcc-eng && vts-tradefed run commandAndExit vts --abi x86_64 --module BinderThroughputBenchmark
+vts-tradefed run commandAndExit vts --abi x86_64 --module BinderThroughputBenchmark
 result=$?
 if [ $status -eq 0 ]; then
     status=$result
