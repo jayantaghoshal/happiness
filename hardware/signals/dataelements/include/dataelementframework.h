@@ -1,10 +1,4 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
-
-#ifndef DATAELEMENTFRAMEWORK_H
-#define DATAELEMENTFRAMEWORK_H
+#pragma once
 
 #include <list>
 #include <map>
@@ -119,5 +113,3 @@ class DataElementFramework {
 
     mutable std::recursive_mutex mutex_protectDataElementListeners;
 };
-
-#endif  // DATAELEMENTFRAMEWORK_H

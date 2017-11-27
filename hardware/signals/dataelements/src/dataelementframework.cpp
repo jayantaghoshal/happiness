@@ -1,8 +1,3 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
-
 #include "dataelementframework.h"
 #include <cutils/log.h>
 #include <sys/types.h>
