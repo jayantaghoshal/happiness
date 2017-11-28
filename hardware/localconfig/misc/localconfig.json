@@ -73,9 +73,10 @@
   "eth1.mac-address": "02:00:00:02:12:01",
   "eth1.mtu": 1500,
   "NetboyRules": [
-      "DRIVER=smsc95xx,ACTION=MOVE_AND_RENAME,NEW_NAME=apix0,NEW_NS=vcc",
-      "DRIVER=igb_avb,ACTION=MOVE_AND_RENAME,NEW_NAME=tcam0,NEW_NS=vcc",
-      "INTERFACE_NAME=meth0,ACTION=MOVE,NEW_NS=vcc"
+    "DRIVER=smsc95xx,ACTION=MOVE_AND_RENAME,NEW_NAME=apix0,NEW_NS=vcc",
+    "DRIVER=smsc9500,ACTION=MOVE_AND_RENAME,NEW_NAME=apix0,NEW_NS=vcc",
+    "DRIVER=igb_avb,ACTION=MOVE_AND_RENAME,NEW_NAME=tcam0,NEW_NS=vcc",
+    "INTERFACE_NAME=meth0,ACTION=MOVE,NEW_NS=vcc"
   ],
   "CONN_NhFirewall":
   {
