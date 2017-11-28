@@ -35,6 +35,17 @@ PRODUCT_PACKAGES += \
     VccLauncher
 
 ##############################################################
+# Internal Apps UI
+##############################################################
+ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+    VccTestApp
+endif
+
+PRODUCT_PACKAGES += \
+    VccTunerApp
+
+##############################################################
 # Vendor apps
 ##############################################################
 PRODUCT_PACKAGES += \

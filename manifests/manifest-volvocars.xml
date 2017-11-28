@@ -16,6 +16,9 @@
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="f5b6df32000cbbd77d4f0021bc64e30fb6b68d47"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="b19fc4bb58595e52ba70bd1041f2a37f88d18e04"/>
 
+  <!-- APPS -->
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="4bf20d3c1f632410ea9e463bbc7cb8bb0daadf4c"/>
+
   <!-- VolvoLauncher -->
   <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars/apps/VolvoLauncher" revision="60e9877a98431a66913f70ae4e996b2c6a96847f"/>
   <!-- Volvo Cars partner apps -->
