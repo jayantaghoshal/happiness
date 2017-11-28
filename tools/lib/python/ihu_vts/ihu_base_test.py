@@ -3,7 +3,15 @@ import os
 
 from vts.runners.host import test_runner
 from vts.runners.host import base_test
+import json
+import sys
 
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
+import typing
+from typing import Union, List, Optional, Dict
+
+_number = Union[int, float]
+_kpi_value_type = Union[_number, List[Union[List[_number], _number]]]
 
 """The _writeResultsJsonString fix is needed to be able to see the number
 of test cases that have been run without error. A virtual python 
@@ -27,8 +35,25 @@ def _writeResultsJsonString(self):
 
 class IhuBaseTestClass(base_test.BaseTestClass):
     def __init__(self, *args, **kwargs):
+        self.vcc_kpis = {}  # type: Dict[str, _kpi_value_type]
         super(IhuBaseTestClass, self).__init__(*args, **kwargs)
         try:
-            test_runner.TestRunner._writeResultsJsonString = _writeResultsJsonString
+            test_runner.TestRunner._writeResultsJsonString = _writeResultsJsonString    # type: ignore
         except Exception:
             print("*** Unable to patch test_runner.TestRunner._writeResultsJsonString ***")
+
+
+    def tearDownClass(self):
+        try:
+            if len(self.vcc_kpis) > 0:
+                with open("/tmp/test_run_kpis.json", "w") as f:
+                    json.dump(self.vcc_kpis, f)
+        except:
+            pass
+
+        super(IhuBaseTestClass, self).tearDownClass()
+
+
+    def write_kpi(self, name, value, unit=None):
+        # type: (str, _kpi_value_type, str) -> None
+        self.vcc_kpis[name] = value

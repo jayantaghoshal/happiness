@@ -16,6 +16,9 @@ from vts.runners.host import const
 from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 import ihu_base_test
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
+import typing
 
 class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     """
@@ -44,6 +47,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
         for core in range(int(number_of_cores)):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
+            self.write_kpi("cpu_core_%d" % core, total_load[core], "%")
             if total_load[core] > requirement:
                 process_running = my_shell.Execute(["top -n1"])
                 logging.info("top -n1")
@@ -72,8 +76,12 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
         asserts.assertLess(requirement, free_percent, "The free memory is less than" + str(requirement) + "%")
 
+        used_mem_kb = total_mem_kb - total_free_memory_kb
+        self.write_kpi("used_memory", used_mem_kb, "mb")
+        self.write_kpi("total_memory", total_free_memory_kb, "kb")
+        self.write_kpi("free_memory", free_percent, "%")
         logging.info("The free memory is: " + str(total_free_memory_kb) + " kB")
-        logging.info("The used memory is: " + str(total_mem_kb - total_free_memory_kb) + " kB")
+        logging.info("The used memory is: " + str(used_mem_kb) + " kB")
         logging.info("The total memory is: " + str(total_mem_kb) + " kB")
         logging.info("Free memory is: {:.2f}".format(free_percent) + "%")
 
@@ -83,7 +91,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         my_shell = getattr(self.dut.shell, "data_shell")
         shell_response = my_shell.Execute(["cat /proc/stat"])
         stats_data = io.StringIO(unicode(shell_response[const.STDOUT][0]))
-        core_load = {}
+        core_load = {} # type: typing.Any
 
         for core in range(cores):
             core_load[str(core)] = {}
@@ -95,14 +103,11 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def calc_load(self, core_first_data, core_last_data, cores):
-        load = {}
-        utilisation = []
+        utilisation = [] # type: typing.List[float]
         for core in range(cores):
-            load[str(core)] = {}
-            load[str(core)]['idle_delta'] = core_first_data[str(core)]['idle'] - core_last_data[str(core)]['idle']
-            load[str(core)]['total_delta'] = core_first_data[str(core)]['total'] - core_last_data[str(core)]['total']
-
-            utilisation.append(100.0 * (1.0 - load[str(core)]['idle_delta'] / load[str(core)]['total_delta']))
+            idle_delta = core_first_data[str(core)]['idle'] - core_last_data[str(core)]['idle']
+            total_delta = core_first_data[str(core)]['total'] - core_last_data[str(core)]['total']
+            utilisation.append(100.0 * (1.0 - idle_delta / total_delta))
 
         return utilisation
 

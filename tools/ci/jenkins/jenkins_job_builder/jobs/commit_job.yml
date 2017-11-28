@@ -73,8 +73,10 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
-
-
+    publishers:
+      - archive:
+          artifacts: 'out/host/linux-x86/vcc_test_results/current/**/*'
+          allow-empty: true
     wrappers:
         - raw:
             xml: |

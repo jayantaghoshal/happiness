@@ -4,6 +4,7 @@
 #       But we want to discuss the structure with CI-guards first.
 
 import argparse
+import glob
 import logging
 import logging.config
 import json
@@ -16,6 +17,7 @@ from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
 from typing import Dict
+from subprocess import check_output
 
 # Add pwd to the PYTHONPATH because VTS runs in its own environment with different working directory
 # than where we launch it. It then translates the <option name="test-case-path" value="x/y/z" />
@@ -28,7 +30,7 @@ def _create_env(test_module_dir_path: str) -> Dict[str, str]:
     env['PYTHONPATH'] = orig_value + os.pathsep + test_module_dir_path if orig_value else test_module_dir_path
     return env
 
-def vts_tradefed_run(test_module_dir_path: str):
+def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
     module_name = read_module_name(os.path.join(test_module_dir_path, "AndroidTest.xml"))
     logging.info("Running test module %s" % module_name)
     max_test_time_sec = 60 * 60
@@ -61,8 +63,40 @@ def vts_tradefed_run(test_module_dir_path: str):
         exception_string2 = ("Test failed! This pattern was missing in the output:  \"%s\"" % fail_pattern2)
         raise VtsTestFailedException(exception_string2, get_json_object(module_name), get_json_change_time(module_name))
 
-    return ResultData(test_result, get_json_object(module_name), get_json_change_time(module_name))
 
+    log_dir_match = re.search(r"I\/ResultReporter:\s+Test Logs:\s+(\S+)", test_result)
+    logdict = dict()
+    if log_dir_match:
+        log_dir = os.path.abspath(log_dir_match.group(1))
+        logging.info("Log dir is %s" % log_dir)
+        assert("out/host/linux-x86/vts/android-vts/logs" in log_dir)
+
+        def read(name, pattern):
+            matches = glob.glob(pattern, recursive=True)
+            logging.info("Attempting %s, found mathces: %r" % (pattern, matches))
+            if len(matches) == 1:
+                gzip_filename = matches[0]
+                logdict[name] = check_output(["gzip", "-d", "-c", gzip_filename]).decode()
+        read("device_logcat_setup", os.path.join(log_dir, "**", "*device_logcat_setup*.txt.gz"))
+        read("device_logcat_teardown", os.path.join(log_dir, "**", "*device_logcat_teardown*.txt.gz"))
+        read("device_logcat_test", os.path.join(log_dir, "**", "*device_logcat_test*.txt.gz"))
+        read("host_log", os.path.join(log_dir, "**", "*host_log*.txt.gz"))
+
+
+    return ResultData(True,
+                      test_result,
+                      get_json_object(module_name),
+                      get_json_change_time(module_name),
+                      get_json_kpi_results(),
+                      logdict)
+
+def get_json_kpi_results():
+    try:
+        with open('/tmp/test_run_kpis.json') as kpis:
+            return json.load(kpis)
+    except FileNotFoundError:
+        logging.info("test_run_kpis.json not found, ignoring test kpis")
+        return {}
 
 def get_json_change_time(module_name):
     try:

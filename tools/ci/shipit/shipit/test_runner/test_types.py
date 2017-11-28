@@ -1,4 +1,5 @@
-from typing import Set
+import typing
+from typing import Set, Mapping, Any
 import datetime
 
 class Capabilities:
@@ -63,7 +64,16 @@ class Disabled(IhuBaseTest):
 
 
 class ResultData:
-    def __init__(self, console, json_result, json_change_time):
+    def __init__(self,
+                 passed: bool,
+                 console: str,
+                 json_result,
+                 json_change_time,
+                 test_kpis: Mapping[str, Any],
+                 logs: Mapping[str, str]) -> None:
+        self.passed = passed
         self.console = console
         self.json_result = json_result
         self.json_change_time = json_change_time
+        self.test_kpis = test_kpis
+        self.logs = logs

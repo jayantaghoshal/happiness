@@ -24,6 +24,10 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    publishers:
+      - archive:
+          artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
+          allow-empty: true
 
 
 - job:
@@ -59,8 +63,6 @@
             !include-raw: 
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_image_build.sh
-
-
 - job:
     name: ihu_hourly_test
     defaults: time_job_defaults
