@@ -23,3 +23,6 @@ $(call inherit-product, $(LOCAL_PATH)/device.mk)
 # Override PRODUCT variables
 PRODUCT_NAME := ihu_vcc
 PRODUCT_DEVICE := ihu_vcc
+
+# Resource overlays
+PRODUCT_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay $(PRODUCT_PACKAGE_OVERLAYS)

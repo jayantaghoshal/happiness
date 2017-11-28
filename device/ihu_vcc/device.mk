@@ -66,12 +66,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 ##############################################################
-# Config overlay
-##############################################################
-PRODUCT_PACKAGE_OVERLAYS += \
-    vendor/volvocars/overlay
-
-##############################################################
 # Configurations for userdebug and engineering build
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
