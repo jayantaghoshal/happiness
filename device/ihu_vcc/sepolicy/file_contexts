@@ -13,6 +13,9 @@
 # GnssD execution rights
 /vendor/bin/hw/gnssd u:object_r:gnssd_exec:s0
 
+# CloudD execution rights
+/vendor/bin/hw/cloudd u:object_r:cloudd_exec:s0
+
 /vendor/bin/hw/dataelements-hidl-server u:object_r:dataelements-hidl-server_exec:s0
 /vendor/bin/hw/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
 

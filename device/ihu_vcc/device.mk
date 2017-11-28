@@ -5,6 +5,7 @@ PRODUCT_PACKAGES += \
     var_run_directory_structure \
     netboyd \
     netman \
+    cloudd \
     vehicle-signals-daemon \
     dataelements-hidl-server \
     ipcbd \

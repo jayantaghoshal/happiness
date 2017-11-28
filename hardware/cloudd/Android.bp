@@ -1,0 +1,33 @@
+cc_binary {
+
+    name: "cloudd",
+    init_rc: ["cloudd.rc"],
+    relative_install_path: "hw",
+    vendor: true,
+
+    srcs: [
+        "src/main.cpp",
+        "src/cloudService.cpp",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    shared_libs: [
+        "liblog",
+        "libtarmac",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libcurl",
+        "libhwbinder",
+        "android.hardware.gnss@1.0",
+    ],
+
+    local_include_dirs: ["src"],
+
+    compile_multilib: "64",
+}
