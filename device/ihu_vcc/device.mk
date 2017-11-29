@@ -12,6 +12,7 @@ PRODUCT_PACKAGES += \
     gnssd \
     carconfig-updater \
     desip_service \
+    desipkeyhandler \
     android.hardware.automotive.vehicle.vcc@2.0-service \
     vendor.volvocars.hardware.uds@1.0-service
 
