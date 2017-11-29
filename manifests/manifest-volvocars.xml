@@ -44,7 +44,7 @@
   <remove-project name="bb_android_hisip_desip"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
   <remove-project name="android_vehicle-hal"/>
-  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="68620f94f7edaf35950e71e3bf3ce9eb7e707856"/>
+  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="9c14af2023b9e35b732ddc9e8d8319c5f21aeeba"/>
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
