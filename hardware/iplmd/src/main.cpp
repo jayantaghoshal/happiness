@@ -95,8 +95,8 @@ bool InitSignals() {
 int main(void) {
     InitSignals();
 
-    IplmService iplmService;
-
+    sp<IplmService> iplmService = new IplmService;
+    iplmService->StartSubscribe();
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 
     joinRpcThreadpool();

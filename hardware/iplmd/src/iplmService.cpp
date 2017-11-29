@@ -7,8 +7,6 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
-using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 namespace LocalCfg = Iplmd::LocalConfig;
 
@@ -38,26 +36,26 @@ enum NsmStateBitMask : std::size_t {
 IplmService::IplmService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
     Iplmd::LocalConfig::loadLocalConfig();
 
-    StartSubscribe();
-
     IIplm::registerAsService();  // register as handler of the IIplm hidl interface
 }
 
 void IplmService::StartSubscribe() {
     ipcbServer_ = IVehicleCom::getService("iplm");
 
-    if (ipcbServer_ != NULL) {
+    if (ipcbServer_ != nullptr) {
         ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
+
+        auto error = ipcbServer_->linkToDeath(this, 2);
+        if (error.isOk()) ALOGD("registered death");
 
         SubscribeResult result;
         // Install callback
         // TODO: Handle subscriber ID returned from subscribe?
-        ipcbServer_.get()->subscribe(0xFFFF, 0xFF01, OperationType::NOTIFICATION_CYCLIC, this,
-                                     [&result](SubscribeResult sr) { result = sr; });
+        ipcbServer_->subscribe(0xFFFF, 0xFF01, OperationType::NOTIFICATION_CYCLIC, this,
+                               [&result](SubscribeResult sr) { result = sr; });
         if (!result.commandResult.success) {
             ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
         }
-
         Initialize();
     } else {
         ALOGD("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
@@ -67,6 +65,10 @@ void IplmService::StartSubscribe() {
     }
 }
 
+void IplmService::serviceDied(uint64_t cookie, const android::wp<IBase>& who) {
+    ALOGD("IPCB died. Exiting IPLM and hoping to restart!");
+    exit(EXIT_SUCCESS);
+}
 void IplmService::HandleMessageRcvd(const Msg& msg) {
     ALOGD("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
@@ -323,7 +325,7 @@ void IplmService::CreateAndSendIpActivityMessage() {
     ALOGD("Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
 
     CommandResult result;
-    ipcbServer_.get()->sendMessage(message, {false, 0, 0}, [&result](CommandResult sr) { result = sr; });
+    ipcbServer_->sendMessage(message, {false, 0, 0}, [&result](CommandResult sr) { result = sr; });
     if (!result.success) {
         ALOGE("sendMessage failed with error: %s", result.errMsg.c_str());
     }

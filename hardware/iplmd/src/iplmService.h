@@ -36,7 +36,9 @@ using XResourceGroup = ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroup;
 using XResourceGroupPrio = ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupPrio;
 using XResourceGroupStatus = ::vendor::volvocars::hardware::iplm::V1_0::ResourceGroupStatus;
 
-class IplmService : public IIplm, public IMessageCallback {
+using ::android::hardware::hidl_death_recipient;
+
+class IplmService : public IIplm, public IMessageCallback, public ::android::hardware::hidl_death_recipient {
   public:
     /** Enumeration used to track remote ECU availability in resource group
      */
@@ -59,8 +61,13 @@ class IplmService : public IIplm, public IMessageCallback {
        * Initialize IpLmService and the internal Link Manager functional block.
        * @param[in] msg_dispatcher  Message dispatcher to use with LinkManager.
        */
+    // // hidl_death_recipient
+    void serviceDied(uint64_t cookie, const android::wp<IBase> &who) override;
+
     bool Initialize();
 
+    // Start subscribing to ipcb
+    void StartSubscribe();
     /**
      * Deinitialize IpLmService.
      */
@@ -145,9 +152,7 @@ class IplmService : public IIplm, public IMessageCallback {
      * Services on local ECU are available to use. Ref: REQPROD 347120*/
     static const Action ACTION_AVAILABLE = 0x01;
 
-    // Start subscribing to ipcb
-    void StartSubscribe();
-
+  private:
     // Handle received message
     void HandleMessageRcvd(const Msg &msg);
 
