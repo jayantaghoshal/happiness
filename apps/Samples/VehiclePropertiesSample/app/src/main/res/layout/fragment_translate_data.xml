@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="0dp"
+android:background="#000000"
+android:focusable="true"
+android:descendantFocusability="beforeDescendants"
+    >
+<android.support.v7.widget.LinearLayoutCompat
+    android:id="@+id/mainLinear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/TerminalBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <Button
+                android:id="@+id/buttonGetProperties"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fetch and Translate"/>
+        </LinearLayout>
+
+        <EditText
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:inputType="textMultiLine"
+            android:id="@+id/testLog"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:minLines="6"
+            android:gravity="top|left"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:scrollbars="vertical"
+            />
+    </LinearLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>
+
+
+</FrameLayout>
