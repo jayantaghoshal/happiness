@@ -10,7 +10,7 @@ PortMapping = namedtuple("PortMapping", ["vip_tty_device", "mp_tty_device"])
 IhuSerials = namedtuple("IhuSerials", ["vip", "mp"])
 
 
-def verify_serial_is_vip(s, timeout_sec=5):
+def verify_serial_is_vip_app(s, timeout_sec=5):
     s.writeline("version")
     stop_time = time.time() + timeout_sec
     while time.time() < stop_time:
@@ -18,6 +18,20 @@ def verify_serial_is_vip(s, timeout_sec=5):
         if not line:
             continue
         if re.match(r"\s*Project_ID.*VCC_IHU.*VIP", line) is not None:
+            return True
+        if re.match(r".*/sh: version: not found", line) is not None:
+            return False
+    return False
+
+
+def verify_serial_is_vip_pbl(s, timeout_sec=5):
+    s.writeline("version")
+    stop_time = time.time() + timeout_sec
+    while time.time() < stop_time:
+        line = s.readline(timeout_sec)
+        if not line:
+            continue
+        if re.match(r".*PBL Version: PBL/.*", line) is not None:
             return True
         if re.match(r".*/sh: version: not found", line) is not None:
             return False
@@ -34,7 +48,7 @@ def verify_serial_is_mp_android(s, timeout_sec=5):
     return False
 
 
-def verify_serial_is_mp_android_elk(s, timeout_sec=5):
+def verify_serial_is_mp_android_abl(s, timeout_sec=5):
     s.writeline("")
     stop_time = time.time() + timeout_sec
     while time.time() < stop_time:
@@ -60,11 +74,11 @@ def auto_detect_port_mapping():
     for p in ports:
         s = RecordingSerial(p.device, 115200, timeout_sec=1)
         if vip is None:
-            if verify_serial_is_vip(s):
+            if verify_serial_is_vip_app(s) or verify_serial_is_vip_pbl(s):
                 vip = s
                 continue  # Don't close
         if mp is None:
-            if verify_serial_is_mp_android(s) or verify_serial_is_mp_android_elk(s):
+            if verify_serial_is_mp_android(s) or verify_serial_is_mp_android_abl(s):
                 mp = s
                 continue # Don't close
         s.close()
