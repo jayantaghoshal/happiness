@@ -1,0 +1,8 @@
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.powerevent"
+    android:sharedUserId="android.uid.system">
+    <application
+    android:name="com.volvocars.powerevent.PowerEventApp"
+    android:persistent="true">
+    </application>
+</manifest>
