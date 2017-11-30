@@ -8,10 +8,6 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
-  <!-- AOSP Changed by Volvo Cars -->
-  <remove-project name="aosp/platform/packages/services/Car"/>
-  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0e9fb47f4bd8e7264d7902715b28824501d3ca17"/>
-
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="f5b6df32000cbbd77d4f0021bc64e30fb6b68d47"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="b19fc4bb58595e52ba70bd1041f2a37f88d18e04"/>
