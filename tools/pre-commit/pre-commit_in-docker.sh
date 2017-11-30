@@ -27,6 +27,7 @@ format_cpp_file() {
 CPP_FILES_TO_FORMAT=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E "\.(cpp|hpp|c|h)$" || true);
 for file in ${CPP_FILES_TO_FORMAT} ; do
   format_cpp_file "${file}"
+  python3 "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/cpp/logging_linter.py" "${file}"
 done
 
 format_bp_file() {
