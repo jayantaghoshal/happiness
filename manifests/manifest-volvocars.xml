@@ -34,7 +34,7 @@
 
   <!-- Delphi Overrides -->
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="b61a6c661be439f4e52e821247185f01ceac866b"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="d513c24aba3c9209cd47dd715930667b30687bfd"/>
 
   <!-- Upstream to Delphi -->
   <remove-project name="bb_android_hisip_desip"/>
