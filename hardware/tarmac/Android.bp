@@ -1,15 +1,14 @@
 cc_defaults {
     name: "libtarmac_defaults",
-    compile_multilib: "64",
+    defaults: ["volvocars_cc_defaults_hq"],
+
     export_include_dirs: [
         "eventloop/include",
         "common/include",
     ],
-    cflags: ["-fexceptions"],
     shared_libs: [
         "liblog",
     ],
-    vendor: true,
 }
 
 // Static library. Used in shared lib and for unit tests.

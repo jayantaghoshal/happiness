@@ -1,9 +1,9 @@
 #include <cutils/log.h>
-#include <errno.h>
 #include <pthread.h>
 #include <sys/epoll.h>
 #include <sys/eventfd.h>
 #include <sys/timerfd.h>
+#include <cerrno>
 #include <map>
 #include <mutex>
 #include <queue>
@@ -13,6 +13,7 @@
 
 #include "IDispatcher.h"
 
+#undef LOG_TAG
 #define LOG_TAG "tarmac.dispatcher"
 
 #if !defined(EFD_SEMAPHORE)
@@ -27,7 +28,7 @@
 namespace tarmac {
 namespace eventloop {
 
-typedef std::function<void()> Task;
+using Task = std::function<void()>;
 
 class EPollQueue {
   public:
@@ -56,7 +57,8 @@ class EPollQueue {
             queue_.emplace(t);
         }
         const uint64_t dummy = 1;
-        write(eventfd_, &dummy, sizeof(dummy));
+        int r = write(eventfd_, &dummy, sizeof(dummy));
+        ALOGE_IF(r < 0, "write failed: %s", strerror(errno));
     }
 
     void addFd(int fd, Task &&t) {
@@ -85,7 +87,8 @@ class EPollQueue {
         int r = epoll_ctl(epollfd_, EPOLL_CTL_DEL, fd, &event);
         ALOGE_IF(r != 0, "EPOLL_CTL_DEL fd failed: %s", strerror(errno));
         std::lock_guard<std::mutex> lock(mutex_);
-        return fdTasks_.erase(fd);
+        auto removed = fdTasks_.erase(fd);
+        return removed > 0;
     }
 
     std::vector<Task> dequeue(void) {
@@ -109,7 +112,8 @@ class EPollQueue {
                     // now read the same amount of times
                     uint64_t dummy;
                     while (cnt > 0) {
-                        read(eventfd_, &dummy, sizeof(dummy));  // one read for each write above
+                        int r = read(eventfd_, &dummy, sizeof(dummy));  // one read for each write above
+                        ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
                         cnt--;
                     }
                 } else {
@@ -215,7 +219,8 @@ IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay,
         }
         if (dispatch_job_now) {
             uint64_t dummy;
-            read(tfd, &dummy, sizeof(dummy));
+            int r = read(tfd, &dummy, sizeof(dummy));
+            ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
             f();
             RemoveFd(tfd);
             close(tfd);
@@ -254,7 +259,7 @@ void Dispatcher::Start() {
         std::vector<Task> tasks = queue_.dequeue();  // Blocking call
         if (!stop_) {
             // do callbacks for all tasks
-            for (Task t : tasks) {
+            for (const Task &t : tasks) {
                 t();
             }
         }
@@ -273,5 +278,5 @@ void Dispatcher::Join() {
         eventthread_.join();
     }
 }
-}
-}
+}  // end eventloop
+}  // end tarmac
