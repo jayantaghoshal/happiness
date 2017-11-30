@@ -7,4 +7,5 @@ subdirs = [
     "uds",
     "test",
     "vehicle",
+    "netman",
 ]

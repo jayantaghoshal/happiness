@@ -2,21 +2,12 @@
 cc_defaults {
     name: "volvocars_cc_defaults",
     compile_multilib: "64",
+    vendor: true,
+
     cflags: [
         "-fexceptions",
         "-Wall",
         "-Wextra",
-    ],
-    vendor: true,
-}
-
-// high quality implementation
-cc_defaults {
-    name: "volvocars_cc_defaults_hq",
-    defaults: ["volvocars_cc_defaults"],
-
-    cflags: [
-        "-Werror",
     ],
 
     tidy: true,
@@ -36,6 +27,20 @@ cc_defaults {
     ],
     tidy_flags: [
         "-header-filter=^vendor/volvocars/.*",
+    ],
+}
+
+// high quality implementation
+cc_defaults {
+    name: "volvocars_cc_defaults_hq",
+    defaults: ["volvocars_cc_defaults"],
+
+    cflags: [
+        "-Werror",
+    ],
+
+    tidy_flags: [
+        "-warnings-as-errors=-*", //TODO progressively extend
     ],
 }
 

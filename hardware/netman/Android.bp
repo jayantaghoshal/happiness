@@ -1,0 +1,69 @@
+//
+// Netman executable for deployment to system
+//
+cc_binary {
+    defaults: ["volvocars_cc_defaults"],
+
+    name: "netman",
+    srcs: [ //TODO use wildcards, if sth is common move to static lib?
+        "src/netutils.cpp",
+        "src/uevent_listener.cpp",
+        "src/uevent_handler.cpp",
+        "src/netman/netman.cpp",
+        "src/netman/netman_event_handler.cpp",
+        "src/netman/firewall_config.cpp",
+    ],
+
+    local_include_dirs: [
+        "src/",
+        "src/netman/",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libcutils",
+    ],
+
+    static_libs: ["libbase"],
+
+    // Netman depends upon sysctl.conf, which it will initialize during startup
+    init_rc: ["netman.rc"],
+    required: [
+        "sysctl.conf",
+        "netd_config.xml",
+    ],
+}
+
+//
+// Netboyd executable for deployment to system
+//
+cc_binary {
+    defaults: ["volvocars_cc_defaults"],
+
+    name: "netboyd",
+
+    srcs: [ //TODO use wildcards, if sth is common move to static lib?
+        "src/netutils.cpp",
+        "src/uevent_listener.cpp",
+        "src/uevent_handler.cpp",
+        "src/netboy/netboy.cpp",
+        "src/netboy/netboy_event_handler.cpp",
+        "src/netboy/rule_handler.cpp",
+    ],
+
+    local_include_dirs: [
+        "src/",
+        "src/netboy/",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libcutils",
+    ],
+
+    static_libs: ["libbase"],
+
+    init_rc: ["netboyd.rc"],
+}
