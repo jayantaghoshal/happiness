@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <cstdint>
 #include <functional>
 
 namespace tarmac {
@@ -8,7 +9,7 @@ namespace eventloop {
 class IDispatcher {
   public:
     // An opaque type that identifies delayed jobs
-    using JobId = unsigned long long;
+    using JobId = uint64_t;
 
     // Get the default dispatcher
     static IDispatcher &GetDefaultDispatcher();
@@ -43,5 +44,5 @@ class IDispatcher {
     // Join with the thread that handles this loop
     virtual void Join() = 0;
 };
-}
-}
+}  // end eventloop
+}  // end tarmac
