@@ -29,7 +29,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         }
 
         // Update the map and and notify property store
-        auto propValInMap = propIt->second;
+        auto& propValInMap = propIt->second;
         propValInMap.value.int32Values[0] = m_fanLevel.get();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
@@ -45,7 +45,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         }
 
         // Notifying subscribers
-        auto propValInMap = propIt->second;
+        auto& propValInMap = propIt->second;
         propValInMap.value.floatValues[0] = m_temperature.get();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
@@ -73,7 +73,6 @@ int HvacModule::setProp(const VehiclePropValue& propValue) {
     ALOGD("Setprop: %d", propValue.prop);
     switch (propValue.prop) {
         case toInt(VehicleProperty::HVAC_FAN_SPEED): {
-            ALOGV("HvacModule setProp HVAC_FAN_SPEED to: %d", propValue.value.int32Values[0]);
             m_fanLevelImpl.setFanLevel(propValue.value.int32Values[0]);
             return 0;
         }
@@ -104,7 +103,7 @@ int HvacModule::setProp(const VehiclePropValue& propValue) {
 }
 
 std::unique_ptr<VehiclePropValue> HvacModule::getProp(const VehiclePropValue& requestedPropValue) {
-    ALOGV("HvacModule getProp: %d", static_cast<int>(requestedPropValue.prop));
+    ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
     auto propIt = m_propValues.find(propertyKey(requestedPropValue));
 
     if (propIt == m_propValues.end()) {
