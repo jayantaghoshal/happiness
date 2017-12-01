@@ -9,13 +9,14 @@ import shlex
 import sys
 import traceback
 import re
+import xml.etree.ElementTree as ET
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
 
 import shipit.test_runner.test_types
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner import tradefed_test_runner
-from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest
+from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
@@ -36,10 +37,10 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 def run_test(test: IhuBaseTest):
     if isinstance(test, VTSTest):
         print(test)
-        return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_xml_path))
+        return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_root_dir))
     elif isinstance(test, TradefedTest):
         print(test)
-        tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+        return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
     elif isinstance(test, shipit.test_runner.test_types.Disabled):
         if datetime.datetime.now() > test.deadline:
             raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
@@ -74,7 +75,7 @@ def build_testcases(tests_to_run: List[IhuBaseTest]):
     logging.debug("Tradefed tests: %r" % all_vts_tests)
 
     test_modules_to_build = (
-        [t.test_xml_path for t in all_vts_tests] +
+        [t.test_root_dir for t in all_vts_tests] +
         [t.test_root_dir for t in all_tradefed_tests])
 
     if len(all_vts_tests) > 0:
@@ -198,7 +199,19 @@ def main():
         else:
             if args.test_component:
                 androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")
-                if os.path.isfile(androidtest_xml_path):
+                if not os.path.isfile(androidtest_xml_path):
+                    print("ERROR: AndroidTest.xml not found")
+                    sys.exit(1)
+
+                try:
+                    elem = ET.parse('AndroidTest.xml').getroot().find("test")
+                    value = elem.get('class').split('.')[-1]
+                except Exception as e:
+                    print("Unable to parse AndroidTest.xml")
+                    print("Error message: " + str(e))
+                    sys.exit(1)
+
+                if value == "VtsMultiDeviceTest" or value == "GTest":
                     return [VTSTest(os.path.relpath(args.test_component, aosp_root), set())]
                 else:
                     return [TradefedTest(os.path.relpath(args.test_component, aosp_root), set())]
@@ -242,7 +255,7 @@ def detect_loose_test_cases():
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests
-    all_testdirs_in_plans = {d.test_xml_path for d in all_tests_including_disabled if isinstance(d, VTSTest)}
+    all_testdirs_in_plans = {d.test_root_dir for d in all_tests_including_disabled if not isinstance(d, Disabled)}
 
     android_xmls = glob.glob(vcc_root + "/**/AndroidTest.xml", recursive=True)
     directories_with_androidtestxml = {os.path.relpath(os.path.dirname(p), aosp_root) for p in android_xmls}
@@ -251,7 +264,7 @@ def detect_loose_test_cases():
     if len(androidtestxmls_not_in_any_plan) > 0:
         print("#############################################################################################")
         print("# ERROR: Found AndroidTest.xml not present in vendor/volvocars/test_plan.py")
-        print("#  All VTS test cases must be included in the test_plan, or explicitly disabled in test_plan.")
+        print("#  All test cases must be included in the test_plan, or explicitly disabled in test_plan.")
         print("#  Please add your missing test into the test_plan")
         print("#  ")
         print("#  Files missing from test_plan.py:")

@@ -13,22 +13,10 @@ import os
 import subprocess
 import typing
 
-def find_test_xml_files(test_path: str) -> typing.List[str]:
-    # https://source.android.com/devices/tech/test_infra/tradefed/full_example
-    #     "Tradefed automatically recognizes all configurations placed in config folders on the classpath."
-    # We enforce that convention a bit stricter by only looking in res/config
-    print("test path is ", test_path)
-    config_path = os.path.abspath(os.path.join(test_path, "res", "config"))
-    print("config path is ", config_path)
-    xml_files = [os.path.join(config_path, x) for x in os.listdir(config_path) if x.endswith(".xml")]
-    if len(xml_files) == 0:
-        raise TestFailedException("Failed to find any xml configurations in %s" % config_path)
-    return xml_files
-
 def tradefed_run(test_path: str):
-    logging.info("Running tradefed test from xml %s" % test_path)
-    for x in find_test_xml_files(test_path):
-        tradefed_run_xml(x)
+    xml_path = os.path.join(test_path, "AndroidTest.xml")
+    logging.info("Running tradefed test from xml %s" % xml_path)
+    tradefed_run_xml(xml_path)
 
 def tradefed_run_xml(xml_path: str):
     if not config_got_xml_reporter(xml_path):
