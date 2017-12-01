@@ -80,6 +80,8 @@ test_plan_hourly = [
     ),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
+    VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
+
 ]
 
 test_plan_nightly = [
