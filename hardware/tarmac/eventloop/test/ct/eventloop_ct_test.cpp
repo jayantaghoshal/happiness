@@ -1,13 +1,13 @@
 #include <IDispatcher.h>
 
-#include <cutils/log.h>
 #include <gtest/gtest.h>
-
 #include <future>
 
+#define LOG_TAG "eventloop.Tests"
+#include <cutils/log.h>
+
 TEST(EventLoopTest, TestEventFunctionCalled) {
-#define LOG_TAG "eventloop.TestEventFunctionCalled"
-    ALOGI("Starting...");
+    ALOGI("Starting %s", test_info_->name());
 
     bool event_func_called = false;
 
@@ -38,8 +38,7 @@ TEST(EventLoopTest, TestEventFunctionCalled) {
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadAll) {
-#define LOG_TAG "eventloop.TestFdEventFunctionCalledReadAll"
-    ALOGI("Starting...");
+    ALOGI("Starting %s", test_info_->name());
 
     int fd[2];
 
@@ -91,8 +90,7 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadAll) {
 }
 
 TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial) {
-#define LOG_TAG "eventloop.TestFdEventFunctionCalledReadPartial"
-    ALOGI("Starting...");
+    ALOGI("Starting %s", test_info_->name());
 
     int fd[2];
 
@@ -143,8 +141,7 @@ TEST(EventLoopTest, TestFdEventFunctionCalledReadPartial) {
 }
 
 TEST(EventLoopTest, TestDelayedEventFunctionCalled) {
-#define LOG_TAG "eventloop.TestDelayedEventFunctionCalled"
-    ALOGI("Starting...");
+    ALOGI("Starting %s", test_info_->name());
 
     std::promise<int> p;
     std::future<int> f = p.get_future();
@@ -180,8 +177,7 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled) {
 }
 
 TEST(EventLoopTest, TestDelayedEventFunctionCancelled) {
-#define LOG_TAG "eventloop.TestDelayedEventFunctionCancelled"
-    ALOGI("Starting...");
+    ALOGI("Starting %s", test_info_->name());
 
     std::promise<int> p;
     std::future<int> f = p.get_future();

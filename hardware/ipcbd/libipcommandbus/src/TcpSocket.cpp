@@ -3,18 +3,16 @@
  * Delphi Confidential
 \*===========================================================================*/
 #include "ipcommandbus/TcpSocket.h"
-#include <cutils/log.h>
-#include <cassert>
-
-#include "ipcommandbus/vcc_pdu_header.h"
-
-#include <unistd.h>
-#include <string>
 
 #include <string.h>
+#include <unistd.h>
 #include <algorithm>
+#include <cassert>
+#include <string>
+#include "ipcommandbus/vcc_pdu_header.h"
 
 #define LOG_TAG "TCP_Socket"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 

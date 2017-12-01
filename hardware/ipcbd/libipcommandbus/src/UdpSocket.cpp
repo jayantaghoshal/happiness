@@ -3,16 +3,15 @@
  * Delphi Confidential
 \*===========================================================================*/
 #include "ipcommandbus/UdpSocket.h"
-#include <cutils/log.h>
-#include <cassert>
-
-#include <unistd.h>
-#include <string>
 
 #include <string.h>
+#include <unistd.h>
 #include <algorithm>
+#include <cassert>
+#include <string>
 
 #define LOG_TAG "UDP_Socket"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 

@@ -4,13 +4,13 @@
 \*===========================================================================*/
 #include "ipcommandbus/MessageDispatcher.h"
 
-#include <cutils/log.h>
 #include <cassert>
 #include <cstdint>
 
 #include "ipcommandbus/net_serializer.h"
 
 #define LOG_TAG "lipcb.MessageDispatcher"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 

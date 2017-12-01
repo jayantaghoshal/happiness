@@ -8,8 +8,6 @@
 
 #include <type_traits>
 
-#include <cutils/log.h>
-
 // Types needed by MpRouter_Signals.h below
 using int8 = int8_t;
 using int16 = int16_t;
@@ -28,8 +26,9 @@ using namespace ECDDataElement;
 #include "vsm/vsm_inject_variables_cpp.h"
 #include "vsm/vsm_sink_variables_cpp.h"
 
-#undef LOG_TAG
 #define LOG_TAG "VipFramework"
+#include <cutils/log.h>
+// NOLOGLINT includes below are log free
 
 namespace {
 const uint16_t SignalGroup = 0x2000;   // Signal group bit according to avmp

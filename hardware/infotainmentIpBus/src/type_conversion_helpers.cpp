@@ -1,11 +1,10 @@
-#define LOG_TAG "Infotainment_IP_Service.tcon"
-
 #include "type_conversion_helpers.h"
-#include <cassert>
-//#include <cmath>
-//#include <string>
-#include <cutils/log.h>
+
+#include <cassert>>
 #include "date.h"
+
+#define LOG_TAG "iipbus.tcon"
+#include <cutils/log.h>
 
 namespace InfotainmentIpBus {
 namespace Utils {

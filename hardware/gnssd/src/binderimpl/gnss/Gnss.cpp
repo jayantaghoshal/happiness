@@ -1,8 +1,9 @@
 #include "Gnss.h"
-#define LOG_TAG "GnssD.binder.gnss"
-#include <cutils/log.h>
 
 #include <IDispatcher.h>
+
+#define LOG_TAG "GnssD.binder.gnss"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 
