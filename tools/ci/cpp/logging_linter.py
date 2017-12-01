@@ -67,70 +67,87 @@ def get_files_with_ALOGx_macros_or_logtag_defined(dir_to_check: str) -> typing.I
     return (f for f in files if not os.path.relpath(f, dir_to_check).startswith("hardware/infotainment-ip-service"))
 
 
-def check_files_with_LOGTAG_defined(dir_to_check: str) -> typing.Iterable[LoggingViolation]:
-    LOGTAG_PATTERN = re.compile("^#define\s+LOG_TAG\s+\"(.*?)\"", re.MULTILINE)
-    ALOGX_PATTERN = re.compile("ALOG[EWIDV]")
+LOGTAG_PATTERN = re.compile("^#define\s+LOG_TAG\s+\"(.*?)\"", re.MULTILINE)
+ALOGX_PATTERN = re.compile("ALOG[EWIDV]")
+
+
+def check_file(filename: str)-> typing.Iterable[LoggingViolation]:
+    try:
+        with open(filename, encoding="utf-8") as f:
+            file_contents = f.read()
+    except UnicodeDecodeError as e:
+        print("Failed to analyze file: %s due to %s" % (filename, e))
+        return
+
+    last_include_index = file_contents.rfind("#include")
+    last_include_cutils_log_index = file_contents.rfind("#include <cutils/log.h>")
+    if last_include_index == last_include_cutils_log_index:
+        last_include_index = file_contents.rfind("#include", 0, last_include_cutils_log_index)
+
+    first_define_logtag_index = file_contents.find("#define LOG_TAG")
+    last_define_logtag_index = file_contents.rfind("#define LOG_TAG")
+    alog_match = ALOGX_PATTERN.search(file_contents)
+    first_alogx_index = -1 if alog_match is None else alog_match.start()
+
+    if filename.endswith(".h"):
+        if last_define_logtag_index >= 0:
+            yield LoggingViolation("Do not #define LOG_TAG in header file", filename)
+        if first_alogx_index >= 0:
+            yield LoggingViolation(
+                'Avoid using the ALOGx-macros in header file, use ALOG(LOG_xxxx, "tag", "message") instead.',
+                filename)
+    else:
+        logtag_matches = LOGTAG_PATTERN.finditer(file_contents)
+        for tm in logtag_matches:
+            tagname = tm.group(1)
+            if len(tagname) > 23:
+                yield LoggingViolation("Logtag exceeds 23 characters: '%s' (%d characers)" % (tagname, len(tagname)),
+                                       filename)
+
+            invalid_characters_in_tag = get_invalid_chars_in_tag(tagname)
+            if len(invalid_characters_in_tag) > 0:
+                yield LoggingViolation("Logtag '%s' contains invalid characters: %s" % (
+                    tagname,
+                    ", ".join(["'%s'" % c for c in invalid_characters_in_tag])),
+                                       filename)
+
+        if 0 <= first_alogx_index < first_define_logtag_index:
+            yield LoggingViolation("ALOGx called before #define LOG_TAG (or no LOG_TAG defined)",
+                                   filename)
+
+        if last_include_index >= 0 and 0 <= last_define_logtag_index < last_include_index:
+            yield LoggingViolation("LOG_TAG defined before #includes, this might overwrite your LOG_TAG",
+                                   filename)
+
+
+def check_files_in_directory(dir_to_check: str) -> typing.Iterable[LoggingViolation]:
+
     files_with_logtag = get_files_with_ALOGx_macros_or_logtag_defined(dir_to_check)
 
     for filename in files_with_logtag:
-        try:
-            with open(filename, encoding="utf-8") as f:
-                file_contents = f.read()
-        except UnicodeDecodeError as e:
-            print("Failed to analyze file: %s due to %s" % (filename, e))
-            continue
-
-        last_include_index = file_contents.rfind("#include")
-        last_include_cutils_log_index =file_contents.rfind("#include <cutils/log.h>")
-        if last_include_index == last_include_cutils_log_index:
-            last_include_index = file_contents.rfind("#include", 0,last_include_cutils_log_index)
-
-        first_define_logtag_index = file_contents.find("#define LOG_TAG")
-        last_define_logtag_index = file_contents.rfind("#define LOG_TAG")
-        alog_match = ALOGX_PATTERN.search(file_contents)
-        first_alogx_index = -1 if alog_match is None else alog_match.start()
-
-
-        if filename.endswith(".h"):
-            if last_define_logtag_index >= 0:
-                yield LoggingViolation("Do not #define LOG_TAG in header file", filename)
-            if first_alogx_index >= 0:
-                yield LoggingViolation(
-                    'Avoid using the ALOGx-macros in header file, use ALOG(LOG_xxxx, "tag", "message") instead.',
-                    filename)
-        else:
-            logtag_matches = LOGTAG_PATTERN.finditer(file_contents)
-            for tm in logtag_matches:
-                tagname = tm.group(1)
-                if len(tagname) > 23:
-                    yield LoggingViolation("Logtag exceeds 23 characters: '%s' (%d characers)" % (tagname, len(tagname)),
-                                           filename)
-
-                invalid_characters_in_tag = get_invalid_chars_in_tag(tagname)
-                if len(invalid_characters_in_tag) > 0:
-                    yield LoggingViolation("Logtag '%s' contains invalid characters: %s" % (
-                                            tagname,
-                                            ", ".join(["'%s'" % c for c in invalid_characters_in_tag])),
-                                           filename)
-
-
-            if 0 <= first_alogx_index < first_define_logtag_index:
-                yield LoggingViolation("ALOGx called before #define LOG_TAG (or no LOG_TAG defined)",
-                                       filename)
-
-            if last_include_index >= 0 and last_define_logtag_index >= 0 and last_include_index > last_define_logtag_index:
-                yield LoggingViolation("LOG_TAG defined before #includes, this might overwrite your LOG_TAG",
-                                       filename)
+        yield from check_file(filename)
 
 
 def main():
-    dir_to_check = sys.argv[1] if len(sys.argv) > 1 else "."
+    arg = sys.argv[1] if len(sys.argv) > 1 else "."
+
+    if os.path.isdir(arg):
+        basedir = arg
+        apply_exclusions = True
+        violations = check_files_in_directory(sys.argv[1])
+    elif os.path.isfile(arg):
+        basedir = os.path.dirname(arg)
+        apply_exclusions = False
+        violations = check_file(sys.argv[1])
+    else:
+        print("Path " + arg + " is neither file nor directory");
+        sys.exit(1)
 
     errors_found = False
-    for e in check_files_with_LOGTAG_defined(dir_to_check):
-        relname = os.path.relpath(e.file, dir_to_check)
+    for e in violations:
+        relname = os.path.relpath(e.file, basedir)
 
-        if relname in temporary_exclusions:
+        if relname in temporary_exclusions and apply_exclusions:
             continue
 
         if not errors_found:
@@ -144,6 +161,7 @@ def main():
         print()
     if errors_found:
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
