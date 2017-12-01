@@ -54,11 +54,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                          standard_caps),
     VTSTest("vendor/volvocars/hardware/test/iplm",                              standard_caps),
-    Disabled(VTSTest("vendor/volvocars/hardware/test/gnss",                     standard_caps),
-             reason="Failing after O.MR1, investigation ongoing",
-             jira_issue="",
-             deadline="2017-12-24"
-    ),
+    VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",              standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",       standard_caps),
