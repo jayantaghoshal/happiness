@@ -55,7 +55,7 @@ def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
 
     common_signals = [] # type: List[fdx_description_file_parser.Item]
     for signal in sorted(fr_and_lin19_signals, key=lambda s: s.name.lower()):
-        if signal.name in rte_name_to_de_name and not isinstance(rte_name_to_de_type[signal.name], model.DE_Array):
+        if signal.name in rte_name_to_de_name:
             common_signals.append(signal)
 
     return (common_signals, rte_name_to_de_name, rte_name_to_de_type)
@@ -63,17 +63,23 @@ def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
 
 def unambiguate_name(s: fdx_description_file_parser.Item, all_signals):
     items_with_same_name = [x for x in all_signals if x.name == s.name]
-    if len(items_with_same_name) > 1:
+    items_with_same_name_on_same_bus = [x for x in items_with_same_name if x.name == s.bus_name]
+    # Don't add prefix for Backbone signals, we here declare that as the default. Unless there is ambiguity on that bus
+    if len(items_with_same_name_on_same_bus) > 1:
+        return s.name + "_" + s.msg_or_namespace
+    elif s.bus_name != "Backbone" and len(items_with_same_name) > 1:
         return s.name + "_" + s.msg_or_namespace
     else:
         return s.name
 
 def render_signals(signals: List[fdx_description_file_parser.Item]):
     convstr = "\n"
-    convstr += "        name_to_item_map = { i.name : i for i in self.signal_list }\n\n"
+    # wow, this is messy..
+    convstr += "        name_to_item_map = { i.msg_or_namespace + '::' + i.name : i for i in self.signal_list }\n\n"
     for signal in signals:
         name = unambiguate_name(signal, signals)
-        convstr += "        self.%s = %s(self, name_to_item_map[%s.fdx_name])\n" % (name, name, name)
+        key = "'%s::' + %s.fdx_name" % (signal.msg_or_namespace, name)
+        convstr += "        self.%s = %s(self, name_to_item_map[%s])\n" % (name, name, key)
     convstr += "\n"
 
     return convstr
@@ -88,9 +94,6 @@ def render(signals: List[fdx_description_file_parser.Item],
     for signal in signals:
         name = unambiguate_name(signal, signals)
         type = rte_name_to_de_type[signal.name]
-
-        if isinstance(type, model.DE_Array):
-            continue # Unsupported, for now...
 
         convstr += py_comment(type.desc)
         convstr += "class %s:\n" % name
@@ -135,6 +138,8 @@ def render(signals: List[fdx_description_file_parser.Item],
             convstr += "    @classmethod\n"
             convstr += "    def p2r(cls, physical):\n"
             convstr += "        return physical\n"
+        elif isinstance(type, model.DE_Array):
+            pass
         else:
             assert(False)
 
@@ -167,8 +172,25 @@ def render(signals: List[fdx_description_file_parser.Item],
     def get(self):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
-
 """
+        elif isinstance(type, model.DE_Array):
+            convstr += """
+    def set(self, value_physical):
+        assert len(value_physical) == %d
+        self.item.value_raw = value_physical
+
+    def send(self, value_physical):
+        assert len(value_physical) == %d
+        self.item.value_raw = value_physical
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %%s=%%d',self.fdx_name, value_physical)
+
+    def get(self):
+        self.signal_interface.logger.debug('get %%s=%%d',self.fdx_name, self.item.value_raw)
+        return self.item.value_raw
+            """ % (type.max_elements, type.max_elements)
+        else:
+            assert(False)
     return convstr
 
 
@@ -191,6 +213,7 @@ def main():
     (groups, sysvars, signals) = fdx_description_file_parser.parse(args.fdxdescriptionfile)
 
     os.makedirs(os.path.dirname(args.outputname), exist_ok=True)
+    #TODO: Need to increase the frequency of some send_free_running_request
     with open(args.outputname, "w", encoding="utf-8") as f:
         (common_signals, rte_name_to_de_name, rte_name_to_de_type) = get_common_signals(all_types, all_de_elements,
                                                                                         signals)
@@ -201,6 +224,7 @@ def main():
 
 import os
 import logging
+import time
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
 
@@ -214,6 +238,7 @@ class FDXDummyConnection:
 
 ns_per_ms = 1000000
 class FrSignalInterface:
+
     def __init__(self):
 
         self.connected = False
@@ -237,6 +262,7 @@ class FrSignalInterface:
                 self.connection.send_start()
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
+                self.verify_simulation_version()                                
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
                 for g in groups_to_subscribe:
                     self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
@@ -249,6 +275,17 @@ class FrSignalInterface:
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
         %(senders_and_receivers)s
+        
+    def verify_simulation_version(self):
+        # SPA2210/FR_Body_LIN/SimulationDB/Simulation.vsysvar
+        EXPECTED_VERSION = 2
+        simulation_version = next((s for s in self.sysvar_list if s.name == "SimulationVersion"))
+        deadline = time.time() + 20
+        while simulation_version.value_raw != EXPECTED_VERSION and time.time() < deadline:
+            self.connection.send_data_request(simulation_version.parent_group.group_id)            
+            time.sleep(0.5)
+        if simulation_version.value_raw != EXPECTED_VERSION:
+            raise Exception("Simulation version mismatch! CANoe simulation version=%%r, expected version=%%d" %% (simulation_version.value_raw, EXPECTED_VERSION))
 
     def close(self):
         if self.connected:
