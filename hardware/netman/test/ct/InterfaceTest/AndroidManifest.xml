@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.volvocars.interfacetest">
+    package="com.volvocars.networkinterfacetest">
+    <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="27"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true">
-        <activity android:name="com.volvocars.interfacetest.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+        <activity android:name=".MainActivity" />
     </application>
+
+    <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
+                     android:targetPackage="com.volvocars.networkinterfacetest"
+                     android:label="Tradefed test for interface restriction">
+    </instrumentation>
 
 </manifest>
