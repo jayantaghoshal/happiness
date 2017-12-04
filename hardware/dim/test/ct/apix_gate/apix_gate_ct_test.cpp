@@ -1,5 +1,4 @@
 #include <arpa/inet.h>
-#include <cutils/log.h>
 #include <gtest/gtest.h>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -10,7 +9,9 @@
 #define PORT 50001
 // simulator script use same IP but different port as real DIM
 #define DIM_SIM_IP "198.18.24.1"
-#define LOG_TAG "ApixGateTest:"
+
+#define LOG_TAG "ApixGateTest"
+#include <cutils/log.h>
 
 TEST(ApixGateTest, ApixGatePingTest) {
     ALOGI("ApixGatePingTest starting...");

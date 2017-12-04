@@ -1,9 +1,8 @@
-#include <cutils/log.h>
+#include <errno.h>
 #include <pthread.h>
 #include <sys/epoll.h>
 #include <sys/eventfd.h>
 #include <sys/timerfd.h>
-#include <cerrno>
 #include <map>
 #include <mutex>
 #include <queue>
@@ -13,8 +12,8 @@
 
 #include "IDispatcher.h"
 
-#undef LOG_TAG
 #define LOG_TAG "tarmac.dispatcher"
+#include <cutils/log.h>
 
 #if !defined(EFD_SEMAPHORE)
 #define EFD_SEMAPHORE (1 << 0)

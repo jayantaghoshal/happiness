@@ -4,7 +4,6 @@
 \*===========================================================================*/
 #include "ipcommandbus/TransportServices.h"
 
-#include <cutils/log.h>
 #include <algorithm>
 #include <cassert>
 #include <chrono>
@@ -15,6 +14,7 @@
 #include "ipcommandbus/net_serializer.h"
 
 #define LOG_TAG "Transport_Services"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 

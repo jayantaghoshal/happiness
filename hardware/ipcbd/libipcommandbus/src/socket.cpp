@@ -3,9 +3,9 @@
  * Delphi Confidential
 \*===========================================================================*/
 #include "ipcommandbus/socket.h"
-#include <cutils/log.h>
 
 #define LOG_TAG "ipcb_socket"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 

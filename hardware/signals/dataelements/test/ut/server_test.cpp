@@ -1,4 +1,3 @@
-#include <cutils/log.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <vendor/volvocars/hardware/signals/1.0/ISignals.h>
@@ -11,8 +10,8 @@
 #include <thread>
 #include "signals_server.h"
 
-#undef LOG_TAG
-#define LOG_TAG "DataelementsServerUT"
+#define LOG_TAG "DataElements.ServerUT"
+#include <cutils/log.h>
 
 using namespace vendor::volvocars::hardware::signals::V1_0;
 using ::testing::_;

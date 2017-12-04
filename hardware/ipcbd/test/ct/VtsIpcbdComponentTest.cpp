@@ -1,4 +1,3 @@
-#include <cutils/log.h>
 #include <gtest/gtest.h>
 #include <sched.h>
 #include <unistd.h>
@@ -15,6 +14,7 @@
 #include "ipcommandbus/vcc_pdu_header.h"
 
 #define LOG_TAG "VtsIpcbdComponentTest"
+#include <cutils/log.h>
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -209,7 +209,7 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id = result.subscriberId;
 
-    EXPECT_NE(subscriber_id, 0);
+    EXPECT_NE(subscriber_id, 0u);
 
     ALOGD("Send Request to IHU");
     tcam_sim.SendPdu(request);
