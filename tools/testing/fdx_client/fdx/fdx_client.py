@@ -197,6 +197,7 @@ class FDXConnection:
         logger.info("Receiver closed")
 
     def send_command(self, command):
+        # type: (bytes) -> None
         reserved = 0
         nr_of_commands = 1
         header = struct.pack('=Qbbhhh',
@@ -225,6 +226,7 @@ class FDXConnection:
         self.send_command(struct.pack('=h', kCommandCode.statusRequest))
 
     def send_data_exchange(self, groupId, dataSize, dataBytes):
+        # type: (int, int, bytes) -> None
         assert(dataSize == len(dataBytes))
         data = struct.pack('=hhh', kCommandCode.dataExchange, groupId, dataSize)
         data += bytes(dataBytes)
