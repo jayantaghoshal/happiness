@@ -2,36 +2,11 @@ import subprocess
 import sys
 import re
 import os
-import itertools
 import typing
 import string
 from collections import namedtuple
 
-
 LoggingViolation = namedtuple("LoggingViolation", "violation file")
-
-# TODO: Remove files from here once they are fixed
-#       Used to be able to run scanner on new files in gate and avoid rebase-race to fix old files
-temporary_exclusions = [
-    "hardware/tarmac/eventloop/test/ct/eventloop_ct_test.cpp",
-    "hardware/signals/vehiclesignalsdaemon/src/vsm_sink.cpp",
-    "hardware/signals/dataelements/generated/vsm/vsm_inject_switch_ok_cpp.h",
-    "hardware/signals/dataelements/AutosarCodeGen/generated/vsm/vsm_inject_switch_ok_cpp.h",
-    "hardware/infotainmentIpBus/test/ut/testCodec.cpp",
-    "hardware/gnssd/src/binderimpl/gnss/Gnss.cpp",
-    "hardware/packet-injector/tiny-ipcommandbus/include/udp_packet_injector.h",
-    "hardware/packet-injector/tiny-ipcommandbus/src/Pdu.cpp",
-    "hardware/localconfig/src/local_config_file_reader_android_ihu_behavior.cpp",
-    "hardware/localconfig/src/local_config_reader.cpp",
-    "hardware/signals/desip/src/desip_main.cpp",
-    "hardware/signals/desip/src/vibdrvHWlink.cpp",
-    "hardware/signals/desip/src/desip_prot.cpp",
-    "hardware/signals/dataelements/src/vipcomm/VipFramework.cpp",
-    "hardware/signals/dataelements/test/ut/unittest.cpp",
-    "hardware/infotainmentIpBus/src/type_conversion_helpers.cpp",
-    "hardware/infotainmentIpBus/src/type_conversion_helpers.cpp",
-    "hardware/dim/test/ct/apix_gate/apix_gate_ct_test.cpp",
-    "hardware/iplmd/test/ct/src/LscMocker.h"]
 
 
 def get_invalid_chars_in_tag(tag):
@@ -56,22 +31,22 @@ def grep(args) -> str:
 
 def get_files_with_ALOGx_macros_or_logtag_defined(dir_to_check: str) -> typing.Iterable[str]:
     files = grep([
-            "--recursive",
-            "--include=*.cpp",
-            "--include=*.h",
-            "--files-with-matches",
-            "--extended-regex",
-            "(#define\s+LOG_TAG|ALOG[EWIDV])",
-             dir_to_check]).splitlines()
-    #TODO: Temp exclude infotainment-ip-service because its not being compiled into image, just used as reference, should be removed
-    return (f for f in files if not os.path.relpath(f, dir_to_check).startswith("hardware/infotainment-ip-service"))
+        "--recursive",
+        "--include=*.cpp",
+        "--include=*.h",
+        "--files-with-matches",
+        "--extended-regex",
+        "(#define\s+LOG_TAG|ALOG[EWIDV])",
+        dir_to_check]).splitlines()
+
+    return files
 
 
 LOGTAG_PATTERN = re.compile("^#define\s+LOG_TAG\s+\"(.*?)\"", re.MULTILINE)
 ALOGX_PATTERN = re.compile("ALOG[EWIDV]")
 
 
-def check_file(filename: str)-> typing.Iterable[LoggingViolation]:
+def check_file(filename: str) -> typing.Iterable[LoggingViolation]:
     try:
         with open(filename, encoding="utf-8") as f:
             file_contents = f.read()
@@ -126,7 +101,6 @@ def check_file(filename: str)-> typing.Iterable[LoggingViolation]:
 
 
 def check_files_in_directory(dir_to_check: str) -> typing.Iterable[LoggingViolation]:
-
     files_with_logtag = get_files_with_ALOGx_macros_or_logtag_defined(dir_to_check)
 
     for filename in files_with_logtag:
@@ -138,11 +112,9 @@ def main():
 
     if os.path.isdir(arg):
         basedir = arg
-        apply_exclusions = True
         violations = check_files_in_directory(arg)
     elif os.path.isfile(arg):
         basedir = os.path.dirname(arg)
-        apply_exclusions = False
         violations = check_file(arg)
     else:
         print("Path " + arg + " is neither file nor directory");
@@ -152,16 +124,13 @@ def main():
     for e in violations:
         relname = os.path.relpath(e.file, basedir)
 
-        if relname in temporary_exclusions and apply_exclusions:
-            continue
-
         if not errors_found:
             print("--------------------------------------------")
             print("Log tag errors found")
             print("See https://c1.confluence.cm.volvocars.biz/display/IHUA/Logging for logging guidelines")
             errors_found = True
 
-        print(" * " + relname )
+        print(" * " + relname)
         print("     " + e.violation)
         print()
     if errors_found:
