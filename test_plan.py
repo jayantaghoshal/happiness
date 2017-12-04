@@ -33,7 +33,7 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
              reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
              jira_issue="",
-             deadline="2017-12-04"
+             deadline="2017-12-18"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
              reason="MR1 not yet on master",
@@ -43,7 +43,7 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix_gate",       standard_caps),
              reason="APIX driver not yet integrated on Master",
              jira_issue="",
-             deadline="2017-12-04"
+             deadline="2017-12-18"
     ),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
@@ -72,7 +72,7 @@ test_plan_hourly = [
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
              reason="We are currently unable to run tradefed tests correctly",
              jira_issue="",
-             deadline="2017-12-04"
+             deadline="2017-12-18"
     ),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
