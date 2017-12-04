@@ -10,7 +10,7 @@ LOCAL_MODULE := $(service_name)-service
 LOCAL_INIT_RC := $(service_name)-service.rc
 LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
-PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle@2.0-service
+PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.intel@2.0-service
 
 LOCAL_SRC_FILES := \
      src/VehicleHALServiceMain.cpp \
