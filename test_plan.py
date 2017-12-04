@@ -69,11 +69,7 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2019-11-17"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
-             reason="We are currently unable to run tradefed tests correctly",
-             jira_issue="",
-             deadline="2017-12-18"
-    ),
+    TradefedTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
