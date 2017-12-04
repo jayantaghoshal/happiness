@@ -1,0 +1,13 @@
+cc_test {
+    name: "VtsApixGateTestCases",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: [
+        "apix_gate_ct_test.cpp",
+        "apix_gate_helpers.cpp",
+    ],
+
+    shared_libs: ["liblog"],
+
+    test_suites: ["vts"],
+}

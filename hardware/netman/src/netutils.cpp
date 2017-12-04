@@ -12,9 +12,6 @@
 
 #include "netutils.h"
 
-#include <cutils/log.h>
-#include <vcc/localconfig.h>
-
 #include <arpa/inet.h>
 #include <errno.h>
 #include <ifaddrs.h>
@@ -22,6 +19,7 @@
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
 #include <net/if.h>
+#include <vcc/localconfig.h>
 
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -33,6 +31,7 @@
 #include <system_error>
 
 #define LOG_TAG "Netmand"
+#include <cutils/log.h>
 
 namespace {
 

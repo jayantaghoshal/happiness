@@ -14,7 +14,9 @@
 #include <sstream>
 
 #include "rule_handler.h"
+
 #define LOG_TAG "Netboyd"
+#include <cutils/log.h>
 
 namespace vcc {
 namespace netman {

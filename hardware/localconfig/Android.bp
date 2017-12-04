@@ -14,10 +14,7 @@ cc_library_static {
     name: "liblocalconfig_static",
     defaults: ["liblocalconfig_defaults"],
     srcs: [
-        "src/local_config_file_reader_android_ihu_behavior.cpp",
-        "src/local_config_reader.cpp",
-        "src/local_config_reader_interface.cpp",
-        "src/localconfig.cpp",
+        "src/*.cpp",
     ],
     host_supported: true,
 }

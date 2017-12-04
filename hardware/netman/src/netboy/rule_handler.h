@@ -15,7 +15,6 @@
 
 #include "vcc/localconfig.h"
 
-#include <cutils/log.h>
 #include <memory>
 #include <string>
 #include <vector>
