@@ -79,8 +79,13 @@ def check_file(filename: str)-> typing.Iterable[LoggingViolation]:
         print("Failed to analyze file: %s due to %s" % (filename, e))
         return
 
+    no_log_lint_index = file_contents.rfind("NOLOGLINT")
+    if no_log_lint_index > 0:
+        return
+
     last_include_index = file_contents.rfind("#include")
     last_include_cutils_log_index = file_contents.rfind("#include <cutils/log.h>")
+
     if last_include_index == last_include_cutils_log_index:
         last_include_index = file_contents.rfind("#include", 0, last_include_cutils_log_index)
 
@@ -134,11 +139,11 @@ def main():
     if os.path.isdir(arg):
         basedir = arg
         apply_exclusions = True
-        violations = check_files_in_directory(sys.argv[1])
+        violations = check_files_in_directory(arg)
     elif os.path.isfile(arg):
         basedir = os.path.dirname(arg)
         apply_exclusions = False
-        violations = check_file(sys.argv[1])
+        violations = check_file(arg)
     else:
         print("Path " + arg + " is neither file nor directory");
         sys.exit(1)
