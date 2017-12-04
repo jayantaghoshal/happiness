@@ -1,8 +1,8 @@
-#include <errno.h>
 #include <pthread.h>
 #include <sys/epoll.h>
 #include <sys/eventfd.h>
 #include <sys/timerfd.h>
+#include <cerrno>
 #include <map>
 #include <mutex>
 #include <queue>
@@ -90,7 +90,7 @@ class EPollQueue {
         return removed > 0;
     }
 
-    std::vector<Task> dequeue(void) {
+    std::vector<Task> dequeue() {
         std::vector<Task> result;
         epoll_event events[MAX_EVENTS];
         int r = epoll_wait(epollfd_, events, MAX_EVENTS, -1);  // -1 -> wait forever
@@ -142,27 +142,27 @@ class Dispatcher : public IDispatcher {
   public:
     Dispatcher();
 
-    virtual ~Dispatcher();
+    ~Dispatcher() override;
 
-    virtual void Enqueue(std::function<void()> &&f);
+    void Enqueue(std::function<void()> &&f) override;
 
-    virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f);
+    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) override;
 
-    virtual bool Cancel(JobId jobid);
+    bool Cancel(JobId jobid) override;
 
-    virtual void AddFd(int fd, std::function<void()> &&f);
-    virtual void RemoveFd(int fd);
+    void AddFd(int fd, std::function<void()> &&f) override;
+    void RemoveFd(int fd) override;
 
-    virtual void Stop();
-    virtual void Join();
+    void Stop() final;
+    void Join() override;
 
   private:
     void Start();
 
     EPollQueue queue_;
-    bool stop_;
+    bool stop_ = false;
     std::thread eventthread_;
-    JobId next_job_id_;
+    JobId next_job_id_ = 0;
     mutable std::mutex mutex_;
     std::map<JobId, int> delayed_jobs_;
 };
@@ -171,7 +171,7 @@ class Dispatcher : public IDispatcher {
 IDispatcher &IDispatcher::GetDefaultDispatcher() {
     static std::unique_ptr<IDispatcher> dispatcher = CreateDispatcher();
 
-    return *dispatcher.get();
+    return *dispatcher;
 }
 
 void IDispatcher::EnqueueTask(std::function<void()> &&f) { GetDefaultDispatcher().Enqueue(std::move(f)); }
@@ -179,7 +179,7 @@ void IDispatcher::EnqueueTask(std::function<void()> &&f) { GetDefaultDispatcher(
 std::unique_ptr<IDispatcher> IDispatcher::CreateDispatcher() { return std::unique_ptr<IDispatcher>(new Dispatcher()); }
 
 // constructor
-Dispatcher::Dispatcher() : stop_(false), eventthread_([this]() { Start(); }), next_job_id_(0) {}
+Dispatcher::Dispatcher() : eventthread_([this]() { Start(); }) {}
 
 // destructor
 Dispatcher::~Dispatcher() { Stop(); }
@@ -205,7 +205,7 @@ IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay,
         delayed_jobs_[this_id] = tfd;  // and add this id to the set of running timers
     }
 
-    timerfd_settime(tfd, 0, &ts, NULL);
+    timerfd_settime(tfd, 0, &ts, nullptr);
 
     AddFd(tfd, [this, tfd, f, this_id]() {
         bool dispatch_job_now = false;
@@ -277,5 +277,5 @@ void Dispatcher::Join() {
         eventthread_.join();
     }
 }
-}  // end eventloop
-}  // end tarmac
+}  // namespace eventloop
+}  // namespace tarmac

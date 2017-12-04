@@ -44,5 +44,5 @@ class IDispatcher {
     // Join with the thread that handles this loop
     virtual void Join() = 0;
 };
-}  // end eventloop
-}  // end tarmac
+}  // namespace eventloop
+}  // namespace tarmac
