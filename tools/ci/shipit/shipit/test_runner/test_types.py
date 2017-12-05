@@ -34,13 +34,13 @@ class IhuBaseTest:
 
 
 class VTSTest(IhuBaseTest):
-    def __init__(self, test_xml_path, require_capabilities):
+    def __init__(self, test_root_dir, require_capabilities):
         # type: (str, Set[str]) -> None
         super().__init__(require_capabilities)
-        self.test_xml_path = test_xml_path  # Relative to AOSP root
+        self.test_root_dir = test_root_dir  # Relative to AOSP root
 
     def __str__(self):
-        return self.test_xml_path
+        return self.test_root_dir
 
 
 class TradefedTest(IhuBaseTest):
