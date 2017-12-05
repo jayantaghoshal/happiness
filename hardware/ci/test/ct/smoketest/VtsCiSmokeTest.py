@@ -38,7 +38,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
 
         first_cpu_data = self.get_data(int(number_of_cores))
-        sleep(5)
+        sleep(30)
         second_cpu_data = self.get_data(int(number_of_cores))
         total_load = self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
 
