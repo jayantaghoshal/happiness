@@ -29,8 +29,8 @@ LOCAL_SHARED_LIBRARIES += \
     libhwbinder \
     libtarmac \
     libipcommandbus \
-    android.hardware.gnss@1.0
-
+    android.hardware.gnss@1.0 \
+    vendor.volvocars.hardware.vehiclecom@1.0
 
 
 LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined

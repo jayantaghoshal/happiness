@@ -9,8 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <type_conversion_helpers.h>
+#include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include <chrono>
+#include <fstream>
 #include <future>
+#include <iostream>
 
 // Note that the auto-generated ASN1 files are in C, not C++
 extern "C" {
@@ -19,6 +22,8 @@ extern "C" {
 extern "C" {
 #include "pl/asn_base/asn_base.h"
 }
+
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 
 using ::android::hardware::gnss::V1_0::IGnss;
 using ::android::hardware::gnss::V1_0::IGnssCallback;
@@ -31,17 +36,6 @@ using ::android::hardware::Void;
 using ::android::sp;
 
 #define LOG_TAG "VtsGnssIntegrationTest"
-// Script to setup gnssd & ipcbd to use mocked ports
-
-#define SHELLSCRIPT \
-    "\
-  killall -9 ipcbd \n\
-  killall -9 gnssd \n\
-  sleep 2 \n\
-  export VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json \n\
-  /vendor/bin/hw/ipcbd ipcb UDP & \n\
-  /vendor/bin/hw/gnssd & \n\
-  sleep 2 \n"
 
 struct GnssCallback : public IGnssCallback {
     // Methods from ::android::hardware::gnss::V1_0::IGnssCallback follow.
@@ -65,12 +59,146 @@ struct GnssCallback : public IGnssCallback {
     // Methods from ::android::hidl::base::V1_0::IBase follow.
 };
 
+static int new_ipcb_pid = -1;
+
+static bool setup_test_case_successful = false;
+
 class VtsGnssIntegrationTest : public ::testing::Test {
   protected:
     static void SetUpTestCase() {
-        ALOGD("Setup services!");
-        system(SHELLSCRIPT);
+        ALOGD("+ SetUpTestCase ");
+
+        // Expected that all tests would be aborted here, but that is not the case.
+        // For now, abort all tests manually
+        ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
+
+        // Kill conflicting IpcbD
+        int ipcb_pid = getProcIdByName("/vendor/bin/hw/ipcbd ipcb UDP");
+        if (-1 != ipcb_pid) {
+            kill(ipcb_pid, SIGTERM);
+        }
+
+        // Start IpcbD for test with mocked localconfig
+        std::string new_ipcb_pid_str = getCmdOut(
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
+                "/vendor/bin/hw/ipcbd ipcb UDP "
+                "& echo $!");
+
+        std::string::size_type sz;  // alias of size_t
+        new_ipcb_pid = std::stoi(new_ipcb_pid_str, &sz);
+
+        // Wait for service to start
+        uint8_t count = 0;
+        while (NULL == IVehicleCom::getService("ipcb").get()) {
+            usleep(100000);
+
+            if (!processExists(new_ipcb_pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        // Wait for GnssD to reconnect to new IpcbD
+        sleep(2);
+
+        setup_test_case_successful = true;
+
+        ALOGD("- SetUpTestCase ");
     }
+
+    static bool processExists(int pid) {
+        // Calling kill with signal 0 will just return 0 if prcess is running
+        return (0 == kill(pid, 0));
+    }
+
+    static bool fileExists(const std::string& name) {
+        if (FILE* file = fopen(name.c_str(), "r")) {
+            fclose(file);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static int getProcIdByName(std::string procName) {
+        int pid = -1;
+
+        // Open the /proc directory
+        DIR* dp = opendir("/proc");
+        if (dp != NULL) {
+            // Enumerate all entries in directory until process found
+            struct dirent* dirp;
+            while (pid < 0 && (dirp = readdir(dp))) {
+                // Skip non-numeric entries
+                int id = atoi(dirp->d_name);
+                if (id > 0) {
+                    // Read contents of virtual /proc/{pid}/cmdline file
+                    std::string cmdPath = std::string("/proc/") + dirp->d_name + "/cmdline";
+                    std::ifstream cmdFile(cmdPath.c_str());
+                    std::string cmdLine;
+                    getline(cmdFile, cmdLine);
+                    replace(cmdLine.begin(), cmdLine.end(), '\0', ' ');
+                    if (!cmdLine.empty()) {
+                        cmdLine.erase(cmdLine.end() - 1);  // Remove the last character
+                        if (procName == cmdLine) pid = id;
+                    }
+                }
+            }
+        }
+
+        closedir(dp);
+
+        return pid;
+    }
+
+    static std::string getCmdOut(const char* cmd) {
+        std::array<char, 128> buffer;
+        std::string result;
+        std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+        if (!pipe) {
+            ALOGE("popen() FAILED");
+        }
+        while (!feof(pipe.get())) {
+            if (fgets(buffer.data(), 128, pipe.get()) != NULL) {
+                result += buffer.data();
+                break;  // break it since we just interested to get process id
+            }
+        }
+        return result;
+    }
+
+    static void TearDownTestCase() {
+        ALOGD("+ TearDownTestCase");
+
+        // Clean up, kill started processes
+        if (-1 != new_ipcb_pid) {
+            kill(new_ipcb_pid, SIGTERM);
+        }
+
+        // Start original IpcbD service to restore state
+        getCmdOut("start ipcbd-infotainment");
+
+        ALOGD("- TearDownTestCase");
+    }
+
+    void SetUp() {
+        ALOGD("+ SetUp ");
+
+        // Make sure Test Case Setup was executed correctly
+        ASSERT_TRUE(setup_test_case_successful) << "Setup Test Case failed, failing test";
+
+        // Make sure IpcbD is still running
+        ASSERT_TRUE(processExists(new_ipcb_pid)) << "IpcbD is not running anymore, did it crash?";
+    }
+
+    void TearDown() {
+        // code here will be called just after the test completes
+        // ok to through exceptions from here if need be
+    }
+
     sp<IGnss> gnssServer_;
 };
 
