@@ -16,7 +16,7 @@ cc_defaults {
         "clang-analyzer-*",
         "-clang-analyzer-alpha*",
         "google-*",
-        "-google-build-using-namespace", // its really fine in cpp files, save a lot of typing
+        "-google-build-using-namespace", // its really fine in cpp files, saves a lot of typing
         "cert-*",
         "modernize-*",
         "-modernize-raw-string-literal", //for short ones it is pointless
@@ -51,5 +51,6 @@ cc_defaults {
 
     tidy_checks: [
         "-cert-err58-cpp", //all gtest test cases creates static objects
+        "-modernize-use-equals-delete", //gtest testcase still use private inheritance
     ],
 }

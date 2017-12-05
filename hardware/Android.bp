@@ -1,12 +1,1 @@
-subdirs = [
-    "signals",
-    "localconfig",
-    "carconfig",
-    "tarmac",
-    "ipcbd",
-    "uds",
-    "test",
-    "vehicle",
-    "netman",
-    "cloudd",
-]
+subdirs = ["*"]
