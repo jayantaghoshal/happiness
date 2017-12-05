@@ -28,7 +28,7 @@ cc_binary {
     static_libs: ["libbase"],
 
     // Netman depends upon sysctl.conf, which it will initialize during startup
-    init_rc: ["netman.rc"],
+    init_rc: ["init/netman.rc"],
     required: [
         "sysctl.conf",
         "netd_config.xml",
@@ -65,5 +65,5 @@ cc_binary {
 
     static_libs: ["libbase"],
 
-    init_rc: ["netboyd.rc"],
+    init_rc: ["init/netboyd.rc"],
 }
