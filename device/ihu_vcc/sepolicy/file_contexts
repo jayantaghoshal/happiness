@@ -1,5 +1,5 @@
 # Netman execution rights
-/vendor/bin/netman u:object_r:netman_exec:s0
+/vendor/bin/netmand u:object_r:netmand_exec:s0
 
 # Netboy execution rights
 /vendor/bin/netboyd u:object_r:netboyd_exec:s0

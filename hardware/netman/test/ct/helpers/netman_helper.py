@@ -21,7 +21,7 @@ class NetmanHelper(BaseHelper):
         self.ip_netns_exec_vcc = ["ip netns exec vcc"]
 
     def start_netman(self):
-        cmd = self._format_cmd_line(["netman&"], True)
+        cmd = self._format_cmd_line(["netmand&"], True)
         self.execute_cmd(cmd)
         # TODO (Philip Werner):
         # Remove sleep in favour of a more reliable method when waiting for interface
@@ -29,7 +29,7 @@ class NetmanHelper(BaseHelper):
         time.sleep(2)
 
     def kill_netman(self):
-        cmd = self._format_cmd_line(["pkill netman"], True)
+        cmd = self._format_cmd_line(["pkill netmand"], True)
         self.execute_cmd(cmd)
 
     def restart_netman(self):

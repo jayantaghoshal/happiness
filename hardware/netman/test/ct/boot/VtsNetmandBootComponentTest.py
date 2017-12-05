@@ -37,7 +37,7 @@ class VtsNetmandBootComponentTest(base_test.BaseTestClass):
         # Arrange
 
         # Act
-        result = self.terminal.Execute("ps -A | grep netman")
+        result = self.terminal.Execute("ps -A | grep netmand")
 
         # Assert
         asserts.assertEqual(0, result[output.EXIT_CODE][0])
