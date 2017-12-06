@@ -1,0 +1,9 @@
+.gradle
+.idea
+build
+libs
+.DS_Store
+proguard-rules.pro
+*.properties
+app.iml
+output-app-signed.apk

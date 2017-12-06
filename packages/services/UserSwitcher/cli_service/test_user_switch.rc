@@ -1,0 +1,5 @@
+service user-switch-test /system/bin/sh /vendor/bin/test_user_switch.sh
+    class hal
+    user root
+    group root
+    seclabel u:r:dataelements-hidl-server:s0
