@@ -53,7 +53,7 @@
   <!-- SWDL, to be decided which layer it belongs -->
   <project name="bsp/vendor/delphi/swdl" path="vendor/delphi/swdl" revision="484a2de25e89514a46746e2a0b9771211736a5cf"/>
 
-  <!-- Patch liblog to silence clang-tiday nagging about readability-implicit-bool-conversion in ALOGV macro -->
+  <!-- Patch liblog to silence clang-tidy nagging about readability-implicit-bool-conversion in ALOGV macro -->
   <remove-project name="aosp/platform/system/core"/>
-  <project name="aosp/platform/system/core" path="system/core" revision="1752e4cc1052daf66f1201235ab72d71909c6524"/>
+  <project name="aosp/platform/system/core" path="system/core" revision="def0a35623bb4599317f821db94a449c7aa79b46"/>
 </manifest>
