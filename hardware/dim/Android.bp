@@ -1,1 +1,35 @@
+//
+//Dim manager for deployment on system
+//
+cc_binary {
+    defaults: ["volvocars_cc_defaults"],
+    name: "dimmanager",
+    init_rc: ["dimmanager.rc"],
+    proprietary: true,
+
+    srcs: [
+        "src/main.cpp",
+        "src/dim_manager.cpp",
+        "src/dim_item.cpp",
+        "src/dim_label.cpp",
+        "src/dim_operation_data.cpp",
+        "src/dim_tbt_area.cpp",
+        "src/dim_image.cpp",
+        "src/dim_linked_item.cpp",
+        "src/dim_tools.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libinfotainmentbusasn",
+        "libhidlbase",
+        "libhidltransport",
+        "libtarmac",
+        "libhwbinder",
+        "vendor.volvocars.hardware.common@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
+    ],
+}
+
 subdirs = ["test/**"]
