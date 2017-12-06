@@ -1,8 +1,30 @@
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.volvocars.powerevent"
-    android:sharedUserId="android.uid.system">
+    package="com.volvocars.powerevent">
+
+    <!-- Prevent third party apps from showing a power alert activity -->
+    <permission
+        android:protectionLevel="signature"
+        android:name="com.volvocars.powerevent.SHOW_POWER_ALERT"/>
+
+    <uses-permission android:name="com.volvocars.powerevent.SHOW_POWER_ALERT" />
+
     <application
-    android:name="com.volvocars.powerevent.PowerEventApp"
-    android:persistent="true">
+        android:name=".MainApplication"
+        android:persistent="true">
+
+        <activity
+            android:name=".TestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AlertActivity"
+            android:theme="@style/AlertTheme"
+            android:exported="false"
+            android:permission="com.volvocars.powerevent.SHOW_POWER_ALERT" >
+        </activity>
     </application>
 </manifest>
