@@ -80,6 +80,57 @@ PRODUCT_PACKAGES += \
 endif
 
 ##############################################################
+# Google Services
+##############################################################
+
+GMS = vendor/google/GoogleServices
+
+# GMS mandatory core packages
+PRODUCT_PACKAGES += \
+    ConfigUpdater \
+    GoogleBackupTransport \
+    GoogleExtServices \
+    GoogleExtShared \
+    GoogleFeedback \
+    GoogleOneTimeInitializer \
+    GooglePackageInstaller \
+    GooglePartnerSetup \
+    GooglePrintRecommendationService \
+    GoogleServicesFramework \
+    GoogleCalendarSyncAdapter \
+    GoogleContactsSyncAdapter \
+    GoogleTTS \
+    GmsCore \
+    Phonesky \
+    SetupWizard \
+    WebViewGoogle
+
+# privapp-permissions whitelisting
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.control_privapp_permissions=log
+
+PRODUCT_COPY_FILES += \
+    $(GMS)/etc/permissions/privapp-permissions-google.xml:system/etc/permissions/privapp-permissions-google.xml
+    $(GMS)/etc/sysconfig/google.xml:system/etc/sysconfig/google.xml
+
+# GMS mandatory application packages
+# Note: Duo is mandatory for telephony devices, whereas Hangouts is for non-telephony devices.
+# The following apps are not currently in the build, but can be enabled
+#    Drive \
+#    Gmail2 \
+#    Duo \
+#    Hangouts \
+#    Music2 \
+#    Photos \
+#    Velvet \
+#    Videos \
+#    YouTube
+
+PRODUCT_PACKAGES += \
+    Chrome \
+    Maps
+
+##############################################################
 # VCC required Linux kernel modules
 ##############################################################
 KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_diffconfig
