@@ -8,7 +8,7 @@ import os
 import shlex
 import sys
 import traceback
-import re
+import multiprocessing
 import xml.etree.ElementTree as ET
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
@@ -23,6 +23,7 @@ from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 
 sys.path.append(vcc_root)
 import test_plan    # NOQA
+
 
 logger = logging.getLogger(__name__)
 
@@ -81,19 +82,16 @@ def build_testcases(tests_to_run: List[IhuBaseTest]):
     if len(all_vts_tests) > 0:
         logger.info("Found VTS test cases, building VTS")
         test_modules_to_build.append("test/vts/runners/target/gtest")
-        # TODO: Increase -j flag on build server
-        run_in_lunched_env("make vts -j7", cwd=aosp_root)
+        run_in_lunched_env("make vts -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
 
     if len(all_tradefed_tests) > 0:
         logger.info("Found Tradefed test cases, building tradefed-all")
-        # TODO: Increase -j flag on build server
-        run_in_lunched_env("make tradefed-all -j7", cwd=aosp_root)
+        run_in_lunched_env("make tradefed-all -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
 
     if len(test_modules_to_build) > 0:
         print(test_modules_to_build)
         test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
-        #TODO: Increase -j flag on build server
-        run_in_lunched_env("mmma -j7 %s" % test_modules_space_separated, cwd=aosp_root)
+        run_in_lunched_env("mmma -j%d %s" % (multiprocessing.cpu_count(), test_modules_space_separated), cwd=aosp_root)
 
 
 def print_indented(s: str, indent="    "):
