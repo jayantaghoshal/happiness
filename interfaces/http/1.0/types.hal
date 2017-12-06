@@ -1,0 +1,15 @@
+package vendor.volvocars.hardware.http@1.0;
+
+struct HttpHeaderField {
+    string name;
+    string value;
+};
+
+typedef vec<HttpHeaderField> HttpHeaders;
+
+struct Response {
+    HttpHeaders responseHeaders;
+    vec<uint8_t> responseData;
+    uint16_t httpResponse;
+};
+
