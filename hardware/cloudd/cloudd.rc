@@ -1,0 +1,6 @@
+service cloudd /vendor/bin/hw/cloudd
+    class vcc_net
+    oneshot
+    user root
+    group root
+    seclabel u:r:cloudd:s0

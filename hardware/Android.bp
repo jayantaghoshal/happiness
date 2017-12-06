@@ -8,4 +8,5 @@ subdirs = [
     "test",
     "vehicle",
     "netman",
+    "cloudd",
 ]
