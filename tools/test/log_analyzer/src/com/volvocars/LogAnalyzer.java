@@ -313,7 +313,10 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
             failures.add(err);
         }
         for (JavaCrashItem ci : logcat.getJavaCrashes()) {
-            String err = String.format("JavaCrashItem: %s", ci.getStack());
+            String err = String.format("Tag: %s, App: %s, JavaCrashItem: %s",
+                    ci.getTag(),
+                    ci.getApp(),
+                    ci.getStack());
             failures.add(err);
         }
         return failures;
@@ -342,7 +345,11 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
                 "sensors@1.0-ser",
                 "SensorService",
                 "InputReader",
-                "hwservicemanage"
+                "hwservicemanage",
+                "allocator@1.0-s",   // Looks like bug that this logs so many warnings
+                "vehicle-signals",    // Waiting for updated desip-component from delphi
+                "android.car.usb.handler",
+                "UsbService"
         ));
 
         /* Chatty is a component of the logging system detecting log spam in run time
