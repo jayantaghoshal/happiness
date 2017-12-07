@@ -8,4 +8,45 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.vehiclecom</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IVehicleCom</name>
+            <instance>ipcb</instance>
+            <instance>iplm</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.iplm</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IIplm</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.signals</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISignals</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.uds</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IUdsDataCollector</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IUdsDataProvider</name>
+            <instance>test-point</instance>
+        </interface>
+    </hal>
 </manifest>

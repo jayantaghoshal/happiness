@@ -12,8 +12,47 @@ intermediates := $(call local-generated-sources-dir, COMMON)
 
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
-LOCAL_JAVA_LIBRARIES :=
+LOCAL_JAVA_LIBRARIES := \
+    android.hidl.base-V1.0-java \
 
+
+#
+# Build types.hal (DagnosticCheckStatus)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/DagnosticCheckStatus.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::types.DagnosticCheckStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (DiagnosticCheckReport)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/DiagnosticCheckReport.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::types.DiagnosticCheckReport
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
 # Build types.hal (DidReadResult)
@@ -50,6 +89,27 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         vendor.volvocars.hardware.uds@1.0::types.DidReadStatusCode
 
 $(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build IRoutineControlHandler.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/IRoutineControlHandler.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/IRoutineControlHandler.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::IRoutineControlHandler
+
+$(GEN): $(LOCAL_PATH)/IRoutineControlHandler.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
@@ -109,8 +169,47 @@ intermediates := $(call local-generated-sources-dir, COMMON)
 
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
-LOCAL_STATIC_JAVA_LIBRARIES :=
+LOCAL_STATIC_JAVA_LIBRARIES := \
+    android.hidl.base-V1.0-java-static \
 
+
+#
+# Build types.hal (DagnosticCheckStatus)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/DagnosticCheckStatus.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::types.DagnosticCheckStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (DiagnosticCheckReport)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/DiagnosticCheckReport.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::types.DiagnosticCheckReport
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
 # Build types.hal (DidReadResult)
@@ -147,6 +246,27 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         vendor.volvocars.hardware.uds@1.0::types.DidReadStatusCode
 
 $(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build IRoutineControlHandler.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/uds/V1_0/IRoutineControlHandler.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/IRoutineControlHandler.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.uds@1.0::IRoutineControlHandler
+
+$(GEN): $(LOCAL_PATH)/IRoutineControlHandler.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 

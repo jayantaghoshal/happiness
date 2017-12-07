@@ -12,7 +12,7 @@ filegroup {
 genrule {
     name: "vendor.volvocars.hardware.signals@1.0_genc++",
     tools: ["hidl-gen"],
-    cmd: "$(location hidl-gen) -o $(genDir) -Lc++ -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.signals@1.0",
+    cmd: "$(location hidl-gen) -o $(genDir) -Lc++-sources -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.signals@1.0",
     srcs: [
         ":vendor.volvocars.hardware.signals@1.0_hal",
     ],
@@ -26,7 +26,7 @@ genrule {
 genrule {
     name: "vendor.volvocars.hardware.signals@1.0_genc++_headers",
     tools: ["hidl-gen"],
-    cmd: "$(location hidl-gen) -o $(genDir) -Lc++ -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.signals@1.0",
+    cmd: "$(location hidl-gen) -o $(genDir) -Lc++-headers -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.signals@1.0",
     srcs: [
         ":vendor.volvocars.hardware.signals@1.0_hal",
     ],
@@ -46,8 +46,35 @@ genrule {
     ],
 }
 
-cc_library_shared {
+cc_library {
     name: "vendor.volvocars.hardware.signals@1.0",
+    defaults: ["hidl-module-defaults"],
+    generated_sources: ["vendor.volvocars.hardware.signals@1.0_genc++"],
+    generated_headers: ["vendor.volvocars.hardware.signals@1.0_genc++_headers"],
+    export_generated_headers: ["vendor.volvocars.hardware.signals@1.0_genc++_headers"],
+    vendor_available: true,
+    vndk: {
+        enabled: true,
+    },
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "liblog",
+        "libutils",
+        "libcutils",
+    ],
+    export_shared_lib_headers: [
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libutils",
+    ],
+}
+
+cc_library {
+    name: "vendor.volvocars.hardware.signals@1.0_vendor",
+    defaults: ["hidl-module-defaults"],
     generated_sources: ["vendor.volvocars.hardware.signals@1.0_genc++"],
     generated_headers: ["vendor.volvocars.hardware.signals@1.0_genc++_headers"],
     export_generated_headers: ["vendor.volvocars.hardware.signals@1.0_genc++_headers"],

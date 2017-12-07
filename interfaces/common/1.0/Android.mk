@@ -5,22 +5,17 @@ LOCAL_PATH := $(call my-dir)
 ################################################################################
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := vendor.volvocars.hardware.vehiclehal-V1.0-java
+LOCAL_MODULE := vendor.volvocars.hardware.common-V1.0-java
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 
 intermediates := $(call local-generated-sources-dir, COMMON)
 
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
-LOCAL_JAVA_LIBRARIES := \
-    android.hardware.automotive.vehicle-V2.0-java \
-    android.hidl.base-V1.0-java \
-
-
 #
-# Build types.hal (VehicleProperty)
+# Build types.hal (Ecu)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/vehiclehal/V1_0/VehicleProperty.java
+GEN := $(intermediates)/vendor/volvocars/hardware/common/V1_0/Ecu.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -28,10 +23,9 @@ $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
         -Ljava \
-        -randroid.hardware:hardware/interfaces \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.vehiclehal@1.0::types.VehicleProperty
+        vendor.volvocars.hardware.common@1.0::types.Ecu
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -42,22 +36,17 @@ include $(BUILD_JAVA_LIBRARY)
 ################################################################################
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := vendor.volvocars.hardware.vehiclehal-V1.0-java-static
+LOCAL_MODULE := vendor.volvocars.hardware.common-V1.0-java-static
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 
 intermediates := $(call local-generated-sources-dir, COMMON)
 
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
-LOCAL_STATIC_JAVA_LIBRARIES := \
-    android.hardware.automotive.vehicle-V2.0-java-static \
-    android.hidl.base-V1.0-java-static \
-
-
 #
-# Build types.hal (VehicleProperty)
+# Build types.hal (Ecu)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/vehiclehal/V1_0/VehicleProperty.java
+GEN := $(intermediates)/vendor/volvocars/hardware/common/V1_0/Ecu.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -65,10 +54,9 @@ $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
         -Ljava \
-        -randroid.hardware:hardware/interfaces \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.vehiclehal@1.0::types.VehicleProperty
+        vendor.volvocars.hardware.common@1.0::types.Ecu
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
