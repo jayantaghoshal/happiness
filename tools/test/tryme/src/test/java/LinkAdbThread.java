@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
