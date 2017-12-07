@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
 
 #
@@ -77,5 +80,6 @@ test_plan_hourly = [
 ]
 
 test_plan_nightly = [
-
+    VTSTest("vendor/volvocars/hardware/ipcbd/test/ct", standard_caps),
+    VTSTest("vendor/volvocars/hardware/test/iplm", standard_caps),
 ]

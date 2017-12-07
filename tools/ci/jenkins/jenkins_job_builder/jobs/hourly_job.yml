@@ -147,3 +147,68 @@
             !include-raw: 
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_daily_test.sh            
+- job:
+    name: ihu_daily_build_vcc_eng
+    defaults: time_job_defaults
+    node: daily_build
+    properties:
+        #TODO: Duplicated from the time_job_defaults, don't know how to append things to the default.
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>    
+
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vcc_eng_build.sh
+
+
+- job:
+    name: ihu_daily_build_vcc_userdebug
+    defaults: time_job_defaults
+    node: daily_build
+    properties:
+        #TODO: Duplicated from the time_job_defaults, don't know how to append things to the default.
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>      
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vcc_userdebug_build.sh           
+
+- job:
+    name: ihu_daily_test1
+    defaults: time_job_defaults
+    node: rack-rig
+    parameters:
+        - run:
+            name: UPSTREAM_JOB        
+            project-name: ihu_vcc_eng_image_build
+            description: IHU daily test job
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi    
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_hourly_test.sh 
+    
