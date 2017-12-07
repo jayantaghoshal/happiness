@@ -1,5 +1,4 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_H
+#pragma once
 
 #include <unistd.h>
 #include <memory>
@@ -22,13 +21,13 @@ class Socket {
     int sockfd_ = -1;
 };
 
-class CertHandler final : public ICertHandler {
+class CertHandler final : public CertHandlerInterface {
   public:
     CertHandler(const std::string& client_cert_pem, const std::string& client_key_pem, const std::string& ca_cert);
 
     CertificateValidationStatus OnCreateOpenSslContext(void* ssl_ctx) noexcept override;
 
-    OcspRetCode GetOcspUrlFromServerCert(const std::string& server_url, std::string& ocsp) const;
+    OcspRetCode GetOcspUrlFromServerCert(const std::string& server_url, std::string* ocsp) const;
 
   private:
     X509* GetCaCert();
@@ -40,4 +39,3 @@ class CertHandler final : public ICertHandler {
     EVP_PKEYUnqPtr m_client_key;
 };
 }
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_H

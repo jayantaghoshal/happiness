@@ -1,5 +1,4 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDD_CONFIG_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDD_CONFIG_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -111,5 +110,3 @@ class ClouddConfig {
 };
 
 }  // namespace Connectivity
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDD_CONFIG_H

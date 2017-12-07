@@ -1,91 +1,62 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUD_REQUEST_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUD_REQUEST_H
+#pragma once
 
 #include <curl/curl.h>
-
-#include <cutils/log.h>
+#include <chrono>
 #include <functional>
-#include <map>
-#include <tuple>
-#include "IDispatcher.h"
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "certificate_handler_interface.h"
-#include "cloud_request_interface.h"
 
 namespace Connectivity {
+typedef std::function<void(std::int32_t, const std::string&, const std::string&)> ResponseCallback;
 
-using ::tarmac::eventloop::IDispatcher;
-
-typedef curl_socket_t FdActionKey;
-
-struct CurlEasyHandleCleaner {
-    void operator()(CURL* easy) { curl_easy_cleanup(easy); }
-};
-struct CurlMultiHandleCleaner {
-    void operator()(CURLM* multi) { (void)curl_multi_cleanup(multi); }
-};
-
-class CurlMultiEasyHandle final {
-  public:
-    CurlMultiEasyHandle(CURLM* multi, CURL* easy)
-        : multi{multi}, easy{easy}, retCode{curl_multi_add_handle(multi, easy)} {
-        if (retCode != CURLMcode::CURLM_OK) {
-            throw std::runtime_error("Failed to add easy handle to multi handle");
-        }
-    }
-    ~CurlMultiEasyHandle() {
-        if (retCode == CURLMcode::CURLM_OK) {
-            const auto removeStatus = curl_multi_remove_handle(multi, easy);
-            if (removeStatus != CURLMcode::CURLM_OK) {
-                ALOG(LOG_ERROR, "CloudD.CloudRequest", "curl_multi_remove_handle unexpected error: %d", removeStatus);
-            }
-        }
-    }
-    CurlMultiEasyHandle(const CurlMultiEasyHandle&) = delete;
-    CurlMultiEasyHandle(CurlMultiEasyHandle&&) = delete;
-    CurlMultiEasyHandle& operator=(const CurlMultiEasyHandle&) = delete;
-    CurlMultiEasyHandle& operator=(CurlMultiEasyHandle&&) = delete;
-
+class CloudRequest {
   private:
-    CURLM* const multi;
-    CURL* const easy;
-    const CURLMcode retCode;
-};
+    std::string url_;
+    CURL* curl_handle_;
+    std::shared_ptr<CertHandlerInterface> certificate_handler_;
+    std::vector<std::string> header_list_;
+    bool use_https_;
+    std::chrono::milliseconds timeout_;
 
-using CurlEasyUnique = std::unique_ptr<CURL, CurlEasyHandleCleaner>;
+    ResponseCallback response_callback_;
+    std::string response_data_;
+    std::string response_header_;
 
-class CloudRequest final : public virtual ICloudRequest {
   public:
-    CloudRequest();
+    CloudRequest(std::shared_ptr<CertHandlerInterface> cert_handler)
+        : url_("www.example.com"),
+          curl_handle_(nullptr),
+          certificate_handler_(cert_handler),
+          header_list_({}),
+          use_https_(true),
+          timeout_(36000000) {}
 
-    bool Init() override;
+    ~CloudRequest() = default;
 
-    RequestHandle HttpGet(const std::string& uri, const RequestConfig& config,
-                          CloudResponseCallback&& response_callback) override;
-    RequestHandle HttpsGet(const std::string& uri, const RequestConfig& config,
-                           CloudResponseCallback&& response_callback, ICertHandler* certHandler) override;
+    bool SetCurlHandle(CURL* curl_handle);
+    CURL* GetCurlHandle() { return curl_handle_; }
 
-    struct MultiState {
-        std::unique_ptr<CURLM, CurlMultiHandleCleaner> curlm_ = nullptr;
-        IDispatcher::JobId timer_job_id;
-    };
+    void SetURL(std::string url) { url_ = url; }
+    std::string GetURL() { return url_; }
 
-    struct EasyState {
-        CurlEasyUnique curle_;
-        std::unique_ptr<CurlMultiEasyHandle> multi_easy_connection;
-        bool finishedPrematurely = false;
-        std::string data_;
-        std::string header_;
-        CloudResponseCallback response_callback_;
-        // TODO: Figure out a better way to define ownership of certHandler, should NOT be raw pointer
-        ICertHandler* certHandler = nullptr;
-    };
+    CertHandlerInterface* GetCertHandler() { return certificate_handler_.get(); }
 
-  private:
-    MultiState multi_state_;
-    RequestHandle GenericGet(const std::string& uri, CloudResponseCallback&& response_callback,
-                             std::function<void(CURL* curl, EasyState& easyState)> setOptFunc,
-                             ICertHandler* certHandler, const RequestConfig& config);
+    void SetHeaderList(std::vector<std::string> header_list) { header_list_ = header_list; }
+    std::vector<std::string> GetHeaderList() { return header_list_; }
+
+    void SetUseHttps(bool use_https) { use_https_ = use_https; }
+    bool GetUseHttps() { return use_https_; }
+
+    void SetTimeout(std::chrono::milliseconds timeout) { timeout_ = timeout; }
+    std::chrono::milliseconds GetTimeout() { return timeout_; }
+
+    void SetCallback(ResponseCallback&& callback) { response_callback_ = callback; }
+    ResponseCallback GetCallback() { return response_callback_; }
+
+    std::string* GetResponseDataBuffer() { return &response_data_; }
+    std::string* GetResponseHeaderBuffer() { return &response_header_; }
 };
-}
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUD_REQUEST_H
+}  // namespace Connectivity

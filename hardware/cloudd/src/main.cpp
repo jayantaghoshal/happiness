@@ -8,7 +8,7 @@
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 
-#include "cloudService.h"
+#include "cloud_service.h"
 
 #define LOG_TAG "CloudD.main"
 
@@ -92,7 +92,7 @@ int main(void) {
     InitSignals();
 
     // Change to sp once hal is setup
-    CloudService* cloudService = new CloudService();
+    std::unique_ptr<CloudService> cloudService = std::unique_ptr<CloudService>(new CloudService());
     cloudService->Initialize();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);

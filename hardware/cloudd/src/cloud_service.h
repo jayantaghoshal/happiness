@@ -2,17 +2,15 @@
  * Copyright 2017 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
-
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDSERVICE_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDSERVICE_H
+#pragma once
 
 #include <IDispatcher.h>
 #include <vendor/volvocars/hardware/http/1.0/IHttpRequest.h>
 #include <list>
 #include "certificate_handler_interface.h"
-#include "cloud_request.h"
+#include "cloud_request_handler.h"
 #include "cloudd_local_config.h"
-#include "vpn_entry_point_fetcher.h"
+#include "entry_point_fetcher.h"
 
 using ::tarmac::eventloop::IDispatcher;
 using ::vendor::volvocars::hardware::http::V1_0::HttpHeaderField;
@@ -38,19 +36,14 @@ class CloudService : public IHttpRequest {
                               doGetRequest_cb _hidl_cb);
 
     Response BuildResponse(std::int32_t code, const std::string& data, const std::string& header);
-    IDispatcher& eventDispatcher_;
 
     ClouddLocalConfig cloudd_local_config_;
-
-    CloudRequest cloud_request_;
-
-    ICertHandler* certHandler_;
-
-    VPNEntryPointFetcher entry_point_fetcher_;
+    std::shared_ptr<CloudRequestHandler> cloud_request_handler_;
+    std::shared_ptr<CertHandlerInterface> cert_handler_;
+    EntryPointFetcher entry_point_fetcher_;
 
     std::string cep_url_;
     int cep_port_;
 };
 
 }  // namespace Connectivity
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDSERVICE_H

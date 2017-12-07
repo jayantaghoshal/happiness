@@ -1,5 +1,4 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_INTERFACE_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_INTERFACE_H
+#pragma once
 
 #include <string>
 
@@ -12,11 +11,10 @@ enum class CertificateValidationStatus { Validated, Error };
 
 enum class OcspRetCode : uint32_t { Ok = 0, NetworkFailure = 1, OcspFailure = 2 };
 
-class ICertHandler {
+class CertHandlerInterface {
   public:
-    virtual ~ICertHandler() = default;
+    virtual ~CertHandlerInterface() = default;
     virtual CertificateValidationStatus OnCreateOpenSslContext(void* ssl_ctx) noexcept = 0;
-    virtual OcspRetCode GetOcspUrlFromServerCert(const std::string& server_url, std::string& ocsp) const = 0;
+    virtual OcspRetCode GetOcspUrlFromServerCert(const std::string& server_url, std::string* ocsp) const = 0;
 };
 }
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CERTIFICATE_HANDLER_INTERFACE_H
