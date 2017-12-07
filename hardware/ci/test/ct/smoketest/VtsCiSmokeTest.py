@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 
 import logging
@@ -31,7 +34,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def testCpuLoad(self):
-        #requirement = 1 
+        #requirement = 1
         requirement = 90
         self.dut.shell.InvokeTerminal("my_shell3")
         my_shell = getattr(self.dut.shell, "my_shell3")

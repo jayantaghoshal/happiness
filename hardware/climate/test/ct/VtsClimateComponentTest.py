@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 
 import logging
@@ -181,7 +184,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(1, len(propValue["value"]["int32Values"]))
         asserts.assertEqual(value, propValue["value"]["int32Values"][0])
 
-  
+
     def extractZonesAsList(self, supportedAreas):
         """Converts bitwise area flags to list of zones"""
         allZones = [

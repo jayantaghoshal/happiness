@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 import os
 
 AOSP_ROOT = os.path.join(os.path.dirname(__file__), "../../../../../../")

@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 import requests
 import sys
@@ -56,7 +59,7 @@ class Artifactory(object):
         if algorithm == "md5":
             hasher = hashlib.md5()
         elif algorithm == "sha1":
-            hasher = hashlib.sha1()        
+            hasher = hashlib.sha1()
         elif algorithm == "sha256":
             hasher = hashlib.sha256()
         else:

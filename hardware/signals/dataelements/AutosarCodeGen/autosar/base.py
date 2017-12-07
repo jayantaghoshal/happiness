@@ -1,9 +1,9 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 ######################################
 # Base classes for AUTOSAR library
 #
-# Copyright (c) Volvo Cars AB
-######################################
-
 import string
 import copy
 from . import maps
@@ -16,10 +16,10 @@ schema ="{http://autosar.org/schema/r4.0}"
 # Auxilliary functions
 
 def GetShortName(element):
-    ''' 
+    '''
         This function searches for sub xml-node SHORT-NAME and returns its value.
 
-        :param element:   Element to find shorname of 
+        :param element:   Element to find shorname of
         :return: String representing element shortname
     '''
     # MATS
@@ -36,15 +36,15 @@ def getiterator(element, tag=None):
     '''
        Return iterator of xml elements.
 
-       :param element: Element to create iterator from 
+       :param element: Element to create iterator from
        :param tag: xml-tag on subelements to iterate over
        :return: iterator on found elements
     '''
     return element.getiterator(tag=add_schema(tag))
 
 def add_schema(xp):
-    ''' 
-       Add AUTOSAR schema prefix to XPATH expression 
+    '''
+       Add AUTOSAR schema prefix to XPATH expression
 
        :param xp: XPATH to add prefix to
        :return: Prefixed XPATH expression
@@ -64,9 +64,9 @@ def add_schema(xp):
 
 
 def create_element(element, value=None, attrib=None):
-    ''' 
-       Create arbitrary AUTOSAR XML element 
-       
+    '''
+       Create arbitrary AUTOSAR XML element
+
        :param element: New element name
        :param value: New element value
        :param attrib: Attribute of new element
@@ -105,7 +105,7 @@ class ARObject:
 
     def setShortname(self,shortname):
         '''
-           Sets the shortname of the element. 
+           Sets the shortname of the element.
            This will update the <SHORT-NAME></SHORT-NAME> xml.
 
            :param shortname: ShortName to set for the object
@@ -153,8 +153,8 @@ class ARObject:
             Remove a ARObject as child to this object.
             : param elemen: Any Autosar Element or path, remove self if None
             : return: Reference to the element to remove
-        ''' 
-        
+        '''
+
         if not element:
             # Remove self
             d = self.arxml.class_map[self.__class__]
@@ -168,7 +168,7 @@ class ARObject:
                 elementpath = element
             else:
                 elementpath = element.path
-                
+
             # Check if element exists
             elem_found = None
             for k,c in self.arxml.class_map:
@@ -187,7 +187,7 @@ class ARObject:
             return None
 
 
-            
+
 
     def addElement(self, element, UpdateReferences = True):
         '''
@@ -221,7 +221,7 @@ class ARObject:
             old_path = element.path
             element.path = self.path + '/' + elem_shortname
             elements.append(element.xmlref)
-            
+
             if UpdateReferences:
                 # Update references
                 if old_path in maps.references and old_path != element.path:
@@ -230,11 +230,11 @@ class ARObject:
                     maps.updateReference(old_path, element.path)
                     #for r in maps.references[old_path]:
                     #    r.text = element.path
-    
+
                 element.arxml = self.arxml
-    
+
                 self.arxml.updateReferences(element,old_path)
-    
+
                 # Update element children paths
                 element.updateReferences(old_path)
 
@@ -267,7 +267,7 @@ class ARObject:
 
 
 class ARPackage(ARObject):
-    ''' 
+    '''
        This class represent any AR-PACKAGE element in AUTOSAR xml.
 
     '''

@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 
 from vts.runners.host import asserts
@@ -111,7 +114,7 @@ class ComponentTest(base_test.BaseTestClass):
     Test launches a android Application that then logs onKeyDown and onKeyUp to logcat.
     Python script send flexray signal for each button under test.
     Waits 1.5 sec then execute logcat and takes 2 latest entries with the LOGTAG Test_KeyPanelEventSniffer
-    KeyDown and KeyUp is expected. 
+    KeyDown and KeyUp is expected.
     For mappings see DesipKeyHandlerService (device/delphi/vcc_ihu/private/bb_android_desip_key_handler/libdesipkeyhandler/src/DesipKeyHandlerService.cpp)
     {Btn4ForUsrSwtPanFrntReq.Psd && Btn4ForUsrSwtPanFrntReq.NotPsd           VIP_KEY_LIN19_DEFROST_FRONT,                   }
     {Btn3ForUsrSwtPanFrntReq.Psd && Btn3ForUsrSwtPanFrntReq.NotPsd           VIP_KEY_LIN19_NEXT,                            }

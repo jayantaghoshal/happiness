@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 """Handle the list command"""
 from tabulate import tabulate
 from termcolor import colored
@@ -28,7 +31,7 @@ class BuildsCommand(BaseCommand):
         else:
             if self._options.build is None:
                 ##
-                # List Jenkins builds 
+                # List Jenkins builds
                 #
                 self.list_builds()
             else:

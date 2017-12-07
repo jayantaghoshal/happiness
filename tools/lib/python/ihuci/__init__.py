@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # -*- coding: utf-8 -*-
 import argparse
 import sys
@@ -14,7 +17,7 @@ def create_parser():
         prog='ihuci',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=textwrap.dedent('''
-            Command line tool for IHU CI 
+            Command line tool for IHU CI
 
             Commands:
             agent   - Execute Jenkins build
@@ -48,7 +51,7 @@ def create_parser():
                                nargs="?",
                                metavar='JOB',
                                help="Jenkins job")
- 
+
     parser_builds.add_argument("build",
                                nargs="?",
                                metavar='BUILD',
