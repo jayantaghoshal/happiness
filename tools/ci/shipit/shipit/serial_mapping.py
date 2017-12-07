@@ -13,10 +13,9 @@ class Serial(RecordingSerial):
                 return True
         message = "Timeout %d sec when expecting match on pattern: \"%s\." % (
             timeout_sec, pattern)
-        if not hint:
-            message += " %d." + hint
+        if hint is not None:
+            message += hint
         raise RuntimeError(message)
-
 
     def wait_line(self, pattern: str, timeout_sec: int):
         stop_time = time.time() + timeout_sec
@@ -41,10 +40,14 @@ class Serial(RecordingSerial):
 
         raise RuntimeError("Never reached time: %d" % device_timestamp_to_wait_for)
 
+
 class VipSerial(Serial):
     pass
+
+
 class MpSerial(Serial):
     pass
+
 
 PortMapping = NamedTuple("PortMapping", [("vip_tty_device", str), ("mp_tty_device", str)])
 IhuSerials = NamedTuple("IhuSerials", [("vip", VipSerial), ("mp", MpSerial)])
@@ -78,7 +81,7 @@ def verify_serial_is_vip_pbl(s: RecordingSerial, timeout_sec=5):
     return False
 
 
-def open_serials(ports : PortMapping) -> IhuSerials:
+def open_serials(ports: PortMapping) -> IhuSerials:
     vip = VipSerial(ports.vip_tty_device, 115200, timeout_sec=1, log_context_name="VIP")
     mp = MpSerial(ports.mp_tty_device, 115200, timeout_sec=1, log_context_name="_MP")
     return IhuSerials(vip, mp)
