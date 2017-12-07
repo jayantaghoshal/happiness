@@ -46,13 +46,18 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         if self.profiling.enabled:
             self.profiling.EnableVTSProfiling(self.dut.shell.one)
 
-        self.dut.hal.InitHidlHal(
-            target_type="vehicle",
-            target_basepaths=self.dut.libPaths,
-            target_version=2.0,
-            target_package="android.hardware.automotive.vehicle",
-            target_component_name="IVehicle",
-            bits=int(self.abi_bitness))
+        try:
+            self.dut.hal.InitHidlHal(
+                target_type="vehicle",
+                target_basepaths=self.dut.libPaths,
+                target_version=2.0,
+                target_package="android.hardware.automotive.vehicle",
+                target_component_name="IVehicle",
+                bits=int(self.abi_bitness))
+        except:
+            e = str(sys.exc_info()[0])
+            asserts.assertTrue(False, "VHAL init fail with error: " + str(e) + " Is VHAL up and running?")
+            raise
 
         self.vehicle = self.dut.hal.vehicle  # shortcut
         self.vehicle.SetCallerUid(system_uid)
@@ -264,7 +269,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
             if msg:
                 fullMsg = "%s %s" % (fullMsg, msg)
             #fail(fullMsg) TODO why does fail() not work any more??
-            asserts.assertTrue(True, fullMsg)
+            asserts.assertTrue(False, fullMsg)
 
     def assertIntValueInRangeForProp(self, value, validValues, prop):
         """Asserts that given value is in the validValues range"""
@@ -301,7 +306,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
         # Try to find fan off button
         try:
-            vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_btn")
+            vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_icon")
         except:
             #Ok, not in climate view, assume we are on home screen, push climate button on homescreen
             device.touchDip(388.0, 948.0, 0)
@@ -310,9 +315,10 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         vc.dump(window=-1)
 
         #Get fan buttons
-        fan_off = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_btn")
+        #TODO investigate if button definitions could be defined in some common file. Also consider VCC/Polestar
+        fan_off = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_icon")
         fan_level = vc.findViewByIdOrRaise("com.volvocars.launcher:id/fan_level_seekbar")
-        fan_max = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_max_btn")
+        fan_max = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_max_icon")
         climate_close = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_bar_close_btn")
 
         #Calcutale x,y of fan level seekbar
