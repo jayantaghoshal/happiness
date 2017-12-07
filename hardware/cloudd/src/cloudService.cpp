@@ -5,33 +5,41 @@
 
 #include "cloudService.h"
 #include <curl/curl.h>
+#include "certificate_handler.h"
+
+#include <stdlib.h>
+#include <unistd.h>
 
 #define LOG_TAG "CloudD.service"
+#include <cutils/log.h>
 
 namespace Connectivity {
 
-CloudService::CloudService() : eventDispatcher_{IDispatcher::GetDefaultDispatcher()} {}
+CloudService::CloudService()
+    : eventDispatcher_{IDispatcher::GetDefaultDispatcher()},
+      certHandler_(new CertHandler{CLIENT_CERT_PEM(), CLIENT_KEY_PEM(), CA_CERT_PEM()}),
+      entry_point_fetcher_{*certHandler_, eventDispatcher_, cloud_request_} {}
 
-bool CloudService::Initialize() { return true; }
-
-void CloudService::ConnectionTest() {
-    CURL *curl;
-    CURLcode res;
-
-    curl = curl_easy_init();
-    if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "http://www.google.com");
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-        ALOGI("Make request");
-        res = curl_easy_perform(curl);
-        if (res != CURLE_OK) {
-            ALOGD("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-        } else {
-            ALOGD("Great success!");
-        }
-
-        curl_easy_cleanup(curl);
+bool CloudService::Initialize() {
+    if (!cloud_request_.Init()) {
+        ALOGE("Unable to init Reachability Cloud Request.");
+        return false;
     }
+
+    std::string lcfg_entrypoint_url = cloudd_local_config_.GetCloudEntryPointAddress();
+
+    entry_point_fetcher_.WhenResultAvailable([&](const VPNEntryPointParser::EntryPoint &entry_point) {
+        ALOGD("Cloud client received entry point");
+
+        cep_url_ = entry_point.host;
+        cep_port_ = entry_point.port;
+
+    });
+
+    std::string entry_point_url = "https://" + lcfg_entrypoint_url + "/?client_id=11";
+
+    entry_point_fetcher_.Fetch(entry_point_url);
+
+    return true;
 }
 }

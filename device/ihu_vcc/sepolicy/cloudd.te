@@ -1,5 +1,12 @@
 # cloudd service
 type cloudd, domain;
 type cloudd_exec, exec_type, file_type, vendor_file_type;
-
 init_daemon_domain(cloudd)
+
+allow cloudd fwmarkd_socket:sock_file write;
+allow cloudd self:unix_stream_socket connectto;
+allow cloudd self:tcp_socket { connect create getattr getopt read setopt write };
+allow cloudd self:udp_socket create;
+
+#============= netd ==============
+allow netd cloudd:fd use;
