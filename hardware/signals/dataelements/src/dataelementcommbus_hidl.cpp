@@ -58,7 +58,6 @@ void DataElementCommBusHIDL::setNewDataElementHandler(
     if (doOnce) {
         ALOGI("Register for notifications for signaling service to come up");
         dataElemHidl::ISignals::registerForNotifications("default", this);
-        connectToVsdProxyAndResend();
     }
 }
 
