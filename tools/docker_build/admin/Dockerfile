@@ -147,6 +147,9 @@ RUN pip3 install redis \
     tabulate \
     zuul==2.5.2
 
+##################################################
+# Commit hooks and commit
+RUN pip3 install docopt
 
 ##################################################
 # Static analysis tools
