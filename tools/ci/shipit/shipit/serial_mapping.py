@@ -1,16 +1,56 @@
 import re
 import time
-from collections import namedtuple
-import serial
-import serial.tools.list_ports
+from typing import NamedTuple
 from .recording_serial import RecordingSerial
 
 
-PortMapping = namedtuple("PortMapping", ["vip_tty_device", "mp_tty_device"])
-IhuSerials = namedtuple("IhuSerials", ["vip", "mp"])
+class Serial(RecordingSerial):
+    def expect_line(self, pattern: str, timeout_sec: int, hint: str = None):
+        stop_time = time.time() + timeout_sec
+        while time.time() < stop_time:
+            line = self.readline(timeout_sec)
+            if line is not None and re.match(pattern, line):
+                return True
+        message = "Timeout %d sec when expecting match on pattern: \"%s\." % (
+            timeout_sec, pattern)
+        if not hint:
+            message += " %d." + hint
+        raise RuntimeError(message)
 
 
-def verify_serial_is_vip_app(s, timeout_sec=5):
+    def wait_line(self, pattern: str, timeout_sec: int):
+        stop_time = time.time() + timeout_sec
+        while time.time() < stop_time:
+            line = self.readline(timeout_sec)
+            if line is not None and re.match(pattern, line):
+                return
+
+    def wait_for_dmesg_timestamp(self, device_timestamp_to_wait_for: int, timeout_sec: int):
+        stop_time = time.time() + timeout_sec
+        while time.time() < stop_time:
+            self.writeline("\n")
+            line = self.readline(timeout_sec)
+            if line:
+                m = re.match(r"\[(.*)\]", line)
+                if m:
+                    numstr = m.group(1)
+                    num = float(numstr.strip())
+                    if num > device_timestamp_to_wait_for:
+                        return
+            time.sleep(0.5)
+
+        raise RuntimeError("Never reached time: %d" % device_timestamp_to_wait_for)
+
+class VipSerial(Serial):
+    pass
+class MpSerial(Serial):
+    pass
+
+PortMapping = NamedTuple("PortMapping", [("vip_tty_device", str), ("mp_tty_device", str)])
+IhuSerials = NamedTuple("IhuSerials", [("vip", VipSerial), ("mp", MpSerial)])
+
+
+def verify_serial_is_vip_app(s: RecordingSerial, timeout_sec=5):
     s.writeline("version")
     stop_time = time.time() + timeout_sec
     while time.time() < stop_time:
@@ -24,7 +64,7 @@ def verify_serial_is_vip_app(s, timeout_sec=5):
     return False
 
 
-def verify_serial_is_vip_pbl(s, timeout_sec=5):
+def verify_serial_is_vip_pbl(s: RecordingSerial, timeout_sec=5):
     s.writeline("version")
     stop_time = time.time() + timeout_sec
     while time.time() < stop_time:
@@ -38,52 +78,7 @@ def verify_serial_is_vip_pbl(s, timeout_sec=5):
     return False
 
 
-def verify_serial_is_mp_android(s, timeout_sec=5):
-    s.writeline("")
-    stop_time = time.time() + timeout_sec
-    while time.time() < stop_time:
-        line = s.readline(timeout_sec)
-        if re.match(r".*|ihu_abl_car:", line) is not None:
-            return True
-    return False
-
-
-def verify_serial_is_mp_android_abl(s, timeout_sec=5):
-    s.writeline("")
-    stop_time = time.time() + timeout_sec
-    while time.time() < stop_time:
-        line = s.readline()
-        if re.match(r">>>.*", line) is not None:
-            return True
-    return False
-
-
 def open_serials(ports : PortMapping) -> IhuSerials:
-    vip = RecordingSerial(ports.vip_tty_device, 115200, timeout_sec=1, log_context_name="VIP")
-    mp = RecordingSerial(ports.mp_tty_device, 115200, timeout_sec=1, log_context_name="_MP")
-    return IhuSerials(vip, mp)
-
-
-def auto_detect_port_mapping():
-    #TODO: This is very unreliable, some times the MP is not even started so we have to start it from VIP
-    #      Before we can find it
-    ports = serial.tools.list_ports.comports()
-    vip = None
-    mp = None
-
-    for p in ports:
-        s = RecordingSerial(p.device, 115200, timeout_sec=1)
-        if vip is None:
-            if verify_serial_is_vip_app(s) or verify_serial_is_vip_pbl(s):
-                vip = s
-                continue  # Don't close
-        if mp is None:
-            if verify_serial_is_mp_android(s) or verify_serial_is_mp_android_abl(s):
-                mp = s
-                continue # Don't close
-        s.close()
-    if vip is None:
-        raise RuntimeError("Failed to find VIP TTY")
-    if mp is None:
-        raise RuntimeError("Failed to find MP TTY")
+    vip = VipSerial(ports.vip_tty_device, 115200, timeout_sec=1, log_context_name="VIP")
+    mp = MpSerial(ports.mp_tty_device, 115200, timeout_sec=1, log_context_name="_MP")
     return IhuSerials(vip, mp)
