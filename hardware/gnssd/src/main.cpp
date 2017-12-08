@@ -1,18 +1,20 @@
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 #include <cstdint>
 #include <functional>
 #include <future>
 #include <iostream>
+
 #include <memory>
 #include <string>
 #include <utility>
 
 #include "gnssService.h"
 
-#define LOG_TAG "GnssD.main"
+#undef LOG_TAG  // workaround for <hidl/HidlTransportSupport.h>
+#define LOG_TAG "gnssd.main"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;

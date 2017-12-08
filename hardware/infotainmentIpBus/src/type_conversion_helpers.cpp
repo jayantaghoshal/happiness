@@ -1,6 +1,6 @@
 #include "type_conversion_helpers.h"
 
-#include <cassert>>
+#include <cassert>
 #include "date.h"
 
 #define LOG_TAG "iipbus.tcon"

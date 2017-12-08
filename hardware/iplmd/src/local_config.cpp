@@ -1,9 +1,9 @@
 #include "local_config.h"
-#include <cutils/log.h>
 
 #include <vcc/localconfig.h>
 
 #define LOG_TAG "Iplmd.lco0"
+#include <cutils/log.h>
 
 namespace Iplmd {
 namespace LocalConfig {

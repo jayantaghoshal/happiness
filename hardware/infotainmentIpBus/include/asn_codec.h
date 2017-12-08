@@ -111,4 +111,6 @@ void createHeader(Connectivity::VccIpCmd::ServiceId serviceId,
 
 }  // namespace Utils
 }  // namespace InfotainmentIpBus
+
+#undef LOG_TAG
 #endif  // INFOTAINMENT_IP_BUS_ASN_DECODER_H

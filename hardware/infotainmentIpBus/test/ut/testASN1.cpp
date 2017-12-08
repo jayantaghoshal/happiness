@@ -18,6 +18,9 @@ extern "C" {
 // using ::testing::Field;
 // using ::testing::AllOf;
 
+#define LOG_TAG "iipbus.ut"
+#include <cutils/log.h>
+
 class ASN1Test : public ::testing::Test {
   public:
     ASN_Result ASN_retcode;

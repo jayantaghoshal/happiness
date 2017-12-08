@@ -5,6 +5,7 @@
 #include "type_conversion_helpers.h"
 
 #define LOG_TAG "GnssD.service"
+#include <cutils/log.h>
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
@@ -30,7 +31,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
     StartSubscribe();
 }
 
-void GnssService::serviceDied(uint64_t cookie, const wp<IBase> &who) {
+void GnssService::serviceDied(uint64_t, const wp<IBase> &) {
     ALOGI("ipcbD died, Trying to reconnect");
     StartSubscribe();
 }

@@ -1,5 +1,4 @@
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 #include <cstdint>
@@ -11,9 +10,10 @@
 #include <utility>
 
 #include "iplmService.h"
-#define LOG_TAG "iplmd"
 
+#undef LOG_TAG  // workaround #include <hidl/HidlTransportSupport.h>
 #define LOG_TAG "iplmd"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;

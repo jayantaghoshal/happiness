@@ -1,0 +1,25 @@
+subdirs = [
+    "test/**",
+]
+
+cc_library_static {
+    name: "libinfotainmentbusasn_static",
+    srcs: [
+        "generated/infotainmentIpBus.c",
+        "generated/VccIpCmdApi.cpp",
+        "asn_base/asn_base.c",
+        "src/asn_print.cpp",
+        "src/type_conversion_helpers.cpp",
+    ],
+
+    export_include_dirs: ["include"],
+}
+
+cc_library_shared {
+    name: "libinfotainmentbusasn",
+    whole_static_libs: ["libinfotainmentbusasn_static"],
+
+    export_include_dirs: ["include"],
+
+    shared_libs: ["liblog"],
+}

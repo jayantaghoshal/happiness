@@ -3,11 +3,11 @@
  * Delphi Confidential
 \*===========================================================================*/
 #include "ipcommandbus/Pdu.h"
-#include <cutils/log.h>
 #include <iomanip>
 #include <sstream>
 
 #define LOG_TAG "lipcb.Pdu"
+#include <cutils/log.h>
 
 namespace Connectivity {
 

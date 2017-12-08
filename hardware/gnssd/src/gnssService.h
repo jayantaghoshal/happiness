@@ -2,7 +2,6 @@
 #define VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
 
 extern "C" {
 #include <pl/asn_base/asn_base.h>

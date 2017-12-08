@@ -1,0 +1,27 @@
+cc_test {
+    name: "VtsGnssIntegrationTest",
+
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: ["*.cpp"],
+
+    static_libs: [
+        "libipcb_simulator_static",
+        "libinfotainmentbusasn_static",
+        "liblog",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libtarmac",
+        "libipcommandbus",
+        "android.hardware.gnss@1.0",
+    ],
+
+    test_suites: ["vts"],
+}
