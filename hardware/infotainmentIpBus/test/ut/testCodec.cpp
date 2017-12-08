@@ -2,14 +2,8 @@
 
 #include "asn_codec.h"
 
-// using ::testing::_;
-// using ::testing::NiceMock;
-// using ::testing::Mock;
-// using ::testing::DoAll;
-// using ::testing::Return;
-// using ::testing::SetArgReferee;
-// using ::testing::Field;
-// using ::testing::AllOf;
+#define LOG_TAG "iipbus.ut"
+#include <cutils/log.h>
 
 class TypeConvHelpersTest : public ::testing::Test {
   public:

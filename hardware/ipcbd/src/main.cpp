@@ -86,8 +86,6 @@ void SigIntHandler(int fd) {
 }
 
 bool InitSignals() {
-    int ret_val;
-
     sigset_t signal_set_term;
     sigset_t signal_set_hup;
     sigset_t signal_set_int;

@@ -2,7 +2,6 @@
 #define SERVICE_MANAGER_H
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <ipcommandbus/MessageDispatcher.h>
 #include <string>
 

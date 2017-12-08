@@ -1,0 +1,16 @@
+cc_test {
+    name: "VtsLibInfotainmentIpBusTests",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: [
+        "testASN1.cpp",
+        "testCodec.cpp",
+    ],
+
+    static_libs: [
+        "libinfotainmentbusasn_static",
+        "liblog",
+    ],
+
+    test_suites: ["vts"],
+}

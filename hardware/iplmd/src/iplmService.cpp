@@ -1,7 +1,9 @@
 #include "iplmService.h"
 #include "local_config.h"
 
+#undef LOG_TAG
 #define LOG_TAG "iplmd.service"
+#include <cutils/log.h>
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
@@ -65,7 +67,7 @@ void IplmService::StartSubscribe() {
     }
 }
 
-void IplmService::serviceDied(uint64_t cookie, const android::wp<IBase>& who) {
+void IplmService::serviceDied(uint64_t, const android::wp<IBase>&) {
     ALOGD("IPCB died. Exiting IPLM and hoping to restart!");
     exit(EXIT_SUCCESS);
 }

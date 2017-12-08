@@ -2,13 +2,13 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
  * Delphi Confidential
 \*===========================================================================*/
-#include <cutils/log.h>
-#include <vcc/localconfig.h>
-
-#include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/local_config_parameters.h"
 
-#define LOG_TAG "libipcb_localconfig"
+#include <vcc/localconfig.h>
+#include "ipcommandbus/IpCmdTypes.h"
+
+#define LOG_TAG "libipcb.localconfig"
+#include <cutils/log.h>
 
 using namespace vcc;
 

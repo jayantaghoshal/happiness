@@ -658,7 +658,7 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
         EXPECT_TRUE(f_pdu_received.get());
         std::chrono::milliseconds duration =
                 std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
-        ALOGI("TestNoResponseRetry, duration = %d", duration.count());
+        ALOGI("TestNoResponseRetry, duration = %d", (int)duration.count());
         EXPECT_TRUE(std::abs(duration.count() - 500) < 100);  // Less than 100 ms diff in resend time
     }
 
@@ -678,7 +678,7 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
         EXPECT_TRUE(f_pdu_received.get());
         std::chrono::milliseconds duration =
                 std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
-        ALOGI("TestNoResponseRetry, duration = %d", duration.count());
+        ALOGI("TestNoResponseRetry, duration = %d", (int)duration.count());
         EXPECT_TRUE(std::abs(duration.count() - 750) < 100);  // Less than 100 ms diff in resend time
     }
 

@@ -1,6 +1,7 @@
 #include "LscMocker.h"
 
 #define LOG_TAG "LscMocker"
+#include <cutils/log.h>
 
 LscMocker::LscMocker() {
     ALOGD("IIplm getService!");

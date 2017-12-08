@@ -52,9 +52,7 @@ LOCAL_STATIC_LIBRARIES := \
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \
     audio_vehicle-hal-impl-lib
-     
 
-LOCAL_CFLAGS += -Wall -Wextra -Werror -fexceptions
-
+include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 include $(BUILD_EXECUTABLE)
 

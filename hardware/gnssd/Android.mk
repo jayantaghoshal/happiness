@@ -4,7 +4,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := gnssd
 LOCAL_INIT_RC := gnssd.rc
 LOCAL_MODULE_RELATIVE_PATH := hw
-LOCAL_VENDOR_MODULE := true
 
 # GnssD
 LOCAL_SRC_FILES := \
@@ -35,7 +34,6 @@ LOCAL_SRC_FILES += \
     src/binderimpl/gnss/GnssXtra.cpp
 
 
-LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined
 LOCAL_SHARED_LIBRARIES += \
     liblog \
     liblocalconfig \
@@ -54,6 +52,9 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/gnssd/src \
     $(LOCAL_PATH)/gnssd/src/binderimpl/gnss
 
-LOCAL_MULTILIB := 64
+LOCAL_CFLAGS+= -Wno-unused-parameter # TODO implement TODOs or stop keeping dead code
+
+include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS)
 include $(BUILD_EXECUTABLE)
+
 include $(call all-makefiles-under,$(LOCAL_PATH))

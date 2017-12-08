@@ -2,7 +2,6 @@
 #define VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <mutex>
 #include <unordered_map>
 
