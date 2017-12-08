@@ -1,10 +1,17 @@
 //
 // Netman executable for deployment to system
 //
-cc_binary {
-    defaults: ["volvocars_cc_defaults"],
 
+cc_defaults {
+    name: "netman_cc_defaults",
+    defaults: ["volvocars_cc_defaults"],
+    tidy_checks: [
+    ],
+}
+
+cc_binary {
     name: "netman",
+    defaults: ["netman_cc_defaults"],
     srcs: [ //TODO use wildcards, if sth is common move to static lib?
         "src/netutils.cpp",
         "src/uevent_listener.cpp",
@@ -39,10 +46,8 @@ cc_binary {
 // Netboyd executable for deployment to system
 //
 cc_binary {
-    defaults: ["volvocars_cc_defaults"],
-
     name: "netboyd",
-
+    defaults: ["netman_cc_defaults"],
     srcs: [ //TODO use wildcards, if sth is common move to static lib?
         "src/netutils.cpp",
         "src/uevent_listener.cpp",

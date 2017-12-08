@@ -1,6 +1,19 @@
-#include "netboy_event_handler.h"
+/*
+ * ===========================================================================
+ * [2017]- Volvo Car Corporation
+ * All Rights Reserved
+ * LEGAL
+ * NOTICE:  All information (including intellectual and technical concepts) contained herein is, and remains the
+ * property of or licensed to Volvo Car Corporation. This information is proprietary to Volvo Car Corporation and may be
+ * covered by patents or patent applications. This information is protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material is strictly forbidden unless prior written
+ * permission is obtained from Volvo Car Corporation.
+ */
 
 #include <cutils/log.h>
+
+#include "netboy_event_handler.h"
+
 #include <fstream>
 #include <string>
 #include "netutils.h"
@@ -48,14 +61,15 @@ void NetboyEventHandler::RuleMatchAndRun(const UeventHandler::NetDeviceAttr &dev
 
 // handle new message
 void NetboyEventHandler::HandleEvent(const char *uevent, const int message_length) {
-    if (!uevent) return;
+    if (nullptr == uevent) return;
 
     const char *const ADD_ACTION = "add@";
 
     // Currently only add@ event are handled. Can be extended as per need
     if (message_length < static_cast<int>(std::string(ADD_ACTION).length()) ||
-        std::string(uevent).find(ADD_ACTION) == std::string::npos)
+        std::string(uevent).find(ADD_ACTION) == std::string::npos) {
         return;
+    }
 
     // advance buffer past first segment
     int index = strlen(uevent) + 1;

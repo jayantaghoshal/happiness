@@ -9,7 +9,7 @@ namespace netman {
 
 class NetmanEventHandler final : public UeventHandler {
   public:
-    NetmanEventHandler(const std::vector<InterfaceConfiguration>& interface_configurations);
+    explicit NetmanEventHandler(const std::vector<InterfaceConfiguration>& interface_configurations);
 
   protected:
     void HandleEvent(const char* uevent, const int message_length) override;

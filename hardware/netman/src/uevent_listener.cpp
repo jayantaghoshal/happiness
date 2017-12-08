@@ -10,7 +10,9 @@
  * permission is obtained from Volvo Car Corporation.
  */
 
-#include <errno.h>
+#include <cutils/log.h>
+
+#include <cerrno>
 
 #include <android-base/macros.h>
 #include <linux/netlink.h>
@@ -18,8 +20,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
-
-#include <cutils/log.h>
 
 #include <atomic>
 #include <condition_variable>
@@ -34,15 +34,15 @@
 namespace vcc {
 namespace netman {
 
-NetlinkSocketListener &NetlinkSocketListener::Instance() {
-    static NetlinkSocketListener instance;
+UEventListener &UEventListener::Instance() {
+    static UEventListener instance;
     return instance;
 }
 
-NetlinkSocketListener::~NetlinkSocketListener() { StopListening(); }
+UEventListener::~UEventListener() { StopListening(); }
 
-int NetlinkSocketListener::StartListening() {
-    if (event_handler_ == nullptr) {
+int UEventListener::StartListening() {
+    if (nullptr == event_handler_) {
         ALOGE("Netlink event handler not set on Netlink socket listener.");
         return -1;
     }
@@ -64,7 +64,7 @@ int NetlinkSocketListener::StartListening() {
             using namespace std::chrono_literals;
             std::unique_lock<std::mutex> lk(mutex);
             // predicate is used to take care of spurious wakeups
-            while (false == cv.wait_for(lk, 50ms, [&] { return is_ready.load(); })) {
+            while (!cv.wait_for(lk, 50ms, [&] { return is_ready.load(); })) {
                 // wait_for reported timeout. this could be because, kernel did not send any uevents and main thread is
                 // still
                 // blocked on "recvmsg". condition_variable variable will not be signalled. To break this dependency
@@ -116,16 +116,16 @@ int NetlinkSocketListener::StartListening() {
     return -1;
 }
 
-void NetlinkSocketListener::StopListening() {
+void UEventListener::StopListening() {
     if (netlink_socket_ != -1) {
         close(netlink_socket_);
         netlink_socket_ = -1;
     }
 }
 
-void NetlinkSocketListener::SetNetlinkEventHandler(UeventHandler &event_handler) { event_handler_ = &event_handler; }
+void UEventListener::SetNetlinkEventHandler(UeventHandler &event_handler) { event_handler_ = &event_handler; }
 
-int NetlinkSocketListener::SetupSocket() {
+int UEventListener::SetupSocket() {
     if (netlink_socket_ != -1) {
         ALOGE("Trying to setup the already opened netlink socket.");
         return 0;
@@ -144,12 +144,12 @@ int NetlinkSocketListener::SetupSocket() {
     }
 
     int on = 1;
-    if (0 != setsockopt(netlink_socket_, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
+    if (setsockopt(netlink_socket_, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on)) != 0) {
         ALOGE("Failed to set credentials option for socket %s", strerror(errno));
         return -1;
     }
 
-    if (bind(netlink_socket_, (struct sockaddr *)&nladdr, sizeof(nladdr)) < 0) {
+    if (bind(netlink_socket_, reinterpret_cast<struct sockaddr *>(&nladdr), sizeof(nladdr)) < 0) {
         ALOGE("Unable to bind netlink socket: %s", strerror(errno));
         close(netlink_socket_);
         return -1;
@@ -158,14 +158,14 @@ int NetlinkSocketListener::SetupSocket() {
     return 0;
 }
 
-// TODO : This function should not return plain int. Need to define enum for error codes
-int NetlinkSocketListener::RecvMessage() {
+// TODO (Abhijeet Shirolikar): This function should not return plain int. Need to define enum for error codes
+int UEventListener::RecvMessage() {
     const int kRecvBufferSize = 4096;
     char buf[kRecvBufferSize] = {0};
     struct iovec iov = {.iov_base = buf, .iov_len = sizeof(buf) - 1};
     char cred_control[CMSG_SPACE(sizeof(struct ucred))];
     struct sockaddr_nl sa;
-    struct msghdr msg = {.msg_name = (void *)&sa,
+    struct msghdr msg = {.msg_name = static_cast<void *>(&sa),
                          .msg_namelen = sizeof(sa),
                          .msg_iov = &iov,
                          .msg_iovlen = 1,
@@ -173,7 +173,6 @@ int NetlinkSocketListener::RecvMessage() {
                          .msg_controllen = sizeof(cred_control),
                          .msg_flags = 0};
 
-    struct nlmsghdr *nl_message_header;
     int message_length;
     message_length = TEMP_FAILURE_RETRY(recvmsg(netlink_socket_, &msg, 0));
 
@@ -187,7 +186,7 @@ int NetlinkSocketListener::RecvMessage() {
     // message to request credentials. But to avoid the trap in future where we may enable additional auxillary
     // messages, below code is needed.
     struct ucred *cred = nullptr;
-    for (struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+    for (struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg != nullptr; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
         if (cmsg->cmsg_type == SCM_CREDENTIALS) {
             cred = reinterpret_cast<struct ucred *>(CMSG_DATA(cmsg));
             break;

@@ -13,29 +13,30 @@
 #ifndef _UEVENT_LISTENER_H_
 #define _UEVENT_LISTENER_H_
 
+#include "memory"
 #include "uevent_handler.h"
 
 namespace vcc {
 namespace netman {
 class UeventHandler;
 
-class NetlinkSocketListener final {
+class UEventListener final {
   public:
-    static NetlinkSocketListener &Instance();
-    ~NetlinkSocketListener();
+    static UEventListener &Instance();
+    ~UEventListener();
 
-    NetlinkSocketListener(NetlinkSocketListener &other) = delete;
-    NetlinkSocketListener(NetlinkSocketListener &&other) = delete;
+    UEventListener(const UEventListener &other) = delete;
+    UEventListener(UEventListener &&other) = delete;
 
-    NetlinkSocketListener &operator=(NetlinkSocketListener &other) = delete;
-    NetlinkSocketListener &operator=(NetlinkSocketListener &&other) = delete;
+    UEventListener &operator=(const UEventListener &other) = delete;
+    UEventListener &operator=(UEventListener &&other) = delete;
 
     int StartListening();
     void StopListening();
     void SetNetlinkEventHandler(UeventHandler &event_handler);
 
   private:
-    NetlinkSocketListener() = default;
+    UEventListener() = default;
     int SetupSocket();
     int RecvMessage();
 

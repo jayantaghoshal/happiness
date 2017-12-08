@@ -11,6 +11,7 @@
  */
 
 #include <cutils/log.h>
+
 #include <cutils/properties.h>
 
 #include <vector>
@@ -54,7 +55,7 @@ int main() {
 
         NetmanEventHandler event_handler(interface_configurations);
 
-        NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
+        UEventListener &nl_socket_listener = UEventListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(event_handler);
 
         property_set("netmand.startup_completed", "1");
