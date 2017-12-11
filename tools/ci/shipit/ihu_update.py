@@ -189,7 +189,17 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                           "/vendor/vip-update/app/*"],
                           timeout_sec=60 * 2)
             logger.info("VIP APP update finished with result %r", output)
-            logger.info("Do power cycle to get full application experience (you are in undefined behavior mode)")
+            VIP.writeline("sm restart")  # new command, already in our PBL
+
+            if not serial_mapping.verify_serial_is_vip_app(ihu_serials.vip):
+                raise Exception("Reseting VIP app failed, try power cycling")
+
+            logger.info("New VIP APP booted successfully")
+
+            wait_for_device_adb(adb_executable)
+            wait_for_boot_completed(adb_executable)
+            logger.info("MP booted successfully with new VIP APP")
+
         else:
             logger.info("NOT Flashing VIP")
 
