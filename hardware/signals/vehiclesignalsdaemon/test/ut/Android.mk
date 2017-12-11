@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -12,14 +15,14 @@ LOCAL_SRC_FILES :=  vsd_unit_test.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/stubs \
                     $(LOCAL_PATH)/mocks \
-                    $(LOCAL_PATH)/../../src 
-                    
+                    $(LOCAL_PATH)/../../src
+
 
 LOCAL_SHARED_LIBRARIES :=   liblog \
                             libcutils \
                             libdataelements
 
-LOCAL_STATIC_LIBRARIES :=   libgmock                             
+LOCAL_STATIC_LIBRARIES :=   libgmock
 
 LOCAL_CPPFLAGS := -std=c++1z \
                   -g \

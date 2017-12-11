@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Inherit from Delphi's BoardConfig
 include device/delphi/volvoihu/ihu_abl_car/BoardConfig.mk
 

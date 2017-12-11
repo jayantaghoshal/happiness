@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Only include this folder for VCC targets (or other upstream targets will suffer)
 ifneq ($(filter ihu_vcc, $(TARGET_DEVICE)),)
   LOCAL_PATH:= $(call my-dir)
