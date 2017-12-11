@@ -15,21 +15,22 @@
 
 #include <forward_list>
 #include <fstream>
+#include <string>
 #include "vcc/localconfig.h"
 
 namespace vcc {
 namespace netman {
 
-class FirewallConfig {
+class FirewallConfig final {
   public:
     enum class IP { IPv4_, IPv6_ };
-    static const std::string kDefaultIptablesRulesPath;
+    static const char* const kDefaultIptablesRulesPath;
 
     /**
      * @brief Constructor
      */
-    FirewallConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {}
-    virtual ~FirewallConfig() {}
+    explicit FirewallConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {}
+    ~FirewallConfig() = default;
 
     /**
      * @brief Convert iptables part of LocalConfig to iptables.rules file

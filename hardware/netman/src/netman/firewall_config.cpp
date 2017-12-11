@@ -18,7 +18,7 @@
 namespace vcc {
 namespace netman {
 
-const std::string FirewallConfig::kDefaultIptablesRulesPath = "/mnt/iptables.rules";
+const char* const FirewallConfig::kDefaultIptablesRulesPath = "/mnt/iptables.rules";
 
 bool FirewallConfig::ParseAndSave(const std::string& output_path) {
     if (output_path.empty()) {
@@ -28,8 +28,7 @@ bool FirewallConfig::ParseAndSave(const std::string& output_path) {
     output_path_ = output_path;
 
     // create .rules file
-    std::ofstream output_file;
-    output_file.open(output_path.c_str(), std::ofstream::out | std::ofstream::trunc);
+    std::ofstream output_file(output_path);
     if (!output_file.is_open()) {
         output_path_.clear();
         return false;
@@ -48,9 +47,6 @@ bool FirewallConfig::ApplyRules(const IP ip_type) {
         return false;
     }
 
-#ifdef ENABLE_TESTS
-    std::string command = output_path_;
-#else
     std::string command;
     if (ip_type == IP::IPv4_) {
         command = "/system/bin/iptables-restore < " + output_path_;
@@ -58,9 +54,9 @@ bool FirewallConfig::ApplyRules(const IP ip_type) {
         command = "/system/bin/ip6tables-restore < " + output_path_;
     }
 
-#endif  // ENABLE_TESTS
-
-    int command_status = system(command.c_str());
+    // TODO (Abhijeet Shirolikar): system calls involves command processor and so is vunerable to injection attacks
+    // Refactor code below to use exec family function together with fork and pipe
+    int command_status = std::system(command.c_str());  // NOLINT
 
     if (command_status < 0) return false;
 
@@ -76,15 +72,17 @@ void FirewallConfig::ParseRules(const ruletable& table, const std::string& table
 
     file << table.top_comment << std::endl;
     file << table.name << std::endl;
-    for (std::string it : table.chains) file << it << std::endl;
+    for (const std::string& str : table.chains) {
+        file << str << std::endl;
+    }
 
     std::vector<std::string> chains = lcfg_->GetStringArray(primary_fw_key, table_name, "CHAINS");
-    for (auto item : chains) {
+    for (const auto& item : chains) {
         file << ":" << item << " - [0:0]" << std::endl;
     }
 
     std::vector<std::string> rules = lcfg_->GetStringArray(primary_fw_key, table_name, "RULES");
-    for (auto item : rules) {
+    for (const auto& item : rules) {
         file << item << std::endl;
     }
     file << table.final << std::endl;

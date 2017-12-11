@@ -30,7 +30,7 @@ enum struct Intent {
 };
 
 struct RuleAction {
-    RuleAction(Intent intent) : intent_(intent) {}
+    explicit RuleAction(Intent intent) : intent_(intent) {}
     virtual ~RuleAction() = default;
     Intent intent_;
 };

@@ -44,13 +44,13 @@ class UeventHandler {
     virtual ~UeventHandler() = default;
 
     UeventHandler(const UeventHandler &) = delete;
-    UeventHandler &operator=(UeventHandler &) = delete;
+    UeventHandler &operator=(const UeventHandler &) = delete;
 
-    UeventHandler(UeventHandler &&) = delete;
-    UeventHandler &operator=(UeventHandler &&) = delete;
+    UeventHandler(const UeventHandler &&) = delete;
+    UeventHandler &operator=(const UeventHandler &&) = delete;
 
     static int SysfsNetSubsystemWalker();
-    virtual void HandleEvent(const char *uevent, const int message_length) = 0;
+    virtual void HandleEvent(const char *uevent, int message_length) = 0;
 
   protected:
     void ReadParentDeviceAttr(NetDeviceAttr &child_device);
@@ -58,8 +58,8 @@ class UeventHandler {
     std::string ExtractAttribute(const std::string &cursor_line, const std::string &attribute);
 
   private:
-    static int HandleSysfsEntry(const char *filepath, const struct stat *info, const int typeflag,
-                                struct FTW *pathinfo);
+    static int HandleSysfsEntry(const char *filepath, const struct stat * /*info*/, int typeflag,
+                                struct FTW * /*pathinfo*/);
 };
 
 }  // namespace netman

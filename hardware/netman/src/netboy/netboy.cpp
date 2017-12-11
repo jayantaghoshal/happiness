@@ -11,8 +11,9 @@
  */
 
 #include <cutils/log.h>
+
 #include <cutils/properties.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "netboy_event_handler.h"
 #include "rule_handler.h"
@@ -37,7 +38,7 @@ int main() {
 
         NetboyEventHandler event_handler;
 
-        NetlinkSocketListener &nl_socket_listener = NetlinkSocketListener::Instance();
+        UEventListener &nl_socket_listener = UEventListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(event_handler);
 
         // Need to set property before Blocking on netlink socket

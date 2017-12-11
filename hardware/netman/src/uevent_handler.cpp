@@ -10,10 +10,11 @@
  * permission is obtained from Volvo Car Corporation.
  */
 
-#include "uevent_handler.h"
 #include <cutils/log.h>
+
 #include <fstream>
 #include <string>
+#include "uevent_handler.h"
 
 #define LOG_TAG "Netmand"
 
@@ -28,7 +29,7 @@ int UeventHandler::SysfsNetSubsystemWalker() {
 }
 
 void UeventHandler::ReadDeviceAttr(const std::string &line, NetDeviceAttr &child_device) {
-    // TODO: Refactor function to make it compact some later time
+    // TODO (Abhijeet Shirolikar): Refactor function to make it compact some later time
 
     // Only read attributes if there values are not already set. As attributes for child are read before parent
     // attributes; this will result in looking at attribute which is more relevant.
@@ -88,8 +89,8 @@ std::string UeventHandler::ExtractAttribute(const std::string &cursor_line, cons
     return value;
 }
 
-int UeventHandler::HandleSysfsEntry(const char *filepath, const struct stat *info, const int typeflag,
-                                    struct FTW *pathinfo) {
+int UeventHandler::HandleSysfsEntry(const char *filepath, const struct stat * /*info*/, int typeflag,
+                                    struct FTW * /*pathinfo*/) {
     // NOTE: NTFW requires callback function to return 0 as an indication proceed
 
     // As per SysFs standard, entries in '/sys/class/net' are symlinks to entries in '/sys/devices'

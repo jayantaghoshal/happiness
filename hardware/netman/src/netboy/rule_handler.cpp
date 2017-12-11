@@ -10,6 +10,8 @@
  * permission is obtained from Volvo Car Corporation.
  */
 
+#include <cutils/log.h>
+
 #include <istream>
 #include <sstream>
 
@@ -83,8 +85,8 @@ bool RuleHandler::parseAttribute(const string& attr, NetboyRule& rule) {
 }
 
 bool RuleHandler::parseRules(const vector<string>& rules) {
-    for (auto it = rules.cbegin(); it != rules.cend(); ++it) {
-        std::stringstream rule_str(it->c_str());
+    for (auto& it : rules) {
+        std::stringstream rule_str(it);
         string attribute;
         NetboyRule rule;
 
@@ -103,13 +105,17 @@ bool RuleHandler::parseRules(const vector<string>& rules) {
             (std::static_pointer_cast<RuleActionMove>(rule.ACTION)->NEW_NS.empty())) {
             ALOGE("MOVE rule must contain NEW_NS");
             return false;
-        } else if (Intent::RENAME == rule.ACTION->intent_ &&
-                   (std::static_pointer_cast<RuleActionRename>(rule.ACTION)->NEW_NAME.empty())) {
+        }
+
+        if (Intent::RENAME == rule.ACTION->intent_ &&
+            (std::static_pointer_cast<RuleActionRename>(rule.ACTION)->NEW_NAME.empty())) {
             ALOGE("RENAME rule must contain NEW_NAME");
             return false;
-        } else if (Intent::MOVE_AND_RENAME == rule.ACTION->intent_ &&
-                   ((std::static_pointer_cast<RuleActionMoveAndRename>(rule.ACTION)->NEW_NS.empty()) ||
-                    (std::static_pointer_cast<RuleActionMoveAndRename>(rule.ACTION)->NEW_NAME.empty()))) {
+        }
+
+        if (Intent::MOVE_AND_RENAME == rule.ACTION->intent_ &&
+            ((std::static_pointer_cast<RuleActionMoveAndRename>(rule.ACTION)->NEW_NS.empty()) ||
+             (std::static_pointer_cast<RuleActionMoveAndRename>(rule.ACTION)->NEW_NAME.empty()))) {
             ALOGE("MOVE_AND_RENAME rule must contain NEW_NAME and NEW_NS");
             return false;
         }
@@ -137,9 +143,9 @@ RuleHandler& RuleHandler::getInstance() {
 }
 
 bool RuleHandler::getMatchingRule(const NetboyRule& attributes_to_match, std::shared_ptr<RuleAction>& return_action) {
-    for (auto it = rules_.cbegin(); it != rules_.cend(); ++it) {
-        if (compareRule(attributes_to_match, *it)) {
-            return_action = it->ACTION;
+    for (const auto& it : rules_) {
+        if (compareRule(attributes_to_match, it)) {
+            return_action = it.ACTION;
             return true;
         }
     }
@@ -150,13 +156,21 @@ bool RuleHandler::compareRule(const NetboyRule& attributes_to_match, const Netbo
     // An empty (or nonexistent) attribute in a rule
     if (!(rule.DEVPATH.empty() || attributes_to_match.DEVPATH == rule.DEVPATH)) {
         return false;
-    } else if (!(rule.SUBSYSTEM.empty() || attributes_to_match.SUBSYSTEM == rule.SUBSYSTEM)) {
+    }
+
+    if (!(rule.SUBSYSTEM.empty() || attributes_to_match.SUBSYSTEM == rule.SUBSYSTEM)) {
         return false;
-    } else if (!(rule.DEVTYPE.empty() || attributes_to_match.DEVTYPE == rule.DEVTYPE)) {
+    }
+
+    if (!(rule.DEVTYPE.empty() || attributes_to_match.DEVTYPE == rule.DEVTYPE)) {
         return false;
-    } else if (!(rule.INTERFACE_NAME.empty() || attributes_to_match.INTERFACE_NAME == rule.INTERFACE_NAME)) {
+    }
+
+    if (!(rule.INTERFACE_NAME.empty() || attributes_to_match.INTERFACE_NAME == rule.INTERFACE_NAME)) {
         return false;
-    } else if (!(rule.DRIVER.empty() || attributes_to_match.DRIVER == rule.DRIVER)) {
+    }
+
+    if (!(rule.DRIVER.empty() || attributes_to_match.DRIVER == rule.DRIVER)) {
         return false;
     }
 
