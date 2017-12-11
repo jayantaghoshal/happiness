@@ -28,6 +28,8 @@ CPP_FILES_TO_FORMAT=$(git diff --cached --name-only --diff-filter=ACMRT | grep -
 for file in ${CPP_FILES_TO_FORMAT} ; do
   format_cpp_file "${file}"
   python3 "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/cpp/logging_linter.py" "${file}"
+  #install docopt in dockerfile
+  #python3 "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/licensing-components/main.py" fix-copyright-headers "${file}"
 done
 
 format_bp_file() {
@@ -37,6 +39,8 @@ format_bp_file() {
 BP_FILES_TO_FORMAT=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E "\.(bp)$" || true);
 for file in ${BP_FILES_TO_FORMAT} ; do
   format_bp_file "${file}"
+  #install docopt in dockerfile
+  #python3 "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/licensing-components/main.py" fix-copyright-headers "${file}"
 done
 
 SH_FILES_TO_CHECK=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E "\.(sh)$" || true);
