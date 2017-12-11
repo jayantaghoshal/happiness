@@ -5,7 +5,8 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ipcbd
 
 LOCAL_INIT_RC := ipcbd-infotainment.rc \
-                 ipcbd-iplm.rc
+                 ipcbd-iplm.rc \
+                 ipcbd-dim.rc
 
 LOCAL_MODULE_RELATIVE_PATH := hw
 
