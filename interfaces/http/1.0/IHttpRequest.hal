@@ -1,0 +1,15 @@
+package vendor.volvocars.hardware.http@1.0;
+
+interface IHttpRequest
+{
+    /**
+    * Send GET request - blocking call
+    * @param uri URI
+    * @param headers Http headers to be added to the request
+    * @param useHttps true if in request https is used
+    * @param timeout time in millisecond to wait for receiving the response
+      //TODO: timeout value can be set to e.g. 0xFFFF which is different from http timeout error code 
+    * @returns responseData Response on the request
+    **/
+    doGetRequest(string uri, HttpHeaders headers, bool useHttps, uint32_t timeout) generates (Response responseData);
+};
