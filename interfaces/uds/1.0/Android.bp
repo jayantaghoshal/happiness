@@ -4,6 +4,7 @@ filegroup {
     name: "vendor.volvocars.hardware.uds@1.0_hal",
     srcs: [
         "types.hal",
+        "IRoutineControlHandler.hal",
         "IUdsDataCollector.hal",
         "IUdsDataProvider.hal",
     ],
@@ -12,12 +13,13 @@ filegroup {
 genrule {
     name: "vendor.volvocars.hardware.uds@1.0_genc++",
     tools: ["hidl-gen"],
-    cmd: "$(location hidl-gen) -o $(genDir) -Lc++ -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.uds@1.0",
+    cmd: "$(location hidl-gen) -o $(genDir) -Lc++-sources -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.uds@1.0",
     srcs: [
         ":vendor.volvocars.hardware.uds@1.0_hal",
     ],
     out: [
         "vendor/volvocars/hardware/uds/1.0/types.cpp",
+        "vendor/volvocars/hardware/uds/1.0/RoutineControlHandlerAll.cpp",
         "vendor/volvocars/hardware/uds/1.0/UdsDataCollectorAll.cpp",
         "vendor/volvocars/hardware/uds/1.0/UdsDataProviderAll.cpp",
     ],
@@ -26,13 +28,18 @@ genrule {
 genrule {
     name: "vendor.volvocars.hardware.uds@1.0_genc++_headers",
     tools: ["hidl-gen"],
-    cmd: "$(location hidl-gen) -o $(genDir) -Lc++ -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.uds@1.0",
+    cmd: "$(location hidl-gen) -o $(genDir) -Lc++-headers -randroid.hidl:system/libhidl/transport -rvendor.volvocars.hardware:vendor/volvocars/interfaces vendor.volvocars.hardware.uds@1.0",
     srcs: [
         ":vendor.volvocars.hardware.uds@1.0_hal",
     ],
     out: [
         "vendor/volvocars/hardware/uds/1.0/types.h",
         "vendor/volvocars/hardware/uds/1.0/hwtypes.h",
+        "vendor/volvocars/hardware/uds/1.0/IRoutineControlHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/IHwRoutineControlHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BnHwRoutineControlHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BpHwRoutineControlHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BsRoutineControlHandler.h",
         "vendor/volvocars/hardware/uds/1.0/IUdsDataCollector.h",
         "vendor/volvocars/hardware/uds/1.0/IHwUdsDataCollector.h",
         "vendor/volvocars/hardware/uds/1.0/BnHwUdsDataCollector.h",
@@ -46,8 +53,35 @@ genrule {
     ],
 }
 
-cc_library_shared {
+cc_library {
     name: "vendor.volvocars.hardware.uds@1.0",
+    defaults: ["hidl-module-defaults"],
+    generated_sources: ["vendor.volvocars.hardware.uds@1.0_genc++"],
+    generated_headers: ["vendor.volvocars.hardware.uds@1.0_genc++_headers"],
+    export_generated_headers: ["vendor.volvocars.hardware.uds@1.0_genc++_headers"],
+    vendor_available: true,
+    vndk: {
+        enabled: true,
+    },
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "liblog",
+        "libutils",
+        "libcutils",
+    ],
+    export_shared_lib_headers: [
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libutils",
+    ],
+}
+
+cc_library {
+    name: "vendor.volvocars.hardware.uds@1.0_vendor",
+    defaults: ["hidl-module-defaults"],
     generated_sources: ["vendor.volvocars.hardware.uds@1.0_genc++"],
     generated_headers: ["vendor.volvocars.hardware.uds@1.0_genc++_headers"],
     export_generated_headers: ["vendor.volvocars.hardware.uds@1.0_genc++_headers"],
