@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Signal simulator for choosen module(s)')
     parser.add_argument('modules', metavar='Module', type=str, nargs='*',
                         help="module wanted in the simulation, e.g. 'climate'")
-    parser.add_argument('--ip', default='192.168.0.1',
+    parser.add_argument('--ip', default='198.18.34.1',
                         help='ip-address of IHU interface')
     parser.add_argument('--port', default='8080',
                         help='port of IHU interface')

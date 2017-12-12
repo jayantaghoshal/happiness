@@ -65,9 +65,9 @@ class PortSender():
             self.infoBindVar.set("Sent")
             self.infoLabel.config(background=BG_COLOR_SENT)
             if self.is_insignal:
-                dir = 1
-            else:
                 dir = 0
+            else:
+                dir = 1
             toSend = {
                 "SignalName": self.portName,
                 "Dir": dir,
