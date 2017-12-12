@@ -20,7 +20,8 @@ LOCAL_SRC_FILES := \
      src/hvacmodule.cpp \
      src/fanlevelimpl.cpp \
      src/tempimpl.cpp \
-     src/keymanagermodule.cpp
+     src/keymanagermodule.cpp \
+     src/activeuserprofilemodule.cpp
 
 LOCAL_C_INCLUDES := \
     src/
@@ -57,7 +58,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
     audio_vehicle-hal-impl-lib
      
 
-LOCAL_CFLAGS += -Wall -Wextra -Werror -fexceptions
+include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 
 include $(BUILD_EXECUTABLE)
 

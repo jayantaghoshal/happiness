@@ -19,6 +19,8 @@
 using namespace android::hardware::automotive::vehicle::V2_0;
 using namespace std::placeholders;
 
+using namespace android;
+
 HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl* vehicleHal)
     : impl::ModuleBase(vehicleHal), m_fanLevel(0), m_fanLevelImpl(m_fanLevel), m_tempImpl(m_temperature) {
     initHandledProperties();
@@ -35,6 +37,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         // Update the map and and notify property store
         auto& propValInMap = propIt->second;
         propValInMap.value.int32Values[0] = m_fanLevel.get();
+        propValInMap.timestamp = elapsedRealtimeNano();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
@@ -51,6 +54,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         // Notifying subscribers
         auto& propValInMap = propIt->second;
         propValInMap.value.floatValues[0] = m_temperature.get();
+        propValInMap.timestamp = elapsedRealtimeNano();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
@@ -68,6 +72,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         // Notifying subscribers
         auto propValInMap = propIt->second;
         propValInMap.value.floatValues[0] = m_temperature.get();
+        propValInMap.timestamp = elapsedRealtimeNano();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
@@ -176,6 +181,7 @@ void HvacModule::initHandledProperties() {
         fanspeed.value.int32Values.resize(1);
         fanspeed.areaId = toInt(VehicleAreaZone::ROW_1);
         fanspeed.value.int32Values[0] = m_fanLevel.get();
+        fanspeed.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(fanspeed)] = fanspeed;
     }
@@ -186,6 +192,7 @@ void HvacModule::initHandledProperties() {
         templeft.value.floatValues.resize(1);
         templeft.areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
         templeft.value.floatValues[0] = m_fanLevel.get();
+        templeft.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(templeft)] = templeft;
     }
@@ -196,6 +203,7 @@ void HvacModule::initHandledProperties() {
         tempright.value.floatValues.resize(1);
         tempright.areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
         tempright.value.floatValues[0] = m_fanLevel.get();
+        tempright.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(tempright)] = tempright;
     }
