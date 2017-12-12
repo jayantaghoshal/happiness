@@ -25,18 +25,35 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         )
 
 HashStartGenericRegex = re.compile(r'(#.*Copyright.*?\n)')
-HashStartReplaceableRegex = re.compile(r'(CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
+HashStartReplaceableRegex = re.compile(r'(#.*(?:Copyright.*(?:(?:Delphi)|(?:Volvo)).*\n)(.*\n)*?\n)',
+                                       re.IGNORECASE)
+HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
+                                                    endline='\n',
+                                                    bodyline_prefix='# ',
+                                                    bodyline_suffix='\n',
+                                                    headers_matcher=[HashStartGenericRegex],
+                                                    headers_to_replace=[HashStartReplaceableRegex]
+                                                    )
+
+CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
                  "This file is covered by LICENSE file in the root of this project"
 
 KnownLanguages = {
     '.c': CLangFeatures,
     '.h': CLangFeatures,
     '.cpp': CLangFeatures,
+    '.java': CLangFeatures,
+    '.bp': CLangFeatures,
     '.mk': HashStartLanguageFeatures,
     '.py': HashStartLanguageFeatures,
 }
 
-PathsIgnoreRegex = re.compile(r'.*(?:(:generated)|(gen)|(vendor/volvocars/interfaces/.*\.(?:bp|mk))).*')
+PathsIgnoreRegex = re.compile(r'.*(?:'
+                              r'(generated)|'
+                              r'(gen)|'
+                              r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))|'
+                              r'(copyrightheader\.py).*'
+                              r')')
 
 
 def should_filepath_be_ignored(path: str):
