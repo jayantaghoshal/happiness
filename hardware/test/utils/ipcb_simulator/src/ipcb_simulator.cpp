@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include <arpa/inet.h>
 #include <cutils/log.h>
 #include <errno.h>

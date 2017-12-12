@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef _NETMAN_EVENT_HANDLER_H_
 #define _NETMAN_EVENT_HANDLER_H_
 

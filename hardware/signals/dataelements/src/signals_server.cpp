@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include "signals_server.h"
 #include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>

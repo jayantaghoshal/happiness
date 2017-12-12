@@ -1,5 +1,11 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
 
+#include <cutils/log.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/iplm/1.0/IIplm.h>

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include <mock_vipcom_client.h>
 
 CarConfigVipCom::CarConfigVipCom() : vipCom(VipCom::Application::systemIpcIndex, this) {}

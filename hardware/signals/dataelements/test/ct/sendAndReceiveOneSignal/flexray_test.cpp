@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 // Test program that expectes one input signal and then send an output signal with the same value as the input.
 
 #include <cutils/log.h>

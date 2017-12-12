@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include <vipcom/vipcom_api.h>
 
 VipCom::VipCom(Application appIndex, IVipComClient *vipcom_client) {}

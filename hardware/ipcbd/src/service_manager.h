@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef SERVICE_MANAGER_H
 #define SERVICE_MANAGER_H
 

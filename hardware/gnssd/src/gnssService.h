@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
 #define VENDOR_VOLVOCARS_HARDWARE_GNSSD_SRC_GNSSSERVICE_H
 

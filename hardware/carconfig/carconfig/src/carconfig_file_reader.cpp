@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include "carconfig_file_reader.h"
 #include <sys/stat.h>
 #include <sys/types.h>
