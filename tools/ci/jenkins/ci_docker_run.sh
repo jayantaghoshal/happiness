@@ -26,15 +26,9 @@ function docker_run() {
   # create them with root.root ownership.
   mkdir -p "${CCACHE_DIR}"
 
-  #TODO: Quick hack, must map $OUT_DIR, which is on /dev/shm, to volumes otherwise
-  #      we get very strange errors when running "make" because the /dev/shm inside docker is too small.
-  volumes=${volumes}\ --volume=/dev/shm:/dev/shm
-
-  #TODO: Old stuff to be removed, OUT_DIR is not defined when this is invoked
-  #if [ -n "${OUT_DIR:-}" ]; then
-  #  volumes=${volumes}\ --volume="${OUT_DIR}":"${OUT_DIR}"
-  #  mkdir -p "${OUT_DIR}"
-  #fi
+  if [ -d "/mnt/ramdisk" ]; then
+    volumes=${volumes}\ --volume=/mnt/ramdisk:/mnt/ramdisk
+  fi
 
   #shellcheck disable=SC2048
   #shellcheck disable=2086
