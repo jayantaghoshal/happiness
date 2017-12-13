@@ -71,13 +71,33 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                                                 product,
                                                 "fast_flashfiles")
 
-    ihu_serials = open_serials(port_mapping)
+    try:
+        ihu_serials = open_serials(port_mapping)
+    except Exception as e:
+        print()
+        print("Failed to open Serial ports")
+        print(e)
+        print()
+        print("  Troubleshooting:")
+        print("    1. USB-to-Serial cables connected?")
+        print("    2. Restart docker container. If you plug in serial cable after docker started it will not auto detect.")
+        print("       Ensure all docker terminals are closed and verify container not running with 'docker ps' and 'docker kill'")
+        print("    3. Other program using tty-device? Picocom?")
+        print("    4. Maybe you have multiple or renamed /dev/ttyUSB-devices, use --mp_port and --vip_port to choose explicitly")
+        return
+
     VIP, MP = ihu_serials.vip, ihu_serials.mp
     is_vip_app = serial_mapping.verify_serial_is_vip_app(ihu_serials.vip)
     is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(ihu_serials.vip)
     if not (is_vip_app or is_vip_pbl):
         raise RuntimeError(
-            "VIP not detected.\nTroubleshooting:\n 1. Power on?\n 2. Serial connected?\n 3. Swap MP/VIP serial with --swap_tty argument?\n 4. Power cycle VIP")
+            "VIP not detected.\n"
+            "Troubleshooting:\n"
+            " 1. Power on?\n"
+            " 2. Serial connected?\n"
+            " 3. Swap MP/VIP serial with --swap_tty argument?\n"
+            " 4. Power cycle VIP\n"
+            " 5. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.")
 
     try:
         adb_bootmode = run([adb_executable, "get-state"], timeout_sec=60)
@@ -204,6 +224,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("NOT Flashing VIP")
 
 
+        logging.info("Flash completed")
     except Exception:
         # Sleep some as it's nice to have output of VIP+MP shortly after exception also, in case of bad timing
         time.sleep(2)
@@ -290,6 +311,7 @@ def main():
     build_out_dir = os.path.join(build_dir, "out")
     logging.info("Start flash with args %r", parsed_args)
 
+
     if parsed_args.swap_tty:
         port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
     else:
@@ -304,7 +326,6 @@ def main():
                 build_out_dir,
                 update_mp=parsed_args.update_mp,
                 update_vip=parsed_args.update_vip)
-    logging.info("Flash completed")
 
 
 if __name__ == "__main__":
