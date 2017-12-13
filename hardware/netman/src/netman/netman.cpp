@@ -4,10 +4,11 @@
  */
 
 #include <cutils/log.h>
-
 #include <cutils/properties.h>
+#include <hidl/HidlTransportSupport.h>
 
 #include <vector>
+#include "diagnostics_reporter.h"
 #include "firewall_config.h"
 #include "netman_event_handler.h"
 #include "netutils.h"
@@ -40,6 +41,10 @@ int main() {
             return EXIT_FAILURE;
         }
 
+        // TODO Enqueue correctly
+        // android::hardware::configureRpcThreadpool(1, false);
+        // DiagnosticsReporter diag_rep;
+
         std::vector<InterfaceConfiguration> interface_configurations;
 
         LoadInterfaceConfiguration(&interface_configurations, lcfg);
@@ -54,7 +59,7 @@ int main() {
         property_set("netmand.startup_completed", "1");
 
         if (nl_socket_listener.StartListening() < 0) {
-            ALOGE("Unable to recv on  Netlink socket");
+            ALOGE("Unable to recv on Netlink socket");
         }
 
     } catch (const std::runtime_error &e) {

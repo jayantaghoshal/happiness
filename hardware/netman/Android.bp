@@ -24,6 +24,7 @@ cc_binary {
         "src/netman/netman.cpp",
         "src/netman/netman_event_handler.cpp",
         "src/netman/firewall_config.cpp",
+        "src/netman/diagnostics_reporter.cpp",
     ],
 
     local_include_dirs: [
@@ -35,6 +36,12 @@ cc_binary {
         "liblog",
         "liblocalconfig",
         "libcutils",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "liblocalconfig",
+        "vendor.volvocars.hardware.uds@1.0",
     ],
 
     static_libs: ["libbase"],
