@@ -30,6 +30,11 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_build_vcc_user
+              current-parameters: true
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}    
       - multijob:
           name: Test
           condition: SUCCESSFUL
@@ -41,7 +46,7 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - copyartifact:
           project: ihu_daily_test1
-          filter: "test_result_*.xml"
+          filter: "aosp/result_dir/*.xml"
           target: ./results
           which-build: multijob-build
           flatten: true

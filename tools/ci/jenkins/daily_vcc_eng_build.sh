@@ -26,7 +26,7 @@ rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.confi
 # Create archive out.tgz 
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
-            --directory="$REPO_ROOT_DIR/out" \
+            --directory="$REPO_ROOT_DIR" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin \
