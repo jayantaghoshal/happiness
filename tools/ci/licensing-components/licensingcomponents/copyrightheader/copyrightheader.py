@@ -14,9 +14,9 @@ LanguageCommentFeatures = namedtuple('LanguageCommentFeatures', ['firstline',
                                                                  'headers_matcher',
                                                                  'headers_to_replace'])
 
-CStyleGenericRegex = re.compile(r'(/\*.*Copyright.*?\*\/)',
+CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
-CStyleReplaceableRegex = re.compile(r'(/\*[\s\S]*(?:(Copyright)|(\[2017\])).*(?:(?:Delphi)|(?:Volvo))[\s\S]*?\*\/)',
+CStyleReplaceableRegex = re.compile(r'(^/\*[\s\S]*(?:(Copyright)|(\[2017\])).*(?:(?:Delphi)|(?:Volvo))[\s\S]*?\*\/)',
                                     re.IGNORECASE)
 
 CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
@@ -27,8 +27,8 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         headers_to_replace=[CStyleReplaceableRegex]
                                         )
 
-HashStartGenericRegex = re.compile(r'(#.*Copyright.*?\n)')
-HashStartReplaceableRegex = re.compile(r'(#.*(?:Copyright.*(?:(?:Delphi)|(?:Volvo)).*\n)(.*\n)*?\n)',
+HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
+HashStartReplaceableRegex = re.compile(r'(^#.*(?:Copyright.*(?:(?:Delphi)|(?:Volvo)).*\n)(.*\n)*?\n)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
@@ -54,8 +54,7 @@ KnownLanguages = {
 PathsIgnoreRegex = re.compile(r'.*(?:'
                               r'(generated)|'
                               r'(gen)|'
-                              r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))|'
-                              r'(copyrightheader\.py).*'
+                              r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))'
                               r')')
 
 
