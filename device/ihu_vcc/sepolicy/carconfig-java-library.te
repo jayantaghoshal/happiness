@@ -1,0 +1,3 @@
+#carconfig-java-library
+allow platform_app carconfig_config_files:dir search;
+allow platform_app carconfig_config_files:file { open read getattr };
