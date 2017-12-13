@@ -1,5 +1,5 @@
 service iplmd /vendor/bin/hw/iplmd
     class vcc_net
-    user root
-    group root
+    user oem_2901
+    group oem_2901
     seclabel u:r:iplmd:s0

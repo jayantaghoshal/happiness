@@ -1,6 +1,6 @@
 service gnssd /vendor/bin/hw/gnssd
     class vcc_net
     oneshot
-    user root
-    group root
+    user gps
+    group gps
     seclabel u:r:gnssd:s0
