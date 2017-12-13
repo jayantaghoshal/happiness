@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sys/epoll.h>
 #include <chrono>
 #include <cstdint>
 #include <functional>
@@ -35,7 +36,7 @@ class IDispatcher {
     virtual bool Cancel(JobId jobid) = 0;
 
     // Add and remove file descriptor monitoring for available in-data
-    virtual void AddFd(int fd, std::function<void()> &&f) = 0;
+    virtual void AddFd(int fd, std::function<void()> &&f, uint32_t events = EPOLLIN) = 0;
     virtual void RemoveFd(int fd) = 0;
 
     // Stop the dispatcher thread. The dispatcher can no longer be used after this.

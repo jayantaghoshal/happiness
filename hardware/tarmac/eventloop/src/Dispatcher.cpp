@@ -60,22 +60,23 @@ class EPollQueue {
         ALOGE_IF(r < 0, "write failed: %s", strerror(errno));
     }
 
-    void addFd(int fd, Task &&t) {
-        std::lock_guard<std::mutex> lock(mutex_);
+    void addFd(int fd, Task &&t, uint32_t events) {
         int r = 0;
 
-        // fd already added so lets remove it first
-        if (fdTasks_.find(fd) != fdTasks_.end()) {
-            removeFd(fd);
+        int action;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            action = (fdTasks_.find(fd) != fdTasks_.end()) ? EPOLL_CTL_MOD : EPOLL_CTL_ADD;
         }
 
         epoll_event event;
-        event.events = EPOLLIN;
+        event.events = events;
         event.data.fd = fd;
-        r = epoll_ctl(epollfd_, EPOLL_CTL_ADD, fd, &event);
+        r = epoll_ctl(epollfd_, action, fd, &event);
         ALOGE_IF(r != 0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
 
         if (r == 0) {
+            std::lock_guard<std::mutex> lock(mutex_);
             fdTasks_[fd] = t;
         }
     }
@@ -150,7 +151,7 @@ class Dispatcher : public IDispatcher {
 
     bool Cancel(JobId jobid) override;
 
-    void AddFd(int fd, std::function<void()> &&f) override;
+    void AddFd(int fd, std::function<void()> &&f, uint32_t events = EPOLLIN) override;
     void RemoveFd(int fd) override;
 
     void Stop() final;
@@ -248,7 +249,7 @@ bool Dispatcher::Cancel(JobId jobid) {
     return false;
 }
 
-void Dispatcher::AddFd(int fd, std::function<void()> &&f) { queue_.addFd(fd, std::move(f)); }
+void Dispatcher::AddFd(int fd, std::function<void()> &&f, uint32_t events) { queue_.addFd(fd, std::move(f), events); }
 
 void Dispatcher::RemoveFd(int fd) { queue_.removeFd(fd); }
 
