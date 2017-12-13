@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IHU CI Test report</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+          crossorigin="anonymous">
+    <base href="http://gotsvl1416.got.volvocars.net/report/">
+</head>
+
+<body>
+    <div id="app"
+         class="container">
+        <div v-if="loadTestResultFailMessage" 
+             class="alert alert-danger"
+             role="alert">
+            Failed to load latest test result: 
+            {{loadTestResultFailMessage}}
+        </div>
+        <div class="container">
+
+            <h1>IHU CI Test report</h1>
+            <div class="row">
+                <div class="col">
+                    <h4>Build info</h4>
+                    <ul>
+                        <li>Date: sdflkjsd</li>
+                        <li>Jenkins url: sfldslkf</li>
+                        <li>Download image from artifactory: sdfkljd</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h5>Boot time</h5>
+                    <line-chart :width="200"
+                                :height="100"
+                                :x="trend_results.x_axis"
+                                :y="trend_results.Test00021['kpi.boot_time']"></line-chart>
+                </div>
+                <h5>Build time</h5>
+                <div class="col">
+                    <line-chart :width="200"
+                                :height="100"
+                                :x="example_x"
+                                :y="example_y"></line-chart>
+                </div>
+                <h5>Test time</h5>
+                <div class="col">
+                    <line-chart :width="200"
+                                :height="100"
+                                :x="example_x"
+                                :y="example_y"></line-chart>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <h5>Logblame</h5>
+                    <button type="button"
+                            class="btn btn-primary"
+                            v-on:click="increment">Nr of clicks: {{nrofclicks}}</button>
+                </div>
+                <div class="col">
+                    <img src="https://icup_android.jenkins.cm.volvocars.biz/job/ihu_hourly_test/buildTimeGraph/png" />
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>Test case</th>
+                    <th>Trend</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="tc in test_results"
+                    v-bind:class="{'page-item':true, 'table-success':(tc.pass), 'table-danger':(!tc.pass)}"
+            
+                    v-on:click="expand(tc)"
+                    role='button'>
+                    <td>{{ tc.name }}
+                        <pre v-if="tc.expanded">
+                            <code>{{tc.stdout}}</code>
+                        </pre>
+                    </td>
+                    <td>
+                        <div v-if="trend_results[tc.name]">
+                            <span v-for="trend_pass in trend_results[tc.name].pass"
+                                  class="badge"
+                                  v-bind:class="{'badge-success':(trend_pass), 'badge-danger':(!trend_pass)}">
+                                o
+                            </span>
+                            <div v-for="kpi_trend in getKpiTrends(trend_results[tc.name])">
+                                {{kpi_trend.name}}
+                                <line-chart style="height: 30px;width:100px;"
+                                            :width="100"
+                                            :height="30"
+                                            :x="trend_xaxis"
+                                            :y="kpi_trend.value"></line-chart>
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge"
+                              v-bind:class="{'badge-success':(tc.pass), 'badge-danger':(!tc.pass)}">
+                            {{ tc.pass ? "PASS" : "FAIL"}}
+                        </span>
+
+                        <span v-for="v,k in tc.kpis"
+                              class="badge badge-primary"
+                              v-if="!Array.isArray(v)">
+                            {{k}}:{{v}}
+                        </span>
+                        <span v-for="v,k in tc.kpis"
+                              v-if="Array.isArray(v)">
+                            {{k}}
+                            <line-chart style="height: 30px;width:100px;"
+                                        :width="100"
+                                        :height="30"
+                                        :x="example_x"
+                                        :y="v"></line-chart>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+<script src="./results/trend_results.js"></script>
+<script src="./build/build.js"></script>
+
+</html>

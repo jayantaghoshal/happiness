@@ -6,6 +6,7 @@ import logging
 import logging.config
 import os
 import shlex
+import shutil
 import sys
 import traceback
 import multiprocessing
@@ -16,7 +17,7 @@ from typing import List, Set, Tuple
 import shipit.test_runner.test_types
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner import tradefed_test_runner
-from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled
+from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
@@ -28,6 +29,11 @@ import test_plan    # NOQA
 logger = logging.getLogger(__name__)
 
 
+class NamedTestResult():
+    def __init__(self, name: str, result: ResultData) -> None:
+        self.name = name
+        self.result = result
+
 def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
     missing_capabilities = test.require_capabilities - machine_capabilities
     if len(missing_capabilities) > 0:
@@ -35,25 +41,40 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
     return len(missing_capabilities) == 0
 
 
-def run_test(test: IhuBaseTest):
-    if isinstance(test, VTSTest):
-        print(test)
-        return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_root_dir))
-    elif isinstance(test, TradefedTest):
-        print(test)
-        return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
-    elif isinstance(test, shipit.test_runner.test_types.Disabled):
-        if datetime.datetime.now() > test.deadline:
-            raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
-                            (test.disabled_test, test.jira_issue, test.reason))
-    else:
+def run_test(test: IhuBaseTest) -> ResultData:
+    try:
+        if isinstance(test, VTSTest):
+            print(test)
+            return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+        elif isinstance(test, TradefedTest):
+            print(test)
+            return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+        elif isinstance(test, shipit.test_runner.test_types.Disabled):
+            if datetime.datetime.now() > test.deadline:
+                raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
+                                (test.disabled_test, test.jira_issue, test.reason))
+            else:
+                return test_types.ResultData(True, "DISABLED", None, None, dict(), dict())  #TODO: Introduce more values than pass/fail?
+
         raise Exception("Unknown test case: %s" % test)
+    except test_types.VtsTestFailedException as exception:
+
+        logger.error(str(exception.message))
+        return test_types.ResultData(False, exception.message, exception.json_result, exception.json_change_time,
+                                       dict(), dict())
+    except test_types.TestFailedException as te:
+        logger.error(str(te))
+        return test_types.ResultData(False, str(te), None, None, dict(), dict())
+    except Exception as e:
+        logger.exception(traceback.format_exc())
+        return test_types.ResultData(False, str(e), None, None, dict(), dict())
 
 
-def check_result(test_result):
-    results = test_result.json_result
+def check_result(test_result: NamedTestResult) -> None:
+    results = test_result.result.json_result
 
     if results is not None:
+        print("Test name: " + test_result.name)
         print("Test class: " + results["Results"][0]["Test Class"])
         for result in results["Results"]:
             print("\tTest name: " + result["Test Name"])
@@ -66,7 +87,7 @@ def check_result(test_result):
 
         print("Number of executed tests in JSON file: " + str(results["Summary"]["Executed"]))
     else:
-        print("The current test case does not generate at JSON file")
+        print("The current test case %s does not generate a JSON file" % test_result.name)
 
 
 def build_testcases(tests_to_run: List[IhuBaseTest]):
@@ -100,12 +121,51 @@ def print_indented(s: str, indent="    "):
         print(indent + l)
 
 
-def print_test_summary(test_results):
+def dump_test_results_to_json(test_results: List[NamedTestResult]):
+    def res(r: NamedTestResult):
+        return {
+            "name": r.name,
+            "pass": r.result.passed,
+            "kpis:" : r.result.test_kpis
+        }
+    to_dump = {
+        "results" : [res(r) for r in test_results]
+    }
+
+    out = os.environ["ANDROID_HOST_OUT"]
+    result_dir = os.path.join(out, "vcc_test_results", "current")
+    if os.path.isdir(result_dir):
+        shutil.rmtree(result_dir)   # TODO: Copy old results into some circular buffer
+    print("\n\n")
+    print("##################################################################################")
+    print("##")
+    print("## Dumping test results to %s" % result_dir)
+    print("##")
+    print()
+    os.makedirs(result_dir, exist_ok=True)
+    for r in test_results:
+        clean_name = "tc_" + r.name.replace("/", "") + "_stdout"
+        with open(os.path.join(result_dir, clean_name), "w", encoding="utf-8") as f:
+            f.write(r.result.console)
+
+        for log_type_name, value in r.result.logs.items():
+            clean_name = "tc_" + r.name.replace("/", "") + "_" + log_type_name
+            with open(os.path.join(result_dir, clean_name), "w", encoding="utf-8") as f:
+                f.write(value)
+
+
+    with open(os.path.join(result_dir, "test_result.json"), "w", encoding="utf-8") as f:
+        json.dump(to_dump, f)
+
+
+
+def print_test_summary(test_results: List[NamedTestResult]):
     print("*** VTS Python Test summary ***")
     for test_result in test_results:
-        results = test_result.json_result
+        results = test_result.result.json_result
         if results is not None:
             print("****************************************************")
+            print("Test name: " +test_result.name)
             print("Test class: " + results["Results"][0]["Test Class"])
 
             print("\tError: " + str(results["Summary"]["Error"]))
@@ -114,46 +174,42 @@ def print_test_summary(test_results):
             print("\tPassed: " + str(results["Summary"]["Passed"]))
             print("\tRequested: " + str(results["Summary"]["Requested"]))
             print("\tSkipped: " + str(results["Summary"]["Skipped"]))
-            print("\tJson creation time: " + str(test_result.json_change_time))
+            print("\tJson creation time: " + str(test_result.result.json_change_time))
             print("****************************************************")
             print("")
 
 
+
 def run_testcases(tests_to_run: List[IhuBaseTest]):
-    failing_testcases = []  # type: List[Tuple[IhuBaseTest, str]]
-    test_results = []
+    test_results = [] # type: List[NamedTestResult]
     for t in tests_to_run:
-        try:
-            test_result = run_test(t)
-            if test_result is not None:
-                check_result(test_result)
-                test_results.append(test_result)
+        test_result = run_test(t)
+        test_results.append(NamedTestResult(str(t), test_result))
+        check_result(test_results[-1])
 
-        except test_types.VtsTestFailedException as exception:
-            result = test_types.ResultData(exception.message, exception.json_result, exception.json_change_time)
-            check_result(result)
-            test_results.append(result)
-            failing_testcases.append((t, str(exception.message)))
-            logger.error(str(exception.message))
 
-        except test_types.TestFailedException as te:
-            failing_testcases.append((t, str(te)))
-            logger.error(str(te))
+    for r in test_results:
+        check_result(r)  # TODO: Is this overlapping with print_test_summary   ???
 
-        except Exception as e:
-            failing_testcases.append((t, str(e)))
-            logger.exception(traceback.format_exc())
+    try:
+        dump_test_results_to_json(test_results)
+    except Exception as e:
+        logger.error("Failed to write json test report %r", e, exc_info=True)
+        # Keep going...
 
     print_test_summary(test_results)
     print("All tests completed")
+    failing_testcases = [x for x in test_results if not x.result.passed]
     if len(failing_testcases) > 0:
         print("#####################################################################")
         print("Failing test cases:")
-        for (test, error) in failing_testcases:
-            print(" * %s" % test)
-            print_indented(error, "      >> ")
+        for ntr in failing_testcases:
+            print(" * %s" % ntr.name)
+            print_indented(ntr.result.console, "      >> ")
         print("#####################################################################")
         sys.exit(1)
+    else:
+        print("All %d tests successful" % len(test_results))
 
 
 def main():
@@ -268,7 +324,7 @@ def detect_loose_test_cases():
         print("#  Files missing from test_plan.py:")
         for a in androidtestxmls_not_in_any_plan:
             print("#    - %s" % a)
-        print("#############################################################################################")
+        print("#####################################################################git ########################")
         sys.exit(1)
 
     tests_in_plan_but_not_on_disk = all_testdirs_in_plans - directories_with_androidtestxml

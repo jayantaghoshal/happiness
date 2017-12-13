@@ -5,7 +5,7 @@ import logging.config
 import re
 import sys
 from shipit.process_tools import check_output_logged
-from shipit.test_runner.test_types import TestFailedException
+from shipit.test_runner.test_types import TestFailedException, ResultData
 import xml.etree.cElementTree as ET
 import concurrent.futures
 import zipfile
@@ -17,6 +17,7 @@ def tradefed_run(test_path: str):
     xml_path = os.path.join(test_path, "AndroidTest.xml")
     logging.info("Running tradefed test from xml %s" % xml_path)
     tradefed_run_xml(xml_path)
+    return ResultData(True, "", None, None, dict(), dict())   #TODO: ...
 
 def tradefed_run_xml(xml_path: str):
     if not config_got_xml_reporter(xml_path):
