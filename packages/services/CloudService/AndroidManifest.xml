@@ -1,0 +1,16 @@
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android"
+    package="vendor.volvocars.cloudservice"
+    android:sharedUserId="android.uid.system">
+       <application
+         android:exported="true"
+        android:name=".MainApplication">
+         <service
+         android:exported="true"
+         android:persistent="true"
+         android:name=".CloudService">
+        <intent-filter>
+            <action android:name="vendor.volvocars.cloudservice.ICloudService" />
+        </intent-filter>
+         </service>
+    </application>
+</manifest>

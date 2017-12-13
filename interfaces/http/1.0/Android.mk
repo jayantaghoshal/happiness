@@ -17,9 +17,9 @@ LOCAL_JAVA_LIBRARIES := \
 
 
 #
-# Build types.hal (KeyValue)
+# Build types.hal (HttpHeaderField)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/KeyValue.java
+GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/HttpHeaderField.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -29,7 +29,26 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.KeyValue
+        vendor.volvocars.hardware.http@1.0::types.HttpHeaderField
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (Response)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/Response.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.http@1.0::types.Response
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -73,9 +92,9 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 
 
 #
-# Build types.hal (KeyValue)
+# Build types.hal (HttpHeaderField)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/KeyValue.java
+GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/HttpHeaderField.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -85,7 +104,26 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.KeyValue
+        vendor.volvocars.hardware.http@1.0::types.HttpHeaderField
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (Response)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/Response.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.http@1.0::types.Response
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
