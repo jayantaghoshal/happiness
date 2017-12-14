@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 package com.volvocars.usb2ethernet;
 
 import android.support.test.runner.AndroidJUnit4;
@@ -26,8 +31,8 @@ public class Usb2EthernetTest extends
     @Test
     public void testEthernetConnectionType() throws Exception{
         int TargetNetworkType = mActivityRule.getActivity().getNetworkType();
-        assertEquals("NetworkType should be '9'(Ethernet) but is: " + 
-            Integer.toString(TargetNetworkType), TargetNetworkType, 
+        assertEquals("NetworkType should be '9'(Ethernet) but is: " +
+            Integer.toString(TargetNetworkType), TargetNetworkType,
             ConnectivityManager.TYPE_ETHERNET);
     }
 }
