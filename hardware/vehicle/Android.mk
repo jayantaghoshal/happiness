@@ -1,3 +1,5 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
 
@@ -52,7 +54,9 @@ LOCAL_STATIC_LIBRARIES := \
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \
     audio_vehicle-hal-impl-lib
+     
 
-include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
+LOCAL_CFLAGS += -Wall -Wextra -Werror -fexceptions
+
 include $(BUILD_EXECUTABLE)
 
