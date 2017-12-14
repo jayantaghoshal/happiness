@@ -12,6 +12,8 @@ import com.delphi.desip.IDesipListener;
 
 
 public class MainApplication extends Application {
+    private static final String LOGTAG = "VolvoPowerEvent";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,7 +32,7 @@ public class MainApplication extends Application {
     private IDesipListener desipListener = new IDesipListener.Stub() {
         @Override
         public boolean deliverMessage(ParcelableDesipMessage msg) throws RemoteException {
-            Log.d("PowerEventDesipListener", "Desip listener deliverMessage()");
+            Log.d(LOGTAG, String.format("Received ParcelableDesipMessage - %s", msg));
 
             startActivity(new Intent(MainApplication.this, AlertActivity.class));
 
