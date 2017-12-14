@@ -3,9 +3,8 @@ type netmand, domain;
 type netmand_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(netmand)
-#permissive netmand;
 
-allow netmand self:netlink_route_socket { create read write getattr bind setopt nlmsg_read };
+allow netmand self:netlink_kobject_uevent_socket read;
 allow netmand self:udp_socket { create ioctl };
 allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
 
@@ -14,10 +13,15 @@ allow netmand netns_device:dir { read open };
 allow netmand netmand_exec:file execute_no_trans;
 allow netmand rootfs:dir mounton;
 
-#domain_auto_trans(netman, ip_exec, ip)
+allow netmand self:capability2 wake_alarm;
+allow netmand self:netlink_kobject_uevent_socket read;
+allow netmand sysfs:file { getattr open read };
+allow netmand uds_diagnostics_default:binder call;
+
 allow netmand self:rawip_socket { create getopt setopt };
 allow netmand proc_net:file getattr;
 
-#allow netman ip_exec:file entrypoint;
-
 set_prop(netmand, netmand_prop)
+
+#domain_auto_trans(netman, ip-vcc_exec, ip-vcc)
+#allow netman ip-vcc_exec:file entrypoint;

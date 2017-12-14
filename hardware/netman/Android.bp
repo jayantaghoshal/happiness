@@ -84,4 +84,8 @@ cc_binary {
     static_libs: ["libbase"],
 
     init_rc: ["init/netboyd.rc"],
+
+    required: [
+        "ip-vcc",
+    ],
 }

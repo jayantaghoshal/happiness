@@ -1,0 +1,44 @@
+# ip
+type ip-vcc, coredomain;
+type ip-vcc_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(ip-vcc)
+
+allow ip-vcc netns_device:dir { create_dir_perms mounton };
+allow ip-vcc netns_device:file { create_file_perms mounton };
+
+allow ip-vcc init:fd use;
+allow ip-vcc null_device:chr_file { read write };
+allow ip-vcc self:netlink_route_socket { create setopt bind getattr write read nlmsg_read };
+allow ip-vcc self:capability net_raw;
+allow ip-vcc rootfs:dir mounton;
+allow ip-vcc toolbox_exec:file { read open getattr execute execute_no_trans };
+allow ip-vcc proc_net:file rw_file_perms;
+allow ip-vcc proc:file r_file_perms;
+allow ip-vcc system_file:file { execute read };
+
+allow ip-vcc proc_overcommit_memory:file { open read };
+allow ip-vcc sysfs:dir search;
+allow ip-vcc sysfs_devices_system_cpu:dir search;
+
+allow ip-vcc device:dir search;
+allow ip-vcc properties_device:dir getattr;
+allow ip-vcc random_device:chr_file read;
+
+allow ip-vcc system_file:file { getattr open };
+allow ip-vcc vendor_file:dir getattr;
+allow ip-vcc vendor_hal_file:dir getattr;
+
+allow ip-vcc property_contexts_file:file { getattr open read };
+
+allow ip-vcc properties_serial:file { open read };
+allow ip-vcc vendor_configs_file:dir search;
+
+allow ip-vcc default_prop:file read;
+allow ip-vcc sysfs_devices_system_cpu:file { getattr open read };
+allow ip-vcc default_prop:file { getattr open };
+
+allow ip-vcc debug_prop:file { open read };
+allow ip-vcc properties_serial:file getattr;
+
+allow ip-vcc unlabeled:file { open read };

@@ -560,7 +560,7 @@ void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std:
                                      const std::string &new_name) {
     std::stringstream move_network_interface_cmd;
 
-    move_network_interface_cmd << "/system/bin/ip link set dev " << current_name;
+    move_network_interface_cmd << "/vendor/bin/ip link set dev " << current_name;
 
     if (!new_name.empty()) move_network_interface_cmd << " name " << new_name;
 

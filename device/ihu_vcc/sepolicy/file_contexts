@@ -20,7 +20,7 @@
 /vendor/bin/hw/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
 
 # iproute2
-/system/bin/ip u:object_r:ip_exec:s0
+/vendor/bin/ip u:object_r:ip-vcc_exec:s0
 
 # netns device
 /dev/vendor/netns(/.*)? u:object_r:netns_device:s0

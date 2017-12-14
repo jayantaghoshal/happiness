@@ -1,4 +1,4 @@
-service carsim_bridge /system/bin/ip netns exec vcc /vendor/bin/carsim_bridge
+service carsim_bridge /vendor/bin/ip netns exec vcc /vendor/bin/carsim_bridge
     class main
     user root
     group root

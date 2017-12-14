@@ -5,6 +5,6 @@ import init.ihu_abl_car.rc
 on post-fs
     mkdir /dev/vendor/
     mkdir /dev/vendor/netns
-    exec -- /system/bin/ip netns add vcc
-    exec -- /system/bin/ip netns exec vcc /system/bin/sysctl -p /vendor/etc/sysctl.conf
+    exec -- /vendor/bin/ip netns add vcc
+    exec -- /vendor/bin/ip netns exec vcc /system/bin/sysctl -p /vendor/etc/sysctl.conf
     class_start vcc_net_init

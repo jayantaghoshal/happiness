@@ -15,4 +15,13 @@ LOCAL_SRC_FILES := conf/sysctl.conf
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
 
+#
+# Copy /system/bin/ip to /vendor/bin/ip
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := ip-vcc
+LOCAL_REQUIRED_MODULES := ip
+LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/ip $(TARGET_OUT_VENDOR)/bin/ip
+include $(BUILD_PHONY_PACKAGE)
+
 include $(call all-makefiles-under,$(LOCAL_PATH))
