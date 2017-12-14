@@ -43,7 +43,6 @@ cc_binary {
     init_rc: ["init/netmand.rc"],
     required: [
         "sysctl.conf",
-        "netd_config.xml",
     ],
 }
 
