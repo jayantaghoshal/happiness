@@ -19,7 +19,7 @@ namespace V1_0 {
 namespace implementation {
 
 Gnss::Gnss() {
-    ALOGD("Gnss::Gnss");
+    ALOGV("Gnss::Gnss");
     started_ = false;
 }
 
@@ -33,22 +33,22 @@ void Gnss::updateLocation(const GnssLocation& location) {
             result.isOk();
             if (result.isDeadObject()) {
                 callback_ = nullptr;
-                ALOGI("callback=null due to dead client");
+                ALOGV("callback=null due to dead client");
             }
         }
     } else {
-        ALOGD("newLocationDelivered but not started -> ignored");
+        ALOGV("newLocationDelivered but not started -> ignored");
     }
 }
 
 // Methods from ::android::hardware::gnss::V1_0::IGnss follow.
 Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
-    ALOGD("setCallback %d", callback != nullptr);
+    ALOGV("setCallback %d", callback != nullptr);
 
     IDispatcher::EnqueueTask([this, callback]() {
         callback_ = callback;
         if (callback_ != nullptr) {
-            ALOGD("Cap+SysInfo callback");
+            ALOGV("Cap+SysInfo callback");
             auto result1 = callback_->gnssSetCapabilitesCb((uint32_t)IGnssCallback::Capabilities::SCHEDULING);
             // We always have to call isOk() even though we don't care about the result. We use care about
             // isDeadObject()
@@ -60,7 +60,7 @@ Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
             result2.isOk();
             if (result1.isDeadObject() || result2.isDeadObject()) {
                 callback_ = nullptr;
-                ALOGI("callback=null due to dead client");
+                ALOGV("callback=null due to dead client");
             }
         }
     });
@@ -72,22 +72,22 @@ Return<bool> Gnss::start() {
     if (started_) {
         ALOGW("starting BUT already started!!");
     } else {
-        ALOGD("start");
+        ALOGV("start");
     }
     started_ = true;
     return true;
 }
 
 Return<bool> Gnss::stop() {
-    ALOGD("stop");
+    ALOGV("stop");
     started_ = false;
     return true;
 }
 
 Return<void> Gnss::cleanup() {
-    ALOGD("cleanup");
+    ALOGV("cleanup");
     if (started_) {
-        ALOGD("... and also stopping");
+        ALOGV("... and also stopping");
         stop();
     }
     return Void();
@@ -95,13 +95,13 @@ Return<void> Gnss::cleanup() {
 
 Return<bool> Gnss::injectTime(int64_t /*timeMs*/, int64_t /*timeReferenceMs*/, int32_t /*uncertaintyMs*/) {
     // TODO implement
-    ALOGD("injectTime");
+    ALOGV("injectTime");
     return bool{};
 }
 
 Return<bool> Gnss::injectLocation(double /*latitudeDegrees*/, double /*longitudeDegrees*/, float /*accuracyMeters*/) {
     // TODO implement
-    ALOGD("injectLocation");
+    ALOGV("injectLocation");
     return bool{};
 }
 
@@ -112,75 +112,75 @@ Return<void> Gnss::deleteAidingData(IGnss::GnssAidingData /*aidingDataFlags*/) {
 
 Return<bool> Gnss::setPositionMode(IGnss::GnssPositionMode mode, IGnss::GnssPositionRecurrence recurrence,
                                    uint32_t minIntervalMs, uint32_t preferredAccuracyMeters, uint32_t preferredTimeMs) {
-    ALOGD("setPositionMode %hhu %u %u %u %u", mode, recurrence, minIntervalMs, preferredAccuracyMeters,
+    ALOGV("setPositionMode %hhu %u %u %u %u", mode, recurrence, minIntervalMs, preferredAccuracyMeters,
           preferredTimeMs);
     return true;
 }
 
 Return<sp<IAGnssRil>> Gnss::getExtensionAGnssRil() {
     // TODO implement
-    ALOGD("getExtensionAGnssRil");
+    ALOGV("getExtensionAGnssRil");
     return ::android::sp<::android::hardware::gnss::V1_0::IAGnssRil>{};
 }
 
 Return<sp<IGnssGeofencing>> Gnss::getExtensionGnssGeofencing() {
     // TODO implement
-    ALOGD("getExtensionGnssGeofencing");
+    ALOGV("getExtensionGnssGeofencing");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssGeofencing>{};
 }
 
 Return<sp<IAGnss>> Gnss::getExtensionAGnss() {
     // TODO implement
-    ALOGD("getExtensionAGnss");
+    ALOGV("getExtensionAGnss");
     return ::android::sp<::android::hardware::gnss::V1_0::IAGnss>{};
 }
 
 Return<sp<IGnssNi>> Gnss::getExtensionGnssNi() {
     // TODO implement
-    ALOGD("getExtensionGnssNi");
+    ALOGV("getExtensionGnssNi");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssNi>{};
 }
 
 Return<sp<IGnssMeasurement>> Gnss::getExtensionGnssMeasurement() {
     // TODO implement
-    ALOGD("getExtensionGnssMeasurement");
+    ALOGV("getExtensionGnssMeasurement");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssMeasurement>{};
 }
 
 Return<sp<IGnssNavigationMessage>> Gnss::getExtensionGnssNavigationMessage() {
     // TODO implement
-    ALOGD("getExtensionGnssNavigationMessage");
+    ALOGV("getExtensionGnssNavigationMessage");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssNavigationMessage>{};
 }
 
 Return<sp<IGnssXtra>> Gnss::getExtensionXtra() {
     // TODO implement
-    ALOGD("getExtensionXtra");
+    ALOGV("getExtensionXtra");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssXtra>{};
 }
 
 Return<sp<IGnssConfiguration>> Gnss::getExtensionGnssConfiguration() {
     // TODO implement
-    ALOGD("getExtensionGnssConfiguration");
+    ALOGV("getExtensionGnssConfiguration");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssConfiguration>{};
 }
 
 Return<sp<IGnssDebug>> Gnss::getExtensionGnssDebug() {
     // TODO implement
-    ALOGD("getExtensionGnssDebug");
+    ALOGV("getExtensionGnssDebug");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssDebug>{};
 }
 
 Return<sp<IGnssBatching>> Gnss::getExtensionGnssBatching() {
     // TODO implement
-    ALOGD("getExtensionGnssBatching");
+    ALOGV("getExtensionGnssBatching");
     return ::android::sp<::android::hardware::gnss::V1_0::IGnssBatching>{};
 }
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
 IGnss* HIDL_FETCH_IGnss(const char* name) {
-    ALOGD("HIDL_FETCH_IGnss %s", name);
+    ALOGV("HIDL_FETCH_IGnss %s", name);
     return new Gnss();
 }
 
