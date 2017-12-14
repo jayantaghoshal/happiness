@@ -57,7 +57,14 @@ done
     ```bash
     export CDSID=
     export TOKEN=    #<<<-- Get your API Token from https://icup_android.jenkins.cm.volvocars.biz/me/configure
+    #Note: This updates all the jenkins jobs under the "jobs" directory.
     jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs
+    
+    #To update all jobs under a specific file
+    jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs/FILENAME.xml
+
+    #To update specific jobs under a file
+    jenkins-jobs --user "$CDSID" --password="$TOKEN" --conf=./jenkins_jobs.ini update ./jobs/FILENAME.xml JOBNAME1 JOBNAME2
     ```
 7. If you got -1 in step3, add a comment in gerrit containing "!recheck" to get Jenkins to run it again with new jobs.
 8. Press Automerge+1 in Gerrit
