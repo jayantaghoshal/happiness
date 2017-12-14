@@ -36,7 +36,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 du -sh "$OUT_ARCHIVE"
 
 # Upload to Artifactory
-time artifactory push ihu_daily_vcc_eng_build "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
 
 # Cleanup
 rm ${OUT_ARCHIVE}
