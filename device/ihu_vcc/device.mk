@@ -7,7 +7,7 @@
 PRODUCT_PACKAGES += \
     var_run_directory_structure \
     netboyd \
-    netman \
+    netmand \
     cloudd \
     vehicle-signals-daemon \
     dataelements-hidl-server \
