@@ -48,4 +48,16 @@ public class ParcelableDesipMessage implements Parcelable {
             return new ParcelableDesipMessage[size];
         }
     };
+
+
+    @Override
+    public String toString() {
+        String dataString = "";
+
+        for (byte b : data) {
+            dataString += String.format("%#x ", b);
+        }
+
+        return String.format("AID: %#x | FID: %#x | Data: %s", aid, fid, dataString);
+    }
 }
