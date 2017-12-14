@@ -12,14 +12,4 @@ LOCAL_SRC_FILES := conf/sysctl.conf
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
 
-#
-# Copy conf/netd_config.xml to /system/etc/netd
-#
-include $(CLEAR_VARS)
-LOCAL_MODULE := netd_config.xml
-LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_RELATIVE_PATH := netd
-LOCAL_SRC_FILES := conf/netd_config.xml
-include $(BUILD_PREBUILT)
-
 include $(call all-makefiles-under,$(LOCAL_PATH))

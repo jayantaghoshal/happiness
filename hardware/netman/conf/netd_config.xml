@@ -1,8 +1,0 @@
-<config>
-  <isWhitelist>true</isWhitelist>
-  <interfaceList>
-    <item>lo</item>
-    <item>sit0</item>
-    <item>eth9</item>
-  </interfaceList>
-</config>
