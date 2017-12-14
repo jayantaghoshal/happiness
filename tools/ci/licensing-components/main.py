@@ -6,8 +6,8 @@ licensing-components
 
 Usage:
   licensing-components software-bom <root> <output_path>
-  licensing-components list-copyright-headers <files>...
-  licensing-components fix-copyright-headers <files>...
+  licensing-components list-copyright-headers <file_or_files_list>...
+  licensing-components fix-copyright-headers <file_or_files_list>...
   licensing-components fix-all-copyright-headers <directory>
   licensing-components verify-copyright-headers <files>...
   licensing-components -h | --help
@@ -64,7 +64,12 @@ def software_bom(root, output_path, **kwargs):
 
 
 @dispatch.on('list-copyright-headers')
-def list_copyright_headers(files, **kwargs):
+def list_copyright_headers(file_or_files_list, **kwargs):
+    if isinstance(file_or_files_list, str):
+        files = [file_or_files_list]
+    else:
+        files = file_or_files_list
+
     for f in files:
         if should_filepath_be_ignored(f):
             print("Ignoring file {}".format(f))
