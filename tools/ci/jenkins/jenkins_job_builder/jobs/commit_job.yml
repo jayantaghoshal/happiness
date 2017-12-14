@@ -106,7 +106,7 @@
     builders:
         - shell: 
             !include-raw: 
-                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_build_stage.sh
                 - bootstrap_ihu_gate_build.sh            
 
 - job:

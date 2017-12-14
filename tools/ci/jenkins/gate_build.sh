@@ -8,12 +8,11 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
-TMPFS=/dev/shm
+TMPFS=/mnt/ramdisk
 export CCACHE_DIR=$TMPFS/ccache
 export CCACHE_MAXSIZE=50G
 export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
-# Setting OUT_DIR must be done BEFORE sourcing envsetup.sh !!!!!!!!!!!!
 export USE_CCACHE=true
 
 # Rerun commit check in case merge effect changed after the change was validated at the check step
@@ -33,10 +32,12 @@ lunch ihu_vcc-eng
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
 # Ensure our repo can be build with mma
-time mmma -j32 vendor/volvocars
+time mmma -j64 vendor/volvocars
 
 # Build image and test utils
-time make -j32 droid vts tradefed-all
+time make -j64 droid 
+time make -j64 vts
+time make -j64 tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate || die "Build Unit and Component tests failed"
