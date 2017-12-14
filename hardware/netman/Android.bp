@@ -15,7 +15,7 @@ cc_defaults {
 }
 
 cc_binary {
-    name: "netman",
+    name: "netmand",
     defaults: ["netman_cc_defaults"],
     srcs: [ //TODO use wildcards, if sth is common move to static lib?
         "src/netutils.cpp",
@@ -40,7 +40,7 @@ cc_binary {
     static_libs: ["libbase"],
 
     // Netman depends upon sysctl.conf, which it will initialize during startup
-    init_rc: ["init/netman.rc"],
+    init_rc: ["init/netmand.rc"],
     required: [
         "sysctl.conf",
         "netd_config.xml",
