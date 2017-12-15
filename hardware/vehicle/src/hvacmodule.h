@@ -54,6 +54,8 @@ class HvacModule : public vhal20::impl::ModuleBase {
 
     std::unique_ptr<SubscriptionBase> m_temperatureLeftHandle;
     std::unique_ptr<SubscriptionBase> m_temperatureRightHandle;
+
+    NotifiableProperty<float> m_temp_left;
+    NotifiableProperty<float> m_temp_right;
     TempImpl m_tempImpl;
-    NotifiableProperty<float> m_temperature;
 };

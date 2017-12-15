@@ -13,12 +13,13 @@ using namespace autosar;
 
 class TempImpl {
   public:
-    TempImpl(NotifiableProperty<float>& temp_left);
+    TempImpl(NotifiableProperty<float>& temp_left, NotifiableProperty<float>& temp_right);
 
     void setleftTemp(float temp_left);
     void setrightTemp(float temp_right);
 
   private:
-    NotifiableProperty<float>& m_temperature;
+    NotifiableProperty<float>& m_temp_left;
+    NotifiableProperty<float>& m_temp_right;
     DESender<HmiCmptmtTSp_info> HmiCmptmtTSpSender;
 };

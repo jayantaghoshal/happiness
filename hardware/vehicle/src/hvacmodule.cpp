@@ -22,7 +22,12 @@ using namespace std::placeholders;
 using namespace android;
 
 HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl* vehicleHal)
-    : impl::ModuleBase(vehicleHal), m_fanLevel(0), m_fanLevelImpl(m_fanLevel), m_tempImpl(m_temperature) {
+    : impl::ModuleBase(vehicleHal),
+      m_fanLevel(0),
+      m_fanLevelImpl(m_fanLevel),
+      m_temp_left(0),
+      m_temp_right(0),
+      m_tempImpl(m_temp_left, m_temp_right) {
     initHandledProperties();
 
     m_fanLevelHandle = m_fanLevel.subscribeAndCall([this](int32_t fanLevel) {
@@ -36,13 +41,13 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
 
         // Update the map and and notify property store
         auto& propValInMap = propIt->second;
-        propValInMap.value.int32Values[0] = m_fanLevel.get();
+        propValInMap.value.int32Values[0] = fanLevel;
         propValInMap.timestamp = elapsedRealtimeNano();
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
 
-    m_temperatureLeftHandle = m_temperature.subscribeAndCall([this](float temp_left) {
+    m_temperatureLeftHandle = m_temp_left.subscribeAndCall([this](float temp_left) {
         ALOGD("temp_left has been updated from the tempimpl. Update the vhal property with temp_left: %f", temp_left);
         auto propIt =
                 m_propValues.find(propertyKey(VehicleProperty::HVAC_TEMPERATURE_SET, VehicleAreaZone::ROW_1_LEFT));
@@ -53,13 +58,13 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
 
         // Notifying subscribers
         auto& propValInMap = propIt->second;
-        propValInMap.value.floatValues[0] = m_temperature.get();
         propValInMap.timestamp = elapsedRealtimeNano();
+        propValInMap.value.floatValues[0] = temp_left;
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
 
-    m_temperatureRightHandle = m_temperature.subscribeAndCall([this](float temp_right) {
+    m_temperatureRightHandle = m_temp_right.subscribeAndCall([this](float temp_right) {
         ALOGD("temp_right has been updated from the tempimpl. Update the vhal property with temp_right: %f",
               temp_right);
         auto propIt =
@@ -71,8 +76,9 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
 
         // Notifying subscribers
         auto propValInMap = propIt->second;
-        propValInMap.value.floatValues[0] = m_temperature.get();
+
         propValInMap.timestamp = elapsedRealtimeNano();
+        propValInMap.value.floatValues[0] = temp_right;
         VehiclePropValue propValue = propValInMap;
         pushProp(propValue);
     });
@@ -161,11 +167,11 @@ std::vector<VehiclePropConfig> HvacModule::listProperties() {
         propConfig.supportedAreas = VehicleAreaZone::ROW_1_LEFT | VehicleAreaZone::ROW_1_RIGHT;
         propConfig.areaConfigs.resize(2);
         propConfig.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-        propConfig.areaConfigs[0].minFloatValue = 16;
-        propConfig.areaConfigs[0].maxFloatValue = 28;
+        propConfig.areaConfigs[0].minFloatValue = 17;  // TODO should this limit be controlled by carconfig?
+        propConfig.areaConfigs[0].maxFloatValue = 27;  // TODO should this limit be controlled by carconfig?
         propConfig.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
-        propConfig.areaConfigs[1].minFloatValue = 16;
-        propConfig.areaConfigs[1].maxFloatValue = 28;
+        propConfig.areaConfigs[1].minFloatValue = 17;  // TODO should this limit be controlled by carconfig?
+        propConfig.areaConfigs[1].maxFloatValue = 27;  // TODO should this limit be controlled by carconfig?
 
         propConfigs.push_back(propConfig);
     }
