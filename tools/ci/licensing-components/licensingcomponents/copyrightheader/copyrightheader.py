@@ -59,7 +59,8 @@ PathsIgnoreRegex = re.compile(r'.*(?:'
 
 
 def should_filepath_be_ignored(path: str):
-    return PathsIgnoreRegex.match(path) is not None
+    abspath = os.path.abspath(path)
+    return PathsIgnoreRegex.match(abspath) is not None
 
 
 def filter_ignored(files):
