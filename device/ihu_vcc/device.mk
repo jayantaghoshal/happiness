@@ -132,7 +132,10 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     Chrome \
-    Maps
+    Maps \
+    MapsGearhead \
+    GoogleAssistant \
+    GoogleAssistantTextQuery
 
 ##############################################################
 # VCC required Linux kernel modules

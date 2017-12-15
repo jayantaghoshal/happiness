@@ -19,7 +19,7 @@
   <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars/apps/VolvoLauncher" revision="60e9877a98431a66913f70ae4e996b2c6a96847f"/>
   <!-- Volvo Cars partner apps -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
-  <project name="vendor/google/apps/GoogleServices" path="vendor/google/GoogleServices" revision="a850f6c95ab5d1e691a0879ee6c6b653c9e348ec"/>
+  <project name="vendor/google/apps/GoogleServices" path="vendor/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
 
   <!-- Intel Overrides -->
   <remove-project name="bsp/vendor/intel/build"/>
