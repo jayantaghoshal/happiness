@@ -31,9 +31,6 @@ lunch ihu_vcc-eng
 # Rerun commit check in case it changed after the change was validated at the check step
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
-# Ensure our repo can be build with mma
-time mmma -j64 vendor/volvocars
-
 # Build image and test utils
 time make -j64 droid 
 time make -j64 vts
@@ -62,6 +59,10 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed || die "Could not create out archive"
+
+# Ensure our repo can be build with mma
+# Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
+time mmma -j64 vendor/volvocars
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
