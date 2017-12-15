@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #pragma once
 #include <vendor/volvocars/hardware/signals/1.0/ISignals.h>
 #include <vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h>

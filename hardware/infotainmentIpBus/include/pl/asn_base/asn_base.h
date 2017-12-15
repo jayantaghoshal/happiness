@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef PL_ASN_BASE_H
 #define PL_ASN_BASE_H 1
 /** @defgroup PL_ASN_BASE ASN.1 Interface

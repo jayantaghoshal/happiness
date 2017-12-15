@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_IPCMDTYPES_H_
 #define _CONNECTIVITY_LIBIPCOMMANDBUS_IPCMDTYPES_H_
 

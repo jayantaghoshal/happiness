@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef LOCAL_CONFIG_H
 #define LOCAL_CONFIG_H
 

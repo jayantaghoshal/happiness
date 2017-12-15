@@ -1,3 +1,7 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #ifndef VSM_SINK_H
 #define VSM_SINK_H

@@ -1,4 +1,9 @@
 /*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+/*
  * mock_diagnostic_client.h
  *
  *  Created on: Aug 26, 2016

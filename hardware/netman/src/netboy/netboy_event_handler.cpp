@@ -1,16 +1,7 @@
 /*
- * ===========================================================================
- * [2017]- Volvo Car Corporation
- * All Rights Reserved
- * LEGAL
- * NOTICE:  All information (including intellectual and technical concepts) contained herein is, and remains the
- * property of or licensed to Volvo Car Corporation. This information is proprietary to Volvo Car Corporation and may be
- * covered by patents or patent applications. This information is protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material is strictly forbidden unless prior written
- * permission is obtained from Volvo Car Corporation.
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
  */
-
-#include <cutils/log.h>
 
 #include "netboy_event_handler.h"
 
@@ -21,6 +12,7 @@
 #include "rule_handler.h"
 
 #define LOG_TAG "Netboyd"
+#include <cutils/log.h>
 
 namespace vcc {
 namespace netman {
@@ -61,15 +53,14 @@ void NetboyEventHandler::RuleMatchAndRun(const UeventHandler::NetDeviceAttr &dev
 
 // handle new message
 void NetboyEventHandler::HandleEvent(const char *uevent, const int message_length) {
-    if (nullptr == uevent) return;
+    if (!uevent) return;
 
     const char *const ADD_ACTION = "add@";
 
     // Currently only add@ event are handled. Can be extended as per need
     if (message_length < static_cast<int>(std::string(ADD_ACTION).length()) ||
-        std::string(uevent).find(ADD_ACTION) == std::string::npos) {
+        std::string(uevent).find(ADD_ACTION) == std::string::npos)
         return;
-    }
 
     // advance buffer past first segment
     int index = strlen(uevent) + 1;

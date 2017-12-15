@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef SOURCE_HARDWARE_UDS_TEST_CT_MOCK_UDS_PROVIDER_H_
 #define SOURCE_HARDWARE_UDS_TEST_CT_MOCK_UDS_PROVIDER_H_
 

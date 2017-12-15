@@ -1,7 +1,8 @@
-/*===========================================================================*\
- * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
- * Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_NET_DESERIALIZER_H_
 #define _CONNECTIVITY_LIBIPCOMMANDBUS_NET_DESERIALIZER_H_
 

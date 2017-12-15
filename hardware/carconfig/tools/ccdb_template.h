@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #pragma once
 
 namespace CarConfigParams
@@ -12,13 +17,13 @@ namespace CarConfigParams
       Parameter Description:
        ##PARAMDESC##
    */
-  
+
   {% for param in paramlist %}
   enum class CC{{param.number}}_{{param.name}}Type
   {
       ParamNumber = {{param.number}},
       {% for value in param.values -%}
-      
+
       {{value.desc}} = 0x{{value.value}},
       {% endfor %}
       InvalidValue = 0xFF

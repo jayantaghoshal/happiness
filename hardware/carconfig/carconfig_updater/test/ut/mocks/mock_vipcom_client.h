@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef MOCK_VIPCOM_CLIENT_H
 #define MOCK_VIPCOM_CLIENT_H
 

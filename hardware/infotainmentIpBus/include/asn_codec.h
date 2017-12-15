@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef INFOTAINMENT_IP_BUS_ASN_DECODER_H
 #define INFOTAINMENT_IP_BUS_ASN_DECODER_H
 

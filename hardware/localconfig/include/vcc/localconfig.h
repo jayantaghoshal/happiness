@@ -1,7 +1,7 @@
-/*===========================================================================*\
- * Copyright 2016, 2017 Delphi Technologies, Inc., All Rights Reserved.
- * Delphi Confidential
- \*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #ifndef VCC_LOCALCONFIG_H_
 #define VCC_LOCALCONFIG_H_

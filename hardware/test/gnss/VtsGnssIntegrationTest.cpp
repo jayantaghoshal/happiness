@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include <VccIpCmdApi.h>
 #include <android/hardware/gnss/1.0/IGnss.h>
 #include <android/hardware/gnss/1.0/IGnssCallback.h>
