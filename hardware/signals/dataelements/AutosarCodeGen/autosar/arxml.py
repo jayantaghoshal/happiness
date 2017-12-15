@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #######################################
 # AUTOSAR ARXML File handling
 #
@@ -85,14 +88,14 @@ def create(filename, replace=False):
 
 def save(filename, saveas=None):
     '''
-        Save ARXml class to disk. 
+        Save ARXml class to disk.
 
         :param filename: ARXml file to save
         :param saveas: Optional new filename to save as
         :return: Nothing
     '''
     arxml_files[filename].save(saveas)
-        
+
 
 
 class ARXml:
@@ -156,8 +159,8 @@ class ARXml:
                  components.ARIsignalGroup: self.syssignalgroup,
                  components.AREndToEndProtection: self.endtoendprotection,
                  components.ARGroupMap: self.groupmapping}
-        
-    
+
+
     def reload(self):
         '''
         Loads/Reloads all AUTOSAR elements found in the file
@@ -194,25 +197,25 @@ class ARXml:
         self.swbasetype.update(get_elem_dict(self.xml.getroot(), self.parents, 'SW-BASE-TYPE', components.ARSwBaseType, self))
         self.units.update(get_elem_dict(self.xml.getroot(), self.parents, 'UNIT', components.ARUnit, self))
         self.phys_dimension.update(get_elem_dict(self.xml.getroot(), self.parents, 'PHYSICAL-DIMENSION', components.ARPhysDimension, self))
-        self.compu_methods.update(get_elem_dict(self.xml.getroot(), self.parents, 'COMPU-METHOD', components.ARCompuMethod, self))    
+        self.compu_methods.update(get_elem_dict(self.xml.getroot(), self.parents, 'COMPU-METHOD', components.ARCompuMethod, self))
         self.isignal = dict()
-        self.isignal.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL', components.ARIsignal, self))    
+        self.isignal.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL', components.ARIsignal, self))
         self.syssignal = dict()
         self.syssignal.update(get_elem_dict(self.xml.getroot(), self.parents, 'SYSTEM-SIGNAL', components.ARSysSignal, self))
         #self.ecu_instance = get_elem_dict(self.xml.getroot(), self.parents, 'ECU-INSTANCE', base.ARObject)
         self.isignalgroup = dict() # type: Dict[str, components.ARIsignalGroup]
         self.isignalgroup.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL-GROUP', components.ARIsignalGroup, self))
         self.endtoendprotection = get_elem_dict(self.xml.getroot(), self.parents, 'END-TO-END-PROTECTION', components.AREndToEndProtection, self)
-        
+
         self.sigtrig = dict() # type: Dict[str, components.ARSigTrig]
         self.sigtrig.update(get_elem_dict(self.xml.getroot(), self.parents, 'I-SIGNAL-TRIGGERING', components.ARSigTrig, self))
-        
+
         self.groupmapping = get_elem_dict2(self.xml.getroot(), self.parents, 'SENDER-RECEIVER-TO-SIGNAL-GROUP-MAPPING', 'DATA-ELEMENT-IREF/TARGET-DATA-PROTOTYPE-REF', components.ARGroupMap,self)
         self.groupmapping.update(get_elem_dict2(self.xml.getroot(), self.parents, 'SENDER-RECEIVER-TO-SIGNAL-MAPPING', 'DATA-ELEMENT-IREF/TARGET-DATA-PROTOTYPE-REF', components.ARGroupMap,self))
         printProgress()
 
 
-        
+
         get_timings(self.xml.getroot(), self.parents)
         get_end_to_end(self.xml.getroot(), self.parents)
 
@@ -227,7 +230,7 @@ class ARXml:
                  components.ARArrayDatatype: self.datatypes,
                  components.ARRecordDatatype: self.recordDatatypes,
                  components.ARRecordElement: self.recordElements,
-                 components.ARImplDatatype: self.impl_datatypes, 
+                 components.ARImplDatatype: self.impl_datatypes,
                  components.ARDataConstraint: self.data_constr,
                  components.ARSwBaseType: self.swbasetype,
                  components.ARUnit: self.units,
@@ -276,18 +279,18 @@ class ARXml:
         self.phys_dimension.update(get_elem_dict(path, self.parents, 'PHYSICAL-DIMENSION', components.ARPhysDimension, self))
         self.compu_methods.update(get_elem_dict(path, self.parents, 'COMPU-METHOD', components.ARCompuMethod, self))
         self.isignal = dict()
-        self.isignal.update(get_elem_dict(path, self.parents, 'I-SIGNAL', components.ARIsignal, self))    
+        self.isignal.update(get_elem_dict(path, self.parents, 'I-SIGNAL', components.ARIsignal, self))
         self.syssignal = dict()
         self.syssignal.update(get_elem_dict(path, self.parents, 'SYSTEM-SIGNAL', components.ARSysSignal, self))
         self.isignalgroup = dict()
-        self.isignalgroup.update(get_elem_dict(path, self.parents, 'I-SIGNAL-Group', components.ARIsignalGroup, self))    
+        self.isignalgroup.update(get_elem_dict(path, self.parents, 'I-SIGNAL-Group', components.ARIsignalGroup, self))
         self.endtoendprotection.update(get_elem_dict(path, self.parents, 'END-TO-END-PROTECTION', components.AREndToEndProtection, self))
-        
+
         self.groupmapping = get_elem_dict2(self.xml.getroot(), self.parents, 'SENDER-RECEIVER-TO-SIGNAL-GROUP-MAPPING', 'DATA-ELEMENT-IREF/TARGET-DATA-PROTOTYPE-REF', components.ARGroupMap,self)
         self.groupmapping.update(get_elem_dict2(self.xml.getroot(), self.parents, 'SENDER-RECEIVER-TO-SIGNAL-MAPPING', 'DATA-ELEMENT-IREF/TARGET-DATA-PROTOTYPE-REF', components.ARGroupMap,self))
 
         printProgress()
-        
+
         #self.ecu_instance = get_elem_dict(self.xml.getroot(), self.parents, 'ECU-INSTANCE', base.ARObject)
 
         get_timings(path, self.parents)
@@ -304,7 +307,7 @@ class ARXml:
                  components.ARArrayDatatype: self.datatypes,
                  components.ARRecordDatatype: self.recordDatatypes,
                  components.ARRecordElement: self.recordElements,
-                 components.ARImplDatatype: self.impl_datatypes, 
+                 components.ARImplDatatype: self.impl_datatypes,
                  components.ARDataConstraint: self.data_constr,
                  components.ARSwBaseType: self.swbasetype,
                  components.ARUnit: self.units,
@@ -313,7 +316,7 @@ class ARXml:
                  components.ARSysSignal: self.syssignal,
                  components.ARIsignal: self.isignal,
                  components.AREndToEndProtection: self.endtoendprotection,
-                 components.ARGroupMap: self.groupmapping}        
+                 components.ARGroupMap: self.groupmapping}
 
         printProgressDone()
 
@@ -380,7 +383,7 @@ class ARXml:
 
             :return: Last ARPackage of path
         '''
-        
+
         pkgs = packagepath.path.split('/')[1:-1]
 
         pkg = self
@@ -421,17 +424,17 @@ class ARXml:
         return dict(self.packages.items() + self.compositions.items() + self.port_interfaces.items() +  self.swcs.items())
 
     def getPackages(self):
-        ''' 
-            Get all *ARPackage* objects in this *ARXml* instance. 
-            
+        '''
+            Get all *ARPackage* objects in this *ARXml* instance.
+
             Returns a list of *ARPackage* objects.
         '''
         return self.packages
 
     def getCompositions(self):
-        ''' 
+        '''
             Get all composition (*ARComposition*) elements in *ARXml* instance.
-            
+
             Returns a list of *ARComposition* objects.
         '''
         return self.compositions
@@ -479,7 +482,7 @@ class ARXml:
             :param implementation: Autosar path to SWC-Implementation
         '''
         return self.swc_impls[implementation]
-    
+
 
     def getPackage(self, package):
         '''
@@ -506,7 +509,7 @@ class ARXml:
 
     def save(self, filename=None, comment=None):
         '''
-            Save ARXml instance to file. If *ARXml* instance is loaded from file it 
+            Save ARXml instance to file. If *ARXml* instance is loaded from file it
             will save back  to the same file by default, unless *filename* is defined.
             If *ARXml* file is created new it will save to the *filename* specified there.
 
@@ -585,7 +588,7 @@ def get_elem_dict(root, parent_dict, tag, elem_class, fileref=None):
         :param elem_class: Autosar Element class to create from element
         :param fileref: *ARXml* file instance
 
-        :return: Returns a dictionary of elements of type *elem_class* where key is 
+        :return: Returns a dictionary of elements of type *elem_class* where key is
                 the Autosar path to the respective element.
     '''
     elems = getiterator(root, tag=tag)
@@ -608,7 +611,7 @@ def get_elem_dict2(root, parent_dict, tag, subtag, elem_class, fileref=None):
         :param elem_class: Autosar Element class to create from element
         :param fileref: *ARXml* file instance
 
-        :return: Returns a dictionary of elements of type *elem_class* where key is 
+        :return: Returns a dictionary of elements of type *elem_class* where key is
                 the Autosar path to the respective element.
     '''
     elems = getiterator(root, tag=tag)
@@ -643,7 +646,7 @@ def get_swc_to_impl_mapping(root, parent_dict, fileref):
 
         #print "SwcImplementation: %s"%(i_path)
         impl_dict[i_path] = components.ARSwcImplementation(i,i_path,fileref)
-    
+
     for m in mapping:
         impl_obj = find(m, 'COMPONENT-IMPLEMENTATION-REF')
         impl = impl_obj.text
@@ -685,7 +688,7 @@ def get_timings(root, parent_dict):
         a = findall(t, 'TARGET-COMPONENT-REF')
         b = findall(t, 'PORT-REF')
         c = findall(t, 'DATA-ELEMENT-REF')
-        
+
         maps.addReferenceList(a)
         maps.addReferenceList(b)
         maps.addReferenceList(c)
@@ -700,7 +703,7 @@ def get_end_to_end(root, parent_dict):
         :param root: Root element of ElementTree.Element type
         :param parent_dict: Dictionary of parent elements
         :return: Nothing
-    '''    
+    '''
     e2e = getiterator(root, tag='END-TO-END-PROTECTION')
 
     for e in e2e:
@@ -721,7 +724,7 @@ def get_end_to_end(root, parent_dict):
 def set_namespaces(etree):
     '''
         Set namespace for ElementTree class
-        
+
         :param etree: ElementTree class
     '''
     if etree.VERSION[0:3] == '1.2':

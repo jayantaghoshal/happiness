@@ -1,8 +1,11 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from datetime import datetime, timedelta
 import time
 
 class JenkinsBuild(object):
-    
+
     @classmethod
     def create(cls, build):
         jenkins_build = cls()
@@ -55,7 +58,7 @@ class JenkinsBuild(object):
                         self.email = parameter["value"]
                     if parameter["name"] == "GERRIT_CHANGE_OWNER_NAME":
                         self.author = parameter["value"]
-                        
+
     def _duration(self, build):
         duration = None
         if (build["duration"] is None) or (build["duration"] == 0):

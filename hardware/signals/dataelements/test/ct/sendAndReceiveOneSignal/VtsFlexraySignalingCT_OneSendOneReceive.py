@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 
 from vts.runners.host import asserts
@@ -53,7 +56,7 @@ class ComponentTest(base_test.BaseTestClass):
         self.flexray.UsgModSts.send(UsgModSts.map.UsgModDrvg)
         self.flexray.FRNetworkStatus.send(1)
         self.flexray.VehBattUSysU.send(12)
-		
+
         log("Waiting for boot")
         self.dut.waitForBootCompletion()
         log("Boot completed")
@@ -73,7 +76,7 @@ class ComponentTest(base_test.BaseTestClass):
         self.flexray.close()
 
     '''test1: Send and receive a flexray signal
-        Send one flexray signal, "signalToIhu" that will end up in a DEReceiver 
+        Send one flexray signal, "signalToIhu" that will end up in a DEReceiver
         in the test program flexray_test.cpp which will in turn send back "signalFromIhu" with the same value as the one sent.
     '''
     def testFlexray2(self):

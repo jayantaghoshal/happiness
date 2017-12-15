@@ -1,5 +1,5 @@
-
-
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
 
 def init(app):
     app.add_sender_element("VehModMngtGlbSafe1")
@@ -22,4 +22,4 @@ def init(app):
     app.add_sender_element("SeatHeatLvlReqLe")
     app.add_sender_element("SeatHeatLvlReqRi")
     app.add_sender_element("DrvModReq")
-    
+

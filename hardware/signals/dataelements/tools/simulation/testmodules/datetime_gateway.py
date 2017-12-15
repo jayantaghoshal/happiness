@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 """
 Takes the local time of the host computer and sends it to the IHU using TiAndDateIndcn signal.
 """

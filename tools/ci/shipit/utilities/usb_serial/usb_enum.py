@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 """Class module to process a list of slave device connections
 and output corresponding serial device"""
 

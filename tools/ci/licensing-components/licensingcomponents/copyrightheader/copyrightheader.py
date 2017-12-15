@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 import datetime
 from collections import namedtuple
 
@@ -13,7 +16,7 @@ LanguageCommentFeatures = namedtuple('LanguageCommentFeatures', ['firstline',
 
 CStyleGenericRegex = re.compile(r'(/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
-CStyleReplaceableRegex = re.compile(r'(/\*[\s\S]*Copyright.*(?:(?:Delphi)|(?:Volvo))[\s\S]*?\*\/)',
+CStyleReplaceableRegex = re.compile(r'(/\*[\s\S]*(?:(Copyright)|(\[2017\])).*(?:(?:Delphi)|(?:Volvo))[\s\S]*?\*\/)',
                                     re.IGNORECASE)
 
 CLangFeatures = LanguageCommentFeatures(firstline='/*\n',

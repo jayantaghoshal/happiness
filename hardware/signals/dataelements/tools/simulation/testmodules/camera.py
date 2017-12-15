@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 import sched
 import threading
 import time
@@ -38,7 +41,7 @@ def init(app):
     app.add_sender_element("PrkgAssiSts")
     app.add_sender_element("SnsrParkAssiFrnt")
     app.add_sender_element("SnsrParkAssiRe")
-    
+
     app.add_sender_element("CarTiGlb")
 
 

@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 
 from vts.runners.host import asserts
@@ -104,13 +107,13 @@ class ComponentTest(base_test.BaseTestClass):
     '''test1: basic start up
     pre-req
         Power Off, CarMode=normal, UsgMode=Abandoned and Close the door.
-    
-    part 1:  
+
+    part 1:
         Power on, wait 20 secs and verify that the IHU is NOT
         running and that we have MmedMaiPwrMod==Sleep , MmedHmiModStd==OFF
-    
+
     part 2:
-        Open & close the door and enter UsgModActive. Verify after 40 secs that the IHU is alive. 
+        Open & close the door and enter UsgModActive. Verify after 40 secs that the IHU is alive.
     '''
     '''
     # TODO waiting for power switch control
@@ -217,7 +220,7 @@ class ComponentTest(base_test.BaseTestClass):
     part 1:
         UsgMod=InActive and open+close the door. Wait 30 secs and verify the IHU is down
 
-    part 2:  
+    part 2:
         Power on, wait 20 secs and verify that the IHU is NOT
         running and that we have MmedMaiPwrMod==Sleep , MmedHmiModStd==OFF
     '''

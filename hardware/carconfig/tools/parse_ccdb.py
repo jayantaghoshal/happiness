@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 # coding:UTF-8
 """
@@ -262,7 +265,7 @@ def parse_ccdb(filename, template_file, output_file, caller = ""):
                 filename=filename,
                 paramlist=paramlist
                 ))
-    
+
 ## MAIN with some error checking.
 if __name__ == '__main__':
     #use docopt if installed.

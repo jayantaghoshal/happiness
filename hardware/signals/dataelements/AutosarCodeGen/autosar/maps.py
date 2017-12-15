@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 import typing
 #########################################
 # This file contains global hashmaps
@@ -45,7 +48,7 @@ def updateReference(oldref, newref):
     try:
         for r in references[oldref]:
             r.text = newref
-    
+
         if newref != '':
             references[newref] = references[oldref]
 

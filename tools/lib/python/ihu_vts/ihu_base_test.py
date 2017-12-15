@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 #!/usr/bin/env python
 import os
 
@@ -14,8 +17,8 @@ _number = Union[int, float]
 _kpi_value_type = Union[_number, List[Union[List[_number], _number]]]
 
 """The _writeResultsJsonString fix is needed to be able to see the number
-of test cases that have been run without error. A virtual python 
-environment is created and stores the test_run_summary.json, 
+of test cases that have been run without error. A virtual python
+environment is created and stores the test_run_summary.json,
 this modification copies it to /tmp outside of the virtual environment.
 Patching test_runner to enable a correct test summary.
 """

@@ -1,9 +1,9 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 ######################################################
 # AUTOSAR library for python
 #
-# Copyright Volvo Cars AB
-######################################################
-
 '''
 The AUTOSAR library package for Python intends to implement a simple way to
 work with and modify AUTOSAR ARXML files.
