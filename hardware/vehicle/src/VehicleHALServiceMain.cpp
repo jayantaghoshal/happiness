@@ -12,6 +12,7 @@
 #include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
 #include "hvacmodule.h"
+#include "keymanagermodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
@@ -35,14 +36,19 @@ int main(int /* argc */, char* /* argv */ []) {
     // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get());
+    auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
     // audioModule->registerToVehicleHal();
     hvacModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
+    keyManagerModule->registerToVehicleHal();
 
     auto service = std::make_unique<vhal_20::VehicleHalManager>(hal.get());
+
+    // Start subscriptions to VIP, do this after HAL is setup
+    keyManagerModule->StartSubscribe();
 
     // Configured to only use 1 thread as the VHAL Manager and Implementation is not threadsafe.
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);

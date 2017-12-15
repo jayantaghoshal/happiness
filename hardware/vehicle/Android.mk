@@ -19,7 +19,8 @@ LOCAL_SRC_FILES := \
      src/carconfigmodule.cpp \
      src/hvacmodule.cpp \
      src/fanlevelimpl.cpp \
-     src/tempimpl.cpp
+     src/tempimpl.cpp \
+     src/keymanagermodule.cpp
 
 LOCAL_C_INCLUDES := \
     src/

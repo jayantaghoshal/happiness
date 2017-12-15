@@ -84,6 +84,6 @@
 
   <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f7461150a665954e12be305163515339a943ff20"/>
   <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="306a508485c04c98ff9762bd88f273b15ae919fe"/>
-  <project name="bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="7f18d49c735358a16e67e45cc8a2ecb694613176"/>
+  <project name="bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="cd842cf209ffa1c71749828991ee933a42327b23"/>
   <project name="bb_libkeyhandling" path="device/delphi/vcc_ihu/private/bb_libkeyhandling" revision="d4173bdf85a453b1bacfe55e22ef6ae90740ab0c"/>
 </manifest>
