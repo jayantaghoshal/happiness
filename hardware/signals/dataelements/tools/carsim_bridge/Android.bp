@@ -5,7 +5,8 @@
 
 cc_binary {
     name: "carsim_bridge",
-    vendor: true,
+    defaults: ["volvocars_cc_defaults"],
+
     cpp_std: "c++14",
     init_rc: ["carsim_bridge.rc"],
     srcs: [
@@ -15,11 +16,6 @@ cc_binary {
         "hidl_handler.cpp",
     ],
 
-    cppflags: [
-        "-fexceptions",
-        "-Wno-unused-parameter",
-        "-Wno-macro-redefined",
-    ],
     shared_libs: [
         "liblog",
         "libcutils",
@@ -31,6 +27,4 @@ cc_binary {
         "vendor.volvocars.hardware.signals@1.0",
         "libdataelements",
     ],
-
-    // compile_multilib: "64",
 }
