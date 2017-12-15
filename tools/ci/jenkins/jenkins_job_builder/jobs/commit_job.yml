@@ -106,6 +106,7 @@
     builders:
         - shell: 
             !include-raw: 
+                - bootstrap_ramdisk.sh
                 - bootstrap_ihu_gate_build_stage.sh
                 - bootstrap_ihu_gate_build.sh            
 

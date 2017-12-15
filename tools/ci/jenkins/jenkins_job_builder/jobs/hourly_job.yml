@@ -61,6 +61,7 @@
     builders:
         - shell: 
             !include-raw: 
+                - bootstrap_ramdisk.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_image_build.sh
 - job:
