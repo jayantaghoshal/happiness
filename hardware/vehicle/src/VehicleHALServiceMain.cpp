@@ -11,6 +11,7 @@
 
 #include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
+#include "activeuserprofilemodule.h"
 #include "hvacmodule.h"
 #include "keymanagermodule.h"
 
@@ -35,6 +36,7 @@ int main(int /* argc */, char* /* argv */ []) {
     // AudioModVHAL: getAllPropValues: invalid context, return a dummy vector, initial call?
     // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
+    auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get());
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
 
@@ -44,8 +46,9 @@ int main(int /* argc */, char* /* argv */ []) {
     hvacModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
+    activeUserProfileModule->registerToVehicleHal();
 
-    auto service = std::make_unique<vhal_20::VehicleHalManager>(hal.get());
+    ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
     // Start subscriptions to VIP, do this after HAL is setup
     keyManagerModule->StartSubscribe();

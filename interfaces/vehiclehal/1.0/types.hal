@@ -10,12 +10,23 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
     /**
      * CarConfigValues. First position in array equals CC01, second position equals CC02 and so on.
      *
-     * @change_mode TODO add info
-     * @access TODO add info
+     * @change_mode VehiclePropertyChangeMode:STATIC
+     * @access VehiclePropertyAccess:READ
      */
     CARCONFIG = (
       0x0001
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:BYTES
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Active user profile
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    ACTIVE_USER_PROFILE = (
+      0x0002
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
 };
