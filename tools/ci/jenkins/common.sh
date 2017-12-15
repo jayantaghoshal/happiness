@@ -21,7 +21,7 @@ function die() {
 }
 
 function ihu_update() {
-  "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/ihu_update.py \
+  python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/ihu_update.py \
     --aosp_root_dir "$REPO_ROOT_DIR" \
     --vip_port /dev/ttyVIP \
     --mp_port /dev/ttyMP
