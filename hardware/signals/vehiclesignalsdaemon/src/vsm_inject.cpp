@@ -10,17 +10,20 @@
 #include <avmp.h>
 #include <vipcomm/VipFramework.h>
 
-#include <thread>
-
 #include <cutils/log.h>
+#include <array>
+#include <chrono>
+#include <thread>
+#include "vsm.h"
 #undef LOG_TAG
 #define LOG_TAG "VSD"
+using namespace std::chrono_literals;
 
 // variables used to monitor avmp communication status
-static bool avmpSignalErrorLogged = false;
-bool avmpSignalReceived = true;
-static bool avmpHeartbeatErrorLogged = false;
-bool avmpHeartbeatReceived = true;
+
+std::atomic<std::chrono::steady_clock::time_point> lastAvmpSignalReceived;
+std::atomic<std::chrono::steady_clock::time_point> lastAvmpHeartbeat;
+std::atomic<VersionHandshakeStatus> avmpVersionCheckOk{VersionHandshakeStatus::NotReceived};
 
 void vsm_inject_init(void) {
     ALOGI("Initializing VSM inject handler");
@@ -28,8 +31,7 @@ void vsm_inject_init(void) {
     // Create instances used to send (inject) data elements received from the VIP to application code
     vipcomm::initializeInject();
 }
-
-void vsm_inject_start(void) {
+void sendAvmpVersionHandshake() {
     uint8_t avmpVersionHandshake[avmp::avmpHeaderSize + avmp::versHandshakePayloadSize];
     Message_Send_T message;
 
@@ -54,49 +56,79 @@ void vsm_inject_start(void) {
     message.data_size = avmp::avmpHeaderSize + avmp::versHandshakePayloadSize;
 
     ALOGI("Sending AVMP version handshake");
-    ALOGD("AVMP version: %d", avmpVersionHandshake[2]);
-    ALOGD("COM CRC, MSB: %d", avmpVersionHandshake[4]);
-    ALOGD("COM CRC, LSB: %d", avmpVersionHandshake[3]);
-    ALOGD("SWC CRC, MSB: %d", avmpVersionHandshake[6]);
-    ALOGD("SWC CRC, LSB: %d", avmpVersionHandshake[5]);
-    ALOGD("RTE TYPE CRC, MSB: %d", avmpVersionHandshake[8]);
-    ALOGD("RTE TYPE CRC, LSB: %d", avmpVersionHandshake[7]);
-    ALOGD("COM CFG CRC, MSB: %d", avmpVersionHandshake[10]);
-    ALOGD("COM CFG CRC, LSB: %d", avmpVersionHandshake[9]);
+    ALOGD("Sending AVMP version: %d", avmpVersionHandshake[2]);
+    ALOGD("Sending COM CRC, MSB: %d", avmpVersionHandshake[4]);
+    ALOGD("Sending COM CRC, LSB: %d", avmpVersionHandshake[3]);
+    ALOGD("Sending SWC CRC, MSB: %d", avmpVersionHandshake[6]);
+    ALOGD("Sending SWC CRC, LSB: %d", avmpVersionHandshake[5]);
+    ALOGD("Sending RTE TYPE CRC, MSB: %d", avmpVersionHandshake[8]);
+    ALOGD("Sending RTE TYPE CRC, LSB: %d", avmpVersionHandshake[7]);
+    ALOGD("Sending COM CFG CRC, MSB: %d", avmpVersionHandshake[10]);
+    ALOGD("Sending COM CFG CRC, LSB: %d", avmpVersionHandshake[9]);
 
     messageSend(&message);
+}
+
+void vsm_inject_start(void) {
+    sendAvmpVersionHandshake();
 
     // Start error monitoring thread
     std::thread monitorThread([]() {
+        lastAvmpHeartbeat = std::chrono::steady_clock::now();
+        lastAvmpSignalReceived = std::chrono::steady_clock::now();
+
+        bool avmpSignalErrorLogged = false;
+        bool avmpHeartbeatErrorLogged = false;
+        size_t versionRetryIndex = 0;
+        const std::array<std::chrono::steady_clock::duration, 8> versionRetryTimes{
+                {200ms, 500ms, 1s, 1s, 1s, 3s, 3s, 10s}};
+
+        const auto avmpHeartBeatTimeout = 4s;
+        const auto avmpSignalTimeout = 4s;
+        std::chrono::steady_clock::time_point nextRetryVersionHandShake =
+                std::chrono::steady_clock::now() + versionRetryTimes[0];
+
         ALOGI("AVMPMonitor thread started");
         while (true) {
-            // Evaluate each 4s if any heartbeats and signals have been received
-            sleep(4);
+            std::this_thread::sleep_for(100ms);  // TODO: Replace with dispatcher
 
-            // Monitor received heartbeats
-            if (!avmpHeartbeatReceived && !avmpHeartbeatErrorLogged) {  // We didn't receive any heartbeats during the
-                                                                        // period and we didn't log it (yet)
-                avmpHeartbeatErrorLogged = true;
-                ALOGE("AVMPMonitor: heartbeats stopped coming in from the VIP");
-            } else if (avmpHeartbeatReceived && avmpHeartbeatErrorLogged) {  // We did receive heartbeats during the
-                                                                             // period and this was the first detection
-                                                                             // of it
-                avmpHeartbeatErrorLogged = false;
-                ALOGE("AVMPMonitor: heartbeats started to come in from the VIP");
-            }
-            avmpHeartbeatReceived = false;
+            const auto now = std::chrono::steady_clock::now();
+            const bool avmpHeartbeatReceived = (lastAvmpHeartbeat.load() > (now - avmpHeartBeatTimeout));
+            const bool avmpSignalReceived = (lastAvmpSignalReceived.load() > (now - avmpSignalTimeout));
 
-            // Monitor received signals
-            if (!avmpSignalReceived &&
-                !avmpSignalErrorLogged) {  // We didn't receive any signals during the period and we didn't log it (yet)
-                avmpSignalErrorLogged = true;
-                ALOGE("AVMPMonitor: signals stopped coming in from the VIP");
-            } else if (avmpSignalReceived && avmpSignalErrorLogged) {  // We did receive signals during the period and
-                                                                       // this was the first detection of it
-                avmpSignalErrorLogged = false;
-                ALOGI("AVMPMonitor: signals started to come in from the VIP");
+            {
+                // Monitor received heartbeats
+                if (!avmpHeartbeatReceived && !avmpHeartbeatErrorLogged) {
+                    avmpHeartbeatErrorLogged = true;
+                    ALOGE("AVMPMonitor: heartbeats stopped coming in from the VIP");
+                } else if (avmpHeartbeatReceived && avmpHeartbeatErrorLogged) {
+                    avmpHeartbeatErrorLogged = false;
+                    ALOGE("AVMPMonitor: heartbeats started to come in from the VIP");
+                }
             }
-            avmpSignalReceived = false;
+            {
+                // Monitor received signals
+                if (!avmpSignalReceived && !avmpSignalErrorLogged) {
+                    avmpSignalErrorLogged = true;
+                    ALOGI("AVMPMonitor: signals stopped coming in from the VIP");
+                } else if (avmpSignalReceived && avmpSignalErrorLogged) {
+                    avmpSignalErrorLogged = false;
+                    ALOGI("AVMPMonitor: signals started to come in from the VIP");
+                }
+            }
+            if (avmpVersionCheckOk == VersionHandshakeStatus::NotReceived && now > nextRetryVersionHandShake) {
+                // WORKAROUND: This retry should actually be done by DESIP layer but some times
+                // VIP acks and still drops the message  so we have to do it here in higher layers also.
+                // [PSS370-3953]
+
+                if (versionRetryIndex == 0) {
+                    ALOGE("DESIP AVMP Version handshake was not received from VIP. Sending signals will not work. "
+                          "Retrying forever");
+                }
+                sendAvmpVersionHandshake();
+                nextRetryVersionHandShake = now + versionRetryTimes[versionRetryIndex];
+                versionRetryIndex = std::min(versionRetryTimes.size() - 1, versionRetryIndex + 1);
+            }
         }
     });
     monitorThread.detach();
@@ -109,7 +141,7 @@ void vsm_inject_inject(uint16_t signalId, void *buffer, bool injectError, const 
         return;
     }
 
-    avmpSignalReceived = true;
+    lastAvmpSignalReceived = std::chrono::steady_clock::now();
 
     if (true == injectError) {
         if (avmp::errorPayloadSize != length) {

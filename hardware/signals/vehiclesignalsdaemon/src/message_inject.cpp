@@ -9,11 +9,9 @@
 #include <vipcomm/VipFramework.h>
 #include <vsm_inject.h>
 #include <vsm_sink.h>
+#include <chrono>
 #undef LOG_TAG
 #define LOG_TAG "VSD"
-
-extern bool avmpVersionCheckOk;
-extern bool avmpHeartbeatReceived;
 
 static void logMessage(const uint8_t *message, const uint32_t data_size);
 static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, const uint32_t data_size);
@@ -67,7 +65,7 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
 
         messageSend(&message);
 
-        avmpHeartbeatReceived = true;
+        lastAvmpHeartbeat = std::chrono::steady_clock::now();
     } else if (avmp::versionHandshakeMsgId == ctrlMsgId) {
         if ((avmp::avmpHeaderSize + avmp::versHandshakePayloadSize) != data_size) {
             ALOGW("Version handshake message has incorrect size expected = %d but received %d",
@@ -86,24 +84,24 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
 
         if ((avmp::avmpVersion == avmpVersion) && (myComCrc == comCrc) && (mySwcCrc == swcCrc) &&
             (myRteTypeCrc == rteTypeCrc) && (myComCfgCrc == comCfgCrc)) {
-            uint8_t avmpHeader[avmp::avmpHeaderSize];
-            Message_Send_T message;
-
-            avmpVersionCheckOk = true;
+            avmpVersionCheckOk = VersionHandshakeStatus::Ok;
 
             // Send a "send all" control message to the VIP to request all
             // Flexray and LIN signals received by the VIP so far
+            uint8_t avmpHeader[avmp::avmpHeaderSize];
+            Message_Send_T message;
             avmpHeader[0] = avmp::sendAllMsgId;
             avmpHeader[1] = avmp::controlMsgByteMask;
             message.data_ptr = avmpHeader;
             message.data_size = avmp::avmpHeaderSize;
 
-            ALOGI("Sending AVMP 'Send all' command");
+            ALOGI("Received correct AVMP version. Sending AVMP 'Send all' command");
             messageSend(&message);
 
             // Now we can also start sinking/sending signals to the VIP
             vsm_sink_init();
         } else {
+            avmpVersionCheckOk = VersionHandshakeStatus::Error;
             ALOGE("AVMP version control failed");
             ALOGI("AVMP version, expected %d , received %d", avmp::avmpVersion, avmpVersion);
             ALOGI("COM CRC, expected %d , received %d", myComCrc, comCrc);

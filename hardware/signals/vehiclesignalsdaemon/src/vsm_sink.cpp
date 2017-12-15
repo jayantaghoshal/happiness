@@ -12,13 +12,13 @@
 #include <avmp.h>
 #include <vipcomm/VipFramework.h>
 #include "vfc_handler.h"
+#include "vsm.h"
+#include "vsm_inject.h"
 
 #define LOG_TAG "VSD"
 
 // This is the namespace for ARInjector and ARSink (found in ECD_dataelement.h) used for VFC
 using namespace ECDDataElement;
-
-extern bool avmpVersionCheckOk;
 
 // This dataelement is special since it is internal to the IHU (sent to the VIP but not Flexray)
 static DESink<ActivateVfc_info> *ActivateVfc_sink;
@@ -28,10 +28,12 @@ static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void *buf
 static void initInternalDataelements(void);
 
 static void validateAvmpVersionAndSinkMessage(Message_Send_T *message) {
-    if (avmpVersionCheckOk) {
+    if (avmpVersionCheckOk == VersionHandshakeStatus::Ok) {
         messageSend(message);
     } else {
-        ALOGW("Mismatch in AVMP version/file CRC or check not yet made. Discarding sink message.");
+        // Actually it's not possible to reach this line as vipcomm::initializeSink() where sinks are initialized
+        // is only called on successful version handshake.
+        ALOGE("Mismatch in AVMP version/file CRC or check not yet made. Discarding sink message.");
     }
 }
 

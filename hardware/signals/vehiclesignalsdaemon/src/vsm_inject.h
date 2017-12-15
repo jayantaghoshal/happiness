@@ -7,6 +7,13 @@
 #define VSM_INJECT_H
 
 #include <message_api.h>
+#include <atomic>
+#include <chrono>
+
+enum class VersionHandshakeStatus { NotReceived, Ok, Error };
+
+extern std::atomic<VersionHandshakeStatus> avmpVersionCheckOk;
+extern std::atomic<std::chrono::steady_clock::time_point> lastAvmpHeartbeat;
 
 // Use this function to initialize the vehicle signals manager inject handler
 void vsm_inject_init(void);
