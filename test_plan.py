@@ -85,6 +85,8 @@ test_plan_hourly = [
 ]
 
 test_plan_nightly = [
-    VTSTest("vendor/volvocars/hardware/ipcbd/test/ct", standard_caps),
-    VTSTest("vendor/volvocars/hardware/test/iplm", standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",
+            standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables",
+            standard_caps),
 ]
