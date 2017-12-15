@@ -122,7 +122,9 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("Starting ABL command line")
             boot_mp_to_abl_cmdline(ihu_serials.vip)
 
-            MP.expect_line(">>>.*", 30, "Is the MP UART connected? Or do you have the TTY open already?")
+            logger.info("Waiting for ABL commandline, it is usually quick but"
+                        "it might take longer in case ABL has some update/init work to do.")
+            MP.expect_line(">>>.*", 3 * 60, "Is the MP UART connected? Or do you have the TTY open already?")
             logger.info("ABL command line confirmed, boot into fastboot")
             MP.writeline("boot elk")
             MP.expect_line("==> jump to image.*", 30)
