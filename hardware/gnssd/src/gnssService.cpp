@@ -26,6 +26,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
     /// other services...
 
     // IpService::service_name_ = "GNSS";
+    ALOGI("GnssD started");
 
     expect_location_accuracy_ = false;  // set this according to which VCM ver you are currently using
     location_.timestamp = 0;
@@ -37,7 +38,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
 }
 
 void GnssService::serviceDied(uint64_t, const wp<IBase> &) {
-    ALOGI("ipcbD died, Trying to reconnect");
+    ALOGE("ipcbD died, Trying to reconnect");
     StartSubscribe();
 }
 
@@ -47,7 +48,7 @@ void GnssService::StartSubscribe() {
     if (ipcbServer_ != NULL) {
         connectionError = false;
         bool subscriptionsfailed = false;
-        ALOGD("IpcbD found, subscribing");
+        ALOGV("IpcbD found, subscribing");
         // Install callback
         IMessageCallback *this_as_callback = this;
         SubscribeResult resultPosNotification, resultPosCyclic, resultAccNotification, resultAccCyclic;
@@ -61,7 +62,7 @@ void GnssService::StartSubscribe() {
             // Save subscription ID
             pos_notification_id = resultPosNotification.subscriberId;
         } else {
-            ALOGD("Failed to subscribe to GNSSPositionData with notification");
+            ALOGV("Failed to subscribe to GNSSPositionData with notification");
             subscriptionsfailed = true;
         }
 
@@ -73,7 +74,7 @@ void GnssService::StartSubscribe() {
             // Save subscription ID
             pos_cyclic_id = resultPosCyclic.subscriberId;
         } else {
-            ALOGD("Failed to subscribe to GNSSPositionData with notification_cyclic");
+            ALOGV("Failed to subscribe to GNSSPositionData with notification_cyclic");
             subscriptionsfailed = true;
         }
 
@@ -86,7 +87,7 @@ void GnssService::StartSubscribe() {
             // Save subscription ID
             acc_notification_id = resultAccNotification.subscriberId;
         } else {
-            ALOGD("Failed to subscribe to GNSSPositionDataAccuracy with notification");
+            ALOGV("Failed to subscribe to GNSSPositionDataAccuracy with notification");
             subscriptionsfailed = true;
         }
 
@@ -98,7 +99,7 @@ void GnssService::StartSubscribe() {
             // Save subscription ID
             acc_cyclic_id = resultAccCyclic.subscriberId;
         } else {
-            ALOGD("Failed to subscribe to GNSSPositionDataAccuracy with notification_cyclic");
+            ALOGV("Failed to subscribe to GNSSPositionDataAccuracy with notification_cyclic");
             subscriptionsfailed = true;
         }
 
@@ -107,16 +108,18 @@ void GnssService::StartSubscribe() {
             returnAccNotification.isDeadObject() || returnAccCyclic.isDeadObject()) {
             unsubscribeAll();
             connectionError = true;
-            ALOGE("Failed to subscribe to ipcbD, retrying every 1 second");
+            ALOGE("ipcbD is started & registered but gnssd failed to subscribe to notifications, retrying every 1 "
+                  "second");
             timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
         } else {
             // Great success, all subscriptions set
+            ALOGI("GnssD all set and waiting for positions");
             hidl_death_recipient *this_as_recipient = this;
             ipcbServer_->linkToDeath(this_as_recipient, 0);
         }
     } else {
         if (!connectionError) {
-            ALOGD("IpcbD not found, retrying every 1 second");
+            ALOGV("IpcbD not found, retrying every 1 second");
         }
         connectionError = true;
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
@@ -130,7 +133,7 @@ void GnssService::unsubscribeAll() {
             ipcbServer_->unsubscribe(pos_notification_id, [&cresult](CommandResult cr) { cresult = cr; });
             pos_notification_id = 0;
             if (!cresult.success) {
-                ALOGD("Failed to unsubscribe position notification");
+                ALOGV("Failed to unsubscribe position notification");
             }
         }
 
@@ -138,7 +141,7 @@ void GnssService::unsubscribeAll() {
             ipcbServer_->unsubscribe(pos_cyclic_id, [&cresult](CommandResult cr) { cresult = cr; });
             pos_cyclic_id = 0;
             if (!cresult.success) {
-                ALOGD("Failed to unsubscribe position cyclic");
+                ALOGV("Failed to unsubscribe position cyclic");
             }
         }
 
@@ -146,7 +149,7 @@ void GnssService::unsubscribeAll() {
             ipcbServer_->unsubscribe(acc_notification_id, [&cresult](CommandResult cr) { cresult = cr; });
             acc_notification_id = 0;
             if (!cresult.success) {
-                ALOGD("Failed to unsubscribe accuracy notification");
+                ALOGV("Failed to unsubscribe accuracy notification");
             }
         }
 
@@ -154,7 +157,7 @@ void GnssService::unsubscribeAll() {
             ipcbServer_->unsubscribe(acc_cyclic_id, [&cresult](CommandResult cr) { cresult = cr; });
             acc_cyclic_id = 0;
             if (!cresult.success) {
-                ALOGD("Failed to unsubscribe accuracy cyclic");
+                ALOGV("Failed to unsubscribe accuracy cyclic");
             }
         }
     }
@@ -199,7 +202,7 @@ bool GnssService::Initialize() {
         ALOGE("Failed to register Gnss binder service: %d", status);
         return false;
     } else {
-        ALOGI("Gnss binder service register ok");
+        ALOGV("Gnss binder service register ok");
     }
 
     return true;
@@ -238,7 +241,7 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg) {
             sendnow = true;
         } else if (expect_location_accuracy_ && location_.timestamp != 0) {
             // This is just to detect misconfigurations; that we expect accuracy but we dont seem to get them
-            ALOGW("Received cbGNSSPositionDataNotification but no accuracy in sight");
+            ALOGV("Received cbGNSSPositionDataNotification but no accuracy in sight");
         }
         location_.timestamp = mssince1970;
 
