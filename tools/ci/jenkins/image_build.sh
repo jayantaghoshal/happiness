@@ -8,18 +8,17 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
-TMPFS=/dev/shm
-JOB_TMPFS=$TMPFS/$JOB_NAME
 export USE_CCACHE=false
-export OUT_DIR=$JOB_TMPFS/out
+
+rm -rf out  # Remove previous OUT_DIR for clean build.
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
-rm -rf "${OUT_DIR}"  # Remove previous OUT_DIR for clean build.
-
 # Build image, vts & tradefed 
-time make -j32 droid vts tradefed-all
+time make -j64 droid
+time make -j64 vts
+time make -j64 tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly || die "Build Unit and Component tests failed"
@@ -31,7 +30,6 @@ rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.confi
 # Create archive out.tgz 
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
-            --directory="${JOB_TMPFS}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin \

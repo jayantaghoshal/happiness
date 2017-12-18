@@ -4,18 +4,6 @@ set -x
 die() { echo "$@" 1>&2 ; exit 1; }
 
 ##
-# Remove old repo
-#
-build_dir=aosp
-
-if [[ -d $build_dir ]]; then
-  rm -rf $build_dir;
-fi
-
-mkdir $build_dir
-cd $build_dir
-
-##
 # Configure Docker 
 #
 export BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
@@ -27,6 +15,7 @@ bootstrap_docker_run () {
     --hostname aic-docker \
     --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
     --volume "$HOME":"$HOME" \
+    --volume "$RAMDISK_ROOT":"$RAMDISK_ROOT" \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \
