@@ -8,9 +8,11 @@
 #include <map>
 #include <string>
 #include <vector>
+
+#include <DesipClient.hpp>
 //#include "diagnostics_client.h"
-//#include "vipcom_client.h"
 #include "carconfig_base.h"
+#include "vipcom_client.h"
 
 class CarConfigUpdater {
   public:
@@ -38,5 +40,5 @@ class CarConfigUpdater {
 
     static std::vector<uint8_t> carconfigParamFaultsPack(std::map<uint32_t, uint8_t> params);
 
-    // static void updateVipParameters(CarConfigVipCom &vipcomClient);
+    static void updateVipParameters(CarConfigVipCom &vipcomClient);
 };

@@ -4,8 +4,7 @@
  */
 
 subdirs = [
-    "carconfig",
-    "carconfig_updater",
+    "*",
 ]
 
 // Used by carconfig clients

@@ -4,72 +4,116 @@
  */
 
 #include "vipcom_client.h"
-#include <ivi-logging.h>
+#include <binder/IPCThreadState.h>
+#include <binder/ProcessState.h>
+#include <hisip_router_api.h>
 #include <unistd.h>
+#include <iomanip>
 
-// Define a context for the IVI-logging library to use.
-typedef logging::DefaultLogContext LogContext;
-LOG_DECLARE_CLASS_CONTEXT("CCVP", "Updating values for VIP");
+#include <cutils/log.h>
 
-CarConfigVipCom::CarConfigVipCom() : vipCom(VipCom::Application::systemIpcIndex, this) {
-    vipResponded = false;
-    vipAcknowledge = INVALID_VIP_REPLY;
+#undef LOG_TAG
+#define LOG_TAG "VipComClient"
+
+CarConfigVipCom::CarConfigVipCom() {
+    vipReader = std::thread(&CarConfigVipCom::VipReader, this);
+    versionRequest();
 }
 
-int CarConfigVipCom::sendConfig(std::vector<uint8_t> &values) {
-    log_info() << "Sending CarConfig values to VIP";
-    // Prepend the control byte.
-    values.insert(values.begin(), hisipBytes::sysSetCarConfigControlByte);
-    // Send the message to VIP.
-    return vipCom.sendMessage(hisipBytes::sysSetCarConfigFid, values);
-}
+CarConfigVipCom::~CarConfigVipCom() {
+    // Make sure we can exit thread functions and join threads
+    DesipClient::setExitListen(true);
 
-int CarConfigVipCom::waitForVipAcknowledge() {
-    // Wait for VIP response.
-    log_debug() << "Waiting for VIP response...";
-    int timeouts = 0;
-    // Check "vipResponded" member for async response from VipCom library.
-    while (!vipResponded) {
-        usleep(TIMEOUT_USEC);
-        timeouts++;
-        // Stop and fail if reaching the allowed number of timeouts.
-        if (timeouts == TIMEOUT_COUNT) {
-            log_error() << "No response from VIP in expected time";
-            return -1;
-        }
+    if (vipReader.joinable()) {
+        vipReader.join();
     }
+}
 
-    // Verify VIP response based on HISIP catalog:
-    if (vipAcknowledge == hisipBytes::sysRepCarConfigAck) {
-        log_debug() << "Received ACK from VIP";
+int32_t CarConfigVipCom::versionReport(void) {
+    ParcelableDesipMessage msg;
+    int8_t* data = msg.allocDataPtr(2);
+    bool sendOK = false;
+
+    data[0] = 0x01;  // catalog version
+    data[1] = 0x07;  // catalog revision
+
+    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setFid(hisipBytes::sysVersionReport);
+
+    sendMsg(msg, &sendOK);
+    return (sendOK ? 0 : -1);
+}
+
+int32_t CarConfigVipCom::versionRequest(void) {
+    ParcelableDesipMessage msg;
+    bool sendOK = false;
+
+    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setFid(hisipBytes::sysVersionRequest);
+
+    sendMsg(msg, &sendOK);
+    return (sendOK ? 0 : -1);
+}
+
+int CarConfigVipCom::sendConfig(std::vector<int8_t>& values) {
+    ParcelableDesipMessage msg;
+    bool sendOK = false;
+
+    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setFid(hisipBytes::sysSetCarConfigFid);
+    msg.setDataPtr(&values[0], values.size());
+    this->sendMsg(msg, &sendOK);
+    usleep(300000);
+    if (sendOK) {
+        ALOGI("Carconfig values successfully sent to VIP");
         return 0;
-    } else if (vipAcknowledge == hisipBytes::sysRepCarConfigNack) {
-        log_error() << "Received NACK from VIP";
-        return -1;
-    } else {
-        log_error() << "Received unexpected response from VIP: " << vipAcknowledge;
-        return -1;
     }
+    ALOGE("Failed to send CarConfig values to VIP");
+    return -1;
 }
 
-void CarConfigVipCom::onMessage(const uint8_t &_fid, const std::vector<uint8_t> &_payload) {
+void CarConfigVipCom::VipReader() {
+    android::ProcessState::self()->startThreadPool();
+    DesipClient::listen<CC_Desip_Listener, CarConfigVipCom>(this);
+    android::IPCThreadState::self()->joinThreadPool();
+}
+
+void CarConfigVipCom::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(GROUP_ID_SYSTEM); }
+
+void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) {
     // Accept messages with correct FID.
     if (_fid == hisipBytes::sysRepCarConfigFid) {
-        // Grab payload and break the waiting loop through "vipResponded" member.
-        vipAcknowledge = _payload.at(0);
-        vipResponded = true;
+        vipAcknowledge = _payload[0];
+
+        // Sys_Car_Config_Request not implemented. VIP will always return 0
+        if (_payload[1] == 0 /*cc_175*/ && _payload[2] == 0 /*cc_181*/) {
+            ALOGI("Received correct values form VIP");
+        } else {
+            ALOGI("FID: 0x%X, Received unexpected values from VIP with data: 0x%X, 0x%X", _fid, _payload[1],
+                  _payload[2]);
+        }
+
+    } else if (_fid == hisipBytes::sysVersionReport) {
+        ALOGI("Received version report from VIP");
+
+    } else if (_fid == hisipBytes::sysVersionRequest) {
+        ALOGI("Sending version report to VIP");
+        versionReport();
+
     } else {
-        log_warn() << "Received a message with unexpected FID: " << _fid;
+        ALOGE("Received a message with unexpected FID: %x", _fid);
     }
 }
 
-void CarConfigVipCom::onConnectionError(ConnectionError e) {
-    if (IVipComClient::ConnectionError::CONNECT_FAILED == e) {
-        // Set invalid payload and break the waiting loop through "vipResponded" member.
-        vipAcknowledge = INVALID_VIP_REPLY;
-        vipResponded = true;
-        log_error() << "VipCom error with initial connection";
-    } else {
-        log_error() << "VipCom error with existing connection";
-    }
+CC_Desip_Listener::CC_Desip_Listener(CarConfigVipCom* carConfigVipCom) { this->carConfigVipCom = carConfigVipCom; }
+
+Status CC_Desip_Listener::deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return) {
+    vip_msg m;
+    m.fid = msg.getFid();
+    memcpy(static_cast<void*>(m.data), static_cast<void*>(msg.getDataPtr()), msg.getDataSize());
+    *_aidl_return = true;
+    carConfigVipCom->onMessage(m.fid, m.data);
+    return android::binder::Status::ok();
 }
+
+String16 CC_Desip_Listener::getId() { return String16("Carconfig-updater"); }

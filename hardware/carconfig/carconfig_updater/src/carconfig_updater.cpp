@@ -289,25 +289,19 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
     return NewStateConfigured;
 }
 
-// void updateVipParameters(CarConfigVipCom &vipcomClient)
-// {
-//     CarconfigFileReader ccFileReader;
-//     // Get parameters of interest: CC175, CC181
-//     std::vector<uint8_t> parameters;
-//     ccFileReader.open(carconfig_file_name);
-//     parameters.push_back(ccFileReader.getValue(175).raw);
-//     parameters.push_back(ccFileReader.getValue(181).raw);
+void CarConfigUpdater::updateVipParameters(CarConfigVipCom& vipcomClient) {
+    CarConfigReader ccReader;
+    int8_t controlByte = 0x00;
+    std::vector<int8_t> values;
+    values.push_back(controlByte);
+    values.push_back(ccReader.getRawValue(175));
+    values.push_back(ccReader.getRawValue(181));
 
-//     // Send parameters to VIP and wait for response.
-//     if (vipcomClient.sendConfig(parameters) == -1)
-//     {
-//         ALOGE("Failed sending values to VIP");
-//     }
-//     else if (vipcomClient.waitForVipAcknowledge() == -1)
-//     {
-//         ALOGE("Did not receive ACK from VIP, but continuing with CarConfig updater!");
-//     }
-// }
+    // Send parameters to VIP and wait for response.
+    if (vipcomClient.sendConfig(values) == -1) {
+        ALOGE("Failed sending values to VIP");
+    }
+}
 
 int32_t CarConfigUpdater::runUpdater() {
     bool allOldParamsOk;
@@ -315,7 +309,7 @@ int32_t CarConfigUpdater::runUpdater() {
     bool allParamsReceived;
     CarConfigList buffer;
     // diagnosticsClient diagClient;
-    // CarConfigVipCom vipcomClient; //TODO add vipCom
+    CarConfigVipCom vipcomClient;
 
     ALOGI("carconfig-updater started");
 
@@ -362,8 +356,7 @@ int32_t CarConfigUpdater::runUpdater() {
         // Success of updating VIP values does not matter,
         // we always try it if parameters changed and then ask for reboot.
         try {
-            // updateVipParameters(vipcomClient); //TODO Send params to VIP when vipCom is availabele
-            ALOGW("Send parameters to vip is not yet implemented");
+            updateVipParameters(vipcomClient);
             rebootIsRequired = true;
         } catch (std::exception& e) {
             ALOGE("%s", e.what());
