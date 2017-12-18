@@ -11,7 +11,7 @@
 #include "android/hardware/automotive/vehicle/2.0/types.h"
 #include "fanlevelimpl.h"
 #include "i_vehicle_hal_impl.h"
-#include "notifiable_property.h"
+
 #include "tempimpl.h"
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
@@ -47,15 +47,12 @@ class HvacModule : public vhal20::impl::ModuleBase {
   private:
     void initHandledProperties();
 
-    std::unique_ptr<SubscriptionBase> m_fanLevelHandle;
-    NotifiableProperty<int32_t> m_fanLevel;
-    FanLevelImpl m_fanLevelImpl;
     std::map<propertyKey, vhal20::VehiclePropValue> m_propValues;
 
-    std::unique_ptr<SubscriptionBase> m_temperatureLeftHandle;
-    std::unique_ptr<SubscriptionBase> m_temperatureRightHandle;
+    SubscriptionHandle m_fanLevelHandle;
+    FanLevelImpl m_fanLevelImpl;
 
-    NotifiableProperty<float> m_temp_left;
-    NotifiableProperty<float> m_temp_right;
+    SubscriptionHandle m_temperatureLeftHandle;
+    SubscriptionHandle m_temperatureRightHandle;
     TempImpl m_tempImpl;
 };

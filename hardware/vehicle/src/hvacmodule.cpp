@@ -12,6 +12,7 @@
 
 #include <cutils/log.h>
 #include "hvacmodule.h"
+#include "notifiable_property.h"
 
 #undef LOG_TAG
 #define LOG_TAG "HvacModule"
@@ -22,15 +23,10 @@ using namespace std::placeholders;
 using namespace android;
 
 HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl* vehicleHal)
-    : impl::ModuleBase(vehicleHal),
-      m_fanLevel(0),
-      m_fanLevelImpl(m_fanLevel),
-      m_temp_left(0),
-      m_temp_right(0),
-      m_tempImpl(m_temp_left, m_temp_right) {
+    : impl::ModuleBase(vehicleHal), m_fanLevelImpl(), m_tempImpl() {
     initHandledProperties();
 
-    m_fanLevelHandle = m_fanLevel.subscribeAndCall([this](int32_t fanLevel) {
+    m_fanLevelHandle = m_fanLevelImpl.fanLevelValue().subscribeAndCall([this](int32_t fanLevel) {
         ALOGD("FanLevel has been updated from the fanlevelimpl. Update the vhal property with fanLevel: %d", fanLevel);
 
         auto propIt = m_propValues.find(propertyKey(VehicleProperty::HVAC_FAN_SPEED, VehicleAreaZone::ROW_1));
@@ -47,7 +43,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         pushProp(propValue);
     });
 
-    m_temperatureLeftHandle = m_temp_left.subscribeAndCall([this](float temp_left) {
+    m_temperatureLeftHandle = m_tempImpl.temperatureLeftValue().subscribeAndCall([this](float temp_left) {
         ALOGD("temp_left has been updated from the tempimpl. Update the vhal property with temp_left: %f", temp_left);
         auto propIt =
                 m_propValues.find(propertyKey(VehicleProperty::HVAC_TEMPERATURE_SET, VehicleAreaZone::ROW_1_LEFT));
@@ -64,7 +60,7 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         pushProp(propValue);
     });
 
-    m_temperatureRightHandle = m_temp_right.subscribeAndCall([this](float temp_right) {
+    m_temperatureRightHandle = m_tempImpl.temperatureLeftValue().subscribeAndCall([this](float temp_right) {
         ALOGD("temp_right has been updated from the tempimpl. Update the vhal property with temp_right: %f",
               temp_right);
         auto propIt =
@@ -186,7 +182,7 @@ void HvacModule::initHandledProperties() {
         fanspeed.prop = toInt(VehicleProperty::HVAC_FAN_SPEED);
         fanspeed.value.int32Values.resize(1);
         fanspeed.areaId = toInt(VehicleAreaZone::ROW_1);
-        fanspeed.value.int32Values[0] = m_fanLevel.get();
+        fanspeed.value.int32Values[0] = m_fanLevelImpl.fanLevelValue().get();
         fanspeed.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(fanspeed)] = fanspeed;
@@ -197,7 +193,7 @@ void HvacModule::initHandledProperties() {
         templeft.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
         templeft.value.floatValues.resize(1);
         templeft.areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-        templeft.value.floatValues[0] = m_fanLevel.get();
+        templeft.value.floatValues[0] = m_tempImpl.temperatureLeftValue().get();
         templeft.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(templeft)] = templeft;
@@ -208,7 +204,7 @@ void HvacModule::initHandledProperties() {
         tempright.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
         tempright.value.floatValues.resize(1);
         tempright.areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
-        tempright.value.floatValues[0] = m_fanLevel.get();
+        tempright.value.floatValues[0] = m_tempImpl.temperatureRightValue().get();
         tempright.timestamp = elapsedRealtimeNano();
 
         m_propValues[propertyKey(tempright)] = tempright;

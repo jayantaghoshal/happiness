@@ -22,13 +22,14 @@ constexpr uint8_t FAN_4 = 4;
 constexpr uint8_t FAN_5 = 5;
 constexpr uint8_t FAN_MAX = 6;
 
-FanLevelImpl::FanLevelImpl(NotifiableProperty<int32_t>& fanLevel) : m_fanLevel(fanLevel) {
+FanLevelImpl::FanLevelImpl() : m_fanLevel(FAN_4) {
     setFanLevel(FAN_4);  // TODO Hard coded init value due to no persistant settings are available
 }
 
+ReadOnlyNotifiableProperty<int32_t>& FanLevelImpl::fanLevelValue() { return m_fanLevel; }
+
 void FanLevelImpl::setFanLevel(int32_t fanLevel) {
     ALOGI("setFanLevel: Send HmiHvacFanLvlFrnt_info for setting fan speed to: %d", fanLevel);
-    m_fanLevel.set(fanLevel);
 
     HmiHvacFanLvl autosarFanSpeed;
     switch (fanLevel) {
@@ -64,7 +65,7 @@ void FanLevelImpl::setFanLevel(int32_t fanLevel) {
             ALOGW("Non-supported fan_speed: %d\n", fanLevel);
             return;
     }
-
+    m_fanLevel.set(fanLevel);
     DESender<HmiHvacFanLvlFrnt_info> fanLvlFrntSender;
     fanLvlFrntSender.send(autosarFanSpeed);
 }
