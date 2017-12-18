@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.localconfigtest">
+    <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="27"/>
+    <uses-permission android:name="android.volvocars.permission.LOCAL_CONFIG" />
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+        <activity android:name=".MainActivity" />
+    </application>
+
+    <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
+                     android:targetPackage="com.volvocars.localconfigtest"
+                     android:label="Tradefed test for Local Config">
+    </instrumentation>
+
+</manifest>
