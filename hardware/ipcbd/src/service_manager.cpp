@@ -30,7 +30,7 @@ ServiceManager::ServiceManager(std::string service_name, ::Connectivity::Message
 // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
 Return<void> ServiceManager::subscribe(uint16_t serviceID, uint16_t operationID, OperationType operationType,
                                        const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) {
-    ALOGD("+ Ipcb::subscribeMessage");
+    ALOGV("+ Ipcb::subscribeMessage");
 
     if (operationType == OperationType::RESPONSE || operationType == OperationType::ERROR) {
         ALOGE("- Ipcb::subscribeMessage failed, provided OperationType not allowed (%d)", uint8_t(operationType));
@@ -64,18 +64,18 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID, uint16_t operationID,
             });
 
     if (0 == subscriberId) {
-        ALOGD("- Ipcb::subscribeMessage (FAILED)");
+        ALOGW("- Ipcb::subscribeMessage (FAILED)");
         _hidl_cb({{false, "Could not subscribe, probably a subscriber already exists!"}, subscriberId});
         return Void();
     } else {
-        ALOGD("- Ipcb::subscribeMessage (SUCCESS)");
+        ALOGV("- Ipcb::subscribeMessage (SUCCESS)");
         _hidl_cb({{true, ""}, subscriberId});
         return Void();
     }
 }
 
 Return<void> ServiceManager::unsubscribe(uint64_t subscriberId, unsubscribe_cb _hidl_cb) {
-    ALOGD("Ipcb::unsubscribe");
+    ALOGV("Ipcb::unsubscribe");
 
     if (!messageDispatcher_.unregisterCallback(subscriberId)) {
         _hidl_cb({false, "Failed to unsubscribe"});
@@ -87,7 +87,7 @@ Return<void> ServiceManager::unsubscribe(uint64_t subscriberId, unsubscribe_cb _
 }
 
 Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryInfo, sendMessage_cb _hidl_cb) {
-    ALOGD("+ Ipcb::sendMessage");
+    ALOGV("+ Ipcb::sendMessage");
 
     if ((OperationType)msg.pdu.header.operationType == OperationType::REQUEST ||
         (OperationType)msg.pdu.header.operationType == OperationType::SETREQUEST ||
@@ -116,7 +116,7 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGI(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
+    ALOGV(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
 
     // Send the request
@@ -125,14 +125,14 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     messageDispatcher_.sendMessage(std::move(message), caller_data);
 
-    ALOGD("- Ipcb::sendMessage");
+    ALOGV("- Ipcb::sendMessage");
     _hidl_cb({true, ""});
     return Void();
 }
 
 Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryInfo,
                                          const sp<IResponseCallback>& callbackHandler, sendRequest_cb _hidl_cb) {
-    ALOGD("+ Ipcb::sendRequest");
+    ALOGV("+ Ipcb::sendRequest");
 
     if ((OperationType)msg.pdu.header.operationType != OperationType::REQUEST &&
         (OperationType)msg.pdu.header.operationType != OperationType::SETREQUEST &&
@@ -198,13 +198,13 @@ Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryI
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGI(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
+    ALOGV(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
 
     // Send the request
     messageDispatcher_.sendMessage(std::move(message), caller_data);
 
-    ALOGD("- Ipcb::sendRequest");
+    ALOGV("- Ipcb::sendRequest");
     _hidl_cb({true, ""});
     return Void();
 }
