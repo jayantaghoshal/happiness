@@ -7,6 +7,7 @@
 #define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDSERVICE_H
 
 #include <IDispatcher.h>
+#include <vendor/volvocars/hardware/http/1.0/IHttpRequest.h>
 #include <list>
 #include "certificate_handler_interface.h"
 #include "cloud_request.h"
@@ -14,10 +15,17 @@
 #include "vpn_entry_point_fetcher.h"
 
 using ::tarmac::eventloop::IDispatcher;
+using ::vendor::volvocars::hardware::http::V1_0::HttpHeaderField;
+using ::vendor::volvocars::hardware::http::V1_0::HttpHeaders;
 
+using ::android::hardware::Return;
+using ::android::hardware::Void;
+using ::android::hardware::hidl_string;
+using ::vendor::volvocars::hardware::http::V1_0::IHttpRequest;
+using ::vendor::volvocars::hardware::http::V1_0::Response;
 namespace Connectivity {
 
-class CloudService {
+class CloudService : public IHttpRequest {
   public:
     CloudService();
     ~CloudService() = default;
@@ -25,6 +33,11 @@ class CloudService {
     bool Initialize();
 
   private:
+    // Methods from IHttpRequest follow.
+    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https, uint32_t timeout,
+                              doGetRequest_cb _hidl_cb);
+
+    Response BuildResponse(std::int32_t code, const std::string& data, const std::string& header);
     IDispatcher& eventDispatcher_;
 
     ClouddLocalConfig cloudd_local_config_;
@@ -39,5 +52,5 @@ class CloudService {
     int cep_port_;
 };
 
-}  // Namespace
+}  // namespace Connectivity
 #endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_CLOUDSERVICE_H

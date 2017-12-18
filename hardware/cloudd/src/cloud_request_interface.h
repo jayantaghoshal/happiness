@@ -9,7 +9,7 @@
 #include "certificate_handler_interface.h"
 
 namespace Connectivity {
-typedef std::function<void(std::int32_t, const std::string&)> CloudResponseCallback;
+typedef std::function<void(std::int32_t, const std::string&, const std::string&)> CloudResponseCallback;
 
 struct RequestConfig {
     bool use_stunnel_proxy = false;

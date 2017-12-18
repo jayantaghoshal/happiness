@@ -24,7 +24,8 @@ VPNEntryPointFetcher::VPNEntryPointFetcher(ICertHandler& certHandler, IDispatche
 void VPNEntryPointFetcher::Restart() {
     ALOGI(" + Restart()");
     using namespace std::chrono_literals;
-    CloudResponseCallback doneCallback = [&](std::int32_t http_response_code, const std::string& data) {
+    CloudResponseCallback doneCallback = [&](std::int32_t http_response_code, const std::string& data,
+                                             const std::string& header) {
         ALOGW("DONE CALLBACK");
         const std::array<std::chrono::milliseconds, 1> retryTimes = {{1000ms}};
         if (http_response_code < 200 || http_response_code > 299) {
@@ -69,4 +70,4 @@ void VPNEntryPointFetcher::Stop() {
 void VPNEntryPointFetcher::WhenResultAvailable(std::function<void(const VPNEntryPointParser::EntryPoint&)>&& callback) {
     whenResultAvailableCallback = std::move(callback);
 }
-}
+}  // namespace Connectivity

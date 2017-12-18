@@ -74,6 +74,7 @@ class CloudRequest final : public virtual ICloudRequest {
         std::unique_ptr<CurlMultiEasyHandle> multi_easy_connection;
         bool finishedPrematurely = false;
         std::string data_;
+        std::string header_;
         CloudResponseCallback response_callback_;
         // TODO: Figure out a better way to define ownership of certHandler, should NOT be raw pointer
         ICertHandler* certHandler = nullptr;

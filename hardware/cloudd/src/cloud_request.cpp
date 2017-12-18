@@ -100,12 +100,12 @@ int perform(CloudRequest::MultiState* multi_state, curl_socket_t fd) {
                 ALOGE("Failed to get CURL response2: %d", ret2);
             } else if (resultCode == CURLcode::CURLE_OPERATION_TIMEDOUT) {
                 ALOGW("Request timeout");
-                easy_state->response_callback_(599, "");
+                easy_state->response_callback_(599, "", "");
             } else if (resultCode != CURLcode::CURLE_OK) {
                 ALOGD("Request failed with error: %d, %s", resultCode, curl_easy_strerror(resultCode));
-                easy_state->response_callback_(-1, "");
+                easy_state->response_callback_(-1, "", "");
             } else {
-                easy_state->response_callback_(response_code, easy_state->data_);
+                easy_state->response_callback_(response_code, easy_state->data_, easy_state->header_);
             }
         }
 
@@ -267,6 +267,7 @@ CloudRequest::RequestHandle CloudRequest::GenericGet(const std::string& uri, Clo
 
         verified_curl_easy_setopt(easy, CURLOPT_WRITEDATA, &easy_state->data_);
         verified_curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_write_callback);
+        verified_curl_easy_setopt(easy, CURLOPT_HEADERDATA, &easy_state->header_);
         verified_curl_easy_setopt(easy, CURLOPT_PRIVATE, easy_state.get());
         verified_curl_easy_setopt(easy, CURLOPT_TIMEOUT_MS, config.timeout.count());
 
@@ -322,7 +323,7 @@ CloudRequest::RequestHandle CloudRequest::GenericGet(const std::string& uri, Clo
     } else if (ret2 != CURLcode::CURLE_OK) {
         ALOGE("Failed to get CURL response2: %d", ret2);
     } else {
-        response_callback(response_code, easy_state->data_);
+        easy_state->response_callback_(response_code, easy_state->data_, easy_state->header_);
     }
 
     curl_easy_cleanup(easy);
