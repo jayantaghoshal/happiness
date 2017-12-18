@@ -166,6 +166,12 @@ RUN pip install flake8
 RUN pip install typing
 
 ##################################################
+# Tools required for CarSim
+RUN apt-get install -y \
+    python3-tk
+
+
+##################################################
 # Preload with python packages required for VTS
 # This is because VTS does pip intall and by having them locally it's faster and
 # doesn't require Internet access
