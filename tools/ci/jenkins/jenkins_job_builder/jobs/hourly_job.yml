@@ -33,7 +33,7 @@
 - job:
     name: ihu_image_build
     defaults: time_job_defaults
-    node: high
+    node: image_build
     properties:
         #TODO: Duplicated from the time_job_defaults, don't know how to append things to the default.
         - build-discarder:
