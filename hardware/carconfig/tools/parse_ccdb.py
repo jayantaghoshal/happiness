@@ -1,9 +1,10 @@
 #!/usr/bin/env python
+# coding:UTF-8
 
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-# coding:UTF-8
+
 """
 Car Configuration Database Parser.
 The parser takes a spreadsheet extract from

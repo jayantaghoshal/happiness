@@ -22,6 +22,8 @@ public class CarConfigApi{
     public static final String TAG = CarConfigApi.class.getSimpleName();
     public static final String CAR_CONFIG_LOCATION = "/oem_config/carconfig/carconfig.csv";
     public static final String CAR_CONFIG_LOCATION_DEFAULT = "/vendor/etc/config/carconfig-default.csv";
+
+
     private static ArrayList<Integer> carConfigData = new ArrayList<>();
 
     /**
@@ -33,15 +35,21 @@ public class CarConfigApi{
     /**
      * Get a value from the volvo car config by given enum
      * @param carConfigEnum
-     * @return Enum
+     * @return Enum or, Null if there are problems
      */
     @SuppressWarnings("unchecked")
-    public static synchronized <T extends CarConfigEnums.CarConfigEnumBase> T getValue(Class<T> carConfigEnum){
+    public static synchronized <T extends Enum & CarConfigEnums.CarConfigEnumBase> T getValue(Class<T> carConfigEnum){
+        if (carConfigEnum == null){
+            return null;
+        }
         if (carConfigData.size()==0){
             loadData();
         }
         int param = CarConfigEnums.getParamNumber(carConfigEnum);
-        return (T) CarConfigEnums.getValue(carConfigEnum, carConfigData.get(param-1));
+        if (carConfigData.size() == 0){
+            return null;
+        }
+        return CarConfigEnums.getValue(carConfigEnum, carConfigData.get(param-1));
     }
 
     /**
