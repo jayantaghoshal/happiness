@@ -12,7 +12,8 @@ LanguageCommentFeatures = namedtuple('LanguageCommentFeatures', ['firstline',
                                                                  'bodyline_prefix',
                                                                  'bodyline_suffix',
                                                                  'headers_matcher',
-                                                                 'headers_to_replace'])
+                                                                 'headers_to_replace',
+                                                                 'supports_shebang'])
 
 CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
@@ -24,7 +25,8 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         bodyline_prefix=' * ',
                                         bodyline_suffix='\n',
                                         headers_matcher=[CStyleGenericRegex],
-                                        headers_to_replace=[CStyleReplaceableRegex]
+                                        headers_to_replace=[CStyleReplaceableRegex],
+                                        supports_shebang=False
                                         )
 
 HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
@@ -35,8 +37,11 @@ HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     bodyline_prefix='# ',
                                                     bodyline_suffix='\n',
                                                     headers_matcher=[HashStartGenericRegex],
-                                                    headers_to_replace=[HashStartReplaceableRegex]
+                                                    headers_to_replace=[HashStartReplaceableRegex],
+                                                    supports_shebang=False
                                                     )
+
+HashStartLanguageWithShebangFeatures = HashStartLanguageFeatures._replace(supports_shebang=True)
 
 CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
                  "This file is covered by LICENSE file in the root of this project"
@@ -48,12 +53,13 @@ KnownLanguages = {
     '.java': CLangFeatures,
     '.bp': CLangFeatures,
     '.mk': HashStartLanguageFeatures,
-    '.py': HashStartLanguageFeatures,
+    '.py': HashStartLanguageWithShebangFeatures,
 }
 
 PathsIgnoreRegex = re.compile(r'.*(?:'
                               r'(generated)|'
                               r'(gen)|'
+                              r'(__init__.py)|'
                               r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))'
                               r')')
 
@@ -135,14 +141,33 @@ def __add_header_to_body(file_body: str, lang: LanguageCommentFeatures):
 
 
 def __replace_headers_in_body(file_body: str, lang: LanguageCommentFeatures):
+    shebang_statement = None
+
+    # extract the shebang from the top of the file
+    if lang.supports_shebang and file_body.startswith("#!"):
+        shebang_statement, file_body = file_body.split('\n', 1)
+        # removing of trailing whitespace needed for reproducibility,
+        file_body = sanitize_whitespace(file_body)
+
     decopyrighted = __remove_header_from_body(file_body, lang)
 
+    # recover the shebang if the header was only thing above it
+    if lang.supports_shebang and decopyrighted.startswith("#!"):
+        shebang_statement, decopyrighted = decopyrighted.split('\n', 1)
+        # removing of trailing whitespace needed for reproducibility,
+        decopyrighted = sanitize_whitespace(decopyrighted)
+
     with_copyright_applied = __add_header_to_body(decopyrighted, lang)
+
+    if shebang_statement is not None:
+        with_copyright_applied = shebang_statement + "\n\n" + with_copyright_applied
+
     return with_copyright_applied
 
 
 def get_contents_with_header_applied(filename: str):
     assert isinstance(filename, str)
+    filename = os.path.abspath(filename)
 
     lang = get_lang(filename)
 
@@ -153,12 +178,15 @@ def get_contents_with_header_applied(filename: str):
     with_copyright_applied_twice = __replace_headers_in_body(with_copyright_applied, lang)
 
     if with_copyright_applied_twice != with_copyright_applied:
+        with open(filename + ".iter_orig", "w") as copy_not_applied:
+            copy_not_applied.write(file_body)
+
         with open(filename + ".iter1", "w") as copy_applied_once:
             copy_applied_once.write(with_copyright_applied)
 
         with open(filename + ".iter2", "w") as copy_applied_twice:
             copy_applied_twice.write(with_copyright_applied_twice)
 
-        raise Exception("Internal error, non reproducible application of header")
+        raise Exception("Internal error, non reproducible application of header to file {}".format(filename))
 
     return with_copyright_applied, file_body
