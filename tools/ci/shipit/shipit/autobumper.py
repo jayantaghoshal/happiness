@@ -6,7 +6,7 @@ import glob
 import logging
 import re
 from xml.etree import ElementTree as ET
-from typing import List, Dict, Union, Any
+from typing import Tuple, List, Dict, Union, Any
 from . import manifest
 from . import process_tools
 from . import git
@@ -114,53 +114,61 @@ def get_changed_projects_from_manifest(manifest_repo: git.Repo) -> Dict[str, Dic
 
 
 def git_commit_info(repo: git.Repo,
-                    rev_range: str) -> Dict[str, Any]:
+                    rev: str) -> Dict[str, Any]:
     """
-    Returns info about the given commit (or commit range) as a dict.
+    Returns info about the given commit as a dict.
     """
     info = {'body': []} # type: Dict[str, Any]
-    for rev in repo.run_git(['rev-list', rev_range]).splitlines():
-        for commit_line in repo.run_git(['show', '-s', rev]).splitlines():
-            match = re.search(r"^(\S+?):*\s+(.*)$", commit_line)
-            if match:
-                info[match.group(1).lower()] = match.group(2)
+    for commit_line in repo.run_git(['show', '-s', rev]).splitlines():
+        match = re.search(r"^(\S+?):*\s+(.*)$", commit_line)
+        if match:
+            info[match.group(1).lower()] = match.group(2)
+        else:
+            if 'title' not in info:
+                if commit_line == "":
+                    continue
+                info['title'] = commit_line.lstrip()
             else:
-                if 'title' not in info:
-                    if commit_line == "":
-                        continue
-                    info['title'] = commit_line.lstrip()
-                else:
-                    info['body'].append(commit_line)
+                info['body'].append(commit_line)
     return info
 
 
-def assemble_commit_messages(base_dir: str, manifest_repo: git.Repo) -> str:
-    commit_addendum = ""
+def assemble_commit_messages(base_dir: str,
+                             manifest_repo: git.Repo) -> Tuple[str, str]:
+    """
+    Assembles the commit messages for the staged changes in the given manifest repository.
+    Returns a tuple consisting of commit title postfix and commit body prefix.
+    """
+    commit_body_prefix = ""
+    commit_title_postfix = ""
     for manifest_name, diff in get_changed_projects_from_manifest(manifest_repo).items():
         for name, details in diff.items():
             if not details[0]:
-                proj_repo = git.Repo(os.path.join(base_dir, details[1]['path']))
-                commit_addendum += "\n{}: Added\n".format(details[1]['path'])
+                commit_body_prefix += " - Added '{}'\n".format(details[1]['path'])
             elif not details[1]:
-                proj_repo = git.Repo(os.path.join(base_dir, details[0]['path']))
-                commit_addendum += "\n{}: Removed\n".format(details[0]['path'])
+                commit_body_prefix += " - Removed '{}'\n".format(details[0]['path'])
             else:
                 proj_repo = git.Repo(os.path.join(base_dir, details[1]['path']))
-                commit_addendum += "\n{}:\n".format(details[1]['path'])
+                commit_body_prefix_addition = ""
                 for rev in proj_repo.run_git(['rev-list',
                                             '^{}'.format(details[0]['revision']),
                                                         details[1]['revision']]).splitlines():
                     rev_info = git_commit_info(proj_repo, rev)
-                    if 'merge' in rev_info:
-                        continue
+                    if rev_info['title'] in commit_title_postfix:
+                        # Replace title postfix with real commit message if previous was a merge commit
+                        commit_title_postfix = rev_info['title']
+                    if commit_title_postfix == "":
+                        commit_title_postfix = rev_info['title']
                     jira_tags = re.findall(r"\[\w+-\w+\]", " ".join(rev_info['body']))
-                    commit_addendum += " - {} {}\n".format(rev_info['title'], " ".join(jira_tags))
-    return commit_addendum
+                    commit_body_prefix_addition += " - {} {}\n".format(rev_info['title'], " ".join(jira_tags))
+                if commit_body_prefix_addition != "":
+                    commit_body_prefix += "\n{}:\n".format(details[0]['path']) + commit_body_prefix_addition + "\n"
+    return (commit_title_postfix, commit_body_prefix)
 
 
 def post_merge(aosp_root_dir: str,
                branch: str,
-               additional_commit_message: str):
+               commit_message: str):
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
     volvocars_repo = git.Repo(volvocars_repo_path)
@@ -172,8 +180,13 @@ def post_merge(aosp_root_dir: str,
                                               manifest_repo,
                                               stage_changes=True)
 
-    additional_commit_message += assemble_commit_messages(aosp_root_dir, manifest_repo)
+    commit_title = "Auto bump"
+
+    (commit_title_postfix, commit_body_prefix) = assemble_commit_messages(aosp_root_dir, manifest_repo)
+
+    if commit_title_postfix != "":
+        commit_title += ": " + commit_title_postfix
 
     logging.info("Changes found, pushing new manifest")
-    manifest_repo.commit("Auto bump\n\n" + additional_commit_message)
+    manifest_repo.commit(commit_title + "\n\n" + commit_body_prefix + commit_message)
     manifest_repo.push(["origin", "HEAD:refs/for/" + branch + "%submit"])
