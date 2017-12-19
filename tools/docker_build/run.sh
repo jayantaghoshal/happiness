@@ -136,5 +136,7 @@ docker run \
     --env=HOME="$HOME" \
     --workdir "${WORKING_DIR}" \
     --privileged \
+    --net=host \
+    --env DISPLAY \
     "${DOCKER_IMAGE}" \
     "$@"
