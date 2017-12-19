@@ -9,7 +9,7 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="c13ef2af052c9698e226449660c1818c826670a4"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="c4e74e3cf37da3fcf633ebb89453ce8995d9e1a8"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="3dd5837d5f7ff8fec1f2673061277bb44c72da98"/>
 
   <!-- APPS -->
