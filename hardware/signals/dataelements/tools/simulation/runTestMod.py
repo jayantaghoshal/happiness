@@ -14,7 +14,8 @@ import traceback
 
 from Sym import CarSim
 
-def app_main(arg_list, ip, port):
+
+def app_main(modules_to_init, ip, port):
     sys.path.append(os.getcwd())
 
 
@@ -27,34 +28,12 @@ def app_main(arg_list, ip, port):
 
     app = CarSim.App(root, (ip, port))
 
-
-    modules_to_init = arg_list
     if len(modules_to_init) == 0:
         print("No test module specified in arguments, check the testmodules folder for available modules")
-    load_modules(app, modules_to_init)
-
+    app.load_modules(modules_to_init)
 
     root.mainloop()
     time.sleep(0.1)
-
-
-def load_modules(app, modules):
-    all_files = os.listdir("testmodules")
-    py_files = [file for file in all_files if file.endswith(".py")]
-    py_modules = [p[:-3] for p in py_files]
-
-    for p in py_modules:
-        if p not in modules:
-            continue
-        if p == "__init__":
-            continue
-
-        try:
-            imported_module = importlib.import_module("testmodules." + p)
-            imported_module.init(app)
-        except Exception as e:
-            logging.error("Failed to load module: %s because: %r" % (p, e) )
-            traceback.print_exc()
 
 
 if __name__ == "__main__":

@@ -6,12 +6,14 @@ import time
 import tkinter
 import tkinter.ttk
 import tkinter.font
+import tkinter.filedialog
 import json
 import sys
 import os
 import socket
 import logging
 import threading
+import importlib
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../../", "AutosarCodeGen"))
 import autosar.arxml as arxml
@@ -87,12 +89,20 @@ class PortSender():
         if self.connection.connected():
             self.infoBindVar.set("x")
             self.infoLabel.config(background=BG_COLOR_NOT_SENT)
+            if self.is_insignal:
+                dir = 0
+            else:
+                dir = 1
             toSend = {
+                "SignalName": self.portName,
+                "Dir": dir,
+                "Data":{
                 "state": 1,
                 "errorCode": 0,
                 "timestamp": int(time.time()),
                 "type": self.senderWidget.dataElementsDataType,
                 "value": self.senderWidget.get_value()
+                }
             }
             self.connection.send(json.dumps(toSend))
 
@@ -349,10 +359,14 @@ class Connection():
         lengthString = '{0:04d}'.format(len(buffer))
         self.socket.sendall('CarSim'.encode(encoding='ascii') + lengthString.encode(encoding='ascii') + buffer)
 
+    def disconnect(self):
+        self._disconnect()
+
     def _disconnect(self):
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close()
-        self._set_connected(False)
+        if self._connected:
+            self.socket.shutdown(socket.SHUT_RDWR)
+            self.socket.close()
+            self._set_connected(False)
 
 
 class App:
@@ -365,11 +379,25 @@ class App:
 
         self.knownReceivedMessages = {}
         self.addedSenderElements = set()
+        self.added_modules = set()
         self.receive_queue = queue.Queue()
         self.send_queue = queue.Queue()
         self.connection = Connection(self.send_queue, self.receive_queue)
         self._server_ip = server_addr[0]  #first element of tuple is ip-address
         self._server_port = int(server_addr[1])  # second element of tuple is tcp-port
+
+        menubar = tkinter.Menu(master)
+        master.config(menu=menubar)
+
+        # create a pulldown menu, and add it to the menu bar
+        filemenu = tkinter.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Load Config...", command=self.load)
+        filemenu.add_command(label="Save Config...", command=self.store)
+        filemenu.add_separator()
+        filemenu.add_command(label="Load Module...", command=self.load_module_file)
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=master.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
 
         #arxmldata
         arxmldata = arxml.load(os.path.join(os.path.dirname(__file__),
@@ -446,14 +474,21 @@ class App:
         self.lActualConnectionStatus.config(background="#ff0000")
 
 
-        ## Connect to remote
+        ## Connect/disconnect to remote
         buttonRow += 1
+        self.buttons = tkinter.Frame(masterFrame)
         self.bConnectToRemote = tkinter.ttk.Button(master, text="ConnectToRemote", command=self.connectToRemote)
-        self.bConnectToRemote.grid(row=buttonRow, column=0, sticky=tkinter.W)
+
+        self.bConnectToRemote.pack(in_=self.buttons, side=tkinter.LEFT)
+        self.bDisconnect = tkinter.ttk.Button(master, text="Disconnect", command=self.disconnectFromRemote)
+
+        self.bDisconnect.pack(in_=self.buttons, side=tkinter.LEFT)
+        self.buttons.grid(row=buttonRow, column=0, sticky=tkinter.W)
         self.eConnectToRemote = tkinter.ttk.Entry(master, width=20)
         self.eConnectToRemote.bind("<Return>", lambda x: self.connectToRemote())
         self.eConnectToRemote.insert(0, self._server_ip)
         self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=tkinter.W)
+
 
 
         ## Add from ARXML
@@ -511,6 +546,48 @@ class App:
 
         self.ever_connected = False
 
+    def load_modules(self, modules):
+        all_files = os.listdir("testmodules")
+        py_files = [file for file in all_files if file.endswith(".py")]
+        py_modules = [p[:-3] for p in py_files]
+
+        for p in py_modules:
+            if p not in modules:
+                continue
+            if p == "__init__":
+                continue
+
+            try:
+                imported_module = importlib.import_module("testmodules." + p)
+                imported_module.init(self)
+                self.added_modules.add(p)
+            except Exception as e:
+                logging.error("Failed to load module: %s because: %r" % (p, e))
+                traceback.print_exc()
+
+    def store(self):
+        d = dict()
+        d['version'] = "1"
+        d['modules'] = list(self.added_modules)
+        d['data_elements'] = list(self.addedSenderElements)
+        with tkinter.filedialog.asksaveasfile(mode='w', defaultextension=".json") as f:
+            f.write(json.dumps(d))
+
+    def load(self):
+        fname = tkinter.filedialog.askopenfilename(filetypes=(("CarSim DE list", "*.json"),))
+        with open(fname) as f:
+            cfg = json.load(f)
+            for m in cfg['modules']:
+                self.load_modules(m)
+            for se in cfg['data_elements']:
+                self.add_sender_element(se)
+
+    def load_module_file(self):
+        fname = tkinter.filedialog.askopenfilename(filetypes=(("CarSim module", "*.py"),))
+        if not fname.endswith('.py'):
+            logging.warning('Module filename must be python file')
+        self.load_modules(os.path.basename(fname[:-3]),)
+
     def fade_timer(self):
         for portname, sink in self.knownReceivedMessages.items():
             for sink in sink.sinkConnections:
@@ -538,6 +615,9 @@ class App:
 
     def connectToRemote(self):
         self.connect(self.eConnectToRemote.get())
+
+    def disconnectFromRemote(self):
+        self.connection.disconnect()
 
     def connect(self, address):
         if not self.connection.connected():
@@ -702,7 +782,6 @@ class App:
         return sender_connection
 
     def add_sender_element(self, dataelement_name):
-
         if dataelement_name in self.addedSenderElements:
             return
         self.addedSenderElements.add(dataelement_name)
@@ -738,7 +817,7 @@ class App:
         first_col = tkinter.Frame(master)
         send_button = tkinter.ttk.Button(first_col, text="Send", width=4)
         stop_button = tkinter.ttk.Button(first_col, text="Error", width=4)
-        port_name_label = tkinter.ttk.Label(first_col, text=dataelement_name)
+        port_name_label = tkinter.ttk.Label(first_col, text=dataelement_name + (' (IN)' if is_insignal else ' (OUT)'))
         info_label = tkinter.ttk.Label(first_col, width=4)
         info_label.pack(side=tkinter.LEFT)
         stop_button.pack(side=tkinter.LEFT)
