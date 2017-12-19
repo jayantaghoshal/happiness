@@ -1,7 +1,7 @@
+#!/usr/bin/env python
+
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
-
-#!/usr/bin/env python
 
 from vts.runners.host import asserts
 from vts.runners.host import base_test

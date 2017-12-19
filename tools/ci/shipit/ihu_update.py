@@ -1,7 +1,7 @@
+#!/usr/bin/env python3
+
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
-
-#!/usr/bin/env python3
 
 # TODO: Don't use adb command line, use https://github.com/android/platform_development/blob/master/testrunner/adb_interface.py
 #       Right now we are missing platform_development repo from intel AOSP delivery
