@@ -2,7 +2,7 @@
 
 WORKING_DIR="$(pwd)"
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
-REPO_ROOT_DIR="${SCRIPT_DIR}"/../../../..
+REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}/../../../..")
 
 DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
 DOCKER_IMAGE=$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")
@@ -17,7 +17,6 @@ IS_INTERACTIVE=false
 if [[ -t 0 ]]; then
     IS_INTERACTIVE=true
 fi
-
 
 
 # Containers can be left dangling if you close the terminal running a contianer, then
