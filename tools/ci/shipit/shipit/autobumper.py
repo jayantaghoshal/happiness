@@ -148,6 +148,13 @@ def assemble_commit_messages(base_dir: str,
             elif not details[1]:
                 commit_body_prefix += " - Removed '{}'\n".format(details[0]['path'])
             else:
+                if not os.path.exists(os.path.join(base_dir, details[1]['path'])):
+                    commit_body_prefix += " - Updated '{}' to commit {}\n".format(details[0]['name'],
+                                                                                  details[0]['revision'])
+                    print("Repository {} is MIA (expected it to be at '{}')".format(
+                        details[1]['name'],
+                        os.path.join(base_dir, details[1]['path'])))
+                    continue
                 proj_repo = git.Repo(os.path.join(base_dir, details[1]['path']))
                 commit_body_prefix_addition = ""
                 for rev in proj_repo.run_git(['rev-list',
