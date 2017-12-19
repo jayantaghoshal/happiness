@@ -39,22 +39,12 @@
           name: Test
           condition: SUCCESSFUL
           projects:
-            - name: ihu_daily_test1
+            - name: ihu_daily_test_generic
               current-parameters: true
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-      - copyartifact:
-          project: ihu_daily_test1
-          filter: "aosp/result_dir/*.xml"
-          target: ./results
-          which-build: multijob-build
-          flatten: true
-          do-not-fingerprint: true
-    publishers:
-      - junit:
-          results: results/*.xml
-          health-scale-factor: 0.0
+      
           
               
             

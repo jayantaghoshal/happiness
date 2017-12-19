@@ -217,7 +217,7 @@
 
 
 - job:
-    name: ihu_daily_test1
+    name: ihu_daily_test_generic
     defaults: time_job_defaults
     node: rack-rig
     parameters:
@@ -235,8 +235,6 @@
         - shell: 
             !include-raw: 
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test1.sh 
-    publishers:
-        - archive:
-            artifacts: 'aosp/result_dir/*.xml'
+                - bootstrap_ihu_daily_test_generic.sh 
+   
             
