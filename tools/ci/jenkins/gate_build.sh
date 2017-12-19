@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
@@ -32,7 +36,7 @@ lunch ihu_vcc-eng
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
 # Build image and test utils
-time make -j64 droid 
+time make -j64 droid
 time make -j64 vts
 time make -j64 tradefed-all
 

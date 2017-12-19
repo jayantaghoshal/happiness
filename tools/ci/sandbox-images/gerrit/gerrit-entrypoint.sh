@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -e
 
 set_gerrit_config() {
@@ -19,10 +23,10 @@ if [ "$1" = "start" ]; then
   # Initialize Gerrit if ${GERRIT_SITE}/git is empty.
   if [ -z "$(ls -A "$GERRIT_SITE/git")" ]; then
     echo "First time initialize gerrit..."
-    java "${JAVA_OPTIONS}" "${JAVA_MEM_OPTIONS}" -jar "${GERRIT_WAR}" init --no-auto-start --batch --install-all-plugins -d "${GERRIT_SITE}"    
+    java "${JAVA_OPTIONS}" "${JAVA_MEM_OPTIONS}" -jar "${GERRIT_WAR}" init --no-auto-start --batch --install-all-plugins -d "${GERRIT_SITE}"
     set_gerrit_config auth.type "DEVELOPMENT_BECOME_ANY_ACCOUNT"
     set_gerrit_config change.submitWholeTopic "true"
-    set_gerrit_config gerrit.canonicalWebUrl "http://dock_gerrit:8080/"    
+    set_gerrit_config gerrit.canonicalWebUrl "http://dock_gerrit:8080/"
 
 
     # Init zuul user

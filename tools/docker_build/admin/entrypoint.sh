@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Verify required parameters
 [[ -z "${HOST_GID}" ]] && {
     echo "HOST_GID env variable not defined!"
@@ -43,7 +46,7 @@ function GetDirOwner() {
     [[ "$rc" == "0" ]] || return $rc
     [[ -z "${owner}" ]] && return 1     # Unexpected output
 
-    
+
     # shellcheck disable=SC2086
     echo ${owner::-1}             # Do not use quotes - variable will be trimmed automatically
     return 0

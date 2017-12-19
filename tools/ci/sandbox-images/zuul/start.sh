@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -x
 
 echo "\
@@ -16,7 +19,7 @@ a2enmod cgi
 a2enmod alias
 a2enmod env
 
-a2enmod rewrite 
+a2enmod rewrite
 a2enmod proxy
 a2enmod proxy_http
 service apache2 restart

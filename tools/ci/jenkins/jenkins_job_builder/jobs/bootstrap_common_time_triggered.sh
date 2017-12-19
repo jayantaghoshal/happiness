@@ -1,10 +1,14 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -x
 
 die() { echo "$@" 1>&2 ; exit 1; }
 
 ##
-# Configure Docker 
+# Configure Docker
 #
 export BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
 export WORKSPACE_ROOT

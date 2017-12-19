@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 WORKING_DIR="$(pwd)"
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}/../../../..")

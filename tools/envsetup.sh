@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Note use of BASH_SOURCE[0] instead of $0 to allow for sourcing.
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"; pwd)
 

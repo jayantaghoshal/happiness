@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -x
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
@@ -24,7 +28,7 @@ adb shell getprop
 
 # Run Unit and Component tests for vendor/volvocars
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial
-status=$?    
+status=$?
 
 
 # Push logs and reports to Artifactory
@@ -37,7 +41,7 @@ echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory
 if [ $status -eq 0 ]; then
     # Mark image as LSV if daily passed
     time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_daily_test_generic "${BUILD_NUMBER}" pass
-    
+
 else
     time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_daily_test_generic "${BUILD_NUMBER}" fail
     die "Test failed"
