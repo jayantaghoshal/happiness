@@ -17,6 +17,8 @@
 
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include "dim_tbt_area.h"
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
+using ::android::sp;
 
 namespace vcc {
 namespace dim {
@@ -41,7 +43,7 @@ class DimManager final : public ::android::hidl::manager::V1_0::IServiceNotifica
                                                      const ::android::hardware::hidl_string& name,
                                                      bool preexisting) override;
 
-    ::android::sp<::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom> vehicle_com_server_;
+    sp<IVehicleCom> vehicle_com_server_;
     std::uint8_t sequence_id_ = 0;
 
     const std::string service_name_ = "dim";
