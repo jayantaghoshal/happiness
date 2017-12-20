@@ -31,10 +31,7 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Create Modules
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
-    // TODO Commented out audioModule since it makes reading properties from vhal fail for other functions, e.g. climate
-    // Keeps logging: AudioModVHAL: getCurrentContext: Unexpected currentSource [-1]
-    // AudioModVHAL: getAllPropValues: invalid context, return a dummy vector, initial call?
-    // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
+    auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get());
@@ -42,9 +39,9 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Register modules
     powerModule->registerToVehicleHal();
-    // audioModule->registerToVehicleHal();
-    hvacModule->registerToVehicleHal();
+    audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
+    hvacModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
 

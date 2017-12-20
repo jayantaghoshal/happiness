@@ -25,29 +25,29 @@
 #undef LOG_TAG
 #define LOG_TAG "VSD"
 
-static void printStartupErrorMessage(ECD_Error_Codes error) {
+static void printStartupErrorMessage(DESIP::ReturnCode error) {
     switch (error) {
-        case ECD_ERROR_NO_ERROR: {
+        case DESIP::ReturnCode::NO_ERROR: {
             break;
         }
-        case ECD_ERROR_NO_CONNECTION_ESTABLISHED: {
-            ALOGE("ECD_ERROR_NO_CONNECTION_ESTABLISHED");
+        case DESIP::ReturnCode::ERROR_NO_CONNECTION_ESTABLISHED: {
+            ALOGE("ERROR_NO_CONNECTION_ESTABLISHED");
             break;
         }
-        case ECD_ERROR_NO_CALLBACK_FUNCTION: {
-            ALOGE("ECD_ERROR_NO_CALLBACK_FUNCTION");
+        case DESIP::ReturnCode::ERROR_NO_CALLBACK_FUNCTION: {
+            ALOGE("ERROR_NO_CALLBACK_FUNCTION");
             break;
         }
-        case ECD_ERROR_CONNECTION_ALREADY_ESTABLISHED: {
-            ALOGE("ECD_ERROR_CONNECTION_ALREADY_ESTABLISHED");
+        case DESIP::ReturnCode::ERROR_CONNECTION_ALREADY_ESTABLISHED: {
+            ALOGE("ERROR_CONNECTION_ALREADY_ESTABLISHED");
             break;
         }
-        case ECD_ERROR_TRANSMIT: {
-            ALOGE("ECD_ERROR_TRANSMIT");
+        case DESIP::ReturnCode::ERROR_TRANSMIT: {
+            ALOGE("ERROR_TRANSMIT");
             break;
         }
-        case ECD_ERROR_HW_FD_CLOSE: {
-            ALOGE("ECD_ERROR_HW_FD_CLOSE");
+        case DESIP::ReturnCode::ERROR_HW_FD_CLOSE: {
+            ALOGE("ERROR_HW_FD_CLOSE");
             break;
         }
         default: {
@@ -85,25 +85,23 @@ void messageSend(Message_Send_T *msg_data) {
     ROUTER_MESSAGE out_msg;
     out_msg.data_size = msg_size;
     out_msg.data = transmitBufferPtr;
+    out_msg.event_id = desip_event_transmit;
 
-    ECD_Error_Codes error = transmit_Layer2Connection(&out_msg);
-    if (error != ECD_ERROR_NO_ERROR) {
+    DESIP::ReturnCode error = transmit_Layer2Connection(&out_msg);
+    if (error != DESIP::ReturnCode::NO_ERROR) {
         ALOGE("messageSend(): Unable to transmit data to Layer2-Component");
         free(transmitBufferPtr);
     }
 }
 
 bool initDesip(const char *pathname) {
-    ECD_Connection_State tx_state = ECD_CONNECTION_NO_CONNECTION;
-    ECD_Connection_State rx_state = ECD_CONNECTION_NO_CONNECTION;
-
     //==========================================================================
     //===  Open Connection to DESIP-Layer = Layer2
     //===  Open Connection to UART-Driver = Layer1
     //==========================================================================
     setCallback_Layer2Connection(messageReceive);
-    ECD_Error_Codes result = open_Layer2Connection(&tx_state, &rx_state, pathname);
-    if ((result != ECD_ERROR_NO_ERROR) || (tx_state == ECD_CONNECTION_NO_CONNECTION)) {
+    DESIP::ReturnCode result = open_Layer2Connection(pathname);
+    if ((result != DESIP::ReturnCode::NO_ERROR)) {
         // DESIP initialization failed
         ALOGE("initDesipThreads(): Creation of Layer2Connection-Threads failed using UART: %s", pathname);
         printStartupErrorMessage(result);

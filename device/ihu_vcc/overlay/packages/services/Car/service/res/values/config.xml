@@ -24,4 +24,8 @@
     <!-- Disable by setting empty string -->
     <string name="instrumentClusterRendererService"></string>
 
+    <!--  Whether to enable Avtivity blocking for safety. When Activity blocking is enabled,
+          only whitelisted safe Activities will be allowed while car is not parked. -->
+    <bool name="enableActivityBlockingForSafety">false</bool>
+
 </resources>

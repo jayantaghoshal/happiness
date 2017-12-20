@@ -4,7 +4,6 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-
 LOCAL_SRC_FILES := src/main.cpp \
         src/vfc_handler.cpp \
         src/signallog.cpp \
@@ -23,22 +22,20 @@ LOCAL_CPPFLAGS += -Wno-macro-redefined
 LOCAL_MODULE := vehicle-signals-daemon
 LOCAL_MODULE_RELATIVE_PATH := hw
 
-
 LOCAL_VENDOR_MODULE := true
 LOCAL_MULTILIB := 64
 LOCAL_INIT_RC := vehicle-signals-daemon.rc
 
 LOCAL_SHARED_LIBRARIES := \
     liblog \
-    libdesip \
     libc++ \
     liblog \
     libdataelements \
     libhidlbase \
     libhidltransport \
+    libhisip \
     libdesip
 
 include $(BUILD_EXECUTABLE)
-
 
 include $(call all-makefiles-under,$(LOCAL_PATH))

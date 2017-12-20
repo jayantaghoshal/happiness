@@ -1,6 +1,6 @@
 #============= hal_vehicle_default ==============
 allow hal_vehicle_default servicemanager:binder call;
-allow hal_vehicle_default desip_service:binder { call transfer };
+#allow hal_vehicle_default desip_service:binder { call transfer };
 
 allow hal_vehicle_default socket_device:file read;
 allow hal_vehicle_default socket_device:file open;

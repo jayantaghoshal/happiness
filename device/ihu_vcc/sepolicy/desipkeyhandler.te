@@ -1,5 +1,0 @@
-# Desip Key Handler service
-type desip_key_hndlr, domain;
-type desip_key_hndlr_exec, exec_type, file_type, vendor_file_type;
-
-init_daemon_domain(desip_key_hndlr)

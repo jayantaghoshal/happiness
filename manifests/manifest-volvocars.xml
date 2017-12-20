@@ -17,9 +17,10 @@
 
   <!-- VolvoLauncher -->
   <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars/apps/VolvoLauncher" revision="60e9877a98431a66913f70ae4e996b2c6a96847f"/>
+
   <!-- Volvo Cars partner apps -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
-  <project name="vendor/google/apps/GoogleServices" path="vendor/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
+  <project name="vendor/google/apps/GoogleServices" path="vendor/volvocars/packages/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
 
   <!-- Intel Overrides -->
   <remove-project name="bsp/vendor/intel/build"/>
@@ -33,15 +34,27 @@
           <copyfile dest="trusty/generate_prebuilt.sh" src="project/generate_prebuilt.sh"/>
   </project>
 
-  <!-- Delphi Overrides -->
-  <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="2eed1639fd4b3bf40696853621a739ad14bf7615"/>
+  <!-- Aptiv Overrides -->
+  <remove-project name="bsp/kernel/modules/microchip/most-driver"/>
+  <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="50d0ba412397e13bc4b64afc587f984c15042cda"/>
 
-  <!-- Upstream to Delphi -->
-  <remove-project name="bb_android_hisip_desip"/>
-  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="285adfeb27fb9f9280d8dd43d00f3e81f3b1f364"/>
-  <remove-project name="android_vehicle-hal"/>
-  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="36e57e081d1dbe4f7ab562d90dcf5f265d8f5491"/>
+  <remove-project name="bsp/device/delphi/volvoihu"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="21c8745e8d6b67a3400ed426c4cb3f941c63a079"/>
+
+  <remove-project name="vendor/delphi/android_device_release"/>
+  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="0750af4da9bd52917b84b772a239d8025e1419c2"/>
+
+  <remove-project name="vendor/delphi/android_vehicle-hal"/>
+  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="b1eb3d46b5edc1ae29db986dec6e15f7f5976ba5" >
+      <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
+      <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
+  </project> 
+
+  <remove-project name="vendor/delphi/android_device" />
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="01be05ff046837ebe3463ad87daf625fc806e625"/>
+
+  <remove-project name="vendor/delphi/bb_android_hisip_desip" />
+  <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="a9e9f3eb74757032d7d6e3846cc2d8cd41254c08"/>
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>

@@ -12,7 +12,7 @@ LOCAL_MODULE := $(service_name)-service
 LOCAL_INIT_RC := $(service_name)-service.rc
 LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
-PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.intel@2.0-service
+PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.delphi@2.0-service
 
 LOCAL_SRC_FILES := \
      src/VehicleHALServiceMain.cpp \
@@ -26,6 +26,8 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
     src/
 
+# TODO (Abhi) ugly hack to get symbols resolved. Ideally Delphi should use LOCAL_WHOLE_STATIC_LIBRARIES while building
+# audio_vehicle-hal-impl-lib. Delphi is informed
 LOCAL_SHARED_LIBRARIES := \
     libbase \
     libhidlbase \
@@ -43,7 +45,10 @@ LOCAL_SHARED_LIBRARIES := \
     $(vccvhal_v1_0) \
     libcarconfig_reader \
     libtarmac \
-    libdataelements
+    libdataelements \
+    libtraceclient \
+    libAudioManagerBinder \
+    libAudioManagerCallbackBinder 
 
 
 LOCAL_STATIC_LIBRARIES := \
@@ -56,7 +61,6 @@ LOCAL_STATIC_LIBRARIES := \
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \
     audio_vehicle-hal-impl-lib
-
 
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 

@@ -82,8 +82,61 @@
   <project name="bsp/vendor/delphi/bcm89501_spi" path="vendor/delphi/bcm89501_spi" revision="cfa0e876f4ac36bc14b2051e4fdf30167b718f59"/>
   <project name="bsp/external/mxt-app" path="external/mxt-app" revision="d911bb52a4774e9be9dd1664ea0d27c9e5ed843e"/>
 
-  <project name="android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle_hal" revision="f7461150a665954e12be305163515339a943ff20"/>
-  <project name="bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="306a508485c04c98ff9762bd88f273b15ae919fe"/>
-  <project name="bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="cd842cf209ffa1c71749828991ee933a42327b23"/>
-  <project name="bb_libkeyhandling" path="device/delphi/vcc_ihu/private/bb_libkeyhandling" revision="d4173bdf85a453b1bacfe55e22ef6ae90740ab0c"/>
+  <!-- Android device project -->
+  <project name="vendor/delphi/android_patches" path="delphi_volvoihu_aosp_patches" revision="c6c9eb3ee990a947cc8a06f4bb9edd995f72cc20"/>
+  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="48e29c94394f966b4e8d3c4f3e0c16216cdf3c2f"/>
+
+  <!-- Project specific Aptiv building blocks -->
+
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="459b96f1929e0c37d0cd3e111afeda59d040a81d"/>
+  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="d9ada227401ead278ccc09eefac2ec6ee33a79ed" >
+    <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
+    <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
+  </project>
+  <project name="vendor/delphi/android_audio-hal" path="device/delphi/vcc_ihu/private/audio-hal" revision="ab4ba79495d25bcd8bf63efcfb98a050ebdc5352"/>
+  <project name="vendor/delphi/bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="dbd61649356918a68d523248424876dcf92d162b"/>
+  <!-- TODO (Abhijeet Shirolikar) submodule ihu_vf_common is not yet synced from Delphi. So remove it as a temporary fix -->
+  <project name="vendor/delphi/android_camera" path="device/delphi/vcc_ihu/private/camera" revision="ede8b1797c39dfa84e352604cda8b838d158d782" />
+
+  <!-- Common Delphi building blocks -->
+  <project name="vendor/delphi/Delphi_Android_Platform_Support" path="device/delphi/vcc_ihu/private/libdelphi_platform" revision="ab6dc87cf1c04fbe6c43a524fc00f71fffcd8f93"/>
+  <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="aac6ca825e6d3b07958eeca792021853fd28c971"/>
+  <project name="vendor/delphi/AShmemService" path="device/delphi/vcc_ihu/private/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498"/>
+  <project name="vendor/delphi/DelphiTraceSystem" path="device/delphi/vcc_ihu/private/DelphiTraceSystem" revision="96c72536693562cdac1f5dbe342a4493b7dd872f"/>
+  <project name="vendor/delphi/AP_XSAL" path="device/delphi/vcc_ihu/private/libxsal" revision="8615654af14c9acbf1202aa06da2f2374a165919"/>
+  <project name="vendor/delphi/AP_XSALcpp" path="device/delphi/vcc_ihu/private/libxsalcpp" revision="080d5f40f5753e95dd39e8d798b121c053472109"/>
+  <project name="vendor/delphi/AP_XSAL_Inline" path="device/delphi/vcc_ihu/private/libxsal_inline" revision="d1a943ba2fdf238513a8d3524ca209ebc68d437e"/>
+  <project name="vendor/delphi/AP_PI" path="device/delphi/vcc_ihu/private/libpi" revision="76d9e26211384a17bd33d04ef3e270dea5317d45"/>
+  <project name="vendor/delphi/AP_Utilities" path="device/delphi/vcc_ihu/private/libAPutilities" revision="0a9252b4923177a37d712ab49407cefe20fd16f9"/>
+  <project name="vendor/delphi/AP_Primitives" path="device/delphi/vcc_ihu/private/libprimitives" revision="ee45b92fea41af4117e2ace30ae4da9e6b0e1c10"/>
+  <project name="vendor/delphi/AP_CppTools" path="device/delphi/vcc_ihu/private/libcpptools" revision="042bc234872c83a507962c379b0e4518ef8f8abc"/>
+
+  <project name="vendor/delphi/bbc_threadcpp" path="device/delphi/vcc_ihu/private/bbc_threadcpp" revision="aef6bcfbd21fdde7d88e5eed0b3a7606214dd8ea"/>
+  <project name="vendor/delphi/bbc_boost" path="device/delphi/vcc_ihu/private/bbc_boost" revision="a45840ed216b2a1a9446f83a436ad4845aaecc36"/>
+  <project name="vendor/delphi/bb_libkeyhandling" path="device/delphi/vcc_ihu/private/bb_libkeyhandling" revision="e04aa9d158f44a8886034ec9c7a10d08181ff560"/>
+  <project name="vendor/delphi/bb_libstatechart" path="device/delphi/vcc_ihu/private/bb_libstatechart" revision="c3367691dc1f5d01b9070ead91361323c14605d5"/>
+
+  <!-- Common Delphi building blocks to be removed or replaced in future -->
+  <project name="vendor/delphi/bbc_trace" path="device/delphi/vcc_ihu/private/libdbgtrace" revision="b6f20c342483eac60937a47329dac125213f56ab"/>
+  <project name="vendor/delphi/bb_util" path="device/delphi/vcc_ihu/private/libutilities" revision="6f32b236e97b0098afd2dbc7294c23256c2c27e3"/>
+
+  <!-- Common Delphi building blocks that are delivered as binaries -->
+  <project name="vendor/delphi/binaries_android_most" path="device/delphi/vcc_ihu/private/most" revision="d0027e2c648836d12c8ddc151d0aaf9e2b8689b0"/>
+  <project name="vendor/delphi/binaries_android_audioengine" path="device/delphi/vcc_ihu/private/audioengine" revision="091bc603885a05662189324fc6d6c4dcfecc417d"/>
+  <project name="vendor/delphi/binaries_android_audio" path="device/delphi/vcc_ihu/private/audio" revision="cb7e991b76e4b32fe0881e89bde6cf7e34bd28dd"/>
+
+  <!-- TODO (Abhijeet Shirolikar) enable while integrating diagnostics together with Aptiv baseline integration effort /-->
+  <!-- project name="vendor/delphi/android_lvds_diagnostic_proxies" path="device/delphi/vcc_ihu/private/lvds_diagnostic_proxies" revision="7352ed6c0d6e65edbe53285ef61bbd96ea945f2d"/ -->
+  <!-- project name="vendor/delphi/binaries_android_diagnostics" path="device/delphi/vcc_ihu/private/vcc_ihu_diagnostics" revision="02d6cca36b61aaeae5a37c0afb67a404c6db8f38"/ -->
+
+  <!-- TODO (Abhijeet Shirolikar) enable while integrating swdl components together with Aptiv baseline integration effort /-->
+  <!-- project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="7ccc2445783d38a871105ffb0668c3e85afc9fc9"/ -->
+  <!-- project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="8657d1a5747e6c674eafd17c15e5017f3c07526b"/ -->
+  <!-- project name="vendor/delphi/AP_ProcessManager" path="device/delphi/vcc_ihu/private/ProcessManager" revision="4a8451dd3ebefbd37714a81efde0b372faca1ef1"/ -->
+
+  <!-- TODO (Abhijeet Shirolikar) enable tunermanager together with Aptiv baseline integration effort. tunermanager has dependency on AP_LIST. But submodules under AP_List are not synced at the time of integration / -->
+  <!-- project name="vendor/delphi/binaries_android_tunermanager" path="device/delphi/vcc_ihu/private/vcc_ihu_tuner" revision="277afc8689df53d3bc7b408ebcd83ba98e976b40"/ -->
+  <!-- project name="vendor/delphi/AP_List" path="device/delphi/vcc_ihu/private/liblist" revision="a99527ace4390c9e7900848882aca1b358bbd25c" sync-s="true"/ -->
+  <!-- External dependencies -->
+  <!-- project name="vendor/delphi/AP_libsoci" path="external/libsoci" revision="71b35446828103012d4f3f6fa12e84011fe83148"/ -->
 </manifest>

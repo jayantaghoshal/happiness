@@ -87,7 +87,7 @@ endif
 # Google Services
 ##############################################################
 
-GMS = vendor/google/GoogleServices
+GMS = vendor/volvocars/packages/google/GoogleServices
 
 # GMS mandatory core packages
 PRODUCT_PACKAGES += \
@@ -134,8 +134,11 @@ PRODUCT_PACKAGES += \
     Chrome \
     Maps \
     MapsGearhead \
-    GoogleAssistant \
-    GoogleAssistantTextQuery
+# TODO (Abhijeet Shirolikar) GoogleAssistant is disabled as current integrated version for audio-hal does not implement
+# AUDIO_ROUTE_POLICY resulting in Car service to continuously crash. Re-enable packages below once required props are
+# implemented in audio-hal 
+#    GoogleAssistant \
+#    GoogleAssistantTextQuery
 
 ##############################################################
 # VCC required Linux kernel modules

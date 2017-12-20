@@ -35,12 +35,6 @@
 #carsim_bridge
 /vendor/bin/carsim_bridge u:object_r:carsim_bridge_exec:s0
 
-# desip_service execution rights, TODO remove when properly integrated by Delphi
-/vendor/bin/hw/desip_service u:object_r:desip_service_exec:s0
-
-# desipkeyhandler execution rights, TODO remove when properly integrated by Delphi
-/vendor/bin/hw/desipkeyhandler u:object_r:desip_key_hndlr_exec:s0
-
 # hal_vehicle_default, TODO remove when properly integrated by Delphi
 /vendor/bin/hw/android.hardware.automotive.vehicle.vcc@2.0-service u:object_r:hal_vehicle_default_exec:s0
 
