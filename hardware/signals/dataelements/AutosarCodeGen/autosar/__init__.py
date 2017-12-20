@@ -1,6 +1,3 @@
-# Copyright 2017 Volvo Car Corporation
-# This file is covered by LICENSE file in the root of this project
-
 ######################################################
 # AUTOSAR library for python
 #
