@@ -10,6 +10,7 @@ import tkinter.filedialog
 import json
 import sys
 import os
+import subprocess
 import socket
 import logging
 import threading
@@ -370,12 +371,12 @@ class Connection():
 
 
 class App:
-    def __init__(self, master, server_addr):
+    def __init__(self, root, server_addr):
         self.connected = False
         self.all_senders = []
         self.message_handlers = {}
-        self.labelFont = tkinter.font.Font(root=master, family="Courier New", size=12)
-        self.valueFont = tkinter.font.Font(root=master, family="Courier New", size=12, weight=tkinter.font.BOLD)
+        self.labelFont = tkinter.font.Font(root=root, family="Courier New", size=12)
+        self.valueFont = tkinter.font.Font(root=root, family="Courier New", size=12, weight=tkinter.font.BOLD)
 
         self.knownReceivedMessages = {}
         self.addedSenderElements = set()
@@ -386,8 +387,10 @@ class App:
         self._server_ip = server_addr[0]  #first element of tuple is ip-address
         self._server_port = int(server_addr[1])  # second element of tuple is tcp-port
 
-        menubar = tkinter.Menu(master)
-        master.config(menu=menubar)
+        self.adb_carsim_bridge_process = None
+
+        menubar = tkinter.Menu(root)
+        root.config(menu=menubar)
 
         # create a pulldown menu, and add it to the menu bar
         filemenu = tkinter.Menu(menubar, tearoff=0)
@@ -396,7 +399,7 @@ class App:
         filemenu.add_separator()
         filemenu.add_command(label="Load Module...", command=self.load_module_file)
         filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=master.quit)
+        filemenu.add_command(label="Exit", command=root.quit)
         menubar.add_cascade(label="File", menu=filemenu)
 
         #arxmldata
@@ -418,13 +421,13 @@ class App:
         self.arxmldata = arxmldata
 
         # Scroll widget only works on Canvas so we have to place the frame inside the canvas
-        yScrollbar = tkinter.Scrollbar(master)
+        yScrollbar = tkinter.Scrollbar(root)
         yScrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 
-        xScrollbar = tkinter.Scrollbar(master, orient=tkinter.HORIZONTAL)
+        xScrollbar = tkinter.Scrollbar(root, orient=tkinter.HORIZONTAL)
         xScrollbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
-        canvas = tkinter.Canvas(master, yscrollcommand=yScrollbar.set, xscrollcommand=xScrollbar.set)
+        canvas = tkinter.Canvas(root, yscrollcommand=yScrollbar.set, xscrollcommand=xScrollbar.set)
 
         masterFrame = tkinter.ttk.Frame(canvas)
         masterFrame.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
@@ -459,17 +462,17 @@ class App:
         canvas.bind_all("<Shift-Button-4>", on_mousewheel_left)    #linux
         canvas.bind_all("<Shift-Button-5>", on_mousewheel_right)  #linux
 
-        master = masterFrame
+        #master = masterFrame
         self.master = masterFrame
         buttonRow = 0
 
         ## Connection status
-        lConnectionStatus = tkinter.ttk.Label(master, text="Connection status: ")
+        lConnectionStatus = tkinter.ttk.Label(masterFrame, text="Connection status: ")
         lConnectionStatus.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
         self.bindConnectionStatus = tkinter.Variable()
         self.bindConnectionStatus.set("disconnected")
-        self.lActualConnectionStatus = tkinter.ttk.Label(master, textvariable=self.bindConnectionStatus)
+        self.lActualConnectionStatus = tkinter.ttk.Label(masterFrame, textvariable=self.bindConnectionStatus)
         self.lActualConnectionStatus .grid(row=buttonRow, column=1, sticky=tkinter.W)
         self.lActualConnectionStatus.config(background="#ff0000")
 
@@ -477,14 +480,18 @@ class App:
         ## Connect/disconnect to remote
         buttonRow += 1
         self.buttons = tkinter.Frame(masterFrame)
-        self.bConnectToRemote = tkinter.ttk.Button(master, text="ConnectToRemote", command=self.connectToRemote)
 
+        self.bConnectToRemote = tkinter.ttk.Button(masterFrame, text="ConnectToRemote", command=self.connectToRemote)
         self.bConnectToRemote.pack(in_=self.buttons, side=tkinter.LEFT)
-        self.bDisconnect = tkinter.ttk.Button(master, text="Disconnect", command=self.disconnectFromRemote)
 
+        self.bConnectAdb = tkinter.ttk.Button(masterFrame, text="Connect ADB", command=self.connect_adb)
+        self.bConnectAdb.pack(in_=self.buttons, side=tkinter.LEFT)
+
+        self.bDisconnect = tkinter.ttk.Button(masterFrame, text="Disconnect", command=self.disconnectFromRemote)
         self.bDisconnect.pack(in_=self.buttons, side=tkinter.LEFT)
+
         self.buttons.grid(row=buttonRow, column=0, sticky=tkinter.W)
-        self.eConnectToRemote = tkinter.ttk.Entry(master, width=20)
+        self.eConnectToRemote = tkinter.ttk.Entry(masterFrame, width=20)
         self.eConnectToRemote.bind("<Return>", lambda x: self.connectToRemote())
         self.eConnectToRemote.insert(0, self._server_ip)
         self.eConnectToRemote.grid(row=buttonRow, column=1, sticky=tkinter.W)
@@ -493,10 +500,10 @@ class App:
 
         ## Add from ARXML
         buttonRow += 1
-        self.bAddSenderPort = tkinter.ttk.Button(master, text="Add new Dataelement", command=self.ui_add_port)
+        self.bAddSenderPort = tkinter.ttk.Button(masterFrame, text="Add new Dataelement", command=self.ui_add_port)
         self.bAddSenderPort.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.eAddSenderPort = tkinter.ttk.Entry(master, width=30)
+        self.eAddSenderPort = tkinter.ttk.Entry(masterFrame, width=30)
         self.eAddSenderPort.insert(0, "VehSpdLgt")
         self.eAddSenderPort.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
@@ -507,12 +514,12 @@ class App:
         def filterChanged(name, index, mode):
             self.filter(self.filterBindVar.get())
 
-        self.filterLabel = tkinter.ttk.Label(master, text="Filter")
+        self.filterLabel = tkinter.ttk.Label(masterFrame, text="Filter")
         self.filterLabel.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
         self.filterBindVar = tkinter.StringVar()
         self.filterBindVar.trace("w", filterChanged)
-        self.eFilter = tkinter.ttk.Entry(master, width=30, textvariable=self.filterBindVar)
+        self.eFilter = tkinter.ttk.Entry(masterFrame, width=30, textvariable=self.filterBindVar)
         self.eFilter.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
@@ -521,30 +528,40 @@ class App:
 
         self.bindAutoSend = tkinter.BooleanVar()
         self.bindAutoSend.set(True)
-        self.autoSendLabel = tkinter.ttk.Label(master, text="Auto send on change")
+        self.autoSendLabel = tkinter.ttk.Label(masterFrame, text="Auto send on change")
         self.autoSendLabel.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
-        self.autoSendCheckbox = tkinter.Checkbutton(master, width=10, variable=self.bindAutoSend)
+        self.autoSendCheckbox = tkinter.Checkbutton(masterFrame, width=10, variable=self.bindAutoSend)
         self.autoSendCheckbox.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
         ## Send all
         buttonRow += 1
-        self.bSendAll = tkinter.ttk.Button(master, width=30, text="Send all")
+        self.bSendAll = tkinter.ttk.Button(masterFrame, width=30, text="Send all")
         self.bSendAll.configure(command=self.send_all)
         self.bSendAll.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
 
         #################### separator ##########################
         buttonRow += 1
-        separator = tkinter.ttk.Separator(master)
+        separator = tkinter.ttk.Separator(masterFrame)
         separator.grid(row=buttonRow, sticky=tkinter.EW)
 
 
-        self.master = master
+        self.masterFrame = masterFrame
+        self.root = root
         self.buttonRow = buttonRow +1
 
         self.ever_connected = False
+
+        root.protocol("WM_DELETE_WINDOW", self.on_exit)
+
+    def on_exit(self):
+        try:
+            self.adb_carsim_bridge_process.kill()
+        except:
+            pass
+        self.root.destroy()
 
     def load_modules(self, modules):
         all_files = os.listdir("testmodules")
@@ -616,7 +633,20 @@ class App:
     def connectToRemote(self):
         self.connect(self.eConnectToRemote.get())
 
+    def connect_adb(self):
+        self.eConnectToRemote.delete(0, tkinter.END)
+        self.eConnectToRemote.insert(0, 'localhost')
+        subprocess.run("adb forward tcp:8080 tcp:8080", shell=True)
+        subprocess.run("adb shell stop carsim_bridge", shell=True)
+        self.adb_carsim_bridge_process = subprocess.Popen('adb shell /vendor/bin/carsim_bridge', shell=True)
+        time.sleep(1.0)
+        self.connect(self.eConnectToRemote.get())
+
     def disconnectFromRemote(self):
+        try:
+            self.adb_carsim_bridge_process.kill()
+        except:
+            pass
         self.connection.disconnect()
 
     def connect(self, address):
