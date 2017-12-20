@@ -54,6 +54,7 @@ KnownLanguages = {
     '.bp': CLangFeatures,
     '.mk': HashStartLanguageFeatures,
     '.py': HashStartLanguageWithShebangFeatures,
+    '.sh': HashStartLanguageWithShebangFeatures,
 }
 
 PathsIgnoreRegex = re.compile(r'.*(?:'
