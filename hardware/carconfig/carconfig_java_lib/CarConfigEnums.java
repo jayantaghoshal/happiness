@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 package com.volvocars.carconfig;
 
 import java.util.HashMap;
@@ -25,7 +30,7 @@ public class CarConfigEnums
         return carConfigEnumBase.getParam();
     }
 
-    
+
     private static HashMap<Integer, CarConfigEnumBase> map_CC_1 = new HashMap<>();
     public enum CC_1_VehicleType implements CarConfigEnumBase
     {
