@@ -1,7 +1,7 @@
+#!/usr/bin/env python3
+
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
-
-#!/usr/bin/env python3
 
 # TODO: We should move the vts_test_runner.py to ../test-fw directory.
 #       But we want to discuss the structure with CI-guards first.
