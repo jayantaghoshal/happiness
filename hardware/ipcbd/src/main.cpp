@@ -46,7 +46,7 @@ void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu) {
     do {
         try {
             sock->setup(ecu);
-            ALOGI("Setup socket for Ecu %u successfully", ecu);
+            ALOGV("Setup socket for Ecu %u successfully", ecu);
             return;
         } catch (const SocketException &e) {
             if (e.what() != previousError) {
