@@ -4,7 +4,6 @@
  */
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 #include <cerrno>
@@ -12,6 +11,7 @@
 #include "dim_manager.h"
 
 #define LOG_TAG "dim_manager"
+#include <cutils/log.h>
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;
@@ -94,8 +94,7 @@ int main(int argc, char *argv[]) {
     dim_manager->Start();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
-
     joinRpcThreadpool();
 
-    ALOGI("dimmanager is exiting ...");
+    ALOGD("dimmanager is exiting ...");
 }

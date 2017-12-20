@@ -16,6 +16,7 @@
             <name>IVehicleCom</name>
             <instance>ipcb</instance>
             <instance>iplm</instance>
+            <instance>dim</instance>
         </interface>
     </hal>
     <hal format="hidl">

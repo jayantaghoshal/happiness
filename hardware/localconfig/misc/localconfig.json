@@ -57,7 +57,7 @@
   "eth0.name": "apix0",
   "eth0.ip-address": "198.18.18.1",
   "eth0.broadcast-address": "198.18.255.255",
-  "eth0.netmask": "255.255.240.0",
+  "eth0.netmask": "255.255.0.0",
   "eth0.mac-address": "02:00:00:00:12:01",
   "eth0.mtu": 1500,
   "meth0.name": "meth0",

@@ -5,19 +5,25 @@
 
 #include "dim_manager.h"
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include "VccIpCmdApi.h"
 #include "dim_operation_data.h"
 
+#define LOG_TAG "dim_manager"
+#include <cutils/log.h>
+
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
+using ::android::sp;
 using namespace Connectivity;
 using namespace tarmac::eventloop;
 using namespace android::hardware;
@@ -50,7 +56,7 @@ bool DimManager::SetDimVideoStreamMode(DimTbtArea::TypeActivationIdentifier id) 
         std::vector<uint8_t> data_;
         dimTbtArea.GetData(data_);
         message.pdu.payload = data_;
-        ALOGV("Attempting to send TbtArea(=1) message");
+        ALOGD("Attempting to send TbtArea(=1) message");
         CommandResult result;
         vehicle_com_server_->sendMessage(message, {false, 0, 0}, [&result](CommandResult sr) { result = sr; });
         if (!result.success) {
@@ -70,19 +76,18 @@ bool DimManager::SetDimVideoStreamMode(DimTbtArea::TypeActivationIdentifier id) 
     (void)preexisting;
 
     if (name != service_name_) {
-        ALOGE("Received notification from a wrong service");
+        ALOGE("Received notification from an incorrect service");
         return ::android::hardware::Return<void>();
     }
 
     if (!SetVehicleCom()) {
-        ALOGD("DimManager::SetVehicleCom: Error: IpcbD returned null!");
-        ExitDimManager();
+        // Return if vehicle_com_server_ cant be retrieved
+        return ::android::hardware::Return<void>();
     }
 
     hidl_death_recipient* this_as_recipient = this;
     vehicle_com_server_->linkToDeath(this_as_recipient, 0);
 
-    ALOGD("Sending data...");
     if (!SetDimVideoStreamMode(DimTbtArea::TypeActivationIdentifier::ACTIVE)) {
         ExitDimManager();
     }
@@ -98,8 +103,11 @@ void DimManager::serviceDied(uint64_t cookie, const android::wp<IBase>& who) {
 }
 
 void DimManager::ExitDimManager() {
-    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
-    IPCThreadState::self()->stopProcess();       // Stop binder
+    ALOGD("ExitDimManager was called");
+    // Delegate shutdown to SIGTERM handler.
+    kill(getpid(), SIGTERM);
+    // Halt execution and wait for TERM-handler to do its work.
+    pause();
 }
 
 void DimManager::Start() {
