@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
@@ -15,7 +19,7 @@ rm -rf out  # Remove previous OUT_DIR for clean build.
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
-# Build image, vts & tradefed 
+# Build image, vts & tradefed
 time make -j64 droid
 time make -j64 vts
 time make -j64 tradefed-all
@@ -27,7 +31,7 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build -
 # TODO: Remove when config file is fixed
 rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.config
 
-# Create archive out.tgz 
+# Create archive out.tgz
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/target/product/ihu_vcc/fast_flashfiles \

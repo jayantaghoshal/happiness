@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 adb shell "mount -o rw,remount /vendor"
 (croot && \
     cd out/target/product/ihu_vcc && \

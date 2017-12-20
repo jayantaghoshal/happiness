@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -ue
 echo "Analyzing DataElements generator"
 mypy --show-column-numbers --check-untyped-defs --warn-no-return dataelements_generator

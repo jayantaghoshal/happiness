@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Determine the absolute path to this script
 SCRIPT_PATH=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 pushd "$SCRIPT_PATH" > /dev/null

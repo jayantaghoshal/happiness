@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # It updates/generates the make files for vendor/volvocars/interfaces
 # Run this file from root of Android project. e.g.
 # cd ~/icup_android/

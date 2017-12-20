@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
@@ -12,7 +16,7 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-userdebug
 
 
-# Build only image 
-time make -j32 droid 
+# Build only image
+time make -j32 droid
 
 # TODO: Make vbf files for userdebug

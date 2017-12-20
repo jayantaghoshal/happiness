@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 set -e
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 HOOK_SCRIPT_TARGET="$SCRIPT_DIR"/pre-commit.sh
