@@ -32,6 +32,7 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
             - name: ihu_daily_build_vcc_user
               current-parameters: true
+              kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}    
@@ -39,11 +40,23 @@
           name: Test
           condition: SUCCESSFUL
           projects:
-            - name: ihu_daily_test_generic
+            - name: ihu_daily_test-generic
               current-parameters: true
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_test-flexray
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_test-audio
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}        
       
           
               

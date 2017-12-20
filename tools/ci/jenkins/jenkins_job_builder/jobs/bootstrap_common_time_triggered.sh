@@ -14,12 +14,17 @@ export BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_ao
 export WORKSPACE_ROOT
 WORKSPACE_ROOT=$(pwd)
 
+if [ "$RAMDISK_ROOT" = '' ]; then
+  BOOTSTRAP_VOLUMES="--volume $WORKSPACE_ROOT:$WORKSPACE_ROOT --volume $HOME:$HOME"
+else
+  BOOTSTRAP_VOLUMES="--volume $WORKSPACE_ROOT:$WORKSPACE_ROOT --volume $HOME:$HOME --volume $RAMDISK_ROOT:$RAMDISK_ROOT"
+fi
+
 bootstrap_docker_run () {
     docker run \
     --hostname aic-docker \
-    --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
-    --volume "$HOME":"$HOME" \
-    --volume "$RAMDISK_ROOT":"$RAMDISK_ROOT" \
+    #shellcheck disable=SC2086
+    ${BOOTSTRAP_VOLUMES} \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \

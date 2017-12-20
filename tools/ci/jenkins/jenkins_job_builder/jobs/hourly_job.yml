@@ -217,7 +217,7 @@
 
 
 - job:
-    name: ihu_daily_test_generic
+    name: ihu_daily_test-generic
     defaults: time_job_defaults
     node: rack-rig
     parameters:
@@ -235,6 +235,46 @@
         - shell: 
             !include-raw: 
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test_generic.sh 
+                - bootstrap_ihu_daily_test_common.sh
    
-            
+- job:
+    name: ihu_daily_test-flexray
+    defaults: time_job_defaults
+    node: rack-rig-flexray
+    parameters:
+        - run:
+            name: UPSTREAM_JOB        
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi    
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_test_common.sh   
+
+- job:
+    name: ihu_daily_test-audio
+    defaults: time_job_defaults
+    node: rack-rig-audio
+    parameters:
+        - run:
+            name: UPSTREAM_JOB        
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi    
+        - shell: 
+            !include-raw: 
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_test_common.sh                   

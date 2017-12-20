@@ -26,24 +26,29 @@ ihu_update || die "Failed to flash IHU image"
 # Get properties
 adb shell getprop
 
+capability=""
+if [ "${JOB_NAME}" = "ihu_daily_test-flexray" ]
+then
+    capability="flexray"
+elif [ "${JOB_NAME}" = "ihu_daily_test-audio" ]
+then
+    capability="audio"
+fi
+export capability
+
 # Run Unit and Component tests for vendor/volvocars
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial
-status=$?
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial "${capability}" -o "${capability}"
+status=$?    
 
 
 # Push logs and reports to Artifactory
-artifactory push ihu_daily_test_generic "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz
-artifactory push ihu_daily_test_generic "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/results/*.zip
+artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz
+artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/results/*.zip
 
-echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory/webapp/#/artifacts/browse/tree/General/ICUP_ANDROID_CI/ihu_daily_test_generic/${BUILD_NUMBER}"
+echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory/webapp/#/artifacts/browse/tree/General/ICUP_ANDROID_CI/${JOB_NAME}/${BUILD_NUMBER}"
 
 # Check status
-if [ $status -eq 0 ]; then
-    # Mark image as LSV if daily passed
-    time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_daily_test_generic "${BUILD_NUMBER}" pass
-
-else
-    time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_daily_test_generic "${BUILD_NUMBER}" fail
+if [ $status -ne 0 ]; then
     die "Test failed"
 fi
 
