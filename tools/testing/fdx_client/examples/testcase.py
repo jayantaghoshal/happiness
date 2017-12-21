@@ -34,7 +34,7 @@ class FDXClientTestBase():
                                                               fdx_client.kFreeRunningFlag.transmitCyclic,
                                                               500 * ns_per_ms,
                                                               0)
-        except:
+        except Exception:
             self.fdx_client.close()
             raise
 

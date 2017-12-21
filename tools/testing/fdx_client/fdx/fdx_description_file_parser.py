@@ -1,6 +1,5 @@
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
-
 import struct
 import threading
 import xml.etree.ElementTree as ET
@@ -38,18 +37,17 @@ class Group():
 
     def build_data(self):
         # type: () -> str
-        data = [0] * self.size
+        data = bytearray(self.size)
         with self.mutex_lock:
             for i in self.items:
                 if i.type == "bytearray":
                     len_bytes = struct.pack("I", len(i.value_raw))
-                    to_send = [ord(c) for c in len_bytes] + i.value_raw
+                    to_send = len_bytes + bytearray(i.value_raw)
                     data[i.offset:(i.offset + i.size)] = to_send
                 else:
-                    # a bit awkward casting to be both py2 and 3 compatible
-                    item_data = str(struct.pack(fdx_type_to_struct_map[i.type], i.value_raw))
-                    data[i.offset:(i.offset + i.size)] = [ord(c) for c in item_data]
-        return str(bytearray(data))
+                    item_data = struct.pack(fdx_type_to_struct_map[i.type], i.value_raw)
+                    data[i.offset:(i.offset + i.size)] = item_data
+        return str(data)
 
     def receive_data(self, data):
         # type: (List[int]) -> None
@@ -58,7 +56,7 @@ class Group():
                 if i.type == "bytearray":
                     raw = data[i.offset:(i.offset + i.size)]
                     array_length =  struct.unpack("I", bytearray(raw[0:4]))[0]
-                    i.value_raw = raw[4:4+array_length]
+                    i.value_raw = raw[4:4 + array_length]
 
                 else:
                     (i.value_raw, ) = struct.unpack(fdx_type_to_struct_map[i.type], bytearray(data[i.offset:(i.offset + i.size)]))
