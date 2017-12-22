@@ -147,9 +147,9 @@ int main(int argc, char *argv[]) {
 
     try {
         /*ShutdownClient shutdown_client_(sock);
-        cedric::core::NodeState nsm_client_(NSM_SHUTDOWNTYPE_NORMAL |
-        NSM_SHUTDOWNTYPE_FAST, 2000);
-        nsm_client_.setShutdownClient(&shutdown_client_);*/
+          cedric::core::NodeState nsm_client_(NSM_SHUTDOWNTYPE_NORMAL |
+          NSM_SHUTDOWNTYPE_FAST, 2000);
+          nsm_client_.setShutdownClient(&shutdown_client_);*/
 
         if (protocol == "UDP") {
             sock = std::make_shared<UdpSocket>(dispatcher);
@@ -165,9 +165,8 @@ int main(int argc, char *argv[]) {
                 return 1;
             }
             if (std::string(argv[3]) == "DIM") {
-                sock = std::make_shared<TcpSocket>(dispatcher);
+                sock = std::make_shared<TcpSocket>(dispatcher, Message::Ecu::DIM);
                 transport.setSocket(sock.get());
-                setupSocket(sock, Message::DIM);
             } else {
                 ALOGE("Only DIM is supported currently");
                 return 1;

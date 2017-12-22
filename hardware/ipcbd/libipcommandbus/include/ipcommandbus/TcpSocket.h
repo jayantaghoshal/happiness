@@ -13,13 +13,14 @@
 namespace Connectivity {
 class TcpSocket final : public Socket {
   public:
-    TcpSocket(tarmac::eventloop::IDispatcher& dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
+    TcpSocket(tarmac::eventloop::IDispatcher &dispatcher, Message::Ecu ecu,
+              EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
     ~TcpSocket();
 
     void registerReadReadyCb(std::function<void(void)> readReadyCb);
-    void setup(const Message::Ecu& ecu) override;
-    void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) override;
-    void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) override;
+    void setup(const Message::Ecu &ecu) override;
+    void read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) override;
+    void writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &ecu) override;
     void endConnection() override;
 
   private:

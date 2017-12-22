@@ -39,13 +39,15 @@ class Socket : public ISocket {
     int getIpPrecedenceValue(IpPrecedence ipPrecedence);
 
     void backoffReset();  // set backoff timer to default/start value
-    // get the current backoff timeout and then backoff with a factor 2 upto a max value
+    // get the current backoff timeout and then backoff with a factor 2 upto a max
+    // value
     std::chrono::milliseconds backoffGet();
 
     int socket_fd_ = -1;
     tarmac::eventloop::IDispatcher &dispatcher_;
 
-    // ToDo Abhi: When local_config object is created; everything is read. This need to split
+    // ToDo Abhi: When local_config object is created; everything is read. This
+    // need to split
     LocalconfigParameters local_config;
 
     const EcuIpMap ecu_ip_map_;  ///< Maps between ECU and IP addresses.

@@ -29,7 +29,8 @@ UdpSocket::~UdpSocket() {
 
 void UdpSocket::setup(const Message::Ecu &ecu) {
     // NOTE! Unlike TCP, the ecu provided here is used to setup the local port.
-    // Therefore it is only allowed to use ALL (for broadcast socket) and IHU (for normal socket)
+    // Therefore it is only allowed to use ALL (for broadcast socket) and IHU (for
+    // normal socket)
 
     if ((Message::Ecu::ALL == ecu) || (Message::Ecu::IHU == ecu)) {
         // Look up IHU info from ECU map
@@ -81,7 +82,9 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
 
         ecu_ = ecu;
     } else {
-        ALOGE("Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : %d)", ecu);
+        ALOGE("Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : "
+              "%d)",
+              ecu);
     }
 }
 
@@ -114,8 +117,10 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
     // Protect from trying to send broadcast from normal socket
     if (Message::Ecu::ALL == ecu) {
         if (Message::Ecu::ALL != ecu_) {
-            ALOGE("Can not send broadcast on ordinary socket! (socket set up for %d and trying to send to %d", ecu_,
-                  ecu);
+            ALOGE("Can not send broadcast on ordinary socket! (socket set up for %d "
+                  "and trying to send to %d",
+                  ecu_, ecu);
+
             return;
         }
     }
@@ -123,7 +128,8 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
     // Protect from trying to send normal message from broadcast socket
     if (Message::Ecu::ALL != ecu) {
         if (Message::Ecu::ALL == ecu_) {
-            ALOGE("Can not send normal packet on broadcast socket! (socket set up for %d and trying to send to %d",
+            ALOGE("Can not send normal packet on broadcast socket! (socket set up "
+                  "for %d and trying to send to %d",
                   ecu_, ecu);
             return;
         }
@@ -158,8 +164,10 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
                 continue;
             }
             if (errno == EPIPE || errno == ECONNRESET || errno == ETIMEDOUT) {
-                // connection is broken. reconnection will be triggered on read. What should happen with reqested
-                // buffer? throw away? as WFR will be triggered and packet will be resent
+                // connection is broken. reconnection will be triggered on read. What
+                // should happen with reqested
+                // buffer? throw away? as WFR will be triggered and packet will be
+                // resent
                 break;
             }
             throw SocketException(errno, "Failed to send packet");
