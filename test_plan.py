@@ -78,6 +78,11 @@ test_plan_hourly = [
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
+    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps),
+             reason="Waiting for microphone to be integrated",
+             jira_issue="",
+             deadline="2018-02-04"
+    ),
     Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps),
              reason="Waiting for fully working MOST drivers",
              jira_issue="",
