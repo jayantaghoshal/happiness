@@ -37,9 +37,9 @@ void getFileCrc(uint16_t &com_arxml, uint16_t &swc_arxml, uint16_t &rte_type, ui
 }
 
 /* Global variables used in production code */
-extern bool avmpVersionCheckOk;
-bool avmpHeartbeatReceived = true;
-bool avmpSignalReceived = true;
+
+std::atomic<std::chrono::steady_clock::time_point> lastAvmpHeartbeat;
+std::atomic<VersionHandshakeStatus> avmpVersionCheckOk{VersionHandshakeStatus::NotReceived};
 
 uint16_t comCrc = 1;
 uint16_t swcCrc = 2;
@@ -71,7 +71,7 @@ class HisipMessageInjectTestFixture : public ::testing::Test {
         vsm_sink_mock_init(&vsmSinkMock);
         messageSendMockPtr = &messageSendMock;
 
-        avmpVersionCheckOk = false;
+        avmpVersionCheckOk = VersionHandshakeStatus::NotReceived;
     }
 
     virtual void TearDown() {}
