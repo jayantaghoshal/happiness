@@ -5,6 +5,7 @@
 
 #include <cutils/log.h>
 
+#include <IDispatcher.h>
 #include <cutils/properties.h>
 #include <cerrno>
 
@@ -37,9 +38,12 @@ int main() {
         // Need to set property before Blocking on netlink socket
         property_set("netboyd.startup_completed", "1");
 
-        if (nl_socket_listener.StartListening() < 0) {
+        if (!nl_socket_listener.StartListening()) {
             ALOGE("Unable to recv on Netlink socket");
         }
+
+        tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Join();
+
     } catch (const std::runtime_error &e) {
         ALOGE("ABORTING: Exception thrown: %s", e.what());
     }

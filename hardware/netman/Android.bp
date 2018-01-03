@@ -41,6 +41,7 @@ cc_binary {
         "libhidltransport",
         "libhwbinder",
         "liblocalconfig",
+        "libtarmac",
         "vendor.volvocars.hardware.uds@1.0",
     ],
 
@@ -77,6 +78,7 @@ cc_binary {
         "liblog",
         "liblocalconfig",
         "libcutils",
+        "libtarmac",
     ],
 
     static_libs: ["libbase"],

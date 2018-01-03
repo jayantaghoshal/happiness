@@ -24,7 +24,7 @@ class UEventListener final {
     UEventListener &operator=(const UEventListener &other) = delete;
     UEventListener &operator=(UEventListener &&other) = delete;
 
-    int StartListening();
+    bool StartListening();
     void StopListening();
     void SetNetlinkEventHandler(UeventHandler &event_handler);
 

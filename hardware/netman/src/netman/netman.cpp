@@ -3,6 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <IDispatcher.h>
 #include <cutils/log.h>
 #include <cutils/properties.h>
 #include <hidl/HidlTransportSupport.h>
@@ -58,9 +59,11 @@ int main() {
 
         property_set("netmand.startup_completed", "1");
 
-        if (nl_socket_listener.StartListening() < 0) {
+        if (!nl_socket_listener.StartListening()) {
             ALOGE("Unable to recv on Netlink socket");
         }
+
+        tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Join();
 
     } catch (const std::runtime_error &e) {
         ALOGE("ABORTING: Exception thrown: %s", e.what());

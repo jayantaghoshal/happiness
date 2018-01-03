@@ -7,6 +7,7 @@
 
 #include <cerrno>
 
+#include <IDispatcher.h>
 #include <android-base/macros.h>
 #include <linux/netlink.h>
 #include <net/if.h>
@@ -14,11 +15,7 @@
 #include <sys/types.h>
 #include <sys/un.h>
 
-#include <atomic>
-#include <condition_variable>
 #include <fstream>
-#include <mutex>
-#include <thread>
 #include "uevent_handler.h"
 #include "uevent_listener.h"
 
@@ -34,79 +31,21 @@ UEventListener &UEventListener::Instance() {
 
 UEventListener::~UEventListener() { StopListening(); }
 
-int UEventListener::StartListening() {
+bool UEventListener::StartListening() {
     if (nullptr == event_handler_) {
         ALOGE("Netlink event handler not set on Netlink socket listener.");
-        return -1;
+        return false;
     }
 
     if (SetupSocket() == -1) {
         ALOGE("Netlink event handler failed to setup socket");
-        return -1;
+        return false;
     }
 
-    // this short lived thread scanning available interfaces which are enumerated before listener opens a socket to
-    // monitor uevent from kernel. If interface is found; kernel is requested to resend uevent which are handled in main
-    // thread. This thread syncronises with main thread so that events are resent by kernel after main thread has
-    // opened socket and listening upon it.
-    std::condition_variable cv;
-    std::mutex mutex;
-    std::atomic_bool is_ready(false);
-    try {
-        auto initial_scan = std::thread([&is_ready, &mutex, &cv] {
-            using namespace std::chrono_literals;
-            std::unique_lock<std::mutex> lk(mutex);
-            // predicate is used to take care of spurious wakeups
-            while (!cv.wait_for(lk, 50ms, [&] { return is_ready.load(); })) {
-                // wait_for reported timeout. this could be because, kernel did not send any uevents and main thread is
-                // still
-                // blocked on "recvmsg". condition_variable variable will not be signalled. To break this dependency
-                // force
-                // kernel to generate an event for "lo" interface. If Main thread is ready and is actually listening for
-                // events;
-                // condition_variable will be signalled otherwise keep trying.
-                std::fstream file("/sys/class/net/lo/uevent");
-                if (file.is_open()) {
-                    file << "add";  // no special handling in case of error. Just try again later
-                }
-            }
-            lk.unlock();
-            UeventHandler::SysfsNetSubsystemWalker();
-        });
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().AddFd(netlink_socket_, [this] { RecvMessage(); });
+    UeventHandler::SysfsNetSubsystemWalker();
 
-        ALOGV("Waiting for netlink messages to arrive...");
-
-        try {
-            for (;;) {
-                static bool notified = false;
-                auto result = RecvMessage();
-                if (!notified) {
-                    {
-                        std::lock_guard<std::mutex> lk(mutex);
-                        is_ready.store(true);
-                    }
-                    // always notify (if not notified before) condition_variable regardless of success or failure
-                    cv.notify_one();
-                    notified = true;
-                    ALOGD("Notified waiting thread");
-                }
-                if (result < 0) {
-                    ALOGE("Netlink event handler failed on RecvMessage");
-                    break;
-                }
-            }
-        } catch (const std::runtime_error &e) {
-            ALOGE("Exception thrown: %s", e.what());
-        }
-
-        // R.I.P child
-        initial_scan.join();
-    } catch (const std::system_error &e) {
-        ALOGE("failed to spawn a thread: %s", e.what());
-    }
-
-    // this function shall never return. So if flow is here; RecvMessage has failed. In that case return error
-    return -1;
+    return true;
 }
 
 void UEventListener::StopListening() {
