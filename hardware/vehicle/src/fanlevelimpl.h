@@ -12,7 +12,7 @@ class FanLevelImpl {
     FanLevelImpl();
 
     void setFanLevel(int32_t fanLevel);
-    ReadOnlyNotifiableProperty<int32_t>& fanLevelValue();
+    ReadOnlyNotifiableProperty<int32_t>* fanLevelValue();
 
   private:
     NotifiableProperty<int32_t> m_fanLevel;

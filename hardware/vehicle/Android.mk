@@ -21,7 +21,8 @@ LOCAL_SRC_FILES := \
      src/fanlevelimpl.cpp \
      src/tempimpl.cpp \
      src/keymanagermodule.cpp \
-     src/activeuserprofilemodule.cpp
+     src/activeuserprofilemodule.cpp \
+     src/modulepropertyhandler.cpp
 
 LOCAL_C_INCLUDES := \
     src/

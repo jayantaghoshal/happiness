@@ -18,8 +18,8 @@ TempImpl::TempImpl() : m_temp_left(23.0f), m_temp_right(23.0f) {
     setrightTemp(23.0f);
 }
 
-ReadOnlyNotifiableProperty<float>& TempImpl::temperatureLeftValue() { return m_temp_left; }
-ReadOnlyNotifiableProperty<float>& TempImpl::temperatureRightValue() { return m_temp_right; }
+ReadOnlyNotifiableProperty<float>* TempImpl::temperatureLeftValue() { return &m_temp_left; }
+ReadOnlyNotifiableProperty<float>* TempImpl::temperatureRightValue() { return &m_temp_right; }
 
 void TempImpl::setleftTemp(float temp_left) {
     ALOGI("%s: Send HmiCmptmtTSp_info for setting left temperature to: %f", __FUNCTION__, temp_left);

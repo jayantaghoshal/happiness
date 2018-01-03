@@ -18,8 +18,8 @@ class TempImpl {
     void setleftTemp(float temp_left);
     void setrightTemp(float temp_right);
 
-    ReadOnlyNotifiableProperty<float>& temperatureLeftValue();
-    ReadOnlyNotifiableProperty<float>& temperatureRightValue();
+    ReadOnlyNotifiableProperty<float>* temperatureLeftValue();
+    ReadOnlyNotifiableProperty<float>* temperatureRightValue();
 
   private:
     NotifiableProperty<float> m_temp_left;
