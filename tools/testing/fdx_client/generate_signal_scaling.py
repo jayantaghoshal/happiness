@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from argparse import ArgumentParser
 from typing import List, Dict, Tuple
 import sys
@@ -256,13 +259,13 @@ class FrSignalInterface:
         if "VECTOR_FDX_IP" in os.environ:
             try:
                 self.connection = fdx_client.FDXConnection(
-                    data_exchange, 
-                    os.environ['VECTOR_FDX_IP'], 
+                    data_exchange,
+                    os.environ['VECTOR_FDX_IP'],
                     int(os.environ.get('VECTOR_FDX_PORT', '2809')))
                 self.connection.send_start()
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
-                self.verify_simulation_version()                                
+                self.verify_simulation_version()
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
                 for g in groups_to_subscribe:
                     self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
@@ -275,14 +278,14 @@ class FrSignalInterface:
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
         %(senders_and_receivers)s
-        
+
     def verify_simulation_version(self):
         # SPA2210/FR_Body_LIN/SimulationDB/Simulation.vsysvar
         EXPECTED_VERSION = 2
         simulation_version = next((s for s in self.sysvar_list if s.name == "SimulationVersion"))
         deadline = time.time() + 20
         while simulation_version.value_raw != EXPECTED_VERSION and time.time() < deadline:
-            self.connection.send_data_request(simulation_version.parent_group.group_id)            
+            self.connection.send_data_request(simulation_version.parent_group.group_id)
             time.sleep(0.5)
         if simulation_version.value_raw != EXPECTED_VERSION:
             raise Exception("Simulation version mismatch! CANoe simulation version=%%r, expected version=%%d" %% (simulation_version.value_raw, EXPECTED_VERSION))

@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from typing import List, Dict
 
 from .model import DE_Element, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical, DE_Boolean, \
@@ -69,7 +72,7 @@ GEN_VSM_SINK_SIGNALGROUP_SUBSCRIBE = """{DATAELEM}_de = new DESink<autosar::{DAT
     auto deValue = {DATAELEM}_de->get().value();
     {RTETYPE} rteValue;
 {TRANSFER}
-    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mtx, &rteValue, sizeof(rteValue) ); 
+    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mtx, &rteValue, sizeof(rteValue) );
 });
 
 """
@@ -78,7 +81,7 @@ GEN_VSM_SINK_SIGNAL_SUBSCRIBE = """{DATAELEM}_de = new DESink<autosar::{DATAELEM
     auto deValue = {DATAELEM}_de->get().value();
     {RTETYPE} rteValue;
     {TRANSFER};
-    sendAvmpMessageToVip( ComConf_ComSignal_is{RTETYPE}_mtx, &rteValue, sizeof(rteValue) ); 
+    sendAvmpMessageToVip( ComConf_ComSignal_is{RTETYPE}_mtx, &rteValue, sizeof(rteValue) );
 });
 
 """
@@ -108,8 +111,8 @@ GEN_VSM_INJECT_SIGNALGROUP_SWITCH_OK = """    case SignalGroup|ComConf_ComSignal
             autosar::{DATAELEM}_info::data_elem_type deValue;
 {TRANSFER}
             {DATAELEM}_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {RTETYPE} (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_ig{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {RTETYPE} (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_ig{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));
         }
     }
     break;
@@ -143,7 +146,7 @@ struct DataElemInfo {
     virtual Dir direction() const=0;
 };
 
-/*! 
+/*!
  * \\brief Provide compile time info if a data-element is in or out
  */
 class InTag {
@@ -302,7 +305,7 @@ namespace autosar {
 
     dataElementsHeaderStr += footer
     dataElemetsCppStr += footer
-    gen_vsm_all_dataelements_cpp += footer 
+    gen_vsm_all_dataelements_cpp += footer
     gen_vsm_inject_variable_cpp += footer
     gen_vsm_inject_instance_cpp += footer
     gen_vsm_inject_switch_ok_cpp += footer

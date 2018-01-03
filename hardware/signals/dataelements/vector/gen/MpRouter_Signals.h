@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef __MP_ROUTER_SIGNALS_H
 #define __MP_ROUTER_SIGNALS_H
 /* COM file input version  --  SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com */

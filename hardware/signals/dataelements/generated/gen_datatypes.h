@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 // clang-format off
 /*!
  * \file
@@ -595,7 +600,7 @@ enum class BltLockSt1 {
  * 0 = button not pressed. No request to adjust volume
  * 1 = button pressed for volume up
  * 2 = buttono pressed for volume down
- * 
+ *
  * Receiver side controls how the button status is used.
  */
 enum class BtnAudVolSts {
@@ -606,8 +611,8 @@ enum class BtnAudVolSts {
 
 /*!
  * \enum BtnMmedLeRiSts
- * Represents status of a (multilevel) button Left/Right. 
- * 
+ * Represents status of a (multilevel) button Left/Right.
+ *
  * Semantic defined by receiver side. (Previou/Next, FFBW/FFWD, etc)
  */
 enum class BtnMmedLeRiSts {
@@ -618,8 +623,8 @@ enum class BtnMmedLeRiSts {
 
 /*!
  * \enum BtnMmedSetSts
- * Represents status of a button Set. 
- * 
+ * Represents status of a button Set.
+ *
  * Semantic defined by receiver side. (Activate/Deactivate, Play/Pause, Mute/UnMute etc)
  */
 enum class BtnMmedSetSts {
@@ -629,8 +634,8 @@ enum class BtnMmedSetSts {
 
 /*!
  * \enum CalPsbl
- * Warning status	                                
- * == 0	Calibration status OK (Normal IHU behavior) 
+ * Warning status
+ * == 0	Calibration status OK (Normal IHU behavior)
  * == 1	Calibration not possible (All 4 rolling wheels shall be grey, menu item for recalibration of iTPMS system shall be unavailable and gray).
  */
 enum class CalPsbl {
@@ -641,7 +646,7 @@ enum class CalPsbl {
 /*!
  * \enum CallSts
  * Carries call presence information. Defined for CallSts range [0-1]
- * 
+ *
  * 0 = Inactive. There is no active call present with any telephony solution in the system.
  * 1 = Active. Atleast one active call is present in the system.
  */
@@ -1957,7 +1962,7 @@ enum class HznTypOfWay1 {
 /*!
  * \enum IdPen
  * Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
- * 
+ *
  * Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
  * Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
  */
@@ -2099,7 +2104,7 @@ enum class LaneDetnSts1 {
  * Uknw = Unknown
  * Lang1 = Arabic
  * Lang2 = Bulgarian
- * Lang3 = Chinese Cantonese Traditional 
+ * Lang3 = Chinese Cantonese Traditional
  * Lang4 = Chinese Mandarin Simplifed
  * Lang5 = Chinese Mandarin Traditional
  * Lang6 = Czech
@@ -2118,7 +2123,7 @@ enum class LaneDetnSts1 {
  * Lang19 = Hungarian
  * Lang20 = Italian
  * Lang21 = Japanese
- * Lang22 = Korean 
+ * Lang22 = Korean
  * Lang23 = Latvian
  * Lang24 = Lithuanian
  * Lang25 = Norwegian
@@ -2189,7 +2194,7 @@ enum class LcmaCtraOn {
 /*!
  * \enum LiAutTran1
  * SntvyLo = Sensitivity Low, light transition happens later
- * SntvyLo = Sensitivity Norma 
+ * SntvyLo = Sensitivity Norma
  * SntvyLo = Sensitivity High, light transition happens earlier
  */
 enum class LiAutTran1 {
@@ -2202,7 +2207,7 @@ enum class LiAutTran1 {
 /*!
  * \enum LiTi2
  * Enumeration for intervals in tenths of seconds.
- * E.g 
+ * E.g
  * 3 = 30 seconds
  * 4 = 40 seconds
  */
@@ -4763,7 +4768,7 @@ struct RngBdIllmnCmdPen1 {
 /*!
  * \struct RsdsSysSts
  * Status of the different internal statemachines.
- * 
+ *
  * Master Statemachine
  * RsdsMstSt (Enum):
  * Cfg
@@ -4774,18 +4779,18 @@ struct RngBdIllmnCmdPen1 {
  * Shutdown
  * Hot
  * Cal
- * 
+ *
  * Lcma:
  * OnOff1
  * ActvInActv
- * 
+ *
  * Ctra:
  * OnOff1
  * ActvInActv
- * 
+ *
  * Rcw:
  * OnOff1
- * 
+ *
  * Rcm:
  * OnOff1
  */
@@ -5159,9 +5164,9 @@ struct UsrSetSpdForKeySpdLimn {
 /*!
  * \struct UsrSetSpdForKeySpdWarn
  * Conveys the 6 personalized speed thresholds for Restricted Key Speed Alert function.
- * 
+ *
  * Value 0 = the speed threshold is not used
- * 
+ *
  * Personal ID shows to which Profile the settings belongs.
  */
 struct UsrSetSpdForKeySpdWarn {

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_PROFILECHANGEDHANDLER_H
 #define VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_PROFILECHANGEDHANDLER_H
 

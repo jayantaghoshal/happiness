@@ -1,9 +1,12 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Signal scaling database
 # --- AUTO GENERATED ---
-# Inputs: generate_signal_scaling.py 
-#    --swcinputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml 
-#    --cominputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com.arxml 
-#    --fdxdescriptionfile=../CANoe/SPA2210/FR_Body_LIN/FDXDescriptionFile.xml 
+# Inputs: generate_signal_scaling.py
+#    --swcinputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+#    --cominputfile=../../../hardware/signals/dataelements/AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com.arxml
+#    --fdxdescriptionfile=../CANoe/SPA2210/FR_Body_LIN/FDXDescriptionFile.xml
 #    --out=generated/pyDataElements.py
 
 import os
@@ -40,13 +43,13 @@ class FrSignalInterface:
         if "VECTOR_FDX_IP" in os.environ:
             try:
                 self.connection = fdx_client.FDXConnection(
-                    data_exchange, 
-                    os.environ['VECTOR_FDX_IP'], 
+                    data_exchange,
+                    os.environ['VECTOR_FDX_IP'],
                     int(os.environ.get('VECTOR_FDX_PORT', '2809')))
                 self.connection.send_start()
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
-                self.verify_simulation_version()                                
+                self.verify_simulation_version()
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
                 for g in groups_to_subscribe:
                     self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
@@ -58,7 +61,7 @@ class FrSignalInterface:
             self.connection = FDXDummyConnection()
             self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
 
-        
+
         name_to_item_map = { i.msg_or_namespace + '::' + i.name : i for i in self.signal_list }
 
         self.AbsWarnIndcnReq = AbsWarnIndcnReq(self, name_to_item_map['VDDMBackBoneSignalIpdu06::' + AbsWarnIndcnReq.fdx_name])
@@ -969,14 +972,14 @@ class FrSignalInterface:
         self.Yr1 = Yr1(self, name_to_item_map['IHUBackBoneSignalIPdu05::' + Yr1.fdx_name])
 
 
-        
+
     def verify_simulation_version(self):
         # SPA2210/FR_Body_LIN/SimulationDB/Simulation.vsysvar
         EXPECTED_VERSION = 2
         simulation_version = next((s for s in self.sysvar_list if s.name == "SimulationVersion"))
         deadline = time.time() + 20
         while simulation_version.value_raw != EXPECTED_VERSION and time.time() < deadline:
-            self.connection.send_data_request(simulation_version.parent_group.group_id)            
+            self.connection.send_data_request(simulation_version.parent_group.group_id)
             time.sleep(0.5)
         if simulation_version.value_raw != EXPECTED_VERSION:
             raise Exception("Simulation version mismatch! CANoe simulation version=%r, expected version=%d" % (simulation_version.value_raw, EXPECTED_VERSION))
@@ -1014,7 +1017,7 @@ class AbsWarnIndcnReq:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class AccAdprSpdLimActvPen:
@@ -1080,7 +1083,7 @@ class AccAdprSpdLimActvSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class AccAdprTurnSpdActvPen:
@@ -3209,7 +3212,7 @@ class BtnAudFbSts:
 # 0 = button not pressed. No request to adjust volume
 # 1 = button pressed for "volume up"
 # 2 = buttono pressed for "volume down"
-# 
+#
 # Receiver side controls how the button status is used.
 class BtnAudVolSts:
     de_name     = "BtnAudVolSts"
@@ -3260,8 +3263,8 @@ class BtnIllmnForWinDefrstFrnt:
     def get(self):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
-# Represents status of a (multilevel) button "Left/Right. 
-# 
+# Represents status of a (multilevel) button "Left/Right.
+#
 # Semantic defined by receiver side. (Previou/Next, FFBW/FFWD, etc)
 class BtnMmedLeRiSts:
     de_name     = "BtnMmedLeRiSts"
@@ -3312,8 +3315,8 @@ class BtnMmedModSts:
     def get(self):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
-# Represents status of a button "Set". 
-# 
+# Represents status of a button "Set".
+#
 # Semantic defined by receiver side. (Activate/Deactivate, Play/Pause, Mute/UnMute etc)
 class BtnMmedSetSts:
     de_name     = "BtnMmedSetSts"
@@ -3340,7 +3343,7 @@ class BtnMmedSetSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries call presence information. Defined for CallSts range [0-1]
-# 
+#
 # 0 = Inactive. There is no active call present with any telephony solution in the system.
 # 1 = Active. Atleast one active call is present in the system.
 class CallStsIndcn:
@@ -3815,7 +3818,7 @@ class ClkFmt:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class CllsnFwdWarnActvPen:
@@ -5938,7 +5941,7 @@ class DrvrDesDir:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class DrvrDispSetgPen:
@@ -6028,7 +6031,7 @@ class DrvrHmiBackGndForHmiCen:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
             # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class DrvrHmiBackGndInfoSetgPen:
@@ -6098,7 +6101,7 @@ class DrvrHmiBackGndInfoSetgSetg:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class DrvrHmiDispdModPen:
@@ -6188,7 +6191,7 @@ class DrvrHmiForHmiCen:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
             # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class DrvrHmiUsrIfSetgPen:
@@ -6314,7 +6317,7 @@ class DrvrPfmncLvl:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class DrvrPfmncMonActvPen:
@@ -7258,7 +7261,7 @@ class DstUnit:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class EasyInOutDrvrSeatAdjmtPen:
@@ -8210,7 +8213,7 @@ class EscWarnIndcnReqCntr:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class ExtrMirrFoldSetgPen:
@@ -8276,7 +8279,7 @@ class ExtrMirrFoldSetgSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class ExtrMirrTiltSetg2IdPen:
@@ -10136,7 +10139,7 @@ class Hr1:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class HudActvReqPen:
@@ -10903,7 +10906,7 @@ class HudVisFctSetgHudFct19:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class HudVisFctSetgPen:
@@ -11048,7 +11051,7 @@ class HzrdLiWarnSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class IdPenForUnits:
@@ -11414,7 +11417,7 @@ class IntrLiAmbLiSetgForLiTintg:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class IntrLiAmbLiSetgPen:
@@ -11507,7 +11510,7 @@ class IntrLiSurrndgsLiSetgForLiLvl:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class IntrLiSurrndgsLiSetgPen:
@@ -11549,7 +11552,7 @@ class IntrLiSurrndgsLiSetgPen:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class IntrMirrTintgSetgPen:
@@ -11616,8 +11619,8 @@ class IntrMirrTintgSetgSts:
     def get(self):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
-# Warning status	                                
-# == 0	Calibration status OK (Normal IHU behavior) 
+# Warning status
+# == 0	Calibration status OK (Normal IHU behavior)
 # == 1	Calibration not possible (All 4 rolling wheels shall be grey, menu item for recalibration of iTPMS system shall be unavailable and gray).
 class iTPMSCalPsbl:
     de_name     = "iTPMSCalPsbl"
@@ -11730,7 +11733,7 @@ class KeyLostWarnIndcn:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class KeyProfMpgUpdForIdPen:
@@ -11983,7 +11986,7 @@ class LampSuppSrv:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LaneChgWarnActvPen:
@@ -12150,7 +12153,7 @@ class LaneDetnStsForLaneKeepAid:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LaneKeepAidActvPen:
@@ -12306,7 +12309,7 @@ class LcmaOn1:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiAdpvReqPen:
@@ -12372,7 +12375,7 @@ class LiAdpvReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiAutTranReqPen:
@@ -12414,7 +12417,7 @@ class LiAutTranReqPen:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # SntvyLo = Sensitivity Low, light transition happens later
-# SntvyLo = Sensitivity Norma 
+# SntvyLo = Sensitivity Norma
 # SntvyLo = Sensitivity High, light transition happens earlier
 class LiAutTranReqSts:
     de_name     = "LiExtReq2WdReq1.Sts"
@@ -12443,7 +12446,7 @@ class LiAutTranReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiBeamHiAuxReqPen:
@@ -12509,7 +12512,7 @@ class LiBeamHiAuxReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiCornrgReqPen:
@@ -12575,7 +12578,7 @@ class LiCornrgReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiDaytiRunngReqPen:
@@ -12665,7 +12668,7 @@ class LiDrvrFltIndcrTurn:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiExtReq1WdReq5IdPen:
@@ -12781,7 +12784,7 @@ class LiForBtn5ForUsrSwtPanFrntCmd:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiHomeLvngReqPen:
@@ -12847,7 +12850,7 @@ class LiHomeLvngReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiHomeSafeReqPen:
@@ -12889,7 +12892,7 @@ class LiHomeSafeReqPen:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Enumeration for intervals in tenths of seconds.
-# E.g 
+# E.g
 # 3 = 30 seconds
 # 4 = 40 seconds
 class LiHomeSafeReqSts:
@@ -12979,7 +12982,7 @@ class LiPassFltIndcrTurn:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LiSeldForDrvrPfmncMonPen:
@@ -13186,7 +13189,7 @@ class LockgCenTrigSrc:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LockgFbSoundReqPen:
@@ -13252,7 +13255,7 @@ class LockgFbSoundReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LockgFbVisReqPen:
@@ -13367,7 +13370,7 @@ class LockgPrsnlSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class LockSpdReqPen:
@@ -17302,7 +17305,7 @@ class ProfActProf9:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class ProfChg:
@@ -17692,7 +17695,7 @@ class ProfLimdProf9:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class ProfPenSts1:
@@ -18592,7 +18595,7 @@ class PwrSplyErrSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class RainSenMemdReqPen:
@@ -18708,7 +18711,7 @@ class RmnLockgPrsnlReq:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class RngbdIllmnCmdPen:
@@ -18777,7 +18780,7 @@ class RngbdIllmnCmdSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class RoadFricIndcnActvPen:
@@ -18911,7 +18914,7 @@ class RoadFricWarnReq:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class RoadSgnInfoActvPen:
@@ -20379,7 +20382,7 @@ class Sec1:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class SetOfLangIdPen:
@@ -20423,7 +20426,7 @@ class SetOfLangIdPen:
 # Uknw = Unknown
 # Lang1 = Arabic
 # Lang2 = Bulgarian
-# Lang3 = Chinese Cantonese Traditional 
+# Lang3 = Chinese Cantonese Traditional
 # Lang4 = Chinese Mandarin Simplifed
 # Lang5 = Chinese Mandarin Traditional
 # Lang6 = Czech
@@ -20442,7 +20445,7 @@ class SetOfLangIdPen:
 # Lang19 = Hungarian
 # Lang20 = Italian
 # Lang21 = Japanese
-# Lang22 = Korean 
+# Lang22 = Korean
 # Lang23 = Latvian
 # Lang24 = Lithuanian
 # Lang25 = Norwegian
@@ -21131,7 +21134,7 @@ class SftyWarnGroupFromAsySafeCntr:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class SpdAlrmActvForRoadSgnInfoPen:
@@ -21197,7 +21200,7 @@ class SpdAlrmActvForRoadSgnInfoSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class SpdCameraInfoSeldForRoadSgnInfoPen:
@@ -22310,7 +22313,7 @@ class TiForYrInPosnFromSatlt:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class TiGapLimdPen:
@@ -23092,7 +23095,7 @@ class TrlrLampActvtChk:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class TrlrLampChkAutReqPen:
@@ -23300,7 +23303,7 @@ class TUnit:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class TurnAutFlsgReqPen:
@@ -24553,7 +24556,7 @@ class UkwnCptRespFromSoundMgrByte7:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class UnlckFbVisReqPen:
@@ -24619,7 +24622,7 @@ class UnlckFbVisReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class UnlckKeylsReqPen:
@@ -24685,7 +24688,7 @@ class UnlckKeylsReqSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class UnlckRemReqPen:
@@ -24779,7 +24782,7 @@ class UsgModSts:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class UsrSetSpdForKeySpdLimnPen:
@@ -25066,7 +25069,7 @@ class UsrSetSpdForKeySpdWarn6:
         return value
 
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class UsrSetSpdForKeySpdWarnPen:
@@ -28260,7 +28263,7 @@ class WiprInPosnForSrv:
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 # Carries a user profile ID for personalization of functionality and settings. Defined for profile  ID range [1 - 13]
-# 
+#
 # Value 0 means profile ID has (yet) not been calculated on sender side. Receiver side defines behaviour e.g use of stored profiel ID/last received profile ID
 # Value 15 refers to all profile IDs and is used in setting tupples <setting value, profile ID> to signal that the setting value is associated with all user profiles.
 class WiprReAutReqPen:

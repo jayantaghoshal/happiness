@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include "entry_point_fetcher.h"
 #include <assert.h>
 #include <array>

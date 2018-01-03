@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 // clang-format off
 /*!
  * \file
@@ -26,7 +31,7 @@ struct DataElemInfo {
     virtual Dir direction() const=0;
 };
 
-/*! 
+/*!
  * \brief Provide compile time info if a data-element is in or out
  */
 class InTag {
@@ -873,7 +878,7 @@ struct Btn5ForUsrSwtPanFrntReq_info : InTag, public DataElemInfo {
  * \brief Signal BtnAudFbSts
  * That is the Push to Talk Button signal sent from DIM to IHU ( SWS Button R6 )
  * Shall start the Speech Session
- * 
+ *
  * ?
  */
 struct BtnAudFbSts_info : InTag, public DataElemInfo {
@@ -1043,7 +1048,7 @@ struct CchForFuEco_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdLockgProtnStsToHmi
  * Signal sent from the Driver door module to the Driver information module to inform if the electric child lock  is ative or not
- * 
+ *
  */
 struct ChdLockgProtnStsToHmi_info : InTag, public DataElemInfo {
     using data_elem_type = OnOffSafe1;
@@ -1061,7 +1066,7 @@ struct ChdLockgProtnStsToHmi_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdWinProtnStsAtDrvrRe
  * Signal sent from the rear driver door module to the Driver door module that informs of the local status of the power window disable functionality.
- * 
+ *
  */
 struct ChdWinProtnStsAtDrvrRe_info : InTag, public DataElemInfo {
     using data_elem_type = OnOff1;
@@ -1079,7 +1084,7 @@ struct ChdWinProtnStsAtDrvrRe_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdWinProtnStsAtPassRe
  * Signal sent from the rear passenger door module to the Driver door module that informs of the local status of the power window disable functionality.
- * 
+ *
  */
 struct ChdWinProtnStsAtPassRe_info : InTag, public DataElemInfo {
     using data_elem_type = OnOff1;
@@ -1247,8 +1252,8 @@ struct ClimaWarn_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal CllsnAidSnvtySeld
- * Distribution of the setting Collision Avoidance Sensitivity Level  
- * 
+ * Distribution of the setting Collision Avoidance Sensitivity Level
+ *
  */
 struct CllsnAidSnvtySeld_info : OutTag, public DataElemInfo {
     using data_elem_type = SnvtyPen1;
@@ -1482,7 +1487,7 @@ struct CnclWarnLgtForAutDrv_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ComLostExtrSound
  * Control signal for ASDM to see if ESM is up.
- * 
+ *
  * Also signals DIM for trigger of message.
  */
 struct ComLostExtrSound_info : InTag, public DataElemInfo {
@@ -1886,10 +1891,10 @@ struct DispAndHomeBtnSts_info : OutTag, public DataElemInfo {
 
 /*!
  * \brief Signal DispBattEgyIn
- * Electric battery energy absorbed by the HV Battery. 
- * 
- * NB: Only power flowing into HV battery is integrated. 
- * 
+ * Electric battery energy absorbed by the HV Battery.
+ *
+ * NB: Only power flowing into HV battery is integrated.
+ *
  * Energy=integral( max( battery power flowing in , 0) )
  */
 struct DispBattEgyIn_info : InTag, public DataElemInfo {
@@ -1907,10 +1912,10 @@ struct DispBattEgyIn_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal DispBattEgyOut
- * Electric battery energy delivered by the HV Battery. 
- * 
- * NB: Only power flowing out of the HV battery is integrated. 
- * 
+ * Electric battery energy delivered by the HV Battery.
+ *
+ * NB: Only power flowing out of the HV battery is integrated.
+ *
  * Energy=integral( max( battery power flowing out , 0) )
  */
 struct DispBattEgyOut_info : InTag, public DataElemInfo {
@@ -1965,9 +1970,9 @@ struct DispStsCen_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal DoorDrvrLockReSts
  * DoorDrvrLockReSts - Driver Side Rear Door Lock Status
- * 
+ *
  * Lock status:
- * 
+ *
  * LockStsUkwn - Lock Status Unknown
  * Unlckd - Unlocked
  * Lockd - Locked
@@ -1989,9 +1994,9 @@ struct DoorDrvrLockReSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorDrvrLockSts
  * DoorDrvrLockSts - Driver Door Lock Status
- * 
+ *
  * Lock status:
- * 
+ *
  * LockStsUkwn - Lock Status Unknown
  * Unlckd - Unlocked
  * Lockd - Locked
@@ -2013,7 +2018,7 @@ struct DoorDrvrLockSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorDrvrReSts
  * DoorDrvrReSts - Driver Side Rear Door Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -2034,7 +2039,7 @@ struct DoorDrvrReSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorDrvrSts
  * DoorDrvrSts - Driver Door Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -2055,9 +2060,9 @@ struct DoorDrvrSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorPassLockReSts
  * DoorPassLockReSts - Passenger Side Rear Door Lock Status
- * 
+ *
  * Lock status:
- * 
+ *
  * LockStsUkwn - Lock Status Unknown
  * Unlckd - Unlocked
  * Lockd - Locked
@@ -2079,9 +2084,9 @@ struct DoorPassLockReSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorPassLockSts
  * DoorPassLockSts - Passenger Door Lock Status
- * 
+ *
  * Lock status:
- * 
+ *
  * LockStsUkwn - Lock Status Unknown
  * Unlckd - Unlocked
  * Lockd - Locked
@@ -2103,7 +2108,7 @@ struct DoorPassLockSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorPassReSts
  * DoorPassReSts - Passenger Side Rear Door Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -2124,7 +2129,7 @@ struct DoorPassReSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DoorPassSts
  * DoorPassSts - Passenger Door Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -2299,20 +2304,20 @@ struct DrvrCtrlOfPassSeatFrntSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DrvrDesDir
  * Desired Driver Direction
- *  
- * Desired Driver Direction is an interpretation of driver input. 
+ *
+ * Desired Driver Direction is an interpretation of driver input.
  * It specifies in which longitudinal direction the driver requests that any accelerating propulsive torque shall be delivered. There are three possible directions:
- *  
+ *
  * 1. Forward - The driver intends propulsion to move the vehicle forward
  * 2. Reverse - The driver intends propulsion to move the vehicle backwards
- * 3. Neutral - The driver intends no powered movement of the vehicle 
- *  
+ * 3. Neutral - The driver intends no powered movement of the vehicle
+ *
  * Note that the latter in the case of a conventional automatic gearbox thus applies to gear positions N and P.
- *  
+ *
  * Note that Desired Driver Direction describes the driver's request, which not necessarily coincides with the actual state of the powertrain at all times. In e.g. shift-by-wire solutions the driver's choice of driving direction is based on gear selector input. Changes to Desired Driving Direction will thus be known a short while before the powertrain has reconfigured accordingly.
- *  
+ *
  * Note that Desired Driver Direction will not reflect implausible driver requests, e.g. changing from Forward to Reverse while moving forward in high speed.
- *  
+ *
  * Note that Desired Driver Direction will initialize to the current powertrain configuration during startup (ECU boot, reset etc).
  */
 struct DrvrDesDir_info : InTag, public DataElemInfo {
@@ -2634,7 +2639,7 @@ struct DrvrSeatMassgFct_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal DrvrSeatSwtSts
  * The Remote control of passenger (Gentleman Function) seat function shall let the Driver control the Passengers power seat. The function shall be activated by entering a menu in the vehicles center stack display (Touch screen) and activate it. When the Gentleman Function is activated the adjustment switches attached to the driver side's seat ECU shall control the passenger side's seat instead of its own seat. It shall be done by sending a signal from the driver ECU to the passenger.
- * 
+ *
  * Signalgroup DrvrSeatSwtSts shall be transmitted from The Driver ECU to the Passenger ECU for control of the passenger seat.
  */
 struct DrvrSeatSwtSts_info : InTag, public DataElemInfo {
@@ -2953,7 +2958,7 @@ struct EngCooltIndcnReq_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal EngCooltLvl
- * Engine coolant level. 
+ * Engine coolant level.
  * 0 = High coolant level (normal)
  * 1 = Low coolant level
  */
@@ -2989,10 +2994,10 @@ struct EngFuCns_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal EngFuCnsFild
- * The econometer data signal for used for driver display have the following requirement for Econometer equalization: 
- * 
+ * The econometer data signal for used for driver display have the following requirement for Econometer equalization:
+ *
  * Deviations from normal data (at e.g. regeneration) shall be taken care of by the ECM (Engine Control Module) fuel consumption algorithm.
- * 
+ *
  * Extra fuel consumption during these events shall be stored locally in the ECM, to be transmitted as a distributed small added extra consumption data. This extra value shall be so designed such that there is no to the customer visible significant jumps in the transmitted ECON signal (that is related to the extra fuel consumed during the specific event). The total transmitted fuel consumption as indicated by the ECON signal, shall over time equal true consumption.
  */
 struct EngFuCnsFild_info : InTag, public DataElemInfo {
@@ -3420,7 +3425,7 @@ struct FltOfLiDaytiRunngRi_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal FrntAxleWarn
- * Warning for front axle, 
+ * Warning for front axle,
  * 3 warning status:
  * No warning (Normal), soft or hard warning.
  */
@@ -3916,7 +3921,7 @@ struct HmiSeatClimaExtd_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal HoodSts
  * HoodSts - Hood Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -4221,7 +4226,7 @@ struct HznProfSho_info : OutTag, public DataElemInfo {
 
 /*!
  * \brief Signal HznRstExtd
- * The long range horizon will be sent out continuously to VEM subsystem. When one horizon has been distributed navigation will start again from the beginning to distribute the ADAS long range on current path once more. 
+ * The long range horizon will be sent out continuously to VEM subsystem. When one horizon has been distributed navigation will start again from the beginning to distribute the ADAS long range on current path once more.
  * Therefore a HznRst-signal can be necessary between VEM and navigation subsystem in case the receiver node is shut down and all locally cached data is lost. New horizon is then to be distributed from the actual vehicle position.
  */
 struct HznRstExtd_info : InTag, public DataElemInfo {
@@ -4361,9 +4366,9 @@ struct IndcnUnit_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal IndcrDisp1WdSts
  * Controls the Direction Indicator tell-tales and sound to the driver.
- * 
+ *
  * Signal will be event driven and holds every flank on and off of the telltales/sound.
- * 
+ *
  * This signal will not be used for the Hazard Warning Light Button in instrument panel.
  */
 struct IndcrDisp1WdSts_info : InTag, public DataElemInfo {
@@ -4432,7 +4437,7 @@ struct InsdCarNoiseMeasd_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal IntAudCnclWarn
  * Signal to trigger sound for ACC Auto Cancel.
- * 
+ *
  * Yes = Trigger Sound
  * No = No sound
  */
@@ -5081,13 +5086,13 @@ struct LockSpdReq_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal LockgCenSts
  * Signal LockgCenSts provides central locking status to other subsystems.
- * 
+ *
  * Signal is a record with three items:
- * 
+ *
  * - LockSt (Lock State)
  * - TrigSrc (Trig Source)
  * - UpdEve (Will be set to TRUE during one second at each new central locking or unlocking event)
- * 
+ *
  * The signal shall be interpreted as the latest executed central locking request performed by user or system. Note that individual side doors and tailgate/bootlid may have a lock status which differs from the central locking status. Hence, this signal shall not be used for customer feedback regarding central locking state of the vehicle.
  */
 struct LockgCenSts_info : InTag, public DataElemInfo {
@@ -5106,9 +5111,9 @@ struct LockgCenSts_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal LockgCenStsForUsrFb
  * LockgCenStsForUsrFb - Central Locking Status for User Feedback
- * 
+ *
  * The signal is used to communicate central locking status to the user of the vehicle
- * 
+ *
  * Undefd - ?Undefined status (to be used when sufficient information about door and lock status is not available)
  * Opend - ?At least one door or taligate/bootlid or hood is open
  * Clsd (Closed) - ?All doors, tailgate/bootlid and hood are closed (at least one door or tailgate/bootlid is unlocked)
@@ -5182,9 +5187,9 @@ struct LockgPrsnlReqFromHmi_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal LockgPrsnlSts
  * LockgPrsnlSts - Private Locking Status
- * 
+ *
  * Current private locking status. To be used for user feedback.
- * 
+ *
  * On - Private locking is ON
  * Off - Private locking is OFF
  */
@@ -5520,7 +5525,7 @@ struct NoEntryWarnReq_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal NoSoundSys
  * Signal to set DIM message that no sound system available.
- * 
+ *
  * FALSE = Sound OK
  * TRUE = No Sound = Trigger DIM message
  */
@@ -6517,7 +6522,7 @@ struct RainSenMemdReq_info : OutTag, public DataElemInfo {
 
 /*!
  * \brief Signal ReAxleWarn
- * Warning for rear axle, 
+ * Warning for rear axle,
  * 3 warning status:
  * No warning (Normal), soft or hard warning.
  */
@@ -6537,7 +6542,7 @@ struct ReAxleWarn_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal RmnLockgPrsnlReq
  * RmnLockgPrsnlReq - Request for Private Locking Reminder
- * 
+ *
  * When private locking is ON, and the user tries to open the glove box or trunk via instrument panel button, a private locking reminder shall be shown to the user via HMI. The reminder shall be shown when this signal changes value from Off to On.
  */
 struct RmnLockgPrsnlReq_info : InTag, public DataElemInfo {
@@ -6711,7 +6716,7 @@ struct RoadUsrProtnSts_info : InTag, public DataElemInfo {
  * The signal shall be provided when the SBSM is ON.
  * The signal value Idle shall be default before any movement have been done after POR.
  * ?0-?Idle,1-?Forward,?2-?Backward,?3-?Spare
- * The signal value Failr shall be set when no direction info is availible 
+ * The signal value Failr shall be set when no direction info is availible
  * User input generic requirement for turn knobs Req. 199813 Signaling Rotary switch absolute postion
  */
 struct RotyDirReq2_info : InTag, public DataElemInfo {
@@ -6729,7 +6734,7 @@ struct RotyDirReq2_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal RotyDirReq1
- * Status signal of rotary knob DIRECTION sent periodically. 
+ * Status signal of rotary knob DIRECTION sent periodically.
  * 0- ?Idle, ?1- ?Clockwise(CW), ?2- ?Counter clockwise(CCW), ?3- ?Spare
  */
 struct RotyDirReq1_info : InTag, public DataElemInfo {
@@ -6749,7 +6754,7 @@ struct RotyDirReq1_info : InTag, public DataElemInfo {
  * \brief Signal RotyPosReq2
  * The signal 'RotyPosReq2' shall reflect the absolute postion of the SBSM rotary knob and be sent periodically on LIN 19.
  * Bit0 to bit4 shall hold the absolute position of the switch since start-up.
- * Bit0 to bit4 has initial- and minimum value 0 and maximum value 31. 
+ * Bit0 to bit4 has initial- and minimum value 0 and maximum value 31.
  * At start up of LIN communication the initial/default value of 'RotyPosReq' is 0x00000
  * When the knob is activated following decoding shall be done by XX:
  * If the knob is turned forward --> Then bit0 to bit4 shall shall decrease by 1 for every step turned.
@@ -6772,9 +6777,9 @@ struct RotyPosReq2_info : InTag, public DataElemInfo {
  * \brief Signal RotyPosReq1
  * The signal 'RotyPosReq1' shall be sent by the XX on LIN Y to the master Z.
  * Bit0 to bit4 shall hold the absolute position of the switch since start-up.
- * Bit0 to bit4 has initial- and minimum value 0 and maximum value 31. 
+ * Bit0 to bit4 has initial- and minimum value 0 and maximum value 31.
  * At start up of LIN communication the initial/default value of 'RotyPosReq' is 0x00000
- * 
+ *
  * When the knob is activated following decoding shall be done by XX:
  * If the knob is turned clock wise (CW) --> Then bit0 to bit4 shall shall decrease by 1 for every step turned.
  * If the knob is turned counter clock wise (CCW) --> Then bit0 to bit4 shall shall increase with 1 for every step turned.
@@ -6830,7 +6835,7 @@ struct RsdsSysStsRi_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal SaveSetgToMemPrmnt
  * Signal for personal settings saving concept
- * 
+ *
  * 0: Profile locked, no saving to be performed
  * 1: On the event (toggle 0 to 1) settings shall be saved (manually saving)
  * 2: Automatic saving
@@ -6851,9 +6856,9 @@ struct SaveSetgToMemPrmnt_info : OutTag, public DataElemInfo {
 /*!
  * \brief Signal ScrBarVolIndcn
  * This signal is sent from Engine to HMI management and display containing information regarding tank level indication to driver.
- * 
+ *
  * The signal is meant to be used showing tank level in IHU in 25% steps (100%, 75%, 50%, 25% and 0%).
- * 
+ *
  * The signal is sent from Engine in 5% steps but are visualized in IHU according to above information.
  */
 struct ScrBarVolIndcn_info : InTag, public DataElemInfo {
@@ -7733,7 +7738,7 @@ struct SteerWhlSwtPwr_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal StopStrtInhb
  * Stop Start inhibit reason, displayed to driver in IHU.
- * 
+ *
  * Bit 0: Electrical system
  * Bit 1: Climate system
  * Bit 2: Engine system
@@ -7879,7 +7884,7 @@ struct SwtForPassAirbCutOffSt_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal TankFlapSts
  * TankFlapSts -Tank Flap Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -7936,19 +7941,19 @@ struct TiAndDateIndcn_info : InTag, public DataElemInfo {
  * UTC Time Correction Data from Navigation map data.
  * - Availability of this functionality is based on map data coverage and current vehicle position and is indicated by the SpprtForFct parameter.
  * - TiCorrnByMapData is provided interally within the IHU.
- * 
+ *
  * Example 1
  * The system has no map data, the vehicle is located in area without map data for time correction or the vehicle position is unknown:
  * SpprtForFct = No
  * Other parameter values N/A.
- * 
+ *
  * Example 2
  * Vehicle is identified by map data as located within the UTC - 3:30 time zone (e.g easten part of Canada). Daylight saving time of 1 h currently apply:
  * SpprtForFct = Yes
  * HrCorrn = -3
  * MinsCorrn = -30
  * DayLiSaveTi = 1
- * 
+ *
  * Example 3
  * Vehicle is identified by map data as located within the UTC + 2:00 time zone (e.g Finland). No daylight saving time currently apply:
  * SpprtForFct = Yes
@@ -8180,7 +8185,7 @@ struct TnlEntryOrEnd_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal TrSts
  * TrSts - Tailgate/Bootlid Status
- * 
+ *
  * Ukwn - Unknown status
  * Opend - Opened
  * Clsd - Closed
@@ -8785,7 +8790,7 @@ struct VehActvMsgToDrvr_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal VehBattU
  * Present vehicle voltage measured by CEM with QF.
- * 
+ *
  * QF values:
  * 3: Value Reliable
  * 2: Value from back up sensor
@@ -8807,10 +8812,10 @@ struct VehBattU_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal VehCfgPrm
- * VehicleConfigurationParameters: Car Config container signal. 
- * Values of Car Config parameters #1 - #504 are mapped into 72 blocks. 
+ * VehicleConfigurationParameters: Car Config container signal.
+ * Values of Car Config parameters #1 - #504 are mapped into 72 blocks.
  * Each block is published in this signal using an 8-byte record: Block counter (MSB) + 7 parameter value byte positions.
- * Block counter runs through all 72 blocks in a sequential loop (normal operation). 
+ * Block counter runs through all 72 blocks in a sequential loop (normal operation).
  * When transmitted, block 1 will contain current values on Car Config parameters #1 - #7, block 2 -> #8 - #14 ... block 72 -> #498 - #504.
  * Any faulty parameter value is indicated using 255.
  */
@@ -8864,11 +8869,11 @@ struct VehMNom_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal VehModMngtGlbSafe1
  * VehModMngtGlbSafe1  is a system signal group sent globally in an end to end protected record that consists of  CarModSts1, CarModSubtypWdCarModSubtyp, UsgModSts,  EgyLvlElecMai,  EgyLvlElecSubtyp,  PwrLvlElecMai, PwrLvlElecSubtyp and FltEngyCnsWdSts
- * 
- * CarModSts1 : Factory, Transport, Dyno, Normal. Crash 
- * 
+ *
+ * CarModSts1 : Factory, Transport, Dyno, Normal. Crash
+ *
  * UsgModSts : Abandoned, Inactive, Convenience, Active, Driving
- * 
+ *
  * CarModSubtypWdCarModSubtyp: examples for CarModSubtyp: Factory Driving, Transport Driving
  */
 struct VehModMngtGlbSafe1_info : InTag, public DataElemInfo {
@@ -8991,7 +8996,7 @@ struct VehSpdLgtSafe_info : InTag, public DataElemInfo {
 
 /*!
  * \brief Signal Vin
- * VehicleIdentificationNumber: The Vin signal data is divided into 3 separate blocks that are transmitted in a sequential loop, 
+ * VehicleIdentificationNumber: The Vin signal data is divided into 3 separate blocks that are transmitted in a sequential loop,
  * using an 8-byte record: Block counter (MSB) + 7 character/ASCII byte positions.
  * When transmitted, block 1 will contain current VIN characters #1 - #7, block 2 -> #8 - #14, block 3 -> #15 - #17.
  * Any fault is indicated using 255.
@@ -9065,7 +9070,7 @@ struct VisnImgAgWideInUse_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal VisnImgAgWideReq
  * Used to request different camera views
- * 
+ *
  * Logical Value	Autosar Naming (Short name)		System			Description
  * 0		NoImg				All			No Image
  * 1		Img1				PAC360			Rear View + Rear Junction View
@@ -9150,7 +9155,7 @@ struct WarnTypForLaneKeepAid_info : OutTag, public DataElemInfo {
 
 /*!
  * \brief Signal WhlCircum
- * WheelCircumference: High average tyre rolling circumference valid for a specific group of tyres. 
+ * WheelCircumference: High average tyre rolling circumference valid for a specific group of tyres.
  * Value in mm. Fault indicated using 4095.
  */
 struct WhlCircum_info : InTag, public DataElemInfo {
@@ -9203,7 +9208,7 @@ struct WhlRotToothCntr_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtDrv
  * Signal sent to inform the rest of the car of the window position status for the front driver side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- * 
+ *
  */
 struct WinPosnStsAtDrv_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9221,7 +9226,7 @@ struct WinPosnStsAtDrv_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtDrvrRe
  * Signal sent to inform the rest of the car of the window position status for the rear driver side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- * 
+ *
  */
 struct WinPosnStsAtDrvrRe_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9239,7 +9244,7 @@ struct WinPosnStsAtDrvrRe_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtPass
  * Signal sent to inform the rest of the car of the window position status for the front passenger side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- * 
+ *
  */
 struct WinPosnStsAtPass_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9257,7 +9262,7 @@ struct WinPosnStsAtPass_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtPassRe
  * Signal sent to inform the rest of the car of the window position status for the rear passenger side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- * 
+ *
  */
 struct WinPosnStsAtPassRe_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9341,7 +9346,7 @@ struct WiprReAutReq_info : OutTag, public DataElemInfo {
 
 /*!
  * \brief Signal WshrFldSts1WdElmHMI
- * Information regarding if the washer fluid level is low. 
+ * Information regarding if the washer fluid level is low.
  * On = Washer Fluid Level Low
  * Off = Washer Fluid Level Not Low.
  */

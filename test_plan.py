@@ -46,12 +46,12 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps | {cp.apix}),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
-    Disabled(VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                  standard_caps), 
+    Disabled(VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                  standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue= "",
              deadline= "2018-01-26"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/test/iplm",                      standard_caps), 
+    Disabled(VTSTest("vendor/volvocars/hardware/test/iplm",                      standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue = "",
              deadline = "2018-01-26"
@@ -72,7 +72,7 @@ test_plan_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
-    Disabled(TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps), 
+    Disabled(TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue="",
              deadline="2018-01-26"

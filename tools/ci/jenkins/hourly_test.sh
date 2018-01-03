@@ -32,7 +32,7 @@ then
     capability="flexray"
     export VECTOR_FDX_IP=198.18.34.2
     export VECTOR_FDX_PORT=2809
-    ping -c1 ${VECTOR_FDX_IP}    
+    ping -c1 ${VECTOR_FDX_IP}
 elif [ "${JOB_NAME}" = "ihu_hourly_test-audio" ]
 then
     capability="audio"

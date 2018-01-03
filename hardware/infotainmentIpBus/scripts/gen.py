@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 """
 Generate Service ID and Operation ID enums, ToString() and ServiceIdIsValid() functions based on
 VCC specs in doc/docx format (requires external application antiword).

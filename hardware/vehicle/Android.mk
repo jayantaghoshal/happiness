@@ -50,7 +50,7 @@ LOCAL_SHARED_LIBRARIES := \
     libdataelements \
     libtraceclient \
     libAudioManagerBinder \
-    libAudioManagerCallbackBinder 
+    libAudioManagerCallbackBinder
 
 
 LOCAL_STATIC_LIBRARIES := \

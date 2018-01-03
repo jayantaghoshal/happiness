@@ -1,6 +1,8 @@
 #!/bin/python3
-# Copyright 2017 Volvo Cars, All Rights Reserved.
-# Volvo Cars Confidential
+
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 import codecs
 import os
 import uuid

@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 """
     This file is used by youcompleteme to provide auto completion for C and C++
     It must be located in any parent directory of the source file you need completion for or configured

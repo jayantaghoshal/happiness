@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef NETMAN_DIAGNOSTICS_REPORTER_H
 #define NETMAN_DIAGNOSTICS_REPORTER_H
 

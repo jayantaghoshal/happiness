@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 # Build the VendorVCC priv app.
 LOCAL_PATH:= $(call my-dir)
 

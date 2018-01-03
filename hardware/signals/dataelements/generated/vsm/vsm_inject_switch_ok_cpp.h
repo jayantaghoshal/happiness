@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 // clang-format off
 /*!
  * \file
@@ -22,8 +27,8 @@
             deValue.Cntr = static_cast<decltype(deValue.Cntr)>(rteValue.ADataRawSafeCntr);
 
             ADataRawSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ADataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igADataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(ADataRawSafe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ADataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igADataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(ADataRawSafe)));
         }
     }
     break;
@@ -112,8 +117,8 @@
             deValue.YawRateQf = static_cast<decltype(deValue.YawRateQf)>(rteValue.YawRate1Qf1);
 
             AgDataRawSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AgDataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAgDataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(AgDataRawSafe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AgDataRawSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAgDataRawSafe_mrx, length, static_cast<unsigned long>(sizeof(AgDataRawSafe)));
         }
     }
     break;
@@ -129,8 +134,8 @@
             deValue.QF = static_cast<decltype(deValue.QF)>(rteValue.AmbTIndcdQf);
 
             AmbTIndcdWithUnit_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AmbTIndcdWithUnit (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx, length, static_cast<unsigned long>(sizeof(AmbTIndcdWithUnit)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AmbTIndcdWithUnit (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTIndcdWithUnit_mrx, length, static_cast<unsigned long>(sizeof(AmbTIndcdWithUnit)));
         }
     }
     break;
@@ -145,8 +150,8 @@
             deValue.Qly = static_cast<decltype(deValue.Qly)>(rteValue.AmbTRawQly);
 
             AmbTRaw_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AmbTRaw (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTRaw_mrx, length, static_cast<unsigned long>(sizeof(AmbTRaw)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AmbTRaw (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAmbTRaw_mrx, length, static_cast<unsigned long>(sizeof(AmbTRaw)));
         }
     }
     break;
@@ -162,8 +167,8 @@
             deValue.Typ = static_cast<decltype(deValue.Typ)>(rteValue.AsyLaneChgTyp);
 
             AsyLaneChg_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AsyLaneChg (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAsyLaneChg_mrx, length, static_cast<unsigned long>(sizeof(AsyLaneChg)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AsyLaneChg (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAsyLaneChg_mrx, length, static_cast<unsigned long>(sizeof(AsyLaneChg)));
         }
     }
     break;
@@ -220,8 +225,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtDrvrForDevErrSts2);
 
             BltLockStAtDrvr_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtDrvr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtDrvr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtDrvr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtDrvr)));
         }
     }
     break;
@@ -236,8 +241,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtPassForBltLockSts);
 
             BltLockStAtPass_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtPass (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtPass_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtPass)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtPass (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtPass_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtPass)));
         }
     }
     break;
@@ -253,8 +258,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtRowSecLeForBltLockSts);
 
             BltLockStAtRowSecLe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecLe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecLe)));
         }
     }
     break;
@@ -270,8 +275,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtRowSecMidForBltLockSts);
 
             BltLockStAtRowSecMid_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecMid (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecMid)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecMid (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecMid_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecMid)));
         }
     }
     break;
@@ -287,8 +292,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtRowSecRiForBltLockSts);
 
             BltLockStAtRowSecRi_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecRi)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowSecRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowSecRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowSecRi)));
         }
     }
     break;
@@ -304,8 +309,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtRowThrdLeForBltLockSts);
 
             BltLockStAtRowThrdLe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowThrdLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdLe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowThrdLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdLe_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdLe)));
         }
     }
     break;
@@ -321,8 +326,8 @@
             deValue.BltLockSts = static_cast<decltype(deValue.BltLockSts)>(rteValue.BltLockStAtRowThrdRiForBltLockSts);
 
             BltLockStAtRowThrdRi_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowThrdRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdRi)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BltLockStAtRowThrdRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBltLockStAtRowThrdRi_mrx, length, static_cast<unsigned long>(sizeof(BltLockStAtRowThrdRi)));
         }
     }
     break;
@@ -395,8 +400,8 @@
             deValue.BrkWarnIndcnReq = static_cast<decltype(deValue.BrkWarnIndcnReq)>(rteValue.BrkWarnIndcnReq);
 
             BrkAndAbsWarnIndcnReq_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BrkAndAbsWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(BrkAndAbsWarnIndcnReqGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BrkAndAbsWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkAndAbsWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(BrkAndAbsWarnIndcnReqGroup)));
         }
     }
     break;
@@ -427,8 +432,8 @@
             deValue.BrkFricTqAtWhlReRiAct = static_cast<decltype(deValue.BrkFricTqAtWhlReRiAct)>( toUnsignedFromRaw<13>(rteValue.BrkFricTqAtWhlReRiAct) ) * 1.0 + 0.0;
 
             BrkFricTqAtWhlAct_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BrkFricTqAtWhlAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx, length, static_cast<unsigned long>(sizeof(BrkFricTqAtWhlAct)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BrkFricTqAtWhlAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igBrkFricTqAtWhlAct_mrx, length, static_cast<unsigned long>(sizeof(BrkFricTqAtWhlAct)));
         }
     }
     break;
@@ -625,8 +630,8 @@
             deValue.GrdForFuEco = static_cast<decltype(deValue.GrdForFuEco)>( toUnsignedFromRaw<10>(rteValue.GrdForFuEco) ) * 0.1 + 0.0;
 
             CchForFuEco_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CchForFuEco (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCchForFuEco_mrx, length, static_cast<unsigned long>(sizeof(CchForFuEco)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CchForFuEco (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCchForFuEco_mrx, length, static_cast<unsigned long>(sizeof(CchForFuEco)));
         }
     }
     break;
@@ -688,8 +693,8 @@
             deValue.HwOffsAdr6 = static_cast<decltype(deValue.HwOffsAdr6)>(rteValue.ChrgrHwAprvdWirelsAdrHwOffsAdr6);
 
             ChrgrHwAprvdWirelsAdr_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ChrgrHwAprvdWirelsAdr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx, length, static_cast<unsigned long>(sizeof(ChrgrHwAprvdWirelsAdr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ChrgrHwAprvdWirelsAdr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igChrgrHwAprvdWirelsAdr_mrx, length, static_cast<unsigned long>(sizeof(ChrgrHwAprvdWirelsAdr)));
         }
     }
     break;
@@ -802,8 +807,8 @@
             deValue.Ri = static_cast<decltype(deValue.Ri)>(rteValue.CllsnWarnSideRi);
 
             CllsnWarnSide_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CllsnWarnSide (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCllsnWarnSide_mrx, length, static_cast<unsigned long>(sizeof(CllsnWarnSide)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CllsnWarnSide (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCllsnWarnSide_mrx, length, static_cast<unsigned long>(sizeof(CllsnWarnSide)));
         }
     }
     break;
@@ -846,8 +851,8 @@
             deValue.QlyFlg = static_cast<decltype(deValue.QlyFlg)>(rteValue.CmptmtAirTEstimdExtdQlyFlg);
 
             CmptmtAirTEstimdExtd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CmptmtAirTEstimdExtd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx, length, static_cast<unsigned long>(sizeof(CmptmtAirTEstimdExtd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CmptmtAirTEstimdExtd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtAirTEstimdExtd_mrx, length, static_cast<unsigned long>(sizeof(CmptmtAirTEstimdExtd)));
         }
     }
     break;
@@ -863,8 +868,8 @@
             deValue.FanForCmptmtTRunng = static_cast<decltype(deValue.FanForCmptmtTRunng)>(rteValue.FanForCmptmtTRunng);
 
             CmptmtTFrnt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CmptmtTFrntGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx, length, static_cast<unsigned long>(sizeof(CmptmtTFrntGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CmptmtTFrntGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCmptmtTFrntGroup_mrx, length, static_cast<unsigned long>(sizeof(CmptmtTFrntGroup)));
         }
     }
     break;
@@ -924,8 +929,8 @@
             deValue.DistanceToWarning = static_cast<decltype(deValue.DistanceToWarning)>(rteValue.ConSftyWarnDistanceToWarning);
 
             ConSftyWarn_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ConSftyWarn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igConSftyWarn_mrx, length, static_cast<unsigned long>(sizeof(ConSftyWarn)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ConSftyWarn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igConSftyWarn_mrx, length, static_cast<unsigned long>(sizeof(ConSftyWarn)));
         }
     }
     break;
@@ -1054,8 +1059,8 @@
             deValue.DataNrSpcl3 = static_cast<decltype(deValue.DataNrSpcl3)>(rteValue.DataSpclDMSMDataNrSpcl3);
 
             DataSpclDMSM_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DataSpclDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDataSpclDMSM_mrx, length, static_cast<unsigned long>(sizeof(DataSpclDMSM)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DataSpclDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDataSpclDMSM_mrx, length, static_cast<unsigned long>(sizeof(DataSpclDMSM)));
         }
     }
     break;
@@ -1312,8 +1317,8 @@
             deValue.VisWarnReq = static_cast<decltype(deValue.VisWarnReq)>(rteValue.DriveAwayInfoWarnReqVisWarnReq);
 
             DriveAwayInfoWarnReq_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DriveAwayInfoWarnReq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx, length, static_cast<unsigned long>(sizeof(DriveAwayInfoWarnReq)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DriveAwayInfoWarnReq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDriveAwayInfoWarnReq_mrx, length, static_cast<unsigned long>(sizeof(DriveAwayInfoWarnReq)));
         }
     }
     break;
@@ -1428,8 +1433,8 @@
             deValue.OnOff = static_cast<decltype(deValue.OnOff)>(rteValue.DrvrSeatMassgFctOnOff);
 
             DrvrSeatMassgFct_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DrvrSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatMassgFct)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DrvrSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatMassgFct)));
         }
     }
     break;
@@ -1449,8 +1454,8 @@
             deValue.DrvrSeatSwtSldSts = static_cast<decltype(deValue.DrvrSeatSwtSldSts)>(rteValue.DrvrSeatSwtSldSts);
 
             DrvrSeatSwtSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DrvrSeatSwtSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatSwtSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DrvrSeatSwtSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDrvrSeatSwtSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrSeatSwtSts)));
         }
     }
     break;
@@ -1493,8 +1498,8 @@
             deValue.DstUnit_ = static_cast<decltype(deValue.DstUnit_)>(rteValue.DstUnit);
 
             DstToEmptyIndcd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DstToEmptyIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx, length, static_cast<unsigned long>(sizeof(DstToEmptyIndcd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DstToEmptyIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igDstToEmptyIndcd_mrx, length, static_cast<unsigned long>(sizeof(DstToEmptyIndcd)));
         }
     }
     break;
@@ -1693,8 +1698,8 @@
             deValue.EngNGrdt = static_cast<decltype(deValue.EngNGrdt)>( toSignedFromRaw<16>(rteValue.EngNSafeEngNGrdt) ) * 1.0 + 0.0;
 
             EngNSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EngNSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEngNSafe_mrx, length, static_cast<unsigned long>(sizeof(EngNSafe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EngNSafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEngNSafe_mrx, length, static_cast<unsigned long>(sizeof(EngNSafe)));
         }
     }
     break;
@@ -1766,8 +1771,8 @@
             deValue.EpbLampReqCntr = static_cast<decltype(deValue.EpbLampReqCntr)>( toUnsignedFromRaw<4>(rteValue.EpbLampReqCntr) ) * 1.0 + 0.0;
 
             EpbLampReq_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EpbLampReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEpbLampReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EpbLampReqGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EpbLampReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEpbLampReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EpbLampReqGroup)));
         }
     }
     break;
@@ -1783,8 +1788,8 @@
             deValue.EscStCntr = static_cast<decltype(deValue.EscStCntr)>(rteValue.EscStCntr);
 
             EscSt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EscStGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscStGroup_mrx, length, static_cast<unsigned long>(sizeof(EscStGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EscStGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscStGroup_mrx, length, static_cast<unsigned long>(sizeof(EscStGroup)));
         }
     }
     break;
@@ -1800,8 +1805,8 @@
             deValue.EscWarnIndcnReqCntr = static_cast<decltype(deValue.EscWarnIndcnReqCntr)>(rteValue.EscWarnIndcnReqCntr);
 
             EscWarnIndcnReq_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EscWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EscWarnIndcnReqGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EscWarnIndcnReqGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEscWarnIndcnReqGroup_mrx, length, static_cast<unsigned long>(sizeof(EscWarnIndcnReqGroup)));
         }
     }
     break;
@@ -1916,8 +1921,8 @@
             deValue.FrntWiprLvrQf = static_cast<decltype(deValue.FrntWiprLvrQf)>(rteValue.FrntWiprLvrReq2FrntWiprLvrQf);
 
             FrntWiprLvrReq2_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for FrntWiprLvrReq2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx, length, static_cast<unsigned long>(sizeof(FrntWiprLvrReq2)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for FrntWiprLvrReq2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFrntWiprLvrReq2_mrx, length, static_cast<unsigned long>(sizeof(FrntWiprLvrReq2)));
         }
     }
     break;
@@ -1974,8 +1979,8 @@
             deValue.GenQF = static_cast<decltype(deValue.GenQF)>(rteValue.FuLvlIndcdQly);
 
             FuLvlIndcd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for FuLvlIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFuLvlIndcd_mrx, length, static_cast<unsigned long>(sizeof(FuLvlIndcd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for FuLvlIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igFuLvlIndcd_mrx, length, static_cast<unsigned long>(sizeof(FuLvlIndcd)));
         }
     }
     break;
@@ -2019,8 +2024,8 @@
             deValue.GearTarIndcn = static_cast<decltype(deValue.GearTarIndcn)>(rteValue.GearTarIndcn);
 
             GearIndcnRec_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for GearIndcnRec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igGearIndcnRec_mrx, length, static_cast<unsigned long>(sizeof(GearIndcnRec)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for GearIndcnRec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igGearIndcnRec_mrx, length, static_cast<unsigned long>(sizeof(GearIndcnRec)));
         }
     }
     break;
@@ -2050,8 +2055,8 @@
             deValue.Re = static_cast<decltype(deValue.Re)>(rteValue.HmiDfrstReSts);
 
             HmiDefrstElecSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for HMIDefrstSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHMIDefrstSts_mrx, length, static_cast<unsigned long>(sizeof(HMIDefrstSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for HMIDefrstSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHMIDefrstSts_mrx, length, static_cast<unsigned long>(sizeof(HMIDefrstSts)));
         }
     }
     break;
@@ -2097,8 +2102,8 @@
             deValue.ImgHudTmpNotAvlSts = static_cast<decltype(deValue.ImgHudTmpNotAvlSts)>(rteValue.HudDiagcImgHudTmpNotAvlSts);
 
             HudDiagc_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for HudDiagc (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHudDiagc_mrx, length, static_cast<unsigned long>(sizeof(HudDiagc)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for HudDiagc (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igHudDiagc_mrx, length, static_cast<unsigned long>(sizeof(HudDiagc)));
         }
     }
     break;
@@ -2267,8 +2272,8 @@
             deValue.KeyId = static_cast<decltype(deValue.KeyId)>(rteValue.KeyReadStsToProfCtrlKeyId);
 
             KeyReadStsToProfCtrl_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for KeyReadStsToProfCtrl (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx, length, static_cast<unsigned long>(sizeof(KeyReadStsToProfCtrl)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for KeyReadStsToProfCtrl (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igKeyReadStsToProfCtrl_mrx, length, static_cast<unsigned long>(sizeof(KeyReadStsToProfCtrl)));
         }
     }
     break;
@@ -2438,8 +2443,8 @@
             deValue.UpdEve = static_cast<decltype(deValue.UpdEve)>(rteValue.LockgCenStsUpdEve);
 
             LockgCenSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for LockgCenSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igLockgCenSts_mrx, length, static_cast<unsigned long>(sizeof(LockgCenSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for LockgCenSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igLockgCenSts_mrx, length, static_cast<unsigned long>(sizeof(LockgCenSts)));
         }
     }
     break;
@@ -2580,8 +2585,8 @@
             deValue.ResourceGroup = static_cast<decltype(deValue.ResourceGroup)>(rteValue.NetCtrlrActvtResourceGroup);
 
             NetCtrlrActvt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NetCtrlrActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetCtrlrActvt_mrx, length, static_cast<unsigned long>(sizeof(NetCtrlrActvt)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NetCtrlrActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetCtrlrActvt_mrx, length, static_cast<unsigned long>(sizeof(NetCtrlrActvt)));
         }
     }
     break;
@@ -2596,8 +2601,8 @@
             deValue.ResourceGroup = static_cast<decltype(deValue.ResourceGroup)>(rteValue.NetTelmActvtResourceGroup);
 
             NetTelmActvt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NetTelmActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetTelmActvt_mrx, length, static_cast<unsigned long>(sizeof(NetTelmActvt)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NetTelmActvt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNetTelmActvt_mrx, length, static_cast<unsigned long>(sizeof(NetTelmActvt)));
         }
     }
     break;
@@ -2684,8 +2689,8 @@
             deValue.Nr4 = static_cast<decltype(deValue.Nr4)>(rteValue.NrSerlDMSMNr4);
 
             NrSerlDMSM_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NrSerlDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNrSerlDMSM_mrx, length, static_cast<unsigned long>(sizeof(NrSerlDMSM)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NrSerlDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNrSerlDMSM_mrx, length, static_cast<unsigned long>(sizeof(NrSerlDMSM)));
         }
     }
     break;
@@ -2705,8 +2710,8 @@
             deValue.Nr4 = static_cast<decltype(deValue.Nr4)>(rteValue.PartNrDMSMNr4);
 
             PartNrDMSM_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PartNrDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPartNrDMSM_mrx, length, static_cast<unsigned long>(sizeof(PartNrDMSM)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PartNrDMSM (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPartNrDMSM_mrx, length, static_cast<unsigned long>(sizeof(PartNrDMSM)));
         }
     }
     break;
@@ -2765,8 +2770,8 @@
             deValue.OnOff = static_cast<decltype(deValue.OnOff)>(rteValue.PassSeatMassgFctOnOff);
 
             PassSeatMassgFct_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PassSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(PassSeatMassgFct)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PassSeatMassgFct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatMassgFct_mrx, length, static_cast<unsigned long>(sizeof(PassSeatMassgFct)));
         }
     }
     break;
@@ -2800,8 +2805,8 @@
             deValue.PassSeatSwtSldSts = static_cast<decltype(deValue.PassSeatSwtSldSts)>(rteValue.PassSeatSwtSts2PassSeatSwtSldSts);
 
             PassSeatSwtSts2_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PassSeatSwtSts2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx, length, static_cast<unsigned long>(sizeof(PassSeatSwtSts2)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PassSeatSwtSts2 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPassSeatSwtSts2_mrx, length, static_cast<unsigned long>(sizeof(PassSeatSwtSts2)));
         }
     }
     break;
@@ -2816,8 +2821,8 @@
             deValue.PinionSteerAg1Qf = static_cast<decltype(deValue.PinionSteerAg1Qf)>(rteValue.PinionSteerAg1Qf);
 
             PinionSteerAg1_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PinionSteerAg1Group (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx, length, static_cast<unsigned long>(sizeof(PinionSteerAg1Group)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PinionSteerAg1Group (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPinionSteerAg1Group_mrx, length, static_cast<unsigned long>(sizeof(PinionSteerAg1Group)));
         }
     }
     break;
@@ -2862,8 +2867,8 @@
             deValue.TiForYr = static_cast<decltype(deValue.TiForYr)>(rteValue.TiForYrInPosnFromSatlt);
 
             PosnFromSatlt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PosnFromSatlt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPosnFromSatlt_mrx, length, static_cast<unsigned long>(sizeof(PosnFromSatlt)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PosnFromSatlt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPosnFromSatlt_mrx, length, static_cast<unsigned long>(sizeof(PosnFromSatlt)));
         }
     }
     break;
@@ -3014,8 +3019,8 @@
             deValue.Prof9 = static_cast<decltype(deValue.Prof9)>(rteValue.ProfActProf9);
 
             ProfAct_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ProfAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfAct_mrx, length, static_cast<unsigned long>(sizeof(ProfAct)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ProfAct (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfAct_mrx, length, static_cast<unsigned long>(sizeof(ProfAct)));
         }
     }
     break;
@@ -3040,8 +3045,8 @@
             deValue.Prof9 = static_cast<decltype(deValue.Prof9)>(rteValue.ProfLimdProf9);
 
             ProfLimd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ProfLimd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfLimd_mrx, length, static_cast<unsigned long>(sizeof(ProfLimd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ProfLimd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igProfLimd_mrx, length, static_cast<unsigned long>(sizeof(ProfLimd)));
         }
     }
     break;
@@ -3239,8 +3244,8 @@
             deValue.PtCluTqQly = static_cast<decltype(deValue.PtCluTqQly)>(rteValue.PtCluTqPtCluTqQly);
 
             PtCluTq_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PtCluTq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtCluTq_mrx, length, static_cast<unsigned long>(sizeof(PtCluTq)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PtCluTq (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtCluTq_mrx, length, static_cast<unsigned long>(sizeof(PtCluTq)));
         }
     }
     break;
@@ -3271,8 +3276,8 @@
             deValue.PtTqAtWhlsFrntQly = static_cast<decltype(deValue.PtTqAtWhlsFrntQly)>(rteValue.PtTqAtWhlsFrntQly);
 
             PtTqAtWhlFrntAct_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PtTqAtWhlFrntActGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx, length, static_cast<unsigned long>(sizeof(PtTqAtWhlFrntActGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PtTqAtWhlFrntActGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPtTqAtWhlFrntActGroup_mrx, length, static_cast<unsigned long>(sizeof(PtTqAtWhlFrntActGroup)));
         }
     }
     break;
@@ -3460,8 +3465,8 @@
             deValue.RsdsSts = static_cast<decltype(deValue.RsdsSts)>(rteValue.RsdsSysStsLeRsdsSts);
 
             RsdsSysStsLe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RsdsSysStsLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsLe_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsLe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RsdsSysStsLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsLe_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsLe)));
         }
     }
     break;
@@ -3481,8 +3486,8 @@
             deValue.RsdsSts = static_cast<decltype(deValue.RsdsSts)>(rteValue.RsdsSysStsRiRsdsSts);
 
             RsdsSysStsRi_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RsdsSysStsRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsRi_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsRi)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RsdsSysStsRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igRsdsSysStsRi_mrx, length, static_cast<unsigned long>(sizeof(RsdsSysStsRi)));
         }
     }
     break;
@@ -3539,8 +3544,8 @@
             deValue.SeatBackUnlckdRi = static_cast<decltype(deValue.SeatBackUnlckdRi)>(rteValue.SeatBackUnlckdThrdRi);
 
             SeatBackUnlckdThrd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SeatBackUnlckdThrd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx, length, static_cast<unsigned long>(sizeof(SeatBackUnlckdThrd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SeatBackUnlckdThrd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSeatBackUnlckdThrd_mrx, length, static_cast<unsigned long>(sizeof(SeatBackUnlckdThrd)));
         }
     }
     break;
@@ -3585,8 +3590,8 @@
             deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchAccActvnStsYr);
 
             SftyCchAccActvnSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchAccActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchAccActvnSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchAccActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchAccActvnSts)));
         }
     }
     break;
@@ -3616,8 +3621,8 @@
             deValue.TotCntxt = static_cast<decltype(deValue.TotCntxt)>(rteValue.SftyCchDrvgCycIdxTotCntxt);
 
             SftyCchDrvgCycIdx_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchDrvgCycIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchDrvgCycIdx)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchDrvgCycIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchDrvgCycIdx)));
         }
     }
     break;
@@ -3634,8 +3639,8 @@
             deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchLaneKeepAidActvnStsYr);
 
             SftyCchLaneKeepAidActvnSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLaneKeepAidActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLaneKeepAidActvnSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLaneKeepAidActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLaneKeepAidActvnSts)));
         }
     }
     break;
@@ -3658,8 +3663,8 @@
             deValue.TotAvl = static_cast<decltype(deValue.TotAvl)>(rteValue.SftyCchLongTermIdxTotAvl);
 
             SftyCchLongTermIdx_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLongTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLongTermIdx)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLongTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLongTermIdx)));
         }
     }
     break;
@@ -3682,8 +3687,8 @@
             deValue.TotAvl = static_cast<decltype(deValue.TotAvl)>(rteValue.SftyCchMidTermIdxTotAvl);
 
             SftyCchMidTermIdx_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchMidTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchMidTermIdx)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchMidTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchMidTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchMidTermIdx)));
         }
     }
     break;
@@ -3700,8 +3705,8 @@
             deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchPilotAssiActvnStsYr);
 
             SftyCchPilotAssiActvnSts_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchPilotAssiActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPilotAssiActvnSts)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchPilotAssiActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPilotAssiActvnSts)));
         }
     }
     break;
@@ -3780,8 +3785,8 @@
             deValue.TotAvl = static_cast<decltype(deValue.TotAvl)>(rteValue.SftyCchShortTermIdxTotAvl);
 
             SftyCchShortTermIdx_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchShortTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchShortTermIdx)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchShortTermIdx (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchShortTermIdx_mrx, length, static_cast<unsigned long>(sizeof(SftyCchShortTermIdx)));
         }
     }
     break;
@@ -3813,8 +3818,8 @@
             deValue.SteerStsForAutDrv = static_cast<decltype(deValue.SteerStsForAutDrv)>(rteValue.SteerStsForAutDrv);
 
             SftyWarnGroupFromAsySafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyWarnGroupFromAsySafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx, length, static_cast<unsigned long>(sizeof(SftyWarnGroupFromAsySafe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyWarnGroupFromAsySafe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyWarnGroupFromAsySafe_mrx, length, static_cast<unsigned long>(sizeof(SftyWarnGroupFromAsySafe)));
         }
     }
     break;
@@ -3835,8 +3840,8 @@
             deValue.DstOfSnsrRiSide = static_cast<decltype(deValue.DstOfSnsrRiSide)>(rteValue.ParkAssiDstFrntOfDstOfSnsrRiSide);
 
             SnsrParkAssiFrnt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrParkAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiFrnt)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrParkAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiFrnt)));
         }
     }
     break;
@@ -3857,8 +3862,8 @@
             deValue.DstOfSnsrRiSide = static_cast<decltype(deValue.DstOfSnsrRiSide)>(rteValue.ParkAssiDstReOfDstOfSnsrRiSide);
 
             SnsrParkAssiRe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrParkAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiRe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrParkAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrParkAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrParkAssiRe)));
         }
     }
     break;
@@ -3879,8 +3884,8 @@
             deValue.SnsrDstSideRi = static_cast<decltype(deValue.SnsrDstSideRi)>( toUnsignedFromRaw<9>(rteValue.SnsrPrkgAssiFrntSnsrDstSideRi) ) * -1.0 + 511.0;
 
             SnsrPrkgAssiFrnt_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrPrkgAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiFrnt)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrPrkgAssiFrnt (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiFrnt_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiFrnt)));
         }
     }
     break;
@@ -3901,8 +3906,8 @@
             deValue.SnsrDstSideRi = static_cast<decltype(deValue.SnsrDstSideRi)>( toUnsignedFromRaw<9>(rteValue.SnsrPrkgAssiReSnsrDstSideRi) ) * -1.0 + 511.0;
 
             SnsrPrkgAssiRe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrPrkgAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiRe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SnsrPrkgAssiRe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSnsrPrkgAssiRe_mrx, length, static_cast<unsigned long>(sizeof(SnsrPrkgAssiRe)));
         }
     }
     break;
@@ -4046,8 +4051,8 @@
             deValue.SteerWhlSnsrQf = static_cast<decltype(deValue.SteerWhlSnsrQf)>(rteValue.SteerWhlSnsrQf);
 
             SteerWhlSnsrSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SteerWhlSnsr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSteerWhlSnsr_mrx, length, static_cast<unsigned long>(sizeof(SteerWhlSnsr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SteerWhlSnsr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSteerWhlSnsr_mrx, length, static_cast<unsigned long>(sizeof(SteerWhlSnsr)));
         }
     }
     break;
@@ -4179,8 +4184,8 @@
             deValue.Yr1 = static_cast<decltype(deValue.Yr1)>(rteValue.Yr);
 
             TiAndDateIndcn_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TiAndDateIndcn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTiAndDateIndcn_mrx, length, static_cast<unsigned long>(sizeof(TiAndDateIndcn)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TiAndDateIndcn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTiAndDateIndcn_mrx, length, static_cast<unsigned long>(sizeof(TiAndDateIndcn)));
         }
     }
     break;
@@ -4196,8 +4201,8 @@
             deValue.TirePPosn_ = static_cast<decltype(deValue.TirePPosn_)>(rteValue.TirePAbsltValFrntRiTirePPosn);
 
             TirePAbsltValFrntRi_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValFrntRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntRi)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValFrntRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntRi)));
         }
     }
     break;
@@ -4213,8 +4218,8 @@
             deValue.TirepabsltVal1 = static_cast<decltype(deValue.TirepabsltVal1)>( toUnsignedFromRaw<8>(rteValue.TirePAbsltValForFrntLe) ) * 2.5 + 0.0;
 
             TirePAbsltValFrntLe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValFrntLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntLe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValFrntLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValFrntLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValFrntLe)));
         }
     }
     break;
@@ -4230,8 +4235,8 @@
             deValue.TirePPosn_ = static_cast<decltype(deValue.TirePPosn_)>(rteValue.TirePPosnForReLe);
 
             TirePAbsltValReLe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValReLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReLe)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValReLe (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReLe_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReLe)));
         }
     }
     break;
@@ -4247,8 +4252,8 @@
             deValue.TirePPosn_ = static_cast<decltype(deValue.TirePPosn_)>(rteValue.TirePPosnForReRi);
 
             TirePAbsltValReRi_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValReRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReRi)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePAbsltValReRi (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePAbsltValReRi_mrx, length, static_cast<unsigned long>(sizeof(TirePAbsltValReRi)));
         }
     }
     break;
@@ -4280,8 +4285,8 @@
             deValue.TirePReRi = static_cast<decltype(deValue.TirePReRi)>(rteValue.TirePReRi);
 
             TirePMonData_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePMonData (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePMonData_mrx, length, static_cast<unsigned long>(sizeof(TirePMonData)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TirePMonData (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTirePMonData_mrx, length, static_cast<unsigned long>(sizeof(TirePMonData)));
         }
     }
     break;
@@ -4380,8 +4385,8 @@
             deValue.TwliBriRawQf = static_cast<decltype(deValue.TwliBriRawQf)>(rteValue.TwliBriRawQf);
 
             TwliBriRaw_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TwliBriRawGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTwliBriRawGroup_mrx, length, static_cast<unsigned long>(sizeof(TwliBriRawGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TwliBriRawGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igTwliBriRawGroup_mrx, length, static_cast<unsigned long>(sizeof(TwliBriRawGroup)));
         }
     }
     break;
@@ -4416,8 +4421,8 @@
             deValue.Byte7 = static_cast<decltype(deValue.Byte7)>(rteValue.UkwnCptReqToInfoMgrByte7);
 
             UkwnCptReqToInfoMgr_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UkwnCptReqToInfoMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToInfoMgr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UkwnCptReqToInfoMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToInfoMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToInfoMgr)));
         }
     }
     break;
@@ -4438,8 +4443,8 @@
             deValue.Byte7 = static_cast<decltype(deValue.Byte7)>(rteValue.UkwnCptReqToSoundMgrByte7);
 
             UkwnCptReqToSoundMgr_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UkwnCptReqToSoundMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToSoundMgr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UkwnCptReqToSoundMgr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUkwnCptReqToSoundMgr_mrx, length, static_cast<unsigned long>(sizeof(UkwnCptReqToSoundMgr)));
         }
     }
     break;
@@ -4464,8 +4469,8 @@
             deValue.UsrSwtDispUpdReqForFanLvlForRowSec = static_cast<decltype(deValue.UsrSwtDispUpdReqForFanLvlForRowSec)>(rteValue.UsrSwtDispUpdReqForFanLvlForRowSec);
 
             UsrSwtDispClimaReqForRowSec_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UsrSwtDispClimaReqForRowSec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispClimaReqForRowSec)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UsrSwtDispClimaReqForRowSec (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispClimaReqForRowSec_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispClimaReqForRowSec)));
         }
     }
     break;
@@ -4482,8 +4487,8 @@
             deValue.usrSwtDispUpdReqForSecRowSeatVentnRi = static_cast<decltype(deValue.usrSwtDispUpdReqForSecRowSeatVentnRi)>(rteValue.UsrSwtDispReqForSecRowSeatVentnusrSwtDispUpdReqForSecRowSeatVentnRi);
 
             UsrSwtDispReqForSecRowSeatVentn_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UsrSwtDispReqForSecRowSeatVentn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispReqForSecRowSeatVentn)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for UsrSwtDispReqForSecRowSeatVentn (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igUsrSwtDispReqForSecRowSeatVentn_mrx, length, static_cast<unsigned long>(sizeof(UsrSwtDispReqForSecRowSeatVentn)));
         }
     }
     break;
@@ -4540,8 +4545,8 @@
             deValue.SysUQf = static_cast<decltype(deValue.SysUQf)>(rteValue.VehBattUSysUQf);
 
             VehBattU_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehBattUGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehBattUGroup_mrx, length, static_cast<unsigned long>(sizeof(VehBattUGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehBattUGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehBattUGroup_mrx, length, static_cast<unsigned long>(sizeof(VehBattUGroup)));
         }
     }
     break;
@@ -4562,8 +4567,8 @@
             deValue.CCPBytePosn8 = static_cast<decltype(deValue.CCPBytePosn8)>( toUnsignedFromRaw<8>(rteValue.VehCfgPrmVal7) ) * 1.0 + 0.0;
 
             VehCfgPrm_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehCfgPrm (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehCfgPrm_mrx, length, static_cast<unsigned long>(sizeof(VehCfgPrm)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehCfgPrm (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehCfgPrm_mrx, length, static_cast<unsigned long>(sizeof(VehCfgPrm)));
         }
     }
     break;
@@ -4579,8 +4584,8 @@
             deValue.VehMQly = static_cast<decltype(deValue.VehMQly)>(rteValue.VehMQly);
 
             VehMNom_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehMGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehMGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMGroup)));
         }
     }
     break;
@@ -4603,8 +4608,8 @@
             deValue.UsgModSts = static_cast<decltype(deValue.UsgModSts)>(rteValue.UsgModSts);
 
             VehModMngtGlbSafe1_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehModMngtGlbSafe1 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx, length, static_cast<unsigned long>(sizeof(VehModMngtGlbSafe1)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehModMngtGlbSafe1 (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehModMngtGlbSafe1_mrx, length, static_cast<unsigned long>(sizeof(VehModMngtGlbSafe1)));
         }
     }
     break;
@@ -4620,8 +4625,8 @@
             deValue.VehMtnStCntr = static_cast<decltype(deValue.VehMtnStCntr)>(rteValue.VehMtnStCntr);
 
             VehMtnStSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehMtnStSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMtnStSafeGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehMtnStSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehMtnStSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehMtnStSafeGroup)));
         }
     }
     break;
@@ -4650,8 +4655,8 @@
             deValue.VehSpdIndcd = static_cast<decltype(deValue.VehSpdIndcd)>(rteValue.VehSpdAvg);
 
             VehSpdAvgIndcd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdAvgIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdAvgIndcd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdAvgIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdAvgIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdAvgIndcd)));
         }
     }
     break;
@@ -4666,8 +4671,8 @@
             deValue.VehSpdIndcd = static_cast<decltype(deValue.VehSpdIndcd)>(rteValue.VehSpdIndcdVal);
 
             VehSpdIndcd_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdIndcd)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdIndcd (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdIndcd_mrx, length, static_cast<unsigned long>(sizeof(VehSpdIndcd)));
         }
     }
     break;
@@ -4684,8 +4689,8 @@
             deValue.VehSpdLgtQf = static_cast<decltype(deValue.VehSpdLgtQf)>(rteValue.VehSpdLgtSafeQf);
 
             VehSpdLgtSafe_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdLgtSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehSpdLgtSafeGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for VehSpdLgtSafeGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVehSpdLgtSafeGroup_mrx, length, static_cast<unsigned long>(sizeof(VehSpdLgtSafeGroup)));
         }
     }
     break;
@@ -4706,8 +4711,8 @@
             deValue.VINSignalPos7 = static_cast<decltype(deValue.VINSignalPos7)>( toUnsignedFromRaw<8>(rteValue.VinPosn7) ) * 1.0 + 0.0;
 
             Vin_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for Vin (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVin_mrx, length, static_cast<unsigned long>(sizeof(Vin)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for Vin (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igVin_mrx, length, static_cast<unsigned long>(sizeof(Vin)));
         }
     }
     break;
@@ -4767,8 +4772,8 @@
             deValue.TqActQlyFac = static_cast<decltype(deValue.TqActQlyFac)>(rteValue.WhlMotSysTqEstQlyFac);
 
             WhlMotSysTqEst_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WhlMotSysTqEstGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx, length, static_cast<unsigned long>(sizeof(WhlMotSysTqEstGroup)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WhlMotSysTqEstGroup (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlMotSysTqEstGroup_mrx, length, static_cast<unsigned long>(sizeof(WhlMotSysTqEstGroup)));
         }
     }
     break;
@@ -4785,8 +4790,8 @@
             deValue.WhlRotToothCntrReRi = static_cast<decltype(deValue.WhlRotToothCntrReRi)>( toUnsignedFromRaw<8>(rteValue.WhlRotToothCntrReRi) ) * 1.0 + 0.0;
 
             WhlRotToothCntr_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WhlRotToothCntr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlRotToothCntr_mrx, length, static_cast<unsigned long>(sizeof(WhlRotToothCntr)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WhlRotToothCntr (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWhlRotToothCntr_mrx, length, static_cast<unsigned long>(sizeof(WhlRotToothCntr)));
         }
     }
     break;
@@ -4858,8 +4863,8 @@
             deValue.WiprInWipgAr = static_cast<decltype(deValue.WiprInWipgAr)>(rteValue.WipgInfoWiprInWipgAr);
 
             WipgInfo_de->inject(deValue);
-        } else { 
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WipgInfo (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWipgInfo_mrx, length, static_cast<unsigned long>(sizeof(WipgInfo)));        
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for WipgInfo (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igWipgInfo_mrx, length, static_cast<unsigned long>(sizeof(WipgInfo)));
         }
     }
     break;

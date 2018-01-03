@@ -139,7 +139,7 @@ PRODUCT_PACKAGES += \
     MapsGearhead \
 # TODO (Abhijeet Shirolikar) GoogleAssistant is disabled as current integrated version for audio-hal does not implement
 # AUDIO_ROUTE_POLICY resulting in Car service to continuously crash. Re-enable packages below once required props are
-# implemented in audio-hal 
+# implemented in audio-hal
 #    GoogleAssistant \
 #    GoogleAssistantTextQuery
 

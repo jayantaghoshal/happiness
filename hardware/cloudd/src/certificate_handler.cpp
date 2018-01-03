@@ -1,3 +1,8 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #include "certificate_handler.h"
 #include <arpa/inet.h>
 #include <assert.h>

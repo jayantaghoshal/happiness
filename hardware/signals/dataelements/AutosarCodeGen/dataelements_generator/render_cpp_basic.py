@@ -1,3 +1,6 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from .model import DE_BaseType, DE_Value, DE_Boolean, DE_Identical
 
 

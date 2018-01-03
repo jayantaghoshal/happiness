@@ -1,17 +1,20 @@
+# Copyright 2017 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
 from typing import List, Dict
 DE_Type_Key = str
 
 """
     Classes representing the bare minimum information required to generate DataElements.
     It is supposed to be agnostic from the language to generate for and independent from the arxml parsing.
-    
+
     Types are represented by the DE_BaseType and its sub-classes.
-    Each type has an string-ID of type DE_Type_Key which is usually its name, 
+    Each type has an string-ID of type DE_Type_Key which is usually its name,
     for simple float/int-types a UUID is generated as type name.
-    
+
     When referring to other types, such as when a struct-type contains several members of other types, these references
     are always represented as ID instead of using pointers/reference.
-    This is to simplify incremental parsing when the type that is a part of the struct might be generated later. 
+    This is to simplify incremental parsing when the type that is a part of the struct might be generated later.
 
     The DE_Element class is representing the DataElement.
 """

@@ -34,7 +34,7 @@ public class CarConfigEnums
         return carConfigEnumBase.getParam();
     }
 
-    
+
     private static HashMap<Integer, CarConfigEnumBase> map_CC_1 = new HashMap<>();
     public enum CC_1_VehicleType implements CarConfigEnumBase
     {
