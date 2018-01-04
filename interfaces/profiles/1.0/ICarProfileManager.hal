@@ -1,0 +1,36 @@
+package vendor.volvocars.hardware.profiles@1.0;
+
+import IKeyPairResponseHandler;
+import IProfileChangedHandler;
+
+/**
+ * Interface to access the Profile Manager as decribed on
+ * https://c1.confluence.cm.volvocars.biz/display/IHUA/User+Profiles#UserProfiles-SWArchitectureoverview
+ */
+interface ICarProfileManager {
+    subscribeUserChange(IProfileChangedHandler cb);
+
+    /**
+     * Sends a request to CEM to switch user profile.
+     * The profile manager will make the mapping from android user id to profile id
+     * The change will be acknowledged by a callback on subscribeUserChange listeners
+     */
+    requestSwitchUser(string androidUserId);
+
+    getUserProfileInformation(string androidUserId) generates (ProfileInfo data);
+
+    getNrOfUnusedProfiles() generates (int16_t nrOfProfiles);
+
+    /**
+     * Must be called after an android user has been created to pair that android user to a profile
+     */
+    pairAndroidUserToUnusedVehicleProfile(string androidUserId) generates (bool success);
+
+    deleteUser(string androidUserId);
+
+    pairCurrentProfileToKey(KeyLocation searchLocation, IKeyPairResponseHandler onKeySearchCompleted);
+
+    disconnectCurrentProfileFromKey() generates (bool success);
+};
+
+

@@ -1,0 +1,5 @@
+package vendor.volvocars.hardware.profiles@1.0;
+
+interface IProfileChangedHandler {
+    profileChanged(string androidUserId);
+};

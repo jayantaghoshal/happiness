@@ -1,0 +1,16 @@
+package vendor.volvocars.hardware.profiles@1.0;
+
+enum KeyLocation : uint16_t{
+    AllZones,
+    BackupReader,
+};
+
+enum KeyPairStatus : uint16_t{
+    TooManyKeysFound,
+    NoKeysFound,
+    Success,
+};
+
+struct ProfileInfo {
+    string KeyId;
+};
