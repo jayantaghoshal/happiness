@@ -1,25 +1,22 @@
 #include "diagnostics_reporter.h"
 
+#include <IDispatcher.h>
 #include <vendor/volvocars/hardware/uds/1.0/IUdsDataCollector.h>
+#include <cassert>
 #include <fstream>
 #include <mutex>
-
-// TODO Remove
-#include <unistd.h>
-#include <thread>
 
 #define LOG_TAG "Netmand"
 #include <cutils/log.h>
 
-using ::vendor::volvocars::hardware::uds::V1_0::IUdsDataCollector;
-using ::vendor::volvocars::hardware::uds::V1_0::DiagnosticCheckReport;
-using ::vendor::volvocars::hardware::uds::V1_0::DagnosticCheckStatus;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
+using ::vendor::volvocars::hardware::uds::V1_0::DagnosticCheckStatus;
+using ::vendor::volvocars::hardware::uds::V1_0::DiagnosticCheckReport;
+using ::vendor::volvocars::hardware::uds::V1_0::IUdsDataCollector;
 
 namespace {
 
-constexpr int NUMBER_OF_INTERFACES = 3;
 constexpr int TCAM_ID = 0x960900;
 constexpr int MOST_ID = 0x960A00;
 constexpr int APIX_ID = 0x960B00;
@@ -35,14 +32,20 @@ std::mutex diag_service_mutex;
 namespace vcc {
 namespace netman {
 
+using tarmac::eventloop::IDispatcher;
+
 int DiagnosticsReporter::getDtcID(const std::string& iface) {
     if (iface == ifnames_[TCAM]) {
         return TCAM_ID;
     } else if (iface == ifnames_[MOST]) {
         return MOST_ID;
-    } else {
+    } else if (iface == ifnames_[APIX]) {
         return APIX_ID;
     }
+
+    // This should never happen
+    assert(false);
+    return -1;
 }
 
 DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {
@@ -54,46 +57,43 @@ DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* 
 }
 
 void DiagnosticsReporter::check_link() {
-    // TODO Enqueue in event loop
-    while (true) {
-        for (int i = 0; i < NUMBER_OF_INTERFACES; ++i) {
-            std::string interface = ifnames_[i];
-            std::string filepath = "/sys/class/net/" + interface + "/carrier";
-            int id = getDtcID(interface);
+    for (const auto& interface : ifnames_) {
+        std::string filepath = "/sys/class/net/" + interface + "/carrier";
+        int id = getDtcID(interface);
 
-            std::ifstream file(filepath);
-            if (file.is_open()) {
-                DiagnosticCheckReport report = {DagnosticCheckStatus::FAILED, 1};
+        std::ifstream file(filepath);
+        if (file.is_open()) {
+            DiagnosticCheckReport report = {DagnosticCheckStatus::FAILED, 1};
 
-                char state = file.get();
-                if (file.good()) {
-                    report.status = (state == '0') ? DagnosticCheckStatus::FAILED : DagnosticCheckStatus::PASSED;
-                } else {
-                    report.status = DagnosticCheckStatus::FAILED;
-                }
-
-                ALOGV("Interface %s Link %c DTC %i", interface.c_str(), state, id);
-
-                // TODO Enable when diagnostics service is complete
-                // std::lock_guard<std::mutex> guard(diag_service_mutex);
-                //
-                // if (!diag_service_.get()) {
-                //     ALOGE("Diagnostics service not reachable");
-                //     return;
-                // }
-                //
-                // diag_service_->reportDiagnosticTestResult(id, report);
+            char state = file.get();
+            if (file.good()) {
+                report.status = (state == '0') ? DagnosticCheckStatus::FAILED : DagnosticCheckStatus::PASSED;
             } else {
-                // As per discussion this case will only happen when the interface is unavailable
-                // (whether due to driver issue, netboy or something else) in which case we have other
-                // error handling and should not check for link availabilty
-                continue;
+                report.status = DagnosticCheckStatus::FAILED;
             }
-        }
 
-        // TODO Remove
-        usleep(POLLING_INTERVAL_MS * 10000);
+            ALOGV("Interface %s Link %c DTC %i", interface.c_str(), state, id);
+
+            std::lock_guard<std::mutex> guard(diag_service_mutex);
+
+            if (!diag_service_.get()) {
+                ALOGE("Diagnostics service not reachable");
+                return;
+            }
+
+            auto uninteresting_retval = diag_service_->reportDiagnosticTestResult(id, report);
+            ALOGE_IF(not uninteresting_retval.isOk(), "DiagnosticsReporter, reportDiagnosticsTestResult failed");
+
+        } else {
+            // As per discussion this case will only happen when the interface is unavailable
+            // (whether due to driver issue, netboy or something else) in which case we have other
+            // error handling and should not check for link availabilty
+            continue;
+        }
     }
+
+    IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(std::chrono::milliseconds(POLLING_INTERVAL_MS),
+                                                         [this] { check_link(); });
 }
 
 void DiagnosticsReporter::serviceDied(uint64_t cookie, const ::android::wp<IBase>& who) {
@@ -114,9 +114,12 @@ Return<void> DiagnosticsReporter::onRegistration(const ::android::hardware::hidl
 
     std::lock_guard<std::mutex> guard(diag_service_mutex);
     diag_service_ = IUdsDataCollector::getService();
-    diag_service_->linkToDeath(this, DIAGNOSTICS_COOKIE);
-    // TODO Enqueue correctly
-    check_link();
+
+    if (diag_service_.get()) {
+        diag_service_->linkToDeath(this, DIAGNOSTICS_COOKIE);
+    }
+
+    IDispatcher::GetDefaultDispatcher().Enqueue([this] { check_link(); });
     return Void();
 }
 
