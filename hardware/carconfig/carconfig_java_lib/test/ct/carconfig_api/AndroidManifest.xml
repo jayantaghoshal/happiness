@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.carconfig">
+    <application>
+        <uses-library android:name="android.test.runner" />
+        <activity android:name=".CarconfigApiActivity" />
+    </application>
+
+    <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
+                     android:targetPackage="com.volvocars.carconfig"
+                     android:label="Tradefed test for basic carconfig api">
+    </instrumentation>
+</manifest>

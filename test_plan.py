@@ -73,6 +73,7 @@ test_plan_hourly = [
              deadline="2019-11-17"
     ),
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps),
+    TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps),
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),

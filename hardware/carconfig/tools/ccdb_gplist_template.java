@@ -21,7 +21,11 @@ public class CarConfigEnums
 
     @SuppressWarnings("unchecked")
     public static <T extends CarConfigEnumBase> T getValue(Class clazz, int value){
-        return (T) getValueData.get(clazz).get(value);
+        HashMap<Integer, CarConfigEnumBase> carconfigMap = getValueData.get(clazz);
+        if (carconfigMap == null){
+            return null;
+        }
+        return (T) carconfigMap.get(value);
     }
 
     @SuppressWarnings("unchecked")
