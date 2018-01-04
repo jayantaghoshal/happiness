@@ -1,0 +1,59 @@
+/*@!Encoding:1252*/
+variables
+{
+  msTimer SPAGPar_Sec_Timer;
+}
+
+on preStart
+{
+  
+}
+
+on start
+{
+  if(@_SPACommon::GParTiAndDate::SimulationControl == @_SPACommon::GParTiAndDate::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_Sec_Timer, 1000);
+  }
+}
+
+on timer SPAGPar_Sec_Timer
+{
+    SPAGPar_SyncTimeAndDate();
+}
+
+on sysvar _SPACommon::GParTiAndDate::SimulationControl
+{
+  if(@_SPACommon::GParTiAndDate::SimulationControl == @_SPACommon::GParTiAndDate::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_Sec_Timer, 1000);
+  }
+  else
+  {
+    cancelTimer(SPAGPar_Sec_Timer);
+  }
+}
+
+SPAGPar_SyncTimeAndDate()
+{  
+  long localTime[9];
+  long year, mounth, dayOfMonth, hours, minutes, seconds;
+  
+  getLocalTime(localTime);
+  year = localTime[5]; // Start at 1900
+  mounth = localTime[4] + 1; //[0,11]
+  dayOfMonth = localTime[3];
+  hours = localTime[2];
+  minutes = localTime[1];
+  seconds = localTime[0];
+
+  If (year > 99)
+    year-=100;
+  
+  @_SPACommon::GParTiAndDate::Yr = year;
+  @_SPACommon::GParTiAndDate::Mth = mounth;
+  @_SPACommon::GParTiAndDate::Day = dayOfMonth;
+  @_SPACommon::GParTiAndDate::Hr = hours;
+  @_SPACommon::GParTiAndDate::Mins = minutes;
+  @_SPACommon::GParTiAndDate::Sec = seconds;
+}

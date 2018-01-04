@@ -1,0 +1,1 @@
+GWEcu	RxBus	RxFrame	RxSig	TxBus	TxFrame	TxSig

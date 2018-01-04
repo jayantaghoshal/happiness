@@ -1,0 +1,12 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+  #include "..\PostProcessFiles\SWSM\SWSM_eventhandler.cin"
+}
+
+variables
+{
+  
+}
+

@@ -1,0 +1,19 @@
+/*@!Encoding:1252*/
+
+variables
+{
+	mstimer longpress;
+}
+
+on key F4
+{
+  $BtnAudFbSts=1;
+  setTimer(longpress,1100);
+}
+
+on timer longpress
+{
+	if ($BtnAudFbSts==1){
+      $BtnAudFbSts=0;
+  }
+}

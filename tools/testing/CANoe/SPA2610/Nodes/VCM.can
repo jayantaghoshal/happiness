@@ -1,0 +1,1063 @@
+includes
+{
+  // Import required CAPL include files
+  //--- begin generated part --- Block start #Hdr_Includes#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Includes#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Includes#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  #include "..\CAPL\SPA-IL-KL30-Helper_FR1.cin"
+  #include "..\CAPL\SPACommon_Common.cin"
+  #include "..\Nodes\VCM_Adaptation.cin"
+  #include "..\CAPL\SPA-NM-Panel-Helper_FR1.cin"
+  #include "..\CAPL\SPA-NM-ASR-Helper_FR1.cin"
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Includes#; do not delete this line! Add application code below this line.
+}
+
+variables
+{
+  // Define global variables for this CAPL file
+
+  /*--- #GenHeader Begin# --- begin generated comment ---
+  | Generated on Thursday, februari 15, 2018, 17:11:18
+  | By ModelGenerator for SPA 1.0.0.3, ModelGeneratorSPADLL 3.1.1.0
+  | Package SPA 3.0.0
+  | Target Bus: Backbone; Channel: FR1; DB Cluster: Backbone;
+  | From Database: SPA2610_ConfigurationsSPA_Backbone_170920.xml
+  | CANoe Version 9.0.133.0
+    --- #GenHeader End  # --- end generated comment --- */
+
+  char gECU[256] = "VCM";
+  //--- begin generated part --- Block start #Hdr_GlobalVariables#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_GlobalVariables#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_GlobalVariables#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  char gFR1BusName[256] = "Backbone";
+  int gFR1Channel = 1; //// The channel the bus is attached to
+  int gFR1TXEnable = 1; //// enable/disable TX of application messages
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_GlobalVariables#; do not delete this line! Add application code below this line.
+}
+
+on preStart
+{
+  // Initialize CAPL includes and node's modules/DLLs
+  //--- begin generated part --- Block start #Hdr_OnInit#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnInit#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnInit#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnInit();
+  NMFR1_OnInit();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnInit#; do not delete this line! Add application code below this line.
+}
+
+on start
+{
+  // Start CAPL includes and node's modules/DLLs
+  //--- begin generated part --- Block start #Hdr_OnStart#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStart#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStart#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnStart();
+  NMFR1_OnStart();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStart#; do not delete this line! Add application code below this line.
+}
+
+on FrPOCState
+{
+  // Possibly propagate FlexRay POC state of interface to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrPOCState#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrPOCState#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrPOCState#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObservePOCState(this.MsgChannel, this.FR_POCState, this.FR_Info2);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrPOCState#; do not delete this line! Add application code below this line.
+}
+
+on FrSymbol
+{
+  // Possibly propagate FlexRay symbol reception to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrSymbol#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrSymbol#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrSymbol#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObserveSymbol(this.MsgChannel, this.FR_Symbol, this.FR_ChannelMask, this.FR_Length, this.FR_Cycle);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrSymbol#; do not delete this line! Add application code below this line.
+}
+
+on FRFrameError *
+{
+  // Possibly propagate FlexRay erroneous frame reception to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrFrameError#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrFrameError#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrFrameError#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObserveFrameError(this.MsgChannel, this.FR_ChannelMask, this.FR_SlotID, this.FR_Cycle, this.FR_Status);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrFrameError#; do not delete this line! Add application code below this line.
+}
+
+on preStop
+{
+  // Prepare stopping
+  //--- begin generated part --- Block start #Hdr_OnStopping#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStopping#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStopping#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStopping#; do not delete this line! Add application code below this line.
+}
+
+on stopMeasurement
+{
+  // Stop actions
+  //--- begin generated part --- Block start #Hdr_OnStop#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStop#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStop#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStop#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::Ignition
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_KL15_Ignition#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_KL15_Ignition#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_KL15_Ignition#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnEnvClamp15(@this);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_KL15_Ignition#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::Power
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_KL30_Power#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_KL30_Power#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_KL30_Power#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnEnvClamp30(@this);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_KL30_Power#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinBlk
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinBlk_VinBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinBlk_VinBlk#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinBlk_VinBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinBlk_VinBlk#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn1
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn2
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn3
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn4
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn5
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn6
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn7
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmBlk
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal1
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal2
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal3
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal4
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal5
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal6
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal7
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarTiGlb::CarTiGlbValue
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParVehBattU::VehBattUSysU
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Yr
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Yr_Yr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Yr_Yr#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Yr_Yr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Yr_Yr#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Mth
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Mth_Mth#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Mth_Mth#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Mth_Mth#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Mth_Mth#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Day
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Day_Day#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Day_Day#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Day_Day#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Day_Day#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Hr
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Hr_Hr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Hr_Hr#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Hr_Hr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Hr_Hr#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Mins
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Mins_Mins#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Mins_Mins#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Mins_Mins#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Mins_Mins#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Sec
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Sec_Sec#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Sec_Sec#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Sec_Sec#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Sec_Sec#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::TiAndDateVld
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::UBPlugNPlay
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_UBOpMode_UBPlugNPlay#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_UBOpMode_UBPlugNPlay#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_UBOpMode_UBPlugNPlay#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_UBOpMode_UBPlugNPlay#; do not delete this line! Add application code below this line.
+}
+
+void Nm_NetworkStartInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_NetworkModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_NetworkTimeoutInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_PrepareBusSleepModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_PrepareBusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_PrepareBusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_PrepareBusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_PrepareBusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_BusSleepModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_StateChangeNotification(long previousState, long currentState)
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkStartInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkStart();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkTimeoutInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkTimeout();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_BusSleepModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndBusSleepMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_StateChangeNotification(long previousState, long currentState)
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndStateChangeNotification(previousState, currentState);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_SynchronizeModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_SynchronizeModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_SynchronizeModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_SynchronizeModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndSynchronizeMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_SynchronizeModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void StartSim(dword busContext, int busActive, int mode)
+{
+  //--- begin generated part --- Block start #Hdr_StartSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_StartSim#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_StartSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_StartSim#; do not delete this line! Add application code below this line.
+}
+
+void StopSim(dword busContext, int busActive, int mode)
+{
+  //--- begin generated part --- Block start #Hdr_StopSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_StopSim#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_StopSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_StopSim#; do not delete this line! Add application code below this line.
+}
+
+void FrILTxPending(char pduName[], long len, byte payload[], long TxAck)
+{
+  //--- begin generated part --- Block start #Hdr_FrILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrILTxPending#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_FrILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrILTxPending#; do not delete this line! Add application code below this line.
+}
+
+dword applILTxPending(long aId, dword aDlc, byte data[])
+{
+  dword ret = 1;
+  //--- begin generated part --- Block start #Hdr_applILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_applILTxPending#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_applILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_applILTxPending#; do not delete this line! Add application code below this line.
+  return ret;
+}
+
+on sysvar_update sysvar::VCM::Common::Control::SimulationControl
+{
+  //--- begin generated part --- Block start #Hdr_Name_SimulationControl#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_SimulationControl#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_SimulationControl#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  setBusContext(getBusNameContext(gFR1BusName));
+  @sysvar::IL_FR1::NODES::N_VCM::EnableNode = @this;
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_SimulationControl#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::VCM::Common::Control::E2EUBMode
+{
+  int controlValue;
+  long resultValue;
+  
+  //--- begin generated part --- Block start #Hdr_Name_E2EUBMode#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_E2EUBMode#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_E2EUBMode#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::NodeReal) :
+        resultValue = SetOperationMode(1,0); break;
+     Case(this::NodePnP) :
+        resultValue = SetOperationMode(1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_E2EUBMode#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::VCM::Common::Control::UB
+{
+  int controlValue;
+  long resultValue;
+  
+  //--- begin generated part --- Block start #Hdr_Name_UB#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_UB#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_UB#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::NodeUBOFF) :
+        resultValue = DisturbUB(0,0,-1,0); break;
+     Case(this::NodeUBHandled) :
+        resultValue = DisturbUB(0,0,0,0); break;
+     Case(this::NodeUBON) :
+        resultValue = DisturbUB(0,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_UB#; do not delete this line! Add application code below this line.
+}
+
+//--- begin generated part --- Block start <#Helper_Functions#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+on frPDU VCMBackboneSignalIPdu00
+{
+  byte firstTime = 1;
+  $BackCntrForMissCom = (this.BackCntrForMissCom)%255+1;
+  if (firstTime)
+  {
+    firstTime=0;
+    DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::MstCfgIDBackboneFR_UB,0,-1,1);
+  }
+  
+}
+
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#Helper_Functions#> do not delete this line! Add application code below this line.
+
+//--- begin generated part --- Block start <#SysVar_Handler#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::ConSftyFromCloud_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::ConSftyFromCloud_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::ConSftyFromCloud_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::ConSftyFromCloud_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::NetCtrlrActvt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::NetCtrlrActvt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::NetCtrlrActvt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::NetCtrlrActvt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::BackCntrForMissCom_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::BackCntrForMissCom_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::BackCntrForMissCom_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::BackCntrForMissCom_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::CmftFctSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::CmftFctSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::CmftFctSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::CmftFctSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::DiagcComActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcComActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcComActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcComActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::DiagcExtCom_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcExtCom_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcExtCom_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DiagcExtCom_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::DstTrvldFromVehCom_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldFromVehCom_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldFromVehCom_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldFromVehCom_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::DstTrvldVldFromVehCom_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldVldFromVehCom_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldVldFromVehCom_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::DstTrvldVldFromVehCom_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::MstCfgIDBackboneFR_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::MstCfgIDBackboneFR_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::MstCfgIDBackboneFR_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu00::MstCfgIDBackboneFR_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::VCM::Backbone::Signals::Control::UB::PosnFromSatlt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu01::PosnFromSatlt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu01::PosnFromSatlt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::VCM::VCMBackboneSignalIPdu01::PosnFromSatlt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IL_FR1::NODES::N_VCM::EnableNode
+{
+  ILFR1_Enable(@this && @sysvar::IL_FR1::enable_AllNodes);
+}
+
+on sysvar_update sysvar::IL_FR1::enable_AllNodes
+{
+  ILFR1_Enable(@this && @sysvar::IL_FR1::NODES::N_VCM::EnableNode);
+}
+
+on sysvar_update sysvar::NM_FR1::NODES::N_VCM::DeactivateNM
+{
+  if( @this == 1 || @sysvar::NM_FR1::StateControl::DeactivateNM == 1)
+  {
+    NMFR1_Enable(0);
+  }
+  else
+  {
+    NMFR1_Enable(1);
+  }
+}
+
+on sysvar_update sysvar::NM_FR1::StateControl::DeactivateNM
+{
+  if( @this == 1 || @sysvar::NM_FR1::NODES::N_VCM::DeactivateNM == 1)
+  {
+    NMFR1_Enable(0);
+  }
+  else
+  {
+    NMFR1_Enable(1);
+  }
+}
+
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#SysVar_Handler#> do not delete this line! Add application code below this line.
+
+//--- begin generated part --- Block start <#MsgUpdateFcns#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#MsgUpdateFcns#> do not delete this line! Add application code below this line.
+

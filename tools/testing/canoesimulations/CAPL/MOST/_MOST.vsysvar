@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="" interface="">
+    <namespace name="_MOST" comment="" interface="">
+      <namespace name="_AudioAmplifier" comment="" interface="">
+        <namespace name="DynamicMuteFilterBG" comment="" interface="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Centerfreq" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="DynamicMuteFilterBG" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="FilterTimeIn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="FilterTimeOut" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Gain" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Qscale" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        </namespace>
+        <namespace name="DynamicMuteLimiterBG" comment="" interface="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="AttackTime" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="AttackTimeDurringRamp" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MuteTimeIN" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="MuteTimeOUT" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="ReleaseTime" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="ReleaseTimeDuringRamp" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Threashold" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        </namespace>
+        <namespace name="SpeakerLevel" comment="" interface="">
+          <namespace name="SourceType1" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType10" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType11" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType12" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType2" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType3" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType4" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType5" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType6" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType7" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType8" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+          <namespace name="SourceType9" comment="" interface="">
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel1" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel2" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel3" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel4" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel5" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel6" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+            <variable anlyzLocal="0" readOnly="false" valueSequence="false" unit="" name="Channel7" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" minValue="-99" minValuePhys="-99" />
+          </namespace>
+        </namespace>
+      </namespace>
+      <namespace name="General" comment="" interface="">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="State" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </namespace>
+      <struct name="Actions" isUnion="False" definedBinaryLayout="True" comment="">
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="Set" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_MOST::AudioAmplifier" />
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="Get" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="Status" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="Error" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </struct>
+      <struct name="AudioAmplifier" isUnion="False" definedBinaryLayout="True" comment="MOST150 representation of MOST messages">
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="SpeakerLevel" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" />
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="DynamicMuteLimiterBG" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" isOptional="False" isHidden="False" name="DynamicMuteFilterBG" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </struct>
+    </namespace>
+  </namespace>
+</systemvariables>

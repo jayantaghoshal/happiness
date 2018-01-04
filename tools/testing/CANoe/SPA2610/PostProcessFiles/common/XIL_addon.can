@@ -1,0 +1,27 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+}
+
+variables
+{
+  
+}
+
+on sysvar sysvar::Configuration::Logging::LogPath
+{
+  char tmp[1024];
+  sysGetVariableString(sysvar::Configuration::Logging::LogPath,tmp,1024);
+  setLogFileName(tmp);
+}
+
+on sysvar sysvar::Configuration::Logging::Logg
+{
+  int logging;
+  logging =  sysGetVariableInt(sysvar::Configuration::Logging::Logg);
+  if(logging)
+    startLogging();
+  else
+    stopLogging();
+}

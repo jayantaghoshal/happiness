@@ -1,0 +1,58 @@
+/*@!Encoding:1252*/
+variables
+{
+  msTimer SPAGPar_GenSysU_Timer;
+  const long SPAGPar_UPDATE_TIME_GenSysU = 160; //ms; SPA0310 update time on BackBone
+  float SPAGPar_GenSysUAmp = 1.0;
+  float SPAGPar_GenSysUOffs = 12.0;
+}
+
+on start
+{
+  SPAGPar_GenSysUAmp = abs(@_SPACommon::GParVehBattU::GenPhysSysUAmp);
+  SPAGPar_GenSysUOffs = abs(@_SPACommon::GParVehBattU::GenPhysSysUOffs);
+  @_SPACommon::GParVehBattU::VehBattUSysU = SPAGPar_GenSysUOffs;
+  
+  if(@_SPACommon::GParVehBattU::SimulationControl == @_SPACommon::GParVehBattU::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_GenSysU_Timer, SPAGPar_UPDATE_TIME_GenSysU);
+  }
+}
+
+on sysvar _SPACommon::GParVehBattU::GenPhysSysUAmp
+{
+  SPAGPar_GenSysUAmp = abs(@this);
+}
+
+on sysvar _SPACommon::GParVehBattU::GenPhysSysUOffs
+{
+  SPAGPar_GenSysUOffs = abs(@this);
+  @_SPACommon::GParVehBattU::VehBattUSysU = SPAGPar_GenSysUOffs;
+}
+
+on sysvar _SPACommon::GParVehBattU::SimulationControl
+{
+  if(@_SPACommon::GParVehBattU::SimulationControl == @_SPACommon::GParVehBattU::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_GenSysU_Timer, SPAGPar_UPDATE_TIME_GenSysU);
+  }
+  else
+  {
+    cancelTimer(SPAGPar_GenSysU_Timer);
+  }
+}
+
+on timer SPAGPar_GenSysU_Timer
+{
+  float delta = 0.1;
+  float nextPhysSysU;
+
+  nextPhysSysU = @_SPACommon::GParVehBattU::VehBattUSysU + delta;
+  If(nextPhysSysU > SPAGPar_GenSysUOffs + SPAGPar_GenSysUAmp || nextPhysSysU < SPAGPar_GenSysUOffs - SPAGPar_GenSysUAmp)
+  {
+    delta = -delta;
+    nextPhysSysU += 2.0 * delta;
+  }
+  @_SPACommon::GParVehBattU::VehBattUSysU = nextPhysSysU;
+
+}

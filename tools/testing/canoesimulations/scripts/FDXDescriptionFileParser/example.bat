@@ -1,0 +1,1 @@
+FDXDescriptionFileParser.py --file_or_directory "C:\\InfotainmentTestAutomationFramework\\Configurations\\canoesimulations\\scripts\\FDXDescriptionFileParser\\input" --skip_read_sysvar True --add_io True

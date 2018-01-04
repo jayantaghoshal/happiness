@@ -1,0 +1,244 @@
+# coding=utf-8
+# Signal scaling database
+# --- AUTO GENERATED ---
+# Inputs: {{inputs}}
+
+import os
+import logging
+import time
+from fdx import fdx_client
+from fdx import fdx_description_file_parser
+
+# Dummy class used when no real FDX connection is used (debugging on host without any hardware)
+class FDXDummyConnection:
+    def send_data_exchange(self, a, b, c):
+        pass
+    def close(self):
+        pass
+
+
+ns_per_ms = 1000000
+class FrSignalInterface:
+
+    def __init__(self):
+
+        self.connected = False
+        self.logger = logging.getLogger(__name__)
+
+        (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
+            os.path.join(os.path.dirname(__file__), "{{fdx_description_file_path}}"))
+
+        self.group_id_map = {g.group_id: g for g in self.groups}
+
+        def data_exchange(group_id, data):
+            group = self.group_id_map[group_id]
+            group.receive_data(data)
+
+        #TODO: Remove this, we don't want implicit dummy mode, it should be explicit
+        if "VECTOR_FDX_IP" in os.environ:
+            try:
+                self.connection = fdx_client.FDXConnection(
+                    data_exchange,
+                    os.environ['VECTOR_FDX_IP'],
+                    int(os.environ.get('VECTOR_FDX_PORT', '2809')))
+                self.connection.confirmed_stop()    # Stop in case previous test failed to stop
+                self.connection.confirmed_start()
+                self.verify_simulation_version()
+                groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
+                for g in groups_to_subscribe:
+                    self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
+                self.connected = True
+            except:
+                self.connection.close()
+                raise
+        else:
+            self.connection = FDXDummyConnection()
+            self.logger.error("Environment variables VECTOR_FDX_PORT and/or VECTOR_FDX_IP not found, no connection to target")
+
+        name_to_item_map = { i.msg_or_namespace + '::' + i.name : i for i in self.signal_list }
+
+        {% for signal in signal_list -%}
+        self.{{signal.unambiguous_name}} = {{signal.unambiguous_name}}(self, name_to_item_map['{{signal.fdx_message_or_namespace}}::' +{{signal.unambiguous_name}}.fdx_name])
+        {% endfor %}
+
+    def verify_simulation_version(self):
+        # SPA2210/FR_Body_LIN/SimulationDB/Simulation.vsysvar
+        EXPECTED_VERSION = 10
+        simulation_version = next((s for s in self.sysvar_list if s.msg_or_namespace == "Configuration::VersionInfo" and s.name == "SimulationVersion"))
+        deadline = time.time() + 20
+        while simulation_version.value_raw != EXPECTED_VERSION and time.time() < deadline:
+            self.connection.send_data_request(simulation_version.parent_group.group_id)
+            time.sleep(0.5)
+        if simulation_version.value_raw != EXPECTED_VERSION:
+            raise Exception("Simulation version mismatch! CANoe simulation version=%r, expected version=%d" % (simulation_version.value_raw, EXPECTED_VERSION))
+
+    def close(self):
+        if self.connected:
+            self.connection.confirmed_stop()
+            self.connection.close()
+
+
+
+
+
+class BaseIntegerSender(object):
+    fdx_name = ""
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        self.signal_interface = signal_interface
+        self.item = item
+
+    def r2p(cls, raw):
+        return raw
+    def p2r(cls, physical):
+        assert(cls.min <= physical <= cls.max)
+        return physical
+
+    def set(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+
+    def send(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
+
+    def get(self):
+        value = self.r2p(self.item.value_raw)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
+        return value
+
+class BaseFloatSender(object):
+    fdx_name = ""
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        self.signal_interface = signal_interface
+        self.item = item
+
+    def r2p(cls, raw):
+        return (raw * cls.scale) + cls.offset
+    def p2r(cls, physical):
+        assert(cls.min <= physical <= cls.max)
+        return (physical - cls.offset) / cls.scale
+
+    def set(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+
+    def send(self, value_physical):
+        self.item.value_raw = self.p2r(value_physical)
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
+
+    def get(self):
+        value = self.r2p(self.item.value_raw)
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
+        return value
+
+
+class BaseBoolSender(object):
+    fdx_name = ""
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        self.signal_interface = signal_interface
+        self.item = item
+
+    def set(self, value_physical):
+        self.item.value_raw = value_physical
+
+    def send(self, value_physical):
+        self.item.value_raw = value_physical
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
+
+    def get(self):
+        value = self.item.value_raw
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
+        return value
+
+
+class BaseEnumSender(object):
+    fdx_name = ""
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        self.signal_interface = signal_interface
+        self.item = item
+
+    def set(self, value_physical):
+        self.item.value_raw = value_physical
+
+    def send(self, value_physical):
+        self.item.value_raw = value_physical
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %s=%d',self.fdx_name, value_physical)
+
+    def get(self):
+        self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
+        return self.item.value_raw
+
+class BaseArraySender(object):
+    fdx_name = ""
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        self.signal_interface = signal_interface
+        self.item = item
+
+    def set(self, value_physical):
+        assert len(value_physical) == self.array_length
+        self.item.value_raw = value_physical
+
+    def send(self, value_physical):
+        assert len(value_physical) == self.array_length
+        self.item.value_raw = value_physical
+        self.signal_interface.connection.send_data_exchange(self.item.parent_group.group_id, self.item.parent_group.size, self.item.parent_group.build_data())
+        self.signal_interface.logger.debug('send %%s=%%d',self.fdx_name, value_physical)
+
+    def get(self):
+        self.signal_interface.logger.debug('get %%s=%%d',self.fdx_name, self.item.value_raw)
+        return self.item.value_raw
+
+
+
+####################################################################################################
+
+{% for signal in signal_list %}
+{{ py_comment(signal.type.desc) }}
+{%- if signal.is_intvalue -%}
+class {{signal.unambiguous_name}}(BaseIntegerSender):
+{%- elif signal.is_floatvalue -%}
+class {{signal.unambiguous_name}}(BaseFloatSender):
+{%- elif signal.is_boolean-%}
+class {{signal.unambiguous_name}}(BaseBoolSender):
+{%- elif signal.is_enum -%}
+class {{signal.unambiguous_name}}(BaseEnumSender):
+{%- elif signal.is_array -%}
+class {{signal.unambiguous_name}}(BaseArraySender):
+{%- endif %}
+    de_name     = "{{ signal.de_name }}"
+    fdx_name    = "{{ signal.fdx_name}}"
+    fdx_groupid = {{ signal.fdx_groupid}}
+    {% if signal.is_intvalue -%}
+    min = {{ signal.type.limit_min }}
+    max = {{ signal.type.limit_max }}
+    {% elif signal.is_floatvalue -%}
+    min    = {{signal.type.limit_min}}
+    max    = {{signal.type.limit_max}}
+    scale  = {{signal.type.scale}}
+    offset = {{signal.type.offset}}
+    {% elif signal.is_enum-%}
+    class map:
+       {% for enum_value in signal.type.values -%}
+       {{clean_variable_name(enum_value.name)}} = {{enum_value.value}}
+       {% endfor -%}
+    {%- elif signal.is_array -%}
+    array_length = {{signal.type.max_elements}}
+    {%- endif %}
+
+    def __init__(self, signal_interface, item):
+        # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
+        super({{signal.unambiguous_name}}, self).__init__(signal_interface, item)
+
+{% endfor %}

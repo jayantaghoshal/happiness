@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="ASDM" comment="NODE">
+      <namespace name="ASDM" comment="..\..\InfotainmentModules\Node_basic_includes\ASDM_roadfriction.cin">
+        <namespace name="RoadFriction" comment="">
+		  <variable name="ConSftyUpldWarnTyp" anlyzLocal="2" readOnly="false" valueSequence="false" unit="" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="5" maxValuePhys="5">
+			<valuetable definesMinMax="true">
+              <valuetableentry value="0" description="NoWarning" />
+              <valuetableentry value="1" description="Friction_ego" />
+              <valuetableentry value="2" description="Hazard" />
+			  <valuetableentry value="3" description="Environment" />
+			  <valuetableentry value="4" description="Feedback" />
+              <valuetableentry value="5" description="Clear" />
+            </valuetable>
+		  </variable>
+		  <variable name="ConSftyUpldWarnDetnLat" comment="Latitude of the detected hazard location" anlyzLocal="2" type="float" startValue="0" readOnly="false" valueSequence="false" unit="Deg" minValue="-90" maxValue="90"/>
+		  <variable name="ConSftyUpldWarnDetnLgt" comment="Longitude of the detected hazard location" anlyzLocal="2" type="float" startValue="0" readOnly="false" valueSequence="false" unit="Deg" minValue="-180" maxValue="180"/>
+		  <variable name="ConSftyUpldWarnDetnTim" comment="Timestamp for the moment the hazard was detected. Calculated as seconds since 00:00:00 the current day" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="s" minValue="0" maxValue="131071" />
+		  <variable name="ConSftyUpldWarnMeta1" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  <variable name="ConSftyUpldWarnMeta2" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  <variable name="ConSftyUpldWarnMeta3" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  <variable name="ConSftyUpldWarnMeta4" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  <variable name="Send" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  <namespace name="Friction_ego" comment="">
+			<variable name="ambientTemp" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="frictionValue" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="frictionQuality" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="wiperSpeed" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  </namespace>
+		  <namespace name="Hazard" comment="">
+			<variable name="vehicleSpeed" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="activationTimeMSB" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="activationTimeLSB" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  </namespace>
+		  <namespace name="Feedback" comment="">
+			<variable name="warningId" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="typFirst" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="typSec" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="uncertain" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  </namespace>
+		  <namespace name="Environment" comment="">
+			<variable name="ambientTemp" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="wiperSpeed" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA2" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  </namespace>
+		  <namespace name="Clear" comment="">
+			<variable name="NA" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA2" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA3" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+			<variable name="NA4" comment="" anlyzLocal="2" type="int" startValue="0" readOnly="false" valueSequence="false" unit="" />
+		  </namespace>
+        </namespace>
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

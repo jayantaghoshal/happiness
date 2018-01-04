@@ -1,0 +1,10 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "..\PostProcessFiles\VDDM\VDDM_speedhandler.cin"
+  #include "..\PostProcessFiles\VDDM\VDDM_init_values.cin"
+}
+variables
+{
+  
+}

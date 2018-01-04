@@ -1,0 +1,22 @@
+/*@!Encoding:1252*/
+on preStart
+{
+  $BltLockStAtDrvrForBltLockSt1 = 1;
+  $BltLockStAtPassForBltLockSt1=0;
+  $BltLockStAtRowSecLeForBltLockSt1=0;
+  $BltLockStAtRowSecMidForBltLockSt1=0;
+  $BltLockStAtRowSecRiForBltLockSt1=0;
+  $BltLockStAtRowThrdLeForBltLockSt1=0;
+  $BltLockStAtRowThrdRiForBltLockSt1=0;
+  $RestrntSysLampReq = 0; 
+  $RestrntSysMsgReq = 1; 
+  
+  $YawRate1 = 0;
+  $ALat1 = 0;
+  $AVert2 = 0;
+  $ALgt1 = 0;
+
+  $PassAirbLampDiReq=2;
+  $PassAirbLampEnaReq=2;
+}
+

@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="GParTiAndDate">
+    <Object Type="Vector.CANalyzer.Panels.Design.GroupBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="GroupBoxControl1" Children="Controls" ControlName="Group Box">
+      <Object Type="Vector.CANalyzer.Panels.Design.CheckBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="CheckBoxControl1" Children="Controls" ControlName="Check Box">
+        <Property Name="Name">CheckBoxControl1</Property>
+        <Property Name="Size">107, 17</Property>
+        <Property Name="Location">263, 14</Property>
+        <Property Name="CheckAlign">MiddleRight</Property>
+        <Property Name="Text">SimulationControl</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;SimulationControl;1;;;-1</Property>
+        <Property Name="TabIndex">2</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl7" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl7</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">231, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Sec:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Sec;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl6" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl6</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">190, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Mins:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Mins;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl4" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl4</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">94, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Day:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Day;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl5" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl5</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">149, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Hr:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Hr;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl3" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl3</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">53, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Mth:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Mth;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.TextBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="TextBoxControl2" Children="Controls" ControlName="Input/Output Box">
+        <Property Name="Name">TextBoxControl2</Property>
+        <Property Name="Size">35, 45</Property>
+        <Property Name="Location">12, 25</Property>
+        <Property Name="AlarmUpperTextColor">WindowText</Property>
+        <Property Name="ValueDecimalPlaces">0</Property>
+        <Property Name="AlarmLowerBkgColor">Salmon</Property>
+        <Property Name="BoxTextAlign">Center</Property>
+        <Property Name="ValueDisplay">Decimal</Property>
+        <Property Name="AlarmUpperBkgColor">IndianRed</Property>
+        <Property Name="AlarmLowerTextColor">WindowText</Property>
+        <Property Name="BoxFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmUpperFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmLowerFont">Microsoft Sans Serif, 18pt</Property>
+        <Property Name="AlarmGeneralSettings">1;0;0;0</Property>
+        <Property Name="DisplayLabel">Top</Property>
+        <Property Name="DescriptionText">Yr:</Property>
+        <Property Name="BoxBorderStyle">None</Property>
+        <Property Name="DescriptionSize">35, 17</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;Yr;1;;;-1</Property>
+        <Property Name="TabIndex">0</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.StaticTextControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="StaticTextControl1" Children="Controls" ControlName="Static Text">
+        <Property Name="Name">StaticTextControl1</Property>
+        <Property Name="Size">30, 13</Property>
+        <Property Name="Location">283, 52</Property>
+        <Property Name="Text">Valid</Property>
+      </Object>
+      <Object Type="Vector.CANalyzer.Panels.Design.ComboBoxControl, Vector.CANalyzer.Panels.CommonControls, Version=9.0.111.0, Culture=neutral, PublicKeyToken=null" Name="ComboBoxControl1" Children="Controls" ControlName="Combo Box">
+        <Property Name="Name">ComboBoxControl1</Property>
+        <Property Name="Size">44, 21</Property>
+        <Property Name="Location">319, 49</Property>
+        <Property Name="DropDownWidth">82</Property>
+        <Property Name="BackColor">Window</Property>
+        <Property Name="ForeColor">WindowText</Property>
+        <Property Name="DisplayLabel">Hide</Property>
+        <Property Name="DescriptionText">TiAndDateVld:</Property>
+        <Property Name="DescriptionSize">67, 21</Property>
+        <Property Name="SymbolConfiguration">4;16;_SPACommon::GParTiAndDate;;;TiAndDateVld;1;;;-1</Property>
+        <Property Name="TabIndex">1</Property>
+      </Object>
+      <Property Name="Name">GroupBoxControl1</Property>
+      <Property Name="Size">376, 91</Property>
+      <Property Name="Location">3, 3</Property>
+      <Property Name="Font">Microsoft Sans Serif, 12pt</Property>
+      <Property Name="Text">Time and Date</Property>
+      <Property Name="ForeColor">Blue</Property>
+      <Property Name="TabIndex">0</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">390, 105</Property>
+  </Object>
+</Panel>

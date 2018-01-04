@@ -1,0 +1,21 @@
+How to use FDXDescriptionFileParser.py
+
+FDXDescriptionFileParser.py --file_or_directory FOLDER_OR_FILE [--start_group_id  ID] [--skip_read_sysvar]
+
+Generates description file from files with file ending .vsysvar and .siglist2.
+
+System variables that is described in a .vsysvar file is normally used for signals that is simulated by CANoe and good for writing to signals. Make sure that each .vsysvar file has a 
+corresponding .csv file with read (r), write (w) or force read (fr) specification for namespaces.
+
+Signals that are described in a .siglist2 file is normally used to read value from a signal that is sent from a physical ECU. This makes it good to verify a signal value from a XIL application. 
+Note: Please filter the siglist2 file to only contain signals that are transmitted (TX) from physical ECUs.  
+------------------------------------------
+
+To generate description file for one sysvar file
+1. Use CLI to start the process, ex: FDXDescriptionFileParser.py --file_or_directory SPA_AdditionalOutputs.vsysvar
+2. Output is FDXDescriptionFile.xml and VectorMAPortConfig.xml
+
+To generate description file for multiple files in a folder
+1. Use CLI to start the process, ex: FDXDescriptionFileParser.py --file_or_directory test_files/fdx_files
+2. Output is FDXDescriptionFile.xml and VectorMAPortConfig.xml
+

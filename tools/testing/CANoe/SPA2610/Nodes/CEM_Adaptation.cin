@@ -1,0 +1,104 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+  #include "..\PostProcessFiles\CEM\CEM_init_values.cin"
+}
+variables
+{
+  byte VMM_Abandoned=0x0;
+  byte VMM_Inactive=0x1;
+  byte VMM_Inconvenience=0x2;
+  byte VMM_Active=0xB;
+  byte VMM_Driving=0xD;
+  byte doorStatus_opened=0x1;
+  byte doorStatus_closed=0x2;
+  
+  int openDrvrDoor = 1;
+  
+}
+
+
+on start
+{
+  @sysvar::IL::Power=1;
+  @sysvar::IL::Ignition=1;
+  @sysvar::NM_FR1::StateControl::StartCommunication=1;
+}
+
+on key F2 // Step up UsgModSts
+{
+  write("-- Button F2 Pressed");
+
+  if (@sysvar::IL::Ignition==0){
+      @sysvar::IL::Ignition=1;
+      write("-- -- Can/FR Bus ON");
+  }
+  else if ($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Abandoned){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inactive;
+      openDrvrDoor = 1;
+      write("-- -- Driver door 1 ");
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inactive && openDrvrDoor == 1){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorDrvrSts = doorStatus_opened;
+      openDrvrDoor = 0;
+      write("-- -- Driver door 0");
+  }else if ($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inactive && $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorDrvrSts == doorStatus_opened){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorDrvrSts = doorStatus_closed;
+  }
+  else if ($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inactive && openDrvrDoor == 0){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inconvenience;
+      openDrvrDoor = 1;
+      write("-- -- Driver door 1 ");
+   }
+  else if ($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inconvenience){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Active; 
+  }
+  else if ($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Active){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Driving;
+  }
+
+  Write("  // UsgModSts Flexray : %d",  getSignal(Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts));
+}
+
+on key F3 // Step down UsgModSts
+{
+  write("-- Button F3 Pressed");
+  
+  if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Driving){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Active;
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts==VMM_Active && openDrvrDoor == 1){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inconvenience;
+      openDrvrDoor = 0;
+      write("-- -- Driver door 0");
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inconvenience)
+  {
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inactive;
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Active && openDrvrDoor == 0){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inconvenience;
+      openDrvrDoor = 1;
+      write("-- -- Driver door 1 ");
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inconvenience){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Inactive;
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Inactive){
+      $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = VMM_Abandoned;
+  }
+  else if($Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts == VMM_Abandoned){
+      @sysvar::IL::Ignition = 0;
+      write("-- -- CAN/FR NM OFF");
+  }   
+  //Get current UsgModSts 
+  Write("  // UsgModSts Flexray : %d",  getSignal(Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts));
+}
+
+on key F5 // Check UsgModSts
+{
+  write("-- Button F5 Pressed");
+  Write("  // UsgModSts Flexray : %d",  getSignal(Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts));
+  
+}

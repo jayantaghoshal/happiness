@@ -1,0 +1,19 @@
+/*@!Encoding:1252*/
+on preStart
+{
+  $EngSpdMaxDispd = 8000;
+  $PrpsnErrIndcnReq = 1;
+  $HmiEngHybSts = 4;
+  $LvlgDirMovmtIndcr = 1;
+  $VehMtnStSafe = 0;
+  
+  $SteerWhlAgSafe = 0;
+  $SteerWhlAgSpdSafe = 0;
+  $AbsWarnIndcnReq = 3;
+  $BrkWarnIndcnReq = 1;
+  $EscWarnIndcnReq = 3;
+  $EpbLampReq = 1;
+  $EscSt = 1;
+  $BrkSysWarnIndcnReqBrkSysWarnIndcnReq = 1;
+}
+

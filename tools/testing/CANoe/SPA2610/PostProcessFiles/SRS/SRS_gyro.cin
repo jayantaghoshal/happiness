@@ -1,0 +1,73 @@
+/*@!Encoding:1252*/
+
+variables
+{
+  msTimer GYROdecreaseAngleTimer;
+  long GYROtimerDelay=150;
+  long GYROtimerDecreaseTime=50;
+  float GYROthreshold_speed=25;
+  float GYROmaxStepValue=6;
+  float GYROstepValue;
+  double AlatScaleFactor=0.6;  //TODO, fix better gyro model
+  double YawrateScaleFactor=0.6; //TODO, fix better gyro model
+}
+
+//Note: The system variable Angle can be exchanged for actual SAS steering angle.
+
+//Navi team shall uncomment this section.
+/*
+on key CursorLeft
+{
+  //Ugly solution to make it OK to control. Feel free to improve
+  //It turns more if speed is below a threshold value.
+  //If you press several times, it turns even more, but never more than a max value.
+  GYROstepValue=GYROmaxStepValue-@sysvar::SRS::Panel::Input::Angle;
+  if (@sysvar::VDDM::Panel::Input::VDDM_speed_kmh<GYROthreshold_speed){
+    GYROstepValue=_min(GYROstepValue,3);
+  }else{
+    GYROstepValue=_min(GYROstepValue,1);
+  }
+  @sysvar::SRS::Panel::Input::Angle=@sysvar::SRS::Panel::Input::Angle+GYROstepValue;
+  setTimer(GYROdecreaseAngleTimer,GYROtimerDelay);
+}
+
+on key 'x'
+{
+  @sysvar::SRS::Panel::Input::Angle=0;
+}
+
+on key CursorRight
+{
+  //Ugly solution to make it OK to control. Feel free to improve
+  //It turns more if speed is below a threshold value.
+  //If you press several times, it turns even more, but never more than a max value.
+  GYROstepValue=0-GYROmaxStepValue-@sysvar::SRS::Panel::Input::Angle;
+  if (@sysvar::VDDM::Panel::Input::VDDM_speed_kmh<GYROthreshold_speed){
+    GYROstepValue=_max(GYROstepValue,-3);
+  }else{
+    GYROstepValue=_max(GYROstepValue,-1);
+  }
+  @sysvar::SRS::Panel::Input::Angle=@sysvar::SRS::Panel::Input::Angle+GYROstepValue;
+  setTimer(GYROdecreaseAngleTimer,GYROtimerDelay);
+}
+*/
+on sysvar sysvar::SRS::Panel::Input::Angle
+{
+
+  //Todo: Add real vehicle model to calculate more accurate value. 
+  $ALat1=@this*AlatScaleFactor;
+  $YawRate1=@this*YawrateScaleFactor;
+}
+
+on timer GYROdecreaseAngleTimer
+{
+  if (@sysvar::SRS::Panel::Input::Angle>=0.5){
+    @sysvar::SRS::Panel::Input::Angle=@sysvar::SRS::Panel::Input::Angle-0.5;
+  }else if(@sysvar::SRS::Panel::Input::Angle<=-0.5){
+    @sysvar::SRS::Panel::Input::Angle=@sysvar::SRS::Panel::Input::Angle+0.5;
+  }
+  if ((@sysvar::SRS::Panel::Input::Angle>=0.5)||(@sysvar::SRS::Panel::Input::Angle<=-0.5)){
+    setTimer(GYROdecreaseAngleTimer,GYROtimerDecreaseTime);
+  }
+}
+

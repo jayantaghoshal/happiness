@@ -1,0 +1,83 @@
+/*@!Encoding:1252*/
+variables
+{
+    
+}
+
+on sysvar sysvar::ASDM::ASDM::RoadFriction::Send
+{
+    if (@this==1){
+        $ConSftyUpldWarnDetnLat=@sysvar::ASDM::ASDM::RoadFriction::ConSftyUpldWarnDetnLat;
+        $ConSftyUpldWarnDetnLgt=@sysvar::ASDM::ASDM::RoadFriction::ConSftyUpldWarnDetnLgt;
+        $ConSftyUpldWarnDetnTim=@sysvar::ASDM::ASDM::RoadFriction::ConSftyUpldWarnDetnTim;
+        
+        switch(@sysvar::ASDM::ASDM::RoadFriction::ConSftyUpldWarnTyp)
+        {
+            case(NoWarning)://NoWarning
+                $ConSftyUpldWarnTyp=0;
+                $ConSftyUpldWarnMeta1=0;
+                $ConSftyUpldWarnMeta2=0;
+                $ConSftyUpldWarnMeta3=0;
+                $ConSftyUpldWarnMeta4=0;
+                break;        
+            case(Friction_ego) ://Friction_ego
+                $ConSftyUpldWarnTyp=1;
+                $ConSftyUpldWarnMeta1=@sysvar::ASDM::ASDM::RoadFriction::Friction_ego::ambientTemp;
+                $ConSftyUpldWarnMeta2=@sysvar::ASDM::ASDM::RoadFriction::Friction_ego::frictionValue;
+                $ConSftyUpldWarnMeta3=@sysvar::ASDM::ASDM::RoadFriction::Friction_ego::frictionQuality;
+                $ConSftyUpldWarnMeta4=@sysvar::ASDM::ASDM::RoadFriction::Friction_ego::wiperSpeed;
+                break;
+            case(Hazard)://Hazard
+                $ConSftyUpldWarnTyp=3;
+                $ConSftyUpldWarnMeta1=@sysvar::ASDM::ASDM::RoadFriction::Hazard::vehicleSpeed;
+                $ConSftyUpldWarnMeta2=@sysvar::ASDM::ASDM::RoadFriction::Hazard::activationTimeMSB;
+                $ConSftyUpldWarnMeta3=@sysvar::ASDM::ASDM::RoadFriction::Hazard::activationTimeLSB;
+                $ConSftyUpldWarnMeta4=0;
+                break;
+            case(Environment)://Environment
+                $ConSftyUpldWarnTyp=13;
+                $ConSftyUpldWarnMeta1=@sysvar::ASDM::ASDM::RoadFriction::Environment::ambientTemp;
+                $ConSftyUpldWarnMeta2=@sysvar::ASDM::ASDM::RoadFriction::Environment::wiperSpeed;
+                $ConSftyUpldWarnMeta3=0;
+                $ConSftyUpldWarnMeta4=0;
+                break;
+            case(Feedback)://Feedback
+                $ConSftyUpldWarnTyp=14;
+                $ConSftyUpldWarnMeta1=@sysvar::ASDM::ASDM::RoadFriction::Feedback::warningId;
+                $ConSftyUpldWarnMeta2=@sysvar::ASDM::ASDM::RoadFriction::Feedback::typFirst;
+                $ConSftyUpldWarnMeta3=@sysvar::ASDM::ASDM::RoadFriction::Feedback::typSec;
+                $ConSftyUpldWarnMeta4=@sysvar::ASDM::ASDM::RoadFriction::Feedback::uncertain;
+                break;
+            case(Clear)://Clear
+                $ConSftyUpldWarnTyp=15;
+                $ConSftyUpldWarnMeta1=0;
+                $ConSftyUpldWarnMeta2=0;
+                $ConSftyUpldWarnMeta3=0;
+                $ConSftyUpldWarnMeta4=0;
+                break;            
+            
+        }
+    }
+      
+}
+
+on frPDU ASDMBackBoneSignalIPdu08
+{
+/*
+This is needed because requirement states that: 
+"An upload shall only be triggered when the Flexray signal WarnTyp (in the ConSftyUpld record)
+changes from zero to a non-zero value - a positive flank from zero."
+I.E. The update bit is not used for this purpose, the actual signal value is used for some reason...
+*/
+    if ($ConSftyUpldWarnTyp!=0){
+        $ConSftyUpldWarnTyp=0; 
+       /* $ConSftyUpldWarnMeta1=0;
+        $ConSftyUpldWarnMeta2=0;
+        $ConSftyUpldWarnMeta3=0;
+        $ConSftyUpldWarnMeta4=0;*/
+    }
+}
+
+
+
+

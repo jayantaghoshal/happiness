@@ -1,0 +1,116 @@
+/*@!Encoding:1252*/
+
+
+OnMostNetState(long oldState, long newstate)
+{
+  write("MOST old state:%d", oldState);
+  write("MOST new state:%d", newstate);
+  write("getnetstate: %d",mostGetNetState());
+  @sysvar::_MOST::General::State = newstate;
+}
+
+
+on mostAMSMessage AudioAmplifier.SpeakerLevel.Set
+{
+  long rx_array[9], i, j;
+  int value, result;
+  char speaker_string[256], channel[10], tmp[4], sysvar_namespace[256], sysvar_name[10];
+  mostAMSMessage * msg = { DLC = 1000 };
+  GetThisMessage(msg, 1000);
+  value = mostParamGet(msg, "Pos");
+  ltoa(value, tmp, 16);
+  write("getnetstate: %d",mostGetNetState());
+  if(value == 0)
+  {
+    for(i=1; i<13; i++)
+    {  
+      snprintf(sysvar_namespace, elcount(sysvar_namespace), "_MOST::_AudioAmplifier::SpeakerLevel::SourceType%d", i);
+      for(j=1; j<8; j++)
+      {
+        snprintf(speaker_string, elcount(speaker_string), "Data.ChannelArray[%d].SpeakerLevel[%d]", i, j);
+        rx_array[j] = mostParamGet(msg, speaker_string);
+        snprintf(sysvar_name, elcount(sysvar_name), "Channel%d", j);
+      }
+      write("%s, %d %d %d %d %d %d %d", sysvar_namespace, rx_array[1], rx_array[2], rx_array[3], rx_array[4], rx_array[5], rx_array[6], rx_array[7]);
+    }
+  }
+  else{
+    i = (value&0xFF00) /256;
+    j= value&0xFF;
+    snprintf(sysvar_namespace, elcount(sysvar_namespace), "_MOST::_AudioAmplifier::SpeakerLevel::SourceType%d", i);
+    if(j==0)
+    {
+      for(j=1; j<8; j++)
+      {
+        snprintf(speaker_string, elcount(speaker_string), "Data.ChannelArray[%d].SpeakerLevel[%d]", i, j);
+        rx_array[j] = mostParamGet(msg, speaker_string);
+        snprintf(sysvar_name, elcount(sysvar_name), "Channel%d", j);
+        sysSetVariableInt(sysvar_namespace, sysvar_name, rx_array[j]);
+      }
+    }
+    else{//This code will probably never execute, due to how the system works. i.e. we expect y to be 0.
+      snprintf(speaker_string, elcount(speaker_string), "Data.ChannelArray[%d].SpeakerLevel[%d]", i, j);
+      rx_array[j] = mostParamGet(msg, speaker_string);
+      snprintf(sysvar_name, elcount(sysvar_name), "Channel%d", j);
+      sysSetVariableInt(sysvar_namespace, sysvar_name, rx_array[j]);
+    }
+    write("%s, %d %d %d %d %d %d %d", sysvar_namespace, rx_array[1], rx_array[2], rx_array[3], rx_array[4], rx_array[5], rx_array[6], rx_array[7]);
+  }
+}
+
+
+on mostAMSMessage AudioAmplifier.DynamicMuteLimiterBG.Set
+{
+  int threshold, attack_time, attack_time_during_ramp, mute_time_in, mute_time_out, release_time, release_time_during_ramp;
+  mostAMSMessage * msg = { DLC = 1000 };
+  GetThisMessage(msg, 1000);
+  if(mostParamIsAvailable(msg, "DynamicMuteLimiterBG") == 1)
+  {
+    threshold = mostParamGet(msg, "DynamicMuteLimiterBG.Threshold");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::Threashold = threshold;
+    
+    attack_time = mostParamGet(msg, "DynamicMuteLimiterBG.AttackTime");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::AttackTime = attack_time;
+    
+    release_time = mostParamGet(msg, "DynamicMuteLimiterBG.ReleaseTime");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::ReleaseTime= release_time;
+    
+    mute_time_in = mostParamGet(msg, "DynamicMuteLimiterBG.MuteTimeIN");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::MuteTimeIN= mute_time_in;
+    
+    mute_time_out = mostParamGet(msg, "DynamicMuteLimiterBG.MuteTimeOUT");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::MuteTimeOUT = mute_time_out;
+    
+    attack_time_during_ramp = mostParamGet(msg, "DynamicMuteLimiterBG.AttackTimeDuringRamp");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::AttackTimeDurringRamp = attack_time_during_ramp;
+    
+    release_time_during_ramp = mostParamGet(msg, "DynamicMuteLimiterBG.ReleaseTimeDuringRamp");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteLimiterBG::ReleaseTimeDuringRamp = release_time_during_ramp;
+  }
+}
+
+
+on mostAMSMessage AudioAmplifier.DynamicMuteFilterBG.Set
+{
+  int centerfreq, dynamic_mute_filter, filter_time_in, filter_time_out, gain, qscale;
+  mostAMSMessage * msg = { DLC = 1000 };
+  GetThisMessage(msg, 1000);
+  write("got DynamicMuteFilterBG message ");
+  if(mostParamIsAvailable(msg, "DynamicMuteFilterBG") == 1)
+  {
+    centerfreq = mostParamGet(msg, "DynamicMuteFilterBG.Centerfreq");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteFilterBG::Centerfreq = centerfreq;
+    
+    filter_time_in = mostParamGet(msg, "DynamicMuteFilterBG.FilterTimeIn");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteFilterBG::FilterTimeIn = filter_time_in;
+    
+    filter_time_out = mostParamGet(msg, "DynamicMuteFilterBG.FilterTimeOut");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteFilterBG::FilterTimeOut = filter_time_out;
+    
+    gain = mostParamGet(msg, "DynamicMuteFilterBG.Gain");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteFilterBG::Gain = gain;
+    
+    qscale = mostParamGet(msg, "DynamicMuteFilterBG.Qscale");
+    @sysvar::_MOST::_AudioAmplifier::DynamicMuteFilterBG::Qscale = qscale;
+  }
+}

@@ -1,0 +1,4851 @@
+includes
+{
+  // Import required CAPL include files
+  //--- begin generated part --- Block start #Hdr_Includes#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Includes#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Includes#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  #include "..\CAPL\SPA-IL-KL30-Helper_FR1.cin"
+  #include "..\CAPL\SPACommon_Common.cin"
+  #include "..\Nodes\IHU_Adaptation.cin"
+  #include "..\CAPL\SPA-NM-Panel-Helper_FR1.cin"
+  #include "..\CAPL\SPA-NM-ASR-Helper_FR1.cin"
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Includes#; do not delete this line! Add application code below this line.
+}
+
+variables
+{
+  // Define global variables for this CAPL file
+
+  /*--- #GenHeader Begin# --- begin generated comment ---
+  | Generated on Thursday, februari 15, 2018, 17:11:18
+  | By ModelGenerator for SPA 1.0.0.3, ModelGeneratorSPADLL 3.1.1.0
+  | Package SPA 3.0.0
+  | Target Bus: Backbone; Channel: FR1; DB Cluster: Backbone;
+  | From Database: SPA2610_ConfigurationsSPA_Backbone_170920.xml
+  | CANoe Version 9.0.133.0
+    --- #GenHeader End  # --- end generated comment --- */
+
+  char gECU[256] = "IHU";
+  //--- begin generated part --- Block start #Hdr_GlobalVariables#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_GlobalVariables#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_GlobalVariables#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  char gFR1BusName[256] = "Backbone";
+  int gFR1Channel = 1; //// The channel the bus is attached to
+  int gFR1TXEnable = 1; //// enable/disable TX of application messages
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_GlobalVariables#; do not delete this line! Add application code below this line.
+}
+
+on preStart
+{
+  // Initialize CAPL includes and node's modules/DLLs
+  //--- begin generated part --- Block start #Hdr_OnInit#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnInit#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnInit#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnInit();
+  NMFR1_OnInit();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnInit#; do not delete this line! Add application code below this line.
+}
+
+on start
+{
+  // Start CAPL includes and node's modules/DLLs
+  //--- begin generated part --- Block start #Hdr_OnStart#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStart#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStart#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnStart();
+  NMFR1_OnStart();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStart#; do not delete this line! Add application code below this line.
+}
+
+on FrPOCState
+{
+  // Possibly propagate FlexRay POC state of interface to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrPOCState#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrPOCState#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrPOCState#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObservePOCState(this.MsgChannel, this.FR_POCState, this.FR_Info2);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrPOCState#; do not delete this line! Add application code below this line.
+}
+
+on FrSymbol
+{
+  // Possibly propagate FlexRay symbol reception to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrSymbol#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrSymbol#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrSymbol#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObserveSymbol(this.MsgChannel, this.FR_Symbol, this.FR_ChannelMask, this.FR_Length, this.FR_Cycle);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrSymbol#; do not delete this line! Add application code below this line.
+}
+
+on FRFrameError *
+{
+  // Possibly propagate FlexRay erroneous frame reception to the FlexRay bus control
+  //--- begin generated part --- Block start #Hdr_OnFrFrameError#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnFrFrameError#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnFrFrameError#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  NMPFR1_ObserveFrameError(this.MsgChannel, this.FR_ChannelMask, this.FR_SlotID, this.FR_Cycle, this.FR_Status);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnFrFrameError#; do not delete this line! Add application code below this line.
+}
+
+on preStop
+{
+  // Prepare stopping
+  //--- begin generated part --- Block start #Hdr_OnStopping#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStopping#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStopping#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStopping#; do not delete this line! Add application code below this line.
+}
+
+on stopMeasurement
+{
+  // Stop actions
+  //--- begin generated part --- Block start #Hdr_OnStop#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_OnStop#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_OnStop#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_OnStop#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::Ignition
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_KL15_Ignition#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_KL15_Ignition#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_KL15_Ignition#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnEnvClamp15(@this);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_KL15_Ignition#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::Power
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_KL30_Power#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_KL30_Power#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_KL30_Power#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  ILFR1_OnEnvClamp30(@this);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_KL30_Power#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinBlk
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinBlk_VinBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinBlk_VinBlk#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinBlk_VinBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinBlk_VinBlk#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn1
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn1_VinPosn1#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn2
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn2_VinPosn2#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn3
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn3_VinPosn3#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn4
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn4_VinPosn4#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn5
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn5_VinPosn5#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn6
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn6_VinPosn6#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::VIN::VinPosn7
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VinPosn7_VinPosn7#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmBlk
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmBlk_VehCfgPrmBlk#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal1
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal1_VehCfgPrmVal1#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal2
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal2_VehCfgPrmVal2#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal3
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal3_VehCfgPrmVal3#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal4
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal4_VehCfgPrmVal4#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal5
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal5_VehCfgPrmVal5#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal6
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal6_VehCfgPrmVal6#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarConfig::VehCfgPrmVal7
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehCfgPrmVal7_VehCfgPrmVal7#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPAInternal::CarTiGlb::CarTiGlbValue
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_CarTiGlb_CarTiGlbValue#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParVehBattU::VehBattUSysU
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_VehBattUSysU_VehBattUSysU#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Yr
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Yr_Yr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Yr_Yr#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Yr_Yr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Yr_Yr#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Mth
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Mth_Mth#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Mth_Mth#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Mth_Mth#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Mth_Mth#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Day
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Day_Day#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Day_Day#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Day_Day#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Day_Day#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Hr
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Hr_Hr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Hr_Hr#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Hr_Hr#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Hr_Hr#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Mins
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Mins_Mins#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Mins_Mins#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Mins_Mins#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Mins_Mins#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::Sec
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_Sec_Sec#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_Sec_Sec#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_Sec_Sec#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_Sec_Sec#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::_SPACommon::GParTiAndDate::TiAndDateVld
+{
+  //--- begin generated part --- Block start #Hdr_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_aModulesSignal_TiAndDateVld_TiAndDateVld#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IL::UBPlugNPlay
+{
+  // Handle system state variable
+  //--- begin generated part --- Block start #Hdr_UBOpMode_UBPlugNPlay#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_UBOpMode_UBPlugNPlay#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_UBOpMode_UBPlugNPlay#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_UBOpMode_UBPlugNPlay#; do not delete this line! Add application code below this line.
+}
+
+void Nm_NetworkStartInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_NetworkModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_NetworkTimeoutInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_PrepareBusSleepModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_PrepareBusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_PrepareBusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_PrepareBusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_PrepareBusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_BusSleepModeInd()
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void Nm_StateChangeNotification(long previousState, long currentState)
+{
+  // Callback of CAN AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_Nm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Nm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_Nm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Nm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkStartInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkStartInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkStart();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkStartInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_NetworkTimeoutInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_NetworkTimeoutInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndNetworkTimeout();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_NetworkTimeoutInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_BusSleepModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_BusSleepModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndBusSleepMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_BusSleepModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_StateChangeNotification(long previousState, long currentState)
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_StateChangeNotification#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndStateChangeNotification(previousState, currentState);
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_StateChangeNotification#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void FrNm_SynchronizeModeInd()
+{
+  // Callback of FlexRay AUTOSAR NM DLL
+  dword lBusContext;
+  //--- begin generated part --- Block start #Hdr_FrNm_SynchronizeModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrNm_SynchronizeModeInd#; do not delete this line! Add application code below this line.
+  lBusContext = GetBusContext();
+  //--- begin generated part --- Block start #Body_FrNm_SynchronizeModeInd#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  if (lBusContext == gNMFR1_BusContext) NMFR1_IndSynchronizeMode();
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrNm_SynchronizeModeInd#; do not delete this line! Add application code below this line.
+  SetBusContext(lBusContext);
+}
+
+void StartSim(dword busContext, int busActive, int mode)
+{
+  //--- begin generated part --- Block start #Hdr_StartSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_StartSim#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_StartSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_StartSim#; do not delete this line! Add application code below this line.
+}
+
+void StopSim(dword busContext, int busActive, int mode)
+{
+  //--- begin generated part --- Block start #Hdr_StopSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_StopSim#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_StopSim#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_StopSim#; do not delete this line! Add application code below this line.
+}
+
+void FrILTxPending(char pduName[], long len, byte payload[], long TxAck)
+{
+  //--- begin generated part --- Block start #Hdr_FrILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_FrILTxPending#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_FrILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_FrILTxPending#; do not delete this line! Add application code below this line.
+}
+
+dword applILTxPending(long aId, dword aDlc, byte data[])
+{
+  dword ret = 1;
+  //--- begin generated part --- Block start #Hdr_applILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_applILTxPending#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_applILTxPending#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_applILTxPending#; do not delete this line! Add application code below this line.
+  return ret;
+}
+
+on sysvar_update sysvar::IHU::Common::Control::SimulationControl
+{
+  //--- begin generated part --- Block start #Hdr_Name_SimulationControl#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_SimulationControl#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_SimulationControl#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  setBusContext(getBusNameContext(gFR1BusName));
+  @sysvar::IL_FR1::NODES::N_IHU::EnableNode = @this;
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_SimulationControl#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IHU::Common::Control::E2EUBMode
+{
+  int controlValue;
+  long resultValue;
+  
+  //--- begin generated part --- Block start #Hdr_Name_E2EUBMode#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_E2EUBMode#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_E2EUBMode#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::NodeReal) :
+        resultValue = SetOperationMode(1,0); break;
+     Case(this::NodePnP) :
+        resultValue = SetOperationMode(1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_E2EUBMode#; do not delete this line! Add application code below this line.
+}
+
+on sysvar_update sysvar::IHU::Common::Control::UB
+{
+  int controlValue;
+  long resultValue;
+  
+  //--- begin generated part --- Block start #Hdr_Name_UB#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Hdr_Name_UB#; do not delete this line! Add application code below this line.
+  //--- begin generated part --- Block start #Body_Name_UB#; do not delete this line and do not add application code in this code block!
+  /* #ChannelStart# |FR1| #BusStart# |Backbone| */
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::NodeUBOFF) :
+        resultValue = DisturbUB(0,0,-1,0); break;
+     Case(this::NodeUBHandled) :
+        resultValue = DisturbUB(0,0,0,0); break;
+     Case(this::NodeUBON) :
+        resultValue = DisturbUB(0,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+  /* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+  //--- end generated part --- Block end #Body_Name_UB#; do not delete this line! Add application code below this line.
+}
+
+//--- begin generated part --- Block start <#Helper_Functions#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#Helper_Functions#> do not delete this line! Add application code below this line.
+
+//--- begin generated part --- Block start <#SysVar_Handler#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrSeatDispMassgFct_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvrSeatDispMassgFct_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvrSeatDispMassgFct_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvrSeatDispMassgFct_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HdHwAprvdWirelsAdr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HdHwAprvdWirelsAdr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HdHwAprvdWirelsAdr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HdHwAprvdWirelsAdr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiCmptmtTSp_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtTSp_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtTSp_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtTSp_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VisnAgWideCfg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnAgWideCfg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnAgWideCfg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnAgWideCfg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VisnImgCamReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgCamReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgCamReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgCamReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ActvtAutnmsPrkgCtrl_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::ActvtAutnmsPrkgCtrl_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::ActvtAutnmsPrkgCtrl_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::ActvtAutnmsPrkgCtrl_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvModReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvModReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvModReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::DrvModReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiCmptmtCoolgReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtCoolgReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtCoolgReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::HmiCmptmtCoolgReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RadioFrqAn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::RadioFrqAn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::RadioFrqAn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::RadioFrqAn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VisnImgAgWideReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgAgWideReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgAgWideReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackboneSignalIPdu01::VisnImgAgWideReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::SignalGroups::Control::E2E::SftySigGroupFromAudSafeChks_Control
+{
+  int controlValue;
+  long resultValue;
+  
+  // --- FR ---
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::ChksHandled) :
+        resultValue = EnableCRC("SftySigGroupFromAudSafe", 1); break;
+     Case(this::ChksManual) :
+        resultValue = EnableCRC("SftySigGroupFromAudSafe", 0); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::SignalGroups::Control::E2E::SftySigGroupFromAudSafeCntr_Control
+{
+  int controlValue;
+  long resultValue;
+  
+  // --- FR ---
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::CntrHandled) :
+        resultValue = EnableCounter ("SftySigGroupFromAudSafe", 1); break;
+     Case(this::CntrManual) :
+        resultValue = EnableCounter ("SftySigGroupFromAudSafe", 0); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AccAdprTurnSpdActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::AccAdprTurnSpdActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::AccAdprTurnSpdActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::AccAdprTurnSpdActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ActvnOfCrsEco_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ActvnOfCrsEco_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ActvnOfCrsEco_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ActvnOfCrsEco_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CllsnFwdWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::CllsnFwdWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::CllsnFwdWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::CllsnFwdWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrHmiBackGndInfoSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiBackGndInfoSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiBackGndInfoSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiBackGndInfoSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrHmiUsrIfSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiUsrIfSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiUsrIfSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrHmiUsrIfSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EngStrtStopDrvModIndSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopDrvModIndSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopDrvModIndSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopDrvModIndSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ExtrMirrFoldSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrFoldSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrFoldSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrFoldSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ExtrMirrTiltSetg2_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrTiltSetg2_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrTiltSetg2_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ExtrMirrTiltSetg2_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HudVisFctSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HudVisFctSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HudVisFctSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HudVisFctSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::IndcnUnit_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IndcnUnit_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IndcnUnit_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IndcnUnit_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::IntrLiAmbLiSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiAmbLiSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiAmbLiSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiAmbLiSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::IntrLiSurrndgsLiSetgLi_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiSurrndgsLiSetgLi_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiSurrndgsLiSetgLi_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::IntrLiSurrndgsLiSetgLi_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LaneChgWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneChgWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneChgWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneChgWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LaneKeepAidActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneKeepAidActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneKeepAidActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::LaneKeepAidActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PassSeatDispMassgFct_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PassSeatDispMassgFct_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PassSeatDispMassgFct_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PassSeatDispMassgFct_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SftySigGroupFromAudSafe_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SftySigGroupFromAudSafe_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SftySigGroupFromAudSafe_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SftySigGroupFromAudSafe_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VFCVectorIHU_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::VFCVectorIHU_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::VFCVectorIHU_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::VFCVectorIHU_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClimaRqrd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ClimaRqrd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ClimaRqrd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::ClimaRqrd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrCtrlOfPassSeatFrntReqd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrCtrlOfPassSeatFrntReqd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrCtrlOfPassSeatFrntReqd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrCtrlOfPassSeatFrntReqd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrEntryLoReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrEntryLoReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrEntryLoReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::DrvrEntryLoReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EngStrtStopSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::EngStrtStopSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiDefrstMaxReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HmiDefrstMaxReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HmiDefrstMaxReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::HmiDefrstMaxReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PrkgOutCfm_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PrkgOutCfm_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PrkgOutCfm_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::PrkgOutCfm_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SaveSetgToMemPrmnt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SaveSetgToMemPrmnt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SaveSetgToMemPrmnt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SaveSetgToMemPrmnt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SeatSwtLeSigThrd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtLeSigThrd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtLeSigThrd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtLeSigThrd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SeatSwtRiSigThrd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtRiSigThrd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtRiSigThrd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu02::SeatSwtRiSigThrd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AccAdprSpdLimActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AccAdprSpdLimActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AccAdprSpdLimActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AccAdprSpdLimActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AdprTurnSpdMod_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AdprTurnSpdMod_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AdprTurnSpdMod_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AdprTurnSpdMod_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AutnmsPrkgSeldScenario_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgSeldScenario_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgSeldScenario_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgSeldScenario_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CllsnAidSnvtySeld_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CllsnAidSnvtySeld_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CllsnAidSnvtySeld_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CllsnAidSnvtySeld_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CrvtSpdEstimrSnvtySeld_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CrvtSpdEstimrSnvtySeld_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CrvtSpdEstimrSnvtySeld_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::CrvtSpdEstimrSnvtySeld_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrPfmncMonActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DrvrPfmncMonActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DrvrPfmncMonActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DrvrPfmncMonActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DstNotifActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DstNotifActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DstNotifActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DstNotifActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HudActvReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudActvReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudActvReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudActvReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznPosn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HznPosn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HznPosn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HznPosn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LvlSeldForSpdLimAdpv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::LvlSeldForSpdLimAdpv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::LvlSeldForSpdLimAdpv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::LvlSeldForSpdLimAdpv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::OffsForSpdWarnSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::OffsForSpdWarnSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::OffsForSpdWarnSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::OffsForSpdWarnSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RoadSgnInfoActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::RoadSgnInfoActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::RoadSgnInfoActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::RoadSgnInfoActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SpdAlrmActvForRoadSgnInfo_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdAlrmActvForRoadSgnInfo_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdAlrmActvForRoadSgnInfo_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdAlrmActvForRoadSgnInfo_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SpdCameraInfoSeldForRoadSgnInfo_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdCameraInfoSeldForRoadSgnInfo_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdCameraInfoSeldForRoadSgnInfo_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::SpdCameraInfoSeldForRoadSgnInfo_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TrlrLampChkAutReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkAutReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkAutReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkAutReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::WarnTypForLaneKeepAid_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::WarnTypForLaneKeepAid_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::WarnTypForLaneKeepAid_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::WarnTypForLaneKeepAid_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AutnmsPrkgActvn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgActvn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgActvn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::AutnmsPrkgActvn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DataDistbnAllwdForEgyPred_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DataDistbnAllwdForEgyPred_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DataDistbnAllwdForEgyPred_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::DataDistbnAllwdForEgyPred_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HudErgoSetgReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudErgoSetgReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudErgoSetgReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HudErgoSetgReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HvBattSmtSeld_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HvBattSmtSeld_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HvBattSmtSeld_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::HvBattSmtSeld_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::InsdCarNoiseMeasd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::InsdCarNoiseMeasd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::InsdCarNoiseMeasd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::InsdCarNoiseMeasd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TrlrLampChkRemReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkRemReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkRemReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu03::TrlrLampChkRemReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CrvtSpdWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CrvtSpdWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CrvtSpdWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CrvtSpdWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EasyInOutDrvrSeatAdjmt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::EasyInOutDrvrSeatAdjmt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::EasyInOutDrvrSeatAdjmt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::EasyInOutDrvrSeatAdjmt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznProfLong_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfLong_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfLong_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfLong_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznProfSho_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfSho_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfSho_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HznProfSho_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::IntvAndWarnModForLaneKeepAid_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::IntvAndWarnModForLaneKeepAid_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::IntvAndWarnModForLaneKeepAid_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::IntvAndWarnModForLaneKeepAid_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiSeldForDrvrPfmncMon_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LiSeldForDrvrPfmncMon_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LiSeldForDrvrPfmncMon_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LiSeldForDrvrPfmncMon_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LockgFbVisReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LockgFbVisReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LockgFbVisReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::LockgFbVisReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RoadFricIndcnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::RoadFricIndcnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::RoadFricIndcnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::RoadFricIndcnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SteerAssiActvForAutDrv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::SteerAssiActvForAutDrv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::SteerAssiActvForAutDrv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::SteerAssiActvForAutDrv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TiGapAdpvSeld_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TiGapAdpvSeld_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TiGapAdpvSeld_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TiGapAdpvSeld_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TrfcRglnSeldForRoadSgnInfo_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TrfcRglnSeldForRoadSgnInfo_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TrfcRglnSeldForRoadSgnInfo_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TrfcRglnSeldForRoadSgnInfo_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UnlckRemReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::UnlckRemReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::UnlckRemReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::UnlckRemReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::WarnTypForLaneChgWarn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::WarnTypForLaneChgWarn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::WarnTypForLaneChgWarn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::WarnTypForLaneChgWarn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClimaEcoModRqrd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::ClimaEcoModRqrd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::ClimaEcoModRqrd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::ClimaEcoModRqrd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CurtActvnReReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CurtActvnReReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CurtActvnReReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::CurtActvnReReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HeatrDurgDrvgReqd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HeatrDurgDrvgReqd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HeatrDurgDrvgReqd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HeatrDurgDrvgReqd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiCmptmtAirDistbnFrnt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiCmptmtAirDistbnFrnt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiCmptmtAirDistbnFrnt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiCmptmtAirDistbnFrnt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiHvacFanLvlFrnt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlFrnt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlFrnt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlFrnt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiHvacFanLvlRe_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlRe_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlRe_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacFanLvlRe_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiHvacRecircCmd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacRecircCmd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacRecircCmd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacRecircCmd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiHvacReCtrl_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacReCtrl_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacReCtrl_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::HmiHvacReCtrl_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::MmedMaiPwrMod_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::MmedMaiPwrMod_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::MmedMaiPwrMod_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::MmedMaiPwrMod_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PrpsnHvBattUsgModReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::PrpsnHvBattUsgModReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::PrpsnHvBattUsgModReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::PrpsnHvBattUsgModReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TripModSeln_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TripModSeln_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TripModSeln_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu04::TripModSeln_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznData_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::HznData_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::HznData_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::HznData_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LockgFbSoundReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockgFbSoundReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockgFbSoundReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockgFbSoundReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LockSpdReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockSpdReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockSpdReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::LockSpdReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SetOfLang_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetOfLang_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetOfLang_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetOfLang_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SetTiAndDate_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetTiAndDate_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetTiAndDate_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SetTiAndDate_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TiGapLimd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TiGapLimd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TiGapLimd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TiGapLimd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UnlckFbVisReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckFbVisReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckFbVisReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckFbVisReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UnlckKeylsReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckKeylsReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckKeylsReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UnlckKeylsReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UsrSetSpdForKeySpdWarn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UsrSetSpdForKeySpdWarn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UsrSetSpdForKeySpdWarn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::UsrSetSpdForKeySpdWarn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CallStsIndcn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::CallStsIndcn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::CallStsIndcn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::CallStsIndcn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ConSftyDataSharingAllwd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::ConSftyDataSharingAllwd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::ConSftyDataSharingAllwd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::ConSftyDataSharingAllwd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DispAndHomeBtnSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::DispAndHomeBtnSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::DispAndHomeBtnSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::DispAndHomeBtnSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SwtAtCenSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SwtAtCenSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SwtAtCenSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::SwtAtCenSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TireMonCalReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonCalReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonCalReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonCalReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TireMonrDispReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonrDispReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonrDispReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::TireMonrDispReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::WiprFrntSrvModReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::WiprFrntSrvModReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::WiprFrntSrvModReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu05::WiprFrntSrvModReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EpbApplyAutSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbApplyAutSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbApplyAutSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbApplyAutSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EpbEngStallApplySetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbEngStallApplySetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbEngStallApplySetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EpbEngStallApplySetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EscSptModReqdByDrvrGroup_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EscSptModReqdByDrvrGroup_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EscSptModReqdByDrvrGroup_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::EscSptModReqdByDrvrGroup_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznEdge_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznEdge_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznEdge_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznEdge_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznSeg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznSeg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznSeg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HznSeg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::KeyProfMpgUpd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyProfMpgUpd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyProfMpgUpd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyProfMpgUpd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiAdpvReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiAdpvReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiAdpvReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiAdpvReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiBeamHiAuxReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiBeamHiAuxReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiBeamHiAuxReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiBeamHiAuxReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiCornrgReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiCornrgReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiCornrgReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiCornrgReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiDaytiRunngReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiDaytiRunngReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiDaytiRunngReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiDaytiRunngReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiHomeLvngReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeLvngReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeLvngReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeLvngReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiHomeSafeReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeSafeReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeSafeReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiHomeSafeReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RainSenMemdReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::RainSenMemdReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::RainSenMemdReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::RainSenMemdReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SeatDispBtnPsd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SeatDispBtnPsd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SeatDispBtnPsd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SeatDispBtnPsd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SuspSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SuspSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SuspSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SuspSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TurnAutFlsgReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::TurnAutFlsgReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::TurnAutFlsgReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::TurnAutFlsgReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VehDecelCtrlSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::VehDecelCtrlSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::VehDecelCtrlSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::VehDecelCtrlSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AntithftRednReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::AntithftRednReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::AntithftRednReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::AntithftRednReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CtraSwOnOff_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::CtraSwOnOff_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::CtraSwOnOff_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::CtraSwOnOff_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DeactvtLvlgCtrl_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DeactvtLvlgCtrl_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DeactvtLvlgCtrl_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DeactvtLvlgCtrl_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DispStsCen_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DispStsCen_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DispStsCen_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::DispStsCen_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiAudSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HmiAudSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HmiAudSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::HmiAudSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::KeyReadReqFromSetgMgr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyReadReqFromSetgMgr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyReadReqFromSetgMgr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::KeyReadReqFromSetgMgr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiTrfcSideReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiTrfcSideReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiTrfcSideReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LiTrfcSideReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LockgPrsnlReqFromHmi_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LockgPrsnlReqFromHmi_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LockgPrsnlReqFromHmi_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::LockgPrsnlReqFromHmi_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ProfChg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::ProfChg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::ProfChg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::ProfChg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SteerWhlHeatgDurgClimaEnad_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgDurgClimaEnad_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgDurgClimaEnad_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgDurgClimaEnad_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SteerWhlHeatgOnReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgOnReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgOnReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu06::SteerWhlHeatgOnReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CmptmtTFrntGroup_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CmptmtTFrntGroup_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CmptmtTFrntGroup_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CmptmtTFrntGroup_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrHmiDispdMod_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrHmiDispdMod_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrHmiDispdMod_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrHmiDispdMod_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EngIdleEco1_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EngIdleEco1_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EngIdleEco1_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EngIdleEco1_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiDefrstElecReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiDefrstElecReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiDefrstElecReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiDefrstElecReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiSeatClima_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClima_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClima_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClima_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HmiSeatClimaExtd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClimaExtd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClimaExtd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HmiSeatClimaExtd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::IntrMirrTintgSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::IntrMirrTintgSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::IntrMirrTintgSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::IntrMirrTintgSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LaneKeepAidRoadEdgeActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LaneKeepAidRoadEdgeActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LaneKeepAidRoadEdgeActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LaneKeepAidRoadEdgeActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiExtReq1WdReq5_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LiExtReq1WdReq5_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LiExtReq1WdReq5_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::LiExtReq1WdReq5_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::MassgFctActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MassgFctActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MassgFctActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MassgFctActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::NetHdActvt_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::NetHdActvt_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::NetHdActvt_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::NetHdActvt_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PtDrvrSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PtDrvrSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PtDrvrSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PtDrvrSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SetgAndRstOfTripForDrvr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SetgAndRstOfTripForDrvr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SetgAndRstOfTripForDrvr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SetgAndRstOfTripForDrvr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SteerSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SteerSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SteerSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SteerSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AirClngReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::AirClngReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::AirClngReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::AirClngReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::BlisSwOnOff_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::BlisSwOnOff_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::BlisSwOnOff_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::BlisSwOnOff_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClimaTmr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClimaTmrStsRqrd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmrStsRqrd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmrStsRqrd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::ClimaTmrStsRqrd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CoolgReqForDispCen_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CoolgReqForDispCen_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CoolgReqForDispCen_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::CoolgReqForDispCen_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DriveAwayInfoActvReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoActvReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoActvReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoActvReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DriveAwayInfoSoundWarnActvReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoSoundWarnActvReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoSoundWarnActvReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DriveAwayInfoSoundWarnActvReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvModDispd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvModDispd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvModDispd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvModDispd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrSeatDispSpplFct_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrSeatDispSpplFct_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrSeatDispSpplFct_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::DrvrSeatDispSpplFct_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EgySave_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EgySave_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EgySave_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::EgySave_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HeatrPreCdngTyp_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HeatrPreCdngTyp_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HeatrPreCdngTyp_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::HeatrPreCdngTyp_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::MmedHmiModStd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MmedHmiModStd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MmedHmiModStd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::MmedHmiModStd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PassSeatDispSpplFct_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PassSeatDispSpplFct_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PassSeatDispSpplFct_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PassSeatDispSpplFct_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PrpsnHvBattUsgOfHldSpd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgOfHldSpd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgOfHldSpd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgOfHldSpd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PrpsnHvBattUsgStsDispd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgStsDispd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgStsDispd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::PrpsnHvBattUsgStsDispd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SeatHeatDurgClimaEnad_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SeatHeatDurgClimaEnad_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SeatHeatDurgClimaEnad_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SeatHeatDurgClimaEnad_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SftyCchLongTermIdxRst_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchLongTermIdxRst_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchLongTermIdxRst_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchLongTermIdxRst_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SftyCchPostTripSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchPostTripSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchPostTripSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SftyCchPostTripSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::SoundExtActvSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SoundExtActvSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SoundExtActvSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::SoundExtActvSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UsrSeldDrvrSpprtFct_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::UsrSeldDrvrSpprtFct_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::UsrSeldDrvrSpprtFct_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu07::UsrSeldDrvrSpprtFct_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrDispSetg_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvrDispSetg_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvrDispSetg_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvrDispSetg_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DstToManvLocn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DstToManvLocn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DstToManvLocn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DstToManvLocn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LiAutTranReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LiAutTranReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LiAutTranReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LiAutTranReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RngbdIllmnCmd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RngbdIllmnCmd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RngbdIllmnCmd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RngbdIllmnCmd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TireCircumCalByNav_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TireCircumCalByNav_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TireCircumCalByNav_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TireCircumCalByNav_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UkwnCptRespFromInfoMgr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromInfoMgr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromInfoMgr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromInfoMgr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UkwnCptRespFromSoundMgr_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromSoundMgr_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromSoundMgr_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UkwnCptRespFromSoundMgr_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::UsrSetSpdForKeySpdLimn_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UsrSetSpdForKeySpdLimn_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UsrSetSpdForKeySpdLimn_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::UsrSetSpdForKeySpdLimn_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::WiprReAutReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::WiprReAutReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::WiprReAutReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::WiprReAutReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ActvnOfPrkgAssi_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAssi_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAssi_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAssi_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ActvnOfPrkgAut_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAut_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAut_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ActvnOfPrkgAut_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::AudWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::AudWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::AudWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::AudWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClngRqrdFromHmi_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClngRqrdFromHmi_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClngRqrdFromHmi_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClngRqrdFromHmi_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::ClsAutEna_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClsAutEna_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClsAutEna_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::ClsAutEna_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::CmftFctActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::CmftFctActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::CmftFctActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::CmftFctActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvgInWrgDirOfTrfc_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvgInWrgDirOfTrfc_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvgInWrgDirOfTrfc_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::DrvgInWrgDirOfTrfc_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::EmgyVehWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::EmgyVehWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::EmgyVehWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::EmgyVehWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HdrestFoldReq2_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HdrestFoldReq2_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HdrestFoldReq2_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HdrestFoldReq2_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HudAdjmtReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HudAdjmtReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HudAdjmtReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HudAdjmtReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznSplyElectcSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HznSplyElectcSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HznSplyElectcSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HznSplyElectcSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HzrdLiWarnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HzrdLiWarnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HzrdLiWarnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::HzrdLiWarnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::iTPMSCalReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::iTPMSCalReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::iTPMSCalReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::iTPMSCalReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::LampSuppSrv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LampSuppSrv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LampSuppSrv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::LampSuppSrv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::NoSoundSys_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::NoSoundSys_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::NoSoundSys_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::NoSoundSys_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::OffsForDrvrSpprtFctActvSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::OffsForDrvrSpprtFctActvSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::OffsForDrvrSpprtFctActvSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::OffsForDrvrSpprtFctActvSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::PasAlrmDeactvnReq_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::PasAlrmDeactvnReq_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::PasAlrmDeactvnReq_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::PasAlrmDeactvnReq_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RoadSpdLimActvSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadSpdLimActvSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadSpdLimActvSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadSpdLimActvSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RoadUsrProtnActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadUsrProtnActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadUsrProtnActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::RoadUsrProtnActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::TrfcLiSpprtActv_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TrfcLiSpprtActv_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TrfcLiSpprtActv_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::TrfcLiSpprtActv_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::VehSpdCtrlActvSts_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::VehSpdCtrlActvSts_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::VehSpdCtrlActvSts_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu08::VehSpdCtrlActvSts_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::SignalGroups::Control::E2E::HznPosnExtdOffsCycCntr_Control
+{
+  int controlValue;
+  long resultValue;
+  
+  // --- FR ---
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::CntrHandled) :
+        resultValue = EnableCounter ("HznPosnExtdOffs", 1); break;
+     Case(this::CntrManual) :
+        resultValue = EnableCounter ("HznPosnExtdOffs", 0); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::SignalGroups::Control::E2E::HznProfLongExtdCycCntr_Control
+{
+  int controlValue;
+  long resultValue;
+  
+  // --- FR ---
+  controlValue = (int) @this;
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(controlValue)
+  {
+     Case(this::CntrHandled) :
+        resultValue = EnableCounter ("HznProfLongExtd", 1); break;
+     Case(this::CntrManual) :
+        resultValue = EnableCounter ("HznProfLongExtd", 0); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::DrvrHmiTmrForHmiCen_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::DrvrHmiTmrForHmiCen_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::DrvrHmiTmrForHmiCen_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::DrvrHmiTmrForHmiCen_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznPosnExtd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznPosnExtdOffs_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtdOffs_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtdOffs_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznPosnExtdOffs_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::HznProfLongExtd_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznProfLongExtd_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznProfLongExtd_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu12::HznProfLongExtd_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::RouteInfo_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::RouteInfo_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::RouteInfo_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::RouteInfo_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IHU::Backbone::Signals::Control::UB::MmedTvmPwerMod_UB_Control
+{
+  long resultValue;
+  
+  // --- FR ---
+  setBusContext(getBusNameContext(gFR1BusName));
+  switch(@this)
+  {
+     Case(this::SignalUBOFF) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::MmedTvmPwerMod_UB,0,-1,0); break;
+     Case(this::SignalUBHandled) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::MmedTvmPwerMod_UB,0,0,0); break;
+     Case(this::SignalUBON) :
+        resultValue = DisturbUB(Backbone::IHU::IHUBackBoneSignalIPdu13::MmedTvmPwerMod_UB,0,-1,1); break;
+     Default :
+        resultValue = -1;
+  }
+  
+}
+
+on sysvar_update sysvar::IL_FR1::NODES::N_IHU::EnableNode
+{
+  ILFR1_Enable(@this && @sysvar::IL_FR1::enable_AllNodes);
+}
+
+on sysvar_update sysvar::IL_FR1::enable_AllNodes
+{
+  ILFR1_Enable(@this && @sysvar::IL_FR1::NODES::N_IHU::EnableNode);
+}
+
+on sysvar_update sysvar::NM_FR1::NODES::N_IHU::DeactivateNM
+{
+  if( @this == 1 || @sysvar::NM_FR1::StateControl::DeactivateNM == 1)
+  {
+    NMFR1_Enable(0);
+  }
+  else
+  {
+    NMFR1_Enable(1);
+  }
+}
+
+on sysvar_update sysvar::NM_FR1::StateControl::DeactivateNM
+{
+  if( @this == 1 || @sysvar::NM_FR1::NODES::N_IHU::DeactivateNM == 1)
+  {
+    NMFR1_Enable(0);
+  }
+  else
+  {
+    NMFR1_Enable(1);
+  }
+}
+
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#SysVar_Handler#> do not delete this line! Add application code below this line.
+
+//--- begin generated part --- Block start <#MsgUpdateFcns#> do not delete this line and do not add application code in this code block!
+/* #ChannelStart# |FR1| #BusStart# |Backbone| */
+/* #ChannelEnd# |FR1| #BusEnd# |Backbone| */
+//--- end generated part --- Block end <#MsgUpdateFcns#> do not delete this line! Add application code below this line.
+

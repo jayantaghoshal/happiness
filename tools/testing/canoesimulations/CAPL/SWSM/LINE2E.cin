@@ -1,0 +1,33 @@
+/*@!Encoding:1252*/
+variables
+{
+  //long SPAE2E_crcTableMade = 0;
+  byte SPAE2E_crcTable[256];
+}
+
+
+SPAE2E_MakeCRCTable()  //Create crc lookup-table for 8-bit data
+{
+
+  
+  int i, j;
+  const dword generator = 0x011D; //Shall be 0x011D for E2E profile 1A
+  dword crc;
+  const long CRCPADLEN = 8;
+  
+  //generator = @%NODE_NAME%::E2ECommon::generator;//Shall be 0x011D for E2E profile 1A
+
+  for (i=0 ; i<256 ; i++) 
+  { /* loop over all 8 bit data points */
+    crc = i << CRCPADLEN; /* pad zeros to the data */
+    for (j=7 ; j>=0 ; j--) 
+    { /* there are 8 bits to divide */
+      if (crc >> (j+CRCPADLEN)) 
+      { /* if the bit is one... */
+        crc = crc ^ (generator << j); /* XOR with generator... */
+      } /* otherwise go to the next bit */
+    }
+    SPAE2E_crcTable[i]=crc; /* store the result in the table */
+  }
+   
+}

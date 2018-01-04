@@ -1,0 +1,41 @@
+/*@!Encoding:1252*/
+variables
+{
+  msTimer SPAGPar_CarTiGlb_Timer;
+  const long SPAGPar_UPDATE_TIME_CarTiGlb = 100; //ms
+}
+
+on preStart
+{  
+}
+
+on start
+{
+  if(@_SPACommon::CarTiGlb::SimulationControl == @_SPACommon::CarTiGlb::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_CarTiGlb_Timer, SPAGPar_UPDATE_TIME_CarTiGlb);
+  }
+}
+
+on preStop
+{
+  
+}
+
+
+on timer SPAGPar_CarTiGlb_Timer
+{
+    @sysvar::_SPAInternal::CarTiGlb::CarTiGlbValue = timeNowFloat()/100000.0 + @sysvar::_SPACommon::CarTiGlb::CarTiGlbStartValue;
+}
+
+on sysvar _SPACommon::CarTiGlb::SimulationControl
+{
+  if(@_SPACommon::CarTiGlb::SimulationControl == @_SPACommon::CarTiGlb::SimulationControl::On)
+  {
+    setTimerCyclic(SPAGPar_CarTiGlb_Timer, SPAGPar_UPDATE_TIME_CarTiGlb);
+  }
+  else
+  {
+    cancelTimer(SPAGPar_CarTiGlb_Timer);
+  }
+}

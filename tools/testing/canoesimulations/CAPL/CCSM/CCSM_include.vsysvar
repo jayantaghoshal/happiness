@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+      <namespace name="CCSM" comment="NODE">
+        <namespace name="Panel" comment="..\..\InfotainmentModules\Node_basic_includes\CCSM_eventhandler.cin">
+			<namespace name="Input" comment="PANEL">
+			  <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PlayPauseBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+			  <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="PreviousBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+			  <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="NextBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+			  <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VolUpBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+			  <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="VolDownBtn" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+			</namespace>
+		</namespace>
+      </namespace>
+  </namespace>
+</systemvariables>

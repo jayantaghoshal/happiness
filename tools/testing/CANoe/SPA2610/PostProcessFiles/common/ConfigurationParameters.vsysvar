@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="Configuration" comment="">
+      <namespace name="Logging" comment="">
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="Logg" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" startValue="0" minValue="0" minValuePhys="0" maxValue="2" maxValuePhys="2">
+          <valuetable definesMinMax="true">
+            <valuetableentry value="0" description="Off" />
+            <valuetableentry value="1" description="On" />
+            <valuetableentry value="2" description="Invalid" />
+          </valuetable>
+        </variable>
+        <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="LogPath" comment="" bitcount="8" isSigned="true" encoding="65001" type="string" startValue="C:\" />
+      </namespace>
+      <namespace name="VersionInfo" comment="">
+        <variable
+            name="SimulationVersion"
+            anlyzLocal="2"
+            readOnly="false"
+            valueSequence="false"
+            unit=""
+            comment=""
+            bitcount="32"
+            isSigned="false"
+            type="int"
+            startValue="10" />
+      </namespace>
+    </namespace>
+  </namespace>
+</systemvariables>

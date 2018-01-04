@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<Panel Type="Vector.CANalyzer.Panels.PanelSerializer, Vector.CANalyzer.Panels.Serializer, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null">
+  <Object Type="Vector.CANalyzer.Panels.Runtime.Panel, Vector.CANalyzer.Panels.Common, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="Panel" Children="Controls" ControlName="SWSM_Panel">
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl8" Children="Controls" ControlName="Button 3">
+      <Property Name="Name">ButtonControl8</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">88, 10</Property>
+      <Property Name="Text">Long PTT</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_LongPress_SpeechBtn;1;;;-1</Property>
+      <Property Name="TabIndex">7</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl7" Children="Controls" ControlName="Button 3">
+      <Property Name="Name">ButtonControl7</Property>
+      <Property Name="Size">69, 23</Property>
+      <Property Name="Location">352, 38</Property>
+      <Property Name="Text">Next</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_NextBtn;1;;;-1</Property>
+      <Property Name="TabIndex">6</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl6" Children="Controls" ControlName="Button 3">
+      <Property Name="Name">ButtonControl6</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">8, 65</Property>
+      <Property Name="Text">Menu</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_MenuBtn;1;;;-1</Property>
+      <Property Name="TabIndex">5</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl5" Children="Controls" ControlName="Button 3">
+      <Property Name="Name">ButtonControl5</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">193, 38</Property>
+      <Property Name="Text">Previous</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_PreviousBtn;1;;;-1</Property>
+      <Property Name="TabIndex">4</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl4" Children="Controls" ControlName="Button 3">
+      <Property Name="Name">ButtonControl4</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">8, 10</Property>
+      <Property Name="Text">PTT</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_SpeechBtn;1;;;-1</Property>
+      <Property Name="TabIndex">3</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl3" Children="Controls" ControlName="Button 2">
+      <Property Name="Name">ButtonControl3</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">272, 38</Property>
+      <Property Name="Text">Enter</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_EnterBtn;1;;;-1</Property>
+      <Property Name="TabIndex">2</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl2" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl2</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">272, 10</Property>
+      <Property Name="Text">Vol Up</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_UpBtn;1;;;-1</Property>
+      <Property Name="TabIndex">1</Property>
+    </Object>
+    <Object Type="Vector.CANalyzer.Panels.Design.ButtonControl, Vector.CANalyzer.Panels.CommonControls, Version=8.2.64.0, Culture=neutral, PublicKeyToken=null" Name="ButtonControl1" Children="Controls" ControlName="Button">
+      <Property Name="Name">ButtonControl1</Property>
+      <Property Name="Size">75, 23</Property>
+      <Property Name="Location">272, 65</Property>
+      <Property Name="Text">Vol Down</Property>
+      <Property Name="SymbolConfiguration">4;16;SWSM::Panel::Input;;;SWSM_DownBtn;1;;;-1</Property>
+      <Property Name="TabIndex">0</Property>
+    </Object>
+    <Property Name="Name">Panel</Property>
+    <Property Name="Size">431, 103</Property>
+  </Object>
+</Panel>

@@ -1,0 +1,30 @@
+/*@!Encoding:1252*/
+/*  Precondition: CCSM_eventhandler.cin must be included in CCSM Node 
+*   and active in simulation setup
+*/
+
+void CCSM_PlayBtn()
+{
+  @sysvar::CCSM::Panel::Input::PlayPauseBtn = 1;
+}
+
+void CCSM_NextBtn()
+{
+  @sysvar::CCSM::Panel::Input::NextBtn = 1;
+}
+
+void CCSM_PreviousBtn()
+{
+ @sysvar::CCSM::Panel::Input::PreviousBtn = 1;
+}
+
+void CCSM_VolUpBtn()
+{
+  @sysvar::CCSM::Panel::Input::VolUpBtn  = 1;
+}
+
+void CCSM_VolDownBtn()
+{
+  @sysvar::CCSM::Panel::Input::VolDownBtn = 1;
+}
+

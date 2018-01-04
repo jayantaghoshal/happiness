@@ -1,0 +1,9 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "..\PostProcessFiles\VCM\VCM_init_values.cin"
+}
+variables
+{
+  
+}

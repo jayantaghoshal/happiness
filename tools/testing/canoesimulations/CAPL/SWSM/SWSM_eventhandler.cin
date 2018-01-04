@@ -1,0 +1,285 @@
+/*@!Encoding:1252*/
+// Should be included in SWSM Node
+
+includes
+{
+  #include "LINE2E.cin"
+}
+
+variables
+{
+  msTimer swsm_msTimer;
+  const byte QF3_BITSHIFTED=0x0c;//QF=3
+  const byte PRESSED_BITSHIFTED=0x10;
+  byte qf_bitshifted;
+  byte count=0;
+  byte val1=0;
+  byte val2=0;
+  byte val5=0;
+  byte crc_input;
+}
+
+on preStart
+{
+  SPAE2E_MakeCRCTable();
+}
+
+on start
+{
+ $BtnL2ReqSteerWhlLeBtnExtReqToUpdQf_LIN20=3;
+ $SteerWhlL1BtnExtReqToUpdQf_LIN20=3;
+ $SteerWhlLeBtn5ExtReqToUpdQf_LIN20=3;
+ qf_bitshifted=QF3_BITSHIFTED;
+}
+
+// TODO: Remove timer and revert to 'on linMessage SwsmLin20Fr01' when SWI regarding 
+// single lin messages is fixed 
+on timer swsm_msTimer
+{
+  $BtnR1Req_LIN20 = 0;
+  $BtnR2Req_LIN20 = 0; 
+  $BtnR3Req_LIN20 = 0;  
+  $BtnR4Req_LIN20 = 0;  
+  $BtnR5Req_LIN20 = 0;  
+  $BtnR6Req_LIN20 = 0;  
+  $BtnR7Req_LIN20 = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_EnterBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_DownBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_SpeechBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_NextBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_PreviousBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_MenuBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_UpBtn = 0;
+  @sysvar::SWSM::Panel::Input::SWSM_LongPress_SpeechBtn == 0;
+  
+}
+
+
+//
+//on key 'w'
+//{
+//  @sysvar::SWSM::Panel::Input::SWSM_UpBtn = 1;
+//}
+//
+//on key 's'
+//{
+//  @sysvar::SWSM::Panel::Input::SWSM_DownBtn = 1;
+//}
+//
+//on key 'a'
+//{
+//   @sysvar::SWSM::Panel::Input::SWSM_PreviousBtn = 1;
+//}
+//
+//on key 'd'
+//{
+//  @sysvar::SWSM::Panel::Input::SWSM_NextBtn = 1;
+//}
+//
+//on key 'q'
+//{
+//  @sysvar::SWSM::Panel::Input::SWSM_SpeechBtn = 1;
+//}
+//
+//on key 'e'
+//{
+//  @sysvar::SWSM::Panel::Input::SWSM_MenuBtn = 1;
+//}
+
+on linMessage SwsmLin20Fr01_LIN20
+{
+
+  
+  //Due to internal CANoe delay when setting a signal to one using system variables,
+  //an if statement is needed to verify a one has been has been sent at least once.
+
+  if (($SteerWhlL1BtnExtReq1_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL1Req==0)){
+    $SteerWhlL1BtnExtReq1_LIN20=0;
+    val1=0;
+  }
+  if(($BtnL2ReqSteerWhlLeBtnExtReq1_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL2Req==0)){
+    $BtnL2ReqSteerWhlLeBtnExtReq1_LIN20=0;
+    val2=0;
+  }
+  if(($SteerWhlLeBtn5ExtReq_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL5Req==0)){
+    $SteerWhlLeBtn5ExtReq_LIN20=0;
+    val5=0;
+  }
+  if(($BtnL3Req_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL3Req==0)){//TODO
+    $BtnL3Req_LIN20=0;
+  }
+  if(($BtnL4Req_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL4Req==0)){
+    $BtnL4Req_LIN20=0;
+  }  
+  if(($BtnL6Req_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL6Req==0)){
+    $BtnL6Req_LIN20=0;
+  }  
+  if(($BtnL7Req_LIN20==1)&&(@sysvar::SWSM::Panel::InputLeft::BtnL7Req==0)){
+    $BtnL7Req_LIN20=0;
+  }  
+  
+  count=(count+1)%4; //00,01,10,11,00, etc
+  $BtnL2ReqSteerWhlLeBtnExtReqCntr_LIN20=count;
+  $SteerWhlL1BtnExtReqCntr_LIN20=count;
+  $SteerWhlLeBtn5ExtReqCntr_LIN20=count;
+  crc_input=val1+qf_bitshifted+count;
+  $SteerWhlL1BtnExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  crc_input=val2+qf_bitshifted+count;
+  $BtnL2ReqSteerWhlLeBtnExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  crc_input=val5+qf_bitshifted+count;
+  $SteerWhlLeBtn5ExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  
+//  
+//  if(this.BtnR1Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR1Req = 0;
+//  }
+//  if(this.BtnR2Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR2Req = 0;  
+//  }
+//  if(this.BtnR3Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR3Req = 0;  
+//  }
+//  if(this.BtnR4Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR4Req = 0;  
+//  }
+//  if(this.BtnR5Req==1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR5Req = 0;  
+//  }
+//  if(this.BtnR6Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR6Req = 0;  
+//  }
+//  if(this.BtnR7Req == 1){
+//    @sysvar::_AdditionalOutputs::SWSM::BtnR7Req = 0;  
+//  }
+}
+
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_DownBtn 
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_DownBtn == 1){
+    $BtnR4Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_EnterBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_EnterBtn == 1){
+    $BtnR1Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_PreviousBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_PreviousBtn == 1){
+    $BtnR2Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_MenuBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_MenuBtn == 1){
+    $BtnR7Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_NextBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_NextBtn == 1){
+    $BtnR3Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_SpeechBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_SpeechBtn == 1){
+    $BtnR6Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_UpBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_UpBtn == 1){
+    $BtnR5Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 100);
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::Input::SWSM_LongPress_SpeechBtn
+{
+  if(@sysvar::SWSM::Panel::Input::SWSM_LongPress_SpeechBtn == 1){
+    $BtnR6Req_LIN20 = 1;
+    setTimer(swsm_msTimer, 1600);
+  }
+}
+
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL1Req
+{
+  if(@this==1)
+  {
+    val1=PRESSED_BITSHIFTED;
+    $SteerWhlL1BtnExtReq1_LIN20=1;
+    crc_input=PRESSED_BITSHIFTED+qf_bitshifted+count;
+    $SteerWhlL1BtnExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL2Req
+{
+  if(@this==1)
+  {
+    val2=PRESSED_BITSHIFTED;
+    $BtnL2ReqSteerWhlLeBtnExtReq1_LIN20=1;
+    crc_input=PRESSED_BITSHIFTED+qf_bitshifted+count;
+    $BtnL2ReqSteerWhlLeBtnExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL3Req
+{
+  if(@this==1)
+  {
+    $BtnL3Req_LIN20=1;
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL4Req
+{
+  if(@this==1)
+  {
+    $BtnL4Req_LIN20=1;
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL5Req
+{
+  if(@this==1)
+  {
+    val5=PRESSED_BITSHIFTED;
+    $SteerWhlLeBtn5ExtReq_LIN20=1;
+    crc_input=PRESSED_BITSHIFTED+qf_bitshifted+count;
+    $SteerWhlLeBtn5ExtReqChks_LIN20=SPAE2E_crcTable[crc_input];
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL6Req
+{
+  if(@this==1)
+  {
+    $BtnL6Req_LIN20=1;
+  }
+}
+
+on sysvar sysvar::SWSM::Panel::InputLeft::BtnL7Req
+{
+  if(@this==1)
+  {
+    $BtnL7Req_LIN20=1;
+  }
+}

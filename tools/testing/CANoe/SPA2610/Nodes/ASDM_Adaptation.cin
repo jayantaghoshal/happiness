@@ -1,0 +1,10 @@
+/*@!Encoding:1252*/
+includes
+{
+  #include "..\PostProcessFiles\ASDM\ASDM_init_values.cin"
+  #include "..\PostProcessFiles\ASDM\ASDM_roadfriction.cin"
+}
+variables
+{
+  
+}

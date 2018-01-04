@@ -1,0 +1,11 @@
+/*@!Encoding:1252*/
+on start
+{
+  $AhbcAvlSts = 2;
+  $LcmaIndcnLe = 0;
+  $LcmaIndcnRi = 0;
+  $RngOfTar = 100;
+  $RngRateOfTar = -0.24;
+  $TrfcFlowInLaneSelf = 0;
+}
+

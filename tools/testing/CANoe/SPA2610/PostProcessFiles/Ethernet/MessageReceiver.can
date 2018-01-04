@@ -1,0 +1,209 @@
+/*@!Encoding:1252*/
+includes
+{  
+}
+
+variables
+{
+  dword socket_udp;  
+  long res;
+  
+  char recvBufferUdp[4096];  
+  const dword BROADCAST = 0xFFFFFFFF;    
+  
+  //long counter;
+}
+
+on start
+{ 
+  //counter = 0;
+  
+  res = VCCIP_initalize();
+  if (res != 0)
+    write( "Unable to load VCC IP CP interaction layer, res: %d", res );
+    
+  openSocketUdp();    
+}
+
+
+
+on stopMeasurement
+{
+    closeSocketUdp();
+}
+
+void openSocketUdp()
+{
+  socket_udp = udpOpen( 0, 50000 ); // address=0, port=50000
+  
+  if (socket_udp == 0)
+  {
+    write( "UDP ERROR: trying to open UDP socket" );
+    return;
+  }
+
+  if (getMessageUdp() == 0)  
+    write( "UDP socket successfully opened (receiver)" );
+  else
+    write( "Error: failed opening UDP socket (receiver)" );
+}
+ 
+int getMessageUdp()
+{  
+  res = UdpReceiveFrom( socket_udp, recvBufferUdp, 4096 );
+  //write( "DEBUG - getMessageUdp" ); // We are receiving something on UDP
+  if (res != 0)
+  {
+    //write( "DEBUG - getMessageUdp - res not zero" ); // We are receiving something on UDP that has a non-zero result
+    res = IpGetLastSocketError(socket_udp);
+    if (res != 997)
+    {
+      write("UDP ERROR: socketErrorCode=%d", res);    
+      return -1;
+    }
+    else
+    {
+      // From CAPL help about UdpReceiveFrom:       - If the specific error code is WSA_IO_PENDING (997) the CAPL callback OnUdpReceiveFrom will be called on completion (successful or not), provided it is implemented in the same CAPL program.
+      //write( "DEBUG - getMessageUdp - IpGetLastSocketError - 997" ); // We are receiving something on UDP with lasterror 997 - This should trigger OnUdpReceiveFrom
+      
+    }
+  }
+  return 0;
+}
+
+void closeSocketUdp()
+{  
+  res = udpClose(socket_udp);  
+}
+
+void OnUdpReceiveFrom( dword socket, long result, dword address, dword port, char buffer[], dword size)
+{ 
+  dword serviceId;
+  dword operationId;
+  dword operationType;  
+  dword length;  
+  long time[9];
+  byte data[1000];
+  dword encodedLength; 
+  char errMsg[1000];
+    
+  //if (address != "198.18.48.17" )
+//  write( "DEBUG - OnUdpReceiveFrom %d", address );
+    
+  //write( "DEBUG - OnUdpReceiveFrom " ); // We are entering this function
+  if (port != 50000)
+  {
+    write( "Wrong port" );
+    return;
+  }  
+
+  // write( "DEBUG - OnUdpReceiveFrom - Correct port " ); // We are entering this function, and finding messages on port 50000
+
+  /*
+   * VCC IP header using function
+   */  
+  res = VCCIP_convertToVccIpMessage( port, size, buffer, serviceId, operationId, operationType, elcount(data), data, length );      
+  if (res != 0)
+  {
+    write( "VCCIP_convertToVccIpMessage: res=%d", res );
+    return;
+  }
+//  else
+//  {
+//    snprintf(errMsg, elcount(errMsg), "VCCIP Message converted: %x, %x", serviceId, operationId);
+//    write(errMsg); 
+//  }
+
+//  write( "DEBUG - OnUdpReceiveFrom - Convert to VCCIP successful" ); // 
+
+  if ((serviceId != 0xFFFF) && (length != 0) )
+  {
+  
+      // Check if message is "OpConnectivityStatus - Notification"
+//    if ((serviceId == 0x00A1) && (operationId == 0x010D) && (operationType == 0x02))
+//    {    
+//      write ("いいいいいいいいいいいいいいFound a Sendtocar match");
+//      res = VCCIP_decode( serviceId, operationId, operationType, length, data );    
+//      if (res != 0)
+//      {
+////        write( "VCCIP_decode: res=%d", res );
+////        write( "DEBUG - Faild to decode OpConnectivityStatus - Notification");    
+//      }    
+//    }
+
+      res = VCCIP_decode( serviceId, operationId, operationType, length, data );    
+      if (res != 0)
+      {
+        write( "VCCIP_decode: res=%d", res );
+  //      write( "DEBUG - SvcID: %X Opid: %X OpType: %X Data: TODO", serviceId, operationId, operationType);    
+      }
+      else{
+        write("Managed to decode message"); 
+      }
+
+
+    
+      //            // Check if message is "OpConnectivityStatus - Notification"
+      //            if ((serviceId == 0xA3) && (operationId == 0x030A) && (operationType == 0x05))
+      //            {    
+      //              // write content to Rx system variables
+      //              res = VCCIP_decode( serviceId, operationId, operationType, length, data );    
+      //              if (res != 0)
+      //              {
+      //                write( "VCCIP_decode: res=%d", res );
+      //                return;
+      //              }    
+      //
+      //              //write( "DEBUG - OnUdpReceiveFrom - VCCIP - OpConnectivityStatus " ); // 
+      //
+      //              // Copy system variables' values from namespace RX to TX
+      //          /*    res = VCCIP_copyRxToTx( serviceId, operationId, operationType );    
+      //              if (res != 0)
+      //              {
+      //                write( "VCCIP_copyRxToTx: res=%d", res );
+      //                return;
+      //              }
+      //                  
+      //              // Update date/time in namespace TX for message "GNSS Position Data - Notification"
+      //              getLocalTime(time);       
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.year    = time[5] + 1900;
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.month   = time[4] + 1;
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.day     = time[3];
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.hour    = time[2];
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.minute  = time[1];
+      //              @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.second  = time[0];
+      //              */
+      //              //@sendGnss++;
+      //              //write( "Send GNSS on IHU-Net (%d)", @sendGnss );
+      //              
+      //            }
+      //            else
+      //            {
+      //              // write content to Rx system variables
+      //              //write( "DEBUG - OnUdpReceiveFrom - VCCIP - Other than OpConnectivityStatus %d" , serviceId  ); // 
+      //              res = VCCIP_decode( serviceId, operationId, operationType, length, data );    
+      //              if (res != 0)
+      //              {
+      //                write( "VCCIP_decode: res=%d", res );
+      //                //write( "DEBUG - SvcID: %d Opid: %d OpType: %d Data: TODO", serviceId, operationId, operationType);    
+      //
+      //                //  return;
+      //              }    
+      //          //    else
+      //          //    {
+      //          //      //write( "DEBUG - OnUdpReceiveFrom - VCCIP - Message decoded %d", serviceId ); // 
+      //          //    }
+      //              
+      //            }
+  }
+
+  getMessageUdp();  
+}
+
+on key 'a'{
+    res = VCCIP_initalize();
+  if (res != 0)
+    write( "Unable to load VCC IP CP interaction layer" );
+    
+  openSocketUdp(); 
+}

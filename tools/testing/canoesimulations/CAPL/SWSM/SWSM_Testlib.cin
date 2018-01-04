@@ -1,0 +1,39 @@
+/*@!Encoding:1252*/
+/*  Precondition: SWSM_eventhandler.cin must be included in SWSM Node 
+*   and active in simulation setup
+*/
+
+void SWSM_UpBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_UpBtn = 1;
+}
+
+void SWSM_DownBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_DownBtn = 1;
+}
+
+void SWSM_PreviousBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_PreviousBtn = 1;
+}
+
+void SWSM_NextBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_NextBtn = 1;
+}
+
+void SWSM_EnterBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_EnterBtn = 1;
+}
+
+void SWSM_SpeechBtn()
+{
+  @sysvar::SWSM::Panel::Input::SWSM_SpeechBtn= 1;
+}
+
+void SWSM_MenuBtn()
+{
+   @sysvar::SWSM::Panel::Input::SWSM_MenuBtn = 1;
+}

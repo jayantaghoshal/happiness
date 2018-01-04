@@ -52,6 +52,7 @@ class Group():
 
     def receive_data(self, data):
         # type: (List[int]) -> None
+
         with self.mutex_lock:
             for i in self.items:
                 if i.type == "bytearray":

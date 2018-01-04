@@ -1,0 +1,10 @@
+/*@!Encoding:1252*/
+includes
+{
+  
+  #include "..\PostProcessFiles\DIM\speechDIM.cin"
+}
+variables
+{
+  
+}

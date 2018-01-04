@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="utf-8"?>
+<systemvariables version="4">
+  <namespace name="" comment="">
+    <namespace name="_VCCIP" comment="">
+      <namespace name="tx_" comment="">
+        <namespace name="Common_All" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDLCConnectedSignal_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDLCConnectedSignal_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMIdentification_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMIdentification_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMRadioMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMRadioMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTunerFrequencies_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTunerFrequencies_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMRadioMode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMRadioMode_SetRequest" />
+        </namespace>
+        <namespace name="Connectivity" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpAccessRightPinCode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpAccessRightPinCode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetGateway_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetGateway_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectivityStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectivityStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectivityStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectivityStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpFactoryDefaultRestore_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpFactoryDefaultRestore_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMResetDataCounter_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMResetDataCounter_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectWorkshopWlan_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectWorkshopWlan_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetGateway_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetGateway_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRoamingConfiguration_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRoamingConfiguration_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkConfiguration_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkConfiguration_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMResetDataCounter_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMResetDataCounter_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnectionStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnectionStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnectionStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnectionStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMDataCounter_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMDataCounter_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkConfiguration_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkConfiguration_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMMessage_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMMessage_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRoamingConfiguration_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRoamingConfiguration_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWorkshopWlanDetected_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWorkshopWlanDetected_Notification" />
+        </namespace>
+        <namespace name="Common_PSIM" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMEnterCode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMEnterCode_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMPhoneOperationMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMPhoneOperationMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSignalStrength_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSignalStrength_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperators_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperators_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRegisterState_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRegisterState_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSecurity_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSecurity_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSecurity_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSecurity_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMState_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMState_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMUssd_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMUssd_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMUssd_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMUssd_SetRequest" />
+        </namespace>
+        <namespace name="Diagnostic_Management" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpAbortRemoteDiagnostics_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpAbortRemoteDiagnostics_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextFromOperatorToUser_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextFromOperatorToUser_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextFromUserToOperator_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextFromUserToOperator_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpUpdateDaCMode_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpUpdateDaCMode_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentDoIPConnection_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentDoIPConnection_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentJ2534Session_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentJ2534Session_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRemoteDiagnosticLink_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRemoteDiagnosticLink_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRemoteDiagnosticInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRemoteDiagnosticInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestUserAuthentication_Request" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestUserAuthentication_Request" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestUserAuthentication_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestUserAuthentication_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentDoIPState_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentDoIPState_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestRemoteDiagnostics_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestRemoteDiagnostics_Notification" />
+        </namespace>
+        <namespace name="Common_PhoneTelematics" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCallHandling_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCallHandling_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPremiumAudio_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPremiumAudio_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPremiumAudio_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPremiumAudio_SetRequest" />
+        </namespace>
+        <namespace name="OTA" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCancelDownload_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCancelDownload_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeviceInstall_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeviceInstall_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDownloadStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDownloadStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeviceInstall_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeviceInstall_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTvmVehicleInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTvmVehicleInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpLocalStorage_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpLocalStorage_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDownloadSoftware_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDownloadSoftware_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCancelDownload_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCancelDownload_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeletedSoftware_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeletedSoftware_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTvmVehicleInfo_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTvmVehicleInfo_Response" />
+        </namespace>
+        <namespace name="Positioning" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeadReckonedPosition_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeadReckonedPosition_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGNSSPositionData_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGNSSPositionData_Response" />
+        </namespace>
+        <namespace name="Telematics" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpClimateTimers_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpClimateTimers_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpClimateTimers_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpClimateTimers_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRescueStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRescueStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCar_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCar_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextMessage_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextMessage_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTNStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTNStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Request" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Request" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRescueStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRescueStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSVTStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSVTStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHWarning_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHWarning_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpIHUSystemInfo_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpIHUSystemInfo_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPositionData_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPositionData_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceBooking_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceBooking_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpUserPrivacySettings_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpUserPrivacySettings_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCarConfirmation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCarConfirmation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSVTStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSVTStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCarConfirmation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCarConfirmation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceActivation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceActivation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceActivation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceActivation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTNStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTNStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHPackageUploaded_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHPackageUploaded_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHPacketSend_SetRequestNoReturn" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHPacketSend_SetRequestNoReturn" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTelematicSettings_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTelematicSettings_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTelematicSettings_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTelematicSettings_SetRequest" />
+        </namespace>
+        <namespace name="WLAN" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPConnDev_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPConnDev_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPPasswd_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPPasswd_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPSSID_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPSSID_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPPasswd_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPPasswd_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANFreqBandSelect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANFreqBandSelect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPConnDev_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPConnDev_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPSSID_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPSSID_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPStatusSettings_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPStatusSettings_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANChannelFreqInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANChannelFreqInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANFreqBandSelect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANFreqBandSelect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAConnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAConnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAConnect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAConnect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTADisconnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTADisconnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAForgetRememberedNetwk_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAForgetRememberedNetwk_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAForgetRememberedNetwk_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAForgetRememberedNetwk_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTARememberedNetwks_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTARememberedNetwks_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAStatus_Response" />
+        </namespace>
+      </namespace>
+      <namespace name="rx_" comment="">
+        <namespace name="Common_All" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDLCConnectedSignal_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDLCConnectedSignal_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMIdentification_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMIdentification_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMRadioMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMRadioMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTunerFrequencies_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTunerFrequencies_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTEMRadioMode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTEMRadioMode_SetRequest" />
+        </namespace>
+        <namespace name="Connectivity" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpAccessRightPinCode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpAccessRightPinCode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetGateway_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetGateway_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectivityStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectivityStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectivityStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectivityStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpFactoryDefaultRestore_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpFactoryDefaultRestore_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMResetDataCounter_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMResetDataCounter_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpConnectWorkshopWlan_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpConnectWorkshopWlan_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetGateway_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetGateway_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRoamingConfiguration_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRoamingConfiguration_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkConfiguration_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkConfiguration_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentInternetSource_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentInternetSource_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlBT_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlBT_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpInternetSourceCtrlUSB_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpInternetSourceCtrlUSB_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMResetDataCounter_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMResetDataCounter_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnectionStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnectionStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnectionStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnectionStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMConnect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMConnect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMDataCounter_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMDataCounter_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkConfiguration_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkConfiguration_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMMessage_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMMessage_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRoamingConfiguration_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRoamingConfiguration_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWorkshopWlanDetected_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWorkshopWlanDetected_Notification" />
+        </namespace>
+        <namespace name="Common_PSIM" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMEnterCode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMEnterCode_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMPhoneOperationMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMPhoneOperationMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSignalStrength_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSignalStrength_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperators_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperators_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMRegisterState_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMRegisterState_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSecurity_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSecurity_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMNetworkOperatorCommand_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMNetworkOperatorCommand_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMSecurity_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMSecurity_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMState_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMState_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMUssd_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMUssd_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPSIMUssd_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPSIMUssd_SetRequest" />
+        </namespace>
+        <namespace name="Diagnostic_Management" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpAbortRemoteDiagnostics_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpAbortRemoteDiagnostics_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextFromOperatorToUser_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextFromOperatorToUser_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextFromUserToOperator_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextFromUserToOperator_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpUpdateDaCMode_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpUpdateDaCMode_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentDoIPConnection_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentDoIPConnection_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentJ2534Session_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentJ2534Session_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRemoteDiagnosticLink_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRemoteDiagnosticLink_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRemoteDiagnosticInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRemoteDiagnosticInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestUserAuthentication_Request" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestUserAuthentication_Request" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestUserAuthentication_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestUserAuthentication_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCurrentDoIPState_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCurrentDoIPState_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRequestRemoteDiagnostics_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRequestRemoteDiagnostics_Notification" />
+        </namespace>
+        <namespace name="Common_PhoneTelematics" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCallHandling_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCallHandling_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPremiumAudio_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPremiumAudio_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPremiumAudio_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPremiumAudio_SetRequest" />
+        </namespace>
+        <namespace name="OTA" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCancelDownload_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCancelDownload_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeviceInstall_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeviceInstall_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDownloadStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDownloadStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeviceInstall_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeviceInstall_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTvmVehicleInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTvmVehicleInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpLocalStorage_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpLocalStorage_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDownloadSoftware_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDownloadSoftware_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpCancelDownload_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpCancelDownload_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeletedSoftware_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeletedSoftware_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTvmVehicleInfo_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTvmVehicleInfo_Response" />
+        </namespace>
+        <namespace name="Positioning" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpDeadReckonedPosition_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpDeadReckonedPosition_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGNSSPositionData_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGNSSPositionData_Response" />
+        </namespace>
+        <namespace name="Telematics" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpClimateTimers_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpClimateTimers_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpClimateTimers_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpClimateTimers_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRescueStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRescueStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCar_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCar_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTextMessage_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTextMessage_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTNStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTNStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_Request" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_Request" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpRescueStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpRescueStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpGenericSettingSynch_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpGenericSettingSynch_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSVTStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSVTStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHWarning_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHWarning_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpIHUSystemInfo_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpIHUSystemInfo_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpPositionData_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpPositionData_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceBooking_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceBooking_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpUserPrivacySettings_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpUserPrivacySettings_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCarConfirmation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCarConfirmation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSVTStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSVTStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSendToCarConfirmation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSendToCarConfirmation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceActivation_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceActivation_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpServiceActivation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpServiceActivation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTNStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTNStatus_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHPackageUploaded_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHPackageUploaded_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSoHPacketSend_SetRequestNoReturn" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSoHPacketSend_SetRequestNoReturn" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpSubscriptionActivation_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpSubscriptionActivation_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTelematicSettings_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTelematicSettings_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpTelematicSettings_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpTelematicSettings_SetRequest" />
+        </namespace>
+        <namespace name="WLAN" comment="">
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPConnDev_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPConnDev_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPPasswd_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPPasswd_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPSSID_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPSSID_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPPasswd_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPPasswd_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANFreqBandSelect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANFreqBandSelect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPConnDev_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPConnDev_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPSSID_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPSSID_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANAPStatusSettings_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANAPStatusSettings_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANChannelFreqInfo_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANChannelFreqInfo_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANFreqBandSelect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANFreqBandSelect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANMode_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANMode_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAConnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAConnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAConnect_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAConnect_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTADisconnect_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTADisconnect_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAForgetRememberedNetwk_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAForgetRememberedNetwk_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAForgetRememberedNetwk_SetRequest" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAForgetRememberedNetwk_SetRequest" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTARememberedNetwks_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTARememberedNetwks_Response" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAStatus_Notification" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAStatus_Notification" />
+          <variable anlyzLocal="2" readOnly="false" valueSequence="false" unit="" name="OpWLANSTAStatus_Response" comment="" bitcount="0" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOpWLANSTAStatus_Response" />
+        </namespace>
+      </namespace>
+      <struct name="StructAPNConfiguration" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="apnName" comment="" bitcount="528" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="username" comment="" bitcount="264" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="password" comment="" bitcount="264" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructChannelCorrectionData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="pseudoRangeMetres" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pseudoRangeMillimetres" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="rangeRate" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pseudoRangeCorrectionData" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="selfEphemerisPredictionTime" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWorkshopWlanDetected_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="mode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="nomadicDevicePresent" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructChannelData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="prn" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="trackingStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="svacc" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="snr" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="azimuthAngle" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="elevationAngle" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="extendedData" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructExtendedChannelData" />
+      </struct>
+      <struct name="StructExtendedChannelData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="data" comment="" bitcount="160" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructChannelCorrectionData" />
+      </struct>
+      <struct name="StructOpConnectivityStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="generalConnectivityAvailable" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpDeviceInstall_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installProgress_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installProgress" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installedList_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installedList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installedList" comment="" bitcount="37600" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="376" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructInstalledData" />
+        </structMember>
+      </struct>
+      <struct name="StructOpAccessRightPinCode_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="pinCodeChangeAllowed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpGenericSettingSynch_Request" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="settingIDs" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructCoordinatesLongLat" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="longitude" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="latitude" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOperatorSelection" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="setOperator" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNwOperatorId" />
+      </struct>
+      <struct name="StructAPNSelection" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="automatic" comment="" bitcount="1057" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAutomaticAPNConfiguration" />
+        <structMember relativeOffset="0" byteOrder="0" name="manual" comment="" bitcount="1056" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAPNConfiguration" />
+        <structMember relativeOffset="0" byteOrder="0" name="autoFailed" comment="" bitcount="1057" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAutomaticAPNConfiguration" />
+      </struct>
+      <struct name="StructOpCurrentDoIPState_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="doIPState" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="doIPMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="doIPPhase" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPositionData_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="position" comment="" bitcount="352" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSimpleVehiclePosition" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlUSB_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructGNSSUsage" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="gpsIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="glonassIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="galileoIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbasIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="qzssL1IsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="qzssL1SAIFIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpDownloadSoftware_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="downloadList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="downloadList" comment="" bitcount="31200" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="312" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUUID" />
+        </structMember>
+      </struct>
+      <struct name="StructAudioStatus" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="micStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="speakerStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructNrOfSatellitesPerSystem" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="gps" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="glonass" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="galileo" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbas" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="qzssL1" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="qzssL1SAIF" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpGNSSPositionData_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="gnssPositionData" comment="" bitcount="49832" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructGNSSData" />
+      </struct>
+      <struct name="StructInstalledData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="identifier" comment="" bitcount="344" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPartIdentifier" />
+        <structMember relativeOffset="0" byteOrder="0" name="fileStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpIHUSystemInfo_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="softwareVersion" comment="" bitcount="184" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="mapBaseVersion" comment="" bitcount="184" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="mapIncrement" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="typeOfPackage" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="failedFetchBooking" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="failedServiceIP" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpAbortRemoteDiagnostics_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="abort" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpConnectWorkshopWlan_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="connectionResult" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlBT_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructNwOperatorId" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="mcc" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="mnc" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructRegisterState" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="registered" comment="" bitcount="392" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNetworkOperator" />
+        <structMember relativeOffset="0" byteOrder="0" name="regRoaming" comment="" bitcount="392" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNetworkOperator" />
+      </struct>
+      <struct name="StructAvailableNetworkInformation" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="signalStrength" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="securityType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="rememberedSSID" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpCurrentInternetSource_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentinternetsource" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpRequestUserAuthentication_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="userAuthCredentials" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructAutomaticAPNConfiguration" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="configuration_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="configuration" comment="" bitcount="1056" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAPNConfiguration" />
+      </struct>
+      <struct name="StructOpPSIMPhoneOperationMode_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="mode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructGNSSStatus" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="fixType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="dgpsIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="selfEphemerisDataUsage" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpDownloadStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="downloadStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="downloadList_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="downloadList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="downloadList" comment="" bitcount="37700" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="377" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSoftwareProduct" />
+        </structMember>
+      </struct>
+      <struct name="StructOpCallHandling_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="action" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="callId_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="callId" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpGenericSettingSynch_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings" comment="" bitcount="415200" isSigned="true" encoding="65001" type="genericarray" arrayLength="50">
+          <elementPrototype name="Prototype" comment="" bitcount="8304" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSetting" />
+        </structMember>
+      </struct>
+      <struct name="StructOpSubscriptionActivation_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="newStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="activationCode_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="activationCode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructDRVehiclePosition" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="drPosition" comment="" bitcount="480" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDRPositionData" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlUSB_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMNetworkOperatorCommand_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="cmd" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOperatorSelection" />
+      </struct>
+      <struct name="StructClimateTimer" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="id" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="timerStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="timerType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="days_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="days" comment="" bitcount="224" isSigned="true" encoding="65001" type="genericarray" arrayLength="7">
+          <elementPrototype name="Prototype" comment="" bitcount="32" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOnOff" />
+        </structMember>
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+      </struct>
+      <struct name="StructOpPSIMEnterCode_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="command" comment="" bitcount="472" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPinPukCommand" />
+      </struct>
+      <struct name="StructClimateTimerError" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="setTimersError" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="getTimerError" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMUssd_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="ussd" comment="" bitcount="1304" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="language" comment="" bitcount="48" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructGeographicalPosition" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="longLat" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructCoordinatesLongLat" />
+        <structMember relativeOffset="0" byteOrder="0" name="altitude" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpCancelDownload_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="software" comment="" bitcount="312" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUUID" />
+      </struct>
+      <struct name="StructOpDeadReckonedPosition_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="position" comment="" bitcount="512" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDRVehiclePosition" />
+      </struct>
+      <struct name="StructOpConnectivityStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="generalConnectivityAvailable" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpCurrentDoIPConnection_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentDoIPConn" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSoHPacketSend_SetRequestNoReturn" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sbTrigger" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbText_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbText" comment="" bitcount="64" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbMainCause_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbMainCause" comment="" bitcount="856" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSBWarning" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbWarnings_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbWarnings" comment="" bitcount="218280" isSigned="true" encoding="65001" type="genericarray" arrayLength="255">
+          <elementPrototype name="Prototype" comment="" bitcount="856" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSBWarning" />
+        </structMember>
+      </struct>
+      <struct name="StructOpTEMRadioMode_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="requestedMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructDateTime" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="year" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="month" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="day" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="hour" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="minute" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="second" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructDOPValues" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="hdop" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="vdop" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pdop" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="tdop" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpCancelDownload_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMResetDataCounter_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="counter" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSubscriptionActivation_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANAPConnDev_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentConnDevices_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentConnDevices" comment="" bitcount="2240" isSigned="true" encoding="65001" type="genericarray" arrayLength="8">
+          <elementPrototype name="Prototype" comment="" bitcount="280" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructWLANConnDevice" />
+        </structMember>
+      </struct>
+      <struct name="StructPinPukCommand" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="enterPin" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="enterPuk" comment="" bitcount="176" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPinPukCodes" />
+        <structMember relativeOffset="0" byteOrder="0" name="changePin" comment="" bitcount="176" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPinPinCodes" />
+      </struct>
+      <struct name="StructUUID" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="uuid" comment="" bitcount="312" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructDRPositionData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="longLat" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructCoordinatesLongLat" />
+        <structMember relativeOffset="0" byteOrder="0" name="heading" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="speedKmph" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="hdopX10" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="numSat" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="fixTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="fixType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="drType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="drDistance" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlBT_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructGNSSData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="utcTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="gpsTime" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructGPSSystemTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="position" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructGeographicalPosition" />
+        <structMember relativeOffset="0" byteOrder="0" name="movement" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructVelocity" />
+        <structMember relativeOffset="0" byteOrder="0" name="heading" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="gnssStatus" comment="" bitcount="6" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructGNSSUsage" />
+        <structMember relativeOffset="0" byteOrder="0" name="positioningStatus" comment="" bitcount="34" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructGNSSStatus" />
+        <structMember relativeOffset="0" byteOrder="0" name="satelliteInfo" comment="" bitcount="384" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSatelliteUsage" />
+        <structMember relativeOffset="0" byteOrder="0" name="precision" comment="" bitcount="128" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDOPValues" />
+        <structMember relativeOffset="0" byteOrder="0" name="receiverChannels_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="receiverChannels" comment="" bitcount="48768" isSigned="true" encoding="65001" type="genericarray" arrayLength="127">
+          <elementPrototype name="Prototype" comment="" bitcount="384" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructChannelData" />
+        </structMember>
+      </struct>
+      <struct name="StructOpCurrentInternetSource_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentinternetsource" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpCurrentJ2534Session_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sessionStatus" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructGPSSystemTime" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="weekNumber" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="timeOfWeek" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMMessage_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sender_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sender" comment="" bitcount="424" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="number" comment="" bitcount="344" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="body" comment="" bitcount="4024" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="date" comment="" bitcount="344" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="344" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructInstallationData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="identifier" comment="" bitcount="344" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPartIdentifier" />
+        <structMember relativeOffset="0" byteOrder="0" name="name" comment="" bitcount="4024" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUri" />
+        <structMember relativeOffset="0" byteOrder="0" name="rebootNeeded" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructNetworkOperator" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="id" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNwOperatorId" />
+        <structMember relativeOffset="0" byteOrder="0" name="name" comment="" bitcount="264" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="type" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="ciphering" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOnOff" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="value" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpDLCConnectedSignal_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="dlcConnected" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpServiceBooking_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sbTrigger" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbText_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbText" comment="" bitcount="64" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbWarning_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sbWarning" comment="" bitcount="856" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSBWarning" />
+        <structMember relativeOffset="0" byteOrder="0" name="dtcWarning_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="dtcWarning" comment="" bitcount="856" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSBWarning" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlUSB_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpClimateTimers_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="timestamp" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="timers_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="timers" comment="" bitcount="16864" isSigned="true" encoding="65001" type="genericarray" arrayLength="31">
+          <elementPrototype name="Prototype" comment="" bitcount="544" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructClimateTimer" />
+        </structMember>
+        <structMember relativeOffset="0" byteOrder="0" name="errorMessage" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructClimateTimerError" />
+      </struct>
+      <struct name="StructOpClimateTimers_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="timestamp" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="timers_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="timers" comment="" bitcount="16864" isSigned="true" encoding="65001" type="genericarray" arrayLength="31">
+          <elementPrototype name="Prototype" comment="" bitcount="544" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructClimateTimer" />
+        </structMember>
+      </struct>
+      <struct name="StructOpCurrentInternetSource_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentinternetsource" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpGenericSettingSynch_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings" comment="" bitcount="415200" isSigned="true" encoding="65001" type="genericarray" arrayLength="50">
+          <elementPrototype name="Prototype" comment="" bitcount="8304" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSetting" />
+        </structMember>
+      </struct>
+      <struct name="StructOpDeletedSoftware_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="deletedSoftware_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="deletedSoftware" comment="" bitcount="34400" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="344" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructPartIdentifier" />
+        </structMember>
+      </struct>
+      <struct name="StructOpDeviceInstall_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="installCommand" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installList_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="installList" comment="" bitcount="436900" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="4369" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructInstallationData" />
+        </structMember>
+      </struct>
+      <struct name="StructOpFactoryDefaultRestore_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="restorationResult" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMSecurity_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="setting" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pin" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpGenericSettingSynch_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="time" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="settings" comment="" bitcount="415200" isSigned="true" encoding="65001" type="genericarray" arrayLength="50">
+          <elementPrototype name="Prototype" comment="" bitcount="8304" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSetting" />
+        </structMember>
+      </struct>
+      <struct name="StructOpInternetGateway_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="internetGateway" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpInternetGateway_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="internetGateway" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpInternetSourceCtrlBT_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpLocalStorage_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="available" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPremiumAudio_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="premiumAudioStatus" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAudioStatus" />
+      </struct>
+      <struct name="StructOpPremiumAudio_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="isRequested" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMConnect_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMConnect_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="onOff" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMConnectionStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="technology" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMConnectionStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="technology" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpTextMessage_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sourceStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="source_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="source" comment="" bitcount="264" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="text" comment="" bitcount="1144" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpTvmVehicleInfo_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="utcTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+      </struct>
+      <struct name="StructOpPSIMDataCounter_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="byteCount" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="counter" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="dateTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+      </struct>
+      <struct name="StructOpWLANMode_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMNetworkConfiguration_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="selection" comment="" bitcount="3202" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAPNSelection" />
+      </struct>
+      <struct name="StructOpPSIMNetworkConfiguration_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="selection" comment="" bitcount="3202" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAPNSelection" />
+      </struct>
+      <struct name="StructOpPSIMNetworkOperatorCommand_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOperatorSelection" />
+        <structMember relativeOffset="0" byteOrder="0" name="operatorSelectionResult" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMNetworkOperatorCommand_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructOperatorSelection" />
+        <structMember relativeOffset="0" byteOrder="0" name="operatorSelectionResult" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMNetworkOperators_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="operators_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="operators" comment="" bitcount="7840" isSigned="true" encoding="65001" type="genericarray" arrayLength="20">
+          <elementPrototype name="Prototype" comment="" bitcount="392" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNetworkOperator" />
+        </structMember>
+      </struct>
+      <struct name="StructOpPSIMRegisterState_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="registerState" comment="" bitcount="816" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructRegisterState" />
+      </struct>
+      <struct name="StructOpPSIMResetDataCounter_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="byteCount" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="counter" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMRoamingConfiguration_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="roamingAllowed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMRoamingConfiguration_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="roamingAllowed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMSecurity_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="setting" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANAPSSID_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANcurrentSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANAPSSID_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANnewSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructWGS84SimplePositionData" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="longLat" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructCoordinatesLongLat" />
+        <structMember relativeOffset="0" byteOrder="0" name="fixTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+        <structMember relativeOffset="0" byteOrder="0" name="fixType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="drType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMSignalStrength_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="rssi" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpPSIMState_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="96" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSimStatus" />
+        <structMember relativeOffset="0" byteOrder="0" name="simID_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="simID" comment="" bitcount="184" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpPSIMUssd_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="ussdStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="ussd" comment="" bitcount="2424" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUssdReturnCode" />
+      </struct>
+      <struct name="StructOpRemoteDiagnosticInfo_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="remoteDiagInfo" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpTextFromOperatorToUser_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="textChatMessage" comment="" bitcount="2072" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANChannelFreqInfo_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANChannelInfo" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructWLANChannelInfo" />
+      </struct>
+      <struct name="StructOpRemoteDiagnosticLink_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="remoteDiagLink" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpRequestRemoteDiagnostics_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="request" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpRequestUserAuthentication_Request" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="operatorName" comment="" bitcount="2064" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="serviceOrg" comment="" bitcount="2064" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="sessionSafetyCode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpRescueStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="raStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="eaStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sdnStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="voiceStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="voiceSource" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="messageStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="buttonStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="psapConfirmStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="backupAudioStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpRescueStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="raStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="eaStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sdnStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="voiceStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="voiceSource" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="messageStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="buttonStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="psapConfirmStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="backupAudioStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpTEMRadioMode_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSendToCar_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="requestId" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="longLat" comment="" bitcount="64" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructCoordinatesLongLat" />
+        <structMember relativeOffset="0" byteOrder="0" name="name" comment="" bitcount="264" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="description" comment="" bitcount="824" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="gpxFile" comment="" bitcount="8388624" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpSendToCarConfirmation_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="confirmation" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="confirmedId" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSendToCarConfirmation_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="confirmation" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="confirmedId" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSoHPackageUploaded_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="packetID" comment="" bitcount="344" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="result" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructSetting" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="id" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="sType" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="length" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="value" comment="" bitcount="8208" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpServiceActivation_Response" comment="" />
+      <struct name="StructOpServiceActivation_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="service" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="action" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSoHWarning_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="sbWarning" comment="" bitcount="856" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSBWarning" />
+      </struct>
+      <struct name="StructOpTNStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="tnStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANSTAConnect_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="wLANConnectStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructSoftwareProduct" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="id" comment="" bitcount="312" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUUID" />
+        <structMember relativeOffset="0" byteOrder="0" name="downloadState" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="progress_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="progress" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSubscriptionActivation_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="status" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpSVTStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="svtStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructSimpleVehiclePosition" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wgs84" comment="" bitcount="320" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructWGS84SimplePositionData" />
+      </struct>
+      <struct name="StructOpSVTStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="svtStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpTelematicSettings_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="telemSetting" comment="" bitcount="1" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructTelemSettings" />
+      </struct>
+      <struct name="StructOpTelematicSettings_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="telemSetting_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="telemSetting" comment="" bitcount="1" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructTelemSettings" />
+      </struct>
+      <struct name="StructOpTEMIdentification_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="imei" comment="" bitcount="144" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="wifiMac_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wifiMac" comment="" bitcount="208" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="serialNr" comment="" bitcount="144" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpTextFromUserToOperator_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="textChatMessage" comment="" bitcount="2072" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpTNStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="tnStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpTunerFrequencies_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="frequencies_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="frequencies" comment="" bitcount="320" isSigned="true" encoding="65001" type="genericarray" arrayLength="10">
+          <elementPrototype name="Prototype" comment="" bitcount="32" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructRadioFrequencyHz" />
+        </structMember>
+      </struct>
+      <struct name="StructOpTvmVehicleInfo_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="utcTime" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructDateTime" />
+      </struct>
+      <struct name="StructOpUpdateDaCMode_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="updateDaCMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpUserPrivacySettings_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="userPrivacySetting" comment="" bitcount="2" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructUserPrivacySettings" />
+      </struct>
+      <struct name="StructOpWLANAPConnDev_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentConnDevices_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentConnDevices" comment="" bitcount="2240" isSigned="true" encoding="65001" type="genericarray" arrayLength="8">
+          <elementPrototype name="Prototype" comment="" bitcount="280" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructWLANConnDevice" />
+        </structMember>
+      </struct>
+      <struct name="StructOpWLANAPPasswd_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentPassword" comment="" bitcount="536" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructUri" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="uri" comment="" bitcount="4024" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANAPPasswd_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANNewPassword" comment="" bitcount="536" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANAPStatusSettings_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANAPCurrentStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentPassword" comment="" bitcount="536" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="numberOfConnectedDevices" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentUsedFrequencyBand" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANFreqBandSelect_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANCurrentFrequencyBand" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableFrequencyList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableFrequencyList" comment="" bitcount="32" isSigned="true" encoding="65001" type="genericarray" arrayLength="1">
+          <elementPrototype name="Prototype" comment="" bitcount="32" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructWLANFrequencyBand" />
+        </structMember>
+      </struct>
+      <struct name="StructWLANFrequencyBand" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="value" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANFreqBandSelect_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANNewFrequencyBand" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANMode_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANSTAConnect_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANPassword" comment="" bitcount="536" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="newSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructVelocity" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="speed" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="horizontalVelocity" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="verticalVelocity" comment="" bitcount="32" isSigned="true" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructWLANConnDevice" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="deviceName" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANMode_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANSTADisconnect_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANConnectStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANSTAForgetRememberedNetwk_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANSSIDToForgetStatus" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructWLANChannelInfo" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wlan24GhzChannelNumber" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wLANChWidth" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructOpWLANSTAForgetRememberedNetwk_SetRequest" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANSSIDToForget" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructOpWLANSTARememberedNetwks_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="wLANRememberedNetworksSSIDList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="wLANRememberedNetworksSSIDList" comment="" bitcount="14000" isSigned="true" encoding="65001" type="genericarray" arrayLength="50">
+          <elementPrototype name="Prototype" comment="" bitcount="280" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructSSID" />
+        </structMember>
+      </struct>
+      <struct name="StructOpWLANSTAStatus_Notification" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="notifyConnectionStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableNetworkInfoList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableNetworkInfoList" comment="" bitcount="34500" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="345" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAvailableNetworkInformation" />
+        </structMember>
+      </struct>
+      <struct name="StructOpWLANSTAStatus_Response" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="currentWLANSTAMode" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentConnectionStatus" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentUsedSSID_optionalIsUsed" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="currentUsedSSID" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableNetworkInfoList_actualSize" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="availableNetworkInfoList" comment="" bitcount="34500" isSigned="true" encoding="65001" type="genericarray" arrayLength="100">
+          <elementPrototype name="Prototype" comment="" bitcount="345" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructAvailableNetworkInformation" />
+        </structMember>
+      </struct>
+      <struct name="StructPartIdentifier" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="partID" comment="" bitcount="344" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructPinPukCodes" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="puk" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="newpin" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructPinPinCodes" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="oldpin" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+        <structMember relativeOffset="0" byteOrder="0" name="newpin" comment="" bitcount="88" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructRadioFrequencyHz" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="value" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructSatelliteUsage" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="nrOfSatellitesVisible" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNrOfSatellitesPerSystem" />
+        <structMember relativeOffset="0" byteOrder="0" name="nrOfSatellitesUsed" comment="" bitcount="192" isSigned="true" encoding="65001" type="struct" structDefinition="_VCCIP::StructNrOfSatellitesPerSystem" />
+      </struct>
+      <struct name="StructSBWarning" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="id" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="txtMessage" comment="" bitcount="824" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructSimStatus" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="choice" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pinBlocked" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="pinRequired" comment="" bitcount="32" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructSSID" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="value" comment="" bitcount="280" isSigned="false" encoding="65001" type="string" />
+      </struct>
+      <struct name="StructTelemSettings" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="keylockEnabled" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructUserPrivacySettings" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="carStatUploadEn" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+        <structMember relativeOffset="0" byteOrder="0" name="locationServicesEn" comment="" bitcount="1" isSigned="false" encoding="65001" type="int" />
+      </struct>
+      <struct name="StructUssdReturnCode" comment="">
+        <structMember relativeOffset="0" byteOrder="0" name="ussdReturnCode" comment="" bitcount="2424" isSigned="false" encoding="65001" type="string" />
+      </struct>
+    </namespace>
+  </namespace>
+</systemvariables>

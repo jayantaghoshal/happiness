@@ -1,0 +1,65 @@
+/*@!Encoding:1252*/
+// Should be included in SWSM Node
+
+variables
+{
+  
+}
+// TODO: Remove timer and revert to 'on linMessage SwsmLin20Fr01' when SWI regarding 
+// single lin messages is fixed 
+on LinMessage CCSMLIN19Fr1_LIN19
+{
+  $Btn1ForUsrSwtPanFrntReq_LIN19 =0;
+  $Btn2ForUsrSwtPanFrntReq_LIN19 =0;
+  $Btn3ForUsrSwtPanFrntReq_LIN19 =0;
+  $Btn4ForUsrSwtPanFrntReq_LIN19 =0;
+  $Btn5ForUsrSwtPanFrntReq_LIN19 =0;
+  $CCSMBtn6_LIN19 =0;
+  $DiagcCCSM_LIN19 =0;
+  $RotyDirReq1_LIN19=0;
+  $RotyPosReq1_LIN19=0;
+  
+  @sysvar::CCSM::Panel::Input::NextBtn = 0;
+  @sysvar::CCSM::Panel::Input::PlayPauseBtn = 0;
+  @sysvar::CCSM::Panel::Input::PreviousBtn = 0;
+  @sysvar::CCSM::Panel::Input::VolDownBtn = 0;
+  @sysvar::CCSM::Panel::Input::VolUpBtn = 0;
+}
+
+on sysvar sysvar::CCSM::Panel::Input::PlayPauseBtn
+{
+  if(@sysvar::CCSM::Panel::Input::PlayPauseBtn == 1){
+    $Btn1ForUsrSwtPanFrntReq_LIN19 = 1;
+  }
+}
+
+on sysvar sysvar::CCSM::Panel::Input::PreviousBtn
+{
+  if(@sysvar::CCSM::Panel::Input::PreviousBtn == 1){
+    $Btn2ForUsrSwtPanFrntReq_LIN19 = 1;
+  }
+}
+
+on sysvar sysvar::CCSM::Panel::Input::NextBtn
+{
+  if(@sysvar::CCSM::Panel::Input::NextBtn == 1){
+    $Btn3ForUsrSwtPanFrntReq_LIN19 = 1;
+  }
+}
+
+on sysvar sysvar::CCSM::Panel::Input::VolDownBtn
+{
+  if(@sysvar::CCSM::Panel::Input::VolDownBtn == 1){
+    $RotyDirReq1_LIN19 = 2;
+    $RotyPosReq1_LIN19 = 1;
+
+  }
+}
+
+on sysvar sysvar::CCSM::Panel::Input::VolUpBtn
+{
+  if(@sysvar::CCSM::Panel::Input::VolUpBtn == 1){
+    $RotyDirReq1_LIN19 = 1;
+    $RotyPosReq1_LIN19 = 1;
+  }
+}

@@ -1,0 +1,218 @@
+/*@!Encoding:1252*/
+includes
+{  
+  #include "Ethernet.cin"
+}
+
+variables
+{  
+  long res;
+  _align(1) struct myEthernetPacket
+  {
+    struct EthHeader eth;
+    BYTE   payload[1500];
+  };
+}
+
+on preStart{
+  BYTE emptyMacId[6];
+  byte BroadcastMacId[6]={0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}; 
+  //byte IHUMacId[6]={0x02,0x00,0x00,0x02,0x12,0x02}; 
+
+  EthReceiveRawPacket( 7, emptyMacId, BroadcastMacId  , 0x0800, "OnBroadcastPacket" );
+}
+
+on start
+{ 
+  res = VCCIP_initalize();
+  if (res != 0)
+    write( "Unable to load VCC IP CP interaction layer" );
+  else{
+    write("dll configured");
+  }
+       
+}
+
+
+void OnBroadcastPacket( LONG channel, LONG dir, LONG size, struct myEthernetPacket packet )
+{
+  BYTE rx_data[256];
+  LONG rx_length;
+  long headerOffset=14+20+8+16;//Ethernet + Ipv4 + UDP + VCCIP
+  long time[9];
+  dword serviceId=0xA9;
+  dword operationId=0x0902;
+  dword operationType=0x05; 
+  
+  if (dir == RX) 
+  {
+    //Filter out GNSS packets
+    if (  (packet.payload[9] == 0x11 /*UDP*/) &&
+          (packet.payload[20] == 0xC3) && (packet.payload[21] == 0x50) /*Port=50000*/ &&
+          (packet.payload[28] == 0xFF) && (packet.payload[29] == 0xFF) /*ServiceId*/ &&
+          (packet.payload[30] == 0xFF) && (packet.payload[31] == 0x01) /*OperationId*/&&
+          (packet.payload[41] == 0x06) //Operation type
+      )    
+    {
+      //Payload is Ethernet packet containing IPLM data.
+      write("got Data");
+      @sysvar::Test::IPLM_VCM++;
+      
+      /*
+      rx_length = EthGetThisData( headerOffset, elCount(rx_data), rx_data );
+      
+      res = VCCIP_decode(serviceId,operationId,operationType,rx_length,rx_data);
+      if (res != 0)
+      {
+        write( "VCCIP_decode: res=%d", res );
+        return;
+      }  
+  
+      // Copy system variables' values from namespace RX to TX
+      res = VCCIP_copyRxToTx( serviceId, operationId, operationType );    
+      if (res != 0)
+      {
+        write( "VCCIP_copyRxToTx: res=%d", res );
+        return;
+      }
+          
+      // Update date/time in namespace TX for message "GNSS Position Data - Notification"
+      getLocalTime(time);       
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.year    = time[5] + 1900;
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.month   = time[4] + 1;
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.day     = time[3];
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.hour    = time[2];
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.minute  = time[1];
+      @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.second  = time[0];
+      
+      @GNSSPanel::sendGnss++; //Triggers sending, and can be used for calculating messages.*/
+    }
+  }
+}
+
+/*///////////////////////////////////////////////////////
+The code below is old, but it shows a good example on how to use the node-layer dll in a much cleaner way than above.
+The code above was added due to the the fact that as of at least CANoe 8.5 it is not possible to have two adapters on the same range of IP numbers.
+So if you want to simulate functionality against one node only, you probably want to use the code below.
+But if you want to act "man in the middle" you probably need to use the code above.
+/Tomas Marklund 2015-05-29
+*///////////////////////////////////////////////////////
+
+/*
+variables
+{
+  dword socket_udp;  
+  long res;
+  
+  char recvBufferUdp[4096];  
+  const dword BROADCAST = 0xFFFFFFFF;    
+  
+  //long counter;
+}
+
+
+
+
+on stopMeasurement
+{
+    closeSocketUdp();
+}
+
+void openSocketUdp()
+{
+  socket_udp = udpOpen( 0, 50000 ); // address=0, port=50000
+  
+  if (socket_udp == 0)
+  {
+    write( "UDP ERROR: trying to open UDP socket" );
+    return;
+  }
+
+  if (getMessageUdp() == 0)  
+    write( "UDP socket successfully opened (receiver)" );
+  else
+    write( "Error: failed opening UDP socket (receiver)" );
+}
+ 
+int getMessageUdp()
+{  
+  res = UdpReceiveFrom( socket_udp, recvBufferUdp, 4096 );
+  if (res != 0)
+  {
+    res = IpGetLastSocketError(socket_udp);
+    if (res != 997)
+    {
+      write("UDP ERROR: socketErrorCode=%d", res);    
+      return -1;
+    }
+  }
+  return 0;
+}
+
+void closeSocketUdp()
+{  
+  res = udpClose(socket_udp);  
+}
+
+
+void OnUdpReceiveFrom( dword socket, long result, dword address, dword port, char buffer[], dword size)
+{ 
+  dword serviceId;
+  dword operationId;
+  dword operationType;  
+  dword length;  
+  long time[9];
+  byte data[1000];
+  dword encodedLength; 
+  char errMsg[1000];
+  
+  if (port != 50000)
+  {
+    write( "Wrong port" );
+    return;
+  }  
+  
+  //
+  // VCC IP header using function
+  //  
+  res = VCCIP_convertToVccIpMessage( port, size, buffer, serviceId, operationId, operationType, elcount(data), data, length );      
+  if (res != 0)
+  {
+    write( "VCCIP_convertToVccIpMessage: res=%d", res );
+    return;
+  }   
+
+  // Check if message is "GNSS Position Data - Notification"
+  if ((serviceId == 0xA9) && (operationId == 0x0902) && (operationType == 0x05))
+  { 
+    write("GNSS data recieved");
+    // write content to Rx system variables
+    res = VCCIP_decode( serviceId, operationId, operationType, length, data );    
+    if (res != 0)
+    {
+      write( "VCCIP_decode: res=%d", res );
+      return;
+    }    
+    // Copy system variables' values from namespace RX to TX
+    res = VCCIP_copyRxToTx( serviceId, operationId, operationType );    
+    if (res != 0)
+    {
+      write( "VCCIP_copyRxToTx: res=%d", res );
+      return;
+    }
+        
+    // Update date/time in namespace TX for message "GNSS Position Data - Notification"
+    getLocalTime(time);       
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.year    = time[5] + 1900;
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.month   = time[4] + 1;
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.day     = time[3];
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.hour    = time[2];
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.minute  = time[1];
+    @_VCCIP::tx_::Positioning::OpGNSSPositionData_Response.gnssPositionData.utcTime.second  = time[0];
+    
+    @GNSSPanel::sendGnss++;
+    write( "Send GNSS on IHU-Net (%d)", @GNSSPanel::sendGnss );
+  }
+  getMessageUdp();  
+}
+*/

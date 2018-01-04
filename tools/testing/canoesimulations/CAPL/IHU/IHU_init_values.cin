@@ -1,0 +1,17 @@
+/*@!Encoding:1252*/
+on preStart
+{
+  $IdPenForUnits = 1;
+  $HudActvReqPen = 1;
+  $HudActvReqSts = 1;
+  
+  $DispAndHomeBtnSts = 0;
+  $CallStsIndcn = 0;
+  $SpprtForFctInDstToManvLocn = 0;
+  $CntDwnToManvStrtInDstToManvLocn = 0;
+  $DstToManvInDstToManvLocn = 1000;
+  
+  $DrvModReq = 2;
+  $DrvrHmiUsrIfSetgPen = 1;  
+}
+

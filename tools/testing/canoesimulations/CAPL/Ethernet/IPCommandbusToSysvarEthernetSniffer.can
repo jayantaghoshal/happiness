@@ -1,0 +1,157 @@
+/*@!Encoding:1252*/
+includes
+{  
+  #include "Ethernet.cin"
+}
+
+variables
+{  
+  long res;
+  int initialized=0; 
+  _align(1) struct myEthernetPacket
+  {
+    struct EthHeader eth;
+    BYTE   payload[1500];
+  };
+  timer initializer;
+  msTimer IPLM_timer;
+  long IPLM_timer_delay = 100;
+  
+  const int IHU_IP = 8705;  //IHU: 34*256 + 01
+  const int TCAM_IP = 8193; //TCAM same IP as VCM: 32*256 +01
+  const int TEM_IP = 12305; //TEM: 48*256 +17
+  const int VGM_IP = 8194;  //VGM: 32*256 +02
+  
+}
+
+on preStart{
+  BYTE emptyMacId[6];
+  byte BroadcastMacId[6]={0xFF,0xFF,0xFF,0xFF,0xFF,0xFF}; 
+
+  EthReceiveRawPacket( 3, emptyMacId, BroadcastMacId  , 0x0800, "OnBroadcastPacket" );
+}
+
+on start
+{ 
+  configure_dll(); 
+  @sysvar::_VCCIP::rx_::IPLM::IHU::Action = 0;
+  @sysvar::_VCCIP::rx_::IPLM::IHU::Time_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::IHU::Message_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VCM::Action = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VCM::Time_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VCM::Message_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TEM::Action = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TEM::Time_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TEM::Message_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VGM::Action = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VGM::Time_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::VGM::Message_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TCAM::Action = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TCAM::Time_counter = 0;
+  @sysvar::_VCCIP::rx_::IPLM::TCAM::Message_counter = 0;
+  setTimer(IPLM_timer, IPLM_timer_delay);
+}
+
+on timer IPLM_timer{
+  @sysvar::_VCCIP::rx_::IPLM::IHU::Time_counter += 1;
+  @sysvar::_VCCIP::rx_::IPLM::VCM::Time_counter += 1;
+  @sysvar::_VCCIP::rx_::IPLM::TEM::Time_counter += 1;
+  @sysvar::_VCCIP::rx_::IPLM::VGM::Time_counter += 1;
+  @sysvar::_VCCIP::rx_::IPLM::TCAM::Time_counter += 1;
+  setTimer(IPLM_timer, IPLM_timer_delay);
+}
+
+
+
+void configure_dll(){
+  res = VCCIP_initalize();
+  if (res != 0)
+  {
+    write( "Unable to load VCC IP CP interaction layer, correct usagemode?" );
+    setTimer(initializer,10);
+  }
+  else
+  {
+    write("VCCIP dll configured");
+  }
+}
+
+
+on timer initializer
+{
+  configure_dll();
+}
+
+void OnBroadcastPacket( LONG channel, LONG dir, LONG size, struct myEthernetPacket packet )
+{
+  BYTE rx_data[256];
+  LONG rx_length;
+  long headerOffset=14+20+8+16;//Ethernet + Ipv4 + UDP + VCCIP
+  long time[9];
+  dword serviceId;
+  dword operationId;
+  dword operationType;
+  int sendIP;
+  
+  //Filter out GNSS packets
+   if (!((packet.payload[9] == 0x11 /*UDP*/) &&
+        (packet.payload[20] == 0xC3) && (packet.payload[21] == 0x50))) /*Port=50000*/
+  {
+      Return;
+  }
+  
+  if ((packet.payload[41] != 0x70) && (packet.payload[41] != 0x06)) 
+  {
+    //Payload is Ethernet packet containing VCC IP Command Bus data.
+    serviceId=(packet.payload[28]<<8)+packet.payload[29];
+    operationId=(packet.payload[30]<<8)+packet.payload[31];
+    operationType=packet.payload[41];
+    rx_length = EthGetThisData( headerOffset, elCount(rx_data), rx_data );   
+    res = VCCIP_decode(serviceId,operationId,operationType,rx_length,rx_data);
+    if (res != 0)
+    {
+      // Debug messages
+      //write("VCCIP_decode: res=%d", res );
+      //write("serviceId: %d", serviceId);
+      //write("operationId: %d", operationId);
+      //write("operationTyp: %d", operationType);
+      return;
+    }  
+  }
+  if ((packet.payload[18] == 0xFF) && (packet.payload[19] == 0xFF)){//Broadcast IP Message
+    sendIP = (int)packet.payload[14]*256 + packet.payload[15];
+    
+    switch (sendIP){
+      case (IHU_IP): 
+        @sysvar::_VCCIP::rx_::IPLM::IHU::Action = packet.payload[44];
+        @sysvar::_VCCIP::rx_::IPLM::IHU::Message_counter += 1;
+        @sysvar::_VCCIP::rx_::IPLM::IHU::Prio = packet.payload[46];
+        @sysvar::_VCCIP::rx_::IPLM::IHU::Time_counter = 0;
+        break;
+     case (TCAM_IP): 
+        @sysvar::_VCCIP::rx_::IPLM::VCM::Action = packet.payload[44];
+        @sysvar::_VCCIP::rx_::IPLM::VCM::Message_counter += 1;
+        @sysvar::_VCCIP::rx_::IPLM::VCM::Prio = packet.payload[46];
+        @sysvar::_VCCIP::rx_::IPLM::VCM::Time_counter = 0;
+        @sysvar::_VCCIP::rx_::IPLM::TCAM::Action = packet.payload[44];
+        @sysvar::_VCCIP::rx_::IPLM::TCAM::Message_counter += 1;
+        @sysvar::_VCCIP::rx_::IPLM::TCAM::Prio = packet.payload[46];
+        @sysvar::_VCCIP::rx_::IPLM::TCAM::Time_counter = 0;
+        break;
+     case (TEM_IP): 
+        @sysvar::_VCCIP::rx_::IPLM::TEM::Action = packet.payload[44];
+        @sysvar::_VCCIP::rx_::IPLM::TEM::Message_counter += 1;
+        @sysvar::_VCCIP::rx_::IPLM::TEM::Prio = packet.payload[46];
+        @sysvar::_VCCIP::rx_::IPLM::TEM::Time_counter = 0;
+        break;
+     case (VGM_IP):
+        @sysvar::_VCCIP::rx_::IPLM::VGM::Action = packet.payload[44];
+        @sysvar::_VCCIP::rx_::IPLM::VGM::Message_counter += 1;
+        @sysvar::_VCCIP::rx_::IPLM::VGM::Prio = packet.payload[46];
+        @sysvar::_VCCIP::rx_::IPLM::VGM::Time_counter = 0;
+        break;
+     default :
+        break;
+      }
+  }
+}

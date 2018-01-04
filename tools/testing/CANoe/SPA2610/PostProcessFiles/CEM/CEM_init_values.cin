@@ -1,0 +1,46 @@
+/*@!Encoding:1252*/
+on preStart
+{
+  $AhbcIndcnDisp = 0;
+  $Backbone::CEM::CEMBackBoneSignalIpdu11::AmbTRawQly = 3;
+  $Backbone::CEM::CEMBackBoneSignalIpdu11::AmbTRawVal = 23;
+  $CrashUnlckFailrSts = 2;
+
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorDrvrSts = 2;
+  $Backbone::CEM::CEMBackBoneSignalIpdu03::DoorDrvrReSts = 2;
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorPassSts = 2;
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::DoorPassReSts = 2;
+  $Backbone::CEM::CEMBackBoneSignalIpdu05::DoorBtnPsdAtDrvr = 0;
+  $Backbone::CEM::CEMBackBoneSignalIpdu06::DrvrSeatBtnPsd = 0;
+  
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::IntrBriSts = 15;
+  $ProfActProf1=-1;
+  $ProfActProf2=-1;
+  
+  $FuSnsrActvSideQly = 3;
+  $FuSnsrActvSideRawVal = 500;
+  $FuSnsrPasSideQly = 3;
+  $FuSnsrPasSideRawVal = 500;
+
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::HoodSts = 2;
+
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::IndcrTurnSts1WdSts = 0;
+
+  $Backbone::CEM::CEMBackBoneSignalIpdu03::ProfPenSts1 = 1;
+  
+  $RlyPwrDistbnCmd1WdBattSaveCmd = 1;
+  $RoofAndLiCtrl = 0;
+  
+  $SteerWhlLvrSts = 0; 
+  
+  $TankFlapSts = 2; 
+  $Backbone::CEM::CEMBackBoneSignalIpdu06::TiAndDateVld = 1;
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::TrSts = 2;
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::TwliBriSts = 1;
+  
+  $Backbone::CEM::CEMBackBoneSignalIpdu01::UsgModSts = 1;
+  
+  $Backbone::CEM::CEMBackBoneSignalIpdu05::WipgInfoWiprActv = 0;
+  $Backbone::CEM::CEMBackBoneSignalIpdu05::WipgInfoWipgSpdInfo = 0;
+  $WiprSysFailrDetdSafe = 1;
+}

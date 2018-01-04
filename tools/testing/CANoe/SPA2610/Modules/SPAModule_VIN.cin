@@ -1,0 +1,90 @@
+/*@!Encoding:1252*/
+variables
+{
+  msTimer SPAVIN_Update_Timer;
+  long SPAVIN_UpdateTime = 1000;
+  const long SPAVIN_STR_MAX_LEN = 20;
+  char SPAVIN_String[SPAVIN_STR_MAX_LEN] = "ABC";
+  long SPAVIN_StringLen = 3;
+  const long SPAVIN_BYTES_TO_SEND = 17;
+
+}
+
+on start
+{
+  write("VIN INFO: Bytes to be sent set to %d, initial send cycle set to %d ms", SPAVIN_StringLen, SPAVIN_UpdateTime);
+  setTimer(SPAVIN_Update_Timer, SPAVIN_UpdateTime * 0.5 );// Wait 0.5 to avoid common clock events, arbitrary
+}
+
+on preStart
+{
+  char defaultString[SPAVIN_STR_MAX_LEN] = "";
+  write("VIN INFO: VIN module implemented in node %NODE_NAME%");
+
+  sysGetVariableString(sysvar::_SPACommon::VIN::VINString, defaultString, SPAVIN_STR_MAX_LEN);
+  
+  strncpy(SPAVIN_String, defaultString, SPAVIN_STR_MAX_LEN);
+  SPAVIN_StringLen = strlen(SPAVIN_String);
+ 
+  SPAVIN_UpdateTime = @sysvar::_SPACommon::VIN::UpdateTime;  
+}
+
+on sysvar _SPACommon::VIN::SimulationControl
+{
+  if(@_SPACommon::VIN::SimulationControl == @_SPACommon::VIN::SimulationControl::On)
+  {
+    setTimer(SPAVIN_Update_Timer, SPAVIN_UpdateTime * 0.5 );// Wait 0.5 to avoid common clock events, arbitrary
+  }
+  else
+  {
+    cancelTimer(SPAVIN_Update_Timer);
+  }
+}
+
+on timer SPAVIN_Update_Timer
+{
+  long byteCounter;
+  long blockCounter;
+  setTimer(SPAVIN_Update_Timer, SPAVIN_UpdateTime);
+  blockCounter = @sysvar::_SPAInternal::VIN::VinBlk;
+  byteCounter = blockCounter * 7 + 1;
+  
+  if(byteCounter > SPAVIN_BYTES_TO_SEND)
+  {
+    blockCounter = 0;
+    byteCounter = 1;
+  }
+  
+  @sysvar::_SPAInternal::VIN::VinPosn1 = SPAVIN_GetByte(byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn2 = SPAVIN_GetByte(++byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn3 = SPAVIN_GetByte(++byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn4 = SPAVIN_GetByte(++byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn5 = SPAVIN_GetByte(++byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn6 = SPAVIN_GetByte(++byteCounter);
+  @sysvar::_SPAInternal::VIN::VinPosn7 = SPAVIN_GetByte(++byteCounter);
+  
+  @sysvar::_SPAInternal::VIN::VinBlk = blockCounter + 1;
+}
+
+long SPAVIN_GetByte(long byteNo)
+{
+  long returnValue;
+  If(byteNo <= SPAVIN_StringLen && byteNo <= SPAVIN_BYTES_TO_SEND)
+    returnValue = (long)SPAVIN_String[byteNo-1];
+  Else If(byteNo > SPAVIN_BYTES_TO_SEND)
+    returnValue = 0; // Reserved byte
+  Else //If(byteNo > SPAVIN_StringLen && byteNo =< SPAVIN_BYTES_TO_SEND)
+    returnValue = 0x30; //Fill out with '0' 
+  return returnValue;
+}
+
+on sysvar _SPACommon::VIN::UpdateTime
+{
+  SPAVIN_UpdateTime = @this;
+}
+
+on sysvar _SPACommon::VIN::VINString
+{
+  sysGetVariableString(this, SPAVIN_String, SPAVIN_STR_MAX_LEN);
+  SPAVIN_StringLen = strlen(SPAVIN_String);
+}

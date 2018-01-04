@@ -1,0 +1,87 @@
+/*@!Encoding:1252*/
+
+
+
+variables
+{
+  int wheel_circumference;
+  float mm_per_tic;
+  float mm_per_timestep=0;
+  float ticvalue;
+}
+
+on start
+{
+  calculateTicDistance();
+  $EngTQf=3;
+  $PitchAgGlbQf=3;
+  $RollAgGlbQf=3;
+  $SteerWhlSnsrQf=3;
+  $SuspFailrStsSuspFailrStsTypQf=3;
+  $VehSpdLgtSafeQf=3;
+}
+
+
+on sysvar sysvar::_SPACommon::CarConfig::Parameters::CC018_TYRE_ROLLING_CIRCUMFERENCE
+{
+  calculateTicDistance();
+}
+
+
+void calculateTicDistance()
+{
+  wheel_circumference=@sysvar::_SPACommon::CarConfig::Parameters::CC018_TYRE_ROLLING_CIRCUMFERENCE*5+1700;
+  mm_per_tic = wheel_circumference/96;
+}
+
+//Navi team shall uncomment this section.
+/*
+on key CursorUp
+{
+  if (@VDDM::Panel::Input::VDDM_speed_kmh<180){
+    @VDDM::Panel::Input::VDDM_speed_kmh=@VDDM::Panel::Input::VDDM_speed_kmh+10;
+  }else{
+    @VDDM::Panel::Input::VDDM_speed_kmh=180;
+  }
+}
+
+
+on key CursorDown
+{
+  if (@VDDM::Panel::Input::VDDM_speed_kmh>10){
+    @VDDM::Panel::Input::VDDM_speed_kmh=@VDDM::Panel::Input::VDDM_speed_kmh-10;
+  }else{
+    @VDDM::Panel::Input::VDDM_speed_kmh=0; 
+  }
+}
+*/
+
+on sysvar VDDM::Panel::Input::VDDM_speed_kmh
+{
+  $VehSpdLgtSafe = @this/3.6;
+  mm_per_timestep=@this*1000/(3.6*200); //5ms time interval->200 updates per second.
+  if(@this==0){
+    $VehMtnStSafe=0x3;//standstill
+  }else{
+    $VehMtnStSafe=0x5;//rolling forward
+  }
+}
+
+
+on frPDU VDDMBackBoneSignalIPdu02
+{
+  int tic;
+  
+  //ticvalue is a float value between 0 and 256, 
+  //it is needed to handle speeds lower than those that perform at least one tic per frame.
+  //It stores "fractions of tics" if you like...
+  ticvalue=ticvalue + mm_per_timestep/mm_per_tic; 
+  if (ticvalue>=256){
+    ticvalue=ticvalue-256; 
+  }
+  tic=(int)_floor(ticvalue);
+  $WhlRotToothCntrFrntLe=tic;
+  $WhlRotToothCntrFrntRi=tic;
+  $WhlRotToothCntrReLe=tic;
+  $WhlRotToothCntrReRi=tic; 
+}

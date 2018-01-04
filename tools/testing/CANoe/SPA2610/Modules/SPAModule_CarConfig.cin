@@ -1,0 +1,531 @@
+/*@!Encoding:1252*/
+variables
+{
+  char [70] SPACC_Params [long];
+  msTimer SPACC_Update_Timer;
+  long SPACC_UpdateTime = 125;
+  long SPACC_ParamsToSend = 504;
+  char SPACC_PARAM_NAMESPACE[100]  = "_SPACommon::CarConfig::Parameters";
+  char SPACC_ReleaseText[50] = "NOT INITIALIZED";
+  long SPACC_ReadFromStream = 0;
+  
+  const long SPACC_PROFILE_LENGTH = 30;
+  char SPACC_Profile[SPACC_PROFILE_LENGTH] = "SPAModule_CarConfig.ini";
+  const long SPACC_PATH_LENGTH = 256;
+  char SPACC_ProfilePath[SPACC_PATH_LENGTH] = "";
+  long SPACC_ProfilePathValid = 0;
+  const long SPACC_PROFILE_SECTION_LENGTH = 50;
+  char SPACC_ProfileSection[SPACC_PROFILE_SECTION_LENGTH]  = "PARAMETER_VALUES";
+}
+
+on start
+{
+  write("CC INFO: Parameters to be sent set to %d, initial send cycle set to %d ms", SPACC_ParamsToSend, SPACC_UpdateTime);
+  if(@_SPACommon::CarConfig::SimulationControl == @_SPACommon::CarConfig::SimulationControl::On)
+  {
+    setTimer(SPACC_Update_Timer, SPACC_UpdateTime * 0.5 );// Wait 0.5 to avoid common clock events, arbitrary
+  }
+}
+
+on preStart
+{
+  SPACC_InitHash();
+  write("CC INFO: Car Config module implemented in node %NODE_NAME%");
+  write("CC INFO: Parameters (in sysvar namespace %s) based on release %s", SPACC_PARAM_NAMESPACE, SPACC_ReleaseText);
+  
+  SPACC_UpdateTime = @_SPACommon::CarConfig::UpdateTime;
+  SPACC_ParamsToSend = @_SPACommon::CarConfig::ParamsToSend;
+  SPACC_ReadFromStream = @_SPACommon::CarConfig::ReadFromStream;
+  
+  sysGetVariableString(sysvar::_SPACommon::CarConfig::UserFile, SPACC_Profile, SPACC_PROFILE_LENGTH);
+  SPACC_UpdateProfilePath();
+  sysGetVariableString(sysvar::_SPACommon::CarConfig::Section, SPACC_ProfileSection, SPACC_PROFILE_SECTION_LENGTH);
+
+  SPACC_TestHash(@_SPACommon::CarConfig::LoadAtPreStart);
+}
+
+
+on preStop
+{
+  If (@_SPACommon::CarConfig::SaveAtPreStop)
+    SPACC_SaveProfile();
+}
+
+on sysvar _SPACommon::CarConfig::SimulationControl
+{
+  if(@_SPACommon::CarConfig::SimulationControl == @_SPACommon::CarConfig::SimulationControl::On)
+  {
+    setTimer(SPACC_Update_Timer, SPACC_UpdateTime * 0.5 );// Wait 0.5 to avoid common clock events, arbitrary
+  }
+  else
+  {
+    cancelTimer(SPACC_Update_Timer);
+  }
+}
+
+SPACC_InitHash() {
+  strncpy(SPACC_ReleaseText, "SPA_014", 50);
+  strncpy(SPACC_Params[1], "CC001_VEHICLE_TYPE", 19);
+  strncpy(SPACC_Params[2], "CC002_NUMBER_OF_DOORS", 22);
+  strncpy(SPACC_Params[3], "CC003_TRANSMISSION_DRIVELINE", 29);
+  strncpy(SPACC_Params[5], "CC005_ENGINE", 13);
+  strncpy(SPACC_Params[6], "CC006_FUEL", 11);
+  strncpy(SPACC_Params[8], "CC008_STEERING_WHEEL_POSITION", 30);
+  strncpy(SPACC_Params[9], "CC009_GEARBOX", 14);
+  strncpy(SPACC_Params[10], "CC010_GEARBOX_TYPE", 19);
+  strncpy(SPACC_Params[11], "CC011_FUEL_TANK_VOLUME", 23);
+  strncpy(SPACC_Params[12], "CC012_FUEL_TANK_SENSOR", 23);
+  strncpy(SPACC_Params[13], "CC013_PROPULSION_TYPE", 22);
+  strncpy(SPACC_Params[15], "CC015_TURBO_CONFIGURATION", 26);
+  strncpy(SPACC_Params[16], "CC016_POWER_STEERING_PERSONALISATION", 37);
+  strncpy(SPACC_Params[17], "CC017_TYRE_DIMENSION", 21);
+  strncpy(SPACC_Params[18], "CC018_TYRE_ROLLING_CIRCUMFERENCE", 33);
+  strncpy(SPACC_Params[19], "CC019_TYRE_PRESSURE_MONITORING_SYSTEM", 38);
+  strncpy(SPACC_Params[20], "CC020_TPMS_MENU_FUNCTIONS_IN_IHU", 33);
+  strncpy(SPACC_Params[22], "CC022_START_DEVICE", 19);
+  strncpy(SPACC_Params[23], "CC023_CRUISE_CONTROL", 21);
+  strncpy(SPACC_Params[24], "CC024_SEATS", 12);
+  strncpy(SPACC_Params[25], "CC025_SEAT_HEAT_CALIBRATION", 28);
+  strncpy(SPACC_Params[28], "CC028_RADIO_AMP_SPEAKER_SYSTEM", 31);
+  strncpy(SPACC_Params[29], "CC029_ELECTRIC_VEHICLE_INLET", 29);
+  strncpy(SPACC_Params[30], "CC030_BATTERY", 14);
+  strncpy(SPACC_Params[36], "CC036_ADJUSTABLE_SPEED_LIMITER", 31);
+  strncpy(SPACC_Params[37], "CC037_GEARSHIFT_INDICATOR", 26);
+  strncpy(SPACC_Params[38], "CC038_ENGINE_COOLING_FAN_PERFORMANCE", 37);
+  strncpy(SPACC_Params[39], "CC039_SHIFT_BY_WIRE", 20);
+  strncpy(SPACC_Params[40], "CC040_ACTIVE_GRILLE_AND_SPOILER_SHUTTERS", 41);
+  strncpy(SPACC_Params[41], "CC041_GEAR_SHIFT_PADDLES", 25);
+  strncpy(SPACC_Params[42], "CC042_PART_NUMBER_FORMAT", 25);
+  strncpy(SPACC_Params[43], "CC043_MAX_VEHICLE_SPEED_LIMITATION", 35);
+  strncpy(SPACC_Params[44], "CC044_STOP_IN_SPEED_VELOCITY", 29);
+  strncpy(SPACC_Params[45], "CC045_REMOTE_ENGINE_START_PRECOND", 34);
+  strncpy(SPACC_Params[46], "CC046_DIAGNOSIS_SYSTEM", 23);
+  strncpy(SPACC_Params[47], "CC047_SELECTIVE_CATALYTIC_REDUCTION", 36);
+  strncpy(SPACC_Params[50], "CC050_CHASSIS_TYPE", 19);
+  strncpy(SPACC_Params[51], "CC051_TRAILER_STABILITY_ASSIST", 31);
+  strncpy(SPACC_Params[52], "CC052_POST_IMPACT_BRAKING", 26);
+  strncpy(SPACC_Params[53], "CC053_HILL_DESCENT_CONTROL", 27);
+  strncpy(SPACC_Params[54], "CC054_WHEEL_BRAKES_TYPE_REAR", 29);
+  strncpy(SPACC_Params[55], "CC055_WHEEL_BRAKES_TYPE_FRONT", 30);
+  strncpy(SPACC_Params[56], "CC056_BRAKE_PADS", 17);
+  strncpy(SPACC_Params[57], "CC057_DRIVE_MODE", 17);
+  strncpy(SPACC_Params[58], "CC058_AIR_SUSPENSION", 21);
+  strncpy(SPACC_Params[59], "CC059_ACTIVE_SUSPENSION", 24);
+  strncpy(SPACC_Params[60], "CC060_LEVELLING_SENSOR_CONFIGURATION", 37);
+  strncpy(SPACC_Params[61], "CC061_HILL_START_ASSIST", 24);
+  strncpy(SPACC_Params[62], "CC062_FRONT_AXLE_WEIGHT", 24);
+  strncpy(SPACC_Params[63], "CC063_REAR_AXLE_WEIGHT", 23);
+  strncpy(SPACC_Params[64], "CC064_ALARM", 12);
+  strncpy(SPACC_Params[65], "CC065_INTERIOR_MOTION_SENSOR", 29);
+  strncpy(SPACC_Params[66], "CC066_INCLINATION_SENSOR", 25);
+  strncpy(SPACC_Params[67], "CC067_STEERING_COLUMN_LOCK", 27);
+  strncpy(SPACC_Params[68], "CC068_PANIC_FUNCTION", 21);
+  strncpy(SPACC_Params[69], "CC069_RETRIGG_ENABLING_IF_ALARM", 32);
+  strncpy(SPACC_Params[70], "CC070_PASSIVE_ARMING", 21);
+  strncpy(SPACC_Params[71], "CC071_FOREIGN_COMPONENT_DETECTION", 34);
+  strncpy(SPACC_Params[72], "CC072_IMMOBILISER_VARIANT", 26);
+  strncpy(SPACC_Params[73], "CC073_KEY_WARNING", 18);
+  strncpy(SPACC_Params[74], "CC074_ATTENUATION_UPHOLSTERY", 29);
+  strncpy(SPACC_Params[75], "CC075_THEFT_NOTIFICATION", 25);
+  strncpy(SPACC_Params[76], "CC076_STOLEN_VEHICLE_TRACKING", 30);
+  strncpy(SPACC_Params[77], "CC077_ASSISTANCE_SERVICES", 26);
+  strncpy(SPACC_Params[78], "CC078_HOMELINK_FREQUENCY_SETTING", 33);
+  strncpy(SPACC_Params[85], "CC085_CENTRAL_LOCK_TYPE", 24);
+  strncpy(SPACC_Params[86], "CC086_CENTRAL_LOCK_SWITCHES", 28);
+  strncpy(SPACC_Params[87], "CC087_CHILD_LOCK_REAR_DOORS", 28);
+  strncpy(SPACC_Params[88], "CC088_PRIVATE_LOCKING_LUGGAGE_COMP", 35);
+  strncpy(SPACC_Params[89], "CC089_SLAM_LOCKING", 19);
+  strncpy(SPACC_Params[90], "CC090_AUTOMATIC_LOCKING_BY_SPEED", 33);
+  strncpy(SPACC_Params[91], "CC091_TWO_STEP_UNLOCKING", 25);
+  strncpy(SPACC_Params[92], "CC092_FREQUENCY_REMOTE_CONTROLS", 32);
+  strncpy(SPACC_Params[94], "CC094_KEYLESS_ENTRY", 20);
+  strncpy(SPACC_Params[95], "CC095_VISIBLE_LOCKING_UNLOCKING", 32);
+  strncpy(SPACC_Params[96], "CC096_AUDIBLE_LOCKING_FEEDBACK", 31);
+  strncpy(SPACC_Params[97], "CC097_TRUNK_RELEASE_POP_UP", 27);
+  strncpy(SPACC_Params[98], "CC098_SELF_OPENING_BOOTLID_TAILGATE", 36);
+  strncpy(SPACC_Params[99], "CC099_HANDSFREE_OPENER_BOOTLID_TAILGATE", 40);
+  strncpy(SPACC_Params[106], "CC106_HEADLIGHTS_TYPE", 22);
+  strncpy(SPACC_Params[107], "CC107_EXTERIOR_LIGHT_LOGIC", 27);
+  strncpy(SPACC_Params[108], "CC108_DRL_TYPE", 15);
+  strncpy(SPACC_Params[109], "CC109_ACTIVE_HIGH_BEAM", 23);
+  strncpy(SPACC_Params[110], "CC110_REAR_FOGLIGHT_TOWFUNCTION", 32);
+  strncpy(SPACC_Params[111], "CC111_TOURIST_LIGHT", 20);
+  strncpy(SPACC_Params[112], "CC112_CORNERING_LIGHT", 22);
+  strncpy(SPACC_Params[113], "CC113_FOGLIGHT_FUNCTION_IN_SPOILER", 35);
+  strncpy(SPACC_Params[114], "CC114_EMERGENCY_BRAKE_LIGHT", 28);
+  strncpy(SPACC_Params[115], "CC115_FRONT_FOGLIGHT", 21);
+  strncpy(SPACC_Params[116], "CC116_DRL_TECHNOLOGY", 21);
+  strncpy(SPACC_Params[117], "CC117_DOOR_HANDLE_LIGHT", 24);
+  strncpy(SPACC_Params[118], "CC118_AUTOLIGHT_FUNCTION", 25);
+  strncpy(SPACC_Params[119], "CC119_AUXILIARY_LIGHTS", 23);
+  strncpy(SPACC_Params[120], "CC120_WINDSCREEN_WIPERS", 24);
+  strncpy(SPACC_Params[121], "CC121_HEADLIGHT_CLEANING_OPTION", 32);
+  strncpy(SPACC_Params[122], "CC122_HEATED_WINDSCREEN", 24);
+  strncpy(SPACC_Params[123], "CC123_IR_REFLECTIVE_GLASS_WINDSCREEN", 37);
+  strncpy(SPACC_Params[124], "CC124_REAR_WINDOW_WIPER", 24);
+  strncpy(SPACC_Params[125], "CC125_AUTOMATIC_LUGGAGE_CONCEALING", 35);
+  strncpy(SPACC_Params[127], "CC127_SEAT_TRACK_SENSORS", 25);
+  strncpy(SPACC_Params[128], "CC128_LAP_BELT_PRETENSIONER", 28);
+  strncpy(SPACC_Params[129], "CC129_PYRO_TECHNICAL_STEERING_COLUMN", 37);
+  strncpy(SPACC_Params[130], "CC130_ADAPTIVE_LOAD_LIMITER_FRONT", 34);
+  strncpy(SPACC_Params[131], "CC131_OCCUPANT_WEIGHT_SENSOR", 29);
+  strncpy(SPACC_Params[132], "CC132_CUT_OFF_SWITCH_PASSENGER_AIRBAG", 38);
+  strncpy(SPACC_Params[133], "CC133_KNEE_AIRBAG", 18);
+  strncpy(SPACC_Params[134], "CC134_PASSENGER_AIRBAG", 23);
+  strncpy(SPACC_Params[135], "CC135_ELECTRICAL_REVERSIBLE_RETRACTORS", 39);
+  strncpy(SPACC_Params[136], "CC136_PEDESTRIAN_PROTECTION_SYSTEM", 35);
+  strncpy(SPACC_Params[137], "CC137_THIRD_ROW_BELT_BUCKLE_DETECTION", 38);
+  strncpy(SPACC_Params[138], "CC138_SECOND_ROW_BELT_BUCKLE_DETECTION", 39);
+  strncpy(SPACC_Params[139], "CC139_BUMPER_TYPES", 19);
+  strncpy(SPACC_Params[140], "CC140_SKIDPLATE_REAR", 21);
+  strncpy(SPACC_Params[141], "CC141_NIGHT_VISION", 19);
+  strncpy(SPACC_Params[142], "CC142_PARKING_ASSISTANCE", 25);
+  strncpy(SPACC_Params[143], "CC143_DRIVER_IMPAIRMENT_MONITOR", 32);
+  strncpy(SPACC_Params[144], "CC144_DISTANCE_ALERT", 21);
+  strncpy(SPACC_Params[145], "CC145_TRAFFIC_JAM_ASSIST", 25);
+  strncpy(SPACC_Params[146], "CC146_COLLISION_MITIGATION_SUPPORT_FRONT", 41);
+  strncpy(SPACC_Params[147], "CC147_ROAD_FRICTION_INFORMATION", 32);
+  strncpy(SPACC_Params[148], "CC148_CURVE_SPEED_SUPPORT", 26);
+  strncpy(SPACC_Params[149], "CC149_ROAD_SIGN_INFORMATION", 28);
+  strncpy(SPACC_Params[150], "CC150_LANE_KEEPING_AID", 23);
+  strncpy(SPACC_Params[151], "CC151_ELECTRONIC_HORIZON", 25);
+  strncpy(SPACC_Params[152], "CC152_BLIND_SPOT_INFORMATION_SYSTEM", 36);
+  strncpy(SPACC_Params[153], "CC153_COLLISION_MITIG_WARN_REAR", 32);
+  strncpy(SPACC_Params[154], "CC154_PARKING_CAMERA", 21);
+  strncpy(SPACC_Params[155], "CC155_SPEED_WARNING", 20);
+  strncpy(SPACC_Params[156], "CC156_REAR_WIEW_MIRRORS_OUTER", 30);
+  strncpy(SPACC_Params[157], "CC157_COMBINED_INSTRUMENT", 26);
+  strncpy(SPACC_Params[158], "CC158_HEAD_UP_DISPLAY", 22);
+  strncpy(SPACC_Params[159], "CC159_SAFETY_BELT_REMINDER", 27);
+  strncpy(SPACC_Params[160], "CC160_INSTRUMENT_CLUSTER_CALIBR", 32);
+  strncpy(SPACC_Params[161], "CC161_UNIT_SETTINGS", 20);
+  strncpy(SPACC_Params[162], "CC162_SERVICE_DISTANCE", 23);
+  strncpy(SPACC_Params[163], "CC163_SERVICE_TIME", 19);
+  strncpy(SPACC_Params[164], "CC164_SERVICE_ENGINE_TIME", 26);
+  strncpy(SPACC_Params[165], "CC165_AMBIENT_TEMP_TABLES", 26);
+  strncpy(SPACC_Params[166], "CC166_EXTENDED_SPEED_INDICATION", 32);
+  strncpy(SPACC_Params[167], "CC167_TRIP_COMPUTER_AND_STATISTICS", 35);
+  strncpy(SPACC_Params[168], "CC168_SCREEN_THEMES_SKINS", 26);
+  strncpy(SPACC_Params[169], "CC169_CLEAN_COMPARTMENT", 24);
+  strncpy(SPACC_Params[170], "CC170_HVAC_REAR", 16);
+  strncpy(SPACC_Params[171], "CC171_ADDITIONAL_HEATER", 24);
+  strncpy(SPACC_Params[172], "CC172_REFRIGERANT", 18);
+  strncpy(SPACC_Params[173], "CC173_AC_COMPRESSORS", 21);
+  strncpy(SPACC_Params[174], "CC174_AIR_QUALITY_SYSTEM", 25);
+  strncpy(SPACC_Params[175], "CC175_HVAC_VARIANTS", 20);
+  strncpy(SPACC_Params[176], "CC176_REAR_VIEW_MIRROR_TYPE", 28);
+  strncpy(SPACC_Params[177], "CC177_ROOF_HATCH", 17);
+  strncpy(SPACC_Params[178], "CC178_PINCH_PROTECTION_LEVEL", 29);
+  strncpy(SPACC_Params[179], "CC179_FRONT_SEAT_VENTILATION", 29);
+  strncpy(SPACC_Params[180], "CC180_HEATED_FRONT_SEATS", 25);
+  strncpy(SPACC_Params[181], "CC181_HEATED_REAR_SEAT", 23);
+  strncpy(SPACC_Params[182], "CC182_PARKING_CLIMATE_LEVEL", 28);
+  strncpy(SPACC_Params[183], "CC183_INTERIOR_ILLUMINATION", 28);
+  strncpy(SPACC_Params[184], "CC184_POWER_SEATS", 18);
+  strncpy(SPACC_Params[185], "CC185_POWER_FOLD_RISE_3_d_ROW", 30);
+  strncpy(SPACC_Params[186], "CC186_HEATED_STEERING_WHEEL", 28);
+  strncpy(SPACC_Params[187], "CC187_HEADRESTS_2_nd_ROW_FOLDING", 33);
+  strncpy(SPACC_Params[188], "CC188_TINTED_TAILGATE_WINDOW", 29);
+  strncpy(SPACC_Params[189], "CC189_REAR_SEAT_VENTILATION", 28);
+  strncpy(SPACC_Params[190], "CC190_GLOBAL_NAVIGATION_SAT_SYSTEM_RECEIVER", 44);
+  strncpy(SPACC_Params[191], "CC191_TELEMATIC_MODULE", 23);
+  strncpy(SPACC_Params[192], "CC192_IHU_LEVEL", 16);
+  strncpy(SPACC_Params[193], "CC193_DIGITAL_RADIO_RECEIVER", 29);
+  strncpy(SPACC_Params[194], "CC194_REAR_SEAT_ENTERTAINMENT", 30);
+  strncpy(SPACC_Params[195], "CC195_REGION_IF_DVD", 20);
+  strncpy(SPACC_Params[196], "CC196_Wi_Fi_FREQUENCY_BAND", 27);
+  strncpy(SPACC_Params[197], "CC197_SYSTEM_LANGUAGE", 22);
+  strncpy(SPACC_Params[198], "CC198_SPEECH", 13);
+  strncpy(SPACC_Params[199], "CC199_SPEECH_LANGUAGE", 22);
+  strncpy(SPACC_Params[200], "CC200_Wi_Fi_FUNCTIONALITY_CONTROL", 34);
+  strncpy(SPACC_Params[201], "CC201_CONNECTIVITY", 19);
+  strncpy(SPACC_Params[202], "CC202_OWNERS_MANUAL", 20);
+  strncpy(SPACC_Params[203], "CC203_MESSAGING", 16);
+  strncpy(SPACC_Params[204], "CC204_TV_TUNER", 15);
+  strncpy(SPACC_Params[205], "CC205_DSRC_UNIT", 16);
+  strncpy(SPACC_Params[206], "CC206_DUAL_MEDIA_VICS_ANTENNA", 30);
+  strncpy(SPACC_Params[207], "CC207_VIDEO_ALLOWED", 20);
+  strncpy(SPACC_Params[209], "CC209_ROAD_AND_TRAFFIC_INFO_RTI", 32);
+  strncpy(SPACC_Params[210], "CC210_SUBWOOFER", 16);
+  strncpy(SPACC_Params[211], "CC211_TRAILER_MODULE_AFTERMARKET", 33);
+  strncpy(SPACC_Params[212], "CC212_ALCOLOCK", 15);
+  strncpy(SPACC_Params[213], "CC213_RUNNINGBOARD_ACCESSORIES", 31);
+  strncpy(SPACC_Params[214], "CC214_RESTRICTED_KEY_FUNCTION", 30);
+  strncpy(SPACC_Params[215], "CC215_DECO_TRIM_ILLUMINATION", 29);
+  strncpy(SPACC_Params[216], "CC216_ACCESSORY_GATEWAY_UNIT", 29);
+  strncpy(SPACC_Params[218], "CC218_MARKET_TELEPHONE_NETWORK", 31);
+  strncpy(SPACC_Params[219], "CC219_MICROPHONE_SETUP", 23);
+  strncpy(SPACC_Params[220], "CC220_LANGUAGE_REGION", 22);
+  strncpy(SPACC_Params[221], "CC221_CONNECTED_SERVICE_BOOKING_IF_CONNECTIVITY", 48);
+  strncpy(SPACC_Params[222], "CC222_MEDIAPLAYER", 18);
+  strncpy(SPACC_Params[223], "CC223_NAVIGATION_SYSTEM_AND_INTERNET_MAP", 41);
+  strncpy(SPACC_Params[224], "CC224_DEVICE_MIRRORING", 23);
+  strncpy(SPACC_Params[225], "CC225_TYRE_PRESSURE_LLF", 24);
+  strncpy(SPACC_Params[226], "CC226_TYRE_PRESSURE_LLR", 24);
+  strncpy(SPACC_Params[227], "CC227_TYRE_PRESSURE_LHF", 24);
+  strncpy(SPACC_Params[228], "CC228_TYRE_PRESSURE_LHR", 24);
+  strncpy(SPACC_Params[229], "CC229_TYRE_PRESSURE_HLF", 24);
+  strncpy(SPACC_Params[230], "CC230_TYRE_PRESSURE_HLR", 24);
+  strncpy(SPACC_Params[231], "CC231_TYRE_PRESSURE_HHF", 24);
+  strncpy(SPACC_Params[232], "CC232_TYRE_PRESSURE_HHR", 24);
+  strncpy(SPACC_Params[237], "CC237_DEFAULT_RIDE_HEIGHT", 26);
+  strncpy(SPACC_Params[238], "CC238_TOP_DAMPING_BRAKES", 25);
+  strncpy(SPACC_Params[239], "CC239_MASSAGE_FRONT_SEAT", 25);
+  strncpy(SPACC_Params[240], "CC240_LUMBAR_SUPPORT", 21);
+  strncpy(SPACC_Params[241], "CC241_CUSHION_EXTENSION", 24);
+  strncpy(SPACC_Params[242], "CC242_HEADRESTS_FRONT", 22);
+  strncpy(SPACC_Params[243], "CC243_POWER_ADJUSTABLE_SIDE_SUPPORT", 36);
+  strncpy(SPACC_Params[244], "CC244_REMOTE_CONTROL_OF_PASSENGER_SEAT_FUNCTIONS", 49);
+  strncpy(SPACC_Params[245], "CC245_EASY_INGRESS_EGRESS", 26);
+  strncpy(SPACC_Params[246], "CC246_POWER_RELEASE_2_nd_ROW", 29);
+  strncpy(SPACC_Params[253], "CC253_FRONT_DIRECTION_INDICATOR_LAMP_TYPE", 42);
+  strncpy(SPACC_Params[254], "CC254_REAR_DIRECTION_INDICATOR_LAMP_TYPE", 41);
+  strncpy(SPACC_Params[255], "CC255_REAR_FOGLIGHT_LAMP_TYPE", 30);
+  strncpy(SPACC_Params[256], "CC256_BENDING_LIGHT", 20);
+  strncpy(SPACC_Params[257], "CC257_REAR_POSITION_LAMP_TYPE", 30);
+  strncpy(SPACC_Params[258], "CC258_REAR_STOP_LEFT_RIGHT_LAMP_TYPE", 37);
+  strncpy(SPACC_Params[259], "CC259_REVERSING_LAMP_TYPE", 26);
+  strncpy(SPACC_Params[267], "CC267_INDIRECT_TPMS_SYSTEM", 27);
+  strncpy(SPACC_Params[268], "CC268_NUMBER_OF_CYLINDERS", 26);
+  strncpy(SPACC_Params[274], "CC274_HEADLAMP_PROJECT_FOR_HCM", 31);
+  strncpy(SPACC_Params[303], "CC303_REAR_SUBFRAME_FASTENING", 30);
+  strncpy(SPACC_Params[316], "CC316_EMERGENCY_LANE_KEEPING_AID", 33);
+  strncpy(SPACC_Params[317], "CC317_EVASIVE_MANOUEVRE_ASSIST", 31);
+  strncpy(SPACC_Params[344], "CC344_LAMINATED_WINDOWS", 24);
+  strncpy(SPACC_Params[345], "CC345_BYPASS_VALVE_HVAC", 24);
+  strncpy(SPACC_Params[346], "CC346_SUN_CURTAIN_REAR_WINDOW", 30);
+  strncpy(SPACC_Params[347], "CC347_HEATER_TYPE", 18);
+  strncpy(SPACC_Params[348], "CC348_HEX_TEMPERATURE_SENSOR", 29);
+  strncpy(SPACC_Params[349], "CC349_IONIC_INTERNAL_AIR_CLEANER", 33);
+  strncpy(SPACC_Params[350], "CC350_MEMORY_BUTTONS_IF_POWER_SEAT", 35);
+  strncpy(SPACC_Params[351], "CC351_SUN_CURTAIN_SIDEWINDOW_REAR", 34);
+  strncpy(SPACC_Params[352], "CC352_SUN_SENSOR", 17);
+  strncpy(SPACC_Params[353], "CC353_HUMIDITY_SENSOR", 22);
+  strncpy(SPACC_Params[354], "CC354_COMPARTMENT_TEMPERATURE_SENSOR", 37);
+  strncpy(SPACC_Params[355], "CC355_PTC_IN_FRONT_HVAC", 24);
+  strncpy(SPACC_Params[358], "CC358_ACTIVE_NOISE_CONTROL", 27);
+  strncpy(SPACC_Params[359], "CC359_EXTERIOR_SOUND_HMI_OPTION", 32);
+  strncpy(SPACC_Params[360], "CC360_FREQUENCY_BAND_STEP_AM_FM_HD_RADIO", 41);
+  strncpy(SPACC_Params[361], "CC361_SIM_CARD_FOR_CONNECTIVITY", 32);
+  strncpy(SPACC_Params[362], "CC362_USB_CONNECTION", 21);
+  strncpy(SPACC_Params[363], "CC363_AUDIO_AUXILIARY_INPUT", 28);
+  strncpy(SPACC_Params[364], "CC364_Exterior_Sound_Module_Calibration_Types", 46);
+  strncpy(SPACC_Params[365], "CC365_Wi_Fi_WORKSHOP_MODE_FUNCTIONAL_CONTROL", 45);
+  strncpy(SPACC_Params[401], "CC401_RAIN_SENSOR_FUNCTION", 27);
+  strncpy(SPACC_Params[407], "CC407_COOLANT_LEVEL_INDICATION", 31);
+  strncpy(SPACC_Params[449], "CC449_CSD_VARIANTS", 19);
+  strncpy(SPACC_Params[450], "CC450_WIRELESS_PHONE_CHARGING_WPC_AND_NEAR_FIELD_COMMUNICATION_NFC_", 68);
+  strncpy(SPACC_Params[451], "CC451_RADIO_AMP_SPEAKER_SYSTEM", 31);
+}
+
+on timer SPACC_Update_Timer
+{
+  long paramCounter;
+  long blockCounter;
+  
+  if(@_SPACommon::CarConfig::SimulationControl == @_SPACommon::CarConfig::SimulationControl::On)
+  {
+    setTimer(SPACC_Update_Timer, SPACC_UpdateTime);
+    blockCounter = @_SPAInternal::CarConfig::VehCfgPrmBlk;
+    paramCounter = blockCounter * 7 + 1;
+    
+    if(paramCounter > SPACC_ParamsToSend)
+    {
+      blockCounter = 0;
+      paramCounter = 1;
+    }
+    
+    @_SPAInternal::CarConfig::VehCfgPrmVal1 = SPACC_GetParam(paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal2 = SPACC_GetParam(++paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal3 = SPACC_GetParam(++paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal4 = SPACC_GetParam(++paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal5 = SPACC_GetParam(++paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal6 = SPACC_GetParam(++paramCounter);
+    @_SPAInternal::CarConfig::VehCfgPrmVal7 = SPACC_GetParam(++paramCounter);
+    
+    @_SPAInternal::CarConfig::VehCfgPrmBlk = blockCounter + 1;
+  }
+}
+
+long SPACC_GetParam(long paramNo)
+{
+  long returnValue;
+  if (SPACC_ReadFromStream)
+  {
+    returnValue = @_SPAInternal::CarConfig::Stream[paramNo-1];
+  }
+  else if(SPACC_Params.containsKey(paramNo))
+  {
+    returnValue = sysGetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo]);  
+    @_SPAInternal::CarConfig::Stream[paramNo-1] = returnValue;
+  }
+  else returnValue = 0;
+  return returnValue;
+}
+
+
+long SPACC_TestHash(long readFromProfile)
+{
+  long lastKey;
+  for(long paramNo : SPACC_Params) {
+    SPACC_TestParam(paramNo, readFromProfile);
+    lastKey = paramNo;
+  }
+  write("Last param: %d", lastKey);
+  if(lastKey > SPACC_ParamsToSend)
+    write("ERROR: Car configuration params up to number %d are hashed but only %d configured to be sent",lastKey,SPACC_ParamsToSend);
+  else if (lastKey + 14 < SPACC_ParamsToSend)
+    write("WARNING: Only car configuration params up to number %d are hashed but %d configured to be sent",lastKey,SPACC_ParamsToSend);
+
+  return lastKey;
+}
+
+long SPACC_TestParam(long paramNo,long readFromProfile)
+{
+  long returnValue;
+  long paramValue;
+  long iniValue;
+  char iniString[50];
+  strncpy(iniString, "", 50);
+  
+  if(!SPACC_Params.containsKey(paramNo))
+  {
+    write("ERROR: Car Config parameter %d not hashed", paramNo);
+    return -1;
+  }
+  paramValue = sysGetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo]);
+  if(!paramValue)
+  {
+    write("ERROR: Car Config parameter %s (sysvar namespace: %s) is either not possible to read or set to 0 (invalid default)", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE);
+  }
+  If (SPACC_ProfilePathValid && readFromProfile)
+  {
+    iniValue = getProfileInt(SPACC_ProfileSection, SPACC_Params[paramNo], paramValue, SPACC_ProfilePath);
+    If (iniValue != paramValue)
+    {
+      strncpy(iniString, " (from Profile)", 50);
+      paramValue = iniValue;
+    }
+  }
+  returnValue = sysSetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo], paramValue);
+  Switch (returnValue)
+  {
+    Case (0) :
+      If(strlen(iniString))
+        write("Car Config parameter %s set to %d%s",SPACC_Params[paramNo],paramValue,iniString); 
+      break;
+    Case (1) :
+      write("ERROR: Car Config parameter %s sysvar namespace %s not found", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE); break;
+    Case (2) :
+      write("ERROR: Car Config parameter %s not found in sysvar namespace %s", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE); break;
+    Case (3) :
+      write("ERROR: Car Config parameter %s in sysvar namespace %s not writable", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE); break;
+    Case (4) :
+      write("ERROR: Car Config parameter %s in sysvar namespace %s not accessable as int", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE); break;
+    default :
+      write("ERROR: Car Config parameter %s in sysvar namespace %s not accessable", SPACC_Params[paramNo],SPACC_PARAM_NAMESPACE); break;
+  }
+  return returnValue;
+}
+
+SPACC_UpdateProfilePath() 
+{
+  long resultValue;
+  resultValue = getUserFilePath(SPACC_Profile, SPACC_ProfilePath, SPACC_PATH_LENGTH-1);
+  If (resultValue > 0)
+    SPACC_ProfilePathValid = 1;
+  else
+  {
+    If (resultValue == -2)
+        write("File '%s' not registered as 'user file'.", SPACC_Profile);
+    Else If (resultValue == -1)
+        write("File path buffer (%d) exceeded",SPACC_PATH_LENGTH-1 );
+    SPACC_ProfilePathValid = 0;
+  }    
+ 
+}
+
+SPACC_LoadProfile()
+{
+  If (SPACC_ProfilePathValid)
+  {
+    long paramValue;
+    long iniValue;
+    long notUpdated;
+    notUpdated = 0;
+    for(long paramNo : SPACC_Params) 
+    {
+      paramValue = sysGetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo]);
+      iniValue = getProfileInt(SPACC_ProfileSection, SPACC_Params[paramNo], paramValue, SPACC_ProfilePath);
+      If (iniValue != paramValue)
+      {
+        sysSetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo], iniValue);
+        write("Car Config parameter %s set to %d from Profile (user file %s) section %s",SPACC_Params[paramNo],iniValue,SPACC_Profile, SPACC_ProfileSection);
+      }
+      Else
+        notUpdated++;
+    }
+    write("%d Car Config parameters not updated from Profile (user file %s); either not found or same as current value", notUpdated, SPACC_Profile);
+  }
+  Else
+    write("ERROR, Car Config (%NODE_NAME%) : Profile (user file %s) not available for loading parameters", SPACC_Profile);
+}
+
+SPACC_SaveProfile()
+{
+  If (SPACC_ProfilePathValid)
+  {
+    long paramValue;
+    for(long paramNo : SPACC_Params) 
+    {
+      paramValue = sysGetVariableInt(SPACC_PARAM_NAMESPACE,SPACC_Params[paramNo]);
+      
+      If (!writeProfileInt(SPACC_ProfileSection, SPACC_Params[paramNo], paramValue, SPACC_ProfilePath))
+        write("ERROR, simulation node %NODE_NAME% : Writing %s/%s in user file %s return error(0)", SPACC_ProfileSection, SPACC_Params[paramNo], SPACC_Profile);
+      Else
+        write("Car Config parameter %s : Value %d stored to Profile (user file %s) section %s",SPACC_Params[paramNo], paramValue, SPACC_Profile, SPACC_ProfileSection);
+    }
+  }
+  Else
+    write("ERROR, Car Config (%NODE_NAME%) : Profile (user file %s) not available to save parameters", SPACC_Profile);
+}
+
+on sysvar _SPACommon::CarConfig::UpdateTime
+{
+  SPACC_UpdateTime = @this;
+}
+
+on sysvar _SPACommon::CarConfig::ParamsToSend
+{
+  SPACC_ParamsToSend = @this;
+}
+
+on sysvar _SPACommon::CarConfig::ReadFromStream
+{
+  SPACC_ReadFromStream = @this;
+}
+
+on sysvar _SPACommon::CarConfig::UserFile
+{
+  sysGetVariableString(this, SPACC_Profile, SPACC_PROFILE_LENGTH);
+  SPACC_UpdateProfilePath();
+}
+
+on sysvar _SPACommon::CarConfig::Section
+{
+  sysGetVariableString(this, SPACC_ProfileSection, SPACC_PROFILE_SECTION_LENGTH);
+}
+
+on sysvar _SPACommon::CarConfig::Command
+{
+  If(@this)
+  {
+    Switch (@this)
+    {
+      Case (2) :
+        SPACC_LoadProfile(); break;
+      Case (3) :
+        SPACC_SaveProfile(); break;
+    }
+  }
+}
