@@ -2,6 +2,7 @@
 
 #include <curl/curl.h>
 
+#include <memory>
 #include <string>
 
 #include "certificate_handler.h"
@@ -10,7 +11,8 @@
 
 namespace Connectivity {
 
-class CloudRequestHandler : public CloudRequestHandlerInterface {
+class CloudRequestHandler : public CloudRequestHandlerInterface,
+                            public std::enable_shared_from_this<CloudRequestHandler> {
   private:
   public:
     CloudRequestHandler();
@@ -18,10 +20,16 @@ class CloudRequestHandler : public CloudRequestHandlerInterface {
 
     int SendCloudRequest(std::shared_ptr<CloudRequest> request);
 
+    CURL *GetMultiHandle() { return multi_; }
+    int &GetTimerId() { return timer_id_; }
+
   private:
+    int timer_id_;
+    CURL *multi_;
+
     static int SocketCallback(CURL *easy, curl_socket_t fd, int operation, void *user_data, void *s);
     static int TimerCallback(CURLM *multi, long timeout_ms, void *user_data);
-    static int Perform(curl_socket_t fd);
+    static int Perform(CURL *multi, curl_socket_t fd);
     static int WriteCallback(char *ptr, const size_t size, const size_t nmemb, void *userdata);
 
     static int OnCreateOpenSslContext(CURL *curl, void *ssl_ctx, void *user_param);

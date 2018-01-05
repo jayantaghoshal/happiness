@@ -9,13 +9,6 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
-// TODO: This should NOT be global variables... Move somewhere else, like CloudRequest perhaps...
-namespace {
-int timeout_;
-int timer_id_;
-CURLM *multi_;
-}
-
 template <typename T>
 void verified_curl_multi_setopt(CURLM *curl, const CURLMoption opt, T data) {
     const CURLMcode res = curl_multi_setopt(curl, opt, data);
@@ -43,14 +36,21 @@ CloudRequestHandler::CloudRequestHandler() {
 
     multi_ = curl_multi_init();
 
+    verified_curl_multi_setopt(multi_, CURLMOPT_SOCKETDATA, this);
     verified_curl_multi_setopt(multi_, CURLMOPT_SOCKETFUNCTION, SocketCallback);
+    verified_curl_multi_setopt(multi_, CURLMOPT_TIMERDATA, this);
     verified_curl_multi_setopt(multi_, CURLMOPT_TIMERFUNCTION, TimerCallback);
 }
 
-CloudRequestHandler::~CloudRequestHandler() { curl_global_cleanup(); }
+CloudRequestHandler::~CloudRequestHandler() {
+    curl_global_cleanup();
+    multi_ = nullptr;
+}
 
 int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operation, void *user_data, void *s) {
     ALOGV("sock_cb: socket=%d, what=%d, sockp=%p\n", fd, operation, s);
+
+    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
 
     const char *whatstr[] = {"none", "IN", "OUT", "INOUT", "REMOVE"};
 
@@ -60,7 +60,9 @@ int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operat
     } else {
         if (!s) {
             ALOGV("Adding data: %s\n", whatstr[operation]);
-            IDispatcher::GetDefaultDispatcher().AddFd(fd, [fd]() { return Perform(fd); }, EPOLLIN | EPOLLOUT);
+            IDispatcher::GetDefaultDispatcher().AddFd(
+                    fd, [request_handler, fd]() { return Perform(request_handler->GetMultiHandle(), fd); },
+                    EPOLLIN | EPOLLOUT);
         }
     }
     return 0;
@@ -69,30 +71,34 @@ int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operat
 int CloudRequestHandler::TimerCallback(CURLM *multi, long timeout_ms, void *user_data) {
     ALOGV("multi_timer_cb: timeout_ms %ld\n", timeout_ms);
 
+    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
+
+    int timer_id = request_handler->GetTimerId();
+
     /* cancel running timer */
-    IDispatcher::GetDefaultDispatcher().Cancel(timer_id_);
+    IDispatcher::GetDefaultDispatcher().Cancel(timer_id);
 
     if (timeout_ms > 0) {
         /* update timer */
-        timer_id_ = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(std::chrono::milliseconds(timeout_ms),
-                                                                         []() { Perform(CURL_SOCKET_TIMEOUT); });
-        ALOGV("Timer Set With Timer ID: %d\n", timer_id_);
+        timer_id = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+                std::chrono::milliseconds(timeout_ms), [multi]() { Perform(multi, CURL_SOCKET_TIMEOUT); });
+        ALOGV("Timer Set With Timer ID: %d\n", timer_id);
     } else if (timeout_ms == 0) {
         ALOGV("Timer Off immediately\n");
-        Perform(CURL_SOCKET_TIMEOUT);
+        Perform(request_handler->GetMultiHandle(), CURL_SOCKET_TIMEOUT);
     }
 
     return 0;
 }
 
-int CloudRequestHandler::Perform(curl_socket_t fd) {
+int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
     int running_handles;
-    curl_multi_socket_action(multi_, fd, 0, &running_handles);
+    curl_multi_socket_action(multi, fd, 0, &running_handles);
 
     int msgs_queue_out = 0;
 
     do {
-        CURLMsg *curl_message = curl_multi_info_read(multi_, &msgs_queue_out);
+        CURLMsg *curl_message = curl_multi_info_read(multi, &msgs_queue_out);
 
         if (curl_message && curl_message->msg == CURLMSG_DONE) {
             ALOGV("Done %i\n", msgs_queue_out);

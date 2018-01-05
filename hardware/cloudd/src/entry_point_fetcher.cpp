@@ -56,6 +56,7 @@ void EntryPointFetcher::Restart() {
         }
         cloud_request->SetURL(entry_point_url_);
         cloud_request->SetCallback(std::move(done_callback));
+
         cloud_request_handler_->SendCloudRequest(cloud_request);
 
     } catch (const std::exception& e) {
