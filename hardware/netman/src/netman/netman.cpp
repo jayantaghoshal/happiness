@@ -42,9 +42,8 @@ int main() {
             return EXIT_FAILURE;
         }
 
-        // TODO Enqueue correctly
-        // android::hardware::configureRpcThreadpool(1, false);
-        // DiagnosticsReporter diag_rep;
+        android::hardware::configureRpcThreadpool(1, false);
+        DiagnosticsReporter diag_rep;
 
         std::vector<InterfaceConfiguration> interface_configurations;
 
