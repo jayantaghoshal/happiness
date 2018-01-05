@@ -22,7 +22,8 @@ LOCAL_SRC_FILES := \
      src/tempimpl.cpp \
      src/keymanagermodule.cpp \
      src/activeuserprofilemodule.cpp \
-     src/modulepropertyhandler.cpp
+     src/modulepropertyhandler.cpp \
+     src/systeminformationmodule.cpp
 
 LOCAL_C_INCLUDES := \
     src/

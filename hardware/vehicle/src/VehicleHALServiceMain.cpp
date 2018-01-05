@@ -17,6 +17,7 @@
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
+#include "systeminformationmodule.h"
 
 #undef LOG_TAG
 #define LOG_TAG "automotive.vehicle2.0"
@@ -36,6 +37,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get());
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
+    auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -44,6 +46,7 @@ int main(int /* argc */, char* /* argv */ []) {
     hvacModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
+    systemInformationModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
