@@ -45,7 +45,7 @@
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="8d5b76f7d21b1683331be24238519aeb08da2d03"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="126c72a472f484e6272fd1f83bc30478305e4281"/>
 
   <remove-project name="bsp/vendor/intel/external/open-avb"/>
   <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="a0331b09700076a1848d383e3e0948fde4d355f6"/>
