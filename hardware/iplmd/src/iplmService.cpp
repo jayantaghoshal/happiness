@@ -53,7 +53,9 @@ void IplmService::StartSubscribe() {
         ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
 
         auto error = ipcbServer_->linkToDeath(this, 2);
-        if (error.isOk()) ALOGD("registered death");
+        if (!error.isOk()) {
+            ALOGW("Unable to register link to death");
+        }
 
         SubscribeResult result;
         // Install callback
@@ -65,7 +67,7 @@ void IplmService::StartSubscribe() {
         }
         Initialize();
     } else {
-        ALOGD("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
+        ALOGV("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
 
         // TODO: Handle return value to be able to abort retries
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
@@ -77,13 +79,13 @@ void IplmService::serviceDied(uint64_t, const android::wp<IBase>&) {
     exit(EXIT_SUCCESS);
 }
 void IplmService::HandleMessageRcvd(const Msg& msg) {
-    ALOGD("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
+    ALOGV("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
 
     if (OperationType::ERROR == msg.pdu.header.operationType) return;
 
     first_contact = true;
-    ALOGD("Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
+    ALOGV("Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
           ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
           ToString(static_cast<Prio>(msg.pdu.payload.data()[1])), (int)msg.ecu, (int)Ecu::VCM, (int)Ecu::TEM);
 
@@ -176,7 +178,7 @@ void IplmService::FlexrayWakeupTimeout() {
 
     senderWakeup_.send(wakeup);
 
-    ALOGI("FlexrayWakeupTimeout");
+    ALOGV("FlexrayWakeupTimeout");
 }
 
 bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
@@ -206,7 +208,7 @@ bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
     flexray_wakeup_attempted = true;
 
     senderWakeupTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(3000), tmoHandler);
-    ALOGI("SendFlexrayWakeup rg=%d , prio=%d", _rg, _prio);
+    ALOGV("SendFlexrayWakeup rg=%d , prio=%d", _rg, _prio);
     return true;
 }
 
@@ -222,7 +224,7 @@ void IplmService::restartTemActivityTimer() {
 }
 
 void IplmService::ActivityTimeout() {
-    ALOGD("+ ActivityTimeout");
+    ALOGV("+ ActivityTimeout");
 
     bool broadcast_allowed = false;
     bool tem_available = false;
@@ -240,12 +242,12 @@ void IplmService::ActivityTimeout() {
     vcm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vcm));
 
     if (broadcast_allowed) {
-        ALOGD("ActivityTimeout: Sending IP Activity broadcast");
+        ALOGV("ActivityTimeout: Sending IP Activity broadcast");
 
         // time to send new activity message
         CreateAndSendIpActivityMessage();
     } else {
-        ALOGD("ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
+        ALOGV("ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
     }
 
     // Copy map of callbacks
@@ -271,7 +273,7 @@ void IplmService::ActivityTimeout() {
         bool isDead =
                 result1.isDeadObject() || result2.isDeadObject() || result3.isDeadObject() || result4.isDeadObject();
         if (isDead) {
-            ALOGI("IplmService::ActivityTimeout, %s is dead, lets remove it", regs.first.c_str());
+            ALOGV("IplmService::ActivityTimeout, %s is dead, lets remove it", regs.first.c_str());
             unregisterService(regs.first);
         }
     }
@@ -286,7 +288,7 @@ void IplmService::ActivityTimeout() {
     // Restart activity timer
     activityTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { ActivityTimeout(); });
 
-    ALOGD("- ActivityTimeout");
+    ALOGV("- ActivityTimeout");
 }
 
 void IplmService::RequestMonitoringTimeout(EcuId ecu) {
@@ -294,7 +296,7 @@ void IplmService::RequestMonitoringTimeout(EcuId ecu) {
 
     first_contact = true;
 
-    ALOGD("Timeout on IP_Activity for %d", ecu);
+    ALOGV("Timeout on IP_Activity for %d", ecu);
 
     iplm_data_.rg1_availabilityStatus_.reset(static_cast<int>(ecu));
     iplm_data_.rg3_availabilityStatus_.reset(static_cast<int>(ecu));
@@ -307,7 +309,7 @@ void IplmService::RequestMonitoringTimeout(EcuId ecu) {
 }
 
 void IplmService::CreateAndSendIpActivityMessage() {
-    ALOGD("LM: Timeout, prepare new broadcast message");
+    ALOGV("LM: Timeout, prepare new broadcast message");
 
     Action action = iplm_data_.action_[(int)Ecu::IHU];
     Prio prio = iplm_data_.prio_[(int)Ecu::IHU];
@@ -329,7 +331,7 @@ void IplmService::CreateAndSendIpActivityMessage() {
 
     message.pdu.payload = std::vector<uint8_t>({action, (uint8_t)prio, 0, 0});
 
-    ALOGD("Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
+    ALOGV("Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
 
     CommandResult result;
     ipcbServer_->sendMessage(message, {false, 0, 0}, [&result](CommandResult sr) { result = sr; });
@@ -536,7 +538,7 @@ Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XReso
 }
 
 Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback) {
-    ALOGI("RegisterService: called for service (%s)", lscName.c_str());
+    ALOGV("RegisterService: called for service (%s)", lscName.c_str());
 
     // Guard with mutex
     std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
@@ -563,7 +565,7 @@ Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<I
 }
 
 Return<bool> IplmService::unregisterService(const hidl_string& lscName) {
-    ALOGI("UnRegisterService: called for service (%s)", lscName.c_str());
+    ALOGV("UnRegisterService: called for service (%s)", lscName.c_str());
 
     {  // Guard list access with mutex
         std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
@@ -623,7 +625,7 @@ bool IplmService::SetNsmSessionState() {
     state.set(NsmStateBitMask::MP_IPLM_BIT_INT_PRIORITY,
               IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH));
 
-    ALOGD("NSM IPLM Session state: %s TODO", state.to_string().c_str());
+    ALOGV("NSM IPLM Session state: %s TODO", state.to_string().c_str());
 
     // auto retVal = nsmState_.SetSessionState(kIPLMSessionName, kIPLMSessionOwner, NsmSeat_Driver, state.to_ulong());
 
