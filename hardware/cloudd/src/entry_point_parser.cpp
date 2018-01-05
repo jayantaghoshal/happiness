@@ -1,12 +1,12 @@
-#include "vpn_entry_point_parser.h"
+#include "entry_point_parser.h"
 #include <tinyxml2.h>
 #include <string>
 #include <utility>
 #include <vector>
 
 namespace Connectivity {
-namespace VPNEntryPointParser {
-VPNEntryPointParser::EntryPoint parse(const char* const data_nullterminated) {
+namespace EntryPointParser {
+EntryPointParser::EntryPoint parse(const char* const data_nullterminated) {
     // TODO: Verify the XML signature, [IHU-14218]
 
     tinyxml2::XMLDocument doc;
@@ -20,7 +20,7 @@ VPNEntryPointParser::EntryPoint parse(const char* const data_nullterminated) {
     const std::string port_str = std::string{port_element->GetText()};
     const int port = std::stoi(port_str);
 
-    return VPNEntryPointParser::EntryPoint{std::string{host_uri_element->GetText()}, port};
+    return EntryPointParser::EntryPoint{std::string{host_uri_element->GetText()}, port};
 }
 }
 }

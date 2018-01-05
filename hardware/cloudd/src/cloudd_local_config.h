@@ -1,5 +1,4 @@
-#ifndef VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_LOCAL_CONFIG_H
-#define VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_LOCAL_CONFIG_H
+#pragma once
 
 #include <vcc/localconfig.h>
 
@@ -176,5 +175,3 @@ class ClouddLocalConfig {
 };
 
 }  // namespace Connectivity
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_CLOUDD_SRC_LOCAL_CONFIG_H

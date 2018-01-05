@@ -3,29 +3,26 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include "cloudService.h"
+#include "cloud_service.h"
 #include <curl/curl.h>
 #include "certificate_handler.h"
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <future>
 #include <regex>
+
 #define LOG_TAG "CloudD.service"
 #include <cutils/log.h>
 
 namespace Connectivity {
 
 CloudService::CloudService()
-    : eventDispatcher_{IDispatcher::GetDefaultDispatcher()},
-      certHandler_(new CertHandler{CLIENT_CERT_PEM(), CLIENT_KEY_PEM(), CA_CERT_PEM()}),
-      entry_point_fetcher_{*certHandler_, eventDispatcher_, cloud_request_} {}
+    : cloud_request_handler_{std::make_shared<CloudRequestHandler>()},
+      cert_handler_(std::make_shared<CertHandler>(CLIENT_CERT_PEM(), CLIENT_KEY_PEM(), CA_CERT_PEM())),
+      entry_point_fetcher_{cert_handler_, cloud_request_handler_} {}
 
 bool CloudService::Initialize() {
-    if (!cloud_request_.Init()) {
-        ALOGD("Unable to init Reachability Cloud Request.");
-        return false;
-    }
-
     // Subscribe to ipcbd
     android::status_t status = IHttpRequest::registerAsService();
     if (status != android::OK) {
@@ -37,7 +34,7 @@ bool CloudService::Initialize() {
 
     std::string lcfg_entrypoint_url = cloudd_local_config_.GetCloudEntryPointAddress();
 
-    entry_point_fetcher_.WhenResultAvailable([&](const VPNEntryPointParser::EntryPoint& entry_point) {
+    entry_point_fetcher_.WhenResultAvailable([&](const EntryPointParser::EntryPoint& entry_point) {
         ALOGD("Cloud client received entry point");
 
         cep_url_ = entry_point.host;
@@ -83,36 +80,55 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
 
     return rsp;
 }
+
 // Methods from IHttpRequest follow.
 Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https,
                                         uint32_t timeout, doGetRequest_cb _hidl_cb) {
+    if (cep_url_.empty()) {
+        ALOGW("Illegal call: CEP URL not fetch yet.");
+        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        Response rsp;
+        rsp.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet".
+        _hidl_cb(rsp);
+    }
+
     std::string url = (use_https ? "https://" : "http://") + cep_url_ + "/" + std::string(uri.c_str());
 
+    std::promise<Response> promise;
+    std::future<Response> future_response = promise.get_future();
+
     try {
-        RequestConfig rc;
-        rc.use_stunnel_proxy = false;
-        rc.timeout = std::chrono::seconds{timeout};
+        std::shared_ptr<CloudRequest> cr = std::make_shared<CloudRequest>(cert_handler_);
+
+        cr->SetUseHttps(use_https);
+        cr->SetTimeout(std::chrono::milliseconds(timeout));
+        cr->SetURL(url);
+        cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
+            promise.set_value(BuildResponse(code, data, header));
+        });
+
+        std::vector<std::string> header_list;
         for (auto header : headers) {
-            rc.header_list.push_back(std::string(header.name.c_str()) + ":" + std::string(header.value.c_str()));
+            header_list.push_back(std::string(header.name.c_str()) + ":" + std::string(header.value.c_str()));
         }
 
-        if (use_https) {
-            cloud_request_.HttpsGet(url, rc,
-                                    [&](std::int32_t code, const std::string& data, const std::string& header) {
-                                        Response rsp = BuildResponse(code, data, header);
-                                        _hidl_cb(rsp);
-                                    },
-                                    certHandler_);
-        } else {
-            cloud_request_.HttpGet(url, rc, [&](std::int32_t code, const std::string& data, const std::string& header) {
-                Response rsp = BuildResponse(code, data, header);
-                _hidl_cb(rsp);
-            });
-        }
+        cr->SetHeaderList(header_list);
+
+        cloud_request_handler_->SendCloudRequest(cr);
 
     } catch (const std::exception& e) {
         ALOGW("Failed to initiate cloud request: %s", e.what());
     }
+
+    Response response;
+    std::chrono::milliseconds span(timeout);
+    if (future_response.wait_for(span) != std::future_status::timeout) {
+        response = future_response.get();
+    } else {
+        response.httpResponse = 408;  // HTTP code for time out
+    }
+
+    _hidl_cb(response);
 
     return Void();
 }

@@ -186,7 +186,7 @@ CertHandler::CertHandler(const std::string& client_cert_pem, const std::string& 
         if (nullptr == m_ca_cert) {
             ALOGE("Could not load CA cert");
         } else {
-            ALOGI("CA cert set up");
+            ALOGV("CA cert set up");
         }
     } else {
         ALOGW("No CA cert data available");
@@ -196,7 +196,7 @@ CertHandler::CertHandler(const std::string& client_cert_pem, const std::string& 
     if (nullptr == m_client_cert) {
         ALOGE("Could not load client cert");
     } else {
-        ALOGI("Client cert set up");
+        ALOGV("Client cert set up");
     }
 
     // Set up the static key
@@ -204,7 +204,7 @@ CertHandler::CertHandler(const std::string& client_cert_pem, const std::string& 
     if (nullptr == m_client_key) {
         ALOGE("Could not load client key");
     } else {
-        ALOGI("Client key set up");
+        ALOGV("Client key set up");
     }
 }
 
@@ -258,13 +258,10 @@ CertificateValidationStatus CertHandler::OnCreateOpenSslContext(void* ssl_ctx) n
         return CertificateValidationStatus::Error;
     }
 
-    ALOGI(" - GetOcspUrlFromServerCert");
     return CertificateValidationStatus::Validated;
 }
 
-OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url, std::string& ocsp) const {
-    ALOGI(" + GetOcspUrlFromServerCert");
-
+OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url, std::string* ocsp) const {
     SSLeay_add_ssl_algorithms();
     SSL_load_error_strings();
 
@@ -303,8 +300,6 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
             sockfd.sockfd_ = -1;
             continue;
         }
-
-        ALOGI("if we get here, we must have connected successfully");
 
         break;  // if we get here, we must have connected successfully
     }
@@ -353,7 +348,7 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
                 ACCESS_DESCRIPTION* value = sk_ACCESS_DESCRIPTION_value(values, j);
 
                 if (value && OBJ_obj2nid(value->method) == NID_ad_OCSP && value->location->type == GEN_URI) {
-                    ocsp.assign(reinterpret_cast<char*>(value->location->d.uniformResourceIdentifier->data));
+                    ocsp->assign(reinterpret_cast<char*>(value->location->d.uniformResourceIdentifier->data));
                     AUTHORITY_INFO_ACCESS_free(values);
                     X509_free(server_cert);
                     return OcspRetCode::Ok;
