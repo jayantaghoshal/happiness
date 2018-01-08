@@ -29,6 +29,7 @@ cc_defaults {
         "readability-*",
         "-readability-braces-around-statements", //some are short enough/oneliners
         "-readability-redundant-declaration", //clang does not filters out errors in external/libcxx/include/new
+        "-readability-else-after-return", // some readable patterns are causing warnings, this readability choice is better left to humans
     ],
     tidy_flags: [
         "-header-filter=^vendor/volvocars/.*",
