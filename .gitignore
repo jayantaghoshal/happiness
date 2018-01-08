@@ -1,6 +1,7 @@
 # other repos imported by repo tool
 hmi/*/
 apps/*/
+packages/google/
 
 # Visual Studio Code
 *.vscode
