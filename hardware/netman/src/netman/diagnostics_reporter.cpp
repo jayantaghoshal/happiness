@@ -1,7 +1,7 @@
 #include "diagnostics_reporter.h"
 
 #include <IDispatcher.h>
-#include <vendor/volvocars/hardware/uds/1.0/IUdsDataCollector.h>
+#include <vendor/volvocars/hardware/uds/1.0/IDataCollector.h>
 #include <cassert>
 #include <fstream>
 #include <mutex>
@@ -11,9 +11,9 @@
 
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::vendor::volvocars::hardware::uds::V1_0::DagnosticCheckStatus;
+using ::vendor::volvocars::hardware::uds::V1_0::DiagnosticCheckStatus;
 using ::vendor::volvocars::hardware::uds::V1_0::DiagnosticCheckReport;
-using ::vendor::volvocars::hardware::uds::V1_0::IUdsDataCollector;
+using ::vendor::volvocars::hardware::uds::V1_0::IDataCollector;
 
 namespace {
 
@@ -53,7 +53,7 @@ DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* 
     ifnames_[MOST] = lcfg_->GetString("eth1.name");
     ifnames_[APIX] = lcfg_->GetString("meth0.name");
 
-    IUdsDataCollector::registerForNotifications("default", this);
+    IDataCollector::registerForNotifications("default", this);
 }
 
 void DiagnosticsReporter::check_link() {
@@ -63,13 +63,13 @@ void DiagnosticsReporter::check_link() {
 
         std::ifstream file(filepath);
         if (file.is_open()) {
-            DiagnosticCheckReport report = {DagnosticCheckStatus::FAILED, 1};
+            DiagnosticCheckReport report = {DiagnosticCheckStatus::FAILED, 1};
 
             char state = file.get();
             if (file.good()) {
-                report.status = (state == '0') ? DagnosticCheckStatus::FAILED : DagnosticCheckStatus::PASSED;
+                report.status = (state == '0') ? DiagnosticCheckStatus::FAILED : DiagnosticCheckStatus::PASSED;
             } else {
-                report.status = DagnosticCheckStatus::FAILED;
+                report.status = DiagnosticCheckStatus::FAILED;
             }
 
             ALOGV("Interface %s Link %c DTC %i", interface.c_str(), state, id);
@@ -113,7 +113,7 @@ Return<void> DiagnosticsReporter::onRegistration(const ::android::hardware::hidl
     ALOGI("Diagnostics service reachable");
 
     std::lock_guard<std::mutex> guard(diag_service_mutex);
-    diag_service_ = IUdsDataCollector::getService();
+    diag_service_ = IDataCollector::getService();
 
     if (diag_service_.get()) {
         diag_service_->linkToDeath(this, DIAGNOSTICS_COOKIE);

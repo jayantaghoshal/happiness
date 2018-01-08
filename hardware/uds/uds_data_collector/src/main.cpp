@@ -4,12 +4,11 @@
  */
 
 #include <hidl/HidlTransportSupport.h>
+#include "DataCollector.h"
 
-#include "UdsDataCollector.h"
-
-#include <cutils/log.h>
 #undef LOG_TAG
 #define LOG_TAG "uds-collector"
+#include <cutils/log.h>
 
 using android::sp;
 using android::hardware::configureRpcThreadpool;
@@ -20,10 +19,10 @@ using android::hardware::joinRpcThreadpool;
 int main() {
     configureRpcThreadpool(1, true /*caller thread would join the threadpool */);
 
-    sp<UdsDataCollector> data_collector = new UdsDataCollector();
+    sp<DataCollector> data_collector = new DataCollector();
 
-    auto* collector = static_cast<IUdsDataCollector*>(data_collector.get());
-    auto* aggregated_provider = static_cast<IUdsDataProvider*>(data_collector.get());
+    auto* collector = static_cast<uds_v1_0::IDataCollector*>(data_collector.get());
+    auto* collector_test_point = static_cast<uds_v1_0::IDataCollectorTestPoint*>(data_collector.get());
 
     auto collector_status = collector->registerAsService();
     if (collector_status != android::NO_ERROR) {
@@ -31,12 +30,14 @@ int main() {
         return collector_status;
     }
 
-    auto test_point_status = aggregated_provider->registerAsService("test-point");
+#if ENABLE_DATA_COLLECTOR_TESTPOINT
+    auto test_point_status = collector_test_point->registerAsService();
 
     if (test_point_status != android::NO_ERROR) {
         ALOGE("Registration as a provider service (test-point) failed, error = %i", test_point_status);
         return test_point_status;
     }
+#endif
 
     joinRpcThreadpool();
 }

@@ -1,0 +1,18 @@
+package vendor.volvocars.hardware.uds@1.0;
+
+import DidReadResult;
+import DidWriteStatusCode;
+import Did;
+
+/**
+ * Interface for component providing DID values, which need to be calculated on
+ * need to respond basis.
+ *
+ * If your component needs to provide DID values to diagnostics, you should implement
+ * this interface, and register with IUdsDataCollector
+ */
+interface IDataHandler
+{
+    readDidValue(Did did) generates (DidReadResult result);
+    writeDidValue(Did did, vec<uint8_t> data) generates (DidWriteStatusCode result);
+};

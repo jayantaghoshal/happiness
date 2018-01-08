@@ -42,12 +42,12 @@
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>IUdsDataCollector</name>
+            <name>IDataCollector</name>
             <instance>default</instance>
         </interface>
         <interface>
-            <name>IUdsDataProvider</name>
-            <instance>test-point</instance>
+            <name>IDataCollectorTestPoint</name>
+            <instance>default</instance>
         </interface>
     </hal>
 </manifest>

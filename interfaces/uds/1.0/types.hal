@@ -1,9 +1,15 @@
 package vendor.volvocars.hardware.uds@1.0;
 
-typedef uint16_t Did;
-typedef uint16_t DtcId;
-typedef uint16_t RoutineId;
+
+//////////////////////////////////////////////////////////////////////////////
+// Common/Generic UDS data and interface types
+
 typedef uint64_t SubscriptionHandle;
+
+//////////////////////////////////////////////////////////////////////////////
+// Read/Write Data by identifier specific UDS data
+
+typedef uint16_t Did;
 
 /**
  * Describes whether DID read operation on component was succesful
@@ -23,12 +29,27 @@ struct DidReadResult {
 };
 
 /**
+ * Describes whether DID read operation on component was succesful
+ */
+enum DidWriteStatusCode : uint8_t {
+    SUCCESS, //data was successfully written
+    CONDITIONS_NOT_CORRECT, // The provider is not able to fulfill this request due too its state.
+    NOT_SUPPORTED, // this provider should never be asked for writing this value
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// Diagnostics Trouble Codes specific UDS data
+
+typedef uint32_t DtcId;
+
+/**
  * What is current state, which in full report represents:
  * - result of the first state
  * - new state after change
  * - old state if component to decide to send report without actual
  */
-enum DagnosticCheckStatus : uint8_t {
+enum DiagnosticCheckStatus : uint8_t {
+    NEVER_REPORTED, // test was never reported to collector component
     PASSED, // test passed
     FAILED, // tast failed
 };
@@ -37,6 +58,54 @@ enum DagnosticCheckStatus : uint8_t {
  * Complete result of diagnostic check
  */
 struct DiagnosticCheckReport {
-    DagnosticCheckStatus status; // current status
+    DiagnosticCheckStatus status; // current status
     uint16_t checks_since_last_report; // checks since last report
 };
+
+//////////////////////////////////////////////////////////////////////////////
+// Routine Control specific UDS data
+typedef uint16_t RoutineId;
+
+/**
+ * Describes whether RoutineControl operation on component was successful
+ */
+enum RoutineControlStatusCode : uint8_t {
+    SUCCESS, //data was read and is valid
+    CONDITIONS_NOT_CORRECT, // The provider is not able to fulfill this request due too its state.
+    NOT_SUPPORTED, // this provider should never be asked for this value
+};
+
+struct RoutineExecutionStartRequest {
+    RoutineId rid;
+    vec<uint8_t> entry_options; // routine entry options parameters
+};
+
+struct RoutineExecutionStopRequest {
+    RoutineId rid;
+    vec<uint8_t> exit_options; // routine exit options parameters
+};
+
+struct RoutineExecutionResultsRequest {
+    RoutineId rid;
+};
+
+struct RoutineExecutionStartResponse {
+
+    RoutineControlStatusCode status;
+    vec<uint8_t> start_status; //additional info about server following the start of the routine
+};
+
+
+struct RoutineExecutionStopResponse {
+    RoutineControlStatusCode status;
+    vec<uint8_t> stop_status; //additional info about server following the stop of the routine
+};
+
+struct RoutineExecutionResultsResponse {
+    RoutineControlStatusCode status;
+    vec<uint8_t> results; //asynchronous routine results
+};
+
+
+
+

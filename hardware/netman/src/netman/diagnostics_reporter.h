@@ -3,7 +3,7 @@
 
 #include <utils/StrongPointer.h>
 #include <vcc/localconfig.h>
-#include <vendor/volvocars/hardware/uds/1.0/IUdsDataCollector.h>
+#include <vendor/volvocars/hardware/uds/1.0/IDataCollector.h>
 
 namespace vcc {
 namespace netman {
@@ -17,7 +17,7 @@ class DiagnosticsReporter final : public ::android::hidl::manager::V1_0::IServic
   private:
     void check_link();
 
-    ::android::sp<::vendor::volvocars::hardware::uds::V1_0::IUdsDataCollector> diag_service_;
+    ::android::sp<::vendor::volvocars::hardware::uds::V1_0::IDataCollector> diag_service_;
 
     ::android::hardware::Return<void> onRegistration(const ::android::hardware::hidl_string& fqName,
                                                      const ::android::hardware::hidl_string& name,

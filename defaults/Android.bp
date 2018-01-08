@@ -57,6 +57,7 @@ cc_defaults {
 
     tidy_checks: [
         "-cert-err58-cpp", //all gtest test cases creates static objects
-        "-modernize-use-equals-delete", //gtest testcase still use private inheritance
+        "-modernize-use-equals-delete", //gtest testcase implementation
+        "-modernize-use-equals-default", //gtest testcase implementation
     ],
 }

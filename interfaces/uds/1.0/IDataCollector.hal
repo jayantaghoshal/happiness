@@ -1,0 +1,73 @@
+package vendor.volvocars.hardware.uds@1.0;
+
+import IDataHandler;
+import IRoutineControlHandler;
+
+import SubscriptionHandle;
+import Did;
+import DiagnosticCheckReport;
+import DtcId;
+import RoutineId;
+
+/**
+ * Interface for collecting diagnostic data from the system
+ *
+ * It is responsible for:
+ *  - gathering diagnostics checks (DiagnosticCheckReport) needed for reporting DTCs,
+ *  - coordinating DID values (either by gathering static ones or by dispatching to providers),
+ *  - coordinating Control Routines handling (by dispatching to handlers).
+ */
+interface IDataCollector
+{
+    /**
+     * Register data handler for multiple DIDs
+     * @param handler to call for  values
+     * @param supported_dids list of DIDs supported by provider (either for write or read)
+     * @return subhandle to be used for unregistering if needed
+     */
+    registerDataHandler(IDataHandler handler, vec<Did> supported_dids) generates (SubscriptionHandle subhandle);
+
+    /**
+     * Register Handler for supporting Control routines
+     * @param handler to call for getting values
+     * @param supported_routine_ids list of Routin IDs supported by handler
+     * @return subhandle to be used for unregistering if needed
+     */
+    registerRoutineHandler(IRoutineControlHandler handler, vec<RoutineId> supported_routine_ids) generates (SubscriptionHandle subhandle);
+
+    /**
+     * Unregister single handle
+     * @param subhandle Handle to registration which should be removed
+     * @return True if unregistration succeeded, false if there was no such handle
+     *         (that would mean you did not get this handle from the UdsCollector
+     *         or it was already unregistered)
+     */
+    unregister(SubscriptionHandle subhandle) generates (bool success);
+
+    /**
+     * Alternative to register handler, allowing for simpler flow in case
+     * of components handling did reading, where following condition make it better approach:
+     * - DID is read only (component only provides value),
+     * - DID value is already computed without added effort (typically it would be not asked for)
+     * - It is impossible to change, so reporting it upfront is simpler/better than being Provider
+     * - It is expected for the provided value to be returned until changed or manually unsubscribed.
+     * - the data to store is below 256B (estimated size of subscription storing structure)
+     *
+     * In other cases becoming handler is cheaper (i.e. no calls will be typically made at runtime,
+     * unless car is in the workshop).
+     * @param did Identifier to provide value for
+     * @param value vector of bytes to be returned as DID value.
+     * @return subhandle that can be used to unregister the value.
+     *         typically not needed if the called does not to intend to change the value
+     *         before power cycle, but also used in testing and provided for completenes.
+     */
+    provideStaticDidValue(Did did, vec<uint8_t> value) generates (SubscriptionHandle subhandle);
+
+    /**
+     * Reporting data for usage with DTCs.
+     * @param id identifier of Diagnostic Trouble Code
+     * @param report Summary of checks since last report
+     */
+    reportDiagnosticTestResult(DtcId id, DiagnosticCheckReport report) generates (bool success);
+
+};

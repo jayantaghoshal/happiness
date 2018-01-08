@@ -22,6 +22,12 @@ cc_binary {
         "liblog",
     ],
 
+    product_variables: {
+        debuggable: {
+            cppflags: ["-DENABLE_DATA_COLLECTOR_TESTPOINT=1"],
+        },
+    },
+
     relative_install_path: "hw",
 
     init_rc: [

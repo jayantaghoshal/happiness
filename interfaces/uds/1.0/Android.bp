@@ -4,9 +4,10 @@ filegroup {
     name: "vendor.volvocars.hardware.uds@1.0_hal",
     srcs: [
         "types.hal",
+        "IDataCollector.hal",
+        "IDataCollectorTestPoint.hal",
+        "IDataHandler.hal",
         "IRoutineControlHandler.hal",
-        "IUdsDataCollector.hal",
-        "IUdsDataProvider.hal",
     ],
 }
 
@@ -19,9 +20,10 @@ genrule {
     ],
     out: [
         "vendor/volvocars/hardware/uds/1.0/types.cpp",
+        "vendor/volvocars/hardware/uds/1.0/DataCollectorAll.cpp",
+        "vendor/volvocars/hardware/uds/1.0/DataCollectorTestPointAll.cpp",
+        "vendor/volvocars/hardware/uds/1.0/DataHandlerAll.cpp",
         "vendor/volvocars/hardware/uds/1.0/RoutineControlHandlerAll.cpp",
-        "vendor/volvocars/hardware/uds/1.0/UdsDataCollectorAll.cpp",
-        "vendor/volvocars/hardware/uds/1.0/UdsDataProviderAll.cpp",
     ],
 }
 
@@ -35,21 +37,26 @@ genrule {
     out: [
         "vendor/volvocars/hardware/uds/1.0/types.h",
         "vendor/volvocars/hardware/uds/1.0/hwtypes.h",
+        "vendor/volvocars/hardware/uds/1.0/IDataCollector.h",
+        "vendor/volvocars/hardware/uds/1.0/IHwDataCollector.h",
+        "vendor/volvocars/hardware/uds/1.0/BnHwDataCollector.h",
+        "vendor/volvocars/hardware/uds/1.0/BpHwDataCollector.h",
+        "vendor/volvocars/hardware/uds/1.0/BsDataCollector.h",
+        "vendor/volvocars/hardware/uds/1.0/IDataCollectorTestPoint.h",
+        "vendor/volvocars/hardware/uds/1.0/IHwDataCollectorTestPoint.h",
+        "vendor/volvocars/hardware/uds/1.0/BnHwDataCollectorTestPoint.h",
+        "vendor/volvocars/hardware/uds/1.0/BpHwDataCollectorTestPoint.h",
+        "vendor/volvocars/hardware/uds/1.0/BsDataCollectorTestPoint.h",
+        "vendor/volvocars/hardware/uds/1.0/IDataHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/IHwDataHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BnHwDataHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BpHwDataHandler.h",
+        "vendor/volvocars/hardware/uds/1.0/BsDataHandler.h",
         "vendor/volvocars/hardware/uds/1.0/IRoutineControlHandler.h",
         "vendor/volvocars/hardware/uds/1.0/IHwRoutineControlHandler.h",
         "vendor/volvocars/hardware/uds/1.0/BnHwRoutineControlHandler.h",
         "vendor/volvocars/hardware/uds/1.0/BpHwRoutineControlHandler.h",
         "vendor/volvocars/hardware/uds/1.0/BsRoutineControlHandler.h",
-        "vendor/volvocars/hardware/uds/1.0/IUdsDataCollector.h",
-        "vendor/volvocars/hardware/uds/1.0/IHwUdsDataCollector.h",
-        "vendor/volvocars/hardware/uds/1.0/BnHwUdsDataCollector.h",
-        "vendor/volvocars/hardware/uds/1.0/BpHwUdsDataCollector.h",
-        "vendor/volvocars/hardware/uds/1.0/BsUdsDataCollector.h",
-        "vendor/volvocars/hardware/uds/1.0/IUdsDataProvider.h",
-        "vendor/volvocars/hardware/uds/1.0/IHwUdsDataProvider.h",
-        "vendor/volvocars/hardware/uds/1.0/BnHwUdsDataProvider.h",
-        "vendor/volvocars/hardware/uds/1.0/BpHwUdsDataProvider.h",
-        "vendor/volvocars/hardware/uds/1.0/BsUdsDataProvider.h",
     ],
 }
 

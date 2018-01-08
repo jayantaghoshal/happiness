@@ -1,5 +1,13 @@
 package vendor.volvocars.hardware.uds@1.0;
 
+import DiagnosticCheckReport;
+import Did;
+import DidReadResult;
+import DidWriteStatusCode;
+import DtcId;
+import RoutineId;
+import SubscriptionHandle;
+
 import RoutineExecutionStartRequest;
 import RoutineExecutionStopRequest;
 import RoutineExecutionResultsRequest;
@@ -7,21 +15,20 @@ import RoutineExecutionStartResponse;
 import RoutineExecutionStopResponse;
 import RoutineExecutionResultsResponse;
 
-/**
- * Interface for component providing Control Routine Handling.
- *
- * If your component needs to handle CRs, you should implement
- * this interface, and register with IUdsDataCollector
- */
-interface IRoutineControlHandler
-{
 
-    /**
-     * Starts routine with whole processing being asynchronous
-     * Or implements whole synchronous control routine
-     */
+/**
+ * Interface for poking into IDataCollector, needed for testing
+ * components interaction with data collector without testing full diagnostic chain
+ * It allows validating full scope of what component should implement.
+ */
+interface IDataCollectorTestPoint
+{
+    readDidValue(Did did) generates (DidReadResult result);
+    writeDidValue(Did did, vec<uint8_t> data) generates (DidWriteStatusCode result);
+
     startAsynchronousRoutine(RoutineExecutionStartRequest request) generates (RoutineExecutionStartResponse result);
     stopAsynchronousRoutine(RoutineExecutionStopRequest request) generates (RoutineExecutionStopResponse result);
     getAsynchronousRoutineResults(RoutineExecutionResultsRequest request) generates (RoutineExecutionResultsResponse result);
 
+    getLastDiagnosticTestResult(DtcId id) generates (DiagnosticCheckReport report);
 };
