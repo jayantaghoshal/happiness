@@ -21,9 +21,9 @@ else
 fi
 
 bootstrap_docker_run () {
+    #shellcheck disable=SC2086
     docker run \
     --hostname aic-docker \
-    #shellcheck disable=SC2086
     ${BOOTSTRAP_VOLUMES} \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \

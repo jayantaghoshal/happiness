@@ -43,13 +43,14 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 du -sh "$OUT_ARCHIVE"
 
 # Upload to Artifactory
-time artifactory push ihu_image_build "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
-redis-cli set icup_android.jenkins.ihu_image_build."${BUILD_NUMBER}".commit "${GIT_COMMIT}" || die "redis-cli set failed"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${GIT_COMMIT}" || die "redis-cli set failed"
 
 # Set this job to latest image build in Redis
-redis-cli set icup_android.jenkins.ihu_image_build.latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
+redis-cli set icup_android.jenkins."${JOB_NAME}".latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
 
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py ihu_image_build "${BUILD_NUMBER}" pass || true
+#TODO: Check if this is valid
+#time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py "${JOB_NAME}" "${BUILD_NUMBER}" pass || true
 
 # Cleanup
 rm ${OUT_ARCHIVE}

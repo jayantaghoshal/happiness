@@ -1,5 +1,5 @@
 - defaults:
-    name: hourly_job_defaults
+    name: daily_job_defaults
     project-type: freestyle
     description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
     concurrent: false
@@ -24,13 +24,9 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
-    publishers:
-      - archive:
-          artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
-          allow-empty: true
-
+    
 - job:
-    name: ihu_hourly
+    name: ihu_daily
     project-type: multijob
     node: high
     scm:
@@ -44,46 +40,55 @@
             wipe-workspace: true
     triggers:
         - pollscm:
-            cron: "H * * * *"
+            cron: "H H(0-1) * * *"
             ignore-post-commit-hooks: True
     builders:
       - multijob:
           name: Build
           condition: ALWAYS
           projects:
-            - name: ihu_hourly_build-eng
+            - name: ihu_daily_build_vcc_eng
               current-parameters: true
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_build_vcc_userdebug
+              current-parameters: true
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_build_vcc_user
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}    
       - multijob:
           name: Test
           condition: SUCCESSFUL
           projects:
-            - name: ihu_hourly_test-generic
+            - name: ihu_daily_test-generic
               current-parameters: true
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_hourly_test-flexray
+            - name: ihu_daily_test-flexray
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_hourly_test-audio
+            - name: ihu_daily_test-audio
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}        
-
 - job:
-    name: ihu_hourly_build-eng
-    defaults: hourly_job_defaults
-    node: hourly_build
+    name: ihu_daily_build_vcc_eng
+    defaults: daily_job_defaults
+    node: daily_build
     properties:
-        #TODO: Duplicated from the hourly_job_defaults, don't know how to append things to the default.
         - build-discarder:
             days-to-keep: 30
             artifact-days-to-keep: 30
@@ -97,69 +102,116 @@
     builders:
         - shell: 
             !include-raw: 
-                - bootstrap_ramdisk.sh
+                - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_hourly_build_eng.sh
+                - bootstrap_ihu_daily_build_eng.sh
+
 
 - job:
-    name: ihu_hourly_test-generic
-    defaults: hourly_job_defaults
-    node: hourly_test-generic
+    name: ihu_daily_build_vcc_userdebug
+    defaults: daily_job_defaults
+    node: daily_build
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>      
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_build_userdebug.sh           
+
+- job:
+    name: ihu_daily_build_vcc_user
+    defaults: daily_job_defaults
+    node: daily_build
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>      
+    builders:
+        - shell: 
+            !include-raw: 
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_build_user.sh           
+
+
+- job:
+    name: ihu_daily_test-generic
+    defaults: daily_job_defaults
+    node: rack-rig
     parameters:
         - run:
             name: UPSTREAM_JOB        
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
     builders:
         - shell: |
             if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
             then
-                echo "Hourly test generic failed!!!"
+                echo "Daily build ihu_vcc-eng failed!!!"
                 exit 1
             fi    
         - shell: 
             !include-raw: 
+                - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_hourly_test_common.sh
+                - bootstrap_ihu_daily_test_common.sh
    
 - job:
-    name: ihu_hourly_test-flexray
-    defaults: hourly_job_defaults
-    node: hourly_test-flexray
+    name: ihu_daily_test-flexray
+    defaults: daily_job_defaults
+    node: rack-rig-flexray
     parameters:
         - run:
             name: UPSTREAM_JOB        
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
     builders:
         - shell: |
             if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
             then
-                echo "Hourly test flexray failed!!!"
+                echo "Daily build ihu_vcc-eng failed!!!"
                 exit 1
             fi    
         - shell: 
             !include-raw: 
+                - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_hourly_test_common.sh   
+                - bootstrap_ihu_daily_test_common.sh   
 
 - job:
-    name: ihu_hourly_test-audio
-    defaults: hourly_job_defaults
-    node: hourly_test-audio
+    name: ihu_daily_test-audio
+    defaults: daily_job_defaults
+    node: rack-rig-audio
     parameters:
         - run:
             name: UPSTREAM_JOB        
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
     builders:
         - shell: |
             if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
             then
-                echo "Hourly test audio failed!!!"
+                echo "Daily build ihu_vcc-eng failed!!!"
                 exit 1
             fi    
         - shell: 
             !include-raw: 
+                - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_hourly_test_common.sh
+                - bootstrap_ihu_daily_test_common.sh                         
