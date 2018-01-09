@@ -33,7 +33,7 @@ def main():
                               "It can be useful because generate targets can be quite slow",
                         default=None)
     args = parser.parse_args()
-
+    print("Please wait, this might take 1min")
 
     working_dir = os.environ["ANDROID_BUILD_TOP"]
     if args.ninjatargets_input:
@@ -54,6 +54,7 @@ def create_ninja_commands(ninja_file):
                                     "-f", ninja_file,
                                     "-t" "commands"]).decode("utf-8")
 
+
 def parse_commands(ninja_log: str, working_dir: str):
     cc_compile_regex = re.compile("(.*-?g?cc )|(.*-?clang )")
     cpp_compile_regex = re.compile("(.*-?[gc]\+\+ )|(.*-?clang\+\+ )")
@@ -70,13 +71,31 @@ def parse_commands(ninja_log: str, working_dir: str):
         "-imacros",
         "-isysroot"
     ]
+    lines = ninja_log.splitlines()
+    nr_lines = len(lines)
+    next_progress = 0
+    for linenr, line in enumerate(lines):
+        if linenr / nr_lines > next_progress:
+            next_progress += 0.05
+            print("%d%%" % (linenr / nr_lines * 100))
 
-    for line in ninja_log.splitlines():
+        compiler = None
+
+        # Compiler-invocations generated with Android.mk are always wrapped inside a bash-command
+        # They usually look something like: /bin/bash -c "PWD=xxxxx clangxx argsxxxx filexxxx"
+        # Android.bp creates cleaner ninja targets with only the clangxx as command
         if bash_regex.match(line):
-            #TODO: Handle cases where there is compiler inside a bash command, these are quite frequent
-            continue
-
-        if cc_compile_regex.match(line):
+            bash_args = shlex.split(line)
+            for b in bash_args:
+                if cc_compile_regex.match(b):
+                    compiler = 'cc'
+                    line = b
+                elif cpp_compile_regex.match(b):
+                    compiler = 'c++'
+                    line = b
+            if compiler is None:
+                continue
+        elif cc_compile_regex.match(line):
             compiler = 'cc'
         elif cpp_compile_regex.match(line):
             compiler = 'c++'
@@ -87,7 +106,25 @@ def parse_commands(ninja_log: str, working_dir: str):
         words = shlex.split(line)[1:]
         filepath = None
 
+
+        try:
+            # Android.mk generates really magic ninja files that invokes bash to include an import-file using cat.
+            # This included file contains include-args to all the header dependencies.
+            cat_import_includes_index = words.index("$(cat")
+            import_includes_path = words[cat_import_includes_index+1][0:-1] #remove trailing ) matching the $cat(
+            with open(import_includes_path, "r", encoding="utf-8") as f:
+                import_includes = f.read()
+            more_words = shlex.split(import_includes)
+            # Replace the $cat( and include_path) args with everything from the included file
+            words[cat_import_includes_index:cat_import_includes_index+2] = more_words
+        except ValueError:
+            pass
+
+        skipnext = False
         for (i, word) in enumerate(words):
+            if skipnext:
+                skipnext = False
+                continue
             if (cpp_file_regex.match(word)):
                 filepath = word
 
@@ -95,13 +132,12 @@ def parse_commands(ninja_log: str, working_dir: str):
             if i != len(words) - 1 and word in filename_flags and words[i + 1][0] != '-':
                 w = words[i + 1]
                 arguments.extend([word, w])
+                skipnext = True
             else:
                 arguments.append(word)
         if filepath is None:
             continue
 
-        #if not "vendor/volvocars" in filepath:
-        #    continue
 
         yield {
             'directory': working_dir,
