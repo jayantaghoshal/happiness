@@ -10,6 +10,7 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 # Sync repos required for build/envsetup.sh and lunch so we can run VTS.
 repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/services/Car aosp/device/sample
+repo_sync vendor/delphi/android_device_release vendor/delphi/android_device
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
