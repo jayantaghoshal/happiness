@@ -77,16 +77,13 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
     try:
         ihu_serials = open_serials(port_mapping)
     except Exception as e:
-        print()
-        print("Failed to open Serial ports")
-        print(e)
-        print()
-        print("  Troubleshooting:")
-        print("    1. USB-to-Serial cables connected?")
-        print("    2. Restart docker container. If you plug in serial cable after docker started it will not auto detect.")
-        print("       Ensure all docker terminals are closed and verify container not running with 'docker ps' and 'docker kill'")
-        print("    3. Other program using tty-device? Picocom?")
-        print("    4. Maybe you have multiple or renamed /dev/ttyUSB-devices, use --mp_port and --vip_port to choose explicitly")
+        print("""Failed to open Serial ports")
+          Troubleshooting:")
+            1. USB-to-Serial cables connected?")
+            2. Restart docker container. If you plug in serial cable after docker started it will not auto detect.")
+                 Ensure all docker terminals are closed and verify container not running with 'docker ps' and 'docker kill'")
+            3. Other program using tty-device? Picocom?")
+            4. Maybe you have multiple or renamed /dev/ttyUSB-devices, use --mp_port and --vip_port to choose explicitly""")
         return
 
     VIP, MP = ihu_serials.vip, ihu_serials.mp
@@ -94,13 +91,13 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
     is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(ihu_serials.vip)
     if not (is_vip_app or is_vip_pbl):
         raise RuntimeError(
-            "VIP not detected.\n"
-            "Troubleshooting:\n"
-            " 1. Power on?\n"
-            " 2. Serial connected?\n"
-            " 3. Swap MP/VIP serial with --swap_tty argument?\n"
-            " 4. Power cycle VIP\n"
-            " 5. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.")
+            """VIP not detected.
+            Troubleshooting:
+             1. Power on?
+             2. Serial connected?
+             3. Swap MP/VIP serial with --swap_tty argument?
+             4. Power cycle VIP
+             5. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.""")
 
     try:
         adb_bootmode = run([adb_executable, "get-state"], timeout_sec=60)
@@ -144,20 +141,25 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             if fastboot_timeout_s == 0:
                 raise Exception("No Fastboot device found. Did you forget to connect host with target?")
 
-
             # Ensure that after flashing completes the pin is in correct state
             # fastboot reboot boots into android anyway, but toggling reset afterwards should not cause
             # booting to abl
             mp_bootpin_prod(ihu_serials.vip)
 
+            fastboot_env = os.environ.copy()
+            fastboot_env['DISABLE_VERITY'] = '1'
+
             logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
-            run(['bash', 'fastboot.sh', '--abl'], cwd=bsp_provided_flashfiles_path)
+            run(['bash', 'fastboot.sh', '--abl'],
+                cwd=bsp_provided_flashfiles_path,
+                env=fastboot_env)
 
             wait_for_device_adb(adb_executable)
             wait_for_boot_completed(adb_executable)
             logger.info("----------------------------")
             logger.info("Flash and reboot complete")
-            logger.info("ro.build.version.release: %s", run([adb_executable, "shell", "getprop", "ro.build.version.release"]))
+            logger.info("ro.build.version.release: %s",
+                        run([adb_executable, "shell", "getprop", "ro.build.version.release"]))
             logger.info("ro.build.date: %s", run([adb_executable, "shell", "getprop", "ro.build.date"]))
         else:
             logger.info("NOT Updating MP software")
@@ -196,7 +198,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                           "shell",
                           "vbf_flasher",
                           "/vendor/vip-update/pbl/vip-pbl.VBF"],
-                          timeout_sec=60 * 2)
+                         timeout_sec=60 * 2)
             logger.info("VIP PBL update finished with result %s", output)
 
             logger.info("Rebooting VIP...")
@@ -212,12 +214,11 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                           "shell",
                           "vbf_flasher",
                           "/vendor/vip-update/app/*"],
-                          timeout_sec=60 * 2)
+                         timeout_sec=60 * 2)
             logger.info("VIP APP update finished with result %r", output)
-            VIP.writeline("sm restart")  # new command, already in our PBL
 
-            if not serial_mapping.verify_serial_is_vip_app(ihu_serials.vip):
-                raise Exception("Reseting VIP app failed, try power cycling")
+            VIP.writeline("sm restart")  # new command, already in our PBL
+            VIP.expect_line("Rebooting to normal mode", 30, hint="Reseting VIP app failed, try power cycling")
 
             logger.info("New VIP APP booted successfully")
 
@@ -227,7 +228,6 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
 
         else:
             logger.info("NOT Flashing VIP")
-
 
         logging.info("Flash completed")
     except Exception:
@@ -243,7 +243,7 @@ def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSer
     try:
         adb_bootmode = run([adb_executable,
                             "get-state"],
-                            timeout_sec=60)
+                           timeout_sec=60)
     except Exception:
         adb_bootmode = 'unknown'
 
@@ -259,7 +259,7 @@ def wait_for_boot_completed(adb_executable: str):
     while True:
         try:
             output = run([adb_executable,
-                         "shell", 'getprop', 'sys.boot_completed'],
+                          "shell", 'getprop', 'sys.boot_completed'],
                          timeout_sec=7)
         except Exception:
             output = "0"  # Ignore if the command times out
@@ -273,7 +273,7 @@ def wait_for_boot_completed(adb_executable: str):
 def wait_for_device_adb(adb_executable):
     logging.info("Wait for device to enter device-mode via ADB")
     check_output_logged([adb_executable,
-                        "wait-for-device"],
+                         "wait-for-device"],
                         timeout_sec=60 * 7)
 
 
@@ -315,7 +315,6 @@ def main():
     build_dir = os.path.expandvars(parsed_args.aosp_root_dir)
     build_out_dir = os.path.join(build_dir, "out")
     logging.info("Start flash with args %r", parsed_args)
-
 
     if parsed_args.swap_tty:
         port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
