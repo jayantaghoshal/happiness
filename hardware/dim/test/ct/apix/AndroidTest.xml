@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-This tests verifies basic APIX configuration and APIX ethernet functionality. 
+This test verifies basic APIX configuration and APIX ethernet functionality.
 -->
 <configuration description="Test that APIX configuration and ethernet function is OK">
  <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="abort-on-push-failure" value="true"/>
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsApixGateTestCases->/data/local/tmp/VtsApixGateTestCases" />
-    </target_preparer>
-    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="push" value="VtsApixMIITestCases->/data/local/tmp/VtsApixMIITestCases" />
+</target_preparer>
+<test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsApixGateTestCases" />
-        <option name="runtime-hint" value="5s" />
-    </test>
+        <option name="module-name" value="VtsApixMIITestCases" />
+        <option name="runtime-hint" value="10s" />
+</test>
 </configuration>

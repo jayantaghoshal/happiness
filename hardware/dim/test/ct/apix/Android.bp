@@ -1,0 +1,28 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "VtsApixMIITestCases",
+
+    srcs: [
+        "apix_ct_mii_test.cpp",
+        "apix_test_helpers.cpp",
+    ],
+
+    shared_libs: ["liblog"],
+
+    test_suites: ["vts"],
+}
+
+cc_binary {
+    name: "apix_setup_sock_util",
+    defaults: ["volvocars_cc_defaults"],
+
+    srcs: [
+        "apix_socket_test_util.cpp",
+    ],
+
+    shared_libs: ["liblog"],
+}

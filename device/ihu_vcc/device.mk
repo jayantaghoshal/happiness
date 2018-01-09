@@ -82,7 +82,8 @@ PRODUCT_PACKAGES += \
     carsim_bridge \
     signal_toggle_sender \
     carconfig-client-tester \
-    hisipcmd
+    hisipcmd \
+    apix_setup_sock_util
 endif
 
 ##############################################################

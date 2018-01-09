@@ -43,8 +43,8 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2018-01-21"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix_gate",       standard_caps),
-             reason="APIX driver not yet integrated on Master",
+    Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps),
+             reason="APIX capability not yet ready in CI",
              jira_issue="",
              deadline="2018-01-30"
     ),

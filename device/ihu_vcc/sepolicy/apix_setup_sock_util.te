@@ -1,0 +1,5 @@
+#apix_setup_sock_util
+type apix_setup_sock_util, domain;
+type apix_setup_sock_util_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(apix_setup_sock_util)
