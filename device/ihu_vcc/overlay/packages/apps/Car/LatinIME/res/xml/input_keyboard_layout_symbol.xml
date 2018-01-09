@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="10%p"
+    android:keyHeight="48px"
+    android:verticalGap="32px"
+    android:horizontalGap="@dimen/keyboard_key_horizontal_tiny_gap">
+
+    <Row android:rowEdgeFlags="top" android:keyWidth="9%">
+        <Key
+            android:keyLabel="1"
+            android:keyEdgeFlags="left" />
+        <Key
+            android:keyLabel="2" />
+        <Key
+            android:keyLabel="3" />
+        <Key
+            android:keyLabel="4" />
+        <Key
+            android:keyLabel="5"  />
+        <Key
+            android:keyLabel="6" />
+        <Key
+            android:keyLabel="7" />
+        <Key
+            android:keyLabel="8" />
+        <Key
+            android:keyLabel="9" />
+        <Key
+            android:keyLabel="0" />
+
+        <Key
+            android:codes="@integer/keycode_delete"
+            android:keyIcon="@drawable/ic_backspace_tint"
+            android:keyWidth="10%p"
+            android:keyEdgeFlags="right"
+            android:isRepeatable="true" />
+    </Row>
+
+    <Row android:keyWidth="9.44%p">
+        <Key
+            android:keyLabel="\#"
+            android:horizontalGap="@dimen/keyboard_key_horizontal_small_gap"
+            android:keyEdgeFlags="left" />
+        <Key
+            android:keyLabel="$" />
+        <Key
+            android:keyLabel="%" />
+        <Key
+            android:keyLabel="^" />
+        <Key
+            android:keyLabel="&amp;" />
+        <Key
+            android:keyLabel="*" />
+        <Key
+            android:keyLabel="(" />
+        <Key
+            android:keyLabel=")" />
+        <Key
+            android:keyLabel="+" />
+        <Key
+            android:codes="@integer/keycode_return"
+            android:keyWidth="15%p"
+            android:keyIcon="@drawable/ic_keyboard_return"
+            android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row android:keyWidth="9.09%p">
+        <Key
+            android:keyLabel="&quot;"
+            android:keyEdgeFlags="left" />
+        <Key
+            android:keyLabel="\'" />
+        <Key
+            android:keyLabel=":" />
+        <Key
+            android:keyLabel=";" />
+        <Key
+            android:keyLabel="/" />
+        <Key
+            android:keyLabel="\\" />
+        <Key
+            android:keyLabel="{" />
+        <Key
+            android:keyLabel="}" />
+        <Key
+            android:keyLabel="|" />
+        <Key
+            android:keyLabel="&lt;" />
+        <Key
+            android:keyLabel="&gt;"
+            android:keyEdgeFlags="right" />
+    </Row>
+
+    <Row
+        android:rowEdgeFlags="bottom">
+        <Key
+            android:codes="@integer/keycode_close_keyboard"
+            android:keyIcon="@drawable/ic_close_keyboard"
+            android:keyWidth="15%p"
+            android:keyEdgeFlags="left" />
+        <Key
+            android:keyLabel="~" />
+        <Key
+            android:keyLabel="`" />
+        <Key
+            android:codes="@integer/keycode_space"
+            android:keyIcon="@drawable/ic_keyboard_spacebar"
+            android:keyWidth="30%p" />
+        <Key
+            android:keyLabel="[" />
+        <Key
+            android:keyLabel="]" />
+        <Key
+            android:codes="@integer/keycode_mode_change"
+            android:keyIcon="@drawable/ic_abc"
+            android:keyWidth="15%p"
+            android:keyEdgeFlags="right"/>
+    </Row>
+
+</Keyboard>

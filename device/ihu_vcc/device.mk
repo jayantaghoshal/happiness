@@ -37,7 +37,8 @@ PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,vendor/delphi/swdl/vip-upd
 ##############################################################
 PRODUCT_PACKAGES += \
     VolvoLauncher \
-    VccLauncher
+    VccLauncher \
+    CarLatinIME
 
 ##############################################################
 # Internal Apps UI
@@ -49,6 +50,7 @@ endif
 
 PRODUCT_PACKAGES += \
     VccTunerApp
+
 
 ##############################################################
 # Vendor apps
