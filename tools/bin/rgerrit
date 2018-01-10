@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import pprint
+import sys
+
+if __name__ == "__main__":
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(sys.argv[0]))))
+    from lib.python.gerrit.gerrit_handler import gerrit
+
+    parser = argparse.ArgumentParser("Remote control gerrit")
+    parser.add_argument('-r', '--review', dest='review', action='store', help='Set review status (0, +1, +2, ...)')
+    parser.add_argument('-A', '--automerge', dest='automerge', action='store', help='Set Automerge status (0 or +1)')
+    parser.add_argument('-V', '--verified', dest='verified', action='store', help='Set Verified status (0 or +1)')
+    parser.add_argument('-R', '--recheck', dest='recheck', action='store_true', help='Recheck change')
+    parser.add_argument('--abandon', dest='abandon', action='store_true', help='Abandon change')
+    parser.add_argument('-H', '--host', dest='host', nargs=1, help='Set gerrit username, host and port (format=username@host:port)')
+    parser.add_argument('command', help='review, query or projects')
+
+    options, remaining_args = parser.parse_known_args(sys.argv[1:])
+
+    if options.host is not None:
+        user, hostport = options.host[0].split('@')
+        host, port = hostport.split(':')
+        gerrit_instance = gerrit(host, port, user)
+    else:
+        gerrit_instance = gerrit()
+    
+    if "review" in options.command.lower():
+        if options.review:
+            remaining_args.extend(["--code-review", options.review])
+        if options.verified:
+            remaining_args.extend(["--verified", options.verified])
+        if options.automerge:
+            remaining_args.extend(["--label", "Automerge={}".format(options.automerge)])
+        if options.recheck:
+            remaining_args.extend(["--message", "'!recheck'"])
+        if options.abandon:
+            remaining_args.append("--abandon")
+        gerrit_instance.review(remaining_args)
+    if "query" in options.command.lower():
+        pprint.pprint(gerrit_instance.query(remaining_args))
+    if "projects" in options.command.lower():
+        print(os.linesep.join(gerrit_instance.ls_projects()))
