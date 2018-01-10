@@ -87,7 +87,7 @@ endif
 # Google Services
 ##############################################################
 
-GMS = vendor/volvocars/packages/google/GoogleServices
+GMS = vendor/volvocars/apps/google/GoogleServices
 
 # GMS mandatory core packages
 PRODUCT_PACKAGES += \
