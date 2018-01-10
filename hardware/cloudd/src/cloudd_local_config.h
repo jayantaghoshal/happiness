@@ -160,7 +160,7 @@ class ClouddLocalConfig {
         std::string carNet_ = "198.18.0.0";
         std::string carSubnet_ = "255.255.0.0";
         bool loggingEnabled_ = false; */
-    std::string cloud_entry_point_address_ = "cnep.test.volvocars.com";
+    std::string cloud_entry_point_address_ = "https://cnep.test.volvocars.com/?client_id=11";
 
     /*
     std::string ethernetGatewayIpAddress_ = "198.18.32.1";

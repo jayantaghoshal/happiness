@@ -54,6 +54,7 @@
   "WLAN_VCM_WLANSTAStatus_TimeoutMs": 1000,
   "WLAN_VCM_WLANSTAForgetRememberedNetwk_TimeoutMs": 1500,
   "CONN_IpNetworkPrioNetworkControl": 7,
+  "CONN_CloudEntryPointAddress":"https://cnep.test.volvocars.com/?client_id=11",
   "eth0.name": "apix0",
   "eth0.ip-address": "198.18.18.1",
   "eth0.broadcast-address": "198.18.255.255",

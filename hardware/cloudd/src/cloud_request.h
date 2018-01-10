@@ -26,7 +26,7 @@ class CloudRequest {
     std::string response_header_;
 
   public:
-    CloudRequest(std::shared_ptr<CertHandlerInterface> cert_handler)
+    CloudRequest(std::shared_ptr<CertHandlerInterface> cert_handler = nullptr)
         : url_("www.example.com"),
           curl_handle_(nullptr),
           certificate_handler_(cert_handler),

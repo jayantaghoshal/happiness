@@ -42,9 +42,7 @@ bool CloudService::Initialize() {
 
     });
 
-    std::string entry_point_url = "https://" + lcfg_entrypoint_url + "/?client_id=11";
-
-    entry_point_fetcher_.Fetch(entry_point_url);
+    entry_point_fetcher_.Fetch(lcfg_entrypoint_url);
 
     return true;
 }

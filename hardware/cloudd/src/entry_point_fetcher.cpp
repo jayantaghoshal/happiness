@@ -47,7 +47,13 @@ void EntryPointFetcher::Restart() {
     try {
         ALOGD("entry point url: %s", entry_point_url_.c_str());
 
-        std::shared_ptr<CloudRequest> cloud_request = std::make_shared<CloudRequest>(cert_handler_);
+        std::shared_ptr<CloudRequest> cloud_request;
+        if (entry_point_url_.find("https") == std::string::npos) {
+            cloud_request = std::make_shared<CloudRequest>();
+            cloud_request->SetUseHttps(false);
+        } else {
+            cloud_request = std::make_shared<CloudRequest>(cert_handler_);
+        }
         cloud_request->SetURL(entry_point_url_);
         cloud_request->SetCallback(std::move(done_callback));
         cloud_request_handler_->SendCloudRequest(cloud_request);
