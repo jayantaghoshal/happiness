@@ -19,6 +19,7 @@ def create_parser():
             Commands:
             agent   - Execute Jenkins build
             builds  - List Jenkins builds
+            nodes   - List Jenkins nodes
             ''')
     )
 
@@ -76,6 +77,25 @@ def create_parser():
                                default=os.getenv('JENKINS_API_KEY', None),
                                help="Jenkins API-KEY (defaults to ${JENKINS_API_KEY})")
 
+    ##
+    # nodes
+    #
+    parser_nodes = subparser.add_parser("nodes",
+                                        description="List nodes in Jenkins")
+
+    parser_nodes.add_argument("-u", "--user",
+                              nargs="?",
+                              dest="username",
+                              metavar='USER',
+                              default=os.getenv('USER'),
+                              help="CDSID (defaults to $USER)")
+
+    parser_nodes.add_argument("-p", "--password",
+                              nargs="?",
+                              metavar='API-KEY',
+                              default=os.getenv('JENKINS_API_KEY', None),
+                              help="Jenkins API-KEY (defaults to ${JENKINS_API_KEY})")
+
     return parser
 
 def create_logger(options):
@@ -101,6 +121,8 @@ def execute(options):
         return AgentCommand(options).run()
     elif options.command == 'builds':
         return BuildsCommand(options).run()
+    elif options.command == 'nodes':
+        return NodesCommand(options).run()
 
 def main(argv=None):
 

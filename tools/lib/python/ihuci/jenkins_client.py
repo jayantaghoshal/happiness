@@ -24,6 +24,19 @@ class JenkinsClient(object):
     def build(self, job, build):
         return self._jenkins().get_build_info(job, build)
 
+    def nodes(self):
+        return self._jenkins().get_nodes()
+
+    def node_info(self, name):
+        if not self._jenkins().node_exists(name):
+            return None
+        return self._jenkins().get_node_info(name)
+
+    def node_config(self, name):
+        if not self._jenkins().node_exists(name):
+            return None
+        return self._jenkins().get_node_config(name)
+
     def _jenkins(self):
         if self._server is None:
             self._server = Jenkins('https://icup_android.jenkins.cm.volvocars.biz',
