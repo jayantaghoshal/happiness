@@ -64,7 +64,7 @@
   <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="a0331b09700076a1848d383e3e0948fde4d355f6"/>
 
   <!-- SWDL, to be decided which layer it belongs -->
-  <project name="bsp/vendor/delphi/swdl" path="vendor/delphi/swdl" revision="2d7221132da21d186437ec1546034e8b51c1f199"/>
+  <project name="bsp/vendor/delphi/swdl" path="vendor/delphi/swdl" revision="be17f608d301478b131718b614f01457a6c614df"/>
 
   <!-- Patch liblog to silence clang-tidy nagging about readability-implicit-bool-conversion in ALOGV macro -->
   <remove-project name="aosp/platform/system/core"/>
