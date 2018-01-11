@@ -49,9 +49,9 @@ int DiagnosticsReporter::getDtcID(const std::string& iface) {
 }
 
 DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {
-    ifnames_[TCAM] = lcfg_->GetString("eth0.name");
-    ifnames_[MOST] = lcfg_->GetString("eth1.name");
-    ifnames_[APIX] = lcfg_->GetString("meth0.name");
+    ifnames_[TCAM] = lcfg_->GetString("eth1.name");
+    ifnames_[MOST] = lcfg_->GetString("meth0.name");
+    ifnames_[APIX] = lcfg_->GetString("eth0.name");
 
     IDataCollector::registerForNotifications("default", this);
 }
