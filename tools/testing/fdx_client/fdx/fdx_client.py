@@ -9,6 +9,8 @@ import logging
 import time
 import select
 logger = logging.getLogger(__name__)
+logger_lowlevel_rx = logging.getLogger(__name__ + ".rx")
+logger_lowlevel_tx = logging.getLogger(__name__ + ".tx")
 import typing
 
 
@@ -177,7 +179,7 @@ class FDXConnection:
                     if host != self.ip and port != self.port:
                         logger.error("Received data from different host than sending to, host: %s, port: %d", host, port)
                         continue
-                    logger.debug("Received message: %r", data)
+                    logger_lowlevel_rx.debug("Received message: %r", data)
                     gen = parser.feed()
                     gen.send(None)
                     for d in data:
@@ -211,7 +213,7 @@ class FDXConnection:
         self.next_seq_nr_to_send = increase_seq_nr(self.next_seq_nr_to_send)
 
         datagram = header + struct.pack('=h', len(command) + size_size) + command
-        logger.debug("Sending data: %r", datagram)
+        logger_lowlevel_tx.debug("Sending data: %r", datagram)
         self.sock.sendto(datagram, (self.ip, self.port))
 
     def send_start(self):
