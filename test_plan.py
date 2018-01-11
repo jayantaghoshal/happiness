@@ -98,7 +98,7 @@ test_plan_hourly = [
     Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps),
              reason="Waiting for fully working MOST drivers",
              jira_issue="",
-             deadline="2018-01-04"
+             deadline="2018-01-30"
     ),
 
 ]

@@ -153,7 +153,7 @@
 - job:
     name: ihu_daily_test-generic
     defaults: daily_job_defaults
-    node: rack-rig
+    node: daily_test-generic
     parameters:
         - run:
             name: UPSTREAM_JOB        
@@ -175,7 +175,7 @@
 - job:
     name: ihu_daily_test-flexray
     defaults: daily_job_defaults
-    node: rack-rig-flexray
+    node: daily_test-flexray
     parameters:
         - run:
             name: UPSTREAM_JOB        
@@ -197,7 +197,7 @@
 - job:
     name: ihu_daily_test-audio
     defaults: daily_job_defaults
-    node: rack-rig-audio
+    node: daily_test-audio
     parameters:
         - run:
             name: UPSTREAM_JOB        
