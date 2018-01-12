@@ -27,7 +27,9 @@ LOCAL_SRC_FILES := \
      src/systeminformationmodule.cpp \
      src/illuminationmodule.cpp \
      src/cartimemodule.cpp \
-     src/sensormodule.cpp
+     src/sensormodule.cpp \
+     src/activesafetymodule.cpp \
+     src/daisettingimpl.cpp
 
 LOCAL_C_INCLUDES := \
     src/
@@ -55,15 +57,17 @@ LOCAL_SHARED_LIBRARIES := \
     libdataelements \
     libtraceclient \
     libAudioManagerBinder \
-    libAudioManagerCallbackBinder
-
+    libAudioManagerCallbackBinder \
+    liblocalconfig \
+    libsettings
 
 LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \
     $(vhal_v2_0)-delphi-impl-lib \
     delphi-vehicle-hal-interfaces-lib \
     libaudioparameters \
-    libaudio_comms_convert
+    libaudio_comms_convert \
+    libccparameterlistgen
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \
@@ -72,4 +76,4 @@ LOCAL_WHOLE_STATIC_LIBRARIES := \
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 
 include $(BUILD_EXECUTABLE)
-
+include $(call all-makefiles-under,$(LOCAL_PATH))

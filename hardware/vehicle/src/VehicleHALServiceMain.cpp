@@ -11,11 +11,14 @@
 
 #include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
+#include "activesafetymodule.h"
 #include "activeuserprofilemodule.h"
 #include "cartimemodule.h"
 #include "hvacmodule.h"
 #include "illuminationmodule.h"
 #include "keymanagermodule.h"
+#include "libsettings/setting.h"
+#include "libsettings/settingsmanagerhidl.h"
 #include "sensormodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
@@ -29,6 +32,10 @@ namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal_10 = vendor::volvocars::hardware::vehiclehal::V1_0;
 
 int main(int /* argc */, char* /* argv */ []) {
+    tarmac::eventloop::IDispatcher& dispatcher = tarmac::eventloop::IDispatcher::GetDefaultDispatcher();
+    android::sp<SettingsFramework::SettingsManagerHidl> settings_manager =
+            new SettingsFramework::SettingsManagerHidl(dispatcher);
+
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
     auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
 
@@ -43,6 +50,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
+    auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -55,6 +63,7 @@ int main(int /* argc */, char* /* argv */ []) {
     illuminationModule->registerToVehicleHal();
     carTimeModule->registerToVehicleHal();
     sensorModule->registerToVehicleHal();
+    activeSafetyModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 

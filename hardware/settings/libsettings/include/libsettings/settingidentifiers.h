@@ -22,5 +22,5 @@ enum class SettingId : uint32_t {
     Climate_FanLevelLeft,
     Climate_FanLevelRight,
     CurveSpeedAdapt_On,
-    DriveAwayInfo_On,
+    DriveAwayInfoSetting,
 };

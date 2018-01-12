@@ -103,5 +103,6 @@
           "-A OUTPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT"
       ]
     }
-  }
+  },
+  "vehiclefunctions.adas.LCFG_DAI_Enabled": true
 }
