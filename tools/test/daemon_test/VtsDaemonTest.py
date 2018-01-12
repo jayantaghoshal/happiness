@@ -18,8 +18,17 @@ from generated.pyDataElements import \
     UsgModSts
 from typing import List
 
-# Add specific services to check with getprop and process ID
+# Service names according to *.rc-file for your component.
+# Verifies that the service is running with "init.svc.xxx" property
 services_to_test = [
+    "dataelements-hidl-server",
+    "vehicle-signals-daemon",
+    "netboyd",
+    "profilemanager-hidl-server"
+]
+
+# Process names to test that they are alive and don't restart
+process_names_to_test = [
     "dataelements-hidl-server",
     "vehicle-signals-daemon",
     "netboyd"
@@ -31,7 +40,8 @@ hals_to_check = [
     "vendor.volvocars.hardware.iplm@1.0::IIplm/default",
     "vendor.volvocars.hardware.signals@1.0::ISignals/default",
     "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/ipcb",
-    "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/iplm"
+    "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/iplm",
+    "vendor.volvocars.hardware.profiles@1.0::ICarProfileManager/default"
 ]
 
 # Add specific propperties and expected value to check with getprop
@@ -104,21 +114,21 @@ class ComponentTest(base_test.BaseTestClass):
 
     def testServicesNotRestart(self):
         process = {}
-        for service in services_to_test:
+        for process_name in process_names_to_test:
             try:
-                retval = self.dut.adb.shell('pidof %s' % service)
-                process[service] = retval.strip()
+                retval = self.dut.adb.shell('pidof %s' % process_name)
+                process[process_name] = retval.strip()
             except:
-                asserts.fail('No process ID to service {0} found'.format(service))
+                asserts.fail('No process ID to process name "{0}" found'.format(process_name))
         end = time.time() + 10
         while time.time() < end:
-            for service in services_to_test:
+            for process_name in process_names_to_test:
                 try:
-                    asserts.assertEqual(process.get(service), \
-                        self.dut.adb.shell('pidof %s' % service).strip(), \
-                        'Process ID of service {0} was changed'.format(service))
+                    asserts.assertEqual(process.get(process_name),
+                        self.dut.adb.shell('pidof %s' % process_name).strip(),
+                        'Process ID of service {0} was changed'.format(process_name))
                 except:
-                    asserts.fail('Could not access process ID for service {0}'.format(service))
+                    asserts.fail('Could not access process ID for service {0}'.format(process_name))
             time.sleep(0.1)
 
     def testProperties(self):

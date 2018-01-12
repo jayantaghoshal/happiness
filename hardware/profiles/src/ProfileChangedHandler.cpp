@@ -7,8 +7,10 @@ namespace profiles {
 namespace V1_0 {
 namespace implementation {
 
-Return<void> ProfileChangedHandler::profileChanged(const hidl_string& androidUserId) {
+Return<void> ProfileChangedHandler::profileChanged(const hidl_string& androidUserId, ProfileIdentifier profileId) {
     (void)androidUserId;
+    (void)profileId;
+    // TODO implement
     return Void();
 }
 

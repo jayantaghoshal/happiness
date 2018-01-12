@@ -4,6 +4,7 @@
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/profiles/1.0/IProfileChangedHandler.h>
+#include <vendor/volvocars/hardware/profiles/1.0/types.h>
 
 namespace vendor {
 namespace volvocars {
@@ -21,7 +22,7 @@ using ::android::hardware::Void;
 using ::android::sp;
 
 struct ProfileChangedHandler : public IProfileChangedHandler {
-    Return<void> profileChanged(const hidl_string& androidUserId) override;
+    Return<void> profileChanged(const hidl_string& androidUserId, ProfileIdentifier profileId) override;
 };
 
 }  // namespace implementation

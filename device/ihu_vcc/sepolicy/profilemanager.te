@@ -1,0 +1,4 @@
+type profilemanager_service, domain;
+type profilemanager_service_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(profilemanager_service)

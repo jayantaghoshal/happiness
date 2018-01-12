@@ -7,6 +7,8 @@ namespace profiles {
 namespace V1_0 {
 namespace implementation {
 
+CarProfileManager::CarProfileManager() {}
+
 Return<void> CarProfileManager::subscribeUserChange(const sp<IProfileChangedHandler>& cb) {
     // TODO implement
     (void)cb;

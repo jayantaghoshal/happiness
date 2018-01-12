@@ -4,6 +4,7 @@
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/profiles/1.0/ICarProfileManager.h>
+#include <string>
 
 namespace vendor {
 namespace volvocars {
@@ -21,6 +22,7 @@ using ::android::hardware::Void;
 using ::android::sp;
 
 struct CarProfileManager : public ICarProfileManager {
+    CarProfileManager();
     Return<void> subscribeUserChange(const sp<IProfileChangedHandler>& cb) override;
     Return<void> requestSwitchUser(const hidl_string& androidUserId) override;
     Return<void> getUserProfileInformation(const hidl_string& androidUserId,
