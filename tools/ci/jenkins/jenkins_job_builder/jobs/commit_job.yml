@@ -107,7 +107,7 @@
 - job:
     name: ihu_gate_build
     defaults: commit_job_defaults
-    node: commit_gate_build
+    node: gate_build
     wrappers:
         - timeout:
             timeout: 180
@@ -124,7 +124,7 @@
 - job:
     name: ihu_gate_test
     defaults: commit_job_defaults
-    node: rack-rig
+    node: gate_test-generic
     builders:
         - shell:
             !include-raw:
@@ -134,7 +134,7 @@
 - job:
     name: ihu_gate_test_flexray
     defaults: commit_job_defaults
-    node: rack-rig-flexray
+    node: gate_test-flexray
     builders:
         - shell:
             !include-raw:
@@ -144,7 +144,7 @@
 - job:
     name: ihu_gate_test_audio
     defaults: commit_job_defaults
-    node: rack-rig-audio
+    node: gate_test-audio
     builders:
         - shell:
             !include-raw:
@@ -160,4 +160,3 @@
       - ihu_gate_test
       - ihu_gate_test_flexray
       - ihu_gate_test_audio
-
