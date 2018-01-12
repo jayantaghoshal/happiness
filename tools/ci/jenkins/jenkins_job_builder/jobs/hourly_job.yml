@@ -14,6 +14,11 @@
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
     wrappers:
+        - timeout:
+            timeout: 60
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
         - raw:
             xml: |
                     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
@@ -76,7 +81,7 @@
               kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}        
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
 
 - job:
     name: ihu_hourly_build-eng
@@ -92,11 +97,16 @@
                 <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
-                </com.sonyericsson.rebuild.RebuildSettings>    
-
+                </com.sonyericsson.rebuild.RebuildSettings>
+    wrappers:
+        - timeout:
+            timeout: 180
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
     builders:
-        - shell: 
-            !include-raw: 
+        - shell:
+            !include-raw:
                 - bootstrap_ramdisk.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_build_eng.sh
@@ -107,7 +117,7 @@
     node: hourly_test-generic
     parameters:
         - run:
-            name: UPSTREAM_JOB        
+            name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
     builders:
@@ -116,19 +126,19 @@
             then
                 echo "Hourly test generic failed!!!"
                 exit 1
-            fi    
-        - shell: 
-            !include-raw: 
+            fi
+        - shell:
+            !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
-   
+
 - job:
     name: ihu_hourly_test-flexray
     defaults: hourly_job_defaults
     node: hourly_test-flexray
     parameters:
         - run:
-            name: UPSTREAM_JOB        
+            name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
     builders:
@@ -137,11 +147,11 @@
             then
                 echo "Hourly test flexray failed!!!"
                 exit 1
-            fi    
-        - shell: 
-            !include-raw: 
+            fi
+        - shell:
+            !include-raw:
                 - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_hourly_test_common.sh   
+                - bootstrap_ihu_hourly_test_common.sh
 
 - job:
     name: ihu_hourly_test-audio
@@ -149,7 +159,7 @@
     node: hourly_test-audio
     parameters:
         - run:
-            name: UPSTREAM_JOB        
+            name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
     builders:
@@ -158,8 +168,8 @@
             then
                 echo "Hourly test audio failed!!!"
                 exit 1
-            fi    
-        - shell: 
-            !include-raw: 
+            fi
+        - shell:
+            !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
