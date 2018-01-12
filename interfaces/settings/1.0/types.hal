@@ -1,0 +1,15 @@
+package vendor.volvocars.hardware.settings@1.0;
+
+enum SettingsChangeReason  : uint16_t
+{
+    Reset,
+    ProfileChange,
+};
+
+enum UserScope : uint16_t {
+    // The setting is not connected to a particular user profile but globally available for all profiles.
+    NOT_USER_RELATED,
+
+    // The setting exists as a separate value for each user profile.
+    USER,
+};

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies the localconfig to be available for applications
+It relies on Localconfig to fallback or on correct default to be present in oem_config
+-->
+<configuration description="Settings test">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="cleanup" value="false" />
+        <option name="push" value="libsettings_ct->/vendor/bin/test/libsettings_ct" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" > 
+        <option name="native-test-device-path" value="/vendor/bin/test" />   
+        <option name="module-name" value="libsettings_ct" />
+        <option name="runtime-hint" value="5s" />
+    </test>
+</configuration>

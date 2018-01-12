@@ -4,21 +4,19 @@
  */
 
 cc_binary {
-    name: "vendor.volvocars.hardware.profiles@1.0-impl",
-    relative_install_path: "hw",
-    proprietary: true,
+    name: "libsettings_testclient",
     defaults: ["volvocars_cc_defaults_hq"],
-    init_rc: ["profilemanager.rc"],
-    srcs: [
-        "src/*.cpp",
-    ],
+
+    srcs: ["main.cpp"],
+
     shared_libs: [
+        "libsettings",
         "libhidlbase",
         "libhidltransport",
         "libutils",
         "liblog",
-        "vendor.volvocars.hardware.profiles@1.0",
-        "libdataelements",
+        "vendor.volvocars.hardware.settings@1.0",
+        "nlohmann-json-v3",
         "libtarmac",
     ],
 }

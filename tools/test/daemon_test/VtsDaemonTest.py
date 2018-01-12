@@ -25,7 +25,8 @@ services_to_test = [
     "vehicle-signals-daemon",
     "netboyd",
     "profilemanager-hidl-server",
-    "soundnotifications"
+    "soundnotifications",
+    "settingstorage-hidl-server"
 ]
 
 # Process names to test that they are alive and don't restart
@@ -33,7 +34,8 @@ process_names_to_test = [
     "dataelements-hidl-server",
     "vehicle-signals-daemon",
     "netboyd",
-    "soundnotifications"
+    "soundnotifications",
+    "vendor.volvocars.hardware.settingsstorage@1.0-service"
 ]
 
 # Add specific HALs to check with lshal
@@ -43,7 +45,8 @@ hals_to_check = [
     "vendor.volvocars.hardware.signals@1.0::ISignals/default",
     "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/ipcb",
     "vendor.volvocars.hardware.vehiclecom@1.0::IVehicleCom/iplm",
-    "vendor.volvocars.hardware.profiles@1.0::ICarProfileManager/default"
+    "vendor.volvocars.hardware.profiles@1.0::ICarProfileManager/default",
+    "vendor.volvocars.hardware.settings@1.0::ISettingsStorage/default"
 ]
 
 # Add specific propperties and expected value to check with getprop

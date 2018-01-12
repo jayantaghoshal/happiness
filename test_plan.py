@@ -92,6 +92,8 @@ test_plan_hourly = test_plan_gate + [
              deadline="2018-01-30"
     ),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
+    VTSTest("vendor/volvocars/hardware/settings/test/ct",                   standard_caps),
+
 
     Disabled(VTSTest("vendor/volvocars/hardware/cloudd/test/ct/vtscloud", standard_caps),
              reason="Waiting for local web server in ci",

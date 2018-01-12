@@ -58,6 +58,15 @@
             <name>ICarProfileManager</name>
             <instance>default</instance>
         </interface>
+    </hal>	
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.settings</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISettingsStorage</name>
+            <instance>default</instance>	    
+        </interface>
     </hal>
     <hal format="hidl">
         <name>vendor.volvocars.hardware.cloud</name>

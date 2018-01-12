@@ -1,0 +1,24 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "libsettings_ct",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: ["settingstest.cpp"],
+
+    shared_libs: [
+        "libsettings",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "vendor.volvocars.hardware.settings@1.0",
+        "nlohmann-json-v3",
+        "libtarmac",
+    ],
+    static_libs: ["libgmock"],
+    test_suites: ["vts"],
+}

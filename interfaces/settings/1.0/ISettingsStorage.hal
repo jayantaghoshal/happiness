@@ -1,0 +1,13 @@
+package vendor.volvocars.hardware.settings@1.0;
+
+import vendor.volvocars.hardware.profiles@1.0::types;
+import ISettingsListener;
+
+// This interface is not intended for public consumption, always use together with the libsettings client library.
+interface ISettingsStorage 
+{
+    set(string key, ProfileIdentifier profileId, string data);
+    get(string key,  ProfileIdentifier profileId) generates (string data);
+    subscribe(string key, ISettingsListener listener);
+    unsubscribe(string key, ISettingsListener listener);
+};

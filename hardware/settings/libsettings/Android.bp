@@ -1,0 +1,42 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_shared {
+    name: "libsettings",
+    relative_install_path: "hw",
+    proprietary: true,
+    defaults: ["volvocars_cc_defaults_hq"],
+    srcs: [
+        "src/settingbase.cpp",
+        "src/settingsmanagerhidl.cpp",
+    ],
+    local_include_dirs: [
+        "include",
+        "src",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libbase",
+        "liblog",
+        "vendor.volvocars.hardware.settings@1.0",
+        "nlohmann-json-v3",
+        "libtarmac",
+    ],
+    cflags: ["-DLOG_NDEBUG=0"],
+    export_shared_lib_headers: [
+        "nlohmann-json-v3",
+        "libtarmac",
+    ],
+
+    tidy_checks: [
+        "cppcoreguidelines-*",
+        "-cppcoreguidelines-pro-type-vararg", // ALOG-macros use this
+    ],
+}

@@ -4,21 +4,28 @@
  */
 
 cc_binary {
-    name: "vendor.volvocars.hardware.profiles@1.0-impl",
+    name: "vendor.volvocars.hardware.settingsstorage@1.0-service",
     relative_install_path: "hw",
     proprietary: true,
     defaults: ["volvocars_cc_defaults_hq"],
-    init_rc: ["profilemanager.rc"],
     srcs: [
-        "src/*.cpp",
+        "src/main.cpp",
+        "src/SettingsStorage.cpp",
     ],
     shared_libs: [
         "libhidlbase",
         "libhidltransport",
         "libutils",
+        "libbase",
         "liblog",
+        "vendor.volvocars.hardware.settings@1.0",
         "vendor.volvocars.hardware.profiles@1.0",
-        "libdataelements",
-        "libtarmac",
+    ],
+    init_rc: [
+        "settings-storage.rc",
+    ],
+    tidy_checks: [
+        "cppcoreguidelines-*",
+        "-cppcoreguidelines-pro-type-vararg", // ALOG-macros use this
     ],
 }

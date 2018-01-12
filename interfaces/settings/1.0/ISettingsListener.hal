@@ -1,0 +1,8 @@
+package vendor.volvocars.hardware.settings@1.0;
+
+import vendor.volvocars.hardware.profiles@1.0::types;
+
+interface ISettingsListener 
+{    
+    settingsForCurrentUserChanged(string key, SettingsChangeReason reason, ProfileIdentifier currentProfile);
+};
