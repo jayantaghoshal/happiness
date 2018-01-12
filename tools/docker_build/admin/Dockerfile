@@ -73,6 +73,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     tree \
     unzip \
     vim \
+    nano \
     wget \
     x11proto-core-dev \
     xsltproc \
