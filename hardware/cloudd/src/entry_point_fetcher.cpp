@@ -24,7 +24,7 @@ EntryPointFetcher::EntryPointFetcher(std::shared_ptr<CertHandlerInterface> cert_
                                      const bool allow_retry)
     : cert_handler_{cert_handler}, cloud_request_handler_{cloud_request_handler}, allow_retry_{allow_retry} {}
 
-void EntryPointFetcher::Restart() {
+void EntryPointFetcher::Restart() throw(std::runtime_error) {
     ALOGV(" + Restart()");
     using namespace std::chrono_literals;
     ResponseCallback done_callback = [&](std::int32_t http_response_code, const std::string& data,
@@ -39,33 +39,34 @@ void EntryPointFetcher::Restart() {
                                                                                        [&]() { Restart(); });
         } else {
             ALOGD("Successfully received entry point");
-            EntryPointParser::EntryPoint ep = EntryPointParser::parse(data.c_str());
+            EntryPointParser::EntryPoint ep;
+            try {
+                ep = EntryPointParser::parse(data.c_str());
+            } catch (const std::exception& e) {
+                ALOGW("Failed while parsing Entry Point Request: %s", e.what());
+            }
             if (when_result_available_callback_) when_result_available_callback_(ep);
         }
     };
 
-    try {
-        ALOGD("entry point url: %s", entry_point_url_.c_str());
+    ALOGD("entry point url: %s", entry_point_url_.c_str());
 
-        std::shared_ptr<CloudRequest> cloud_request;
-        if (entry_point_url_.find("https") == std::string::npos) {
-            cloud_request = std::make_shared<CloudRequest>();
-            cloud_request->SetUseHttps(false);
-        } else {
-            cloud_request = std::make_shared<CloudRequest>(cert_handler_);
-        }
-        cloud_request->SetURL(entry_point_url_);
-        cloud_request->SetCallback(std::move(done_callback));
-
-        cloud_request_handler_->SendCloudRequest(cloud_request);
-
-    } catch (const std::exception& e) {
-        ALOGE("Failed to start cloudrequest for vpn entry point: %s", e.what());
+    std::shared_ptr<CloudRequest> cloud_request;
+    if (entry_point_url_.find("https") == std::string::npos) {
+        cloud_request = std::make_shared<CloudRequest>();
+        cloud_request->SetUseHttps(false);
+    } else {
+        cloud_request = std::make_shared<CloudRequest>(cert_handler_);
     }
+    cloud_request->SetURL(entry_point_url_);
+    cloud_request->SetCallback(std::move(done_callback));
+
+    cloud_request_handler_->SendCloudRequest(cloud_request);
+
     ALOGV("- Restart()");
 }
 
-void EntryPointFetcher::Fetch(const std::string& entry_point_url) {
+void EntryPointFetcher::Fetch(const std::string& entry_point_url) throw(std::runtime_error) {
     ALOGV("+ Fetch()");
     Stop();
     entry_point_url_ = entry_point_url;

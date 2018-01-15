@@ -12,6 +12,10 @@
 namespace Connectivity {
 typedef std::function<void(std::int32_t, const std::string&, const std::string&)> ResponseCallback;
 
+/*
+ * Container class for a single request. Used for passing around along the life cycle of a request in libcurl
+ * implementation
+ */
 class CloudRequest {
   private:
     std::string url_;
@@ -27,7 +31,7 @@ class CloudRequest {
 
   public:
     CloudRequest(std::shared_ptr<CertHandlerInterface> cert_handler = nullptr)
-        : url_("www.example.com"),
+        : url_(""),
           curl_handle_(nullptr),
           certificate_handler_(cert_handler),
           header_list_({}),
@@ -37,26 +41,26 @@ class CloudRequest {
     ~CloudRequest() = default;
 
     bool SetCurlHandle(CURL* curl_handle);
-    CURL* GetCurlHandle() { return curl_handle_; }
+    CURL* GetCurlHandle();
 
-    void SetURL(std::string url) { url_ = url; }
-    std::string GetURL() { return url_; }
+    void SetURL(std::string url);
+    std::string GetURL();
 
-    CertHandlerInterface* GetCertHandler() { return certificate_handler_.get(); }
+    CertHandlerInterface* GetCertHandler();
 
-    void SetHeaderList(std::vector<std::string> header_list) { header_list_ = header_list; }
-    std::vector<std::string> GetHeaderList() { return header_list_; }
+    void SetHeaderList(std::vector<std::string> header_list);
+    std::vector<std::string> GetHeaderList();
 
-    void SetUseHttps(bool use_https) { use_https_ = use_https; }
-    bool GetUseHttps() { return use_https_; }
+    void SetUseHttps(bool use_https);
+    bool GetUseHttps();
 
-    void SetTimeout(std::chrono::milliseconds timeout) { timeout_ = timeout; }
-    std::chrono::milliseconds GetTimeout() { return timeout_; }
+    void SetTimeout(std::chrono::milliseconds timeout);
+    std::chrono::milliseconds GetTimeout();
 
-    void SetCallback(ResponseCallback&& callback) { response_callback_ = callback; }
-    ResponseCallback GetCallback() { return response_callback_; }
+    void SetCallback(ResponseCallback&& callback);
+    ResponseCallback GetCallback();
 
-    std::string* GetResponseDataBuffer() { return &response_data_; }
-    std::string* GetResponseHeaderBuffer() { return &response_header_; }
+    std::string* GetResponseDataBuffer();
+    std::string* GetResponseHeaderBuffer();
 };
 }  // namespace Connectivity

@@ -32,18 +32,29 @@ bool CloudService::Initialize() {
         ALOGV("Http binder service register ok");
     }
 
+    return FetchEntryPoint();
+}
+
+bool CloudService::FetchEntryPoint() {
     std::string lcfg_entrypoint_url = cloudd_local_config_.GetCloudEntryPointAddress();
 
     entry_point_fetcher_.WhenResultAvailable([&](const EntryPointParser::EntryPoint& entry_point) {
-        ALOGD("Cloud client received entry point");
+        if (entry_point.host.empty()) {
+            ALOGW("Entry point URL is empty, what do?");
+        } else {
+            ALOGV("Cloud daemon received entry point");
+        }
 
         cep_url_ = entry_point.host;
         cep_port_ = entry_point.port;
-
     });
 
-    entry_point_fetcher_.Fetch(lcfg_entrypoint_url);
-
+    try {
+        entry_point_fetcher_.Fetch(lcfg_entrypoint_url);
+    } catch (std::exception& e) {
+        ALOGE("Failed to fetch entry point: %s", e.what());
+        return false;
+    }
     return true;
 }
 
@@ -58,8 +69,9 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
     std::vector<std::string> header_strings{std::sregex_token_iterator(header.begin(), header.end(), linebreak, -1),
                                             {}};
 
-    if (!header_strings.empty())
+    if (!header_strings.empty()) {
         ALOGW("TODO: Do we want to include status and code in header? [%s]", header_strings[0].c_str());
+    }
 
     std::vector<HttpHeaderField> http_headers;
     for (auto s : header_strings) {
@@ -71,6 +83,7 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
             http_headers.push_back(http_header);
         } else {
             // What should we do if the header doesn't have a ':' delimmiter (Like HTTP/1.1 200 OK)
+            // Code is stored in httpResponse
         }
     }
 
@@ -85,12 +98,20 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     if (cep_url_.empty()) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
-        Response rsp;
-        rsp.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet".
-        _hidl_cb(rsp);
+        Response error;
+        error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
+        _hidl_cb(error);
     }
 
-    std::string url = (use_https ? "https://" : "http://") + cep_url_ + "/" + std::string(uri.c_str());
+    std::string url = (use_https ? "https://" : "http://") + cep_url_ + ":" + std::to_string(cep_port_);
+    std::string path(uri.c_str());
+
+    size_t pos = path.find("/", 0);
+    if (0 == pos) {
+        url = url + path;
+    } else {
+        url = url + "/" + path;
+    }
 
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
@@ -112,10 +133,13 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
 
         cr->SetHeaderList(header_list);
 
-        cloud_request_handler_->SendCloudRequest(cr);
+        cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
 
     } catch (const std::exception& e) {
         ALOGW("Failed to initiate cloud request: %s", e.what());
+        Response error;
+        error.httpResponse = 400;  // Bad request.
+        _hidl_cb(error);
     }
 
     Response response;

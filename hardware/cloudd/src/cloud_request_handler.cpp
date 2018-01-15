@@ -9,6 +9,7 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
+// Helper methods for verifying the success of setting options in curl. One for easy handles and one for multi handles.
 template <typename T>
 void verified_curl_multi_setopt(CURLM *curl, const CURLMoption opt, T data) {
     const CURLMcode res = curl_multi_setopt(curl, opt, data);
@@ -27,11 +28,12 @@ void verified_curl_easy_setopt(CURL *curl, const CURLoption opt, T data) {
     }
 }
 
-CloudRequestHandler::CloudRequestHandler() {
+CloudRequestHandler::CloudRequestHandler() : timer_id_{-1}, multi_{nullptr} {
     curl_global_init(CURL_GLOBAL_ALL);
 
     curl_version_info_data *data = curl_version_info(CURLVERSION_NOW);
 
+    // TODO: Check version??
     ALOGD("Version: %s\n", data->version);
 
     multi_ = curl_multi_init();
@@ -65,30 +67,33 @@ int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operat
                     EPOLLIN | EPOLLOUT);
         }
     }
-    return 0;
+    return CURLcode::CURLE_OK;
 }
 
 int CloudRequestHandler::TimerCallback(CURLM *multi, long timeout_ms, void *user_data) {
     ALOGV("multi_timer_cb: timeout_ms %ld\n", timeout_ms);
 
-    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
+    int code = CURLcode::CURLE_OK;
 
-    int timer_id = request_handler->GetTimerId();
+    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
+    int *timer_id = request_handler->GetTimerId();
 
     /* cancel running timer */
-    IDispatcher::GetDefaultDispatcher().Cancel(timer_id);
+    IDispatcher::GetDefaultDispatcher().Cancel(*timer_id);
 
     if (timeout_ms > 0) {
         /* update timer */
-        timer_id = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+        *timer_id = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
                 std::chrono::milliseconds(timeout_ms), [multi]() { Perform(multi, CURL_SOCKET_TIMEOUT); });
-        ALOGV("Timer Set With Timer ID: %d\n", timer_id);
+        ALOGV("Timer Set With Timer ID: %d\n", *timer_id);
     } else if (timeout_ms == 0) {
         ALOGV("Timer Off immediately\n");
-        Perform(request_handler->GetMultiHandle(), CURL_SOCKET_TIMEOUT);
+        code = Perform(request_handler->GetMultiHandle(), CURL_SOCKET_TIMEOUT);
+    } else {
+        ALOGD("Timeout ID is -1, how did this happen..?");
     }
 
-    return 0;
+    return code;
 }
 
 int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
@@ -194,7 +199,9 @@ int CloudRequestHandler::OnCreateOpenSslContext(CURL *curl, void *ssl_ctx, void 
 
 int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request) {
     CURL *easy = curl_easy_init();
-    request->SetCurlHandle(easy);
+    if (!request->SetCurlHandle(easy)) {
+        throw std::runtime_error("Failed to initialise an easy handle.");
+    }
 
     // Associate CloudRequest with curl handle
     verified_curl_easy_setopt(easy, CURLOPT_PRIVATE, request.get());

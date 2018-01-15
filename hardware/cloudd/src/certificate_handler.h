@@ -21,6 +21,9 @@ class Socket {
     int sockfd_ = -1;
 };
 
+/*
+ * Contains and handles the certificates needed for a cloud connection. Can also validate incomming certificates.
+ */
 class CertHandler final : public CertHandlerInterface {
   public:
     CertHandler(const std::string& client_cert_pem, const std::string& client_key_pem, const std::string& ca_cert);

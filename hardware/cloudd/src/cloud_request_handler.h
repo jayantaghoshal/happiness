@@ -11,6 +11,10 @@
 
 namespace Connectivity {
 
+/*
+ * Owner of the libcurl implementation and is responsible for configuring curl at start up and then each request that is
+ * sent.
+ */
 class CloudRequestHandler : public CloudRequestHandlerInterface,
                             public std::enable_shared_from_this<CloudRequestHandler> {
   private:
@@ -21,12 +25,13 @@ class CloudRequestHandler : public CloudRequestHandlerInterface,
     int SendCloudRequest(std::shared_ptr<CloudRequest> request);
 
     CURL *GetMultiHandle() { return multi_; }
-    int &GetTimerId() { return timer_id_; }
+    int *GetTimerId() { return &timer_id_; }
 
   private:
     int timer_id_;
     CURL *multi_;
 
+    // Static methods injected into libcurl.
     static int SocketCallback(CURL *easy, curl_socket_t fd, int operation, void *user_data, void *s);
     static int TimerCallback(CURLM *multi, long timeout_ms, void *user_data);
     static int Perform(CURL *multi, curl_socket_t fd);

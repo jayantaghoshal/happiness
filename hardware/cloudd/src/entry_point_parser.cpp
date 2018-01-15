@@ -6,7 +6,7 @@
 
 namespace Connectivity {
 namespace EntryPointParser {
-EntryPointParser::EntryPoint parse(const char* const data_nullterminated) {
+EntryPointParser::EntryPoint parse(const char* const data_nullterminated) throw(std::runtime_error) {
     // TODO: Verify the XML signature, [IHU-14218]
 
     tinyxml2::XMLDocument doc;

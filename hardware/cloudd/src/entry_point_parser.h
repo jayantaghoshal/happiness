@@ -11,6 +11,11 @@ struct EntryPoint {
     std::string host;
     int port;
 };
-EntryPoint parse(const char* const data);
+/*
+ * Tries to parse out an EntryPoint from a XML document. Throws runtime error if it fails.
+ * @parm data XML data containing the EntryPoint
+ * @return An EntryPoint populated with the data contained within the XML data.
+ */
+EntryPoint parse(const char* const data) throw(std::runtime_error);
 }
 }  // namespace Connectivity

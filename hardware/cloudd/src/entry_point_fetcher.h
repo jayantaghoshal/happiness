@@ -16,23 +16,32 @@
 using ::tarmac::eventloop::IDispatcher;
 
 namespace Connectivity {
-
+/*
+ * Class responsible for fetching and parsing the URL of a Cloud Entry Point(CEP) from the (Central Node Entry Point)
+ */
 class EntryPointFetcher final {
   public:
     EntryPointFetcher(std::shared_ptr<CertHandlerInterface> cert_handler,
                       std::shared_ptr<CloudRequestHandlerInterface> cloud_request_handler,
                       const bool allow_retry = true);
 
-    void Fetch(const std::string& entry_point_url);
+    /*
+     * Configures a request to start fetching the CEP URL. Will call the when_result_available_callback_ when done.
+     */
+    void Fetch(const std::string& entry_point_url) throw(std::runtime_error);
 
     void Stop();
 
+    /*
+     * Sets the callback method that will be called when the URL of the CEP is fetched. NOTE: the Entry Point URL is
+     * empty if the fetching or parsing failed.
+     */
     void WhenResultAvailable(std::function<void(const EntryPointParser::EntryPoint&)>&& callback);
 
     static EntryPointParser::EntryPoint parse(const char* const data);
 
   private:
-    void Restart();
+    void Restart() throw(std::runtime_error);
     void worker();
 
     std::shared_ptr<CertHandlerInterface> cert_handler_;

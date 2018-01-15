@@ -93,11 +93,10 @@ int main(void) {
 
     // Change to sp once hal is setup
     std::unique_ptr<CloudService> cloudService = std::unique_ptr<CloudService>(new CloudService());
-    cloudService->Initialize();
-
-    configureRpcThreadpool(1, true /*callerWillJoin*/);
-
-    joinRpcThreadpool();
+    if (cloudService->Initialize()) {
+        configureRpcThreadpool(1, true /*callerWillJoin*/);
+        joinRpcThreadpool();
+    }
 
     ALOGI("exiting ...");
 }
