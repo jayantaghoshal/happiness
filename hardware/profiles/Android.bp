@@ -18,5 +18,7 @@ cc_binary {
         "libutils",
         "liblog",
         "vendor.volvocars.hardware.profiles@1.0",
+        "libdataelements",
+        "libtarmac",
     ],
 }

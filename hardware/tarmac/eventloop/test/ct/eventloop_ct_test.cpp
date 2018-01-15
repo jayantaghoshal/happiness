@@ -5,13 +5,12 @@
 
 #include <IDispatcher.h>
 
-#include <cutils/log.h>
 #include <gtest/gtest.h>
 #include <chrono>
 #include <future>
 
-#undef LOG_TAG
 #define LOG_TAG "eventloop.Tests"
+#include <cutils/log.h>
 
 TEST(EventLoopTest, TestEventFunctionCalled) {
     ALOGI("Starting %s", test_info_->name());

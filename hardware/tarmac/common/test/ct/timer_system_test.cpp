@@ -15,10 +15,13 @@
 #include <thread>
 
 using ::testing::_;
+using namespace tarmac::timeprovider;
+using namespace tarmac::eventloop;
 
 class SystemTimerTest : public ::testing::Test {
   public:
-    TimeProvider tp;
+    std::shared_ptr<IDispatcher> dispatcher = IDispatcher::CreateDispatcher();
+    std::shared_ptr<TimeProvider> tp = std::shared_ptr<TimeProvider>(new TimeProvider(dispatcher));
 };
 
 TEST_F(SystemTimerTest, test_single_shot) {
@@ -26,11 +29,11 @@ TEST_F(SystemTimerTest, test_single_shot) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
     std::unique_ptr<TimerSubscriptionHandle> subsHandle =
-            tp.add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+            tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
 
@@ -46,10 +49,10 @@ TEST_F(SystemTimerTest, test_single_shot_2) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp.add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1100));
@@ -62,10 +65,10 @@ TEST_F(SystemTimerTest, test_single_shot_3) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp.add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(15000));
@@ -78,10 +81,10 @@ TEST_F(SystemTimerTest, test_periodic) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp.add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 * 10 + 500));
@@ -94,10 +97,10 @@ TEST_F(SystemTimerTest, test_singleshot_unsubscribe) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp.add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -112,10 +115,10 @@ TEST_F(SystemTimerTest, test_periodic_unsubscribe) {
     std::chrono::steady_clock::time_point calledAt;
     std::function<void()> functToCall = [&callcount, &calledAt, this]() {
         callcount++;
-        calledAt = tp.steady_clock_now();
+        calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp.add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 * 5 + 500));

@@ -5,17 +5,25 @@
 
 #include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
+#include <memory>
 #include "CarProfileManager.h"
+#include "IDispatcher.h"
+#include "time_provider.h"
 
 #undef LOG_TAG
 #define LOG_TAG "ProfilesManager"
 
 using namespace vendor::volvocars::hardware::profiles::V1_0::implementation;
+using namespace tarmac::timeprovider;
+using namespace tarmac::eventloop;
 
 int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
-    android::sp<CarProfileManager> service = new CarProfileManager();
+
+    std::shared_ptr<IDispatcher> dispatcher = IDispatcher::CreateDispatcher();
+    std::shared_ptr<ITimeProvider> time_provider = std::shared_ptr<TimeProvider>(new TimeProvider(dispatcher));
+    android::sp<CarProfileManager> service = new CarProfileManager(time_provider);
 
     // Configure a thread pool of 1, this means that the HIDL
     // server calls is done from one thread.

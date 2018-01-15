@@ -9,6 +9,9 @@
 #include <functional>
 #include <memory>
 
+namespace tarmac {
+namespace timeprovider {
+
 class TimerSubscriptionHandle {
   public:
     TimerSubscriptionHandle() = default;
@@ -33,3 +36,5 @@ class ITimeProvider {
     virtual std::unique_ptr<TimerSubscriptionHandle> add_periodic_timer(std::chrono::milliseconds interval,
                                                                         std::function<void()> func) = 0;
 };
+}  // namespace timeprovider
+}  // namespace tarmac

@@ -10,6 +10,6 @@ This tests verifies components in tarmac common.
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsTarmacCommonCTTestCases" />
-        <option name="runtime-hint" value="800ms" />
+        <option name="runtime-hint" value="10s" />
     </test>
 </configuration>

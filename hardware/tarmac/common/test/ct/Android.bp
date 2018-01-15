@@ -5,12 +5,8 @@
 
 cc_test {
     name: "VtsTarmacCommonCTTestCases",
-
+    defaults: ["volvocars_cc_defaults_hq_tests"],
     srcs: ["timer_system_test.cpp"],
-
-    cppflags: [
-        "-fexceptions",
-    ],
 
     shared_libs: ["liblog"],
     static_libs: [
@@ -18,5 +14,4 @@ cc_test {
         "libtarmac_static",
     ],
     test_suites: ["vts"],
-    compile_multilib: "64",
 }

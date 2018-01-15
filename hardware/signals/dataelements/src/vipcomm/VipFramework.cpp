@@ -26,6 +26,7 @@ using namespace ECDDataElement;
 #include "vsm/vsm_inject_variables_cpp.h"
 #include "vsm/vsm_sink_variables_cpp.h"
 
+#undef LOG_TAG
 #define LOG_TAG "VipFramework"
 #include <cutils/log.h>
 // NOLOGLINT includes below are log free

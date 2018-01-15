@@ -177,7 +177,7 @@ class Dispatcher : public IDispatcher {
 
 // static helpers
 IDispatcher &IDispatcher::GetDefaultDispatcher() {
-    static std::unique_ptr<IDispatcher> dispatcher = CreateDispatcher();
+    static std::shared_ptr<IDispatcher> dispatcher = CreateDispatcher();
 
     return *dispatcher;
 }
@@ -189,7 +189,7 @@ IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds d
     return GetDefaultDispatcher().EnqueueWithDelay(delay, std::move(f), cyclic_timer);
 }
 
-std::unique_ptr<IDispatcher> IDispatcher::CreateDispatcher() { return std::unique_ptr<IDispatcher>(new Dispatcher()); }
+std::shared_ptr<IDispatcher> IDispatcher::CreateDispatcher() { return std::shared_ptr<IDispatcher>(new Dispatcher()); }
 
 // constructor
 Dispatcher::Dispatcher() : eventthread_([this]() { Start(); }) {}

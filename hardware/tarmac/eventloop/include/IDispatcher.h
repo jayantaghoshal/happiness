@@ -9,6 +9,7 @@
 #include <chrono>
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 namespace tarmac {
 namespace eventloop {
@@ -29,7 +30,7 @@ class IDispatcher {
                                       bool cyclic_timer = false);
 
     // Create a new dispatcher instance with the provided priority
-    static std::unique_ptr<IDispatcher> CreateDispatcher();
+    static std::shared_ptr<IDispatcher> CreateDispatcher();
 
     virtual ~IDispatcher() = default;
 
