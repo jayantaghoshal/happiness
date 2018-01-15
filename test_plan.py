@@ -94,6 +94,11 @@ test_plan_hourly = [
     ),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
 
+    Disabled(VTSTest("vendor/volvocars/hardware/cloudd/test/ct/vtscloud", standard_caps),
+             reason="Waiting for local web server in ci",
+             jira_issue="",
+             deadline="2018-03-01"
+    )
 ]
 
 test_plan_nightly = [
