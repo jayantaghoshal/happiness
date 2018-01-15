@@ -167,3 +167,24 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
+
+- job:
+    name: ihu_hourly_test-apix
+    defaults: hourly_job_defaults
+    node: hourly_test-apix
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_hourly_build-eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Hourly test apix failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_hourly_test_common.sh

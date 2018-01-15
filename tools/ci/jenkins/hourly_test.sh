@@ -36,6 +36,9 @@ then
 elif [ "${JOB_NAME}" = "ihu_hourly_test-audio" ]
 then
     capability="audio"
+elif [ "${JOB_NAME}" = "ihu_hourly_test-apix" ]
+then
+    capability="apix"
 fi
 export capability
 

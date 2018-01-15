@@ -12,6 +12,7 @@ class Capabilities:
     mp_serial   = "mp-serial"
     vip_serial  = "vip-serial"
     audio       = "audio"
+    apix        = "apix"
 
 standard_caps = {
     Capabilities.ihu_generic,

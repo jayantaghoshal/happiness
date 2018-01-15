@@ -145,6 +145,16 @@
                 - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_gate_test_audio.sh
 
+- job:
+    name: ihu_gate_test_apix
+    defaults: commit_job_defaults
+    node: rack-rig-apix
+    builders:
+        - shell:
+            !include-raw:
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_test_apix.sh
+
 - project:
     name: ihu
     node: master

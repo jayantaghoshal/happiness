@@ -219,3 +219,25 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_daily_test_common.sh
+
+- job:
+    name: ihu_daily_test-apix
+    defaults: daily_job_defaults
+    node: daily_test-apix
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_test_common.sh
