@@ -152,6 +152,9 @@ RUN pip3 install redis \
 # Commit hooks and commit
 RUN pip3 install docopt
 
+RUN apt-get install -y \
+    git-review
+
 ##################################################
 # Static analysis tools
 RUN apt-get install -y \
