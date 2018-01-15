@@ -29,6 +29,13 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         req['type'] = "GET"
         req['path'] = self.path
         req['version'] = self.protocol_version
+        headerkeys = self.headers.keys()
+        headers = []
+        for i in range(0,len(headerkeys)):
+            header = {}
+            header[headerkeys[i]] = self.headers.get(headerkeys[i])
+            headers.append(header)
+        req['headers'] = headers
 
         print(json.dumps(req, indent=4))
         message = cloud_logic_.get_rsp(json.dumps(req))

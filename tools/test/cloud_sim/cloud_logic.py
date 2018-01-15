@@ -40,7 +40,7 @@ class CloudLogic:
             req_rule = rule['request']
 
             if self.match(req_rule, request):
-                return json.dumps(self.req_rsp_rules[i]['response'])
+                return self.req_rsp_rules[i]['response']
 
             i += 1
 
