@@ -79,7 +79,7 @@
           allow-empty: true
     wrappers:
         - timeout:
-            timeout: 60
+            timeout: 180
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
@@ -108,12 +108,6 @@
     name: ihu_gate_build
     defaults: commit_job_defaults
     node: gate_build
-    wrappers:
-        - timeout:
-            timeout: 180
-            timeout-var: 'BUILD_TIMEOUT'
-            abort: true
-            type: absolute
     builders:
         - shell:
             !include-raw:

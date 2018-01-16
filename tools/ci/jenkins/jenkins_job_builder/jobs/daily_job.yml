@@ -15,7 +15,7 @@
                 </com.sonyericsson.rebuild.RebuildSettings>
     wrappers:
         - timeout:
-            timeout: 60
+            timeout: 180
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
@@ -103,12 +103,6 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
-    wrappers:
-        - timeout:
-            timeout: 180
-            timeout-var: 'BUILD_TIMEOUT'
-            abort: true
-            type: absolute
     builders:
         - shell:
             !include-raw:
@@ -131,12 +125,6 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
-    wrappers:
-        - timeout:
-            timeout: 180
-            timeout-var: 'BUILD_TIMEOUT'
-            abort: true
-            type: absolute
     builders:
         - shell:
             !include-raw:
@@ -158,12 +146,6 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
-    wrappers:
-        - timeout:
-            timeout: 180
-            timeout-var: 'BUILD_TIMEOUT'
-            abort: true
-            type: absolute
     builders:
         - shell:
             !include-raw:
