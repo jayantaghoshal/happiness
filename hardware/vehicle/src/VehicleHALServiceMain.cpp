@@ -50,9 +50,6 @@ int main(int /* argc */, char* /* argv */ []) {
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
-    // Start subscriptions to VIP, do this after HAL is setup
-    keyManagerModule->StartSubscribe();
-
     // Configured to only use 1 thread as the VHAL Manager and Implementation is not threadsafe.
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
 
