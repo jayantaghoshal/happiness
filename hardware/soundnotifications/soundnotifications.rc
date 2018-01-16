@@ -1,0 +1,8 @@
+on boot
+    start soundnotifications
+
+service soundnotifications /vendor/bin/hw/soundnotifications
+    user root
+    group root
+    oneshot
+    seclabel u:r:soundnotifications:s0

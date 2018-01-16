@@ -24,14 +24,16 @@ services_to_test = [
     "dataelements-hidl-server",
     "vehicle-signals-daemon",
     "netboyd",
-    "profilemanager-hidl-server"
+    "profilemanager-hidl-server",
+    "soundnotifications"
 ]
 
 # Process names to test that they are alive and don't restart
 process_names_to_test = [
     "dataelements-hidl-server",
     "vehicle-signals-daemon",
-    "netboyd"
+    "netboyd",
+    "soundnotifications"
 ]
 
 # Add specific HALs to check with lshal

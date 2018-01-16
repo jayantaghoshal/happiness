@@ -28,6 +28,9 @@
 #carconfig-updater
 /vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0
 
+#soundnotifications
+/vendor/bin/hw/soundnotifications u:object_r:soundnotifications_exec:s0
+
 #carconfig files
 /vendor/etc/carconfig-default.csv u:object_r:carconfig_default_config_file:s0
 /oem_config/carconfig(/.*)? u:object_r:carconfig_config_files:s0
