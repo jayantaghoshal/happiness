@@ -9,7 +9,7 @@ import typing
 import string
 from collections import namedtuple
 
-LoggingViolation = namedtuple("LoggingViolation", "violation file")
+LoggingViolation = namedtuple("LoggingViolation", ["violation", "file"])
 
 
 def get_invalid_chars_in_tag(tag):

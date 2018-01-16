@@ -1,23 +1,30 @@
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-import datetime
-from collections import namedtuple
-
+import typing
+import collections
 import os
 import re
+from ihuutils.sourcecode import sanitize_whitespace
 
-LanguageCommentFeatures = namedtuple('LanguageCommentFeatures', ['firstline',
-                                                                 'endline',
-                                                                 'bodyline_prefix',
-                                                                 'bodyline_suffix',
-                                                                 'headers_matcher',
-                                                                 'headers_to_replace',
-                                                                 'supports_shebang'])
+
+class LicenseHeaderInvalidError(Exception):
+    def __init__(self, violation, source_file):
+        # Call the base class constructor with the parameters it needs
+        super(LicenseHeaderInvalidError, self).__init__("{} in file {}".format(violation, source_file))
+
+
+LanguageCommentFeatures = collections.namedtuple('LanguageCommentFeatures', ['firstline',
+                                                                             'endline',
+                                                                             'bodyline_prefix',
+                                                                             'bodyline_suffix',
+                                                                             'headers_matcher',
+                                                                             'headers_to_replace',
+                                                                             'supports_shebang'])
 
 CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
-CStyleReplaceableRegex = re.compile(r'(^/\*[\s\S]*(?:(Copyright)|(\[2017\])).*(?:(?:Delphi)|(?:Volvo))[\s\S]*?\*\/)',
+CStyleReplaceableRegex = re.compile(r'(^/\*[\s\S]*?((Copyright)|(\[2017\])).*?((Delphi)|(Volvo))[\s\S]*?\*/)',
                                     re.IGNORECASE)
 
 CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
@@ -30,7 +37,7 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         )
 
 HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
-HashStartReplaceableRegex = re.compile(r'(^#.*(?:Copyright.*(?:(?:Delphi)|(?:Volvo)).*\n)(.*\n)*?\n)',
+HashStartReplaceableRegex = re.compile(r'(^#.*?(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)*?\n)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
@@ -58,8 +65,6 @@ KnownLanguages = {
 }
 
 PathsIgnoreRegex = re.compile(r'.*(?:'
-                              r'(generated)|'
-                              r'(gen)|'
                               r'(__init__.py)|'
                               r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))'
                               r')')
@@ -67,6 +72,11 @@ PathsIgnoreRegex = re.compile(r'.*(?:'
 
 def should_filepath_be_ignored(path: str):
     abspath = os.path.abspath(path)
+
+    filename, extension = os.path.splitext(path)
+    if extension not in get_known_languages_extensions():
+        return True
+
     return PathsIgnoreRegex.match(abspath) is not None
 
 
@@ -74,8 +84,6 @@ def filter_ignored(files):
     for f in files:
         if not should_filepath_be_ignored(f):
             yield f
-        else:
-            print("Ignoring file {}".format(f))
 
 
 def get_known_languages_extensions():
@@ -95,12 +103,6 @@ def list_headers_and_filenames(filename: str):
         print(filename)
         for h in headers:
             print(h)
-
-
-def sanitize_whitespace(text):
-    trailing_strip_re = re.compile(r'[ \t]+(\n|\Z)')
-    text = trailing_strip_re.sub(r"\1", text).lstrip('\r\n ').replace('\r', '')
-    return text
 
 
 def get_lang(filename: str):
@@ -129,7 +131,7 @@ def __add_header_to_body(file_body: str, lang: LanguageCommentFeatures):
 
     for line in CommentPattern.splitlines(keepends=False):
         copyright_header += lang.bodyline_prefix
-        copyright_header += line.replace('{year}', str(datetime.datetime.now().year))
+        copyright_header += line.replace('{year}', '2017')
         copyright_header += lang.bodyline_suffix
 
     copyright_header += lang.endline
@@ -191,3 +193,70 @@ def get_contents_with_header_applied(filename: str):
         raise Exception("Internal error, non reproducible application of header to file {}".format(filename))
 
     return with_copyright_applied, file_body
+
+
+def fix_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
+    if isinstance(file_or_files_list, str):
+        files = [file_or_files_list]
+    else:
+        files = list(file_or_files_list)
+
+    for f in filter_ignored(files):
+        assert os.path.isfile(f)
+
+        fixed, original = get_contents_with_header_applied(f)
+        if fixed != original:
+            with(open(f, 'w', encoding="utf-8")) as target:
+                target.write(fixed)
+            print("Fixed header in file {0}".format(f))
+    pass
+
+
+def verify_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
+    if isinstance(file_or_files_list, str):
+        files = [file_or_files_list]
+    else:
+        files = list(file_or_files_list)
+
+    for f in filter_ignored(files):
+
+        fixed, original = get_contents_with_header_applied(f)
+        if fixed != original:
+            raise LicenseHeaderInvalidError("Copyright header invalid", f)
+    pass
+
+
+def collect_supported_files(directory):
+    for entry in os.scandir(directory):
+        if entry.is_dir():
+            yield from collect_supported_files(entry.path)
+
+        if entry.is_file():
+            filename, ext = os.path.splitext(entry.path)
+            if ext in get_known_languages_extensions():
+                yield entry.path
+    pass
+
+
+def collect_copyrightable_files(directory):
+    yield from filter_ignored(collect_supported_files(directory))
+
+
+def list_copyright_headers(file_or_files_list):
+    if isinstance(file_or_files_list, str):
+        files = [file_or_files_list]
+    else:
+        files = file_or_files_list
+
+    for f in files:
+        if should_filepath_be_ignored(f):
+            print("Ignoring file {}".format(f))
+            continue
+
+        list_headers_and_filenames(f)
+    pass
+
+
+def fix_all_copyright_headers(directory):
+    for path in collect_copyrightable_files(directory):
+        fix_copyright_headers(path)
