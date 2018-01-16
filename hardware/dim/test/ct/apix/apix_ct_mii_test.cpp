@@ -23,7 +23,7 @@ TEST(ApixMIITest, ApixMIIPingTest) {
 TEST(ApixMIITest, ApixMIISetupSocketTest) {
     ALOGI("ApixMIISetupSocketTest starting...");
     // Arrange
-    int command_result = system("ip netns exec vcc ./vendor/bin/apix_setup_sock_util");
+    int command_result = system("/vendor/bin/ip netns exec vcc ./vendor/bin/apix_setup_sock_util");
     // Act & Assert
     ASSERT_TRUE(WIFEXITED(command_result) && WEXITSTATUS(command_result) == 0) << "Setup TCP socket failed";
 }

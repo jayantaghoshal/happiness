@@ -9,12 +9,13 @@
 #include <string>
 
 bool Ping(const std::string &ip, int attempts, std::string &result) {
-    std::string command = "ip netns exec vcc ping -c " + std::to_string(attempts) + " " + ip;
+    std::string command = "vendor/bin/ip netns exec vcc ping -c " + std::to_string(attempts) + " " + ip;
     std::string mode = "r";
     std::stringstream result_details;
-    FILE *in = nullptr;
+    FILE *in;
     char buff[512];
-    if (!(in = popen(command.c_str(), mode.c_str()))) {
+    in = popen(command.c_str(), mode.c_str());
+    if (in == nullptr) {
         return false;
     }
     while (fgets(buff, sizeof(buff), in) != NULL) {
