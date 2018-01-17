@@ -45,19 +45,19 @@
   <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="21c8745e8d6b67a3400ed426c4cb3f941c63a079"/>
 
   <remove-project name="vendor/delphi/android_device_release"/>
-  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="0750af4da9bd52917b84b772a239d8025e1419c2"/>
+  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="bb41eb3b6589a85ac26addecde289b847739b768"/>
 
   <remove-project name="vendor/delphi/android_vehicle-hal"/>
-  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="f44ae3872b67ff91f7875aba81e98f796ca0dea3" >
+  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="b848a51267b56a0dca97d16e7e6c3d456014f79d" >
       <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
       <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
   </project> 
 
   <remove-project name="vendor/delphi/android_device" />
-  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="01be05ff046837ebe3463ad87daf625fc806e625"/>
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="dec4e3b22d47214db596ddaff86dfe460a7af760"/>
 
   <remove-project name="vendor/delphi/bb_android_hisip_desip" />
-  <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="a9e9f3eb74757032d7d6e3846cc2d8cd41254c08"/>
+  <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="f15d7ae732d32e445af36036e0fbcf8919ec02bc"/>
 
   <remove-project name="vendor/delphi/bb_android_desip_key_handler" />
   <project name="vendor/delphi/bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="ffddf6b821dda97f9a7f31113f08278c7c2838b6"/>
