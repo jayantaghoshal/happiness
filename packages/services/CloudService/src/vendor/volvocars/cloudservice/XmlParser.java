@@ -170,4 +170,24 @@ public final class XmlParser
             }
         }
     }
+
+
+    /*
+     * ###########################################################################################
+     * #                            PARSER FOR SOFTWARE ASSIGNMENT                                #
+     * ###########################################################################################
+     */
+
+    public static ArrayList<SoftwareAssignment> ParseSoftwareAssignments(InputStream in) throws XmlPullParserException, IOException {
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+            //parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            //parser.setInput(in, null);
+            //parser.nextTag();
+            //return readFeatures(parser);
+        } finally {
+            in.close();
+        }
+        return new ArrayList();
+    }
 }
