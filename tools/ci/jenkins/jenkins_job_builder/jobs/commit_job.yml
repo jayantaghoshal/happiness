@@ -148,7 +148,7 @@
 - job:
     name: ihu_gate_test_apix
     defaults: commit_job_defaults
-    node: rack-rig-apix
+    node: gate_test-apix
     builders:
         - shell:
             !include-raw:
