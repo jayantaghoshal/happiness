@@ -23,6 +23,11 @@ class IDispatcher {
     // Helper function for easy job scheduling
     static void EnqueueTask(std::function<void()> &&f);
 
+    // Helper function for easy job scheduling of delayed or cyclic task
+    // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
+    static JobId EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+                                      bool cyclic_timer = false);
+
     // Create a new dispatcher instance with the provided priority
     static std::unique_ptr<IDispatcher> CreateDispatcher();
 
@@ -31,8 +36,10 @@ class IDispatcher {
     // Enqueue a job to be executed asap
     virtual void Enqueue(std::function<void()> &&f) = 0;
 
-    // Enqueue a job for later execution. The returned value is an id that can be used in Cancel(...)
-    virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) = 0;
+    // Enqueue a job for later execution. The returned value is an id that can be used in Cancel(...).
+    // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
+    virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+                                   bool cyclic_timer = false) = 0;
 
     // Cancel a job that has been enqueued with EnqueueWithDelay()
     // return value:

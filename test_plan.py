@@ -100,6 +100,7 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2018-01-30"
     ),
+    VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
 
 ]
 

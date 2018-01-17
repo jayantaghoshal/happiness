@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies components in tarmac common.
+-->
+<configuration description="Test tarmac common">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsTarmacCommonCTTestCases->/data/local/tmp/VtsTarmacCommonCTTestCases" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsTarmacCommonCTTestCases" />
+        <option name="runtime-hint" value="800ms" />
+    </test>
+</configuration>

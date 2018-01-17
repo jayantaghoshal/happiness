@@ -5,11 +5,13 @@
 
 #include <IDispatcher.h>
 
+#include <cutils/log.h>
 #include <gtest/gtest.h>
+#include <chrono>
 #include <future>
 
+#undef LOG_TAG
 #define LOG_TAG "eventloop.Tests"
-#include <cutils/log.h>
 
 TEST(EventLoopTest, TestEventFunctionCalled) {
     ALOGI("Starting %s", test_info_->name());
@@ -177,6 +179,56 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled) {
         EXPECT_NEAR(diff.count(), 0.5f, 0.1f);
         ALOGI("Expected delay time is 0.5s, measured delay time is %f, allowed margin of error is 0.1s", diff.count());
     }
+
+    ALOGI("Finished...");
+}
+
+TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
+    ALOGI("Starting %s", test_info_->name());
+    using Ms = std::chrono::milliseconds;
+
+    std::promise<int> p;
+    std::future<int> f = p.get_future();
+
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    std::vector<std::chrono::steady_clock::time_point> timer_fired;
+
+    auto subscriptio_handle = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+            std::chrono::microseconds(100000),
+            [&timer_fired, &p, &start]() {
+                timer_fired.push_back(std::chrono::steady_clock::now());
+                if (timer_fired.size() >= 5) {
+                    ALOGI("Task setting future to ready");
+                    p.set_value(1);
+                }
+            },
+            true);
+
+    // Wait for 50ms and check that task wasn't dispatched immediatelly
+    usleep(50000);
+    EXPECT_TRUE(timer_fired.size() == 0);
+
+    ALOGI("Wait for task to be executed");
+    std::future_status status = f.wait_for(std::chrono::seconds(5));
+    ALOGI("Done waiting for task to be executed");
+
+    // Check that task was executed, if not event_func_called will be false
+    EXPECT_TRUE(status == std::future_status::ready);
+
+    if (status == std::future_status::ready) {
+        EXPECT_EQ(timer_fired.size(), 5);
+        auto timepoint = start;
+        for (const auto& timer_fired_at : timer_fired) {
+            ALOGI("Timer fired at: %ld", std::chrono::duration_cast<Ms>((timer_fired_at - start)));
+            auto duration = timer_fired_at - timepoint;
+            timepoint = timepoint + duration;
+            Ms d = std::chrono::duration_cast<Ms>(duration);
+            EXPECT_NEAR(d.count(), Ms(100).count(), Ms(10).count());
+            ALOGI("Expected delay time is 0.1s, measured delay time is %ld, allowed margin of error is 0.01s",
+                  std::chrono::duration_cast<Ms>(duration));
+        }
+    }
+    tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(subscriptio_handle);
 
     ALOGI("Finished...");
 }

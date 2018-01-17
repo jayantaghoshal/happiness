@@ -22,6 +22,7 @@ cc_library_static {
     defaults: ["libtarmac_defaults"],
     srcs: [
         "eventloop/src/Dispatcher.cpp",
+        "common/src/time_provider.cpp",
     ],
     host_supported: true,
 }
@@ -34,4 +35,7 @@ cc_library_shared {
     host_supported: true,
 }
 
-subdirs = ["eventloop"]
+subdirs = [
+    "eventloop",
+    "common",
+]

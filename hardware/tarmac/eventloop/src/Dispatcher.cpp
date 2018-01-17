@@ -153,7 +153,8 @@ class Dispatcher : public IDispatcher {
 
     void Enqueue(std::function<void()> &&f) override;
 
-    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) override;
+    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+                           bool cyclic_timer = false) override;
 
     bool Cancel(JobId jobid) override;
 
@@ -183,6 +184,11 @@ IDispatcher &IDispatcher::GetDefaultDispatcher() {
 
 void IDispatcher::EnqueueTask(std::function<void()> &&f) { GetDefaultDispatcher().Enqueue(std::move(f)); }
 
+IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+                                                     bool cyclic_timer) {
+    return GetDefaultDispatcher().EnqueueWithDelay(delay, std::move(f), cyclic_timer);
+}
+
 std::unique_ptr<IDispatcher> IDispatcher::CreateDispatcher() { return std::unique_ptr<IDispatcher>(new Dispatcher()); }
 
 // constructor
@@ -193,14 +199,15 @@ Dispatcher::~Dispatcher() { Stop(); }
 
 void Dispatcher::Enqueue(std::function<void()> &&f) { queue_.enqueue(std::move(f)); }
 
-IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f) {
+IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+                                                bool cyclic_timer) {
     struct itimerspec ts;
     int tfd, usec;
     JobId this_id;
 
     usec = delay.count();
-    ts.it_interval.tv_sec = 0;
-    ts.it_interval.tv_nsec = 0;
+    ts.it_interval.tv_sec = cyclic_timer ? usec / 1000000 : 0;
+    ts.it_interval.tv_nsec = cyclic_timer ? (usec % 1000000) * 1000 : 0;
     ts.it_value.tv_sec = usec / 1000000;
     ts.it_value.tv_nsec = (usec % 1000000) * 1000;
 
@@ -214,22 +221,24 @@ IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay,
 
     timerfd_settime(tfd, 0, &ts, nullptr);
 
-    AddFd(tfd, [this, tfd, f, this_id]() {
+    AddFd(tfd, [this, tfd, f, this_id, cyclic_timer]() {
         bool dispatch_job_now = false;
         {  // lock scope
             std::lock_guard<std::mutex> lock(mutex_);
             auto iter = delayed_jobs_.find(this_id);
             // see if job shall continue, which means it has NOT been cancelled
             dispatch_job_now = (iter != delayed_jobs_.end());
-            if (dispatch_job_now) delayed_jobs_.erase(iter);  // job has not been cancelled
+            if (dispatch_job_now && !cyclic_timer) delayed_jobs_.erase(iter);  // job has not been cancelled
         }
         if (dispatch_job_now) {
             uint64_t dummy;
             int r = read(tfd, &dummy, sizeof(dummy));
             ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
             f();
-            RemoveFd(tfd);
-            close(tfd);
+            if (!cyclic_timer) {
+                RemoveFd(tfd);
+                close(tfd);
+            }
         }
     });
     return this_id;
