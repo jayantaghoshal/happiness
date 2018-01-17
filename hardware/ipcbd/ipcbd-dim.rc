@@ -1,5 +1,4 @@
 service ipcbd-dim /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd dim TCP DIM
-    oneshot
     class vcc_net
     user root
     group root

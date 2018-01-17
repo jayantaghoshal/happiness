@@ -2,7 +2,6 @@ on boot
     start dimmanager
 
 service dimmanager /vendor/bin/dimmanager
-    oneshot
     user root
     group root
     seclabel u:r:dimmanager:s0
