@@ -75,11 +75,7 @@ test_plan_hourly = [
     ),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
-    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
-             reason="Manual test which require usb2eth dongel",
-             jira_issue="",
-             deadline="2019-11-17"
-    ),
+    TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
     Disabled(TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps), 
              reason="Team slytherin working on the failing tests",
              jira_issue="",

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import java.lang.String;
 
@@ -23,6 +24,13 @@ public class Usb2EthernetActivity extends Activity{
     }
 
     public int getNetworkType(){
-        return connMngr.getActiveNetworkInfo().getType();
+        NetworkInfo net_info = connMngr.getActiveNetworkInfo();
+        //getActiveNetworkInfo can return NULL if no active network exist.
+        if(net_info == null) {
+            return -1;
+        }
+        else {
+            return net_info.getType();
+        }
     }
 }
