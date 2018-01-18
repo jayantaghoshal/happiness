@@ -89,6 +89,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_test-apix
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}    
 - job:
     name: ihu_daily_build_vcc_eng
     defaults: daily_job_defaults
