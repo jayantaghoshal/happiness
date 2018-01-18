@@ -43,7 +43,7 @@ cc_binary {
         "libz",
         "libhwbinder",
         "android.hardware.gnss@1.0",
-        "vendor.volvocars.hardware.http@1.0",
+        "vendor.volvocars.hardware.cloud@1.0",
     ],
 
     static_libs: ["libcurl"],

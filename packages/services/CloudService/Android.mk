@@ -13,7 +13,7 @@ LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
-LOCAL_STATIC_JAVA_LIBRARIES += vendor.volvocars.hardware.http-V1.0-java \
+LOCAL_STATIC_JAVA_LIBRARIES += vendor.volvocars.hardware.cloud-V1.0-java \
 vendor.volvocars.cloudservice.IfsApi
 
 LOCAL_MODULE_TAGS := optional

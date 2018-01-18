@@ -6,7 +6,7 @@
 #pragma once
 
 #include <IDispatcher.h>
-#include <vendor/volvocars/hardware/http/1.0/IHttpRequest.h>
+#include <vendor/volvocars/hardware/cloud/1.0/ICloudConnection.h>
 #include <list>
 #include "certificate_handler_interface.h"
 #include "cloud_request_handler.h"
@@ -14,20 +14,20 @@
 #include "entry_point_fetcher.h"
 
 using ::tarmac::eventloop::IDispatcher;
-using ::vendor::volvocars::hardware::http::V1_0::HttpHeaderField;
-using ::vendor::volvocars::hardware::http::V1_0::HttpHeaders;
+using ::vendor::volvocars::hardware::cloud::V1_0::HttpHeaderField;
+using ::vendor::volvocars::hardware::cloud::V1_0::HttpHeaders;
 
 using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::hardware::hidl_string;
-using ::vendor::volvocars::hardware::http::V1_0::IHttpRequest;
-using ::vendor::volvocars::hardware::http::V1_0::Response;
+using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnection;
+using ::vendor::volvocars::hardware::cloud::V1_0::Response;
 namespace Connectivity {
 
 /*
  * Controller class for the cloud daemon. Implements the HAL interface and owns the URI to CEP
  */
-class CloudService : public IHttpRequest {
+class CloudService : public ICloudConnection {
   public:
     CloudService();
     ~CloudService() = default;

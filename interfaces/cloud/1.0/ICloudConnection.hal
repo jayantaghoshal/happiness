@@ -1,6 +1,6 @@
-package vendor.volvocars.hardware.http@1.0;
+package vendor.volvocars.hardware.cloud@1.0;
 
-interface IHttpRequest
+interface ICloudConnection
 {
     /**
     * Send GET request - blocking call

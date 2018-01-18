@@ -24,7 +24,7 @@ CloudService::CloudService()
 
 bool CloudService::Initialize() {
     // Subscribe to ipcbd
-    android::status_t status = IHttpRequest::registerAsService();
+    android::status_t status = ICloudConnection::registerAsService();
     if (status != android::OK) {
         ALOGW("Failed to register Http binder service: %d", status);
         return false;

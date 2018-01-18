@@ -7,7 +7,7 @@ package vendor.volvocars.cloudservice;
 
 import android.util.Log;
 import android.os.RemoteException;
-import vendor.volvocars.hardware.http.V1_0.*;
+import vendor.volvocars.hardware.cloud.V1_0.*;
 import java.util.ArrayList;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -16,9 +16,9 @@ import java.io.InputStream;
  * Implementation of Foundation service API.
  */
 public class FsApiImpl{
-    private IHttpRequest server;
+    private ICloudConnection server;
     private static final String LOG_TAG = "CloudService.FsApi";
-    public FsApiImpl(IHttpRequest server){
+    public FsApiImpl(ICloudConnection server){
         this.server = server;
     }
 

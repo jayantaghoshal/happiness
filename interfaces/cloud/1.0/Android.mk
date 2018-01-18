@@ -5,7 +5,7 @@ LOCAL_PATH := $(call my-dir)
 ################################################################################
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := vendor.volvocars.hardware.http-V1.0-java
+LOCAL_MODULE := vendor.volvocars.hardware.cloud-V1.0-java
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 
 intermediates := $(call local-generated-sources-dir, COMMON)
@@ -19,7 +19,7 @@ LOCAL_JAVA_LIBRARIES := \
 #
 # Build types.hal (HttpHeaderField)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/HttpHeaderField.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/HttpHeaderField.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -29,7 +29,7 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.HttpHeaderField
+        vendor.volvocars.hardware.cloud@1.0::types.HttpHeaderField
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -38,7 +38,7 @@ LOCAL_GENERATED_SOURCES += $(GEN)
 #
 # Build types.hal (Response)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/Response.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/Response.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -48,19 +48,19 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.Response
+        vendor.volvocars.hardware.cloud@1.0::types.Response
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build IHttpRequest.hal
+# Build ICloudConnection.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/IHttpRequest.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnection.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/IHttpRequest.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnection.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -69,9 +69,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::IHttpRequest
+        vendor.volvocars.hardware.cloud@1.0::ICloudConnection
 
-$(GEN): $(LOCAL_PATH)/IHttpRequest.hal
+$(GEN): $(LOCAL_PATH)/ICloudConnection.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_JAVA_LIBRARY)
@@ -80,7 +80,7 @@ include $(BUILD_JAVA_LIBRARY)
 ################################################################################
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := vendor.volvocars.hardware.http-V1.0-java-static
+LOCAL_MODULE := vendor.volvocars.hardware.cloud-V1.0-java-static
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 
 intermediates := $(call local-generated-sources-dir, COMMON)
@@ -94,7 +94,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 #
 # Build types.hal (HttpHeaderField)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/HttpHeaderField.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/HttpHeaderField.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -104,7 +104,7 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.HttpHeaderField
+        vendor.volvocars.hardware.cloud@1.0::types.HttpHeaderField
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -113,7 +113,7 @@ LOCAL_GENERATED_SOURCES += $(GEN)
 #
 # Build types.hal (Response)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/Response.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/Response.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -123,19 +123,19 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::types.Response
+        vendor.volvocars.hardware.cloud@1.0::types.Response
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build IHttpRequest.hal
+# Build ICloudConnection.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/http/V1_0/IHttpRequest.java
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnection.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/IHttpRequest.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnection.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -144,9 +144,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.http@1.0::IHttpRequest
+        vendor.volvocars.hardware.cloud@1.0::ICloudConnection
 
-$(GEN): $(LOCAL_PATH)/IHttpRequest.hal
+$(GEN): $(LOCAL_PATH)/ICloudConnection.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_STATIC_JAVA_LIBRARY)

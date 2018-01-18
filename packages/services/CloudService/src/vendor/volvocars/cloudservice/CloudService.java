@@ -12,7 +12,7 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
-import vendor.volvocars.hardware.http.V1_0.*;
+import vendor.volvocars.hardware.cloud.V1_0.*;
 import java.util.ArrayList;
 /**
 * CloudService is the main service for communcating with clouddeamon.
@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public class CloudService extends Service {
     private static final String LOG_TAG = "CloudService";
     private IfsApi.Stub fsapiBinder = null;
-    private IHttpRequest server = null;
+    private ICloudConnection server = null;
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
         try{
-            server = IHttpRequest.getService();
+            server = ICloudConnection.getService();
             fsapiBinder = new FsApiImpl(server).binder;
         }
         catch(Exception ex){
