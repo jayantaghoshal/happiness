@@ -43,7 +43,7 @@ class CloudRequest {
           use_https_(true),
           timeout_(36000000) {}
 
-    ~CloudRequest() = default;
+    ~CloudRequest() { curl_easy_cleanup(curl_handle_); };
 
     bool SetCurlHandle(CURL* curl_handle);
     CURL* GetCurlHandle();

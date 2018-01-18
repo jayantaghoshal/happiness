@@ -46,7 +46,9 @@ class EntryPointFetcher final {
     static EntryPointParser::EntryPoint parse(const char* const data);
 
   private:
-    void Restart() throw(std::runtime_error);
+    void RequestCallbackHandler(std::int32_t http_response_code, const std::string& data,
+                                const std::string& header) throw(std::runtime_error);
+    void GetEntryPoint();
     void worker();
 
     std::shared_ptr<CertHandlerInterface> cert_handler_;
@@ -55,6 +57,7 @@ class EntryPointFetcher final {
     const bool allow_retry_;
     size_t retry_index_ = 0;
     IDispatcher::JobId retry_timer_handle_;
+    std::shared_ptr<CloudRequest> cloud_request_;
 
     std::function<void(const EntryPointParser::EntryPoint&)> when_result_available_callback_;
 };

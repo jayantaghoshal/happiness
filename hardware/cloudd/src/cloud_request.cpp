@@ -5,6 +5,7 @@
 
 #include "cloud_request.h"
 
+#define LOG_TAG "CloudD.request"
 #include <cutils/log.h>
 
 namespace Connectivity {

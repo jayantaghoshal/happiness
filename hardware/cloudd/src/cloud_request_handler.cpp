@@ -95,7 +95,7 @@ int CloudRequestHandler::TimerCallback(CURLM *multi, long timeout_ms, void *user
         ALOGV("Timer Off immediately\n");
         code = Perform(request_handler->GetMultiHandle(), CURL_SOCKET_TIMEOUT);
     } else {
-        ALOGD("Timeout ID is -1, how did this happen..?");
+        ALOGV("Timer aborted");
     }
 
     return code;
@@ -130,6 +130,7 @@ int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
                 ALOGW("Request failed with error: %d, %s\n", resultCode, curl_easy_strerror(resultCode));
                 cr->GetCallback()(-1, "", "");
             } else {
+                ALOGV("Calling callback method\n");
                 cr->GetCallback()(response_code, *cr->GetResponseDataBuffer(), *cr->GetResponseHeaderBuffer());
             }
         }
