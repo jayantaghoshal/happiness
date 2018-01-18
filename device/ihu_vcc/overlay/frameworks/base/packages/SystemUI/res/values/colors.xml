@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="system_bar_background">@color/system_bar_background_transparent</drawable>
+    <!-- Status bar -->
+    <eat-comment/>
+    <drawable name="system_bar_background">#00000000</drawable>
     <color name="system_bar_background_opaque">#00000000</color>
     <color name="system_bar_background_transparent">#00000000</color>
+
+    <!-- Notifications -->
+    <eat-comment/>
+    <!-- The color of the material notification background -->
+    <color name="notification_material_background_color">#ff222222</color>
+    <!-- The color of the material notification background when dimmed -->
+    <color name="notification_material_background_dimmed_color">#80171718</color>
+    <!-- The background color of the notification shade - Semi-transparent Grey -->
+    <color name="notification_shade_background_color">#80171718</color>
+
+    <!-- The background color of notifications with min importance. The color name says low
+         but it actually doesn't apply to notifications with low importance. -->
+    <color name="notification_material_background_low_priority_color">#ff222222</color>
 </resources>

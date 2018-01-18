@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The background color for the container of notification actions. -->
+    <color name="notification_action_list">#00000000</color>
+</resources>
