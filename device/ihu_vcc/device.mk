@@ -78,6 +78,7 @@ PRODUCT_COPY_FILES += \
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
     signaltrace \
+    vhaltrace \
     signalecho \
     carsim_bridge \
     signal_toggle_sender \

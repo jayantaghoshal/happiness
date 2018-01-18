@@ -5,16 +5,11 @@
 
 cc_binary {
     name: "vhaltrace",
-    vendor: true,
+    defaults: ["volvocars_cc_defaults_hq"],
     srcs: [
-        "vhaltrace.cpp",
+        "*.cpp",
     ],
 
-    cppflags: [
-        "-fexceptions",
-        "-Wno-unused-parameter",
-        "-Wno-macro-redefined",
-    ],
     shared_libs: [
         "liblog",
         "libcutils",
@@ -26,6 +21,4 @@ cc_binary {
         "vendor.volvocars.hardware.vehiclehal@1.0",
         "android.hardware.automotive.vehicle@2.0",
     ],
-
-    // compile_multilib: "64",
 }
