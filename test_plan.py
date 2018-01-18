@@ -43,11 +43,7 @@ test_plan_hourly = [
              jira_issue="",
              deadline="2018-01-21"
     ),
-    Disabled(VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps),
-             reason="APIX capability not yet ready in CI",
-             jira_issue="",
-             deadline="2018-01-30"
-    ),
+    VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps | {cp.apix}),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
     Disabled(VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                  standard_caps), 
