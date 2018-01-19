@@ -150,10 +150,12 @@ RUN pip3 install redis \
 
 ##################################################
 # Commit hooks and commit
-RUN pip3 install docopt
+RUN pip3 install docopt \
+                 guardonce
 
 RUN apt-get install -y \
     git-review
+
 
 ##################################################
 # Static analysis tools
@@ -161,10 +163,13 @@ RUN apt-get install -y \
     shellcheck \
     python-autopep8 \
     python-pep8
+
 RUN pip3 install mypy \
                  pylint \
                  flake8
+
 RUN pip install flake8
+
 # Typing comes built in with python3, but has to be installed with python2
 # Then you can use it together with comment annotations and mypy
 RUN pip install typing
