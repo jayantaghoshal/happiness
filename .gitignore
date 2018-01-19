@@ -4,6 +4,10 @@
 hmi/*/
 apps/*/
 
+# Temporary files/buffers
+*.swp
+*.tmp
+
 # Visual Studio Code
 *.vscode
 
