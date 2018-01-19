@@ -3,6 +3,8 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#pragma once
+
 #include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
 
 #include <cutils/log.h>

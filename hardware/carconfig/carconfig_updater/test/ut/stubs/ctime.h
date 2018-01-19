@@ -3,6 +3,8 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#pragma once
+
 #include <time.h>
 
 double difftime(time_t end, time_t beginning);

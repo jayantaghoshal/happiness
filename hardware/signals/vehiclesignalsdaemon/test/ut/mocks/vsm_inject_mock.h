@@ -3,6 +3,8 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#pragma once
+
 #include <gmock/gmock.h>
 #include <vsm_inject.h>
 
