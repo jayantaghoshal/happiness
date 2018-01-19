@@ -34,6 +34,7 @@ lunch ihu_vcc-eng
 
 # Rerun commit check in case it changed after the change was validated at the check step
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/bin/gate_check.py
 
 # Build image and test utils
 time make -j64 droid

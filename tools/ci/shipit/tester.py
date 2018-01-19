@@ -336,6 +336,5 @@ def detect_loose_test_cases():
             print("ERROR: vendor/volvocars/test_plan.py contains test not found in repo. Path: %s" % a)
         sys.exit(1)
 
-
 if __name__ == "__main__":
     main()
