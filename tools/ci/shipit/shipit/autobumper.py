@@ -175,15 +175,16 @@ def assemble_commit_messages(base_dir: str,
 
 def post_merge(aosp_root_dir: str,
                branch: str,
-               commit_message: str):
+               commit_message: str,
+               repo_path_name: str):
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
-    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
-    volvocars_repo = git.Repo(volvocars_repo_path)
+    repo_path = os.path.join(aosp_root_dir, repo_path_name)
+    git_repo = git.Repo(repo_path)
 
     repo_init(aosp_root_dir, branch)
 
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir,
-                                              volvocars_repo,
+                                              git_repo,
                                               manifest_repo,
                                               stage_changes=True)
 

@@ -26,10 +26,11 @@ def main(args):
     elif mode == "local":
         autobumper.on_commit(aosp_root_dir, branch)
     elif mode == "autobump":
-        if len(args) != 4:
+        if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')
         message = args[3]
-        autobumper.post_merge(aosp_root_dir, branch, message)
+        repo_path_name = args[4]
+        autobumper.post_merge(aosp_root_dir, branch, message, repo_path_name)
 
 
 if __name__ == "__main__":
