@@ -39,11 +39,19 @@ then
 fi
 export capability
 
+clean_old_test_result_files
+
+set +e
+
+# time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
 
+set -e
+
+collect_test_result_files
 
 # Push logs and reports to Artifactory
 artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz
@@ -55,4 +63,3 @@ echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory
 if [ $status -ne 0 ]; then
     die "Test failed"
 fi
-

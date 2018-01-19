@@ -116,4 +116,5 @@ test_plan_nightly = [
              jira_issue="",
              deadline="2018-01-30"
              ),
+    VTSTest("vendor/volvocars/hardware/dim/test/ct/apix", standard_caps | {cp.apix}),
 ]
