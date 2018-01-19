@@ -4,6 +4,7 @@ filegroup {
     name: "vendor.volvocars.hardware.cloud@1.0_hal",
     srcs: [
         "types.hal",
+        "ICertificateHandler.hal",
         "ICloudConnection.hal",
     ],
 }
@@ -17,6 +18,7 @@ genrule {
     ],
     out: [
         "vendor/volvocars/hardware/cloud/1.0/types.cpp",
+        "vendor/volvocars/hardware/cloud/1.0/CertificateHandlerAll.cpp",
         "vendor/volvocars/hardware/cloud/1.0/CloudConnectionAll.cpp",
     ],
 }
@@ -31,6 +33,11 @@ genrule {
     out: [
         "vendor/volvocars/hardware/cloud/1.0/types.h",
         "vendor/volvocars/hardware/cloud/1.0/hwtypes.h",
+        "vendor/volvocars/hardware/cloud/1.0/ICertificateHandler.h",
+        "vendor/volvocars/hardware/cloud/1.0/IHwCertificateHandler.h",
+        "vendor/volvocars/hardware/cloud/1.0/BnHwCertificateHandler.h",
+        "vendor/volvocars/hardware/cloud/1.0/BpHwCertificateHandler.h",
+        "vendor/volvocars/hardware/cloud/1.0/BsCertificateHandler.h",
         "vendor/volvocars/hardware/cloud/1.0/ICloudConnection.h",
         "vendor/volvocars/hardware/cloud/1.0/IHwCloudConnection.h",
         "vendor/volvocars/hardware/cloud/1.0/BnHwCloudConnection.h",

@@ -1,0 +1,10 @@
+package vendor.volvocars.hardware.cloud@1.0;
+
+interface ICertificateHandler
+{
+    /**
+    * Get certificates and client key - blocking call
+    * @return certificates The certificates and client key
+    **/
+    getCertificates() generates(vec<string> certificates);
+};

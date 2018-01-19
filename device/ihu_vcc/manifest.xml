@@ -67,5 +67,9 @@
             <name>ICloudConnection</name>
             <instance>default</instance>
         </interface>
+        <interface>
+            <name>ICertificateHandler</name>
+            <instance>default</instance>
+        </interface>
     </hal>
 </manifest>

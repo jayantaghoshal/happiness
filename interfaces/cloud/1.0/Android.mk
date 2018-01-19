@@ -55,6 +55,25 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
+# Build ICertificateHandler.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICertificateHandler.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICertificateHandler.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.cloud@1.0::ICertificateHandler
+
+$(GEN): $(LOCAL_PATH)/ICertificateHandler.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build ICloudConnection.hal
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnection.java
@@ -126,6 +145,25 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         vendor.volvocars.hardware.cloud@1.0::types.Response
 
 $(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build ICertificateHandler.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICertificateHandler.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICertificateHandler.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.cloud@1.0::ICertificateHandler
+
+$(GEN): $(LOCAL_PATH)/ICertificateHandler.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
