@@ -81,6 +81,13 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     zlib1g-dev \
     kmod=22-1ubuntu5
 
+###########################################################
+# Tools required for "make dist" (required for VBF creation)
+# hexdump & cgpt
+RUN apt-get install -y \
+    bsdmainutils \
+    cgpt
+
 ##################################################
 # Tools required for building Volvo components
 RUN apt-get install -y \
