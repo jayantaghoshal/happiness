@@ -37,6 +37,9 @@
   <remove-project name="aosp/platform/external/curl"/>
   <project name="aosp/platform/external/curl" path="external/curl" revision="5730c1ed690d43020d5d937cb8e7c2e9a92898c6"/>
 
+  <remove-project name="aosp/platform/external/iptables"/>
+  <project name="aosp/platform/external/iptables" path="external/iptables" revision="664c525517c0b5296c9a6176018edde83144cd60"/>
+
   <!-- Aptiv Overrides -->
   <remove-project name="bsp/kernel/modules/microchip/most-driver"/>
   <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="50d0ba412397e13bc4b64afc587f984c15042cda"/>
