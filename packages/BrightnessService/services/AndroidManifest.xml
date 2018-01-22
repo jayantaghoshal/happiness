@@ -1,0 +1,14 @@
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.brightnessservice"
+    android:sharedUserId="android.uid.system">
+       <application
+         android:name=".MainApplication" android:persistent="true">
+           <service
+         android:persistent="true"
+         android:name=".BrightnessService">
+           <intent-filter>
+               <action android:name=".CHANGE_BRIGHTNESS" />
+           </intent-filter>
+         </service>
+    </application>
+</manifest>
