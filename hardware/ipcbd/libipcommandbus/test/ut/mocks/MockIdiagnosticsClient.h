@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_IDIAGNOSTICS_CLIENT_H
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_IDIAGNOSTICS_CLIENT_H
+#pragma once
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -16,5 +15,3 @@ class MockIDiagnosticsClient : public IDiagnosticsClient {
   public:
     MOCK_METHOD2(SetInvalidData, void(const Message::Ecu ecu, const bool error));
 };
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_IDIAGNOSTICS_CLIENT_H

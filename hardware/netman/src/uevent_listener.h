@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _UEVENT_LISTENER_H_
-#define _UEVENT_LISTENER_H_
+#pragma once
 
 #include "memory"
 #include "uevent_handler.h"
@@ -39,5 +38,3 @@ class UEventListener final {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _UEVENT_LISTENER_H_

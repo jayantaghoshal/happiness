@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef AVMP_H
-#define AVMP_H
+#pragma once
 #include <stdint.h>
 namespace avmp {
 // Version and CRC constants used in version handshaking
@@ -32,4 +31,3 @@ const uint8_t errorPayloadSize = 1;
 const uint8_t payloadOffset = 2;
 
 }  // end of namespace
-#endif

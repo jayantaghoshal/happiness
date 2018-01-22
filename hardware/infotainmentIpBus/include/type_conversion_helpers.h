@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef TYPE_CONVERSION_HELPER_H
-#define TYPE_CONVERSION_HELPER_H
+#pragma once
 
 //#include <cstring>
 #include <chrono>
@@ -346,5 +345,3 @@ static inline S32 DegreesDToFixedPoint32 (double degrees) {
 // clang-format on
 }  // namespace Utils
 }  // namespace InfotainmentIpBus
-
-#endif  // TYPE_CONVERSION_HELPER_H

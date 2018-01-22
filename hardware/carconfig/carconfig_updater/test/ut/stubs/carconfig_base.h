@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef CARCONFIG_BASE_H
-#define CARCONFIG_BASE_H
+#pragma once
 
 #include <string>
 
@@ -21,5 +20,3 @@ class CarConfigBase {
     carConfigObject ccCache[cc_no_of_variables];
     int32_t bufferSize() { return sizeof(carConfigObject) * cc_no_of_variables; }
 };
-
-#endif

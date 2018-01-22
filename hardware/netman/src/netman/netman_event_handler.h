@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _NETMAN_EVENT_HANDLER_H_
-#define _NETMAN_EVENT_HANDLER_H_
+#pragma once
 
 #include <vector>
 #include "uevent_handler.h"
@@ -25,5 +24,3 @@ class NetmanEventHandler final : public UeventHandler {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _NETMAN_EVENT_HANDLER_H_

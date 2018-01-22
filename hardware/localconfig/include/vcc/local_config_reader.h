@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_SRC_LOCAL_CONFIG_READER_H_
-#define VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_SRC_LOCAL_CONFIG_READER_H_
+#pragma once
 
 #include "local_config_reader_interface.h"
 
@@ -59,5 +58,3 @@ class LocalConfigStaticContentReader : public LocalConfigReader {
     explicit LocalConfigStaticContentReader(std::string json);
 };
 }  // namespace vcc
-
-#endif /* VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_SRC_LOCAL_CONFIG_READER_H_ */

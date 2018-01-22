@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_VCC_PDU_HEADER_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_VCC_PDU_HEADER_H_
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -32,5 +31,3 @@ struct VCCPDUHeader {
     std::uint8_t process_flag_and_reserved = 0;
 };
 }
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_VCC_PDU_HEADER_H_

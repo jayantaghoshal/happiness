@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef FIREWALL_CONFIG_H_
-#define FIREWALL_CONFIG_H_
+#pragma once
 
 #include <forward_list>
 #include <fstream>
@@ -100,5 +99,3 @@ class FirewallConfig final {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // FIREWALL_CONFIG_H_

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_TRANSPORTSERVICES_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_TRANSPORTSERVICES_H_
+#pragma once
 
 #include <functional>
 #include <memory>
@@ -231,5 +230,3 @@ class TransportServices : public ITransportServices {
 };
 
 }  // Connectivity
-
-#endif  //_CONNECTIVITY_LIBIPCOMMANDBUS_TRANSPORTSERVICES_H_

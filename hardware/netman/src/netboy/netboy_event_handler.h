@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _NETBOY_EVENT_HANDLER_H_
-#define _NETBOY_EVENT_HANDLER_H_
+#pragma once
 
 #include "uevent_handler.h"
 
@@ -21,5 +20,3 @@ class NetboyEventHandler final : public UeventHandler {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _NETBOY_EVENT_HANDLER_H_

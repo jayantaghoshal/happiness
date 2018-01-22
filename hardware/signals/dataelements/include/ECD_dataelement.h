@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ECDDATAELEMENT_H
-#define ECDDATAELEMENT_H
+#pragma once
 
 /*!
  * \file
@@ -188,4 +187,3 @@ class DESink : public INewDataElement {
 };
 
 }  // end of namespace
-#endif  // ECDDATAELEMENT_H

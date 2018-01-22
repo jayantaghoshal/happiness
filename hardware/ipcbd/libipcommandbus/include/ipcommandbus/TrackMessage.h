@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_TRACKMESSAGE_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_TRACKMESSAGE_H_
+#pragma once
 
 #include <IDispatcher.h>
 #include <memory>
@@ -42,5 +41,3 @@ class TrackMessage {
 };
 
 }  // Connectivity
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_TRACKMESSAGE_H_

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _UEVENT_HANDLER_H_
-#define _UEVENT_HANDLER_H_
+#pragma once
 
 #include <ftw.h>
 #include <string>
@@ -57,5 +56,3 @@ class UeventHandler {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _UEVENT_HANDLER_H_

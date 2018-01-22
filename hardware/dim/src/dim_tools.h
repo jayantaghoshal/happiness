@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMTOOLS_H
-#define DIMTOOLS_H
+#pragma once
 
 #include <array>
 #include <string>
@@ -23,4 +22,3 @@ class DimTools {
 }  // namespace dim_tools
 }  // namespace dim
 }  // namespace vcc
-#endif

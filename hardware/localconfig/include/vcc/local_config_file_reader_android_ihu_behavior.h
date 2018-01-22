@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_FILE_READER_WITH_FALLBACK_H_
-#define VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_FILE_READER_WITH_FALLBACK_H_
+#pragma once
 
 #include "local_config_reader.h"
 
@@ -22,5 +21,3 @@ class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader {
 };
 
 } /* namespace vcc */
-
-#endif /* VENDOR_VOLVOCARS_HARDWARE_LOCALCONFIG_INCLUDE_VCC_LOCAL_CONFIG_FILE_READER_WITH_FALLBACK_H_ */

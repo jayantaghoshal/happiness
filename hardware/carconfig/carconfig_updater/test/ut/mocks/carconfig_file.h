@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ICARCONFIG_FILE_H
-#define ICARCONFIG_FILE_H
+#pragma once
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -48,5 +47,3 @@ class CarconfigFile : public ICarconfigFile {
     MOCK_METHOD1(getValue, ccValue(int));
     MOCK_METHOD2(setValue, bool(uint32_t, ccValue));
 };
-
-#endif  // CARCONFIG_FILE_H

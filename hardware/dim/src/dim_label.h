@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMLABEL_H
-#define DIMLABEL_H
+#pragma once
 
 #include "dim_item.h"
 
@@ -40,5 +39,3 @@ class DimLabel final : public DimItem {
 
 }  // namespace dim
 }  // namespace vcc
-
-#endif

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VIPCOM_API_H
-#define VIPCOM_API_H
+#pragma once
 
 #include <cstdint>
 #include <thread>
@@ -161,5 +160,3 @@ class VipCom {
     // Pointers to client application's handler
     IVipComClient *vipcom_client_ = nullptr;
 };
-
-#endif

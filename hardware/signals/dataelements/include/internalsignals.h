@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _INTERNALSIGNALS_H
-#define _INTERNALSIGNALS_H
+#pragma once
 
 #include "gen_dataelements.h"
 #include "gen_jsonencdec.h"
@@ -74,5 +73,3 @@ json toJson<ActivateVfc>(const ActivateVfc& v);
 template <>
 ActivateVfc fromJson<ActivateVfc>(const json& j);
 }
-
-#endif

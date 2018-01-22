@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef MESSAGE_API_H
-#define MESSAGE_API_H
+#pragma once
 
 #include <reuse.h>
 
@@ -18,5 +17,3 @@ void messageSend(Message_Send_T *msg_data);
 
 // Use this function to inject AVMP messages into the vehicle signals manager module.
 void avmpMessageInject(uint8_t *msg_data, const uint32_t data_size);
-
-#endif  // MESSAGE_API_H

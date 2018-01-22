@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef REUSE_H
-#define REUSE_H
+#pragma once
 
 #if defined(WIN32)
 
@@ -72,5 +71,3 @@ typedef uint8_t bool;
 enum bool_Tag { false = 0, true = 1 };
 
 #endif /* __cplusplus */
-
-#endif /* REUSE_H */

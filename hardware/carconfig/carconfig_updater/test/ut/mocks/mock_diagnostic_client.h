@@ -10,8 +10,7 @@
  *      Author: bastian
  */
 
-#ifndef CARCONFIG_UPDATER_TEST_UT_MOCKS_MOCK_DIAGNOSTIC_CLIENT_H_
-#define CARCONFIG_UPDATER_TEST_UT_MOCKS_MOCK_DIAGNOSTIC_CLIENT_H_
+#pragma once
 
 #include <diagnostics_client.h>
 #include <gmock/gmock.h>
@@ -35,5 +34,3 @@ class MockDiagnosticClient : public diagnosticsClient {
 };
 
 void diag_mock_init(MockDiagnosticClient* mockInstance);
-
-#endif /* CARCONFIG_UPDATER_TEST_UT_MOCKS_MOCK_DIAGNOSTIC_CLIENT_H_ */

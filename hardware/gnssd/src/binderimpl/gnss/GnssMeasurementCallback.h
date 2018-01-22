@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSMEASUREMENTCALLBACK_H
-#define ANDROID_HARDWARE_GNSS_V1_0_GNSSMEASUREMENTCALLBACK_H
+#pragma once
 
 #include <android/hardware/gnss/1.0/IGnssMeasurementCallback.h>
 #include <hidl/MQDescriptor.h>
@@ -41,5 +40,3 @@ extern "C" IGnssMeasurementCallback* HIDL_FETCH_IGnssMeasurementCallback(const c
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_GNSS_V1_0_GNSSMEASUREMENTCALLBACK_H

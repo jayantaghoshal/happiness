@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_NET_DESERIALIZER_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_NET_DESERIALIZER_H_
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -29,5 +28,3 @@ class NetDeserializer {
     std::vector<std::uint8_t>::size_type position;
 };
 }
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_NET_DESERIALIZER_H_

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef CEDRIC_LOCALCONFIG_STUB_H
-#define CEDRIC_LOCALCONFIG_STUB_H
+#pragma once
 
 #include <string>
 
@@ -30,5 +29,3 @@ const T* getValue(const std::string& key);
 }
 }
 }
-
-#endif  // MOCK_CEDRIC_LOCALCONFIG_STUB_H

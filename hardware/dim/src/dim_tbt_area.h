@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMTBTAREA_H
-#define DIMTBTAREA_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -41,5 +40,3 @@ class DimTbtArea final : public DimOperationData {
 
 }  // namespace dim
 }  // namespace vcc
-
-#endif

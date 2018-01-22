@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_TIMEOUTINFO_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_TIMEOUTINFO_H_
+#pragma once
 
 #include <chrono>
 #include <cstdint>
@@ -42,5 +41,3 @@ class TimeoutInfo {
 };
 
 }  // Connectivity
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_TIMEOUTINFO_H_

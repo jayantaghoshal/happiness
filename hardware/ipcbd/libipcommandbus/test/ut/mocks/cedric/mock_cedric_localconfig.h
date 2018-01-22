@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef MOCK_CEDRIC_LOCALCONFIG_H
-#define MOCK_CEDRIC_LOCALCONFIG_H
+#pragma once
 
 #include <gmock/gmock.h>
 #include <string>
@@ -33,5 +32,3 @@ const T* getValue(const std::string& key);
 }
 }
 }
-
-#endif  // MOCK_CEDRIC_LOCALCONFIG_H

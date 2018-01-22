@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHINGCALLBACK_H
-#define ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHINGCALLBACK_H
+#pragma once
 
 #include <android/hardware/gnss/1.0/IGnssBatchingCallback.h>
 #include <hidl/MQDescriptor.h>
@@ -42,5 +41,3 @@ extern "C" IGnssBatchingCallback* HIDL_FETCH_IGnssBatchingCallback(const char* n
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHINGCALLBACK_H

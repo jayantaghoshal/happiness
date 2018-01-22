@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_KEYPAIRRESPONSEHANDLER_H
-#define VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_KEYPAIRRESPONSEHANDLER_H
+#pragma once
 
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
@@ -35,5 +34,3 @@ struct KeyPairResponseHandler : public IKeyPairResponseHandler {
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_KEYPAIRRESPONSEHANDLER_H

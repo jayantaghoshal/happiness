@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_PROFILECHANGEDHANDLER_H
-#define VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_PROFILECHANGEDHANDLER_H
+#pragma once
 
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
@@ -36,5 +35,3 @@ struct ProfileChangedHandler : public IProfileChangedHandler {
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_PROFILES_V1_0_PROFILECHANGEDHANDLER_H

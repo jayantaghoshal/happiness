@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_UDS_V1_0_UDSDATACOLLECTOR_H
-#define VENDOR_VOLVOCARS_HARDWARE_UDS_V1_0_UDSDATACOLLECTOR_H
+#pragma once
 
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/uds/1.0/IDataCollector.h>
@@ -122,5 +121,3 @@ class DataCollector : public uds_v1_0::IDataCollector,
     bool PreexistingDidHandler(const hidl_vec<Did>& supported_dids);
     bool PreexistingRoutineHandler(const hidl_vec<RoutineId>& supported_rids);
 };
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_UDS_V1_0_UDSDATACOLLECTOR_H

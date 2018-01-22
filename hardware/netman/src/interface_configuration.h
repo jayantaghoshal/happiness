@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _INTERFACE_CONFIGURATION_H_
-#define _INTERFACE_CONFIGURATION_H_
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -25,5 +24,3 @@ struct InterfaceConfiguration {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _INTERFACE_CONFIGURATION_H_

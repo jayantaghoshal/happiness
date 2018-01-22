@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _NETUTILS_H_
-#define _NETUTILS_H_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -33,5 +32,3 @@ bool TakeInterfaceDown(const char *interface_name);
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _NETUTILS_H_

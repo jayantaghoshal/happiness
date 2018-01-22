@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_TRANSPORTSERVICES_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_TRANSPORTSERVICES_H_
+#pragma once
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -35,5 +34,3 @@ class MockTransportServices : public Connectivity::ITransportServices {
 
     MOCK_METHOD4(sendError, void(Connectivity::Message::Ecu, const Connectivity::Pdu &, ErrorCode, uint16_t));
 };
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_TRANSPORTSERVICES_H_

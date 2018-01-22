@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef APPLICATIONDATAELEMENT_H
-#define APPLICATIONDATAELEMENT_H
+#pragma once
 
 /*!
  * \file
@@ -179,4 +178,3 @@ class DEReceiver : public INewDataElement {
 };
 
 }  // end of namespace
-#endif  // APPLICATIONDATAELEMENT_H

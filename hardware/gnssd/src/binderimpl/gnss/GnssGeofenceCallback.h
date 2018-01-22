@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCECALLBACK_H
-#define ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCECALLBACK_H
+#pragma once
 
 #include <android/hardware/gnss/1.0/IGnssGeofenceCallback.h>
 #include <hidl/MQDescriptor.h>
@@ -50,5 +49,3 @@ extern "C" IGnssGeofenceCallback* HIDL_FETCH_IGnssGeofenceCallback(const char* n
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCECALLBACK_H

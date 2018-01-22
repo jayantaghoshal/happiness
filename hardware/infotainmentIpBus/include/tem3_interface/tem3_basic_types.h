@@ -26,8 +26,7 @@
  *****************************************************************************
  */
 
-#ifndef TEM3_BASIC_TYPES_H
-#define TEM3_BASIC_TYPES_H
+#pragma once
 
 #include <stdbool.h> /* For better C++ interoperability. Not in original code. */
 #include <stddef.h>
@@ -129,4 +128,3 @@ typedef signed long long S64;
 //@}
 
 /** @} */ /* End Doxygen defgroup */
-#endif

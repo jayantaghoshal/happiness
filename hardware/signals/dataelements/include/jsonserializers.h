@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef JSONSERIALIZERS_H
-#define JSONSERIALIZERS_H
+#pragma once
 
 #include <cutils/log.h>
 #include "gen_jsonencdec.h"
@@ -65,5 +64,3 @@ DataElemValue<S> deserialize(const std::string& ba) {
             return DataElemValue<S>::ERROR(-2, timestamp);  // unknown state
     }
 }
-
-#endif  // JSONSERIALIZERS_H

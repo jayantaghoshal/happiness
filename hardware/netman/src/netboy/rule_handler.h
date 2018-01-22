@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _RULE_HANDLER_H_
-#define _RULE_HANDLER_H_
+#pragma once
 
 #include "vcc/localconfig.h"
 
@@ -78,5 +77,3 @@ class RuleHandler {
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // _RULE_HANDLER_H_

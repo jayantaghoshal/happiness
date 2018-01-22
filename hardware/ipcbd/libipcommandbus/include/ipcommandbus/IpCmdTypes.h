@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_IPCMDTYPES_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_IPCMDTYPES_H_
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -71,5 +70,3 @@ const char *toString(DataType dt);
 
 }  // IpCmdTypes
 }  // Connectivity
-
-#endif  //_CONNECTIVITY_LIBIPCOMMANDBUS_IPCMDTYPES_H_

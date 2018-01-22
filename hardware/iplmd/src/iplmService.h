@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
-#define VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H
+#pragma once
 
 #include <IDispatcher.h>
 #include <mutex>
@@ -256,5 +255,3 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
 
     std::vector<EcuAvailabilityNotification> node_availability_notifications_;
 };
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_IPLMD_IPLMSERVICE_H

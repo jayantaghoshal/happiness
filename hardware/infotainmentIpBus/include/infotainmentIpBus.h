@@ -12,8 +12,7 @@
 // november 1
 //
 
-#ifndef INFOTAINMENT_IP_BUSINFOTAINMENTIPBUS_H
-#define INFOTAINMENT_IP_BUSINFOTAINMENTIPBUS_H
+#pragma once
 
 #include "pl/asn_base/asn_base.h"
 
@@ -5746,7 +5745,5 @@ Icb_OpGNSSPositionData_Response Icb_OpGNSSPositionData_Response_Create(ASN_Sessi
 #ifdef ASN_PRINT
 void Icb_OpGNSSPositionData_Response_Print(Icb_OpGNSSPositionData_Response ThisPtr);
 #endif /* #ifdef ASN_PRINT */
-
-#endif /* INFOTAINMENT_IP_BUSINFOTAINMENTIPBUS_H */
 
 // End of infotainmentIpBus.h

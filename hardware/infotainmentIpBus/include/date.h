@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DATE_H
-#define DATE_H
+#pragma once
 
 // The MIT License (MIT)
 //
@@ -5656,5 +5655,3 @@ inline std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, T
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
-
-#endif  // DATE_H

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_UDPSOCKET_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_UDPSOCKET_H_
+#pragma once
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -19,5 +18,3 @@ class MockUdpSocket : public Connectivity::ISocket {
     MOCK_METHOD2(writeTo, void(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu));
     MOCK_METHOD0(endConnection, void());
 };
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_MOCK_UDPSOCKET_H_

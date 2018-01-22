@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VCC_LOCALCONFIG_H_
-#define VCC_LOCALCONFIG_H_
+#pragma once
 
 #include <vcc/local_config_reader_interface.h>
 #include <string>
@@ -119,5 +118,3 @@ std::vector<std::string> GetStringArray(const T &... keys) {
 
 }  // namespace localconfig
 }  // namespace vcc
-
-#endif  // VCC_LOCALCONFIG_H_

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef PL_ASN_BASE_H
-#define PL_ASN_BASE_H 1
+#pragma once
 /** @defgroup PL_ASN_BASE ASN.1 Interface
 *** @ingroup PL
 *** @{
@@ -1523,4 +1522,3 @@ void ASN_UTF8String_Print(ASN_UTF8String ThisPtr);
 #endif /* #ifdef ASN_PRINT */
 
 /// @}
-#endif

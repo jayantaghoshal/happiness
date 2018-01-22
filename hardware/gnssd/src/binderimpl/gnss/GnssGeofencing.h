@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCING_H
-#define ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCING_H
+#pragma once
 
 #include <android/hardware/gnss/1.0/IGnssGeofencing.h>
 #include <hidl/MQDescriptor.h>
@@ -48,5 +47,3 @@ extern "C" IGnssGeofencing* HIDL_FETCH_IGnssGeofencing(const char* name);
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_GNSS_V1_0_GNSSGEOFENCING_H

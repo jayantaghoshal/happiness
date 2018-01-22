@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef APPLICATIONDATAELEMENT_H
-#define APPLICATIONDATAELEMENT_H
+#pragma once
 
 #include <algorithm>
 #include <functional>
@@ -204,4 +203,3 @@ class DEInjector {
 };
 
 }  // end of namespace
-#endif  // APPLICATIONDATAELEMENT_H

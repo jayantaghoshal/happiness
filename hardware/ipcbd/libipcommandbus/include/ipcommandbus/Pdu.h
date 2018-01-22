@@ -9,8 +9,7 @@
  * @brief Pdu class
  *
  */
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_PDU_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_PDU_H_
+#pragma once
 
 #include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/vcc_pdu_header.h"
@@ -66,5 +65,3 @@ class Pdu {
 };
 
 }  // Connectivity
-
-#endif  //_CONNECTIVITY_LIBIPCOMMANDBUS_PDU_H_

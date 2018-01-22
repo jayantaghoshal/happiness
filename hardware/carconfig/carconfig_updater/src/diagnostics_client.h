@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIAGNOSTICSCLIENT_H_
-#define DIAGNOSTICSCLIENT_H_
+#pragma once
 
 #include <CommonAPI/CommonAPI.hpp>
 #include <cstdint>
@@ -38,5 +37,3 @@ enum class MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS_BYTE_0 : uint8_t {
     invalid_unconfigured_error = 0b00000100,
     invalid_unconfigured_not_tested = 0b00001000
 };
-
-#endif  // DIAGNOSTICSCLIENT_H_

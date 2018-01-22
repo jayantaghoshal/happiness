@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef SERVICE_MANAGER_H
-#define SERVICE_MANAGER_H
+#pragma once
 
 #include <IDispatcher.h>
 #include <ipcommandbus/MessageDispatcher.h>
@@ -54,5 +53,3 @@ class ServiceManager : public IVehicleCom {
 };
 
 }  // namespace Connectivity
-
-#endif  // SERVICE_MANAGER_H

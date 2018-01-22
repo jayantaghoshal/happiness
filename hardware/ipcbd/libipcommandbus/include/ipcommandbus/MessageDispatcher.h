@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGEDISPATCHER_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGEDISPATCHER_H_
+#pragma once
 
 #include <assert.h>
 #include <algorithm>
@@ -191,5 +190,3 @@ class MessageDispatcher {
 };
 
 }  // Connectivity
-
-#endif  //_CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGEDISPATCHER_H_

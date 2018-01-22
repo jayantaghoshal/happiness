@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef INFOTAINMENT_IP_BUS_ASN_DECODER_H
-#define INFOTAINMENT_IP_BUS_ASN_DECODER_H
+#pragma once
 
 #define ASN_LOG_TAG "InfotainmentIPBus.decode"
 
@@ -118,4 +117,3 @@ void createHeader(Connectivity::VccIpCmd::ServiceId serviceId,
 }  // namespace InfotainmentIpBus
 
 #undef LOG_TAG
-#endif  // INFOTAINMENT_IP_BUS_ASN_DECODER_H

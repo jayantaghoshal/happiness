@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_NET_SERIALIZER_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_NET_SERIALIZER_H_
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -22,5 +21,3 @@ class NetSerializer {
     std::vector<std::uint8_t> &vector;
 };
 }
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_NET_SERIALIZER_H_

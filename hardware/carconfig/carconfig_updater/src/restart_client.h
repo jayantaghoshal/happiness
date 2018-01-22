@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef RESTART_CLIENT_H
-#define RESTART_CLIENT_H
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -28,5 +27,3 @@ class restartClient {
     sd_bus_message *m;
     sd_bus *bus;
 };
-
-#endif

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef MOCK_VIPCOM_CLIENT_H
-#define MOCK_VIPCOM_CLIENT_H
+#pragma once
 
 #include <gmock/gmock.h>
 #include <vipcom_client.h>
@@ -16,5 +15,3 @@ class CarConfigVipComMock : public CarConfigVipCom {
     MOCK_METHOD2(onMessage, void(const uint8_t &_fid, const std::vector<uint8_t> &_payload));
     MOCK_METHOD1(onConnectionError, void(ConnectionError e));
 };
-
-#endif  // MOCK_VIPCOM_CLIENT_H

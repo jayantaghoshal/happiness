@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMIMAGE_H
-#define DIMIMAGE_H
+#pragma once
 
 #include "dim_item.h"
 
@@ -40,4 +39,3 @@ class DimImage final : public DimItem {
 /** @} dimItem end group */
 }  // namspace dim
 }  // namespace vcc
-#endif  //! DIMIMAGE_H

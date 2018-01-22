@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMITEM_H
-#define DIMITEM_H
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -142,4 +141,3 @@ class DimItem {
 
 }  // namespace dim
 }  // namespace vcc
-#endif

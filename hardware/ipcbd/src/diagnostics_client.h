@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIAGNOSTICS_CLIENT_H
-#define DIAGNOSTICS_CLIENT_H
+#pragma once
 
 #include "ipcommandbus/idiagnostics_client.h"
 
@@ -38,5 +37,3 @@ class DiagnosticsClient :
 };
 
 }  // namespace
-
-#endif  // DIAGNOSTICS_CLIENT_H

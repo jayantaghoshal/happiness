@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMLINKEDITEM_H
-#define DIMLINKEDITEM_H
+#pragma once
 
 #include "dim_item.h"
 
@@ -47,5 +46,3 @@ class DimLinkedItem final : public DimItem {
 /** @} dimItem end group */
 }  // namespace dim
 }  // namespace vcc
-
-#endif  // !DIMLINKEDITEM_H

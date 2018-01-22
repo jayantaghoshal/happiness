@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef LOCALCONFIG_PARAMETERS_H
-#define LOCALCONFIG_PARAMETERS_H
+#pragma once
 
 #include <chrono>
 #include <string>
@@ -101,5 +100,3 @@ class LocalconfigParameters {
 };
 
 }  // Connectivity
-
-#endif  // LOCALCONFIG_PARAMETERS_H

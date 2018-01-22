@@ -9,8 +9,7 @@
  * @brief Message class
  *
  */
-#ifndef _CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGE_H_
-#define _CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGE_H_
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -73,5 +72,3 @@ struct Message {
     RetryInfo retry_info = {false, 0, 0};
 };
 }
-
-#endif  // _CONNECTIVITY_LIBIPCOMMANDBUS_MESSAGE_H_

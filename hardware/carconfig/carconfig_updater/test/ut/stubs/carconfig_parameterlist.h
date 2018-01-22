@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef CEDRIC_CCDB_PARAMETER_LIST_H
-#define CEDRIC_CCDB_PARAMETER_LIST_H
+#pragma once
 
 namespace CarConfigParamList {
 /* Do not edit by hand!
@@ -2571,4 +2570,3 @@ const std::map<int, std::vector<int>> paramListBad = {
                  0x03,  // Rain_Sensor_Function_Activated_By_Interval_Position
          }}};
 }
-#endif

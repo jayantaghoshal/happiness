@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef NETMAN_DIAGNOSTICS_REPORTER_H
-#define NETMAN_DIAGNOSTICS_REPORTER_H
+#pragma once
 
 #include <utils/StrongPointer.h>
 #include <vcc/localconfig.h>
@@ -37,5 +36,3 @@ class DiagnosticsReporter final : public ::android::hidl::manager::V1_0::IServic
 
 }  // namespace netman
 }  // namespace vcc
-
-#endif  // NETMAN_DIAGNOSTICS_REPORTER_H

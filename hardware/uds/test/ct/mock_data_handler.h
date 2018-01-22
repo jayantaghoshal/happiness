@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef SOURCE_HARDWARE_UDS_TEST_CT_MOCK_DATA_HANDLER_H_
-#define SOURCE_HARDWARE_UDS_TEST_CT_MOCK_DATA_HANDLER_H_
+#pragma once
 
 #include <gmock/gmock.h>
 #include <vendor/volvocars/hardware/uds/1.0/IDataHandler.h>
@@ -37,5 +36,3 @@ struct MockDataHandler : public IDataHandler {
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor
-
-#endif /* SOURCE_HARDWARE_UDS_TEST_CT_MOCK_DATA_HANDLER_H_ */

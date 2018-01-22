@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VIPCOM_CLIENT_H
-#define VIPCOM_CLIENT_H
+#pragma once
 
 #include <vipcom/vipcom_api.h>
 
@@ -36,5 +35,3 @@ class CarConfigVipCom : public IVipComClient {
         sysSetCarConfigControlByte = 0x00
     } hisipBytes;
 };
-
-#endif  // VIPCOM_CLIENT_H

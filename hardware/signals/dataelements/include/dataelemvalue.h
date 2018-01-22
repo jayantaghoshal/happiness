@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DATAELEMVALUE_H
-#define DATAELEMVALUE_H
+#pragma once
 
 /*!
  * \file
@@ -159,5 +158,3 @@ class DataElemValue : public DataElemValueBase {
     // Signal content
     value_type m_value;
 };
-
-#endif  // DATAELEMVALUE_H

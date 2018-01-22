@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIMSERVICE_H
-#define DIMSERVICE_H
+#pragma once
 
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include "dim_tbt_area.h"
@@ -42,5 +41,3 @@ class DimManager final : public ::android::hidl::manager::V1_0::IServiceNotifica
 
 }  // namespace dim
 }  // namespace vcc
-
-#endif

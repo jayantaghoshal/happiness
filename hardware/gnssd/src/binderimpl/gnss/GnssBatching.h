@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHING_H
-#define ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHING_H
+#pragma once
 
 #include <android/hardware/gnss/1.0/IGnssBatching.h>
 #include <hidl/MQDescriptor.h>
@@ -47,5 +46,3 @@ extern "C" IGnssBatching* HIDL_FETCH_IGnssBatching(const char* name);
 }  // namespace gnss
 }  // namespace hardware
 }  // namespace android
-
-#endif  // ANDROID_HARDWARE_GNSS_V1_0_GNSSBATCHING_H

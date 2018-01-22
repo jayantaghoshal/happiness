@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef LOCAL_CONFIG_H
-#define LOCAL_CONFIG_H
+#pragma once
 
 #include <string>
 
@@ -21,4 +20,3 @@ int getRequestMonitoringTmo();
 int getNofLocalSoftwareComponents();
 }
 }
-#endif  // LOCAL_CONFIG_H

@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef DIAG_MESSAGE_KEYS_H
-#define DIAG_MESSAGE_KEYS_H
+#pragma once
 
 /**
  * Manufacturing and Customer Diag Keys
@@ -371,5 +370,3 @@ enum DIAGNOSTICS_KEYS {
 
     /* Diagnostic control keys */
 };
-
-#endif /* DIAG_MESSAGE_KEYS_H */
