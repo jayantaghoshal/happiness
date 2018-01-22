@@ -62,10 +62,11 @@ def check_file(filename: str) -> typing.Iterable[LoggingViolation]:
         return
 
     last_include_index = file_contents.rfind("#include")
-    last_include_cutils_log_index = file_contents.rfind("#include <cutils/log.h>")
+    last_include_logging_header_index = max(file_contents.rfind("#include <cutils/log.h>"),
+                                            file_contents.rfind("#include <android-base/logging.h>"))
 
-    if last_include_index == last_include_cutils_log_index:
-        last_include_index = file_contents.rfind("#include", 0, last_include_cutils_log_index)
+    if last_include_index == last_include_logging_header_index:
+        last_include_index = file_contents.rfind("#include", 0, last_include_logging_header_index)
 
     first_define_logtag_index = file_contents.find("#define LOG_TAG")
     last_define_logtag_index = file_contents.rfind("#define LOG_TAG")
