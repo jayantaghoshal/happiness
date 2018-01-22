@@ -1,0 +1,6 @@
+type vehicle_monitor_service_exec, exec_type, file_type;
+type vehicle_monitor_service, domain;
+
+typeattribute vehicle_monitor_service vendor_executes_system_violators;
+
+init_daemon_domain(vehicle_monitor_service)

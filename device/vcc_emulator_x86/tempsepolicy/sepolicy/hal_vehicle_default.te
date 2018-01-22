@@ -1,0 +1,12 @@
+# vehicle subsystem
+type hal_vehicle_default, domain;
+typeattribute hal_vehicle_default vendor_executes_system_violators;
+typeattribute hal_vehicle_default socket_between_core_and_vendor_violators;
+typeattribute hal_vehicle_default binder_in_vendor_violators;
+hal_server_domain(hal_vehicle_default, hal_vehicle)
+
+# may be started by init
+type hal_vehicle_default_exec, exec_type, file_type;
+init_daemon_domain(hal_vehicle_default)
+
+allow hal_vehicle_default car_service:service_manager { add };

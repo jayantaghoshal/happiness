@@ -5,3 +5,4 @@
 
 add_lunch_combo ihu_vcc-userdebug
 add_lunch_combo ihu_vcc-eng
+add_lunch_combo vcc_emulator_x86-eng

@@ -13,4 +13,6 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/ihu_vcc/ihu_vcc.mk
+    $(LOCAL_DIR)/ihu_vcc/ihu_vcc.mk \
+    $(LOCAL_DIR)/vcc_emulator_x86/vcc_emulator_x86.mk
+
