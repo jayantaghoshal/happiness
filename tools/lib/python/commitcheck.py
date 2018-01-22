@@ -85,7 +85,7 @@ def collect_loop_exceptions(item_list, action_on_item, accepted_types=(Exception
 def print_error_explanations(error_list: typing.Iterable[Exception]):
     sorted_error_list = sorted(error_list, key=lambda er: type(er).__name__)
 
-    grouped_errors = collections.defaultdict(list)
+    grouped_errors = collections.defaultdict(list)  # type: typing.DefaultDict[type, typing.List[Exception]]
     for e in sorted_error_list:
         grouped_errors[type(e)].append(e)
 
@@ -145,16 +145,28 @@ ExpectedExceptions = (linters.LinterError,
                       copyrightheader.LicenseHeaderInvalidError)
 
 
+def is_external_thirdparty(file_path: str) -> bool:
+    if file_path.find("/external/") > 0:
+        return True
+
+    if file_path.find("/thirdparty/") > 0:
+        return True
+
+    return False
+
+
 def verify_file_path(file_path):
-    codeformat.verify_source_file_format(file_path)
-    copyrightheader.verify_copyright_headers(file_path)
-    linters.run_for_file(file_path)
+    if not is_external_thirdparty(file_path):
+        codeformat.verify_source_file_format(file_path)
+        copyrightheader.verify_copyright_headers(file_path)
+        linters.run_for_file(file_path)
 
 
 def fix_file_path(file_path):
-    codeformat.apply_source_file_format(file_path)
-    copyrightheader.fix_copyright_headers(file_path)
-    linters.run_for_file(file_path)
+    if not is_external_thirdparty(file_path):
+        codeformat.apply_source_file_format(file_path)
+        copyrightheader.fix_copyright_headers(file_path)
+        linters.run_for_file(file_path)
 
 
 def verify_repo(repo_root, **kwargs):
