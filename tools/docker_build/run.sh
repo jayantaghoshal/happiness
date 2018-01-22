@@ -118,6 +118,16 @@ if [[ $IS_TERMINAL == true ]]; then
     INTERACTIVE_OPTS="${INTERACTIVE_OPTS} --tty "
 fi
 
+if [[ $IS_TERMINAL == true && $IS_INTERACTIVE == true ]]; then
+    # Patch library.go if we want to skip abi checks
+    if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
+        # Patch build/soong/cc/library.go to skip generating .sdump files for ABI checking
+        git -C "${REPO_ROOT_DIR}/build/soong" apply "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/jenkins/abi-dump.patch"
+        # Restore file at exit/user break/external termination during builds
+        trap 'git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go' EXIT SIGINT SIGTERM
+    fi
+fi
+
 #shellcheck disable=SC2086
 docker run \
     --rm \
@@ -138,6 +148,7 @@ docker run \
     --env CXX_WRAPPER \
     --env OUT_DIR \
     --env USE_CCACHE \
+    --env SKIP_ABI_CHECKS \
     --env=HOST_USER_GROUPS="${HOST_USER_GROUPS}" \
     --env=REPO_ROOT_DIR="${REPO_ROOT_DIR}" \
     --env=HOME="$HOME" \
@@ -147,3 +158,14 @@ docker run \
     --env DISPLAY \
     "${DOCKER_IMAGE}" \
     "$@"
+
+RETVAL=$?
+
+if [[ $IS_TERMINAL == true && $IS_INTERACTIVE == true ]]; then
+    # Restore library.go
+    if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
+        git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go
+    fi
+fi
+
+exit $RETVAL
