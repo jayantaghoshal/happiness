@@ -32,7 +32,7 @@ cc_defaults {
         "-readability-else-after-return", // some readable patterns are causing warnings, this readability choice is better left to humans
     ],
     tidy_flags: [
-        "-header-filter=^vendor/volvocars/.*",
+        "-header-filter=^vendor/volvocars/(?!external).*$",
     ],
 }
 

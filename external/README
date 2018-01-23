@@ -1,0 +1,7 @@
+Imported external repositories (via repo tool),
+which do not fit/match the purpose of hmi/* and apps/*
+When adding remember to update external/.gitignore
+
+Copied/imported blobs/projects (i.e. where files do not come from GIT or GIT was huge)
+
+Each project must be one level below (matching external/*/).
