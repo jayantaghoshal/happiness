@@ -101,25 +101,4 @@ test_plan_hourly = [
     )
 ]
 
-test_plan_nightly = [
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest", standard_caps),
-    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut", standard_caps),
-    VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct", standard_caps),
-    VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib", standard_caps),
-    VTSTest("vendor/volvocars/hardware/localconfig/test/ut", standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration", standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables", standard_caps),
-    VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration", standard_caps),
-    VTSTest("vendor/volvocars/hardware/uds/test/ct", standard_caps),
-    VTSTest("vendor/volvocars/tools/test/daemon_test", standard_caps),
-    VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher", standard_caps),
-    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal",  standard_caps | {cp.flexray}),
-    VTSTest("vendor/volvocars/hardware/powermoding/test/ct",  standard_caps | {cp.flexray}),
-    VTSTest("vendor/volvocars/hardware/test/keypanel",  standard_caps | {cp.flexray}),
-    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps),
-             reason="Waiting for fully working MOST drivers",
-             jira_issue="",
-             deadline="2018-01-30"
-             ),
-    VTSTest("vendor/volvocars/hardware/dim/test/ct/apix", standard_caps | {cp.apix}),
-]
+test_plan_nightly = test_plan_gate + test_plan_hourly

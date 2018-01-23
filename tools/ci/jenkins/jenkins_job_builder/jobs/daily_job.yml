@@ -70,7 +70,7 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - multijob:
           name: Test
-          condition: SUCCESSFUL
+          condition: ALWAYS
           projects:
             - name: ihu_daily_test-generic
               current-parameters: true
@@ -100,24 +100,31 @@
           target: ihu_daily_test-generic_results/
           which-build: multijob-build
           optional: true
+          flatten: true
 
       - copyartifact:
           project: ihu_daily_test-flexray
           target: ihu_daily_test-flexray_results/
           which-build: multijob-build
           optional: true
-
+          flatten: true
       - copyartifact:
           project: ihu_daily_test-audio
           target: ihu_daily_test-audio_results/
           which-build: multijob-build
-          optional: true    
+          optional: true
+          flatten: true
 
       - copyartifact:
           project: ihu_daily_test-apix
           target: ihu_daily_test-apix_results/
           which-build: multijob-build
-          optional: true      
+          optional: true
+          flatten: true  
+      
+      - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_report_generation.sh    
 
 - job:
     name: ihu_daily_build_vcc_eng
@@ -207,8 +214,10 @@
                 - bootstrap_ihu_daily_test_common.sh
     publishers:
         - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/**/*.*'
-            allow-empty: 'true'                
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_daily_test-flexray
@@ -233,8 +242,10 @@
                 - bootstrap_ihu_daily_test_common.sh
     publishers:
         - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/**/*.*'
-            allow-empty: 'true'                
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_daily_test-audio
@@ -259,8 +270,10 @@
                 - bootstrap_ihu_daily_test_common.sh
     publishers:
         - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/**/*.*'
-            allow-empty: 'true'                
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_daily_test-apix
@@ -285,5 +298,7 @@
                 - bootstrap_ihu_daily_test_common.sh
     publishers:
         - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/**/*.*'
-            allow-empty: 'true'                
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'

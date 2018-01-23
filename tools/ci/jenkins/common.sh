@@ -40,16 +40,17 @@ function clean_old_test_result_files() {
 
   #clean results of old tests
   rm -rf /tmp/0/stub/*
-  rm -rf "$ANDROID_HOST_OUT/vts/android-vts/logs/*"
-  rm -rf "$ANDROID_HOST_OUT/vts/android-vts/results/*"
+  rm -rf "$ANDROID_HOST_OUT"/vts/android-vts/logs/*
+  rm -rf "$ANDROID_HOST_OUT"/vts/android-vts/results/*
 
   #mkdir if not present
-  [ -d "$ANDROID_HOST_OUT/vcc_test_results/tradefed" ] || mkdir "$ANDROID_HOST_OUT/vcc_test_results/tradefed"
-  [ -d "$ANDROID_HOST_OUT/vcc_test_results/vts" ] || mkdir "$ANDROID_HOST_OUT/vcc_test_results/vts"
+  mkdir  -p "$ANDROID_HOST_OUT"/vcc_test_results/
+  mkdir  -p "$ANDROID_HOST_OUT"/vcc_test_results/tradefed
+  mkdir  -p "$ANDROID_HOST_OUT"/vcc_test_results/vts
 
   #clean old collected results
-  rm -rf "$ANDROID_HOST_OUT/vcc_test_results/tradefed/*"
-  rm -rf "$ANDROID_HOST_OUT/vcc_test_results/vts/*"
+  rm -rf "$ANDROID_HOST_OUT"/vcc_test_results/tradefed/*
+  rm -rf "$ANDROID_HOST_OUT"/vcc_test_results/vts/*
 
   set -e # set exiting on error returns
 
@@ -58,22 +59,24 @@ function clean_old_test_result_files() {
 function collect_test_result_files() {
   set +e # unset exiting on error returns
   #collect the results
-  cp -R /tmp/0/stub/* "$ANDROID_HOST_OUT/vcc_test_results/tradefed"
-  cp -R "$ANDROID_HOST_OUT/vts/android-vts/logs/*" "$ANDROID_HOST_OUT/vcc_test_results/vts/"
-  cp -R "$ANDROID_HOST_OUT/vts/android-vts/results/*" "$ANDROID_HOST_OUT/vcc_test_results/vts/"
+  cp -R /tmp/0/stub/* "$ANDROID_HOST_OUT"/vcc_test_results/tradefed
+  ls "$ANDROID_HOST_OUT"/vts/android-vts/logs/
+  cp -R "$ANDROID_HOST_OUT"/vts/android-vts/logs/* "$ANDROID_HOST_OUT"/vcc_test_results/vts/
+  cp -R "$ANDROID_HOST_OUT"/vts/android-vts/results/* "$ANDROID_HOST_OUT"/vcc_test_results/vts/
 
   #unzip archieves and rm zips (tradefed)
-  find "$ANDROID_HOST_OUT/vcc_test_results/tradefed" -name '*.zip' -exec sh -c 'unzip -d `dirname {}` {}' ';'
-  find "$ANDROID_HOST_OUT/vcc_test_results/tradefed" -name '*.zip' -exec sh -c 'rm  {}' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/tradefed -name '*.zip' -exec sh -c 'unzip -d `dirname {}` {}' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/tradefed -name '*.zip' -exec sh -c 'rm  {}' ';'
 
   #unzip archieves and rm zips (vts)
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -name '*.gz' -exec sh -c 'gunzip -d {}' ';'
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -maxdepth 2 -type f \! -name 'test_result.xml' -delete
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -type d -name 'config' -exec sh -c 'rm -rf {}' ';'
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -type f -name 'test_result.xml' -exec sh -c 'mv {} `dirname {}`/inv_*/' ';'
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -type d -name 'inv_*' -exec sh -c 'mv {} `dirname {}`/../' ';'
-  find "$ANDROID_HOST_OUT/vcc_test_results/vts" -maxdepth 1 -type d \! -name 'inv_*' -delete
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -name '*.gz' -exec sh -c 'gunzip -d {}' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -maxdepth 2 -type f \! -name 'test_result.xml' -delete
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -type d -name 'config' -exec sh -c 'rm -rf {}' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -type f -name 'test_result.xml' -exec sh -c 'mv {} `dirname {}`/inv_*/' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -type d -name 'inv_*' -exec sh -c 'mv {} `dirname {}`/../' ';'
+  find "$ANDROID_HOST_OUT"/vcc_test_results/vts -maxdepth 1 -type d \! -name 'inv_*' -delete
 
+  tar -czvf "$ANDROID_HOST_OUT"/vcc_test_results/vcc_test_results_"$JOB_NAME"_"$NODE_NAME".tar.gz -C "$ANDROID_HOST_OUT"/vcc_test_results/ vts tradefed
   set -e # set exiting on error returns
 
 }
