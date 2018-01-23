@@ -3,6 +3,8 @@
 
 import os
 import subprocess
+import xml.parsers.expat
+
 import android_logging_linter
 from ihuutils import external_tool_finder
 
@@ -23,12 +25,17 @@ class ShellcheckLinterError(LinterError):
     pass
 
 
+class XmlLinterError(LinterError):
+    pass
+
+
 SHELLCHECK_BINARY = external_tool_finder.find_tool('shellcheck', 'SHELLCHECK_BINARY')
 
 cpp_extensions = ['.cpp', '.c', '.hpp', '.h']
 shellcheck_extensions = ['.sh']
+xml_extension = ['.xml']
 
-supported_extensions = cpp_extensions + shellcheck_extensions
+supported_extensions = cpp_extensions + shellcheck_extensions + xml_extension
 
 
 def can_file_be_linted(path: str):
@@ -50,3 +57,11 @@ def run_for_file(path: str):
         if len(violations) > 0:
             violation = violations[0]
             raise AndroidLoggingLinterError(violation.violation, violation.file)
+
+    if extension in xml_extension:
+        try:
+            parser = xml.parsers.expat.ParserCreate()
+            with open(path, "rb") as xml_as_binary_file:
+                parser.ParseFile(xml_as_binary_file)
+        except Exception as e:
+            raise XmlLinterError(e, path)

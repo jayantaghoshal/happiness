@@ -67,6 +67,12 @@ This should be handled autonomously during commit phase
 if commit hook was properly installed
 -------------------------------------------------------------------""",
 
+    linters.XmlLinterError:
+        """
+-------------------------------------------------------------------"
+XML Syntax Check
+-------------------------------------------------------------------""",
+
 }
 
 

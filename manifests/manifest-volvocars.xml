@@ -51,7 +51,7 @@
   <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="b848a51267b56a0dca97d16e7e6c3d456014f79d" >
       <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
       <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
-  </project> 
+  </project>
 
   <remove-project name="vendor/delphi/android_device" />
   <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="dec4e3b22d47214db596ddaff86dfe460a7af760"/>

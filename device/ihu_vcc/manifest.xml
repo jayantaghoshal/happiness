@@ -56,7 +56,7 @@
         <version>1.0</version>
         <interface>
             <name>ICarProfileManager</name>
-            <instance>default</instance>	    
+            <instance>default</instance>
         </interface>
     </hal>
     <hal format="hidl">
