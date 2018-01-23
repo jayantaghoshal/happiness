@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests turns off APIX, MOST and TCAM interfaces and verifies that DataCollector in uds_data_collector functions as intended
+-->
+<configuration description="This tests turns off APIX, MOST and TCAM interfaces and verifies that DataCollector in uds_data_collector functions as intended">
+ <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+        <option name="push" value="netmanudscollectorreportingtest->/data/local/tmp/netmanudscollectorreportingtest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="netmanudscollectorreportingtest" />
+        <option name="runtime-hint" value="4s" />
+    </test>
+</configuration>

@@ -56,6 +56,7 @@ test_plan_hourly = test_plan_gate + [
              deadline = "2018-01-30"
     ),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/uds_diagnostics_test",                        standard_caps),
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",              standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",   standard_caps),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",       standard_caps),
