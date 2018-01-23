@@ -1,0 +1,5 @@
+cc_library_headers {
+    name: "nlohmann-json-2.1.1",
+    export_include_dirs: ["."],
+    host_supported: true
+}

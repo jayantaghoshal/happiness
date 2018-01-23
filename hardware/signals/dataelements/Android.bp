@@ -54,6 +54,14 @@ cc_library_shared {
         "vendor.volvocars.hardware.signals@1.0",
     ],
 
+    header_libs: [
+        "nlohmann-json-2.1.1",
+    ],
+
+    export_header_lib_headers: [
+        "nlohmann-json-2.1.1",
+    ],
+
     local_include_dirs: [
         "vector",
     ],
@@ -111,5 +119,13 @@ cc_library_static {
         "include",
         "generated",
         "vector",
+    ],
+
+    header_libs: [
+        "nlohmann-json-2.1.1",
+    ],
+
+    export_header_lib_headers: [
+        "nlohmann-json-2.1.1",
     ],
 }
