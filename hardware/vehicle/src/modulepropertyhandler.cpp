@@ -50,7 +50,8 @@ int ModulePropertyHandler::setProp(const VehiclePropValue& propValue) {
     return 1;
 }
 
-std::unique_ptr<VehiclePropValue> ModulePropertyHandler::getProp(const VehiclePropValue& requestedPropValue) {
+std::unique_ptr<VehiclePropValue> ModulePropertyHandler::getProp(const VehiclePropValue& requestedPropValue,
+                                                                 vhal20::impl::Status& /*status*/) {
     ALOGV("%s: for property: 0x%0x in zone %d", __FUNCTION__, requestedPropValue.prop, requestedPropValue.areaId);
     // Find the property
     auto property_it = propertyhandlers_.find(static_cast<vccvhal10::VehicleProperty>(requestedPropValue.prop));
@@ -136,7 +137,7 @@ vhal20::VehiclePropValue ModulePropertyHandler::PropertyHandlerInt32::get() {
     return prop_value_;
 }
 
-}  // impl
+}  // namespace impl
 
 }  // namespace V1_0
 }  // namespace vehiclehal
