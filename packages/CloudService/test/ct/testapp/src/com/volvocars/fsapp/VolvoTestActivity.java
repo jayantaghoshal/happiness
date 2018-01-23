@@ -8,7 +8,7 @@ package com.volvocars.fsapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import vendor.volvocars.cloudservice.*;
+import com.volvocars.cloudservice.*;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;

@@ -13,8 +13,10 @@ LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
-LOCAL_STATIC_JAVA_LIBRARIES += vendor.volvocars.FoundationServicesLib \
-							   vendor.volvocars.SoftwareManagementLib
+LOCAL_STATIC_JAVA_LIBRARIES += \
+            com.volvocars.FoundationServicesLib \
+			com.volvocars.SoftwareManagementLib \
+			com.volvocars.softwareupdate.ISoftwareUpdateManager \
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 64

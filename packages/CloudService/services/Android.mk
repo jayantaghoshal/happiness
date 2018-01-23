@@ -15,8 +15,8 @@ LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
 LOCAL_STATIC_JAVA_LIBRARIES += \
     vendor.volvocars.hardware.cloud-V1.0-java \
-    vendor.volvocars.cloudservice.IFoundationServicesApi \
-    vendor.volvocars.cloudservice.ISoftwareManagementApi \
+    com.volvocars.cloudservice.IFoundationServicesApi \
+    com.volvocars.cloudservice.ISoftwareManagementApi \
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 64

@@ -1,5 +1,5 @@
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android"
-    package="vendor.volvocars.softwareupdate"
+    package="com.volvocars.softwareupdate"
     android:sharedUserId="android.uid.system">
        <application
          android:exported="true"
@@ -9,7 +9,7 @@
          android:persistent="true"
          android:name=".SoftwareUpdateService">
         <intent-filter>
-            <action android:name="vendor.volvocars.cloudservice.ISoftwareUpdateService" />
+            <action android:name="com.volvocars.cloudservice.ISoftwareUpdateService" />
         </intent-filter>
          </service>
     </application>
