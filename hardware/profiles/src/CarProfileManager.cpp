@@ -49,8 +49,9 @@ Return<void> CarProfileManager::subscribeUserChange(const sp<IProfileChangedHand
 
 Return<void> CarProfileManager::requestSwitchUser(const hidl_string& androidUserId) {
     ALOGI("%s to change android user to %s", __FUNCTION__, androidUserId.c_str());
-    // TODO Hardcode value, Get ProfileId from settings
-    prof_chg_sender_.send(IdPen::Prof1);
+    // TODO (ts) Hard cast from string to int, Get ProfileId from settings instead
+    auto string_as_int = std::stoi(androidUserId);
+    prof_chg_sender_.send(static_cast<IdPen>(string_as_int));
     prof_chg_timer_handle_ = time_provider_->add_single_shot_timer(
             std::chrono::milliseconds{1000}, [this]() { prof_chg_sender_.send(IdPen::ProfUkwn); });
     return Void();
