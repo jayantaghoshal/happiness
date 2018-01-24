@@ -23,7 +23,8 @@ LOCAL_SRC_FILES := \
      src/keymanagermodule.cpp \
      src/activeuserprofilemodule.cpp \
      src/modulepropertyhandler.cpp \
-     src/systeminformationmodule.cpp
+     src/systeminformationmodule.cpp \
+     src/illuminationmodule.cpp
 
 LOCAL_C_INCLUDES := \
     src/
