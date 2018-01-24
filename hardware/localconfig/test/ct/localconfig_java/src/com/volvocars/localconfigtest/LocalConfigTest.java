@@ -14,58 +14,68 @@ import org.junit.Test;
 import org.junit.Rule;
 import java.lang.String;
 
-
 @SmallTest
 @RunWith(AndroidJUnit4.class)
-public class LocalConfigTest extends
-    ActivityTestRule<MainActivity>{
+public class LocalConfigTest extends ActivityTestRule<MainActivity> {
 
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+  @Rule
+  public ActivityTestRule<MainActivity> mActivityRule =
+      new ActivityTestRule<>(MainActivity.class);
 
-    public LocalConfigTest(){
-        super(MainActivity.class);
-    }
+  public LocalConfigTest() { super(MainActivity.class); }
 
-    @Test
-    public void testLocalConfigEnvPath() throws Exception {
+  @Test
+  public void testLocalConfigEnvPath() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigEnvPath();
-    }
+    mActivityRule.getActivity().LocalConfigEnvPath();
+  }
 
-    @Test
-    public void testLocalConfigMockedPathExists() throws Exception {
+  @Test
+  public void testLocalConfigMockedPathExists() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigMockedPathExists();
-    }
+    mActivityRule.getActivity().LocalConfigMockedPathExists();
+  }
 
-    @Test
-    public void testLocalConfigConnection() throws Exception {
+  @Test
+  public void testLocalConfigConnection() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigConnection();
-    }
+    mActivityRule.getActivity().LocalConfigConnection();
+  }
 
-    @Test
-    public void testLocalConfigDoubleConnection() throws Exception {
+  @Test
+  public void testLocalConfigDoubleConnection() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigDoubleConnection();
-    }
+    mActivityRule.getActivity().LocalConfigDoubleConnection();
+  }
 
-    @Test
-    public void testLocalConfigGetInteger() throws Exception {
+  @Test
+  public void testLocalConfigGetInteger() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigGetInteger();
-    }
-    @Test
-    public void testLocalConfigGetDouble() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetInteger();
+  }
+  @Test
+  public void testLocalConfigGetDouble() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigGetDouble();
-    }
-    @Test
-    public void testLocalConfigGetString() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetDouble();
+  }
+  @Test
+  public void testLocalConfigGetString() throws Exception {
 
-        mActivityRule.getActivity().LocalConfigGetString();
-    }
+    mActivityRule.getActivity().LocalConfigGetString();
+  }
 
+  @Test
+  public void testLocalConfigGetWrongString() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetWrongString();
+  }
+
+  @Test
+  public void testLocalConfigGetWrongInteger() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetWrongInteger();
+  }
+
+  @Test
+  public void testLocalConfigGetWrongDouble() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetWrongDouble();
+  }
 }

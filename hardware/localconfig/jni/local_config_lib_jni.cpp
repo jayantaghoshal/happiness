@@ -55,13 +55,15 @@ static jstring getString(JNIEnv *env, jobject jObject, jstring javaString) {
 
     std::string value = "";
 
+    // In order to avoid runtime complain use NewStringUTF before throwing exception
+    jstring errorValue = stringToJString(env, "");
+
     try {
         value = lcfg->GetString(jStringToString(env, javaString));
     } catch (const std::exception &e) {
         jniThrowRuntimeException(env, e.what());
+        return errorValue;  // return empty value here after throwing exception
     }
-
-    ALOGV("- getString");
     return stringToJString(env, value);
 }
 

@@ -5,7 +5,6 @@
 
 package com.volvocars.localconfigtest;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Context;
@@ -197,4 +196,89 @@ public class MainActivity extends Activity
 
         mlocalcfgapi.disconnectlocalConfig();
     }
+
+    public void LocalConfigGetWrongString()
+    {
+        boolean isRuntimeException = false;
+        LocalConfig mlocalcfgapi = LocalConfig.createLocalConfig(getApplicationContext(),mServiceConnectionListener);
+        mlocalcfgapi.connectlocalConfig();
+        try {
+            waitForConnection(DEFAULT_WAIT_TIMEOUT_MS);
+        } catch (InterruptedException e) {
+
+        }
+        String lcf = "";
+
+        try {
+            lcf = mlocalcfgapi.getLocalConfigString("Invalid_String");
+        }
+        catch (LcfgNotConnectedException e)
+        {
+             Log.v(TAG,e.getMessage());
+        }
+        catch(RuntimeException e)
+        {
+            Log.v(TAG,e.getMessage());
+            isRuntimeException = true;
+        }
+
+        assertTrue(isRuntimeException);
+        mlocalcfgapi.disconnectlocalConfig();
+    }
+
+    public void LocalConfigGetWrongInteger()
+    {
+        boolean isRuntimeException = false;
+        LocalConfig mlocalcfgapi = LocalConfig.createLocalConfig(getApplicationContext(),mServiceConnectionListener);
+        mlocalcfgapi.connectlocalConfig();
+        try {
+            waitForConnection(DEFAULT_WAIT_TIMEOUT_MS);
+        } catch (InterruptedException e) {
+
+        }
+
+        try {
+            int lcf = mlocalcfgapi.getLocalConfigInteger("Invalid_Int");
+        }         catch (LcfgNotConnectedException e)
+        {
+             Log.v(TAG,e.getMessage());
+        }
+        catch(RuntimeException e)
+        {
+            Log.v(TAG,e.getMessage());
+            isRuntimeException = true;
+        }
+        assertTrue(isRuntimeException);
+
+        mlocalcfgapi.disconnectlocalConfig();
+    }
+
+    public void LocalConfigGetWrongDouble()
+    {
+        boolean isRuntimeException = false;
+        LocalConfig mlocalcfgapi = LocalConfig.createLocalConfig(getApplicationContext(),mServiceConnectionListener);
+        mlocalcfgapi.connectlocalConfig();
+        try {
+            waitForConnection(DEFAULT_WAIT_TIMEOUT_MS);
+        } catch (InterruptedException e) {
+
+        }
+
+        try {
+            double lcf = mlocalcfgapi.getLocalConfigDouble("Invalid_Double");
+        }
+        catch (LcfgNotConnectedException e)
+        {
+             Log.v(TAG,e.getMessage());
+        }
+        catch(RuntimeException e)
+        {
+            Log.v(TAG,e.getMessage());
+            isRuntimeException = true;
+        }
+
+        assertTrue(isRuntimeException);
+        mlocalcfgapi.disconnectlocalConfig();
+    }
+
 }

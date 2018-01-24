@@ -53,46 +53,64 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
     }
 
     @Override
-    public int getLocalConfigInteger(String key) throws RuntimeException {
-        /* TODO Exception handling from JNI */
+    public int getLocalConfigInteger(String key){
         int lcfval = 0;
         if(sLcfinstance != null) {
             assertLcfgPermission(mContext);
-            lcfval = sLcfinstance.getInt(key);
+            try {
+                lcfval = sLcfinstance.getInt(key);
+            }
+            catch(RuntimeException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
+
         }
         return lcfval;
     }
 
     @Override
-    public String getLocalConfigString(String key) throws RuntimeException {
-        /* TODO Exception handling from JNI */
-        String lcfval = " ";
+    public String getLocalConfigString(String key)  {
+        String lcfval = "";
         if(sLcfinstance != null) {
             assertLcfgPermission(mContext);
-            lcfval = sLcfinstance.getString(key);
+            try {
+                lcfval = sLcfinstance.getString(key);
+            }
+            catch(RuntimeException e) {
+                 throw new IllegalArgumentException(e.getMessage());
+             }
         }
         return lcfval;
     }
 
     @Override
     public boolean getLocalConfigBoolean(String key) throws RuntimeException {
-        /* TODO Exception handling from JNI */
         /* Invalid value should be returned */
         boolean lcfval = false;
         if(sLcfinstance != null) {
             assertLcfgPermission(mContext);
-            lcfval = sLcfinstance.getBoolean(key);
+            try {
+                lcfval = sLcfinstance.getBoolean(key);
+            }
+            catch(RuntimeException e) {
+                 throw new IllegalArgumentException(e.getMessage());
+            }
         }
         return lcfval;
     }
 
     @Override
     public double getLocalConfigDouble(String key) throws RuntimeException {
-        /* TODO Exception handling from JNI */
+
         double lcfval = 0;
         if(sLcfinstance != null) {
             assertLcfgPermission(mContext);
+        try {
             lcfval = sLcfinstance.getDouble(key);
+        }
+        catch(RuntimeException e) {
+                 throw new IllegalArgumentException(e.getMessage());
+        }
         }
         return lcfval;
     }
