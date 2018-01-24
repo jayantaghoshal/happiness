@@ -2,16 +2,6 @@
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := localconfig_json
-LOCAL_SRC_FILES := localconfig.json
-LOCAL_MODULE_CLASS := ETC
-LOCAL_MULTILIB := 64
-LOCAL_COMPATIBILITY_SUITE := cts
-LOCAL_MODULE_PATH := $(LOCAL_PATH)
-ANDROID_PRODUCT_OUT:= $(LOCAL_PATH)
-include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
 
