@@ -23,17 +23,21 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        /*
+         * Disabled because it is broken.
+         *
         IBinder binder = ServiceManager.getService(IDesip.class.getCanonicalName());
-        IDesip desip = IDesip.Stub.asInterface(binder);
+        Desip desip = IDesip.Stub.asInterface(binder);
 
         try {
             desip.addListener(this.getClass().getCanonicalName(), desipListener, new byte[] { Signals.AID_POWER_EVENT });
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        */
     }
 
-
+/*
     private IDesipListener desipListener = new IDesipListener.Stub() {
         @Override
         public boolean deliverMessage(ParcelableDesipMessage msg) throws RemoteException {
@@ -45,4 +49,5 @@ public class MainApplication extends Application {
             return false;
         }
     };
+*/
 }

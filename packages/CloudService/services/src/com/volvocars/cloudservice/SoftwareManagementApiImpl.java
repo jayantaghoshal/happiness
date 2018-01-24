@@ -34,8 +34,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         // To be removed?
         FetchSoftwareManagementURIs();
-
-        FetchSoftwareAssignmentsList();
     }
 
     private void FetchSoftwareManagementURIs() {
@@ -60,9 +58,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             for(int i=0; i<bytesdata.length;i++){
                 bytesdata[i] = response.responseData.get(i);
             }
-
-            String s = new String(bytesdata);
-            Log.e(LOG_TAG,s);
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             uris = XmlParser.ParseSoftwareManagementURIs(stream);

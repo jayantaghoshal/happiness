@@ -5,12 +5,24 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 /**
  * A callback interface to enable non-blocking request calls
  */
-interface ISoftwareUpdateManagerCallback {
+oneway interface ISoftwareUpdateManagerCallback {
+    /**
+     * Notify client about a new state
+     */
     void UpdateState(in int state);
 
+    /**
+     * Notify client about new Software Assignment List
+     */
     void UpdateSoftwareAssignmentList(in List<SoftwareAssignment> software_list);
 
+    /**
+     * Notify client about a state change of a specific assignment
+     */
     void UpdateSoftwareState(in String uuid, in int state);
 
+    /**
+     * Notify client of Error
+     */
     void ProvideErrorMessage(in int code, in String message);
 }

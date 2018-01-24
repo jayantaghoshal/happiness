@@ -116,8 +116,10 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
 
+    std::shared_ptr<CloudRequest> cr;
+
     try {
-        std::shared_ptr<CloudRequest> cr = std::make_shared<CloudRequest>(cert_handler_);
+        cr = std::make_shared<CloudRequest>(cert_handler_);
 
         cr->SetUseHttps(use_https);
         cr->SetTimeout(std::chrono::milliseconds(timeout));

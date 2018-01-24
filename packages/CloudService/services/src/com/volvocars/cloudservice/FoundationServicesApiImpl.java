@@ -91,7 +91,6 @@ public class FoundationServicesApiImpl {
         }
 
         private boolean HandleHttpResponseCode(final int code) {
-
             return code == 200;
         }
     };

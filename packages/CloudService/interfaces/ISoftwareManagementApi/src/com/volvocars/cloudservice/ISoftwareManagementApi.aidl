@@ -6,7 +6,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 /**
  * An interface to access all the Software Management features.
  */
-interface ISoftwareManagementApi {
+oneway interface ISoftwareManagementApi {
     /**
      * Get a the list of available assignments
      * @param callback
