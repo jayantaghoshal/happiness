@@ -80,6 +80,8 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",          standard_caps),
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps),
+   VTSTest("vendor/volvocars/hardware/soundnotifications",         standard_caps),
+
 ]
 
 test_plan_nightly = test_plan_hourly + [

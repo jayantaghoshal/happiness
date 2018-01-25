@@ -15,8 +15,6 @@ using namespace autosar;
 #undef LOG_TAG
 #define LOG_TAG "SoundNotifyTurnInd"
 
-using namespace autosar;
-
 namespace SoundNotifications {
 TurnIndicator::TurnIndicator() : previous_IndcrDisp1WdSts(IndcrSts1::Off) {
     indcrRecevier.subscribe([&]() {

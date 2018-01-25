@@ -21,8 +21,7 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libbinder \
     libtraceclient \
-    libAudioManagerBinder \
-    libAudioManagerCallbackBinder
+    vendor.delphi.audiomanager@1.0
 
 LOCAL_STATIC_LIBRARIES := libaudiotable
 

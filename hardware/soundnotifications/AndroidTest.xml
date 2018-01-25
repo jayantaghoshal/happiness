@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies the functionality in eventloop.
+-->
+<configuration description="Test eventloop">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsSoundNotificationTest->/data/local/tmp/VtsSoundNotificationTest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsSoundNotificationTest" />
+        <option name="runtime-hint" value="800ms" />
+    </test>
+</configuration>
