@@ -68,29 +68,6 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
 
         TAG = "LocalConfigTest";
-
-        File file = new File(mockedLocalConfigPath);
-        if(file.exists() && !file.isDirectory()) {
-            try {
-                Os.setenv("VCC_LOCALCONFIG_PATH",mockedLocalConfigPath,true);
-            }
-            catch (ErrnoException e) {
-                Log.e(TAG,e.getMessage());
-            }
-        }
-    }
-
-
-    public void LocalConfigEnvPath()
-    {
-           String path = Os.getenv("VCC_LOCALCONFIG_PATH");
-           assertEquals(path,mockedLocalConfigPath);
-    }
-
-    public void LocalConfigMockedPathExists()
-    {
-        File file = new File(mockedLocalConfigPath);
-        assertTrue(file.exists() && !file.isDirectory());
     }
 
     public void LocalConfigConnection()

@@ -25,18 +25,6 @@ public class LocalConfigTest extends ActivityTestRule<MainActivity> {
   public LocalConfigTest() { super(MainActivity.class); }
 
   @Test
-  public void testLocalConfigEnvPath() throws Exception {
-
-    mActivityRule.getActivity().LocalConfigEnvPath();
-  }
-
-  @Test
-  public void testLocalConfigMockedPathExists() throws Exception {
-
-    mActivityRule.getActivity().LocalConfigMockedPathExists();
-  }
-
-  @Test
   public void testLocalConfigConnection() throws Exception {
 
     mActivityRule.getActivity().LocalConfigConnection();
