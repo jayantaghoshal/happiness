@@ -20,6 +20,10 @@ cc_binary {
         "liblog",
         "vendor.volvocars.hardware.settings@1.0",
         "vendor.volvocars.hardware.profiles@1.0",
+        "libsqlite",
+    ],
+    static_libs: [
+        "libgsl",
     ],
     init_rc: [
         "settings-storage.rc",

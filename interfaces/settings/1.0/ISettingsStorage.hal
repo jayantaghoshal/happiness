@@ -8,6 +8,6 @@ interface ISettingsStorage
 {
     set(string key, ProfileIdentifier profileId, string data);
     get(string key,  ProfileIdentifier profileId) generates (string data);
-    subscribe(string key, ISettingsListener listener);
+    subscribe(string key, UserScope userScope, ISettingsListener listener);
     unsubscribe(string key, ISettingsListener listener);
 };

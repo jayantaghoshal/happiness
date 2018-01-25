@@ -40,8 +40,11 @@ SettingsHandle SettingsManagerHidl::attachSetting(
         return 1;  // TODO(ee): Fix proper attach/detach behavior? (not important when we only allow once instance per
                    // name)
     }
+
+    const auto hidlUserScope = static_cast<settingsHidl::UserScope>(u);
+
     ALOGV("Settingshidl::attachSetting->subscribe");
-    settingsProxy->subscribe(name, this);
+    settingsProxy->subscribe(name, hidlUserScope, this);
     ALOGV("Settingshidl::done");
     return 1;  // TODO(ee): Fix proper attach/detach behavior? (not important when we only allow once instance per name)
 }
@@ -121,7 +124,7 @@ andrHw::Return<void> SettingsManagerHidl::onRegistration(const andrHw::hidl_stri
     }
     ALOGV("Link to death ok");
 
-    reloadAllSettings(settingsProxy);
+    reloadAllSettings(*settingsProxy);
 
     ALOGV("Link to death reloadsettings done");
 
@@ -165,15 +168,17 @@ andrHw::Return<void> SettingsManagerHidl::settingsForCurrentUserChanged(
     return andrHw::Return<void>();
 }
 
-void SettingsManagerHidl::reloadAllSettings(android::sp<settingsHidl::ISettingsStorage>& settingsProxyCopy) {
+void SettingsManagerHidl::reloadAllSettings(settingsHidl::ISettingsStorage& settings_proxy) {
     std::lock_guard<std::recursive_mutex> lock(cacheMutex_);
 
     ALOGV("reloadAllSettings, size=%lu", settingsCache_.size());
-    for (auto& it : settingsCache_) {
+    for (const auto& it : settingsCache_) {
         const std::string name = it.first;
+        const SettingsInfo& info = it.second;
+        const auto hidlUserScope = static_cast<settingsHidl::UserScope>(info.userScope);
         ALOGV("reloadAllSettings, name=%s", name.c_str());
-        auto result = settingsProxyCopy->subscribe(
-                name, this);  // Subscribe shall ALWAYS call settingsForCurrentUserChanged first time
+        // Subscribe will always instantly call settingsForCurrentUserChanged from service side
+        auto result = settings_proxy.subscribe(name, hidlUserScope, this);
         ALOGW_IF(!result.isOk(), "Failed to subscribe to setting %s, error=%s", name.c_str(),
                  result.description().c_str());
     }

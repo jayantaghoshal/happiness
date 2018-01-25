@@ -88,14 +88,17 @@ class Setting : public SettingBase {
     void setForProfile(const ValueProfile<T>& newValue) {
         ALOG(LOG_DEBUG, SETTINGS_LOG_TAG, "setForProfile, name=%s, profileid=%d", name().c_str(), newValue.profileId);
         assertInitialized();
-        if (newValue.profileId == value_.profileId || newValue.profileId == ProfileIdentifier::None) {
+        if (userScope == UserScope::NOT_USER_RELATED || newValue.profileId == value_.profileId ||
+            newValue.profileId == ProfileIdentifier::None) {
             const bool dirty = (value_.value != newValue.value);
             value_ = newValue;
             const nlohmann::json j(encodeToJson<T>(newValue.value));
             setStringData(j.dump(), newValue.profileId);
 
             if (dirty) {
-                if (callbackToApplicationOnSettingChanged_) callbackToApplicationOnSettingChanged_();
+                if (callbackToApplicationOnSettingChanged_) {
+                    callbackToApplicationOnSettingChanged_();
+                }
             }
         } else {
             const nlohmann::json j(encodeToJson<T>(newValue.value));

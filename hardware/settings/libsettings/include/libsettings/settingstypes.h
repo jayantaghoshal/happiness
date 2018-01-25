@@ -11,10 +11,10 @@ using SettingsHandle = int;
 
 enum class UserScope {
     // The setting is not connected to a particular user profile but globally available for all profiles.
-    NOT_USER_RELATED,
+    NOT_USER_RELATED = 0,
 
     // The setting exists as a separate value for each user profile.
-    USER,
+    USER = 1,
 };
 
 enum class ProfileIdentifier {

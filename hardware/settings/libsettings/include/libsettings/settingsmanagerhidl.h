@@ -49,7 +49,7 @@ class SettingsManagerHidl : public SettingsManager,
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
   private:
-    void reloadAllSettings(android::sp<settingsHidl::ISettingsStorage>& settingsProxyCopy);
+    void reloadAllSettings(settingsHidl::ISettingsStorage& settings_proxy);
     void dispatchPendingSettingsUpdatesOnAppThread();
 
     struct SettingsInfo {

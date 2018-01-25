@@ -29,7 +29,6 @@ cc_library_shared {
         "nlohmann-json-v3",
         "libtarmac",
     ],
-    cflags: ["-DLOG_NDEBUG=0"],
     export_shared_lib_headers: [
         "nlohmann-json-v3",
         "libtarmac",
