@@ -147,7 +147,7 @@ class EPollQueue {
 
 class Dispatcher : public IDispatcher {
   public:
-    Dispatcher();
+    Dispatcher(bool auto_start_on_new_thread);
 
     ~Dispatcher() override;
 
@@ -163,6 +163,7 @@ class Dispatcher : public IDispatcher {
 
     void Stop() final;
     void Join() override;
+    void RunUntil(std::function<bool()> stop_condition) override;
 
   private:
     void Start();
@@ -189,10 +190,15 @@ IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds d
     return GetDefaultDispatcher().EnqueueWithDelay(delay, std::move(f), cyclic_timer);
 }
 
-std::shared_ptr<IDispatcher> IDispatcher::CreateDispatcher() { return std::shared_ptr<IDispatcher>(new Dispatcher()); }
+std::shared_ptr<IDispatcher> IDispatcher::CreateDispatcher(bool auto_start_on_new_thread) {
+    return std::shared_ptr<IDispatcher>(new Dispatcher(auto_start_on_new_thread));
+}
 
-// constructor
-Dispatcher::Dispatcher() : eventthread_([this]() { Start(); }) {}
+Dispatcher::Dispatcher(bool auto_start_on_new_thread) {
+    if (auto_start_on_new_thread) {
+        eventthread_ = std::thread([this]() { Start(); });
+    }
+}
 
 // destructor
 Dispatcher::~Dispatcher() { Stop(); }
@@ -270,7 +276,11 @@ void Dispatcher::RemoveFd(int fd) { queue_.removeFd(fd); }
 
 // private
 void Dispatcher::Start() {
-    while (!stop_) {
+    RunUntil([&]() { return stop_; });
+}
+
+void Dispatcher::RunUntil(std::function<bool()> stopCondition) {
+    while (!stopCondition()) {
         std::vector<Task> tasks = queue_.dequeue();  // Blocking call
         if (!stop_) {
             // do callbacks for all tasks

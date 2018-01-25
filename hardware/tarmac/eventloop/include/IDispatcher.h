@@ -30,7 +30,7 @@ class IDispatcher {
                                       bool cyclic_timer = false);
 
     // Create a new dispatcher instance with the provided priority
-    static std::shared_ptr<IDispatcher> CreateDispatcher();
+    static std::shared_ptr<IDispatcher> CreateDispatcher(bool auto_start_on_new_thread = true);
 
     virtual ~IDispatcher() = default;
 
@@ -51,6 +51,12 @@ class IDispatcher {
     // Add and remove file descriptor monitoring for available in-data
     virtual void AddFd(int fd, std::function<void()> &&f, uint32_t events = EPOLLIN) = 0;
     virtual void RemoveFd(int fd) = 0;
+
+    // Consumes the event-queue synchronously forever until stop_condition is fulfilled.
+    // stop_condition is evaluated at the end of processing a undefined chunk of events
+    // This method must only be called when dispatcher is created with auto_start_on_new_thread=false
+    // Main use case of this function would be for testing
+    virtual void RunUntil(std::function<bool()> stop_condition) = 0;
 
     // Stop the dispatcher thread. The dispatcher can no longer be used after this.
     virtual void Stop() = 0;
