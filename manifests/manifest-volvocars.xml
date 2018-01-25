@@ -9,11 +9,11 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="c4e74e3cf37da3fcf633ebb89453ce8995d9e1a8"/>
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="3dd5837d5f7ff8fec1f2673061277bb44c72da98"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="0df0bedc96fd89780d18612fa108821972e90b32"/>
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="b932d52361d06a2112b6edb7f3c58ace6b2e2fa6"/>
 
   <!-- APPS -->
-  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="186491fd8c682c3f38394d4cdbb3e7eab74cf363"/>
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="a35ebf4d965303f0690f8141c8a4e6d35739a4e7"/>
 
   <!-- VolvoLauncher -->
   <project name="vendor/volvocars/apps/VolvoLauncher" path="vendor/volvocars/apps/VolvoLauncher" revision="60e9877a98431a66913f70ae4e996b2c6a96847f"/>
