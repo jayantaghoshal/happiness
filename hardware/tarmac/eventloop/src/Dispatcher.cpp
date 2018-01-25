@@ -13,10 +13,12 @@
 #include <mutex>
 #include <queue>
 #include <set>
+#include <system_error>
 #include <thread>
 #include <vector>
 
 #include "IDispatcher.h"
+#include "file_descriptor.h"
 
 #define LOG_TAG "tarmac.dispatcher"
 #include <cutils/log.h>
@@ -37,23 +39,15 @@ using Task = std::function<void()>;
 
 class EPollQueue {
   public:
-    EPollQueue() {
-        epollfd_ = epoll_create1(0);
-        ALOGE_IF(epollfd_ < 0, "Failed to create epollfd: %s", strerror(errno));
-
-        eventfd_ = eventfd(0, EFD_SEMAPHORE);
-        ALOGE_IF(eventfd_ < 0, "Failed to create eventfd: %s", strerror(errno));
-
+    EPollQueue() : epollfd_(epoll_create1(0)), eventfd_((eventfd(0, EFD_SEMAPHORE))) {
         epoll_event event;
         event.events = EPOLLIN;
         event.data.ptr = nullptr;  // this indicates a "normal" enqueue task
         int r = epoll_ctl(epollfd_, EPOLL_CTL_ADD, eventfd_, &event);
-        ALOGE_IF(r != 0, "EPOLL_CTL_ADD failed: %s", strerror(errno));
-    }
-
-    virtual ~EPollQueue() {
-        close(eventfd_);
-        close(epollfd_);
+        if (r == -1) {
+            ALOGE("EPOLL_CTL_ADD failed: %s", strerror(errno));
+            throw std::system_error(errno, std::system_category());
+        }
     }
 
     void enqueue(Task &&t) {
@@ -79,9 +73,12 @@ class EPollQueue {
         event.events = events;
         event.data.fd = fd;
         r = epoll_ctl(epollfd_, action, fd, &event);
-        ALOGE_IF(r != 0, "EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+        if (r == -1) {
+            ALOGE("EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+            throw std::system_error(errno, std::system_category());
+        }
 
-        if (r == 0) {
+        {
             std::lock_guard<std::mutex> lock(mutex_);
             fdTasks_[fd] = t;
         }
@@ -91,48 +88,65 @@ class EPollQueue {
         epoll_event event;
         event.data.fd = fd;
         int r = epoll_ctl(epollfd_, EPOLL_CTL_DEL, fd, &event);
-        ALOGE_IF(r != 0, "EPOLL_CTL_DEL fd failed: %s", strerror(errno));
-        std::lock_guard<std::mutex> lock(mutex_);
-        auto removed = fdTasks_.erase(fd);
+        if (r == -1) {
+            ALOGE("EPOLL_CTL_DEL fd failed: %s", strerror(errno));
+            throw std::system_error(errno, std::system_category());
+        }
+
+        uint16_t removed;
+        {
+            std::lock_guard<std::mutex> lock(mutex_);
+            removed = fdTasks_.erase(fd);
+        }
+
         return removed > 0;
     }
 
     std::vector<Task> dequeue() {
         std::vector<Task> result;
         epoll_event events[MAX_EVENTS];
-        int r = epoll_wait(epollfd_, events, MAX_EVENTS, -1);  // -1 -> wait forever
-        if (r > 0) {
-            // we got some stuff to work on
-            for (int i = 0; i < r; ++i) {
-                if (events[i].data.ptr == nullptr) {
-                    // this is a "normal" enqueued task, lets get them all
-                    int cnt = 0;
-                    {  // lock scope
-                        std::lock_guard<std::mutex> lock(mutex_);
-                        while (!queue_.empty()) {
-                            result.push_back(queue_.front());
-                            queue_.pop();
-                            cnt++;
-                        }
-                    }
-                    // now read the same amount of times
-                    uint64_t dummy;
-                    while (cnt > 0) {
-                        int r = read(eventfd_, &dummy, sizeof(dummy));  // one read for each write above
-                        ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
-                        cnt--;
-                    }
-                } else {
+
+        int r = 0;
+        do {
+            r = epoll_wait(epollfd_, events, MAX_EVENTS, -1);  // -1 -> wait forever
+            // Check the following stackoverflow QA as to why this loop is here:
+            // https://stackoverflow.com/questions/6870158/epoll-wait-fails-due-to-eintr-how-to-remedy-this
+        } while (r < 0 && errno == EINTR);
+
+        if (r < 0) {
+            ALOGE("epoll_wait failed: %s", strerror(errno));
+            throw std::system_error(errno, std::system_category());
+        }
+
+        // we got some stuff to work on
+        for (int i = 0; i < r; ++i) {
+            if (events[i].data.ptr == nullptr) {
+                // this is a "normal" enqueued task, lets get them all
+                int cnt = 0;
+                {  // lock scope
                     std::lock_guard<std::mutex> lock(mutex_);
-                    auto iter = fdTasks_.find(events[i].data.fd);
-                    if (iter != fdTasks_.end()) {
-                        result.push_back(iter->second);
+                    while (!queue_.empty()) {
+                        result.push_back(queue_.front());
+                        queue_.pop();
+                        cnt++;
                     }
                 }
+                // now read the same amount of times
+                uint64_t dummy;
+                while (cnt > 0) {
+                    int r = read(eventfd_, &dummy, sizeof(dummy));  // one read for each write above
+                    ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
+                    cnt--;
+                }
+            } else {
+                std::lock_guard<std::mutex> lock(mutex_);
+                auto iter = fdTasks_.find(events[i].data.fd);
+                if (iter != fdTasks_.end()) {
+                    result.push_back(iter->second);
+                }
             }
-        } else if (r < 0) {
-            ALOGE("epoll_wait failed: %s", strerror(errno));
         }
+
         return result;
     }
 
@@ -140,8 +154,8 @@ class EPollQueue {
     std::queue<Task> queue_;
     std::map<int, Task> fdTasks_;
     mutable std::mutex mutex_;
-    int eventfd_;
-    int epollfd_;
+    FileDescriptor epollfd_;
+    FileDescriptor eventfd_;
     const unsigned int MAX_EVENTS = 5;
 };
 

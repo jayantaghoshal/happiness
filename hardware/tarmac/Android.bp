@@ -21,8 +21,8 @@ cc_library_static {
     name: "libtarmac_static",
     defaults: ["libtarmac_defaults"],
     srcs: [
-        "eventloop/src/Dispatcher.cpp",
-        "common/src/time_provider.cpp",
+        "eventloop/src/*.cpp",
+        "common/src/*.cpp",
     ],
     host_supported: true,
 }
