@@ -32,7 +32,11 @@ PRODUCT_PACKAGES += \
     vbf_flashing_service
 endif
 
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,vendor/delphi/swdl/vip-update,vendor/vip-update)
+##############################################################
+# VIP update VBFs
+##############################################################
+VIP_VBF_IMAGES_PATH := vendor/delphi/vcc_ihu/common/vip_images/ihu_abl_car/proprietary
+PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(VIP_VBF_IMAGES_PATH),vendor/vip-update)
 
 ##############################################################
 # System UI
