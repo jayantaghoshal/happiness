@@ -28,9 +28,13 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private boolean software_management_available;
 
+    private class SwListResponse {
+        private ArrayList<SoftwareAssignment> swlist = new ArrayList<SoftwareAssignment>();
+        private int code = -1;
+    }
+
     public SoftwareManagementApiImpl(ICloudConnection cloud_connection) {
         this.cloud_connection = cloud_connection;
-
 
         // To be removed?
         FetchSoftwareManagementURIs();
@@ -49,15 +53,19 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             // Send request
             Response response = cloud_connection.doGetRequest(SOFTWARE_MANAGEMENT_URI, headers, true, 10000);
 
-            if(!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse + ".\nSomething went bananas with the request. And it is not handled properly :'(");
+            if (!HandleHttpResponseCode(response.httpResponse)) {
+                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
             // Parse response
-            byte[] bytesdata =  new byte[response.responseData.size()];
-            for(int i=0; i<bytesdata.length;i++){
+            byte[] bytesdata = new byte[response.responseData.size()];
+            for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
+
+            String s = new String(bytesdata);
+            Log.e(LOG_TAG, s);
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             uris = XmlParser.ParseSoftwareManagementURIs(stream);
@@ -65,19 +73,19 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
             Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_software_assignments + "\n" + uris.downloads);
 
-        } catch(RemoteException ex) {
+        } catch (RemoteException ex) {
             // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG,"Something went bananas with binder: " + ex.getMessage());
-        } catch(XmlPullParserException ex) {
+            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
+        } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG,"Something went bananas with the parsing: " + ex.getMessage());
-        } catch(IOException ex) {
+            Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
+        } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG,"Something went bananas with the streams: " + ex.getMessage());
+            Log.e(LOG_TAG, "Something went bananas with the streams: " + ex.getMessage());
         }
     }
 
-    private ArrayList<SoftwareAssignment> FetchSoftwareAssignmentsList() {
+    private SwListResponse FetchSoftwareAssignmentsList() {
         // Build request
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -90,39 +98,43 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         int timeout = 20000;
 
         ArrayList<SoftwareAssignment> software_list = new ArrayList();
+        SwListResponse swrsp = new SwListResponse();
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(uris.available_software_assignments, headers, useHttps, timeout);
+            Response response = cloud_connection.doGetRequest(uris.available_software_assignments,
+                    headers, useHttps, timeout);
 
-            if(!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse +
-                               ".\nSomething went bananas with the request. And it is not handled properly :'(");
+            if (!HandleHttpResponseCode(response.httpResponse)) {
+                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
             // Parse response
-            byte[] bytesdata =  new byte[response.responseData.size()];
-            for(int i=0; i<bytesdata.length;i++){
+            byte[] bytesdata = new byte[response.responseData.size()];
+            for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             software_list = XmlParser.ParseSoftwareAssignments(stream);
 
-        } catch(RemoteException ex) {
+            swrsp.swlist = software_list;
+            swrsp.code = response.httpResponse;
+
+        } catch (RemoteException ex) {
             // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG,"Something went bananas with binder: " + ex.getMessage());
-        } catch(XmlPullParserException ex) {
+            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
+        } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG,"Something went bananas with the parsing: " + ex.getMessage());
-        } catch(IOException ex) {
+            Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
+        } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG,"Something went bananas with the streams: " + ex.getMessage());
+            Log.e(LOG_TAG, "Something went bananas with the streams: " + ex.getMessage());
         }
 
-        return software_list;
+        return swrsp;
     }
-
 
     private boolean HandleHttpResponseCode(final int code) {
 
@@ -135,7 +147,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      */
     @Override
     public void GetSoftwareAssigmentList(ISoftwareManagementApiCallback callback) throws RemoteException {
-        callback.SoftwareAssignmentList(400, FetchSoftwareAssignmentsList());
+        SwListResponse swrsp = FetchSoftwareAssignmentsList();
+        callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 
     /**
@@ -143,7 +156,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      * @param id The id of the assignment to fetch.
      */
     @Override
-    public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
         callback.CommissionStatus(400);
     }
 }
