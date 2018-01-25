@@ -12,7 +12,9 @@
 #include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
 #include "activeuserprofilemodule.h"
+#include "cartimemodule.h"
 #include "hvacmodule.h"
+#include "illuminationmodule.h"
 #include "keymanagermodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
@@ -26,7 +28,6 @@ namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal_10 = vendor::volvocars::hardware::vehiclehal::V1_0;
 
 int main(int /* argc */, char* /* argv */ []) {
-    // auto store = std::make_unique<VehiclePropertyStore>();
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
     auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
 
@@ -38,6 +39,8 @@ int main(int /* argc */, char* /* argv */ []) {
     auto hvacModule = std::make_unique<HvacModule>(hal.get());
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
     auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
+    auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
+    auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -47,6 +50,8 @@ int main(int /* argc */, char* /* argv */ []) {
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
     systemInformationModule->registerToVehicleHal();
+    illuminationModule->registerToVehicleHal();
+    carTimeModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 

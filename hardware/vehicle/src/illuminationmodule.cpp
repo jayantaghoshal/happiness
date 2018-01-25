@@ -66,16 +66,22 @@ std::vector<VehiclePropValue> IlluminationHal::getAllPropValues() {
 }
 
 std::vector<VehiclePropConfig> IlluminationHal::listProperties() {
-    return {{
-                    .prop = toInt(VehicleProperty::AMBIENT_DAY_NIGHT),
-                    .access = VehiclePropertyAccess::READ,
-                    .changeMode = VehiclePropertyChangeMode::ON_CHANGE,
-            },
-            {
-                    .prop = toInt(VehicleProperty::MANUAL_ILLUMINATION),
-                    .access = VehiclePropertyAccess::READ,
-                    .changeMode = VehiclePropertyChangeMode::ON_CHANGE,
-            }};
+    VehiclePropConfig daynightconfig;
+    daynightconfig.prop = toInt(VehicleProperty::AMBIENT_DAY_NIGHT);
+    daynightconfig.access = VehiclePropertyAccess::READ;
+    daynightconfig.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+
+    VehiclePropConfig illuminationconfig;
+    illuminationconfig.prop = toInt(VehicleProperty::MANUAL_ILLUMINATION);
+    illuminationconfig.access = VehiclePropertyAccess::READ;
+    illuminationconfig.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+    illuminationconfig.supportedAreas = toInt(VehicleAreaZone::WHOLE_CABIN);
+    illuminationconfig.areaConfigs.resize(1);
+    illuminationconfig.areaConfigs[0].areaId = toInt(VehicleAreaZone::WHOLE_CABIN);
+    illuminationconfig.areaConfigs[0].minInt32Value = 0;    // 0%
+    illuminationconfig.areaConfigs[0].maxInt32Value = 100;  // 100%
+
+    return {daynightconfig, illuminationconfig};
 }
 
 void IlluminationHal::StartFlexraySubscribers() {
