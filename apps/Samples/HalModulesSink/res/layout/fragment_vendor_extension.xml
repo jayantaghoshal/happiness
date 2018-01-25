@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/TerminalBackground"
+android:orientation="vertical">
+   
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drive away information setting"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                />
+            <Button
+                android:id="@+id/buttonSettingOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Off"/>
+            <Button
+                android:id="@+id/buttonSettingVisual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visual"/>
+            <Button
+                android:id="@+id/buttonSettingVisualAndSound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visual and Sound"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Curve Speed Adoption setting"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            />
+        <Button
+            android:id="@+id/buttonCsaOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Off"/>
+        <Button
+            android:id="@+id/buttonCsaOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="On"/>
+
+    </LinearLayout>
+
+<ScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/TerminalBackground">
+        <EditText
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:inputType="textMultiLine"
+            android:id="@+id/testLog"
+            android:textColor="@color/colorWhite"
+            android:textSize="20dp"
+            android:minLines="6"
+            android:gravity="top|left"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:scrollbars="vertical"
+            />
+</ScrollView>
+</LinearLayout>
+

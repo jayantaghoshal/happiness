@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/TerminalBackground"
+android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/vehicleHalPropIdEdit"
+            android:textSize="20dp"
+            android:gravity="top|left"
+            android:text="Prop ID"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            />
+        <EditText
+            android:id="@+id/vehicleHalStringData"
+            android:textSize="20dp"
+            android:gravity="top|left"
+            android:text="Value"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            />
+        <Button
+            android:id="@+id/vehicleHalSetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set Property Idea"/>
+
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/TerminalBackground">
+        <TextView
+            android:id="@+id/log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:text="Init..."
+            android:textSize="20dp"
+            android:padding="16dp"
+            tools:text="Log" />
+    </ScrollView>
+</LinearLayout>
