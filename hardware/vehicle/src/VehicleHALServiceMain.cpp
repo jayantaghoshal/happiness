@@ -16,6 +16,7 @@
 #include "hvacmodule.h"
 #include "illuminationmodule.h"
 #include "keymanagermodule.h"
+#include "sensormodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
@@ -41,6 +42,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
+    auto sensorModule = std::make_unique<SensorModule>(hal.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -52,6 +54,7 @@ int main(int /* argc */, char* /* argv */ []) {
     systemInformationModule->registerToVehicleHal();
     illuminationModule->registerToVehicleHal();
     carTimeModule->registerToVehicleHal();
+    sensorModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 

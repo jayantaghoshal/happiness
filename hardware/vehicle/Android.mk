@@ -25,7 +25,8 @@ LOCAL_SRC_FILES := \
      src/modulepropertyhandler.cpp \
      src/systeminformationmodule.cpp \
      src/illuminationmodule.cpp \
-     src/cartimemodule.cpp
+     src/cartimemodule.cpp \
+     src/sensormodule.cpp
 
 LOCAL_C_INCLUDES := \
     src/
