@@ -47,8 +47,8 @@ public class FoundationServicesApiImpl {
         public boolean IsFeatureAvailable (String feature) throws RemoteException {
             //Setup request fields
             HttpHeaderField field = new HttpHeaderField();
-            field.value = "Accept: application/volvo.cloud.Features+XML";
-            field.name = "features";
+            field.value = "application/volvo.cloud.Features+XML";
+            field.name = "Accept";
             ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
             headers.add(field);
             String uri = "features-1";
