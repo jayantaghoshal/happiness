@@ -101,6 +101,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
         Response error;
         error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
         _hidl_cb(error);
+        return Void();
     }
 
     std::string url = (use_https ? "https://" : "http://") + cep_url_ + ":" + std::to_string(cep_port_);
@@ -142,6 +143,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
         Response error;
         error.httpResponse = 400;  // Bad request.
         _hidl_cb(error);
+        return Void();
     }
 
     Response response;
