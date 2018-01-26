@@ -31,7 +31,7 @@ using ::android::hardware::Void;
 using ::android::sp;
 using namespace tarmac::timeprovider;
 
-class CarProfileManager : public ICarProfileManager {
+class CarProfileManager : public ICarProfileManager, public ::android::hardware::hidl_death_recipient {
   public:
     CarProfileManager(std::shared_ptr<ITimeProvider> time_provider);
     Return<void> subscribeUserChange(const sp<IProfileChangedHandler>& cb) override;
@@ -45,6 +45,8 @@ class CarProfileManager : public ICarProfileManager {
                                          const sp<IKeyPairResponseHandler>& onKeySearchCompleted) override;
     Return<bool> disconnectCurrentProfileFromKey() override;
 
+    void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
+
   private:
     ApplicationDataElement::DESender<autosar::ProfChg_info> prof_chg_sender_;
     ApplicationDataElement::DEReceiver<autosar::ProfPenSts1_info> prof_pen_sts1_receiver_;
@@ -55,7 +57,8 @@ class CarProfileManager : public ICarProfileManager {
     std::shared_ptr<ITimeProvider> time_provider_;
     std::unique_ptr<TimerSubscriptionHandle> prof_chg_timer_handle_;
 
-    sp<IProfileChangedHandler> profile_changed_cb_;
+    ProfileIdentifier currentProfile = ProfileIdentifier::Guest;
+    std::list<sp<IProfileChangedHandler>> profile_changed_listeners_;
     std::mutex callback_lock_;  // Guard for registering and using callback
 };
 

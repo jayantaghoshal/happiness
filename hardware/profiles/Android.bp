@@ -21,4 +21,8 @@ cc_binary {
         "libdataelements",
         "libtarmac",
     ],
+    tidy_checks: [
+        "cppcoreguidelines-*",
+        "-cppcoreguidelines-pro-type-vararg", // ALOG-macros use this
+    ],
 }

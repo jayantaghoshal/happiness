@@ -20,31 +20,57 @@ using namespace ApplicationDataElement;
 using namespace autosar;
 using namespace tarmac;
 using namespace timeprovider;
+namespace andrHw = ::android::hardware;
 
 CarProfileManager::CarProfileManager(std::shared_ptr<ITimeProvider> time_provider)
-    : time_provider_(time_provider), prof_chg_timer_handle_(nullptr), profile_changed_cb_(nullptr) {
+    : time_provider_(time_provider), prof_chg_timer_handle_(nullptr) {
     prof_pen_sts1_receiver_.subscribe([this]() {
         if (prof_pen_sts1_receiver_.get().isOk()) {
-            auto new_profile = prof_pen_sts1_receiver_.get().value();
-            {  // lock scope
+            currentProfile = static_cast<ProfileIdentifier>(prof_pen_sts1_receiver_.get().value());
+            ALOGI("ActiveUserProfile changed to: %hu", currentProfile);
+
+            std::list<sp<IProfileChangedHandler>> listeners_to_notify;
+            {
+                // Copy list to avoid recursive lock cb->profileChanged() -> listener.???() -> subscribeUserChange()
                 std::lock_guard<std::mutex> lock(callback_lock_);
-                if (profile_changed_cb_ != nullptr) {
-                    profile_changed_cb_->profileChanged("DUMMY_USER_ID", static_cast<ProfileIdentifier>(new_profile));
+                listeners_to_notify = profile_changed_listeners_;
+            }
+            for (auto& cb : listeners_to_notify) {
+                auto status = cb->profileChanged("DUMMY_USER_ID", currentProfile);
+                if (!status.isOk()) {
+                    ALOGW("ProfileChangedHandler.profileChanged callback failed: %s", status.description().c_str());
                 }
             }
-            ALOGI("ActiveUserProfile changed to: %d", new_profile);  // TODO remove this log
         } else {
-            ALOGI("%s signal ProfPenSts1 is in error.", __FUNCTION__);
+            ALOGI("Signal ProfPenSts1 is in error.");
         }
     });
 }
 
 Return<void> CarProfileManager::subscribeUserChange(const sp<IProfileChangedHandler>& cb) {
+    ALOGD("subscribeUserChange");
     {  // lock scope
         std::lock_guard<std::mutex> lock(callback_lock_);
-        profile_changed_cb_ = cb;
-        return Void();
+        profile_changed_listeners_.push_back(cb);
     }
+    auto status = cb->profileChanged("DUMMY_USER_ID", currentProfile);
+    if (!status.isOk()) {
+        ALOGW("ProfileChangedHandler.subscribeUserChange callback failed: %s", status.description().c_str());
+    }
+
+    cb->linkToDeath(this, 0);
+    return Void();
+}
+
+void CarProfileManager::serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) {
+    ALOGD("userchange listener servicedied");
+    (void)cookie;
+    android::sp<::android::hidl::base::V1_0::IBase> lockedWho = who.promote();
+    if (lockedWho == nullptr) {
+        return;  // If wp can't be promoted it means sp is already removed from profile_changed_listeners_
+    }
+    std::lock_guard<std::mutex> lock(callback_lock_);
+    profile_changed_listeners_.remove_if([&lockedWho](const auto& x) { return (x == lockedWho); });
 }
 
 Return<void> CarProfileManager::requestSwitchUser(const hidl_string& androidUserId) {
