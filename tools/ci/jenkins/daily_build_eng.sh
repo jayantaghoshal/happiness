@@ -17,7 +17,7 @@ lunch ihu_vcc-eng
 
 
 # Build image, vts & tradefed
-time make -j32 droid vts tradefed-all
+time make droid vts tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests) # Not relevant to daily build
 # TODO: fix it for building daily tests

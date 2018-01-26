@@ -45,9 +45,9 @@ if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
 fi
 
 # Build image and test utils
-time make -j64 droid
-time make -j64 vts
-time make -j64 tradefed-all
+time make droid
+time make vts
+time make tradefed-all
 
 # Restore library.go
 if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
@@ -80,7 +80,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 
 # Ensure our repo can be build with mma
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
-time mmma -j64 vendor/volvocars
+time mmma vendor/volvocars
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"

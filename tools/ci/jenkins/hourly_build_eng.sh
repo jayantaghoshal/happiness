@@ -20,9 +20,9 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
 # Build image, vts & tradefed
-time make -j64 droid
-time make -j64 vts
-time make -j64 tradefed-all
+time make droid
+time make vts
+time make tradefed-all
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly || die "Build Unit and Component tests failed"

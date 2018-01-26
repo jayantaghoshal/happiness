@@ -17,6 +17,6 @@ lunch ihu_vcc-userdebug
 
 
 # Build only image
-time make -j32 droid
+time make droid
 
 # TODO: Make vbf files for userdebug
