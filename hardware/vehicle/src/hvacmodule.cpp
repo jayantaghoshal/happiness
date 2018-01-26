@@ -31,7 +31,8 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
         temperature_property.prop_config.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
         temperature_property.prop_config.access = VehiclePropertyAccess::READ_WRITE;
         temperature_property.prop_config.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-        temperature_property.prop_config.supportedAreas = toInt(VehicleAreaZone::ROW_1_LEFT);
+        temperature_property.prop_config.supportedAreas =
+                toInt(VehicleAreaZone::ROW_1_LEFT) | VehicleAreaZone::ROW_1_RIGHT;
         temperature_property.prop_config.areaConfigs.resize(2);
         temperature_property.prop_config.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
         temperature_property.prop_config.areaConfigs[0].minFloatValue = 17;  // TODO carconfig?
