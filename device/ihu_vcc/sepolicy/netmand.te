@@ -27,3 +27,8 @@ set_prop(netmand, netmand_prop)
 
 #domain_auto_trans(netman, ip-vcc_exec, ip-vcc)
 #allow netman ip-vcc_exec:file entrypoint;
+
+allow netmand hwservicemanager:binder call;
+
+allow netmand iptables-vcc_exec:file execute_no_trans;
+allow netmand ip6tables-vcc_exec:file execute_no_trans;

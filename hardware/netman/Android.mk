@@ -31,4 +31,26 @@ LOCAL_REQUIRED_MODULES := ip
 LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/ip $(TARGET_OUT_VENDOR)/bin/ip
 include $(BUILD_PHONY_PACKAGE)
 
+#
+# Copy /system/bin/iptables to /vendor/bin/iptables
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := iptables-vcc
+LOCAL_REQUIRED_MODULES := iptables
+LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/iptables $(TARGET_OUT_VENDOR)/bin/iptables; \
+	ln -sf iptables $(TARGET_OUT_VENDOR)/bin/iptables-save; \
+	ln -sf iptables $(TARGET_OUT_VENDOR)/bin/iptables-restore
+include $(BUILD_PHONY_PACKAGE)
+
+#
+# Copy /system/bin/ip6tables to /vendor/bin/ip6tables
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := ip6tables-vcc
+LOCAL_REQUIRED_MODULES := ip6tables
+LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables; \
+	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-save; \
+	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-restore
+include $(BUILD_PHONY_PACKAGE)
+
 include $(call all-makefiles-under,$(LOCAL_PATH))

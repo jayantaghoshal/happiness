@@ -17,6 +17,8 @@ class FirewallConfig final {
   public:
     enum class IP { IPv4_, IPv6_ };
     static const char* const kDefaultIptablesRulesPath;
+    static const char* const kIptablesRestoreExecutablePath;
+    static const char* const kIp6tablesRestoreExecutablePath;
 
     /**
      * @brief Constructor

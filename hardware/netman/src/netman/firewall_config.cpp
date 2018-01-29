@@ -13,6 +13,10 @@ namespace netman {
 
 const char* const FirewallConfig::kDefaultIptablesRulesPath = "/mnt/iptables.rules";
 
+const char* const FirewallConfig::kIptablesRestoreExecutablePath = "/vendor/bin/iptables-restore";
+
+const char* const FirewallConfig::kIp6tablesRestoreExecutablePath = "/vendor/bin/ip6tables-restore";
+
 bool FirewallConfig::ParseAndSave(const std::string& output_path) {
     if (output_path.empty()) {
         return false;
@@ -42,9 +46,9 @@ bool FirewallConfig::ApplyRules(const IP ip_type) {
 
     std::string command;
     if (ip_type == IP::IPv4_) {
-        command = "/system/bin/iptables-restore < " + output_path_;
+        command = std::string(FirewallConfig::kIptablesRestoreExecutablePath) + " < " + output_path_;
     } else {
-        command = "/system/bin/ip6tables-restore < " + output_path_;
+        command = std::string(FirewallConfig::kIp6tablesRestoreExecutablePath) + " < " + output_path_;
     }
 
     // TODO (Abhijeet Shirolikar): system calls involves command processor and so is vunerable to injection attacks
