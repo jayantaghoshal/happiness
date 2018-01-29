@@ -19,7 +19,9 @@ cc_binary {
         "liblog",
         "vendor.volvocars.hardware.profiles@1.0",
         "libdataelements",
+        "liblocalconfig",
         "libtarmac",
+        "libsettings",
     ],
     tidy_checks: [
         "cppcoreguidelines-*",
@@ -27,3 +29,7 @@ cc_binary {
         "-cppcoreguidelines-pro-bounds-array-to-pointer-decay", // ALOG + __FUNCTION__
     ],
 }
+
+subdirs = [
+    "test",
+]

@@ -17,7 +17,7 @@ interface ICarProfileManager {
      */
     requestSwitchUser(string androidUserId);
 
-    getUserProfileInformation(string androidUserId) generates (ProfileInfo data);
+    getUserProfileInformation(string androidUserId) generates (KeyId data);
 
     getNrOfUnusedProfiles() generates (int16_t nrOfProfiles);
 

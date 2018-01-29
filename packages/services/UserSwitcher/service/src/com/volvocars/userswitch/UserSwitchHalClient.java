@@ -10,7 +10,7 @@ import android.os.RemoteException;
 import vendor.volvocars.hardware.profiles.V1_0.ICarProfileManager;
 import vendor.volvocars.hardware.profiles.V1_0.IKeyPairResponseHandler;
 import vendor.volvocars.hardware.profiles.V1_0.IProfileChangedHandler;
-import vendor.volvocars.hardware.profiles.V1_0.ProfileInfo;
+import vendor.volvocars.hardware.profiles.V1_0.KeyId;
 
 /**
  * Implementation for the HIDL client
@@ -34,7 +34,7 @@ public class UserSwitchHalClient {
         carProfileManager.requestSwitchUser(androidUserId);
     }
 
-    public ProfileInfo getUserProfileInformation(String androidUserId) throws RemoteException {
+    public short getUserProfileInformation(String androidUserId) throws RemoteException {
         return carProfileManager.getUserProfileInformation(androidUserId);
     }
 
@@ -51,7 +51,8 @@ public class UserSwitchHalClient {
         carProfileManager.deleteUser(androidUserId);
     }
 
-    public void pairCurrentProfileToKey(short searchLocation, IKeyPairResponseHandler onKeySearchCompleted) throws RemoteException {
+    public void pairCurrentProfileToKey(short searchLocation, IKeyPairResponseHandler onKeySearchCompleted)
+            throws RemoteException {
         carProfileManager.pairCurrentProfileToKey(searchLocation, onKeySearchCompleted);
     }
 

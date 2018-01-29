@@ -11,8 +11,20 @@ enum KeyPairStatus : uint16_t{
     Success,
 };
 
-struct ProfileInfo {
-    string KeyId;
+enum KeyId : uint16_t {
+    Key0 = 0,
+    Key1 = 1,
+    Key2 = 2,
+    Key3 = 3,
+    Key4 = 4,
+    Key5 = 5,
+    Key6 = 6,
+    Key7 = 7,
+    Key8 = 8,
+    Key9 = 9,
+    Key10 = 10,
+    Key11 = 11,
+    None = 12,
 };
 
 enum ProfileIdentifier : uint16_t {

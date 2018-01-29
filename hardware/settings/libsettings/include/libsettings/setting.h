@@ -50,6 +50,11 @@ class Setting : public SettingBase {
         }
 
         const auto stringdata = getStringData(profileId);
+        if (stringdata == "") {
+            ALOG(LOG_INFO, SETTINGS_LOG_TAG, "%s:getStringData returned empty string. Fallback to default value",
+                 __FUNCTION__);
+            return default_;
+        }
         return parse(stringdata);
     }
 
@@ -103,6 +108,7 @@ class Setting : public SettingBase {
      * NOTE: This function may throw exceptions
      */
     T parse(const std::string& stringdata) const {
+        ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "Setting::Parse: %s", stringdata.c_str());
         nlohmann::json j = nlohmann::json::parse(stringdata);
         T valueOut = decodeFromJson<T>(j);
         return valueOut;

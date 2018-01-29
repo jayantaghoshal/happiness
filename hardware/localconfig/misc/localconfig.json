@@ -101,5 +101,7 @@
       ]
     }
   },
-  "vehiclefunctions.adas.LCFG_DAI_Enabled": true
+  "vehiclefunctions.adas.LCFG_DAI_Enabled": true,
+  "vehiclefunctions.profiles.T_PassiveKeysearch_Timeout_ms": 1000,
+  "vehiclefunctions.profiles.T_Keysearch_Timeout_ms": 1000
 }

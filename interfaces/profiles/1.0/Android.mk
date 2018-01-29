@@ -17,6 +17,25 @@ LOCAL_JAVA_LIBRARIES := \
 
 
 #
+# Build types.hal (KeyId)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/KeyId.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.profiles@1.0::types.KeyId
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build types.hal (KeyLocation)
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/KeyLocation.java
@@ -68,25 +87,6 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
         vendor.volvocars.hardware.profiles@1.0::types.ProfileIdentifier
-
-$(GEN): $(LOCAL_PATH)/types.hal
-	$(transform-generated-source)
-LOCAL_GENERATED_SOURCES += $(GEN)
-
-#
-# Build types.hal (ProfileInfo)
-#
-GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/ProfileInfo.java
-$(GEN): $(HIDL)
-$(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
-$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
-$(GEN): PRIVATE_CUSTOM_TOOL = \
-        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-        -Ljava \
-        -randroid.hidl:system/libhidl/transport \
-        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.profiles@1.0::types.ProfileInfo
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -176,6 +176,25 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 
 
 #
+# Build types.hal (KeyId)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/KeyId.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.profiles@1.0::types.KeyId
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build types.hal (KeyLocation)
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/KeyLocation.java
@@ -227,25 +246,6 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
         vendor.volvocars.hardware.profiles@1.0::types.ProfileIdentifier
-
-$(GEN): $(LOCAL_PATH)/types.hal
-	$(transform-generated-source)
-LOCAL_GENERATED_SOURCES += $(GEN)
-
-#
-# Build types.hal (ProfileInfo)
-#
-GEN := $(intermediates)/vendor/volvocars/hardware/profiles/V1_0/ProfileInfo.java
-$(GEN): $(HIDL)
-$(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
-$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
-$(GEN): PRIVATE_CUSTOM_TOOL = \
-        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-        -Ljava \
-        -randroid.hidl:system/libhidl/transport \
-        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.profiles@1.0::types.ProfileInfo
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)

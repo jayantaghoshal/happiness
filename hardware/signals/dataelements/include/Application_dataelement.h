@@ -73,8 +73,12 @@ class DEReceiver : public INewDataElement {
     }
 
     virtual void performCallback() {
-        std::unique_lock<std::mutex> protectCallback(setCallbackMutex);
-        _callback(_value);
+        CallbackWrapper<DataElemValue<S>> cbcopy;
+        {
+            std::unique_lock<std::mutex> protectCallback(setCallbackMutex);
+            cbcopy = _callback;
+        }
+        cbcopy(_value);
     }
 
     /*!

@@ -62,6 +62,7 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps | {cp.audio}),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                   standard_caps),
+    VTSTest("vendor/volvocars/hardware/profiles/test/ct",                   standard_caps),
 
     # This test will set the screen-always-on to ON which will prevent the screen to pwer off.
     # If your test relies on the screen to power off, either put it before this test or set

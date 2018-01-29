@@ -40,6 +40,7 @@ cc_library_shared {
         "generated/gen_jsonencdec.cpp",
         "src/dataelementcommbus_hidl.cpp",
         "src/signals_server.cpp",
+        "src/vfc_helper.cpp",
     ],
 
     shared_libs: [

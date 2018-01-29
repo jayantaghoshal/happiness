@@ -8,6 +8,8 @@
 #include <memory>
 #include "CarProfileManager.h"
 #include "IDispatcher.h"
+#include "libsettings/setting.h"
+#include "libsettings/settingsmanagerhidl.h"
 #include "time_provider.h"
 
 #undef LOG_TAG
@@ -16,6 +18,7 @@
 using namespace vendor::volvocars::hardware::profiles::V1_0::implementation;
 using namespace tarmac::timeprovider;
 using namespace tarmac::eventloop;
+using namespace SettingsFramework;
 
 int main(int argc, char* argv[]) {
     (void)argc;
@@ -23,7 +26,10 @@ int main(int argc, char* argv[]) {
 
     std::shared_ptr<IDispatcher> dispatcher = IDispatcher::CreateDispatcher();
     auto time_provider = std::make_shared<TimeProvider>(dispatcher);
-    android::sp<CarProfileManager> service = new CarProfileManager(time_provider);
+
+    android::sp<SettingsManagerHidl> manager = new SettingsManagerHidl(*(dispatcher.get()));
+
+    android::sp<CarProfileManager> service = new CarProfileManager(time_provider, manager);
 
     // Configure a thread pool of 1, this means that the HIDL
     // server calls is done from one thread.
