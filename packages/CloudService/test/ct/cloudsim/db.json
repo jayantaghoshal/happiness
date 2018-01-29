@@ -1,0 +1,75 @@
+{
+  "entrypoint": {
+    "this": "/entrypointlocator",
+    "specification_version": 1,
+    "implementation_version": 1,
+    "client_uri": "http://cep.eu.vcctest.ericssoncvc.com/features-1/",
+    "host": "192.168.1.103",
+    "port": 3000
+  },
+
+  "features-1": {
+    "this": "features-1",
+    "feature": [
+      {
+        "name": "SoftwareManagement",
+        "enabled": "true",
+        "visible": "visible",
+        "uri": "/softwaremanagement-1"
+      }
+    ]
+  },
+
+  "softwaremanagement-1": {
+    "this": "softwaremanagement-1",
+    "available_updates": "/softwaremanagement-1/availableUpdates",
+    "available_accessories": "/softwaremanagement-1/availableAccessories",
+    "map_updates": "/softwaremanagement-1/mapUpdates",
+    "downloads": "/softwaremanagement-1/downloads",
+    "delete_notification": "/softwaremanagement-1/deleteNotification"
+  },
+
+  "availableUpdates": {
+    "@": {
+      "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_updates",
+      "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "this": "availableupdates",
+    "software": [
+      {
+        "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+        "name": "Security patch for IHU",
+        "short_description": "Solves a security problem",
+        "long_description": {
+          "textblock": "An interesting and informative text describing the patch"
+        },
+        "size": "366.4"
+      },
+      {
+        "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
+        "name": "Spotify",
+        "short_description": "Streaming your music",
+        "long_description": {
+          "textblock": "Minor fixes:",
+          "listelement": [
+            "Playlist sorting",
+            "Increased performance"
+          ],
+          "linefeed": {}
+        },
+        "size": "366.4"
+      }
+    ]
+  },
+
+  "commission": {
+    "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
+    "client_id": "FTKR1EDXBPB10452",
+    "reasen": "USER"
+  },
+
+  "downloads": {
+    "software": []
+  }
+}

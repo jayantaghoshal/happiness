@@ -188,6 +188,20 @@ RUN apt-get install -y \
 
 
 ##################################################
+# Tools required for Cloud Simulation
+RUN apt-get install -y \
+    nodejs \
+    nodejs-legacy \
+    npm
+
+RUN npm config set proxy $HTTP_PROXY
+RUN npm config set proxy-https $HTTPS_PROXY
+RUN npm install -g \
+    lowdb \
+    js2xmlparser \
+    json-server
+
+##################################################
 # Preload with python packages required for VTS
 # This is because VTS does pip intall and by having them locally it's faster and
 # doesn't require Internet access
@@ -206,6 +220,7 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
 # Install VCCCI_MESSAGES python package from SWF1
 ARG swf1_pypi_user
 ARG swf1_pypi_pass
+
 RUN pip install pika
 RUN pip install vccci_messages==1.4.1 ci_confighub==0.1.6 --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
