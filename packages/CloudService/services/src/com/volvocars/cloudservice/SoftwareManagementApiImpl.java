@@ -7,6 +7,7 @@ package com.volvocars.cloudservice;
 
 import android.util.Log;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import vendor.volvocars.hardware.cloud.V1_0.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     SoftwareManagementURIs uris;
 
     private boolean software_management_available;
-
+    private boolean useHttps = true;
     private class SwListResponse {
         private ArrayList<SoftwareAssignment> swlist = new ArrayList<SoftwareAssignment>();
         private int code = -1;
@@ -35,6 +36,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     public SoftwareManagementApiImpl(ICloudConnection cloud_connection) {
         this.cloud_connection = cloud_connection;
+        useHttps = SystemProperties.getBoolean("service.cloudservice.use_https", true);
 
         // To be removed?
         FetchSoftwareManagementURIs();
@@ -51,7 +53,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(SOFTWARE_MANAGEMENT_URI, headers, true, 10000);
+            Response response = cloud_connection.doGetRequest(SOFTWARE_MANAGEMENT_URI, headers, useHttps, 10000);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -94,7 +96,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         field.value = "application/volvo.cloud.software.AvailableUpdates+XML";
         headers.add(field);
 
-        boolean useHttps = true;
         int timeout = 20000;
 
         ArrayList<SoftwareAssignment> software_list = new ArrayList();
@@ -102,8 +103,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(uris.available_software_assignments,
-                    headers, useHttps, timeout);
+            Response response = cloud_connection.doGetRequest(uris.available_software_assignments, headers, useHttps,
+                    timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
