@@ -3,7 +3,7 @@
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-import ipm
+from remote_power_control import ipm  # IP Power Management
 import json
 import os
 

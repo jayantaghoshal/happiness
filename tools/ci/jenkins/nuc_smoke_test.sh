@@ -11,17 +11,29 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
+source "$REPO_ROOT_DIR"/build/envsetup.sh
+lunch ihu_vcc-eng
+
 # Download from Artifactory
-artifactory pull ihu_hourly_build-eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
 
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
 
-source "$REPO_ROOT_DIR"/build/envsetup.sh
-lunch ihu_vcc-eng
-
-# Update IHU
-ihu_update || die "Failed to flash IHU image"
+set +e
+for tmp in 1 2 3
+do
+    # Update IHU
+    ihu_update
+    if [ $? -eq 0 ]; then # On success, break
+        break
+    elif [ $tmp -eq 3 ]; then
+        die "Failed to flash IHU image" # failed after three attempts
+    else
+        python3 "${SCRIPT_DIR}"/ihu_ipm_reboot.py # reboot ihu on flashing failures
+    fi
+done
+set -e
 
 # Get properties
 adb shell getprop
