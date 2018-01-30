@@ -3,8 +3,6 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include <cutils/log.h>
-
 #include <cerrno>
 
 #include <IDispatcher.h>
@@ -20,6 +18,7 @@
 #include "uevent_listener.h"
 
 #define LOG_TAG "Netmand"
+#include <cutils/log.h>
 
 namespace vcc {
 namespace netman {

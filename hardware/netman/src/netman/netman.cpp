@@ -4,10 +4,8 @@
  */
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
 #include <cutils/properties.h>
 #include <hidl/HidlTransportSupport.h>
-
 #include <vector>
 #include "diagnostics_reporter.h"
 #include "firewall_config.h"
@@ -17,6 +15,7 @@
 #include "vcc/localconfig.h"
 
 #define LOG_TAG "Netmand"
+#include <cutils/log.h>
 
 using namespace vcc::netman;
 
