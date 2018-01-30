@@ -17,13 +17,13 @@ namespace settingsHidl = vendor::volvocars::hardware::settings::V1_0;
 
 class SettingsUpdate {
   public:
-    SettingsUpdate(const std::string& key, const ProfileIdentifier profileId, const std::string& data,
+    SettingsUpdate(const SettingId& key, const ProfileIdentifier profileId, const std::string& data,
                    const settingsHidl::SettingsChangeReason reason)
-        : key{key}, profileId{profileId}, data{data}, reason{reason} {}
-    const std::string key;
-    const ProfileIdentifier profileId;
-    const std::string data;
-    const settingsHidl::SettingsChangeReason reason;
+        : key_{key}, profileId_{profileId}, data_{data}, reason_{reason} {}
+    const SettingId key_;
+    const ProfileIdentifier profileId_;
+    const std::string data_;
+    const settingsHidl::SettingsChangeReason reason_;
 };
 
 class SettingsManagerHidl : public SettingsManager,
@@ -33,15 +33,15 @@ class SettingsManagerHidl : public SettingsManager,
   public:
     SettingsManagerHidl(tarmac::eventloop::IDispatcher& dispatcher);
 
-    virtual SettingsHandle attachSetting(const std::string& name, UserScope u,
+    virtual SettingsHandle attachSetting(const SettingId& name, UserScope u,
                                          std::function<void(const std::string&, ProfileIdentifier)> onSettingChanged,
                                          std::function<void(ProfileIdentifier p)> onSettingReset);
-    void detachSetting(const std::string& name, SettingsHandle handle) override;
-    std::string getRawData(const std::string& name, ProfileIdentifier profid) override;
-    void setRawData(const std::string& name, ProfileIdentifier profid, const std::string& data) override;
+    void detachSetting(const SettingId& name, SettingsHandle handle) override;
+    std::string getRawData(const SettingId& name, ProfileIdentifier profid) override;
+    void setRawData(const SettingId& name, ProfileIdentifier profid, const std::string& data) override;
 
     andrHw::Return<void> settingsForCurrentUserChanged(
-            const andrHw::hidl_string& key, settingsHidl::SettingsChangeReason reason,
+            const uint32_t key, settingsHidl::SettingsChangeReason reason,
             ::vendor::volvocars::hardware::profiles::V1_0::ProfileIdentifier currentProfile) override;
 
     andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
@@ -60,11 +60,11 @@ class SettingsManagerHidl : public SettingsManager,
 
     tarmac::eventloop::IDispatcher& dispatcher;
     std::list<std::unique_ptr<SettingsUpdate>> pendingUpdates;  // Only access with cacheMutex
-    std::map<std::string, SettingsInfo> settingsCache_;         // Only access with cacheMutex
+    std::map<SettingId, SettingsInfo> settingsCache_;           // Only access with cacheMutex
     // recursive_mutex due to reloadAllSettings-->subscribe-->settingsForCurrentUserChanged
     std::recursive_mutex cacheMutex_;
-    ::android::sp<settingsHidl::ISettingsStorage>
-            settingsProxy;  // Take sp-copy when check+use from app-thread, written by hidl-thread
+    // Take sp-copy when check+use from app-thread, written by hidl-thread
+    ::android::sp<settingsHidl::ISettingsStorage> settingsProxy;
 };
 
 }  // namespace SettingsFramework

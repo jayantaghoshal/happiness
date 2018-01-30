@@ -13,24 +13,14 @@
 
 namespace SettingsFramework {
 
-SettingsContext::SettingsContext(tarmac::eventloop::IDispatcher& dispatcher, android::sp<SettingsManager> manager)
-    : dispatcher{dispatcher},
-      manager{std::move(manager)} {
+namespace {
+std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
+}  // namespace
 
-      };
-
-SettingBase::SettingBase(const std::shared_ptr<SettingsContext>& context, const std::string& name, UserScope userScope)
-    : callbackToApplicationOnSettingChanged_(nullptr),
-      userScope_(userScope),
-      context{context},
-      handle_(-1),
-      name_(name) {
-    ALOGV("SettingBase ctor %s", name.c_str());
-    if (name == "") {
-        throw std::runtime_error("Setting with empty name");
-    }
-    std::weak_ptr<SettingsContext> contextWeak = context;
-    handle_ = context->manager->attachSetting(
+SettingBase::SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope)
+    : userScope_(userScope), name_(name), context{context}, handle_(-1) {
+    ALOGV("SettingBase ctor %d, userScope=%d", name, userScope);
+    handle_ = context->attachSetting(
             name_, userScope,
             [this](const std::string& stringdata, ProfileIdentifier profileId) {
                 ALOGV("onDataChangedBase, data=%s", stringdata.c_str());
@@ -50,16 +40,14 @@ SettingBase::SettingBase(const std::shared_ptr<SettingsContext>& context, const 
 SettingBase::~SettingBase() {
     ALOGV("SettingBase destructor");
     if (handle_ > 0) {
-        context->manager->detachSetting(name_, handle_);
+        context->detachSetting(name_, handle_);
     }
     ALOGV("SettingBase destructor detached");
 }
 
-std::string SettingBase::name() const { return name_; }
-
 void SettingBase::assertInitialized() const {
     if (!initialized) {
-        throw std::runtime_error("Settings is not initialized, name=" + name_);
+        throw std::runtime_error("Settings is not initialized, name=" + toString(name_));
     }
 }
 
@@ -67,30 +55,22 @@ std::string SettingBase::getStringData(ProfileIdentifier profid) const {
     assertInitialized();
 
     if (userScope_ == UserScope::NOT_USER_RELATED && profid != ProfileIdentifier::None) {
-        throw std::runtime_error("Attempt to getStringData for profile on non-profile releated setting, name=" + name_ +
-                                 "profile=" + std::to_string(static_cast<int>(profid)));
+        throw std::runtime_error("Attempt to getStringData for profile on non-profile releated setting, name=" +
+                                 toString(name_) + "profile=" + std::to_string(static_cast<int>(profid)));
     }
 
-    return context->manager->getRawData(name(), profid);
+    return context->getRawData(name_, profid);
 }
 
 void SettingBase::setStringData(const std::string& data, ProfileIdentifier profid) {
     assertInitialized();
 
     if (userScope_ == UserScope::NOT_USER_RELATED && profid != ProfileIdentifier::None) {
-        throw std::runtime_error("Attempt to setStringData for profile on non-profile releated setting, name=" + name_ +
-                                 "profile=" + std::to_string(static_cast<int>(profid)));
+        throw std::runtime_error("Attempt to setStringData for profile on non-profile releated setting, name=" +
+                                 toString(name_) + "profile=" + std::to_string(static_cast<int>(profid)));
     }
 
-    context->manager->setRawData(name_, profid, data);
-}
-
-void SettingBase::setCallback(std::function<void()>&& settingChangedCallback) {
-    ALOGV("setCallback, name=%s", name_.c_str());
-    callbackToApplicationOnSettingChanged_ = std::move(settingChangedCallback);
-    if (initialized && callbackToApplicationOnSettingChanged_) {
-        callbackToApplicationOnSettingChanged_();
-    }
+    context->setRawData(name_, profid, data);
 }
 
 std::string SettingBase::jsonToVec(const nlohmann::json& j) { return j.dump(); }

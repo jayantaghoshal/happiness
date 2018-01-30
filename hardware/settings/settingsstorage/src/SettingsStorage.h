@@ -32,6 +32,7 @@ using ::android::sp;
 
 namespace andrHw = ::android::hardware;
 namespace profileHidl = vendor::volvocars::hardware::profiles::V1_0;
+using SettingsIdHidl = uint32_t;
 
 class ProfileListener : public profileHidl::IProfileChangedHandler,
                         public ::android::hidl::manager::V1_0::IServiceNotification,
@@ -50,9 +51,9 @@ class ProfileListener : public profileHidl::IProfileChangedHandler,
 };
 
 struct SettingsListener {
-    SettingsListener(const std::string key, const UserScope user_scope, const sp<ISettingsListener>& listener)
+    SettingsListener(const SettingsIdHidl key, const UserScope user_scope, const sp<ISettingsListener>& listener)
         : key_{key}, user_scope_{user_scope}, listener_{listener} {}
-    const std::string key_;
+    const SettingsIdHidl key_;
     const UserScope user_scope_;
     const sp<ISettingsListener> listener_;
 };
@@ -62,16 +63,16 @@ class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recip
     SettingsStorage();
     ~SettingsStorage();
 
-    Return<void> set(const hidl_string& key, profileHidl::ProfileIdentifier profileId,
-                     const hidl_string& data) override;
-    Return<void> get(const hidl_string& key, profileHidl::ProfileIdentifier profileId, get_cb _hidl_cb) override;
-    Return<void> subscribe(const hidl_string& key, UserScope userScope, const sp<ISettingsListener>& listener) override;
-    Return<void> unsubscribe(const hidl_string& key, const sp<ISettingsListener>& listener) override;
+    Return<void> set(SettingsIdHidl key, profileHidl::ProfileIdentifier profileId,
+                     const andrHw::hidl_string& data) override;
+    Return<void> get(SettingsIdHidl key, profileHidl::ProfileIdentifier profileId, get_cb _hidl_cb) override;
+    Return<void> subscribe(SettingsIdHidl key, UserScope userScope, const sp<ISettingsListener>& listener) override;
+    Return<void> unsubscribe(SettingsIdHidl key, const sp<ISettingsListener>& listener) override;
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
   private:
     // Returned pointer is valid until next time getData is called, or until this is destroyed
-    const unsigned char* getData(const hidl_string& key, profileHidl::ProfileIdentifier profileId);
+    const unsigned char* getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId);
     void onProfileChange(profileHidl::ProfileIdentifier profileId);
     profileHidl::ProfileIdentifier activeProfileId = profileHidl::ProfileIdentifier::None;
 

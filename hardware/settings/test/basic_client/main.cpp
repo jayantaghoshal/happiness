@@ -9,6 +9,7 @@
 #include <iostream>
 #include <thread>
 #include "libsettings/setting.h"
+#include "libsettings/settingidentifiers.h"
 #include "libsettings/settingsmanagerhidl.h"
 #undef LOG_TAG
 #define LOG_TAG "Settings"
@@ -21,38 +22,29 @@ int main(int argc, char** argv) {
 
     tarmac::eventloop::IDispatcher& dispatcher = tarmac::eventloop::IDispatcher::GetDefaultDispatcher();
     android::sp<SettingsManagerHidl> manager = new SettingsManagerHidl(dispatcher);
-    std::shared_ptr<SettingsFramework::SettingsContext> context =
-            std::make_shared<SettingsFramework::SettingsContext>(dispatcher, manager);
 
-    ALOGI("Init setting");
     std::unique_ptr<Setting<int, UserScope::USER>> s1;
-
-    bool first = true;
-    std::promise<void> settingInitializedPromise;
-    std::future<void> settingInitialized = settingInitializedPromise.get_future();
-
     dispatcher.Enqueue([&]() {
-        s1 = std::make_unique<Setting<int, UserScope::USER>>("s1", 1234, context);
-        s1->setCallback([&]() {
-            if (first) {
-                first = false;
-                settingInitializedPromise.set_value();
-            }
-
-            // NOTE: you are not allowed to call get() before this callback has been called
-            auto value = s1->get();
-            std::cout << std::endl << "Settings change notification, s1=" << value << std::endl;
+        s1 = std::make_unique<Setting<int, UserScope::USER>>(SettingId::TestSetting1, 1234, manager);
+        s1->setCallback([&](const auto& value) {
+            std::cout << "Read setting TestSetting1=" << value.value
+                      << " profileId=" << static_cast<uint32_t>(value.profileId) << std::endl;
         });
     });
-
-    std::cout << "Waiting for settings" << std::endl;
-    settingInitialized.wait();
+    std::unique_ptr<Setting<int, UserScope::NOT_USER_RELATED>> s2;
+    dispatcher.Enqueue([&]() {
+        s2 = std::make_unique<Setting<int, UserScope::NOT_USER_RELATED>>(SettingId::TestSetting2, 1234, manager);
+        s2->setCallback([&](const auto& value) {
+            std::cout << "Read setting TestSetting2=" << value.value << " global " << std::endl;
+        });
+    });
 
     while (true) {
         int setToValue;
         std::cout << "Enter a number to set the settings: ";
         std::string userInput;
         std::getline(std::cin, userInput);
+        std::cout << std::endl;
         try {
             setToValue = std::stoi(userInput);
         } catch (const std::exception& e) {
@@ -62,5 +54,7 @@ int main(int argc, char** argv) {
 
         std::cout << std::endl;
         dispatcher.Enqueue([&]() { s1->set(setToValue); });
+        // Sleep to avoid printing "Enter number" before settingcallback fired
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
 }

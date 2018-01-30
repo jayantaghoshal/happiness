@@ -111,7 +111,7 @@ SettingsStorage::SettingsStorage() {
     {
         const std::string sql =
                 "CREATE TABLE IF NOT EXISTS settings("    //
-                "settings_key CHAR(64) NOT NULL, "        //
+                "settings_key INTEGER NOT NULL, "         //
                 "profile_id  INTEGER NOT NULL, "          //
                 "setting_value TEXT NOT NULL, "           //
                 "PRIMARY KEY (settings_key, profile_id)"  //
@@ -196,13 +196,13 @@ void SettingsStorage::onProfileChange(profileHidl::ProfileIdentifier profileId) 
     }
 }
 
-Return<void> SettingsStorage::set(const hidl_string& key, profileHidl::ProfileIdentifier profileId,
+Return<void> SettingsStorage::set(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId,
                                   const hidl_string& data) {
-    ALOGD("set %s = %s", key.c_str(), data.c_str());
+    ALOGD("set %d = %s", key, data.c_str());
 
     {
         (void)sqlite3_reset(insert_stmt_);
-        sqlite3_bind_text(insert_stmt_, 1, key.c_str(), key.size(), SQLITE_STATIC);
+        sqlite3_bind_int(insert_stmt_, 1, key);
         sqlite3_bind_int(insert_stmt_, 2, static_cast<int32_t>(profileId));
         sqlite3_bind_text(insert_stmt_, 3, data.c_str(), data.size(), SQLITE_STATIC);
         int status = sqlite3_step(insert_stmt_);
@@ -210,14 +210,14 @@ Return<void> SettingsStorage::set(const hidl_string& key, profileHidl::ProfileId
             ALOGE("SQL error insert. Step: %d, %s", status, sqlite3_errmsg(db_));
             return Return<void>(andrHw::Status::fromExceptionCode(andrHw::Status::Exception::EX_ILLEGAL_STATE));
         }
-        ALOGD("Settings inserted successfully, key=%s", key.c_str());
+        ALOGD("Settings inserted successfully, key=%d", key);
     }
     return andrHw::Return<void>();
 }
 
-const unsigned char* SettingsStorage::getData(const hidl_string& key, profileHidl::ProfileIdentifier profileId) {
+const unsigned char* SettingsStorage::getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId) {
     (void)sqlite3_reset(select_setting_stmt_);
-    sqlite3_bind_text(select_setting_stmt_, 1, key.c_str(), key.size(), SQLITE_STATIC);
+    sqlite3_bind_int(select_setting_stmt_, 1, key);
     sqlite3_bind_int(select_setting_stmt_, 2, static_cast<int32_t>(profileId));
     int status = sqlite3_step(select_setting_stmt_);
     if (status == SQLITE_DONE) {
@@ -240,8 +240,8 @@ const unsigned char* SettingsStorage::getData(const hidl_string& key, profileHid
     return data;
 }
 
-Return<void> SettingsStorage::get(const hidl_string& key, profileHidl::ProfileIdentifier profileId, get_cb _hidl_cb) {
-    ALOGD("get %s", key.c_str());
+Return<void> SettingsStorage::get(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId, get_cb _hidl_cb) {
+    ALOGD("get %d", key);
     const unsigned char* data = getData(key, profileId);
     // TODO(ee): How to handle NULL on get vs settingsReset
     hidl_string returnValue{reinterpret_cast<const char*>(data)};  // NOLINT
@@ -249,11 +249,11 @@ Return<void> SettingsStorage::get(const hidl_string& key, profileHidl::ProfileId
     return andrHw::Return<void>();
 }
 
-Return<void> SettingsStorage::subscribe(const hidl_string& key, UserScope userScope,
+Return<void> SettingsStorage::subscribe(const SettingsIdHidl key, UserScope userScope,
                                         const sp<ISettingsListener>& listener) {
-    ALOGD("subscribe %s", key.c_str());
+    ALOGD("subscribe key=%d, userScope=%hu", key, userScope);
 
-    settings_listeners_.emplace_back(std::string(key), userScope, listener);
+    settings_listeners_.emplace_back(key, userScope, listener);
     listener->linkToDeath(this, ISETTINGSLISTENER_DEATH_COOKIE);
 
     profileHidl::ProfileIdentifier profileToGet =
@@ -264,12 +264,12 @@ Return<void> SettingsStorage::subscribe(const hidl_string& key, UserScope userSc
     if (data == nullptr) {
         reason = SettingsChangeReason::Reset;
     }
-    listener->settingsForCurrentUserChanged(key, reason, activeProfileId);
+    listener->settingsForCurrentUserChanged(key, reason, profileToGet);
     return andrHw::Return<void>();
 }
 
-Return<void> SettingsStorage::unsubscribe(const hidl_string& key, const sp<ISettingsListener>& listener) {
-    ALOGD("unsubscribe %s", key.c_str());
+Return<void> SettingsStorage::unsubscribe(const SettingsIdHidl key, const sp<ISettingsListener>& listener) {
+    ALOGD("unsubscribe %d", key);
     settings_listeners_.remove_if([&](const auto& x) { return x.key_ == key && ((x.listener_) == (listener)); });
     return andrHw::Return<void>();
 }

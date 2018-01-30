@@ -19,6 +19,7 @@ cc_test {
         "nlohmann-json-v3",
         "libtarmac",
     ],
+    cflags: ["-Wno-unused-parameter"],
     static_libs: ["libgmock"],
     test_suites: ["vts"],
 }
