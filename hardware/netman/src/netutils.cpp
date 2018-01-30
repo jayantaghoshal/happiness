@@ -9,7 +9,16 @@
 
 #include <arpa/inet.h>
 #include <ifaddrs.h>
+
+// NOTE: Quick fix for using external/iptable/libiptc which is only
+// purposed to be used by external/iptables. this resulted in a messy include order
+// which hides __KERNEL_DIV_ROUND_UP in original linux/kenel.h
+#ifndef __KERNEL_DIV_ROUND_UP
+#define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d)-1) / (d))
+#endif
+
 #include <linux/ethtool.h>
+
 #include <linux/if_arp.h>
 #include <linux/rtnetlink.h>
 #include <net/if.h>
