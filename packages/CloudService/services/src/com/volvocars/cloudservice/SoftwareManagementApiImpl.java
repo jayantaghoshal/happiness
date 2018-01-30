@@ -24,7 +24,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private ICloudConnection cloud_connection;
 
-    private final String SOFTWARE_MANAGEMENT_URI = "/softwaremanagement-1/";
+    private String softwareManagementUri;
     SoftwareManagementURIs uris;
 
     private boolean software_management_available;
@@ -34,8 +34,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         private int code = -1;
     }
 
-    public SoftwareManagementApiImpl(ICloudConnection cloud_connection) {
+    public SoftwareManagementApiImpl(ICloudConnection cloud_connection, String softwareManagementUri) {
         this.cloud_connection = cloud_connection;
+        this.softwareManagementUri = softwareManagementUri;
+
         useHttps = SystemProperties.getBoolean("service.cloudservice.use_https", true);
 
         // To be removed?
@@ -53,7 +55,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(SOFTWARE_MANAGEMENT_URI, headers, useHttps, 10000);
+            Response response = cloud_connection.doGetRequest(softwareManagementUri, headers, useHttps, 10000);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse

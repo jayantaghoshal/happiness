@@ -7,13 +7,13 @@ package com.volvocars.cloudservice;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-import android.content.Intent;
-import android.os.Bundle;
-import vendor.volvocars.hardware.cloud.V1_0.*;
 import java.util.ArrayList;
+import vendor.volvocars.hardware.cloud.V1_0.*;
+
 /**
 * CloudService is the main service for communcating with clouddeamon.
 */
@@ -21,16 +21,16 @@ public class CloudService extends Service {
     private static final String LOG_TAG = "CloudService";
     private static final String FSAPI = "FoundationServicesApi";
     private static final String SOFTWARE_MANAGEMENT = "SoftwareManagementApi";
-    private IFoundationServicesApi.Stub fsapiBinder = null;
     private ICloudConnection cloud_connection = null;
 
     private SoftwareManagementApiImpl software_management_api = null;
+    private FoundationServicesApiImpl fsapi = null;
 
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
-        try{
+        try {
             cloud_connection = ICloudConnection.getService();
 
             // Do some registration for knowing when the Cloud Daemon has established a connection
@@ -48,18 +48,20 @@ public class CloudService extends Service {
         try {
 
             Log.v(LOG_TAG, "FSAPI init");
-            fsapiBinder = new FoundationServicesApiImpl(cloud_connection).binder;
+            fsapi = new FoundationServicesApiImpl(cloud_connection);
 
             // Do this for now, later on we will have some callback and stuff..
             Log.v(LOG_TAG, "Call feature available");
-            if(fsapiBinder.IsFeatureAvailable("SoftwareManagement")) {
+
+            Feature feature = fsapi.getFeatureAvailable("SoftwareManagement");
+
+            if (feature != null) {
                 Log.v(LOG_TAG, "SWMAPI init");
-                software_management_api = new SoftwareManagementApiImpl(cloud_connection);
+                software_management_api = new SoftwareManagementApiImpl(cloud_connection, feature.uri);
             } else {
                 Log.w(LOG_TAG, "Software Management is not available");
             }
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             Log.e(LOG_TAG, "Unhandled exception:\n" + ex.getMessage());
         }
     }
@@ -74,9 +76,9 @@ public class CloudService extends Service {
 
         String action = intent.getAction();
 
-        if(action.equals(FSAPI)) {
+        if (action.equals(FSAPI)) {
             Log.v(LOG_TAG, "Bind on FoundationServicesApi");
-            return fsapiBinder;
+            return fsapi;
         } else if (action.equals(SOFTWARE_MANAGEMENT)) {
             Log.v(LOG_TAG, "Bind on SoftwareManagementApi");
             return software_management_api;
