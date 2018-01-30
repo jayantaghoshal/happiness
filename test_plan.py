@@ -35,12 +35,12 @@ test_plan_hourly = test_plan_gate + [
     Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
              reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
              jira_issue="",
-             deadline="2018-01-30"
+             deadline="2018-01-31"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
              reason="MR1 not yet on master",
              jira_issue="",
-             deadline="2018-01-30"
+             deadline="2018-01-31"
     ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps | {cp.apix}),
     # Climate included twice because the test case dynamically detects if FR hardware is present
@@ -48,12 +48,12 @@ test_plan_hourly = test_plan_gate + [
     Disabled(VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                  standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue= "",
-             deadline= "2018-01-30"
+             deadline= "2018-01-31"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/test/iplm",                      standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue = "",
-             deadline = "2018-01-30"
+             deadline = "2018-01-31"
     ),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",              standard_caps),
@@ -61,21 +61,17 @@ test_plan_hourly = test_plan_gate + [
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",       standard_caps),
              reason="Reboot is still unstable",
              jira_issue="",
-             deadline="2018-01-30"
+             deadline="2018-01-31"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",       standard_caps),
              reason="Reboot is still unstable",
              jira_issue="",
-             deadline="2018-01-30"
+             deadline="2018-01-31"
     ),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
-    Disabled(TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps),
-             reason="Team slytherin working on the failing tests",
-             jira_issue="",
-             deadline="2018-01-30"
-             ),
+    TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps),
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
@@ -89,7 +85,7 @@ test_plan_hourly = test_plan_gate + [
     Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps),
              reason="Waiting for fully working MOST drivers",
              jira_issue="",
-             deadline="2018-01-30"
+             deadline="2018-01-31"
     ),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                   standard_caps),
