@@ -6,12 +6,14 @@
 package com.volvocars.softwareupdateapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.cloudservice.*;
 import java.util.*;
@@ -22,7 +24,11 @@ public class SoftwareUpdateApp extends Activity {
 
     private Button getAssignmentsButton;
     private TextView assignmentsTv;
+    private LinearLayout layout;
 
+    private Context context = this;
+
+    private ArrayList<TextView> sws = new ArrayList<TextView>();
     private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
         public void UpdateState(int state) {
             Log.v(LOG_TAG, "UpdateState");
@@ -30,13 +36,19 @@ public class SoftwareUpdateApp extends Activity {
 
         public void UpdateSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
             Log.v(LOG_TAG, "UpdateSoftwareAssignmentList");
-            String str = "**********";
-            for (SoftwareAssignment sw : software_list) {
-                str += sw.toString();
-                str += "**********";
-            }
 
-            updateTv(assignmentsTv, str);
+            updateTv(assignmentsTv, "Software assignments:", 20);
+            for (SoftwareAssignment sw : software_list) {
+                TextView name = new TextView(context);
+                sws.add(name);
+                updateTv(name, sw.name, 30);
+                addToLayout(name);
+
+                TextView desc = new TextView(context);
+                sws.add(desc);
+                updateTv(desc, sw.description, 20);
+                addToLayout(desc);
+            }
         }
 
         public void UpdateSoftwareState(String uuid, int state) {
@@ -45,19 +57,42 @@ public class SoftwareUpdateApp extends Activity {
 
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
-            updateTv(assignmentsTv, "Error message: [ code: " + code + ", message: " + message + "]");
+
+            for(TextView tv : sws) {
+                deleteFromLayout(tv);
+            }
+
+            updateTv(assignmentsTv, "Error message: [ code: " + code + ", message: " + message + "]", 20);
         }
     };
 
-    private void updateTv(TextView tv, String s) {
+    private void updateTv(TextView tv, String s, int size) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 tv.setText(s);
+                tv.setTextSize(size);
+            }
+        });
+    }
+    private void addToLayout(TextView tv) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layout.addView(tv);
             }
         });
     }
 
+    private void deleteFromLayout(TextView tv)
+    {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layout.removeView(tv);
+            }
+        });
+    }
     private SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
         @Override
         public void onServiceConnected() {
@@ -80,6 +115,8 @@ public class SoftwareUpdateApp extends Activity {
         getAssignmentsButton.setEnabled(false);
 
         assignmentsTv = (TextView) findViewById(R.id.assignmentsTv);
+
+        layout = (LinearLayout) findViewById(R.id.rootlinearlayout);
 
         getAssignmentsButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
