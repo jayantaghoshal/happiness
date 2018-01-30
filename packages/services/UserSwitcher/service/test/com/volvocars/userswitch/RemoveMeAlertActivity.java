@@ -14,6 +14,13 @@ import android.widget.TextView;
  * A sample alert UI and will be removed later
  */
 public class RemoveMeAlertActivity extends Activity {
+    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RemoveMeAlertActivity.this.finish();
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +31,9 @@ public class RemoveMeAlertActivity extends Activity {
 
         action.setText(getIntent().getExtras().getString("action"));
         String infoS = getIntent().getExtras().getString("info");
-        if (infoS != null){
+        if (infoS != null) {
             info.setText(infoS);
         }
         findViewById(R.id.button).setOnClickListener(buttonClickListener);
     }
-
-    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            RemoveMeAlertActivity.this.finish();
-        }
-    };
 }

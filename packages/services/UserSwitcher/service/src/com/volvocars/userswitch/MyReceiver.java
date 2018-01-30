@@ -14,7 +14,7 @@ public class MyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(UserSwitchService.LOG, "Received BOOT_COMPLETED intent");
+        Log.i(UserSwitchService.TAG, "Received BOOT_COMPLETED intent");
         Intent myIntent = new Intent(context, UserSwitchService.class);
         context.startService(myIntent);
     }

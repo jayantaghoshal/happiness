@@ -9,8 +9,9 @@ package com.volvocars.userswitch;
 
 import com.volvocars.userswitch.VolvoUser;
 
-interface ISwitchUserService {
+interface IUserSwitchService {
     void switchUser(in VolvoUser volvoUser) = 0;
     void createUser(in VolvoUser volvoUser) = 1;
     void pairUserTokey() = 2;
+    void deleteUser(in VolvoUser volvoUser) = 3;
 }

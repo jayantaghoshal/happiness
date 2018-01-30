@@ -10,32 +10,41 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ChangeUser1"
-            android:gravity="top|right"/>
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ChangeUser2"
-            android:gravity="top|right"/>
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CustomProfile"
-            android:gravity="top|right"/>
         <EditText
             android:id="@+id/editTextUserId"
-            android:textSize="20dp"
-            android:gravity="top|left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/pairUserButtonCreate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            />
+            android:text="CreateUser"
+            android:gravity="top|right"/>
+        <Button
+            android:id="@+id/pairUserButtonSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Switch user"
+            android:gravity="top|right"/>
+        <Button
+            android:id="@+id/pairUserButtonPair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pair"
+            android:gravity="top|right"/>
+        <Button
+            android:id="@+id/dumpUserButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dump Android Users"
+            android:gravity="top|right"/>
 
+        <Button
+            android:id="@+id/deleteUserButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete User button"
+            android:gravity="top|right"/>
 
     </LinearLayout>
 

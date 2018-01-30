@@ -8,10 +8,24 @@ package com.volvocars.userswitch;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * This class represents the user information
+ */
 public class VolvoUser implements Parcelable {
 
+    public static final Creator<VolvoUser> CREATOR = new Creator<VolvoUser>() {
+        @Override
+        public VolvoUser[] newArray(int size) {
+            return new VolvoUser[size];
+        }
+
+        @Override
+        public VolvoUser createFromParcel(Parcel source) {
+            return new VolvoUser(source);
+        }
+    };
     private String name;
-    private  int id;
+    private int id;
     private int volvoProfile;
 
     public VolvoUser(Parcel source) {
@@ -38,12 +52,12 @@ public class VolvoUser implements Parcelable {
         return id;
     }
 
-    public String getIdString() {
-        return String.valueOf(id);
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getIdString() {
+        return String.valueOf(id);
     }
 
     public int getVolvoProfile() {
@@ -66,18 +80,6 @@ public class VolvoUser implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(volvoProfile);
     }
-
-    public static final Creator<VolvoUser> CREATOR = new Creator<VolvoUser>() {
-        @Override
-        public VolvoUser[] newArray(int size) {
-            return new VolvoUser[size];
-        }
-
-        @Override
-        public VolvoUser createFromParcel(Parcel source) {
-            return new VolvoUser(source);
-        }
-    };
 
     @Override
     public String toString() {
