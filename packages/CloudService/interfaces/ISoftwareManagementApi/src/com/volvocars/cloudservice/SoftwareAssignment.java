@@ -9,10 +9,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SoftwareAssignment implements Parcelable {
-    private String uuid;
-    private String name;
-    private String description;
-    private byte[] image;
+    public String uuid = "dummy";
+    public String name = "dummy";
+    public String description = "dummy";
+    public byte[] image = {};
 
     public static final Creator<SoftwareAssignment> CREATOR = new Creator<SoftwareAssignment>() {
         @Override

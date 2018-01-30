@@ -268,7 +268,7 @@ public final class XmlParser
                 String tag = parser.getName();
                 if(tag.equals("available_updates")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    list = ParseAvailableUpdatesElement(parser);
                 } else {
                     Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
@@ -344,10 +344,10 @@ public final class XmlParser
                 String tag = parser.getName();
                 if(tag.equals("id")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    software.uuid = ParseString(tag, parser);
                 } else if(tag.equals("name")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    SkipElement(parser);
+                    software.name = ParseString(tag, parser);
                 } else if(tag.equals("icon")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
@@ -356,7 +356,7 @@ public final class XmlParser
                     SkipElement(parser);
                 } else if(tag.equals("short_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    software.description = ParseString(tag, parser);
                 } else if(tag.equals("long_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
