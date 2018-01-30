@@ -3,16 +3,36 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#pragma once
+#include <iostream>
 #include "vhal_util.h"
 
-class VhalListener : public vhal20::IVehicleCallback {
+class VhalListener : public vhal20::IVehicleCallback, public ::android::hardware::hidl_death_recipient {
   public:
     explicit VhalListener(::android::sp<vhal20::IVehicle> service) : service_{std::move(service)} {}
+
+    void startLinkToDeath() {
+        // Causes segfault when placed in constructor, because "this" is not fully constructed ???
+        auto result = service_->linkToDeath(this, 0xdead);
+        if (!result.isOk()) {
+            std::cout << "ERROR: Failed to linkToDeath: " << result.description() << std::endl;
+            std::cout << "       VHAL restarts will not be notified!" << std::endl;
+        }
+    }
+
+    void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override {
+        (void)who;
+        (void)cookie;
+        std::cout << "ERROR: VHAL service died" << std::endl;
+        // TODO: Automatic reconnect
+        exit(1);
+    }
 
     ::android::hardware::Return<void> onPropertyEvent(
             const ::android::hardware::hidl_vec<vhal20::VehiclePropValue>& values) override {
         for (auto const& prop_value : values) {
-            VhalUtil::DumpPropertyValue(service_, prop_value);
+            VhalUtil::DumpPropertyValue(prop_value);
+            std::cout << std::endl;
         }
         return ::android::hardware::Return<void>();
     }

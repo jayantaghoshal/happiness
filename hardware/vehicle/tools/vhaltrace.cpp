@@ -76,6 +76,7 @@ int main(int argc, char* argv[]) {
     printf("\nListning done.\n");
 
     ::android::sp<VhalListener> vhal_listener = new VhalListener(service);
+    vhal_listener->startLinkToDeath();
 
     if (requested_properties.empty()) {
         auto service_status = service->getAllPropConfigs(

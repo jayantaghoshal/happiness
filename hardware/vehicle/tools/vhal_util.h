@@ -3,6 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#pragma once
 #include <cstdio>
 #include <cstdlib>
 #include <map>
@@ -21,7 +22,9 @@ std::string GetPropertyName(int32_t prop);
 
 std::string GetVehicleZoneNameByVehicleAreaAndAreaId(vhal20::VehicleArea vehicle_area, int32_t area_id);
 
-void DumpPropertyValue(const ::android::sp<vhal20::IVehicle>& service, const vhal20::VehiclePropValue& property_value);
+void GetAndDumpPropertyValue(const ::android::sp<vhal20::IVehicle>& service,
+                             const vhal20::VehiclePropValue& property_value, const std::string indentation);
+void DumpPropertyValue(const vhal20::VehiclePropValue& property_value, std::string indentation = "");
 
 void DumpProperties(const ::android::sp<vhal20::IVehicle>& service,
                     const ::android::hardware::hidl_vec<vhal20::VehiclePropConfig>& property_config_list);
