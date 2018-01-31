@@ -61,12 +61,12 @@ test_plan_hourly = test_plan_gate + [
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",       standard_caps),
              reason="Reboot is still unstable",
              jira_issue="",
-             deadline="2018-01-31"
+             deadline="2018-02-09"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",       standard_caps),
              reason="Reboot is still unstable",
              jira_issue="",
-             deadline="2018-01-31"
+             deadline="2018-02-09"
     ),
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut", standard_caps),
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}),
