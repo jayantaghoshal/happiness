@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
+
 import org.xmlpull.v1.XmlPullParserException;
 import android.os.SystemProperties;
 
@@ -24,14 +25,18 @@ import vendor.volvocars.hardware.cloud.V1_0.*;
  * Implementation of Foundation service API.
  */
 public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
-    private ICloudConnection server;
+    private CloudConnection server = null;
     private static final String LOG_TAG = "CloudService.FsApi";
-    private Boolean use_https = true;
 
-    public FoundationServicesApiImpl(ICloudConnection server) {
+    private boolean foundation_services_is_available = false;
+
+    public FoundationServicesApiImpl() {
+
+    }
+
+    public void init(CloudConnection server) {
         this.server = server;
-        use_https = SystemProperties.getBoolean("service.cloudservice.use_https", true);
-        Log.d(LOG_TAG, "service.cloudservice.use_https: " + use_https);
+        foundation_services_is_available = true;
     }
 
     public Feature getFeatureAvailable(String feature) {
@@ -41,11 +46,11 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
         field.name = "Accept";
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
         headers.add(field);
-        String uri = "features-1"; //FIX?!
+        String uri = "features-1";
         int timeout = 20000;
         //DoRequest
         try {
-            Response response = server.doGetRequest(uri, headers, use_https, timeout);
+            Response response = server.doGetRequest(uri, headers, timeout);
             byte[] bytesdata = new byte[response.responseData.size()];
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
@@ -64,10 +69,6 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
                 if (f.name.equals(feature))
                     return f;
             }
-
-        } catch (RemoteException ex) {
-            // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
             Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
@@ -88,6 +89,9 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
     */
     @Override
     public boolean IsFeatureAvailable(String feature) throws RemoteException {
+        if (!foundation_services_is_available) {
+            return false;
+        }
         return (getFeatureAvailable(feature) != null);
     }
 

@@ -4,7 +4,7 @@
     "specification_version": 1,
     "implementation_version": 1,
     "client_uri": "http://cep.eu.vcctest.ericssoncvc.com/features-1/",
-    "host": "192.168.1.103",
+    "host": "localhost",
     "port": 3000
   },
 
