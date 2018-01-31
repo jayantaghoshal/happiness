@@ -29,6 +29,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private boolean software_management_available;
     private boolean useHttps = true;
+
     private class SwListResponse {
         private ArrayList<SoftwareAssignment> swlist = new ArrayList<SoftwareAssignment>();
         private int code = -1;
@@ -139,6 +140,34 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         return swrsp;
     }
 
+    private int CommissionSoftwareAssignment(String uuid) {
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.Commission+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        String body = "id=" + uuid + "&client_id=" + "" + "&reason=USER"; //TODO: Remove hardcoded values (client_id and reason)
+
+        try {
+            //Do we need to fetch commission uri?
+            Response response = cloud_connection.doPostRequest(softwareManagementUri + "/commission", headers, body,
+                    useHttps, timeout);
+
+            return response.httpResponse;
+
+        } catch (RemoteException ex) {
+            // Something went bananas with binder.. What do?
+            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
+        }
+
+        return -1;
+    }
+
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -161,6 +190,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     @Override
     public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
             throws RemoteException {
-        callback.CommissionStatus(400);
+        callback.CommissionStatus(CommissionSoftwareAssignment(uuid));
     }
 }
