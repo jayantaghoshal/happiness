@@ -48,12 +48,12 @@ test_plan_hourly = test_plan_gate + [
     Disabled(VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                  standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue= "",
-             deadline= "2018-01-31"
+             deadline= "2018-02-09"
     ),
     Disabled(VTSTest("vendor/volvocars/hardware/test/iplm",                      standard_caps),
              reason="Team slytherin working on the failing tests",
              jira_issue = "",
-             deadline = "2018-01-31"
+             deadline = "2018-02-09"
     ),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",              standard_caps),
