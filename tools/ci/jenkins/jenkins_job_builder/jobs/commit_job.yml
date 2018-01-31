@@ -120,6 +120,11 @@
     defaults: commit_job_defaults
     node: gate_test-generic
     builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
         - shell:
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
@@ -130,6 +135,11 @@
     defaults: commit_job_defaults
     node: gate_test-flexray
     builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
         - shell:
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
@@ -140,6 +150,11 @@
     defaults: commit_job_defaults
     node: gate_test-audio
     builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
         - shell:
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
@@ -150,6 +165,11 @@
     defaults: commit_job_defaults
     node: gate_test-apix
     builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
         - shell:
             !include-raw:
                 - bootstrap_common_commit_triggered.sh

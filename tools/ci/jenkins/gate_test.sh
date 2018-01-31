@@ -25,7 +25,20 @@ artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
 tar xvf "${OUT_ARCHIVE}" || die "Could not extract out archive."
 rm "${OUT_ARCHIVE}"
 
-ihu_update
+set +e
+for tmp in 1 2 3
+do
+    # Update IHU
+    ihu_update
+    if [ $? -eq 0 ]; then # On success, break
+        break
+    elif [ $tmp -eq 3 ]; then
+        die "Failed to flash IHU image" # failed after three attempts
+    else
+        python3 "${SCRIPT_DIR}"/ihu_ipm_reboot.py # reboot ihu on flashing failures
+    fi
+done
+set -e
 
 # Run Unit and Component tests for vendor/volvocars
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial
