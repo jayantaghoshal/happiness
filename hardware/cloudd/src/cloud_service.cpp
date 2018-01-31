@@ -18,7 +18,9 @@
 namespace Connectivity {
 
 CloudService::CloudService()
-    : cloud_request_handler_{std::make_shared<CloudRequestHandler>()},
+    : state_{INIT},
+      listeners_{},
+      cloud_request_handler_{std::make_shared<CloudRequestHandler>()},
       cert_handler_(std::make_shared<CertHandler>(CLIENT_CERT_PEM(), CLIENT_KEY_PEM(), CA_CERT_PEM())),
       entry_point_fetcher_{cert_handler_, cloud_request_handler_} {}
 
@@ -47,6 +49,9 @@ bool CloudService::FetchEntryPoint() {
 
         cep_url_ = entry_point.host;
         cep_port_ = entry_point.port;
+
+        state_ = ConnectionState::CONNECTED;
+
     });
 
     try {
@@ -95,13 +100,23 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
 // Methods from ICloudConnection follow.
 Return<void> CloudService::registerCloudConnectionEventListener(
         const android::sp<ICloudConnectionEventListener>& listener) {
-    // TODO implement
+    listeners_.push_back(listener);
+
+    bool connected = false;
+    if (state_ == ConnectionState::CONNECTED) {
+        connected = true;
+    }
+
+    // Register somne death listener??
+
+    listener->isConnected(connected);
+
     return Void();
 }
 
 Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https,
                                         uint32_t timeout, doGetRequest_cb _hidl_cb) {
-    if (cep_url_.empty()) {
+    if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
         Response error;
@@ -167,7 +182,69 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
 
 Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
                                          bool useHttps, uint32_t timeout, doPostRequest_cb _hidl_cb) {
-    // TODO implement
+    if (state_ != ConnectionState::CONNECTED) {
+        ALOGW("Illegal call: CEP URL not fetch yet.");
+        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        Response error;
+        error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
+        _hidl_cb(error);
+        return Void();
+    }
+
+    std::string url = (useHttps ? "https://" : "http://") + cep_url_ + ":" + std::to_string(cep_port_);
+    std::string path(uri.c_str());
+
+    size_t pos = path.find("/", 0);
+    if (0 == pos) {
+        url = url + path;
+    } else {
+        url = url + "/" + path;
+    }
+
+    std::promise<Response> promise;
+    std::future<Response> future_response = promise.get_future();
+
+    std::shared_ptr<CloudRequest> cr;
+
+    try {
+        cr = std::make_shared<CloudRequest>(cert_handler_);
+
+        cr->SetUseHttps(useHttps);
+        cr->SetTimeout(std::chrono::milliseconds(timeout));
+        cr->SetRequestMethod(CloudRequest::HttpMethod::POST);
+        cr->SetRequestBody(std::string(body.c_str()));
+        cr->SetURL(url);
+        cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
+            promise.set_value(BuildResponse(code, data, header));
+        });
+
+        std::vector<std::string> header_list;
+        for (auto header : headers) {
+            header_list.push_back(std::string(header.name.c_str()) + ":" + std::string(header.value.c_str()));
+        }
+
+        cr->SetHeaderList(header_list);
+
+        cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
+
+    } catch (const std::exception& e) {
+        ALOGW("Failed to initiate cloud request: %s", e.what());
+        Response error;
+        error.httpResponse = 400;  // Bad request.
+        _hidl_cb(error);
+        return Void();
+    }
+
+    Response response;
+    std::chrono::milliseconds span(timeout);
+    if (future_response.wait_for(span) != std::future_status::timeout) {
+        response = future_response.get();
+    } else {
+        response.httpResponse = 408;  // HTTP code for time out
+    }
+
+    _hidl_cb(response);
+
     return Void();
 }
 

@@ -31,6 +31,8 @@ namespace Connectivity {
  */
 class CloudService : public ICloudConnection {
   public:
+    enum ConnectionState { INIT, CONNECTION, CONNECTED, NOCONNECTION };
+
     CloudService();
     ~CloudService() = default;
 
@@ -64,6 +66,9 @@ class CloudService : public ICloudConnection {
      * @return A Response containing the code, data and a parsed header list that can be sent over Binder.
      */
     Response BuildResponse(std::int32_t code, const std::string& data, const std::string& header);
+
+    ConnectionState state_;
+    std::vector<android::sp<ICloudConnectionEventListener> > listeners_;
 
     ClouddLocalConfig cloudd_local_config_;
     std::shared_ptr<CloudRequestHandler> cloud_request_handler_;

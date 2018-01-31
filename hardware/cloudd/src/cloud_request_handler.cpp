@@ -213,8 +213,20 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     verified_curl_easy_setopt(easy, CURLOPT_PRIVATE, request.get());
     // Follow redirections
     verified_curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1L);
-    // Force HTTP Get method
-    verified_curl_easy_setopt(easy, CURLOPT_HTTPGET, 1L);
+    // Force HTTP method
+    if (request->GetRequestMethod() == CloudRequest::HttpMethod::PUT) {
+        verified_curl_easy_setopt(easy, CURLOPT_PUT, 1L);
+        // TODO: Missing implementation. Add Data for PUT-request
+        throw std::runtime_error("PUT request not implemented");
+    } else if (request->GetRequestMethod() == CloudRequest::HttpMethod::POST) {
+        verified_curl_easy_setopt(easy, CURLOPT_HTTPPOST, 1L);
+        verified_curl_easy_setopt(easy, CURLOPT_POSTFIELDSIZE, (long)strlen(request->GetRequestBody().c_str()));
+        verified_curl_easy_setopt(easy, CURLOPT_POSTFIELDS, request->GetRequestBody().c_str());
+
+    } else {
+        verified_curl_easy_setopt(easy, CURLOPT_HTTPGET, 1L);
+    }
+    //
     // Set URL
     verified_curl_easy_setopt(easy, CURLOPT_URL, request->GetURL().c_str());
     // Set Timeout

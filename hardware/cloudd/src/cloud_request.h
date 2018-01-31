@@ -22,6 +22,9 @@ typedef std::function<void(std::int32_t, const std::string&, const std::string&)
  * implementation
  */
 class CloudRequest {
+  public:
+    enum HttpMethod { GET, POST, PUT };
+
   private:
     std::string url_;
     CURL* curl_handle_;
@@ -29,6 +32,8 @@ class CloudRequest {
     std::vector<std::string> header_list_;
     bool use_https_;
     std::chrono::milliseconds timeout_;
+    std::string body_;
+    HttpMethod method_;
 
     ResponseCallback response_callback_;
     std::string response_data_;
@@ -41,7 +46,8 @@ class CloudRequest {
           certificate_handler_(cert_handler),
           header_list_({}),
           use_https_(true),
-          timeout_(36000000) {}
+          timeout_(36000000),
+          method_{GET} {}
 
     ~CloudRequest() { curl_easy_cleanup(curl_handle_); };
 
@@ -61,6 +67,12 @@ class CloudRequest {
 
     void SetTimeout(std::chrono::milliseconds timeout);
     std::chrono::milliseconds GetTimeout();
+
+    void SetRequestBody(std::string body);
+    std::string GetRequestBody();
+
+    void SetRequestMethod(HttpMethod method);
+    HttpMethod GetRequestMethod();
 
     void SetCallback(ResponseCallback&& callback);
     ResponseCallback GetCallback();

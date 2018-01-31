@@ -71,6 +71,14 @@ void CloudRequest::SetTimeout(std::chrono::milliseconds timeout) { timeout_ = ti
 
 std::chrono::milliseconds CloudRequest::GetTimeout() { return timeout_; }
 
+void CloudRequest::SetRequestBody(std::string body) { body_ = body; }
+
+std::string CloudRequest::GetRequestBody() { return body_; }
+
+void CloudRequest::SetRequestMethod(CloudRequest::HttpMethod method) { method_ = method; }
+
+CloudRequest::HttpMethod CloudRequest::GetRequestMethod() { return method_; }
+
 void CloudRequest::SetCallback(ResponseCallback&& callback) {
     if (!callback) {
         throw std::runtime_error("Trying to set a null pointer as callback");
