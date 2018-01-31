@@ -12,7 +12,12 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
 # image. The version currently shipped by Google in AOSP (3.1.9) is too old and causes build
 # failures when building in parallel.
-export USE_CCACHE=false
+TMPFS=/mnt/ramdisk
+export CCACHE_DIR=$TMPFS/ccache
+export CCACHE_MAXSIZE=50G
+export CC_WRAPPER=/usr/bin/ccache
+export CXX_WRAPPER=/usr/bin/ccache
+export USE_CCACHE=true
 
 rm -rf out  # Remove previous OUT_DIR for clean build.
 
