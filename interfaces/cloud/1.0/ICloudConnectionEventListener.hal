@@ -1,0 +1,21 @@
+package vendor.volvocars.hardware.cloud@1.0;
+
+interface ICloudConnectionEventListener
+{
+    /**
+     * Called to update listener if the daemon gets or loses connection to the cloud
+     * @param connected true of connected, false otherwise
+     */
+    oneway isConnected(bool connected);
+
+    /**
+     * Called when daemon entered an error state.
+     * @param reason An error string explaining the erronoues state.
+     **/
+    oneway enteredErrorState(string reason);
+
+    /**
+     * Placeholder for MQTT push notification
+     **/
+    oneway shoulderTap(string tap);
+};

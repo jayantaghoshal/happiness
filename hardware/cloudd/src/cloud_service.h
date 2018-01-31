@@ -7,6 +7,7 @@
 
 #include <IDispatcher.h>
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnection.h>
+#include <vendor/volvocars/hardware/cloud/1.0/ICloudConnectionEventListener.h>
 #include <list>
 #include "certificate_handler_interface.h"
 #include "cloud_request_handler.h"
@@ -21,6 +22,7 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::hardware::hidl_string;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnection;
+using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionEventListener;
 using ::vendor::volvocars::hardware::cloud::V1_0::Response;
 namespace Connectivity {
 
@@ -45,9 +47,14 @@ class CloudService : public ICloudConnection {
      */
     bool FetchEntryPoint();
 
-    // Methods from IHttpRequest
-    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https, uint32_t timeout,
+    // Methods from ICloudConnection follow.
+    Return<void> registerCloudConnectionEventListener(const android::sp<ICloudConnectionEventListener>& listener);
+
+    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool useHttps, uint32_t timeout,
                               doGetRequest_cb _hidl_cb);
+
+    Return<void> doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
+                               bool useHttps, uint32_t timeout, doPostRequest_cb _hidl_cb);
 
     /*
      * Helper method to create a parseable Response out of data received from curl after a successful request.

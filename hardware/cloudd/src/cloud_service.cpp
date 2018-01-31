@@ -92,7 +92,13 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
     return rsp;
 }
 
-// Methods from IHttpRequest follow.
+// Methods from ICloudConnection follow.
+Return<void> CloudService::registerCloudConnectionEventListener(
+        const android::sp<ICloudConnectionEventListener>& listener) {
+    // TODO implement
+    return Void();
+}
+
 Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https,
                                         uint32_t timeout, doGetRequest_cb _hidl_cb) {
     if (cep_url_.empty()) {
@@ -158,4 +164,11 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
 
     return Void();
 }
+
+Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
+                                         bool useHttps, uint32_t timeout, doPostRequest_cb _hidl_cb) {
+    // TODO implement
+    return Void();
+}
+
 }  // namespace Connectivity
