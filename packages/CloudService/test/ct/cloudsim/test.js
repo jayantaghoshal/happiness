@@ -7,8 +7,7 @@ var middlewares = jsonServer.defaults()
 const low = require('/usr/local/lib/node_modules/lowdb')
 const FileSync = require('/usr/local/lib/node_modules/lowdb/adapters/FileSync')
 
-const adapter = new FileSync('db.json')
-const db = low(adapter)
+var db = router.db
 
 var routes = require('./routes.json')
 server.use(jsonServer.rewriter(routes))
@@ -19,17 +18,17 @@ server.use(jsonServer.bodyParser)
 router.render = function (req, res) {
   var data = res.locals.data
   var tag = ""
-  if(req._parsedUrl.pathname == '/entrypoint') {
+  if (req._parsedUrl.pathname == '/entrypoint') {
     tag = "entry_point"
-  } else if(req._parsedUrl.pathname == '/features-1') {
+  } else if (req._parsedUrl.pathname == '/features-1') {
     tag = "features"
-  } else if(req._parsedUrl.pathname == '/softwaremanagement-1') {
+  } else if (req._parsedUrl.pathname == '/softwaremanagement-1') {
     tag = "software_management"
-  } else if(req._parsedUrl.pathname == '/softwaremanagement-1/') {
+  } else if (req._parsedUrl.pathname == '/softwaremanagement-1/') {
     tag = "software_management"
-  } else if(req._parsedUrl.pathname == '/availableUpdates') {
+  } else if (req._parsedUrl.pathname == '/availableUpdates') {
     tag = "available_updates"
-  } else if(req._parsedUrl.pathname == '/commission') {
+  } else if (req._parsedUrl.pathname == '/commission') {
     tag = "commission"
   } else {
     return res.send(data)
@@ -39,14 +38,20 @@ router.render = function (req, res) {
 }
 
 server.post('/availableUpdates', function (req, res, next) {
-  return res.status(405).send({error: "Nope, cant do that."})
+  return res.status(405).send({ error: "Nope, cant do that." })
 })
 
 server.post('/commission', function (req, res, next) {
-  var tmp = db.get('availableUpdates').get('software').find({id: req.query.id})
+  var t = db.get('availableUpdates').get('software')
 
-  db.get('downloads').get('software').push(tmp.value()).write()
-  db.get('availableUpdates').get('software').remove({id: req.query.id}).write()
+  for (i = 0; i < t.value().length; i++) {
+    if (t.value()[i]['id'] == req.body.id) {
+      var tmp = t.value()[i]
+      db.get('downloads').get('software').push(tmp).write()
+      db.get('availableUpdates').get('software').remove(tmp).write()
+      break
+    }
+  }
 
   req.method = 'GET'
   next()
