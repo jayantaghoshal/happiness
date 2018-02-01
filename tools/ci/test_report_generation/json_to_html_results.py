@@ -114,7 +114,10 @@ function display_test_case_details(row_no) {
 
     }
 }
-
+function toggleChangesTable() {
+    var lTable = document.getElementById("changesTable");
+    lTable.style.display = (lTable.style.display == "table") ? "none" : "table";
+    }
 </script>
 """
 
@@ -298,6 +301,35 @@ def parse_vts(Html_file: str, json_file: str, table_record_counter: int):
     return table_record_counter
 
 
+def changelog_table(Html_file: str):
+
+    with open(os.path.join(out_dir, "changelog.json"), 'r') as f:
+        json_data = json.load(f)
+
+    Html_file.write("""
+    <div align="right"><a onclick="toggleChangesTable();" href="#"><u>Changes since last run</u></a></div>
+    """)
+    Html_file.write("""
+    <table id=changesTable class="table table-hover" style="display:none;white-space: pre-wrap; list-style-position: inside;">
+    <tr style="padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #4CAF50;color: white;">
+        <th>No.</th>
+        <th>Changes since last run</th>
+        <th>Commit ID</th>
+
+    </tr>
+    """)
+
+    try:
+        i = 1
+        for changes in json_data["changeSet"]["items"]:
+                Html_file.write("<tr><td>" + str(i) + "</td><td>" +
+                                changes["comment"] + "</td><td>" + changes["commitId"] + "</td></tr>")
+                i = i + 1
+    except Exception:
+        pass  # ignore if there are no changesets
+
+    Html_file.write("</table>")
+
 def main():
     table_record_counter = 0
     Html_file = open(os.path.join(out_dir, "index.html"), "w")
@@ -305,6 +337,7 @@ def main():
     Html_file.write(html_table_style)
     Html_file.write(html_script)
     Html_file.write(html_body_start)
+    changelog_table(Html_file)
     Html_file.write(html_table_start)
 
     for filename in glob.iglob(out_dir + '/**/*.json', recursive=True):
