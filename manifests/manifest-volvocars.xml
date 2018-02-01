@@ -63,19 +63,16 @@
   <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="ec08fdba4991f533f75751077b890d417427977e"/>
 
   <remove-project name="vendor/delphi/android_vehicle-hal"/>
-  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="bc981960d6ebf588e3993c4775da5cda68a0f984" >
+  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="ae7c75ab7917d517d8fa93649cf103aadccdff41" >
       <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
       <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
   </project>
 
   <remove-project name="vendor/delphi/android_device" />
-  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="39c0f133d807c6428486e690791840a6d48b7752"/>
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="1c18654f5682315dafa8df564082f340113f011b"/>
 
   <remove-project name="vendor/delphi/android_vendor" />
   <project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="c138a9514b7dce01e0e0c5752827dfe698223d8c" />
-
-  <remove-project name="vendor/delphi/binaries_android_tunermngr" />
-  <project name="vendor/delphi/binaries_android_tunermngr" path="device/delphi/vcc_ihu/private/vcc_ihu_tuner" revision="15aa504e6160efa8495a500652a2d0b4e0d25bc6" />
 
   <remove-project name="vendor/delphi/bb_android_hisip_desip" />
   <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="f15d7ae732d32e445af36036e0fbcf8919ec02bc"/>

@@ -152,7 +152,7 @@
   <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="216ab3b79e9088b8be23b9f9f10d174ccb82faf1" />
   <project name="vendor/delphi/AP_ProcessManager" path="device/delphi/vcc_ihu/private/ProcessManager" revision="4a8451dd3ebefbd37714a81efde0b372faca1ef1"/>
 
-  <project name="vendor/delphi/binaries_android_tunermngr" path="device/delphi/vcc_ihu/private/vcc_ihu_tuner" revision="b3cdd47e275a5c1c414b6433511c988f33a6f1c6" />
+  <project name="vendor/delphi/binaries_android_tunermngr" path="device/delphi/vcc_ihu/private/vcc_ihu_tuner" revision="36865dd5035a8c20efb1626fe46423fca393b384" />
   <project name="vendor/delphi/AP_List" path="device/delphi/vcc_ihu/private/liblist" revision="a99527ace4390c9e7900848882aca1b358bbd25c" sync-s="true"/>
   <project name="vendor/delphi/AP_ListSource_API" path="device/delphi/vcc_ihu/private/liblist/ListSource" revision="98bf380cafe45f78a224ad0789c20112c681441e" />
   <project name="vendor/delphi/AP_ListView_API" path="device/delphi/vcc_ihu/private/liblist/ListView" revision="ebabdfa0db1201208f8c6f185d668e148553a926" />
