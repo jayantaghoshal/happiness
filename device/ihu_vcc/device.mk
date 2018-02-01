@@ -53,8 +53,8 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    VccTunerApp
-
+    VccTunerApp \
+    BrightnessService \
 
 ##############################################################
 # Vendor apps

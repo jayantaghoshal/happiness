@@ -26,17 +26,17 @@ public class IlluminationControl {
     private VehicleCallback  mInternalCallback;
     private BrightnessService.ServiceHandler mServiceHandler;
     private int mLatestManualIllumination=101;
-    private int mLatestDayNight=1;//It is day by default;
+    private int mLatestNight=0;//It is day by default;
     private final float PERCENTAGE_OF_MAX_VALUE = 406.0f/1023.0f; // Percentage of max CSD brightness.
     private final float SCALED_MAX_VALUE = PERCENTAGE_OF_MAX_VALUE * 255; // whats the max manual illumination in android scale?
     private final int VEHICLE_HAL_SUBSCRIBE_RETRIES = 10;
     private int mSubcribeRetries = 0;
 
-    public IlluminationControl(BrightnessService.ServiceHandler serviceHandler) {
+    public IlluminationControl(BrightnessService.ServiceHandler serviceHandler, IVehicle vehicle) {
         try {
             Log.v(TAG, "IlluminationControl start ");
             mServiceHandler = serviceHandler;
-            mVehicle = IVehicle.getService();
+            mVehicle = vehicle;
             mInternalCallback = new VehicleCallback();
 
             //Setup SubscribeOptions
@@ -46,7 +46,7 @@ public class IlluminationControl {
             opts.flags = SubscribeFlags.DEFAULT;
             options.add(opts);
             SubscribeOptions opts2 = new SubscribeOptions();
-            opts2.propId = VehicleProperty.AMBIENT_DAY_NIGHT; // soon to be ->NIGHT_MODE ;
+            opts2.propId = VehicleProperty.NIGHT_MODE;
             opts2.flags = SubscribeFlags.DEFAULT;
             options.add(opts2);
 
@@ -61,7 +61,7 @@ public class IlluminationControl {
                 else{
                     //Since wo dont get latest values when we subscribe we do get on each property
                     VehiclePropValue requestedprop = new VehiclePropValue();
-                    requestedprop.prop = VehicleProperty.AMBIENT_DAY_NIGHT; //NIGHT_MODE  soon to be ->NIGHT_MODE ;
+                    requestedprop.prop = VehicleProperty.NIGHT_MODE;
                     ValueResult valueResultNightMode = getVehiclePropValue(requestedprop);
                     requestedprop.prop = VehicleProperty.MANUAL_ILLUMINATION;
                     ValueResult propValueManual = getVehiclePropValue(requestedprop);
@@ -83,6 +83,7 @@ public class IlluminationControl {
                     break;
                 }
             }
+            Log.e(TAG, "subscribe failed permanently: ");
         }
         catch (RemoteException ex) {
             Log.e(TAG, ex.getMessage());
@@ -90,24 +91,22 @@ public class IlluminationControl {
         catch (InterruptedException ex) {
             Log.e(TAG, ex.getMessage());
         }
-        Log.e(TAG, "subscribe failed permanently: ");
-
     }
     /**
-     * Gets that maximum brightsness value from array list och VehiclePropValues
+     * Gets that maximum brightness value from array list och VehiclePropValues
      * @param propValues array list och VehiclePropValues
      */
     private int getMaxBrightnessPropValue(ArrayList<VehiclePropValue> propValues){
         int max = 0; //255;
         for(VehiclePropValue prop: propValues) {
-            if (prop.prop == VehicleProperty.AMBIENT_DAY_NIGHT){   //soon to be ->NIGHT_MODE ;
+            if (prop.prop == VehicleProperty.NIGHT_MODE){
                 if (prop.value.int32Values.get(0) == 1) {
-                    mLatestDayNight = 1;
+                    mLatestNight = 1;
                 }
                 else{
-                    mLatestDayNight = 0;
+                    mLatestNight = 0;
                 }
-                Log.v(TAG, "AMBIENT_DAY_NIGHT " + prop.value.int32Values.get(0));
+                Log.v(TAG, "NIGHT_MODE " + prop.value.int32Values.get(0));
             }
             else if (prop.prop == VehicleProperty.MANUAL_ILLUMINATION) {
                 //Note.
@@ -123,7 +122,7 @@ public class IlluminationControl {
                 Log.v(TAG, "MANUAL_ILLUMINATION BrightnessValue " +BrightnessValue);
             }
         }
-        if(mLatestDayNight ==1){// Its day so max brightness
+        if(mLatestNight ==1){// Its day so max brightness
             max = 255 ;
         }
         else{
@@ -160,7 +159,7 @@ public class IlluminationControl {
     }
 
     /**
-     * Callback function used when subcribing to property events in VehicleHal.
+     * Callback function used when subscribing to property events in VehicleHal.
      * onPropertyEvent we send the values to BrightnessService.
      * */
     private class VehicleCallback extends IVehicleCallback.Stub {

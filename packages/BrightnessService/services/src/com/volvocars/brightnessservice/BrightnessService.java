@@ -7,31 +7,31 @@ package com.volvocars.brightnessservice;
 
 import android.app.Service;
 import android.content.Intent;
-import android.hardware.light.V2_0.ILight;
-import android.hardware.light.V2_0.LightState;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.Log;
 import android.os.Process;
-
+import android.hardware.automotive.vehicle.V2_0.IVehicle;
 /**
+ *
  * BrightnessService is a service that controls the brightness of the screen.
 */
 public class BrightnessService extends Service {
 
     public static final String TAG = "BrightnessService";
-    private ILight mLight = null;
+    private IVehicle mVehicle = null;
     private CSDConsumerManager mCSDConsumerManager;
     private IlluminationControl mIlluminationControl;
-    private int mLightType = 0;
     private Looper mServiceLooper = null;
     private ServiceHandler mServiceHandler = null;
-    private int mIlluminationControlProposal = 0;
-    private int mCSDConsumerManagerProposal = 255;
+    private PowerManager mPowerManager;
+    private int mIlluminationControlProposal = 255;
     public enum MessageSender{
         CSDConsumerManager,
         IlluminationControl
@@ -42,16 +42,11 @@ public class BrightnessService extends Service {
         }
         @Override
         public void handleMessage(Message msg) {
-
-            if(msg.arg1 == MessageSender.CSDConsumerManager.ordinal()){
-                mCSDConsumerManagerProposal = msg.arg2;
-            }
-            else if(msg.arg1 ==  MessageSender.IlluminationControl.ordinal()){
+            if(msg.arg1 ==  MessageSender.IlluminationControl.ordinal()){
                 mIlluminationControlProposal = msg.arg2;
             }
             Log.v(TAG,"mIlluminationControlProposal: " + mIlluminationControlProposal);
-            Log.v(TAG,"mCSDConsumerManagerProposal: " + mCSDConsumerManagerProposal);
-            changeBrightness(Math.min(mCSDConsumerManagerProposal,mIlluminationControlProposal));
+            changeBrightness(mIlluminationControlProposal);
         }
     }
     @Override
@@ -59,7 +54,6 @@ public class BrightnessService extends Service {
         Log.v(TAG, "onStartCommand");
         return START_STICKY;
     }
-
     @Override
     public void onDestroy() {
         Log.v(TAG, "onDestroy");
@@ -69,13 +63,6 @@ public class BrightnessService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.v(TAG, "onCreate");
-        try {
-            mLight = ILight.getService();
-            mLightType = mLight.getSupportedTypes().get(0);
-        }
-        catch (RemoteException ex) {
-            Log.e(TAG, ex.getMessage());
-        }
 
         // Start up the thread running the service.
         HandlerThread serviceThread = new HandlerThread("serviceThread", Process.THREAD_PRIORITY_BACKGROUND);
@@ -83,9 +70,15 @@ public class BrightnessService extends Service {
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = serviceThread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-
-        mCSDConsumerManager = new CSDConsumerManager();
-        mIlluminationControl = new IlluminationControl(mServiceHandler);
+        try {
+            mVehicle = IVehicle.getService();
+        }
+        catch(RemoteException ex){
+            Log.e(TAG, ex.getMessage());
+        }
+        mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mCSDConsumerManager = new CSDConsumerManager(mVehicle,mPowerManager);
+        mIlluminationControl = new IlluminationControl(mServiceHandler,mVehicle);
 
     }
     @Override
@@ -93,28 +86,23 @@ public class BrightnessService extends Service {
         return null;
     }
     /**
-     * Change brightness of the screen, uses lightshal.
+     * Change brightness of the screen, uses settings&/& lightshal.
      * @param brightnessValue int beetween 0-255
      */
     public void changeBrightness(int brightnessValue){
+        if(brightnessValue < 0 | brightnessValue > 255){
+            Log.w(TAG, "brightnessValue not witheen range: " + brightnessValue);
+            return;
+        }
         try {
-            if(brightnessValue < 0 | brightnessValue > 255){
-                Log.w(TAG, "brightnessValue not witheen range: " + brightnessValue);
-                return;
+            int brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
+            if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
+                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
             }
-
-            Log.v(TAG, "setting brightness to: " + brightnessValue);
-            LightState lightState = new LightState();
-            int color = brightnessValue & 0x000000ff;
-            color = 0xff000000 | (color << 16) | (color << 8) | color;
-            lightState.color = color;
-            lightState.flashMode = 0;
-            lightState.flashOnMs = 0;
-            lightState.flashOffMs = 0;
-            lightState.brightnessMode = 0;
-            mLight.setLight(mLightType, lightState);
-        } catch(RemoteException ex){
-            Log.d(TAG,ex.getMessage());
+            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightnessValue);
+        }
+        catch (Settings.SettingNotFoundException e) {
+            Log.e(TAG,e.getMessage());
         }
     }
 }
