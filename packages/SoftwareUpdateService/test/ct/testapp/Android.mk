@@ -9,7 +9,26 @@ LOCAL_PACKAGE_NAME := softwareupdateapp
 LOCAL_MODULE_TAGS := optional
 #LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
 #ANDROID_PRODUCT_OUT:= $(TARGET_OUT_DATA_APPS)
-LOCAL_STATIC_JAVA_LIBRARIES := com.volvocars.SoftwareUpdateLib
+LOCAL_STATIC_JAVA_LIBRARIES := com.volvocars.SoftwareUpdateLib \
+android-support-v4
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-appcompat
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-design
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-cardview
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v7-recyclerview
+LOCAL_STATIC_JAVA_LIBRARIES += android-support-v13
+
+LOCAL_AAPT_FLAGS := \
+--auto-add-overlay \
+--extra-packages android.support.v7.appcompat \
+--extra-packages android.support.design \
+--extra-packages android.support.v7.cardview \
+--extra-packages android.support.v7.recyclerview
+
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res \
+frameworks/support/v7/appcompat/res \
+frameworks/support/design/res \
+frameworks/support/v7/cardview/res \
+frameworks/support/v7/recyclerview/res
 
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
