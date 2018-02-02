@@ -30,10 +30,13 @@ LOCAL_SRC_FILES := \
      src/sensormodule.cpp \
      src/connectedsafety.cpp \
      src/activesafetymodule.cpp \
-     src/daisettingimpl.cpp
+     src/daisettingimpl.cpp \
+     src/interface_mapping.cpp \
+     vhal_modules/curve_speed_adaption_module.cpp
 
 LOCAL_C_INCLUDES := \
-    src/
+    $(LOCAL_PATH)/src \
+    $(LOCAL_PATH)/vhal_modules
 
 # TODO (Abhi) ugly hack to get symbols resolved. Ideally Delphi should use LOCAL_WHOLE_STATIC_LIBRARIES while building
 # audio_vehicle-hal-impl-lib. Delphi is informed

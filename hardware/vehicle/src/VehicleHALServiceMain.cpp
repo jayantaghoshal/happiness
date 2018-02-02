@@ -21,6 +21,7 @@
 #include "libsettings/setting.h"
 #include "libsettings/settingsmanagerhidl.h"
 #include "sensormodule.h"
+#include "vhal_modules/curve_speed_adaption_module.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
@@ -53,6 +54,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
     auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
+    auto curve_speed_adaption_module = std::make_unique<CurveSpeedAdaptionModule>(hal.get(), settings_manager);
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -67,6 +69,7 @@ int main(int /* argc */, char* /* argv */ []) {
     sensorModule->registerToVehicleHal();
     connectedSafetyModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
+    curve_speed_adaption_module->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
