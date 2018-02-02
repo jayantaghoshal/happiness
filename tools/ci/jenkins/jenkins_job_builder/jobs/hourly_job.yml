@@ -33,7 +33,13 @@
       - archive:
           artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
           allow-empty: true
-
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
 - job:
     name: ihu_hourly
     project-type: multijob
@@ -57,6 +63,13 @@
                 credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
                 username: JENKINS_USER
                 password: JENKINS_PASSWORD            
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
     builders:
       - multijob:
           name: Build

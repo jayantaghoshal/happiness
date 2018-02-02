@@ -24,6 +24,13 @@
             branches:
                 - "*/${GERRIT_BRANCH}"
             basedir: vendor/volvocars
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
     builders:
         - shell: |
                 export WORKSPACE_ROOT=$(pwd)

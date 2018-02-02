@@ -77,6 +77,13 @@
       - archive:
           artifacts: 'out/host/linux-x86/vcc_test_results/current/**/*'
           allow-empty: true
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
     wrappers:
         - timeout:
             timeout: 180

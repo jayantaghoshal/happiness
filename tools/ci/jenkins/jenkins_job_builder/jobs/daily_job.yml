@@ -13,6 +13,13 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
     wrappers:
         - timeout:
             timeout: 180
@@ -47,6 +54,13 @@
         - pollscm:
             cron: "H H(0-1) * * *"
             ignore-post-commit-hooks: True
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
     wrappers:
         - credentials-binding:
             - username-password-separated:
