@@ -1,20 +1,11 @@
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.volvocars.timeupdateservice">
-
+    package="com.volvocars.timeupdateservice"
+    android:sharedUserId="android.uid.system">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.SET_TIME"/>
     <application
         android:name=".MainApplication"
-        android:persistent="false">
-        <!-- <activity
-            android:name=".TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> -->
-        <receiver android:name=".TimeChangedReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-        </receiver>
+        android:persistent="true">
     </application>
 </manifest>

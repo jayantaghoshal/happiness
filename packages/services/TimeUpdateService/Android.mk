@@ -18,6 +18,13 @@ LOCAL_PROGUARD_ENABLED := disabled
 
 LOCAL_MODULE_TAGS := optional
 
+
+
+LOCAL_STATIC_JAVA_LIBRARIES := \
+        android-support-v4 \
+        vendor.volvocars.hardware.vehiclehal-V1.0-java-static \
+        android.hardware.automotive.vehicle-V2.0-java-static
+
 LOCAL_MULTILIB := 64
 include $(BUILD_PACKAGE)
 include $(call all-makefiles-under,$(LOCAL_PATH))

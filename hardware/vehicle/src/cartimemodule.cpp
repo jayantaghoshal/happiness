@@ -123,7 +123,8 @@ bool CarTimeHal::GetTimeFromFlexray(VehiclePropValue& prop_value) {
         tmtime.tm_hour = datetime.Hr1;
         tmtime.tm_min = datetime.Mins1;
         tmtime.tm_sec = datetime.Sec1;
-        tmtime.tm_isdst = 0;
+        tmtime.tm_isdst = -1;
+
         const time_t epoch1970 = mktime(&tmtime);
         if (epoch1970 > 0) {
             prop_value.value.int64Values[0] = epoch1970;
