@@ -10,24 +10,25 @@ from shipit import autobumper
 
 
 def main(args):
-    if len(args) < 3:
-        raise SystemExit('Error: bump.py requires 3 args')
+    if len(args) < 2:
+        raise SystemExit('Error: bump.py requires 2 args')
 
     aosp_root_dir = args[0]
     mode = args[1]
-    branch = args[2]
 
     with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "logging.json"), "rt") as f:
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
     if mode == "check":
+        branch = args[2]
         autobumper.check_manifest(aosp_root_dir, branch)
     elif mode == "local":
-        autobumper.on_commit(aosp_root_dir, branch)
+        autobumper.on_commit(aosp_root_dir)
     elif mode == "autobump":
         if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')
+        branch = args[2]
         message = args[3]
         repo_path_name = args[4]
         autobumper.post_merge(aosp_root_dir, branch, message, repo_path_name)
