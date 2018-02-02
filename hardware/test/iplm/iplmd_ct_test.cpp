@@ -81,7 +81,9 @@ class IplmTestFixture : public ::testing::Test {
         }
 
         // Start IpcbD for test with mocked localconfig
-        std::string new_iplm_pid_str = getCmdOut("/vendor/bin/hw/iplmd & echo $!");
+        std::string new_iplm_pid_str = getCmdOut(
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /vendor/bin/hw/iplmd "
+                "& echo $!");
 
         new_iplm_pid = std::stoi(new_iplm_pid_str, &sz);
 
@@ -231,7 +233,7 @@ class IplmTestFixture : public ::testing::Test {
 };
 
 /**
- Test that we recive a activitymessage
+ Test that IplmD can receive an activity message
  **/
 TEST_F(IplmTestFixture, ReciveActivityMessage) {
     ALOGD("+ ReciveActivityMessage");
@@ -369,10 +371,10 @@ TEST_F(IplmTestFixture, RegisterUnRegisterLSC) {
 
 /*
 IPLM Inform other LM modules across the vehicle internal IP network when the ECU has all its services available.
-Following test will register 3 Local Software components and will exepect broad case messages from IPLM
+Following test will register 3 Local Software components and will expect broadcast messages from IPLM
 */
-TEST_F(IplmTestFixture, RecieveBroadCast_SUCCESS) {
-    ALOGD("+ RecieveBroadCast_SUCCESS");
+TEST_F(IplmTestFixture, DoSendBroadcast) {
+    ALOGD("+ DoSendBroadcast");
 
     lscMocker->onResourceGroupStatusCallback = [&](ResourceGroup resourceGroup,
                                                    ResourceGroupStatus resourceGroupStatus) {
@@ -418,47 +420,40 @@ TEST_F(IplmTestFixture, RecieveBroadCast_SUCCESS) {
     EXPECT_TRUE(calledNodeStatus);
 
     // After 3 registered LSCs we should receive broadcast messages.
-    IpcbSimulator* ipcbSimulator = new IpcbSimulator("198.18.255.255", 60000, 70000, 1);
+    IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
 
     Pdu pdu;
 
-    bool result = false;
-    for (int i = 0; i < 10; i++) {
-        // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
-        std::future<bool> fut = std::async([&]() { return ipcbSimulator->ReceivePdu(pdu); });
-
-        std::chrono::milliseconds span(3000);
-        if (fut.wait_for(span) == std::future_status::timeout) {
-            ipcbSimulator->CloseSocket();
-            fut.get();
-            delete ipcbSimulator;
-            break;
-        } else {
-            result = fut.get();
-        }
-    }
+    bool result = ipcbSimulator.ReceivePdu(pdu, 3);
 
     for (int i = 0; i < 3; i++) {
         lscMocker->UnregisterLSC("lsc-" + std::to_string(i));
         ALOGD("UnregisterLSC - %d", i);
     }
 
-    if (result) {
-        ipcbSimulator->CloseSocket();
-        delete ipcbSimulator;
-    }
-
     EXPECT_EQ(result, true);
-    ALOGD("- RecieveBroadCast_SUCCESS");
+    ALOGD("- DoSendBroadcast");
 }
 
-// IPLM broadcast messages if less than 3 LSc registered
-TEST_F(IplmTestFixture, RecieveBroadCast_FAIL) {
-    ALOGD("+ RecieveBroadCast_FAIL");
-    // TODO: Implemenet test case where less than 3 LSCs are registered, in this case IPLM shall not broadcast message.
-    bool flag = false;
-    EXPECT_EQ(flag, false);
-    ALOGD("- RecieveBroadCast_FAIL");
+// IPLM should not broadcast messages if less than 3 LSCs registered
+// NOTE! This will fail once the "correct" handling is in where IplmD should never
+// stop sending Activity messages once it has started.... At that point, this testcase
+// needs to be fixed or removed
+TEST_F(IplmTestFixture, DoNotSendBroadcast) {
+    ALOGD("+ DoNotSendBroadcast");
+
+    // Start simulator to receive broadcasts
+    IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
+
+    Pdu pdu;
+
+    // Read off all old PDUs, to make sure inbuffer is empty
+    ipcbSimulator.ReceivePdu(pdu, 3);
+
+    // Expect no new PDUs to be received by simulator
+    EXPECT_FALSE(ipcbSimulator.ReceivePdu(pdu, 5));
+
+    ALOGD("- DoNotSendBroadcast");
 }
 
 // Request services by Resource Group 1 and Prio Normal
@@ -515,33 +510,44 @@ TEST_F(IplmTestFixture, RequestResourceGroup_RG1_NORM) {
     const hidl_string& lscName("VOC");
     ResourceGroup _rg = ResourceGroup::ResourceGroup1;
     ResourceGroupPrio _prio = ResourceGroupPrio::Normal;
-    IpcbSimulator IpcbSimulator("198.18.255.255", 60000, 70000, 1);
-    bool flag = false;
+    IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
     Pdu pdu;
 
+    // Request resource group
     lscMocker->RequestResourceGroup(lscName, _rg, _prio);
 
-    // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
-    bool IsPduRecevied = IpcbSimulator.ReceivePdu(pdu);
+    // Check the comming 5 PDUs to see if payload is correct
+    std::future<bool> f_pdu_received = std::async([&]() {
+        for (int i = 1; i < 6; i++) {
+            bool IsPduRecevied = ipcbSimulator.ReceivePdu(pdu, 2);
+            ALOGD("Received PDU number %d", i);
 
-    if (IsPduRecevied) {
-        std::vector<uint8_t> payload(pdu.payload);
+            if (IsPduRecevied) {
+                std::vector<uint8_t> payload(pdu.payload);
 
-        // get resource group bit which is stored in first bit
-        uint8_t received_action = payload[0];
-        uint8_t received_prio = payload[1];
+                // get resource group bit which is stored in first bit
+                uint8_t received_action = payload[0];
+                uint8_t received_prio = payload[1];
 
-        if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
-            flag = true;
+                if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
+                    ALOGD("Payload is correct, ending loop");
+                    return true;
+                }
+            }
         }
-    }
+        ALOGD("Payload was not correct after five tries, return false");
+        return false;
+    });
+
+    if (f_pdu_received.wait_for(std::chrono::milliseconds(10000)) == std::future_status::timeout) ASSERT_TRUE(false);
+    EXPECT_TRUE(f_pdu_received.get());
 
     // Unregistering LSCs
     lscMocker->UnregisterLSC("VOC");
     lscMocker->UnregisterLSC("OTA");
     lscMocker->UnregisterLSC("CSB");
 
-    EXPECT_EQ(flag, true);
+    ALOGD("- RequestResourceGroup_RG1_NORM");
 }
 
 // Request services by Resource Group 3 and Prio High
@@ -569,7 +575,7 @@ TEST_F(IplmTestFixture, RequestResourceGroup_RG3_HIGH) {
         ALOGD("- onNodeStatusCallback");
     };
 
-    // Need to register atleast three LSCs in order IPLM to star broadcasting message
+    // Need to register atleast three LSCs in order IPLM to start broadcasting message
     lscMocker->RegisterLSC("VOC");
     lscMocker->RegisterLSC("OTA");
     lscMocker->RegisterLSC("CSB");
@@ -597,33 +603,43 @@ TEST_F(IplmTestFixture, RequestResourceGroup_RG3_HIGH) {
     const hidl_string& lscName("VOC");
     ResourceGroup _rg = ResourceGroup::ResourceGroup3;
     ResourceGroupPrio _prio = ResourceGroupPrio::High;
-    IpcbSimulator IpcbSimulator("198.18.255.255", 60000, 70000, 1);
-    bool flag = false;
+    IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
     Pdu pdu;
 
     lscMocker->RequestResourceGroup(lscName, _rg, _prio);
 
-    // TODO: PDU valid or not should be handled in seperate tests within libipcommandbus
-    bool IsPduRecevied = IpcbSimulator.ReceivePdu(pdu);
+    // Check the comming 5 PDUs to see if payload is correct
+    std::future<bool> f_pdu_received = std::async([&]() {
+        for (int i = 1; i < 6; i++) {
+            bool IsPduRecevied = ipcbSimulator.ReceivePdu(pdu, 2);
+            ALOGD("Received PDU number %d", i);
 
-    if (IsPduRecevied) {
-        std::vector<uint8_t> payload(pdu.payload);
+            if (IsPduRecevied) {
+                std::vector<uint8_t> payload(pdu.payload);
 
-        // get resource group bit which is stored in first bit
-        uint8_t received_action = payload[0];
-        uint8_t received_prio = payload[1];
+                // get resource group bit which is stored in first bit
+                uint8_t received_action = payload[0];
+                uint8_t received_prio = payload[1];
 
-        if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
-            flag = true;
+                if (((received_action & _rg) == (int8_t)_rg) && ((received_prio & _prio) == (int8_t)_prio)) {
+                    ALOGD("Payload is correct, ending loop");
+                    return true;
+                }
+            }
         }
-    }
+        ALOGD("Payload was not correct after five tries, return false");
+        return false;
+    });
+
+    if (f_pdu_received.wait_for(std::chrono::milliseconds(10000)) == std::future_status::timeout) ASSERT_TRUE(false);
+    EXPECT_TRUE(f_pdu_received.get());
 
     // Unregistering LSCs
     lscMocker->UnregisterLSC("VOC");
     lscMocker->UnregisterLSC("OTA");
     lscMocker->UnregisterLSC("CSB");
 
-    EXPECT_EQ(flag, true);
+    ALOGD("- RequestResourceGroup_RG3_HIGH");
 }
 
 // TODO: Verify if this test case is producing correct result.

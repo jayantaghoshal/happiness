@@ -111,7 +111,18 @@ bool IpcbSimulator::SendPdu(Pdu pdu) {
     return true;
 }
 
-bool IpcbSimulator::ReceivePdu(Pdu &pdu) {
+bool IpcbSimulator::ReceivePdu(Pdu &pdu, const uint32_t timeout_sec) {
+    ALOGD("Rcv pdu");
+
+    if (timeout_sec > 0) {
+        struct timeval tv;
+        tv.tv_sec = timeout_sec;
+        tv.tv_usec = 0;
+        if (setsockopt(local_socket_, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0) {
+            ALOGE("Error setting timeout on socket");
+        }
+    }
+
     std::vector<uint8_t> rd_buffer;
 
     ssize_t packet_length = recv(local_socket_, nullptr, 0, MSG_PEEK | MSG_TRUNC);
