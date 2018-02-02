@@ -51,6 +51,12 @@
         - pollscm:
             cron: "H * * * *"
             ignore-post-commit-hooks: True
+    wrappers:
+        - credentials-binding:
+            - username-password-separated:
+                credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
+                username: JENKINS_USER
+                password: JENKINS_PASSWORD            
     builders:
       - multijob:
           name: Build
@@ -63,7 +69,7 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - multijob:
           name: Test
-          condition: SUCCESSFUL
+          condition: ALWAYS
           projects:
             - name: ihu_hourly_test-generic
               current-parameters: true
@@ -88,7 +94,36 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}                
+      - copyartifact:
+          project: ihu_hourly_test-generic
+          target: ihu_hourly_test-generic_results/
+          which-build: multijob-build
+          optional: true
+          flatten: true
 
+      - copyartifact:
+          project: ihu_hourly_test-flexray
+          target: ihu_hourly_test-flexray_results/
+          which-build: multijob-build
+          optional: true
+          flatten: true
+      - copyartifact:
+          project: ihu_hourly_test-audio
+          target: ihu_hourly_test-audio_results/
+          which-build: multijob-build
+          optional: true
+          flatten: true
+
+      - copyartifact:
+          project: ihu_hourly_test-apix
+          target: ihu_hourly_test-apix_results/
+          which-build: multijob-build
+          optional: true
+          flatten: true  
+
+      - shell:
+            !include-raw:
+                - bootstrap_ihu_hourly_report_generation.sh 
 - job:
     name: ihu_hourly_build-eng
     defaults: hourly_job_defaults
@@ -136,6 +171,12 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
+    publishers:
+        - archive:
+            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_hourly_test-flexray
@@ -162,6 +203,12 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
+    publishers:
+        - archive:
+            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_hourly_test-audio
@@ -188,6 +235,12 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
+    publishers:
+        - archive:
+            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_hourly_test-apix
@@ -214,3 +267,9 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
+    publishers:
+        - archive:
+            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
