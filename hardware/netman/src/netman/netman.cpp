@@ -14,6 +14,7 @@
 #include "uevent_listener.h"
 #include "vcc/localconfig.h"
 
+#undef LOG_TAG  // <hidl/HidlTransportSupport.h>
 #define LOG_TAG "Netmand"
 #include <cutils/log.h>
 

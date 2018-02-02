@@ -3,12 +3,20 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-cc_binary {
-    name: "vendor.volvocars.hardware.uds@1.0-service",
+cc_library {
+    name: "lib_uds_data_handler",
     defaults: ["volvocars_cc_defaults_hq"],
 
     srcs: [
         "src/*.cpp",
+    ],
+
+    export_include_dirs: [
+        "include/",
+    ],
+
+    local_include_dirs: [
+        "include/uds",
     ],
 
     shared_libs: [
@@ -16,18 +24,6 @@ cc_binary {
         "libutils",
         "libhidlbase",
         "libhidltransport",
-        "liblog",
-    ],
-
-    product_variables: {
-        debuggable: {
-            cppflags: ["-DENABLE_DATA_COLLECTOR_TESTPOINT=1"],
-        },
-    },
-
-    relative_install_path: "hw",
-
-    init_rc: [
-        "uds_data_collector.rc",
+        "libbase",
     ],
 }
