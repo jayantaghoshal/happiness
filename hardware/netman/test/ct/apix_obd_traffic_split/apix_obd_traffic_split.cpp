@@ -56,8 +56,9 @@ class ApixObdTrafficSplitFixture : public ::testing::Test {
 
     bool readIptable(const std::string& table, std::string& output) {
         std::array<char, 128> buffer;
-        std::string vcc_netns = "ip netns exec vcc ";
-        std::string cmd = vcc_netns + "iptables -w 5 -S -t " + table + " 2>&1";
+        std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
+        // TODO (Samuel.Idowu): Switch to /vendor/bin/iptables
+        std::string cmd = vcc_netns + "/system/bin/iptables -w 5 -S -t " + table + " 2>&1";
         std::unique_ptr<FILE, decltype(&pclose)> pFile(popen(cmd.c_str(), "re"), pclose);
         if (!pFile) {
             ALOGE("popen() failed!");
