@@ -220,9 +220,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
         throw std::runtime_error("PUT request not implemented");
     } else if (request->GetRequestMethod() == CloudRequest::HttpMethod::POST) {
         verified_curl_easy_setopt(easy, CURLOPT_HTTPPOST, 1L);
-        verified_curl_easy_setopt(easy, CURLOPT_POSTFIELDSIZE, (long)strlen(request->GetRequestBody().c_str()));
-        verified_curl_easy_setopt(easy, CURLOPT_POSTFIELDS, request->GetRequestBody().c_str());
-
+        verified_curl_easy_setopt(easy, CURLOPT_COPYPOSTFIELDS, request->GetRequestBody().c_str());
     } else {
         verified_curl_easy_setopt(easy, CURLOPT_HTTPGET, 1L);
     }

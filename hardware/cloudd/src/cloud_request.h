@@ -47,6 +47,7 @@ class CloudRequest {
           header_list_({}),
           use_https_(true),
           timeout_(36000000),
+          body_(""),
           method_{GET} {}
 
     ~CloudRequest() { curl_easy_cleanup(curl_handle_); };
