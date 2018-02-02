@@ -11,13 +11,13 @@
   <project name="bsp/device/intel/broxton" path="device/intel/broxton" revision="92e584a6b0a979afef13c7d94df8e5f1d94b75ed"/>
 
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="8ac7b418d91597210c05dcdb1351569cd97a4256"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="7c75e5ef6ca2ad62e06f9bed182eb07c255693f0"/>
 
   <remove-project name="bsp/vendor/intel/abl/abl_build_tools"/>
-  <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="2a0564b77d8eea8707752896fa398baac1f60b93"/>
+  <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="2573a37592db85f51dcf620f419ac0c2c1a75f0c"/>
 
   <remove-project name="aosp/platform/build"/>
-  <project name="aosp/platform/build" path="build/make" revision="b8e4a201e7e3c96589f4bb61f7bfc9bfa4b2ecfc">
+  <project name="aosp/platform/build" path="build/make" revision="e085d38b79b96adb7e146f331da4be7f6c1e75c9">
     <copyfile dest="Makefile" src="core/root.mk"/>
     <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk"/>
     <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default"/>
