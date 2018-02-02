@@ -112,7 +112,7 @@
 
   <!-- Project specific Aptiv building blocks -->
 
-  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="7aaf8942fad97ed9edcfe13682761aff3a450ea2"/>
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="7aaf8942fad97ed9edcfe13682761aff3a450ea2">
     <copyfile dest="vendor/aptiv/components/Android.bp" src="blueprintintermediate"/>
   </project>
   <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="74aad5555d305482666c5d796e24a38ab08bb19c" />
