@@ -2,22 +2,22 @@
 <manifest>
   <include name="manifest-intel.xml"/>
 
-  <!-- Delphi device trees (config files for Delphi platforms) -->
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="984127f3f9dddc10b20118c47afffdc2a9739e12"/>
-  <project name="bsp/device/delphi/dash.2" path="device/delphi/dash.2" revision="cfcf5bd1c5c0815628862374fcadf9db82e1ed96"/>
+  <!-- Aptiv device trees (config files for Delphi platforms) -->
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="ae3772bcc58bb5ca601e526769f73a55c1ffbb60"/>
+  <project name="bsp/device/delphi/dash.2" path="device/delphi/dash.2" revision="259a80e77fb8d0a7481f76661389d55c9282d68c"/>
 
-  <!-- modifications / bug fixes implemented for Delphi platforms (rebased for each new release from Intel) -->
+  <!-- modifications / bug fixes implemented for Aptiv platforms (rebased for each new release from Intel) -->
   <remove-project name="bsp/device/intel/broxton"/>
   <project name="bsp/device/intel/broxton" path="device/intel/broxton" revision="92e584a6b0a979afef13c7d94df8e5f1d94b75ed"/>
 
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="ec0f66eb58295a6d079e05f12a0e4497adbb2534"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="8ac7b418d91597210c05dcdb1351569cd97a4256"/>
 
   <remove-project name="bsp/vendor/intel/abl/abl_build_tools"/>
   <project name="bsp/vendor/intel/abl/abl_build_tools" path="vendor/intel/abl/abl_build_tools" revision="2a0564b77d8eea8707752896fa398baac1f60b93"/>
 
   <remove-project name="aosp/platform/build"/>
-  <project name="aosp/platform/build" path="build/make" revision="3f79695f45ec318cce7a29a736e64623a47e04f6">
+  <project name="aosp/platform/build" path="build/make" revision="b8e4a201e7e3c96589f4bb61f7bfc9bfa4b2ecfc">
     <copyfile dest="Makefile" src="core/root.mk"/>
     <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk"/>
     <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default"/>
@@ -65,11 +65,8 @@
   <remove-project name="aosp/platform/system/bt"/>
   <project name="aosp/platform/system/bt" path="system/bt" revision="a44decd1e71d3408a11a00863bfc9a35478f7df4"/>
 
-  <remove-project name="aosp/platform/external/libusb"/>
-  <project name="aosp/platform/external/libusb" path="external/libusb" revision="7e6549dfb362c1821e8f6de6cb810e14e7f78fb9"/>
-
   <remove-project name="bsp/vendor/intel/fw/trusty_lk_trusty_target_sand"/>
-  <project name="bsp/vendor/intel/fw/trusty_lk_trusty_target_sand" path="trusty/target/sand" revision="b03627e9464802b61f2927c7b8f95e51b7b19802"/>
+  <project name="bsp/vendor/intel/fw/trusty_lk_trusty_target_sand" path="trusty/target/sand" revision="84a434eafd9e4226d7930a8548841fd057cf45d8"/>
 
   <remove-project name="bsp/device/intel/sepolicy"/>
   <project name="bsp/device/intel/sepolicy" path="device/intel/sepolicy" revision="055cb610eec7e0e776309bd6f6f0c90df742720a"/>
@@ -87,73 +84,80 @@
     <copyfile dest="hardware/intel/audio/coe/primary/Android.bp" src="Android_intel.bp"/>
   </project>
 
-  <!-- Delphi platform extensions (no equivalent shipped by Intel) -->
+  <remove-project name="bsp/hardware/intel/evs"/>
+  <project name="bsp/hardware/intel/evs" path="hardware/intel/evs" revision="cc79d79fd6b54c5d5c14f61ea872f5c98a1b389a"/>
+
+  <remove-project name="bsp/target/security/ifwi-apl"/>
+  <project name="bsp/target/security/ifwi-apl" path="vendor/intel/abl/ifwi-apl" revision="d7179f605fb8d11c7832bc7b3648e8803434fd72"/>
+
+  <!-- Aptiv platform extensions (no equivalent shipped by Intel) -->
+  <project name="bsp/external/bcm89230" path="external/bcm89230" revision="41b450916ffdb338037f38c58eb912461ca4aece"/>
+  <project name="bsp/external/88W8897P" path="external/88W8897P" revision="f79a46b303671e278454099bf4c86f0bb16f828b"/>
+  <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="50d0ba412397e13bc4b64afc587f984c15042cda"/>
+  <project name="bsp/vendor/delphi/bcm89501_spi" path="vendor/delphi/bcm89501_spi" revision="cfa0e876f4ac36bc14b2051e4fdf30167b718f59"/>
+
+  <!-- Aptiv extensions which are for development only (no equivalent shipped by Intel) -->
   <project name="bsp/external/libncurses" path="external/libncurses" revision="067ae32f7e4b45bb1cb7ba37d0ffe618905e049f"/>
   <project name="bsp/external/vim" path="external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40"/>
   <project name="bsp/external/picocom" path="external/picocom" revision="e119091d98c069fcd8d36867546196a764772702"/>
   <project name="bsp/external/i2c-tools" path="external/i2c-tools" revision="d3166d1fe46329ee0af6b4faacb9c467d69c2178"/>
   <project name="bsp/external/spi-tools" path="external/spi-tools" revision="7f80b51344e36e4437c7aa447985772f0d6843cc"/>
   <project name="bsp/external/devmem2" path="external/devmem2" revision="8784c6a33ff12923b7ee12ef1be14f3a56fb76ce"/>
-  <project name="bsp/external/bcm89230" path="external/bcm89230" revision="41b450916ffdb338037f38c58eb912461ca4aece"/>
-  <project name="bsp/external/88W8897P" path="external/88W8897P" revision="f79a46b303671e278454099bf4c86f0bb16f828b"/>
   <project name="bsp/vendor/delphi/wifi/marvell/mfgbridge" path="vendor/delphi/wifi/marvell/mfgbridge" revision="3d100edf5050f7b42100334f0447f45a581be96c"/>
-  <project name="bsp/kernel/modules/microchip/most-driver" path="kernel/modules/microchip/most-driver" revision="50d0ba412397e13bc4b64afc587f984c15042cda"/>
-  <project name="bsp/vendor/delphi/bcm89501_spi" path="vendor/delphi/bcm89501_spi" revision="cfa0e876f4ac36bc14b2051e4fdf30167b718f59"/>
   <project name="bsp/external/mxt-app" path="external/mxt-app" revision="d911bb52a4774e9be9dd1664ea0d27c9e5ed843e"/>
   <!-- TODO Abhi: this repo is currently not available. And will not be available /-->
   <!--project name="bsp/external/memtester" path="external/memtester" revision="c6c4765d3b889fc7f84651928ae7a468e0d31938"/-->
   <!-- Android device project -->
-  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="4e1e7e5740e917304cf9593ec674d2568c34ca4c"/>
+  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="2fd4960e2b49aacc5bb89e2593dd8f2336f15ae6"/>
 
   <!-- Project specific Aptiv building blocks -->
 
-  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="ccdd31308f796d2e44e7ab915f10ede97e04bf4f"/>
-  <project name="vendor/delphi/android_vehicle-hal" path="device/delphi/vcc_ihu/private/vehicle-hal" revision="07def3a5f9ad756fc89e0387dc304d4a3924dca0" >
-    <copyfile dest="device/delphi/vcc_ihu/Android.bp" src="blueprintintermediate"/>
-    <copyfile dest="device/delphi/vcc_ihu/private/vehicle-hal/power_vehicle-hal/interfaces/lifecyclecontrol/1.0/Android.bp" src="power_vehicle-hal/interfaces/lifecyclecontrol/1.0/targetspecific/ihu.bp"/>
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="7aaf8942fad97ed9edcfe13682761aff3a450ea2"/>
+    <copyfile dest="vendor/aptiv/components/Android.bp" src="blueprintintermediate"/>
   </project>
-  <project name="vendor/delphi/android_audio-hal" path="device/delphi/vcc_ihu/private/audio-hal" revision="fc0c612b9ccfdb5feb841681f2af3e14b19131c1"/>
-  <project name="vendor/delphi/bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="dbd61649356918a68d523248424876dcf92d162b"/>
-  <project name="vendor/delphi/android_camera" path="device/delphi/vcc_ihu/private/camera" revision="d30ea5ac6cf1105b17e590dac85f8ff5c3e1d56a" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="74aad5555d305482666c5d796e24a38ab08bb19c" />
+  <project name="vendor/delphi/android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="8eca3a1ed3c838533f2e73486f0dad0a18f30540"/>
+  <project name="vendor/delphi/bb_android_desip_key_handler" path="vendor/aptiv/components/bb_android_desip_key_handler" revision="901770311fc195f1b296a4c00e544054fc1f1f0b"/>
+  <project name="vendor/delphi/android_camera" path="vendor/aptiv/components/camera" revision="f183c6c635f1efa411bc833a0e2849d2ebad4b3d" />
   <project name="vendor/delphi/ihu_vf_common" path="device/delphi/vcc_ihu/private/camera/ihu_vf_common" revision="f85d253e4bbf6e9531fb89a4b0c34a2139b61444" />
 
   <!-- Common Delphi building blocks -->
-  <project name="vendor/delphi/bb_reprogramming" path="device/delphi/vcc_ihu/private/bb_reprogramming" revision="386ec6d407e9b792f816f4acf877e0478dca0f84"/>
-  <project name="vendor/delphi/Delphi_Android_Platform_Support" path="device/delphi/vcc_ihu/private/libdelphi_platform" revision="ab6dc87cf1c04fbe6c43a524fc00f71fffcd8f93"/>
-  <project name="vendor/delphi/bb_android_hisip_desip" path="device/delphi/vcc_ihu/private/bb_android_hisip_desip" revision="aac6ca825e6d3b07958eeca792021853fd28c971"/>
-  <project name="vendor/delphi/AShmemService" path="device/delphi/vcc_ihu/private/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498"/>
-  <project name="vendor/delphi/DelphiTraceSystem" path="device/delphi/vcc_ihu/private/DelphiTraceSystem" revision="f306978421ab1a9372a168b0c396000944454627"/>
-  <project name="vendor/delphi/AP_XSAL" path="device/delphi/vcc_ihu/private/libxsal" revision="7595babd4ab1797282efb8c246d396812c4c3d39"/>
-  <project name="vendor/delphi/AP_XSALcpp" path="device/delphi/vcc_ihu/private/libxsalcpp" revision="62f9b948835bcd38ff46a1014191841cdf91f141"/>
-  <project name="vendor/delphi/AP_XSAL_Inline" path="device/delphi/vcc_ihu/private/libxsal_inline" revision="d1a943ba2fdf238513a8d3524ca209ebc68d437e"/>
-  <project name="vendor/delphi/AP_PI" path="device/delphi/vcc_ihu/private/libpi" revision="76d9e26211384a17bd33d04ef3e270dea5317d45"/>
-  <project name="vendor/delphi/AP_Utilities" path="device/delphi/vcc_ihu/private/libAPutilities" revision="0a9252b4923177a37d712ab49407cefe20fd16f9"/>
-  <project name="vendor/delphi/AP_Primitives" path="device/delphi/vcc_ihu/private/libprimitives" revision="ee45b92fea41af4117e2ace30ae4da9e6b0e1c10"/>
-  <project name="vendor/delphi/AP_CppTools" path="device/delphi/vcc_ihu/private/libcpptools" revision="3f3d4c4927e0bcca74fb70b38fe2f3d489edb5cd"/>
+  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="74c9a2e621a625f794e9e9287203cf4a71acc1ae"/>
+  <project name="vendor/delphi/Delphi_Android_Platform_Support" path="vendor/aptiv/components/libdelphi_platform" revision="ab6dc87cf1c04fbe6c43a524fc00f71fffcd8f93"/>
+  <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="aac6ca825e6d3b07958eeca792021853fd28c971"/>
+  <project name="vendor/delphi/AShmemService" path="vendor/aptiv/components/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498"/>
+  <project name="vendor/delphi/DelphiTraceSystem" path="vendor/aptiv/components/DelphiTraceSystem" revision="f306978421ab1a9372a168b0c396000944454627"/>
+  <project name="vendor/delphi/AP_XSAL" path="vendor/aptiv/components/libxsal" revision="7595babd4ab1797282efb8c246d396812c4c3d39"/>
+  <project name="vendor/delphi/AP_XSALcpp" path="vendor/aptiv/components/libxsalcpp" revision="62f9b948835bcd38ff46a1014191841cdf91f141"/>
+  <project name="vendor/delphi/AP_XSAL_Inline" path="vendor/aptiv/components/libxsal_inline" revision="d1a943ba2fdf238513a8d3524ca209ebc68d437e"/>
+  <project name="vendor/delphi/AP_PI" path="vendor/aptiv/components/libpi" revision="76d9e26211384a17bd33d04ef3e270dea5317d45"/>
+  <project name="vendor/delphi/AP_Utilities" path="vendor/aptiv/components/libAPutilities" revision="0a9252b4923177a37d712ab49407cefe20fd16f9"/>
+  <project name="vendor/delphi/AP_Primitives" path="vendor/aptiv/components/libprimitives" revision="ee45b92fea41af4117e2ace30ae4da9e6b0e1c10"/>
+  <project name="vendor/delphi/AP_CppTools" path="vendor/aptiv/components/libcpptools" revision="3f3d4c4927e0bcca74fb70b38fe2f3d489edb5cd"/>
 
-  <project name="vendor/delphi/bbc_threadcpp" path="device/delphi/vcc_ihu/private/bbc_threadcpp" revision="aef6bcfbd21fdde7d88e5eed0b3a7606214dd8ea"/>
-  <project name="vendor/delphi/bbc_boost" path="device/delphi/vcc_ihu/private/bbc_boost" revision="a45840ed216b2a1a9446f83a436ad4845aaecc36"/>
-  <project name="vendor/delphi/bb_libkeyhandling" path="device/delphi/vcc_ihu/private/bb_libkeyhandling" revision="e04aa9d158f44a8886034ec9c7a10d08181ff560"/>
-  <project name="vendor/delphi/bb_libstatechart" path="device/delphi/vcc_ihu/private/bb_libstatechart" revision="c3367691dc1f5d01b9070ead91361323c14605d5"/>
+  <project name="vendor/delphi/bbc_threadcpp" path="vendor/aptiv/components/bbc_threadcpp" revision="aef6bcfbd21fdde7d88e5eed0b3a7606214dd8ea"/>
+  <project name="vendor/delphi/bbc_boost" path="vendor/aptiv/components/bbc_boost" revision="a45840ed216b2a1a9446f83a436ad4845aaecc36"/>
+  <project name="vendor/delphi/bb_libkeyhandling" path="vendor/aptiv/components/bb_libkeyhandling" revision="a867296cedd047ff6bc8b46b4f6948ec7ad8aa1a"/>
+  <project name="vendor/delphi/bb_libstatechart" path="vendor/aptiv/components/bb_libstatechart" revision="c3367691dc1f5d01b9070ead91361323c14605d5"/>
 
   <!-- Common Delphi building blocks to be removed or replaced in future -->
-  <project name="vendor/delphi/bbc_trace" path="device/delphi/vcc_ihu/private/libdbgtrace" revision="b6f20c342483eac60937a47329dac125213f56ab"/>
-  <project name="vendor/delphi/bb_util" path="device/delphi/vcc_ihu/private/libutilities" revision="6f32b236e97b0098afd2dbc7294c23256c2c27e3"/>
+  <project name="vendor/delphi/bbc_trace" path="vendor/aptiv/components/libdbgtrace" revision="b6f20c342483eac60937a47329dac125213f56ab"/>
+  <project name="vendor/delphi/bb_util" path="vendor/aptiv/components/libutilities" revision="6f32b236e97b0098afd2dbc7294c23256c2c27e3"/>
 
   <!-- Common Delphi building blocks that are delivered as binaries -->
-  <project name="vendor/delphi/binaries_android_most" path="device/delphi/vcc_ihu/private/most" revision="b2df3f6381027a1143ccdf0b39af4fea498f041a"/>
-  <project name="vendor/delphi/binaries_android_audioengine" path="device/delphi/vcc_ihu/private/audioengine" revision="8112cee26348a7a6b2d881759031fc0c37e0ab5d"/>
-  <project name="vendor/delphi/binaries_android_audio" path="device/delphi/vcc_ihu/private/audio" revision="e336c99f316f4cd2ad64d16575147c77c38051b0"/>
+  <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="59e40c2cef74fe7c19d42b4343c0431cbaa76c73"/>
+  <project name="vendor/delphi/binaries_android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="0e9cfd817ff94d32d44865af27684dac5a27dc62" />
+  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="961b1ae7516e5afe9d7588779b4f31227c45e3f7"/>
+  <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="ca3101e78afc3d20a69328877214743c18cc699c"/>
+  <project name="vendor/delphi/binaries_android_tunermngr" path="vendor/aptiv/components/vcc_ihu_tuner" revision="36865dd5035a8c20efb1626fe46423fca393b384" />
+  <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="1ff46eb8fd8b3fde9895932db3f485a80d7ecbf8"/>
 
-  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="device/delphi/vcc_ihu/private/lvds_diagnostic_proxies" revision="7352ed6c0d6e65edbe53285ef61bbd96ea945f2d" />
-  <project name="vendor/delphi/binaries_android_diagnostics" path="device/delphi/vcc_ihu/private/vcc_ihu_diagnostics" revision="d436b7b8f8dc0067292652c848b9b2b3b6c2b831" />
-
+  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="7352ed6c0d6e65edbe53285ef61bbd96ea945f2d" />
+  <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="08f50ae7b11e0a6351955e85b408163fb533d9a3" />
   <project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="7ccc2445783d38a871105ffb0668c3e85afc9fc9" />
   <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="216ab3b79e9088b8be23b9f9f10d174ccb82faf1" />
   <project name="vendor/delphi/AP_ProcessManager" path="device/delphi/vcc_ihu/private/ProcessManager" revision="4a8451dd3ebefbd37714a81efde0b372faca1ef1"/>
 
-  <project name="vendor/delphi/binaries_android_tunermngr" path="device/delphi/vcc_ihu/private/vcc_ihu_tuner" revision="36865dd5035a8c20efb1626fe46423fca393b384" />
-  <project name="vendor/delphi/AP_List" path="device/delphi/vcc_ihu/private/liblist" revision="a99527ace4390c9e7900848882aca1b358bbd25c" sync-s="true"/>
   <project name="vendor/delphi/AP_ListSource_API" path="device/delphi/vcc_ihu/private/liblist/ListSource" revision="98bf380cafe45f78a224ad0789c20112c681441e" />
   <project name="vendor/delphi/AP_ListView_API" path="device/delphi/vcc_ihu/private/liblist/ListView" revision="ebabdfa0db1201208f8c6f185d668e148553a926" />
 
