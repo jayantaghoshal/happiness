@@ -3,7 +3,7 @@
   <include name="manifest-intel.xml"/>
 
   <!-- Aptiv device trees (config files for Delphi platforms) -->
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="ae3772bcc58bb5ca601e526769f73a55c1ffbb60"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="1e3bef273e9c5e4597719760741f327c1c348b86"/>
   <project name="bsp/device/delphi/dash.2" path="device/delphi/dash.2" revision="259a80e77fb8d0a7481f76661389d55c9282d68c"/>
 
   <!-- modifications / bug fixes implemented for Aptiv platforms (rebased for each new release from Intel) -->
@@ -28,7 +28,7 @@
   </project>
 
   <remove-project name="bsp/hardware/intel/efi/kernelflinger"/>
-  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="63ff8ef7e8b6c84222943bb7b9a893e2ad0e5fcc"/>
+  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="7c75e5ef6ca2ad62e06f9bed182eb07c255693f0"/>
 
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
   <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="6182c49be2b9d82717900ce3321d6fd877793b5e"/>
