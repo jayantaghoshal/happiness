@@ -28,7 +28,7 @@
   </project>
 
   <remove-project name="bsp/hardware/intel/efi/kernelflinger"/>
-  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="7c75e5ef6ca2ad62e06f9bed182eb07c255693f0"/>
+  <project name="bsp/hardware/intel/efi/kernelflinger" path="hardware/intel/kernelflinger" revision="918d13e856f44198cc7649ffe28d8b0119e8e611"/>
 
   <remove-project name="bsp/vendor/intel/fw/evmm"/>
   <project name="bsp/vendor/intel/fw/evmm" path="vendor/intel/fw/evmm" revision="6182c49be2b9d82717900ce3321d6fd877793b5e"/>
