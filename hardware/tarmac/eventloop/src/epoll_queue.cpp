@@ -12,6 +12,7 @@
 #define EFD_SEMAPHORE (1 << 0)
 #endif
 
+constexpr uint32_t MAX_EVENTS_PROCESSED_AT_ONCE = 16;
 constexpr int FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE = -1;
 
 using tarmac::eventloop::EPollQueue;
@@ -31,8 +32,8 @@ EPollQueue::EPollQueue() : epollfd_(epoll_create1(0)), eventfd_((eventfd(0, EFD_
 void EPollQueue::enqueue(Task&& t) {
     {
         // lock scope
-        std::lock_guard<std::mutex> lock(mutex_);
-        queue_.emplace(t);
+        std::lock_guard<std::mutex> lock(tasks_mutex_);
+        tasks_normal_.emplace(t);
     }
     const uint64_t dummy = 1;
     int r = write(eventfd_, &dummy, sizeof(dummy));
@@ -43,20 +44,20 @@ void EPollQueue::addFd(int fd, Task&& t, uint32_t events) {
     int r = 0;
     int action;
     {
-        std::lock_guard<std::mutex> lock(mutex_);
-        action = (fdTasks_.find(fd) != fdTasks_.end()) ? EPOLL_CTL_MOD : EPOLL_CTL_ADD;
+        std::lock_guard<std::mutex> lock(tasks_mutex_);
+        action = (tasks_fd_.find(fd) != tasks_fd_.end()) ? EPOLL_CTL_MOD : EPOLL_CTL_ADD;
     }
     epoll_event event;
     event.events = events;
     event.data.fd = fd;
     r = epoll_ctl(epollfd_, action, fd, &event);
     if (r == -1) {
-        ALOGE("EPOLL_CTL_ADD fd failed: %s", strerror(errno));
+        ALOGE("EPOLL_CTL_ADD/MOD fd failed: %s", strerror(errno));
         throw std::system_error(errno, std::system_category());
     }
     {
-        std::lock_guard<std::mutex> lock(mutex_);
-        fdTasks_[fd] = t;
+        std::lock_guard<std::mutex> lock(tasks_mutex_);
+        tasks_fd_[fd] = t;
     }
 }
 
@@ -70,19 +71,19 @@ bool EPollQueue::removeFd(int fd) {
     }
     uint16_t removed;
     {
-        std::lock_guard<std::mutex> lock(mutex_);
-        removed = fdTasks_.erase(fd);
+        std::lock_guard<std::mutex> lock(tasks_mutex_);
+        removed = tasks_fd_.erase(fd);
     }
     return removed > 0;
 }
 
 std::vector<Task> EPollQueue::dequeue() {
     std::vector<Task> result;
-    epoll_event events[MAX_EVENTS];
+    epoll_event events[MAX_EVENTS_PROCESSED_AT_ONCE];
 
     int r = 0;
     do {
-        r = epoll_wait(epollfd_, events, MAX_EVENTS, -1);  // -1 -> wait forever
+        r = epoll_wait(epollfd_, events, MAX_EVENTS_PROCESSED_AT_ONCE, -1);  // -1 -> wait forever
         // Check the following stackoverflow QA as to why this loop is here:
         // https://stackoverflow.com/questions/6870158/epoll-wait-fails-due-to-eintr-how-to-remedy-this
     } while (r < 0 && errno == EINTR);
@@ -98,27 +99,27 @@ std::vector<Task> EPollQueue::dequeue() {
 
         if (event.data.fd == FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE) {
             // this is a "normal" enqueued task, lets get them all
-            int cnt = 0;
+            int popped_task_normal_cnt = 0;
             {  // lock scope
-                std::lock_guard<std::mutex> lock(mutex_);
-                while (!queue_.empty()) {
-                    result.push_back(queue_.front());
-                    queue_.pop();
-                    cnt++;
+                std::lock_guard<std::mutex> lock(tasks_mutex_);
+                while (!tasks_normal_.empty()) {
+                    result.push_back(tasks_normal_.front());
+                    tasks_normal_.pop();
+                    popped_task_normal_cnt++;
                 }
             }
             // now read the same amount of times
             uint64_t dummy;
-            while (cnt > 0) {
+            while (popped_task_normal_cnt > 0) {
                 int r = read(eventfd_, &dummy, sizeof(dummy));  // one read for each write above
                 ALOGE_IF(r < 0, "read failed: %s", strerror(errno));
-                cnt--;
+                popped_task_normal_cnt--;
             }
         } else {
-            // this is fs associated Task, lets find the right handler for it.
-            std::lock_guard<std::mutex> lock(mutex_);
-            auto iter = fdTasks_.find(events[i].data.fd);
-            if (iter != fdTasks_.end()) {
+            // this is fd associated Task, lets find the right handler for it.
+            std::lock_guard<std::mutex> lock(tasks_mutex_);
+            auto iter = tasks_fd_.find(events[i].data.fd);
+            if (iter != tasks_fd_.end()) {
                 result.push_back(iter->second);
             }
         }

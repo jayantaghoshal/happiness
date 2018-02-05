@@ -31,12 +31,12 @@ class EPollQueue {
     std::vector<Task> dequeue();
 
   private:
-    std::queue<Task> queue_;
-    std::map<int, Task> fdTasks_;
-    mutable std::mutex mutex_;
-    FileDescriptor epollfd_;
-    FileDescriptor eventfd_;
-    const unsigned int MAX_EVENTS = 5;
+    std::mutex tasks_mutex_;
+    std::queue<Task> tasks_normal_;
+    std::map<int, Task> tasks_fd_;
+
+    const FileDescriptor epollfd_;
+    const FileDescriptor eventfd_;
 };
 
 }  // namespace eventloop
