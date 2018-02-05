@@ -45,17 +45,13 @@ class IplmTestFixture : public ::testing::Test {
         // For now, abort all tests manually
         ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
 
-        // Kill conflicting IpcbD
-        int ipcb_pid = getProcIdByName("/vendor/bin/hw/ipcbd iplm UDPB");
-        if (-1 != ipcb_pid) {
-            kill(ipcb_pid, SIGTERM);
-        }
+        // Stop IpcbD serving IplmD
+        ALOGD("SetUpTestCase: Stopping ipcbd-iplm");
+        getCmdOut("stop ipcbd-iplm");
 
-        // Kill conflicting IplmD
-        int iplm_pid = getProcIdByName("/vendor/bin/hw/iplmd");
-        if (-1 != iplm_pid) {
-            kill(iplm_pid, SIGTERM);
-        }
+        // Stop conflicting IplmD
+        ALOGD("SetUpTestCase: Stopping iplmd");
+        getCmdOut("stop iplmd");
 
         // Start IpcbD for test with mocked localconfig
         std::string new_ipcb_pid_str = getCmdOut(
@@ -193,6 +189,14 @@ class IplmTestFixture : public ::testing::Test {
         if (-1 != new_iplm_pid) {
             kill(new_iplm_pid, SIGTERM);
         }
+
+        // Restart IpcbD for IplmD
+        ALOGD("TearDownTestCase: Starting ipcbd-iplm");
+        getCmdOut("start ipcbd-iplm");
+
+        // Restart IplmD
+        ALOGD("TearDownTestCase: Starting iplmd");
+        getCmdOut("start iplmd");
 
         ALOGD("- TearDownTestCase");
     }
