@@ -94,6 +94,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         my_shell = getattr(self.dut.shell, "data_shell")
         shell_response = my_shell.Execute(["cat /proc/stat"])
         stats_data = io.StringIO(unicode(shell_response[const.STDOUT][0]))
+        stats_data.readline() #remove first line with total cpu load
         core_load = {} # type: typing.Any
 
         for core in range(cores):
