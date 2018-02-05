@@ -71,9 +71,6 @@
   <remove-project name="bsp/device/intel/sepolicy"/>
   <project name="bsp/device/intel/sepolicy" path="device/intel/sepolicy" revision="055cb610eec7e0e776309bd6f6f0c90df742720a"/>
 
-  <remove-project name="bsp/vendor/intel/build"/>
-  <project name="bsp/vendor/intel/build" path="device/intel/build" revision="ce0df60741ebdc4683a8110c0103b53432acaa4d"/>
-
   <remove-project name="bsp/vendor/intel/common"/>
   <project name="bsp/vendor/intel/common" path="device/intel/common" revision="013126dc17f0deefb8c26d51ccab92b22f47175d">
     <copyfile dest="vendor/intel/hardware/Android.bp" src="Android_intel.bp"/>
