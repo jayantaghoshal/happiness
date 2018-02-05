@@ -1,4 +1,4 @@
 functional_area: 'Connectivity'
 component: 'Network Management'
 deployment: 'native-suite'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

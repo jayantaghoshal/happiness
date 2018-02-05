@@ -1,4 +1,4 @@
 functional_area: 'IP Command Bus'
 component: 'ASN1 encoding/decoding support'
 deployment: 'native-shared-lib'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

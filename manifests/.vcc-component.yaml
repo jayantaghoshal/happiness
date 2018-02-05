@@ -1,4 +1,4 @@
 functional_area: 'Build System'
 component: 'System Manifests XML'
 deployment: 'none'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

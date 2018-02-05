@@ -1,4 +1,4 @@
 functional_area: 'Platform Platform Support'
 component: 'Local Config'
 deployment: 'native-shared-lib'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

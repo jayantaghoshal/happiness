@@ -1,4 +1,4 @@
 functional_area: 'VCC Vehicle HAL'
 component: 'android.hardware.automotive.vehicle.vcc@2.0'
 deployment: 'native-binary'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

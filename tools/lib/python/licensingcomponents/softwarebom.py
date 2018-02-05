@@ -3,10 +3,10 @@
 
 import jinja2
 import os
-from licensingcomponents.softwarebom import descriptions, source, validation
+from licensingcomponents.swbom import descriptions, source, validation
 
 env = jinja2.Environment(
-    loader=jinja2.PackageLoader('licensingcomponents'),
+    loader=jinja2.PackageLoader('licensingcomponents.swbom'),
     autoescape=jinja2.select_autoescape(['html', 'xml'])
 )
 
