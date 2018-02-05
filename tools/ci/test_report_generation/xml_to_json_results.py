@@ -140,8 +140,10 @@ def main():
         pathname = os.path.join(top_dir, f)
         if os.path.isdir(pathname):
             hostname = os.path.basename(pathname).split("_")[-1]
-            xmlToJSON_Tradefed(os.path.join(pathname, "tradefed"), hostname)
-            xmlToJSON_VTS(os.path.join(pathname, "vts"), hostname)
+            if os.path.isdir(os.path.join(pathname, "tradefed")):
+                xmlToJSON_Tradefed(os.path.join(pathname, "tradefed"), hostname)
+            if os.path.isdir(os.path.join(pathname, "vts")):
+                xmlToJSON_VTS(os.path.join(pathname, "vts"), hostname)
 
 
 if __name__ == "__main__":
