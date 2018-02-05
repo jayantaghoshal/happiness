@@ -12,13 +12,15 @@
 #define EFD_SEMAPHORE (1 << 0)
 #endif
 
+constexpr int FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE = -1;
+
 using tarmac::eventloop::EPollQueue;
 using tarmac::eventloop::Task;
 
 EPollQueue::EPollQueue() : epollfd_(epoll_create1(0)), eventfd_((eventfd(0, EFD_SEMAPHORE))) {
     epoll_event event;
     event.events = EPOLLIN;
-    event.data.ptr = nullptr;  // this indicates a "normal" enqueue task
+    event.data.fd = FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE;
     int r = epoll_ctl(epollfd_, EPOLL_CTL_ADD, eventfd_, &event);
     if (r == -1) {
         ALOGE("EPOLL_CTL_ADD failed: %s", strerror(errno));
@@ -77,19 +79,24 @@ bool EPollQueue::removeFd(int fd) {
 std::vector<Task> EPollQueue::dequeue() {
     std::vector<Task> result;
     epoll_event events[MAX_EVENTS];
+
     int r = 0;
     do {
         r = epoll_wait(epollfd_, events, MAX_EVENTS, -1);  // -1 -> wait forever
         // Check the following stackoverflow QA as to why this loop is here:
         // https://stackoverflow.com/questions/6870158/epoll-wait-fails-due-to-eintr-how-to-remedy-this
     } while (r < 0 && errno == EINTR);
+
     if (r < 0) {
         ALOGE("epoll_wait failed: %s", strerror(errno));
         throw std::system_error(errno, std::system_category());
     }
+
     // we got some stuff to work on
     for (int i = 0; i < r; ++i) {
-        if (events[i].data.ptr == nullptr) {
+        const epoll_event& event = events[i];
+
+        if (event.data.fd == FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE) {
             // this is a "normal" enqueued task, lets get them all
             int cnt = 0;
             {  // lock scope
@@ -108,6 +115,7 @@ std::vector<Task> EPollQueue::dequeue() {
                 cnt--;
             }
         } else {
+            // this is fs associated Task, lets find the right handler for it.
             std::lock_guard<std::mutex> lock(mutex_);
             auto iter = fdTasks_.find(events[i].data.fd);
             if (iter != fdTasks_.end()) {
