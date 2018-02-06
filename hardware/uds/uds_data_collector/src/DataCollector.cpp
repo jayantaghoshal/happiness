@@ -4,10 +4,8 @@
  */
 
 #include "DataCollector.h"
-
-#include <mutex>
-
 #include <cutils/log.h>
+#include <mutex>
 #undef LOG_TAG
 #define LOG_TAG "uds-collector"
 

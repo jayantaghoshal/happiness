@@ -98,3 +98,7 @@ cc_binary {
         "ip-vcc",
     ],
 }
+
+subdirs = [
+    "*",
+]
