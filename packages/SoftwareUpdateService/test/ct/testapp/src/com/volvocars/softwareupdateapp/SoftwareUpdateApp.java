@@ -25,7 +25,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 
 import android.graphics.Rect;
 
-public class SoftwareUpdateApp extends AppCompatActivity {
+public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp{
     private static final String LOG_TAG = "SwUpdApp";
     private SoftwareUpdateManager softwareUpdateManager = null;
 
@@ -36,7 +36,6 @@ public class SoftwareUpdateApp extends AppCompatActivity {
 
     private FloatingActionButton actionsFab;
     private FloatingActionButton availableFab;
-
     private LinearLayout layoutFabAvailable;
     private boolean fabExpanded = false;
 
@@ -101,14 +100,12 @@ public class SoftwareUpdateApp extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        assignments = new ArrayList<SoftwareAssignment>();
-        adapter = new AssignmentAdapter(this, assignments);
-
-        actionsFab = (FloatingActionButton) findViewById(R.id.actionFab);
         layoutFabAvailable = (LinearLayout) findViewById(R.id.getAvailable);
+        actionsFab = (FloatingActionButton) findViewById(R.id.actionFab);
         availableFab = (FloatingActionButton) findViewById(R.id.getAvailableFab);
 
+        assignments = new ArrayList<SoftwareAssignment>();
+        adapter = new AssignmentAdapter(this, assignments, this);
         actionsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,5 +167,14 @@ public class SoftwareUpdateApp extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "InForeground");
+    }
+
+    @Override
+    public void commissionAssignment(String uuid) {
+        try {
+            softwareUpdateManager.CommissionAssignment(uuid);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
     }
 }

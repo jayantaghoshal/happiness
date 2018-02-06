@@ -5,7 +5,6 @@
 
 package com.volvocars.softwareupdateapp;
 
-public interface ISoftwareUpdateAppCallback {
-
-
+public interface ISoftwareUpdateApp {
+    public abstract void commissionAssignment(String uuid);
 }
