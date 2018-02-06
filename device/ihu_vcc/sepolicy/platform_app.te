@@ -1,0 +1,4 @@
+# platform_app
+
+allow platform_app config_file:dir getattr;
+allow platform_app proc_timer:file { open read getattr };

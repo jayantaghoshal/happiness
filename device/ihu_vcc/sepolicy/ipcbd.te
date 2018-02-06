@@ -3,3 +3,11 @@ type ipcbd, domain;
 type ipcbd_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(ipcbd)
+
+allow ipcbd fwmarkd_socket:sock_file write;
+allow ipcbd iplmd:binder call;
+allow ipcbd self:udp_socket { read write };
+allow ipcbd self:tcp_socket { connect setopt };
+
+# port?
+allow ipcbd port:tcp_socket name_connect;

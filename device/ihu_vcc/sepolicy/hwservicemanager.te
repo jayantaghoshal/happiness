@@ -10,3 +10,11 @@ allow hwservicemanager carconfig-updater:dir search;
 allow hwservicemanager carconfig-updater:file { open read };
 allow hwservicemanager carconfig-updater:process getattr;
 
+allow hwservicemanager iplmd:dir search;
+allow hwservicemanager iplmd:file read;
+
+allow hwservicemanager ipcbd:process getattr;
+
+allow hwservicemanager netmand:dir search;
+allow hwservicemanager netmand:file read;
+allow hwservicemanager netmand:process getattr;

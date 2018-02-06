@@ -1,0 +1,9 @@
+# netd
+
+allow netd cloudd:fd use;
+
+allow netd ipcbd:fd use;
+allow netd ipcbd:tcp_socket { read write getopt setopt };
+
+allow netd proc_net:dir { add_name write };
+allow netd proc_net:file create;
