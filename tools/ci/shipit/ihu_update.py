@@ -172,7 +172,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                 VIP.expect_line(".*PBL Version.*", 15)
             except Exception:
                 logger.warning("As usually swdl e failed due to power moding, go for emergency one")
-                VIP.writeline("swdl er")  # brutal # swdl e
+                VIP.writeline("swdl er")  # brutal swdl e
 
             serial_mapping.verify_serial_is_vip_pbl(ihu_serials.vip, timeout_sec=15)
             time.sleep(1)
@@ -241,6 +241,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
 
 def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSerials):
     try:
+        wait_for_device_adb(adb_executable)
         adb_bootmode = run([adb_executable,
                             "get-state"],
                            timeout_sec=60)
@@ -270,11 +271,11 @@ def wait_for_boot_completed(adb_executable: str):
         time.sleep(4)
 
 
-def wait_for_device_adb(adb_executable):
+def wait_for_device_adb(adb_executable, timeout_sec=60 * 7):
     logging.info("Wait for device to enter device-mode via ADB")
     check_output_logged([adb_executable,
                          "wait-for-device"],
-                        timeout_sec=60 * 7)
+                        timeout_sec=timeout_sec)
 
 
 def str2bool(v: str) -> bool:
