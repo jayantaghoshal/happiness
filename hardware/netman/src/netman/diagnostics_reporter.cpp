@@ -44,11 +44,14 @@ namespace netman {
 using tarmac::eventloop::IDispatcher;
 
 DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {
-    interfaces_[TCAM] = {lcfg_->GetString("eth1.name"), std::make_unique<uds::DiagnosticTestResultsReporter>(TCAM_ID)};
-    interfaces_[MOST] = {lcfg_->GetString("meth0.name"), std::make_unique<uds::DiagnosticTestResultsReporter>(MOST_ID)};
-    interfaces_[APIX] = {lcfg_->GetString("eth0.name"), std::make_unique<uds::DiagnosticTestResultsReporter>(APIX_ID)};
+    interfaces_[APIX] = {lcfg_->GetString("eth0", "name"),
+                         std::make_unique<uds::DiagnosticTestResultsReporter>(APIX_ID)};
+    interfaces_[TCAM] = {lcfg_->GetString("eth1", "name"),
+                         std::make_unique<uds::DiagnosticTestResultsReporter>(TCAM_ID)};
+    interfaces_[MOST] = {lcfg_->GetString("eth2", "name"),
+                         std::make_unique<uds::DiagnosticTestResultsReporter>(MOST_ID)};
 
-    eth_gw_address_ = lcfg_->GetString("eth1.ip-address");
+    eth_gw_address_ = lcfg_->GetString("eth1", "ip-address");
 
     apix_traffic_splitting_ = IptablesConfig().isSplitTrafficSet(interfaces_[APIX].name, eth_gw_address_);
 
