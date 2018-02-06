@@ -26,6 +26,8 @@ void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std:
 bool SetupInterface(const char* interface_name, const std::vector<uint8_t>& mac_address, const char* ip_addr,
                     const char* netmask, const char* broadcast_addr, uint32_t mtu);
 
+bool SetupVLan(const InterfaceConfiguration& interface_configuration);
+
 bool BringInterfaceUp(const char* interface_name);
 
 bool TakeInterfaceDown(const char* interface_name);

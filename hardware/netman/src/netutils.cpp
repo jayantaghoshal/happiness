@@ -40,7 +40,7 @@ namespace {
 
 void ValidateReturnStatus(const int command_status, const std::string& what) {
     if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
-        throw std::system_error(command_status, std::generic_category(), what.c_str());
+        throw std::system_error(WEXITSTATUS(command_status), std::system_category(), what.c_str());
     }
 }
 
@@ -500,6 +500,26 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_c
         ConvertMacAddress(conf.mac_address, conf.mac_address_bytes);
         conf.broadcast_address = lcfg->GetString(name, "broadcast-address");
         conf.mtu = static_cast<std::uint32_t>(lcfg->GetInt(name, "mtu"));
+        try {
+            auto string_array = lcfg->GetStringArray(name, "vlan");
+            for (auto& str : string_array) {
+                // strip out any whitespace characters
+                str.erase(std::remove_if(str.begin(), str.end(), isspace), str.end());
+
+                std::istringstream str_stream(str);
+                std::string attr;
+                InterfaceConfiguration::vlan_conf entry;
+
+                while (std::getline(str_stream, attr, ',') && !attr.empty()) {
+                    std::string key, value;
+                    std::getline(std::getline(std::istringstream(attr), key, '=') >> std::ws, value);
+                    entry[key] = value;
+                }
+                conf.vlan.push_back(entry);
+            }
+        } catch (const std::runtime_error& e) {
+            ALOGE("%s. Skipping...", e.what());
+        }
         interface_configurations->push_back(conf);
     }
 }
@@ -631,6 +651,37 @@ bool SetupInterface(const char* interface_name, const std::vector<uint8_t>& mac_
     }
 
     return true;
+}
+
+bool SetupVLan(const InterfaceConfiguration& interface_configuration) {
+    auto ret = false;
+    for (auto& entry : interface_configuration.vlan) {
+        try {
+            // TODO (Abhi) Change below implementation to use netlink library instead
+            std::string cmd = "/vendor/bin/ip link add link " + interface_configuration.name + " name " +
+                              entry.at("name") + " type vlan id " + entry.at("id") + " egress 0:" + entry.at("prio");
+
+            try {
+                ValidateReturnStatus(std::system(cmd.c_str()),
+                                     std::string("Failed to setup Vlan interface ") + entry.at("name"));
+            } catch (const std::system_error& e) {
+                if (e.code().value() != ENOENT) throw;
+            }
+
+            if (!SetIpAddress(entry.at("name").c_str(), entry.at("ip-address").c_str(), entry.at("netmask").c_str(),
+                              entry.at("broadcast-address").c_str())) {
+                return false;
+            }
+
+            if (!BringInterfaceUp(entry.at("name").c_str())) {
+                return false;
+            }
+
+        } catch (const std::out_of_range& e) {
+            return false;
+        }
+    }
+    return ret;
 }
 
 }  // namespace netman

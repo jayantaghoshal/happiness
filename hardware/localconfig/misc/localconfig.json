@@ -67,7 +67,10 @@
       "broadcast-address": "198.18.255.255",
       "netmask": "255.255.240.0",
       "mac-address": "02:00:00:02:12:01",
-      "mtu": 1500
+      "mtu": 1500,
+      "vlan": [
+          "name=tcam0_ac, id=172, prio=3, ip-address=198.19.101.66, netmask=255.255.255.224, broadcast-address=198.19.101.95"
+      ]
   },
   "meth0": {
       "ip-address": "198.18.2.1",

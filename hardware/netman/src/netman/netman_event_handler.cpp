@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include <system_error>
 #include "netutils.h"
 
 #define LOG_TAG "Netmand"
@@ -58,9 +59,13 @@ void NetmanEventHandler::HandleEvent(const char* uevent, const int message_lengt
 
     if (handle_new_link_evt) {
         for (const auto& ic : interface_configurations_) {
-            if (interface == ic.name) {
-                SetupInterface(ic.name.c_str(), ic.mac_address_bytes, ic.ip_address.c_str(), ic.netmask.c_str(),
-                               ic.broadcast_address.c_str(), ic.mtu);
+            try {
+                if (interface == ic.name && SetupInterface(ic.name.c_str(), ic.mac_address_bytes, ic.ip_address.c_str(),
+                                                           ic.netmask.c_str(), ic.broadcast_address.c_str(), ic.mtu)) {
+                    SetupVLan(ic);
+                }
+            } catch (const std::system_error& e) {
+                ALOGE("%s", e.what());
             }
         }
     }

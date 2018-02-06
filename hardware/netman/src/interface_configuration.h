@@ -7,12 +7,15 @@
 
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace vcc {
 namespace netman {
 
 struct InterfaceConfiguration {
+    using vlan_conf = std::unordered_map<std::string, std::string>;
+
     std::string name;
     std::string ip_address;
     std::string netmask;
@@ -20,6 +23,7 @@ struct InterfaceConfiguration {
     std::string mac_address;
     std::vector<std::uint8_t> mac_address_bytes;
     std::uint32_t mtu = 0;
+    std::vector<vlan_conf> vlan;
 };
 
 }  // namespace netman
