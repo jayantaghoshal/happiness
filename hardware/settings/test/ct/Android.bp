@@ -16,9 +16,13 @@ cc_test {
         "libutils",
         "liblog",
         "vendor.volvocars.hardware.settings@1.0",
-        "nlohmann-json-v3",
         "libtarmac",
     ],
+
+    header_libs: [
+        "nlohmann-json-3.0.1",
+    ],
+
     cflags: ["-Wno-unused-parameter"],
     static_libs: ["libgmock"],
     test_suites: ["vts"],

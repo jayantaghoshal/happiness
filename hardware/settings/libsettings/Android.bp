@@ -26,13 +26,20 @@ cc_library_shared {
         "libbase",
         "liblog",
         "vendor.volvocars.hardware.settings@1.0",
-        "nlohmann-json-v3",
         "libtarmac",
     ],
+
     export_shared_lib_headers: [
-        "nlohmann-json-v3",
-        "libtarmac",
         "vendor.volvocars.hardware.settings@1.0",
+        "libtarmac",
+    ],
+
+    header_libs: [
+        "nlohmann-json-3.0.1",
+    ],
+
+    export_header_lib_headers: [
+        "nlohmann-json-3.0.1",
     ],
 
     tidy_checks: [
