@@ -27,7 +27,8 @@ PRODUCT_PACKAGES += \
 # VCC System Apps/Services
 #############################################################
 PRODUCT_PACKAGES += \
-TimeUpdateService
+    TimeUpdateService \
+    LcfService
 
 
 ##############################################################

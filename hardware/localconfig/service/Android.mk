@@ -18,9 +18,7 @@ LOCAL_PROGUARD_ENABLED := disabled
 
 LOCAL_STATIC_JAVA_LIBRARIES += android.volvocars.localconfig
 
-LOCAL_STATIC_JAVA_LIBRARIES += com.volvocars.localconfig_java_jni_lib
-
-LOCAL_MULTILIB := 64
+LOCAL_JNI_SHARED_LIBRARIES := liblocalconfig_jni
 
 include $(BUILD_PACKAGE)
 include $(call all-makefiles-under,$(LOCAL_PATH))

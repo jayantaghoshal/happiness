@@ -9,7 +9,6 @@
 #include "jni.h"
 #include "utils/Log.h"
 
-#define LOG_TAG "LocalConfigJNICLIB"
 auto *lcfg = vcc::LocalConfigDefault();
 
 std::string jStringToString(JNIEnv *env, jstring jStr) {
@@ -127,7 +126,7 @@ static const JNINativeMethod sMethods[] = {
 };
 
 int register_android_LocalConfig(JNIEnv *env) {
-    return jniRegisterNativeMethods(env, "com/volvocars/localconfig/LcfLibrary", sMethods, NELEM(sMethods));
+    return jniRegisterNativeMethods(env, "com/volvocars/localconfig/ILocalConfigImpl", sMethods, NELEM(sMethods));
 }
 
 extern "C" jint JNI_OnLoad(JavaVM *vm, void * /* reserved */) {

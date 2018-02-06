@@ -20,14 +20,18 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
     @GuardedBy("ILocalConfigImpl.class")
     private static ILocalConfigImpl sInstance = null;
 
-    private static LcfLibrary sLcfinstance = null;
+    static {
+        /*
+         * Load the JNI shared library
+         */
+        System.loadLibrary("localconfig_jni");
+    }
 
     private final Context mContext;
 
     public synchronized static ILocalConfigImpl getInstance(Context serviceContext) {
         if (sInstance == null) {
             sInstance = new ILocalConfigImpl(serviceContext);
-            sInstance.init();
         }
         return sInstance;
     }
@@ -36,7 +40,6 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
         if (sInstance == null) {
             return;
         }
-        sInstance.release();
         sInstance = null;
     }
 
@@ -45,40 +48,29 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
         mContext = serviceContext;
     }
 
-    private void init() {
-        sLcfinstance = new LcfLibrary();
-    }
-
-    private void release() {
-    }
-
     @Override
     public int getLocalConfigInteger(String key){
         int lcfval = 0;
-        if(sLcfinstance != null) {
-            assertLcfgPermission(mContext);
-            try {
-                lcfval = sLcfinstance.getInt(key);
-            }
-            catch(RuntimeException e) {
-                throw new IllegalArgumentException(e.getMessage());
-            }
-
+        assertLcfgPermission(mContext);
+        try {
+            lcfval = getNativeInt(key);
         }
+        catch(RuntimeException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
         return lcfval;
     }
 
     @Override
     public String getLocalConfigString(String key)  {
         String lcfval = "";
-        if(sLcfinstance != null) {
-            assertLcfgPermission(mContext);
-            try {
-                lcfval = sLcfinstance.getString(key);
-            }
-            catch(RuntimeException e) {
-                 throw new IllegalArgumentException(e.getMessage());
-             }
+        assertLcfgPermission(mContext);
+        try {
+             lcfval = getNativeString(key);
+        }
+        catch(RuntimeException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
         return lcfval;
     }
@@ -87,14 +79,12 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
     public boolean getLocalConfigBoolean(String key) throws RuntimeException {
         /* Invalid value should be returned */
         boolean lcfval = false;
-        if(sLcfinstance != null) {
-            assertLcfgPermission(mContext);
-            try {
-                lcfval = sLcfinstance.getBoolean(key);
-            }
-            catch(RuntimeException e) {
-                 throw new IllegalArgumentException(e.getMessage());
-            }
+        assertLcfgPermission(mContext);
+        try {
+            lcfval = getNativeBool(key);
+        }
+        catch(RuntimeException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
         return lcfval;
     }
@@ -103,14 +93,12 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
     public double getLocalConfigDouble(String key) throws RuntimeException {
 
         double lcfval = 0;
-        if(sLcfinstance != null) {
-            assertLcfgPermission(mContext);
+        assertLcfgPermission(mContext);
         try {
-            lcfval = sLcfinstance.getDouble(key);
+            lcfval = getNativeDouble(key);
         }
         catch(RuntimeException e) {
-                 throw new IllegalArgumentException(e.getMessage());
-        }
+            throw new IllegalArgumentException(e.getMessage());
         }
         return lcfval;
     }
@@ -122,4 +110,9 @@ public class ILocalConfigImpl extends ILocalConfig.Stub {
                     "requires " + LocalConfig.PERMISSION_LCFG);
         }
     }
+
+    native private int getNativeInt(String inputValue);
+    native private String getNativeString(String inputValue);
+    native private boolean getNativeBool(String inputValue);
+    native private double getNativeDouble(String inputValue);
 }
