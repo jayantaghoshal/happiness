@@ -31,6 +31,8 @@ git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:294
 
 git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ json_to_html_results.py | tar -x
 
+git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ test_reporting.py | tar -x
+
 git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ volvo_logo.png | tar -x
 
 set +x
@@ -41,7 +43,9 @@ python3 xml_to_json_results.py
 
 python3 json_to_html_results.py
 
-rm -rf xml_to_json_results.py json_to_html_results.py
+python3 test_reporting.py
+
+rm -rf xml_to_json_results.py json_to_html_results.py test_reporting.py
 
 cd "$WORKSPACE"
 
