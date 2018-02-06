@@ -26,7 +26,6 @@ import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
 import com.volvocars.cloudservice.SoftwareAssignment;
 
-
 /**
 *
 */
@@ -37,42 +36,17 @@ public class SoftwareUpdateService extends Service {
 
     private SoftwareUpdateManagerImpl software_update_manager;
 
-    private FoundationServicesApi fsapi = null;
     private SoftwareManagementApi swapi = null;
 
     private int state = 0; // Dummy state
 
-    private FoundationServicesApiConnectionCallback fsapi_callback = new FoundationServicesApiConnectionCallback() {
-        @Override
-        public void onServiceConnected() {
-            Log.d(LOG_TAG, "Connected to FSAPI");
-
-            // Set some state?
-
-            // Check SWApi availability...
-            try {
-                if(fsapi.IsFeatureAvailable("SoftwareManagement")) {
-                    // Start SWApi if available...
-                    swapi = new SoftwareManagementApi(context, swapi_callback);
-                } else {
-                    Log.w(LOG_TAG, "Software Management not available, and will not be used.\n" +
-                                   "TODO: Make IsFeatureAvailable to accept a callback that can be used from FSAPI");
-                }
-            } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Connection to FSAPI was lost. How to handle?");
-                // Set some state?
-            }
-        }
-        @Override
-        public void onServiceDisconnected() {
-            Log.d(LOG_TAG, "Connection Lost");
-        }
-    };
-
     private SoftwareManagementApiConnectionCallback swapi_callback = new SoftwareManagementApiConnectionCallback() {
         @Override
-        public void onServiceConnected(){
+        public void onServiceConnected() {
             Log.d(LOG_TAG, "Connected to SWAPI");
+
+            state = 1;
+            software_update_manager.UpdateState(state);
 
             ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
 
@@ -85,9 +59,9 @@ public class SoftwareUpdateService extends Service {
                 @Override
                 public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
                     String list = "";
-                    if(code == 200) {
-                        list +=  "#### SOFTWARE ASSIGNMENT LIST ####\n";
-                        for(SoftwareAssignment s : software_list) {
+                    if (code == 200) {
+                        list += "#### SOFTWARE ASSIGNMENT LIST ####\n";
+                        for (SoftwareAssignment s : software_list) {
                             list += s.toString() + "\n-------------\n";
                         }
                     } else {
@@ -96,9 +70,10 @@ public class SoftwareUpdateService extends Service {
 
                     Log.i(LOG_TAG, list);
 
-                }};
+                }
+            };
 
-            if(swapi != null) {
+            if (swapi != null) {
                 try {
                     swapi.GetSoftwareAssigmentList(swapi_callback);
                 } catch (RemoteException e) {
@@ -108,10 +83,11 @@ public class SoftwareUpdateService extends Service {
 
             // Set some state?
         }
+
         @Override
-        public void onServiceDisconnected(){
+        public void onServiceDisconnected() {
             Log.d(LOG_TAG, "Connection to SWAPI was lost. How to handle?");
-            // Set some state?
+            state = 0;
         }
     };
 
@@ -124,7 +100,7 @@ public class SoftwareUpdateService extends Service {
         context = this;
 
         // Connect to FSApi
-        fsapi = new FoundationServicesApi(context, fsapi_callback);
+        swapi = new SoftwareManagementApi(context, swapi_callback);
 
         // Provide SUSApi
         software_update_manager = new SoftwareUpdateManagerImpl(this);
@@ -135,7 +111,6 @@ public class SoftwareUpdateService extends Service {
         Log.v(LOG_TAG, "OnBind");
         return software_update_manager.asBinder(); // Binder to SUSApi
     }
-
 
     public int GetState() {
         Log.e(LOG_TAG, "GetState not implemented");
@@ -168,7 +143,7 @@ public class SoftwareUpdateService extends Service {
 
             @Override
             public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-                if(code == 200) {
+                if (code == 200) {
                     try {
                         callback.UpdateSoftwareAssignmentList(software_list);
                     } catch (RemoteException e) {
@@ -181,9 +156,10 @@ public class SoftwareUpdateService extends Service {
                         Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
                     }
                 }
-            }};
+            }
+        };
 
-        if(swapi != null) {
+        if (swapi != null) {
             try {
                 swapi.GetSoftwareAssigmentList(swapi_callback);
             } catch (RemoteException e) {
@@ -200,10 +176,10 @@ public class SoftwareUpdateService extends Service {
 
             @Override
             public void CommissionStatus(int code) {
-                if(code == 200) {
+                if (code == 200) {
                     software_update_manager.UpdateSoftwareAssignmentState(uuid, 0); // Dont know what state to set, and state is not defined..
                 } else {
-                    Log.w(LOG_TAG, "Commissioning of Sofware " + uuid +" failed. I dont know what to do?");
+                    Log.w(LOG_TAG, "Commissioning of Sofware " + uuid + " failed. I dont know what to do?");
                 }
             }
 
@@ -211,14 +187,18 @@ public class SoftwareUpdateService extends Service {
             public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
                 // Shouldnt be called...
                 Log.w(LOG_TAG, "CommissionAssignment::SoftwareAssignmentList: Why am I called? o_O Please stop.");
-            }};
+            }
+        };
 
-        if(swapi != null) {
+        if (swapi != null) {
             try {
                 swapi.CommissionSoftwareAssignment(uuid, swapi_callback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "Cannot commission software assignment.. No contact with SWAPI.. I'm sad...");
             }
+        }
+        else {
+            Log.e(LOG_TAG, "SWAPI null");
         }
     }
 

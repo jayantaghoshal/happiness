@@ -40,10 +40,17 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     private boolean fabExpanded = false;
 
     private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
+        @Override
         public void UpdateState(int state) {
-            Log.v(LOG_TAG, "UpdateState");
+            Log.v(LOG_TAG, "UpdateState " + state);
+            if(state == 1) {
+                actionsFab.setEnabled(true);
+            } else {
+                actionsFab.setEnabled(false);
+            }
         }
 
+        @Override
         public void UpdateSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
             assignments.clear();
             for (SoftwareAssignment sw : software_list) {
@@ -53,10 +60,12 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             updateAdapter();
         }
 
+        @Override
         public void UpdateSoftwareState(String uuid, int state) {
             Log.v(LOG_TAG, "UpdateSoftwareState");
         }
 
+        @Override
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
         }
@@ -66,7 +75,11 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void onServiceConnected() {
             Log.v(LOG_TAG, "onServiceConnected app");
-            actionsFab.setEnabled(true);
+            try {
+                softwareUpdateManager.GetState(callback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Error GetState");
+            }
         }
 
         @Override

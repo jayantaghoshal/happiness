@@ -22,7 +22,7 @@ import java.util.List;
 public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     private static final String LOG_TAG = "SwUpdManager";
 
-    private ArrayList<ISoftwareUpdateManagerCallback> clients;
+    private ArrayList<ISoftwareUpdateManagerCallback> clients = new ArrayList();
 
     private SoftwareUpdateService service;
 
@@ -36,6 +36,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      * @param state State to be sent to all registered clients
      */
     public void UpdateState(int state) {
+        Log.v(LOG_TAG, "UpdateState");
         for(ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateState(state);
@@ -76,6 +77,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
 
     @Override
     public void GetState(ISoftwareUpdateManagerCallback callback) {
+        Log.v(LOG_TAG, "GetState");
         clients.add(callback);
         try {
             callback.UpdateState(service.GetState());

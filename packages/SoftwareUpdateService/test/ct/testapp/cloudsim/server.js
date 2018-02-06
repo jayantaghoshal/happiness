@@ -1,15 +1,12 @@
 var jsonServer = require('/usr/local/lib/node_modules/json-server')
 var js2xmlparser = require('/usr/local/lib/node_modules/js2xmlparser')
 var server = jsonServer.create()
-var router = jsonServer.router('./db.json')
+var router = jsonServer.router(__dirname + '/db.json')
 var middlewares = jsonServer.defaults()
-
-const low = require('/usr/local/lib/node_modules/lowdb')
-const FileSync = require('/usr/local/lib/node_modules/lowdb/adapters/FileSync')
 
 var db = router.db
 
-var routes = require('./routes.json')
+var routes = require(__dirname + '/routes.json')
 server.use(jsonServer.rewriter(routes))
 
 server.use(middlewares)
@@ -56,6 +53,7 @@ server.post('/commission', function (req, res, next) {
   req.method = 'GET'
   next()
 })
+
 
 server.use(router)
 server.listen(3000, function () {

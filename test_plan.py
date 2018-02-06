@@ -80,12 +80,11 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                   standard_caps),
 
-
-    Disabled(VTSTest("vendor/volvocars/hardware/cloudd/test/ct/vtscloud", standard_caps),
-             reason="Waiting for local web server in ci",
-             jira_issue="",
-             deadline="2018-03-01"
-    )
+    # This test will set the screen-always-on to ON which will prevent the screen to pwer off.
+    # If your test relies on the screen to power off, either put it before this test or set
+    # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
+    # a reboot.
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/testapp", standard_caps),
 ]
 
 test_plan_nightly = test_plan_hourly + [

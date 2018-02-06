@@ -149,6 +149,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         Response response = cloud_connection.doPostRequest(softwareManagementUri + "/commission", headers, body,
                 timeout);
 
+        Log.d(LOG_TAG, " " + response.httpResponse);
+
         return response.httpResponse;
 
     }

@@ -37,7 +37,6 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     public void init() {
         try {
             cloud_connection = ICloudConnection.getService();
-
             cloud_connection.registerCloudConnectionEventListener(this);
 
         } catch (RemoteException ex) {
@@ -78,6 +77,9 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     }
 
     public Response doPostRequest(String uri, ArrayList<HttpHeaderField> headers, String body, int timeout) {
+
+        Log.v(LOG_TAG, "doPostRequest");
+
         Response response = null;
         try {
             response = cloud_connection.doPostRequest(uri, headers, body, use_https, timeout);
