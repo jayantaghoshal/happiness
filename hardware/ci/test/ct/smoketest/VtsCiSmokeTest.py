@@ -89,6 +89,32 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         logging.info("Free memory is: {:.2f}".format(free_percent) + "%")
 
 
+    def testDisk(self):
+        requirement = 95
+        self.dut.shell.InvokeTerminal("my_shell5")
+        my_shell = getattr(self.dut.shell, "my_shell5")
+        shell_response = my_shell.Execute(["df"])
+        number_of_disks = re.findall('dm\s*-\s*([^\n\r]*)', shell_response[const.STDOUT][0])
+        disk_load = {}
+
+        for disk in number_of_disks:
+            disk_load[str(disk)] = {}
+            disk_load[str(disk)]['usage'] = [x.strip() for x in str(disk).split()[1:]]
+
+            #Size
+            logging.info("Total size: " + str(disk_load[str(disk)]['usage'][0]))
+            #Used
+            logging.info("Used: " + str(disk_load[str(disk)]['usage'][1]))
+            #Available
+            logging.info("Available: " + str(disk_load[str(disk)]['usage'][2]))
+            #Usage -%
+            logging.info("Usage: " + str(disk_load[str(disk)]['usage'][3]))
+            #Mount Location
+            logging.info("Mount on: " + str(disk_load[str(disk)]['usage'][4]))
+
+            if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
+               asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
+
     def get_data(self, cores):
         self.dut.shell.InvokeTerminal("data_shell")
         my_shell = getattr(self.dut.shell, "data_shell")
@@ -114,6 +140,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             utilisation.append(100.0 * (1.0 - idle_delta / total_delta))
 
         return utilisation
+
 
 
 if __name__ ==  "__main__":
