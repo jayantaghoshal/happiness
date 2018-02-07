@@ -17,40 +17,43 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import java.util.ArrayList;
-import android.util.Log;
 
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<SoftwareAssignment> assignments;
+    private ISoftwareUpdateApp softwareUpdateApp;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name, desc;
-        public ImageView overflow;
+        public ImageView commissionImage;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             desc = (TextView) view.findViewById(R.id.description);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            commissionImage = (ImageView) view.findViewById(R.id.commissionImage);
         }
     }
 
-    public AssignmentAdapter(Context context, ArrayList<SoftwareAssignment> assignments) {
+    public AssignmentAdapter(Context context, ArrayList<SoftwareAssignment> assignments,
+            ISoftwareUpdateApp softwareUpdateApp) {
         this.context = context;
         this.assignments = assignments;
+        this.softwareUpdateApp = softwareUpdateApp;
     }
 
     /**
      * Showing popup menu when tapping on 3 dots
      */
-    private void showPopupMenu(View view) {
+    private void showPopupMenu(View view, SoftwareAssignment sw) {
         // inflate menu
         PopupMenu popup = new PopupMenu(context, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_assignment, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener(sw));
         popup.show();
     }
 
@@ -58,15 +61,18 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.My
      * Click listener for popup menu items
      */
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+        private SoftwareAssignment sw;
 
-        public MyMenuItemClickListener() {
+        public MyMenuItemClickListener(SoftwareAssignment sw) {
+            this.sw = sw;
         }
 
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
             case R.id.commission:
-                Toast.makeText(context, "Hello World! :) ", Toast.LENGTH_SHORT).show();
+                softwareUpdateApp.commissionAssignment(sw.uuid);
+                Toast.makeText(context, "Commissioning \"" + sw.name + "\"", Toast.LENGTH_SHORT).show();
                 return true;
             default:
             }
@@ -87,10 +93,10 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.My
         holder.name.setText(sw.name);
         holder.desc.setText(sw.description);
 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+        holder.commissionImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(holder.overflow);
+                showPopupMenu(holder.commissionImage, assignments.get(position));
             }
         });
     }

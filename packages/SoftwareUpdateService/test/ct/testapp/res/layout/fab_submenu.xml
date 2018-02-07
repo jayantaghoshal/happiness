@@ -4,10 +4,10 @@
     android:id="@+id/fabFrame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingBottom="48dp"
+    android:paddingLeft="@dimen/defaultPadding"
+    android:paddingRight="@dimen/defaultPadding"
+    android:paddingTop="@dimen/defaultPadding"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,9 +25,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/cardview_light_background"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="@dimen/cardCornerRadius"
+            app:cardElevation="@dimen/cardElevation"
             app:cardUseCompatPadding="true" >
+
             <TextView
                 android:id="@+id/getAvailableTv"
                 android:layout_width="wrap_content"
@@ -35,19 +36,19 @@
                 android:text="Get assignments"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"
-                android:paddingRight="16dp"
-                android:paddingLeft="16dp"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp" />
+                android:paddingRight="@dimen/defaultPadding"
+                android:paddingLeft="@dimen/defaultPadding"
+                android:paddingBottom="@dimen/defaultPadding"
+                android:paddingTop="@dimen/defaultPadding" />
+
         </android.support.v7.widget.CardView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/getAvailableFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_36dp"
-            app:backgroundTint="@android:color/holo_green_light"
+            android:src="@drawable/ic_autorenew_white_36dp"
+            app:backgroundTint="@color/fabLight"
             app:fabSize="mini" />
-
     </LinearLayout>
 </FrameLayout>
