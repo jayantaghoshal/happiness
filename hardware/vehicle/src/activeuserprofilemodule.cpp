@@ -66,7 +66,8 @@ int ActiveUserProfileHal::setProp(const VehiclePropValue& propValue) {
     }
 }
 
-std::unique_ptr<VehiclePropValue> ActiveUserProfileHal::getProp(const VehiclePropValue& requestedPropValue) {
+std::unique_ptr<VehiclePropValue> ActiveUserProfileHal::getProp(const VehiclePropValue& requestedPropValue,
+                                                                vhal20::impl::Status& /*status*/) {
     ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
     getUserProfileFromFlexray(active_user_profile_);
     return std::make_unique<VehiclePropValue>(active_user_profile_);
@@ -109,7 +110,7 @@ bool ActiveUserProfileHal::getUserProfileFromFlexray(vhal20::VehiclePropValue& a
     }
 }
 
-}  // impl
+}  // namespace impl
 
 }  // namespace V1_0
 }  // namespace vehiclehal

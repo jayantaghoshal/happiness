@@ -35,7 +35,8 @@ IlluminationHal::IlluminationHal(vhal20::impl::IVehicleHalImpl* vehicleHal) : vh
     StartFlexraySubscribers();
 }
 
-std::unique_ptr<VehiclePropValue> IlluminationHal::getProp(const VehiclePropValue& requestedPropValue) {
+std::unique_ptr<VehiclePropValue> IlluminationHal::getProp(const VehiclePropValue& requestedPropValue,
+                                                           vhal20::impl::Status& /*status*/) {
     ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
     VehiclePropValue prop_value;
     switch (requestedPropValue.prop) {

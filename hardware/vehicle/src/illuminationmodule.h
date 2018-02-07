@@ -24,7 +24,8 @@ class IlluminationHal : public vhal20::impl::ModuleBase {
   public:
     IlluminationHal(vhal20::impl::IVehicleHalImpl* vehicleHal);
 
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue) override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& status) override;
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override;
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
 

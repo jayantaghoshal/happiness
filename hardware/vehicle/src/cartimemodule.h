@@ -27,7 +27,8 @@ class CarTimeHal : public vhal20::impl::ModuleBase {
     CarTimeHal(vhal20::impl::IVehicleHalImpl* vehicleHal);
 
     int setProp(const vhal20::VehiclePropValue& propValue) override;
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue) override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& status) override;
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override;
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
 

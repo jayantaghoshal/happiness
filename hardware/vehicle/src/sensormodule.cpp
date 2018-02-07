@@ -53,7 +53,8 @@ std::vector<vhal20::VehiclePropConfig> SensorModule::listProperties() {
     return sensor_prop_config_;
 }
 
-std::unique_ptr<vhal20::VehiclePropValue> SensorModule::getProp(const vhal20::VehiclePropValue& property_value) {
+std::unique_ptr<vhal20::VehiclePropValue> SensorModule::getProp(const vhal20::VehiclePropValue& property_value,
+                                                                vhal20::impl::Status& /*status*/) {
     ALOGV("[%s] Property ID: %d", __func__, property_value.prop);
 
     auto property = static_cast<vhal20::VehicleProperty>(property_value.prop);
