@@ -222,7 +222,7 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
             auto duration = timer_fired_at - timepoint;
             timepoint = timepoint + duration;
             Ms d = std::chrono::duration_cast<Ms>(duration);
-            EXPECT_NEAR(d.count(), Ms(100).count(), Ms(10).count());
+            EXPECT_NEAR(d.count(), Ms(100).count(), Ms(50).count());
             ALOGI("Expected delay time is 0.1s, measured delay time is %ld, allowed margin of error is 0.01s",
                   std::chrono::duration_cast<Ms>(duration));
         }
