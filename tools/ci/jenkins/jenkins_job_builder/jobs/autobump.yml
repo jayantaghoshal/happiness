@@ -41,5 +41,5 @@
                 cd "${WORKSPACE_ROOT}"
 
                 ## Update the manifests based on the templates and push it
-                python3 ./vendor/volvocars/tools/ci/shipit/bump.py . autobump "${GERRIT_BRANCH}" "${BUILD_URL}"
+                python3 ./vendor/volvocars/tools/ci/shipit/bump.py . autobump "${GERRIT_BRANCH}" "${BUILD_URL}" "${GERRIT_PROJECT}"
 
