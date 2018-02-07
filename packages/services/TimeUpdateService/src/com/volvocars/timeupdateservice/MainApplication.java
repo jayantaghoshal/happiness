@@ -58,7 +58,7 @@ public class MainApplication extends Application implements LocationListener {
     private static final Boolean AUTO_MODE = true;
 
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private static final int LOCATION_INTERVAL = 30000;
+    private static final int LOCATION_INTERVAL = 1000;  //30000;
     private static final float LOCATION_DISTANCE = 0f;
 
     private static long gpsTimeMilis;
@@ -79,7 +79,9 @@ public class MainApplication extends Application implements LocationListener {
     private final static long maxDiffinIhu = 5000L;
 
     /**
-    * Return the current state of the permissions needed.
+     * Return the current state of the permissions need
+     * @param None
+     * @return true if all permissions are matched false if any one check fails
     */
     private boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -105,14 +107,14 @@ public class MainApplication extends Application implements LocationListener {
 
     /**
      * Implement virtual methods of the Location Listener to extract time from GPS
+     * @param Location, last received location.
+     * @return None
      */
 
     @Override
     public void onLocationChanged(Location location) {
-        Location mLastLocation;
-        mLastLocation = new Location("gps");
-        mLastLocation.set(location);
-        gpsTimeMilis = mLastLocation.getTime();
+
+        gpsTimeMilis = location.getTime();
         long ihuTime = getIHUTime();
         long storedOffset = getUserTimeOffset();
 
@@ -124,13 +126,14 @@ public class MainApplication extends Application implements LocationListener {
                 if (Math.abs((ihuTime - gpsTimeMilis) - storedOffset) > maxDiffinIhu) {
                     locationCounter++;
                     if(locationCounter == 2){
-                        setIHUTime(ihuTime + storedOffset);
-                        setCemTime(ihuTime + storedOffset);
+                        setIHUTime(gpsTimeMilis + storedOffset);
+                        setCemTime(gpsTimeMilis + storedOffset);
                     }
                 }else{
                     locationCounter = 0;
                 }
         }
+
     }
 
     @Override
@@ -177,6 +180,10 @@ public class MainApplication extends Application implements LocationListener {
         super.onCreate();
         Log.d(TimeUpdateLog.SERVICE_TAG, String.format("Time Update Service listening to clock change events"));
 
+
+        if(isAutomaticTimeRequested()){
+            setUserTimeOffset(0L);
+        }
         gpsTimeOffset = getUserTimeOffset();
         Log.i(TimeUpdateLog.SERVICE_TAG, "On Boot offset is: " + gpsTimeOffset);
 
@@ -225,12 +232,13 @@ public class MainApplication extends Application implements LocationListener {
         this.registerReceiver(receiver, filter);
     }
 
-
+    /**
+     * Is called when user sets time manually or changes the clock mode
+     * @param A boolean value false:Manual_Mode true:Auto_mode
+     * @return None
+     */
     public void updateTimeOnSettingsChange(boolean mode) {
         if (mode == MANUAL_MODE) {
-            //  compare current time with gps time and get the offset
-            //  store the system time in the global system settings
-            //  update the Vehicla HAL properties to set the CEM time
 
             long userTime = getIHUTime();
             Log.e(TimeUpdateLog.SERVICE_TAG, "user set time: " + String.valueOf(userTime));
@@ -243,8 +251,7 @@ public class MainApplication extends Application implements LocationListener {
                 Log.i(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on user change");
 
         } else {
-            setUserTimeOffset(Long.MAX_VALUE);
-            // To be Done
+            setUserTimeOffset(0L);
         }
     }
 
@@ -255,7 +262,7 @@ public class MainApplication extends Application implements LocationListener {
             // Update CEM time on change of usertime
             VehiclePropValue unixTimeProp = new VehiclePropValue();
             unixTimeProp.prop = VehicleProperty.UNIX_TIME;
-            long userTimeSecs = Math.round(userTime / 1000L);
+            long userTimeSecs = (userTime + 500L) / 1000L;
             Log.i(TimeUpdateLog.SERVICE_TAG, "user time in secs: " + userTimeSecs);
             unixTimeProp.value.int64Values.add(0, userTimeSecs);
             if (mVehicle.set(unixTimeProp) == StatusCode.OK) {
@@ -272,7 +279,6 @@ public class MainApplication extends Application implements LocationListener {
     private static class VehicleCallback extends IVehicleCallback.Stub {
         @Override
         public void onPropertyEvent(ArrayList<VehiclePropValue> propValues) {
-            Log.d(TimeUpdateLog.SERVICE_TAG, "onPropertyEvent: " + propValues.size());
             for (VehiclePropValue prop : propValues) {
                 if (prop.prop == VehicleProperty.UNIX_TIME) {
                     cemTime = prop.value.int64Values.get(0) * 1000L;
