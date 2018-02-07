@@ -47,6 +47,12 @@
         - pollscm:
             cron: "H H(0-1) * * *"
             ignore-post-commit-hooks: True
+    wrappers:
+        - credentials-binding:
+            - username-password-separated:
+                credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
+                username: JENKINS_USER
+                password: JENKINS_PASSWORD
     builders:
       - multijob:
           name: Build

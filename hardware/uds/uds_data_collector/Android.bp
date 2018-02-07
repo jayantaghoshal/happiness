@@ -16,9 +16,6 @@ cc_binary {
         "libutils",
         "libhidlbase",
         "libhidltransport",
-    ],
-
-    static_libs: [
         "liblog",
     ],
 

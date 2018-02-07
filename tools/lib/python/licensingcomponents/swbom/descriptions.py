@@ -20,13 +20,13 @@ allowed_deployments = set([
     'complete-image'
 ])
 
-allowed_licenses = set(['Proprietary'])
+allowed_aptivelicenses = set(['Proprietary', 'WhiteBox', 'GreyBox', 'External'])
 
 ComponentDescription = namedtuple('ComponentDescription',
                                   ['functional_area',
                                    'component',
                                    'deployment',
-                                   'license'])
+                                   'aptivlicense'])
 
 ComponentInfo = namedtuple('ComponentInfo', ['description', 'path', 'absolute_path'])
 
@@ -46,11 +46,11 @@ def validate_description(description: ComponentDescription, path: str):
             "allowed deployments are defined in {}\nand they include:\n{}"
                 .format(path, description.deployment, __file__, json.dumps(sorted(allowed_deployments), indent=4)))
 
-    if description.license not in allowed_licenses:
+    if description.aptivlicense not in allowed_aptivelicenses:
         raise Exception(
-            "Component at {} has unknown deployment model ({}),\n"
+            "Component at {} has unknown aptivlicense ({}),\n"
             "allowed deployments are defined in {}\nand they include:\n{}"
-                .format(path, description.license, __file__, json.dumps(sorted(allowed_licenses), indent=4)))
+                .format(path, description.aptivlicense, __file__, json.dumps(sorted(allowed_aptivelicenses), indent=4)))
 
 
 def load_and_validate(path: str, root: str):

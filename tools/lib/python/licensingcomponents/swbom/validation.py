@@ -4,7 +4,7 @@
 from collections import namedtuple
 from typing import List
 
-from licensingcomponents.softwarebom.descriptions import ComponentInfo
+from licensingcomponents.swbom.descriptions import ComponentInfo
 
 ComponentSources = namedtuple('ComponentSources', ['info',
                                                    'directories',

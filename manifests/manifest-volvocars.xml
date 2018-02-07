@@ -80,6 +80,9 @@
   <remove-project name="vendor/delphi/bb_android_desip_key_handler" />
   <project name="vendor/delphi/bb_android_desip_key_handler" path="device/delphi/vcc_ihu/private/bb_android_desip_key_handler" revision="ffddf6b821dda97f9a7f31113f08278c7c2838b6"/>
 
+  <!-- Boost_1_66_0 -->
+  <project name="vendor/volvocars/external/boost" path="vendor/volvocars/external/boost_1_66_0" revision="595e113a9e43d40b756c171a3d81d20b8a6d3508"/>
+
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
   <project name="bsp/kernel/bxt" path="kernel/bxt" revision="13a2e82a5e48592693bba75d52ea30c27f4c0257"/>

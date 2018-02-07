@@ -22,23 +22,25 @@ import org.xmlpull.v1.XmlPullParserException;
 public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     private static final String LOG_TAG = "CloudService.SWAPI";
 
-    private ICloudConnection cloud_connection;
+    private CloudConnection cloud_connection = null;
 
-    private final String SOFTWARE_MANAGEMENT_URI = "/softwaremanagement-1/";
-    SoftwareManagementURIs uris;
+    private String softwareManagementUri = null;
+    SoftwareManagementURIs uris = null;
 
-    private boolean software_management_available;
-    private boolean useHttps = true;
+    private boolean software_management_available = false;
+
     private class SwListResponse {
         private ArrayList<SoftwareAssignment> swlist = new ArrayList<SoftwareAssignment>();
         private int code = -1;
     }
 
-    public SoftwareManagementApiImpl(ICloudConnection cloud_connection) {
-        this.cloud_connection = cloud_connection;
-        useHttps = SystemProperties.getBoolean("service.cloudservice.use_https", true);
+    public SoftwareManagementApiImpl() {
+    }
 
-        // To be removed?
+    public void init(CloudConnection cloud_connection, String softwareManagementUri) {
+        this.cloud_connection = cloud_connection;
+        this.softwareManagementUri = softwareManagementUri;
+        software_management_available = true;
         FetchSoftwareManagementURIs();
     }
 
@@ -53,7 +55,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(SOFTWARE_MANAGEMENT_URI, headers, useHttps, 10000);
+            Response response = cloud_connection.doGetRequest(softwareManagementUri, headers, 10000);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -75,9 +77,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
             Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_software_assignments + "\n" + uris.downloads);
 
-        } catch (RemoteException ex) {
-            // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
             Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
@@ -103,8 +102,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(uris.available_software_assignments, headers, useHttps,
-                    timeout);
+            Response response = cloud_connection.doGetRequest(uris.available_software_assignments, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -123,9 +121,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             swrsp.swlist = software_list;
             swrsp.code = response.httpResponse;
 
-        } catch (RemoteException ex) {
-            // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
             Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
@@ -135,6 +130,27 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
 
         return swrsp;
+    }
+
+    private int CommissionSoftwareAssignment(String uuid) {
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.Commission+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        String body = "id=" + uuid + "&client_id=" + "" + "&reason=USER"; //TODO: Remove hardcoded values (client_id and reason)
+
+        //Do we need to fetch commission uri?
+        Response response = cloud_connection.doPostRequest(softwareManagementUri + "/commission", headers, body,
+                timeout);
+
+        return response.httpResponse;
+
     }
 
     private boolean HandleHttpResponseCode(final int code) {
@@ -148,6 +164,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      */
     @Override
     public void GetSoftwareAssigmentList(ISoftwareManagementApiCallback callback) throws RemoteException {
+
+        if (!software_management_available) {
+            callback.SoftwareAssignmentList(-1, null);
+        }
+
         SwListResponse swrsp = FetchSoftwareAssignmentsList();
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
@@ -159,6 +180,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     @Override
     public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
             throws RemoteException {
-        callback.CommissionStatus(400);
+        if (!software_management_available) {
+            callback.CommissionStatus(-1);
+        }
+
+        callback.CommissionStatus(CommissionSoftwareAssignment(uuid));
     }
 }

@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootlinearlayout"
-    android:layout_width="500dp"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:baselineAligned="false"
-    android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.volvocars.softwareupdateap.SoftwareUpdateApp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/assignmentsButton"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="get software assingments" />
+    <RelativeLayout
+        android:id="@+id/rootlayout"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:baselineAligned="false"
+        android:layout_margin="16dp">
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"/>
-
-    <TextView
-        android:id="@+id/assignmentsTv"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_centerInParent="true"
+            android:scrollbars="vertical" />
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/actionFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:layout_below="@+id/recycler_view"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_black_36dp" />
+
+    <include layout="@layout/fab_submenu"/>
+</FrameLayout>

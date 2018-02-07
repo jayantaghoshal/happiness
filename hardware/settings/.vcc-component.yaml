@@ -1,0 +1,4 @@
+functional_area: 'Vehicle Functions'
+component: 'Settings'
+deployment: ['native-suite']
+aptivlicense: 'WhiteBox'

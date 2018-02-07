@@ -1,0 +1,4 @@
+functional_area: 'Cloud'
+component: 'Cloud Deamon'
+deployment: ['native-suite']
+aptivlicense: 'WhiteBox'

@@ -7,6 +7,7 @@
 #include <cutils/log.h>
 #include <json.hpp>
 #include "libsettings/settingbase.h"
+#include "libsettings/settingsmanager.h"
 #include "libsettings/settingstypes.h"
 
 #define SETTINGS_LOG_TAG "SETTINGS"
@@ -22,24 +23,17 @@ struct ValueProfile {
     ProfileIdentifier profileId;
 };
 
-template <typename T, UserScope userScope = UserScope::NOT_USER_RELATED>
+template <typename T, UserScope userScope>
 class Setting : public SettingBase {
   public:
-    Setting(const std::string& name, const T& defaultValue, std::shared_ptr<SettingsContext> context)
+    Setting(const SettingId& name, const T& defaultValue, android::sp<SettingsManager> context)
         : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {}
 
-    /*
-     * Get value for the setting.
-     * NOTE: This function may not be called until setCallback-notification has been called.
-     *       Such notification indicates that settings-backend is connected
-     *
-     * Depending on if the setting is USER_RELATED or not this method behaves differently:
-     * USER_RELATED: get value for active profile
-     * NOT_USER_RELATED: get value (for the car globally)
-     */
-    T get() const {
-        assertInitialized();
-        return getValueAndProfile().value;
+    void setCallback(std::function<void(const ValueProfile<T>&)>&& settingChangedCallback) {
+        callbackToApplicationOnSettingChanged_ = std::move(settingChangedCallback);
+        if (initialized && callbackToApplicationOnSettingChanged_) {
+            callbackToApplicationOnSettingChanged_(value_);
+        }
     }
 
     T defaultValue() const { return default_; }
@@ -60,33 +54,21 @@ class Setting : public SettingBase {
     }
 
     /*
-     * Get a <value,profileId> tuple for the Settings instance. The returned .profileId is, at the time of the call,
-     * the currently active profile. The .value is the value that belongs to that profile.
-     * The returned values are GUARANTEED to be consistent meaning that the .value is really the value for the
-     * .profileId
-     * Only use this method if you want to get a value that is user-related!!
+     * Set the value (.value) for the provided profile (.profileId)
+     * Only use this method if you want to set a value for a
+     * specific profile (including possibly the active profile).
      *
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      * IMPORTANT
      * If you have a use case like the following in your code:
      * 1) get user specific data from settings
-     * 2) modify that data and then
+     * 2) modify that data and then (eg increment a counter)
      * 3) set it again in settings
      * then you SHOULD use getValueAndProfile()() and setForProfile() to correctly handle
      * that a profile change happens after 1) but before 3) above.
      */
-    ValueProfile<T> getValueAndProfile() const {
-        assertInitialized();
-        return value_;
-    }
-
-    /*
-     * Set the value (.value) for the provided profile (.profileId)
-     * Only use this method if you want to set a value for a
-     * specific profile (including possibly the active profile).
-     */
     void setForProfile(const ValueProfile<T>& newValue) {
-        ALOG(LOG_DEBUG, SETTINGS_LOG_TAG, "setForProfile, name=%s, profileid=%d", name().c_str(), newValue.profileId);
+        ALOG(LOG_DEBUG, SETTINGS_LOG_TAG, "setForProfile, name=%d, profileid=%d", name_, newValue.profileId);
         assertInitialized();
         if (userScope == UserScope::NOT_USER_RELATED || newValue.profileId == value_.profileId ||
             newValue.profileId == ProfileIdentifier::None) {
@@ -97,7 +79,7 @@ class Setting : public SettingBase {
 
             if (dirty) {
                 if (callbackToApplicationOnSettingChanged_) {
-                    callbackToApplicationOnSettingChanged_();
+                    callbackToApplicationOnSettingChanged_(value_);
                 }
             }
         } else {
@@ -130,13 +112,13 @@ class Setting : public SettingBase {
         value_ = ValueProfile<T>(default_, profileId);
         ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "Setting::onSettingReset");
         if (callbackToApplicationOnSettingChanged_) {
-            callbackToApplicationOnSettingChanged_();
+            callbackToApplicationOnSettingChanged_(value_);
         }
     }
 
     void onDataChanged(const std::string& stringData, ProfileIdentifier profileId) override {
-        ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, name=%s, value=%s, profileid=%d", name().c_str(),
-             stringData.c_str(), profileId);
+        ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, name=%d, value=%s, profileid=%d", name_, stringData.c_str(),
+             profileId);
         if (userScope == UserScope::NOT_USER_RELATED) {
             profileId = ProfileIdentifier::None;
         }
@@ -146,16 +128,17 @@ class Setting : public SettingBase {
             value_ = ValueProfile<T>(v, profileId);
         } catch (const std::exception& e) {
             ALOG(LOG_ERROR, SETTINGS_LOG_TAG,
-                 "Failed to parse stored setting. Fallback to default. Key=%s, Value=%s, Error=%s", name().c_str(),
+                 "Failed to parse stored setting. Fallback to default. Key=%d, Value=%s, Error=%s", name_,
                  stringData.c_str(), e.what());
             value_ = ValueProfile<T>(default_, profileId);
         }
         if (callbackToApplicationOnSettingChanged_) {
-            callbackToApplicationOnSettingChanged_();
+            callbackToApplicationOnSettingChanged_(value_);
         }
     }
 
   private:
+    std::function<void(const ValueProfile<T>&)> callbackToApplicationOnSettingChanged_;
     mutable ValueProfile<T> value_;
     const T default_;
 };

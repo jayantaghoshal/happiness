@@ -48,6 +48,7 @@ cc_binary {
         "liblocalconfig",
         "libtarmac",
         "vendor.volvocars.hardware.uds@1.0",
+        "lib_uds_data_handler",
     ],
 
     static_libs: [
@@ -97,3 +98,7 @@ cc_binary {
         "ip-vcc",
     ],
 }
+
+subdirs = [
+    "*",
+]

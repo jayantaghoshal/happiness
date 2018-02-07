@@ -1,0 +1,30 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_shared {
+    name: "liblocalconfig_jni",
+    srcs: [
+        "local_config_lib_jni.cpp",
+    ],
+    include_dirs: [
+        "libnativehelper/include/nativehelper",
+    ],
+    shared_libs: [
+        "libandroid_runtime",
+        "libnativehelper",
+        "libcutils",
+        "libutils",
+        "liblog",
+        "liblocalconfig",
+    ],
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+    ],
+    cppflags: ["-Wno-conversion-null"],
+    compile_multilib: "64",
+}

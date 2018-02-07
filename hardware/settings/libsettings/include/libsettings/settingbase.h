@@ -12,24 +12,17 @@
 #include <string>
 #include <type_traits>
 #include "libsettings/icustom.h"
+#include "libsettings/settingidentifiers.h"
 #include "libsettings/settingsmanager.h"
 #include "libsettings/settingstypes.h"
 
 namespace SettingsFramework {
 
-class SettingsContext final {
-  public:
-    SettingsContext(tarmac::eventloop::IDispatcher& dispatcher, android::sp<SettingsManager> manager);
-    tarmac::eventloop::IDispatcher& dispatcher;
-    android::sp<SettingsManager> manager;
-};
-
 class SettingBase {
   public:
-    SettingBase(const std::shared_ptr<SettingsContext>& context, const std::string& name, UserScope userScope);
+    SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope);
     virtual ~SettingBase();
     void setCallback(std::function<void()>&& settingChangedCallback);
-    std::string name() const;
 
   protected:
     void assertInitialized() const;
@@ -38,20 +31,16 @@ class SettingBase {
 
     static std::string jsonToVec(const nlohmann::json& j);
 
-    std::function<void()> callbackToApplicationOnSettingChanged_;
-
     const UserScope userScope_;
+    bool initialized = false;
+    const SettingId name_;
 
   private:
-    // void onDataChangedBase(const std::string& stringdata, ProfileIdentifier profileId);
-    // void onSettingResetBase(ProfileIdentifier profileId);
     virtual void onDataChanged(const std::string& stringData, ProfileIdentifier profileId) = 0;
     virtual void onSettingReset(ProfileIdentifier profileId) = 0;
 
-    std::shared_ptr<SettingsContext> context;
+    const android::sp<SettingsManager> context;
     SettingsHandle handle_;
-    const std::string name_;
-    bool initialized = false;
 };
 
 // =====================================================

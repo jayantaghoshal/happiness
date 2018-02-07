@@ -23,6 +23,14 @@ PRODUCT_PACKAGES += \
     soundnotifications \
     vendor.volvocars.hardware.settingsstorage@1.0-service
 
+#############################################################
+# VCC System Apps/Services
+#############################################################
+PRODUCT_PACKAGES += \
+    TimeUpdateService \
+    LcfService
+
+
 ##############################################################
 # System UI
 ##############################################################

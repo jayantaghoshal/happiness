@@ -55,7 +55,6 @@ clean_old_test_result_files
 
 set +e
 
-# time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}

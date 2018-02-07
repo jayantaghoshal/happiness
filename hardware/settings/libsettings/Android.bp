@@ -32,6 +32,7 @@ cc_library_shared {
     export_shared_lib_headers: [
         "nlohmann-json-v3",
         "libtarmac",
+        "vendor.volvocars.hardware.settings@1.0",
     ],
 
     tidy_checks: [

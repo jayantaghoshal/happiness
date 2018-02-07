@@ -33,6 +33,10 @@ git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:294
 
 git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ volvo_logo.png | tar -x
 
+set +x
+curl -X GET -u "$JENKINS_USER":"$JENKINS_PASSWORD" https://icup_android.jenkins.cm.volvocars.biz/job/ihu_daily/"$BUILD_NUMBER"/api/json?pretty=true > changelog.json
+set -x
+
 python3 xml_to_json_results.py
 
 python3 json_to_html_results.py

@@ -5,33 +5,38 @@
 
 #pragma once
 
-#include <utils/StrongPointer.h>
+#include <uds/diagnostic_test_results_reporter_interface.h>
 #include <vcc/localconfig.h>
 #include <vendor/volvocars/hardware/uds/1.0/IDataCollector.h>
 #include <vendor/volvocars/hardware/uds/1.0/IDataHandler.h>
+#include <array>
 
 namespace vcc {
 namespace netman {
 
-class DiagnosticsReporter final : public ::android::hidl::manager::V1_0::IServiceNotification,
-                                  public virtual ::android::RefBase,
-                                  public ::android::hardware::hidl_death_recipient,
+class DiagnosticsReporter final : public virtual ::android::RefBase,
+                                  public ::android::hidl::manager::V1_0::IServiceNotification,
                                   public ::vendor::volvocars::hardware::uds::V1_0::IDataHandler {
   public:
     explicit DiagnosticsReporter(const vcc::LocalConfigReaderInterface* lcfg = vcc::LocalConfigDefault());
 
   private:
+    // DTC PART
+    enum IFACE { TCAM = 0, MOST = 1, APIX = 2, IFACE_COUNT };
+
     void check_link();
 
-    ::android::sp<::vendor::volvocars::hardware::uds::V1_0::IDataCollector> diag_service_;
+    struct IfNameWithReporter {
+        std::string name;
+        std::unique_ptr<uds::DiagnosticTestResultsReporterInterface> reporter;
+    };
 
     ::android::hardware::Return<void> onRegistration(const ::android::hardware::hidl_string& fqName,
                                                      const ::android::hardware::hidl_string& name,
                                                      bool preexisting) override;
+    std::array<IfNameWithReporter, IFACE_COUNT> interfaces_;
 
-    void serviceDied(uint64_t cookie, const ::android::wp<IBase>& who) override;
-    int getDtcID(const std::string& iface);
-
+    // DID PART
     ::android::hardware::Return<void> readDidValue(uint16_t did, readDidValue_cb _hidl_cb) override;
 
     ::android::hardware::Return<::vendor::volvocars::hardware::uds::V1_0::DidWriteStatusCode> writeDidValue(
@@ -42,10 +47,11 @@ class DiagnosticsReporter final : public ::android::hidl::manager::V1_0::IServic
     ::android::hardware::Return<::vendor::volvocars::hardware::uds::V1_0::DidWriteStatusCode> setApixOnObd(
             const ::android::hardware::hidl_vec<uint8_t>& data);
 
-    std::array<std::string, 3> ifnames_;
-    const vcc::LocalConfigReaderInterface* const lcfg_;
     std::string eth_gw_address_;
     bool apix_traffic_splitting_ = false;
+
+    // OTHER
+    const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
 }  // namespace netman

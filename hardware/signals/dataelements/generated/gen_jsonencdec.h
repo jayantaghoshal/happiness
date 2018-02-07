@@ -10,9 +10,10 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
  * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
  */
-#pragma once
+#ifndef _JSONENCDEC_H
+#define _JSONENCDEC_H
 
-#include <json.hpp>
+#include <json_v211.hpp>
 #include <type_traits>
 
 #include "gen_datatypes.h"
@@ -786,4 +787,5 @@ template <> json toJson<WipgInfo>(const WipgInfo& v);
 template <> WipgInfo fromJson<WipgInfo>(const json& j);
 
 } // end of namespace
+#endif
 // clang-format on

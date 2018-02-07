@@ -84,14 +84,18 @@ public class SoftwareUpdateService extends Service {
 
                 @Override
                 public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
+                    String list = "";
                     if(code == 200) {
-                        Log.i(LOG_TAG, "SOFTWARE ASSIGNMENT LIST ---------------------------------");
+                        list +=  "#### SOFTWARE ASSIGNMENT LIST ####\n";
                         for(SoftwareAssignment s : software_list) {
-                            Log.i(LOG_TAG, s.toString());
+                            list += s.toString() + "\n-------------\n";
                         }
                     } else {
-
+                        list = "No List, HTTP Code: " + code;
                     }
+
+                    Log.i(LOG_TAG, list);
+
                 }};
 
             if(swapi != null) {
@@ -136,6 +140,18 @@ public class SoftwareUpdateService extends Service {
     public int GetState() {
         Log.e(LOG_TAG, "GetState not implemented");
         return state;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(LOG_TAG, "onStartCommand");
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(LOG_TAG, "onDestroy");
+        super.onDestroy();
     }
 
     public void GetSoftwareAssignmentList(ISoftwareUpdateManagerCallback callback) {

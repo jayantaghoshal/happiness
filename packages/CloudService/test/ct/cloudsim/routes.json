@@ -1,0 +1,8 @@
+{
+    "/softwaremanagement-1/availableUpdates" : "/availableUpdates",
+    "/softwaremanagement-1/availableAccessories": "/availableAccessories",
+    "/softwaremanagement-1/mapUpdates": "/mapUpdates",
+    "/softwaremanagement-1/downloads": "/downloads",
+    "/softwaremanagement-1/deleteNotification": "/deleteNotification",
+    "/softwaremanagement-1/commission": "/commission"
+}

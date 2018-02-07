@@ -3,7 +3,7 @@
 
 import os
 
-ignored_source_files = ['Android.mk', 'Android.bp', '__init__.py', '.vcc-component.yaml']
+ignored_source_files = ['Android.mk', 'Android.bp', '__init__.py', '.vcc-component.yaml', 'README.md']
 ignored_directories = ['.git', '.idea', '__pycache__']
 
 

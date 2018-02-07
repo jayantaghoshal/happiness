@@ -1,0 +1,29 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library {
+    name: "lib_uds_data_handler",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    export_include_dirs: [
+        "include/",
+    ],
+
+    local_include_dirs: [
+        "include/uds",
+    ],
+
+    shared_libs: [
+        "vendor.volvocars.hardware.uds@1.0",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libbase",
+    ],
+}

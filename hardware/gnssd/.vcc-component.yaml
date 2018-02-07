@@ -1,4 +1,4 @@
 functional_area: 'Positioning'
 component: 'GNSS Deamon'
 deployment: 'native-suite'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

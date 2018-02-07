@@ -1,4 +1,4 @@
 functional_area: 'Platform'
 component: 'Car Config'
 deployment: 'native-suite'
-license: 'Proprietary'
+aptivlicense: 'WhiteBox'

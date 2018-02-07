@@ -304,47 +304,40 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
                    'autodump': False, 'startviewserver': True, 'compresseddump': True}
         vc = ViewClient(device, serialno, **kwargs2)
 
-        # Get content of current visible view
-        vc.dump(window=-1)
-
         # Try to find fan off button
         try:
-            vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_icon")
+            vc.findViewByIdOrRaise("com.volvocars.hmi.overlay.polestar:id/ps_clm_fan")
+
         except:
             #Ok, not in climate view, assume we are on home screen, push climate button on homescreen
             device.touchDip(388.0, 948.0, 0)
 
-        #Get content of climate first row view
-        vc.dump(window=-1)
-
         #Get fan buttons
-        #TODO investigate if button definitions could be defined in some common file. Also consider VCC/Polestar
-        fan_off = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_off_icon")
-        fan_level = vc.findViewByIdOrRaise("com.volvocars.launcher:id/fan_level_seekbar")
-        fan_max = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_fan_level_max_icon")
-        climate_close = vc.findViewByIdOrRaise("com.volvocars.launcher:id/climate_bar_close_btn")
+        fan_off_pos_X = 208.0
+        fan_off_pos_Y = 785.0
 
-        #Calcutale x,y of fan level seekbar
-        fan_level_pic_with = fan_level.getWidth()/5
-        fan_level_pic_pos1 = fan_level.getX()+(fan_level_pic_with/2)
-        fan_level_1 = (fan_level_pic_pos1+(fan_level_pic_with*0), fan_level.getY(), 0)
-        fan_level_2 = (fan_level_pic_pos1+(fan_level_pic_with*1), fan_level.getY(), 0)
-        fan_level_3 = (fan_level_pic_pos1+(fan_level_pic_with*2), fan_level.getY(), 0)
-        fan_level_4 = (fan_level_pic_pos1+(fan_level_pic_with*3), fan_level.getY(), 0)
-        fan_level_5 = (fan_level_pic_pos1+(fan_level_pic_with*4), fan_level.getY(), 0)
+        fan_off = (fan_off_pos_X, fan_off_pos_Y, 0.0)
+        fan_level_2 = (fan_off_pos_X + (70*1), fan_off_pos_Y, 0.0)
+        fan_level_3 = (fan_off_pos_X + (70*2), fan_off_pos_Y, 0.0)
+        fan_level_4 = (fan_off_pos_X + (70*3), fan_off_pos_Y, 0.0)
+        fan_level_5 = (fan_off_pos_X + (70*4), fan_off_pos_Y, 0.0)
+        fan_max = (fan_off_pos_X + (70*5), fan_off_pos_Y, 0.0)
+
+        climate_close = (388.0, 948.0, 0)
 
         # Using flexray signal values for ECC climate
 
         # Set to OFF
-        fan_off.touch()
+        device.touchDip(*fan_off)
         vc.sleep(_s)
-
         fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
         asserts.assertEqual(self.extractValue(fan_speed_value), 0, "Failed to set fan to OFF")
         self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.Off)
 
         # Set to Level 1
-        device.touchDip(*fan_level_1)
+        # Swipe down from level 2 to 0 to be able to set level 1
+        device.touchDip(*fan_level_2)
+        vc.swipe(fan_level_2[0], fan_level_2[1], fan_off[0], fan_off[1])
         vc.sleep(_s)
         fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
         asserts.assertEqual(self.extractValue(fan_speed_value), 1, "Failed to set fan to Level 1")
@@ -379,15 +372,14 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.LvlAutPlusPlus)
 
         # Set to Max
-        fan_max.touch()
+        device.touchDip(*fan_max)
         vc.sleep(_s)
         fan_speed_value = self.readVhalProperty(self.vtypes.VehicleProperty.HVAC_FAN_SPEED, self.vtypes.VehicleAreaZone.ROW_1)
         asserts.assertEqual(self.extractValue(fan_speed_value), 6, "Failed to set fan to Level Max")
         self.assert_signal_equals(self.flexray.HmiHvacFanLvlFrnt, self.flexray.HmiHvacFanLvlFrnt.map.Max)
 
         #Close climate screen
-        climate_close.touch()
-
+        device.touchDip(*climate_close)
         vc.sleep(_s)
 
 if __name__ == "__main__":

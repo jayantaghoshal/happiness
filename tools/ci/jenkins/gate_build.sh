@@ -25,7 +25,7 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # Update the manifests based on the templates and download all other
 # repositories. First time this will take a very long time but subsequent
 # downloads are incremental and faster.
-time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local "${ZUUL_BRANCH}"
+time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local
 
 rm -rf out  # Remove previous OUT_DIR for clean build.
 

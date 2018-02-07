@@ -73,7 +73,7 @@ namespace autosar {
     gen_jsonenc_h_contents = header + """#ifndef _JSONENCDEC_H
 #define _JSONENCDEC_H
 
-#include <json.hpp>
+#include <json_v211.hpp>
 #include <type_traits>
 
 #include "gen_datatypes.h"

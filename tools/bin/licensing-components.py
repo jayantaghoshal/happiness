@@ -33,11 +33,12 @@ Help:
 import typing
 from ihuutils.docopt_dispatch import dispatch
 from licensingcomponents import copyrightheader
+from licensingcomponents import softwarebom
 
 
 @dispatch.on('software-bom')
 def software_bom(root, output_path, **kwargs):
-    software_bom(root, output_path)
+    softwarebom.software_bom(root, output_path)
 
 
 @dispatch.on('list-copyright-headers')

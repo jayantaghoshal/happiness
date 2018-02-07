@@ -18,7 +18,7 @@ class IpcbSimulator {
     ~IpcbSimulator();
 
     bool SendPdu(Pdu pdu);
-    bool ReceivePdu(Pdu& pdu);
+    bool ReceivePdu(Pdu& pdu, const uint32_t timeout_sec = 0);
     void CreateAndSendIpActivityMessage();  // TODO: Consider removing, this is per implementation specific code
     void CloseSocket();
 
