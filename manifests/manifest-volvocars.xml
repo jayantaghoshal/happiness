@@ -62,6 +62,9 @@
       <copyfile dest="vendor/aptiv/components/Android.bp" src="blueprintintermediate"/>
   </project>
 
+  <remove-project name="vendor/delphi/android_vendor" />
+  <project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="b52a6d2e92d5572cd9832071bd3b524b1bd3536b" />
+
   <remove-project name="vendor/delphi/bb_android_hisip_desip" />
   <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="b862ea0de8697acdb9644e9672e0386e1a6c27cd"/>
 
