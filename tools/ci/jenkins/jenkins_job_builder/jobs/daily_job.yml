@@ -130,7 +130,7 @@
       
       - shell:
             !include-raw:
-                - bootstrap_ihu_daily_report_generation.sh    
+                - bootstrap_ihu_report_generation.sh    
 
 - job:
     name: ihu_daily_build_vcc_eng

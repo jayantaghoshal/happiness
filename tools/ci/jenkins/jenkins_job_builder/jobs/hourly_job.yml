@@ -123,7 +123,7 @@
 
       - shell:
             !include-raw:
-                - bootstrap_ihu_hourly_report_generation.sh 
+                - bootstrap_ihu_report_generation.sh
 - job:
     name: ihu_hourly_build-eng
     defaults: hourly_job_defaults
