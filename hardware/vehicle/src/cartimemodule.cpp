@@ -42,7 +42,8 @@ int CarTimeHal::setProp(const VehiclePropValue& propValue) {
     }
 }
 
-std::unique_ptr<VehiclePropValue> CarTimeHal::getProp(const VehiclePropValue& requestedPropValue) {
+std::unique_ptr<VehiclePropValue> CarTimeHal::getProp(const VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& /*status*/) {
     ALOGV("getProp: 0x%0x", requestedPropValue.prop);
     VehiclePropValue prop_value;
     switch (requestedPropValue.prop) {

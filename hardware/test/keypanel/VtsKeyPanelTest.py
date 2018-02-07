@@ -115,7 +115,7 @@ class ComponentTest(base_test.BaseTestClass):
     Python script send flexray signal for each button under test.
     Waits 1.5 sec then execute logcat and takes 2 latest entries with the LOGTAG Test_KeyPanelEventSniffer
     KeyDown and KeyUp is expected.
-    For mappings see DesipKeyHandlerService (device/delphi/vcc_ihu/private/bb_android_desip_key_handler/libdesipkeyhandler/src/DesipKeyHandlerService.cpp)
+    For mappings see DesipKeyHandlerService (vendor/aptiv/components/bb_android_desip_key_handler/libdesipkeyhandler/src/DesipKeyHandlerService.cpp)
     {Btn4ForUsrSwtPanFrntReq.Psd && Btn4ForUsrSwtPanFrntReq.NotPsd           VIP_KEY_LIN19_DEFROST_FRONT,                   }
     {Btn3ForUsrSwtPanFrntReq.Psd && Btn3ForUsrSwtPanFrntReq.NotPsd           VIP_KEY_LIN19_NEXT,                            }
     {Btn1ForUsrSwtPanFrntReq.Psd && Btn1ForUsrSwtPanFrntReq.NotPsd           VIP_KEY_LIN19_PLAY_PAUSE,                      }

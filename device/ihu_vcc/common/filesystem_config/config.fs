@@ -1,5 +1,5 @@
 [AID_IPLMD]
-value: 2920
+value: 2972
 
 [vendor/bin/hw/iplmd]
 mode: 0755

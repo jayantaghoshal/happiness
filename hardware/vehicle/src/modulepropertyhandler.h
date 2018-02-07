@@ -23,17 +23,18 @@ namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
 /*
-* @brief Helper class for VHAL modules. Inherit this class in any new VHAL module, e.g. hvacmodule.h.
-* Then instantiate one IPropertyHandler for each required property and zone e.g. one PropertyHandlerFloat for
-* HVAC_TEMPERATURE_SET
-* and ROW_1_RIGHT and one for HVAC_TEMPERATURE_SET and ROW_1_LEFT.
-*/
+ * @brief Helper class for VHAL modules. Inherit this class in any new VHAL module, e.g. hvacmodule.h.
+ * Then instantiate one IPropertyHandler for each required property and zone e.g. one PropertyHandlerFloat for
+ * HVAC_TEMPERATURE_SET
+ * and ROW_1_RIGHT and one for HVAC_TEMPERATURE_SET and ROW_1_LEFT.
+ */
 class ModulePropertyHandler : public vhal20::impl::ModuleBase {
   public:
     ModulePropertyHandler(vhal20::impl::IVehicleHalImpl* vehicleHal);
 
     int setProp(const vhal20::VehiclePropValue& propValue) override;
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue) override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& status) override;
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override;
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
 
@@ -112,7 +113,7 @@ class ModulePropertyHandler : public vhal20::impl::ModuleBase {
     std::map<vccvhal10::VehicleProperty, PropertyAndConfig> propertyhandlers_;
 };
 
-}  // impl
+}  // namespace impl
 
 }  // namespace V1_0
 }  // namespace vehiclehal

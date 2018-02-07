@@ -5,6 +5,7 @@ LOCAL_PATH := $(call my-dir)
 
 vhal_v2_0 = android.hardware.automotive.vehicle@2.0
 vccvhal_v1_0 = vendor.volvocars.hardware.vehiclehal@1.0
+audiohal_v1_0 = vendor.delphi.audiomanager@1.0
 service_name = android.hardware.automotive.vehicle.vcc@2.0
 
 include $(CLEAR_VARS)
@@ -48,6 +49,7 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     $(vhal_v2_0) \
     $(vccvhal_v1_0) \
+    $(audiohal_v1_0) \
     libcarconfig_reader \
     libtarmac \
     libdataelements \

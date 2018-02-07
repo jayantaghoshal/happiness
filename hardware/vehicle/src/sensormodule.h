@@ -23,7 +23,8 @@ class SensorModule : public vhal20::impl::ModuleBase {
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override;
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
     /* Callbacks */
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& propValue) override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& propValue,
+                                                      vhal20::impl::Status& status) override;
 
   private:
     const std::vector<vhal20::VehiclePropConfig> sensor_prop_config_;

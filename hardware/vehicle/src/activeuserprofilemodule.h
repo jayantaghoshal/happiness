@@ -25,7 +25,8 @@ class ActiveUserProfileHal : public vhal20::impl::ModuleBase {
     ActiveUserProfileHal(vhal20::impl::IVehicleHalImpl* vehicleHal);
 
     int setProp(const vhal20::VehiclePropValue& propValue) override;
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue) override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& status) override;
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override;
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
 
@@ -39,7 +40,7 @@ class ActiveUserProfileHal : public vhal20::impl::ModuleBase {
     vhal20::VehiclePropValue active_user_profile_;
 };
 
-}  // impl
+}  // namespace impl
 
 }  // namespace V1_0
 }  // namespace vehiclehal

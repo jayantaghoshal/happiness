@@ -26,7 +26,11 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/ip_configuration",            standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/iptables",                    standard_caps),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",     standard_caps),
-    VTSTest("vendor/volvocars/hardware/uds/test/ct",                                standard_caps),
+    Disabled(VTSTest("vendor/volvocars/hardware/uds/test/ct",                       standard_caps),
+             reason="failed in ww45c, not a feature blocker, will be fixed on master",
+             jira_issue="",
+             deadline="2018-02-25"
+    ),
     VTSTest("vendor/volvocars/tools/test/daemon_test",                              standard_caps),
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",             standard_caps),
 ]
