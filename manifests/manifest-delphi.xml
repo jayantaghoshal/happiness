@@ -152,7 +152,7 @@
   <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="7352ed6c0d6e65edbe53285ef61bbd96ea945f2d" />
   <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="08f50ae7b11e0a6351955e85b408163fb533d9a3" />
   <project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="7ccc2445783d38a871105ffb0668c3e85afc9fc9" />
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="f3e29e946c2bd62fe86c22651105bf8d475408e3" />
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="9e3b2213b9ea7d429ffbf77a897b9222d54120fd" />
   <project name="vendor/delphi/AP_ProcessManager" path="device/delphi/vcc_ihu/private/ProcessManager" revision="4a8451dd3ebefbd37714a81efde0b372faca1ef1"/>
 
   <project name="vendor/delphi/AP_ListSource_API" path="device/delphi/vcc_ihu/private/liblist/ListSource" revision="98bf380cafe45f78a224ad0789c20112c681441e" />
