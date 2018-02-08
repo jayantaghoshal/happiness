@@ -58,8 +58,9 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
                 return;
             }
 
-            // Use broadcast address for broadcast socket
+            // Use broadcast address and port for broadcast socket
             local_ip = it->second.ip;
+            local_port = it->second.port;
 
             set_option(SOL_SOCKET, SO_BROADCAST, true);
         }
