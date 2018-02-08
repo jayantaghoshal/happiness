@@ -66,4 +66,22 @@ public class LocalConfigTest extends ActivityTestRule<MainActivity> {
   public void testLocalConfigGetWrongDouble() throws Exception {
     mActivityRule.getActivity().LocalConfigGetWrongDouble();
   }
+
+  @Test
+  public void testLocalConfigGetBoolean() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetBoolean();
+  }
+
+  @Test
+  public void testLocalConfigGetString_Mismatchtype() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetString_MismatchKey();
+  }
+  @Test
+  public void testLocalConfigGetDouble_Mismatchtype() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetDouble_Mismatchtype();
+  }
+  @Test
+  public void testLocalConfigGetInteger_Mismatchtype() throws Exception {
+    mActivityRule.getActivity().LocalConfigGetInteger_Mismatchtype();
+  }
 }
