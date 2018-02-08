@@ -16,7 +16,7 @@ def main():
         raise RuntimeError('Failed due to the IPM map file')
     ipm_instance = IHU_power_control()
     ipm_instance.port_detail()
-    ipm_instance.reboot(20) # reboot after 20 seconds
+    ipm_instance.reboot(120) # reboot after 2 minutes
     print("State: "+str(ipm_instance.state()))
 
 if __name__ == '__main__':
