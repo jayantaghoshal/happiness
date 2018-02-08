@@ -27,7 +27,9 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # downloads are incremental and faster.
 time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local
 
-rm -rf out  # Remove previous OUT_DIR for clean build.
+# Unable to remove out folder when the server is in process of
+# copying files at the same time.
+rm -rf out || sleep 30 && rm -rf out  # Remove previous OUT_DIR for clean build.
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
