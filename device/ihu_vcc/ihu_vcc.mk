@@ -13,3 +13,6 @@ PRODUCT_DEVICE := ihu_vcc
 
 # Resource overlays
 PRODUCT_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay $(PRODUCT_PACKAGE_OVERLAYS)
+
+# Override for Aptiv audio configuration
+PRODUCT_COPY_FILES += vendor/volvocars/device/ihu_vcc/most_type.txt:vendor/etc/most_type.txt
