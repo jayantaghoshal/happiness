@@ -3,6 +3,7 @@ type netmand, domain;
 type netmand_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(netmand)
+hal_client_domain(netmand, hal_uds_diagnostics)
 
 allow netmand self:netlink_kobject_uevent_socket read;
 allow netmand self:udp_socket { create ioctl };
@@ -16,7 +17,6 @@ allow netmand rootfs:dir mounton;
 allow netmand self:capability2 wake_alarm;
 allow netmand self:netlink_kobject_uevent_socket read;
 allow netmand sysfs:file { getattr open read };
-allow netmand uds_diagnostics_default:binder call;
 
 allow netmand self:rawip_socket { create getopt setopt };
 allow netmand proc_net:file getattr;
