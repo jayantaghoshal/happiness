@@ -93,5 +93,7 @@ if __name__ == '__main__':
             str(BUILD_NUMBER)
 
     for commiter in commiters_list:
-        send_hourly_failed_email(
-            commiter["commiter_name"], commiter["commiter_mail"], report_link)
+        # TODO send mail notifications to recipients in other domains
+        if "volvocars" in commiter["commiter_mail"]: # send mail to only receipts in volvocars domain
+            send_hourly_failed_email(
+                commiter["commiter_name"], commiter["commiter_mail"], report_link)
