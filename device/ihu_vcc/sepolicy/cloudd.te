@@ -6,7 +6,11 @@ init_daemon_domain(cloudd)
 allow cloudd fwmarkd_socket:sock_file write;
 allow cloudd self:unix_stream_socket connectto;
 allow cloudd self:tcp_socket { connect create getattr getopt read setopt write };
-allow cloudd self:udp_socket create;
+allow cloudd self:udp_socket { create getopt write connect bind };
 
-#============= netd ==============
-allow netd cloudd:fd use;
+allow cloudd dnsproxyd_socket:sock_file write;
+allow cloudd self:capability2 wake_alarm;
+
+allow cloudd port:udp_socket name_bind;
+allow cloudd self:capability net_raw;
+allow cloudd node:udp_socket node_bind;
