@@ -146,13 +146,9 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             # booting to abl
             mp_bootpin_prod(ihu_serials.vip)
 
-            fastboot_env = os.environ.copy()
-            fastboot_env['DISABLE_VERITY'] = '1'
-
             logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
-            run(['bash', 'fastboot.sh', '--abl'],
-                cwd=bsp_provided_flashfiles_path,
-                env=fastboot_env)
+            run(['bash', 'fastboot.sh', '--abl', '--disable-verity'],
+                cwd=bsp_provided_flashfiles_path)
 
             wait_for_device_adb(adb_executable)
             wait_for_boot_completed(adb_executable)

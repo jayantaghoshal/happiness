@@ -49,7 +49,7 @@
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="78ab688ef202164a9d2bbeeaa34b0b281cc2dbeb"/>
 
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="fd16635bf4cc2ed5f73c48c1b50bb3c84c29cf2e"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="e652f048ca91b242f13c49cec5c79ac7d8a5f4bb"/>
 
   <remove-project name="vendor/delphi/android_device_release"/>
   <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="339b033005330d9a992ca28ae42400c9dd91be69"/>
