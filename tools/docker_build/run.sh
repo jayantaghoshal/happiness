@@ -134,6 +134,7 @@ docker run \
     ${INTERACTIVE_OPTS} \
     ${ENV_FILE_OPT} \
     --hostname aic-docker \
+    --add-host aic-docker:127.0.0.1 \
     $VOLUMES \
     --dns=10.244.0.15 \
     --dns=10.244.0.20 \
