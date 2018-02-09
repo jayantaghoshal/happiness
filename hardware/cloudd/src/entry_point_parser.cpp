@@ -18,6 +18,8 @@ EntryPointParser::EntryPoint parse(const char* const data_nullterminated) throw(
     doc.Parse(data_nullterminated);
     tinyxml2::XMLElement* entry_point_element = doc.GetDocument()->FirstChildElement("entry_point");
     if (entry_point_element == nullptr) throw std::runtime_error("entry_point not found");
+    tinyxml2::XMLElement* client_uri_element = entry_point_element->FirstChildElement("client_uri");
+    if (client_uri_element == nullptr) throw std::runtime_error("Client URI not found");
     tinyxml2::XMLElement* host_uri_element = entry_point_element->FirstChildElement("host");
     if (host_uri_element == nullptr) throw std::runtime_error("host not found");
     tinyxml2::XMLElement* port_element = entry_point_element->FirstChildElement("port");
@@ -25,7 +27,8 @@ EntryPointParser::EntryPoint parse(const char* const data_nullterminated) throw(
     const std::string port_str = std::string{port_element->GetText()};
     const int port = std::stoi(port_str);
 
-    return EntryPointParser::EntryPoint{std::string{host_uri_element->GetText()}, port};
+    return EntryPointParser::EntryPoint{std::string{client_uri_element->GetText()},
+                                        std::string{host_uri_element->GetText()}, port};
 }
 }
 }

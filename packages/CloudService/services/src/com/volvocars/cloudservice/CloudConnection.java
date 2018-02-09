@@ -24,14 +24,11 @@ import vendor.volvocars.hardware.cloud.V1_0.*;
 public class CloudConnection extends ICloudConnectionEventListener.Stub {
     private CloudService service;
     private static final String LOG_TAG = "CloudService.ClConn";
-    private Boolean use_https = true;
 
     private ICloudConnection cloud_connection = null;
 
     public CloudConnection(CloudService service) {
         this.service = service;
-        use_https = SystemProperties.getBoolean("service.cloudservice.use_https", true);
-        Log.d(LOG_TAG, "service.cloudservice.use_https: " + use_https);
     }
 
     public void init() {
@@ -64,7 +61,7 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     public Response doGetRequest(String uri, ArrayList<HttpHeaderField> headers, int timeout) {
         Response response = null;
         try {
-            response = cloud_connection.doGetRequest(uri, headers, use_https, timeout);
+            response = cloud_connection.doGetRequest(uri, headers, timeout);
 
             if(!checkResponse(response)) {
                 response = null;
@@ -82,7 +79,7 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
 
         Response response = null;
         try {
-            response = cloud_connection.doPostRequest(uri, headers, body, use_https, timeout);
+            response = cloud_connection.doPostRequest(uri, headers, body, timeout);
 
             if(!checkResponse(response)) {
                 response = null;

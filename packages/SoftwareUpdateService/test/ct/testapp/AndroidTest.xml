@@ -17,7 +17,6 @@
     </target_preparer>
 
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
-        <option name="run-command" value="setprop service.cloudservice.use_https 0" />
         <option name="run-command" value="stop cloudd" />
         <option name="run-command" value="killall -9 cloudd" />
         <option name="run-command" value="am force-stop com.volvocars.cloudservice" />

@@ -40,18 +40,28 @@ bool CloudService::Initialize() {
 bool CloudService::FetchEntryPoint() {
     std::string lcfg_entrypoint_url = cloudd_local_config_.GetCloudEntryPointAddress();
 
-    entry_point_fetcher_.WhenResultAvailable([&](const EntryPointParser::EntryPoint& entry_point) {
+    entry_point_fetcher_.WhenResultAvailable([&, lcfg_entrypoint_url](const EntryPointParser::EntryPoint& entry_point) {
         if (entry_point.host.empty()) {
             ALOGW("Entry point URL is empty, what do?");
         } else {
             ALOGV("Cloud daemon received entry point");
         }
 
-        cep_url_ = entry_point.host;
+        size_t pos = lcfg_entrypoint_url.find("://");
+        std::string protocol;
+        if (pos != std::string::npos) {
+            protocol = lcfg_entrypoint_url.substr(0, pos + 3);
+        } else {
+            ALOGW("CNEP URL %s doesn't contain a protocol. Using 'https' as default.", lcfg_entrypoint_url.c_str());
+            protocol = "https://";
+        }
+
+        cep_url_ = protocol + entry_point.host;
         cep_port_ = entry_point.port;
 
-        state_ = ConnectionState::CONNECTED;
+        ALOGD("CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
 
+        state_ = ConnectionState::CONNECTED;
     });
 
     try {
@@ -114,8 +124,8 @@ Return<void> CloudService::registerCloudConnectionEventListener(
     return Void();
 }
 
-Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool use_https,
-                                        uint32_t timeout, doGetRequest_cb _hidl_cb) {
+Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, uint32_t timeout,
+                                        doGetRequest_cb _hidl_cb) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -125,7 +135,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
         return Void();
     }
 
-    std::string url = (use_https ? "https://" : "http://") + cep_url_ + ":" + std::to_string(cep_port_);
+    std::string url = cep_url_ + ":" + std::to_string(cep_port_);
     std::string path(uri.c_str());
 
     size_t pos = path.find("/", 0);
@@ -143,7 +153,6 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     try {
         cr = std::make_shared<CloudRequest>(cert_handler_);
 
-        cr->SetUseHttps(use_https);
         cr->SetTimeout(std::chrono::milliseconds(timeout));
         cr->SetURL(url);
         cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
@@ -181,7 +190,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
 }
 
 Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
-                                         bool useHttps, uint32_t timeout, doPostRequest_cb _hidl_cb) {
+                                         uint32_t timeout, doPostRequest_cb _hidl_cb) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -191,7 +200,7 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
         return Void();
     }
 
-    std::string url = (useHttps ? "https://" : "http://") + cep_url_ + ":" + std::to_string(cep_port_);
+    std::string url = cep_url_ + ":" + std::to_string(cep_port_);
     std::string path(uri.c_str());
 
     size_t pos = path.find("/", 0);
@@ -209,7 +218,6 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
     try {
         cr = std::make_shared<CloudRequest>(cert_handler_);
 
-        cr->SetUseHttps(useHttps);
         cr->SetTimeout(std::chrono::milliseconds(timeout));
         cr->SetRequestMethod(CloudRequest::HttpMethod::POST);
         cr->SetRequestBody(std::string(body.c_str()));

@@ -13,6 +13,7 @@
 namespace Connectivity {
 namespace EntryPointParser {
 struct EntryPoint {
+    std::string client_uri;
     std::string host;
     int port;
 };
