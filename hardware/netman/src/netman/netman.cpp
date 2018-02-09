@@ -24,7 +24,7 @@ int main() {
     try {
         ALOGI("Netmand 0.1 starting");
 
-        auto *lcfg = vcc::LocalConfigDefault();
+        auto* lcfg = vcc::LocalConfigDefault();
 
         FirewallConfig fw_conf = FirewallConfig(lcfg);
         if (!fw_conf.ParseAndSave(FirewallConfig::kDefaultIptablesRulesPath)) {
@@ -53,7 +53,7 @@ int main() {
 
         NetmanEventHandler event_handler(interface_configurations);
 
-        UEventListener &nl_socket_listener = UEventListener::Instance();
+        UEventListener& nl_socket_listener = UEventListener::Instance();
         nl_socket_listener.SetNetlinkEventHandler(event_handler);
 
         property_set("netmand.startup_completed", "1");
@@ -64,7 +64,7 @@ int main() {
 
         tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Join();
 
-    } catch (const std::runtime_error &e) {
+    } catch (const std::runtime_error& e) {
         ALOGE("ABORTING: Exception thrown: %s", e.what());
     }
 

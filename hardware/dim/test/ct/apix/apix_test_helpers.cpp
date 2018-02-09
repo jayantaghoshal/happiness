@@ -8,11 +8,11 @@
 #include <sstream>
 #include <string>
 
-bool Ping(const std::string &ip, int attempts, std::string &result) {
+bool Ping(const std::string& ip, int attempts, std::string& result) {
     std::string command = "vendor/bin/ip netns exec vcc ping -c " + std::to_string(attempts) + " " + ip;
     std::string mode = "r";
     std::stringstream result_details;
-    FILE *in;
+    FILE* in;
     char buff[512];
     in = popen(command.c_str(), mode.c_str());
     if (in == nullptr) {

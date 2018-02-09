@@ -8,7 +8,7 @@
 #include <cstdint>
 #include "carconfig_updater.h"
 
-int32_t main(int argc, char *argv[]) {
+int32_t main(int argc, char* argv[]) {
     android::ProcessState::initWithDriver("/dev/vndbinder");
     return CarConfigUpdater::runUpdater();
 }

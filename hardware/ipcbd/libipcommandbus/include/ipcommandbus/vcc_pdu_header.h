@@ -18,8 +18,8 @@ struct VCCPDUHeader {
     static const std::size_t BASE_LENGTH =
             DATA_SIZE - 8;  ///< Length field contain totsl PDU length except first 8 bytes
 
-    static VCCPDUHeader from_data(const std::vector<std::uint8_t> &data);
-    void to_data(std::vector<std::uint8_t> &data) const;
+    static VCCPDUHeader from_data(const std::vector<std::uint8_t>& data);
+    void to_data(std::vector<std::uint8_t>& data) const;
 
     IpCmdTypes::ServiceId service_id = 0x0000;      // Undefined
     IpCmdTypes::OperationId operation_id = 0x0000;  // Undefined

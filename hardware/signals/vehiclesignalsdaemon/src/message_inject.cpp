@@ -13,10 +13,10 @@
 #undef LOG_TAG
 #define LOG_TAG "VSD"
 
-static void logMessage(const uint8_t *message, const uint32_t data_size);
-static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, const uint32_t data_size);
+static void logMessage(const uint8_t* message, const uint32_t data_size);
+static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t* msg_data, const uint32_t data_size);
 
-void avmpMessageInject(uint8_t *msg_data, const uint32_t data_size) {
+void avmpMessageInject(uint8_t* msg_data, const uint32_t data_size) {
     uint16_t avmpHeader;
 
     if (nullptr == msg_data) {
@@ -37,12 +37,12 @@ void avmpMessageInject(uint8_t *msg_data, const uint32_t data_size) {
         handleAvmpCtrlMsg(avmpHeader, msg_data, data_size);
     } else {
         vsm_inject_inject((avmp::signalIdMask & avmpHeader) | (avmp::signalGroupMask & avmpHeader),
-                          static_cast<void *>(&msg_data[avmp::payloadOffset]), 0 != (avmp::errorMask & avmpHeader),
+                          static_cast<void*>(&msg_data[avmp::payloadOffset]), 0 != (avmp::errorMask & avmpHeader),
                           data_size - avmp::avmpHeaderSize);
     }
 }
 
-static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, const uint32_t data_size) {
+static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t* msg_data, const uint32_t data_size) {
     uint16_t ctrlMsgId = avmp::controlMsgIdMask & avmpHeader;
 
     ALOGV("Received AVMP control message with ID %d", ctrlMsgId);
@@ -126,7 +126,7 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
     }
 }
 
-static void logMessage(const uint8_t *message, const uint32_t data_size) {
+static void logMessage(const uint8_t* message, const uint32_t data_size) {
     if (data_size > 4) {
         ALOGV("AVMP message data: 0x%02X%02X%02X%02X%02X", message[0], message[1], message[2], message[3], message[4]);
     } else if (data_size > 3) {

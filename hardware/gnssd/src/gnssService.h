@@ -50,19 +50,19 @@ class GnssService : public virtual RefBase, private IMessageCallback, private hi
        */
     bool Initialize();
 
-    void GNSSPositionDataNotificationHandler(const Msg &msg);
-    void GNSSPositionDataAccuracyNotificationHandler(const Msg &msg);
+    void GNSSPositionDataNotificationHandler(const Msg& msg);
+    void GNSSPositionDataAccuracyNotificationHandler(const Msg& msg);
 
   private:
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
-    Return<void> onMessageRcvd(const Msg &msg) override;
+    Return<void> onMessageRcvd(const Msg& msg) override;
 
     // Methods from hidl_death_recipient follow.
-    void serviceDied(uint64_t cookie, const wp<IBase> &who) override;
+    void serviceDied(uint64_t cookie, const wp<IBase>& who) override;
     void unsubscribeAll();
     sp<IVehicleCom> ipcbServer_;
 
-    tarmac::eventloop::IDispatcher &timeProvider_;
+    tarmac::eventloop::IDispatcher& timeProvider_;
 
     Gnss gnss_;
     GnssLocation location_;

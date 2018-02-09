@@ -18,7 +18,7 @@ using ::vendor::volvocars::hardware::uds::V1_0::DiagnosticCheckStatus;
 
 NetmanInterfaceTestHelper::NetmanInterfaceTestHelper() {}
 
-void NetmanInterfaceTestHelper::TakeDownNetworkInterface(const std::string &interface_name) {
+void NetmanInterfaceTestHelper::TakeDownNetworkInterface(const std::string& interface_name) {
     // taking downthe interface
     std::string interface_down = "/vendor/bin/ip netns exec vcc /vendor/bin/ifconfig " + interface_name + " down";
     system(interface_down.c_str());

@@ -19,7 +19,7 @@ namespace InfotainmentIpBus {
 namespace Utils {
 
 template <class MsgTypePtr>
-bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session &m_session_msgd, MsgTypePtr &pDecodedMsg,
+bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session& m_session_msgd, MsgTypePtr& pDecodedMsg,
                    MsgTypePtr (*createFunc)(ASN_Session session),
                    ASN_Result (*decodeFunc)(MsgTypePtr ThisPtr, ASN_Session session, ASN_Stream stream)) {
     ASN_Session_Reset(m_session_msgd);
@@ -50,7 +50,7 @@ bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session &m_session_msgd, Ms
 
 template <class MsgTypePtr>
 void encodeMessage(MsgTypePtr pMsg, ASN_Result (*encodeFunc)(MsgTypePtr, ASN_Stream),
-                   U32 (*encodedSizeFunc)(MsgTypePtr), std::vector<uint8_t> *bufPayload) {
+                   U32 (*encodedSizeFunc)(MsgTypePtr), std::vector<uint8_t>* bufPayload) {
     // Prepare payload
     // - Align the size of the ASN1 payload buffer on 8-bit boundary
     const U32 encodedSizeInBits = encodedSizeFunc(pMsg);

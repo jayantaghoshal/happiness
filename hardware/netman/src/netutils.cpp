@@ -38,13 +38,13 @@
 
 namespace {
 
-void ValidateReturnStatus(const int command_status, const std::string &what) {
+void ValidateReturnStatus(const int command_status, const std::string& what) {
     if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
         throw std::system_error(command_status, std::generic_category(), what.c_str());
     }
 }
 
-bool WriteFile(const std::string &path, const std::string &text) {
+bool WriteFile(const std::string& path, const std::string& text) {
     std::fstream file(path);
 
     if (file.is_open()) {
@@ -54,13 +54,13 @@ bool WriteFile(const std::string &path, const std::string &text) {
     return false;
 }
 
-bool SetProxyArp(const char *interface_name) {
+bool SetProxyArp(const char* interface_name) {
     ALOGV("%s: Setting proxy_arp = 1", interface_name);
     return WriteFile(std::string("/proc/sys/net/ipv4/conf/") + interface_name + "/proxy_arp", "1");
 }
 
 // Helper functions
-void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac_address_out) {
+void ConvertMacAddress(const std::string& mac_address, std::vector<uint8_t>& mac_address_out) {
     mac_address_out.resize(6);
 
     std::stringstream address(mac_address, std::ios_base::in);
@@ -75,7 +75,7 @@ void ConvertMacAddress(const std::string &mac_address, std::vector<uint8_t> &mac
     }
 }
 
-bool IsMacAddressCorrect(const std::vector<uint8_t> &mac_address, const char *interface_name) {
+bool IsMacAddressCorrect(const std::vector<uint8_t>& mac_address, const char* interface_name) {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
     std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
@@ -98,7 +98,7 @@ bool IsMacAddressCorrect(const std::vector<uint8_t> &mac_address, const char *in
         ALOGE("not an Ethernet interface");
     }
 
-    const char *received_mac = static_cast<char *>(ifr_req.ifr_hwaddr.sa_data);
+    const char* received_mac = static_cast<char*>(ifr_req.ifr_hwaddr.sa_data);
 
     bool match = true;
     for (int pos = 0; pos <= 5; ++pos) {
@@ -112,9 +112,9 @@ bool IsMacAddressCorrect(const std::vector<uint8_t> &mac_address, const char *in
     return match;
 }
 
-std::uint32_t ethtool_cmd_speed_(const struct ethtool_cmd *ep) { return (ep->speed_hi << 16) | ep->speed; }
+std::uint32_t ethtool_cmd_speed_(const struct ethtool_cmd* ep) { return (ep->speed_hi << 16) | ep->speed; }
 
-bool IsLinkSpeedCorrect(const std::string &interface_name) {
+bool IsLinkSpeedCorrect(const std::string& interface_name) {
     int sock;
     struct ifreq ifr;
     struct ethtool_cmd edata;
@@ -151,12 +151,12 @@ bool IsLinkSpeedCorrect(const std::string &interface_name) {
     return false;
 }
 
-inline void ethtool_cmd_speed_set_(struct ethtool_cmd *ep, __u32 speed) {
+inline void ethtool_cmd_speed_set_(struct ethtool_cmd* ep, __u32 speed) {
     ep->speed = static_cast<std::uint16_t>(speed & 0xFFFF);
     ep->speed_hi = static_cast<std::uint16_t>(speed >> 16);
 }
 
-bool SetLinkSpeed(const std::string &interface_name) {
+bool SetLinkSpeed(const std::string& interface_name) {
     int sock;
     struct ifreq ifr;
     struct ethtool_cmd edata;
@@ -197,7 +197,7 @@ bool SetLinkSpeed(const std::string &interface_name) {
     return true;
 }
 
-bool IsInterfaceUp(const char *interface_name) {
+bool IsInterfaceUp(const char* interface_name) {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
     std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
@@ -218,7 +218,7 @@ bool IsInterfaceUp(const char *interface_name) {
     return (ifr_req.ifr_flags & IFF_UP) != 0;
 }
 
-std::string GetIpAddress(const std::string &interface_name) {
+std::string GetIpAddress(const std::string& interface_name) {
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
@@ -240,10 +240,10 @@ std::string GetIpAddress(const std::string &interface_name) {
 
     close(inet_sock_fd);
 
-    return inet_ntoa(reinterpret_cast<struct sockaddr_in *>(&ifr.ifr_addr)->sin_addr);
+    return inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&ifr.ifr_addr)->sin_addr);
 }
 
-std::string GetNetmask(const std::string &interface_name) {
+std::string GetNetmask(const std::string& interface_name) {
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
@@ -264,10 +264,10 @@ std::string GetNetmask(const std::string &interface_name) {
 
     close(inet_sock_fd);
 
-    return inet_ntoa(reinterpret_cast<struct sockaddr_in *>(&ifr.ifr_netmask)->sin_addr);
+    return inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&ifr.ifr_netmask)->sin_addr);
 }
 
-std::string GetBroadcastAddress(const std::string &interface_name) {
+std::string GetBroadcastAddress(const std::string& interface_name) {
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
@@ -287,16 +287,16 @@ std::string GetBroadcastAddress(const std::string &interface_name) {
     }
 
     close(inet_sock_fd);
-    return inet_ntoa(reinterpret_cast<struct sockaddr_in *>(&ifr.ifr_broadaddr)->sin_addr);
+    return inet_ntoa(reinterpret_cast<struct sockaddr_in*>(&ifr.ifr_broadaddr)->sin_addr);
 }
 
-bool SetBroadcastAddress(int inet_sock_fd, const char *interface_name, const char *broadcast_address) {
+bool SetBroadcastAddress(int inet_sock_fd, const char* interface_name, const char* broadcast_address) {
     struct sockaddr_in sin_addr {
         .sin_family = AF_INET, .sin_port = htons(0)
     };
 
     // safe to ignore return value as ip address is a const string in correct format
-    inet_aton(broadcast_address, reinterpret_cast<struct in_addr *>(&sin_addr.sin_addr.s_addr));
+    inet_aton(broadcast_address, reinterpret_cast<struct in_addr*>(&sin_addr.sin_addr.s_addr));
 
     struct ifreq ifr;
     memset(&ifr, 0, sizeof(struct ifreq));
@@ -312,9 +312,9 @@ bool SetBroadcastAddress(int inet_sock_fd, const char *interface_name, const cha
     return true;
 }
 
-bool SetNetmask(int skfd, const char *intf, const char *newmask) {
+bool SetNetmask(int skfd, const char* intf, const char* newmask) {
     struct ifreq ifr;
-    auto *sin = reinterpret_cast<struct sockaddr_in *>(&ifr.ifr_addr);
+    auto* sin = reinterpret_cast<struct sockaddr_in*>(&ifr.ifr_addr);
     memset(&ifr, 0, sizeof(ifr));
     sin->sin_family = AF_INET;
     if (inet_pton(AF_INET, newmask, &sin->sin_addr) <= 0) {
@@ -331,7 +331,7 @@ bool SetNetmask(int skfd, const char *intf, const char *newmask) {
     return true;
 }
 
-bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *netmask, const char *broadcast_address) {
+bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask, const char* broadcast_address) {
     // Open AF_INET socket
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1) {
@@ -345,7 +345,7 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
         };
 
         // safe to ignore return value as ip address is a const string in correct format
-        inet_aton(ip_addr, reinterpret_cast<struct in_addr *>(&sin_addr.sin_addr.s_addr));
+        inet_aton(ip_addr, reinterpret_cast<struct in_addr*>(&sin_addr.sin_addr.s_addr));
 
         struct ifreq ifr;
         std::memset(&ifr, 0, sizeof(struct ifreq));
@@ -390,7 +390,7 @@ bool SetIpAddress(const char *interface_name, const char *ip_addr, const char *n
     return true;
 }
 
-bool SetMtu(const uint32_t mtu, const char *interface_name) {
+bool SetMtu(const uint32_t mtu, const char* interface_name) {
     int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd == -1) {
         ALOGE("Unable to open socket for set MTU address for device %s", interface_name);
@@ -415,7 +415,7 @@ bool SetMtu(const uint32_t mtu, const char *interface_name) {
     return true;
 }
 
-std::uint32_t GetMtu(const std::string &interface_name) {
+std::uint32_t GetMtu(const std::string& interface_name) {
     int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket.");
@@ -439,7 +439,7 @@ std::uint32_t GetMtu(const std::string &interface_name) {
     return ifr.ifr_mtu;
 }
 
-bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char *interface_name) {
+bool SetMacAddress(const std::vector<uint8_t>& mac_address, const char* interface_name) {
     struct ifreq ifr_mac;
     int sockfd;
 
@@ -475,7 +475,7 @@ bool SetMacAddress(const std::vector<uint8_t> &mac_address, const char *interfac
 namespace vcc {
 namespace netman {
 
-void PrintInterfaceConfiguration(const std::string &context, const InterfaceConfiguration &conf) {
+void PrintInterfaceConfiguration(const std::string& context, const InterfaceConfiguration& conf) {
     ALOGV("--------------------------------------------------------");
     ALOGV("Interface configuration: %s", context.c_str());
     ALOGV("Interface name: %s", conf.name.c_str());
@@ -488,10 +488,10 @@ void PrintInterfaceConfiguration(const std::string &context, const InterfaceConf
     ALOGV("MTU: %i", conf.mtu);
 }
 
-void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations,
-                                const vcc::LocalConfigReaderInterface *lcfg) {
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_configurations,
+                                const vcc::LocalConfigReaderInterface* lcfg) {
     const std::vector<std::string> interface_names = {"apix0", "tcam0", "meth0"};
-    for (auto &name : interface_names) {
+    for (auto& name : interface_names) {
         InterfaceConfiguration conf;
         conf.name = name;
         conf.ip_address = lcfg->GetString(name, "ip-address");
@@ -504,7 +504,7 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_c
     }
 }
 
-bool BringInterfaceUp(const char *interface_name) {
+bool BringInterfaceUp(const char* interface_name) {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
     std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
@@ -535,7 +535,7 @@ bool BringInterfaceUp(const char *interface_name) {
     return true;
 }
 
-bool TakeInterfaceDown(const char *interface_name) {
+bool TakeInterfaceDown(const char* interface_name) {
     struct ifreq ifr_req;
     memset(&ifr_req, 0, sizeof(struct ifreq));
     std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
@@ -565,8 +565,8 @@ bool TakeInterfaceDown(const char *interface_name) {
     return true;
 }
 
-void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std::string &ns,
-                                     const std::string &new_name) {
+void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std::string& ns,
+                                     const std::string& new_name) {
     std::stringstream move_network_interface_cmd;
 
     move_network_interface_cmd << "/vendor/bin/ip link set dev " << current_name;
@@ -581,8 +581,8 @@ void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std:
                          std::string("Failed to move ") + current_name);
 }
 
-bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_address, const char *ip_addr,
-                    const char *netmask, const char *broadcast_addr, const uint32_t mtu) {
+bool SetupInterface(const char* interface_name, const std::vector<uint8_t>& mac_address, const char* ip_addr,
+                    const char* netmask, const char* broadcast_addr, const uint32_t mtu) {
     ALOGD("%s: Setting configuration for network interface", interface_name);
 
     // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.

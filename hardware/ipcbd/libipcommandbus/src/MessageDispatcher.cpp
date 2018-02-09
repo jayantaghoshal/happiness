@@ -17,7 +17,7 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
-MessageDispatcher::MessageDispatcher(ITransportServices *transport, IDispatcher &dispatcher)
+MessageDispatcher::MessageDispatcher(ITransportServices* transport, IDispatcher& dispatcher)
     : wakeUpApplicationThread(dispatcher) {
     assert(transport);
 
@@ -32,7 +32,7 @@ MessageDispatcher::MessageDispatcher(ITransportServices *transport, IDispatcher 
                                                           std::placeholders::_1, std::placeholders::_2));
 }
 
-void MessageDispatcher::setDiagnostics(IDiagnosticsClient *diagnostics) {
+void MessageDispatcher::setDiagnostics(IDiagnosticsClient* diagnostics) {
     assert(diagnostics);
     m_diagnostics = diagnostics;
     m_transport->setDiagnostics(diagnostics, &wakeUpApplicationThread);
@@ -51,7 +51,7 @@ uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId servic
     // only one subscriber is allowed. Check if that is the case and fail if so.
     if (IpCmdTypes::OperationType::REQUEST == operationType || IpCmdTypes::OperationType::SETREQUEST == operationType ||
         IpCmdTypes::OperationType::NOTIFICATION_REQUEST == operationType) {
-        auto it = FindReceiver([&serviceId, &operationId, &operationType](const RegInfo &ri) {
+        auto it = FindReceiver([&serviceId, &operationId, &operationType](const RegInfo& ri) {
             return (serviceId == ri.serviceId && operationId == ri.operationId && operationType == ri.operationType);
         });
         if (it != m_registeredReceivers.end()) {
@@ -71,7 +71,7 @@ bool MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId) {
 
     // Find id and remove from list!
     auto it = FindReceiver(
-            [&registeredReceiverId](const RegInfo &ri) { return registeredReceiverId == ri.registeredReceiverId; });
+            [&registeredReceiverId](const RegInfo& ri) { return registeredReceiverId == ri.registeredReceiverId; });
 
     if (m_registeredReceivers.end() != it) {
         m_registeredReceivers.erase(it);
@@ -82,7 +82,7 @@ bool MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId) {
     return true;
 }
 
-void MessageDispatcher::sendMessage(Message &&msg, std::shared_ptr<CallerData> pCallerData) {
+void MessageDispatcher::sendMessage(Message&& msg, std::shared_ptr<CallerData> pCallerData) {
     ALOGD("Send message %s to %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     {
@@ -135,7 +135,7 @@ void MessageDispatcher::IPCBThread_sendPendingMessages(void) {
     }
 }
 
-bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg) {
+bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
     ALOGD("Incoming request %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     bool receiverExists = false;
@@ -162,13 +162,13 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg) {
             // Called here inside scope of m_registeredReceiversMutex
 
             // Check if we have a subscriber for the Service ID and Operation ID
-            serviceAndOpExists = ReceiverExists([&msg](const RegInfo &ri) {
+            serviceAndOpExists = ReceiverExists([&msg](const RegInfo& ri) {
                 return msg.pdu.header.service_id == ri.serviceId && msg.pdu.header.operation_id == ri.operationId;
             });
 
             // Check if we have a subscriber for the Service ID
             serviceExists =
-                    ReceiverExists([&msg](const RegInfo &ri) { return msg.pdu.header.service_id == ri.serviceId; });
+                    ReceiverExists([&msg](const RegInfo& ri) { return msg.pdu.header.service_id == ri.serviceId; });
         }
     }
 
@@ -204,7 +204,7 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message &msg) {
     }
 }
 
-void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message &msg) {
+void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message& msg) {
     if (ri.messageCb) {
         ALOGD("MessageDispatcher::AppThread_cbIncomingRequest, Call messageCb()");
         if (!ri.messageCb(msg, ri.registeredReceiverId)) {
@@ -221,12 +221,12 @@ void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message &msg) {
     }
 }
 
-void MessageDispatcher::IPCBThread_cbIncomingNotification(Message &msg) {
+void MessageDispatcher::IPCBThread_cbIncomingNotification(Message& msg) {
     // TODO: Inefficient copy of msg, should modify TransportServices to pass msg as unique_ptr
     wakeUpApplicationThread.Enqueue([ this, m2 = msg ]() mutable { Appthread_cbIncomingNotification(m2); });
 }
 
-void MessageDispatcher::Appthread_cbIncomingNotification(Message &msg) {
+void MessageDispatcher::Appthread_cbIncomingNotification(Message& msg) {
     ALOGD("Incoming notification %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     {  // Mutex scope
@@ -261,13 +261,13 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message &msg) {
     }
 }
 
-void MessageDispatcher::IPCBThread_cbIncomingResponse(Message &msg) {
+void MessageDispatcher::IPCBThread_cbIncomingResponse(Message& msg) {
     ALOGD("Incoming response %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     wakeUpApplicationThread.Enqueue([ this, m2 = msg ]() mutable { AppThread_cbIncomingResponse(m2); });
 }
 
-void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg) {
+void MessageDispatcher::AppThread_cbIncomingResponse(Message& msg) {
     auto itc = m_requestsMap.find(msg.pdu.header.sender_handle_id);
     if (itc != m_requestsMap.end()) {
         std::shared_ptr<CallerData> pCallerData = itc->second;
@@ -305,11 +305,11 @@ void MessageDispatcher::AppThread_cbIncomingResponse(Message &msg) {
     }
 }
 
-void MessageDispatcher::IPCBThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType) {
+void MessageDispatcher::IPCBThread_cbIncomingError(Message& msg, ITransportServices::ErrorType eType) {
     wakeUpApplicationThread.Enqueue([ this, m2 = msg, eType ]() mutable { AppThread_cbIncomingError(m2, eType); });
 }
 
-void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServices::ErrorType eType) {
+void MessageDispatcher::AppThread_cbIncomingError(Message& msg, ITransportServices::ErrorType eType) {
     ALOGD("Incoming error %u,  %s from %s", static_cast<uint32_t>(eType), Pdu::toString(msg.pdu).c_str(),
           Message::EcuStr(msg.ecu));
 
@@ -342,7 +342,7 @@ void MessageDispatcher::AppThread_cbIncomingError(Message &msg, ITransportServic
     }
 }
 
-void MessageDispatcher::DecodeGenericError(Message &msg, Icb_OpGeneric_Error_t &errorReturn) {
+void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& errorReturn) {
     ALOGD("DecodeGenericError %s (size: %zu)", Pdu::toString(msg.pdu).c_str(), msg.pdu.payload.size());
 
     // NOTE! Not explicitly mentioned in specification, but since errorInfo is an optional element,

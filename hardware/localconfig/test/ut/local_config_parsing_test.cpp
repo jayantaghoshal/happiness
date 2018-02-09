@@ -54,8 +54,8 @@ std::string malformed_json_input = R"(
 { foo
 )";
 
-const char *kTestIntKey = "foo";
-const char *kTestStringKey = "bum";
+const char* kTestIntKey = "foo";
+const char* kTestStringKey = "bum";
 }  // namespace
 
 TEST(LocalConfigParsingTestMalformed, MalformedInput) {
@@ -69,7 +69,7 @@ class LocalConfigParsingTest : public ::testing::Test {
 
   protected:
     // only accessing through interface gives proper overload resolution
-    vcc::LocalConfigReaderInterface &reader = underlying_reader;
+    vcc::LocalConfigReaderInterface& reader = underlying_reader;
 };
 
 TEST_F(LocalConfigParsingTest, GetInt) {

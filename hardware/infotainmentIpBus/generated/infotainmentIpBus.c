@@ -22,7 +22,7 @@ ASN_Result ASN_Session_GetResult(ASN_Session session);
 #define ASN_MAX(a, b) ((a > b) ? a : b)
 
 // Find the index for value in an array
-static U32 findIndex(U32 value, const U32 *ordinalArray, U32 arraySize) {
+static U32 findIndex(U32 value, const U32* ordinalArray, U32 arraySize) {
     U32 index;
     for (index = 0; index < arraySize; index++) {
         if (value == ordinalArray[index]) {
@@ -155,7 +155,7 @@ static const U32 Icb_ErrorCode_EnumMap[] = {
         e_Icb_ErrorCode_parameterInvalid         /* Index = 14 */
 };
 
-ASN_Result Icb_ErrorCode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_ErrorCode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 14, FALSE));
 
@@ -353,7 +353,7 @@ static const U32 Icb_SourceStatus_EnumMap[] = {
         e_Icb_SourceStatus_outgoing      /* Index = 4 */
 };
 
-ASN_Result Icb_SourceStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SourceStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -414,7 +414,7 @@ static const U32 Icb_OnOffStatus_EnumMap[] = {
         e_Icb_OnOffStatus_unknown /* Index = 2 */
 };
 
-ASN_Result Icb_OnOffStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_OnOffStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -470,7 +470,7 @@ static const U32 Icb_SecurityStatus_EnumMap[] = {
         e_Icb_SecurityStatus_activeStandalone /* Index = 3 */
 };
 
-ASN_Result Icb_SecurityStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SecurityStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -528,7 +528,7 @@ static const U32 Icb_GenericOkStatus_EnumMap[] = {
         e_Icb_GenericOkStatus_notOk    /* Index = 2 */
 };
 
-ASN_Result Icb_GenericOkStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_GenericOkStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -759,7 +759,7 @@ static const U32 Icb_SBTrigger_EnumMap[] = {
         e_Icb_SBTrigger_manual      /* Index = 3 */
 };
 
-ASN_Result Icb_SBTrigger_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SBTrigger_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -1329,7 +1329,7 @@ static const U32 Icb_ActivationStatusChange_EnumMap[] = {
         e_Icb_ActivationStatusChange_provision    /* Index = 2 */
 };
 
-ASN_Result Icb_ActivationStatusChange_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_ActivationStatusChange_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -1387,7 +1387,7 @@ static const U32 Icb_ActivationStatus_EnumMap[] = {
         e_Icb_ActivationStatus_provisioning_ongoing         /* Index = 5 */
 };
 
-ASN_Result Icb_ActivationStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_ActivationStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 5, FALSE));
 
@@ -1450,7 +1450,7 @@ static const U32 Icb_OnCallService_EnumMap[] = {
         e_Icb_OnCallService_roadsideAssist   /* Index = 1 */
 };
 
-ASN_Result Icb_OnCallService_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_OnCallService_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -1501,7 +1501,7 @@ static const U32 Icb_OnOffSetting_EnumMap[] = {
         e_Icb_OnOffSetting_on   /* Index = 1 */
 };
 
-ASN_Result Icb_OnOffSetting_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_OnOffSetting_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -1622,7 +1622,7 @@ static const U32 Icb_RescueStatus_EnumMap[] = {
         e_Icb_RescueStatus_terminated           /* Index = 4 */
 };
 
-ASN_Result Icb_RescueStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_RescueStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -1686,7 +1686,7 @@ static const U32 Icb_ButtonStatus_EnumMap[] = {
         e_Icb_ButtonStatus_allReleased     /* Index = 5 */
 };
 
-ASN_Result Icb_ButtonStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_ButtonStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 5, FALSE));
 
@@ -1755,7 +1755,7 @@ static const U32 Icb_VoiceStatus_EnumMap[] = {
         e_Icb_VoiceStatus_connectedIncoming /* Index = 7 */
 };
 
-ASN_Result Icb_VoiceStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_VoiceStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 7, FALSE));
 
@@ -1827,7 +1827,7 @@ static const U32 Icb_MessageStatus_EnumMap[] = {
         e_Icb_MessageStatus_ackDefined    /* Index = 4 */
 };
 
-ASN_Result Icb_MessageStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_MessageStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -1887,7 +1887,7 @@ static const U32 Icb_PSAPStatus_EnumMap[] = {
         e_Icb_PSAPStatus_confirmNotRequired /* Index = 1 */
 };
 
-ASN_Result Icb_PSAPStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PSAPStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -1941,7 +1941,7 @@ static const U32 Icb_SendToCarConfirmation_EnumMap[] = {
         e_Icb_SendToCarConfirmation_errorWhenAdding             /* Index = 4 */
 };
 
-ASN_Result Icb_SendToCarConfirmation_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SendToCarConfirmation_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -2001,7 +2001,7 @@ static const U32 Icb_PreferredEcalls_EnumMap[] = {
         e_Icb_PreferredEcalls_volvoOnCall /* Index = 1 */
 };
 
-ASN_Result Icb_PreferredEcalls_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PreferredEcalls_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -2468,7 +2468,7 @@ static const U32 Icb_TimerError_EnumMap[] = {
         e_Icb_TimerError_generalErrorHMI /* Index = 2 */
 };
 
-ASN_Result Icb_TimerError_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_TimerError_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -2524,7 +2524,7 @@ static const U32 Icb_TimerStatus_EnumMap[] = {
         e_Icb_TimerStatus_reserved /* Index = 3 */
 };
 
-ASN_Result Icb_TimerStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_TimerStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -2583,7 +2583,7 @@ static const U32 Icb_TimerType_EnumMap[] = {
         e_Icb_TimerType_repeated  /* Index = 3 */
 };
 
-ASN_Result Icb_TimerType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_TimerType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -2640,7 +2640,7 @@ static const U32 Icb_OnOff_EnumMap[] = {
         e_Icb_OnOff_on   /* Index = 1 */
 };
 
-ASN_Result Icb_OnOff_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_OnOff_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -2743,7 +2743,7 @@ static const U32 Icb_SettingType_EnumMap[] = {
         e_Icb_SettingType_error    /* Index = 1 */
 };
 
-ASN_Result Icb_SettingType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SettingType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -2981,7 +2981,7 @@ static const U32 Icb_DataCounter_EnumMap[] = {
         e_Icb_DataCounter_psimSentReceived /* Index = 0 */
 };
 
-ASN_Result Icb_DataCounter_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DataCounter_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 0, FALSE));
 
@@ -3587,7 +3587,7 @@ static const U32 Icb_PSIMConnectionStatus_EnumMap[] = {
         e_Icb_PSIMConnectionStatus_prohibited        /* Index = 4 */
 };
 
-ASN_Result Icb_PSIMConnectionStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PSIMConnectionStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -3652,7 +3652,7 @@ static const U32 Icb_WirelessTechnology_EnumMap[] = {
         e_Icb_WirelessTechnology_lte      /* Index = 6 */
 };
 
-ASN_Result Icb_WirelessTechnology_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WirelessTechnology_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 6, FALSE));
 
@@ -3925,7 +3925,7 @@ static const U32 Icb_Ecu_EnumMap[] = {
         e_Icb_Ecu_tem   /* Index = 3 */
 };
 
-ASN_Result Icb_Ecu_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_Ecu_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -4142,7 +4142,7 @@ static const U32 Icb_WorkshopWlanConnectionResult_EnumMap[] = {
         e_Icb_WorkshopWlanConnectionResult_failed_general         /* Index = 4 */
 };
 
-ASN_Result Icb_WorkshopWlanConnectionResult_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WorkshopWlanConnectionResult_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -4264,7 +4264,7 @@ static const U32 Icb_InternetSource_EnumMap[] = {
         e_Icb_InternetSource_usb        /* Index = 3 */
 };
 
-ASN_Result Icb_InternetSource_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_InternetSource_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 255, FALSE));
 
@@ -4760,7 +4760,7 @@ static const U32 Icb_WLANMode_EnumMap[] = {
         e_Icb_WLANMode_staWS /* Index = 3 */
 };
 
-ASN_Result Icb_WLANMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANMode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -4817,7 +4817,7 @@ static const U32 Icb_WLANFrequencyBand_EnumMap[] = {
         e_Icb_WLANFrequencyBand_highFrequencyBand /* Index = 1 */
 };
 
-ASN_Result Icb_WLANFrequencyBand_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANFrequencyBand_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -4869,7 +4869,7 @@ static const U32 Icb_WLANChannelWidthData_EnumMap[] = {
         e_Icb_WLANChannelWidthData_width_20MHz  /* Index = 2 */
 };
 
-ASN_Result Icb_WLANChannelWidthData_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANChannelWidthData_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -4990,7 +4990,7 @@ static const U32 Icb_WLANConnectStatus_EnumMap[] = {
         e_Icb_WLANConnectStatus_wrongPassword /* Index = 2 */
 };
 
-ASN_Result Icb_WLANConnectStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANConnectStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -5111,7 +5111,7 @@ static const U32 Icb_WLANAPCurrentStatus_EnumMap[] = {
         e_Icb_WLANAPCurrentStatus_enabled   /* Index = 1 */
 };
 
-ASN_Result Icb_WLANAPCurrentStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANAPCurrentStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -5162,7 +5162,7 @@ static const U32 Icb_WLANConnectionStatus_EnumMap[] = {
         e_Icb_WLANConnectionStatus_connected     /* Index = 1 */
 };
 
-ASN_Result Icb_WLANConnectionStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANConnectionStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -5218,7 +5218,7 @@ static const U32 Icb_WLANSecurityType_EnumMap[] = {
         e_Icb_WLANSecurityType_wPA2_EAP_TLS   /* Index = 6 */
 };
 
-ASN_Result Icb_WLANSecurityType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_WLANSecurityType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 6, FALSE));
 
@@ -5425,7 +5425,7 @@ static const U32 Icb_SimSecuritySetting_EnumMap[] = {
         e_Icb_SimSecuritySetting_auto /* Index = 2 */
 };
 
-ASN_Result Icb_SimSecuritySetting_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SimSecuritySetting_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -6096,7 +6096,7 @@ static const U32 Icb_NetworkType_EnumMap[] = {
         e_Icb_NetworkType_lte   /* Index = 2 */
 };
 
-ASN_Result Icb_NetworkType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_NetworkType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -6477,7 +6477,7 @@ static const U32 Icb_PinTrials_EnumMap[] = {
         e_Icb_PinTrials_threeRemaining /* Index = 3 */
 };
 
-ASN_Result Icb_PinTrials_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PinTrials_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -6543,7 +6543,7 @@ static const U32 Icb_PukTrials_EnumMap[] = {
         e_Icb_PukTrials_tenRemaining    /* Index = 10 */
 };
 
-ASN_Result Icb_PukTrials_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PukTrials_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 10, FALSE));
 
@@ -6627,7 +6627,7 @@ static const U32 Icb_PhoneOperationMode_EnumMap[] = {
         e_Icb_PhoneOperationMode_probationRestricted /* Index = 7 */
 };
 
-ASN_Result Icb_PhoneOperationMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_PhoneOperationMode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 7, FALSE));
 
@@ -6817,7 +6817,7 @@ static const U32 Icb_UssdStatus_EnumMap[] = {
         e_Icb_UssdStatus_netInit     /* Index = 3 */
 };
 
-ASN_Result Icb_UssdStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_UssdStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -7010,7 +7010,7 @@ static const U32 Icb_AssistCallAction_EnumMap[] = {
         e_Icb_AssistCallAction_hangupCall  /* Index = 1 */
 };
 
-ASN_Result Icb_AssistCallAction_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_AssistCallAction_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -7062,7 +7062,7 @@ static const U32 Icb_RadioMode_EnumMap[] = {
         e_Icb_RadioMode_silentTSIM /* Index = 2 */
 };
 
-ASN_Result Icb_RadioMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_RadioMode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -7303,7 +7303,7 @@ static const U32 Icb_GnssFixType_EnumMap[] = {
         e_Icb_GnssFixType_startupMode   /* Index = 4 */
 };
 
-ASN_Result Icb_GnssFixType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_GnssFixType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -7364,7 +7364,7 @@ static const U32 Icb_DeadReckoningType_EnumMap[] = {
         e_Icb_DeadReckoningType_drMapMatched  /* Index = 2 */
 };
 
-ASN_Result Icb_DeadReckoningType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DeadReckoningType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -8044,7 +8044,7 @@ Icb_ReceiverChannelData Icb_ReceiverChannelData_Create(ASN_Session session) {
     if (value != (Icb_ReceiverChannelData)NULL) {
         ASN_INTERNAL_SIZE_Icb_ReceiverChannelData(0, 127);
         value->actual_size = 0;
-        value->data_array = (Icb_ChannelData *)NULL;
+        value->data_array = (Icb_ChannelData*)NULL;
     }
     return value;
 }
@@ -8079,8 +8079,8 @@ ASN_Result Icb_ReceiverChannelData_SetSize(Icb_ReceiverChannelData ThisPtr, ASN_
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_ChannelData *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_ChannelData *)NULL) {
+    ThisPtr->data_array = (Icb_ChannelData*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_ChannelData*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -8134,7 +8134,7 @@ static const U32 Icb_SatelliteTrackingStatusType_EnumMap[] = {
         e_Icb_SatelliteTrackingStatusType_collectedAndUsed     /* Index = 3 */
 };
 
-ASN_Result Icb_SatelliteTrackingStatusType_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_SatelliteTrackingStatusType_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -8567,7 +8567,7 @@ static const U32 Icb_RemoteDiagInfo_EnumMap[] = {
         e_Icb_RemoteDiagInfo_failed   /* Index = 2 */
 };
 
-ASN_Result Icb_RemoteDiagInfo_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_RemoteDiagInfo_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -8761,7 +8761,7 @@ static const U32 Icb_DoIPPhase_EnumMap[] = {
         e_Icb_DoIPPhase_session       /* Index = 3 */
 };
 
-ASN_Result Icb_DoIPPhase_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DoIPPhase_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 3, FALSE));
 
@@ -8819,7 +8819,7 @@ static const U32 Icb_DoIPMode_EnumMap[] = {
         e_Icb_DoIPMode_remote /* Index = 2 */
 };
 
-ASN_Result Icb_DoIPMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DoIPMode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -8876,7 +8876,7 @@ static const U32 Icb_CurrentDoIPConn_EnumMap[] = {
         e_Icb_CurrentDoIPConn_phone        /* Index = 4 */
 };
 
-ASN_Result Icb_CurrentDoIPConn_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_CurrentDoIPConn_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 4, FALSE));
 
@@ -9022,7 +9022,7 @@ static const U32 Icb_UserAuthCredentials_EnumMap[] = {
         e_Icb_UserAuthCredentials_accept  /* Index = 1 */
 };
 
-ASN_Result Icb_UserAuthCredentials_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_UserAuthCredentials_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 1, FALSE));
 
@@ -9281,7 +9281,7 @@ static const U32 Icb_UpdateDacMode_EnumMap[] = {
         e_Icb_UpdateDacMode_manual         /* Index = 2 */
 };
 
-ASN_Result Icb_UpdateDacMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_UpdateDacMode_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -9418,7 +9418,7 @@ static const U32 Icb_DownloadStatus_EnumMap[] = {
         e_Icb_DownloadStatus_noService /* Index = 2 */
 };
 
-ASN_Result Icb_DownloadStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DownloadStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 2, FALSE));
 
@@ -9492,7 +9492,7 @@ static const U32 Icb_DownloadState_EnumMap[] = {
         e_Icb_DownloadState_cancelled                          /* Index = 21 */
 };
 
-ASN_Result Icb_DownloadState_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_DownloadState_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 21, FALSE));
 
@@ -9708,7 +9708,7 @@ static const U32 Icb_InstallCommand_EnumMap[] = {
         e_Icb_InstallCommand_cancelInstall /* Index = 2 */
 };
 
-ASN_Result Icb_InstallCommand_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_InstallCommand_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 255, FALSE));
 
@@ -9903,7 +9903,7 @@ static const U32 Icb_InstallStatus_EnumMap[] = {
         e_Icb_InstallStatus_failedValidation        /* Index = 8 */
 };
 
-ASN_Result Icb_InstallStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_InstallStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 255, FALSE));
 
@@ -9977,7 +9977,7 @@ static const U32 Icb_FileInstallationStatus_EnumMap[] = {
         e_Icb_FileInstallationStatus_failed      /* Index = 3 */
 };
 
-ASN_Result Icb_FileInstallationStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream) {
+ASN_Result Icb_FileInstallationStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ENUM_Decode(val, session, stream, 0, 255, FALSE));
 
@@ -10246,7 +10246,7 @@ Icb_ArrayOf_ClimateTimer Icb_ArrayOf_ClimateTimer_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_ClimateTimer *)NULL;
+        value->data_array = (Icb_ClimateTimer*)NULL;
     }
     return value;
 }
@@ -10281,8 +10281,8 @@ ASN_Result Icb_ArrayOf_ClimateTimer_SetSize(Icb_ArrayOf_ClimateTimer ThisPtr, AS
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_ClimateTimer *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_ClimateTimer *)NULL) {
+    ThisPtr->data_array = (Icb_ClimateTimer*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_ClimateTimer*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10341,7 +10341,7 @@ Icb_ArrayOf_OnOff Icb_ArrayOf_OnOff_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_OnOff *)NULL;
+        value->data_array = (Icb_OnOff*)NULL;
     }
     return value;
 }
@@ -10375,8 +10375,8 @@ ASN_Result Icb_ArrayOf_OnOff_SetSize(Icb_ArrayOf_OnOff ThisPtr, ASN_Session sess
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_OnOff *)ASN_Malloc(session, size * sizeof(Icb_OnOff));
-    if (ThisPtr->data_array == (Icb_OnOff *)NULL) {
+    ThisPtr->data_array = (Icb_OnOff*)ASN_Malloc(session, size * sizeof(Icb_OnOff));
+    if (ThisPtr->data_array == (Icb_OnOff*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10434,7 +10434,7 @@ Icb_OpGenericSettingSynch_Request_settingIDs Icb_OpGenericSettingSynch_Request_s
     if (value != (Icb_OpGenericSettingSynch_Request_settingIDs)NULL) {
         ASN_INTERNAL_SIZE_Icb_OpGenericSettingSynch_Request_settingIDs(0, 50);
         value->actual_size = 0;
-        value->data_array = (U32 *)NULL;
+        value->data_array = (U32*)NULL;
     }
     return value;
 }
@@ -10471,8 +10471,8 @@ ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_SetSize(Icb_OpGenericSet
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (U32 *)ASN_Malloc(session, size * sizeof(U32));
-    if (ThisPtr->data_array == (U32 *)NULL) {
+    ThisPtr->data_array = (U32*)ASN_Malloc(session, size * sizeof(U32));
+    if (ThisPtr->data_array == (U32*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10527,7 +10527,7 @@ Icb_ArrayOf_Setting Icb_ArrayOf_Setting_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_Setting *)NULL;
+        value->data_array = (Icb_Setting*)NULL;
     }
     return value;
 }
@@ -10561,8 +10561,8 @@ ASN_Result Icb_ArrayOf_Setting_SetSize(Icb_ArrayOf_Setting ThisPtr, ASN_Session 
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_Setting *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_Setting *)NULL) {
+    ThisPtr->data_array = (Icb_Setting*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_Setting*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10621,7 +10621,7 @@ Icb_ArrayOf_SBWarning Icb_ArrayOf_SBWarning_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_SBWarning *)NULL;
+        value->data_array = (Icb_SBWarning*)NULL;
     }
     return value;
 }
@@ -10655,8 +10655,8 @@ ASN_Result Icb_ArrayOf_SBWarning_SetSize(Icb_ArrayOf_SBWarning ThisPtr, ASN_Sess
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_SBWarning *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_SBWarning *)NULL) {
+    ThisPtr->data_array = (Icb_SBWarning*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_SBWarning*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10716,7 +10716,7 @@ Icb_ArrayOf_WLANFrequencyBand Icb_ArrayOf_WLANFrequencyBand_Create(ASN_Session s
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_WLANFrequencyBand *)NULL;
+        value->data_array = (Icb_WLANFrequencyBand*)NULL;
     }
     return value;
 }
@@ -10752,8 +10752,8 @@ ASN_Result Icb_ArrayOf_WLANFrequencyBand_SetSize(Icb_ArrayOf_WLANFrequencyBand T
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_WLANFrequencyBand *)ASN_Malloc(session, size * sizeof(Icb_WLANFrequencyBand));
-    if (ThisPtr->data_array == (Icb_WLANFrequencyBand *)NULL) {
+    ThisPtr->data_array = (Icb_WLANFrequencyBand*)ASN_Malloc(session, size * sizeof(Icb_WLANFrequencyBand));
+    if (ThisPtr->data_array == (Icb_WLANFrequencyBand*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10807,7 +10807,7 @@ Icb_ArrayOf_WLANConnDevice Icb_ArrayOf_WLANConnDevice_Create(ASN_Session session
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_WLANConnDevice *)NULL;
+        value->data_array = (Icb_WLANConnDevice*)NULL;
     }
     return value;
 }
@@ -10842,8 +10842,8 @@ ASN_Result Icb_ArrayOf_WLANConnDevice_SetSize(Icb_ArrayOf_WLANConnDevice ThisPtr
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_WLANConnDevice *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_WLANConnDevice *)NULL) {
+    ThisPtr->data_array = (Icb_WLANConnDevice*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_WLANConnDevice*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -10903,7 +10903,7 @@ Icb_ArrayOf_AvailableNetworkInformation Icb_ArrayOf_AvailableNetworkInformation_
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_AvailableNetworkInformation *)NULL;
+        value->data_array = (Icb_AvailableNetworkInformation*)NULL;
     }
     return value;
 }
@@ -10941,8 +10941,8 @@ ASN_Result Icb_ArrayOf_AvailableNetworkInformation_SetSize(Icb_ArrayOf_Available
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_AvailableNetworkInformation *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_AvailableNetworkInformation *)NULL) {
+    ThisPtr->data_array = (Icb_AvailableNetworkInformation*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_AvailableNetworkInformation*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11002,7 +11002,7 @@ Icb_ArrayOf_SSID Icb_ArrayOf_SSID_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_SSID *)NULL;
+        value->data_array = (Icb_SSID*)NULL;
     }
     return value;
 }
@@ -11036,8 +11036,8 @@ ASN_Result Icb_ArrayOf_SSID_SetSize(Icb_ArrayOf_SSID ThisPtr, ASN_Session sessio
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_SSID *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_SSID *)NULL) {
+    ThisPtr->data_array = (Icb_SSID*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_SSID*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11096,7 +11096,7 @@ Icb_ArrayOf_NetworkOperator Icb_ArrayOf_NetworkOperator_Create(ASN_Session sessi
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_NetworkOperator *)NULL;
+        value->data_array = (Icb_NetworkOperator*)NULL;
     }
     return value;
 }
@@ -11132,8 +11132,8 @@ ASN_Result Icb_ArrayOf_NetworkOperator_SetSize(Icb_ArrayOf_NetworkOperator ThisP
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_NetworkOperator *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_NetworkOperator *)NULL) {
+    ThisPtr->data_array = (Icb_NetworkOperator*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_NetworkOperator*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11193,7 +11193,7 @@ Icb_ArrayOf_RadioFrequencyHz Icb_ArrayOf_RadioFrequencyHz_Create(ASN_Session ses
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_RadioFrequencyHz *)NULL;
+        value->data_array = (Icb_RadioFrequencyHz*)NULL;
     }
     return value;
 }
@@ -11229,8 +11229,8 @@ ASN_Result Icb_ArrayOf_RadioFrequencyHz_SetSize(Icb_ArrayOf_RadioFrequencyHz Thi
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_RadioFrequencyHz *)ASN_Malloc(session, size * sizeof(Icb_RadioFrequencyHz));
-    if (ThisPtr->data_array == (Icb_RadioFrequencyHz *)NULL) {
+    ThisPtr->data_array = (Icb_RadioFrequencyHz*)ASN_Malloc(session, size * sizeof(Icb_RadioFrequencyHz));
+    if (ThisPtr->data_array == (Icb_RadioFrequencyHz*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11284,7 +11284,7 @@ Icb_ArrayOf_ApprovalStatusType Icb_ArrayOf_ApprovalStatusType_Create(ASN_Session
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_ApprovalStatusType *)NULL;
+        value->data_array = (Icb_ApprovalStatusType*)NULL;
     }
     return value;
 }
@@ -11321,8 +11321,8 @@ ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_ApprovalStatusType *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_ApprovalStatusType *)NULL) {
+    ThisPtr->data_array = (Icb_ApprovalStatusType*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_ApprovalStatusType*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11382,7 +11382,7 @@ Icb_ArrayOf_SoftwareProduct Icb_ArrayOf_SoftwareProduct_Create(ASN_Session sessi
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_SoftwareProduct *)NULL;
+        value->data_array = (Icb_SoftwareProduct*)NULL;
     }
     return value;
 }
@@ -11418,8 +11418,8 @@ ASN_Result Icb_ArrayOf_SoftwareProduct_SetSize(Icb_ArrayOf_SoftwareProduct ThisP
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_SoftwareProduct *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_SoftwareProduct *)NULL) {
+    ThisPtr->data_array = (Icb_SoftwareProduct*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_SoftwareProduct*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11478,7 +11478,7 @@ Icb_ArrayOf_UUID Icb_ArrayOf_UUID_Create(ASN_Session session) {
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_UUID *)NULL;
+        value->data_array = (Icb_UUID*)NULL;
     }
     return value;
 }
@@ -11512,8 +11512,8 @@ ASN_Result Icb_ArrayOf_UUID_SetSize(Icb_ArrayOf_UUID ThisPtr, ASN_Session sessio
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_UUID *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_UUID *)NULL) {
+    ThisPtr->data_array = (Icb_UUID*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_UUID*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11572,7 +11572,7 @@ Icb_ArrayOf_PartIdentifier Icb_ArrayOf_PartIdentifier_Create(ASN_Session session
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_PartIdentifier *)NULL;
+        value->data_array = (Icb_PartIdentifier*)NULL;
     }
     return value;
 }
@@ -11607,8 +11607,8 @@ ASN_Result Icb_ArrayOf_PartIdentifier_SetSize(Icb_ArrayOf_PartIdentifier ThisPtr
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_PartIdentifier *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_PartIdentifier *)NULL) {
+    ThisPtr->data_array = (Icb_PartIdentifier*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_PartIdentifier*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11668,7 +11668,7 @@ Icb_ArrayOf_InstallationData Icb_ArrayOf_InstallationData_Create(ASN_Session ses
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_InstallationData *)NULL;
+        value->data_array = (Icb_InstallationData*)NULL;
     }
     return value;
 }
@@ -11704,8 +11704,8 @@ ASN_Result Icb_ArrayOf_InstallationData_SetSize(Icb_ArrayOf_InstallationData Thi
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_InstallationData *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_InstallationData *)NULL) {
+    ThisPtr->data_array = (Icb_InstallationData*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_InstallationData*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;
@@ -11765,7 +11765,7 @@ Icb_ArrayOf_InstalledData Icb_ArrayOf_InstalledData_Create(ASN_Session session) 
         value->min_size = 0;
         value->max_size = 0;
         value->actual_size = 0;
-        value->data_array = (Icb_InstalledData *)NULL;
+        value->data_array = (Icb_InstalledData*)NULL;
     }
     return value;
 }
@@ -11800,8 +11800,8 @@ ASN_Result Icb_ArrayOf_InstalledData_SetSize(Icb_ArrayOf_InstalledData ThisPtr, 
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
-    ThisPtr->data_array = (Icb_InstalledData *)ASN_Malloc(session, size * sizeof(void *));
-    if (ThisPtr->data_array == (Icb_InstalledData *)NULL) {
+    ThisPtr->data_array = (Icb_InstalledData*)ASN_Malloc(session, size * sizeof(void*));
+    if (ThisPtr->data_array == (Icb_InstalledData*)NULL) {
         result = ASN_Session_GetResult(session);
         result->error = ASN_ERROR_MEMORY;
         result->linenumber = __LINE__;

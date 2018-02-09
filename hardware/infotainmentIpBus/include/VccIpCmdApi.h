@@ -176,7 +176,7 @@ typedef std::uint32_t SenderHandleId;
 struct CombinedId {
     CombinedId(ServiceId _sid, OperationId _oid);
 
-    bool operator==(const CombinedId &id) const;
+    bool operator==(const CombinedId& id) const;
 
     const ServiceId serviceId;
     const OperationId operationId;
@@ -188,18 +188,18 @@ bool ServiceIdIsValid(ServiceId id);
  * Returns the string literal for the passed enumerations.
  */
 std::string toString(ServiceId si);
-std::string toString(ServiceId si, OperationId oi, const char *separator = ".");
-std::string toString(const CombinedId &id, const char *separator = ".");
+std::string toString(ServiceId si, OperationId oi, const char* separator = ".");
+std::string toString(const CombinedId& id, const char* separator = ".");
 
 /**
  * Returns the string literal for the passed enumeration.
  */
-const char *toString(OperationType ot);
+const char* toString(OperationType ot);
 
 /**
  * Returns the string literal for the passed enumeration.
  */
-const char *toString(DataType dt);
+const char* toString(DataType dt);
 
 }  // VccIpCmd
 }  // Connectivity

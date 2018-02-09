@@ -19,7 +19,7 @@
 using namespace tarmac::eventloop;
 
 namespace Connectivity {
-TcpSocket::TcpSocket(IDispatcher &dispatcher, Message::Ecu ecu, EcuIpMap ecu_ip_map)
+TcpSocket::TcpSocket(IDispatcher& dispatcher, Message::Ecu ecu, EcuIpMap ecu_ip_map)
     : Socket(dispatcher, AF_INET, SOCK_STREAM, IPPROTO_TCP, ecu_ip_map) {
     using namespace std::chrono_literals;
     bool is_connection_established = false;
@@ -27,7 +27,7 @@ TcpSocket::TcpSocket(IDispatcher &dispatcher, Message::Ecu ecu, EcuIpMap ecu_ip_
         try {
             setup(ecu);
             is_connection_established = true;
-        } catch (const SocketException &e) {
+        } catch (const SocketException& e) {
             ALOGV("Error Msg: %s", e.what());
             std::this_thread::sleep_for(100ms);
         }
@@ -40,9 +40,9 @@ TcpSocket::~TcpSocket() {
 
 void TcpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { ready_cb_ = std::move(readReadyCb); }
 
-void TcpSocket::setup(const Message::Ecu &ecu) {
+void TcpSocket::setup(const Message::Ecu& ecu) {
     auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                           [ecu](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == ecu; });
+                           [ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
     if (it == ecu_ip_map_.end()) {
         ALOGD("No ECU");
         assert(false);
@@ -74,7 +74,7 @@ void TcpSocket::setup(const Message::Ecu &ecu) {
     // }
 
     const int connect_status =
-            connect(socket_fd_, reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)));
+            connect(socket_fd_, reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
     if (0 != connect_status) {
         throw SocketException(errno, "Failed to connect ");
     }
@@ -87,7 +87,7 @@ void TcpSocket::setup(const Message::Ecu &ecu) {
 
 void TcpSocket::endConnection() { resetConnection(); }
 
-void TcpSocket::read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) {
+void TcpSocket::read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) {
     buffer.clear();
     if (!read_frame_buffer_.empty()) {
         buffer = std::move(read_frame_buffer_.front());
@@ -97,13 +97,13 @@ void TcpSocket::read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) {
     ecu = peer_ecu_;
 }
 
-void TcpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu & /*ecu*/) {
+void TcpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& /*ecu*/) {
     auto remaining_bytes = buffer.size();
     int sent_bytes = 0;
 
     while (remaining_bytes > 0) {
         int ret = -1;
-        ret = send(socket_fd_, reinterpret_cast<const void *>(&buffer[sent_bytes]), remaining_bytes, 0);
+        ret = send(socket_fd_, reinterpret_cast<const void*>(&buffer[sent_bytes]), remaining_bytes, 0);
 
         if (-1 == ret) {
             if (errno == EINTR) {
@@ -128,7 +128,7 @@ void TcpSocket::readEventHandler() {
     // Resize buffer to a value larger than header length
     std::vector<std::uint8_t> buffer(4000, 0);
 
-    int packet_length = recv(socket_fd_, static_cast<void *>(buffer.data()), buffer.size(), 0);
+    int packet_length = recv(socket_fd_, static_cast<void*>(buffer.data()), buffer.size(), 0);
     if (0 >= packet_length) {
         if (errno == ECONNRESET || errno == ETIMEDOUT || packet_length == 0) {
             // Connection is closed by peer/lost. Initiate reconnection
@@ -197,7 +197,7 @@ void TcpSocket::reconnect() {
         Socket::setup(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         setup(peer_ecu_);
         backoffReset();
-    } catch (const SocketException &e) {
+    } catch (const SocketException& e) {
         dispatcher_.EnqueueWithDelay(backoffGet(), [this] { reconnect(); });
     }
 }

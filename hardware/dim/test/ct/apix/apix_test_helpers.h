@@ -5,4 +5,4 @@
 
 #pragma once
 
-bool Ping(const std::string &ip, int attempts, std::string &result);
+bool Ping(const std::string& ip, int attempts, std::string& result);

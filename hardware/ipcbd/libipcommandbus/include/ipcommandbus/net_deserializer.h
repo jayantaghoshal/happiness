@@ -12,9 +12,9 @@
 namespace Connectivity {
 class NetDeserializer {
   public:
-    NetDeserializer(const std::vector<std::uint8_t> &vector) : NetDeserializer(vector, 0) {}
+    NetDeserializer(const std::vector<std::uint8_t>& vector) : NetDeserializer(vector, 0) {}
 
-    NetDeserializer(const std::vector<std::uint8_t> &vector, std::vector<std::uint8_t>::size_type position)
+    NetDeserializer(const std::vector<std::uint8_t>& vector, std::vector<std::uint8_t>::size_type position)
         : vector(vector), position(position) {}
 
     std::size_t bytes_available() const;
@@ -24,7 +24,7 @@ class NetDeserializer {
     std::uint32_t read_uint32();
 
   private:
-    const std::vector<std::uint8_t> &vector;
+    const std::vector<std::uint8_t>& vector;
     std::vector<std::uint8_t>::size_type position;
 };
 }

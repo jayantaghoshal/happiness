@@ -26,7 +26,7 @@ class RestartClientTestFixture : public ::testing::Test {
 
 TEST_F(RestartClientTestFixture, restart) { EXPECT_TRUE(r.restart()); }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

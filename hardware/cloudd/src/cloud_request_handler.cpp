@@ -16,7 +16,7 @@ namespace Connectivity {
 
 // Helper methods for verifying the success of setting options in curl. One for easy handles and one for multi handles.
 template <typename T>
-void verified_curl_multi_setopt(CURLM *curl, const CURLMoption opt, T data) {
+void verified_curl_multi_setopt(CURLM* curl, const CURLMoption opt, T data) {
     const CURLMcode res = curl_multi_setopt(curl, opt, data);
     if (res != CURLMcode::CURLM_OK) {
         throw std::runtime_error("Failed to set curl multi option: " + std::to_string(opt) + ", error: " +
@@ -25,7 +25,7 @@ void verified_curl_multi_setopt(CURLM *curl, const CURLMoption opt, T data) {
 }
 
 template <typename T>
-void verified_curl_easy_setopt(CURL *curl, const CURLoption opt, T data) {
+void verified_curl_easy_setopt(CURL* curl, const CURLoption opt, T data) {
     const CURLcode res = curl_easy_setopt(curl, opt, data);
     if (res != CURLcode::CURLE_OK) {
         throw std::runtime_error("Failed to set curl option: " + std::to_string(opt) + ", error: " +
@@ -36,7 +36,7 @@ void verified_curl_easy_setopt(CURL *curl, const CURLoption opt, T data) {
 CloudRequestHandler::CloudRequestHandler() : timer_id_{-1}, multi_{nullptr} {
     curl_global_init(CURL_GLOBAL_ALL);
 
-    curl_version_info_data *data = curl_version_info(CURLVERSION_NOW);
+    curl_version_info_data* data = curl_version_info(CURLVERSION_NOW);
 
     // TODO: Check version??
     ALOGD("Version: %s\n", data->version);
@@ -54,14 +54,14 @@ CloudRequestHandler::~CloudRequestHandler() {
     multi_ = nullptr;
 }
 
-int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operation, void *user_data, void *s) {
+int CloudRequestHandler::SocketCallback(CURL* easy, curl_socket_t fd, int operation, void* user_data, void* s) {
     ALOGV("sock_cb: socket=%d, what=%d, sockp=%p\n", fd, operation, s);
 
-    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
+    CloudRequestHandler* request_handler = static_cast<CloudRequestHandler*>(user_data);
 
-    const char *whatstr[] = {"none", "IN", "OUT", "INOUT", "REMOVE"};
+    const char* whatstr[] = {"none", "IN", "OUT", "INOUT", "REMOVE"};
 
-    int *actionp = (int *)s;
+    int* actionp = (int*)s;
     if (operation == CURL_POLL_REMOVE) {
         IDispatcher::GetDefaultDispatcher().RemoveFd(fd);
     } else {
@@ -75,13 +75,13 @@ int CloudRequestHandler::SocketCallback(CURL *easy, curl_socket_t fd, int operat
     return CURLcode::CURLE_OK;
 }
 
-int CloudRequestHandler::TimerCallback(CURLM *multi, long timeout_ms, void *user_data) {
+int CloudRequestHandler::TimerCallback(CURLM* multi, long timeout_ms, void* user_data) {
     ALOGV("multi_timer_cb: timeout_ms %ld\n", timeout_ms);
 
     int code = CURLcode::CURLE_OK;
 
-    CloudRequestHandler *request_handler = static_cast<CloudRequestHandler *>(user_data);
-    int *timer_id = request_handler->GetTimerId();
+    CloudRequestHandler* request_handler = static_cast<CloudRequestHandler*>(user_data);
+    int* timer_id = request_handler->GetTimerId();
 
     /* cancel running timer */
     IDispatcher::GetDefaultDispatcher().Cancel(*timer_id);
@@ -101,14 +101,14 @@ int CloudRequestHandler::TimerCallback(CURLM *multi, long timeout_ms, void *user
     return code;
 }
 
-int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
+int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
     int running_handles;
     curl_multi_socket_action(multi, fd, 0, &running_handles);
 
     int msgs_queue_out = 0;
 
     do {
-        CURLMsg *curl_message = curl_multi_info_read(multi, &msgs_queue_out);
+        CURLMsg* curl_message = curl_multi_info_read(multi, &msgs_queue_out);
 
         if (curl_message && curl_message->msg == CURLMSG_DONE) {
             ALOGV("Done %i\n", msgs_queue_out);
@@ -116,7 +116,7 @@ int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
             std::int32_t response_code = -1;
             int ret1 = curl_easy_getinfo(curl_message->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
 
-            CloudRequest *cr;
+            CloudRequest* cr;
             int ret2 = curl_easy_getinfo(curl_message->easy_handle, CURLINFO_PRIVATE, &cr);
 
             const CURLcode resultCode = curl_message->data.result;
@@ -140,10 +140,10 @@ int CloudRequestHandler::Perform(CURL *multi, curl_socket_t fd) {
     return CURLcode::CURLE_OK;
 }
 
-int CloudRequestHandler::WriteCallback(char *ptr, const size_t size, const size_t nmemb, void *userdata) {
+int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata) {
     const size_t real_size = size * nmemb;
 
-    std::string *write_buffer = static_cast<std::string *>(userdata);
+    std::string* write_buffer = static_cast<std::string*>(userdata);
 
     try {
         write_buffer->append(ptr, real_size);
@@ -155,8 +155,8 @@ int CloudRequestHandler::WriteCallback(char *ptr, const size_t size, const size_
     return real_size;
 }
 
-int CloudRequestHandler::DebugCallback(CURL *handle, curl_infotype type, char *data, size_t size, void *userp) {
-    const char *text;
+int CloudRequestHandler::DebugCallback(CURL* handle, curl_infotype type, char* data, size_t size, void* userp) {
+    const char* text;
     (void)handle;
     (void)userp;
 
@@ -191,8 +191,8 @@ int CloudRequestHandler::DebugCallback(CURL *handle, curl_infotype type, char *d
     return 0;
 }
 
-int CloudRequestHandler::OnCreateOpenSslContext(CURL *curl, void *ssl_ctx, void *user_param) {
-    CloudRequest *cr = static_cast<CloudRequest *>(user_param);
+int CloudRequestHandler::OnCreateOpenSslContext(CURL* curl, void* ssl_ctx, void* user_param) {
+    CloudRequest* cr = static_cast<CloudRequest*>(user_param);
 
     CertificateValidationStatus certStatus = cr->GetCertHandler()->OnCreateOpenSslContext(ssl_ctx);
 
@@ -204,7 +204,7 @@ int CloudRequestHandler::OnCreateOpenSslContext(CURL *curl, void *ssl_ctx, void 
 }
 
 int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request) {
-    CURL *easy = curl_easy_init();
+    CURL* easy = curl_easy_init();
     if (!request->SetCurlHandle(easy)) {
         throw std::runtime_error("Failed to initialise an easy handle.");
     }
@@ -231,7 +231,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     verified_curl_easy_setopt(easy, CURLOPT_TIMEOUT_MS, request->GetTimeout().count());
 
     if (!request->GetHeaderList().empty()) {
-        struct curl_slist *chunk = NULL;
+        struct curl_slist* chunk = NULL;
         for (auto p : request->GetHeaderList()) {
             chunk = curl_slist_append(chunk, p.c_str());
         }
@@ -257,7 +257,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     verified_curl_easy_setopt(easy, CURLOPT_HEADERDATA, request->GetResponseHeaderBuffer());
 
     // Debug logging
-    char const *const verboseEnv = getenv("NWH_CLOUDREQUEST_VERBOSE");
+    char const* const verboseEnv = getenv("NWH_CLOUDREQUEST_VERBOSE");
     const bool verbose = (verboseEnv != nullptr && (strcmp("0", verboseEnv) != 0));
     verified_curl_easy_setopt(easy, CURLOPT_VERBOSE, verbose);
     verified_curl_easy_setopt(easy, CURLOPT_DEBUGFUNCTION, DebugCallback);

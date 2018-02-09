@@ -12,19 +12,19 @@ namespace Connectivity {
 LocalconfigParameters::LocalconfigParameters() {}
 LocalconfigParameters::~LocalconfigParameters() {}
 
-bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, int &config) {
+bool LocalconfigParameters::ReadLocalConfig(const std::string& configId, int& config) {
     (void)configId;
     (void)config;
     return true;
 }
 
-bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, std::string &config) {
+bool LocalconfigParameters::ReadLocalConfig(const std::string& configId, std::string& config) {
     (void)configId;
     (void)config;
     return true;
 }
 
-bool LocalconfigParameters::ReadLocalConfig(const std::string &configId, double &config) {
+bool LocalconfigParameters::ReadLocalConfig(const std::string& configId, double& config) {
     (void)configId;
     (void)config;
     return true;
@@ -54,7 +54,7 @@ ISocket::IpPrecedence LocalconfigParameters::getNetworkControlPriority() {
     return ISocket::IpPrecedence::kNetworkControl;
 }
 
-LocalconfigParameters &LocalconfigParameters::getInstance() {
+LocalconfigParameters& LocalconfigParameters::getInstance() {
     static LocalconfigParameters instance;
     return instance;
 }

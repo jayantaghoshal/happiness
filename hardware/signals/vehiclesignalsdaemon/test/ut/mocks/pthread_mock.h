@@ -10,13 +10,13 @@
 
 class Pthread {
   public:
-    virtual int pthread_attr_init(pthread_attr_t *attr) = 0;
+    virtual int pthread_attr_init(pthread_attr_t* attr) = 0;
 };
 
 class PthreadMock : public Pthread {
   public:
     int attrInitReturnValue;
-    MOCK_METHOD1(pthread_attr_init, int(pthread_attr_t *attr));
+    MOCK_METHOD1(pthread_attr_init, int(pthread_attr_t* attr));
 };
 
-void pthread_mock_init(PthreadMock *mockInstance);
+void pthread_mock_init(PthreadMock* mockInstance);

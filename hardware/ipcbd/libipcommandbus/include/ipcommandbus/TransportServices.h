@@ -23,33 +23,33 @@ namespace Connectivity {
  */
 class TransportServices : public ITransportServices {
   public:
-    TransportServices(tarmac::eventloop::IDispatcher &timeProvider, tarmac::eventloop::IDispatcher &threadDispatcher,
+    TransportServices(tarmac::eventloop::IDispatcher& timeProvider, tarmac::eventloop::IDispatcher& threadDispatcher,
                       Message::Ecu selfEcu, bool useWfaTimer = true);
 
-    static const char *ErrorTypeToCString(ErrorType error_type);
+    static const char* ErrorTypeToCString(ErrorType error_type);
 
-    tarmac::eventloop::IDispatcher &getThreadDispatcher() override;
+    tarmac::eventloop::IDispatcher& getThreadDispatcher() override;
 
     /**
      * Set the socket to use for communication.
      *
      * @param[in] pSocket           Pointer to the socket to use.
      */
-    void setSocket(ISocket *pSocket);
+    void setSocket(ISocket* pSocket);
 
     /**
      * Set the socket to use for broadcast communication.
      *
      * @param[in] pSocket           Pointer to the socket to use.
      */
-    void setBroadcastSocket(ISocket *pSocket);
+    void setBroadcastSocket(ISocket* pSocket);
 
     /**
     * Sets the Diagnostics object to be used by TransportServices
     *
     * @param[in] diagnostics                pointer to an IDiagnostics object
     */
-    void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher *dispatcher) override;
+    void setDiagnostics(IDiagnosticsClient* diagnostics, tarmac::eventloop::IDispatcher* dispatcher) override;
 
     /**
      * Register a callback that will be called upon well formed incoming
@@ -60,35 +60,35 @@ class TransportServices : public ITransportServices {
      *
      * @param[in] messageCb                 The callback.
      */
-    void registerIncomingRequestCallback(std::function<bool(Message &)> messageCb) override;
+    void registerIncomingRequestCallback(std::function<bool(Message&)> messageCb) override;
 
     /**
      * Register a callback that will be called upon well formed incoming notification / cyclic notification.
      *
      * @param[in] messageCb                 The callback.
      */
-    void registerIncomingNotificationCallback(std::function<void(Message &)> messageCb) override;
+    void registerIncomingNotificationCallback(std::function<void(Message&)> messageCb) override;
 
     /**
      * Register a callback that will be called upon well formed incoming response.
      *
      * @param[in] messageCb                 The callback.
      */
-    void registerIncomingResponseCallback(std::function<void(Message &)> messageCb) override;
+    void registerIncomingResponseCallback(std::function<void(Message&)> messageCb) override;
 
     /**
      * Register a callback that will be called upon any error / timeout related to previously sent REQUEST message.
      *
      * @param[in] messageCb                 The callback.
      */
-    void registerErrorOnRequestCallback(std::function<void(Message &, ErrorType)> messageCb) override;
+    void registerErrorOnRequestCallback(std::function<void(Message&, ErrorType)> messageCb) override;
 
     /**
      * Sends a message to the default target (set in the assigned socket).
      *
      * @param[in] msg                       Message to send. TransportServices takes ownership of the message.
      */
-    void sendMessage(Message &&msg) override;
+    void sendMessage(Message&& msg) override;
 
     /**
      * Send an error for the given senderHandleId.
@@ -98,7 +98,7 @@ class TransportServices : public ITransportServices {
      * @param[in] errorCode                 The error to transmit.
      * @param[in] errorInfo                 Additional error information
      */
-    void sendError(Message::Ecu destination, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo = 0) override;
+    void sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo = 0) override;
 
     static const uint8_t PROTOCOL_VERSION = 2;  ///< Which protocol version that is implemented with this class.
 
@@ -110,7 +110,7 @@ class TransportServices : public ITransportServices {
      * @return                              Pointer to TrackMessage upon success.
      *                                      nullptr if the sender handle id is not currently tracked.
      */
-    TrackMessage *getTrackMessage(uint32_t senderHandleId);
+    TrackMessage* getTrackMessage(uint32_t senderHandleId);
 
     /**
      * Get the tracking info for a Pdu and stop tracking it.
@@ -127,7 +127,7 @@ class TransportServices : public ITransportServices {
      * @param[in] destination               Where to send the Pdu.
      * @param[in] pdu                       Pdu to transmit
      */
-    void sendPdu(Message::Ecu destination, const Pdu &pdu);
+    void sendPdu(Message::Ecu destination, const Pdu& pdu);
 
     /**
      * Transmit an ACK for a given Pdu
@@ -135,7 +135,7 @@ class TransportServices : public ITransportServices {
      * @param[in] destination               Where to send the Pdu.
      * @param[in] pdu                       Pdu to ACK
      */
-    void sendAck(Message::Ecu destination, const Pdu &pdu);
+    void sendAck(Message::Ecu destination, const Pdu& pdu);
 
     /**
      * Generates an error for the given senderHandleId.
@@ -145,14 +145,14 @@ class TransportServices : public ITransportServices {
      * @param[in] errorCode                 The error to transmit.
      * @param[in] errorInfo                 Additional error information
      */
-    void generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo);
+    void generateErrorPdu(Pdu& errorPdu, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo);
 
     /**
      * Called when there is data available on the given socket.
      * Will extract Pdu and relay them for processing.
      * @param[in] socket                    The unicast/broadcast socket.
       */
-    void handleInData(ISocket *socket);
+    void handleInData(ISocket* socket);
 
     /**
      * Called when there is data available on the broadcast socket.
@@ -172,7 +172,7 @@ class TransportServices : public ITransportServices {
      * @param[in] pdu                       The Pdu to process.
      * @param[in] sourceEcu                 Ecu that sent the Pdu
      */
-    void processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu);
+    void processIncomingPdu(Pdu&& pdu, Message::Ecu sourceEcu);
 
     /**
      * Process an incoming ACK.
@@ -180,45 +180,45 @@ class TransportServices : public ITransportServices {
      * @param[in] pdu                       The incoming ACK Pdu.
      * @param[in] sourceEcu                 Ecu that sent the Pdu
      */
-    void handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu);
+    void handleIncomingAck(const Pdu& pdu, Message::Ecu sourceEcu);
 
     /**
      * Process an incoming ERROR.
      *
      * @param[in] pdu                       The incoming ERROR Pdu
      */
-    void handleIncomingError(const Pdu &pdu);
+    void handleIncomingError(const Pdu& pdu);
 
     /**
      * Called when a message timeout occurrs.
      *
      * @param[in] tm                        Reference to the message track structure that has to handle the time out.
      */
-    void messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id);
+    void messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandleId id);
 
     /// Handle to the callback to call when we get a well formed incoming request.
-    std::function<bool(Message &)> m_incomingRequestCb;
+    std::function<bool(Message&)> m_incomingRequestCb;
 
     /// Handle to the callback to call when we get a well formed incoming (cyclic) notification
-    std::function<void(Message &)> m_incomingNotificationCb;
+    std::function<void(Message&)> m_incomingNotificationCb;
 
     /// Handle to the callback to call when we get a well formed incoming response
-    std::function<void(Message &)> m_incomingResponseCb;
+    std::function<void(Message&)> m_incomingResponseCb;
 
     ///  Handle to the callback when an error occurred associated with a REQUEST that we previously sent.
-    std::function<void(Message &, ErrorType)> m_errorOnRequestCb;
+    std::function<void(Message&, ErrorType)> m_errorOnRequestCb;
 
     /// Handle to the callback when an error occurred associated with a RESPONSE that we previously sent.
     //  Currently not handled. See TODO in handleIncomingError...
     // std::function<void(Message&, ErrorType)> m_errorOnResponsetCb;
 
-    tarmac::eventloop::IDispatcher &timeProvider;
-    tarmac::eventloop::IDispatcher &threadDispatcher;
-    ISocket *m_pSocket = nullptr;           ///< Socket to use for unicast communication.
-    ISocket *m_pBroadcastSocket = nullptr;  ///< Socket to use for broadcast communication.
+    tarmac::eventloop::IDispatcher& timeProvider;
+    tarmac::eventloop::IDispatcher& threadDispatcher;
+    ISocket* m_pSocket = nullptr;           ///< Socket to use for unicast communication.
+    ISocket* m_pBroadcastSocket = nullptr;  ///< Socket to use for broadcast communication.
 
-    IDiagnosticsClient *m_diagnostics = nullptr;  ///< Interface for reporting to diagnostics service.
-    tarmac::eventloop::IDispatcher *m_applicationThreadDispatcher = nullptr;
+    IDiagnosticsClient* m_diagnostics = nullptr;  ///< Interface for reporting to diagnostics service.
+    tarmac::eventloop::IDispatcher* m_applicationThreadDispatcher = nullptr;
 
     // ...Ideally change to a container type more suitable for the purpose...
     std::vector<std::unique_ptr<TrackMessage>> m_pendingMessages;  ///< Contain all currently tracked messages.

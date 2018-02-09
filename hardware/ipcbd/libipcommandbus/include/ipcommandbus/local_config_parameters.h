@@ -16,9 +16,9 @@
 namespace Connectivity {
 class LocalconfigParameters {
   public:
-    LocalconfigParameters(const vcc::LocalConfigReaderInterface *lcfg = vcc::LocalConfigDefault());
+    LocalconfigParameters(const vcc::LocalConfigReaderInterface* lcfg = vcc::LocalConfigDefault());
 
-    static LocalconfigParameters &getInstance();
+    static LocalconfigParameters& getInstance();
 
     // ------------
     // Ack timeouts
@@ -32,13 +32,13 @@ class LocalconfigParameters {
     // -----------------
     double getDefaultRespMultiplier();
 
-    const std::string &getLocalIpAddress();
-    const std::string &getBroadcastIpAddress();
-    const std::string &getVCMIpAddress();
-    const std::string &getTEMIpAddress();
-    const std::string &getDIMIpAddress();
-    const std::string &getVGMIpAddress();
-    const std::string &getTCAMIpAddress();
+    const std::string& getLocalIpAddress();
+    const std::string& getBroadcastIpAddress();
+    const std::string& getVCMIpAddress();
+    const std::string& getTEMIpAddress();
+    const std::string& getDIMIpAddress();
+    const std::string& getVGMIpAddress();
+    const std::string& getTCAMIpAddress();
 
     uint16_t getLocalPort();
     uint16_t getBroadcastPort();
@@ -96,7 +96,7 @@ class LocalconfigParameters {
 
     int networkControlPrio_ = 0;
 
-    const vcc::LocalConfigReaderInterface *const lcfg_;
+    const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
 }  // Connectivity

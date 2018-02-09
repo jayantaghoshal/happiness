@@ -65,10 +65,10 @@ class MessageDispatcherFixture : public ::testing::Test {
 
     std::unique_ptr<Connectivity::MessageDispatcher> dispatcher;
 
-    std::function<void(Message &)> respMsgCb;
-    std::function<bool(Message &)> reqMsgCb;
-    std::function<void(Message &)> notMsgCb;
-    std::function<void(Message &, ITransportServices::ErrorType)> errMsgCb;
+    std::function<void(Message&)> respMsgCb;
+    std::function<bool(Message&)> reqMsgCb;
+    std::function<void(Message&)> notMsgCb;
+    std::function<void(Message&, ITransportServices::ErrorType)> errMsgCb;
 
     std::vector<uint8_t> expectErrData = {
             0x00,
@@ -92,7 +92,7 @@ class MessageDispatcherFixture : public ::testing::Test {
 
     Connectivity::Message createMsg(VccIpCmd::ServiceId srvId, VccIpCmd::OperationId opId,
                                     VccIpCmd::OperationType opType, uint8_t seqNr,
-                                    std::vector<uint8_t> &&data = std::vector<uint8_t>(),
+                                    std::vector<uint8_t>&& data = std::vector<uint8_t>(),
                                     VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED) {
         Pdu pdu;
         pdu.createHeader(srvId, opId, opType, dataType, seqNr);
@@ -119,7 +119,7 @@ TEST_F(MessageDispatcherFixture, ReceiveResponse) {
     bool msgReceived = false;
 
     dispatcher->registerResponseCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                         [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
+                                         [&msgReceived](Message& m, std::shared_ptr<MessageDispatcher::CallerData> c) {
                                              (void)(m);
                                              (void)(c);
                                              msgReceived = true;
@@ -148,7 +148,7 @@ TEST_F(MessageDispatcherFixture, ReceiveResponse_NoReceiver) {
     bool msgReceived = false;
 
     dispatcher->registerResponseCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                         [&msgReceived](Message &m, std::shared_ptr<MessageDispatcher::CallerData> c) {
+                                         [&msgReceived](Message& m, std::shared_ptr<MessageDispatcher::CallerData> c) {
                                              (void)(m);
                                              (void)(c);
                                              msgReceived = true;
@@ -168,7 +168,7 @@ TEST_F(MessageDispatcherFixture, ReceiveRequest) {
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -187,7 +187,7 @@ TEST_F(MessageDispatcherFixture, ReceiveRequest_NoReceiver) {
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -229,7 +229,7 @@ TEST_F(MessageDispatcherFixture, SendMessage) {
     EXPECT_CALL(transport, getThreadDispatcher()).WillOnce(ReturnRef(mtd));
 
     EXPECT_CALL(transport,
-                sendMessage_mocked(LambdaMatcher([&expectedMsg](const Connectivity::Message &msg, bool &ret) {
+                sendMessage_mocked(LambdaMatcher([&expectedMsg](const Connectivity::Message& msg, bool& ret) {
                     if (msg.pdu.header.service_id != expectedMsg.pdu.header.service_id) {
                         ret = false;
                         return "ServiceId mismatch";
@@ -258,7 +258,7 @@ TEST_F(MessageDispatcherFixture, TestNotification) {
     bool msgReceived = false;
 
     dispatcher->registerNotificationCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                             [&msgReceived](Message &m) {
+                                             [&msgReceived](Message& m) {
                                                  (void)(m);
                                                  msgReceived = true;
                                              });
@@ -278,7 +278,7 @@ TEST_F(MessageDispatcherFixture, TestNotification_no_receiver) {
     bool msgReceived = false;
 
     dispatcher->registerNotificationCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                             [&msgReceived](Message &m) {
+                                             [&msgReceived](Message& m) {
                                                  (void)(m);
                                                  msgReceived = true;
                                              });
@@ -297,7 +297,7 @@ TEST_F(MessageDispatcherFixture, TestError) {
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -313,7 +313,7 @@ TEST_F(MessageDispatcherFixture, TestError_no_receiver) {
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -329,7 +329,7 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload) {
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -350,7 +350,7 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_no_payload_no_ex
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -371,7 +371,7 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_correct_siz
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });
@@ -403,7 +403,7 @@ TEST_F(MessageDispatcherFixture, TestError_with_earlier_request_incl_incorrect_s
     bool msgReceived = false;
 
     dispatcher->registerRequestCallback(ServiceId::Connectivity, OperationId::CurrentInternetSource,
-                                        [&msgReceived](Message &m) {
+                                        [&msgReceived](Message& m) {
                                             (void)(m);
                                             msgReceived = true;
                                         });

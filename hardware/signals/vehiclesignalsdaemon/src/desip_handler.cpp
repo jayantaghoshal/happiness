@@ -57,21 +57,21 @@ static void printStartupErrorMessage(DESIP::ReturnCode error) {
     }
 }
 
-void messageReceive(ROUTER_MESSAGE *in_msg) { avmpMessageInject((uint8_t *)in_msg->data, (uint32_t)in_msg->data_size); }
+void messageReceive(ROUTER_MESSAGE* in_msg) { avmpMessageInject((uint8_t*)in_msg->data, (uint32_t)in_msg->data_size); }
 
-void messageSend(Message_Send_T *msg_data) {
+void messageSend(Message_Send_T* msg_data) {
     if (nullptr == msg_data) {
         ALOGW("messageSend(): Bad input parameter");
         return;
     }
 
     int msg_size = msg_data->data_size;
-    uint8_t *transmitBufferPtr = (uint8_t *)malloc(msg_size);
+    uint8_t* transmitBufferPtr = (uint8_t*)malloc(msg_size);
     if (transmitBufferPtr == NULL) {
         ALOGE("messageSend(): Unable to allocate Transmit-Buffer");
         return;
     }
-    void *payloadPointer = transmitBufferPtr;
+    void* payloadPointer = transmitBufferPtr;
 
     // Fill Payload-Data into Message-PayLoad
     if (msg_data->data_size > 0) {
@@ -94,7 +94,7 @@ void messageSend(Message_Send_T *msg_data) {
     }
 }
 
-bool initDesip(const char *pathname) {
+bool initDesip(const char* pathname) {
     //==========================================================================
     //===  Open Connection to DESIP-Layer = Layer2
     //===  Open Connection to UART-Driver = Layer1

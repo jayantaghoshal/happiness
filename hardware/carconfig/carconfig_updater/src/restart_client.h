@@ -24,6 +24,6 @@ class restartClient {
 
   private:
     sd_bus_error error;
-    sd_bus_message *m;
-    sd_bus *bus;
+    sd_bus_message* m;
+    sd_bus* bus;
 };

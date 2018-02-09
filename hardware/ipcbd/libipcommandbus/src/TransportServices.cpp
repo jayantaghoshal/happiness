@@ -21,44 +21,44 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
-TransportServices::TransportServices(IDispatcher &timeProvider, IDispatcher &threadDispatcher, Message::Ecu selfEcu,
+TransportServices::TransportServices(IDispatcher& timeProvider, IDispatcher& threadDispatcher, Message::Ecu selfEcu,
                                      bool useWfaTimer)
     : timeProvider{timeProvider}, threadDispatcher{threadDispatcher}, m_useWfaTimer(useWfaTimer), selfEcu{selfEcu} {}
 
-void TransportServices::setSocket(ISocket *pSocket) {
+void TransportServices::setSocket(ISocket* pSocket) {
     m_pSocket = pSocket;
     m_pSocket->registerReadReadyCb(std::bind(&TransportServices::handleInUnicastData, this));
 }
 
-void TransportServices::setBroadcastSocket(ISocket *pSocket) {
+void TransportServices::setBroadcastSocket(ISocket* pSocket) {
     m_pBroadcastSocket = pSocket;
     m_pBroadcastSocket->registerReadReadyCb(std::bind(&TransportServices::handleInBroadcastData, this));
 }
 
-void TransportServices::setDiagnostics(IDiagnosticsClient *diagnostics, IDispatcher *dispatcher) {
+void TransportServices::setDiagnostics(IDiagnosticsClient* diagnostics, IDispatcher* dispatcher) {
     assert(diagnostics);
     assert(dispatcher);
     m_diagnostics = diagnostics;
     m_applicationThreadDispatcher = dispatcher;
 }
 
-void TransportServices::registerIncomingRequestCallback(std::function<bool(Message &)> messageCb) {
+void TransportServices::registerIncomingRequestCallback(std::function<bool(Message&)> messageCb) {
     m_incomingRequestCb = messageCb;
 }
 
-void TransportServices::registerIncomingNotificationCallback(std::function<void(Message &)> messageCb) {
+void TransportServices::registerIncomingNotificationCallback(std::function<void(Message&)> messageCb) {
     m_incomingNotificationCb = messageCb;
 }
 
-void TransportServices::registerIncomingResponseCallback(std::function<void(Message &)> messageCb) {
+void TransportServices::registerIncomingResponseCallback(std::function<void(Message&)> messageCb) {
     m_incomingResponseCb = messageCb;
 }
 
-void TransportServices::registerErrorOnRequestCallback(std::function<void(Message &, ErrorType)> messageCb) {
+void TransportServices::registerErrorOnRequestCallback(std::function<void(Message&, ErrorType)> messageCb) {
     m_errorOnRequestCb = messageCb;
 }
 
-void TransportServices::sendMessage(Message &&msg) {
+void TransportServices::sendMessage(Message&& msg) {
     ALOGV("TransportServices::sendMessage - %s to ECU %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     // Need to set the proper protocol version
@@ -106,7 +106,7 @@ void TransportServices::sendMessage(Message &&msg) {
                     [ this, pTmRef, id = pTm->msg.pdu.header.sender_handle_id ]() { messageTimeout(pTmRef, id); });
             // Add the message to pending and send it
             m_pendingMessages.push_back(std::move(pTm));
-            std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
+            std::unique_ptr<TrackMessage>& pendTm = m_pendingMessages.back();
             this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
         } break;
 
@@ -126,7 +126,7 @@ void TransportServices::sendMessage(Message &&msg) {
 
                 // Add to pending message and send it
                 m_pendingMessages.push_back((std::move(pTm)));
-                std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
+                std::unique_ptr<TrackMessage>& pendTm = m_pendingMessages.back();
                 this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
             } else {
                 // No book keeping needed since ack timer is not used.
@@ -157,7 +157,7 @@ void TransportServices::sendMessage(Message &&msg) {
 
                 // Add the message to pending and send it
                 m_pendingMessages.push_back(std::move(pTm));
-                std::unique_ptr<TrackMessage> &pendTm = m_pendingMessages.back();
+                std::unique_ptr<TrackMessage>& pendTm = m_pendingMessages.back();
                 this->sendPdu(pendTm->msg.ecu, pendTm->msg.pdu);
             } else {
                 // No book keeping needed as we are not using the ack timer
@@ -179,7 +179,7 @@ void TransportServices::sendMessage(Message &&msg) {
     }
 }
 
-TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId) {
+TrackMessage* TransportServices::getTrackMessage(uint32_t senderHandleId) {
     // TODO: What if same operation (operationid+operation+type+service) happens to be sent by two different nodes with
     // same seq nr...
     //       Can we rule out this ever happens?
@@ -189,7 +189,7 @@ TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId) {
     //    >> different messages.
 
     auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
-                           [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
+                           [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
                                return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
                            });
 
@@ -202,7 +202,7 @@ TrackMessage *TransportServices::getTrackMessage(uint32_t senderHandleId) {
 
 std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t senderHandleId) {
     auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
-                           [&senderHandleId](std::unique_ptr<TrackMessage> &pTm) {
+                           [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
                                return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
                            });
 
@@ -214,7 +214,7 @@ std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t sen
     return std::unique_ptr<TrackMessage>();
 }
 
-void TransportServices::sendPdu(Message::Ecu destination, const Pdu &pdu) {
+void TransportServices::sendPdu(Message::Ecu destination, const Pdu& pdu) {
     ALOGD("Send PDU: %s to %s", Pdu::toString(pdu).c_str(), Message::EcuStr(destination));
 
     if (destination == Message::Ecu::UNKNOWN || destination == selfEcu) {
@@ -235,11 +235,11 @@ void TransportServices::sendPdu(Message::Ecu destination, const Pdu &pdu) {
         } else {
             m_pSocket->writeTo(buffer, destination);
         }
-    } catch (const SocketException &e) {
+    } catch (const SocketException& e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
     }
 }
-void TransportServices::sendAck(Message::Ecu destination, const Pdu &pdu) {
+void TransportServices::sendAck(Message::Ecu destination, const Pdu& pdu) {
     if (m_useWfaTimer) {
         ALOGV("Send ACK for: 0x%08X", pdu.header.sender_handle_id);
         Pdu ackPdu;
@@ -252,7 +252,7 @@ void TransportServices::sendAck(Message::Ecu destination, const Pdu &pdu) {
     }
 }
 
-void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo) {
+void TransportServices::generateErrorPdu(Pdu& errorPdu, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo) {
     // Payload for error PDUs have the following bit layout (1 character is one bit):
     //
     // ECCC CIII IIII IIII IIII I000
@@ -298,7 +298,7 @@ void TransportServices::generateErrorPdu(Pdu &errorPdu, const Pdu &pdu, ErrorCod
     }
 }
 
-void TransportServices::sendError(Message::Ecu destination, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo) {
+void TransportServices::sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo) {
     Pdu errorPdu;
 
     generateErrorPdu(errorPdu, pdu, errorCode, errorInfo);
@@ -318,7 +318,7 @@ void TransportServices::handleInBroadcastData(void) {
     }
 }
 
-void TransportServices::handleInData(ISocket *socket) {
+void TransportServices::handleInData(ISocket* socket) {
     std::vector<uint8_t> buffer;
 
     // Read one UDP message
@@ -326,7 +326,7 @@ void TransportServices::handleInData(ISocket *socket) {
 
     try {
         socket->read(buffer, sourceEcu);
-    } catch (const SocketException &e) {
+    } catch (const SocketException& e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
         return;
     }
@@ -390,7 +390,7 @@ void TransportServices::handleInData(ISocket *socket) {
     }
 }
 
-void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu) {
+void TransportServices::processIncomingPdu(Pdu&& pdu, Message::Ecu sourceEcu) {
     ALOGD("Recv PDU: %s", Pdu::toString(pdu).c_str());
 
     // Handle PDU
@@ -504,9 +504,9 @@ void TransportServices::processIncomingPdu(Pdu &&pdu, Message::Ecu sourceEcu) {
     }
 }
 
-void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu) {
+void TransportServices::handleIncomingAck(const Pdu& pdu, Message::Ecu sourceEcu) {
     (void)(sourceEcu);
-    TrackMessage *pTm = this->getTrackMessage(pdu.header.sender_handle_id);
+    TrackMessage* pTm = this->getTrackMessage(pdu.header.sender_handle_id);
 
     // Did we find something that matches the ACK?
     if (nullptr == pTm) {
@@ -564,8 +564,8 @@ void TransportServices::handleIncomingAck(const Pdu &pdu, Message::Ecu sourceEcu
     ALOGW("Unexpected ACK received for managed message: 0x%08X", pdu.header.sender_handle_id);
 }
 
-void TransportServices::handleIncomingError(const Pdu &pdu) {
-    TrackMessage *pTm = this->getTrackMessage(pdu.header.sender_handle_id);
+void TransportServices::handleIncomingError(const Pdu& pdu) {
+    TrackMessage* pTm = this->getTrackMessage(pdu.header.sender_handle_id);
 
     // Did we find something that matches the ERROR?
     if (nullptr == pTm) {
@@ -655,7 +655,7 @@ void TransportServices::handleIncomingError(const Pdu &pdu) {
     }
 }
 
-void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandleId id) {
+void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandleId id) {
     ALOGI("MessageTimeout: senderid: %d", id);
     // TrackMessage &tm = *pTm;
 
@@ -782,7 +782,7 @@ void TransportServices::messageTimeout(TrackMessage &tm, IpCmdTypes::SenderHandl
     }
 }
 
-const char *TransportServices::ErrorTypeToCString(ErrorType error_type) {
+const char* TransportServices::ErrorTypeToCString(ErrorType error_type) {
     switch (error_type) {
         case ErrorType::OK:
             return "OK";
@@ -796,6 +796,6 @@ const char *TransportServices::ErrorTypeToCString(ErrorType error_type) {
     return "Unknown error type";
 }
 
-IDispatcher &TransportServices::getThreadDispatcher() { return threadDispatcher; }
+IDispatcher& TransportServices::getThreadDispatcher() { return threadDispatcher; }
 
 }  // namespace Connectivity

@@ -40,7 +40,7 @@ SocketServer::SocketServer(int port) {
     ALOGV("DEBUG-SocketServer::SocketServer-3");
 
     // Forcefully attaching socket to the port
-    if (bind(*server_socket_fd_Ptr_, (struct sockaddr *)&address_, sizeof(address_)) < 0) {
+    if (bind(*server_socket_fd_Ptr_, (struct sockaddr*)&address_, sizeof(address_)) < 0) {
         throw std::runtime_error("Error: SocketServer::SocketServer, Bind failed (internal ex: " +
                                  std::string(strerror(errno)) + ")");
     }
@@ -59,7 +59,7 @@ std::shared_ptr<CarSim::SocketConnection> SocketServer::Connect() {
 
     ALOGV("DEBUG-SocketServer::Connect-1");
 
-    if ((new_socket = accept(*server_socket_fd_Ptr_, (struct sockaddr *)&address_, (socklen_t *)&addrlen)) < 0) {
+    if ((new_socket = accept(*server_socket_fd_Ptr_, (struct sockaddr*)&address_, (socklen_t*)&addrlen)) < 0) {
         throw std::runtime_error("Error: SocketServer::Connect, Accept (internal ex: " + std::string(strerror(errno)) +
                                  ")");
     }

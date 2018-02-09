@@ -19,11 +19,11 @@ namespace vcc {
 // default configuration is to be avoided.
 class LocalConfigReader : public LocalConfigReaderInterface {
   public:
-    using LazyLoader = std::function<void(Json::Value *root)>;
+    using LazyLoader = std::function<void(Json::Value* root)>;
 
     explicit LocalConfigReader(LazyLoader loader) : loader_(std::move(loader)) {}
-    LocalConfigReader(const LocalConfigReader &) = delete;
-    const LocalConfigReader &operator=(const LocalConfigReader &) = delete;
+    LocalConfigReader(const LocalConfigReader&) = delete;
+    const LocalConfigReader& operator=(const LocalConfigReader&) = delete;
 
     std::string GetString(std::initializer_list<std::string> keys) const override;
     int GetInt(std::initializer_list<std::string> keys) const override;
@@ -34,10 +34,10 @@ class LocalConfigReader : public LocalConfigReaderInterface {
     void Preload();
 
   protected:
-    static void LoadFile(const std::string &file_path, Json::Value *value);
+    static void LoadFile(const std::string& file_path, Json::Value* value);
 
   private:
-    const Json::Value &GetJsonValue(std::initializer_list<std::string> keys) const;
+    const Json::Value& GetJsonValue(std::initializer_list<std::string> keys) const;
 
     LazyLoader const loader_;
     mutable std::mutex mutex_;
@@ -48,13 +48,13 @@ class LocalConfigFileReader : public LocalConfigReader {
     using base = LocalConfigReader;
 
   public:
-    explicit LocalConfigFileReader(const std::string &file_path);
+    explicit LocalConfigFileReader(const std::string& file_path);
 };
 
 class LocalConfigStaticContentReader : public LocalConfigReader {
     using base = LocalConfigReader;
 
   public:
-    explicit LocalConfigStaticContentReader(const std::string &json);
+    explicit LocalConfigStaticContentReader(const std::string& json);
 };
 }  // namespace vcc

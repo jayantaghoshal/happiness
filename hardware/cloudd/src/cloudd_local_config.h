@@ -25,7 +25,7 @@ class ClouddLocalConfig {
 
     //    using TrafficLimitEntry = std::tuple<std::string, std::string, std::string>;
 
-    ClouddLocalConfig(const vcc::LocalConfigReaderInterface *lcfg = vcc::LocalConfigDefault());
+    ClouddLocalConfig(const vcc::LocalConfigReaderInterface* lcfg = vcc::LocalConfigDefault());
 
     /**
      * @brief Initialise the local configuration.
@@ -176,7 +176,7 @@ class ClouddLocalConfig {
 
     std::vector<TrafficLimitEntry> trafficLimits_;
 */
-    const vcc::LocalConfigReaderInterface *const lcfg_;
+    const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
 }  // namespace Connectivity

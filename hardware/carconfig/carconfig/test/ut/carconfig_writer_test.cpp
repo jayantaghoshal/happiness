@@ -35,7 +35,7 @@ class CarConfigWriterTestFixture : public ::testing::Test {
     virtual void TearDown() {}
 
   protected:
-    FILE *shmFile = nullptr;
+    FILE* shmFile = nullptr;
     std::string csvPath;
 };
 
@@ -72,7 +72,7 @@ TEST_F(CarConfigWriterTestFixture, commitToSharedMemory_GivenGoodFile_SharedMemo
     ASSERT_TRUE((result[1] & 0xFF) == 0xFE);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

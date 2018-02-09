@@ -40,7 +40,7 @@ const std::string connNhTrafficLimit = "CONN_NhTrafficLimit"; */
 
 namespace Connectivity {
 
-ClouddLocalConfig::ClouddLocalConfig(const vcc::LocalConfigReaderInterface *lcfg) : lcfg_(lcfg) { Init(); }
+ClouddLocalConfig::ClouddLocalConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) { Init(); }
 /*
 bool ClouddLocalConfig::ReadLocalConfig(const std::string &configId, std::string &config)
 {

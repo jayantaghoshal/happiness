@@ -10,7 +10,7 @@
 #undef LOG_TAG
 #define LOG_TAG "SoundNotifications"
 
-int32_t main(int argc, char *argv[]) {
+int32_t main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
     ALOGI("Starting service...");

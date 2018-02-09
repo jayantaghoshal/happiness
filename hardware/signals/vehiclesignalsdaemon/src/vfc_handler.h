@@ -17,4 +17,4 @@
  *
  * If this function returns false the vfc shall not be sent to the VIP at all.
  */
-bool shallSendVfcToVIP(const ActivateVfc &vfc);
+bool shallSendVfcToVIP(const ActivateVfc& vfc);

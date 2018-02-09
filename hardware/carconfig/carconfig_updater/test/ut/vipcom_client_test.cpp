@@ -38,7 +38,7 @@ TEST_F(CarConfigVipComTestFixture, waitForVipAcknowledge_NotOk_Timeout) {
     ASSERT_EQ(ccVipcom.waitForVipAcknowledge(), -1);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

@@ -16,32 +16,32 @@
 
 #include "pl/asn_base/asn_base.h"
 
-typedef struct Icb_VccPduHeader_t *Icb_VccPduHeader;
+typedef struct Icb_VccPduHeader_t* Icb_VccPduHeader;
 typedef U32 Icb_ErrorCode;
-typedef struct Icb_OpGeneric_Request_t *Icb_OpGeneric_Request;
-typedef struct Icb_OpGeneric_SetRequestNoReturn_t *Icb_OpGeneric_SetRequestNoReturn;
-typedef struct Icb_OpGeneric_Response_t *Icb_OpGeneric_Response;
-typedef struct Icb_DateTime_t *Icb_DateTime;
+typedef struct Icb_OpGeneric_Request_t* Icb_OpGeneric_Request;
+typedef struct Icb_OpGeneric_SetRequestNoReturn_t* Icb_OpGeneric_SetRequestNoReturn;
+typedef struct Icb_OpGeneric_Response_t* Icb_OpGeneric_Response;
+typedef struct Icb_DateTime_t* Icb_DateTime;
 typedef U32 Icb_SourceStatus;
 typedef U32 Icb_OnOffStatus;
 typedef U32 Icb_SecurityStatus;
 typedef U32 Icb_GenericOkStatus;
-typedef struct Icb_AudioStatus_t *Icb_AudioStatus;
-typedef struct Icb_UUID_t *Icb_UUID;
-typedef struct Icb_PartIdentifier_t *Icb_PartIdentifier;
+typedef struct Icb_AudioStatus_t* Icb_AudioStatus;
+typedef struct Icb_UUID_t* Icb_UUID;
+typedef struct Icb_PartIdentifier_t* Icb_PartIdentifier;
 typedef U32 Icb_SBTrigger;
-typedef struct Icb_SBWarning_t *Icb_SBWarning;
-typedef struct Icb_OpSVTStatus_Response_t *Icb_OpSVTStatus_Response;
-typedef struct Icb_OpSVTStatus_Notification_t *Icb_OpSVTStatus_Notification;
-typedef struct Icb_OpTNStatus_Response_t *Icb_OpTNStatus_Response;
-typedef struct Icb_OpTNStatus_Notification_t *Icb_OpTNStatus_Notification;
-typedef struct Icb_TelemSettings_t *Icb_TelemSettings;
-typedef struct Icb_SimpleVehiclePosition_t *Icb_SimpleVehiclePosition;
+typedef struct Icb_SBWarning_t* Icb_SBWarning;
+typedef struct Icb_OpSVTStatus_Response_t* Icb_OpSVTStatus_Response;
+typedef struct Icb_OpSVTStatus_Notification_t* Icb_OpSVTStatus_Notification;
+typedef struct Icb_OpTNStatus_Response_t* Icb_OpTNStatus_Response;
+typedef struct Icb_OpTNStatus_Notification_t* Icb_OpTNStatus_Notification;
+typedef struct Icb_TelemSettings_t* Icb_TelemSettings;
+typedef struct Icb_SimpleVehiclePosition_t* Icb_SimpleVehiclePosition;
 typedef U32 Icb_ActivationStatusChange;
 typedef U32 Icb_ActivationStatus;
 typedef U32 Icb_OnCallService;
 typedef U32 Icb_OnOffSetting;
-typedef struct Icb_OpServiceActivation_Response_t *Icb_OpServiceActivation_Response;
+typedef struct Icb_OpServiceActivation_Response_t* Icb_OpServiceActivation_Response;
 typedef U32 Icb_RescueStatus;
 typedef U32 Icb_ButtonStatus;
 typedef U32 Icb_VoiceStatus;
@@ -50,245 +50,245 @@ typedef U32 Icb_PSAPStatus;
 typedef U32 Icb_SendToCarId;
 typedef U32 Icb_SendToCarConfirmation;
 typedef U32 Icb_PreferredEcalls;
-typedef struct Icb_OpTextMessage_SetRequest_t *Icb_OpTextMessage_SetRequest;
-typedef struct Icb_OpIHUSystemInfo_Response_t *Icb_OpIHUSystemInfo_Response;
-typedef struct Icb_UserPrivacySettings_t *Icb_UserPrivacySettings;
-typedef struct Icb_ClimateTimerError_t *Icb_ClimateTimerError;
+typedef struct Icb_OpTextMessage_SetRequest_t* Icb_OpTextMessage_SetRequest;
+typedef struct Icb_OpIHUSystemInfo_Response_t* Icb_OpIHUSystemInfo_Response;
+typedef struct Icb_UserPrivacySettings_t* Icb_UserPrivacySettings;
+typedef struct Icb_ClimateTimerError_t* Icb_ClimateTimerError;
 typedef U32 Icb_TimerError;
 typedef U32 Icb_TimerStatus;
 typedef U32 Icb_TimerType;
 typedef U32 Icb_OnOff;
-typedef struct Icb_OpSoHWarning_Notification_t *Icb_OpSoHWarning_Notification;
+typedef struct Icb_OpSoHWarning_Notification_t* Icb_OpSoHWarning_Notification;
 typedef U32 Icb_SettingType;
-typedef struct Icb_OpServiceBooking_Notification_t *Icb_OpServiceBooking_Notification;
-typedef struct Icb_OpSoHPackageUploaded_Notification_t *Icb_OpSoHPackageUploaded_Notification;
+typedef struct Icb_OpServiceBooking_Notification_t* Icb_OpServiceBooking_Notification;
+typedef struct Icb_OpSoHPackageUploaded_Notification_t* Icb_OpSoHPackageUploaded_Notification;
 typedef U32 Icb_DataCounterValue;
 typedef U32 Icb_DataCounter;
-typedef struct Icb_OpPSIMResetDataCounter_SetRequest_t *Icb_OpPSIMResetDataCounter_SetRequest;
-typedef struct Icb_OpPSIMResetDataCounter_Response_t *Icb_OpPSIMResetDataCounter_Response;
-typedef struct Icb_APNConfiguration_t *Icb_APNConfiguration;
-typedef struct Icb_AutomaticAPNConfiguration_t *Icb_AutomaticAPNConfiguration;
-typedef struct Icb_APNSelection_t *Icb_APNSelection;
-typedef struct Icb_OpPSIMConnect_SetRequest_t *Icb_OpPSIMConnect_SetRequest;
-typedef struct Icb_OpPSIMConnect_Response_t *Icb_OpPSIMConnect_Response;
+typedef struct Icb_OpPSIMResetDataCounter_SetRequest_t* Icb_OpPSIMResetDataCounter_SetRequest;
+typedef struct Icb_OpPSIMResetDataCounter_Response_t* Icb_OpPSIMResetDataCounter_Response;
+typedef struct Icb_APNConfiguration_t* Icb_APNConfiguration;
+typedef struct Icb_AutomaticAPNConfiguration_t* Icb_AutomaticAPNConfiguration;
+typedef struct Icb_APNSelection_t* Icb_APNSelection;
+typedef struct Icb_OpPSIMConnect_SetRequest_t* Icb_OpPSIMConnect_SetRequest;
+typedef struct Icb_OpPSIMConnect_Response_t* Icb_OpPSIMConnect_Response;
 typedef U32 Icb_PSIMConnectionStatus;
 typedef U32 Icb_WirelessTechnology;
-typedef struct Icb_OpPSIMRoamingConfiguration_SetRequest_t *Icb_OpPSIMRoamingConfiguration_SetRequest;
-typedef struct Icb_OpPSIMRoamingConfiguration_Response_t *Icb_OpPSIMRoamingConfiguration_Response;
-typedef struct Icb_OpAccessRightPinCode_Response_t *Icb_OpAccessRightPinCode_Response;
+typedef struct Icb_OpPSIMRoamingConfiguration_SetRequest_t* Icb_OpPSIMRoamingConfiguration_SetRequest;
+typedef struct Icb_OpPSIMRoamingConfiguration_Response_t* Icb_OpPSIMRoamingConfiguration_Response;
+typedef struct Icb_OpAccessRightPinCode_Response_t* Icb_OpAccessRightPinCode_Response;
 typedef U32 Icb_Ecu;
-typedef struct Icb_OpFactoryDefaultRestore_Response_t *Icb_OpFactoryDefaultRestore_Response;
-typedef struct Icb_OpConnectivityStatus_Response_t *Icb_OpConnectivityStatus_Response;
-typedef struct Icb_OpConnectivityStatus_Notification_t *Icb_OpConnectivityStatus_Notification;
+typedef struct Icb_OpFactoryDefaultRestore_Response_t* Icb_OpFactoryDefaultRestore_Response;
+typedef struct Icb_OpConnectivityStatus_Response_t* Icb_OpConnectivityStatus_Response;
+typedef struct Icb_OpConnectivityStatus_Notification_t* Icb_OpConnectivityStatus_Notification;
 typedef U32 Icb_WorkshopWlanConnectionResult;
-typedef struct Icb_OpWorkshopWlanDetected_Notification_t *Icb_OpWorkshopWlanDetected_Notification;
+typedef struct Icb_OpWorkshopWlanDetected_Notification_t* Icb_OpWorkshopWlanDetected_Notification;
 typedef U32 Icb_InternetSource;
-typedef struct Icb_OpInternetSourceCtrlBT_SetRequest_t *Icb_OpInternetSourceCtrlBT_SetRequest;
-typedef struct Icb_OpInternetSourceCtrlBT_Response_t *Icb_OpInternetSourceCtrlBT_Response;
-typedef struct Icb_OpInternetSourceCtrlBT_Notification_t *Icb_OpInternetSourceCtrlBT_Notification;
-typedef struct Icb_OpInternetSourceCtrlUSB_SetRequest_t *Icb_OpInternetSourceCtrlUSB_SetRequest;
-typedef struct Icb_OpInternetSourceCtrlUSB_Response_t *Icb_OpInternetSourceCtrlUSB_Response;
-typedef struct Icb_OpInternetSourceCtrlUSB_Notification_t *Icb_OpInternetSourceCtrlUSB_Notification;
-typedef struct Icb_OpPSIMMessage_SetRequest_t *Icb_OpPSIMMessage_SetRequest;
+typedef struct Icb_OpInternetSourceCtrlBT_SetRequest_t* Icb_OpInternetSourceCtrlBT_SetRequest;
+typedef struct Icb_OpInternetSourceCtrlBT_Response_t* Icb_OpInternetSourceCtrlBT_Response;
+typedef struct Icb_OpInternetSourceCtrlBT_Notification_t* Icb_OpInternetSourceCtrlBT_Notification;
+typedef struct Icb_OpInternetSourceCtrlUSB_SetRequest_t* Icb_OpInternetSourceCtrlUSB_SetRequest;
+typedef struct Icb_OpInternetSourceCtrlUSB_Response_t* Icb_OpInternetSourceCtrlUSB_Response;
+typedef struct Icb_OpInternetSourceCtrlUSB_Notification_t* Icb_OpInternetSourceCtrlUSB_Notification;
+typedef struct Icb_OpPSIMMessage_SetRequest_t* Icb_OpPSIMMessage_SetRequest;
 typedef U32 Icb_WLANMode;
 typedef U32 Icb_WLANFrequencyBand;
 typedef U32 Icb_WLANChannelWidthData;
 typedef ASN_OctetString Icb_SSID;
 typedef ASN_OctetString Icb_WLAN_Password;
-typedef struct Icb_WLANConnDevice_t *Icb_WLANConnDevice;
+typedef struct Icb_WLANConnDevice_t* Icb_WLANConnDevice;
 typedef U32 Icb_WLANConnectStatus;
 typedef ASN_OctetString Icb_WLANExternalPassword;
-typedef struct Icb_OpWLANSTADisconnect_Response_t *Icb_OpWLANSTADisconnect_Response;
+typedef struct Icb_OpWLANSTADisconnect_Response_t* Icb_OpWLANSTADisconnect_Response;
 typedef U32 Icb_WLANAPCurrentStatus;
 typedef U32 Icb_WLANConnectionStatus;
 typedef U32 Icb_WLANSecurityType;
-typedef struct Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_t *Icb_OpWLANSTAForgetRememberedNetwk_SetRequest;
-typedef struct Icb_OpWLANSTAForgetRememberedNetwk_Response_t *Icb_OpWLANSTAForgetRememberedNetwk_Response;
+typedef struct Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_t* Icb_OpWLANSTAForgetRememberedNetwk_SetRequest;
+typedef struct Icb_OpWLANSTAForgetRememberedNetwk_Response_t* Icb_OpWLANSTAForgetRememberedNetwk_Response;
 typedef ASN_OctetString Icb_PinCode;
 typedef U32 Icb_SimSecuritySetting;
-typedef struct Icb_OpPSIMSecurity_Response_t *Icb_OpPSIMSecurity_Response;
-typedef struct Icb_PinPukCommand_t *Icb_PinPukCommand;
-typedef struct Icb_PinPukCodes_t *Icb_PinPukCodes;
-typedef struct Icb_PinPinCodes_t *Icb_PinPinCodes;
-typedef struct Icb_RegisterState_t *Icb_RegisterState;
-typedef struct Icb_NwOperatorId_t *Icb_NwOperatorId;
+typedef struct Icb_OpPSIMSecurity_Response_t* Icb_OpPSIMSecurity_Response;
+typedef struct Icb_PinPukCommand_t* Icb_PinPukCommand;
+typedef struct Icb_PinPukCodes_t* Icb_PinPukCodes;
+typedef struct Icb_PinPinCodes_t* Icb_PinPinCodes;
+typedef struct Icb_RegisterState_t* Icb_RegisterState;
+typedef struct Icb_NwOperatorId_t* Icb_NwOperatorId;
 typedef U32 Icb_NetworkType;
-typedef struct Icb_OperatorSelection_t *Icb_OperatorSelection;
-typedef struct Icb_SimStatus_t *Icb_SimStatus;
+typedef struct Icb_OperatorSelection_t* Icb_OperatorSelection;
+typedef struct Icb_SimStatus_t* Icb_SimStatus;
 typedef ASN_OctetString Icb_IMSINumber;
 typedef U32 Icb_PinTrials;
 typedef U32 Icb_PukTrials;
 typedef U32 Icb_PhoneOperationMode;
-typedef struct Icb_OpPSIMSignalStrength_Notification_t *Icb_OpPSIMSignalStrength_Notification;
+typedef struct Icb_OpPSIMSignalStrength_Notification_t* Icb_OpPSIMSignalStrength_Notification;
 typedef ASN_OctetString Icb_UssdCode;
-typedef struct Icb_UssdReturnCode_t *Icb_UssdReturnCode;
+typedef struct Icb_UssdReturnCode_t* Icb_UssdReturnCode;
 typedef U32 Icb_UssdStatus;
-typedef struct Icb_OpPremiumAudio_SetRequest_t *Icb_OpPremiumAudio_SetRequest;
-typedef struct Icb_OpPremiumAudio_Response_t *Icb_OpPremiumAudio_Response;
+typedef struct Icb_OpPremiumAudio_SetRequest_t* Icb_OpPremiumAudio_SetRequest;
+typedef struct Icb_OpPremiumAudio_Response_t* Icb_OpPremiumAudio_Response;
 typedef U32 Icb_AssistCallAction;
 typedef ASN_OctetString Icb_MacAddress;
 typedef U32 Icb_RadioMode;
 typedef U32 Icb_RadioFrequencyHz;
-typedef struct Icb_OpDLCConnectedSignal_Response_t *Icb_OpDLCConnectedSignal_Response;
-typedef struct Icb_DRVehiclePosition_t *Icb_DRVehiclePosition;
+typedef struct Icb_OpDLCConnectedSignal_Response_t* Icb_OpDLCConnectedSignal_Response;
+typedef struct Icb_DRVehiclePosition_t* Icb_DRVehiclePosition;
 typedef U32 Icb_GnssFixType;
 typedef U32 Icb_DeadReckoningType;
-typedef struct Icb_GPSSystemTime_t *Icb_GPSSystemTime;
-typedef struct Icb_CoordinatesLongLat_t *Icb_CoordinatesLongLat;
-typedef struct Icb_Velocity_t *Icb_Velocity;
-typedef struct Icb_GNSSUsage_t *Icb_GNSSUsage;
-typedef struct Icb_GNSSStatus_t *Icb_GNSSStatus;
-typedef struct Icb_NrOfSatellitesPerSystem_t *Icb_NrOfSatellitesPerSystem;
-typedef struct Icb_DOPValues_t *Icb_DOPValues;
-typedef struct Icb_ReceiverChannelData_t *Icb_ReceiverChannelData;
+typedef struct Icb_GPSSystemTime_t* Icb_GPSSystemTime;
+typedef struct Icb_CoordinatesLongLat_t* Icb_CoordinatesLongLat;
+typedef struct Icb_Velocity_t* Icb_Velocity;
+typedef struct Icb_GNSSUsage_t* Icb_GNSSUsage;
+typedef struct Icb_GNSSStatus_t* Icb_GNSSStatus;
+typedef struct Icb_NrOfSatellitesPerSystem_t* Icb_NrOfSatellitesPerSystem;
+typedef struct Icb_DOPValues_t* Icb_DOPValues;
+typedef struct Icb_ReceiverChannelData_t* Icb_ReceiverChannelData;
 typedef U32 Icb_SatelliteTrackingStatusType;
-typedef struct Icb_ExtendedChannelData_t *Icb_ExtendedChannelData;
-typedef struct Icb_ChannelCorrectionData_t *Icb_ChannelCorrectionData;
-typedef struct Icb_AccuracyValues_t *Icb_AccuracyValues;
-typedef struct Icb_OpRemoteDiagnosticLink_Notification_t *Icb_OpRemoteDiagnosticLink_Notification;
+typedef struct Icb_ExtendedChannelData_t* Icb_ExtendedChannelData;
+typedef struct Icb_ChannelCorrectionData_t* Icb_ChannelCorrectionData;
+typedef struct Icb_AccuracyValues_t* Icb_AccuracyValues;
+typedef struct Icb_OpRemoteDiagnosticLink_Notification_t* Icb_OpRemoteDiagnosticLink_Notification;
 typedef U32 Icb_RemoteDiagInfo;
-typedef struct Icb_OpTextFromOperatorToUser_Notification_t *Icb_OpTextFromOperatorToUser_Notification;
-typedef struct Icb_OpCurrentJ2534Session_Notification_t *Icb_OpCurrentJ2534Session_Notification;
+typedef struct Icb_OpTextFromOperatorToUser_Notification_t* Icb_OpTextFromOperatorToUser_Notification;
+typedef struct Icb_OpCurrentJ2534Session_Notification_t* Icb_OpCurrentJ2534Session_Notification;
 typedef U32 Icb_DoIPPhase;
 typedef U32 Icb_DoIPMode;
 typedef U32 Icb_CurrentDoIPConn;
-typedef struct Icb_OpRequestUserAuthentication_Request_t *Icb_OpRequestUserAuthentication_Request;
+typedef struct Icb_OpRequestUserAuthentication_Request_t* Icb_OpRequestUserAuthentication_Request;
 typedef U32 Icb_UserAuthCredentials;
-typedef struct Icb_OpTextFromUserToOperator_Notification_t *Icb_OpTextFromUserToOperator_Notification;
-typedef struct Icb_OpRequestRemoteDiagnostics_Notification_t *Icb_OpRequestRemoteDiagnostics_Notification;
-typedef struct Icb_OpAbortRemoteDiagnostics_Notification_t *Icb_OpAbortRemoteDiagnostics_Notification;
+typedef struct Icb_OpTextFromUserToOperator_Notification_t* Icb_OpTextFromUserToOperator_Notification;
+typedef struct Icb_OpRequestRemoteDiagnostics_Notification_t* Icb_OpRequestRemoteDiagnostics_Notification;
+typedef struct Icb_OpAbortRemoteDiagnostics_Notification_t* Icb_OpAbortRemoteDiagnostics_Notification;
 typedef U32 Icb_UpdateDacMode;
-typedef struct Icb_ApprovalStatusType_t *Icb_ApprovalStatusType;
+typedef struct Icb_ApprovalStatusType_t* Icb_ApprovalStatusType;
 typedef U32 Icb_DownloadStatus;
 typedef U32 Icb_DownloadProgress;
 typedef U32 Icb_DownloadState;
-typedef struct Icb_OpCancelDownload_SetRequest_t *Icb_OpCancelDownload_SetRequest;
-typedef struct Icb_OpCancelDownload_Response_t *Icb_OpCancelDownload_Response;
+typedef struct Icb_OpCancelDownload_SetRequest_t* Icb_OpCancelDownload_SetRequest;
+typedef struct Icb_OpCancelDownload_Response_t* Icb_OpCancelDownload_Response;
 typedef U32 Icb_InstallCommand;
 typedef U32 Icb_InstallProgress;
-typedef struct Icb_Uri_t *Icb_Uri;
-typedef struct Icb_InstallationData_t *Icb_InstallationData;
+typedef struct Icb_Uri_t* Icb_Uri;
+typedef struct Icb_InstallationData_t* Icb_InstallationData;
 typedef U32 Icb_InstallStatus;
 typedef U32 Icb_FileInstallationStatus;
-typedef struct Icb_OpLocalStorage_Response_t *Icb_OpLocalStorage_Response;
-typedef struct Icb_OpTvmVehicleInfo_Response_t *Icb_OpTvmVehicleInfo_Response;
-typedef struct Icb_OpTvmVehicleInfo_Notification_t *Icb_OpTvmVehicleInfo_Notification;
-typedef struct Icb_ArrayOf_ClimateTimer_t *Icb_ArrayOf_ClimateTimer;
-typedef struct Icb_ArrayOf_OnOff_t *Icb_ArrayOf_OnOff;
-typedef struct Icb_OpGenericSettingSynch_Request_settingIDs_t *Icb_OpGenericSettingSynch_Request_settingIDs;
-typedef struct Icb_ArrayOf_Setting_t *Icb_ArrayOf_Setting;
-typedef struct Icb_ArrayOf_SBWarning_t *Icb_ArrayOf_SBWarning;
-typedef struct Icb_ArrayOf_WLANFrequencyBand_t *Icb_ArrayOf_WLANFrequencyBand;
-typedef struct Icb_ArrayOf_WLANConnDevice_t *Icb_ArrayOf_WLANConnDevice;
-typedef struct Icb_ArrayOf_AvailableNetworkInformation_t *Icb_ArrayOf_AvailableNetworkInformation;
-typedef struct Icb_ArrayOf_SSID_t *Icb_ArrayOf_SSID;
-typedef struct Icb_ArrayOf_NetworkOperator_t *Icb_ArrayOf_NetworkOperator;
-typedef struct Icb_ArrayOf_RadioFrequencyHz_t *Icb_ArrayOf_RadioFrequencyHz;
-typedef struct Icb_ArrayOf_ApprovalStatusType_t *Icb_ArrayOf_ApprovalStatusType;
-typedef struct Icb_ArrayOf_SoftwareProduct_t *Icb_ArrayOf_SoftwareProduct;
-typedef struct Icb_ArrayOf_UUID_t *Icb_ArrayOf_UUID;
-typedef struct Icb_ArrayOf_PartIdentifier_t *Icb_ArrayOf_PartIdentifier;
-typedef struct Icb_ArrayOf_InstallationData_t *Icb_ArrayOf_InstallationData;
-typedef struct Icb_ArrayOf_InstalledData_t *Icb_ArrayOf_InstalledData;
-typedef struct Icb_OpGeneric_Error_t *Icb_OpGeneric_Error;
-typedef struct Icb_OpTelematicSettings_SetRequest_t *Icb_OpTelematicSettings_SetRequest;
-typedef struct Icb_OpTelematicSettings_Response_t *Icb_OpTelematicSettings_Response;
-typedef struct Icb_OpPositionData_Response_t *Icb_OpPositionData_Response;
-typedef struct Icb_WGS84SimplePositionData_t *Icb_WGS84SimplePositionData;
-typedef struct Icb_OpSubscriptionActivation_SetRequest_t *Icb_OpSubscriptionActivation_SetRequest;
-typedef struct Icb_OpSubscriptionActivation_Response_t *Icb_OpSubscriptionActivation_Response;
-typedef struct Icb_OpSubscriptionActivation_Notification_t *Icb_OpSubscriptionActivation_Notification;
-typedef struct Icb_OpServiceActivation_SetRequest_t *Icb_OpServiceActivation_SetRequest;
-typedef struct Icb_OpRescueStatus_Response_t *Icb_OpRescueStatus_Response;
-typedef struct Icb_OpRescueStatus_Notification_t *Icb_OpRescueStatus_Notification;
-typedef struct Icb_OpSendToCarConfirmation_SetRequest_t *Icb_OpSendToCarConfirmation_SetRequest;
-typedef struct Icb_OpSendToCarConfirmation_Response_t *Icb_OpSendToCarConfirmation_Response;
-typedef struct Icb_EcalSettings_t *Icb_EcalSettings;
-typedef struct Icb_OpSendToCar_SetRequest_t *Icb_OpSendToCar_SetRequest;
-typedef struct Icb_OpUserPrivacySettings_Notification_t *Icb_OpUserPrivacySettings_Notification;
-typedef struct Icb_OpClimateTimers_SetRequest_t *Icb_OpClimateTimers_SetRequest;
-typedef struct Icb_OpClimateTimers_Response_t *Icb_OpClimateTimers_Response;
-typedef struct Icb_TimerDays_t *Icb_TimerDays;
-typedef struct Icb_OpGenericSettingSynch_Request_t *Icb_OpGenericSettingSynch_Request;
-typedef struct Icb_OpGenericSettingSynch_SetRequest_t *Icb_OpGenericSettingSynch_SetRequest;
-typedef struct Icb_OpGenericSettingSynch_Response_t *Icb_OpGenericSettingSynch_Response;
-typedef struct Icb_OpGenericSettingSynch_Notification_t *Icb_OpGenericSettingSynch_Notification;
-typedef struct Icb_Setting_t *Icb_Setting;
-typedef struct Icb_OpSoHPacketSend_SetRequestNoReturn_t *Icb_OpSoHPacketSend_SetRequestNoReturn;
-typedef struct Icb_OpPSIMDataCounter_Response_t *Icb_OpPSIMDataCounter_Response;
-typedef struct Icb_OpPSIMNetworkConfiguration_SetRequest_t *Icb_OpPSIMNetworkConfiguration_SetRequest;
-typedef struct Icb_OpPSIMNetworkConfiguration_Response_t *Icb_OpPSIMNetworkConfiguration_Response;
-typedef struct Icb_OpPSIMConnectionStatus_Response_t *Icb_OpPSIMConnectionStatus_Response;
-typedef struct Icb_OpPSIMConnectionStatus_Notification_t *Icb_OpPSIMConnectionStatus_Notification;
-typedef struct Icb_OpInternetGateway_SetRequest_t *Icb_OpInternetGateway_SetRequest;
-typedef struct Icb_OpInternetGateway_Response_t *Icb_OpInternetGateway_Response;
-typedef struct Icb_OpConnectWorkshopWlan_Notification_t *Icb_OpConnectWorkshopWlan_Notification;
-typedef struct Icb_OpCurrentInternetSource_SetRequest_t *Icb_OpCurrentInternetSource_SetRequest;
-typedef struct Icb_OpCurrentInternetSource_Response_t *Icb_OpCurrentInternetSource_Response;
-typedef struct Icb_OpCurrentInternetSource_Notification_t *Icb_OpCurrentInternetSource_Notification;
-typedef struct Icb_OpWLANMode_SetRequest_t *Icb_OpWLANMode_SetRequest;
-typedef struct Icb_OpWLANMode_Response_t *Icb_OpWLANMode_Response;
-typedef struct Icb_OpWLANMode_Notification_t *Icb_OpWLANMode_Notification;
-typedef struct Icb_OpWLANFreqBandSelect_SetRequest_t *Icb_OpWLANFreqBandSelect_SetRequest;
-typedef struct Icb_OpWLANFreqBandSelect_Response_t *Icb_OpWLANFreqBandSelect_Response;
-typedef struct Icb_WLANChannelInfo_t *Icb_WLANChannelInfo;
-typedef struct Icb_OpWLANAPSSID_SetRequest_t *Icb_OpWLANAPSSID_SetRequest;
-typedef struct Icb_OpWLANAPSSID_Response_t *Icb_OpWLANAPSSID_Response;
-typedef struct Icb_OpWLANAPPasswd_SetRequest_t *Icb_OpWLANAPPasswd_SetRequest;
-typedef struct Icb_OpWLANAPPasswd_Response_t *Icb_OpWLANAPPasswd_Response;
-typedef struct Icb_OpWLANAPConnDev_Response_t *Icb_OpWLANAPConnDev_Response;
-typedef struct Icb_OpWLANAPConnDev_Notification_t *Icb_OpWLANAPConnDev_Notification;
-typedef struct Icb_OpWLANSTAConnect_SetRequest_t *Icb_OpWLANSTAConnect_SetRequest;
-typedef struct Icb_OpWLANSTAConnect_Response_t *Icb_OpWLANSTAConnect_Response;
-typedef struct Icb_OpWLANAPStatusSettings_Response_t *Icb_OpWLANAPStatusSettings_Response;
-typedef struct Icb_OpWLANSTAStatus_Response_t *Icb_OpWLANSTAStatus_Response;
-typedef struct Icb_OpWLANSTAStatus_Notification_t *Icb_OpWLANSTAStatus_Notification;
-typedef struct Icb_AvailableNetworkInformation_t *Icb_AvailableNetworkInformation;
-typedef struct Icb_OpWLANSTARememberedNetwks_Response_t *Icb_OpWLANSTARememberedNetwks_Response;
-typedef struct Icb_OpPSIMSecurity_SetRequest_t *Icb_OpPSIMSecurity_SetRequest;
-typedef struct Icb_OpPSIMEnterCode_SetRequest_t *Icb_OpPSIMEnterCode_SetRequest;
-typedef struct Icb_OpPSIMRegisterState_Response_t *Icb_OpPSIMRegisterState_Response;
-typedef struct Icb_NetworkOperator_t *Icb_NetworkOperator;
-typedef struct Icb_OpPSIMNetworkOperators_Response_t *Icb_OpPSIMNetworkOperators_Response;
-typedef struct Icb_OpPSIMNetworkOperatorCommand_SetRequest_t *Icb_OpPSIMNetworkOperatorCommand_SetRequest;
-typedef struct Icb_OpPSIMNetworkOperatorCommand_Response_t *Icb_OpPSIMNetworkOperatorCommand_Response;
-typedef struct Icb_OpPSIMNetworkOperatorCommand_Notification_t *Icb_OpPSIMNetworkOperatorCommand_Notification;
-typedef struct Icb_OpPSIMState_Response_t *Icb_OpPSIMState_Response;
-typedef struct Icb_OpPSIMPhoneOperationMode_Response_t *Icb_OpPSIMPhoneOperationMode_Response;
-typedef struct Icb_OpPSIMUssd_SetRequest_t *Icb_OpPSIMUssd_SetRequest;
-typedef struct Icb_OpPSIMUssd_Response_t *Icb_OpPSIMUssd_Response;
-typedef struct Icb_OpCallHandling_SetRequest_t *Icb_OpCallHandling_SetRequest;
-typedef struct Icb_OpTEMIdentification_Response_t *Icb_OpTEMIdentification_Response;
-typedef struct Icb_OpTEMRadioMode_SetRequest_t *Icb_OpTEMRadioMode_SetRequest;
-typedef struct Icb_OpTEMRadioMode_Response_t *Icb_OpTEMRadioMode_Response;
-typedef struct Icb_OpTunerFrequencies_Response_t *Icb_OpTunerFrequencies_Response;
-typedef struct Icb_OpDeadReckonedPosition_Response_t *Icb_OpDeadReckonedPosition_Response;
-typedef struct Icb_DRPositionData_t *Icb_DRPositionData;
-typedef struct Icb_GeographicalPosition_t *Icb_GeographicalPosition;
-typedef struct Icb_SatelliteUsage_t *Icb_SatelliteUsage;
-typedef struct Icb_ChannelData_t *Icb_ChannelData;
-typedef struct Icb_GNSSDataAccuracy_t *Icb_GNSSDataAccuracy;
-typedef struct Icb_OpRemoteDiagnosticInfo_Notification_t *Icb_OpRemoteDiagnosticInfo_Notification;
-typedef struct Icb_OpCurrentDoIPState_Notification_t *Icb_OpCurrentDoIPState_Notification;
-typedef struct Icb_OpCurrentDoIPConnection_Notification_t *Icb_OpCurrentDoIPConnection_Notification;
-typedef struct Icb_OpRequestUserAuthentication_Response_t *Icb_OpRequestUserAuthentication_Response;
-typedef struct Icb_OpUpdateDaCMode_Notification_t *Icb_OpUpdateDaCMode_Notification;
-typedef struct Icb_OpApprovalStatus_Response_t *Icb_OpApprovalStatus_Response;
-typedef struct Icb_OpApprovalStatus_Notification_t *Icb_OpApprovalStatus_Notification;
-typedef struct Icb_OpDownloadStatus_Response_t *Icb_OpDownloadStatus_Response;
-typedef struct Icb_SoftwareProduct_t *Icb_SoftwareProduct;
-typedef struct Icb_OpDownloadSoftware_SetRequest_t *Icb_OpDownloadSoftware_SetRequest;
-typedef struct Icb_OpDeletedSoftware_SetRequest_t *Icb_OpDeletedSoftware_SetRequest;
-typedef struct Icb_OpDeviceInstall_SetRequest_t *Icb_OpDeviceInstall_SetRequest;
-typedef struct Icb_OpDeviceInstall_Response_t *Icb_OpDeviceInstall_Response;
-typedef struct Icb_InstalledData_t *Icb_InstalledData;
-typedef struct Icb_OpEcallSettings_SetRequest_t *Icb_OpEcallSettings_SetRequest;
-typedef struct Icb_OpEcallSettings_Response_t *Icb_OpEcallSettings_Response;
-typedef struct Icb_ClimateTimer_t *Icb_ClimateTimer;
-typedef struct Icb_OpWLANChannelFreqInfo_Notification_t *Icb_OpWLANChannelFreqInfo_Notification;
-typedef struct Icb_GNSSData_t *Icb_GNSSData;
-typedef struct Icb_OpGNSSPositionDataAccuracy_Response_t *Icb_OpGNSSPositionDataAccuracy_Response;
-typedef struct Icb_OpGNSSPositionData_Response_t *Icb_OpGNSSPositionData_Response;
+typedef struct Icb_OpLocalStorage_Response_t* Icb_OpLocalStorage_Response;
+typedef struct Icb_OpTvmVehicleInfo_Response_t* Icb_OpTvmVehicleInfo_Response;
+typedef struct Icb_OpTvmVehicleInfo_Notification_t* Icb_OpTvmVehicleInfo_Notification;
+typedef struct Icb_ArrayOf_ClimateTimer_t* Icb_ArrayOf_ClimateTimer;
+typedef struct Icb_ArrayOf_OnOff_t* Icb_ArrayOf_OnOff;
+typedef struct Icb_OpGenericSettingSynch_Request_settingIDs_t* Icb_OpGenericSettingSynch_Request_settingIDs;
+typedef struct Icb_ArrayOf_Setting_t* Icb_ArrayOf_Setting;
+typedef struct Icb_ArrayOf_SBWarning_t* Icb_ArrayOf_SBWarning;
+typedef struct Icb_ArrayOf_WLANFrequencyBand_t* Icb_ArrayOf_WLANFrequencyBand;
+typedef struct Icb_ArrayOf_WLANConnDevice_t* Icb_ArrayOf_WLANConnDevice;
+typedef struct Icb_ArrayOf_AvailableNetworkInformation_t* Icb_ArrayOf_AvailableNetworkInformation;
+typedef struct Icb_ArrayOf_SSID_t* Icb_ArrayOf_SSID;
+typedef struct Icb_ArrayOf_NetworkOperator_t* Icb_ArrayOf_NetworkOperator;
+typedef struct Icb_ArrayOf_RadioFrequencyHz_t* Icb_ArrayOf_RadioFrequencyHz;
+typedef struct Icb_ArrayOf_ApprovalStatusType_t* Icb_ArrayOf_ApprovalStatusType;
+typedef struct Icb_ArrayOf_SoftwareProduct_t* Icb_ArrayOf_SoftwareProduct;
+typedef struct Icb_ArrayOf_UUID_t* Icb_ArrayOf_UUID;
+typedef struct Icb_ArrayOf_PartIdentifier_t* Icb_ArrayOf_PartIdentifier;
+typedef struct Icb_ArrayOf_InstallationData_t* Icb_ArrayOf_InstallationData;
+typedef struct Icb_ArrayOf_InstalledData_t* Icb_ArrayOf_InstalledData;
+typedef struct Icb_OpGeneric_Error_t* Icb_OpGeneric_Error;
+typedef struct Icb_OpTelematicSettings_SetRequest_t* Icb_OpTelematicSettings_SetRequest;
+typedef struct Icb_OpTelematicSettings_Response_t* Icb_OpTelematicSettings_Response;
+typedef struct Icb_OpPositionData_Response_t* Icb_OpPositionData_Response;
+typedef struct Icb_WGS84SimplePositionData_t* Icb_WGS84SimplePositionData;
+typedef struct Icb_OpSubscriptionActivation_SetRequest_t* Icb_OpSubscriptionActivation_SetRequest;
+typedef struct Icb_OpSubscriptionActivation_Response_t* Icb_OpSubscriptionActivation_Response;
+typedef struct Icb_OpSubscriptionActivation_Notification_t* Icb_OpSubscriptionActivation_Notification;
+typedef struct Icb_OpServiceActivation_SetRequest_t* Icb_OpServiceActivation_SetRequest;
+typedef struct Icb_OpRescueStatus_Response_t* Icb_OpRescueStatus_Response;
+typedef struct Icb_OpRescueStatus_Notification_t* Icb_OpRescueStatus_Notification;
+typedef struct Icb_OpSendToCarConfirmation_SetRequest_t* Icb_OpSendToCarConfirmation_SetRequest;
+typedef struct Icb_OpSendToCarConfirmation_Response_t* Icb_OpSendToCarConfirmation_Response;
+typedef struct Icb_EcalSettings_t* Icb_EcalSettings;
+typedef struct Icb_OpSendToCar_SetRequest_t* Icb_OpSendToCar_SetRequest;
+typedef struct Icb_OpUserPrivacySettings_Notification_t* Icb_OpUserPrivacySettings_Notification;
+typedef struct Icb_OpClimateTimers_SetRequest_t* Icb_OpClimateTimers_SetRequest;
+typedef struct Icb_OpClimateTimers_Response_t* Icb_OpClimateTimers_Response;
+typedef struct Icb_TimerDays_t* Icb_TimerDays;
+typedef struct Icb_OpGenericSettingSynch_Request_t* Icb_OpGenericSettingSynch_Request;
+typedef struct Icb_OpGenericSettingSynch_SetRequest_t* Icb_OpGenericSettingSynch_SetRequest;
+typedef struct Icb_OpGenericSettingSynch_Response_t* Icb_OpGenericSettingSynch_Response;
+typedef struct Icb_OpGenericSettingSynch_Notification_t* Icb_OpGenericSettingSynch_Notification;
+typedef struct Icb_Setting_t* Icb_Setting;
+typedef struct Icb_OpSoHPacketSend_SetRequestNoReturn_t* Icb_OpSoHPacketSend_SetRequestNoReturn;
+typedef struct Icb_OpPSIMDataCounter_Response_t* Icb_OpPSIMDataCounter_Response;
+typedef struct Icb_OpPSIMNetworkConfiguration_SetRequest_t* Icb_OpPSIMNetworkConfiguration_SetRequest;
+typedef struct Icb_OpPSIMNetworkConfiguration_Response_t* Icb_OpPSIMNetworkConfiguration_Response;
+typedef struct Icb_OpPSIMConnectionStatus_Response_t* Icb_OpPSIMConnectionStatus_Response;
+typedef struct Icb_OpPSIMConnectionStatus_Notification_t* Icb_OpPSIMConnectionStatus_Notification;
+typedef struct Icb_OpInternetGateway_SetRequest_t* Icb_OpInternetGateway_SetRequest;
+typedef struct Icb_OpInternetGateway_Response_t* Icb_OpInternetGateway_Response;
+typedef struct Icb_OpConnectWorkshopWlan_Notification_t* Icb_OpConnectWorkshopWlan_Notification;
+typedef struct Icb_OpCurrentInternetSource_SetRequest_t* Icb_OpCurrentInternetSource_SetRequest;
+typedef struct Icb_OpCurrentInternetSource_Response_t* Icb_OpCurrentInternetSource_Response;
+typedef struct Icb_OpCurrentInternetSource_Notification_t* Icb_OpCurrentInternetSource_Notification;
+typedef struct Icb_OpWLANMode_SetRequest_t* Icb_OpWLANMode_SetRequest;
+typedef struct Icb_OpWLANMode_Response_t* Icb_OpWLANMode_Response;
+typedef struct Icb_OpWLANMode_Notification_t* Icb_OpWLANMode_Notification;
+typedef struct Icb_OpWLANFreqBandSelect_SetRequest_t* Icb_OpWLANFreqBandSelect_SetRequest;
+typedef struct Icb_OpWLANFreqBandSelect_Response_t* Icb_OpWLANFreqBandSelect_Response;
+typedef struct Icb_WLANChannelInfo_t* Icb_WLANChannelInfo;
+typedef struct Icb_OpWLANAPSSID_SetRequest_t* Icb_OpWLANAPSSID_SetRequest;
+typedef struct Icb_OpWLANAPSSID_Response_t* Icb_OpWLANAPSSID_Response;
+typedef struct Icb_OpWLANAPPasswd_SetRequest_t* Icb_OpWLANAPPasswd_SetRequest;
+typedef struct Icb_OpWLANAPPasswd_Response_t* Icb_OpWLANAPPasswd_Response;
+typedef struct Icb_OpWLANAPConnDev_Response_t* Icb_OpWLANAPConnDev_Response;
+typedef struct Icb_OpWLANAPConnDev_Notification_t* Icb_OpWLANAPConnDev_Notification;
+typedef struct Icb_OpWLANSTAConnect_SetRequest_t* Icb_OpWLANSTAConnect_SetRequest;
+typedef struct Icb_OpWLANSTAConnect_Response_t* Icb_OpWLANSTAConnect_Response;
+typedef struct Icb_OpWLANAPStatusSettings_Response_t* Icb_OpWLANAPStatusSettings_Response;
+typedef struct Icb_OpWLANSTAStatus_Response_t* Icb_OpWLANSTAStatus_Response;
+typedef struct Icb_OpWLANSTAStatus_Notification_t* Icb_OpWLANSTAStatus_Notification;
+typedef struct Icb_AvailableNetworkInformation_t* Icb_AvailableNetworkInformation;
+typedef struct Icb_OpWLANSTARememberedNetwks_Response_t* Icb_OpWLANSTARememberedNetwks_Response;
+typedef struct Icb_OpPSIMSecurity_SetRequest_t* Icb_OpPSIMSecurity_SetRequest;
+typedef struct Icb_OpPSIMEnterCode_SetRequest_t* Icb_OpPSIMEnterCode_SetRequest;
+typedef struct Icb_OpPSIMRegisterState_Response_t* Icb_OpPSIMRegisterState_Response;
+typedef struct Icb_NetworkOperator_t* Icb_NetworkOperator;
+typedef struct Icb_OpPSIMNetworkOperators_Response_t* Icb_OpPSIMNetworkOperators_Response;
+typedef struct Icb_OpPSIMNetworkOperatorCommand_SetRequest_t* Icb_OpPSIMNetworkOperatorCommand_SetRequest;
+typedef struct Icb_OpPSIMNetworkOperatorCommand_Response_t* Icb_OpPSIMNetworkOperatorCommand_Response;
+typedef struct Icb_OpPSIMNetworkOperatorCommand_Notification_t* Icb_OpPSIMNetworkOperatorCommand_Notification;
+typedef struct Icb_OpPSIMState_Response_t* Icb_OpPSIMState_Response;
+typedef struct Icb_OpPSIMPhoneOperationMode_Response_t* Icb_OpPSIMPhoneOperationMode_Response;
+typedef struct Icb_OpPSIMUssd_SetRequest_t* Icb_OpPSIMUssd_SetRequest;
+typedef struct Icb_OpPSIMUssd_Response_t* Icb_OpPSIMUssd_Response;
+typedef struct Icb_OpCallHandling_SetRequest_t* Icb_OpCallHandling_SetRequest;
+typedef struct Icb_OpTEMIdentification_Response_t* Icb_OpTEMIdentification_Response;
+typedef struct Icb_OpTEMRadioMode_SetRequest_t* Icb_OpTEMRadioMode_SetRequest;
+typedef struct Icb_OpTEMRadioMode_Response_t* Icb_OpTEMRadioMode_Response;
+typedef struct Icb_OpTunerFrequencies_Response_t* Icb_OpTunerFrequencies_Response;
+typedef struct Icb_OpDeadReckonedPosition_Response_t* Icb_OpDeadReckonedPosition_Response;
+typedef struct Icb_DRPositionData_t* Icb_DRPositionData;
+typedef struct Icb_GeographicalPosition_t* Icb_GeographicalPosition;
+typedef struct Icb_SatelliteUsage_t* Icb_SatelliteUsage;
+typedef struct Icb_ChannelData_t* Icb_ChannelData;
+typedef struct Icb_GNSSDataAccuracy_t* Icb_GNSSDataAccuracy;
+typedef struct Icb_OpRemoteDiagnosticInfo_Notification_t* Icb_OpRemoteDiagnosticInfo_Notification;
+typedef struct Icb_OpCurrentDoIPState_Notification_t* Icb_OpCurrentDoIPState_Notification;
+typedef struct Icb_OpCurrentDoIPConnection_Notification_t* Icb_OpCurrentDoIPConnection_Notification;
+typedef struct Icb_OpRequestUserAuthentication_Response_t* Icb_OpRequestUserAuthentication_Response;
+typedef struct Icb_OpUpdateDaCMode_Notification_t* Icb_OpUpdateDaCMode_Notification;
+typedef struct Icb_OpApprovalStatus_Response_t* Icb_OpApprovalStatus_Response;
+typedef struct Icb_OpApprovalStatus_Notification_t* Icb_OpApprovalStatus_Notification;
+typedef struct Icb_OpDownloadStatus_Response_t* Icb_OpDownloadStatus_Response;
+typedef struct Icb_SoftwareProduct_t* Icb_SoftwareProduct;
+typedef struct Icb_OpDownloadSoftware_SetRequest_t* Icb_OpDownloadSoftware_SetRequest;
+typedef struct Icb_OpDeletedSoftware_SetRequest_t* Icb_OpDeletedSoftware_SetRequest;
+typedef struct Icb_OpDeviceInstall_SetRequest_t* Icb_OpDeviceInstall_SetRequest;
+typedef struct Icb_OpDeviceInstall_Response_t* Icb_OpDeviceInstall_Response;
+typedef struct Icb_InstalledData_t* Icb_InstalledData;
+typedef struct Icb_OpEcallSettings_SetRequest_t* Icb_OpEcallSettings_SetRequest;
+typedef struct Icb_OpEcallSettings_Response_t* Icb_OpEcallSettings_Response;
+typedef struct Icb_ClimateTimer_t* Icb_ClimateTimer;
+typedef struct Icb_OpWLANChannelFreqInfo_Notification_t* Icb_OpWLANChannelFreqInfo_Notification;
+typedef struct Icb_GNSSData_t* Icb_GNSSData;
+typedef struct Icb_OpGNSSPositionDataAccuracy_Response_t* Icb_OpGNSSPositionDataAccuracy_Response;
+typedef struct Icb_OpGNSSPositionData_Response_t* Icb_OpGNSSPositionData_Response;
 
 ///////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// Predefined values ////////////////////////////////
@@ -343,7 +343,7 @@ enum Icb_ErrorCode_t {
 };
 
 #define Icb_ErrorCode_Create(session) 0
-ASN_Result Icb_ErrorCode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_ErrorCode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_ErrorCode_Encode(U32 val, ASN_Stream stream);
 #define Icb_ErrorCode_EncodedSize(val) ENUM_EncodedSize(val, 0, 36, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -385,7 +385,7 @@ enum Icb_SourceStatus_t {
 };
 
 #define Icb_SourceStatus_Create(session) 0
-ASN_Result Icb_SourceStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SourceStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SourceStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_SourceStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -397,7 +397,7 @@ void Icb_SourceStatus_Print(Icb_SourceStatus value);
 enum Icb_OnOffStatus_t { e_Icb_OnOffStatus_off, e_Icb_OnOffStatus_on, e_Icb_OnOffStatus_unknown };
 
 #define Icb_OnOffStatus_Create(session) 0
-ASN_Result Icb_OnOffStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_OnOffStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_OnOffStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_OnOffStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -414,7 +414,7 @@ enum Icb_SecurityStatus_t {
 };
 
 #define Icb_SecurityStatus_Create(session) 0
-ASN_Result Icb_SecurityStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SecurityStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SecurityStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_SecurityStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -426,7 +426,7 @@ void Icb_SecurityStatus_Print(Icb_SecurityStatus value);
 enum Icb_GenericOkStatus_t { e_Icb_GenericOkStatus_unknown, e_Icb_GenericOkStatus_ok, e_Icb_GenericOkStatus_notOk };
 
 #define Icb_GenericOkStatus_Create(session) 0
-ASN_Result Icb_GenericOkStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_GenericOkStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_GenericOkStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_GenericOkStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -501,7 +501,7 @@ enum Icb_SBTrigger_t {
 };
 
 #define Icb_SBTrigger_Create(session) 0
-ASN_Result Icb_SBTrigger_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SBTrigger_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SBTrigger_Encode(U32 val, ASN_Stream stream);
 #define Icb_SBTrigger_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -658,7 +658,7 @@ enum Icb_ActivationStatusChange_t {
 };
 
 #define Icb_ActivationStatusChange_Create(session) 0
-ASN_Result Icb_ActivationStatusChange_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_ActivationStatusChange_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_ActivationStatusChange_Encode(U32 val, ASN_Stream stream);
 #define Icb_ActivationStatusChange_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -677,7 +677,7 @@ enum Icb_ActivationStatus_t {
 };
 
 #define Icb_ActivationStatus_Create(session) 0
-ASN_Result Icb_ActivationStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_ActivationStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_ActivationStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_ActivationStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 5, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -689,7 +689,7 @@ void Icb_ActivationStatus_Print(Icb_ActivationStatus value);
 enum Icb_OnCallService_t { e_Icb_OnCallService_emergencyAssist, e_Icb_OnCallService_roadsideAssist };
 
 #define Icb_OnCallService_Create(session) 0
-ASN_Result Icb_OnCallService_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_OnCallService_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_OnCallService_Encode(U32 val, ASN_Stream stream);
 #define Icb_OnCallService_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -701,7 +701,7 @@ void Icb_OnCallService_Print(Icb_OnCallService value);
 enum Icb_OnOffSetting_t { e_Icb_OnOffSetting_off, e_Icb_OnOffSetting_on };
 
 #define Icb_OnOffSetting_Create(session) 0
-ASN_Result Icb_OnOffSetting_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_OnOffSetting_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_OnOffSetting_Encode(U32 val, ASN_Stream stream);
 #define Icb_OnOffSetting_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -739,7 +739,7 @@ enum Icb_RescueStatus_t {
 };
 
 #define Icb_RescueStatus_Create(session) 0
-ASN_Result Icb_RescueStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_RescueStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_RescueStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_RescueStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -758,7 +758,7 @@ enum Icb_ButtonStatus_t {
 };
 
 #define Icb_ButtonStatus_Create(session) 0
-ASN_Result Icb_ButtonStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_ButtonStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_ButtonStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_ButtonStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 5, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -779,7 +779,7 @@ enum Icb_VoiceStatus_t {
 };
 
 #define Icb_VoiceStatus_Create(session) 0
-ASN_Result Icb_VoiceStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_VoiceStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_VoiceStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_VoiceStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 7, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -797,7 +797,7 @@ enum Icb_MessageStatus_t {
 };
 
 #define Icb_MessageStatus_Create(session) 0
-ASN_Result Icb_MessageStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_MessageStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_MessageStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_MessageStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -809,7 +809,7 @@ void Icb_MessageStatus_Print(Icb_MessageStatus value);
 enum Icb_PSAPStatus_t { e_Icb_PSAPStatus_confirmRequired, e_Icb_PSAPStatus_confirmNotRequired };
 
 #define Icb_PSAPStatus_Create(session) 0
-ASN_Result Icb_PSAPStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PSAPStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PSAPStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_PSAPStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -843,7 +843,7 @@ enum Icb_SendToCarConfirmation_t {
 };
 
 #define Icb_SendToCarConfirmation_Create(session) 0
-ASN_Result Icb_SendToCarConfirmation_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SendToCarConfirmation_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SendToCarConfirmation_Encode(U32 val, ASN_Stream stream);
 #define Icb_SendToCarConfirmation_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -855,7 +855,7 @@ void Icb_SendToCarConfirmation_Print(Icb_SendToCarConfirmation value);
 enum Icb_PreferredEcalls_t { e_Icb_PreferredEcalls_publicSOS, e_Icb_PreferredEcalls_volvoOnCall };
 
 #define Icb_PreferredEcalls_Create(session) 0
-ASN_Result Icb_PreferredEcalls_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PreferredEcalls_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PreferredEcalls_Encode(U32 val, ASN_Stream stream);
 #define Icb_PreferredEcalls_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -964,7 +964,7 @@ void Icb_ClimateTimerError_Print(Icb_ClimateTimerError ThisPtr);
 enum Icb_TimerError_t { e_Icb_TimerError_newerTimers, e_Icb_TimerError_carInUseHMI, e_Icb_TimerError_generalErrorHMI };
 
 #define Icb_TimerError_Create(session) 0
-ASN_Result Icb_TimerError_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_TimerError_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_TimerError_Encode(U32 val, ASN_Stream stream);
 #define Icb_TimerError_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -981,7 +981,7 @@ enum Icb_TimerStatus_t {
 };
 
 #define Icb_TimerStatus_Create(session) 0
-ASN_Result Icb_TimerStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_TimerStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_TimerStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_TimerStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -998,7 +998,7 @@ enum Icb_TimerType_t {
 };
 
 #define Icb_TimerType_Create(session) 0
-ASN_Result Icb_TimerType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_TimerType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_TimerType_Encode(U32 val, ASN_Stream stream);
 #define Icb_TimerType_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1010,7 +1010,7 @@ void Icb_TimerType_Print(Icb_TimerType value);
 enum Icb_OnOff_t { e_Icb_OnOff_off, e_Icb_OnOff_on };
 
 #define Icb_OnOff_Create(session) 0
-ASN_Result Icb_OnOff_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_OnOff_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_OnOff_Encode(U32 val, ASN_Stream stream);
 #define Icb_OnOff_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1042,7 +1042,7 @@ void Icb_OpSoHWarning_Notification_Print(Icb_OpSoHWarning_Notification ThisPtr);
 enum Icb_SettingType_t { e_Icb_SettingType_setting, e_Icb_SettingType_error };
 
 #define Icb_SettingType_Create(session) 0
-ASN_Result Icb_SettingType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SettingType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SettingType_Encode(U32 val, ASN_Stream stream);
 #define Icb_SettingType_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1117,7 +1117,7 @@ void Icb_OpSoHPackageUploaded_Notification_Print(Icb_OpSoHPackageUploaded_Notifi
 enum Icb_DataCounter_t { e_Icb_DataCounter_psimSentReceived };
 
 #define Icb_DataCounter_Create(session) 0
-ASN_Result Icb_DataCounter_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DataCounter_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DataCounter_Encode(U32 val, ASN_Stream stream);
 #define Icb_DataCounter_EncodedSize(val) ENUM_EncodedSize(val, 0, 0, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1288,7 +1288,7 @@ enum Icb_PSIMConnectionStatus_t {
 };
 
 #define Icb_PSIMConnectionStatus_Create(session) 0
-ASN_Result Icb_PSIMConnectionStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PSIMConnectionStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PSIMConnectionStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_PSIMConnectionStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1308,7 +1308,7 @@ enum Icb_WirelessTechnology_t {
 };
 
 #define Icb_WirelessTechnology_Create(session) 0
-ASN_Result Icb_WirelessTechnology_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WirelessTechnology_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WirelessTechnology_Encode(U32 val, ASN_Stream stream);
 #define Icb_WirelessTechnology_EncodedSize(val) ENUM_EncodedSize(val, 0, 30, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1382,7 +1382,7 @@ void Icb_OpAccessRightPinCode_Response_Print(Icb_OpAccessRightPinCode_Response T
 enum Icb_Ecu_t { e_Icb_Ecu_none, e_Icb_Ecu_ihu, e_Icb_Ecu_vcm, e_Icb_Ecu_tem };
 
 #define Icb_Ecu_Create(session) 0
-ASN_Result Icb_Ecu_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_Ecu_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_Ecu_Encode(U32 val, ASN_Stream stream);
 #define Icb_Ecu_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1461,7 +1461,7 @@ enum Icb_WorkshopWlanConnectionResult_t {
 };
 
 #define Icb_WorkshopWlanConnectionResult_Create(session) 0
-ASN_Result Icb_WorkshopWlanConnectionResult_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WorkshopWlanConnectionResult_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WorkshopWlanConnectionResult_Encode(U32 val, ASN_Stream stream);
 #define Icb_WorkshopWlanConnectionResult_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1500,7 +1500,7 @@ enum Icb_InternetSource_t {
 };
 
 #define Icb_InternetSource_Create(session) 0
-ASN_Result Icb_InternetSource_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_InternetSource_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_InternetSource_Encode(U32 val, ASN_Stream stream);
 #define Icb_InternetSource_EncodedSize(val) ENUM_EncodedSize(val, 0, 255, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1661,7 +1661,7 @@ void Icb_OpPSIMMessage_SetRequest_Print(Icb_OpPSIMMessage_SetRequest ThisPtr);
 enum Icb_WLANMode_t { e_Icb_WLANMode_off, e_Icb_WLANMode_sta, e_Icb_WLANMode_ap, e_Icb_WLANMode_staWS };
 
 #define Icb_WLANMode_Create(session) 0
-ASN_Result Icb_WLANMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANMode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANMode_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANMode_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1673,7 +1673,7 @@ void Icb_WLANMode_Print(Icb_WLANMode value);
 enum Icb_WLANFrequencyBand_t { e_Icb_WLANFrequencyBand_lowFrequencyBand, e_Icb_WLANFrequencyBand_highFrequencyBand };
 
 #define Icb_WLANFrequencyBand_Create(session) 0
-ASN_Result Icb_WLANFrequencyBand_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANFrequencyBand_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANFrequencyBand_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANFrequencyBand_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1689,7 +1689,7 @@ enum Icb_WLANChannelWidthData_t {
 };
 
 #define Icb_WLANChannelWidthData_Create(session) 0
-ASN_Result Icb_WLANChannelWidthData_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANChannelWidthData_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANChannelWidthData_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANChannelWidthData_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1752,7 +1752,7 @@ enum Icb_WLANConnectStatus_t {
 };
 
 #define Icb_WLANConnectStatus_Create(session) 0
-ASN_Result Icb_WLANConnectStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANConnectStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANConnectStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANConnectStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1799,7 +1799,7 @@ void Icb_OpWLANSTADisconnect_Response_Print(Icb_OpWLANSTADisconnect_Response Thi
 enum Icb_WLANAPCurrentStatus_t { e_Icb_WLANAPCurrentStatus_disabled, e_Icb_WLANAPCurrentStatus_enabled };
 
 #define Icb_WLANAPCurrentStatus_Create(session) 0
-ASN_Result Icb_WLANAPCurrentStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANAPCurrentStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANAPCurrentStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANAPCurrentStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1811,7 +1811,7 @@ void Icb_WLANAPCurrentStatus_Print(Icb_WLANAPCurrentStatus value);
 enum Icb_WLANConnectionStatus_t { e_Icb_WLANConnectionStatus_disconnected, e_Icb_WLANConnectionStatus_connected };
 
 #define Icb_WLANConnectionStatus_Create(session) 0
-ASN_Result Icb_WLANConnectionStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANConnectionStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANConnectionStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANConnectionStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1831,7 +1831,7 @@ enum Icb_WLANSecurityType_t {
 };
 
 #define Icb_WLANSecurityType_Create(session) 0
-ASN_Result Icb_WLANSecurityType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_WLANSecurityType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_WLANSecurityType_Encode(U32 val, ASN_Stream stream);
 #define Icb_WLANSecurityType_EncodedSize(val) ENUM_EncodedSize(val, 0, 6, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -1903,7 +1903,7 @@ enum Icb_SimSecuritySetting_t {
 };
 
 #define Icb_SimSecuritySetting_Create(session) 0
-ASN_Result Icb_SimSecuritySetting_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SimSecuritySetting_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SimSecuritySetting_Encode(U32 val, ASN_Stream stream);
 #define Icb_SimSecuritySetting_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2057,7 +2057,7 @@ void Icb_NwOperatorId_Print(Icb_NwOperatorId ThisPtr);
 enum Icb_NetworkType_t { e_Icb_NetworkType_gsm, e_Icb_NetworkType_umts, e_Icb_NetworkType_lte };
 
 #define Icb_NetworkType_Create(session) 0
-ASN_Result Icb_NetworkType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_NetworkType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_NetworkType_Encode(U32 val, ASN_Stream stream);
 #define Icb_NetworkType_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2149,7 +2149,7 @@ enum Icb_PinTrials_t {
 };
 
 #define Icb_PinTrials_Create(session) 0
-ASN_Result Icb_PinTrials_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PinTrials_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PinTrials_Encode(U32 val, ASN_Stream stream);
 #define Icb_PinTrials_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2173,7 +2173,7 @@ enum Icb_PukTrials_t {
 };
 
 #define Icb_PukTrials_Create(session) 0
-ASN_Result Icb_PukTrials_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PukTrials_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PukTrials_Encode(U32 val, ASN_Stream stream);
 #define Icb_PukTrials_EncodedSize(val) ENUM_EncodedSize(val, 0, 10, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2194,7 +2194,7 @@ enum Icb_PhoneOperationMode_t {
 };
 
 #define Icb_PhoneOperationMode_Create(session) 0
-ASN_Result Icb_PhoneOperationMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_PhoneOperationMode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_PhoneOperationMode_Encode(U32 val, ASN_Stream stream);
 #define Icb_PhoneOperationMode_EncodedSize(val) ENUM_EncodedSize(val, 0, 7, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2265,7 +2265,7 @@ enum Icb_UssdStatus_t {
 };
 
 #define Icb_UssdStatus_Create(session) 0
-ASN_Result Icb_UssdStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_UssdStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_UssdStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_UssdStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2317,7 +2317,7 @@ void Icb_OpPremiumAudio_Response_Print(Icb_OpPremiumAudio_Response ThisPtr);
 enum Icb_AssistCallAction_t { e_Icb_AssistCallAction_acceptCall, e_Icb_AssistCallAction_hangupCall };
 
 #define Icb_AssistCallAction_Create(session) 0
-ASN_Result Icb_AssistCallAction_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_AssistCallAction_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_AssistCallAction_Encode(U32 val, ASN_Stream stream);
 #define Icb_AssistCallAction_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2343,7 +2343,7 @@ void Icb_AssistCallAction_Print(Icb_AssistCallAction value);
 enum Icb_RadioMode_t { e_Icb_RadioMode_telematic, e_Icb_RadioMode_personal, e_Icb_RadioMode_silentTSIM };
 
 #define Icb_RadioMode_Create(session) 0
-ASN_Result Icb_RadioMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_RadioMode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_RadioMode_Encode(U32 val, ASN_Stream stream);
 #define Icb_RadioMode_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2421,7 +2421,7 @@ enum Icb_GnssFixType_t {
 };
 
 #define Icb_GnssFixType_Create(session) 0
-ASN_Result Icb_GnssFixType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_GnssFixType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_GnssFixType_Encode(U32 val, ASN_Stream stream);
 #define Icb_GnssFixType_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2437,7 +2437,7 @@ enum Icb_DeadReckoningType_t {
 };
 
 #define Icb_DeadReckoningType_Create(session) 0
-ASN_Result Icb_DeadReckoningType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DeadReckoningType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DeadReckoningType_Encode(U32 val, ASN_Stream stream);
 #define Icb_DeadReckoningType_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2607,7 +2607,7 @@ struct Icb_ReceiverChannelData_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_ChannelData *data_array;
+    Icb_ChannelData* data_array;
 };
 
 U32 Icb_ReceiverChannelData_EncodedSize(Icb_ReceiverChannelData ThisPtr);
@@ -2629,7 +2629,7 @@ enum Icb_SatelliteTrackingStatusType_t {
 };
 
 #define Icb_SatelliteTrackingStatusType_Create(session) 0
-ASN_Result Icb_SatelliteTrackingStatusType_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_SatelliteTrackingStatusType_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_SatelliteTrackingStatusType_Encode(U32 val, ASN_Stream stream);
 #define Icb_SatelliteTrackingStatusType_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2731,7 +2731,7 @@ void Icb_OpRemoteDiagnosticLink_Notification_Print(Icb_OpRemoteDiagnosticLink_No
 enum Icb_RemoteDiagInfo_t { e_Icb_RemoteDiagInfo_closed, e_Icb_RemoteDiagInfo_started, e_Icb_RemoteDiagInfo_failed };
 
 #define Icb_RemoteDiagInfo_Create(session) 0
-ASN_Result Icb_RemoteDiagInfo_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_RemoteDiagInfo_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_RemoteDiagInfo_Encode(U32 val, ASN_Stream stream);
 #define Icb_RemoteDiagInfo_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2790,7 +2790,7 @@ enum Icb_DoIPPhase_t {
 };
 
 #define Icb_DoIPPhase_Create(session) 0
-ASN_Result Icb_DoIPPhase_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DoIPPhase_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DoIPPhase_Encode(U32 val, ASN_Stream stream);
 #define Icb_DoIPPhase_EncodedSize(val) ENUM_EncodedSize(val, 0, 3, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2802,7 +2802,7 @@ void Icb_DoIPPhase_Print(Icb_DoIPPhase value);
 enum Icb_DoIPMode_t { e_Icb_DoIPMode_none, e_Icb_DoIPMode_local, e_Icb_DoIPMode_remote };
 
 #define Icb_DoIPMode_Create(session) 0
-ASN_Result Icb_DoIPMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DoIPMode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DoIPMode_Encode(U32 val, ASN_Stream stream);
 #define Icb_DoIPMode_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2820,7 +2820,7 @@ enum Icb_CurrentDoIPConn_t {
 };
 
 #define Icb_CurrentDoIPConn_Create(session) 0
-ASN_Result Icb_CurrentDoIPConn_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_CurrentDoIPConn_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_CurrentDoIPConn_Encode(U32 val, ASN_Stream stream);
 #define Icb_CurrentDoIPConn_EncodedSize(val) ENUM_EncodedSize(val, 0, 4, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2855,7 +2855,7 @@ void Icb_OpRequestUserAuthentication_Request_Print(Icb_OpRequestUserAuthenticati
 enum Icb_UserAuthCredentials_t { e_Icb_UserAuthCredentials_reject, e_Icb_UserAuthCredentials_accept };
 
 #define Icb_UserAuthCredentials_Create(session) 0
-ASN_Result Icb_UserAuthCredentials_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_UserAuthCredentials_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_UserAuthCredentials_Encode(U32 val, ASN_Stream stream);
 #define Icb_UserAuthCredentials_EncodedSize(val) ENUM_EncodedSize(val, 0, 1, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2934,7 +2934,7 @@ enum Icb_UpdateDacMode_t {
 };
 
 #define Icb_UpdateDacMode_Create(session) 0
-ASN_Result Icb_UpdateDacMode_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_UpdateDacMode_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_UpdateDacMode_Encode(U32 val, ASN_Stream stream);
 #define Icb_UpdateDacMode_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -2967,7 +2967,7 @@ void Icb_ApprovalStatusType_Print(Icb_ApprovalStatusType ThisPtr);
 enum Icb_DownloadStatus_t { e_Icb_DownloadStatus_idle, e_Icb_DownloadStatus_active, e_Icb_DownloadStatus_noService };
 
 #define Icb_DownloadStatus_Create(session) 0
-ASN_Result Icb_DownloadStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DownloadStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DownloadStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_DownloadStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 2, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -3018,7 +3018,7 @@ enum Icb_DownloadState_t {
 };
 
 #define Icb_DownloadState_Create(session) 0
-ASN_Result Icb_DownloadState_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_DownloadState_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_DownloadState_Encode(U32 val, ASN_Stream stream);
 #define Icb_DownloadState_EncodedSize(val) ENUM_EncodedSize(val, 0, 21, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -3074,7 +3074,7 @@ enum Icb_InstallCommand_t {
 };
 
 #define Icb_InstallCommand_Create(session) 0
-ASN_Result Icb_InstallCommand_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_InstallCommand_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_InstallCommand_Encode(U32 val, ASN_Stream stream);
 #define Icb_InstallCommand_EncodedSize(val) ENUM_EncodedSize(val, 0, 255, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -3152,7 +3152,7 @@ enum Icb_InstallStatus_t {
 };
 
 #define Icb_InstallStatus_Create(session) 0
-ASN_Result Icb_InstallStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_InstallStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_InstallStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_InstallStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 255, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -3169,7 +3169,7 @@ enum Icb_FileInstallationStatus_t {
 };
 
 #define Icb_FileInstallationStatus_Create(session) 0
-ASN_Result Icb_FileInstallationStatus_Decode(U32 *val, ASN_Session session, ASN_Stream stream);
+ASN_Result Icb_FileInstallationStatus_Decode(U32* val, ASN_Session session, ASN_Stream stream);
 ASN_Result Icb_FileInstallationStatus_Encode(U32 val, ASN_Stream stream);
 #define Icb_FileInstallationStatus_EncodedSize(val) ENUM_EncodedSize(val, 0, 255, FALSE)
 #ifdef ENABLE_ASN_SESSION_SIZE
@@ -3246,7 +3246,7 @@ struct Icb_ArrayOf_ClimateTimer_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_ClimateTimer *data_array;
+    Icb_ClimateTimer* data_array;
 };
 
 U32 Icb_ArrayOf_ClimateTimer_EncodedSize(Icb_ArrayOf_ClimateTimer ThisPtr, S32 min, S32 max);
@@ -3269,7 +3269,7 @@ struct Icb_ArrayOf_OnOff_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_OnOff *data_array;
+    Icb_OnOff* data_array;
 };
 
 U32 Icb_ArrayOf_OnOff_EncodedSize(Icb_ArrayOf_OnOff ThisPtr, S32 min, S32 max);
@@ -3292,7 +3292,7 @@ struct Icb_OpGenericSettingSynch_Request_settingIDs_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    U32 *data_array;
+    U32* data_array;
 };
 
 U32 Icb_OpGenericSettingSynch_Request_settingIDs_EncodedSize(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr);
@@ -3317,7 +3317,7 @@ struct Icb_ArrayOf_Setting_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_Setting *data_array;
+    Icb_Setting* data_array;
 };
 
 U32 Icb_ArrayOf_Setting_EncodedSize(Icb_ArrayOf_Setting ThisPtr, S32 min, S32 max);
@@ -3340,7 +3340,7 @@ struct Icb_ArrayOf_SBWarning_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_SBWarning *data_array;
+    Icb_SBWarning* data_array;
 };
 
 U32 Icb_ArrayOf_SBWarning_EncodedSize(Icb_ArrayOf_SBWarning ThisPtr, S32 min, S32 max);
@@ -3363,7 +3363,7 @@ struct Icb_ArrayOf_WLANFrequencyBand_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_WLANFrequencyBand *data_array;
+    Icb_WLANFrequencyBand* data_array;
 };
 
 U32 Icb_ArrayOf_WLANFrequencyBand_EncodedSize(Icb_ArrayOf_WLANFrequencyBand ThisPtr, S32 min, S32 max);
@@ -3387,7 +3387,7 @@ struct Icb_ArrayOf_WLANConnDevice_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_WLANConnDevice *data_array;
+    Icb_WLANConnDevice* data_array;
 };
 
 U32 Icb_ArrayOf_WLANConnDevice_EncodedSize(Icb_ArrayOf_WLANConnDevice ThisPtr, S32 min, S32 max);
@@ -3410,7 +3410,7 @@ struct Icb_ArrayOf_AvailableNetworkInformation_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_AvailableNetworkInformation *data_array;
+    Icb_AvailableNetworkInformation* data_array;
 };
 
 U32 Icb_ArrayOf_AvailableNetworkInformation_EncodedSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr, S32 min,
@@ -3436,7 +3436,7 @@ struct Icb_ArrayOf_SSID_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_SSID *data_array;
+    Icb_SSID* data_array;
 };
 
 U32 Icb_ArrayOf_SSID_EncodedSize(Icb_ArrayOf_SSID ThisPtr, S32 min, S32 max);
@@ -3458,7 +3458,7 @@ struct Icb_ArrayOf_NetworkOperator_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_NetworkOperator *data_array;
+    Icb_NetworkOperator* data_array;
 };
 
 U32 Icb_ArrayOf_NetworkOperator_EncodedSize(Icb_ArrayOf_NetworkOperator ThisPtr, S32 min, S32 max);
@@ -3481,7 +3481,7 @@ struct Icb_ArrayOf_RadioFrequencyHz_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_RadioFrequencyHz *data_array;
+    Icb_RadioFrequencyHz* data_array;
 };
 
 U32 Icb_ArrayOf_RadioFrequencyHz_EncodedSize(Icb_ArrayOf_RadioFrequencyHz ThisPtr, S32 min, S32 max);
@@ -3505,7 +3505,7 @@ struct Icb_ArrayOf_ApprovalStatusType_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_ApprovalStatusType *data_array;
+    Icb_ApprovalStatusType* data_array;
 };
 
 U32 Icb_ArrayOf_ApprovalStatusType_EncodedSize(Icb_ArrayOf_ApprovalStatusType ThisPtr, S32 min, S32 max);
@@ -3530,7 +3530,7 @@ struct Icb_ArrayOf_SoftwareProduct_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_SoftwareProduct *data_array;
+    Icb_SoftwareProduct* data_array;
 };
 
 U32 Icb_ArrayOf_SoftwareProduct_EncodedSize(Icb_ArrayOf_SoftwareProduct ThisPtr, S32 min, S32 max);
@@ -3553,7 +3553,7 @@ struct Icb_ArrayOf_UUID_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_UUID *data_array;
+    Icb_UUID* data_array;
 };
 
 U32 Icb_ArrayOf_UUID_EncodedSize(Icb_ArrayOf_UUID ThisPtr, S32 min, S32 max);
@@ -3575,7 +3575,7 @@ struct Icb_ArrayOf_PartIdentifier_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_PartIdentifier *data_array;
+    Icb_PartIdentifier* data_array;
 };
 
 U32 Icb_ArrayOf_PartIdentifier_EncodedSize(Icb_ArrayOf_PartIdentifier ThisPtr, S32 min, S32 max);
@@ -3598,7 +3598,7 @@ struct Icb_ArrayOf_InstallationData_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_InstallationData *data_array;
+    Icb_InstallationData* data_array;
 };
 
 U32 Icb_ArrayOf_InstallationData_EncodedSize(Icb_ArrayOf_InstallationData ThisPtr, S32 min, S32 max);
@@ -3622,7 +3622,7 @@ struct Icb_ArrayOf_InstalledData_t {
     U32 min_size;
     U32 max_size;
     U32 actual_size;
-    Icb_InstalledData *data_array;
+    Icb_InstalledData* data_array;
 };
 
 U32 Icb_ArrayOf_InstalledData_EncodedSize(Icb_ArrayOf_InstalledData ThisPtr, S32 min, S32 max);

@@ -17,7 +17,7 @@
 
 int main() {
     const int port = 50000;
-    const char *dim_ip = "198.18.24.1";
+    const char* dim_ip = "198.18.24.1";
     int sock = 0;
     fd_set file_desc;
     struct sockaddr_in dim_addr;
@@ -34,7 +34,7 @@ int main() {
     dim_addr.sin_port = htons(port);
     dim_addr.sin_addr.s_addr = inet_addr(dim_ip);
 
-    int conn_result = connect(sock, reinterpret_cast<struct sockaddr *>(&dim_addr), sizeof(dim_addr));
+    int conn_result = connect(sock, reinterpret_cast<struct sockaddr*>(&dim_addr), sizeof(dim_addr));
     if (conn_result < 0) {
         if (errno == EINPROGRESS) {
             ALOGV("Connect in progress");

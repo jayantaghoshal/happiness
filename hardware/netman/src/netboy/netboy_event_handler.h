@@ -12,10 +12,10 @@ namespace netman {
 
 class NetboyEventHandler final : public UeventHandler {
   protected:
-    void HandleEvent(const char *uevent, int message_length) override;
+    void HandleEvent(const char* uevent, int message_length) override;
 
   private:
-    void RuleMatchAndRun(const UeventHandler::NetDeviceAttr &device);
+    void RuleMatchAndRun(const UeventHandler::NetDeviceAttr& device);
 };
 
 }  // namespace netman

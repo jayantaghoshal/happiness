@@ -47,14 +47,14 @@ class ITransportServices {
         PAYLOAD_DECODE_ERROR  // (For use by service specific layer.)
     };
 
-    virtual tarmac::eventloop::IDispatcher &getThreadDispatcher() = 0;
+    virtual tarmac::eventloop::IDispatcher& getThreadDispatcher() = 0;
 
     /**
     * Sets the Diagnostics object to be used by TransportServices
     *
     * @param[in] diagnostics                pointer to an IDiagnostics object
     */
-    virtual void setDiagnostics(IDiagnosticsClient *diagnostics, tarmac::eventloop::IDispatcher *dispatcher) = 0;
+    virtual void setDiagnostics(IDiagnosticsClient* diagnostics, tarmac::eventloop::IDispatcher* dispatcher) = 0;
 
     /**
      * Register a callback that will be called upon well formed incoming
@@ -65,35 +65,35 @@ class ITransportServices {
      *
      * @param[in] messageCb                 The callback.
      */
-    virtual void registerIncomingRequestCallback(std::function<bool(Message &)> messageCb) = 0;
+    virtual void registerIncomingRequestCallback(std::function<bool(Message&)> messageCb) = 0;
 
     /**
      * Register a callback that will be called upon well formed incoming notification / cyclic notification.
      *
      * @param[in] messageCb                 The callback.
      */
-    virtual void registerIncomingNotificationCallback(std::function<void(Message &)> messageCb) = 0;
+    virtual void registerIncomingNotificationCallback(std::function<void(Message&)> messageCb) = 0;
 
     /**
      * Register a callback that will be called upon well formed incoming response.
      *
      * @param[in] messageCb                 The callback.
      */
-    virtual void registerIncomingResponseCallback(std::function<void(Message &)> messageCb) = 0;
+    virtual void registerIncomingResponseCallback(std::function<void(Message&)> messageCb) = 0;
 
     /**
      * Register a callback that will be called upon any error / timeout related to previously sent REQUEST message.
      *
      * @param[in] messageCb                 The callback.
      */
-    virtual void registerErrorOnRequestCallback(std::function<void(Message &, ErrorType)> messageCb) = 0;
+    virtual void registerErrorOnRequestCallback(std::function<void(Message&, ErrorType)> messageCb) = 0;
 
     /**
      * Sends a message to the default target (set in the assigned socket).
      *
      * @param[in] msg                       Message to send. TransportServices takes ownership of the message.
      */
-    virtual void sendMessage(Message &&msg) = 0;
+    virtual void sendMessage(Message&& msg) = 0;
 
     /**
      * Send an error for the given senderHandleId.
@@ -103,7 +103,7 @@ class ITransportServices {
      * @param[in] errorCode                 The error to transmit.
      * @param[in] errorInfo                 Additional error information
      */
-    virtual void sendError(Message::Ecu destination, const Pdu &pdu, ErrorCode errorCode, uint16_t errorInfo = 0) = 0;
+    virtual void sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo = 0) = 0;
 };
 
 }  // Connectivity

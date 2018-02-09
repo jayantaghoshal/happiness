@@ -15,15 +15,15 @@ class Socket : public ISocket {
   public:
     using EcuIpMap = std::vector<std::pair<Message::Ecu, EcuAddress>>;
 
-    Socket(tarmac::eventloop::IDispatcher &dispatcher, int domain, int type, int protocol, EcuIpMap ecu_ip_map);
+    Socket(tarmac::eventloop::IDispatcher& dispatcher, int domain, int type, int protocol, EcuIpMap ecu_ip_map);
 
-    Socket(Socket &&) = delete;
-    Socket &operator=(Socket &&) = delete;
+    Socket(Socket&&) = delete;
+    Socket& operator=(Socket&&) = delete;
 
     virtual ~Socket();
-    virtual void setup(const Message::Ecu &ecu) = 0;
-    virtual void read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) = 0;
-    virtual void writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &ecu) = 0;
+    virtual void setup(const Message::Ecu& ecu) = 0;
+    virtual void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) = 0;
+    virtual void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) = 0;
     virtual void registerReadReadyCb(std::function<void(void)> readReadyCb) = 0;
     void endConnection() {}
 
@@ -44,7 +44,7 @@ class Socket : public ISocket {
     std::chrono::milliseconds backoffGet();
 
     int socket_fd_ = -1;
-    tarmac::eventloop::IDispatcher &dispatcher_;
+    tarmac::eventloop::IDispatcher& dispatcher_;
 
     // ToDo Abhi: When local_config object is created; everything is read. This
     // need to split

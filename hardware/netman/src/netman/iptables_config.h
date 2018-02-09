@@ -12,9 +12,9 @@ namespace netman {
 
 class IptablesConfig {
   public:
-    bool configureSplitTraffic(const std::string &interface, const std::string &gateway_ip_address, bool add);
+    bool configureSplitTraffic(const std::string& interface, const std::string& gateway_ip_address, bool add);
 
-    bool isSplitTrafficSet(const std::string &interface, const std::string &gateway_ip_address);
+    bool isSplitTrafficSet(const std::string& interface, const std::string& gateway_ip_address);
 };
 
 }  // namespace netman

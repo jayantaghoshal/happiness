@@ -16,14 +16,14 @@
 namespace vcc {
 namespace netman {
 
-NetmanEventHandler::NetmanEventHandler(const std::vector<InterfaceConfiguration> &interface_configurations)
+NetmanEventHandler::NetmanEventHandler(const std::vector<InterfaceConfiguration>& interface_configurations)
     : interface_configurations_(interface_configurations) {}
 
-void NetmanEventHandler::HandleEvent(const char *uevent, const int message_length) {
+void NetmanEventHandler::HandleEvent(const char* uevent, const int message_length) {
     if (nullptr == uevent) return;
 
-    const char *const MOVE_ACTION = "move@";
-    const char *const ADD_ACTION = "add@";
+    const char* const MOVE_ACTION = "move@";
+    const char* const ADD_ACTION = "add@";
 
     // Currently move@ and add@ event are handled. Can be extended as per need
     if (message_length < std::min(static_cast<int>(std::string(MOVE_ACTION).length()),
@@ -57,7 +57,7 @@ void NetmanEventHandler::HandleEvent(const char *uevent, const int message_lengt
     }
 
     if (handle_new_link_evt) {
-        for (const auto &ic : interface_configurations_) {
+        for (const auto& ic : interface_configurations_) {
             if (interface == ic.name) {
                 SetupInterface(ic.name.c_str(), ic.mac_address_bytes, ic.ip_address.c_str(), ic.netmask.c_str(),
                                ic.broadcast_address.c_str(), ic.mtu);

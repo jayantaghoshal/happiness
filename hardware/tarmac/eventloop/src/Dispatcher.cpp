@@ -32,14 +32,14 @@ class Dispatcher : public IDispatcher {
 
     ~Dispatcher() override;
 
-    void Enqueue(std::function<void()> &&f) override;
+    void Enqueue(std::function<void()>&& f) override;
 
-    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f,
                            bool cyclic_timer = false) override;
 
     bool Cancel(JobId jobid) override;
 
-    void AddFd(int fd, std::function<void()> &&f, uint32_t events = EPOLLIN) override;
+    void AddFd(int fd, std::function<void()>&& f, uint32_t events = EPOLLIN) override;
     void RemoveFd(int fd) override;
 
     void Stop() final;
@@ -58,15 +58,15 @@ class Dispatcher : public IDispatcher {
 };
 
 // static helpers
-IDispatcher &IDispatcher::GetDefaultDispatcher() {
+IDispatcher& IDispatcher::GetDefaultDispatcher() {
     static std::shared_ptr<IDispatcher> dispatcher = CreateDispatcher();
 
     return *dispatcher;
 }
 
-void IDispatcher::EnqueueTask(std::function<void()> &&f) { GetDefaultDispatcher().Enqueue(std::move(f)); }
+void IDispatcher::EnqueueTask(std::function<void()>&& f) { GetDefaultDispatcher().Enqueue(std::move(f)); }
 
-IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()>&& f,
                                                      bool cyclic_timer) {
     return GetDefaultDispatcher().EnqueueWithDelay(delay, std::move(f), cyclic_timer);
 }
@@ -84,9 +84,9 @@ Dispatcher::Dispatcher(bool auto_start_on_new_thread) {
 // destructor
 Dispatcher::~Dispatcher() { Stop(); }
 
-void Dispatcher::Enqueue(std::function<void()> &&f) { queue_.enqueue(std::move(f)); }
+void Dispatcher::Enqueue(std::function<void()>&& f) { queue_.enqueue(std::move(f)); }
 
-IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f,
                                                 bool cyclic_timer) {
     struct itimerspec ts;
     int tfd, usec;
@@ -151,7 +151,7 @@ bool Dispatcher::Cancel(JobId jobid) {
     return false;
 }
 
-void Dispatcher::AddFd(int fd, std::function<void()> &&f, uint32_t events) { queue_.addFd(fd, std::move(f), events); }
+void Dispatcher::AddFd(int fd, std::function<void()>&& f, uint32_t events) { queue_.addFd(fd, std::move(f), events); }
 
 void Dispatcher::RemoveFd(int fd) { queue_.removeFd(fd); }
 
@@ -165,7 +165,7 @@ void Dispatcher::RunUntil(std::function<bool()> stop_condition) {
         std::vector<Task> tasks = queue_.dequeue();  // Blocking call
         if (!stop_) {
             // do callbacks for all tasks
-            for (const Task &t : tasks) {
+            for (const Task& t : tasks) {
                 t();
             }
         }

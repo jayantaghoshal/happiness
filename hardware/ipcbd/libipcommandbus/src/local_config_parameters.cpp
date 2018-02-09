@@ -14,7 +14,7 @@
 using namespace vcc;
 
 namespace Connectivity {
-LocalconfigParameters::LocalconfigParameters(const vcc::LocalConfigReaderInterface *lcfg) : lcfg_(lcfg) { Init(); }
+LocalconfigParameters::LocalconfigParameters(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) { Init(); }
 
 void LocalconfigParameters::Init() {
     InitTimeoutValues();
@@ -79,23 +79,23 @@ double LocalconfigParameters::getDefaultAckMultiplier() { return defaultAckMulti
 
 double LocalconfigParameters::getDefaultRespMultiplier() { return defaultRespMultiplier_; }
 
-const std::string &LocalconfigParameters::getLocalIpAddress() { return ip_address_local_; }
+const std::string& LocalconfigParameters::getLocalIpAddress() { return ip_address_local_; }
 
-const std::string &LocalconfigParameters::getBroadcastIpAddress() { return ip_address_broadcast_; }
+const std::string& LocalconfigParameters::getBroadcastIpAddress() { return ip_address_broadcast_; }
 
 ISocket::IpPrecedence LocalconfigParameters::getNetworkControlPriority() {
     return static_cast<ISocket::IpPrecedence>(networkControlPrio_);
 }
 
-const std::string &LocalconfigParameters::getVCMIpAddress() { return ip_address_vcm_; }
+const std::string& LocalconfigParameters::getVCMIpAddress() { return ip_address_vcm_; }
 
-const std::string &LocalconfigParameters::getTEMIpAddress() { return ip_address_tem_; }
+const std::string& LocalconfigParameters::getTEMIpAddress() { return ip_address_tem_; }
 
-const std::string &LocalconfigParameters::getDIMIpAddress() { return ip_address_dim_; }
+const std::string& LocalconfigParameters::getDIMIpAddress() { return ip_address_dim_; }
 
-const std::string &LocalconfigParameters::getTCAMIpAddress() { return ip_address_tcam_; }
+const std::string& LocalconfigParameters::getTCAMIpAddress() { return ip_address_tcam_; }
 
-const std::string &LocalconfigParameters::getVGMIpAddress() { return ip_address_vgm_; }
+const std::string& LocalconfigParameters::getVGMIpAddress() { return ip_address_vgm_; }
 
 uint16_t LocalconfigParameters::getLocalPort() { return port_local_; }
 
@@ -112,7 +112,7 @@ uint16_t LocalconfigParameters::getVGMPort() { return port_vgm_; }
 
 uint32_t LocalconfigParameters::getTestPort() { return port_test_; }
 
-LocalconfigParameters &LocalconfigParameters::getInstance() {
+LocalconfigParameters& LocalconfigParameters::getInstance() {
     static LocalconfigParameters instance;
     return instance;
 }

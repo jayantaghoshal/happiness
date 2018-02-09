@@ -22,4 +22,4 @@ void vsm_inject_init(void);
 void vsm_inject_start(void);
 
 // This function is called to injected data or signal an error
-void vsm_inject_inject(uint16_t signalId, void *message, bool injectError, const uint32_t length);
+void vsm_inject_inject(uint16_t signalId, void* message, bool injectError, const uint32_t length);

@@ -34,8 +34,8 @@ using ::testing::AtLeast;
 extern bool setStateAndSendDiagnostics(bool stateConfigured, bool allParamsReceived, bool allParamsOk,
                                        bool paramsChanged, bool allStoredParamsOk,
                                        std::map<uint32_t, uint8_t> receivedBadParams,
-                                       std::map<uint32_t, uint8_t> storedBadParams, diagnosticsClient &diagClient,
-                                       bool &rebootNeeded);
+                                       std::map<uint32_t, uint8_t> storedBadParams, diagnosticsClient& diagClient,
+                                       bool& rebootNeeded);
 
 typedef std::map<uint32_t, uint8_t> paramMap_t;
 
@@ -49,7 +49,7 @@ class CarConfigUpdaterTestFixture : public ::testing::Test {
     }
     std::string testFolderPath;
     std::string tmpFilePath = testFolderPath + "tmpFile";
-    CarconfigFile *mockCarconfigFile;
+    CarconfigFile* mockCarconfigFile;
     bool mIsConfigured = false;
     bool mAllParamsReceived = false;
     bool mAllParamsOk = false;
@@ -453,7 +453,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_TRUE(result);
     EXPECT_TRUE(mRebootNeeded);
@@ -485,7 +485,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -517,7 +517,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -549,7 +549,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -587,7 +587,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -625,7 +625,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, true);
@@ -662,7 +662,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);
@@ -700,7 +700,7 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllRe
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);
@@ -740,13 +740,13 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
 
     result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
                                         mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient *>(&mockDiagClient)), mRebootNeeded);
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

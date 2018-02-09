@@ -15,20 +15,20 @@
 namespace vcc {
 namespace netman {
 
-void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations,
-                                const vcc::LocalConfigReaderInterface *lcfg);
+void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_configurations,
+                                const vcc::LocalConfigReaderInterface* lcfg);
 
-void PrintInterfaceConfiguration(const std::string &context, const InterfaceConfiguration &conf);
+void PrintInterfaceConfiguration(const std::string& context, const InterfaceConfiguration& conf);
 
-void MoveNetworkInterfaceToNamespace(const std::string &current_name, const std::string &ns,
-                                     const std::string &new_name = "");
+void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std::string& ns,
+                                     const std::string& new_name = "");
 
-bool SetupInterface(const char *interface_name, const std::vector<uint8_t> &mac_address, const char *ip_addr,
-                    const char *netmask, const char *broadcast_addr, uint32_t mtu);
+bool SetupInterface(const char* interface_name, const std::vector<uint8_t>& mac_address, const char* ip_addr,
+                    const char* netmask, const char* broadcast_addr, uint32_t mtu);
 
-bool BringInterfaceUp(const char *interface_name);
+bool BringInterfaceUp(const char* interface_name);
 
-bool TakeInterfaceDown(const char *interface_name);
+bool TakeInterfaceDown(const char* interface_name);
 
 }  // namespace netman
 }  // namespace vcc

@@ -18,7 +18,7 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
-UdpSocket::UdpSocket(IDispatcher &dispatcher, EcuIpMap ecu_ip_map)
+UdpSocket::UdpSocket(IDispatcher& dispatcher, EcuIpMap ecu_ip_map)
     : Socket(dispatcher, AF_INET, SOCK_DGRAM, IPPROTO_UDP, ecu_ip_map) {
     setHandler([this] { readEventHandler(); });
 }
@@ -27,7 +27,7 @@ UdpSocket::~UdpSocket() {
     // flush buffers as well
 }
 
-void UdpSocket::setup(const Message::Ecu &ecu) {
+void UdpSocket::setup(const Message::Ecu& ecu) {
     // NOTE! Unlike TCP, the ecu provided here is used to setup the local port.
     // Therefore it is only allowed to use ALL (for broadcast socket) and IHU (for
     // normal socket)
@@ -36,7 +36,7 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
         // Look up IHU info from ECU map
         auto it = std::find_if(
                 ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                [](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == Message::Ecu::IHU; });
+                [](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == Message::Ecu::IHU; });
 
         if (it == ecu_ip_map_.end()) {
             ALOGW("IHU not found in ECU map!");
@@ -51,7 +51,7 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
             // Look up ALL (broadcast) info from ECU map
             it = std::find_if(
                     ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                    [](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == Message::Ecu::ALL; });
+                    [](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == Message::Ecu::ALL; });
 
             if (it == ecu_ip_map_.end()) {
                 ALOGW("\"ALL\" (broadcast) not found in ECU map!");
@@ -76,7 +76,7 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
         }
 
         const int bindStatus =
-                bind(socket_fd_, reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)));
+                bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
         if (0 != bindStatus) {
             throw SocketException(errno, "Failed to bind to socket");
         }
@@ -91,7 +91,7 @@ void UdpSocket::setup(const Message::Ecu &ecu) {
 
 void UdpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { read_cb_ = std::move(readReadyCb); }
 
-void UdpSocket::read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) {
+void UdpSocket::read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) {
     buffer.clear();
     ecu = Message::Ecu::UNKNOWN;
     if (!read_frame_buffer_.empty()) {
@@ -102,7 +102,7 @@ void UdpSocket::read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) {
     }
 }
 
-void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &ecu) {
+void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) {
     // Protect from trying to send to a bad ECU
     if (Message::Ecu::UNKNOWN == ecu) {
         ALOGE("Can not send to UNKNOWN socket!");
@@ -137,7 +137,7 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
     }
 
     auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                           [ecu](const std::pair<Message::Ecu, EcuAddress> &pair) { return pair.first == ecu; });
+                           [ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
 
     if (it == ecu_ip_map_.end()) {
         return;
@@ -156,8 +156,8 @@ void UdpSocket::writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &
 
     while (remaining_bytes > 0) {
         int ret = -1;
-        ret = sendto(socket_fd_, reinterpret_cast<const void *>(&buffer[sent_bytes]), remaining_bytes, 0,
-                     reinterpret_cast<struct sockaddr *>(&sa), static_cast<socklen_t>(sizeof(sa)));
+        ret = sendto(socket_fd_, reinterpret_cast<const void*>(&buffer[sent_bytes]), remaining_bytes, 0,
+                     reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
 
         if (-1 == ret) {
             if (errno == EINTR) {
@@ -191,18 +191,18 @@ void UdpSocket::readEventHandler() {
     struct sockaddr_in sa_out;
 
     socklen_t addrlen = static_cast<socklen_t>(sizeof(sa_out));
-    memset(static_cast<void *>(&sa_out), 0, addrlen);
+    memset(static_cast<void*>(&sa_out), 0, addrlen);
     sa_out.sin_family = AF_INET;
 
-    if (0 > recvfrom(socket_fd_, static_cast<void *>(buffer.data()), packet_length, 0,
-                     reinterpret_cast<struct sockaddr *>(&sa_out), &addrlen)) {
+    if (0 > recvfrom(socket_fd_, static_cast<void*>(buffer.data()), packet_length, 0,
+                     reinterpret_cast<struct sockaddr*>(&sa_out), &addrlen)) {
         // socket suddenly failed. Could be a wakeup from suspend.
         dispatcher_.EnqueueWithDelay(std::chrono::milliseconds(200), [this] { resetup(); });
         return;
     }
 
     char buf[INET_ADDRSTRLEN];
-    const char *const bufConst = inet_ntop(AF_INET, &sa_out.sin_addr, buf, INET_ADDRSTRLEN);
+    const char* const bufConst = inet_ntop(AF_INET, &sa_out.sin_addr, buf, INET_ADDRSTRLEN);
     if (bufConst == nullptr || bufConst != buf) {
         ALOGW("Address not in correct format");
         return;
@@ -212,7 +212,7 @@ void UdpSocket::readEventHandler() {
     const auto fromPort = ntohs(sa_out.sin_port);
 
     auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                           [&fromIp, fromPort](const std::pair<Message::Ecu, EcuAddress> &pair) {
+                           [&fromIp, fromPort](const std::pair<Message::Ecu, EcuAddress>& pair) {
                                return (pair.second.ip == fromIp && pair.second.port == fromPort);
                            });
 
@@ -230,7 +230,7 @@ void UdpSocket::resetup() {
         Socket::setup(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
         setup(ecu_);
         backoffReset();
-    } catch (const SocketException &e) {
+    } catch (const SocketException& e) {
         dispatcher_.EnqueueWithDelay(backoffGet(), [this] { resetup(); });
     }
 }

@@ -31,7 +31,7 @@ using namespace Connectivity;
 const int testValue = 5555;
 const int defaultTimeout = 5800;
 
-MockLocalconfig *g_mock_local_config = nullptr;
+MockLocalconfig* g_mock_local_config = nullptr;
 
 class LocalconfigParametersFixture : public ::testing::Test {
   public:

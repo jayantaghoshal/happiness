@@ -21,13 +21,13 @@
 using namespace ECDDataElement;
 
 // This dataelement is special since it is internal to the IHU (sent to the VIP but not Flexray)
-static DESink<ActivateVfc_info> *ActivateVfc_sink;
+static DESink<ActivateVfc_info>* ActivateVfc_sink;
 
-static void validateAvmpVersionAndSinkMessage(Message_Send_T *message);
-static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void *buffer, const std::size_t buffSize);
+static void validateAvmpVersionAndSinkMessage(Message_Send_T* message);
+static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void* buffer, const std::size_t buffSize);
 static void initInternalDataelements(void);
 
-static void validateAvmpVersionAndSinkMessage(Message_Send_T *message) {
+static void validateAvmpVersionAndSinkMessage(Message_Send_T* message) {
     if (avmpVersionCheckOk == VersionHandshakeStatus::Ok) {
         messageSend(message);
     } else {
@@ -37,9 +37,9 @@ static void validateAvmpVersionAndSinkMessage(Message_Send_T *message) {
     }
 }
 
-static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void *buffer, const std::size_t buffSize) {
+static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void* buffer, const std::size_t buffSize) {
     Message_Send_T message;
-    uint8_t *messageBuffer = static_cast<uint8_t *>(malloc(buffSize + avmp::avmpHeaderSize));
+    uint8_t* messageBuffer = static_cast<uint8_t*>(malloc(buffSize + avmp::avmpHeaderSize));
 
     if (nullptr != messageBuffer) {
         messageBuffer[0] = static_cast<uint8_t>(header & 0x00FF);

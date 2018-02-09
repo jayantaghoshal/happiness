@@ -16,7 +16,7 @@
 namespace Connectivity {
 class VCCPDUHeaderTest : public testing::Test {
   protected:
-    static const std::vector<std::uint8_t> &valid_header_data() {
+    static const std::vector<std::uint8_t>& valid_header_data() {
         static const std::vector<std::uint8_t> data{0x00, 0xa9, 0x09, 0x02, 0x00, 0x00, 0x00, 0x6f,
                                                     0xa9, 0x02, 0x05, 0x00, 0x02, 0x05, 0x00, 0x00};
         return data;

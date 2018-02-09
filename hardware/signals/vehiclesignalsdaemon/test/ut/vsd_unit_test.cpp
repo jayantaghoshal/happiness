@@ -28,7 +28,7 @@ using ::testing::Mock;
 using ::testing::Pointee;
 
 namespace vipcomm {
-void getFileCrc(uint16_t &com_arxml, uint16_t &swc_arxml, uint16_t &rte_type, uint16_t &com_cfg) {
+void getFileCrc(uint16_t& com_arxml, uint16_t& swc_arxml, uint16_t& rte_type, uint16_t& com_cfg) {
     com_arxml = 1;
     swc_arxml = 2;
     rte_type = 3;
@@ -47,22 +47,22 @@ uint16_t rteTypeCrc = 3;
 uint16_t comCfgCrc = 4;
 
 extern "C" {
-extern int __real_open(const char *pathname, int flags, mode_t mode);
-extern ssize_t __real_read(int fd, void *buf, size_t count);
+extern int __real_open(const char* pathname, int flags, mode_t mode);
+extern ssize_t __real_read(int fd, void* buf, size_t count);
 }
 
 /* Create a mock of the messageSend-function */
 class MessageSend {
   public:
-    virtual void messageSend(Message_Send_T *msg_data) = 0;
+    virtual void messageSend(Message_Send_T* msg_data) = 0;
 };
 
 class MessageSendMock : public MessageSend {
   public:
-    MOCK_METHOD1(messageSend, void(Message_Send_T *));
+    MOCK_METHOD1(messageSend, void(Message_Send_T*));
 };
 
-static MessageSendMock *messageSendMockPtr;
+static MessageSendMock* messageSendMockPtr;
 
 class HisipMessageInjectTestFixture : public ::testing::Test {
   public:
@@ -82,7 +82,7 @@ class HisipMessageInjectTestFixture : public ::testing::Test {
     MessageSendMock messageSendMock;
 };
 
-void messageSend(Message_Send_T *msg_data) { messageSendMockPtr->messageSend(msg_data); }
+void messageSend(Message_Send_T* msg_data) { messageSendMockPtr->messageSend(msg_data); }
 
 TEST_F(HisipMessageInjectTestFixture, avmpMessageInject_nullPtrMessage_shallBeIgnored) {
     avmpMessageInject(nullptr, 0);
@@ -234,7 +234,7 @@ TEST_F(VsmTestFixture, vsmInit_noPresumptions_shallCallVsmInjectInit) {
 }
 
 TEST_F(VsmTestFixture, vsmDeInit_noPresumptions_shallDoNothing) { vsm_deInit(); }
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

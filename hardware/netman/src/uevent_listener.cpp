@@ -23,7 +23,7 @@
 namespace vcc {
 namespace netman {
 
-UEventListener &UEventListener::Instance() {
+UEventListener& UEventListener::Instance() {
     static UEventListener instance;
     return instance;
 }
@@ -54,7 +54,7 @@ void UEventListener::StopListening() {
     }
 }
 
-void UEventListener::SetNetlinkEventHandler(UeventHandler &event_handler) { event_handler_ = &event_handler; }
+void UEventListener::SetNetlinkEventHandler(UeventHandler& event_handler) { event_handler_ = &event_handler; }
 
 int UEventListener::SetupSocket() {
     if (netlink_socket_ != -1) {
@@ -80,7 +80,7 @@ int UEventListener::SetupSocket() {
         return -1;
     }
 
-    if (bind(netlink_socket_, reinterpret_cast<struct sockaddr *>(&nladdr), sizeof(nladdr)) < 0) {
+    if (bind(netlink_socket_, reinterpret_cast<struct sockaddr*>(&nladdr), sizeof(nladdr)) < 0) {
         ALOGE("Unable to bind netlink socket: %s", strerror(errno));
         close(netlink_socket_);
         return -1;
@@ -96,7 +96,7 @@ int UEventListener::RecvMessage() {
     struct iovec iov = {.iov_base = buf, .iov_len = sizeof(buf) - 1};
     char cred_control[CMSG_SPACE(sizeof(struct ucred))];
     struct sockaddr_nl sa;
-    struct msghdr msg = {.msg_name = static_cast<void *>(&sa),
+    struct msghdr msg = {.msg_name = static_cast<void*>(&sa),
                          .msg_namelen = sizeof(sa),
                          .msg_iov = &iov,
                          .msg_iovlen = 1,
@@ -116,10 +116,10 @@ int UEventListener::RecvMessage() {
     // Strictly speaking CMSG loop below is not needed for present code where we only have enabled single auxillary
     // message to request credentials. But to avoid the trap in future where we may enable additional auxillary
     // messages, below code is needed.
-    struct ucred *cred = nullptr;
-    for (struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg != nullptr; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+    struct ucred* cred = nullptr;
+    for (struct cmsghdr* cmsg = CMSG_FIRSTHDR(&msg); cmsg != nullptr; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
         if (cmsg->cmsg_type == SCM_CREDENTIALS) {
-            cred = reinterpret_cast<struct ucred *>(CMSG_DATA(cmsg));
+            cred = reinterpret_cast<struct ucred*>(CMSG_DATA(cmsg));
             break;
         }
     }

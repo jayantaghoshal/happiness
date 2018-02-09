@@ -102,7 +102,7 @@ class IVipComClient {
     };
 
     virtual ~IVipComClient() {}
-    virtual void onMessage(const uint8_t &_fid, const std::vector<uint8_t> &_payload) = 0;
+    virtual void onMessage(const uint8_t& _fid, const std::vector<uint8_t>& _payload) = 0;
     virtual void onConnectionError(ConnectionError e) = 0;
 };
 
@@ -131,7 +131,7 @@ class VipCom {
      * @param appIndex selects which connection type that shall be established
      * @param Use this to hook up callbacks to your app's IVipComClient implementation. Or nullptr.
      */
-    VipCom(Application appIndex, IVipComClient *vipcom_client);
+    VipCom(Application appIndex, IVipComClient* vipcom_client);
     ~VipCom();
 
     /**
@@ -140,7 +140,7 @@ class VipCom {
      * @param _payload
      * @return -1 if not successful (this could mean that the connection to VDD is down.)
      */
-    int sendMessage(const uint8_t &_fid, const std::vector<uint8_t> &_payload);
+    int sendMessage(const uint8_t& _fid, const std::vector<uint8_t>& _payload);
 
     /**
      * @brief Get status of VipCom object. If there is a connection problem the status will indicate NOK
@@ -158,5 +158,5 @@ class VipCom {
     void main_loop();
 
     // Pointers to client application's handler
-    IVipComClient *vipcom_client_ = nullptr;
+    IVipComClient* vipcom_client_ = nullptr;
 };

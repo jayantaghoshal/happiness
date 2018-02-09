@@ -24,34 +24,34 @@ class UeventHandler {
         std::string action;  // add, remove, change etc.
     };
 
-    const char *const ATTR_SUBSYSTEM = "SUBSYSTEM";
-    const char *const ATTR_DEVTYPE = "DEVTYPE";
-    const char *const ATTR_DEVPATH = "DEVPATH";
-    const char *const ATTR_DRIVER = "DRIVER";
-    const char *const ATTR_INTERFACE = "INTERFACE";
-    const char *const ATTR_IFINDEX = "IFINDEX";
-    const char *const ATTR_ACTION = "ACTION";
+    const char* const ATTR_SUBSYSTEM = "SUBSYSTEM";
+    const char* const ATTR_DEVTYPE = "DEVTYPE";
+    const char* const ATTR_DEVPATH = "DEVPATH";
+    const char* const ATTR_DRIVER = "DRIVER";
+    const char* const ATTR_INTERFACE = "INTERFACE";
+    const char* const ATTR_IFINDEX = "IFINDEX";
+    const char* const ATTR_ACTION = "ACTION";
 
     UeventHandler() = default;
     virtual ~UeventHandler() = default;
 
-    UeventHandler(const UeventHandler &) = delete;
-    UeventHandler &operator=(const UeventHandler &) = delete;
+    UeventHandler(const UeventHandler&) = delete;
+    UeventHandler& operator=(const UeventHandler&) = delete;
 
-    UeventHandler(const UeventHandler &&) = delete;
-    UeventHandler &operator=(const UeventHandler &&) = delete;
+    UeventHandler(const UeventHandler&&) = delete;
+    UeventHandler& operator=(const UeventHandler&&) = delete;
 
     static int SysfsNetSubsystemWalker();
-    virtual void HandleEvent(const char *uevent, int message_length) = 0;
+    virtual void HandleEvent(const char* uevent, int message_length) = 0;
 
   protected:
-    void ReadParentDeviceAttr(NetDeviceAttr &child_device);
-    void ReadDeviceAttr(const std::string &line, NetDeviceAttr &child_device);
-    std::string ExtractAttribute(const std::string &cursor_line, const std::string &attribute);
+    void ReadParentDeviceAttr(NetDeviceAttr& child_device);
+    void ReadDeviceAttr(const std::string& line, NetDeviceAttr& child_device);
+    std::string ExtractAttribute(const std::string& cursor_line, const std::string& attribute);
 
   private:
-    static int HandleSysfsEntry(const char *filepath, const struct stat * /*info*/, int typeflag,
-                                struct FTW * /*pathinfo*/);
+    static int HandleSysfsEntry(const char* filepath, const struct stat* /*info*/, int typeflag,
+                                struct FTW* /*pathinfo*/);
 };
 
 }  // namespace netman

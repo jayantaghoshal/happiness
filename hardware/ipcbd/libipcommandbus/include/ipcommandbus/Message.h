@@ -43,15 +43,15 @@ struct Message {
 
     Message() = default;
 
-    Message(const Message &) = default;
-    Message &operator=(const Message &) = default;
+    Message(const Message&) = default;
+    Message& operator=(const Message&) = default;
 
-    Message(Message &&) = default;
-    Message &operator=(Message &&) = default;
+    Message(Message&&) = default;
+    Message& operator=(Message&&) = default;
 
-    Message(Pdu &&);
+    Message(Pdu&&);
 
-    static const char *EcuStr(Ecu ecu);
+    static const char* EcuStr(Ecu ecu);
 
     /**
      * Creates a message given some header parameters.

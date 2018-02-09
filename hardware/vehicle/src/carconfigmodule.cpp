@@ -23,7 +23,7 @@ namespace V1_0 {
 
 namespace impl {
 
-CarConfigHal::CarConfigHal(::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl *vehicleHal)
+CarConfigHal::CarConfigHal(::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl* vehicleHal)
     : vhal20::impl::ModuleBase(vehicleHal), carconfigs(carconfig::getNumberOfCCParameters()) {
     // Get all carconfigs
     for (int i = 0; i < carconfig::getNumberOfCCParameters(); i++) {

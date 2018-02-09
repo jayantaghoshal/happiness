@@ -54,7 +54,7 @@ TEST_F(diagnosticsClientTestFixture, updateDID_givenUpdatedDID_theDIDShouldBeUpd
     ASSERT_TRUE(testDID[0] == 0x22);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

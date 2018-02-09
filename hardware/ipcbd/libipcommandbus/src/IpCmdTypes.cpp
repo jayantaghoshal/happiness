@@ -11,7 +11,7 @@
 namespace Connectivity {
 namespace IpCmdTypes {
 
-const char *toString(OperationType ot) {
+const char* toString(OperationType ot) {
     switch (ot) {
         case OperationType::REQUEST:
             return "REQUEST";
@@ -38,7 +38,7 @@ const char *toString(OperationType ot) {
     }
 }
 
-const char *toString(DataType dt) {
+const char* toString(DataType dt) {
     switch (dt) {
         case DataType::ENCODED:
             return "ENCODED";

@@ -56,17 +56,17 @@ typedef std::uint32_t SenderHandleId;
  * Returns the string literal for the passed enumerations.
  */
 std::string toString(ServiceId si);
-std::string toString(ServiceId si, OperationId oi, const char *separator = ".");
+std::string toString(ServiceId si, OperationId oi, const char* separator = ".");
 
 /**
  * Returns the string literal for the passed enumeration.
  */
-const char *toString(OperationType ot);
+const char* toString(OperationType ot);
 
 /**
  * Returns the string literal for the passed enumeration.
  */
-const char *toString(DataType dt);
+const char* toString(DataType dt);
 
 }  // IpCmdTypes
 }  // Connectivity

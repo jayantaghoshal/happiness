@@ -22,7 +22,7 @@
 namespace Connectivity {
 class SocketException : public std::system_error {
   public:
-    SocketException(int ev, const std::string &what_arg) : std::system_error(ev, std::system_category(), what_arg) {}
+    SocketException(int ev, const std::string& what_arg) : std::system_error(ev, std::system_category(), what_arg) {}
 };
 
 class ISocket {
@@ -88,7 +88,7 @@ class ISocket {
 
     virtual void endConnection() = 0;
     virtual void registerReadReadyCb(std::function<void(void)> readReadyCb) = 0;
-    virtual void read(std::vector<uint8_t> &buffer, Message::Ecu &ecu) = 0;
-    virtual void writeTo(const std::vector<uint8_t> &buffer, const Message::Ecu &ecu) = 0;
+    virtual void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) = 0;
+    virtual void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) = 0;
 };
 }

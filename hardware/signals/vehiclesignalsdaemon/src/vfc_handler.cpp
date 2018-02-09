@@ -24,7 +24,7 @@ uint8_t userInputSettings_activeTime(0);
  * Currently we only handle the UserInputSettings since that is the one
  * imposing problems.
  */
-bool shallSendVfcToVIP(const ActivateVfc &vfc) {
+bool shallSendVfcToVIP(const ActivateVfc& vfc) {
     if (vfc.vfcToActivate == Vfc::UserInputSettings) {
         const auto now = std::chrono::steady_clock::now();
         const auto timeSinceLastActivation = now - userInputSettings_timestamp;

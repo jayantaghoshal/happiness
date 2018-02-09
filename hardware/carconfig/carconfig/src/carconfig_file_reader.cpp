@@ -73,7 +73,7 @@ ccValue CarConfigFileReader::getValue(int id) {
     return value;
 }
 
-bool CarConfigFileReader::validateValue(int unvalidatedValue, uint8_t &validatedValue) {
+bool CarConfigFileReader::validateValue(int unvalidatedValue, uint8_t& validatedValue) {
     if ((unvalidatedValue >= 0) && (unvalidatedValue <= 255)) {
         validatedValue = static_cast<uint8_t>(unvalidatedValue);
         return true;
@@ -82,7 +82,7 @@ bool CarConfigFileReader::validateValue(int unvalidatedValue, uint8_t &validated
     }
 }
 
-bool CarConfigFileReader::validateStatus(int unvalidatedStatus, ccStatus &validatedStatus) {
+bool CarConfigFileReader::validateStatus(int unvalidatedStatus, ccStatus& validatedStatus) {
     if (unvalidatedStatus == 0) {
         validatedStatus = ccStatus::GOOD;
         return true;

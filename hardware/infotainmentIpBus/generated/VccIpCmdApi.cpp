@@ -37,14 +37,14 @@ bool ServiceIdIsValid(ServiceId id) {
 
 CombinedId::CombinedId(ServiceId _sid, OperationId _oid) : serviceId{_sid}, operationId{_oid} {}
 
-bool CombinedId::operator==(const CombinedId &id) const {
+bool CombinedId::operator==(const CombinedId& id) const {
     return (id.serviceId == serviceId && id.operationId == operationId);
 }
 
 std::string toString(ServiceId sid) {
     struct ServiceIdStringMapping {
         ServiceId id;
-        const char *serviceIdString;
+        const char* serviceIdString;
     };
 
     static const std::vector<ServiceIdStringMapping> serviceIdStringMapping = {
@@ -64,7 +64,7 @@ std::string toString(ServiceId sid) {
     };
 
     std::string idString = std::string("ServiceId=") + std::to_string(static_cast<std::uint16_t>(sid));
-    for (const ServiceIdStringMapping &element : serviceIdStringMapping) {
+    for (const ServiceIdStringMapping& element : serviceIdStringMapping) {
         if (element.id == sid) {
             idString = element.serviceIdString;
             break;
@@ -73,10 +73,10 @@ std::string toString(ServiceId sid) {
     return idString;
 }
 
-std::string toString(ServiceId sid, OperationId oid, const char *separator) {
+std::string toString(ServiceId sid, OperationId oid, const char* separator) {
     struct OperationIdStringMapping {
         CombinedId id;
-        const char *operationIdString;
+        const char* operationIdString;
     };
 
     static const std::vector<OperationIdStringMapping> operationIdStringMapping = {
@@ -199,7 +199,7 @@ std::string toString(ServiceId sid, OperationId oid, const char *separator) {
     };
 
     std::string idString = toString(sid);
-    for (const OperationIdStringMapping &element : operationIdStringMapping) {
+    for (const OperationIdStringMapping& element : operationIdStringMapping) {
         if (element.id.serviceId == sid && element.id.operationId == oid) {
             idString += separator;
             idString += element.operationIdString;
@@ -210,11 +210,11 @@ std::string toString(ServiceId sid, OperationId oid, const char *separator) {
     return idString;
 }
 
-std::string toString(const CombinedId &id, const char *separator) {
+std::string toString(const CombinedId& id, const char* separator) {
     return toString(id.serviceId, id.operationId, separator);
 }
 
-const char *toString(OperationType ot) {
+const char* toString(OperationType ot) {
     switch (ot) {
         case OperationType::REQUEST:
             return "REQUEST";
@@ -241,7 +241,7 @@ const char *toString(OperationType ot) {
     }
 }
 
-const char *toString(DataType dt) {
+const char* toString(DataType dt) {
     switch (dt) {
         case DataType::ENCODED:
             return "ENCODED";

@@ -47,21 +47,21 @@ static bool setupSuccessful = false;
 
 // Class implementing Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IResponseCallback follow.
 class VehicleComClient : public IResponseCallback, public IMessageCallback {
-    Return<void> onMessageRcvd(const Msg &msg) override {
+    Return<void> onMessageRcvd(const Msg& msg) override {
         if (onMessageRcvdCallback != NULL) {
             onMessageRcvdCallback(msg);
         }
         return Void();
     }
 
-    Return<void> onResponseRcvd(const Msg &msg) override {
+    Return<void> onResponseRcvd(const Msg& msg) override {
         if (onResponseRcvdCallback != NULL) {
             onResponseRcvdCallback(msg);
         }
         return Void();
     }
 
-    Return<void> onErrorRcvd(const Error &error) override {
+    Return<void> onErrorRcvd(const Error& error) override {
         if (onErrorRcvdCallback != NULL) {
             onErrorRcvdCallback(error);
         }
@@ -69,9 +69,9 @@ class VehicleComClient : public IResponseCallback, public IMessageCallback {
     }
 
   public:
-    std::function<void(const Msg &msg)> onMessageRcvdCallback;
-    std::function<void(const Msg &msg)> onResponseRcvdCallback;
-    std::function<void(const Error &error)> onErrorRcvdCallback;
+    std::function<void(const Msg& msg)> onMessageRcvdCallback;
+    std::function<void(const Msg& msg)> onResponseRcvdCallback;
+    std::function<void(const Error& error)> onErrorRcvdCallback;
 };
 
 class VtsIpcbdComponentTest : public ::Test {
@@ -117,8 +117,8 @@ class VtsIpcbdComponentTest : public ::Test {
         return (0 == kill(pid, 0));
     }
 
-    static bool fileExists(const std::string &name) {
-        if (FILE *file = fopen(name.c_str(), "r")) {
+    static bool fileExists(const std::string& name) {
+        if (FILE* file = fopen(name.c_str(), "r")) {
             fclose(file);
             return true;
         } else {
@@ -126,7 +126,7 @@ class VtsIpcbdComponentTest : public ::Test {
         }
     }
 
-    static std::string getCmdOut(const char *cmd) {
+    static std::string getCmdOut(const char* cmd) {
         std::array<char, 128> buffer;
         std::string result;
         std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
@@ -197,7 +197,7 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
 
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, request, &p_msg_cb_triggered](const Msg &msg) {
+    vehicle_com_client->onMessageRcvdCallback = [&message_received, request, &p_msg_cb_triggered](const Msg& msg) {
         ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         if (msg.pdu.header.serviceID == request.header.service_id &&
@@ -276,7 +276,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
 
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg &msg) {
+    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
         ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
@@ -352,7 +352,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
 
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg &msg) {
+    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
         ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
@@ -456,7 +456,7 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     uint8_t response_received = 0;
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onResponseRcvdCallback = [&response_received, response, &p_msg_cb_triggered](const Msg &msg) {
+    vehicle_com_client->onResponseRcvdCallback = [&response_received, response, &p_msg_cb_triggered](const Msg& msg) {
         ALOGD("Response received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         if (msg.pdu.header.serviceID == response.header.service_id &&
@@ -493,7 +493,7 @@ TEST_F(VtsIpcbdComponentTest, TestNoAckRetry) {
     std::promise<bool> p_error_cb_triggered;
     std::future<bool> f_error_cb_triggered = p_error_cb_triggered.get_future();
     int error_received = 0;
-    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error &error) {
+    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error& error) {
         (void)error;
         ++error_received;
         p_error_cb_triggered.set_value(true);
@@ -601,7 +601,7 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
     std::promise<bool> p_error_cb_triggered;
     std::future<bool> f_error_cb_triggered = p_error_cb_triggered.get_future();
     int error_received = 0;
-    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error &error) {
+    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error& error) {
         (void)error;
         ++error_received;
         p_error_cb_triggered.set_value(true);

@@ -12,3 +12,6 @@ ColumnLimit : 120
 AccessModifierOffset: -2
 ContinuationIndentWidth: 8
 IndentWidth:     4
+
+#Deviation for reproducible behavior
+DerivePointerAlignment: false

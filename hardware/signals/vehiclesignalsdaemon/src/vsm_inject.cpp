@@ -134,7 +134,7 @@ void vsm_inject_start(void) {
     monitorThread.detach();
 }
 
-void vsm_inject_inject(uint16_t signalId, void *buffer, bool injectError, const uint32_t length) {
+void vsm_inject_inject(uint16_t signalId, void* buffer, bool injectError, const uint32_t length) {
     // Parameter check
     if (nullptr == buffer) {
         ALOGE("vsm_inject_inject called with bad parameter");
@@ -151,7 +151,7 @@ void vsm_inject_inject(uint16_t signalId, void *buffer, bool injectError, const 
         }
 
         // The error reason is found in the first payload byte
-        const int errorCode = static_cast<int>((static_cast<uint8_t *>(buffer))[0]);
+        const int errorCode = static_cast<int>((static_cast<uint8_t*>(buffer))[0]);
 
         ALOGV("Error: %d received for rx signal %d", errorCode, signalId);
 

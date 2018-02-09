@@ -19,14 +19,14 @@ class IDispatcher {
     using JobId = uint64_t;
 
     // Get the default dispatcher
-    static IDispatcher &GetDefaultDispatcher();
+    static IDispatcher& GetDefaultDispatcher();
 
     // Helper function for easy job scheduling
-    static void EnqueueTask(std::function<void()> &&f);
+    static void EnqueueTask(std::function<void()>&& f);
 
     // Helper function for easy job scheduling of delayed or cyclic task
     // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
-    static JobId EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+    static JobId EnqueueTaskWithDelay(std::chrono::microseconds delay, std::function<void()>&& f,
                                       bool cyclic_timer = false);
 
     // Create a new dispatcher instance with the provided priority
@@ -35,11 +35,11 @@ class IDispatcher {
     virtual ~IDispatcher() = default;
 
     // Enqueue a job to be executed asap
-    virtual void Enqueue(std::function<void()> &&f) = 0;
+    virtual void Enqueue(std::function<void()>&& f) = 0;
 
     // Enqueue a job for later execution. The returned value is an id that can be used in Cancel(...).
     // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
-    virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()> &&f,
+    virtual JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f,
                                    bool cyclic_timer = false) = 0;
 
     // Cancel a job that has been enqueued with EnqueueWithDelay()
@@ -49,7 +49,7 @@ class IDispatcher {
     virtual bool Cancel(JobId jobid) = 0;
 
     // Add and remove file descriptor monitoring for available in-data
-    virtual void AddFd(int fd, std::function<void()> &&f, uint32_t events = EPOLLIN) = 0;
+    virtual void AddFd(int fd, std::function<void()>&& f, uint32_t events = EPOLLIN) = 0;
     virtual void RemoveFd(int fd) = 0;
 
     // Consumes the event-queue synchronously forever until stop_condition is fulfilled.

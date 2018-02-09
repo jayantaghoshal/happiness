@@ -21,6 +21,6 @@ class NetmanInterfaceTestHelper {
   public:
     NetmanInterfaceTestHelper();
     ~NetmanInterfaceTestHelper();
-    void TakeDownNetworkInterface(const std::string &interface_name);
+    void TakeDownNetworkInterface(const std::string& interface_name);
     void BringUpNetworkInterfaces();
 };

@@ -13,7 +13,7 @@
 namespace Connectivity {
 
 // TODO: Why is fromData not const?
-bool Pdu::fromData(std::vector<uint8_t> &fromData) {
+bool Pdu::fromData(std::vector<uint8_t>& fromData) {
     header = VCCPDUHeader::from_data(fromData);
 
     // Sanity check of header length field
@@ -40,7 +40,7 @@ bool Pdu::fromData(std::vector<uint8_t> &fromData) {
     return true;
 }
 
-void Pdu::toData(std::vector<uint8_t> &buffer) const {
+void Pdu::toData(std::vector<uint8_t>& buffer) const {
     header.to_data(buffer);
     buffer.insert(buffer.end(), payload.begin(), payload.end());
 }
@@ -59,12 +59,12 @@ void Pdu::createHeader(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId 
     header.process_flag_and_reserved = 0;
 }
 
-void Pdu::setPayload(std::vector<uint8_t> &&data) {
+void Pdu::setPayload(std::vector<uint8_t>&& data) {
     payload = std::move(data);
     header.length = VCCPDUHeader::DATA_SIZE - 8 + payload.size();
 }
 
-std::string Pdu::toString(const Pdu &pdu) {
+std::string Pdu::toString(const Pdu& pdu) {
     std::stringstream ss;
     ss << "[" << std::setfill('0') << std::setw(8) << std::hex << pdu.header.sender_handle_id << "] ";
     ss << "(";

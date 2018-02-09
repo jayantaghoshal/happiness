@@ -17,7 +17,7 @@
 namespace vcc {
 namespace netman {
 
-void NetboyEventHandler::RuleMatchAndRun(const UeventHandler::NetDeviceAttr &device) {
+void NetboyEventHandler::RuleMatchAndRun(const UeventHandler::NetDeviceAttr& device) {
     // Create and fill structure for rule matching
     NetboyRule rule{device.devpath, device.subsystem, device.devtype, device.interface_name, device.driver, nullptr};
     std::shared_ptr<RuleAction> action;
@@ -52,10 +52,10 @@ void NetboyEventHandler::RuleMatchAndRun(const UeventHandler::NetDeviceAttr &dev
 }
 
 // handle new message
-void NetboyEventHandler::HandleEvent(const char *uevent, const int message_length) {
+void NetboyEventHandler::HandleEvent(const char* uevent, const int message_length) {
     if (!uevent) return;
 
-    const char *const ADD_ACTION = "add@";
+    const char* const ADD_ACTION = "add@";
 
     // Currently only add@ event are handled. Can be extended as per need
     if (message_length < static_cast<int>(std::string(ADD_ACTION).length()) ||

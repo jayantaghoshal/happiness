@@ -22,6 +22,6 @@ class CarConfigFileReader {
     std::unique_ptr<std::stringstream> fileBuf_;
     std::string filePath_;
     int filePos_;
-    bool validateValue(int unvalidatedValue, uint8_t &validatedValue);
-    bool validateStatus(int unvalidatedStatus, Carconfig_base::ccStatus &validatedStatus);
+    bool validateValue(int unvalidatedValue, uint8_t& validatedValue);
+    bool validateStatus(int unvalidatedStatus, Carconfig_base::ccStatus& validatedStatus);
 };

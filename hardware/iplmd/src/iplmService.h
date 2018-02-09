@@ -58,14 +58,14 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     ~IplmService() = default;
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
-    Return<void> onMessageRcvd(const Msg &msg) override;
+    Return<void> onMessageRcvd(const Msg& msg) override;
 
     /**
        * Initialize IpLmService and the internal Link Manager functional block.
        * @param[in] msg_dispatcher  Message dispatcher to use with LinkManager.
        */
     // // hidl_death_recipient
-    void serviceDied(uint64_t cookie, const android::wp<IBase> &who) override;
+    void serviceDied(uint64_t cookie, const android::wp<IBase>& who) override;
 
     bool Initialize();
 
@@ -82,7 +82,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      * @param[in] _rg             Resource group being requested
      * @param[in] _prio           priority for the requested resource group
      */
-    Return<bool> requestResourceGroup(const hidl_string &lscName, XResourceGroup resourceGroup,
+    Return<bool> requestResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup,
                                       XResourceGroupPrio resourceGroupPrio) override;
 
     /**
@@ -90,19 +90,19 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      * @param[in] lscName         Name of the service making the request
      * @param[in] _rg             Resource group being released
      */
-    Return<bool> releaseResourceGroup(const hidl_string &lscName, XResourceGroup resourceGroup) override;
+    Return<bool> releaseResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup) override;
 
     /**
      * description: Register Local Software Component with Link Manager
      * @param[in] lscName         Name of the service being registered
      */
-    Return<bool> registerService(const hidl_string &lscName, const sp<IIplmCallback> &iIplmCallback) override;
+    Return<bool> registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback) override;
 
     /**
      * description: Unregister Local Software Component with Link Manager
      * @param[in] lscName         Name of the service being de-registered
      */
-    Return<bool> unregisterService(const hidl_string &lscName) override;
+    Return<bool> unregisterService(const hidl_string& lscName) override;
 
     /**
      * Get availibility for a specified node
@@ -119,7 +119,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      * Usage: Internal services can register a callback method to be notified on
      * Ecu availability to avoid registering public common api notifications internally.
      */
-    void registerAvailabilityNotification(const EcuAvailabilityNotification &f) {
+    void registerAvailabilityNotification(const EcuAvailabilityNotification& f) {
         node_availability_notifications_.push_back(f);
     }
 
@@ -157,38 +157,38 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
 
   private:
     // Handle received message
-    void HandleMessageRcvd(const Msg &msg);
+    void HandleMessageRcvd(const Msg& msg);
 
     /*! \brief Timer handler used to trigger a new broadcast to be sent. */
     void ActivityTimeout();
 
     void RequestMonitoringTimeout(EcuId ecu);
 
-    static bool IsRgRequestedLocally(const IplmData &iplm_data, const ResourceGroup rg, const Prio prio);
+    static bool IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg, const Prio prio);
 
-    static bool IsRgRequestedLocally(const IplmData &iplm_data, const ResourceGroup rg);
+    static bool IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg);
 
-    static bool IsServiceRegistered(const IplmData &iplm_data, const std::string &lscName);
+    static bool IsServiceRegistered(const IplmData& iplm_data, const std::string& lscName);
 
-    static bool IsServiceRegistered(IplmData &iplm_data, const std::string &lscName, ServicePrioMap::iterator &it);
+    static bool IsServiceRegistered(IplmData& iplm_data, const std::string& lscName, ServicePrioMap::iterator& it);
 
     static bool IsRequestedRGValid(XResourceGroup rg);
 
-    static bool IsRgRequestedByExternalNode(const IplmData &iplm_data, const ResourceGroup rg);
+    static bool IsRgRequestedByExternalNode(const IplmData& iplm_data, const ResourceGroup rg);
 
-    static bool GetExternalPrio(const IplmData &iplm_data);
+    static bool GetExternalPrio(const IplmData& iplm_data);
 
     // Helper function to produce debug friendly output for enumerations
-    static const char *ToString(ResourceGroup r);
+    static const char* ToString(ResourceGroup r);
     static const std::string ToString(Action a);
-    static const char *ToString(Prio p);
-    static const char *ToString(XResourceGroup r);
-    static const char *ToString(XResourceGroupPrio prio);
+    static const char* ToString(Prio p);
+    static const char* ToString(XResourceGroup r);
+    static const char* ToString(XResourceGroupPrio prio);
 
     /*! \brief Sequence ID as defined by the IP Command Bus Protocol. */
     std::uint8_t sequenceId_ = 0;
 
-    tarmac::eventloop::IDispatcher &timeProvider_;
+    tarmac::eventloop::IDispatcher& timeProvider_;
     /*! \brief Activity timer, trigger periodic broadcasts */
     tarmac::eventloop::IDispatcher::JobId activityTimer_;
 

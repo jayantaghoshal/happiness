@@ -37,7 +37,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
     StartSubscribe();
 }
 
-void GnssService::serviceDied(uint64_t, const wp<IBase> &) {
+void GnssService::serviceDied(uint64_t, const wp<IBase>&) {
     ALOGE("ipcbD died, Trying to reconnect");
     StartSubscribe();
 }
@@ -50,7 +50,7 @@ void GnssService::StartSubscribe() {
         bool subscriptionsfailed = false;
         ALOGV("IpcbD found, subscribing");
         // Install callback
-        IMessageCallback *this_as_callback = this;
+        IMessageCallback* this_as_callback = this;
         SubscribeResult resultPosNotification, resultPosCyclic, resultAccNotification, resultAccCyclic;
         // TODO: Handle subscription ID returned from subscribe in order to unsubscribe?
 
@@ -114,7 +114,7 @@ void GnssService::StartSubscribe() {
         } else {
             // Great success, all subscriptions set
             ALOGI("GnssD all set and waiting for positions");
-            hidl_death_recipient *this_as_recipient = this;
+            hidl_death_recipient* this_as_recipient = this;
             ipcbServer_->linkToDeath(this_as_recipient, 0);
         }
     } else {
@@ -164,7 +164,7 @@ void GnssService::unsubscribeAll() {
 }
 
 // Methods from vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
-Return<void> GnssService::onMessageRcvd(const Msg &msg) {
+Return<void> GnssService::onMessageRcvd(const Msg& msg) {
     ALOGV("onMessageRcvd %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
 
@@ -208,7 +208,7 @@ bool GnssService::Initialize() {
     return true;
 }
 
-void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg) {
+void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
     Icb_OpGNSSPositionData_Response p = nullptr;
 
     ALOGV("cbGNSSPositionDataNotification %04X.%04X.%02d 0x%08X. size: %d", (int)msg.pdu.header.serviceID,
@@ -267,7 +267,7 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg &msg) {
     }
 }
 
-void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg &msg) {
+void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
     Icb_OpGNSSPositionDataAccuracy_Response p = nullptr;
 
     ALOGV("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d", (int)msg.pdu.header.serviceID,

@@ -16,15 +16,15 @@ using namespace autosar;
 
 class SystemInformationModule : public vhal20::impl::ModuleBase {
   public:
-    SystemInformationModule(vhal20::impl::IVehicleHalImpl *vehicle_hal);
+    SystemInformationModule(vhal20::impl::IVehicleHalImpl* vehicle_hal);
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
 
   private:
     void StartSubscribe();
-    void onVin1BlockReceived(const DataElemValue<Vin_info> &vin_info);
-    std::string asStdString(const autosar::Vin1 &block1, const autosar::Vin1 &block2, const autosar::Vin1 &block3);
-    bool hasByteErrors(const autosar::Vin1 &block);
-    bool hasNonPrintableCharacters(const autosar::Vin1 &block);
+    void onVin1BlockReceived(const DataElemValue<Vin_info>& vin_info);
+    std::string asStdString(const autosar::Vin1& block1, const autosar::Vin1& block2, const autosar::Vin1& block3);
+    bool hasByteErrors(const autosar::Vin1& block);
+    bool hasNonPrintableCharacters(const autosar::Vin1& block);
 
   private:
     DEReceiver<Vin_info> vin_info_receiver_;

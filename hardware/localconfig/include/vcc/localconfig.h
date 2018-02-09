@@ -22,7 +22,7 @@ namespace vcc {
  * @return Target system configured LocalConfig implementation (not-null)
  * @throws std::runtime_error if initialization is impossible.
  */
-const vcc::LocalConfigReaderInterface *LocalConfigDefault();
+const vcc::LocalConfigReaderInterface* LocalConfigDefault();
 
 namespace localconfig {
 /**
@@ -36,10 +36,10 @@ namespace localconfig {
  * @param key string that identifies a local config value
  * @return String with the requested parameter value.
  */
-std::string GetString(const std::initializer_list<std::string> &keys);
+std::string GetString(const std::initializer_list<std::string>& keys);
 
 template <class... T>
-std::string GetString(const T &... keys) {
+std::string GetString(const T&... keys) {
     return GetString({keys...});
 }
 
@@ -54,10 +54,10 @@ std::string GetString(const T &... keys) {
  * @param key string that identifies a local config value
  * @return int with the requested parameter value.
  */
-int GetInt(const std::initializer_list<std::string> &keys);
+int GetInt(const std::initializer_list<std::string>& keys);
 
 template <class... T>
-int GetInt(const T &... keys) {
+int GetInt(const T&... keys) {
     return GetInt({keys...});
 }
 
@@ -72,10 +72,10 @@ int GetInt(const T &... keys) {
  * @param key string that identifies a local config value
  * @return bool with the requested parameter value.
  */
-bool GetBool(const std::initializer_list<std::string> &keys);
+bool GetBool(const std::initializer_list<std::string>& keys);
 
 template <class... T>
-bool GetBool(const T &... keys) {
+bool GetBool(const T&... keys) {
     return GetBool({keys...});
 }
 
@@ -90,10 +90,10 @@ bool GetBool(const T &... keys) {
  * @param key string that identifies a local config value
  * @return double with the requested parameter value.
  */
-double GetDouble(const std::initializer_list<std::string> &keys);
+double GetDouble(const std::initializer_list<std::string>& keys);
 
 template <class... T>
-double GetDouble(const T &... keys) {
+double GetDouble(const T&... keys) {
     return GetDouble({keys...});
 }
 
@@ -109,10 +109,10 @@ double GetDouble(const T &... keys) {
  * @return vector of strings with requested parameter value
  */
 
-std::vector<std::string> GetStringArray(const std::initializer_list<std::string> &keys);
+std::vector<std::string> GetStringArray(const std::initializer_list<std::string>& keys);
 
 template <class... T>
-std::vector<std::string> GetStringArray(const T &... keys) {
+std::vector<std::string> GetStringArray(const T&... keys) {
     return GetStringArray({keys...});
 }
 

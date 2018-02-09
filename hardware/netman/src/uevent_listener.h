@@ -14,25 +14,25 @@ class UeventHandler;
 
 class UEventListener final {
   public:
-    static UEventListener &Instance();
+    static UEventListener& Instance();
     ~UEventListener();
 
-    UEventListener(const UEventListener &other) = delete;
-    UEventListener(UEventListener &&other) = delete;
+    UEventListener(const UEventListener& other) = delete;
+    UEventListener(UEventListener&& other) = delete;
 
-    UEventListener &operator=(const UEventListener &other) = delete;
-    UEventListener &operator=(UEventListener &&other) = delete;
+    UEventListener& operator=(const UEventListener& other) = delete;
+    UEventListener& operator=(UEventListener&& other) = delete;
 
     bool StartListening();
     void StopListening();
-    void SetNetlinkEventHandler(UeventHandler &event_handler);
+    void SetNetlinkEventHandler(UeventHandler& event_handler);
 
   private:
     UEventListener() = default;
     int SetupSocket();
     int RecvMessage();
 
-    UeventHandler *event_handler_ = nullptr;
+    UeventHandler* event_handler_ = nullptr;
     int netlink_socket_ = -1;
 };
 

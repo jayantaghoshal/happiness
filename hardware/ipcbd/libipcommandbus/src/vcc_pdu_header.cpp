@@ -16,7 +16,7 @@
 
 namespace Connectivity {
 
-VCCPDUHeader VCCPDUHeader::from_data(const std::vector<std::uint8_t> &data) {
+VCCPDUHeader VCCPDUHeader::from_data(const std::vector<std::uint8_t>& data) {
     NetDeserializer deserializer(data);
 
     // TODO: Document that it is up to caller to check that
@@ -45,7 +45,7 @@ VCCPDUHeader VCCPDUHeader::from_data(const std::vector<std::uint8_t> &data) {
     return header;
 }
 
-void VCCPDUHeader::to_data(std::vector<std::uint8_t> &data) const {
+void VCCPDUHeader::to_data(std::vector<std::uint8_t>& data) const {
     NetSerializer serializer(data);
 
     serializer.write_uint16(static_cast<uint16_t>(service_id));

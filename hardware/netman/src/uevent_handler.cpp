@@ -20,7 +20,7 @@ int UeventHandler::SysfsNetSubsystemWalker() {
     return nftw("/sys/class/net/", HandleSysfsEntry, openFds, FTW_PHYS);
 }
 
-void UeventHandler::ReadDeviceAttr(const std::string &line, NetDeviceAttr &child_device) {
+void UeventHandler::ReadDeviceAttr(const std::string& line, NetDeviceAttr& child_device) {
     // TODO (Abhijeet Shirolikar): Refactor function to make it compact some later time
 
     // Only read attributes if there values are not already set. As attributes for child are read before parent
@@ -62,7 +62,7 @@ void UeventHandler::ReadDeviceAttr(const std::string &line, NetDeviceAttr &child
     }
 }
 
-void UeventHandler::ReadParentDeviceAttr(NetDeviceAttr &child_device) {
+void UeventHandler::ReadParentDeviceAttr(NetDeviceAttr& child_device) {
     // Adjust devpath to access attributes for parent node
     std::fstream parent_attr(std::string("/sys/") + child_device.devpath + "/../../uevent");
     if (parent_attr.is_open()) {
@@ -73,7 +73,7 @@ void UeventHandler::ReadParentDeviceAttr(NetDeviceAttr &child_device) {
     }
 }
 
-std::string UeventHandler::ExtractAttribute(const std::string &cursor_line, const std::string &attribute) {
+std::string UeventHandler::ExtractAttribute(const std::string& cursor_line, const std::string& attribute) {
     std::string value;
     if (!cursor_line.empty()) {
         value = std::string(cursor_line.c_str() + attribute.length() + 1);
@@ -81,8 +81,8 @@ std::string UeventHandler::ExtractAttribute(const std::string &cursor_line, cons
     return value;
 }
 
-int UeventHandler::HandleSysfsEntry(const char *filepath, const struct stat * /*info*/, int typeflag,
-                                    struct FTW * /*pathinfo*/) {
+int UeventHandler::HandleSysfsEntry(const char* filepath, const struct stat* /*info*/, int typeflag,
+                                    struct FTW* /*pathinfo*/) {
     // NOTE: NTFW requires callback function to return 0 as an indication proceed
 
     // As per SysFs standard, entries in '/sys/class/net' are symlinks to entries in '/sys/devices'
@@ -109,7 +109,7 @@ int UeventHandler::HandleSysfsEntry(const char *filepath, const struct stat * /*
 
     const std::vector<std::string> ignored_interface_list{"lo", "sit0"};
     auto it = std::find_if(ignored_interface_list.cbegin(), ignored_interface_list.cend(),
-                           [&interface_name](const std::string &item) { return (interface_name == item); });
+                           [&interface_name](const std::string& item) { return (interface_name == item); });
     if (it != ignored_interface_list.cend()) {
         return 0;  // filter out 'lo' and 'sit0'
     }

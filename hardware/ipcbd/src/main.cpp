@@ -48,7 +48,7 @@ void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu) {
             sock->setup(ecu);
             ALOGV("Setup socket for Ecu %u successfully", ecu);
             return;
-        } catch (const SocketException &e) {
+        } catch (const SocketException& e) {
             if (e.what() != previousError) {
                 previousError = e.what();
                 ALOGE("Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
@@ -127,7 +127,7 @@ bool InitSignals() {
 
 // ===============================================================
 // MAIN
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     if (argc < 3) {
         ALOGE("Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
               "\nExamples:\n 1. infotainment UDP\n"
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
     std::string protocol = argv[2];
     InitSignals();
 
-    IDispatcher &dispatcher = IDispatcher::GetDefaultDispatcher();
+    IDispatcher& dispatcher = IDispatcher::GetDefaultDispatcher();
 
     TransportServices transport{dispatcher, dispatcher, Message::Ecu::IHU};
 
@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
         joinRpcThreadpool();
 
         ALOGI("exiting ...");
-    } catch (const SocketException &e) {
+    } catch (const SocketException& e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
     }
 }

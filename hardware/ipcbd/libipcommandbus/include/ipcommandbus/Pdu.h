@@ -30,14 +30,14 @@ class Pdu {
      * @return                                      True if header size and extracted bytes match.
      *                                              False if header contain incorrect length.
      */
-    bool fromData(std::vector<uint8_t> &fromData);
+    bool fromData(std::vector<uint8_t>& fromData);
 
     /**
      * Serialize this Pdu into a provided vector. Data will be appended to the vector.
      *
      * @param[inout] buffer                         Serialized Pdu data will be placed in this vector.
      */
-    void toData(std::vector<uint8_t> &buffer) const;
+    void toData(std::vector<uint8_t>& buffer) const;
 
     /**
      * Convenience function to set up the header fields. E.g. sets the length, sender handle id, reserved bits, etc.
@@ -56,12 +56,12 @@ class Pdu {
      * Assign Pdu payload.
      * @param[in] data                              The data to set.
      */
-    void setPayload(std::vector<uint8_t> &&data);
+    void setPayload(std::vector<uint8_t>&& data);
 
     VCCPDUHeader header;           ///< Pdu header fields
     std::vector<uint8_t> payload;  ///< Pdu payload
 
-    static std::string toString(const Pdu &pdu);
+    static std::string toString(const Pdu& pdu);
 };
 
 }  // Connectivity

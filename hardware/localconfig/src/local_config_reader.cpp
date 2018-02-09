@@ -15,7 +15,7 @@ using vcc::LocalConfigReader;
 namespace {
 std::string GetKeyString(std::initializer_list<std::string> keys) {
     std::stringstream key_string;
-    for (auto &k : keys) {
+    for (auto& k : keys) {
         key_string << "[\"" << k << "\"]";
     }
     return key_string.str();
@@ -27,14 +27,14 @@ void vcc::LocalConfigReader::Preload() {
     loader_(&root_);
 }
 
-const Json::Value &LocalConfigReader::GetJsonValue(std::initializer_list<std::string> keys) const {
+const Json::Value& LocalConfigReader::GetJsonValue(std::initializer_list<std::string> keys) const {
     if (keys.size() == 0) throw std::runtime_error("At least one key must be requested from LocalConfig");
 
     if (root_.isNull()) loader_(&root_);
 
-    const Json::Value *current_node = &root_;
-    const Json::Value *node_value = nullptr;
-    for (auto &key : keys) {
+    const Json::Value* current_node = &root_;
+    const Json::Value* node_value = nullptr;
+    for (auto& key : keys) {
         node_value = &(*current_node)[key];
         if (node_value->isNull()) {
             auto message = "Parameter " + GetKeyString(keys) + " not found in localconfig.";
@@ -56,7 +56,7 @@ const Json::Value &LocalConfigReader::GetJsonValue(std::initializer_list<std::st
 
 std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys) const {
     std::unique_lock<std::mutex> lock(mutex_);
-    const Json::Value &node_value = GetJsonValue(keys);
+    const Json::Value& node_value = GetJsonValue(keys);
     if (!node_value.isString()) THROW_TYPE_MISMATCH("std::string");
 
     return node_value.asString();
@@ -64,7 +64,7 @@ std::string LocalConfigReader::GetString(std::initializer_list<std::string> keys
 
 int LocalConfigReader::GetInt(std::initializer_list<std::string> keys) const {
     std::unique_lock<std::mutex> lock(mutex_);
-    const Json::Value &node_value = GetJsonValue(keys);
+    const Json::Value& node_value = GetJsonValue(keys);
 
     if (!node_value.isInt()) THROW_TYPE_MISMATCH("int");
 
@@ -73,7 +73,7 @@ int LocalConfigReader::GetInt(std::initializer_list<std::string> keys) const {
 
 bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys) const {
     std::unique_lock<std::mutex> lock(mutex_);
-    const Json::Value &node_value = GetJsonValue(keys);
+    const Json::Value& node_value = GetJsonValue(keys);
 
     if (!node_value.isBool()) THROW_TYPE_MISMATCH("bool");
 
@@ -82,7 +82,7 @@ bool LocalConfigReader::GetBool(std::initializer_list<std::string> keys) const {
 
 double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys) const {
     std::unique_lock<std::mutex> lock(mutex_);
-    const Json::Value &node_value = GetJsonValue(keys);
+    const Json::Value& node_value = GetJsonValue(keys);
 
     if (!node_value.isDouble()) THROW_TYPE_MISMATCH("double");
 
@@ -91,12 +91,12 @@ double LocalConfigReader::GetDouble(std::initializer_list<std::string> keys) con
 
 std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list<std::string> keys) const {
     std::unique_lock<std::mutex> lock(mutex_);
-    const Json::Value &array = GetJsonValue(keys);
+    const Json::Value& array = GetJsonValue(keys);
 
     if (!array.isArray()) THROW_TYPE_MISMATCH("array");
 
     std::vector<std::string> values;
-    for (const Json::Value &val : array) {
+    for (const Json::Value& val : array) {
         if (!val.isString()) {
             auto message = "List node_value for parameter " + GetKeyString(keys) + " is not a string.";
             ALOGE("%s", message.c_str());
@@ -108,7 +108,7 @@ std::vector<std::string> LocalConfigReader::GetStringArray(std::initializer_list
     return values;
 }
 
-void vcc::LocalConfigReader::LoadFile(const std::string &file_path, Json::Value *value) {
+void vcc::LocalConfigReader::LoadFile(const std::string& file_path, Json::Value* value) {
     std::ifstream ifs(file_path);
     if (!ifs) {
         throw std::runtime_error("JSON file " + file_path + " could not be opened.");
@@ -120,11 +120,11 @@ void vcc::LocalConfigReader::LoadFile(const std::string &file_path, Json::Value 
     }
 }
 
-vcc::LocalConfigFileReader::LocalConfigFileReader(const std::string &file_path)
-    : base([file_path](Json::Value *value) { LoadFile(file_path, value); }) {}
+vcc::LocalConfigFileReader::LocalConfigFileReader(const std::string& file_path)
+    : base([file_path](Json::Value* value) { LoadFile(file_path, value); }) {}
 
-vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(const std::string &json)
-    : base([json](Json::Value *value) {
+vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(const std::string& json)
+    : base([json](Json::Value* value) {
           Json::Reader reader;
           if (!reader.parse(json, *value)) {
               throw std::runtime_error("JSON text could not be parsed, please check content.");

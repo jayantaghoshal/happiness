@@ -46,7 +46,7 @@ class TransportServicesFixture : public ::testing::Test {
      * Pass-through methods for private members of
      * class Connectivity::TransportServices.
      */
-    void messageTimeout(TrackMessage &tm) {
+    void messageTimeout(TrackMessage& tm) {
         (void)tm;
         timeProvider.sleep_for(std::chrono::milliseconds(800));
     }
@@ -58,9 +58,9 @@ class TransportServicesFixture : public ::testing::Test {
      */
     uint8_t getProtocolVersion() { return transport.PROTOCOL_VERSION; }
 
-    void setRetry(int value, TrackMessage &tm) { tm.wfr.retry_ = value; }
+    void setRetry(int value, TrackMessage& tm) { tm.wfr.retry_ = value; }
 
-    void setMaxRetries(int value, TrackMessage &tm) { tm.wfr.maxRetries_ = value; }
+    void setMaxRetries(int value, TrackMessage& tm) { tm.wfr.maxRetries_ = value; }
 
   protected:
     void verifyAndClear(void) {
@@ -68,7 +68,7 @@ class TransportServicesFixture : public ::testing::Test {
         Mock::VerifyAndClearExpectations(&diagnostics);
     }
 
-    void getResponseSendAck(const Message &msg) {
+    void getResponseSendAck(const Message& msg) {
         std::vector<uint8_t> respData, expectData;
         Connectivity::Pdu respPdu, ackPdu;
         respPdu.header = msg.pdu.header;
@@ -85,7 +85,7 @@ class TransportServicesFixture : public ::testing::Test {
 
         // Ensure that message is delivered to upper layers
         bool messageDelivered = false;
-        transport.registerIncomingResponseCallback([&messageDelivered](Connectivity::Message &m) {
+        transport.registerIncomingResponseCallback([&messageDelivered](Connectivity::Message& m) {
             (void)(m);
             messageDelivered = true;
         });
@@ -158,7 +158,7 @@ class TransportServicesFixture : public ::testing::Test {
 
     Connectivity::Message createMsg(VccIpCmd::ServiceId srvId, VccIpCmd::OperationId opId,
                                     VccIpCmd::OperationType opType, uint8_t seqNr,
-                                    std::vector<uint8_t> &&data = std::vector<uint8_t>(),
+                                    std::vector<uint8_t>&& data = std::vector<uint8_t>(),
                                     VccIpCmd::DataType dataType = VccIpCmd::DataType::ENCODED) {
         Pdu pdu;
         pdu.createHeader(srvId, opId, opType, dataType, seqNr);
@@ -289,7 +289,7 @@ TEST_F(TransportServicesFixture, SendRequest_ACK_Timeout_No_Resends) {
 
     bool errorCalled = false;
 
-    transport.registerErrorOnRequestCallback([&errorCalled](Message &msg, TransportServices::ErrorType et) {
+    transport.registerErrorOnRequestCallback([&errorCalled](Message& msg, TransportServices::ErrorType et) {
 
         ASSERT_EQ(VccIpCmd::OperationType::ERROR, msg.pdu.header.operation_type);
         ASSERT_EQ(static_cast<uint8_t>(TransportServices::ErrorCode::TIMEOUT_ERROR),
@@ -420,7 +420,7 @@ TEST_F(TransportServicesFixture, SendRequest_NewRequestOnResponse) {
     EXPECT_CALL(sock, writeTo(requestAck_, _));
 
     // Create a response function that immediately sends a new message
-    transport.registerIncomingResponseCallback([&](Connectivity::Message &m) {
+    transport.registerIncomingResponseCallback([&](Connectivity::Message& m) {
         (void)(m);
         Connectivity::Message msg2 =
                 createMsg(ServiceId::Connectivity, OperationId::CurrentInternetSource, OperationType::REQUEST, 0xBB);
@@ -446,7 +446,7 @@ TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfAck) {
     msg.pdu.header.protocol_version = 2;
 
     bool errorCalled = false;
-    transport.registerErrorOnRequestCallback([&errorCalled](Message &, TransportServices::ErrorType et) {
+    transport.registerErrorOnRequestCallback([&errorCalled](Message&, TransportServices::ErrorType et) {
         ASSERT_EQ(TransportServices::REMOTE_ERROR, et);
         errorCalled = true;
     });
@@ -501,7 +501,7 @@ TEST_F(TransportServicesFixture, SendRequest_ErrorInsteadOfResponse) {
     msg.pdu.header.protocol_version = 2;
 
     bool errorCalled = false;
-    transport.registerErrorOnRequestCallback([&errorCalled](Message &, TransportServices::ErrorType et) {
+    transport.registerErrorOnRequestCallback([&errorCalled](Message&, TransportServices::ErrorType et) {
         ASSERT_EQ(TransportServices::REMOTE_ERROR, et);
         errorCalled = true;
     });
@@ -579,7 +579,7 @@ TEST_F(TransportServicesFixture, SendRequest_BusyError) {
                      0x00,
                      0x00};
 
-    transport.registerErrorOnRequestCallback([](Message &, TransportServices::ErrorType) { ASSERT_TRUE(false); });
+    transport.registerErrorOnRequestCallback([](Message&, TransportServices::ErrorType) { ASSERT_TRUE(false); });
 
     // 1. Send request
     EXPECT_CALL(sock, writeTo(requestData_, _));
@@ -613,7 +613,7 @@ TEST_F(TransportServicesFixture, SendRequest_BusyError) {
  */
 TEST_F(TransportServicesFixture, IncomingRequestImmResp_Success) {
     // Register a request function that immediately sends a response
-    transport.registerIncomingRequestCallback([&](Connectivity::Message &m) {
+    transport.registerIncomingRequestCallback([&](Connectivity::Message& m) {
         Connectivity::Message msg;
         msg.pdu.header = m.pdu.header;
         msg.pdu.header.operation_type = OperationType::RESPONSE;
@@ -658,7 +658,7 @@ TEST_F(TransportServicesFixture, IncomingRequestImmResp_Success) {
 TEST_F(TransportServicesFixture, IncomingRequestDelayedResp_Success) {
     Pdu requestPdu;
     // Register a request function that immediately sends a response
-    transport.registerIncomingRequestCallback([&requestPdu](Connectivity::Message &m) {
+    transport.registerIncomingRequestCallback([&requestPdu](Connectivity::Message& m) {
         // 2. Request callback return true, indicating that request is supported
         requestPdu = m.pdu;
         return true;
@@ -701,7 +701,7 @@ TEST_F(TransportServicesFixture, IncomingRequestDelayedResp_Success) {
  */
 TEST_F(TransportServicesFixture, IncomingRequest_NotSupported) {
     // Register a request function that immediately sends a response
-    transport.registerIncomingRequestCallback([&](Connectivity::Message &m) {
+    transport.registerIncomingRequestCallback([&](Connectivity::Message& m) {
         Connectivity::Message msg;
         msg.ecu = Message::VCM;
         msg.pdu.header = m.pdu.header;
@@ -827,7 +827,7 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Setrequest_Noreturn) {
 
     // Execute without incoming request callback
 
-    transport.registerIncomingRequestCallback([&](Connectivity::Message &msg) {
+    transport.registerIncomingRequestCallback([&](Connectivity::Message& msg) {
         (void)msg;
         return false;
     });
@@ -838,7 +838,7 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Setrequest_Noreturn) {
 
     // Execute with incoming request callback
 
-    transport.registerIncomingRequestCallback([&](Connectivity::Message &msg) {
+    transport.registerIncomingRequestCallback([&](Connectivity::Message& msg) {
         (void)msg;
         return true;
     });
@@ -870,7 +870,7 @@ TEST_F(TransportServicesFixture, TestprocessIncomingPdu_Notification) {
 
     // Execute for Notification with callback
 
-    transport.registerIncomingNotificationCallback([&](Connectivity::Message &msg) {
+    transport.registerIncomingNotificationCallback([&](Connectivity::Message& msg) {
         (void)msg;
         return true;
     });
@@ -948,7 +948,7 @@ TEST_F(TransportServicesFixture, TesthandleIncomingAck_set_request_no_return) {
 
     EXPECT_CALL(sock, read(_, _)).WillOnce(DoAll(SetArgReferee<0>(readData), SetArgReferee<1>(Message::VCM)));
 
-    transport.registerIncomingRequestCallback([&](Connectivity::Message &msg) {
+    transport.registerIncomingRequestCallback([&](Connectivity::Message& msg) {
         (void)msg;
         return true;
     });
@@ -973,7 +973,7 @@ TEST_F(TransportServicesFixture, TesthandleIncomingAck_notification) {
 
     EXPECT_CALL(sock, read(_, _)).WillOnce(DoAll(SetArgReferee<0>(readData), SetArgReferee<1>(Message::VCM)));
 
-    transport.registerIncomingNotificationCallback([&](Connectivity::Message &msg) {
+    transport.registerIncomingNotificationCallback([&](Connectivity::Message& msg) {
         (void)msg;
         return true;
     });
