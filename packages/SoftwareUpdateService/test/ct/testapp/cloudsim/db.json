@@ -26,7 +26,8 @@
     "available_accessories": "/softwaremanagement-1/availableAccessories",
     "map_updates": "/softwaremanagement-1/mapUpdates",
     "downloads": "/softwaremanagement-1/downloads",
-    "delete_notification": "/softwaremanagement-1/deleteNotification"
+    "delete_notification": "/softwaremanagement-1/deleteNotification",
+    "pending_installations": "/softwaremanagement-1/pendingInstallations"
   },
 
   "availableUpdates": {
@@ -62,14 +63,28 @@
       }
     ]
   },
-
+  "pendingInstallations": {
+    "@": {
+      "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/pending_installations",
+      "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "this": "pendingInstallations",
+    "installation_orders": []
+  },
   "commission": {
     "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
     "client_id": "FTKR1EDXBPB10452",
     "reasen": "USER"
   },
 
-  "downloads": {
-    "software": []
-  }
+  "preDownloadInfo": [
+    {
+      "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9"
+    },
+    {
+      "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa"
+    }
+  ],
+  "downloads": []
 }

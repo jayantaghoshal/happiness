@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlPullParserException;
+import com.volvocars.carconfig.*;
 
 /**
  * Implementation of Foundation service API.
@@ -29,8 +30,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private boolean software_management_available = false;
 
-    private class SwListResponse {
-        private ArrayList<SoftwareAssignment> swlist = new ArrayList<SoftwareAssignment>();
+    private class SwListResponse<T> {
+        private ArrayList<T> swlist = new ArrayList<T>();
         private int code = -1;
     }
 
@@ -75,7 +76,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             uris = XmlParser.ParseSoftwareManagementURIs(stream);
             stream.close();
 
-            Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_software_assignments + "\n" + uris.downloads);
+            Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_software_assignments + "\n" + uris.downloads
+                    + "\n" + uris.pending_installations);
 
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
@@ -86,7 +88,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private SwListResponse FetchSoftwareAssignmentsList() {
+    private SwListResponse<SoftwareAssignment> FetchSoftwareAssignmentsList() {
         // Build request
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -98,7 +100,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         int timeout = 20000;
 
         ArrayList<SoftwareAssignment> software_list = new ArrayList();
-        SwListResponse swrsp = new SwListResponse();
+        SwListResponse<SoftwareAssignment> swrsp = new SwListResponse();
 
         try {
             // Send request
@@ -155,6 +157,143 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     }
 
+    private String GetSystemLanguage() {
+        switch (CarConfigApi.getValue(CarConfigEnums.CC_197_SystemLanguage.class)) {
+        case Arabic:
+            return "ar-BH";
+        case Chinese_Simp_Man:
+            return "zh-CHS";
+        case Chinese_Trad_Can:
+            return "zh-CH";
+        case Chinese_Trad_Man:
+            return "zh-CHT";
+        case Czech:
+            return "cs-CZ";
+        case Danish:
+            return "da-DK";
+        case Dutch:
+            return "nl-NL";
+        case Australien_English:
+            return "en-AU";
+        case English:
+            return "en-GB";
+        case American_English:
+            return "en-US";
+        case Finnish:
+            return "fi-FI";
+        case Flemmish:
+            return "nl-BE";
+        case Canadian_French:
+            return "fr-CA";
+        case French:
+            return "fr-FR";
+        case German:
+            return "de-DE";
+        case Greek:
+            return "el-GR";
+        case Hungarian:
+            return "hu-HU";
+        case Italian:
+            return "it-IT";
+        case Japanese:
+            return "ja-JP";
+        case Korean_Han_Gul_:
+            return "ko-KR";
+        case Norwegian:
+            return "nb-NO";
+        case Polish:
+            return "pl-PL";
+        case Brazilian_Portuguese:
+            return "pt-BR";
+        case Portuguese:
+            return "pt-PT";
+        case Russian:
+            return "ru-RU";
+        case Spanish:
+            return "es-ES";
+        case American_Spanish:
+            return "es-US";
+        case Swedish:
+            return "sv-SE";
+        case Thai:
+            return "th-TH";
+        case Turkish:
+            return "tr-TR";
+        case Bulgarian:
+            return "bg-BG";
+        case Estonian:
+            return "et-EE";
+        case Latvian:
+            return "lv-LV";
+        case Lithuanian:
+            return "lt-LT";
+        case Romanian:
+            return "ro-RO";
+        case Slovak:
+            return "sk-SK";
+        case Slovene:
+            return "sl-SI";
+        default:
+            return "";
+        }
+    }
+
+    private SwListResponse<InstallationOrder> FetchPendingInstallations() {
+        // Build request
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+        Log.v(LOG_TAG, "FetchPendingInstallations");
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.PendingInstallations+XML";
+        headers.add(field);
+
+        String systemLanguage = GetSystemLanguage();
+        Log.v(LOG_TAG, "SystemLanguage: " + systemLanguage);
+
+        if (!systemLanguage.isEmpty()) {
+            HttpHeaderField languagefield = new HttpHeaderField();
+            languagefield.name = "Accept-Language";
+            languagefield.value = systemLanguage;
+            headers.add(languagefield);
+        }
+
+        int timeout = 20000;
+
+        ArrayList<InstallationOrder> installationOrder = new ArrayList();
+        SwListResponse<InstallationOrder> swrsp = new SwListResponse();
+
+        try {
+            // Send request
+            Response response = cloud_connection.doGetRequest(uris.pending_installations, headers, timeout);
+
+            if (!HandleHttpResponseCode(response.httpResponse)) {
+                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
+            }
+
+            // Parse response
+            byte[] bytesdata = new byte[response.responseData.size()];
+            for (int i = 0; i < bytesdata.length; i++) {
+                bytesdata[i] = response.responseData.get(i);
+            }
+
+            InputStream stream = new ByteArrayInputStream(bytesdata);
+            installationOrder = XmlParser.ParsePendingInstallations(stream);
+
+            swrsp.swlist = installationOrder;
+            swrsp.code = response.httpResponse;
+
+        } catch (XmlPullParserException ex) {
+            // Something went bananas with the parsing.. What do?
+            Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
+        } catch (IOException ex) {
+            // Something went bananas with the streams.. What do?
+            Log.e(LOG_TAG, "Something went bananas with the streams: " + ex.getMessage());
+        }
+
+        return swrsp;
+    }
+
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -171,7 +310,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             callback.SoftwareAssignmentList(-1, null);
         }
 
-        SwListResponse swrsp = FetchSoftwareAssignmentsList();
+        SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignmentsList();
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 
@@ -195,7 +334,12 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     */
     @Override
     public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
-        //TODO: implement
+        if (!software_management_available) {
+            callback.PendingInstallations(-1, null);
+        }
+
+        SwListResponse<InstallationOrder> swrsp = FetchPendingInstallations();
+        callback.PendingInstallations(swrsp.code, swrsp.swlist);
     }
 
     /**

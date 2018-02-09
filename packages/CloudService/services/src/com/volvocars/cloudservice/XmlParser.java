@@ -15,13 +15,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import android.util.Log;
 import android.util.Xml;
+
 /**
 * XmlParser for parsing Cloud related responses
 * Follows structure found on https://developer.android.com/training/basics/network-ops/xml.html
 */
-public final class XmlParser
-{
-    private static final String LOG_TAG ="CloudService.XmlParser";
+public final class XmlParser {
+    private static final String LOG_TAG = "CloudService.XmlParser";
     private static final String null_string = null;
 
     public static ArrayList<Feature> parse(InputStream in) throws XmlPullParserException, IOException {
@@ -35,6 +35,7 @@ public final class XmlParser
             in.close();
         }
     }
+
     /**
     * Parses root elmeent which should be features, skips other tags.
     */
@@ -56,6 +57,7 @@ public final class XmlParser
         }
         return features;
     }
+
     /**
     /* Parses the contents of an entry. If it encounters other elements like name, enabled, visible,uri or tags hands them off
     /* to their respective "read" methods for processing. Otherwise, skips the tag.
@@ -64,61 +66,61 @@ public final class XmlParser
      */
     private static Feature readFeature(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, null_string, "feature");
-        String name="";
-        Boolean enabled=false;
-        Boolean visible=false;
-        String uri="";
-        ArrayList<String> tags =null;
+        String name = "";
+        Boolean enabled = false;
+        Boolean visible = false;
+        String uri = "";
+        ArrayList<String> tags = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String attributeName = parser.getName();
             if (attributeName.equals("name")) {
-                name = readAttributeAsString(parser,"name");
-            }
-            else if (attributeName.equals("enabled")) {
-                enabled = readAttributeAsBool(parser,"enabled");
-            }
-            else if (attributeName.equals("visible")) {
-                visible = readAttributeAsBool(parser,"visible");
-            }
-            else if (attributeName.equals("uri")) {
-                uri = readAttributeAsString(parser,"uri");
-            }
-            else if (attributeName.equals("tags")) {
+                name = readAttributeAsString(parser, "name");
+            } else if (attributeName.equals("enabled")) {
+                enabled = readAttributeAsBool(parser, "enabled");
+            } else if (attributeName.equals("visible")) {
+                visible = readAttributeAsBool(parser, "visible");
+            } else if (attributeName.equals("uri")) {
+                uri = readAttributeAsString(parser, "uri");
+            } else if (attributeName.equals("tags")) {
                 //Todo implement tags
                 SkipElement(parser);
-            }
-            else {
+            } else {
                 SkipElement(parser);
             }
         }
-        return new Feature(name,enabled,visible,uri,null);
+        return new Feature(name, enabled, visible, uri, null);
     }
+
     /**
     /* Read attribut or (tag) as bool
     /* @param parser XmlPullParser object containg the data
     /* @param attr attribute or (tag) to look for.
     /* @return read attribute or (tag)
     */
-    private static Boolean readAttributeAsBool(XmlPullParser parser, String attr) throws IOException, XmlPullParserException {
+    private static Boolean readAttributeAsBool(XmlPullParser parser, String attr)
+            throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null_string, attr);
         Boolean name = readAsBool(parser);
         parser.require(XmlPullParser.END_TAG, null_string, attr);
         return name;
     }
+
     /** Read attribute or (tag) as string
     /* @param parser XmlPullParser object containg the data
     /* @param attr attribute or (tag) to look for.
     /* @return read attribute or (tag)
     */
-    private static String readAttributeAsString(XmlPullParser parser, String attr) throws IOException, XmlPullParserException {
+    private static String readAttributeAsString(XmlPullParser parser, String attr)
+            throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null_string, attr);
         String name = readAsString(parser);
         parser.require(XmlPullParser.END_TAG, null_string, attr);
         return name;
     }
+
     /**
     /* Helper function for readAttributeAsBool
     /* Gets the text from parser.
@@ -131,11 +133,12 @@ public final class XmlParser
             result = parser.getText();
             parser.nextTag();
         }
-        if(result.toLowerCase().equals("true"))
+        if (result.toLowerCase().equals("true"))
             return true;
         else
             return false;
     }
+
     /**
     /* Helper function for readAttributeAsString
     /* Gets the text from parser.
@@ -157,22 +160,23 @@ public final class XmlParser
      * ###########################################################################################
      */
 
-    public static SoftwareManagementURIs ParseSoftwareManagementURIs(InputStream in) throws XmlPullParserException, IOException {
+    public static SoftwareManagementURIs ParseSoftwareManagementURIs(InputStream in)
+            throws XmlPullParserException, IOException {
 
         Log.v(LOG_TAG, "+ ParseSoftwareManagementURIs");
 
-        SoftwareManagementURIs uris = new SoftwareManagementURIs("", "");
+        SoftwareManagementURIs uris = new SoftwareManagementURIs("", "", "");
 
         XmlPullParser parser = Xml.newPullParser();
         parser.setInput(in, null);
 
         int eventType = parser.getEventType();
-        while(eventType != XmlPullParser.END_DOCUMENT) {
-            if(eventType == XmlPullParser.START_DOCUMENT) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_DOCUMENT) {
                 Log.v(LOG_TAG, "Start of Document");
-            } else if(eventType == XmlPullParser.START_TAG) {
+            } else if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
-                if(tag.equals("software_management")) {
+                if (tag.equals("software_management")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     uris = ParseSoftwareManagementElement(parser);
                 } else {
@@ -190,58 +194,58 @@ public final class XmlParser
         return uris;
     }
 
-    private static SoftwareManagementURIs ParseSoftwareManagementElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static SoftwareManagementURIs ParseSoftwareManagementElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
-        if ((eventType != XmlPullParser.START_TAG) ||
-            (!parser.getName().equals("software_management"))) {
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("software_management"))) {
             throw new IllegalStateException();
         }
 
-        SoftwareManagementURIs uris = new SoftwareManagementURIs("", "");
+        SoftwareManagementURIs uris = new SoftwareManagementURIs("", "", "");
 
         int depth = 1;
-        while(depth != 0) {
+        while (depth != 0) {
             eventType = parser.next();
-            if(eventType == XmlPullParser.START_TAG) {
+            if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
-                if(tag.equals("this")) {
+                if (tag.equals("this")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("available_updates")) {
+                } else if (tag.equals("available_updates")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     uris.available_software_assignments = ParseString("available_updates", parser);
-                } else if(tag.equals("available_accessories")) {
+                } else if (tag.equals("available_accessories")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("map_updates")) {
+                } else if (tag.equals("map_updates")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("downloads")) {
+                } else if (tag.equals("downloads")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     uris.downloads = ParseString("downloads", parser);
-                } else if(tag.equals("delete_notification")) {
+                } else if (tag.equals("delete_notification")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("pending_installations")) {
+                } else if (tag.equals("pending_installations")) {
+                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    uris.pending_installations = ParseString("pending_installations", parser);
+                } else if (tag.equals("closed_installations")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("closed_installations")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
-                } else if(tag.equals("Signature")) {
+                } else if (tag.equals("Signature")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
                     Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
-            } else if(eventType == XmlPullParser.END_TAG) {
-                if(parser.getName().equals("software_management")) {
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (parser.getName().equals("software_management")) {
                     depth--;
                 } else {
                     Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
-            } else if(eventType == XmlPullParser.END_DOCUMENT) {
+            } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
@@ -251,7 +255,8 @@ public final class XmlParser
         return uris;
     }
 
-    public static ArrayList<SoftwareAssignment> ParseSoftwareAssignments(InputStream in) throws XmlPullParserException, IOException {
+    public static ArrayList<SoftwareAssignment> ParseSoftwareAssignments(InputStream in)
+            throws XmlPullParserException, IOException {
 
         Log.v(LOG_TAG, "+ ParseSoftwareAssignments");
 
@@ -261,12 +266,12 @@ public final class XmlParser
         parser.setInput(in, null);
 
         int eventType = parser.getEventType();
-        while(eventType != XmlPullParser.END_DOCUMENT) {
-            if(eventType == XmlPullParser.START_DOCUMENT) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_DOCUMENT) {
                 Log.v(LOG_TAG, "Start of Document");
-            } else if(eventType == XmlPullParser.START_TAG) {
+            } else if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
-                if(tag.equals("available_updates")) {
+                if (tag.equals("available_updates")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     list = ParseAvailableUpdatesElement(parser);
                 } else {
@@ -285,40 +290,40 @@ public final class XmlParser
         return list;
     }
 
-    private static ArrayList<SoftwareAssignment> ParseAvailableUpdatesElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static ArrayList<SoftwareAssignment> ParseAvailableUpdatesElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
-        if ((eventType != XmlPullParser.START_TAG) ||
-            (!parser.getName().equals("available_updates"))) {
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("available_updates"))) {
             throw new IllegalStateException();
         }
 
         ArrayList<SoftwareAssignment> list = new ArrayList();
 
         int depth = 1;
-        while(depth != 0) {
+        while (depth != 0) {
             eventType = parser.next();
-            if(eventType == XmlPullParser.START_TAG) {
+            if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
-                if(tag.equals("this")) {
+                if (tag.equals("this")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("software")) {
+                } else if (tag.equals("software")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     list.add(ParseSoftwareElement(parser));
-                } else if(tag.equals("Signature")) {
+                } else if (tag.equals("Signature")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
                     Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
-            } else if(eventType == XmlPullParser.END_TAG) {
-                if(parser.getName().equals("available_updates")) {
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (parser.getName().equals("available_updates")) {
                     depth--;
                 } else {
                     Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
-            } else if(eventType == XmlPullParser.END_DOCUMENT) {
+            } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
@@ -329,69 +334,69 @@ public final class XmlParser
         return list;
     }
 
-    private static SoftwareAssignment ParseSoftwareElement(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static SoftwareAssignment ParseSoftwareElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
-        if ((eventType != XmlPullParser.START_TAG) ||
-            (!parser.getName().equals("software"))) {
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("software"))) {
             throw new IllegalStateException();
         }
         SoftwareAssignment software = new SoftwareAssignment();
 
         int depth = 1;
-        while(depth != 0) {
+        while (depth != 0) {
             eventType = parser.next();
-            if(eventType == XmlPullParser.START_TAG) {
+            if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
-                if(tag.equals("id")) {
+                if (tag.equals("id")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     software.uuid = ParseString(tag, parser);
-                } else if(tag.equals("name")) {
+                } else if (tag.equals("name")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     software.name = ParseString(tag, parser);
-                } else if(tag.equals("icon")) {
+                } else if (tag.equals("icon")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("icon")) {
+                } else if (tag.equals("icon")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("short_description")) {
+                } else if (tag.equals("short_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     software.description = ParseString(tag, parser);
-                } else if(tag.equals("long_description")) {
+                } else if (tag.equals("long_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("size")) {
+                } else if (tag.equals("size")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("software_product_id")) {
+                } else if (tag.equals("software_product_id")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("type")) {
+                } else if (tag.equals("type")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("deliverable_type")) {
+                } else if (tag.equals("deliverable_type")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("installation_type")) {
+                } else if (tag.equals("installation_type")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("estimated_installation_time")) {
+                } else if (tag.equals("estimated_installation_time")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if(tag.equals("ommission_uri")) {
+                } else if (tag.equals("ommission_uri")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
                     Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
-            } else if(eventType == XmlPullParser.END_TAG) {
-                if(parser.getName().equals("software")) {
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (parser.getName().equals("software")) {
                     depth--;
                 } else {
                     Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
-            } else if(eventType == XmlPullParser.END_DOCUMENT) {
+            } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
@@ -403,14 +408,154 @@ public final class XmlParser
 
     /*
      * ###########################################################################################
+     * #                            PARSER FOR PENDING INSTALLATIONS                             #
+     * ###########################################################################################
+     */
+    public static ArrayList<InstallationOrder> ParsePendingInstallations(InputStream in)
+            throws XmlPullParserException, IOException {
+
+        Log.v(LOG_TAG, "+ ParsePendingInstallations");
+
+        ArrayList<InstallationOrder> list = new ArrayList();
+
+        XmlPullParser parser = Xml.newPullParser();
+        parser.setInput(in, null);
+
+        int eventType = parser.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_DOCUMENT) {
+                Log.v(LOG_TAG, "Start of Document");
+            } else if (eventType == XmlPullParser.START_TAG) {
+                String tag = parser.getName();
+                if (tag.equals("pending_installations")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    list = ParsePendingInstallationsElement(parser);
+                } else {
+                    Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    SkipElement(parser);
+                }
+            } else {
+                Log.d(LOG_TAG, "Unknown Element of type: " + eventType);
+            }
+            eventType = parser.next();
+        }
+        Log.v(LOG_TAG, "End of Document");
+
+        Log.v(LOG_TAG, "- ParsePendingInstallations");
+
+        return list;
+    }
+
+    private static ArrayList<InstallationOrder> ParsePendingInstallationsElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        int eventType = parser.getEventType();
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("pending_installations"))) {
+            throw new IllegalStateException();
+        }
+
+        ArrayList<InstallationOrder> list = new ArrayList();
+
+        int depth = 1;
+        while (depth != 0) {
+            eventType = parser.next();
+            if (eventType == XmlPullParser.START_TAG) {
+                String tag = parser.getName();
+                if (tag.equals("this")) {
+                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    SkipElement(parser);
+                } else if (tag.equals("installation_order")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    list.add(ParseInstallationOrderElement(parser));
+                } else if (tag.equals("Signature")) {
+                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    SkipElement(parser);
+                } else {
+                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    SkipElement(parser);
+                }
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (parser.getName().equals("pending_installations")) {
+                    depth--;
+                } else {
+                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                }
+            } else if (eventType == XmlPullParser.END_DOCUMENT) {
+                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                throw new IllegalStateException();
+            } else {
+                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+            }
+        }
+
+        return list;
+    }
+
+    private static InstallationOrder ParseInstallationOrderElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        int eventType = parser.getEventType();
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("installation_order"))) {
+            throw new IllegalStateException();
+        }
+        InstallationOrder installationOrder = new InstallationOrder();
+
+        int depth = 1;
+        while (depth != 0) {
+            eventType = parser.next();
+            if (eventType == XmlPullParser.START_TAG) {
+                String tag = parser.getName();
+                if (tag.equals("id")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.uuid = ParseString(tag, parser);
+                } else if (tag.equals("status")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.status = ParseString(tag, parser);
+                } else if (tag.equals("created_by")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.createdBy = ParseString(tag, parser);
+                } else if (tag.equals("created")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.created = ParseString(tag, parser);
+                } else if (tag.equals("downloads_uri")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.downloadsUri = ParseString(tag, parser);
+                } else if (tag.equals("install_notifications_uri")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.installNotificationsUri = ParseString(tag, parser);
+                } else if (tag.equals("installation_report_uri")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.installationReportUri = ParseString(tag, parser);
+                } else if (tag.equals("software")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    installationOrder.software = ParseSoftwareElement(parser);
+                }   else {
+                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    SkipElement(parser);
+                }
+            } else if (eventType == XmlPullParser.END_TAG) {
+                if (parser.getName().equals("installation_order")) {
+                    depth--;
+                } else {
+                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                }
+            } else if (eventType == XmlPullParser.END_DOCUMENT) {
+                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                throw new IllegalStateException();
+            } else {
+                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+            }
+        }
+        return installationOrder;
+    }
+
+    /*
+     * ###########################################################################################
      * #                                         AUXILIARY                                       #
      * ###########################################################################################
      */
 
     private static String ParseString(String tag, XmlPullParser parser) throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
-        if ((eventType != XmlPullParser.START_TAG) ||
-            (!parser.getName().equals(tag))) {
+        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals(tag))) {
 
             throw new IllegalStateException();
         }
@@ -421,7 +566,7 @@ public final class XmlParser
             eventType = parser.next();
             if (eventType == XmlPullParser.START_TAG) {
                 depth++;
-            } else if(eventType == XmlPullParser.END_TAG) {
+            } else if (eventType == XmlPullParser.END_TAG) {
                 depth--;
             } else if (eventType == XmlPullParser.TEXT) {
                 string = parser.getText();

@@ -195,7 +195,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void commissionAssignment(String uuid) {
         try {
-            softwareUpdateManager.CommissionAssignment(uuid);
+            softwareUpdateManager.CommissionAssignment(callback, uuid);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
         }

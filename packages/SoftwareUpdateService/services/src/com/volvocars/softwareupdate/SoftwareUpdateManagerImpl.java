@@ -9,6 +9,7 @@ import android.util.Log;
 
 import android.os.RemoteException;
 
+import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.softwareupdate.ISoftwareUpdateManager;
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
@@ -30,7 +31,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         this.service = service;
     }
 
-
     /**
      * Updates the state for all the clients. Remove all clients that doesn't respond.
      * @param state State to be sent to all registered clients
@@ -40,7 +40,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         for(ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateState(state);
-            } catch(RemoteException e) {
+            } catch (RemoteException e) {
                 clients.remove(c);
             }
         }
@@ -51,10 +51,10 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      * @param software_list The list with software that all clients should be updated with.
      */
     public void UpdateSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
-        for(ISoftwareUpdateManagerCallback c : clients) {
+        for (ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateSoftwareAssignmentList(software_list);
-            } catch(RemoteException e) {
+            } catch (RemoteException e) {
                 clients.remove(c);
             }
         }
@@ -66,10 +66,20 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      * @param sate The new state of the Software Assignment
      */
     public void UpdateSoftwareAssignmentState(String uuid, int state) {
-        for(ISoftwareUpdateManagerCallback c : clients) {
+        for (ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateSoftwareState(uuid, state);
-            } catch(RemoteException e) {
+            } catch (RemoteException e) {
+                clients.remove(c);
+            }
+        }
+    }
+
+    public void UpdatePendingInstallations(List<InstallationOrder> installation_order_list) {
+        for (ISoftwareUpdateManagerCallback c : clients) {
+            try {
+                c.UpdatePendingInstallations(installation_order_list);
+            } catch (RemoteException e) {
                 clients.remove(c);
             }
         }
@@ -81,7 +91,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         clients.add(callback);
         try {
             callback.UpdateState(service.GetState());
-        } catch(RemoteException e) {
+        } catch (RemoteException e) {
             clients.remove(callback);
         }
     }
@@ -92,8 +102,8 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void CommissionAssignment(String uuid) {
-        service.CommissionAssignment(uuid);
+    public void CommissionAssignment(ISoftwareUpdateManagerCallback callback, String uuid) {
+        service.CommissionAssignment(callback, uuid);
     }
 
     @Override

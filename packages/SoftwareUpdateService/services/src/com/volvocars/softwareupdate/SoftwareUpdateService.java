@@ -22,6 +22,7 @@ import java.util.List;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
+import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareManagementApi;
@@ -49,6 +50,37 @@ public class SoftwareUpdateService extends Service {
 
             state = 1;
             software_update_manager.UpdateState(state);
+
+            ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
+
+                @Override
+                public void CommissionStatus(int code) {
+                }
+
+                @Override
+                public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
+                    Log.v(LOG_TAG, "SoftwareAssignmentList callback when SoftwareUpdateService started, what to do with this list?");
+                }
+
+                @Override
+                public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
+                    Log.v(LOG_TAG, "PendingInstallations callback when SoftwareUpdateService started, what to do with this list?");
+                }
+
+                @Override
+                public void DownloadInfo(String uuid, DownloadInfo info) {
+                    //TODO: implement
+                }
+            };
+
+            if (swapi != null) {
+                try {
+                    swapi.GetSoftwareAssigmentList(swapi_callback);
+                    swapi.GetPendingInstallations(swapi_callback);
+                } catch (RemoteException e) {
+                    Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
+                }
+            }
 
         }
 
@@ -101,21 +133,28 @@ public class SoftwareUpdateService extends Service {
         /**
          * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
          */
-        ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
+        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback);
+        if (swapi != null) {
+            try {
+                swapi.GetSoftwareAssigmentList(swapiCallback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
+            }
+        }
+    }
 
+    public void CommissionAssignment(ISoftwareUpdateManagerCallback callback, String uuid) {
+        /**
+         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
+         */
+        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback) {
             @Override
             public void CommissionStatus(int code) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "GetSoftwareAssignmentList::CommissionStatus: Why am I called? o_O Please stop.");
-            }
-
-            @Override
-            public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-                if (code == 200) {
+                if (200 == code) {
                     try {
-                        callback.UpdateSoftwareAssignmentList(software_list);
+                        callback.UpdateSoftwareState(uuid, 0); // Dont know what state to set, and state is not defined..
                     } catch (RemoteException e) {
-                        Log.w(LOG_TAG, "Cannot update Software Assignment List. Client is stupid...");
+                        Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
                     }
                 } else {
                     try {
@@ -125,66 +164,11 @@ public class SoftwareUpdateService extends Service {
                     }
                 }
             }
-
-            @Override
-            public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "GetSoftwareAssignmentList::PendingInstallations: Why am I called? o_O Please stop.");
-
-            }
-
-            @Override
-            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
-                //TODO: implement
-            }
         };
 
         if (swapi != null) {
             try {
-                swapi.GetSoftwareAssigmentList(swapi_callback);
-            } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
-            }
-        }
-    }
-
-    public void CommissionAssignment(String uuid) {
-        /**
-         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
-         */
-        ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
-
-            @Override
-            public void CommissionStatus(int code) {
-                if (code == 200) {
-                    software_update_manager.UpdateSoftwareAssignmentState(uuid, 0); // Dont know what state to set, and state is not defined..
-                } else {
-                    Log.w(LOG_TAG, "Commissioning of Sofware " + uuid + " failed. I dont know what to do?");
-                }
-            }
-
-            @Override
-            public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "CommissionAssignment::SoftwareAssignmentList: Why am I called? o_O Please stop.");
-            }
-
-            @Override
-            public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "CommissionAssignment::PendingInstallations: Why am I called? o_O Please stop.");
-
-            }
-
-            @Override
-            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
-                //TODO: implement
-            }
-        };
-
-        if (swapi != null) {
-            try {
-                swapi.CommissionSoftwareAssignment(uuid, swapi_callback);
+                swapi.CommissionSoftwareAssignment(uuid, swapiCallback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "Cannot commission software assignment.. No contact with SWAPI.. I'm sad...");
             }
@@ -197,30 +181,15 @@ public class SoftwareUpdateService extends Service {
         /**
         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
         */
-        ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
+        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback);
 
-            @Override
-            public void CommissionStatus(int code) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "GetPendingInstallations::CommissionStatus: Why am I called? o_O Please stop.");
+        if (swapi != null) {
+            try {
+                Log.v(LOG_TAG, "GetPendingInstallations");
+                swapi.GetPendingInstallations(swapiCallback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot fetch Pending Installations... No contact with SWAPI.. I'm sad...");
             }
-
-            @Override
-            public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-                // Shouldnt be called...
-                Log.w(LOG_TAG, "GetPendingInstallations::SoftwareAssignmentList: Why am I called? o_O Please stop.");
-            }
-
-            @Override
-            public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-                //TODO: implement
-
-            }
-
-            @Override
-            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
-                //TODO: implement
-            }
-        };
+        }
     }
 }

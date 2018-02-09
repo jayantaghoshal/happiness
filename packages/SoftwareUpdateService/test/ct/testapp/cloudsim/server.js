@@ -27,6 +27,8 @@ router.render = function (req, res) {
     tag = "available_updates"
   } else if (req._parsedUrl.pathname == '/commission') {
     tag = "commission"
+  } else if(req._parsedUrl.pathname == '/pendingInstallations') {
+    tag = "pending_installations"
   } else {
     return res.send(data)
   }
@@ -38,14 +40,42 @@ server.post('/availableUpdates', function (req, res, next) {
   return res.status(405).send({ error: "Nope, cant do that." })
 })
 
+
+var counter = -1
 server.post('/commission', function (req, res, next) {
+
   var t = db.get('availableUpdates').get('software')
 
   for (i = 0; i < t.value().length; i++) {
     if (t.value()[i]['id'] == req.body.id) {
       var tmp = t.value()[i]
-      db.get('downloads').get('software').push(tmp).write()
+
+      counter++
+
+      var installation_order_data = {}
+      installation_order_data['id'] = counter
+      installation_order_data['status'] = "PENDING"
+      installation_order_data['created_by'] = "1FTKR1EDXBPB10452"
+      installation_order_data['created'] = "2002-05-30T09:00:00"
+      installation_order_data['downloads_uri'] = "/downloads/" //+ counter
+      installation_order_data['install_notifications_uri'] = "installnotifications"
+      installation_order_data['installation_report_uri'] = "/installationreport"
+      installation_order_data['software'] = [tmp]
+      var installation_order = {}
+      installation_order['installation_order'] = installation_order_data
+      db.get('pendingInstallations').get('installation_order').push(installation_order_data).write();
       db.get('availableUpdates').get('software').remove(tmp).write()
+
+
+      var d = db.get('preDownloadInfo')
+      for (j = 0; j < d.value().length; j++) {
+        if (d.value()[j]['id'] == req.body.id) {
+          var tmpObj = Object.assign({}, d.value()[j])
+          tmpObj['id'] = counter
+          db.get('downloads').push(tmpObj).write()
+          break
+        }
+      }
       break
     }
   }
@@ -53,7 +83,6 @@ server.post('/commission', function (req, res, next) {
   req.method = 'GET'
   next()
 })
-
 
 server.use(router)
 server.listen(3000, function () {

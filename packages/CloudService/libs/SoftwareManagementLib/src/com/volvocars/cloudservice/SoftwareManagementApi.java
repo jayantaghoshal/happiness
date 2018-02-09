@@ -64,7 +64,7 @@ public class SoftwareManagementApi implements ServiceConnection {
      * @param callback
      */
     public void GetSoftwareAssigmentList(ISoftwareManagementApiCallback callback) throws RemoteException {
-        if(software_management!=null && service_bound) {
+        if (software_management != null && service_bound) {
             software_management.GetSoftwareAssigmentList(callback);
         }
     }
@@ -73,10 +73,21 @@ public class SoftwareManagementApi implements ServiceConnection {
      * Issue a commission of an SoftwareAssignment.
      * @param id The id of the assignment to fetch.
      */
-     public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
-        if(software_management!=null && service_bound) {
+    public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
+        if (software_management != null && service_bound) {
             software_management.CommissionSoftwareAssignment(uuid, callback);
         }
 
-     }
+    }
+
+    /**
+    * Get a list of pending installations (installation orders)
+    * @param callback
+    */
+    public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.GetPendingInstallations(callback);
+        }
+    }
 }

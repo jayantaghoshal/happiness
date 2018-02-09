@@ -19,7 +19,7 @@ oneway interface ISoftwareUpdateManager {
     /**
      * Request to commission a SoftwareAssignment
      */
-    void CommissionAssignment(in String uuid);
+    void CommissionAssignment(in ISoftwareUpdateManagerCallback callback, in String uuid);
 
     /**
     * Get a list of pending installations (installation orders)

@@ -17,6 +17,7 @@ LOCAL_STATIC_JAVA_LIBRARIES += \
     vendor.volvocars.hardware.cloud-V1.0-java \
     com.volvocars.cloudservice.IFoundationServicesApi \
     com.volvocars.cloudservice.ISoftwareManagementApi \
+    carconfigapi
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 64
