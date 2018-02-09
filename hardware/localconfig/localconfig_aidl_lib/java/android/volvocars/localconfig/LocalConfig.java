@@ -26,13 +26,7 @@ import com.android.internal.annotations.GuardedBy;
  */
 public final class LocalConfig {
 
-    /** Service name for Local Config */
     /**
-     * @hide
-     */
-    @SystemApi
-    public static final String LCFG_SERVICE = "localconfig";
-       /**
      * Permission necessary to access Local Config APIs.
      * @hide
      */
@@ -246,7 +240,7 @@ public final class LocalConfig {
      * Get the Integer value corresponds to inputted Local configuration key string
      * @param keystring Key string
      * @return int Integer value corresponds to Local configuration key.
-     * @throws LcfgNotConnectedException
+     * @throws LcfgNotConnectedException RuntimeException
      */
     public int getLocalConfigInteger(String keystring) throws LcfgNotConnectedException, RuntimeException {
 
@@ -256,10 +250,10 @@ public final class LocalConfig {
             try {
 
                 localconfigvalue = service.getLocalConfigInteger(keystring);
-                return localconfigvalue;
 
             } catch (RemoteException e) {
                  handleRemoteException(e);
+                 throw new LcfgNotConnectedException("Local Config Service Crashed !");
             }
         }
         return localconfigvalue;
@@ -268,16 +262,17 @@ public final class LocalConfig {
      * Get the String value corresponds to inputted Local configuration key string
      * @param keystring Key string
      * @return String value corresponds to Local configuration key.
-     * @throws LcfgNotConnectedException
+     * @throws LcfgNotConnectedException RuntimeException
      */
     public String getLocalConfigString(String keystring) throws LcfgNotConnectedException, RuntimeException {
-        String localconfigvalue="";
+        String localconfigvalue = "";
         ILocalConfig service = getILocalConfigOrThrow();
         synchronized (this) {
             try {
                 localconfigvalue = service.getLocalConfigString(keystring);
             } catch (RemoteException e) {
                  handleRemoteException(e);
+                 throw new LcfgNotConnectedException("Local Config Service Crashed !");
             }
         }
         return localconfigvalue;
@@ -286,7 +281,7 @@ public final class LocalConfig {
      * Get the boolean value corresponds to inputted Local configuration key string
      * @param keystring Key string
      * @return boolean value corresponds to Local configuration key.
-     * @throws LcfgNotConnectedException
+     * @throws LcfgNotConnectedException RuntimeException
      */
     public boolean getLocalConfigBoolean(String keystring) throws LcfgNotConnectedException, RuntimeException {
         boolean localconfigvalue = false;
@@ -296,6 +291,7 @@ public final class LocalConfig {
                 localconfigvalue = service.getLocalConfigBoolean(keystring);
             } catch (RemoteException e) {
                  handleRemoteException(e);
+                 throw new LcfgNotConnectedException("Local Config Service Crashed !");
             }
         }
         return localconfigvalue;
@@ -304,7 +300,7 @@ public final class LocalConfig {
      * Get the boolean value corresponds to inputted Local configuration key string
      * @param keystring Key string
      * @return boolean value corresponds to Local configuration key.
-     * @throws LcfgNotConnectedException
+     * @throws LcfgNotConnectedException RuntimeException
      */
     public double getLocalConfigDouble(String keystring) throws LcfgNotConnectedException, RuntimeException {
         double localconfigvalue = 0;
@@ -314,6 +310,7 @@ public final class LocalConfig {
                  localconfigvalue = service.getLocalConfigDouble(keystring);
             } catch (RemoteException e) {
                  handleRemoteException(e);
+                 throw new LcfgNotConnectedException("Local Config Service Crashed !");
             }
         }
         return localconfigvalue;
@@ -339,9 +336,9 @@ public final class LocalConfig {
         }
     }
 
-    private synchronized ILocalConfig getILocalConfigOrThrow() throws IllegalStateException {
+    private synchronized ILocalConfig getILocalConfigOrThrow() throws LcfgNotConnectedException {
         if (mService == null) {
-            throw new IllegalStateException("not connected");
+            throw new LcfgNotConnectedException(" Local Config Service not running !");
         }
         return mService;
     }
