@@ -120,10 +120,10 @@ void vcc::LocalConfigReader::LoadFile(const std::string &file_path, Json::Value 
     }
 }
 
-vcc::LocalConfigFileReader::LocalConfigFileReader(std::string file_path)
+vcc::LocalConfigFileReader::LocalConfigFileReader(const std::string &file_path)
     : base([file_path](Json::Value *value) { LoadFile(file_path, value); }) {}
 
-vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(std::string json)
+vcc::LocalConfigStaticContentReader::LocalConfigStaticContentReader(const std::string &json)
     : base([json](Json::Value *value) {
           Json::Reader reader;
           if (!reader.parse(json, *value)) {

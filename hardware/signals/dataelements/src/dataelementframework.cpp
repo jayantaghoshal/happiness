@@ -94,7 +94,7 @@ void DataElementFramework::reset() {
     while (iter != m_dataElementListeners.end()) {
         const std::list<INewDataElement*>& subs = iter->second.second;
         DataElemValueBase& devb = *iter->second.first;
-        devb._errorCode = (int)SignalErrorCode::NEVER_RECEIVED;
+        devb._errorCode = static_cast<int>(SignalErrorCode::NEVER_RECEIVED);
         devb._state = DataElemValueBase::State::ERROR;
         for (auto ptr : subs) {  // update all values
             ptr->newDataElementValue(devb);

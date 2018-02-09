@@ -47,7 +47,7 @@ bool initializeInjectInternal() {
 #include "vsm/vsm_inject_instances_cpp.h"
     return true;
 }
-}
+}  // namespace
 
 namespace vipcomm {
 

@@ -28,9 +28,8 @@ void vcc::LocalConfigFileReaderAndroidIhuBehavior::LoadWithFallback(const std::s
  * @param fallback_path Engineering, /vendor/ path for default fallback file
  * @param environment_override, name of the environment variable used for overriding the path for test purposes
  */
-vcc::LocalConfigFileReaderAndroidIhuBehavior::LocalConfigFileReaderAndroidIhuBehavior(std::string production_path,
-                                                                                      std::string fallback_path,
-                                                                                      const char* environment_override)
+vcc::LocalConfigFileReaderAndroidIhuBehavior::LocalConfigFileReaderAndroidIhuBehavior(
+        const std::string& production_path, const std::string& fallback_path, const char* environment_override)
     : base([production_path, fallback_path, environment_override](Json::Value* value) {
 
           const char* const environment_vcc_lcfg_path = getenv(environment_override);

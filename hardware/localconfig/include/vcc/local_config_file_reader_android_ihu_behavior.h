@@ -12,7 +12,7 @@ class LocalConfigFileReaderAndroidIhuBehavior : public LocalConfigReader {
     using base = LocalConfigReader;
 
   public:
-    LocalConfigFileReaderAndroidIhuBehavior(std::string production_path, std::string fallback_path,
+    LocalConfigFileReaderAndroidIhuBehavior(const std::string& production_path, const std::string& fallback_path,
                                             const char* environment_override);
 
   private:

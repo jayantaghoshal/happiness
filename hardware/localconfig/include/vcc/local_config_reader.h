@@ -48,13 +48,13 @@ class LocalConfigFileReader : public LocalConfigReader {
     using base = LocalConfigReader;
 
   public:
-    explicit LocalConfigFileReader(std::string file_path);
+    explicit LocalConfigFileReader(const std::string &file_path);
 };
 
 class LocalConfigStaticContentReader : public LocalConfigReader {
     using base = LocalConfigReader;
 
   public:
-    explicit LocalConfigStaticContentReader(std::string json);
+    explicit LocalConfigStaticContentReader(const std::string &json);
 };
 }  // namespace vcc

@@ -17,7 +17,7 @@ class DataElementCommBus_standalone : public IDataElementCommBus {
             std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) override;
     void addName(autosar::Dir dir, const std::string& name) override;
     void send(const std::string& name, const std::string& payload, autosar::Dir dir) override;
-    virtual ~DataElementCommBus_standalone() {}
+    virtual ~DataElementCommBus_standalone() = default;
 
   private:
     std::function<void(const std::string& name, const std::string& payload)> _callback;

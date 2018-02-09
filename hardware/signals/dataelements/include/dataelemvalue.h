@@ -65,7 +65,7 @@ class DataElemValueBase {
      * \brief timestamp Creation timestamp of signal.
      * \return timestamp in milliseconds since Jan 1, 1970 UTC (https://en.wikipedia.org/wiki/Unix_time)
      */
-    long long timestamp() const;
+    int64_t timestamp() const;
 
     /*!
      * \brief state Signal state
@@ -83,12 +83,12 @@ class DataElemValueBase {
   private:
 #endif
     // Signal content and state etc
-    long long _timestamp;
+    int64_t _timestamp;
     State _state;
     int _errorCode;
 
   protected:
-    DataElemValueBase(long long timestamp, State state, int errorCode);
+    DataElemValueBase(int64_t timestamp, State state, int errorCode);
 };
 
 // ====================================================
@@ -118,10 +118,10 @@ class DataElemValue : public DataElemValueBase {
   public:
     using value_type = typename S::data_elem_type;
 
-    static DataElemValue OK(const value_type& value, long long timestamp = -1) {
+    static DataElemValue OK(const value_type& value, int64_t timestamp = -1) {
         return DataElemValue(value, timestamp, State::OK, 0);
     }
-    static DataElemValue ERROR(int errorCode, long long timestamp = -1) {
+    static DataElemValue ERROR(int errorCode, int64_t timestamp = -1) {
         return DataElemValue(value_type(), timestamp, State::ERROR, errorCode);
     }
     virtual ~DataElemValue() {}
@@ -152,7 +152,7 @@ class DataElemValue : public DataElemValueBase {
 
   private:
     DataElemValue() {}
-    DataElemValue(const value_type& value, long long timestamp, State state, int errorCode)
+    DataElemValue(const value_type& value, int64_t timestamp, State state, int errorCode)
         : DataElemValueBase(timestamp, state, errorCode), m_value(value) {}
 
     // Signal content

@@ -24,10 +24,10 @@ std::string GetPropertyName(int32_t prop) {
     }
 }
 
-void SetProperty(vhal20::VehiclePropValue& property_value, const std::string& value,
+void SetProperty(vhal20::VehiclePropValue* property_value, const std::string& value,
                  ::android::sp<vhal20::IVehicle> service) {
     const auto property_type =
-            static_cast<vhal20::VehiclePropertyType>(property_value.prop & vhal20::VehiclePropertyType::MASK);
+            static_cast<vhal20::VehiclePropertyType>(property_value->prop & vhal20::VehiclePropertyType::MASK);
 
     printf("Prop type: %s\n", vhal20::toString(property_type).c_str());
 
@@ -42,15 +42,15 @@ void SetProperty(vhal20::VehiclePropValue& property_value, const std::string& va
     } else if (property_type == vhal20::VehiclePropertyType::BOOLEAN ||
                property_type == vhal20::VehiclePropertyType::INT32) {
         const auto int32_value = std::stoi(value);
-        property_value.value.int32Values = ::android::hardware::hidl_vec<int32_t>{int32_value};
+        property_value->value.int32Values = ::android::hardware::hidl_vec<int32_t>{int32_value};
 
     } else if (property_type == vhal20::VehiclePropertyType::FLOAT) {
         const auto float_value = std::stof(std::string(value));
-        property_value.value.floatValues = ::android::hardware::hidl_vec<float>{float_value};
+        property_value->value.floatValues = ::android::hardware::hidl_vec<float>{float_value};
 
     } else if (property_type == vhal20::VehiclePropertyType::INT64) {
         const auto int64_value = std::stol(std::string(value));
-        property_value.value.int64Values = ::android::hardware::hidl_vec<int64_t>{int64_value};
+        property_value->value.int64Values = ::android::hardware::hidl_vec<int64_t>{int64_value};
 
     } else if (property_type == vhal20::VehiclePropertyType::INT32_VEC) {
         printf("Not implemented.\n");
@@ -86,7 +86,7 @@ void SetProperty(vhal20::VehiclePropValue& property_value, const std::string& va
 
         // Was never able to get the commented code below to work, hence the "Not implemented" for this
         // VehiclePropertyType
-        // TODO make the below work (data-> android::hardware::hidl_vec<unsigned char>)
+        // TODO (daniel.floodh@volvocars.com) make the below work (data-> android::hardware::hidl_vec<unsigned char>)
         // property_value.value.bytes = value.c_str();
 
     } else if (property_type == vhal20::VehiclePropertyType::FLOAT_VEC) {
@@ -104,7 +104,7 @@ void SetProperty(vhal20::VehiclePropValue& property_value, const std::string& va
         return;
     }
 
-    service->set(property_value);
+    service->set(*property_value);
     printf("Value set");
 }
 
@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
                         printf("Prop id: %d\n", property_config.prop);
                         printf("area id: %d\n", property_value.areaId);
 
-                        SetProperty(property_value, value_for_property, service);
+                        SetProperty(&property_value, value_for_property, service);
                     }
                 }
                 if (!match_found) {
