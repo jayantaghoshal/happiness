@@ -32,11 +32,7 @@ test_plan_gate = [
 ]
 
 test_plan_hourly = test_plan_gate + [
-    Disabled(VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
-             reason="Viewclients vc.dump() doesn't work when the 'you are in fullscreen'-popup is stealing focus, HMI to fix",
-             jira_issue="",
-             deadline="2018-01-31"
-    ),
+    VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
     Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
              reason="MR1 not yet on master",
              jira_issue="",
