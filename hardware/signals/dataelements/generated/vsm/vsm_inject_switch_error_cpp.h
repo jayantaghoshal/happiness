@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
     case SignalGroup|ComConf_ComSignalGroup_igADataRawSafe_mrx:
@@ -21,6 +21,10 @@
 
     case ComConf_ComSignal_isAccSts_mrx:
         AccSts_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isActrPosnFrnReqForOsaAndRecirc_mrx:
+        ActrPosnFrnReqForOsaAndRecirc_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isActvOfHorn_mrx:
@@ -47,6 +51,10 @@
         AmbTRaw_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isAsyFctDeactvnWarn_mrx:
+        AsyFctDeactvnWarn_de->error(errorCode);
+        break;
+
     case SignalGroup|ComConf_ComSignalGroup_igAsyLaneChg_mrx:
         AsyLaneChg_de->error(errorCode);
         break;
@@ -55,8 +63,32 @@
         AsySteerApplyRqrd_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isAsySteerFctDeactvdWarn_mrx:
+        AsySteerFctDeactvdWarn_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isAudMsgReq_mrx:
         AudMsgReq_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igAutnmsPrkgActvScenario_mrx:
+        AutnmsPrkgActvScenario_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igAutnmsPrkgAvlScenario_mrx:
+        AutnmsPrkgAvlScenario_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isAutnmsPrkgEnaResu_mrx:
+        AutnmsPrkgEnaResu_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isAutnmsPrkgProgs_mrx:
+        AutnmsPrkgProgs_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isAvlStsForLatAutDrv_mrx:
+        AvlStsForLatAutDrv_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isBackCntrForMissCom_mrx:
@@ -247,8 +279,16 @@
         CnclWarnLgtForAutDrv_de->error(errorCode);
         break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igCnsPrm_mrx:
+        CnsPrm_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isComLostExtrSound_mrx:
         ComLostExtrSound_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isConSftyDataSharingSts_mrx:
+        ConSftyDataSharingSts_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igConSftyWarn_mrx:
@@ -287,12 +327,20 @@
         CtraOn1_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isDataDistbnReqForEgyPred_mrx:
+        DataDistbnReqForEgyPred_de->error(errorCode);
+        break;
+
     case SignalGroup|ComConf_ComSignalGroup_igDataSpclDMSM_mrx:
         DataSpclDMSM_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isDayToSrv_mrx:
         DayToSrv_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isDestSrcAndCfmRqrd_mrx:
+        DestSrcAndCfmRqrd_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isDiagcCCSM_mrx:
@@ -371,6 +419,10 @@
         DrvrDesDir_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isDrvrHmiSpdLimAdpnSts_mrx:
+        DrvrHmiSpdLimAdpnSts_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isDrvrMassgRunng_mrx:
         DrvrMassgRunng_de->error(errorCode);
         break;
@@ -401,6 +453,14 @@
 
     case ComConf_ComSignal_isDrvrWLoadLvl_mrx:
         DrvrWLoadLvl_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isDstEstimdToEmptyForDrvgElec_mrx:
+        DstEstimdToEmptyForDrvgElec_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isDstEstimdToEmptyForDrvgElecEco_mrx:
+        DstEstimdToEmptyForDrvgElecEco_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isDstNotifSts_mrx:
@@ -435,8 +495,16 @@
         DstTrvldMst2_de->error(errorCode);
         break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igEgyCostForRoute_mrx:
+        EgyCostForRoute_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isEmgyAsscSts_mrx:
         EmgyAsscSts_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isEmgyAsscStsConnGen2_mrx:
+        EmgyAsscStsConnGen2_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isEmgyVehWarnSts_mrx:
@@ -579,6 +647,10 @@
         HudSts_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isHvBattSmtActv_mrx:
+        HvBattSmtActv_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isHvacAirMFlowEstimd_mrx:
         HvacAirMFlowEstimd_de->error(errorCode);
         break;
@@ -667,6 +739,10 @@
         LiPassFltIndcrTurn_de->error(errorCode);
         break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igListOfNodAv_mrx:
+        ListOfNodAv_de->error(errorCode);
+        break;
+
     case SignalGroup|ComConf_ComSignalGroup_igLockgCenSts_mrx:
         LockgCenSts_de->error(errorCode);
         break;
@@ -705,6 +781,14 @@
 
     case ComConf_ComSignal_isMstCfgIDBackboneFR_mrx:
         MstCfgIDBackboneFR_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igNFSDataFront_mrx:
+        NFSDataFront_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igNFSDataRear_mrx:
+        NFSDataRear_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igNetCtrlrActvt_mrx:
@@ -783,6 +867,18 @@
         PreClngNotif_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isPrkgAssiActvSts_mrx:
+        PrkgAssiActvSts_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igPrkgAssiAudWarnFront_mrx:
+        PrkgAssiAudWarnFront_de->error(errorCode);
+        break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igPrkgAssiAudWarnRear_mrx:
+        PrkgAssiAudWarnRear_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isPrkgAssiFailr_mrx:
         PrkgAssiFailr_de->error(errorCode);
         break;
@@ -821,6 +917,10 @@
 
     case ComConf_ComSignal_isProfPenSts1_mrx:
         ProfPenSts1_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isPrpsnDrvMod_mrx:
+        PrpsnDrvMod_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isPrpsnHvBattUsgModAct_mrx:
@@ -895,6 +995,22 @@
         ReAxleWarn_de->error(errorCode);
         break;
 
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdBattSaveCmd_mrx:
+        RlyPwrDistbnCmd1WdBattSaveCmd_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyCmd_mrx:
+        RlyPwrDistbnCmd1WdIgnRlyCmd_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyExtCmd_mrx:
+        RlyPwrDistbnCmd1WdIgnRlyExtCmd_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdPreBattSaveCmd_mrx:
+        RlyPwrDistbnCmd1WdPreBattSaveCmd_de->error(errorCode);
+        break;
+
     case ComConf_ComSignal_isRmnLockgPrsnlReq_mrx:
         RmnLockgPrsnlReq_de->error(errorCode);
         break;
@@ -963,16 +1079,16 @@
         SeatVentnAutCdn_de->error(errorCode);
         break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx:
-        SftyCchAccActvnSts_de->error(errorCode);
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchAccSts_mrx:
+        SftyCchAccSts_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchDrvgCycIdx_mrx:
         SftyCchDrvgCycIdx_de->error(errorCode);
         break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx:
-        SftyCchLaneKeepAidActvnSts_de->error(errorCode);
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchLaneKeepAidSts_mrx:
+        SftyCchLaneKeepAidSts_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igSftyCchLongTermIdx_mrx:
@@ -983,8 +1099,8 @@
         SftyCchMidTermIdx_de->error(errorCode);
         break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx:
-        SftyCchPilotAssiActvnSts_de->error(errorCode);
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchPilotAssiSts_mrx:
+        SftyCchPilotAssiSts_de->error(errorCode);
         break;
 
     case ComConf_ComSignal_isSftyCchPrimFbAftDrvg_mrx:
@@ -1101,6 +1217,10 @@
 
     case ComConf_ComSignal_isTelmSts_mrx:
         TelmSts_de->error(errorCode);
+        break;
+
+    case ComConf_ComSignal_isTelmStsConnGen2_mrx:
+        TelmStsConnGen2_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igTiAndDateIndcn_mrx:

@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-// databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Com.arxml
+// databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Com.arxml
 #ifndef COM_CRC
-#define COM_CRC 14168
+#define COM_CRC 59546
 #endif

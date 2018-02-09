@@ -108,6 +108,18 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t *msg_data, cons
             ALOGI("SWC CRC, expected %d, received  %d", mySwcCrc, swcCrc);
             ALOGI("RTE type CRC, expected %d , received = %d", myRteTypeCrc, rteTypeCrc);
             ALOGI("COM CFG CRC, expected %d received %d", myComCfgCrc, comCfgCrc);
+
+            // HACK: eventhough version check failed we do this now!!!
+            // Send a "send all" control message to the VIP to request all
+            // Flexray and LIN signals received by the VIP so far
+            ALOGW("Sending send_all anyhow!!!");
+            uint8_t avmpHeader[avmp::avmpHeaderSize];
+            Message_Send_T message;
+            avmpHeader[0] = avmp::sendAllMsgId;
+            avmpHeader[1] = avmp::controlMsgByteMask;
+            message.data_ptr = avmpHeader;
+            message.data_size = avmp::avmpHeaderSize;
+            messageSend(&message);
         }
     } else {
         ALOGW("Unknown AVMP control message with ID %d was discarded", ctrlMsgId);

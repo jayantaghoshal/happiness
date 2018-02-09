@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 #ifndef _DATAELEMENTS_H
 #define _DATAELEMENTS_H
@@ -118,6 +118,22 @@ struct AccAutResuWarnReq_info : InTag, public DataElemInfo {
  */
 struct AccSts_info : InTag, public DataElemInfo {
     using data_elem_type = AccSts1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal ActrPosnFrnReqForOsaAndRecirc
+ */
+struct ActrPosnFrnReqForOsaAndRecirc_info : InTag, public DataElemInfo {
+    using data_elem_type = double; /*!<Unit: %,  Range:0->100, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
 
     static const char* Name();
     static const char* TypeName();
@@ -269,6 +285,22 @@ struct ActvnOfSwtIllmnDrvMod_info : OutTag, public DataElemInfo {
  */
 struct ActvnOfSwtIllmnForSeatHeatrRe_info : OutTag, public DataElemInfo {
     using data_elem_type = bool;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal ActvtAutnmsPrkgCtrl
+ */
+struct ActvtAutnmsPrkgCtrl_info : OutTag, public DataElemInfo {
+    using data_elem_type = ActvtAutnmsPrkgCtrl;
 
     static const char* Name();
     static const char* TypeName();
@@ -434,6 +466,23 @@ struct AntithftRednReq_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal AsyFctDeactvnWarn
+ * Imminent function deactivation warning. Warning intensity level in percentage.
+ */
+struct AsyFctDeactvnWarn_info : InTag, public DataElemInfo {
+    using data_elem_type = uint8_t; /*!<Unit: %,  Range:0->100*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal AsyLaneChg
  * Lane change assist intention
  */
@@ -468,6 +517,23 @@ struct AsySteerApplyRqrd_info : InTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal AsySteerFctDeactvdWarn
+ * Active safety steering functions deactivated due to hands off detected.
+ */
+struct AsySteerFctDeactvdWarn_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal AudMsgReq
  * Used by the DIM to request audio chimes
  */
@@ -490,6 +556,120 @@ struct AudMsgReq_info : InTag, public DataElemInfo {
  */
 struct AudWarnActv_info : OutTag, public DataElemInfo {
     using data_elem_type = NoYesCrit1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgActvScenario
+ * Active state for AP
+ */
+struct AutnmsPrkgActvScenario_info : InTag, public DataElemInfo {
+    using data_elem_type = AutnmsPrkgActvScenario;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgActvn
+ */
+struct AutnmsPrkgActvn_info : OutTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgAvlScenario
+ */
+struct AutnmsPrkgAvlScenario_info : InTag, public DataElemInfo {
+    using data_elem_type = AutnmsPrkgAvlScenario;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgEnaResu
+ */
+struct AutnmsPrkgEnaResu_info : InTag, public DataElemInfo {
+    using data_elem_type = EnaResu;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgProgs
+ */
+struct AutnmsPrkgProgs_info : InTag, public DataElemInfo {
+    using data_elem_type = uint8_t; /*!<Unit: %,  Range:0->100*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AutnmsPrkgSeldScenario
+ */
+struct AutnmsPrkgSeldScenario_info : OutTag, public DataElemInfo {
+    using data_elem_type = AutnmsPrkgSeldScenario;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal AvlStsForLatAutDrv
+ * Lateral Autonomous Drive availability status.
+ */
+struct AvlStsForLatAutDrv_info : InTag, public DataElemInfo {
+    using data_elem_type = AvlStsForLatAutDrv5;
 
     static const char* Name();
     static const char* TypeName();
@@ -1485,6 +1665,22 @@ struct CnclWarnLgtForAutDrv_info : InTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal CnsPrm
+ */
+struct CnsPrm_info : InTag, public DataElemInfo {
+    using data_elem_type = CnsPrmRec1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal ComLostExtrSound
  * Control signal for ASDM to see if ESM is up.
  *
@@ -1492,6 +1688,40 @@ struct CnclWarnLgtForAutDrv_info : InTag, public DataElemInfo {
  */
 struct ComLostExtrSound_info : InTag, public DataElemInfo {
     using data_elem_type = bool;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal ConSftyDataSharingAllwd
+ * Driver decide whether or not to allow data sharing for the connected safety functions.
+ */
+struct ConSftyDataSharingAllwd_info : OutTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal ConSftyDataSharingSts
+ * To notify HMI the current Data Sharing status for functions in ASDM.
+ */
+struct ConSftyDataSharingSts_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
 
     static const char* Name();
     static const char* TypeName();
@@ -1741,6 +1971,39 @@ struct CurtActvnReReq_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal DataDistbnAllwdForEgyPred
+ */
+struct DataDistbnAllwdForEgyPred_info : OutTag, public DataElemInfo {
+    using data_elem_type = OnOffNoReq;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal DataDistbnReqForEgyPred
+ * Data sharing request for Energy Prediction
+ */
+struct DataDistbnReqForEgyPred_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOffNoReq;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal DataSpclDMSM
  */
 struct DataSpclDMSM_info : InTag, public DataElemInfo {
@@ -1795,6 +2058,27 @@ struct DeactvtLvlgCtrl_info : OutTag, public DataElemInfo {
  */
 struct DefrstDurgClimaEnad_info : InternalTag, public DataElemInfo {
     using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal DestSrcAndCfmRqrd
+ * Confirmation required info for respective destination source. Array of bits. One bit per destination source. 1 indicates confirmation required for that specific destination source.
+ * Bit1 = Destination set by user
+ * Bit2 = Predicted destination
+ * Bit3 = Destination not reached from previous drive cycle
+ * Bit4 = Destination set by mobile application
+ */
+struct DestSrcAndCfmRqrd_info : InTag, public DataElemInfo {
+    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->1023*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2434,6 +2718,22 @@ struct DrvrHmiForHmiCen_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal DrvrHmiSpdLimAdpnSts
+ */
+struct DrvrHmiSpdLimAdpnSts_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal DrvrHmiTmrForHmiCen
  */
 struct DrvrHmiTmrForHmiCen_info : OutTag, public DataElemInfo {
@@ -2673,6 +2973,40 @@ struct DrvrWLoadLvl_info : InTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal DstEstimdToEmptyForDrvgElec
+ * Estimated remaining driving range in electric only driving for current HV battery energy content.
+ */
+struct DstEstimdToEmptyForDrvgElec_info : InTag, public DataElemInfo {
+    using data_elem_type = uint16_t; /*!<Unit: KiloMtr,  Range:0->1023*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal DstEstimdToEmptyForDrvgElecEco
+ * electric Distance to Empty from Vehicle Energy Coordinator if Eco Mode is chosen
+ */
+struct DstEstimdToEmptyForDrvgElecEco_info : InTag, public DataElemInfo {
+    using data_elem_type = uint16_t; /*!<Unit: KiloMtr,  Range:0->1023*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal DstNotifActv
  * Distribution of the setting  Distance Alert (DA)
  */
@@ -2864,6 +3198,23 @@ struct EasyInOutDrvrSeatAdjmt_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal EgyCostForRoute
+ * Remaining energy cost for route
+ */
+struct EgyCostForRoute_info : InTag, public DataElemInfo {
+    using data_elem_type = EgyCostForRouteRec1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal EgySave
  * Energy save selected by user during Drive Mode individual
  */
@@ -2885,6 +3236,22 @@ struct EgySave_info : OutTag, public DataElemInfo {
  * Indicates the current status of the Emergency Assistance function (VEH-FCT : 184B - Emergency Assist / MAIN; 0).
  */
 struct EmgyAsscSts_info : InTag, public DataElemInfo {
+    using data_elem_type = AsscSts;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal EmgyAsscStsConnGen2
+ */
+struct EmgyAsscStsConnGen2_info : InTag, public DataElemInfo {
     using data_elem_type = AsscSts;
 
     static const char* Name();
@@ -4075,6 +4442,55 @@ struct HudVisFctSetg_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal HvBattEgyAvlDcha3
+ */
+struct HvBattEgyAvlDcha3_info : InternalTag, public DataElemInfo {
+    using data_elem_type = double; /*!<Unit: Wh,  Range:-500->120000, Resolution: (50.0*x+-500.0, raw is unsigned, 0 bits )*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal HvBattSmtActv
+ * HV battery optimization function can be activated.
+ */
+struct HvBattSmtActv_info : InTag, public DataElemInfo {
+    using data_elem_type = Flg1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal HvBattSmtSeld
+ */
+struct HvBattSmtSeld_info : OutTag, public DataElemInfo {
+    using data_elem_type = OnOffNoReq;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal HvacAirMFlowEstimd
  * Estimated total mass air flow in front HVAC.
  */
@@ -5067,6 +5483,25 @@ struct LiTrfcSide1WdReq1_info : OutTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal ListOfNodAv
+ * ListOfNodesAvailable: ECU-list is bit-mapped into this signal.
+ * All diagnostic missing frame masters must have information regarding which ECUs that are connected to the networks.
+ * ListOfNodAv is a bit-coded periodic signal that shall be distributed on the bus (backbone). The signal time max latency shall be set to 320ms, using an update bit.
+ */
+struct ListOfNodAv_info : InTag, public DataElemInfo {
+    using data_elem_type = ListOfNodAv;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal LockSpdReq
  * Distribution of Speed locking setting
  */
@@ -5417,6 +5852,40 @@ struct MstCfgIDBackboneFR_info : InTag, public DataElemInfo {
  */
 struct MtrlSnsrT_info : InternalTag, public DataElemInfo {
     using data_elem_type = MtrlSnsrT;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal NFSDataFront
+ * Near Field Sensing Data Front contains data from the front of the car and from the front portion of the sides of the car.
+ */
+struct NFSDataFront_info : InTag, public DataElemInfo {
+    using data_elem_type = SnsrPrkgAssi3;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal NFSDataRear
+ * Near Field Sensing Data Rear contains data from the rear of the car and from the rear portion of the sides of the car.
+ */
+struct NFSDataRear_info : InTag, public DataElemInfo {
+    using data_elem_type = SnsrPrkgAssi3;
 
     static const char* Name();
     static const char* TypeName();
@@ -5915,6 +6384,56 @@ struct PreClngNotif_info : InTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal PrkgAssiActvSts
+ */
+struct PrkgAssiActvSts_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal PrkgAssiAudWarnFront
+ * Front audio warning signals for PAS.
+ */
+struct PrkgAssiAudWarnFront_info : InTag, public DataElemInfo {
+    using data_elem_type = PrkgAssiAudWarn;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal PrkgAssiAudWarnRear
+ * Rear audio warning signals for PAS.
+ */
+struct PrkgAssiAudWarnRear_info : InTag, public DataElemInfo {
+    using data_elem_type = PrkgAssiAudWarn;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal PrkgAssiFailr
  * Indication of failure in the Park assist system.
  */
@@ -6107,6 +6626,22 @@ struct ProfLimd_info : InTag, public DataElemInfo {
  */
 struct ProfPenSts1_info : InTag, public DataElemInfo {
     using data_elem_type = IdPen;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal PrpsnDrvMod
+ */
+struct PrpsnDrvMod_info : InTag, public DataElemInfo {
+    using data_elem_type = PrpsnDrvMod;
 
     static const char* Name();
     static const char* TypeName();
@@ -6540,6 +7075,77 @@ struct ReAxleWarn_info : InTag, public DataElemInfo {
 
 
 /*!
+ * \brief Signal RlyPwrDistbnCmd1WdBattSaveCmd
+ * 0 = Off when BatterySaver relay is Off
+ * 1 = On when BatterySaver relay is On
+ */
+struct RlyPwrDistbnCmd1WdBattSaveCmd_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal RlyPwrDistbnCmd1WdIgnRlyCmd
+ * 0 = Off when Ignition-relay is Off
+ * 1 = On when Ignition-relay is On
+ */
+struct RlyPwrDistbnCmd1WdIgnRlyCmd_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal RlyPwrDistbnCmd1WdIgnRlyExtCmd
+ * 0 = Off when IgnitionExtendend-relay is Off
+ * 1 = On when IgnitionExtendend-relay is On
+ */
+struct RlyPwrDistbnCmd1WdIgnRlyExtCmd_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal RlyPwrDistbnCmd1WdPreBattSaveCmd
+ * Prewarning that BatterySaver relay will be shut off. Normally '0' but when warning alerts, the value changes to '1', 30 sec prior the shut off.
+ */
+struct RlyPwrDistbnCmd1WdPreBattSaveCmd_info : InTag, public DataElemInfo {
+    using data_elem_type = OnOff1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
  * \brief Signal RmnLockgPrsnlReq
  * RmnLockgPrsnlReq - Request for Private Locking Reminder
  *
@@ -6787,6 +7393,22 @@ struct RotyPosReq2_info : InTag, public DataElemInfo {
  */
 struct RotyPosReq1_info : InTag, public DataElemInfo {
     using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->31*/
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal RouteInfo
+ */
+struct RouteInfo_info : OutTag, public DataElemInfo {
+    using data_elem_type = RouteInfoRec1;
 
     static const char* Name();
     static const char* TypeName();
@@ -7077,11 +7699,27 @@ struct SetTiAndDate_info : OutTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal SftyCchAccActvnSts
- * Safety Coach ACC Activation status
+ * \brief Signal SetgAndRstOfTripForDrvr
  */
-struct SftyCchAccActvnSts_info : InTag, public DataElemInfo {
-    using data_elem_type = SftyCchActvnSts1;
+struct SetgAndRstOfTripForDrvr_info : OutTag, public DataElemInfo {
+    using data_elem_type = SetgAndRstOfTripForDrvr;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal SftyCchAccSts
+ * ACC Activation status for Safety Coach
+ */
+struct SftyCchAccSts_info : InTag, public DataElemInfo {
+    using data_elem_type = SftyCchActvnSts2;
 
     static const char* Name();
     static const char* TypeName();
@@ -7111,11 +7749,11 @@ struct SftyCchDrvgCycIdx_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal SftyCchLaneKeepAidActvnSts
- * Status of LKA function, if it is active or when it was last active in Years, months and days.
+ * \brief Signal SftyCchLaneKeepAidSts
+ * LKA status for Safety coach
  */
-struct SftyCchLaneKeepAidActvnSts_info : InTag, public DataElemInfo {
-    using data_elem_type = SftyCchActvnSts1;
+struct SftyCchLaneKeepAidSts_info : InTag, public DataElemInfo {
+    using data_elem_type = SftyCchActvnSts2;
 
     static const char* Name();
     static const char* TypeName();
@@ -7179,11 +7817,11 @@ struct SftyCchMidTermIdx_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal SftyCchPilotAssiActvnSts
- * Safety coach activation status of Pilor assist function
+ * \brief Signal SftyCchPilotAssiSts
+ * Pilot assist status for safety coach
  */
-struct SftyCchPilotAssiActvnSts_info : InTag, public DataElemInfo {
-    using data_elem_type = SftyCchActvnSts1;
+struct SftyCchPilotAssiSts_info : InTag, public DataElemInfo {
+    using data_elem_type = SftyCchActvnSts2;
 
     static const char* Name();
     static const char* TypeName();
@@ -7920,11 +8558,10 @@ struct TelmSts_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal TiAndDateIndcn
- * Current time (Hr, Min and Sec) and date (Year, Months and days) data for indication. See requirement for more information about the signals.
+ * \brief Signal TelmStsConnGen2
  */
-struct TiAndDateIndcn_info : InTag, public DataElemInfo {
-    using data_elem_type = DateTi30;
+struct TelmStsConnGen2_info : InTag, public DataElemInfo {
+    using data_elem_type = TelmSts;
 
     static const char* Name();
     static const char* TypeName();
@@ -7937,32 +8574,11 @@ struct TiAndDateIndcn_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal TiCorrnByMapData
- * UTC Time Correction Data from Navigation map data.
- * - Availability of this functionality is based on map data coverage and current vehicle position and is indicated by the SpprtForFct parameter.
- * - TiCorrnByMapData is provided interally within the IHU.
- *
- * Example 1
- * The system has no map data, the vehicle is located in area without map data for time correction or the vehicle position is unknown:
- * SpprtForFct = No
- * Other parameter values N/A.
- *
- * Example 2
- * Vehicle is identified by map data as located within the UTC - 3:30 time zone (e.g easten part of Canada). Daylight saving time of 1 h currently apply:
- * SpprtForFct = Yes
- * HrCorrn = -3
- * MinsCorrn = -30
- * DayLiSaveTi = 1
- *
- * Example 3
- * Vehicle is identified by map data as located within the UTC + 2:00 time zone (e.g Finland). No daylight saving time currently apply:
- * SpprtForFct = Yes
- * HrCorrn = 2
- * MinsCorrn = 0
- * DayLiSaveTi = 0
+ * \brief Signal TiAndDateIndcn
+ * Current time (Hr, Min and Sec) and date (Year, Months and days) data for indication. See requirement for more information about the signals.
  */
-struct TiCorrnByMapData_info : InternalTag, public DataElemInfo {
-    using data_elem_type = TiCorrn;
+struct TiAndDateIndcn_info : InTag, public DataElemInfo {
+    using data_elem_type = DateTi30;
 
     static const char* Name();
     static const char* TypeName();
@@ -8530,6 +9146,22 @@ struct UnlckKeylsReq_info : OutTag, public DataElemInfo {
  */
 struct UnlckRemReq_info : OutTag, public DataElemInfo {
     using data_elem_type = UnlckRemCfgPen1;
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+
+
+/*!
+ * \brief Signal UsrSeldDrvrSpprtFct
+ */
+struct UsrSeldDrvrSpprtFct_info : OutTag, public DataElemInfo {
+    using data_elem_type = DrvrSpprtFct;
 
     static const char* Name();
     static const char* TypeName();

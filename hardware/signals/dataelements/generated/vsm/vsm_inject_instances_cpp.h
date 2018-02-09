@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
     ADataRawSafe_de = new DEInjector<autosar::ADataRawSafe_info>();
@@ -16,6 +16,8 @@
     AccAutResuWarnReq_de = new DEInjector<autosar::AccAutResuWarnReq_info>();
 
     AccSts_de = new DEInjector<autosar::AccSts_info>();
+
+    ActrPosnFrnReqForOsaAndRecirc_de = new DEInjector<autosar::ActrPosnFrnReqForOsaAndRecirc_info>();
 
     ActvOfHorn_de = new DEInjector<autosar::ActvOfHorn_info>();
 
@@ -29,11 +31,25 @@
 
     AmbTRaw_de = new DEInjector<autosar::AmbTRaw_info>();
 
+    AsyFctDeactvnWarn_de = new DEInjector<autosar::AsyFctDeactvnWarn_info>();
+
     AsyLaneChg_de = new DEInjector<autosar::AsyLaneChg_info>();
 
     AsySteerApplyRqrd_de = new DEInjector<autosar::AsySteerApplyRqrd_info>();
 
+    AsySteerFctDeactvdWarn_de = new DEInjector<autosar::AsySteerFctDeactvdWarn_info>();
+
     AudMsgReq_de = new DEInjector<autosar::AudMsgReq_info>();
+
+    AutnmsPrkgActvScenario_de = new DEInjector<autosar::AutnmsPrkgActvScenario_info>();
+
+    AutnmsPrkgAvlScenario_de = new DEInjector<autosar::AutnmsPrkgAvlScenario_info>();
+
+    AutnmsPrkgEnaResu_de = new DEInjector<autosar::AutnmsPrkgEnaResu_info>();
+
+    AutnmsPrkgProgs_de = new DEInjector<autosar::AutnmsPrkgProgs_info>();
+
+    AvlStsForLatAutDrv_de = new DEInjector<autosar::AvlStsForLatAutDrv_info>();
 
     BackCntrForMissCom_de = new DEInjector<autosar::BackCntrForMissCom_info>();
 
@@ -129,7 +145,11 @@
 
     CnclWarnLgtForAutDrv_de = new DEInjector<autosar::CnclWarnLgtForAutDrv_info>();
 
+    CnsPrm_de = new DEInjector<autosar::CnsPrm_info>();
+
     ComLostExtrSound_de = new DEInjector<autosar::ComLostExtrSound_info>();
+
+    ConSftyDataSharingSts_de = new DEInjector<autosar::ConSftyDataSharingSts_info>();
 
     ConSftyWarn_de = new DEInjector<autosar::ConSftyWarn_info>();
 
@@ -149,9 +169,13 @@
 
     CtraOn1_de = new DEInjector<autosar::CtraOn1_info>();
 
+    DataDistbnReqForEgyPred_de = new DEInjector<autosar::DataDistbnReqForEgyPred_info>();
+
     DataSpclDMSM_de = new DEInjector<autosar::DataSpclDMSM_info>();
 
     DayToSrv_de = new DEInjector<autosar::DayToSrv_info>();
+
+    DestSrcAndCfmRqrd_de = new DEInjector<autosar::DestSrcAndCfmRqrd_info>();
 
     DiagcCCSM_de = new DEInjector<autosar::DiagcCCSM_info>();
 
@@ -191,6 +215,8 @@
 
     DrvrDesDir_de = new DEInjector<autosar::DrvrDesDir_info>();
 
+    DrvrHmiSpdLimAdpnSts_de = new DEInjector<autosar::DrvrHmiSpdLimAdpnSts_info>();
+
     DrvrMassgRunng_de = new DEInjector<autosar::DrvrMassgRunng_info>();
 
     DrvrPfmncLvl_de = new DEInjector<autosar::DrvrPfmncLvl_info>();
@@ -206,6 +232,10 @@
     DrvrSeatSwtSts_de = new DEInjector<autosar::DrvrSeatSwtSts_info>();
 
     DrvrWLoadLvl_de = new DEInjector<autosar::DrvrWLoadLvl_info>();
+
+    DstEstimdToEmptyForDrvgElec_de = new DEInjector<autosar::DstEstimdToEmptyForDrvgElec_info>();
+
+    DstEstimdToEmptyForDrvgElecEco_de = new DEInjector<autosar::DstEstimdToEmptyForDrvgElecEco_info>();
 
     DstNotifSts_de = new DEInjector<autosar::DstNotifSts_info>();
 
@@ -223,7 +253,11 @@
 
     DstTrvldMst2_de = new DEInjector<autosar::DstTrvldMst2_info>();
 
+    EgyCostForRoute_de = new DEInjector<autosar::EgyCostForRoute_info>();
+
     EmgyAsscSts_de = new DEInjector<autosar::EmgyAsscSts_info>();
+
+    EmgyAsscStsConnGen2_de = new DEInjector<autosar::EmgyAsscStsConnGen2_info>();
 
     EmgyVehWarnSts_de = new DEInjector<autosar::EmgyVehWarnSts_info>();
 
@@ -295,6 +329,11 @@
 
     HudSts_de = new DEInjector<autosar::HudSts_info>();
 
+// ***************************************
+// HvBattEgyAvlDcha3 not found in Com file
+
+    HvBattSmtActv_de = new DEInjector<autosar::HvBattSmtActv_info>();
+
     HvacAirMFlowEstimd_de = new DEInjector<autosar::HvacAirMFlowEstimd_info>();
 
     HznRstExtd_de = new DEInjector<autosar::HznRstExtd_info>();
@@ -339,6 +378,8 @@
 
     LiPassFltIndcrTurn_de = new DEInjector<autosar::LiPassFltIndcrTurn_info>();
 
+    ListOfNodAv_de = new DEInjector<autosar::ListOfNodAv_info>();
+
     LockgCenSts_de = new DEInjector<autosar::LockgCenSts_info>();
 
     LockgCenStsForUsrFb_de = new DEInjector<autosar::LockgCenStsForUsrFb_info>();
@@ -361,6 +402,10 @@
 
 // ***************************************
 // MtrlSnsrT not found in Com file
+
+    NFSDataFront_de = new DEInjector<autosar::NFSDataFront_info>();
+
+    NFSDataRear_de = new DEInjector<autosar::NFSDataRear_info>();
 
     NetCtrlrActvt_de = new DEInjector<autosar::NetCtrlrActvt_info>();
 
@@ -400,6 +445,12 @@
 
     PreClngNotif_de = new DEInjector<autosar::PreClngNotif_info>();
 
+    PrkgAssiActvSts_de = new DEInjector<autosar::PrkgAssiActvSts_info>();
+
+    PrkgAssiAudWarnFront_de = new DEInjector<autosar::PrkgAssiAudWarnFront_info>();
+
+    PrkgAssiAudWarnRear_de = new DEInjector<autosar::PrkgAssiAudWarnRear_info>();
+
     PrkgAssiFailr_de = new DEInjector<autosar::PrkgAssiFailr_info>();
 
     PrkgAssiManvActvSts_de = new DEInjector<autosar::PrkgAssiManvActvSts_info>();
@@ -419,6 +470,8 @@
     ProfLimd_de = new DEInjector<autosar::ProfLimd_info>();
 
     ProfPenSts1_de = new DEInjector<autosar::ProfPenSts1_info>();
+
+    PrpsnDrvMod_de = new DEInjector<autosar::PrpsnDrvMod_info>();
 
     PrpsnHvBattUsgModAct_de = new DEInjector<autosar::PrpsnHvBattUsgModAct_info>();
 
@@ -455,6 +508,14 @@
     PwrSplyErrSts_de = new DEInjector<autosar::PwrSplyErrSts_info>();
 
     ReAxleWarn_de = new DEInjector<autosar::ReAxleWarn_info>();
+
+    RlyPwrDistbnCmd1WdBattSaveCmd_de = new DEInjector<autosar::RlyPwrDistbnCmd1WdBattSaveCmd_info>();
+
+    RlyPwrDistbnCmd1WdIgnRlyCmd_de = new DEInjector<autosar::RlyPwrDistbnCmd1WdIgnRlyCmd_info>();
+
+    RlyPwrDistbnCmd1WdIgnRlyExtCmd_de = new DEInjector<autosar::RlyPwrDistbnCmd1WdIgnRlyExtCmd_info>();
+
+    RlyPwrDistbnCmd1WdPreBattSaveCmd_de = new DEInjector<autosar::RlyPwrDistbnCmd1WdPreBattSaveCmd_info>();
 
     RmnLockgPrsnlReq_de = new DEInjector<autosar::RmnLockgPrsnlReq_info>();
 
@@ -493,17 +554,17 @@
 // ***************************************
 // SetOfLangAck not found in Com file
 
-    SftyCchAccActvnSts_de = new DEInjector<autosar::SftyCchAccActvnSts_info>();
+    SftyCchAccSts_de = new DEInjector<autosar::SftyCchAccSts_info>();
 
     SftyCchDrvgCycIdx_de = new DEInjector<autosar::SftyCchDrvgCycIdx_info>();
 
-    SftyCchLaneKeepAidActvnSts_de = new DEInjector<autosar::SftyCchLaneKeepAidActvnSts_info>();
+    SftyCchLaneKeepAidSts_de = new DEInjector<autosar::SftyCchLaneKeepAidSts_info>();
 
     SftyCchLongTermIdx_de = new DEInjector<autosar::SftyCchLongTermIdx_info>();
 
     SftyCchMidTermIdx_de = new DEInjector<autosar::SftyCchMidTermIdx_info>();
 
-    SftyCchPilotAssiActvnSts_de = new DEInjector<autosar::SftyCchPilotAssiActvnSts_info>();
+    SftyCchPilotAssiSts_de = new DEInjector<autosar::SftyCchPilotAssiSts_info>();
 
     SftyCchPrimFbAftDrvg_de = new DEInjector<autosar::SftyCchPrimFbAftDrvg_info>();
 
@@ -562,6 +623,8 @@
     TankFlapSts_de = new DEInjector<autosar::TankFlapSts_info>();
 
     TelmSts_de = new DEInjector<autosar::TelmSts_info>();
+
+    TelmStsConnGen2_de = new DEInjector<autosar::TelmStsConnGen2_info>();
 
     TiAndDateIndcn_de = new DEInjector<autosar::TiAndDateIndcn_info>();
 

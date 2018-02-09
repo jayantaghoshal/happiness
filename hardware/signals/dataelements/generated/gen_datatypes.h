@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 #ifndef _DATATYPES_H
 #define _DATATYPES_H
@@ -99,6 +99,7 @@ enum class ActvtAutnmsPrkgCtrl {
     Idle=0,
     Activate=1,
     Resume=2,
+    Pause=3,
 };
 
 /*!
@@ -281,7 +282,7 @@ enum class AutnmsPrkgActvPrkgSide {
     Inactive=0,
     Left=1,
     Right=2,
-    StraightForward=3,
+    Straight=3,
 };
 
 /*!
@@ -331,7 +332,7 @@ enum class AutnmsPrkgActvSt {
     ExitVehicle=16,
     WrongGear=17,
     StandStillAndConfirm=18,
-    LookAroundAndStartManeuvre=19,
+    ReleaseBrakePedal=19,
     RearwardMove=20,
     ForwardMove=21,
     ChangeGearForward=22,
@@ -342,9 +343,9 @@ enum class AutnmsPrkgActvSt {
     Finished=27,
     Pause=28,
     Cancel=29,
-    Resd1=30,
-    Resd2=31,
-    Resd3=32,
+    PassiveSlotFoundStopToPark=30,
+    StopAndChangeGearForward=31,
+    StopAndChangeGearRearward=32,
     Resd4=33,
     Resd5=34,
 };
@@ -384,7 +385,11 @@ enum class AutnmsPrkgAvlPrkgSide {
     NoSlotDetected=0,
     Left=1,
     Right=2,
-    StraightForward=3,
+    Straight=3,
+    LeftAndRight=4,
+    LeftAndStraight=5,
+    RightAndStraight=6,
+    LeftAndRightAndStraight=7,
 };
 
 /*!
@@ -404,7 +409,7 @@ enum class AutnmsPrkgAvlSlotTyp {
     Parallel=1,
     Perpendicular=2,
     ParallelOrPerpendicular=3,
-    DirectParking=4,
+    PerpendicularOrFishbone=4,
     Fishbone=5,
     ParallelOrFishbone=6,
     ParallelOrPerpendicularOrFishbone=7,
@@ -450,8 +455,8 @@ enum class AutnmsPrkgPauseSts {
     SafetySwitchReleased=9,
     DriverOutOfRange=10,
     UndefinedPause=11,
-    Resd1=12,
-    Resd2=13,
+    AutobrakeUnavailable=12,
+    DriverDeactivation=13,
     Resd3=14,
     Resd4=15,
 };
@@ -481,7 +486,7 @@ enum class AutnmsPrkgRecmndPrkgSide {
     NoSlotDetected=0,
     Left=1,
     Right=2,
-    StraightForward=3,
+    Straight=3,
 };
 
 /*!
@@ -500,7 +505,7 @@ enum class AutnmsPrkgRecmndSlotTyp {
     NoSlotDetected=0,
     Parallel=1,
     Perpendicular=2,
-    DirectParking=3,
+    Garage=3,
     Fishbone=4,
     Resd1=5,
     Resd2=6,
@@ -574,6 +579,33 @@ enum class AutnmsPrkgSeldSlotTyp {
 enum class AvlSts2 {
     NotAvl=0,
     Avl=1,
+};
+
+/*!
+ * \enum AvlStsForLatAutDrv5
+ */
+enum class AvlStsForLatAutDrv5 {
+    NoMsg=0,
+    LatCtrlNotAvl=1,
+    HiSpd=2,
+    LaneLimrMiss=3,
+    VehToFolwMiss=4,
+    OvrdTiMaxExcdd=5,
+    DrvrNotInLoopDetd=6,
+    DrvrBucdRqrd=7,
+    DrvrDoorNotClsd=8,
+    GearNotInDrv=9,
+    SnsrBlkd=10,
+    HldTiMaxExcdd=11,
+    DrvModSeldNotOk=12,
+    EpbAppld=13,
+    SpdLowLimExcdd=14,
+    NotInUse2=15,
+    NotInUse3=16,
+    NotInUse4=17,
+    NotInUse5=18,
+    NotInUse6=19,
+    NotInUse7=20,
 };
 
 /*!
@@ -1045,6 +1077,16 @@ enum class DrvrPfmncWarnReq1 {
 };
 
 /*!
+ * \enum DrvrSpprtFct
+ */
+enum class DrvrSpprtFct {
+    NoReq=0,
+    ACC=1,
+    CC=2,
+    SL=3,
+};
+
+/*!
  * \enum DstLong
  */
 enum class DstLong {
@@ -1107,6 +1149,14 @@ enum class DstSho {
 enum class DstUnit {
     km=0,
     miles=1,
+};
+
+/*!
+ * \enum EnaResu
+ */
+enum class EnaResu {
+    Disable=0,
+    Enable=1,
 };
 
 /*!
@@ -1692,14 +1742,18 @@ enum class HznProfLongTyp {
  * 5			5			NodCtrlForLat	Node Control For Lateral	(Bézier) Control Point Latitude
  * 6			6			NodCtrlForAlti	Node Control For Altitude	(Bézier) Control Point Altitude
  * 7			7			Id		Identifier			Link Identifier
- * 8			15								Reserved for standard types
- * 16			16			SpdLim1		Speed limits 1
- * 17			17			SpdLim2		Speed limits 2
- * 18			18			SpdLim3		Speed limits 3
- * 19			19			CamSpd		Speed camera
- * 20			20			RoadWInfo	Road Work Information
- * 21			21			TrfcLi		Traffic lights
- * 22			30								Reserved for system specific types
+ *
+ * VCC specific profile types:
+ * 16			16
+ * 17			17
+ * 18			18
+ * 20			20
+ * 21			21
+ * 22			22
+ * 23                                            23
+ * 24                                            24
+ * 25                                            25
+ *
  * 31			31			Ukwn		Unknown
  */
 enum class HznProfLongTypExtd1 {
@@ -1714,7 +1768,13 @@ enum class HznProfLongTypExtd1 {
     SpdRng=16,
     AltiAvg=17,
     DestOrInterDest=18,
-    Ukwn=31,
+    SpdFromTrfcInfo=20,
+    LvlOfSrvFromTrfcInfo=21,
+    SpdFromMap=22,
+    EvChrgnLocn=23,
+    VehStopLocn=24,
+    Slop=25,
+    Ukw=31,
 };
 
 /*!
@@ -2524,6 +2584,23 @@ enum class OnOff2 {
 };
 
 /*!
+ * \enum OnOffCrit1
+ * To protect critical signaling from one bit flipping.
+ *
+ * Min	Max	Physical Value	Long name
+ * 0	0	NotVld		Not Valid
+ * 1	1	Off		Off
+ * 2	2	On		On
+ * 3	3	NotVld		Not Valid
+ */
+enum class OnOffCrit1 {
+    NotVld1=0,
+    Off=1,
+    On=2,
+    NotVld2=3,
+};
+
+/*!
  * \enum OnOffIdle1
  */
 enum class OnOffIdle1 {
@@ -2948,6 +3025,20 @@ enum class RsdsMstSt {
     Shutdown=5,
     Hot=6,
     Cal=7,
+};
+
+/*!
+ * \enum RstOfTrip1
+ */
+enum class RstOfTrip1 {
+    NoRstOfTrip1=0,
+    RstOfDstSho1=1,
+    RstOfFuCnsAvg1=2,
+    RstOfEgyCnsAvg1=3,
+    RstOfForSpdAvg1=4,
+    RstOfTiDrv1=5,
+    RstOfAllTrip1=6,
+    Resv=7,
 };
 
 /*!
@@ -3758,6 +3849,16 @@ enum class iTPMSTirePMSts {
 };
 
 /*!
+ * \enum status
+ * ClientConfigurationStatus response
+ */
+enum class status {
+    OK=0,
+    UNAVAILABLE=1,
+    NOK=2,
+};
+
+/*!
  * \struct ADataRawSafe1
  */
 struct ADataRawSafe1 {
@@ -3961,6 +4062,20 @@ struct CmptmtTFrnt {
 };
 
 /*!
+ * \struct CnsPrmRec1
+ * Consumption parameters for Navigation
+ */
+struct CnsPrmRec1 {
+    double SpdVal; /*!<Unit: Unitless,  Range:-0.4548->1.5922, Resolution: (0.001*x+-0.4548, raw is unsigned, 11 bits )*/
+    uint8_t SpdIdx; /*!<Unit: Unitless,  Range:0->31*/
+    double AuxPwrPrsnt; /*!<Unit: W,  Range:0->20460, Resolution: (20.0*x+0.0, raw is unsigned, 10 bits )*/
+    double AuxPwrLvlInct; /*!<Unit: W,  Range:0->20460, Resolution: (20.0*x+0.0, raw is unsigned, 10 bits )*/
+    double AuxTiPrsnt; /*!<Unit: Unitless,  Range:-1->40949, Resolution: (10.0*x+-1.0, raw is unsigned, 12 bits )*/
+    double AuxTiTranPha; /*!<Unit: Unitless,  Range:-1->40949, Resolution: (10.0*x+-1.0, raw is unsigned, 12 bits )*/
+    double AVal; /*!<Unit: Unitless,  Range:0->2.55, Resolution: (0.01*x+0.0, raw is unsigned, 8 bits )*/
+};
+
+/*!
  * \struct ConSftyWarn1
  */
 struct ConSftyWarn1 {
@@ -4085,6 +4200,15 @@ struct DstToManvLocnByNav {
     NoYes1 CntDwnToManvStrt;
     PosnFromNavQly PosnQly;
     NoYes1 SpprtForFct;
+};
+
+/*!
+ * \struct EgyCostForRouteRec1
+ * Remaining energy cost for route
+ */
+struct EgyCostForRouteRec1 {
+    double Egy; /*!<Unit: Wh,  Range:-500->120000, Resolution: (50.0*x+-500.0, raw is unsigned, 12 bits )*/
+    uint8_t Idx; /*!<Unit: Unitless,  Range:0->63*/
 };
 
 /*!
@@ -4518,6 +4642,20 @@ struct LiTiPen2 {
 };
 
 /*!
+ * \struct ListOfNodAv
+ */
+struct ListOfNodAv {
+    uint32_t ListOfNodAv1; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv2; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv3; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv4; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv5; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv6; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv7; /*!<Unit: Unitless,  Range:0->4294967295*/
+    uint32_t ListOfNodAv8; /*!<Unit: Unitless,  Range:0->4294967295*/
+};
+
+/*!
  * \struct LockgCenSts3
  */
 struct LockgCenSts3 {
@@ -4554,7 +4692,7 @@ struct MirrDimPen {
  * \struct MtrlSnsrT
  */
 struct MtrlSnsrT {
-    double MtrlSnsrT; /*!<Unit: degC,  Range:-256->255.9, Resolution: (0.1*x+0.0, raw is unsigned, 0 bits )*/
+    double MtrlSnsrT; /*!<Unit: degC,  Range:-256->255.9, Resolution: (0.1*x+0.0, raw is signed, 13 bits )*/
     MtrlSnsrTFacQly MtrlSnsrTFacQly_;
 };
 
@@ -4639,11 +4777,11 @@ struct PinionSteerAg1Rec {
  * \struct PosnFromNav
  */
 struct PosnFromNav {
-    double PosnLat; /*!<Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is unsigned, 0 bits )*/
-    double PosnLgt; /*!<Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is unsigned, 0 bits )*/
-    double PosnAlti; /*!<Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 0 bits )*/
-    double PosnSpd; /*!<Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 0 bits )*/
-    double PosnDir; /*!<Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 0 bits )*/
+    double PosnLat; /*!<Unit: Deg,  Range:-90->90, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 30 bits )*/
+    double PosnLgt; /*!<Unit: Deg,  Range:-180->180, Resolution: (2.7777777777777776e-07*x+0.0, raw is signed, 31 bits )*/
+    double PosnAlti; /*!<Unit: m,  Range:-100->6000, Resolution: (0.1*x+-100.0, raw is unsigned, 16 bits )*/
+    double PosnSpd; /*!<Unit: m/s,  Range:0->100, Resolution: (0.001*x+0.0, raw is unsigned, 17 bits )*/
+    double PosnDir; /*!<Unit: Deg,  Range:0->359.99, Resolution: (0.01*x+0.0, raw is unsigned, 16 bits )*/
     PosnFromNavQly PosnQly;
 };
 
@@ -4766,6 +4904,18 @@ struct RngBdIllmnCmdPen1 {
 };
 
 /*!
+ * \struct RouteInfoRec1
+ * Route information for function Vehicle Energy Management
+ */
+struct RouteInfoRec1 {
+    uint16_t DestInfo; /*!<Unit: Unitless,  Range:0->1023*/
+    uint8_t IdOfDest; /*!<Unit: Unitless,  Range:0->127*/
+    uint8_t DestProblty; /*!<Unit: %,  Range:0->100*/
+    uint16_t NrOfDestCmpl; /*!<Unit: Unitless,  Range:0->4095*/
+    uint8_t DestSrc; /*!<Unit: Unitless,  Range:0->15*/
+};
+
+/*!
  * \struct RsdsSysSts
  * Status of the different internal statemachines.
  *
@@ -4839,14 +4989,43 @@ struct SetOfLang {
 };
 
 /*!
- * \struct SftyCchActvnSts1
+ * \struct SetgAndRstOfTripForDrvr
+ * To set the indicaiton of trip computer and vehicle speed. Also reset.
+ */
+struct SetgAndRstOfTripForDrvr {
+    OnOffCrit1 SetgTripForDstLong;
+    OnOffCrit1 SetgTripForFuCns;
+    OnOffCrit1 SetgTripForFuDst;
+    OnOffCrit1 SetgTripForEgyDst;
+    OnOffCrit1 SetgTripForDstSho1;
+    OnOffCrit1 SetgTripForFuCnsAvg1;
+    OnOffCrit1 SetgTripForEgyCnsAvg1;
+    OnOffCrit1 SetgTripForSpdAvg1;
+    OnOffCrit1 SetgTripForTiDrv1;
+    OnOffCrit1 SetgTripForDstSho2;
+    OnOffCrit1 SetgTripForFuCnsAvg2;
+    OnOffCrit1 SetgTripForEgyCnsAvg2;
+    OnOffCrit1 SetgTripForSpdAvg2;
+    OnOffCrit1 SetgTripForTiDrv2;
+    OnOffCrit1 SetgTripForDrvrMtr;
+    OnOffCrit1 SetgTripForSpdPtr;
+    OnOffCrit1 SetgTripForSpdDig;
+    OnOffCrit1 SetgTripForSpdTrvl;
+    RstOfTrip1 SetgTripForRstOfAllTripFct1;
+    uint16_t SetgTripForTiRstCdn; /*!<Unit: Unitless,  Range:0->1023*/
+    OnOffCrit1 SetgTripOffOn;
+    IdPen SetgTripWithProfID;
+};
+
+/*!
+ * \struct SftyCchActvnSts2
  * Current status of function and also time since function was last active in Years, months and days.
  */
-struct SftyCchActvnSts1 {
+struct SftyCchActvnSts2 {
     NoYes1 Actv;
     uint8_t Yr; /*!<Unit: Unitless,  Range:0->15*/
     uint8_t Mth; /*!<Unit: Unitless,  Range:0->15*/
-    uint8_t Day; /*!<Unit: Unitless,  Range:0->15*/
+    uint8_t Day; /*!<Unit: Unitless,  Range:0->31*/
 };
 
 /*!
@@ -4952,12 +5131,12 @@ struct SnsrPrkgAssi2 {
  * New record type to hold distances using new data type for longer range ultrasound sensors (DstOfSnsr2 and DstOfSnsr3).
  */
 struct SnsrPrkgAssi3 {
-    double SnsrDstInsdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
-    double SnsrDstOutdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
-    double SnsrDstSideLe; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 0 bits )*/
-    double SnsrDstInsdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
-    double SnsrDstOutdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 0 bits )*/
-    double SnsrDstSideRi; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 0 bits )*/
+    double SnsrDstInsdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstOutdLe; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstSideLe; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 9 bits )*/
+    double SnsrDstInsdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstOutdRi; /*!<Unit: cm,  Range:0->1023, Resolution: (-1.0*x+1023.0, raw is unsigned, 10 bits )*/
+    double SnsrDstSideRi; /*!<Unit: cm,  Range:0->511, Resolution: (-1.0*x+511.0, raw is unsigned, 9 bits )*/
 };
 
 /*!

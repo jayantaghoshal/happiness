@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
     static DESink<autosar::AccAdprSpdLimActv_info>* AccAdprSpdLimActv_de=nullptr;
@@ -29,6 +29,8 @@
 
     static DESink<autosar::ActvnOfSwtIllmnForSeatHeatrRe_info>* ActvnOfSwtIllmnForSeatHeatrRe_de=nullptr;
 
+    static DESink<autosar::ActvtAutnmsPrkgCtrl_info>* ActvtAutnmsPrkgCtrl_de=nullptr;
+
     static DESink<autosar::AdprTurnSpdMod_info>* AdprTurnSpdMod_de=nullptr;
 
     static DESink<autosar::LiExtReq1WdReq5_info>* LiExtReq1WdReq5_de=nullptr;
@@ -38,6 +40,10 @@
     static DESink<autosar::AntithftRednReq_info>* AntithftRednReq_de=nullptr;
 
     static DESink<autosar::AudWarnActv_info>* AudWarnActv_de=nullptr;
+
+    static DESink<autosar::AutnmsPrkgActvn_info>* AutnmsPrkgActvn_de=nullptr;
+
+    static DESink<autosar::AutnmsPrkgSeldScenario_info>* AutnmsPrkgSeldScenario_de=nullptr;
 
     static DESink<autosar::BlisSwOnOff_info>* BlisSwOnOff_de=nullptr;
 
@@ -61,6 +67,8 @@
 
     static DESink<autosar::CmftFctActv_info>* CmftFctActv_de=nullptr;
 
+    static DESink<autosar::ConSftyDataSharingAllwd_info>* ConSftyDataSharingAllwd_de=nullptr;
+
     static DESink<autosar::CoolgReqForDispCen_info>* CoolgReqForDispCen_de=nullptr;
 
     static DESink<autosar::CrvtSpdEstimrSnvtySeld_info>* CrvtSpdEstimrSnvtySeld_de=nullptr;
@@ -70,6 +78,8 @@
     static DESink<autosar::CtraSwOnOff_info>* CtraSwOnOff_de=nullptr;
 
     static DESink<autosar::CurtActvnReReq_info>* CurtActvnReReq_de=nullptr;
+
+    static DESink<autosar::DataDistbnAllwdForEgyPred_info>* DataDistbnAllwdForEgyPred_de=nullptr;
 
     static DESink<autosar::DeactvtLvlgCtrl_info>* DeactvtLvlgCtrl_de=nullptr;
 
@@ -176,6 +186,8 @@
     static DESink<autosar::HudErgoSetgReq_info>* HudErgoSetgReq_de=nullptr;
 
     static DESink<autosar::HudVisFctSetg_info>* HudVisFctSetg_de=nullptr;
+
+    static DESink<autosar::HvBattSmtSeld_info>* HvBattSmtSeld_de=nullptr;
 
     static DESink<autosar::HznData_info>* HznData_de=nullptr;
 
@@ -307,6 +319,8 @@
 
     static DESink<autosar::RoadUsrProtnActv_info>* RoadUsrProtnActv_de=nullptr;
 
+    static DESink<autosar::RouteInfo_info>* RouteInfo_de=nullptr;
+
     static DESink<autosar::SaveSetgToMemPrmnt_info>* SaveSetgToMemPrmnt_de=nullptr;
 
     static DESink<autosar::SeatDispBtnPsd_info>* SeatDispBtnPsd_de=nullptr;
@@ -320,6 +334,8 @@
     static DESink<autosar::SetOfLang_info>* SetOfLang_de=nullptr;
 
     static DESink<autosar::SetTiAndDate_info>* SetTiAndDate_de=nullptr;
+
+    static DESink<autosar::SetgAndRstOfTripForDrvr_info>* SetgAndRstOfTripForDrvr_de=nullptr;
 
     static DESink<autosar::SftyCchLongTermIdxRst_info>* SftyCchLongTermIdxRst_de=nullptr;
 
@@ -378,6 +394,8 @@
     static DESink<autosar::UnlckKeylsReq_info>* UnlckKeylsReq_de=nullptr;
 
     static DESink<autosar::UnlckRemReq_info>* UnlckRemReq_de=nullptr;
+
+    static DESink<autosar::UsrSeldDrvrSpprtFct_info>* UsrSeldDrvrSpprtFct_de=nullptr;
 
     static DESink<autosar::UsrSetSpdForKeySpdLimn_info>* UsrSetSpdForKeySpdLimn_de=nullptr;
 

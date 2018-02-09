@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
     static DEInjector<autosar::ADataRawSafe_info>* ADataRawSafe_de=nullptr;
@@ -16,6 +16,8 @@
     static DEInjector<autosar::AccAutResuWarnReq_info>* AccAutResuWarnReq_de=nullptr;
 
     static DEInjector<autosar::AccSts_info>* AccSts_de=nullptr;
+
+    static DEInjector<autosar::ActrPosnFrnReqForOsaAndRecirc_info>* ActrPosnFrnReqForOsaAndRecirc_de=nullptr;
 
     static DEInjector<autosar::ActvOfHorn_info>* ActvOfHorn_de=nullptr;
 
@@ -29,11 +31,25 @@
 
     static DEInjector<autosar::AmbTRaw_info>* AmbTRaw_de=nullptr;
 
+    static DEInjector<autosar::AsyFctDeactvnWarn_info>* AsyFctDeactvnWarn_de=nullptr;
+
     static DEInjector<autosar::AsyLaneChg_info>* AsyLaneChg_de=nullptr;
 
     static DEInjector<autosar::AsySteerApplyRqrd_info>* AsySteerApplyRqrd_de=nullptr;
 
+    static DEInjector<autosar::AsySteerFctDeactvdWarn_info>* AsySteerFctDeactvdWarn_de=nullptr;
+
     static DEInjector<autosar::AudMsgReq_info>* AudMsgReq_de=nullptr;
+
+    static DEInjector<autosar::AutnmsPrkgActvScenario_info>* AutnmsPrkgActvScenario_de=nullptr;
+
+    static DEInjector<autosar::AutnmsPrkgAvlScenario_info>* AutnmsPrkgAvlScenario_de=nullptr;
+
+    static DEInjector<autosar::AutnmsPrkgEnaResu_info>* AutnmsPrkgEnaResu_de=nullptr;
+
+    static DEInjector<autosar::AutnmsPrkgProgs_info>* AutnmsPrkgProgs_de=nullptr;
+
+    static DEInjector<autosar::AvlStsForLatAutDrv_info>* AvlStsForLatAutDrv_de=nullptr;
 
     static DEInjector<autosar::BackCntrForMissCom_info>* BackCntrForMissCom_de=nullptr;
 
@@ -129,7 +145,11 @@
 
     static DEInjector<autosar::CnclWarnLgtForAutDrv_info>* CnclWarnLgtForAutDrv_de=nullptr;
 
+    static DEInjector<autosar::CnsPrm_info>* CnsPrm_de=nullptr;
+
     static DEInjector<autosar::ComLostExtrSound_info>* ComLostExtrSound_de=nullptr;
+
+    static DEInjector<autosar::ConSftyDataSharingSts_info>* ConSftyDataSharingSts_de=nullptr;
 
     static DEInjector<autosar::ConSftyWarn_info>* ConSftyWarn_de=nullptr;
 
@@ -149,9 +169,13 @@
 
     static DEInjector<autosar::CtraOn1_info>* CtraOn1_de=nullptr;
 
+    static DEInjector<autosar::DataDistbnReqForEgyPred_info>* DataDistbnReqForEgyPred_de=nullptr;
+
     static DEInjector<autosar::DataSpclDMSM_info>* DataSpclDMSM_de=nullptr;
 
     static DEInjector<autosar::DayToSrv_info>* DayToSrv_de=nullptr;
+
+    static DEInjector<autosar::DestSrcAndCfmRqrd_info>* DestSrcAndCfmRqrd_de=nullptr;
 
     static DEInjector<autosar::DiagcCCSM_info>* DiagcCCSM_de=nullptr;
 
@@ -191,6 +215,8 @@
 
     static DEInjector<autosar::DrvrDesDir_info>* DrvrDesDir_de=nullptr;
 
+    static DEInjector<autosar::DrvrHmiSpdLimAdpnSts_info>* DrvrHmiSpdLimAdpnSts_de=nullptr;
+
     static DEInjector<autosar::DrvrMassgRunng_info>* DrvrMassgRunng_de=nullptr;
 
     static DEInjector<autosar::DrvrPfmncLvl_info>* DrvrPfmncLvl_de=nullptr;
@@ -206,6 +232,10 @@
     static DEInjector<autosar::DrvrSeatSwtSts_info>* DrvrSeatSwtSts_de=nullptr;
 
     static DEInjector<autosar::DrvrWLoadLvl_info>* DrvrWLoadLvl_de=nullptr;
+
+    static DEInjector<autosar::DstEstimdToEmptyForDrvgElec_info>* DstEstimdToEmptyForDrvgElec_de=nullptr;
+
+    static DEInjector<autosar::DstEstimdToEmptyForDrvgElecEco_info>* DstEstimdToEmptyForDrvgElecEco_de=nullptr;
 
     static DEInjector<autosar::DstNotifSts_info>* DstNotifSts_de=nullptr;
 
@@ -223,7 +253,11 @@
 
     static DEInjector<autosar::DstTrvldMst2_info>* DstTrvldMst2_de=nullptr;
 
+    static DEInjector<autosar::EgyCostForRoute_info>* EgyCostForRoute_de=nullptr;
+
     static DEInjector<autosar::EmgyAsscSts_info>* EmgyAsscSts_de=nullptr;
+
+    static DEInjector<autosar::EmgyAsscStsConnGen2_info>* EmgyAsscStsConnGen2_de=nullptr;
 
     static DEInjector<autosar::EmgyVehWarnSts_info>* EmgyVehWarnSts_de=nullptr;
 
@@ -295,6 +329,11 @@
 
     static DEInjector<autosar::HudSts_info>* HudSts_de=nullptr;
 
+// ***************************************
+// HvBattEgyAvlDcha3 not found in Com file
+
+    static DEInjector<autosar::HvBattSmtActv_info>* HvBattSmtActv_de=nullptr;
+
     static DEInjector<autosar::HvacAirMFlowEstimd_info>* HvacAirMFlowEstimd_de=nullptr;
 
     static DEInjector<autosar::HznRstExtd_info>* HznRstExtd_de=nullptr;
@@ -339,6 +378,8 @@
 
     static DEInjector<autosar::LiPassFltIndcrTurn_info>* LiPassFltIndcrTurn_de=nullptr;
 
+    static DEInjector<autosar::ListOfNodAv_info>* ListOfNodAv_de=nullptr;
+
     static DEInjector<autosar::LockgCenSts_info>* LockgCenSts_de=nullptr;
 
     static DEInjector<autosar::LockgCenStsForUsrFb_info>* LockgCenStsForUsrFb_de=nullptr;
@@ -361,6 +402,10 @@
 
 // ***************************************
 // MtrlSnsrT not found in Com file
+
+    static DEInjector<autosar::NFSDataFront_info>* NFSDataFront_de=nullptr;
+
+    static DEInjector<autosar::NFSDataRear_info>* NFSDataRear_de=nullptr;
 
     static DEInjector<autosar::NetCtrlrActvt_info>* NetCtrlrActvt_de=nullptr;
 
@@ -400,6 +445,12 @@
 
     static DEInjector<autosar::PreClngNotif_info>* PreClngNotif_de=nullptr;
 
+    static DEInjector<autosar::PrkgAssiActvSts_info>* PrkgAssiActvSts_de=nullptr;
+
+    static DEInjector<autosar::PrkgAssiAudWarnFront_info>* PrkgAssiAudWarnFront_de=nullptr;
+
+    static DEInjector<autosar::PrkgAssiAudWarnRear_info>* PrkgAssiAudWarnRear_de=nullptr;
+
     static DEInjector<autosar::PrkgAssiFailr_info>* PrkgAssiFailr_de=nullptr;
 
     static DEInjector<autosar::PrkgAssiManvActvSts_info>* PrkgAssiManvActvSts_de=nullptr;
@@ -419,6 +470,8 @@
     static DEInjector<autosar::ProfLimd_info>* ProfLimd_de=nullptr;
 
     static DEInjector<autosar::ProfPenSts1_info>* ProfPenSts1_de=nullptr;
+
+    static DEInjector<autosar::PrpsnDrvMod_info>* PrpsnDrvMod_de=nullptr;
 
     static DEInjector<autosar::PrpsnHvBattUsgModAct_info>* PrpsnHvBattUsgModAct_de=nullptr;
 
@@ -455,6 +508,14 @@
     static DEInjector<autosar::PwrSplyErrSts_info>* PwrSplyErrSts_de=nullptr;
 
     static DEInjector<autosar::ReAxleWarn_info>* ReAxleWarn_de=nullptr;
+
+    static DEInjector<autosar::RlyPwrDistbnCmd1WdBattSaveCmd_info>* RlyPwrDistbnCmd1WdBattSaveCmd_de=nullptr;
+
+    static DEInjector<autosar::RlyPwrDistbnCmd1WdIgnRlyCmd_info>* RlyPwrDistbnCmd1WdIgnRlyCmd_de=nullptr;
+
+    static DEInjector<autosar::RlyPwrDistbnCmd1WdIgnRlyExtCmd_info>* RlyPwrDistbnCmd1WdIgnRlyExtCmd_de=nullptr;
+
+    static DEInjector<autosar::RlyPwrDistbnCmd1WdPreBattSaveCmd_info>* RlyPwrDistbnCmd1WdPreBattSaveCmd_de=nullptr;
 
     static DEInjector<autosar::RmnLockgPrsnlReq_info>* RmnLockgPrsnlReq_de=nullptr;
 
@@ -493,17 +554,17 @@
 // ***************************************
 // SetOfLangAck not found in Com file
 
-    static DEInjector<autosar::SftyCchAccActvnSts_info>* SftyCchAccActvnSts_de=nullptr;
+    static DEInjector<autosar::SftyCchAccSts_info>* SftyCchAccSts_de=nullptr;
 
     static DEInjector<autosar::SftyCchDrvgCycIdx_info>* SftyCchDrvgCycIdx_de=nullptr;
 
-    static DEInjector<autosar::SftyCchLaneKeepAidActvnSts_info>* SftyCchLaneKeepAidActvnSts_de=nullptr;
+    static DEInjector<autosar::SftyCchLaneKeepAidSts_info>* SftyCchLaneKeepAidSts_de=nullptr;
 
     static DEInjector<autosar::SftyCchLongTermIdx_info>* SftyCchLongTermIdx_de=nullptr;
 
     static DEInjector<autosar::SftyCchMidTermIdx_info>* SftyCchMidTermIdx_de=nullptr;
 
-    static DEInjector<autosar::SftyCchPilotAssiActvnSts_info>* SftyCchPilotAssiActvnSts_de=nullptr;
+    static DEInjector<autosar::SftyCchPilotAssiSts_info>* SftyCchPilotAssiSts_de=nullptr;
 
     static DEInjector<autosar::SftyCchPrimFbAftDrvg_info>* SftyCchPrimFbAftDrvg_de=nullptr;
 
@@ -562,6 +623,8 @@
     static DEInjector<autosar::TankFlapSts_info>* TankFlapSts_de=nullptr;
 
     static DEInjector<autosar::TelmSts_info>* TelmSts_de=nullptr;
+
+    static DEInjector<autosar::TelmStsConnGen2_info>* TelmStsConnGen2_de=nullptr;
 
     static DEInjector<autosar::TiAndDateIndcn_info>* TiAndDateIndcn_de=nullptr;
 
