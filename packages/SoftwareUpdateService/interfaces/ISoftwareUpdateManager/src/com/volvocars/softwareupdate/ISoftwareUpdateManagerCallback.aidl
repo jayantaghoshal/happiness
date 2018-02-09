@@ -1,5 +1,6 @@
 package com.volvocars.softwareupdate;
 
+import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 
 /**
@@ -20,6 +21,11 @@ oneway interface ISoftwareUpdateManagerCallback {
      * Notify client about a state change of a specific assignment
      */
     void UpdateSoftwareState(in String uuid, in int state);
+
+    /**
+    * Notify client about new Pending Installations (Installation Order List)
+    */
+    void UpdatePendingInstallations(in List<InstallationOrder> installation_order_list);
 
     /**
      * Notify client of Error

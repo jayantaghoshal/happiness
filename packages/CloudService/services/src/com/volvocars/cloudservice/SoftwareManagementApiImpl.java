@@ -188,4 +188,13 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         callback.CommissionStatus(CommissionSoftwareAssignment(uuid));
     }
+
+    /**
+    * Get a list of pending installations (installation orders)
+    * @param callback
+    */
+    @Override
+    public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
+        //TODO: implement
+    }
 }

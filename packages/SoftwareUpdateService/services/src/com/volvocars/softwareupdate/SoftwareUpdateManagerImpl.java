@@ -96,5 +96,8 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         service.CommissionAssignment(uuid);
     }
 
-
+    @Override
+    public void GetPendingInstallations(ISoftwareUpdateManagerCallback callback) {
+        service.GetPendingInstallations(callback);
+    }
 }

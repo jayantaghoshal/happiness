@@ -19,4 +19,10 @@ oneway interface ISoftwareManagementApi {
      * @param callback
      */
      void CommissionSoftwareAssignment(in String uuid, in ISoftwareManagementApiCallback callback);
+
+    /**
+    * Get a list of pending installations (installation orders)
+    * @param callback
+    */
+     void GetPendingInstallations(in ISoftwareManagementApiCallback callback);
 }
