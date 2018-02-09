@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 #include "gen_dataelements.h"
 
@@ -63,6 +63,16 @@ Dir AccSts_info::Direction() { return Dir::IN; }
 const char* AccSts_info::name() const { return Name(); }
 const char* AccSts_info::typeName() const { return TypeName(); }
 Dir AccSts_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* ActrPosnFrnReqForOsaAndRecirc_info::Name() { return "ActrPosnFrnReqForOsaAndRecirc"; }
+const char* ActrPosnFrnReqForOsaAndRecirc_info::TypeName() { return "double"; }
+Dir ActrPosnFrnReqForOsaAndRecirc_info::Direction() { return Dir::IN; }
+
+const char* ActrPosnFrnReqForOsaAndRecirc_info::name() const { return Name(); }
+const char* ActrPosnFrnReqForOsaAndRecirc_info::typeName() const { return TypeName(); }
+Dir ActrPosnFrnReqForOsaAndRecirc_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -156,6 +166,16 @@ Dir ActvnOfSwtIllmnForSeatHeatrRe_info::direction() const { return Direction(); 
 
 
 //==========================================
+const char* ActvtAutnmsPrkgCtrl_info::Name() { return "ActvtAutnmsPrkgCtrl"; }
+const char* ActvtAutnmsPrkgCtrl_info::TypeName() { return "ActvtAutnmsPrkgCtrl"; }
+Dir ActvtAutnmsPrkgCtrl_info::Direction() { return Dir::OUT; }
+
+const char* ActvtAutnmsPrkgCtrl_info::name() const { return Name(); }
+const char* ActvtAutnmsPrkgCtrl_info::typeName() const { return TypeName(); }
+Dir ActvtAutnmsPrkgCtrl_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* AdjSpdLimnSts_info::Name() { return "AdjSpdLimnSts"; }
 const char* AdjSpdLimnSts_info::TypeName() { return "AdjSpdLimnSts2"; }
 Dir AdjSpdLimnSts_info::Direction() { return Dir::IN; }
@@ -246,6 +266,16 @@ Dir AntithftRednReq_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* AsyFctDeactvnWarn_info::Name() { return "AsyFctDeactvnWarn"; }
+const char* AsyFctDeactvnWarn_info::TypeName() { return "uint8_t"; }
+Dir AsyFctDeactvnWarn_info::Direction() { return Dir::IN; }
+
+const char* AsyFctDeactvnWarn_info::name() const { return Name(); }
+const char* AsyFctDeactvnWarn_info::typeName() const { return TypeName(); }
+Dir AsyFctDeactvnWarn_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* AsyLaneChg_info::Name() { return "AsyLaneChg"; }
 const char* AsyLaneChg_info::TypeName() { return "AsyLaneChg1"; }
 Dir AsyLaneChg_info::Direction() { return Dir::IN; }
@@ -266,6 +296,16 @@ Dir AsySteerApplyRqrd_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* AsySteerFctDeactvdWarn_info::Name() { return "AsySteerFctDeactvdWarn"; }
+const char* AsySteerFctDeactvdWarn_info::TypeName() { return "OnOff1"; }
+Dir AsySteerFctDeactvdWarn_info::Direction() { return Dir::IN; }
+
+const char* AsySteerFctDeactvdWarn_info::name() const { return Name(); }
+const char* AsySteerFctDeactvdWarn_info::typeName() const { return TypeName(); }
+Dir AsySteerFctDeactvdWarn_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* AudMsgReq_info::Name() { return "AudMsgReq"; }
 const char* AudMsgReq_info::TypeName() { return "uint8_t"; }
 Dir AudMsgReq_info::Direction() { return Dir::IN; }
@@ -283,6 +323,76 @@ Dir AudWarnActv_info::Direction() { return Dir::OUT; }
 const char* AudWarnActv_info::name() const { return Name(); }
 const char* AudWarnActv_info::typeName() const { return TypeName(); }
 Dir AudWarnActv_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgActvScenario_info::Name() { return "AutnmsPrkgActvScenario"; }
+const char* AutnmsPrkgActvScenario_info::TypeName() { return "AutnmsPrkgActvScenario"; }
+Dir AutnmsPrkgActvScenario_info::Direction() { return Dir::IN; }
+
+const char* AutnmsPrkgActvScenario_info::name() const { return Name(); }
+const char* AutnmsPrkgActvScenario_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgActvScenario_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgActvn_info::Name() { return "AutnmsPrkgActvn"; }
+const char* AutnmsPrkgActvn_info::TypeName() { return "OnOff1"; }
+Dir AutnmsPrkgActvn_info::Direction() { return Dir::OUT; }
+
+const char* AutnmsPrkgActvn_info::name() const { return Name(); }
+const char* AutnmsPrkgActvn_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgActvn_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgAvlScenario_info::Name() { return "AutnmsPrkgAvlScenario"; }
+const char* AutnmsPrkgAvlScenario_info::TypeName() { return "AutnmsPrkgAvlScenario"; }
+Dir AutnmsPrkgAvlScenario_info::Direction() { return Dir::IN; }
+
+const char* AutnmsPrkgAvlScenario_info::name() const { return Name(); }
+const char* AutnmsPrkgAvlScenario_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgAvlScenario_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgEnaResu_info::Name() { return "AutnmsPrkgEnaResu"; }
+const char* AutnmsPrkgEnaResu_info::TypeName() { return "EnaResu"; }
+Dir AutnmsPrkgEnaResu_info::Direction() { return Dir::IN; }
+
+const char* AutnmsPrkgEnaResu_info::name() const { return Name(); }
+const char* AutnmsPrkgEnaResu_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgEnaResu_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgProgs_info::Name() { return "AutnmsPrkgProgs"; }
+const char* AutnmsPrkgProgs_info::TypeName() { return "uint8_t"; }
+Dir AutnmsPrkgProgs_info::Direction() { return Dir::IN; }
+
+const char* AutnmsPrkgProgs_info::name() const { return Name(); }
+const char* AutnmsPrkgProgs_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgProgs_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AutnmsPrkgSeldScenario_info::Name() { return "AutnmsPrkgSeldScenario"; }
+const char* AutnmsPrkgSeldScenario_info::TypeName() { return "AutnmsPrkgSeldScenario"; }
+Dir AutnmsPrkgSeldScenario_info::Direction() { return Dir::OUT; }
+
+const char* AutnmsPrkgSeldScenario_info::name() const { return Name(); }
+const char* AutnmsPrkgSeldScenario_info::typeName() const { return TypeName(); }
+Dir AutnmsPrkgSeldScenario_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* AvlStsForLatAutDrv_info::Name() { return "AvlStsForLatAutDrv"; }
+const char* AvlStsForLatAutDrv_info::TypeName() { return "AvlStsForLatAutDrv5"; }
+Dir AvlStsForLatAutDrv_info::Direction() { return Dir::IN; }
+
+const char* AvlStsForLatAutDrv_info::name() const { return Name(); }
+const char* AvlStsForLatAutDrv_info::typeName() const { return TypeName(); }
+Dir AvlStsForLatAutDrv_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -866,6 +976,16 @@ Dir CnclWarnLgtForAutDrv_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* CnsPrm_info::Name() { return "CnsPrm"; }
+const char* CnsPrm_info::TypeName() { return "CnsPrmRec1"; }
+Dir CnsPrm_info::Direction() { return Dir::IN; }
+
+const char* CnsPrm_info::name() const { return Name(); }
+const char* CnsPrm_info::typeName() const { return TypeName(); }
+Dir CnsPrm_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* ComLostExtrSound_info::Name() { return "ComLostExtrSound"; }
 const char* ComLostExtrSound_info::TypeName() { return "bool"; }
 Dir ComLostExtrSound_info::Direction() { return Dir::IN; }
@@ -873,6 +993,26 @@ Dir ComLostExtrSound_info::Direction() { return Dir::IN; }
 const char* ComLostExtrSound_info::name() const { return Name(); }
 const char* ComLostExtrSound_info::typeName() const { return TypeName(); }
 Dir ComLostExtrSound_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* ConSftyDataSharingAllwd_info::Name() { return "ConSftyDataSharingAllwd"; }
+const char* ConSftyDataSharingAllwd_info::TypeName() { return "OnOff1"; }
+Dir ConSftyDataSharingAllwd_info::Direction() { return Dir::OUT; }
+
+const char* ConSftyDataSharingAllwd_info::name() const { return Name(); }
+const char* ConSftyDataSharingAllwd_info::typeName() const { return TypeName(); }
+Dir ConSftyDataSharingAllwd_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* ConSftyDataSharingSts_info::Name() { return "ConSftyDataSharingSts"; }
+const char* ConSftyDataSharingSts_info::TypeName() { return "OnOff1"; }
+Dir ConSftyDataSharingSts_info::Direction() { return Dir::IN; }
+
+const char* ConSftyDataSharingSts_info::name() const { return Name(); }
+const char* ConSftyDataSharingSts_info::typeName() const { return TypeName(); }
+Dir ConSftyDataSharingSts_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -1016,6 +1156,26 @@ Dir CurtActvnReReq_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* DataDistbnAllwdForEgyPred_info::Name() { return "DataDistbnAllwdForEgyPred"; }
+const char* DataDistbnAllwdForEgyPred_info::TypeName() { return "OnOffNoReq"; }
+Dir DataDistbnAllwdForEgyPred_info::Direction() { return Dir::OUT; }
+
+const char* DataDistbnAllwdForEgyPred_info::name() const { return Name(); }
+const char* DataDistbnAllwdForEgyPred_info::typeName() const { return TypeName(); }
+Dir DataDistbnAllwdForEgyPred_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* DataDistbnReqForEgyPred_info::Name() { return "DataDistbnReqForEgyPred"; }
+const char* DataDistbnReqForEgyPred_info::TypeName() { return "OnOffNoReq"; }
+Dir DataDistbnReqForEgyPred_info::Direction() { return Dir::IN; }
+
+const char* DataDistbnReqForEgyPred_info::name() const { return Name(); }
+const char* DataDistbnReqForEgyPred_info::typeName() const { return TypeName(); }
+Dir DataDistbnReqForEgyPred_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* DataSpclDMSM_info::Name() { return "DataSpclDMSM"; }
 const char* DataSpclDMSM_info::TypeName() { return "DataSpclTyp"; }
 Dir DataSpclDMSM_info::Direction() { return Dir::IN; }
@@ -1053,6 +1213,16 @@ Dir DefrstDurgClimaEnad_info::Direction() { return Dir::INTERNAL; }
 const char* DefrstDurgClimaEnad_info::name() const { return Name(); }
 const char* DefrstDurgClimaEnad_info::typeName() const { return TypeName(); }
 Dir DefrstDurgClimaEnad_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* DestSrcAndCfmRqrd_info::Name() { return "DestSrcAndCfmRqrd"; }
+const char* DestSrcAndCfmRqrd_info::TypeName() { return "uint16_t"; }
+Dir DestSrcAndCfmRqrd_info::Direction() { return Dir::IN; }
+
+const char* DestSrcAndCfmRqrd_info::name() const { return Name(); }
+const char* DestSrcAndCfmRqrd_info::typeName() const { return TypeName(); }
+Dir DestSrcAndCfmRqrd_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -1386,6 +1556,16 @@ Dir DrvrHmiForHmiCen_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* DrvrHmiSpdLimAdpnSts_info::Name() { return "DrvrHmiSpdLimAdpnSts"; }
+const char* DrvrHmiSpdLimAdpnSts_info::TypeName() { return "OnOff1"; }
+Dir DrvrHmiSpdLimAdpnSts_info::Direction() { return Dir::IN; }
+
+const char* DrvrHmiSpdLimAdpnSts_info::name() const { return Name(); }
+const char* DrvrHmiSpdLimAdpnSts_info::typeName() const { return TypeName(); }
+Dir DrvrHmiSpdLimAdpnSts_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* DrvrHmiTmrForHmiCen_info::Name() { return "DrvrHmiTmrForHmiCen"; }
 const char* DrvrHmiTmrForHmiCen_info::TypeName() { return "Array8ByteU8"; }
 Dir DrvrHmiTmrForHmiCen_info::Direction() { return Dir::OUT; }
@@ -1526,6 +1706,26 @@ Dir DrvrWLoadLvl_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* DstEstimdToEmptyForDrvgElec_info::Name() { return "DstEstimdToEmptyForDrvgElec"; }
+const char* DstEstimdToEmptyForDrvgElec_info::TypeName() { return "uint16_t"; }
+Dir DstEstimdToEmptyForDrvgElec_info::Direction() { return Dir::IN; }
+
+const char* DstEstimdToEmptyForDrvgElec_info::name() const { return Name(); }
+const char* DstEstimdToEmptyForDrvgElec_info::typeName() const { return TypeName(); }
+Dir DstEstimdToEmptyForDrvgElec_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* DstEstimdToEmptyForDrvgElecEco_info::Name() { return "DstEstimdToEmptyForDrvgElecEco"; }
+const char* DstEstimdToEmptyForDrvgElecEco_info::TypeName() { return "uint16_t"; }
+Dir DstEstimdToEmptyForDrvgElecEco_info::Direction() { return Dir::IN; }
+
+const char* DstEstimdToEmptyForDrvgElecEco_info::name() const { return Name(); }
+const char* DstEstimdToEmptyForDrvgElecEco_info::typeName() const { return TypeName(); }
+Dir DstEstimdToEmptyForDrvgElecEco_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* DstNotifActv_info::Name() { return "DstNotifActv"; }
 const char* DstNotifActv_info::TypeName() { return "OnOffPen"; }
 Dir DstNotifActv_info::Direction() { return Dir::OUT; }
@@ -1636,6 +1836,16 @@ Dir EasyInOutDrvrSeatAdjmt_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* EgyCostForRoute_info::Name() { return "EgyCostForRoute"; }
+const char* EgyCostForRoute_info::TypeName() { return "EgyCostForRouteRec1"; }
+Dir EgyCostForRoute_info::Direction() { return Dir::IN; }
+
+const char* EgyCostForRoute_info::name() const { return Name(); }
+const char* EgyCostForRoute_info::typeName() const { return TypeName(); }
+Dir EgyCostForRoute_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* EgySave_info::Name() { return "EgySave"; }
 const char* EgySave_info::TypeName() { return "OnOff1"; }
 Dir EgySave_info::Direction() { return Dir::OUT; }
@@ -1653,6 +1863,16 @@ Dir EmgyAsscSts_info::Direction() { return Dir::IN; }
 const char* EmgyAsscSts_info::name() const { return Name(); }
 const char* EmgyAsscSts_info::typeName() const { return TypeName(); }
 Dir EmgyAsscSts_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* EmgyAsscStsConnGen2_info::Name() { return "EmgyAsscStsConnGen2"; }
+const char* EmgyAsscStsConnGen2_info::TypeName() { return "AsscSts"; }
+Dir EmgyAsscStsConnGen2_info::Direction() { return Dir::IN; }
+
+const char* EmgyAsscStsConnGen2_info::name() const { return Name(); }
+const char* EmgyAsscStsConnGen2_info::typeName() const { return TypeName(); }
+Dir EmgyAsscStsConnGen2_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -2336,6 +2556,36 @@ Dir HudVisFctSetg_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* HvBattEgyAvlDcha3_info::Name() { return "HvBattEgyAvlDcha3"; }
+const char* HvBattEgyAvlDcha3_info::TypeName() { return "double"; }
+Dir HvBattEgyAvlDcha3_info::Direction() { return Dir::INTERNAL; }
+
+const char* HvBattEgyAvlDcha3_info::name() const { return Name(); }
+const char* HvBattEgyAvlDcha3_info::typeName() const { return TypeName(); }
+Dir HvBattEgyAvlDcha3_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* HvBattSmtActv_info::Name() { return "HvBattSmtActv"; }
+const char* HvBattSmtActv_info::TypeName() { return "Flg1"; }
+Dir HvBattSmtActv_info::Direction() { return Dir::IN; }
+
+const char* HvBattSmtActv_info::name() const { return Name(); }
+const char* HvBattSmtActv_info::typeName() const { return TypeName(); }
+Dir HvBattSmtActv_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* HvBattSmtSeld_info::Name() { return "HvBattSmtSeld"; }
+const char* HvBattSmtSeld_info::TypeName() { return "OnOffNoReq"; }
+Dir HvBattSmtSeld_info::Direction() { return Dir::OUT; }
+
+const char* HvBattSmtSeld_info::name() const { return Name(); }
+const char* HvBattSmtSeld_info::typeName() const { return TypeName(); }
+Dir HvBattSmtSeld_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* HvacAirMFlowEstimd_info::Name() { return "HvacAirMFlowEstimd"; }
 const char* HvacAirMFlowEstimd_info::TypeName() { return "uint16_t"; }
 Dir HvacAirMFlowEstimd_info::Direction() { return Dir::IN; }
@@ -2916,6 +3166,16 @@ Dir LiTrfcSide1WdReq1_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* ListOfNodAv_info::Name() { return "ListOfNodAv"; }
+const char* ListOfNodAv_info::TypeName() { return "ListOfNodAv"; }
+Dir ListOfNodAv_info::Direction() { return Dir::IN; }
+
+const char* ListOfNodAv_info::name() const { return Name(); }
+const char* ListOfNodAv_info::typeName() const { return TypeName(); }
+Dir ListOfNodAv_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* LockSpdReq_info::Name() { return "LockSpdReq"; }
 const char* LockSpdReq_info::TypeName() { return "OnOffPen"; }
 Dir LockSpdReq_info::Direction() { return Dir::OUT; }
@@ -3113,6 +3373,26 @@ Dir MtrlSnsrT_info::Direction() { return Dir::INTERNAL; }
 const char* MtrlSnsrT_info::name() const { return Name(); }
 const char* MtrlSnsrT_info::typeName() const { return TypeName(); }
 Dir MtrlSnsrT_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* NFSDataFront_info::Name() { return "NFSDataFront"; }
+const char* NFSDataFront_info::TypeName() { return "SnsrPrkgAssi3"; }
+Dir NFSDataFront_info::Direction() { return Dir::IN; }
+
+const char* NFSDataFront_info::name() const { return Name(); }
+const char* NFSDataFront_info::typeName() const { return TypeName(); }
+Dir NFSDataFront_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* NFSDataRear_info::Name() { return "NFSDataRear"; }
+const char* NFSDataRear_info::TypeName() { return "SnsrPrkgAssi3"; }
+Dir NFSDataRear_info::Direction() { return Dir::IN; }
+
+const char* NFSDataRear_info::name() const { return Name(); }
+const char* NFSDataRear_info::typeName() const { return TypeName(); }
+Dir NFSDataRear_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -3396,6 +3676,36 @@ Dir PreClngNotif_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* PrkgAssiActvSts_info::Name() { return "PrkgAssiActvSts"; }
+const char* PrkgAssiActvSts_info::TypeName() { return "OnOff1"; }
+Dir PrkgAssiActvSts_info::Direction() { return Dir::IN; }
+
+const char* PrkgAssiActvSts_info::name() const { return Name(); }
+const char* PrkgAssiActvSts_info::typeName() const { return TypeName(); }
+Dir PrkgAssiActvSts_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* PrkgAssiAudWarnFront_info::Name() { return "PrkgAssiAudWarnFront"; }
+const char* PrkgAssiAudWarnFront_info::TypeName() { return "PrkgAssiAudWarn"; }
+Dir PrkgAssiAudWarnFront_info::Direction() { return Dir::IN; }
+
+const char* PrkgAssiAudWarnFront_info::name() const { return Name(); }
+const char* PrkgAssiAudWarnFront_info::typeName() const { return TypeName(); }
+Dir PrkgAssiAudWarnFront_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* PrkgAssiAudWarnRear_info::Name() { return "PrkgAssiAudWarnRear"; }
+const char* PrkgAssiAudWarnRear_info::TypeName() { return "PrkgAssiAudWarn"; }
+Dir PrkgAssiAudWarnRear_info::Direction() { return Dir::IN; }
+
+const char* PrkgAssiAudWarnRear_info::name() const { return Name(); }
+const char* PrkgAssiAudWarnRear_info::typeName() const { return TypeName(); }
+Dir PrkgAssiAudWarnRear_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* PrkgAssiFailr_info::Name() { return "PrkgAssiFailr"; }
 const char* PrkgAssiFailr_info::TypeName() { return "PrkgAssiFailr2"; }
 Dir PrkgAssiFailr_info::Direction() { return Dir::IN; }
@@ -3513,6 +3823,16 @@ Dir ProfPenSts1_info::Direction() { return Dir::IN; }
 const char* ProfPenSts1_info::name() const { return Name(); }
 const char* ProfPenSts1_info::typeName() const { return TypeName(); }
 Dir ProfPenSts1_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* PrpsnDrvMod_info::Name() { return "PrpsnDrvMod"; }
+const char* PrpsnDrvMod_info::TypeName() { return "PrpsnDrvMod"; }
+Dir PrpsnDrvMod_info::Direction() { return Dir::IN; }
+
+const char* PrpsnDrvMod_info::name() const { return Name(); }
+const char* PrpsnDrvMod_info::typeName() const { return TypeName(); }
+Dir PrpsnDrvMod_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -3756,6 +4076,46 @@ Dir ReAxleWarn_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* RlyPwrDistbnCmd1WdBattSaveCmd_info::Name() { return "RlyPwrDistbnCmd1WdBattSaveCmd"; }
+const char* RlyPwrDistbnCmd1WdBattSaveCmd_info::TypeName() { return "OnOff1"; }
+Dir RlyPwrDistbnCmd1WdBattSaveCmd_info::Direction() { return Dir::IN; }
+
+const char* RlyPwrDistbnCmd1WdBattSaveCmd_info::name() const { return Name(); }
+const char* RlyPwrDistbnCmd1WdBattSaveCmd_info::typeName() const { return TypeName(); }
+Dir RlyPwrDistbnCmd1WdBattSaveCmd_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* RlyPwrDistbnCmd1WdIgnRlyCmd_info::Name() { return "RlyPwrDistbnCmd1WdIgnRlyCmd"; }
+const char* RlyPwrDistbnCmd1WdIgnRlyCmd_info::TypeName() { return "OnOff1"; }
+Dir RlyPwrDistbnCmd1WdIgnRlyCmd_info::Direction() { return Dir::IN; }
+
+const char* RlyPwrDistbnCmd1WdIgnRlyCmd_info::name() const { return Name(); }
+const char* RlyPwrDistbnCmd1WdIgnRlyCmd_info::typeName() const { return TypeName(); }
+Dir RlyPwrDistbnCmd1WdIgnRlyCmd_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::Name() { return "RlyPwrDistbnCmd1WdIgnRlyExtCmd"; }
+const char* RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::TypeName() { return "OnOff1"; }
+Dir RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::Direction() { return Dir::IN; }
+
+const char* RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::name() const { return Name(); }
+const char* RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::typeName() const { return TypeName(); }
+Dir RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* RlyPwrDistbnCmd1WdPreBattSaveCmd_info::Name() { return "RlyPwrDistbnCmd1WdPreBattSaveCmd"; }
+const char* RlyPwrDistbnCmd1WdPreBattSaveCmd_info::TypeName() { return "OnOff1"; }
+Dir RlyPwrDistbnCmd1WdPreBattSaveCmd_info::Direction() { return Dir::IN; }
+
+const char* RlyPwrDistbnCmd1WdPreBattSaveCmd_info::name() const { return Name(); }
+const char* RlyPwrDistbnCmd1WdPreBattSaveCmd_info::typeName() const { return TypeName(); }
+Dir RlyPwrDistbnCmd1WdPreBattSaveCmd_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* RmnLockgPrsnlReq_info::Name() { return "RmnLockgPrsnlReq"; }
 const char* RmnLockgPrsnlReq_info::TypeName() { return "OnOff1"; }
 Dir RmnLockgPrsnlReq_info::Direction() { return Dir::IN; }
@@ -3893,6 +4253,16 @@ Dir RotyPosReq1_info::Direction() { return Dir::IN; }
 const char* RotyPosReq1_info::name() const { return Name(); }
 const char* RotyPosReq1_info::typeName() const { return TypeName(); }
 Dir RotyPosReq1_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* RouteInfo_info::Name() { return "RouteInfo"; }
+const char* RouteInfo_info::TypeName() { return "RouteInfoRec1"; }
+Dir RouteInfo_info::Direction() { return Dir::OUT; }
+
+const char* RouteInfo_info::name() const { return Name(); }
+const char* RouteInfo_info::typeName() const { return TypeName(); }
+Dir RouteInfo_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4056,13 +4426,23 @@ Dir SetTiAndDate_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* SftyCchAccActvnSts_info::Name() { return "SftyCchAccActvnSts"; }
-const char* SftyCchAccActvnSts_info::TypeName() { return "SftyCchActvnSts1"; }
-Dir SftyCchAccActvnSts_info::Direction() { return Dir::IN; }
+const char* SetgAndRstOfTripForDrvr_info::Name() { return "SetgAndRstOfTripForDrvr"; }
+const char* SetgAndRstOfTripForDrvr_info::TypeName() { return "SetgAndRstOfTripForDrvr"; }
+Dir SetgAndRstOfTripForDrvr_info::Direction() { return Dir::OUT; }
 
-const char* SftyCchAccActvnSts_info::name() const { return Name(); }
-const char* SftyCchAccActvnSts_info::typeName() const { return TypeName(); }
-Dir SftyCchAccActvnSts_info::direction() const { return Direction(); }
+const char* SetgAndRstOfTripForDrvr_info::name() const { return Name(); }
+const char* SetgAndRstOfTripForDrvr_info::typeName() const { return TypeName(); }
+Dir SetgAndRstOfTripForDrvr_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* SftyCchAccSts_info::Name() { return "SftyCchAccSts"; }
+const char* SftyCchAccSts_info::TypeName() { return "SftyCchActvnSts2"; }
+Dir SftyCchAccSts_info::Direction() { return Dir::IN; }
+
+const char* SftyCchAccSts_info::name() const { return Name(); }
+const char* SftyCchAccSts_info::typeName() const { return TypeName(); }
+Dir SftyCchAccSts_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4076,13 +4456,13 @@ Dir SftyCchDrvgCycIdx_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* SftyCchLaneKeepAidActvnSts_info::Name() { return "SftyCchLaneKeepAidActvnSts"; }
-const char* SftyCchLaneKeepAidActvnSts_info::TypeName() { return "SftyCchActvnSts1"; }
-Dir SftyCchLaneKeepAidActvnSts_info::Direction() { return Dir::IN; }
+const char* SftyCchLaneKeepAidSts_info::Name() { return "SftyCchLaneKeepAidSts"; }
+const char* SftyCchLaneKeepAidSts_info::TypeName() { return "SftyCchActvnSts2"; }
+Dir SftyCchLaneKeepAidSts_info::Direction() { return Dir::IN; }
 
-const char* SftyCchLaneKeepAidActvnSts_info::name() const { return Name(); }
-const char* SftyCchLaneKeepAidActvnSts_info::typeName() const { return TypeName(); }
-Dir SftyCchLaneKeepAidActvnSts_info::direction() const { return Direction(); }
+const char* SftyCchLaneKeepAidSts_info::name() const { return Name(); }
+const char* SftyCchLaneKeepAidSts_info::typeName() const { return TypeName(); }
+Dir SftyCchLaneKeepAidSts_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4116,13 +4496,13 @@ Dir SftyCchMidTermIdx_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* SftyCchPilotAssiActvnSts_info::Name() { return "SftyCchPilotAssiActvnSts"; }
-const char* SftyCchPilotAssiActvnSts_info::TypeName() { return "SftyCchActvnSts1"; }
-Dir SftyCchPilotAssiActvnSts_info::Direction() { return Dir::IN; }
+const char* SftyCchPilotAssiSts_info::Name() { return "SftyCchPilotAssiSts"; }
+const char* SftyCchPilotAssiSts_info::TypeName() { return "SftyCchActvnSts2"; }
+Dir SftyCchPilotAssiSts_info::Direction() { return Dir::IN; }
 
-const char* SftyCchPilotAssiActvnSts_info::name() const { return Name(); }
-const char* SftyCchPilotAssiActvnSts_info::typeName() const { return TypeName(); }
-Dir SftyCchPilotAssiActvnSts_info::direction() const { return Direction(); }
+const char* SftyCchPilotAssiSts_info::name() const { return Name(); }
+const char* SftyCchPilotAssiSts_info::typeName() const { return TypeName(); }
+Dir SftyCchPilotAssiSts_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4536,6 +4916,16 @@ Dir TelmSts_info::direction() const { return Direction(); }
 
 
 //==========================================
+const char* TelmStsConnGen2_info::Name() { return "TelmStsConnGen2"; }
+const char* TelmStsConnGen2_info::TypeName() { return "TelmSts"; }
+Dir TelmStsConnGen2_info::Direction() { return Dir::IN; }
+
+const char* TelmStsConnGen2_info::name() const { return Name(); }
+const char* TelmStsConnGen2_info::typeName() const { return TypeName(); }
+Dir TelmStsConnGen2_info::direction() const { return Direction(); }
+
+
+//==========================================
 const char* TiAndDateIndcn_info::Name() { return "TiAndDateIndcn"; }
 const char* TiAndDateIndcn_info::TypeName() { return "DateTi30"; }
 Dir TiAndDateIndcn_info::Direction() { return Dir::IN; }
@@ -4543,16 +4933,6 @@ Dir TiAndDateIndcn_info::Direction() { return Dir::IN; }
 const char* TiAndDateIndcn_info::name() const { return Name(); }
 const char* TiAndDateIndcn_info::typeName() const { return TypeName(); }
 Dir TiAndDateIndcn_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* TiCorrnByMapData_info::Name() { return "TiCorrnByMapData"; }
-const char* TiCorrnByMapData_info::TypeName() { return "TiCorrn"; }
-Dir TiCorrnByMapData_info::Direction() { return Dir::INTERNAL; }
-
-const char* TiCorrnByMapData_info::name() const { return Name(); }
-const char* TiCorrnByMapData_info::typeName() const { return TypeName(); }
-Dir TiCorrnByMapData_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4883,6 +5263,16 @@ Dir UnlckRemReq_info::Direction() { return Dir::OUT; }
 const char* UnlckRemReq_info::name() const { return Name(); }
 const char* UnlckRemReq_info::typeName() const { return TypeName(); }
 Dir UnlckRemReq_info::direction() const { return Direction(); }
+
+
+//==========================================
+const char* UsrSeldDrvrSpprtFct_info::Name() { return "UsrSeldDrvrSpprtFct"; }
+const char* UsrSeldDrvrSpprtFct_info::TypeName() { return "DrvrSpprtFct"; }
+Dir UsrSeldDrvrSpprtFct_info::Direction() { return Dir::OUT; }
+
+const char* UsrSeldDrvrSpprtFct_info::name() const { return Name(); }
+const char* UsrSeldDrvrSpprtFct_info::typeName() const { return TypeName(); }
+Dir UsrSeldDrvrSpprtFct_info::direction() const { return Direction(); }
 
 
 //==========================================

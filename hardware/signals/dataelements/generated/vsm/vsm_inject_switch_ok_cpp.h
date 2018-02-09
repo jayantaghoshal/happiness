@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
     case SignalGroup|ComConf_ComSignalGroup_igADataRawSafe_mrx:
@@ -57,6 +57,20 @@
             AccSts_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AccSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isAccSts_mrx, length, static_cast<unsigned long>(sizeof(AccSts)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isActrPosnFrnReqForOsaAndRecirc_mrx:
+    {
+        if (sizeof(ActrPosnFrnReqForOsaAndRecirc) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received ActrPosnFrnReqForOsaAndRecirc (%u)", ComConf_ComSignal_isActrPosnFrnReqForOsaAndRecirc_mrx);
+            const ActrPosnFrnReqForOsaAndRecirc& rteValue = *static_cast<const ActrPosnFrnReqForOsaAndRecirc*>(buffer);
+            autosar::ActrPosnFrnReqForOsaAndRecirc_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>( toUnsignedFromRaw<0>(rteValue) ) * 0.1 + 0.0;
+            ActrPosnFrnReqForOsaAndRecirc_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ActrPosnFrnReqForOsaAndRecirc (%u). Got %zu , expected %lu", ComConf_ComSignal_isActrPosnFrnReqForOsaAndRecirc_mrx, length, static_cast<unsigned long>(sizeof(ActrPosnFrnReqForOsaAndRecirc)));
         }
     }
     break;
@@ -156,6 +170,20 @@
     }
     break;
 
+    case ComConf_ComSignal_isAsyFctDeactvnWarn_mrx:
+    {
+        if (sizeof(AsyFctDeactvnWarn) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AsyFctDeactvnWarn (%u)", ComConf_ComSignal_isAsyFctDeactvnWarn_mrx);
+            const AsyFctDeactvnWarn& rteValue = *static_cast<const AsyFctDeactvnWarn*>(buffer);
+            autosar::AsyFctDeactvnWarn_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            AsyFctDeactvnWarn_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AsyFctDeactvnWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isAsyFctDeactvnWarn_mrx, length, static_cast<unsigned long>(sizeof(AsyFctDeactvnWarn)));
+        }
+    }
+    break;
+
     case SignalGroup|ComConf_ComSignalGroup_igAsyLaneChg_mrx:
     {
         if (sizeof(AsyLaneChg) == length) {
@@ -187,6 +215,20 @@
     }
     break;
 
+    case ComConf_ComSignal_isAsySteerFctDeactvdWarn_mrx:
+    {
+        if (sizeof(AsySteerFctDeactvdWarn) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AsySteerFctDeactvdWarn (%u)", ComConf_ComSignal_isAsySteerFctDeactvdWarn_mrx);
+            const AsySteerFctDeactvdWarn& rteValue = *static_cast<const AsySteerFctDeactvdWarn*>(buffer);
+            autosar::AsySteerFctDeactvdWarn_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            AsySteerFctDeactvdWarn_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AsySteerFctDeactvdWarn (%u). Got %zu , expected %lu", ComConf_ComSignal_isAsySteerFctDeactvdWarn_mrx, length, static_cast<unsigned long>(sizeof(AsySteerFctDeactvdWarn)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isAudMsgReq_mrx:
     {
         if (sizeof(AudMsgReq) == length) {
@@ -197,6 +239,96 @@
             AudMsgReq_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AudMsgReq (%u). Got %zu , expected %lu", ComConf_ComSignal_isAudMsgReq_mrx, length, static_cast<unsigned long>(sizeof(AudMsgReq)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igAutnmsPrkgActvScenario_mrx:
+    {
+        if (sizeof(AutnmsPrkgActvScenario) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AutnmsPrkgActvScenario (%u)", ComConf_ComSignalGroup_igAutnmsPrkgActvScenario_mrx);
+            const AutnmsPrkgActvScenario& rteValue = *static_cast<const AutnmsPrkgActvScenario*>(buffer);
+            autosar::AutnmsPrkgActvScenario_info::data_elem_type deValue;
+            deValue.APActiveDirectParking = static_cast<decltype(deValue.APActiveDirectParking)>(rteValue.AutnmsPrkgActvScenarioAPActiveDirectParking);
+            deValue.APActiveParkingDirection = static_cast<decltype(deValue.APActiveParkingDirection)>(rteValue.AutnmsPrkgActvScenarioAPActiveParkingDirection);
+            deValue.APActiveParkingScenario = static_cast<decltype(deValue.APActiveParkingScenario)>(rteValue.AutnmsPrkgActvScenarioAPActiveParkingScenario);
+            deValue.APActiveParkingSide = static_cast<decltype(deValue.APActiveParkingSide)>(rteValue.AutnmsPrkgActvScenarioAPActiveParkingSide);
+            deValue.APActiveRemote = static_cast<decltype(deValue.APActiveRemote)>(rteValue.AutnmsPrkgActvScenarioAPActiveRemote);
+            deValue.APActiveSlotType = static_cast<decltype(deValue.APActiveSlotType)>(rteValue.AutnmsPrkgActvScenarioAPActiveSlotType);
+            deValue.APActiveState = static_cast<decltype(deValue.APActiveState)>(rteValue.AutnmsPrkgActvScenarioAPActiveState);
+            deValue.APCancelStatus = static_cast<decltype(deValue.APCancelStatus)>(rteValue.AutnmsPrkgActvScenarioAPCancelStatus);
+            deValue.APPauseStatus = static_cast<decltype(deValue.APPauseStatus)>(rteValue.AutnmsPrkgActvScenarioAPPauseStatus);
+
+            AutnmsPrkgActvScenario_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AutnmsPrkgActvScenario (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAutnmsPrkgActvScenario_mrx, length, static_cast<unsigned long>(sizeof(AutnmsPrkgActvScenario)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igAutnmsPrkgAvlScenario_mrx:
+    {
+        if (sizeof(AutnmsPrkgAvlScenario) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AutnmsPrkgAvlScenario (%u)", ComConf_ComSignalGroup_igAutnmsPrkgAvlScenario_mrx);
+            const AutnmsPrkgAvlScenario& rteValue = *static_cast<const AutnmsPrkgAvlScenario*>(buffer);
+            autosar::AutnmsPrkgAvlScenario_info::data_elem_type deValue;
+            deValue.APAvailableDirectParking = static_cast<decltype(deValue.APAvailableDirectParking)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableDirectParking);
+            deValue.APAvailableParkingDirection = static_cast<decltype(deValue.APAvailableParkingDirection)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableParkingDirection);
+            deValue.APAvailableParkingScenario = static_cast<decltype(deValue.APAvailableParkingScenario)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableParkingScenario);
+            deValue.APAvailableParkingSide = static_cast<decltype(deValue.APAvailableParkingSide)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableParkingSide);
+            deValue.APAvailableRemote = static_cast<decltype(deValue.APAvailableRemote)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableRemote);
+            deValue.APAvailableSlotType = static_cast<decltype(deValue.APAvailableSlotType)>(rteValue.AutnmsPrkgAvlScenarioAPAvailableSlotType);
+            deValue.APRecommendedParkingDirection = static_cast<decltype(deValue.APRecommendedParkingDirection)>(rteValue.AutnmsPrkgAvlScenarioAPRecommendedParkingDirection);
+            deValue.APRecommendedParkingScenario = static_cast<decltype(deValue.APRecommendedParkingScenario)>(rteValue.AutnmsPrkgAvlScenarioAPRecommendedParkingScenario);
+            deValue.APRecommendedParkingSide = static_cast<decltype(deValue.APRecommendedParkingSide)>(rteValue.AutnmsPrkgAvlScenarioAPRecommendedParkingSide);
+            deValue.APRecommendedRemote = static_cast<decltype(deValue.APRecommendedRemote)>(rteValue.AutnmsPrkgAvlScenarioAPRecommendedRemote);
+            deValue.APRecommendedSlotType = static_cast<decltype(deValue.APRecommendedSlotType)>(rteValue.AutnmsPrkgAvlScenarioAPRecommendedSlotType);
+
+            AutnmsPrkgAvlScenario_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AutnmsPrkgAvlScenario (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igAutnmsPrkgAvlScenario_mrx, length, static_cast<unsigned long>(sizeof(AutnmsPrkgAvlScenario)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isAutnmsPrkgEnaResu_mrx:
+    {
+        if (sizeof(AutnmsPrkgEnaResu) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AutnmsPrkgEnaResu (%u)", ComConf_ComSignal_isAutnmsPrkgEnaResu_mrx);
+            const AutnmsPrkgEnaResu& rteValue = *static_cast<const AutnmsPrkgEnaResu*>(buffer);
+            autosar::AutnmsPrkgEnaResu_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            AutnmsPrkgEnaResu_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AutnmsPrkgEnaResu (%u). Got %zu , expected %lu", ComConf_ComSignal_isAutnmsPrkgEnaResu_mrx, length, static_cast<unsigned long>(sizeof(AutnmsPrkgEnaResu)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isAutnmsPrkgProgs_mrx:
+    {
+        if (sizeof(AutnmsPrkgProgs) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AutnmsPrkgProgs (%u)", ComConf_ComSignal_isAutnmsPrkgProgs_mrx);
+            const AutnmsPrkgProgs& rteValue = *static_cast<const AutnmsPrkgProgs*>(buffer);
+            autosar::AutnmsPrkgProgs_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            AutnmsPrkgProgs_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AutnmsPrkgProgs (%u). Got %zu , expected %lu", ComConf_ComSignal_isAutnmsPrkgProgs_mrx, length, static_cast<unsigned long>(sizeof(AutnmsPrkgProgs)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isAvlStsForLatAutDrv_mrx:
+    {
+        if (sizeof(AvlStsForLatAutDrv) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received AvlStsForLatAutDrv (%u)", ComConf_ComSignal_isAvlStsForLatAutDrv_mrx);
+            const AvlStsForLatAutDrv& rteValue = *static_cast<const AvlStsForLatAutDrv*>(buffer);
+            autosar::AvlStsForLatAutDrv_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            AvlStsForLatAutDrv_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for AvlStsForLatAutDrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isAvlStsForLatAutDrv_mrx, length, static_cast<unsigned long>(sizeof(AvlStsForLatAutDrv)));
         }
     }
     break;
@@ -902,6 +1034,27 @@
     }
     break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igCnsPrm_mrx:
+    {
+        if (sizeof(CnsPrm) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received CnsPrm (%u)", ComConf_ComSignalGroup_igCnsPrm_mrx);
+            const CnsPrm& rteValue = *static_cast<const CnsPrm*>(buffer);
+            autosar::CnsPrm_info::data_elem_type deValue;
+            deValue.AVal = static_cast<decltype(deValue.AVal)>( toUnsignedFromRaw<8>(rteValue.CnsPrmAVal) ) * 0.01 + 0.0;
+            deValue.AuxPwrLvlInct = static_cast<decltype(deValue.AuxPwrLvlInct)>( toUnsignedFromRaw<10>(rteValue.CnsPrmAuxPwrLvlInct) ) * 20.0 + 0.0;
+            deValue.AuxPwrPrsnt = static_cast<decltype(deValue.AuxPwrPrsnt)>( toUnsignedFromRaw<10>(rteValue.CnsPrmAuxPwrPrsnt) ) * 20.0 + 0.0;
+            deValue.AuxTiPrsnt = static_cast<decltype(deValue.AuxTiPrsnt)>( toUnsignedFromRaw<12>(rteValue.CnsPrmAuxTiPrsnt) ) * 10.0 + -1.0;
+            deValue.AuxTiTranPha = static_cast<decltype(deValue.AuxTiTranPha)>( toUnsignedFromRaw<12>(rteValue.CnsPrmAuxTiTranPha) ) * 10.0 + -1.0;
+            deValue.SpdIdx = static_cast<decltype(deValue.SpdIdx)>(rteValue.CnsPrmSpdIdx);
+            deValue.SpdVal = static_cast<decltype(deValue.SpdVal)>( toUnsignedFromRaw<11>(rteValue.CnsPrmSpdVal) ) * 0.001 + -0.4548;
+
+            CnsPrm_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for CnsPrm (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igCnsPrm_mrx, length, static_cast<unsigned long>(sizeof(CnsPrm)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isComLostExtrSound_mrx:
     {
         if (sizeof(ComLostExtrSound) == length) {
@@ -912,6 +1065,20 @@
             ComLostExtrSound_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ComLostExtrSound (%u). Got %zu , expected %lu", ComConf_ComSignal_isComLostExtrSound_mrx, length, static_cast<unsigned long>(sizeof(ComLostExtrSound)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isConSftyDataSharingSts_mrx:
+    {
+        if (sizeof(ConSftyDataSharingSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received ConSftyDataSharingSts (%u)", ComConf_ComSignal_isConSftyDataSharingSts_mrx);
+            const ConSftyDataSharingSts& rteValue = *static_cast<const ConSftyDataSharingSts*>(buffer);
+            autosar::ConSftyDataSharingSts_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            ConSftyDataSharingSts_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ConSftyDataSharingSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isConSftyDataSharingSts_mrx, length, static_cast<unsigned long>(sizeof(ConSftyDataSharingSts)));
         }
     }
     break;
@@ -1047,6 +1214,20 @@
     }
     break;
 
+    case ComConf_ComSignal_isDataDistbnReqForEgyPred_mrx:
+    {
+        if (sizeof(DataDistbnReqForEgyPred) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received DataDistbnReqForEgyPred (%u)", ComConf_ComSignal_isDataDistbnReqForEgyPred_mrx);
+            const DataDistbnReqForEgyPred& rteValue = *static_cast<const DataDistbnReqForEgyPred*>(buffer);
+            autosar::DataDistbnReqForEgyPred_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            DataDistbnReqForEgyPred_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DataDistbnReqForEgyPred (%u). Got %zu , expected %lu", ComConf_ComSignal_isDataDistbnReqForEgyPred_mrx, length, static_cast<unsigned long>(sizeof(DataDistbnReqForEgyPred)));
+        }
+    }
+    break;
+
     case SignalGroup|ComConf_ComSignalGroup_igDataSpclDMSM_mrx:
     {
         if (sizeof(DataSpclDMSM) == length) {
@@ -1075,6 +1256,20 @@
             DayToSrv_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DayToSrv (%u). Got %zu , expected %lu", ComConf_ComSignal_isDayToSrv_mrx, length, static_cast<unsigned long>(sizeof(DayToSrv)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isDestSrcAndCfmRqrd_mrx:
+    {
+        if (sizeof(DestSrcAndCfmRqrd) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received DestSrcAndCfmRqrd (%u)", ComConf_ComSignal_isDestSrcAndCfmRqrd_mrx);
+            const DestSrcAndCfmRqrd& rteValue = *static_cast<const DestSrcAndCfmRqrd*>(buffer);
+            autosar::DestSrcAndCfmRqrd_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            DestSrcAndCfmRqrd_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DestSrcAndCfmRqrd (%u). Got %zu , expected %lu", ComConf_ComSignal_isDestSrcAndCfmRqrd_mrx, length, static_cast<unsigned long>(sizeof(DestSrcAndCfmRqrd)));
         }
     }
     break;
@@ -1351,6 +1546,20 @@
     }
     break;
 
+    case ComConf_ComSignal_isDrvrHmiSpdLimAdpnSts_mrx:
+    {
+        if (sizeof(DrvrHmiSpdLimAdpnSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received DrvrHmiSpdLimAdpnSts (%u)", ComConf_ComSignal_isDrvrHmiSpdLimAdpnSts_mrx);
+            const DrvrHmiSpdLimAdpnSts& rteValue = *static_cast<const DrvrHmiSpdLimAdpnSts*>(buffer);
+            autosar::DrvrHmiSpdLimAdpnSts_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            DrvrHmiSpdLimAdpnSts_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DrvrHmiSpdLimAdpnSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isDrvrHmiSpdLimAdpnSts_mrx, length, static_cast<unsigned long>(sizeof(DrvrHmiSpdLimAdpnSts)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isDrvrMassgRunng_mrx:
     {
         if (sizeof(DrvrMassgRunng) == length) {
@@ -1474,6 +1683,34 @@
     }
     break;
 
+    case ComConf_ComSignal_isDstEstimdToEmptyForDrvgElec_mrx:
+    {
+        if (sizeof(DstEstimdToEmptyForDrvgElec) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received DstEstimdToEmptyForDrvgElec (%u)", ComConf_ComSignal_isDstEstimdToEmptyForDrvgElec_mrx);
+            const DstEstimdToEmptyForDrvgElec& rteValue = *static_cast<const DstEstimdToEmptyForDrvgElec*>(buffer);
+            autosar::DstEstimdToEmptyForDrvgElec_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            DstEstimdToEmptyForDrvgElec_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DstEstimdToEmptyForDrvgElec (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstEstimdToEmptyForDrvgElec_mrx, length, static_cast<unsigned long>(sizeof(DstEstimdToEmptyForDrvgElec)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isDstEstimdToEmptyForDrvgElecEco_mrx:
+    {
+        if (sizeof(DstEstimdToEmptyForDrvgElecEco) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received DstEstimdToEmptyForDrvgElecEco (%u)", ComConf_ComSignal_isDstEstimdToEmptyForDrvgElecEco_mrx);
+            const DstEstimdToEmptyForDrvgElecEco& rteValue = *static_cast<const DstEstimdToEmptyForDrvgElecEco*>(buffer);
+            autosar::DstEstimdToEmptyForDrvgElecEco_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            DstEstimdToEmptyForDrvgElecEco_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for DstEstimdToEmptyForDrvgElecEco (%u). Got %zu , expected %lu", ComConf_ComSignal_isDstEstimdToEmptyForDrvgElecEco_mrx, length, static_cast<unsigned long>(sizeof(DstEstimdToEmptyForDrvgElecEco)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isDstNotifSts_mrx:
     {
         if (sizeof(DstNotifSts) == length) {
@@ -1588,6 +1825,22 @@
     }
     break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igEgyCostForRoute_mrx:
+    {
+        if (sizeof(EgyCostForRoute) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received EgyCostForRoute (%u)", ComConf_ComSignalGroup_igEgyCostForRoute_mrx);
+            const EgyCostForRoute& rteValue = *static_cast<const EgyCostForRoute*>(buffer);
+            autosar::EgyCostForRoute_info::data_elem_type deValue;
+            deValue.Egy = static_cast<decltype(deValue.Egy)>( toUnsignedFromRaw<12>(rteValue.EgyCostForRouteEgy) ) * 50.0 + -500.0;
+            deValue.Idx = static_cast<decltype(deValue.Idx)>(rteValue.EgyCostForRouteIdx);
+
+            EgyCostForRoute_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EgyCostForRoute (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igEgyCostForRoute_mrx, length, static_cast<unsigned long>(sizeof(EgyCostForRoute)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isEmgyAsscSts_mrx:
     {
         if (sizeof(EmgyAsscSts) == length) {
@@ -1598,6 +1851,20 @@
             EmgyAsscSts_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EmgyAsscSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isEmgyAsscSts_mrx, length, static_cast<unsigned long>(sizeof(EmgyAsscSts)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isEmgyAsscStsConnGen2_mrx:
+    {
+        if (sizeof(EmgyAsscStsConnGen2) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received EmgyAsscStsConnGen2 (%u)", ComConf_ComSignal_isEmgyAsscStsConnGen2_mrx);
+            const EmgyAsscStsConnGen2& rteValue = *static_cast<const EmgyAsscStsConnGen2*>(buffer);
+            autosar::EmgyAsscStsConnGen2_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            EmgyAsscStsConnGen2_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for EmgyAsscStsConnGen2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isEmgyAsscStsConnGen2_mrx, length, static_cast<unsigned long>(sizeof(EmgyAsscStsConnGen2)));
         }
     }
     break;
@@ -2122,6 +2389,20 @@
     }
     break;
 
+    case ComConf_ComSignal_isHvBattSmtActv_mrx:
+    {
+        if (sizeof(HvBattSmtActv) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received HvBattSmtActv (%u)", ComConf_ComSignal_isHvBattSmtActv_mrx);
+            const HvBattSmtActv& rteValue = *static_cast<const HvBattSmtActv*>(buffer);
+            autosar::HvBattSmtActv_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            HvBattSmtActv_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for HvBattSmtActv (%u). Got %zu , expected %lu", ComConf_ComSignal_isHvBattSmtActv_mrx, length, static_cast<unsigned long>(sizeof(HvBattSmtActv)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isHvacAirMFlowEstimd_mrx:
     {
         if (sizeof(HvacAirMFlowEstimd) == length) {
@@ -2432,6 +2713,28 @@
     }
     break;
 
+    case SignalGroup|ComConf_ComSignalGroup_igListOfNodAv_mrx:
+    {
+        if (sizeof(ListOfNodAv) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received ListOfNodAv (%u)", ComConf_ComSignalGroup_igListOfNodAv_mrx);
+            const ListOfNodAv& rteValue = *static_cast<const ListOfNodAv*>(buffer);
+            autosar::ListOfNodAv_info::data_elem_type deValue;
+            deValue.ListOfNodAv1 = static_cast<decltype(deValue.ListOfNodAv1)>(rteValue.ListOfNodAvListOfNodAv1);
+            deValue.ListOfNodAv2 = static_cast<decltype(deValue.ListOfNodAv2)>(rteValue.ListOfNodAvListOfNodAv2);
+            deValue.ListOfNodAv3 = static_cast<decltype(deValue.ListOfNodAv3)>(rteValue.ListOfNodAvListOfNodAv3);
+            deValue.ListOfNodAv4 = static_cast<decltype(deValue.ListOfNodAv4)>(rteValue.ListOfNodAvListOfNodAv4);
+            deValue.ListOfNodAv5 = static_cast<decltype(deValue.ListOfNodAv5)>(rteValue.ListOfNodAvListOfNodAv5);
+            deValue.ListOfNodAv6 = static_cast<decltype(deValue.ListOfNodAv6)>(rteValue.ListOfNodAvListOfNodAv6);
+            deValue.ListOfNodAv7 = static_cast<decltype(deValue.ListOfNodAv7)>(rteValue.ListOfNodAvListOfNodAv7);
+            deValue.ListOfNodAv8 = static_cast<decltype(deValue.ListOfNodAv8)>(rteValue.ListOfNodAvListOfNodAv8);
+
+            ListOfNodAv_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ListOfNodAv (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igListOfNodAv_mrx, length, static_cast<unsigned long>(sizeof(ListOfNodAv)));
+        }
+    }
+    break;
+
     case SignalGroup|ComConf_ComSignalGroup_igLockgCenSts_mrx:
     {
         if (sizeof(LockgCenSts) == length) {
@@ -2571,6 +2874,46 @@
             MstCfgIDBackboneFR_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for MstCfgIDBackboneFR (%u). Got %zu , expected %lu", ComConf_ComSignal_isMstCfgIDBackboneFR_mrx, length, static_cast<unsigned long>(sizeof(MstCfgIDBackboneFR)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igNFSDataFront_mrx:
+    {
+        if (sizeof(NFSDataFront) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received NFSDataFront (%u)", ComConf_ComSignalGroup_igNFSDataFront_mrx);
+            const NFSDataFront& rteValue = *static_cast<const NFSDataFront*>(buffer);
+            autosar::NFSDataFront_info::data_elem_type deValue;
+            deValue.SnsrDstInsdLe = static_cast<decltype(deValue.SnsrDstInsdLe)>( toUnsignedFromRaw<10>(rteValue.NFSDataFrontSnsrDstInsdLe) ) * -1.0 + 1023.0;
+            deValue.SnsrDstInsdRi = static_cast<decltype(deValue.SnsrDstInsdRi)>( toUnsignedFromRaw<10>(rteValue.NFSDataFrontSnsrDstInsdRi) ) * -1.0 + 1023.0;
+            deValue.SnsrDstOutdLe = static_cast<decltype(deValue.SnsrDstOutdLe)>( toUnsignedFromRaw<10>(rteValue.NFSDataFrontSnsrDstOutdLe) ) * -1.0 + 1023.0;
+            deValue.SnsrDstOutdRi = static_cast<decltype(deValue.SnsrDstOutdRi)>( toUnsignedFromRaw<10>(rteValue.NFSDataFrontSnsrDstOutdRi) ) * -1.0 + 1023.0;
+            deValue.SnsrDstSideLe = static_cast<decltype(deValue.SnsrDstSideLe)>( toUnsignedFromRaw<9>(rteValue.NFSDataFrontSnsrDstSideLe) ) * -1.0 + 511.0;
+            deValue.SnsrDstSideRi = static_cast<decltype(deValue.SnsrDstSideRi)>( toUnsignedFromRaw<9>(rteValue.NFSDataFrontSnsrDstSideRi) ) * -1.0 + 511.0;
+
+            NFSDataFront_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NFSDataFront (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNFSDataFront_mrx, length, static_cast<unsigned long>(sizeof(NFSDataFront)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igNFSDataRear_mrx:
+    {
+        if (sizeof(NFSDataRear) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received NFSDataRear (%u)", ComConf_ComSignalGroup_igNFSDataRear_mrx);
+            const NFSDataRear& rteValue = *static_cast<const NFSDataRear*>(buffer);
+            autosar::NFSDataRear_info::data_elem_type deValue;
+            deValue.SnsrDstInsdLe = static_cast<decltype(deValue.SnsrDstInsdLe)>( toUnsignedFromRaw<10>(rteValue.NFSDataRearSnsrDstInsdLe) ) * -1.0 + 1023.0;
+            deValue.SnsrDstInsdRi = static_cast<decltype(deValue.SnsrDstInsdRi)>( toUnsignedFromRaw<10>(rteValue.NFSDataRearSnsrDstInsdRi) ) * -1.0 + 1023.0;
+            deValue.SnsrDstOutdLe = static_cast<decltype(deValue.SnsrDstOutdLe)>( toUnsignedFromRaw<10>(rteValue.NFSDataRearSnsrDstOutdLe) ) * -1.0 + 1023.0;
+            deValue.SnsrDstOutdRi = static_cast<decltype(deValue.SnsrDstOutdRi)>( toUnsignedFromRaw<10>(rteValue.NFSDataRearSnsrDstOutdRi) ) * -1.0 + 1023.0;
+            deValue.SnsrDstSideLe = static_cast<decltype(deValue.SnsrDstSideLe)>( toUnsignedFromRaw<9>(rteValue.NFSDataRearSnsrDstSideLe) ) * -1.0 + 511.0;
+            deValue.SnsrDstSideRi = static_cast<decltype(deValue.SnsrDstSideRi)>( toUnsignedFromRaw<9>(rteValue.NFSDataRearSnsrDstSideRi) ) * -1.0 + 511.0;
+
+            NFSDataRear_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for NFSDataRear (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igNFSDataRear_mrx, length, static_cast<unsigned long>(sizeof(NFSDataRear)));
         }
     }
     break;
@@ -2901,6 +3244,52 @@
     }
     break;
 
+    case ComConf_ComSignal_isPrkgAssiActvSts_mrx:
+    {
+        if (sizeof(PrkgAssiActvSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received PrkgAssiActvSts (%u)", ComConf_ComSignal_isPrkgAssiActvSts_mrx);
+            const PrkgAssiActvSts& rteValue = *static_cast<const PrkgAssiActvSts*>(buffer);
+            autosar::PrkgAssiActvSts_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            PrkgAssiActvSts_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PrkgAssiActvSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrkgAssiActvSts_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiActvSts)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igPrkgAssiAudWarnFront_mrx:
+    {
+        if (sizeof(PrkgAssiAudWarnFront) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received PrkgAssiAudWarnFront (%u)", ComConf_ComSignalGroup_igPrkgAssiAudWarnFront_mrx);
+            const PrkgAssiAudWarnFront& rteValue = *static_cast<const PrkgAssiAudWarnFront*>(buffer);
+            autosar::PrkgAssiAudWarnFront_info::data_elem_type deValue;
+            deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.PrkgAssiAudWarnFrontAudSideWarn);
+            deValue.AudWarnDir = static_cast<decltype(deValue.AudWarnDir)>(rteValue.PrkgAssiAudWarnFrontAudWarnDir);
+
+            PrkgAssiAudWarnFront_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PrkgAssiAudWarnFront (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPrkgAssiAudWarnFront_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiAudWarnFront)));
+        }
+    }
+    break;
+
+    case SignalGroup|ComConf_ComSignalGroup_igPrkgAssiAudWarnRear_mrx:
+    {
+        if (sizeof(PrkgAssiAudWarnRear) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received PrkgAssiAudWarnRear (%u)", ComConf_ComSignalGroup_igPrkgAssiAudWarnRear_mrx);
+            const PrkgAssiAudWarnRear& rteValue = *static_cast<const PrkgAssiAudWarnRear*>(buffer);
+            autosar::PrkgAssiAudWarnRear_info::data_elem_type deValue;
+            deValue.AudSideWarn = static_cast<decltype(deValue.AudSideWarn)>(rteValue.PrkgAssiAudWarnRearAudSideWarn);
+            deValue.AudWarnDir = static_cast<decltype(deValue.AudWarnDir)>(rteValue.PrkgAssiAudWarnRearAudWarnDir);
+
+            PrkgAssiAudWarnRear_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PrkgAssiAudWarnRear (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igPrkgAssiAudWarnRear_mrx, length, static_cast<unsigned long>(sizeof(PrkgAssiAudWarnRear)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isPrkgAssiFailr_mrx:
     {
         if (sizeof(PrkgAssiFailr) == length) {
@@ -3061,6 +3450,20 @@
             ProfPenSts1_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for ProfPenSts1 (%u). Got %zu , expected %lu", ComConf_ComSignal_isProfPenSts1_mrx, length, static_cast<unsigned long>(sizeof(ProfPenSts1)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isPrpsnDrvMod_mrx:
+    {
+        if (sizeof(PrpsnDrvMod) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received PrpsnDrvMod (%u)", ComConf_ComSignal_isPrpsnDrvMod_mrx);
+            const PrpsnDrvMod& rteValue = *static_cast<const PrpsnDrvMod*>(buffer);
+            autosar::PrpsnDrvMod_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            PrpsnDrvMod_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for PrpsnDrvMod (%u). Got %zu , expected %lu", ComConf_ComSignal_isPrpsnDrvMod_mrx, length, static_cast<unsigned long>(sizeof(PrpsnDrvMod)));
         }
     }
     break;
@@ -3324,6 +3727,62 @@
     }
     break;
 
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdBattSaveCmd_mrx:
+    {
+        if (sizeof(RlyPwrDistbnCmd1WdBattSaveCmd) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received RlyPwrDistbnCmd1WdBattSaveCmd (%u)", ComConf_ComSignal_isRlyPwrDistbnCmd1WdBattSaveCmd_mrx);
+            const RlyPwrDistbnCmd1WdBattSaveCmd& rteValue = *static_cast<const RlyPwrDistbnCmd1WdBattSaveCmd*>(buffer);
+            autosar::RlyPwrDistbnCmd1WdBattSaveCmd_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            RlyPwrDistbnCmd1WdBattSaveCmd_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RlyPwrDistbnCmd1WdBattSaveCmd (%u). Got %zu , expected %lu", ComConf_ComSignal_isRlyPwrDistbnCmd1WdBattSaveCmd_mrx, length, static_cast<unsigned long>(sizeof(RlyPwrDistbnCmd1WdBattSaveCmd)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyCmd_mrx:
+    {
+        if (sizeof(RlyPwrDistbnCmd1WdIgnRlyCmd) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received RlyPwrDistbnCmd1WdIgnRlyCmd (%u)", ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyCmd_mrx);
+            const RlyPwrDistbnCmd1WdIgnRlyCmd& rteValue = *static_cast<const RlyPwrDistbnCmd1WdIgnRlyCmd*>(buffer);
+            autosar::RlyPwrDistbnCmd1WdIgnRlyCmd_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            RlyPwrDistbnCmd1WdIgnRlyCmd_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RlyPwrDistbnCmd1WdIgnRlyCmd (%u). Got %zu , expected %lu", ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyCmd_mrx, length, static_cast<unsigned long>(sizeof(RlyPwrDistbnCmd1WdIgnRlyCmd)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyExtCmd_mrx:
+    {
+        if (sizeof(RlyPwrDistbnCmd1WdIgnRlyExtCmd) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received RlyPwrDistbnCmd1WdIgnRlyExtCmd (%u)", ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyExtCmd_mrx);
+            const RlyPwrDistbnCmd1WdIgnRlyExtCmd& rteValue = *static_cast<const RlyPwrDistbnCmd1WdIgnRlyExtCmd*>(buffer);
+            autosar::RlyPwrDistbnCmd1WdIgnRlyExtCmd_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            RlyPwrDistbnCmd1WdIgnRlyExtCmd_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RlyPwrDistbnCmd1WdIgnRlyExtCmd (%u). Got %zu , expected %lu", ComConf_ComSignal_isRlyPwrDistbnCmd1WdIgnRlyExtCmd_mrx, length, static_cast<unsigned long>(sizeof(RlyPwrDistbnCmd1WdIgnRlyExtCmd)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isRlyPwrDistbnCmd1WdPreBattSaveCmd_mrx:
+    {
+        if (sizeof(RlyPwrDistbnCmd1WdPreBattSaveCmd) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received RlyPwrDistbnCmd1WdPreBattSaveCmd (%u)", ComConf_ComSignal_isRlyPwrDistbnCmd1WdPreBattSaveCmd_mrx);
+            const RlyPwrDistbnCmd1WdPreBattSaveCmd& rteValue = *static_cast<const RlyPwrDistbnCmd1WdPreBattSaveCmd*>(buffer);
+            autosar::RlyPwrDistbnCmd1WdPreBattSaveCmd_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            RlyPwrDistbnCmd1WdPreBattSaveCmd_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for RlyPwrDistbnCmd1WdPreBattSaveCmd (%u). Got %zu , expected %lu", ComConf_ComSignal_isRlyPwrDistbnCmd1WdPreBattSaveCmd_mrx, length, static_cast<unsigned long>(sizeof(RlyPwrDistbnCmd1WdPreBattSaveCmd)));
+        }
+    }
+    break;
+
     case ComConf_ComSignal_isRmnLockgPrsnlReq_mrx:
     {
         if (sizeof(RmnLockgPrsnlReq) == length) {
@@ -3578,20 +4037,20 @@
     }
     break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx:
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchAccSts_mrx:
     {
-        if (sizeof(SftyCchAccActvnSts) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchAccActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx);
-            const SftyCchAccActvnSts& rteValue = *static_cast<const SftyCchAccActvnSts*>(buffer);
-            autosar::SftyCchAccActvnSts_info::data_elem_type deValue;
-            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchAccActvnStsActv);
-            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchAccActvnStsDay);
-            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchAccActvnStsMth);
-            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchAccActvnStsYr);
+        if (sizeof(SftyCchAccSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchAccSts (%u)", ComConf_ComSignalGroup_igSftyCchAccSts_mrx);
+            const SftyCchAccSts& rteValue = *static_cast<const SftyCchAccSts*>(buffer);
+            autosar::SftyCchAccSts_info::data_elem_type deValue;
+            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchAccStsActv);
+            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchAccStsDay);
+            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchAccStsMth);
+            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchAccStsYr);
 
-            SftyCchAccActvnSts_de->inject(deValue);
+            SftyCchAccSts_de->inject(deValue);
         } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchAccActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchAccActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchAccActvnSts)));
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchAccSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchAccSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchAccSts)));
         }
     }
     break;
@@ -3627,20 +4086,20 @@
     }
     break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx:
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchLaneKeepAidSts_mrx:
     {
-        if (sizeof(SftyCchLaneKeepAidActvnSts) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchLaneKeepAidActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx);
-            const SftyCchLaneKeepAidActvnSts& rteValue = *static_cast<const SftyCchLaneKeepAidActvnSts*>(buffer);
-            autosar::SftyCchLaneKeepAidActvnSts_info::data_elem_type deValue;
-            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchLaneKeepAidActvnStsActv);
-            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchLaneKeepAidActvnStsDay);
-            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchLaneKeepAidActvnStsMth);
-            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchLaneKeepAidActvnStsYr);
+        if (sizeof(SftyCchLaneKeepAidSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchLaneKeepAidSts (%u)", ComConf_ComSignalGroup_igSftyCchLaneKeepAidSts_mrx);
+            const SftyCchLaneKeepAidSts& rteValue = *static_cast<const SftyCchLaneKeepAidSts*>(buffer);
+            autosar::SftyCchLaneKeepAidSts_info::data_elem_type deValue;
+            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchLaneKeepAidStsActv);
+            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchLaneKeepAidStsDay);
+            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchLaneKeepAidStsMth);
+            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchLaneKeepAidStsYr);
 
-            SftyCchLaneKeepAidActvnSts_de->inject(deValue);
+            SftyCchLaneKeepAidSts_de->inject(deValue);
         } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLaneKeepAidActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLaneKeepAidActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLaneKeepAidActvnSts)));
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchLaneKeepAidSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchLaneKeepAidSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchLaneKeepAidSts)));
         }
     }
     break;
@@ -3693,20 +4152,20 @@
     }
     break;
 
-    case SignalGroup|ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx:
+    case SignalGroup|ComConf_ComSignalGroup_igSftyCchPilotAssiSts_mrx:
     {
-        if (sizeof(SftyCchPilotAssiActvnSts) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchPilotAssiActvnSts (%u)", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx);
-            const SftyCchPilotAssiActvnSts& rteValue = *static_cast<const SftyCchPilotAssiActvnSts*>(buffer);
-            autosar::SftyCchPilotAssiActvnSts_info::data_elem_type deValue;
-            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchPilotAssiActvnStsActv);
-            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchPilotAssiActvnStsDay);
-            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchPilotAssiActvnStsMth);
-            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchPilotAssiActvnStsYr);
+        if (sizeof(SftyCchPilotAssiSts) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received SftyCchPilotAssiSts (%u)", ComConf_ComSignalGroup_igSftyCchPilotAssiSts_mrx);
+            const SftyCchPilotAssiSts& rteValue = *static_cast<const SftyCchPilotAssiSts*>(buffer);
+            autosar::SftyCchPilotAssiSts_info::data_elem_type deValue;
+            deValue.Actv = static_cast<decltype(deValue.Actv)>(rteValue.SftyCchPilotAssiStsActv);
+            deValue.Day = static_cast<decltype(deValue.Day)>(rteValue.SftyCchPilotAssiStsDay);
+            deValue.Mth = static_cast<decltype(deValue.Mth)>(rteValue.SftyCchPilotAssiStsMth);
+            deValue.Yr = static_cast<decltype(deValue.Yr)>(rteValue.SftyCchPilotAssiStsYr);
 
-            SftyCchPilotAssiActvnSts_de->inject(deValue);
+            SftyCchPilotAssiSts_de->inject(deValue);
         } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchPilotAssiActvnSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchPilotAssiActvnSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPilotAssiActvnSts)));
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for SftyCchPilotAssiSts (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_igSftyCchPilotAssiSts_mrx, length, static_cast<unsigned long>(sizeof(SftyCchPilotAssiSts)));
         }
     }
     break;
@@ -4165,6 +4624,20 @@
             TelmSts_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TelmSts (%u). Got %zu , expected %lu", ComConf_ComSignal_isTelmSts_mrx, length, static_cast<unsigned long>(sizeof(TelmSts)));
+        }
+    }
+    break;
+
+    case ComConf_ComSignal_isTelmStsConnGen2_mrx:
+    {
+        if (sizeof(TelmStsConnGen2) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received TelmStsConnGen2 (%u)", ComConf_ComSignal_isTelmStsConnGen2_mrx);
+            const TelmStsConnGen2& rteValue = *static_cast<const TelmStsConnGen2*>(buffer);
+            autosar::TelmStsConnGen2_info::data_elem_type deValue;
+            deValue = static_cast<decltype(deValue)>(rteValue);
+            TelmStsConnGen2_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for TelmStsConnGen2 (%u). Got %zu , expected %lu", ComConf_ComSignal_isTelmStsConnGen2_mrx, length, static_cast<unsigned long>(sizeof(TelmStsConnGen2)));
         }
     }
     break;

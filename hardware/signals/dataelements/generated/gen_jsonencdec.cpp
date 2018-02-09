@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
 #include "gen_jsonencdec.h"
@@ -521,6 +521,37 @@ CmptmtTFrnt fromJson<CmptmtTFrnt>(const json& object) {
 
 
 // ==========================================
+// CnsPrmRec1
+template <>
+json toJson<CnsPrmRec1>(const CnsPrmRec1& v) {
+    json j;
+    j["SpdVal"] = toJson<double>(v.SpdVal);
+    j["SpdIdx"] = toJson<uint8_t>(v.SpdIdx);
+    j["AuxPwrPrsnt"] = toJson<double>(v.AuxPwrPrsnt);
+    j["AuxPwrLvlInct"] = toJson<double>(v.AuxPwrLvlInct);
+    j["AuxTiPrsnt"] = toJson<double>(v.AuxTiPrsnt);
+    j["AuxTiTranPha"] = toJson<double>(v.AuxTiTranPha);
+    j["AVal"] = toJson<double>(v.AVal);
+    return j;
+}
+template <>
+CnsPrmRec1 fromJson<CnsPrmRec1>(const json& object) {
+    if (!object.is_object()) {
+        return CnsPrmRec1();
+    }
+    CnsPrmRec1 v;
+    v.SpdVal = fromJson<double>(object["SpdVal"]);
+    v.SpdIdx = fromJson<uint8_t>(object["SpdIdx"]);
+    v.AuxPwrPrsnt = fromJson<double>(object["AuxPwrPrsnt"]);
+    v.AuxPwrLvlInct = fromJson<double>(object["AuxPwrLvlInct"]);
+    v.AuxTiPrsnt = fromJson<double>(object["AuxTiPrsnt"]);
+    v.AuxTiTranPha = fromJson<double>(object["AuxTiTranPha"]);
+    v.AVal = fromJson<double>(object["AVal"]);
+    return v;
+}
+
+
+// ==========================================
 // ConSftyWarn1
 template <>
 json toJson<ConSftyWarn1>(const ConSftyWarn1& v) {
@@ -846,6 +877,27 @@ DstToManvLocnByNav fromJson<DstToManvLocnByNav>(const json& object) {
     v.CntDwnToManvStrt = fromJson<NoYes1>(object["CntDwnToManvStrt"]);
     v.PosnQly = fromJson<PosnFromNavQly>(object["PosnQly"]);
     v.SpprtForFct = fromJson<NoYes1>(object["SpprtForFct"]);
+    return v;
+}
+
+
+// ==========================================
+// EgyCostForRouteRec1
+template <>
+json toJson<EgyCostForRouteRec1>(const EgyCostForRouteRec1& v) {
+    json j;
+    j["Egy"] = toJson<double>(v.Egy);
+    j["Idx"] = toJson<uint8_t>(v.Idx);
+    return j;
+}
+template <>
+EgyCostForRouteRec1 fromJson<EgyCostForRouteRec1>(const json& object) {
+    if (!object.is_object()) {
+        return EgyCostForRouteRec1();
+    }
+    EgyCostForRouteRec1 v;
+    v.Egy = fromJson<double>(object["Egy"]);
+    v.Idx = fromJson<uint8_t>(object["Idx"]);
     return v;
 }
 
@@ -1868,6 +1920,39 @@ LiTiPen2 fromJson<LiTiPen2>(const json& object) {
 
 
 // ==========================================
+// ListOfNodAv
+template <>
+json toJson<ListOfNodAv>(const ListOfNodAv& v) {
+    json j;
+    j["ListOfNodAv1"] = toJson<uint32_t>(v.ListOfNodAv1);
+    j["ListOfNodAv2"] = toJson<uint32_t>(v.ListOfNodAv2);
+    j["ListOfNodAv3"] = toJson<uint32_t>(v.ListOfNodAv3);
+    j["ListOfNodAv4"] = toJson<uint32_t>(v.ListOfNodAv4);
+    j["ListOfNodAv5"] = toJson<uint32_t>(v.ListOfNodAv5);
+    j["ListOfNodAv6"] = toJson<uint32_t>(v.ListOfNodAv6);
+    j["ListOfNodAv7"] = toJson<uint32_t>(v.ListOfNodAv7);
+    j["ListOfNodAv8"] = toJson<uint32_t>(v.ListOfNodAv8);
+    return j;
+}
+template <>
+ListOfNodAv fromJson<ListOfNodAv>(const json& object) {
+    if (!object.is_object()) {
+        return ListOfNodAv();
+    }
+    ListOfNodAv v;
+    v.ListOfNodAv1 = fromJson<uint32_t>(object["ListOfNodAv1"]);
+    v.ListOfNodAv2 = fromJson<uint32_t>(object["ListOfNodAv2"]);
+    v.ListOfNodAv3 = fromJson<uint32_t>(object["ListOfNodAv3"]);
+    v.ListOfNodAv4 = fromJson<uint32_t>(object["ListOfNodAv4"]);
+    v.ListOfNodAv5 = fromJson<uint32_t>(object["ListOfNodAv5"]);
+    v.ListOfNodAv6 = fromJson<uint32_t>(object["ListOfNodAv6"]);
+    v.ListOfNodAv7 = fromJson<uint32_t>(object["ListOfNodAv7"]);
+    v.ListOfNodAv8 = fromJson<uint32_t>(object["ListOfNodAv8"]);
+    return v;
+}
+
+
+// ==========================================
 // LockgCenSts3
 template <>
 json toJson<LockgCenSts3>(const LockgCenSts3& v) {
@@ -2470,6 +2555,33 @@ RngBdIllmnCmdPen1 fromJson<RngBdIllmnCmdPen1>(const json& object) {
 
 
 // ==========================================
+// RouteInfoRec1
+template <>
+json toJson<RouteInfoRec1>(const RouteInfoRec1& v) {
+    json j;
+    j["DestInfo"] = toJson<uint16_t>(v.DestInfo);
+    j["IdOfDest"] = toJson<uint8_t>(v.IdOfDest);
+    j["DestProblty"] = toJson<uint8_t>(v.DestProblty);
+    j["NrOfDestCmpl"] = toJson<uint16_t>(v.NrOfDestCmpl);
+    j["DestSrc"] = toJson<uint8_t>(v.DestSrc);
+    return j;
+}
+template <>
+RouteInfoRec1 fromJson<RouteInfoRec1>(const json& object) {
+    if (!object.is_object()) {
+        return RouteInfoRec1();
+    }
+    RouteInfoRec1 v;
+    v.DestInfo = fromJson<uint16_t>(object["DestInfo"]);
+    v.IdOfDest = fromJson<uint8_t>(object["IdOfDest"]);
+    v.DestProblty = fromJson<uint8_t>(object["DestProblty"]);
+    v.NrOfDestCmpl = fromJson<uint16_t>(object["NrOfDestCmpl"]);
+    v.DestSrc = fromJson<uint8_t>(object["DestSrc"]);
+    return v;
+}
+
+
+// ==========================================
 // RsdsSysSts
 template <>
 json toJson<RsdsSysSts>(const RsdsSysSts& v) {
@@ -2589,9 +2701,70 @@ SetOfLang fromJson<SetOfLang>(const json& object) {
 
 
 // ==========================================
-// SftyCchActvnSts1
+// SetgAndRstOfTripForDrvr
 template <>
-json toJson<SftyCchActvnSts1>(const SftyCchActvnSts1& v) {
+json toJson<SetgAndRstOfTripForDrvr>(const SetgAndRstOfTripForDrvr& v) {
+    json j;
+    j["SetgTripForDstLong"] = toJson<OnOffCrit1>(v.SetgTripForDstLong);
+    j["SetgTripForFuCns"] = toJson<OnOffCrit1>(v.SetgTripForFuCns);
+    j["SetgTripForFuDst"] = toJson<OnOffCrit1>(v.SetgTripForFuDst);
+    j["SetgTripForEgyDst"] = toJson<OnOffCrit1>(v.SetgTripForEgyDst);
+    j["SetgTripForDstSho1"] = toJson<OnOffCrit1>(v.SetgTripForDstSho1);
+    j["SetgTripForFuCnsAvg1"] = toJson<OnOffCrit1>(v.SetgTripForFuCnsAvg1);
+    j["SetgTripForEgyCnsAvg1"] = toJson<OnOffCrit1>(v.SetgTripForEgyCnsAvg1);
+    j["SetgTripForSpdAvg1"] = toJson<OnOffCrit1>(v.SetgTripForSpdAvg1);
+    j["SetgTripForTiDrv1"] = toJson<OnOffCrit1>(v.SetgTripForTiDrv1);
+    j["SetgTripForDstSho2"] = toJson<OnOffCrit1>(v.SetgTripForDstSho2);
+    j["SetgTripForFuCnsAvg2"] = toJson<OnOffCrit1>(v.SetgTripForFuCnsAvg2);
+    j["SetgTripForEgyCnsAvg2"] = toJson<OnOffCrit1>(v.SetgTripForEgyCnsAvg2);
+    j["SetgTripForSpdAvg2"] = toJson<OnOffCrit1>(v.SetgTripForSpdAvg2);
+    j["SetgTripForTiDrv2"] = toJson<OnOffCrit1>(v.SetgTripForTiDrv2);
+    j["SetgTripForDrvrMtr"] = toJson<OnOffCrit1>(v.SetgTripForDrvrMtr);
+    j["SetgTripForSpdPtr"] = toJson<OnOffCrit1>(v.SetgTripForSpdPtr);
+    j["SetgTripForSpdDig"] = toJson<OnOffCrit1>(v.SetgTripForSpdDig);
+    j["SetgTripForSpdTrvl"] = toJson<OnOffCrit1>(v.SetgTripForSpdTrvl);
+    j["SetgTripForRstOfAllTripFct1"] = toJson<RstOfTrip1>(v.SetgTripForRstOfAllTripFct1);
+    j["SetgTripForTiRstCdn"] = toJson<uint16_t>(v.SetgTripForTiRstCdn);
+    j["SetgTripOffOn"] = toJson<OnOffCrit1>(v.SetgTripOffOn);
+    j["SetgTripWithProfID"] = toJson<IdPen>(v.SetgTripWithProfID);
+    return j;
+}
+template <>
+SetgAndRstOfTripForDrvr fromJson<SetgAndRstOfTripForDrvr>(const json& object) {
+    if (!object.is_object()) {
+        return SetgAndRstOfTripForDrvr();
+    }
+    SetgAndRstOfTripForDrvr v;
+    v.SetgTripForDstLong = fromJson<OnOffCrit1>(object["SetgTripForDstLong"]);
+    v.SetgTripForFuCns = fromJson<OnOffCrit1>(object["SetgTripForFuCns"]);
+    v.SetgTripForFuDst = fromJson<OnOffCrit1>(object["SetgTripForFuDst"]);
+    v.SetgTripForEgyDst = fromJson<OnOffCrit1>(object["SetgTripForEgyDst"]);
+    v.SetgTripForDstSho1 = fromJson<OnOffCrit1>(object["SetgTripForDstSho1"]);
+    v.SetgTripForFuCnsAvg1 = fromJson<OnOffCrit1>(object["SetgTripForFuCnsAvg1"]);
+    v.SetgTripForEgyCnsAvg1 = fromJson<OnOffCrit1>(object["SetgTripForEgyCnsAvg1"]);
+    v.SetgTripForSpdAvg1 = fromJson<OnOffCrit1>(object["SetgTripForSpdAvg1"]);
+    v.SetgTripForTiDrv1 = fromJson<OnOffCrit1>(object["SetgTripForTiDrv1"]);
+    v.SetgTripForDstSho2 = fromJson<OnOffCrit1>(object["SetgTripForDstSho2"]);
+    v.SetgTripForFuCnsAvg2 = fromJson<OnOffCrit1>(object["SetgTripForFuCnsAvg2"]);
+    v.SetgTripForEgyCnsAvg2 = fromJson<OnOffCrit1>(object["SetgTripForEgyCnsAvg2"]);
+    v.SetgTripForSpdAvg2 = fromJson<OnOffCrit1>(object["SetgTripForSpdAvg2"]);
+    v.SetgTripForTiDrv2 = fromJson<OnOffCrit1>(object["SetgTripForTiDrv2"]);
+    v.SetgTripForDrvrMtr = fromJson<OnOffCrit1>(object["SetgTripForDrvrMtr"]);
+    v.SetgTripForSpdPtr = fromJson<OnOffCrit1>(object["SetgTripForSpdPtr"]);
+    v.SetgTripForSpdDig = fromJson<OnOffCrit1>(object["SetgTripForSpdDig"]);
+    v.SetgTripForSpdTrvl = fromJson<OnOffCrit1>(object["SetgTripForSpdTrvl"]);
+    v.SetgTripForRstOfAllTripFct1 = fromJson<RstOfTrip1>(object["SetgTripForRstOfAllTripFct1"]);
+    v.SetgTripForTiRstCdn = fromJson<uint16_t>(object["SetgTripForTiRstCdn"]);
+    v.SetgTripOffOn = fromJson<OnOffCrit1>(object["SetgTripOffOn"]);
+    v.SetgTripWithProfID = fromJson<IdPen>(object["SetgTripWithProfID"]);
+    return v;
+}
+
+
+// ==========================================
+// SftyCchActvnSts2
+template <>
+json toJson<SftyCchActvnSts2>(const SftyCchActvnSts2& v) {
     json j;
     j["Actv"] = toJson<NoYes1>(v.Actv);
     j["Yr"] = toJson<uint8_t>(v.Yr);
@@ -2600,11 +2773,11 @@ json toJson<SftyCchActvnSts1>(const SftyCchActvnSts1& v) {
     return j;
 }
 template <>
-SftyCchActvnSts1 fromJson<SftyCchActvnSts1>(const json& object) {
+SftyCchActvnSts2 fromJson<SftyCchActvnSts2>(const json& object) {
     if (!object.is_object()) {
-        return SftyCchActvnSts1();
+        return SftyCchActvnSts2();
     }
-    SftyCchActvnSts1 v;
+    SftyCchActvnSts2 v;
     v.Actv = fromJson<NoYes1>(object["Actv"]);
     v.Yr = fromJson<uint8_t>(object["Yr"]);
     v.Mth = fromJson<uint8_t>(object["Mth"]);

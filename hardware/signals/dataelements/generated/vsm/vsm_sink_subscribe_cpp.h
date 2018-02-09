@@ -8,7 +8,7 @@
  * \file
  * C++ code generator for AUTOSAR v1.0
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
- * Source: databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml
+ * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
 AccAdprSpdLimActv_de = new DESink<autosar::AccAdprSpdLimActv_info>();
@@ -89,6 +89,14 @@ ActvnOfSwtIllmnForSeatHeatrRe_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfSwtIllmnForSeatHeatrRe_mtx, &rteValue, sizeof(rteValue) );
 });
 
+ActvtAutnmsPrkgCtrl_de = new DESink<autosar::ActvtAutnmsPrkgCtrl_info>();
+ActvtAutnmsPrkgCtrl_de->subscribe([]() {
+    auto deValue = ActvtAutnmsPrkgCtrl_de->get().value();
+    ActvtAutnmsPrkgCtrl rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isActvtAutnmsPrkgCtrl_mtx, &rteValue, sizeof(rteValue) );
+});
+
 AdprTurnSpdMod_de = new DESink<autosar::AdprTurnSpdMod_info>();
 AdprTurnSpdMod_de->subscribe([]() {
     auto deValue = AdprTurnSpdMod_de->get().value();
@@ -131,6 +139,28 @@ AudWarnActv_de->subscribe([]() {
     AudWarnActv rteValue;
     rteValue = static_cast<decltype(rteValue)>(deValue);
     sendAvmpMessageToVip( ComConf_ComSignal_isAudWarnActv_mtx, &rteValue, sizeof(rteValue) );
+});
+
+AutnmsPrkgActvn_de = new DESink<autosar::AutnmsPrkgActvn_info>();
+AutnmsPrkgActvn_de->subscribe([]() {
+    auto deValue = AutnmsPrkgActvn_de->get().value();
+    AutnmsPrkgActvn rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isAutnmsPrkgActvn_mtx, &rteValue, sizeof(rteValue) );
+});
+
+AutnmsPrkgSeldScenario_de = new DESink<autosar::AutnmsPrkgSeldScenario_info>();
+AutnmsPrkgSeldScenario_de->subscribe([]() {
+    auto deValue = AutnmsPrkgSeldScenario_de->get().value();
+    AutnmsPrkgSeldScenario rteValue;
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldDirectPrkg = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldDirectPrkg)>(deValue.AutnmsPrkgSeldDirectPrkg_);
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgDir = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgDir)>(deValue.AutnmsPrkgSeldPrkgDir_);
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgScenario = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgScenario)>(deValue.AutnmsPrkgSeldPrkgScenario_);
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgSide = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldPrkgSide)>(deValue.AutnmsPrkgSeldPrkgSide_);
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldRem = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldRem)>(deValue.AutnmsPrkgSeldRem_);
+    rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldSlotTyp = static_cast<decltype(rteValue.AutnmsPrkgSeldScenarioAutnmsPrkgSeldSlotTyp)>(deValue.AutnmsPrkgSeldSlotTyp_);
+
+    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igAutnmsPrkgSeldScenario_mtx, &rteValue, sizeof(rteValue) );
 });
 
 BlisSwOnOff_de = new DESink<autosar::BlisSwOnOff_info>();
@@ -225,6 +255,14 @@ CmftFctActv_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isCmftFctActv_mtx, &rteValue, sizeof(rteValue) );
 });
 
+ConSftyDataSharingAllwd_de = new DESink<autosar::ConSftyDataSharingAllwd_info>();
+ConSftyDataSharingAllwd_de->subscribe([]() {
+    auto deValue = ConSftyDataSharingAllwd_de->get().value();
+    ConSftyDataSharingAllwd rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isConSftyDataSharingAllwd_mtx, &rteValue, sizeof(rteValue) );
+});
+
 CoolgReqForDispCen_de = new DESink<autosar::CoolgReqForDispCen_info>();
 CoolgReqForDispCen_de->subscribe([]() {
     auto deValue = CoolgReqForDispCen_de->get().value();
@@ -267,6 +305,14 @@ CurtActvnReReq_de->subscribe([]() {
     CurtActvnReReq rteValue;
     rteValue = static_cast<decltype(rteValue)>(deValue);
     sendAvmpMessageToVip( ComConf_ComSignal_isCurtActvnReReq_mtx, &rteValue, sizeof(rteValue) );
+});
+
+DataDistbnAllwdForEgyPred_de = new DESink<autosar::DataDistbnAllwdForEgyPred_info>();
+DataDistbnAllwdForEgyPred_de->subscribe([]() {
+    auto deValue = DataDistbnAllwdForEgyPred_de->get().value();
+    DataDistbnAllwdForEgyPred rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isDataDistbnAllwdForEgyPred_mtx, &rteValue, sizeof(rteValue) );
 });
 
 DeactvtLvlgCtrl_de = new DESink<autosar::DeactvtLvlgCtrl_info>();
@@ -777,6 +823,14 @@ HudVisFctSetg_de->subscribe([]() {
     rteValue.HudVisFctSetgPen = static_cast<decltype(rteValue.HudVisFctSetgPen)>(deValue.Pen);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igHudVisFctSetg_mtx, &rteValue, sizeof(rteValue) );
+});
+
+HvBattSmtSeld_de = new DESink<autosar::HvBattSmtSeld_info>();
+HvBattSmtSeld_de->subscribe([]() {
+    auto deValue = HvBattSmtSeld_de->get().value();
+    HvBattSmtSeld rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isHvBattSmtSeld_mtx, &rteValue, sizeof(rteValue) );
 });
 
 HznData_de = new DESink<autosar::HznData_info>();
@@ -1472,6 +1526,19 @@ RoadUsrProtnActv_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isRoadUsrProtnActv_mtx, &rteValue, sizeof(rteValue) );
 });
 
+RouteInfo_de = new DESink<autosar::RouteInfo_info>();
+RouteInfo_de->subscribe([]() {
+    auto deValue = RouteInfo_de->get().value();
+    RouteInfo rteValue;
+    rteValue.RouteInfoDestInfo = static_cast<decltype(rteValue.RouteInfoDestInfo)>(deValue.DestInfo);
+    rteValue.RouteInfoDestProblty = static_cast<decltype(rteValue.RouteInfoDestProblty)>(deValue.DestProblty);
+    rteValue.RouteInfoDestSrc = static_cast<decltype(rteValue.RouteInfoDestSrc)>(deValue.DestSrc);
+    rteValue.RouteInfoIdOfDest = static_cast<decltype(rteValue.RouteInfoIdOfDest)>(deValue.IdOfDest);
+    rteValue.RouteInfoNrOfDestCmpl = static_cast<decltype(rteValue.RouteInfoNrOfDestCmpl)>(deValue.NrOfDestCmpl);
+
+    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igRouteInfo_mtx, &rteValue, sizeof(rteValue) );
+});
+
 SaveSetgToMemPrmnt_de = new DESink<autosar::SaveSetgToMemPrmnt_info>();
 SaveSetgToMemPrmnt_de->subscribe([]() {
     auto deValue = SaveSetgToMemPrmnt_de->get().value();
@@ -1537,6 +1604,36 @@ SetTiAndDate_de->subscribe([]() {
     rteValue.Yr1 = static_cast<decltype(rteValue.Yr1)>(deValue.Year);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSetTiAndDate_mtx, &rteValue, sizeof(rteValue) );
+});
+
+SetgAndRstOfTripForDrvr_de = new DESink<autosar::SetgAndRstOfTripForDrvr_info>();
+SetgAndRstOfTripForDrvr_de->subscribe([]() {
+    auto deValue = SetgAndRstOfTripForDrvr_de->get().value();
+    SetgAndRstOfTripForDrvr rteValue;
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForDrvrMtr = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForDrvrMtr)>(deValue.SetgTripForDrvrMtr);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForDstLong = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForDstLong)>(deValue.SetgTripForDstLong);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForDstSho1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForDstSho1)>(deValue.SetgTripForDstSho1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForDstSho2 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForDstSho2)>(deValue.SetgTripForDstSho2);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyCnsAvg1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyCnsAvg1)>(deValue.SetgTripForEgyCnsAvg1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyCnsAvg2 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyCnsAvg2)>(deValue.SetgTripForEgyCnsAvg2);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyDst = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForEgyDst)>(deValue.SetgTripForEgyDst);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCns = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCns)>(deValue.SetgTripForFuCns);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCnsAvg1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCnsAvg1)>(deValue.SetgTripForFuCnsAvg1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCnsAvg2 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForFuCnsAvg2)>(deValue.SetgTripForFuCnsAvg2);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForFuDst = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForFuDst)>(deValue.SetgTripForFuDst);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForRstOfAllTripFct1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForRstOfAllTripFct1)>(deValue.SetgTripForRstOfAllTripFct1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdAvg1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdAvg1)>(deValue.SetgTripForSpdAvg1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdAvg2 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdAvg2)>(deValue.SetgTripForSpdAvg2);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdDig = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdDig)>(deValue.SetgTripForSpdDig);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdPtr = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdPtr)>(deValue.SetgTripForSpdPtr);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdTrvl = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForSpdTrvl)>(deValue.SetgTripForSpdTrvl);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForTiDrv1 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForTiDrv1)>(deValue.SetgTripForTiDrv1);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForTiDrv2 = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForTiDrv2)>(deValue.SetgTripForTiDrv2);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripForTiRstCdn = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripForTiRstCdn)>(deValue.SetgTripForTiRstCdn);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripOffOn = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripOffOn)>(deValue.SetgTripOffOn);
+    rteValue.SetgAndRstOfTripForDrvrSetgTripWithProfID = static_cast<decltype(rteValue.SetgAndRstOfTripForDrvrSetgTripWithProfID)>(deValue.SetgTripWithProfID);
+
+    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSetgAndRstOfTripForDrvr_mtx, &rteValue, sizeof(rteValue) );
 });
 
 SftyCchLongTermIdxRst_de = new DESink<autosar::SftyCchLongTermIdxRst_info>();
@@ -1821,6 +1918,14 @@ UnlckRemReq_de->subscribe([]() {
     rteValue.UnlckRemReqSts = static_cast<decltype(rteValue.UnlckRemReqSts)>(deValue.Sts);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igUnlckRemReq_mtx, &rteValue, sizeof(rteValue) );
+});
+
+UsrSeldDrvrSpprtFct_de = new DESink<autosar::UsrSeldDrvrSpprtFct_info>();
+UsrSeldDrvrSpprtFct_de->subscribe([]() {
+    auto deValue = UsrSeldDrvrSpprtFct_de->get().value();
+    UsrSeldDrvrSpprtFct rteValue;
+    rteValue = static_cast<decltype(rteValue)>(deValue);
+    sendAvmpMessageToVip( ComConf_ComSignal_isUsrSeldDrvrSpprtFct_mtx, &rteValue, sizeof(rteValue) );
 });
 
 UsrSetSpdForKeySpdLimn_de = new DESink<autosar::UsrSetSpdForKeySpdLimn_info>();

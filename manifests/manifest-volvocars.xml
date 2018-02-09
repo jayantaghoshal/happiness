@@ -55,7 +55,7 @@
   <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="339b033005330d9a992ca28ae42400c9dd91be69"/>
 
   <remove-project name="vendor/delphi/android_vehicle-hal"/>
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="df9daa8fb4ed3ab24505369d84908de39f1597bb" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="685f0b6167713eee83874e179db4621ee9c74da8" />
 
   <remove-project name="vendor/delphi/android_device" />
   <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="15d93c5a08db89ab0592c0f330ac07341a5c59e8">
@@ -67,6 +67,9 @@
 
   <remove-project name="vendor/delphi/bb_android_hisip_desip" />
   <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="b862ea0de8697acdb9644e9672e0386e1a6c27cd"/>
+
+  <remove-project name="vendor/delphi/android_ihu_vipimages" />
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="c575b21120dda60ee6d88bdda8e6515a761f8273" />
 
   <!-- Boost_1_66_0 -->
   <project name="vendor/volvocars/external/boost" path="vendor/volvocars/external/boost_1_66_0" revision="595e113a9e43d40b756c171a3d81d20b8a6d3508"/>
