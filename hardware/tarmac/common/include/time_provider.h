@@ -4,12 +4,11 @@
  */
 
 #pragma once
-#include "IDispatcher.h"
-#include "itime_provider.h"
-
 #include <chrono>
 #include <functional>
 #include <memory>
+#include "IDispatcher.h"
+#include "timer_manager_interface.h"
 
 namespace tarmac {
 namespace timeprovider {
@@ -18,15 +17,15 @@ namespace timeprovider {
 // NOTE:
 //  TimeProvider underneath uses Dispatcher-class as dispatcher for its timers.
 //
-class TimeProvider final : public ITimeProvider {
+class TimeProvider final : public TimerManagerInterface {
   public:
     TimeProvider(std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher);
     std::chrono::steady_clock::time_point steady_clock_now() const override;
-    std::chrono::system_clock::time_point system_clock_now() const override;
-    std::unique_ptr<TimerSubscriptionHandle> add_single_shot_timer(std::chrono::milliseconds time,
-                                                                   std::function<void()> func) override;
-    std::unique_ptr<TimerSubscriptionHandle> add_periodic_timer(std::chrono::milliseconds time,
+
+    std::unique_ptr<TimerSubscriptionHandle> AddSingleShotTimer(std::chrono::milliseconds delay,
                                                                 std::function<void()> func) override;
+    std::unique_ptr<TimerSubscriptionHandle> AddPeriodicTimer(std::chrono::milliseconds time,
+                                                              std::function<void()> func) override;
 
   private:
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher_;

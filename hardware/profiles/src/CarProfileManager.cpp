@@ -22,7 +22,7 @@ using namespace tarmac;
 using namespace timeprovider;
 namespace andrHw = ::android::hardware;
 
-CarProfileManager::CarProfileManager(std::shared_ptr<ITimeProvider> time_provider)
+CarProfileManager::CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider)
     : time_provider_(time_provider), prof_chg_timer_handle_(nullptr) {
     prof_pen_sts1_receiver_.subscribe([this]() {
         if (prof_pen_sts1_receiver_.get().isOk()) {
@@ -78,8 +78,8 @@ Return<void> CarProfileManager::requestSwitchUser(const hidl_string& androidUser
     // TODO (ts) Hard cast from string to int, Get ProfileId from settings instead
     auto string_as_int = std::stoi(androidUserId);
     prof_chg_sender_.send(static_cast<IdPen>(string_as_int));
-    prof_chg_timer_handle_ = time_provider_->add_single_shot_timer(
-            std::chrono::milliseconds{1000}, [this]() { prof_chg_sender_.send(IdPen::ProfUkwn); });
+    prof_chg_timer_handle_ = time_provider_->AddSingleShotTimer(std::chrono::milliseconds{1000},
+                                                                [this]() { prof_chg_sender_.send(IdPen::ProfUkwn); });
     return Void();
 }
 
@@ -149,8 +149,8 @@ Return<void> CarProfileManager::pairCurrentProfileToKey(KeyLocation searchLocati
             key_read_req_sender_.send(KeyLocn1::KeyLocnResvInt);
             break;
     }
-    time_provider_->add_single_shot_timer(std::chrono::milliseconds{1000},
-                                          [this]() { key_read_req_sender_.send(KeyLocn1::KeyLocnIdle); });
+    time_provider_->AddSingleShotTimer(std::chrono::milliseconds{1000},
+                                       [this]() { key_read_req_sender_.send(KeyLocn1::KeyLocnIdle); });
 
     return Void();
 }

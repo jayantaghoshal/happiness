@@ -31,19 +31,15 @@ std::chrono::steady_clock::time_point TimeProvider::steady_clock_now() const {
     return std::chrono::steady_clock::now();
 }
 
-std::chrono::system_clock::time_point TimeProvider::system_clock_now() const {
-    return std::chrono::system_clock::now();
-}
-
-std::unique_ptr<TimerSubscriptionHandle> TimeProvider::add_single_shot_timer(std::chrono::milliseconds time,
-                                                                             std::function<void()> func) {
+std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddSingleShotTimer(std::chrono::milliseconds time,
+                                                                          std::function<void()> func) {
     IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelay(time, std::move(func));
     auto rval = std::make_unique<SubscriptionHandle>(timer_id, dispatcher_);
     return std::unique_ptr<TimerSubscriptionHandle>(rval.release());  //"static_pointer_cast" for unique_ptr
 }
 
-std::unique_ptr<TimerSubscriptionHandle> TimeProvider::add_periodic_timer(std::chrono::milliseconds time,
-                                                                          std::function<void()> func) {
+std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddPeriodicTimer(std::chrono::milliseconds time,
+                                                                        std::function<void()> func) {
     IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelay(time, std::move(func), true);
     auto rval = std::make_unique<SubscriptionHandle>(timer_id, dispatcher_);
     return std::unique_ptr<TimerSubscriptionHandle>(rval.release());  //"static_pointer_cast" for unique_ptr

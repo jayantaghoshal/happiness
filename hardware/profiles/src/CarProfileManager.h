@@ -11,9 +11,8 @@
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/profiles/1.0/ICarProfileManager.h>
 #include <string>
-#include "itime_provider.h"
-
 #include "Application_dataelement.h"
+#include "timer_manager_interface.h"
 
 namespace vendor {
 namespace volvocars {
@@ -33,7 +32,7 @@ using namespace tarmac::timeprovider;
 
 class CarProfileManager : public ICarProfileManager, public ::android::hardware::hidl_death_recipient {
   public:
-    CarProfileManager(std::shared_ptr<ITimeProvider> time_provider);
+    CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider);
     Return<void> subscribeUserChange(const sp<IProfileChangedHandler>& cb) override;
     Return<void> requestSwitchUser(const hidl_string& androidUserId) override;
     Return<void> getUserProfileInformation(const hidl_string& androidUserId,
@@ -54,7 +53,7 @@ class CarProfileManager : public ICarProfileManager, public ::android::hardware:
     ApplicationDataElement::DEReceiver<autosar::KeyReadStsToProfCtrl_info> key_read_sts_receiver_;
     ApplicationDataElement::DEReceiver<autosar::NrOfKeyAvl_info> nr_of_key_receiver_;
 
-    std::shared_ptr<ITimeProvider> time_provider_;
+    std::shared_ptr<TimerManagerInterface> time_provider_;
     std::unique_ptr<TimerSubscriptionHandle> prof_chg_timer_handle_;
 
     ProfileIdentifier currentProfile = ProfileIdentifier::Guest;

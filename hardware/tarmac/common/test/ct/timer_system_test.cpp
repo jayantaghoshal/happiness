@@ -33,7 +33,7 @@ TEST_F(SystemTimerTest, test_single_shot) {
     };
 
     std::unique_ptr<TimerSubscriptionHandle> subsHandle =
-            tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+            tp->AddSingleShotTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
 
@@ -52,7 +52,7 @@ TEST_F(SystemTimerTest, test_single_shot_2) {
         calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->AddSingleShotTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1100));
@@ -68,7 +68,7 @@ TEST_F(SystemTimerTest, test_single_shot_3) {
         calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->AddSingleShotTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(15000));
@@ -84,7 +84,7 @@ TEST_F(SystemTimerTest, test_periodic) {
         calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp->add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->AddPeriodicTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 * 10 + 500));
@@ -100,7 +100,7 @@ TEST_F(SystemTimerTest, test_singleshot_unsubscribe) {
         calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp->add_single_shot_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->AddSingleShotTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -118,7 +118,7 @@ TEST_F(SystemTimerTest, test_periodic_unsubscribe) {
         calledAt = tp->steady_clock_now();
     };
 
-    auto subsHandle = tp->add_periodic_timer(std::chrono::milliseconds(1000), functToCall);
+    auto subsHandle = tp->AddPeriodicTimer(std::chrono::milliseconds(1000), functToCall);
 
     EXPECT_EQ(0, callcount);
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 * 5 + 500));

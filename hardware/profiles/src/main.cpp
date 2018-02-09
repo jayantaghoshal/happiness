@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     (void)argv;
 
     std::shared_ptr<IDispatcher> dispatcher = IDispatcher::CreateDispatcher();
-    std::shared_ptr<ITimeProvider> time_provider = std::shared_ptr<TimeProvider>(new TimeProvider(dispatcher));
+    auto time_provider = std::make_shared<TimeProvider>(dispatcher);
     android::sp<CarProfileManager> service = new CarProfileManager(time_provider);
 
     // Configure a thread pool of 1, this means that the HIDL
