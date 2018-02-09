@@ -1,0 +1,1 @@
+vendor.volvocars.hardware.uds::IDataCollector                 u:object_r:hal_uds_diagnostics_hwservice:s0

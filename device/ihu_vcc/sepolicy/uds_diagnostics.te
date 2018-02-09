@@ -1,17 +1,14 @@
-# uds diagnostic services
+#define uds_diagnostics hal
 
-attribute uds_diagnostics;
-attribute uds_diagnostics_client;
-attribute uds_diagnostics_server;
-
+#define domain for implementation used by VCC
 type uds_diagnostics_default, domain;
 type uds_diagnostics_default_exec, exec_type, file_type, vendor_file_type;
 
-hal_server_domain(uds_diagnostics_default, uds_diagnostics)
-
-# HwBinder IPC from client to server
-binder_call(uds_diagnostics_client, uds_diagnostics_server)
-
-
-hwbinder_use(uds_diagnostics_default)
+#configure uds_diagnostics_default to be a domain for service launched by init
+#it uses label from file_contexts
 init_daemon_domain(uds_diagnostics_default)
+
+#declare this domain as server for uds_diagnostics
+hal_server_domain(uds_diagnostics_default, hal_uds_diagnostics)
+
+

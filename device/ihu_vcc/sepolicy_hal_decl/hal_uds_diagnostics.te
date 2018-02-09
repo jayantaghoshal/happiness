@@ -1,0 +1,14 @@
+#define uds_diagnostics hal
+
+# TODO use hal_attribute() when available in P
+attribute hal_uds_diagnostics;
+expandattribute hal_uds_diagnostics true;
+attribute hal_uds_diagnostics_client;
+expandattribute hal_uds_diagnostics_client true;
+attribute hal_uds_diagnostics_server;
+expandattribute hal_uds_diagnostics_server false;
+
+
+binder_call(hal_uds_diagnostics_client, hal_uds_diagnostics_server)
+add_hwservice(hal_uds_diagnostics_server, hal_uds_diagnostics_hwservice)
+allow hal_uds_diagnostics_client hal_uds_diagnostics_hwservice:hwservice_manager find;
