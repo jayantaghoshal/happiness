@@ -9,11 +9,11 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="0df0bedc96fd89780d18612fa108821972e90b32"/>
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="b932d52361d06a2112b6edb7f3c58ace6b2e2fa6"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="85898a66f5663469d5dacc549b87d7ffd573fc73"/>
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="1e58d48a83af29084ef09d76dc4058a28f4e3215"/>
 
   <!-- APPS -->
-  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="a35ebf4d965303f0690f8141c8a4e6d35739a4e7"/>
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="5330b03640b8d5bec88978d8524aeb897d66d63e"/>
 
   <!-- Volvo Cars partner apps -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
