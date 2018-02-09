@@ -58,7 +58,7 @@
   <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="685f0b6167713eee83874e179db4621ee9c74da8" />
 
   <remove-project name="vendor/delphi/android_device" />
-  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="15d93c5a08db89ab0592c0f330ac07341a5c59e8">
+  <project name="vendor/delphi/android_device" path="device/delphi/vcc_ihu/private/vcc_ihu_device" revision="8bae31c949d9266490c012f25ab47264bab81104">
       <copyfile dest="vendor/aptiv/components/Android.bp" src="blueprintintermediate"/>
   </project>
 
