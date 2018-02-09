@@ -61,7 +61,10 @@ function collect_test_result_files() {
   #collect the results
   cp -R /tmp/0/stub/* "$ANDROID_HOST_OUT"/vcc_test_results/tradefed
   ls "$ANDROID_HOST_OUT"/vts/android-vts/logs/
-  cp -R "$ANDROID_HOST_OUT"/vts/android-vts/logs/* "$ANDROID_HOST_OUT"/vcc_test_results/vts/
+  # Sometimes duplicate log dirs created under the same test instance dir
+  # this command copies only one directory from ../vts/android-vts/logs/**/
+  find "$ANDROID_HOST_OUT"/vts/android-vts/logs/**/ -maxdepth 0 -type d -exec sh -c "find {} -mindepth 1 -type d | head -1 | xargs cp -R -t $ANDROID_HOST_OUT/vcc_test_results/vts/" ";"
+  #cp -R "$ANDROID_HOST_OUT"/vts/android-vts/logs/* "$ANDROID_HOST_OUT"/vcc_test_results/vts/
   cp -R "$ANDROID_HOST_OUT"/vts/android-vts/results/* "$ANDROID_HOST_OUT"/vcc_test_results/vts/
 
   #unzip archieves and rm zips (tradefed)
