@@ -26,6 +26,9 @@
   <remove-project name="aosp/platform/external/iproute2"/>
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="c6b4e863bc8e6ccd53a676e7219a713fce30330b"/>
 
+  <remove-project name="aosp/platform/packages/services/Car"/>
+  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="50b847cff3bafde618fd23158376e8ed52b222b5"/>
+
   <!-- Intel Overrides -->
   <remove-project name="bsp/vendor/intel/build"/>
   <project name="bsp/vendor/intel/build" path="device/intel/build" revision="ee092b9350913d739657b7c05bc99ee1a7749881"/>
@@ -49,7 +52,7 @@
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="78ab688ef202164a9d2bbeeaa34b0b281cc2dbeb"/>
 
   <remove-project name="bsp/device/delphi/volvoihu"/>
-  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="e652f048ca91b242f13c49cec5c79ac7d8a5f4bb"/>
+  <project name="bsp/device/delphi/volvoihu" path="device/delphi/volvoihu" revision="4aca7999670ada305bdad8d4c94b2447b7eb1888"/>
 
   <remove-project name="vendor/delphi/android_device_release"/>
   <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="339b033005330d9a992ca28ae42400c9dd91be69"/>
