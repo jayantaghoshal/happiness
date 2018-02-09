@@ -40,7 +40,7 @@ std::unique_ptr<VehiclePropValue> IlluminationHal::getProp(const VehiclePropValu
     ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
     VehiclePropValue prop_value;
     switch (requestedPropValue.prop) {
-        case toInt(VehicleProperty::AMBIENT_DAY_NIGHT):
+        case toInt(VehicleProperty::NIGHT_MODE):
             GetDayNightFromFlexray(prop_value);
             break;
 
@@ -68,7 +68,7 @@ std::vector<VehiclePropValue> IlluminationHal::getAllPropValues() {
 
 std::vector<VehiclePropConfig> IlluminationHal::listProperties() {
     VehiclePropConfig daynightconfig;
-    daynightconfig.prop = toInt(VehicleProperty::AMBIENT_DAY_NIGHT);
+    daynightconfig.prop = toInt(VehicleProperty::NIGHT_MODE);
     daynightconfig.access = VehiclePropertyAccess::READ;
     daynightconfig.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
 
@@ -89,7 +89,7 @@ void IlluminationHal::StartFlexraySubscribers() {
     day_night_receiver_.subscribe([this]() {
         VehiclePropValue prop_value;
         if (GetDayNightFromFlexray(prop_value)) {
-            ALOGI("DayNight changed to: %d", prop_value.value.int32Values[0]);
+            ALOGI("NightMode changed to: %d", prop_value.value.int32Values[0]);
             pushProp(prop_value);
         }
     });
@@ -107,12 +107,12 @@ bool IlluminationHal::GetDayNightFromFlexray(VehiclePropValue& prop_value) {
     // day/night is a boolen which is assumed to be filled in into int32 but this is actually unclear
     prop_value.timestamp = elapsedRealtimeNano();
     prop_value.areaId = 0;
-    prop_value.prop = toInt(VehicleProperty::AMBIENT_DAY_NIGHT);
+    prop_value.prop = toInt(VehicleProperty::NIGHT_MODE);
     prop_value.value.int32Values.resize(1);
-    prop_value.value.int32Values[0] = 1;  // true/Day is a valid default value if nothing can be read
+    prop_value.value.int32Values[0] = 0;  // false/Day is a valid default value if nothing can be read
     const auto signal_state_value = day_night_receiver_.get();
     if (signal_state_value.isOk()) {
-        prop_value.value.int32Values[0] = (signal_state_value.value() == TwliBriSts1::Day) ? 1 : 0;
+        prop_value.value.int32Values[0] = (signal_state_value.value() == TwliBriSts1::Night) ? 1 : 0;
         return true;
     } else {
         ALOGI("%s signal TwliBriSts is in error.", __FUNCTION__);

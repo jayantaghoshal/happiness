@@ -31,25 +31,13 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehicleArea:GLOBAL),
 
     /**
-     * Day/night indicator based on ambient light
-     * day = true , night = false
-     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
-     * @access VehiclePropertyAccess:READ
-     */
-    AMBIENT_DAY_NIGHT = (
-      0x0003
-      | VehiclePropertyGroup:VENDOR
-      | VehiclePropertyType:BOOLEAN
-      | VehicleArea:GLOBAL),
-
-    /**
      * Control of screen illumination via dashboard regulator (thumb wheel)
      * Wheel position value: 0..100 %
      * @change_mode VehiclePropertyChangeMode:ON_CHANGE
      * @access VehiclePropertyAccess:READ
      */
     MANUAL_ILLUMINATION = (
-      0x0004
+      0x0003
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
