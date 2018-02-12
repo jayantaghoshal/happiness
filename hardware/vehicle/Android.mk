@@ -28,6 +28,7 @@ LOCAL_SRC_FILES := \
      src/illuminationmodule.cpp \
      src/cartimemodule.cpp \
      src/sensormodule.cpp \
+     src/connectedsafety.cpp \
      src/activesafetymodule.cpp \
      src/daisettingimpl.cpp
 

@@ -14,6 +14,7 @@
 #include "activesafetymodule.h"
 #include "activeuserprofilemodule.h"
 #include "cartimemodule.h"
+#include "connectedsafety.h"
 #include "hvacmodule.h"
 #include "illuminationmodule.h"
 #include "keymanagermodule.h"
@@ -50,6 +51,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
+    auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
 
     // Register modules
@@ -63,6 +65,7 @@ int main(int /* argc */, char* /* argv */ []) {
     illuminationModule->registerToVehicleHal();
     carTimeModule->registerToVehicleHal();
     sensorModule->registerToVehicleHal();
+    connectedSafetyModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};

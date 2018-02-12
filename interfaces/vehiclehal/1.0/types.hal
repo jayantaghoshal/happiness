@@ -42,6 +42,18 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
 
+    /**
+     * Vehicle function setting Connected Safety
+     * Physical value On Off
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    CONNECTED_SAFETY_ON = (
+      0x0004
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
      /**
      * Drive Away Information Settings
      * @change_mode VehiclePropertyChangeMode:ON_CHANGE

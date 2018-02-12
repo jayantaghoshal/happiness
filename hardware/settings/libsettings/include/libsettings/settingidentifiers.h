@@ -23,8 +23,8 @@ enum class SettingId : uint32_t {
     Climate_FanLevelRight,
     CurveSpeedAdapt_On,
     DriveAwayInfoSetting,
-    DriveAwayInfo_On,
     AndroidUserId,
     CurrentProfileId,
-    PairedKeyId
+    PairedKeyId,
+    ConnectedSafety_On
 };
