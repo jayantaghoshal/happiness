@@ -16,7 +16,10 @@ cc_binary {
         "libutils",
         "liblog",
         "vendor.volvocars.hardware.settings@1.0",
-        "nlohmann-json-v3",
         "libtarmac",
+    ],
+
+    header_libs: [
+        "nlohmann-json-3.0.1",
     ],
 }
