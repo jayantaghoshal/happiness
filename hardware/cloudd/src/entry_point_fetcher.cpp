@@ -62,7 +62,6 @@ void EntryPointFetcher::GetEntryPoint() {
 
     if (entry_point_url_.find("https") == std::string::npos) {
         cloud_request_ = std::make_shared<CloudRequest>();
-        cloud_request_->SetUseHttps(false);
     } else {
         cloud_request_ = std::make_shared<CloudRequest>(cert_handler_);
     }

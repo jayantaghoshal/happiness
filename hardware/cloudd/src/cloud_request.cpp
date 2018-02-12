@@ -26,18 +26,18 @@ void CloudRequest::SetURL(std::string url) {
         std::string https = "https://";
         std::vector<size_t> positions;
 
-        // Maybe we can use this check to set "use_https" instead of having to specify it? Might enable easier testing..
-
         size_t pos = url.find(http, 0);
         while (pos != std::string::npos) {
             positions.push_back(pos);
             pos = url.find(http, pos + 1);
+            use_https_ = false;
         }
 
         pos = url.find(https, 0);
         while (pos != std::string::npos) {
             positions.push_back(pos);
             pos = url.find(https, pos + 1);
+            use_https_ = true;
         }
 
         if (positions.empty() || (positions.size() > 1) ||
@@ -62,8 +62,6 @@ void CloudRequest::SetHeaderList(std::vector<std::string> header_list) {
 }
 
 std::vector<std::string> CloudRequest::GetHeaderList() { return header_list_; }
-
-void CloudRequest::SetUseHttps(bool use_https) { use_https_ = use_https; }
 
 bool CloudRequest::GetUseHttps() { return use_https_; }
 

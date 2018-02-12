@@ -3,7 +3,7 @@
     "this": "/entrypointlocator",
     "specification_version": 1,
     "implementation_version": 1,
-    "client_uri": "http://cep.eu.vcctest.ericssoncvc.com/features-1/",
+    "client_uri": "http://localhost:3000/features-1/",
     "host": "localhost",
     "port": 3000
   },

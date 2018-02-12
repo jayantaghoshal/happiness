@@ -63,7 +63,6 @@ class CloudRequest {
     void SetHeaderList(std::vector<std::string> header_list);
     std::vector<std::string> GetHeaderList();
 
-    void SetUseHttps(bool use_https);
     bool GetUseHttps();
 
     void SetTimeout(std::chrono::milliseconds timeout);

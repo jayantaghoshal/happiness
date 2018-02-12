@@ -52,11 +52,11 @@ class CloudService : public ICloudConnection {
     // Methods from ICloudConnection follow.
     Return<void> registerCloudConnectionEventListener(const android::sp<ICloudConnectionEventListener>& listener);
 
-    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, bool useHttps, uint32_t timeout,
+    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, uint32_t timeout,
                               doGetRequest_cb _hidl_cb);
 
     Return<void> doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
-                               bool useHttps, uint32_t timeout, doPostRequest_cb _hidl_cb);
+                               uint32_t timeout, doPostRequest_cb _hidl_cb);
 
     /*
      * Helper method to create a parseable Response out of data received from curl after a successful request.
