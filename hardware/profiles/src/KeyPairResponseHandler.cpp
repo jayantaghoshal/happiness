@@ -13,7 +13,7 @@ namespace V1_0 {
 namespace implementation {
 
 Return<void> KeyPairResponseHandler::keySearchCompleted(KeyPairStatus result) {
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     (void)result;
     return Void();
 }

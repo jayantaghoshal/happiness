@@ -145,10 +145,10 @@ Return<DidWriteStatusCode> DiagnosticsReporter::setApixOnObd(const ::android::ha
 }
 
 bool DiagnosticsReporter::isApixOnObdParamValid(const ::android::hardware::hidl_vec<uint8_t>& data) {
-    if (data[0] == APIX_OBD_ON || data[0] == APIX_OBD_OFF) {
-        return true;
-    }
-    return false;
+    bool is_on = data[0] == APIX_OBD_ON;
+    bool is_off = data[0] == APIX_OBD_OFF;
+
+    return is_on or is_off;
 }
 
 }  // namespace netman

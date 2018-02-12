@@ -15,7 +15,7 @@ namespace implementation {
 Return<void> ProfileChangedHandler::profileChanged(const hidl_string& androidUserId, ProfileIdentifier profileId) {
     (void)androidUserId;
     (void)profileId;
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     return Void();
 }
 

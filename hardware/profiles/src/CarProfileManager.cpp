@@ -85,25 +85,25 @@ Return<void> CarProfileManager::requestSwitchUser(const hidl_string& androidUser
 
 Return<void> CarProfileManager::getUserProfileInformation(const hidl_string& androidUserId,
                                                           getUserProfileInformation_cb _hidl_cb) {
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     (void)androidUserId;
     (void)_hidl_cb;
     return Void();
 }
 
 Return<int16_t> CarProfileManager::getNrOfUnusedProfiles() {
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     return int16_t{};
 }
 
 Return<bool> CarProfileManager::pairAndroidUserToUnusedVehicleProfile(const hidl_string& androidUserId) {
-    // TODO implement. Store profile and android user in setting
+    // TODO(erik.elmeke@volvocars.com) implement. Store profile and android user in setting
     (void)androidUserId;
     return bool{};
 }
 
 Return<void> CarProfileManager::deleteUser(const hidl_string& androidUserId) {
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     (void)androidUserId;
     return Void();
 }
@@ -156,7 +156,7 @@ Return<void> CarProfileManager::pairCurrentProfileToKey(KeyLocation searchLocati
 }
 
 Return<bool> CarProfileManager::disconnectCurrentProfileFromKey() {
-    // TODO implement
+    // TODO(erik.elmeke@volvocars.com) implement
     return bool{};
 }
 
