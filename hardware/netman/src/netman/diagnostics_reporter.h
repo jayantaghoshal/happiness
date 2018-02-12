@@ -22,7 +22,7 @@ class DiagnosticsReporter final : public virtual ::android::RefBase,
 
   private:
     // DTC PART
-    enum IFACE { TCAM = 0, MOST = 1, APIX = 2, IFACE_COUNT };
+    enum IFACE { TCAM = 0, MOST = 1, APIX = 2, MAX_IFACE_COUNT };
 
     void check_link();
 
@@ -34,7 +34,7 @@ class DiagnosticsReporter final : public virtual ::android::RefBase,
     ::android::hardware::Return<void> onRegistration(const ::android::hardware::hidl_string& fqName,
                                                      const ::android::hardware::hidl_string& name,
                                                      bool preexisting) override;
-    std::array<IfNameWithReporter, IFACE_COUNT> interfaces_;
+    std::array<IfNameWithReporter, MAX_IFACE_COUNT> interfaces_;
 
     // DID PART
     ::android::hardware::Return<void> readDidValue(uint16_t did, readDidValue_cb _hidl_cb) override;

@@ -55,24 +55,21 @@
   "WLAN_VCM_WLANSTAForgetRememberedNetwk_TimeoutMs": 1500,
   "CONN_IpNetworkPrioNetworkControl": 7,
   "CONN_CloudEntryPointAddress":"https://cnep.test.volvocars.com/?client_id=11",
-  "eth0": {
-      "name": "apix0",
+  "apix0": {
       "ip-address": "198.18.18.1",
       "broadcast-address": "198.18.255.255",
       "netmask": "255.255.0.0",
       "mac-address": "02:00:00:00:12:01",
       "mtu": 1500
   },
-  "eth1": {
-      "name": "tcam0",
+  "tcam0": {
       "ip-address": "198.18.34.1",
       "broadcast-address": "198.18.255.255",
       "netmask": "255.255.240.0",
       "mac-address": "02:00:00:02:12:01",
       "mtu": 1500
   },
-  "eth2": {
-      "name": "meth0",
+  "meth0": {
       "ip-address": "198.18.2.1",
       "broadcast-address": "198.18.255.255",
       "netmask": "255.255.240.0",

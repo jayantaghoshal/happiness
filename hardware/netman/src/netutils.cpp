@@ -490,10 +490,10 @@ void PrintInterfaceConfiguration(const std::string &context, const InterfaceConf
 
 void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration> *interface_configurations,
                                 const vcc::LocalConfigReaderInterface *lcfg) {
-    const std::vector<std::string> interface_names = {"eth0", "eth1", "eth2"};
+    const std::vector<std::string> interface_names = {"apix0", "tcam0", "meth0"};
     for (auto &name : interface_names) {
         InterfaceConfiguration conf;
-        conf.name = lcfg->GetString(name, "name");
+        conf.name = name;
         conf.ip_address = lcfg->GetString(name, "ip-address");
         conf.netmask = lcfg->GetString(name, "netmask");
         conf.mac_address = lcfg->GetString(name, "mac-address");
