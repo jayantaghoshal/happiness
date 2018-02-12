@@ -66,7 +66,7 @@ PRODUCT_PACKAGES += \
 # Vendor priv-apps
 ##############################################################
 PRODUCT_PACKAGES += \
-    CloudApp \
+    CloudService \
     SoftwareUpdateService
 
 ##############################################################
