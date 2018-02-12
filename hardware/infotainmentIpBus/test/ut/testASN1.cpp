@@ -40,15 +40,15 @@ class ASN1Test : public ::testing::Test {
     ASN_BYTE* m_encodedBufPtr = nullptr;
     U32 m_encodedBufLen = 0;
 
-    virtual void SetUp() {
+    void SetUp() override {
         m_encodedBufPtr = nullptr;
-        ASN_retcode = NULL;
+        ASN_retcode = nullptr;
     }
 
-    virtual void TearDown() {}
+    void TearDown() override {}
 
   protected:
-    void verifyAndClear(void) {}
+    void verifyAndClear() {}
 };
 
 // MATCHER_P(LambdaMatcher, func, "") { bool ret=false; *result_listener << func(arg, ret); return ret; }
@@ -59,7 +59,7 @@ class ASN1Test : public ::testing::Test {
  *      Encode function returns OK (NULL)
  */
 TEST_F(ASN1Test, EncodeOk) {
-    Icb_OpSendToCarConfirmation_SetRequest p = NULL;
+    Icb_OpSendToCarConfirmation_SetRequest p = nullptr;
 
     ASN_Stream_Reset(m_stream);
     ASN_Session_Reset(m_session);
@@ -72,7 +72,7 @@ TEST_F(ASN1Test, EncodeOk) {
 
     ASN_retcode = Icb_OpSendToCarConfirmation_SetRequest_Encode(p, m_stream);
     ASSERT_TRUE(ASN_retcode == ASN_RESULT_OK);
-    EXPECT_EQ(NULL, ASN_retcode);
+    EXPECT_EQ(nullptr, ASN_retcode);
 
     m_encodedBufPtr = ASN_Stream_GetBuffer(m_stream, &m_encodedBufLen);
 }
@@ -83,7 +83,7 @@ TEST_F(ASN1Test, EncodeOk) {
  *      Encode function returns an Error with code ASN_ERROR_VALUE_NOT_WITHIN_RANGE.
  */
 TEST_F(ASN1Test, EncodeError) {
-    Icb_OpSendToCarConfirmation_SetRequest p = NULL;
+    Icb_OpSendToCarConfirmation_SetRequest p = nullptr;
 
     ASN_Stream_Reset(m_stream);
     ASN_Session_Reset(m_session);
@@ -107,7 +107,7 @@ TEST_F(ASN1Test, EncodeError) {
  *      Decode function returns OK (NULL)
  */
 TEST_F(ASN1Test, DecodeOk) {
-    Icb_OpSendToCarConfirmation_SetRequest p = NULL;
+    Icb_OpSendToCarConfirmation_SetRequest p = nullptr;
     ASN_BYTE encode_buffer[] = {0x10, 0x00, 0x00, 0x4d, 0x20};
 
     /* ASN_Stream_Reset(m_stream); */
@@ -130,7 +130,7 @@ TEST_F(ASN1Test, DecodeOk) {
  *      Decode function returns an Error with code ASN_ERROR_VALUE_NOT_WITHIN_RANGE.
  */
 TEST_F(ASN1Test, DecodeError) {
-    Icb_OpSendToCarConfirmation_SetRequest p = NULL;
+    Icb_OpSendToCarConfirmation_SetRequest p = nullptr;
     ASN_BYTE encode_buffer[] = {0xee, 0xab, 0x10, 0xab};  // INVALID bitstream
 
     p = Icb_OpSendToCarConfirmation_SetRequest_Create(m_session);

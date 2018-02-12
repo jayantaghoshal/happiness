@@ -69,8 +69,9 @@ int main(int argc, char* argv[]) {
                         printf(" Conf properties NOT OK (status=%s)\n", toString(status).c_str());
                     }
                 });
-        if (!service_status.isOk())
+        if (!service_status.isOk()) {
             printf("Error in getPropConfigs, description: %s)\n", service_status.description().c_str());
+        }
     }
 
     printf("\nListning done.\n");

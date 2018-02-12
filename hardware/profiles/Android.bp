@@ -24,5 +24,6 @@ cc_binary {
     tidy_checks: [
         "cppcoreguidelines-*",
         "-cppcoreguidelines-pro-type-vararg", // ALOG-macros use this
+        "-cppcoreguidelines-pro-bounds-array-to-pointer-decay", // ALOG + __FUNCTION__
     ],
 }

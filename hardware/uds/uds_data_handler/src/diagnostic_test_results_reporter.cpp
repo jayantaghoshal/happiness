@@ -13,14 +13,14 @@
 using uds::DiagnosticTestResultsReporter;
 using uds::DiagnosticTestResultsReporterImpl;
 
+DiagnosticTestResultsReporter::~DiagnosticTestResultsReporter() = default;
+
 DiagnosticTestResultsReporter::DiagnosticTestResultsReporter(uint32_t dtc_id)
     : pimpl_(std::make_unique<DiagnosticTestResultsReporterImpl>(dtc_id, std::chrono::seconds(2))) {}
 
 DiagnosticTestResultsReporter::DiagnosticTestResultsReporter(uint32_t dtc_id,
                                                              std::chrono::steady_clock::duration reporting_interval)
     : pimpl_(std::make_unique<DiagnosticTestResultsReporterImpl>(dtc_id, reporting_interval)) {}
-
-DiagnosticTestResultsReporter::~DiagnosticTestResultsReporter() {}
 
 void DiagnosticTestResultsReporter::ReportTestPass() { pimpl_->ReportTestPass(); }
 

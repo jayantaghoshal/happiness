@@ -3,7 +3,6 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include <errno.h>
 #include <pthread.h>
 #include <sys/timerfd.h>
 #include <cerrno>
@@ -29,7 +28,7 @@ using Task = std::function<void()>;
 
 class Dispatcher : public IDispatcher {
   public:
-    Dispatcher(bool auto_start_on_new_thread);
+    explicit Dispatcher(bool auto_start_on_new_thread);
 
     ~Dispatcher() override;
 
@@ -161,8 +160,8 @@ void Dispatcher::Start() {
     RunUntil([&]() { return stop_; });
 }
 
-void Dispatcher::RunUntil(std::function<bool()> stopCondition) {
-    while (!stopCondition()) {
+void Dispatcher::RunUntil(std::function<bool()> stop_condition) {
+    while (!stop_condition()) {
         std::vector<Task> tasks = queue_.dequeue();  // Blocking call
         if (!stop_) {
             // do callbacks for all tasks

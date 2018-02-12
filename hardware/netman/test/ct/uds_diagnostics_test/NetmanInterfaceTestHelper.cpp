@@ -4,10 +4,11 @@
  */
 
 #include "NetmanInterfaceTestHelper.h"
+
 #include <cutils/log.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <chrono>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 

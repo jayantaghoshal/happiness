@@ -23,7 +23,7 @@ using namespace timeprovider;
 namespace andrHw = ::android::hardware;
 
 CarProfileManager::CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider)
-    : time_provider_(time_provider), prof_chg_timer_handle_(nullptr) {
+    : time_provider_(std::move(time_provider)), prof_chg_timer_handle_(nullptr) {
     prof_pen_sts1_receiver_.subscribe([this]() {
         if (prof_pen_sts1_receiver_.get().isOk()) {
             currentProfile = static_cast<ProfileIdentifier>(prof_pen_sts1_receiver_.get().value());

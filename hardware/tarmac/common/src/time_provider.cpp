@@ -15,7 +15,7 @@ class SubscriptionHandle final : public TimerSubscriptionHandle {
     explicit SubscriptionHandle(IDispatcher::JobId timer_id,
                                 std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher);
 
-    ~SubscriptionHandle() { dispatcher_->Cancel(timer_id_); }
+    ~SubscriptionHandle() override { dispatcher_->Cancel(timer_id_); }
 
   private:
     const IDispatcher::JobId timer_id_;
@@ -23,17 +23,18 @@ class SubscriptionHandle final : public TimerSubscriptionHandle {
 };
 SubscriptionHandle::SubscriptionHandle(IDispatcher::JobId timer_id,
                                        std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher)
-    : timer_id_(timer_id), dispatcher_(dispatcher) {}
+    : timer_id_(timer_id), dispatcher_(std::move(dispatcher)) {}
 
-TimeProvider::TimeProvider(std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher) : dispatcher_(dispatcher) {}
+TimeProvider::TimeProvider(std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher)
+    : dispatcher_(std::move(dispatcher)) {}
 
 std::chrono::steady_clock::time_point TimeProvider::steady_clock_now() const {
     return std::chrono::steady_clock::now();
 }
 
-std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddSingleShotTimer(std::chrono::milliseconds time,
+std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddSingleShotTimer(std::chrono::milliseconds delay,
                                                                           std::function<void()> func) {
-    IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelay(time, std::move(func));
+    IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelay(delay, std::move(func));
     auto rval = std::make_unique<SubscriptionHandle>(timer_id, dispatcher_);
     return std::unique_ptr<TimerSubscriptionHandle>(rval.release());  //"static_pointer_cast" for unique_ptr
 }

@@ -11,13 +11,8 @@
 #include <cutils/log.h>
 
 class TypeConvHelpersTest : public ::testing::Test {
-  public:
-    virtual void SetUp() {}
-
-    virtual void TearDown() {}
-
   protected:
-    void verifyAndClear(void) {}
+    void verifyAndClear() {}
 };
 
 /**
@@ -117,7 +112,7 @@ TEST_F(TypeConvHelpersTest, EncodeWOSession) {
     };
     Icb_ExtendedChannelData_t extendedData_1 = {
             Icb_ExtendedChannelData_Choices::e_Icb_ExtendedChannelData_data,  // choice
-            NULL,                                                             // notSupported
+            nullptr,                                                          // notSupported
             &data_1};
     Icb_ChannelData_t channelData[1] = {
             {1,                                                                              // prn
