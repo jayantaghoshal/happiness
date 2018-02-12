@@ -40,19 +40,19 @@ class VtsNetmandBootComponentTest(base_test.BaseTestClass):
         # Arrange
 
         # Act
-        result = self.terminal.Execute("ps -A | grep netmand")
+        output = self.helper.execute_cmd("ps -A | grep netmand")
 
         # Assert
-        asserts.assertEqual(0, result[output.EXIT_CODE][0])
+        asserts.assertEqual(0, output['return_codes'][0])
 
     def test_OnBoot_NetboydIsRunning(self):
         # Arrange
 
         # Act
-        result = self.terminal.Execute("ps -A | grep netboyd")
+        output = self.helper.execute_cmd("ps -A | grep netboyd")
 
         # Assert
-        asserts.assertEqual(0, result[output.EXIT_CODE][0])
+        asserts.assertEqual(0, output['return_codes'][0])
 
     ## ----------------------------------------
     ## --/ TCAM (eth1) Interface Ip Configuration Tests /--

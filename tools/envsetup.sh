@@ -12,3 +12,4 @@ export PYTHONPATH=$PYTHONPATH:${SCRIPT_DIR}/lib/python/ihu_vts
 export PYTHONPATH=$PYTHONPATH:${SCRIPT_DIR}/lib/python
 export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor
 export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/tools/testing/fdx_client
+export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/netman/test/ct/helpers

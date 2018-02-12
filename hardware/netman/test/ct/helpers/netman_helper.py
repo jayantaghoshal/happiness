@@ -48,7 +48,7 @@ class NetmanHelper(BaseHelper):
         conf["netmask"] = self._parse_netmask(ifconfig_output)
         conf["mtu"] = self._parse_mtu(ifconfig_output)
         conf["mac_address"] = self._parse_mac_address(ifconfig_output)
-        logging.info(conf)
+        logging.info(str(conf))
         return conf
 
     def set_broadcast_address(self, interface, broadcast_address, run_in_vcc_namespace=True):

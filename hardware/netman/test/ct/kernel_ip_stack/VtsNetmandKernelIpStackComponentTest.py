@@ -33,13 +33,14 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
     ## --/ Firewall Configuration Tests /--
     ## ----------------------------------------
 
-    def test_TcpWindowScaling_ShouldBeZero(self):
-        # Act
-        tcp_window_scaling = \
-            int(self.target.get_sys_ctl_parameters("ipv4/tcp_window_scaling"))
-
-        # Assert
-        asserts.assertEqual(0, tcp_window_scaling)
+    # TODO Parameter not available in namspaces, kernel patch not integrated into Android yet
+    # def test_TcpWindowScaling_ShouldBeZero(self):
+    #     # Act
+    #     tcp_window_scaling = \
+    #         int(self.target.get_sys_ctl_parameters("ipv4/tcp_window_scaling"))
+    #
+    #     # Assert
+    #     asserts.assertEqual(0, tcp_window_scaling)
 
     def test_TcpWindowScaling_ShouldBeOne(self):
         # Act
@@ -111,11 +112,12 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
         asserts.assertEqual(0, default_secure_redirects)
 
-    def test_TcpTimeStamps_ShouldBeZero(self):
-        tcp_timestamps = \
-            int(self.target.get_sys_ctl_parameters("ipv4/tcp_timestamps"))
-
-        asserts.assertEqual(0, tcp_timestamps)
+    # TODO Parameter not available in namspaces, kernel patch not integrated into Android yet
+    # def test_TcpTimeStamps_ShouldBeZero(self):
+    #     tcp_timestamps = \
+    #         int(self.target.get_sys_ctl_parameters("ipv4/tcp_timestamps"))
+    #
+    #     asserts.assertEqual(0, tcp_timestamps)
 
     def test_AllSendRedirects_ShouldBeZero(self):
         all_send_redirects = \
@@ -143,24 +145,21 @@ class VtsNetmandKernelIpStackComponentTest(base_test.BaseTestClass):
 
     def test_ProxyArpEth1_ShouldBeOne(self):
         # Force interface up
-        result = self.terminal.Execute("ip netns exec vcc ifconfig tcam0 up")
-        asserts.assertEqual(0, result[const.EXIT_CODE][0])
+        output = self.target.execute_cmd("ip netns exec vcc ifconfig tcam0 up")
+        asserts.assertEqual(0, output['return_codes'][0])
         proxy_arp_eth1 = \
             int(self.target.get_sys_ctl_parameters("ipv4/conf/tcam0/proxy_arp"))
 
         asserts.assertEqual(1, proxy_arp_eth1)
 
-    """
-    TODO: (Abhi) enable below test after MOST intergration is complete
-    """
-    # def test_ProxyArpMeth0_ShouldBeOne(self):
-    #     # Force interface up
-    #     result = self.terminal.Execute("ip netns exec vcc ifconfig meth0 up")
-    #     asserts.assertEqual(0, result[const.EXIT_CODE][0])
-    #     proxy_arp_meth0 = \
-    #         int(self.target.get_sys_ctl_parameters("ipv4/conf/meth0/proxy_arp"))
+    def test_ProxyArpMeth0_ShouldBeOne(self):
+        # Force interface up
+        output = self.target.execute_cmd("ip netns exec vcc ifconfig meth0 up")
+        asserts.assertEqual(0, output['return_codes'][0])
+        proxy_arp_meth0 = \
+            int(self.target.get_sys_ctl_parameters("ipv4/conf/meth0/proxy_arp"))
 
-    #     asserts.assertEqual(1, proxy_arp_meth0)
+        asserts.assertEqual(1, proxy_arp_meth0)
 
     def _invoke_terminal(self, name="test_terminal"):
         self.dut.shell.InvokeTerminal(name)
