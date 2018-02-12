@@ -33,11 +33,7 @@ test_plan_gate = [
 
 test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                      standard_caps),
-    Disabled(VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps),
-             reason="MR1 not yet on master",
-             jira_issue="",
-             deadline="2018-01-31"
-    ),
+    VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",       standard_caps | {cp.audio}),
     VTSTest("vendor/volvocars/hardware/netman/test/ct/apix_obd_traffic_split",         standard_caps),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",       standard_caps | {cp.apix}),
     # Climate included twice because the test case dynamically detects if FR hardware is present
