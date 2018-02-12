@@ -1,5 +1,5 @@
 # ip
-type ip-vcc, coredomain;
+type ip-vcc, domain;
 type ip-vcc_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(ip-vcc)
@@ -12,7 +12,7 @@ allow ip-vcc null_device:chr_file { read write };
 allow ip-vcc self:netlink_route_socket { create setopt bind getattr write read nlmsg_read };
 allow ip-vcc self:capability net_raw;
 allow ip-vcc rootfs:dir mounton;
-allow ip-vcc toolbox_exec:file { read open getattr execute execute_no_trans };
+#allow ip-vcc toolbox_exec:file { read open getattr execute execute_no_trans };
 allow ip-vcc proc_net:file rw_file_perms;
 allow ip-vcc proc:file r_file_perms;
 allow ip-vcc system_file:file { execute read };
