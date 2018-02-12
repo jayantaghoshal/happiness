@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -44,7 +44,9 @@ class LscMocker : public IIplmCallback {
 
   private:
     // Methods from ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback follow.
-    Return<void> onResourceGroupStatus(ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus) override;
+    Return<void> onResourceGroupStatus(ResourceGroup resourceGroup,
+                                       ResourceGroupStatus resourceGroupStatus,
+                                       ResourceGroupPrio resourceGroupPrio) override;
     Return<void> onNodeStatus(Ecu ecuType, bool ecuStatus) override;
     // Variables
     sp<IIplm> iplmservice;

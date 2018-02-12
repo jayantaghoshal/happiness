@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -20,35 +20,37 @@ import android.hardware.automotive.vehicle.V2_0.VehicleApPowerState;
 import android.hardware.automotive.vehicle.V2_0.VehicleIgnitionState;
 import android.hardware.automotive.vehicle.V2_0.VehicleApPowerSetState;
 import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
-
+import vendor.volvocars.hardware.iplm.V1_0.IIplm;
+import vendor.volvocars.hardware.iplm.V1_0.IIplmCallback;
+import vendor.volvocars.hardware.iplm.V1_0.ResourceGroup;
+import vendor.volvocars.hardware.iplm.V1_0.ResourceGroupPrio;
 
 /**
+ *
  * CSDConsumerManager
  */
 public class CSDConsumerManager {
     public static final String TAG = "BrightnessService.CSDMa";
     private PowerManager mPowerManager;
     private IVehicle mVehicle;
+    private IIplmCallback mIIplmCallback;
+    private IIplm mIIplm;
     private VehicleCallback mInternalCallback;
+    private IplmCallback miplmCallback;
     private int mSubcribeRetries =0;
     private final int VEHICLE_HAL_SUBSCRIBE_RETRIES = 10;
-    private PowerManager.WakeLock wakeLock = null;
-    private int CC100 = 0; //LocalConfig value
-    private boolean mTimer1Expired = false;
-    private boolean mTimer2Expired = false;
-    private UberRequest mUberRequest = UberRequest.NotReceived;
-    private enum UberRequest{
-        NotReceived,
-        SetCSDStateInON,
-        SetCSDStateInOFF
-    }
+    private PowerManager.WakeLock wakeLockVehicleIgnition = null;
+    private PowerManager.WakeLock wakeLockIplm = null;
     public CSDConsumerManager(IVehicle vehicle, PowerManager powerManager) {
         try {
             Log.d(TAG, "BrightnessService.CSDMan start ");
             mVehicle = vehicle;
             mPowerManager = powerManager;
             mInternalCallback = new VehicleCallback();
+            miplmCallback = new IplmCallback();
 
+            mIIplm = IIplm.getService();
+            mIIplm.registerService("CSDConsumerManager",miplmCallback);
             //Setup SubscribeOptions
             ArrayList<SubscribeOptions> options = new ArrayList<>();
             SubscribeOptions opts = new SubscribeOptions();
@@ -106,7 +108,7 @@ public class CSDConsumerManager {
             setprop.value.int32Values.add(valueToSet);
             setprop.areaId = VehicleArea.GLOBAL;
             int setResult = mVehicle.set(setprop);
-            Log.v(TAG, "set result " + setResult);
+            Log.d(TAG, "set result " + setResult);
         } catch (RemoteException ex) {
             Log.e(TAG, ex.getMessage());
         }
@@ -142,15 +144,15 @@ public class CSDConsumerManager {
         switch (ignitionState){
             case VehicleIgnitionState.ON:
             case VehicleIgnitionState.START:
-                if(wakeLock==null) {
-                    wakeLock = mPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "VehicleIgnitionOn");
-                    wakeLock.acquire();
+                if(wakeLockVehicleIgnition ==null) {
+                    wakeLockVehicleIgnition = mPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "VehicleIgnitionOn");
+                    wakeLockVehicleIgnition.acquire();
                 }
                 break;
             default:
-                if(wakeLock!= null) {
-                    wakeLock.release();
-                    wakeLock = null;
+                if(wakeLockVehicleIgnition != null) {
+                    wakeLockVehicleIgnition.release();
+                    wakeLockVehicleIgnition = null;
                 }
                 break;
         }
@@ -193,5 +195,33 @@ public class CSDConsumerManager {
         public void onPropertySet(VehiclePropValue propValue) {}//Not used
         @Override
         public void onPropertySetError(int errorCode, int propId, int areaId) {}// Not used
+    }
+    /**
+     * Callback class for iplm.
+     * onResourceGroupStatus is used determine if an TCAM Request PRIO_HIGH
+     * then we should acquire wakelock to keep the screen lit.
+     * */
+    private class IplmCallback extends IIplmCallback.Stub{
+        @Override
+        public void onResourceGroupStatus(byte resourceGroup, byte resourceGroupStatus,byte resourceGroupPrio){
+            if(resourceGroup == ResourceGroup.ResourceGroup3 && resourceGroupPrio == ResourceGroupPrio.High && wakeLockIplm == null){
+                Log.v(TAG,"acquire wakeLockIplm:");
+                Log.d(TAG,"resourceGroup: :" + resourceGroup);
+                Log.d(TAG,"resourceGroupStatus: " + resourceGroupStatus);
+                Log.d(TAG,"resourceGroupPrio: " + resourceGroupPrio);
+                wakeLockIplm = mPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "IPLM_RG3_PrioHigh");
+                wakeLockIplm.acquire();
+            }
+            else if(resourceGroup == ResourceGroup.ResourceGroup3  && resourceGroupPrio == ResourceGroupPrio.Normal && wakeLockIplm != null){ // PRIO_HIGH not set anymore.
+                Log.v(TAG,"Release wakelock:");
+                Log.d(TAG,"resourceGroup: :" + resourceGroup);
+                Log.d(TAG,"resourceGroupStatus: " + resourceGroupStatus);
+                Log.d(TAG,"resourceGroupPrio: " + resourceGroupPrio);
+                wakeLockIplm.release();
+                wakeLockIplm = null;
+            }
+        }
+        @Override
+        public void onNodeStatus(byte ecuType, boolean ecuStatus){} // not used
     }
 }

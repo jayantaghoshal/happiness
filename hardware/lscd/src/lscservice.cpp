@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -31,7 +31,9 @@ void LscService::RequestResourceGroup(const hidl_string& lscName, ResourceGroup 
 
 LscService::~LscService() { ALOGD("~LscService"); }
 // Methods from ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback follow.
-Return<void> LscService::onResourceGroupStatus(ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus) {
+Return<void> LscService::onResourceGroupStatus(ResourceGroup resourceGroup,
+                                               ResourceGroupStatus resourceGroupStatus,
+                                               ResourceGroupPrio resourceGroupPrio) {
     if (onResourceGroupStatusCallback != nullptr) onResourceGroupStatusCallback(resourceGroup, resourceGroupStatus);
     return Void();
 }

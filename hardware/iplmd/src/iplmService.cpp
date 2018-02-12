@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -251,6 +251,8 @@ void IplmService::ActivityTimeout() {
     tem_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Tem));
     vcm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vcm));
 
+    XResourceGroupPrio rg_prio = (XResourceGroupPrio)GetExternalPrio(iplm_data_);
+
     if (broadcast_allowed) {
         ALOGV("ActivityTimeout: Sending IP Activity broadcast");
 
@@ -270,8 +272,8 @@ void IplmService::ActivityTimeout() {
     // send events to LSCs. Update is sent periodically every second
     for (auto regs : registered_callbacks_to_call) {
         auto callback = regs.second;
-        auto result1 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status);
-        auto result2 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status);
+        auto result1 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status, rg_prio);
+        auto result2 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status, rg_prio);
         auto result3 = callback->onNodeStatus(Ecu::TEM, tem_available);
         auto result4 = callback->onNodeStatus(Ecu::VCM, vcm_available);
         // We always have to call isOk() eventthough we don't need it
