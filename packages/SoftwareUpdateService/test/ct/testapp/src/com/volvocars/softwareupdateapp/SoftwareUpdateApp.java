@@ -25,7 +25,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 
 import android.graphics.Rect;
 
-public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp{
+public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp {
     private static final String LOG_TAG = "SwUpdApp";
     private SoftwareUpdateManager softwareUpdateManager = null;
 
@@ -43,7 +43,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateState(int state) {
             Log.v(LOG_TAG, "UpdateState " + state);
-            if(state == 1) {
+            if (state == 1) {
                 actionsFab.setEnabled(true);
             } else {
                 actionsFab.setEnabled(false);
@@ -63,6 +63,11 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateSoftwareState(String uuid, int state) {
             Log.v(LOG_TAG, "UpdateSoftwareState");
+        }
+
+        @Override
+        public void UpdatePendingInstallations(List<InstallationOrder> installation_order_list) {
+            Log.v(LOG_TAG, "UpdatePendingInstallations");
         }
 
         @Override
