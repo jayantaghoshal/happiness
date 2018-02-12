@@ -20,6 +20,7 @@ def create_parser():
             agent   - Execute Jenkins build
             builds  - List Jenkins builds
             nodes   - List Jenkins nodes
+            vbf     - IHU VBF management
             ''')
     )
 
@@ -96,6 +97,69 @@ def create_parser():
                               default=os.getenv('JENKINS_API_KEY', None),
                               help="Jenkins API-KEY (defaults to ${JENKINS_API_KEY})")
 
+    ##
+    # vbf
+    #
+    parser_vbf = subparser.add_parser("vbf",
+                                      description="IHU VBF management")
+
+    vbf_subparser = parser_vbf.add_subparsers(dest="action")
+
+    ##
+    # GET
+    #
+    parser_vbf_get = vbf_subparser.add_parser("get",
+                                              description="Get VBF part number and version")
+
+    parser_vbf_get.add_argument("sw_tag",
+                                metavar='SW-TAG',
+                                help="SW Tag (e.g. SWL2)")
+
+    parser_vbf_get.add_argument("-t", "--build-type",
+                                nargs="?",
+                                metavar='BUILD-TYPE',
+                                default="eng",
+                                help="AOSP Build Type (defaults to \"eng\"")
+
+    ##
+    # INC
+    #
+    parser_vbf_inc = vbf_subparser.add_parser("inc",
+                                              description="Increment VBF version")
+
+    parser_vbf_inc.add_argument("sw_tag",
+                                metavar='SW-TAG',
+                                help="SW Tag (e.g. SWL2)")
+
+    parser_vbf_inc.add_argument("-t", "--build-type",
+                                nargs="?",
+                                metavar='BUILD-TYPE',
+                                default="eng",
+                                help="AOSP Build Type (defaults to \"eng\"")
+    ##
+    # SET
+    #
+    parser_vbf_set = vbf_subparser.add_parser("set",
+                                              description="Set VBF part number and version")
+
+    parser_vbf_set.add_argument("sw_tag",
+                                metavar='SW-TAG',
+                                help="SW Tag (e.g. SWL2)")
+
+    parser_vbf_set.add_argument("part_number",
+                                metavar='PART-NUMBER',
+                                help="VBF Partnumber")
+
+    parser_vbf_set.add_argument("suffix",
+                                metavar='SUFFIX',
+                                help="VBF suffix (version)")
+
+    parser_vbf_set.add_argument("-t", "--build-type",
+                                nargs="?",
+                                metavar='BUILD-TYPE',
+                                default="eng",
+                                help="AOSP Build Type (defaults to \"eng\"")
+
     return parser
 
 def create_logger(options):
@@ -123,6 +187,8 @@ def execute(options):
         return BuildsCommand(options).run()
     elif options.command == 'nodes':
         return NodesCommand(options).run()
+    elif options.command == 'vbf':
+        return VBFCommand(options).run()
 
 def main(argv=None):
 
@@ -134,5 +200,8 @@ def main(argv=None):
     create_logger(options)
     if not options.command:
         parser.error("Must specify a 'command' to be performed")
+    if options.command == "vbf":
+        if not options.action:
+           parser.error("Must specify an 'action' (set,get,inc) to be performed")
 
     return execute(options)
