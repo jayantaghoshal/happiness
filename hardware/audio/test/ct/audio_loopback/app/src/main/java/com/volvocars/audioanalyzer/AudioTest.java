@@ -30,6 +30,8 @@ public class AudioTest extends
     public void testAudio() throws Exception{
         mActivityRule.getActivity().playSound(200);
 
+        Thread.sleep(500);
+
         assertTrue(mActivityRule.getActivity().getCompareFreqs());
     }
 }

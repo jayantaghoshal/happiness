@@ -72,11 +72,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}),
-    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps),
-             reason="Waiting for fully working MOST drivers",
-             jira_issue="",
-             deadline="2018-01-31"
-    ),
+    TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps | {cp.audio}),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                   standard_caps),
 
