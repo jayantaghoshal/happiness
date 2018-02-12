@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="IlluminationControl-Test">
+    <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
+        <option name="apk-name" value="TestIlluminationControlJava.apk" />
+    </target_preparer>
+    <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
+        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/BrightnessService/test/ct/IlluminationControlTest/prepare.sh" />
+        <option name="host-teardown-command" value="adb shell rm /data/local/tmp/InjectFlexRayIllumination" />
+    </target_preparer>
+
+   <test class="com.android.tradefed.testtype.AndroidJUnitTest">
+       <option name="package" value="com.volvocars.brightnesstest" />
+       <option name="class" value="com.volvocars.brightnesstest.IlluminationControlTestDimming" />
+       <option name="runtime-hint" value="240s" />
+   </test>
+   <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />
+   <result_reporter class="com.android.tradefed.result.XmlResultReporter" />
+</configuration>
