@@ -46,7 +46,13 @@ cc_defaults {
     ],
 
     tidy_flags: [
-        "-warnings-as-errors=-*", //TODO progressively extend
+        "-warnings-as-errors=" +
+        "*," +
+        "-performance-unnecessary-value-param," +
+        "-google-readability-casting," +
+        "-google-default-arguments," +
+        "-performance-unnecessary-value-param," +
+        "-cert-env33-c",
     ],
 }
 
