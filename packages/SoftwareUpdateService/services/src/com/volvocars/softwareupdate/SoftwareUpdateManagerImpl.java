@@ -100,4 +100,9 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     public void GetPendingInstallations(ISoftwareUpdateManagerCallback callback) {
         service.GetPendingInstallations(callback);
     }
+
+    @Override
+    public void GetDownloadInfo(String uuid, ISoftwareUpdateManagerCallback callback) throws RemoteException {
+        //TODO: implement
+    }
 }

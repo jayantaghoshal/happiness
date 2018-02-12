@@ -19,6 +19,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
@@ -131,6 +132,11 @@ public class SoftwareUpdateService extends Service {
                 Log.w(LOG_TAG, "GetSoftwareAssignmentList::PendingInstallations: Why am I called? o_O Please stop.");
 
             }
+
+            @Override
+            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
+                //TODO: implement
+            }
         };
 
         if (swapi != null) {
@@ -169,6 +175,11 @@ public class SoftwareUpdateService extends Service {
                 Log.w(LOG_TAG, "CommissionAssignment::PendingInstallations: Why am I called? o_O Please stop.");
 
             }
+
+            @Override
+            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
+                //TODO: implement
+            }
         };
 
         if (swapi != null) {
@@ -204,6 +215,11 @@ public class SoftwareUpdateService extends Service {
             public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
                 //TODO: implement
 
+            }
+
+            @Override
+            public void DownloadInfo(String uuid, DownloadInfo download_info ) {
+                //TODO: implement
             }
         };
     }

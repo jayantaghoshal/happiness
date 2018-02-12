@@ -1,5 +1,6 @@
 package com.volvocars.softwareupdate;
 
+import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
@@ -25,4 +26,11 @@ oneway interface ISoftwareUpdateManager {
     * @param callback
     */
     void GetPendingInstallations(in ISoftwareUpdateManagerCallback callback);
+
+    /**
+    * Get Download Info for an installation order
+    * @param uuid installation order id
+    * @param callback
+    */
+     void GetDownloadInfo(in String uuid, in ISoftwareUpdateManagerCallback callback);
 }

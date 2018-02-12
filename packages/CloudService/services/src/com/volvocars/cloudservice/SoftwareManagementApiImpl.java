@@ -197,4 +197,14 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
         //TODO: implement
     }
+
+    /**
+    * Get Download Info for an installation order
+    * @param uuid installation order id
+    * @param callback
+    */
+    @Override
+    public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
+        //TODO: implement
+    }
 }

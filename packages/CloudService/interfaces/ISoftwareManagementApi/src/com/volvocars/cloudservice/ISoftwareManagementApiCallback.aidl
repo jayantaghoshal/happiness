@@ -1,5 +1,6 @@
 package com.volvocars.cloudservice;
 
+import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationOrder;
 
@@ -26,4 +27,11 @@ oneway interface ISoftwareManagementApiCallback {
     * @param installation_order_list The list of InstallationOrders
     */
     void PendingInstallations(in int code, in List<InstallationOrder> installation_order_list);
+
+    /**
+    * Return the result for GetDownloadInfo
+    * @param uuids         The id for the installation order
+    * @param download_info The download information of the installation order.
+    */
+    void DownloadInfo(in String uuid, in DownloadInfo download_info);
 }

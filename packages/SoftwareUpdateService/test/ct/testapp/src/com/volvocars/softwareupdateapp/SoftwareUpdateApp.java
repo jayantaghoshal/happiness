@@ -71,6 +71,11 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         }
 
         @Override
+        public void UpdateDownloadInfo(String uuid, DownloadInfo download_info) {
+            Log.v(LOG_TAG, "UpdateDownloadInfo");
+        }
+
+        @Override
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
         }
