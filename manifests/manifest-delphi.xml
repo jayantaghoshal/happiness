@@ -105,7 +105,7 @@
   <!-- TODO Abhi: this repo is currently not available. And will not be available /-->
   <!--project name="bsp/external/memtester" path="external/memtester" revision="c6c4765d3b889fc7f84651928ae7a468e0d31938"/-->
   <!-- Android device project -->
-  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="2fd4960e2b49aacc5bb89e2593dd8f2336f15ae6"/>
+  <project name="vendor/delphi/android_device_release" path="device/delphi/vcc_ihu/release" revision="6c615dddedda074993889e37e9d2d680c0e61f93"/>
 
   <!-- Project specific Aptiv building blocks -->
 
