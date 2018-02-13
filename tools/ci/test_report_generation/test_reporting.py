@@ -81,11 +81,22 @@ def fetch_commiters_name():
         pass  # ignore if there are no changesets
 
 
-if __name__ == '__main__':
+def uniqueList(commiters_list):
+    unique_commiters = []
+    for commiter in commiters_list:
+            if commiter not in unique_commiters:
+                unique_commiters.append(commiter)
+    return unique_commiters
+
+def main():
     commiters_list = fetch_commiters_name()
+    # remove repetition due to multiple commits by a person
+    commiters_list = uniqueList(commiters_list)
     print("commiters list: ")
     print(commiters_list)
     if JOB_NAME == "ihu_hourly":
+        # TODO hourly is frequent in a day so mailing would annoy the developers. Enable when all tests are passing and stable.
+        return
         report_link = "http://gotsvl1416.got.volvocars.net/hourly_test_report/" + \
             str(BUILD_NUMBER)
     elif JOB_NAME == "ihu_daily":
@@ -94,6 +105,10 @@ if __name__ == '__main__':
 
     for commiter in commiters_list:
         # TODO send mail notifications to recipients in other domains
-        if "volvocars" in commiter["commiter_mail"]: # send mail to only receipts in volvocars domain
+        # send mail to only receipts in volvocars domain
+        if "volvocars" in commiter["commiter_mail"]:
             send_hourly_failed_email(
                 commiter["commiter_name"], commiter["commiter_mail"], report_link)
+
+if __name__ == '__main__':
+    main()
