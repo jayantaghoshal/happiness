@@ -6,5 +6,5 @@
 python3 -tt generate.py \
     -s databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml \
     -c databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Com.arxml \
-    -d generated
+    -d ../generated
 

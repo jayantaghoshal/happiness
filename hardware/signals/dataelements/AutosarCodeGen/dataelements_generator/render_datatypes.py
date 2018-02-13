@@ -13,8 +13,7 @@ def render_datatype(header: str,
                     arrays: List[DE_Array],
                     structs: List[DE_Struct],
                     all_types: Dict[DE_Type_Key, DE_BaseType]):
-    dTStr = header + """#ifndef _DATATYPES_H
-#define _DATATYPES_H
+    dTStr = header + """#pragma once
 
 #include <array>
 
@@ -70,6 +69,6 @@ namespace autosar {\n
 
             dTStr += "};\n\n"
 
-    dTStr += "} // end of namespace\n#endif"
+    dTStr += "} // end of namespace\n"
     dTStr += footer
     return dTStr

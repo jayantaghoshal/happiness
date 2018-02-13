@@ -10,8 +10,7 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
  * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
-#ifndef _DATATYPES_H
-#define _DATATYPES_H
+#pragma once
 
 #include <array>
 
@@ -5565,5 +5564,5 @@ struct WipgInfo {
 };
 
 } // end of namespace
-#endif
+
 // clang-format on

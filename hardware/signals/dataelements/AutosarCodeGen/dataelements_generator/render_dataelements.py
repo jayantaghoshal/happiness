@@ -125,8 +125,7 @@ def render_dataelments(header: str, footer: str, all_de_elements: List[DE_Elemen
     # TODO: Split this into VIP and DataElements?
 
 
-    dataElementsHeaderStr = header + """#ifndef _DATAELEMENTS_H
-#define _DATAELEMENTS_H
+    dataElementsHeaderStr = header + """#pragma once
 
 #include \"gen_datatypes.h\"
 
@@ -300,7 +299,7 @@ namespace autosar {
                                                                                              de_de.rtename).replace(
                         "{DATAELEM}", de_de.de_dataelementname).replace("{TRANSFER}", tmpTransferSink)
 
-    dataElementsHeaderStr += "} // end of namespace\n#endif"
+    dataElementsHeaderStr += "} // end of namespace\n"
     dataElemetsCppStr += "} // end of namespace\n"
 
     dataElementsHeaderStr += footer

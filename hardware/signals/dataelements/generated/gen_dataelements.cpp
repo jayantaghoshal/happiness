@@ -126,46 +126,6 @@ Dir ActvnOfPrkgAut_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* ActvnOfSwtIllmnCen_info::Name() { return "ActvnOfSwtIllmnCen"; }
-const char* ActvnOfSwtIllmnCen_info::TypeName() { return "bool"; }
-Dir ActvnOfSwtIllmnCen_info::Direction() { return Dir::OUT; }
-
-const char* ActvnOfSwtIllmnCen_info::name() const { return Name(); }
-const char* ActvnOfSwtIllmnCen_info::typeName() const { return TypeName(); }
-Dir ActvnOfSwtIllmnCen_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* ActvnOfSwtIllmnClima_info::Name() { return "ActvnOfSwtIllmnClima"; }
-const char* ActvnOfSwtIllmnClima_info::TypeName() { return "bool"; }
-Dir ActvnOfSwtIllmnClima_info::Direction() { return Dir::OUT; }
-
-const char* ActvnOfSwtIllmnClima_info::name() const { return Name(); }
-const char* ActvnOfSwtIllmnClima_info::typeName() const { return TypeName(); }
-Dir ActvnOfSwtIllmnClima_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* ActvnOfSwtIllmnDrvMod_info::Name() { return "ActvnOfSwtIllmnDrvMod"; }
-const char* ActvnOfSwtIllmnDrvMod_info::TypeName() { return "bool"; }
-Dir ActvnOfSwtIllmnDrvMod_info::Direction() { return Dir::OUT; }
-
-const char* ActvnOfSwtIllmnDrvMod_info::name() const { return Name(); }
-const char* ActvnOfSwtIllmnDrvMod_info::typeName() const { return TypeName(); }
-Dir ActvnOfSwtIllmnDrvMod_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* ActvnOfSwtIllmnForSeatHeatrRe_info::Name() { return "ActvnOfSwtIllmnForSeatHeatrRe"; }
-const char* ActvnOfSwtIllmnForSeatHeatrRe_info::TypeName() { return "bool"; }
-Dir ActvnOfSwtIllmnForSeatHeatrRe_info::Direction() { return Dir::OUT; }
-
-const char* ActvnOfSwtIllmnForSeatHeatrRe_info::name() const { return Name(); }
-const char* ActvnOfSwtIllmnForSeatHeatrRe_info::typeName() const { return TypeName(); }
-Dir ActvnOfSwtIllmnForSeatHeatrRe_info::direction() const { return Direction(); }
-
-
-//==========================================
 const char* ActvtAutnmsPrkgCtrl_info::Name() { return "ActvtAutnmsPrkgCtrl"; }
 const char* ActvtAutnmsPrkgCtrl_info::TypeName() { return "ActvtAutnmsPrkgCtrl"; }
 Dir ActvtAutnmsPrkgCtrl_info::Direction() { return Dir::OUT; }
@@ -393,16 +353,6 @@ Dir AvlStsForLatAutDrv_info::Direction() { return Dir::IN; }
 const char* AvlStsForLatAutDrv_info::name() const { return Name(); }
 const char* AvlStsForLatAutDrv_info::typeName() const { return TypeName(); }
 Dir AvlStsForLatAutDrv_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* BackCntrForMissCom_info::Name() { return "BackCntrForMissCom"; }
-const char* BackCntrForMissCom_info::TypeName() { return "uint8_t"; }
-Dir BackCntrForMissCom_info::Direction() { return Dir::IN; }
-
-const char* BackCntrForMissCom_info::name() const { return Name(); }
-const char* BackCntrForMissCom_info::typeName() const { return TypeName(); }
-Dir BackCntrForMissCom_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -1263,16 +1213,6 @@ Dir DiagcStsDMSM_info::Direction() { return Dir::IN; }
 const char* DiagcStsDMSM_info::name() const { return Name(); }
 const char* DiagcStsDMSM_info::typeName() const { return TypeName(); }
 Dir DiagcStsDMSM_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* DispAndHomeBtnSts_info::Name() { return "DispAndHomeBtnSts"; }
-const char* DispAndHomeBtnSts_info::TypeName() { return "Trig1"; }
-Dir DispAndHomeBtnSts_info::Direction() { return Dir::OUT; }
-
-const char* DispAndHomeBtnSts_info::name() const { return Name(); }
-const char* DispAndHomeBtnSts_info::typeName() const { return TypeName(); }
-Dir DispAndHomeBtnSts_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -2776,16 +2716,6 @@ Dir IndcrTurnSts1WdSts_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* IniValSigCfgIDBackboneFR_info::Name() { return "IniValSigCfgIDBackboneFR"; }
-const char* IniValSigCfgIDBackboneFR_info::TypeName() { return "uint16_t"; }
-Dir IniValSigCfgIDBackboneFR_info::Direction() { return Dir::IN; }
-
-const char* IniValSigCfgIDBackboneFR_info::name() const { return Name(); }
-const char* IniValSigCfgIDBackboneFR_info::typeName() const { return TypeName(); }
-Dir IniValSigCfgIDBackboneFR_info::direction() const { return Direction(); }
-
-
-//==========================================
 const char* InsdCarNoiseMeasd_info::Name() { return "InsdCarNoiseMeasd"; }
 const char* InsdCarNoiseMeasd_info::TypeName() { return "double"; }
 Dir InsdCarNoiseMeasd_info::Direction() { return Dir::OUT; }
@@ -2813,16 +2743,6 @@ Dir IntrBriSts_info::Direction() { return Dir::IN; }
 const char* IntrBriSts_info::name() const { return Name(); }
 const char* IntrBriSts_info::typeName() const { return TypeName(); }
 Dir IntrBriSts_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* IntrBriStsForSeatHeatrRe_info::Name() { return "IntrBriStsForSeatHeatrRe"; }
-const char* IntrBriStsForSeatHeatrRe_info::TypeName() { return "uint8_t"; }
-Dir IntrBriStsForSeatHeatrRe_info::Direction() { return Dir::OUT; }
-
-const char* IntrBriStsForSeatHeatrRe_info::name() const { return Name(); }
-const char* IntrBriStsForSeatHeatrRe_info::typeName() const { return TypeName(); }
-Dir IntrBriStsForSeatHeatrRe_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -3323,46 +3243,6 @@ Dir MirrFoldStsAtPass_info::Direction() { return Dir::IN; }
 const char* MirrFoldStsAtPass_info::name() const { return Name(); }
 const char* MirrFoldStsAtPass_info::typeName() const { return TypeName(); }
 Dir MirrFoldStsAtPass_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* MmedHdPwrMod_info::Name() { return "MmedHdPwrMod"; }
-const char* MmedHdPwrMod_info::TypeName() { return "MmedMaiPwrMod"; }
-Dir MmedHdPwrMod_info::Direction() { return Dir::OUT; }
-
-const char* MmedHdPwrMod_info::name() const { return Name(); }
-const char* MmedHdPwrMod_info::typeName() const { return TypeName(); }
-Dir MmedHdPwrMod_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* MmedHmiModStd_info::Name() { return "MmedHmiModStd"; }
-const char* MmedHmiModStd_info::TypeName() { return "MmedHmiModStd2"; }
-Dir MmedHmiModStd_info::Direction() { return Dir::OUT; }
-
-const char* MmedHmiModStd_info::name() const { return Name(); }
-const char* MmedHmiModStd_info::typeName() const { return TypeName(); }
-Dir MmedHmiModStd_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* MmedTvmPwerMod_info::Name() { return "MmedTvmPwerMod"; }
-const char* MmedTvmPwerMod_info::TypeName() { return "MmedTvmPwerMod"; }
-Dir MmedTvmPwerMod_info::Direction() { return Dir::OUT; }
-
-const char* MmedTvmPwerMod_info::name() const { return Name(); }
-const char* MmedTvmPwerMod_info::typeName() const { return TypeName(); }
-Dir MmedTvmPwerMod_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* MstCfgIDBackboneFR_info::Name() { return "MstCfgIDBackboneFR"; }
-const char* MstCfgIDBackboneFR_info::TypeName() { return "uint16_t"; }
-Dir MstCfgIDBackboneFR_info::Direction() { return Dir::IN; }
-
-const char* MstCfgIDBackboneFR_info::name() const { return Name(); }
-const char* MstCfgIDBackboneFR_info::typeName() const { return TypeName(); }
-Dir MstCfgIDBackboneFR_info::direction() const { return Direction(); }
 
 
 //==========================================
@@ -4876,16 +4756,6 @@ Dir SwtAcptReq_info::direction() const { return Direction(); }
 
 
 //==========================================
-const char* SwtAtCenSts_info::Name() { return "SwtAtCenSts"; }
-const char* SwtAtCenSts_info::TypeName() { return "Trig1"; }
-Dir SwtAtCenSts_info::Direction() { return Dir::OUT; }
-
-const char* SwtAtCenSts_info::name() const { return Name(); }
-const char* SwtAtCenSts_info::typeName() const { return TypeName(); }
-Dir SwtAtCenSts_info::direction() const { return Direction(); }
-
-
-//==========================================
 const char* SwtForPassAirbCutOffSt_info::Name() { return "SwtForPassAirbCutOffSt"; }
 const char* SwtForPassAirbCutOffSt_info::TypeName() { return "OnOff2"; }
 Dir SwtForPassAirbCutOffSt_info::Direction() { return Dir::IN; }
@@ -5183,16 +5053,6 @@ Dir TwliBriSts_info::Direction() { return Dir::IN; }
 const char* TwliBriSts_info::name() const { return Name(); }
 const char* TwliBriSts_info::typeName() const { return TypeName(); }
 Dir TwliBriSts_info::direction() const { return Direction(); }
-
-
-//==========================================
-const char* TwliBriStsForSeatHeatrRe_info::Name() { return "TwliBriStsForSeatHeatrRe"; }
-const char* TwliBriStsForSeatHeatrRe_info::TypeName() { return "TwliBriSts1"; }
-Dir TwliBriStsForSeatHeatrRe_info::Direction() { return Dir::OUT; }
-
-const char* TwliBriStsForSeatHeatrRe_info::name() const { return Name(); }
-const char* TwliBriStsForSeatHeatrRe_info::typeName() const { return TypeName(); }
-Dir TwliBriStsForSeatHeatrRe_info::direction() const { return Direction(); }
 
 
 //==========================================

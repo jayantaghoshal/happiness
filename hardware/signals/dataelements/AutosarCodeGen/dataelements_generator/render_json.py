@@ -41,7 +41,7 @@ template <>
 GEN_JSONENCDEC_HPP_FROMTO_ARRAY_TEMPLATE = """// ==========================================
 // {ARRAY}
 template <> json toJson<{ARRAY}>(const {ARRAY}& v);
-template <> {ARRAY} fromJson<{ARRAY}>(const json& j);
+template <> {ARRAY} fromJson<{ARRAY}>(const json& object);
 
 """
 GEN_JSONENCDEC_CPP_TOJSON_FUNC_OPENING = """// ==========================================
@@ -53,7 +53,7 @@ json toJson<{STRUCT}>(const {STRUCT}& v) {
 GEN_JSONENCDEC_HPP_CLASS_TEMPLATE = """// ==========================================
 // {STRUCT}
 template <> json toJson<{STRUCT}>(const {STRUCT}& v);
-template <> {STRUCT} fromJson<{STRUCT}>(const json& j);
+template <> {STRUCT} fromJson<{STRUCT}>(const json& object);
 
 """
 
@@ -70,8 +70,7 @@ namespace autosar {
 """
 
 
-    gen_jsonenc_h_contents = header + """#ifndef _JSONENCDEC_H
-#define _JSONENCDEC_H
+    gen_jsonenc_h_contents = header + """#pragma once
 
 #include <json_v211.hpp>
 #include <type_traits>
@@ -150,7 +149,7 @@ AllButAREnum<T> fromJson(const json& j) {
             func_fromjson_str += "    return v;\n}\n\n\n"
 
             gen_jsonenc_cpp_contents += func_tojson_str + "\n" + func_fromjson_str
-    gen_jsonenc_h_contents += "} // end of namespace\n#endif"
+    gen_jsonenc_h_contents += "} // end of namespace\n"
     gen_jsonenc_cpp_contents += "} // end of namespace\n"
     gen_jsonenc_h_contents += footer
     gen_jsonenc_cpp_contents += footer

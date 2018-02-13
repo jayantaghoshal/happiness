@@ -333,20 +333,6 @@
     }
     break;
 
-    case ComConf_ComSignal_isBackCntrForMissCom_mrx:
-    {
-        if (sizeof(BackCntrForMissCom) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received BackCntrForMissCom (%u)", ComConf_ComSignal_isBackCntrForMissCom_mrx);
-            const BackCntrForMissCom& rteValue = *static_cast<const BackCntrForMissCom*>(buffer);
-            autosar::BackCntrForMissCom_info::data_elem_type deValue;
-            deValue = static_cast<decltype(deValue)>(rteValue);
-            BackCntrForMissCom_de->inject(deValue);
-        } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for BackCntrForMissCom (%u). Got %zu , expected %lu", ComConf_ComSignal_isBackCntrForMissCom_mrx, length, static_cast<unsigned long>(sizeof(BackCntrForMissCom)));
-        }
-    }
-    break;
-
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx:
     {
         if (sizeof(BltLockStAtDrvr) == length) {
@@ -2501,20 +2487,6 @@
     }
     break;
 
-    case ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx:
-    {
-        if (sizeof(IniValSigCfgIDBackboneFR) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received IniValSigCfgIDBackboneFR (%u)", ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx);
-            const IniValSigCfgIDBackboneFR& rteValue = *static_cast<const IniValSigCfgIDBackboneFR*>(buffer);
-            autosar::IniValSigCfgIDBackboneFR_info::data_elem_type deValue;
-            deValue = static_cast<decltype(deValue)>(rteValue);
-            IniValSigCfgIDBackboneFR_de->inject(deValue);
-        } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for IniValSigCfgIDBackboneFR (%u). Got %zu , expected %lu", ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx, length, static_cast<unsigned long>(sizeof(IniValSigCfgIDBackboneFR)));
-        }
-    }
-    break;
-
     case ComConf_ComSignal_isIntrBriSts_mrx:
     {
         if (sizeof(IntrBriSts) == length) {
@@ -2860,20 +2832,6 @@
             MirrFoldStsAtPass_de->inject(deValue);
         } else {
             ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for MirrFoldStsAtPass (%u). Got %zu , expected %lu", ComConf_ComSignal_isMirrFoldStsAtPass_mrx, length, static_cast<unsigned long>(sizeof(MirrFoldStsAtPass)));
-        }
-    }
-    break;
-
-    case ComConf_ComSignal_isMstCfgIDBackboneFR_mrx:
-    {
-        if (sizeof(MstCfgIDBackboneFR) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received MstCfgIDBackboneFR (%u)", ComConf_ComSignal_isMstCfgIDBackboneFR_mrx);
-            const MstCfgIDBackboneFR& rteValue = *static_cast<const MstCfgIDBackboneFR*>(buffer);
-            autosar::MstCfgIDBackboneFR_info::data_elem_type deValue;
-            deValue = static_cast<decltype(deValue)>(rteValue);
-            MstCfgIDBackboneFR_de->inject(deValue);
-        } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for MstCfgIDBackboneFR (%u). Got %zu , expected %lu", ComConf_ComSignal_isMstCfgIDBackboneFR_mrx, length, static_cast<unsigned long>(sizeof(MstCfgIDBackboneFR)));
         }
     }
     break;

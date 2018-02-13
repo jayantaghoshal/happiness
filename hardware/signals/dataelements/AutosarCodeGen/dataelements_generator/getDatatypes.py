@@ -4,9 +4,12 @@
 # This file is covered by LICENSE file in the root of this project
 
 import codecs
+import logging
 import os
 import uuid
-import logging
+
+from dataelements_generator.dataelements_generation_config import SIGNALS_EXCLUDED_FROM_MP
+
 logger = logging.getLogger(__name__)
 from typing import Dict, List, cast, Tuple
 
@@ -252,6 +255,11 @@ def generate(swc_input_file, options):
     comfile_data = autosar.arxml.load(options.cominputfile)
     (all_types, all_de_elements) = parse(swc_data, comfile_data)
 
+    mp_only_de_elements = [d for d in all_de_elements if d.rtename not in SIGNALS_EXCLUDED_FROM_MP]
+    excluded_signals =  [d for d in all_de_elements if d.rtename in SIGNALS_EXCLUDED_FROM_MP]
+    for e in excluded_signals:
+        print("Excluding: %s / %s" % (e. de_dataelementname, e.rtename))
+
     all_enums = [e for e in all_types.values() if isinstance(e, DE_Enum)]
     all_structs = [e for e in all_types.values() if isinstance(e, DE_Struct)]
     all_arrays = [e for e in all_types.values() if isinstance(e, DE_Array)]
@@ -265,7 +273,7 @@ def generate(swc_input_file, options):
      gen_vsm_sink_variable_cpp,
      gen_vsm_sink_subscribe_cpp,
      gen_vsm_all_dataelements_cpp
-     ) = render_dataelements.render_dataelments(header, footer, all_de_elements, all_types)
+     ) = render_dataelements.render_dataelments(header, footer, mp_only_de_elements, all_types)
     (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents) = render_json.render_json(header, footer, all_arrays, all_structs, all_types)
 
     with codecs.open(datatypespath, 'w', encoding=OUTPUT_FILE_ENCODING) as fout:

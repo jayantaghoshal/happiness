@@ -21,14 +21,6 @@
 
     static DESink<autosar::ActvnOfPrkgAut_info>* ActvnOfPrkgAut_de=nullptr;
 
-    static DESink<autosar::ActvnOfSwtIllmnCen_info>* ActvnOfSwtIllmnCen_de=nullptr;
-
-    static DESink<autosar::ActvnOfSwtIllmnClima_info>* ActvnOfSwtIllmnClima_de=nullptr;
-
-    static DESink<autosar::ActvnOfSwtIllmnDrvMod_info>* ActvnOfSwtIllmnDrvMod_de=nullptr;
-
-    static DESink<autosar::ActvnOfSwtIllmnForSeatHeatrRe_info>* ActvnOfSwtIllmnForSeatHeatrRe_de=nullptr;
-
     static DESink<autosar::ActvtAutnmsPrkgCtrl_info>* ActvtAutnmsPrkgCtrl_de=nullptr;
 
     static DESink<autosar::AdprTurnSpdMod_info>* AdprTurnSpdMod_de=nullptr;
@@ -82,8 +74,6 @@
     static DESink<autosar::DataDistbnAllwdForEgyPred_info>* DataDistbnAllwdForEgyPred_de=nullptr;
 
     static DESink<autosar::DeactvtLvlgCtrl_info>* DeactvtLvlgCtrl_de=nullptr;
-
-    static DESink<autosar::DispAndHomeBtnSts_info>* DispAndHomeBtnSts_de=nullptr;
 
     static DESink<autosar::DispStsCen_info>* DispStsCen_de=nullptr;
 
@@ -215,8 +205,6 @@
 
     static DESink<autosar::InsdCarNoiseMeasd_info>* InsdCarNoiseMeasd_de=nullptr;
 
-    static DESink<autosar::IntrBriStsForSeatHeatrRe_info>* IntrBriStsForSeatHeatrRe_de=nullptr;
-
     static DESink<autosar::IntrLiAmbLiSetg_info>* IntrLiAmbLiSetg_de=nullptr;
 
     static DESink<autosar::IntrLiSurrndgsLiSetgLi_info>* IntrLiSurrndgsLiSetgLi_de=nullptr;
@@ -270,12 +258,6 @@
     static DESink<autosar::LvlSeldForSpdLimAdpv_info>* LvlSeldForSpdLimAdpv_de=nullptr;
 
     static DESink<autosar::MassgFctActv_info>* MassgFctActv_de=nullptr;
-
-    static DESink<autosar::MmedHdPwrMod_info>* MmedHdPwrMod_de=nullptr;
-
-    static DESink<autosar::MmedHmiModStd_info>* MmedHmiModStd_de=nullptr;
-
-    static DESink<autosar::MmedTvmPwerMod_info>* MmedTvmPwerMod_de=nullptr;
 
     static DESink<autosar::NetHdActvt_info>* NetHdActvt_de=nullptr;
 
@@ -359,8 +341,6 @@
 
     static DESink<autosar::SuspSetg_info>* SuspSetg_de=nullptr;
 
-    static DESink<autosar::SwtAtCenSts_info>* SwtAtCenSts_de=nullptr;
-
     static DESink<autosar::TiGapAdpvSeld_info>* TiGapAdpvSeld_de=nullptr;
 
     static DESink<autosar::TiGapLimd_info>* TiGapLimd_de=nullptr;
@@ -382,8 +362,6 @@
     static DESink<autosar::TrlrLampChkRemReq_info>* TrlrLampChkRemReq_de=nullptr;
 
     static DESink<autosar::LiExtReq1WdReq3_info>* LiExtReq1WdReq3_de=nullptr;
-
-    static DESink<autosar::TwliBriStsForSeatHeatrRe_info>* TwliBriStsForSeatHeatrRe_de=nullptr;
 
     static DESink<autosar::UkwnCptRespFromInfoMgr_info>* UkwnCptRespFromInfoMgr_de=nullptr;
 

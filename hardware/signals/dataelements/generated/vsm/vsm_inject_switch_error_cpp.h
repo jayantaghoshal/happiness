@@ -91,10 +91,6 @@
         AvlStsForLatAutDrv_de->error(errorCode);
         break;
 
-    case ComConf_ComSignal_isBackCntrForMissCom_mrx:
-        BackCntrForMissCom_de->error(errorCode);
-        break;
-
     case SignalGroup|ComConf_ComSignalGroup_igBltLockStAtDrvr_mrx:
         BltLockStAtDrvr_de->error(errorCode);
         break;
@@ -679,10 +675,6 @@
         IndcrTurnSts1WdSts_de->error(errorCode);
         break;
 
-    case ComConf_ComSignal_isIniValSigCfgIDBackboneFR_mrx:
-        IniValSigCfgIDBackboneFR_de->error(errorCode);
-        break;
-
     case ComConf_ComSignal_isIntrBriSts_mrx:
         IntrBriSts_de->error(errorCode);
         break;
@@ -777,10 +769,6 @@
 
     case ComConf_ComSignal_isMirrFoldStsAtPass_mrx:
         MirrFoldStsAtPass_de->error(errorCode);
-        break;
-
-    case ComConf_ComSignal_isMstCfgIDBackboneFR_mrx:
-        MstCfgIDBackboneFR_de->error(errorCode);
         break;
 
     case SignalGroup|ComConf_ComSignalGroup_igNFSDataFront_mrx:

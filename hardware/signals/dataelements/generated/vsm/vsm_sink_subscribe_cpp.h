@@ -57,38 +57,6 @@ ActvnOfPrkgAut_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfPrkgAut_mtx, &rteValue, sizeof(rteValue) );
 });
 
-ActvnOfSwtIllmnCen_de = new DESink<autosar::ActvnOfSwtIllmnCen_info>();
-ActvnOfSwtIllmnCen_de->subscribe([]() {
-    auto deValue = ActvnOfSwtIllmnCen_de->get().value();
-    ActvnOfSwtIllmnCen rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfSwtIllmnCen_mtx, &rteValue, sizeof(rteValue) );
-});
-
-ActvnOfSwtIllmnClima_de = new DESink<autosar::ActvnOfSwtIllmnClima_info>();
-ActvnOfSwtIllmnClima_de->subscribe([]() {
-    auto deValue = ActvnOfSwtIllmnClima_de->get().value();
-    ActvnOfSwtIllmnClima rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfSwtIllmnClima_mtx, &rteValue, sizeof(rteValue) );
-});
-
-ActvnOfSwtIllmnDrvMod_de = new DESink<autosar::ActvnOfSwtIllmnDrvMod_info>();
-ActvnOfSwtIllmnDrvMod_de->subscribe([]() {
-    auto deValue = ActvnOfSwtIllmnDrvMod_de->get().value();
-    ActvnOfSwtIllmnDrvMod rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfSwtIllmnDrvMod_mtx, &rteValue, sizeof(rteValue) );
-});
-
-ActvnOfSwtIllmnForSeatHeatrRe_de = new DESink<autosar::ActvnOfSwtIllmnForSeatHeatrRe_info>();
-ActvnOfSwtIllmnForSeatHeatrRe_de->subscribe([]() {
-    auto deValue = ActvnOfSwtIllmnForSeatHeatrRe_de->get().value();
-    ActvnOfSwtIllmnForSeatHeatrRe rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isActvnOfSwtIllmnForSeatHeatrRe_mtx, &rteValue, sizeof(rteValue) );
-});
-
 ActvtAutnmsPrkgCtrl_de = new DESink<autosar::ActvtAutnmsPrkgCtrl_info>();
 ActvtAutnmsPrkgCtrl_de->subscribe([]() {
     auto deValue = ActvtAutnmsPrkgCtrl_de->get().value();
@@ -321,14 +289,6 @@ DeactvtLvlgCtrl_de->subscribe([]() {
     DeactvtLvlgCtrl rteValue;
     rteValue = static_cast<decltype(rteValue)>(deValue);
     sendAvmpMessageToVip( ComConf_ComSignal_isDeactvtLvlgCtrl_mtx, &rteValue, sizeof(rteValue) );
-});
-
-DispAndHomeBtnSts_de = new DESink<autosar::DispAndHomeBtnSts_info>();
-DispAndHomeBtnSts_de->subscribe([]() {
-    auto deValue = DispAndHomeBtnSts_de->get().value();
-    DispAndHomeBtnSts rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isDispAndHomeBtnSts_mtx, &rteValue, sizeof(rteValue) );
 });
 
 DispStsCen_de = new DESink<autosar::DispStsCen_info>();
@@ -1048,14 +1008,6 @@ InsdCarNoiseMeasd_de->subscribe([]() {
     sendAvmpMessageToVip( ComConf_ComSignal_isInsdCarNoiseMeasd_mtx, &rteValue, sizeof(rteValue) );
 });
 
-IntrBriStsForSeatHeatrRe_de = new DESink<autosar::IntrBriStsForSeatHeatrRe_info>();
-IntrBriStsForSeatHeatrRe_de->subscribe([]() {
-    auto deValue = IntrBriStsForSeatHeatrRe_de->get().value();
-    IntrBriStsForSeatHeatrRe rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isIntrBriStsForSeatHeatrRe_mtx, &rteValue, sizeof(rteValue) );
-});
-
 IntrLiAmbLiSetg_de = new DESink<autosar::IntrLiAmbLiSetg_info>();
 IntrLiAmbLiSetg_de->subscribe([]() {
     auto deValue = IntrLiAmbLiSetg_de->get().value();
@@ -1314,30 +1266,6 @@ MassgFctActv_de->subscribe([]() {
     rteValue.MassgFctActvPassMassgFctActv = static_cast<decltype(rteValue.MassgFctActvPassMassgFctActv)>(deValue.PassMassgFctActv);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igMassgFctActv_mtx, &rteValue, sizeof(rteValue) );
-});
-
-MmedHdPwrMod_de = new DESink<autosar::MmedHdPwrMod_info>();
-MmedHdPwrMod_de->subscribe([]() {
-    auto deValue = MmedHdPwrMod_de->get().value();
-    MmedMaiPwrMod rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isMmedMaiPwrMod_mtx, &rteValue, sizeof(rteValue) );
-});
-
-MmedHmiModStd_de = new DESink<autosar::MmedHmiModStd_info>();
-MmedHmiModStd_de->subscribe([]() {
-    auto deValue = MmedHmiModStd_de->get().value();
-    MmedHmiModStd rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isMmedHmiModStd_mtx, &rteValue, sizeof(rteValue) );
-});
-
-MmedTvmPwerMod_de = new DESink<autosar::MmedTvmPwerMod_info>();
-MmedTvmPwerMod_de->subscribe([]() {
-    auto deValue = MmedTvmPwerMod_de->get().value();
-    MmedTvmPwerMod rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isMmedTvmPwerMod_mtx, &rteValue, sizeof(rteValue) );
 });
 
 NetHdActvt_de = new DESink<autosar::NetHdActvt_info>();
@@ -1741,14 +1669,6 @@ SuspSetg_de->subscribe([]() {
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igSuspSetg_mtx, &rteValue, sizeof(rteValue) );
 });
 
-SwtAtCenSts_de = new DESink<autosar::SwtAtCenSts_info>();
-SwtAtCenSts_de->subscribe([]() {
-    auto deValue = SwtAtCenSts_de->get().value();
-    SwtAtCenSts rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isSwtAtCenSts_mtx, &rteValue, sizeof(rteValue) );
-});
-
 TiGapAdpvSeld_de = new DESink<autosar::TiGapAdpvSeld_info>();
 TiGapAdpvSeld_de->subscribe([]() {
     auto deValue = TiGapAdpvSeld_de->get().value();
@@ -1848,14 +1768,6 @@ LiExtReq1WdReq3_de->subscribe([]() {
     rteValue.TurnAutFlsgReqSts = static_cast<decltype(rteValue.TurnAutFlsgReqSts)>(deValue.Sts);
 
     sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_igTurnAutFlsgReq_mtx, &rteValue, sizeof(rteValue) );
-});
-
-TwliBriStsForSeatHeatrRe_de = new DESink<autosar::TwliBriStsForSeatHeatrRe_info>();
-TwliBriStsForSeatHeatrRe_de->subscribe([]() {
-    auto deValue = TwliBriStsForSeatHeatrRe_de->get().value();
-    TwliBriStsForSeatHeatrRe rteValue;
-    rteValue = static_cast<decltype(rteValue)>(deValue);
-    sendAvmpMessageToVip( ComConf_ComSignal_isTwliBriStsForSeatHeatrRe_mtx, &rteValue, sizeof(rteValue) );
 });
 
 UkwnCptRespFromInfoMgr_de = new DESink<autosar::UkwnCptRespFromInfoMgr_info>();

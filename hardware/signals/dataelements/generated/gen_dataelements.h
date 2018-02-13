@@ -10,8 +10,7 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
  * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
-#ifndef _DATAELEMENTS_H
-#define _DATAELEMENTS_H
+#pragma once
 
 #include "gen_datatypes.h"
 
@@ -218,73 +217,6 @@ struct ActvnOfPrkgAssi_info : OutTag, public DataElemInfo {
  */
 struct ActvnOfPrkgAut_info : OutTag, public DataElemInfo {
     using data_elem_type = ActvnOfPrkgAut;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal ActvnOfSwtIllmnCen
- * Activates/deactivates the symbol illumination of the CCSM. Dependent on VMM signals mostly.
- */
-struct ActvnOfSwtIllmnCen_info : OutTag, public DataElemInfo {
-    using data_elem_type = bool;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal ActvnOfSwtIllmnClima
- * Activates/deactivates the symbol illumination of the RSCM and RSHC. Dependent on VMM signals mostly.
- */
-struct ActvnOfSwtIllmnClima_info : OutTag, public DataElemInfo {
-    using data_elem_type = bool;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal ActvnOfSwtIllmnDrvMod
- * Activates/deactivates the symbol illumination of the drive mode switch. Dependent on VMM signals mostly.
- */
-struct ActvnOfSwtIllmnDrvMod_info : OutTag, public DataElemInfo {
-    using data_elem_type = bool;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal ActvnOfSwtIllmnForSeatHeatrRe
- */
-struct ActvnOfSwtIllmnForSeatHeatrRe_info : OutTag, public DataElemInfo {
-    using data_elem_type = bool;
 
     static const char* Name();
     static const char* TypeName();
@@ -670,22 +602,6 @@ struct AutnmsPrkgSeldScenario_info : OutTag, public DataElemInfo {
  */
 struct AvlStsForLatAutDrv_info : InTag, public DataElemInfo {
     using data_elem_type = AvlStsForLatAutDrv5;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal BackCntrForMissCom
- */
-struct BackCntrForMissCom_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->255*/
 
     static const char* Name();
     static const char* TypeName();
@@ -2145,23 +2061,6 @@ struct DiagcRSHC_info : InTag, public DataElemInfo {
  */
 struct DiagcStsDMSM_info : InTag, public DataElemInfo {
     using data_elem_type = DiagcStsTypDMSM;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal DispAndHomeBtnSts
- * Status if the touch screen or home button is used.
- */
-struct DispAndHomeBtnSts_info : OutTag, public DataElemInfo {
-    using data_elem_type = Trig1;
 
     static const char* Name();
     static const char* TypeName();
@@ -4818,22 +4717,6 @@ struct IndcrTurnSts1WdSts_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal IniValSigCfgIDBackboneFR
- */
-struct IniValSigCfgIDBackboneFR_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
  * \brief Signal InsdCarNoiseMeasd
  * Signal that represents the perceived audio noise (in dB RMS over 3 seconds) in the coupé.
  */
@@ -4876,22 +4759,6 @@ struct IntAudCnclWarn_info : InternalTag, public DataElemInfo {
  * Set by user through rheostat wheel situated on MyCar Module.
  */
 struct IntrBriSts_info : InTag, public DataElemInfo {
-    using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->15*/
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal IntrBriStsForSeatHeatrRe
- */
-struct IntrBriStsForSeatHeatrRe_info : OutTag, public DataElemInfo {
     using data_elem_type = uint8_t; /*!<Unit: Unitless,  Range:0->15*/
 
     static const char* Name();
@@ -5766,75 +5633,6 @@ struct MirrFoldStsAtDrvr_info : InTag, public DataElemInfo {
  */
 struct MirrFoldStsAtPass_info : InTag, public DataElemInfo {
     using data_elem_type = MirrFoldStsTyp;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal MmedHdPwrMod
- * Multimedia Head Power Mode
- * Power State of the IHU.
- * The states are described in the data type.
- */
-struct MmedHdPwrMod_info : OutTag, public DataElemInfo {
-    using data_elem_type = MmedMaiPwrMod;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal MmedHmiModStd
- * Multimedia Hmi Mode Standard
- * This signal displays the currently used Infotainment mode of the Infotainment system. The modes are described in the Infotainment Mode Manager
- */
-struct MmedHmiModStd_info : OutTag, public DataElemInfo {
-    using data_elem_type = MmedHmiModStd2;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal MmedTvmPwerMod
- */
-struct MmedTvmPwerMod_info : OutTag, public DataElemInfo {
-    using data_elem_type = MmedTvmPwerMod;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal MstCfgIDBackboneFR
- */
-struct MstCfgIDBackboneFR_info : InTag, public DataElemInfo {
-    using data_elem_type = uint16_t; /*!<Unit: Unitless,  Range:0->65535*/
 
     static const char* Name();
     static const char* TypeName();
@@ -8486,23 +8284,6 @@ struct SwtAcptReq_info : InTag, public DataElemInfo {
 
 
 /*!
- * \brief Signal SwtAtCenSts
- * Status if any of the center console buttons is used.
- */
-struct SwtAtCenSts_info : OutTag, public DataElemInfo {
-    using data_elem_type = Trig1;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
  * \brief Signal SwtForPassAirbCutOffSt
  * Passenger airbag status, based on PACOS input.
  */
@@ -9010,22 +8791,6 @@ struct TwliBriRaw_info : InTag, public DataElemInfo {
  * Day/night status signal. Lux value (not this signal) sent from SUS to CEM and CEM sets day or night signal.
  */
 struct TwliBriSts_info : InTag, public DataElemInfo {
-    using data_elem_type = TwliBriSts1;
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-/*!
- * \brief Signal TwliBriStsForSeatHeatrRe
- */
-struct TwliBriStsForSeatHeatrRe_info : OutTag, public DataElemInfo {
     using data_elem_type = TwliBriSts1;
 
     static const char* Name();
@@ -10063,5 +9828,5 @@ struct iTPMSTirePMSts_info : InTag, public DataElemInfo {
 
 
 } // end of namespace
-#endif
+
 // clang-format on

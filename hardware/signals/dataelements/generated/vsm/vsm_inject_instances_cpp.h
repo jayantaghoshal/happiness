@@ -51,8 +51,6 @@
 
     AvlStsForLatAutDrv_de = new DEInjector<autosar::AvlStsForLatAutDrv_info>();
 
-    BackCntrForMissCom_de = new DEInjector<autosar::BackCntrForMissCom_info>();
-
     BltLockStAtDrvr_de = new DEInjector<autosar::BltLockStAtDrvr_info>();
 
     BltLockStAtPass_de = new DEInjector<autosar::BltLockStAtPass_info>();
@@ -348,8 +346,6 @@
 
     IndcrTurnSts1WdSts_de = new DEInjector<autosar::IndcrTurnSts1WdSts_info>();
 
-    IniValSigCfgIDBackboneFR_de = new DEInjector<autosar::IniValSigCfgIDBackboneFR_info>();
-
     IntrBriSts_de = new DEInjector<autosar::IntrBriSts_info>();
 
     KeyLostWarnIndcn_de = new DEInjector<autosar::KeyLostWarnIndcn_info>();
@@ -397,8 +393,6 @@
     MirrFoldStsAtDrvr_de = new DEInjector<autosar::MirrFoldStsAtDrvr_info>();
 
     MirrFoldStsAtPass_de = new DEInjector<autosar::MirrFoldStsAtPass_info>();
-
-    MstCfgIDBackboneFR_de = new DEInjector<autosar::MstCfgIDBackboneFR_info>();
 
 // ***************************************
 // MtrlSnsrT not found in Com file
