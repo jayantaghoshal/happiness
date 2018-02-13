@@ -15,9 +15,17 @@ export USE_CCACHE=false
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
-
 # Build image, vts & tradefed
+ihuci vbf inc SWL2 # Increment part number suffix
+MP_PART_NUMBER=$(ihuci vbf get SWL2)
+export MP_PART_NUMBER
 time make droid vts tradefed-all
+
+# Make OTA package
+time make dist
+DIST_FILE="${REPO_ROOT_DIR}/out/dist/ihu_vcc-target_files-eng.ihu.zip"
+OTA_UPDATE_FILE="${REPO_ROOT_DIR}/out/ota_update.zip"
+time "${REPO_ROOT_DIR}"/build/tools/releasetools/ota_from_target_files --block "${DIST_FILE}" "${OTA_UPDATE_FILE}"
 
 # Build vendor/volovcar tests (Unit and Component Tests) # Not relevant to daily build
 # TODO: fix it for building daily tests
@@ -41,6 +49,8 @@ du -sh "$OUT_ARCHIVE"
 
 # Upload to Artifactory
 time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_FILE}" || die "Could not push dist file to Artifactory."
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OTA_UPDATE_FILE}" || die "Could not push ota update file to Artifactory."
 
 # Cleanup
 rm ${OUT_ARCHIVE}
