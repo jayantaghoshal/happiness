@@ -5,9 +5,12 @@
 
 #include <cutils/log.h>
 
+#include <algorithm>
 #include <istream>
 #include <sstream>
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include "rule_handler.h"
 
 #define LOG_TAG "Netboyd"
@@ -16,12 +19,14 @@
 namespace vcc {
 namespace netman {
 
-using std::string;
-using std::vector;
+bool RuleHandler::parseAttribute(const std::string& attr, NetboyRule& rule) {
+    std::string attr_copy(attr);
 
-bool RuleHandler::parseAttribute(const string& attr, NetboyRule& rule) {
-    std::stringstream attr_stream(attr);
-    string key, value;
+    // strip whitespace characters if any
+    attr_copy.erase(std::remove_if(attr_copy.begin(), attr_copy.end(), isspace), attr_copy.end());
+
+    std::stringstream attr_stream(attr_copy);
+    std::string key, value;
 
     std::getline(attr_stream, key, '=');
     std::getline(attr_stream, value);
@@ -77,10 +82,10 @@ bool RuleHandler::parseAttribute(const string& attr, NetboyRule& rule) {
     return true;
 }
 
-bool RuleHandler::parseRules(const vector<string>& rules) {
+bool RuleHandler::parseRules(const std::vector<std::string>& rules) {
     for (auto& it : rules) {
         std::stringstream rule_str(it);
-        string attribute;
+        std::string attribute;
         NetboyRule rule;
 
         while (std::getline(rule_str, attribute, ',')) {
@@ -119,10 +124,17 @@ bool RuleHandler::parseRules(const vector<string>& rules) {
     return true;
 }
 
-bool RuleHandler::loadRules(const vcc::LocalConfigReaderInterface* lcfg) {
-    vector<string> unparsed_rules = lcfg->GetStringArray("NetboyRules");
+bool RuleHandler::loadRules(const std::string& rules_file_path) {
+    boost::property_tree::ptree root;
+    boost::property_tree::read_json(rules_file_path, root);
 
-    if (!parseRules(unparsed_rules)) {
+    std::vector<std::string> rules;
+
+    for (const auto& rule : root.get_child("NetboyRules")) {
+        rules.emplace_back(rule.second.data());
+    }
+
+    if (!parseRules(rules)) {
         rules_.clear();
         return false;
     }

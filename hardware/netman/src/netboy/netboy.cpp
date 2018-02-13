@@ -12,7 +12,6 @@
 #include "netboy_event_handler.h"
 #include "rule_handler.h"
 #include "uevent_listener.h"
-#include "vcc/localconfig.h"
 
 #define LOG_TAG "Netboyd"
 
@@ -22,11 +21,10 @@ int main() {
     try {
         ALOGI("Netboyd 0.1 starting");
 
-        auto* lcfg = vcc::LocalConfigDefault();
-
         RuleHandler& rule_handler = RuleHandler::getInstance();
-        if (!rule_handler.loadRules(lcfg)) {
-            ALOGE("Unable to read rules from local config");
+        const std::string path_to_rules_file = "/vendor/etc/netboyd.rules";
+        if (!rule_handler.loadRules(path_to_rules_file)) {
+            ALOGE("Unable to read rules ");
             return EXIT_FAILURE;
         }
 

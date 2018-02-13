@@ -15,6 +15,13 @@ LOCAL_SRC_FILES := conf/sysctl.conf
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := netboyd.rules
+LOCAL_VENDOR_MODULE := true
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES := conf/netboy.rules
+LOCAL_MULTILIB := 64
+include $(BUILD_PREBUILT)
 #
 # Copy /system/bin/ip to /vendor/bin/ip
 #

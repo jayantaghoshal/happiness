@@ -69,6 +69,7 @@ cc_binary {
 cc_binary {
     name: "netboyd",
     defaults: ["netman_cc_defaults"],
+    rtti: true,
     srcs: [ //TODO use wildcards, if sth is common move to static lib?
         "src/netutils.cpp",
         "src/uevent_listener.cpp",
@@ -90,12 +91,16 @@ cc_binary {
         "libtarmac",
     ],
 
-    static_libs: ["libbase"],
+    static_libs: [
+        "libbase",
+        "libboost_1_64_0_vcc",
+    ],
 
     init_rc: ["init/netboyd.rc"],
 
     required: [
         "ip-vcc",
+        "netboyd.rules",
     ],
 }
 

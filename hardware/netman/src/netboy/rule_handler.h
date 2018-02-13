@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "vcc/localconfig.h"
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -60,7 +58,7 @@ class RuleHandler {
     RuleHandler(RuleHandler&&) = delete;
     RuleHandler& operator=(RuleHandler&&) = delete;
 
-    bool loadRules(const vcc::LocalConfigReaderInterface* lcfg);
+    bool loadRules(const std::string& rules_file_path);
     static RuleHandler& getInstance();
 
     bool getMatchingRule(const NetboyRule& attributes_to_match, std::shared_ptr<RuleAction>& return_action);
