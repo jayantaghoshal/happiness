@@ -37,46 +37,50 @@ public class SoftwareUpdateService extends Service {
 
     private Context context;
 
-    private SoftwareUpdateManagerImpl software_update_manager;
+    private SoftwareUpdateManagerImpl softwareUpdateManager;
 
     private SoftwareManagementApi swapi = null;
 
     private int state = 0; // Dummy state
 
-    private SoftwareManagementApiConnectionCallback swapi_callback = new SoftwareManagementApiConnectionCallback() {
+    private ArrayList<SoftwareInformation> softwareInformationList;
+    private SoftwareManagementApiCallback swapiCallback;
+    private SoftwareManagementApiConnectionCallback swapiConnectionCallback = new SoftwareManagementApiConnectionCallback() {
         @Override
         public void onServiceConnected() {
             Log.d(LOG_TAG, "Connected to SWAPI");
 
             state = 1;
-            software_update_manager.UpdateState(state);
+            softwareUpdateManager.UpdateState(state);
 
-            ISoftwareManagementApiCallback.Stub swapi_callback = new ISoftwareManagementApiCallback.Stub() {
+            ISoftwareManagementApiCallback.Stub swapiCallback = new ISoftwareManagementApiCallback.Stub() {
 
                 @Override
                 public void CommissionStatus(int code) {
                 }
 
                 @Override
-                public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-                    Log.v(LOG_TAG, "SoftwareAssignmentList callback when SoftwareUpdateService started, what to do with this list?");
+                public void SoftwareAssignmentList(int code, List<SoftwareAssignment> softwareAssigmentList) {
+                    Log.v(LOG_TAG,
+                            "SoftwareAssignmentList callback when SoftwareUpdateService started, what to do with this list?");
                 }
 
                 @Override
-                public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-                    Log.v(LOG_TAG, "PendingInstallations callback when SoftwareUpdateService started, what to do with this list?");
+                public void PendingInstallations(int code, List<InstallationOrder> installationOrderList) {
+                    Log.v(LOG_TAG,
+                            "PendingInstallations callback when SoftwareUpdateService started, what to do with this list?");
                 }
 
                 @Override
-                public void DownloadInfo(String uuid, DownloadInfo info) {
+                public void DownloadInfo(int code, DownloadInfo info) {
                     //TODO: implement
                 }
             };
 
             if (swapi != null) {
                 try {
-                    swapi.GetSoftwareAssigmentList(swapi_callback);
-                    swapi.GetPendingInstallations(swapi_callback);
+                    swapi.GetSoftwareAssigmentList(swapiCallback);
+                    swapi.GetPendingInstallations(swapiCallback);
                 } catch (RemoteException e) {
                     Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
                 }
@@ -100,16 +104,18 @@ public class SoftwareUpdateService extends Service {
         context = this;
 
         // Connect to FSApi
-        swapi = new SoftwareManagementApi(context, swapi_callback);
+        swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
+        swapiCallback = new SoftwareManagementApiCallback(this);
+        softwareInformationList = new ArrayList();
 
         // Provide SUSApi
-        software_update_manager = new SoftwareUpdateManagerImpl(this);
+        softwareUpdateManager = new SoftwareUpdateManagerImpl(this);
 
     }
 
     public IBinder onBind(Intent intent) {
         Log.v(LOG_TAG, "OnBind");
-        return software_update_manager.asBinder(); // Binder to SUSApi
+        return softwareUpdateManager.asBinder(); // Binder to SUSApi
     }
 
     public int GetState() {
@@ -129,11 +135,10 @@ public class SoftwareUpdateService extends Service {
         super.onDestroy();
     }
 
-    public void GetSoftwareAssignmentList(ISoftwareUpdateManagerCallback callback) {
+    public void GetSoftwareAssignmentList() {
         /**
          * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
          */
-        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback);
         if (swapi != null) {
             try {
                 swapi.GetSoftwareAssigmentList(swapiCallback);
@@ -143,28 +148,10 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void CommissionAssignment(ISoftwareUpdateManagerCallback callback, String uuid) {
+    public void CommissionAssignment(String uuid) {
         /**
          * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
          */
-        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback) {
-            @Override
-            public void CommissionStatus(int code) {
-                if (200 == code) {
-                    try {
-                        callback.UpdateSoftwareState(uuid, 0); // Dont know what state to set, and state is not defined..
-                    } catch (RemoteException e) {
-                        Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
-                    }
-                } else {
-                    try {
-                        callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");
-                    } catch (RemoteException e) {
-                        Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
-                    }
-                }
-            }
-        };
 
         if (swapi != null) {
             try {
@@ -177,11 +164,10 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void GetPendingInstallations(ISoftwareUpdateManagerCallback callback) {
+    public void GetPendingInstallations() {
         /**
         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
         */
-        SoftwareManagementApiCallback swapiCallback = new SoftwareManagementApiCallback(callback);
 
         if (swapi != null) {
             try {
@@ -191,5 +177,75 @@ public class SoftwareUpdateService extends Service {
                 Log.e(LOG_TAG, "Cannot fetch Pending Installations... No contact with SWAPI.. I'm sad...");
             }
         }
+    }
+
+    public void GetDownloadInfo(String uuid) throws RemoteException {
+        /**
+        * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
+        */
+
+        if (swapi != null) {
+            try {
+                swapi.GetDownloadInfo(uuid, swapiCallback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot get download information.. No contact with SWAPI.. I'm sad...");
+            }
+        } else {
+            Log.e(LOG_TAG, "SWAPI null");
+        }
+    }
+
+    public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
+
+        softwareInformationList.clear();
+
+        for (SoftwareAssignment assignment : softwareAssignments) {
+            boolean found = false;
+            for (SoftwareInformation information : softwareInformationList) {
+                if (assignment.uuid.equals(information.softwareId)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                softwareInformationList.add(new SoftwareInformation(assignment));
+            }
+        }
+
+        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
+    }
+
+    public void UpdateSoftwareListWithInstallationOrders(List<InstallationOrder> installationOrders) {
+        for (InstallationOrder order : installationOrders) {
+            boolean found = false;
+            for (SoftwareInformation information : softwareInformationList) {
+                if (order.software.uuid.equals(information.softwareId)) {
+                    found = true;
+                    information.AddInstallationOrder(order);
+                    break;
+                }
+            }
+            if (!found) {
+                softwareInformationList.add(new SoftwareInformation(order));
+            }
+        }
+        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
+    }
+
+    public void UpdateSoftwareList(DownloadInfo downloadInfo) {
+
+        boolean found = false;
+        for (SoftwareInformation information : softwareInformationList) {
+            if (downloadInfo.uuid.equals(information.softwareId)) {
+                found = true;
+                information.AddDownloadInfo(downloadInfo);
+                break;
+            }
+        }
+        if (!found) {
+            // Weird..?
+        }
+
+        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
     }
 }

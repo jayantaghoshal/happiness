@@ -23,25 +23,30 @@ import com.volvocars.carconfig.*;
 public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     private static final String LOG_TAG = "CloudService.SWAPI";
 
-    private CloudConnection cloud_connection = null;
+    private CloudConnection cloudConnection = null;
 
     private String softwareManagementUri = null;
     SoftwareManagementURIs uris = null;
 
-    private boolean software_management_available = false;
+    private boolean softwareManagementAvailable = false;
 
     private class SwListResponse<T> {
         private ArrayList<T> swlist = new ArrayList<T>();
         private int code = -1;
     }
 
+    private class DownloadInfoResponse {
+        private DownloadInfo downloadInfo = new DownloadInfo();
+        private int code = -1;
+    }
+
     public SoftwareManagementApiImpl() {
     }
 
-    public void init(CloudConnection cloud_connection, String softwareManagementUri) {
-        this.cloud_connection = cloud_connection;
+    public void init(CloudConnection cloudConnection, String softwareManagementUri) {
+        this.cloudConnection = cloudConnection;
         this.softwareManagementUri = softwareManagementUri;
-        software_management_available = true;
+        softwareManagementAvailable = true;
         FetchSoftwareManagementURIs();
     }
 
@@ -56,7 +61,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(softwareManagementUri, headers, 10000);
+            Response response = cloudConnection.doGetRequest(softwareManagementUri, headers, 10000);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -104,7 +109,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(uris.available_software_assignments, headers, timeout);
+            Response response = cloudConnection.doGetRequest(uris.available_software_assignments, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -148,7 +153,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         String body = "id=" + uuid + "&client_id=" + "" + "&reason=USER"; //TODO: Remove hardcoded values (client_id and reason)
 
         //Do we need to fetch commission uri?
-        Response response = cloud_connection.doPostRequest(softwareManagementUri + "/commission", headers, body,
+        Response response = cloudConnection.doPostRequest(softwareManagementUri + "/commission", headers, body,
                 timeout);
 
         Log.d(LOG_TAG, " " + response.httpResponse);
@@ -264,7 +269,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloud_connection.doGetRequest(uris.pending_installations, headers, timeout);
+            Response response = cloudConnection.doGetRequest(uris.pending_installations, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -294,6 +299,50 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         return swrsp;
     }
 
+    private DownloadInfoResponse FetchDownloadInfo(String uuid) {
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.Downloads+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        DownloadInfoResponse downloadInfoResponse = new DownloadInfoResponse();
+
+        try {
+            // Send request
+            Response response = cloudConnection.doGetRequest(uris.downloads + "/" + uuid, headers, timeout);
+
+            if (!HandleHttpResponseCode(response.httpResponse)) {
+                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
+            }
+
+            // Parse response
+            byte[] bytesdata = new byte[response.responseData.size()];
+            for (int i = 0; i < bytesdata.length; i++) {
+                bytesdata[i] = response.responseData.get(i);
+            }
+
+            InputStream stream = new ByteArrayInputStream(bytesdata);
+
+            downloadInfoResponse.downloadInfo =  XmlParser.ParseDownloadInfo(stream);
+            downloadInfoResponse.code = response.httpResponse;
+
+        } catch (XmlPullParserException ex) {
+            // Something went bananas with the parsing.. What do?
+            Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
+        } catch (IOException ex) {
+            // Something went bananas with the streams.. What do?
+            Log.e(LOG_TAG, "Something went bananas with the streams: " + ex.getMessage());
+        }
+        return downloadInfoResponse;
+    }
+
+
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -306,7 +355,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     @Override
     public void GetSoftwareAssigmentList(ISoftwareManagementApiCallback callback) throws RemoteException {
 
-        if (!software_management_available) {
+        if (!softwareManagementAvailable) {
             callback.SoftwareAssignmentList(-1, null);
         }
 
@@ -321,7 +370,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     @Override
     public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
             throws RemoteException {
-        if (!software_management_available) {
+        if (!softwareManagementAvailable) {
             callback.CommissionStatus(-1);
         }
 
@@ -334,7 +383,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     */
     @Override
     public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
-        if (!software_management_available) {
+        if (!softwareManagementAvailable) {
             callback.PendingInstallations(-1, null);
         }
 
@@ -349,6 +398,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     */
     @Override
     public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
-        //TODO: implement
+        if (!softwareManagementAvailable) {
+            callback.DownloadInfo(-1, null);
+        }
+
+        DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(uuid);
+        callback.DownloadInfo(downloadInfoResponse.code, downloadInfoResponse.downloadInfo);
     }
 }

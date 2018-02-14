@@ -31,12 +31,15 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
     private Context context = this;
     private RecyclerView recyclerView;
-    public AssignmentAdapter adapter;
-    private ArrayList<SoftwareAssignment> assignments;
+    public SoftwareInformationAdapter adapter;
+    private ArrayList<SoftwareInformation> swInfos;
 
     private FloatingActionButton actionsFab;
     private FloatingActionButton availableFab;
+    private FloatingActionButton commissionedFab;
     private LinearLayout layoutFabAvailable;
+    private LinearLayout layoutFabCommissioned;
+
     private boolean fabExpanded = false;
 
     private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
@@ -51,10 +54,10 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         }
 
         @Override
-        public void UpdateSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
-            assignments.clear();
-            for (SoftwareAssignment sw : software_list) {
-                assignments.add(sw);
+        public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
+            swInfos.clear();
+            for(SoftwareInformation si : software_list) {
+                swInfos.add(si);
             }
 
             updateAdapter();
@@ -63,16 +66,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateSoftwareState(String uuid, int state) {
             Log.v(LOG_TAG, "UpdateSoftwareState");
-        }
-
-        @Override
-        public void UpdatePendingInstallations(List<InstallationOrder> installation_order_list) {
-            Log.v(LOG_TAG, "UpdatePendingInstallations");
-        }
-
-        @Override
-        public void UpdateDownloadInfo(String uuid, DownloadInfo download_info) {
-            Log.v(LOG_TAG, "UpdateDownloadInfo");
         }
 
         @Override
@@ -109,11 +102,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
     private void openSubMenusFab() {
         layoutFabAvailable.setVisibility(View.VISIBLE);
+        layoutFabCommissioned.setVisibility(View.VISIBLE);
         fabExpanded = true;
     }
 
     private void closeSubMenusFab() {
         layoutFabAvailable.setVisibility(View.INVISIBLE);
+        layoutFabCommissioned.setVisibility(View.INVISIBLE);
         fabExpanded = false;
     }
 
@@ -124,11 +119,14 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         layoutFabAvailable = (LinearLayout) findViewById(R.id.getAvailable);
+        layoutFabCommissioned = (LinearLayout) findViewById(R.id.getCommissioned);
+
         actionsFab = (FloatingActionButton) findViewById(R.id.actionFab);
         availableFab = (FloatingActionButton) findViewById(R.id.getAvailableFab);
+        commissionedFab = (FloatingActionButton) findViewById(R.id.getCommissionedFab);
 
-        assignments = new ArrayList<SoftwareAssignment>();
-        adapter = new AssignmentAdapter(this, assignments, this);
+        swInfos = new ArrayList<SoftwareInformation>();
+        adapter = new SoftwareInformationAdapter(this, swInfos, this);
         actionsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +141,19 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             @Override
             public void onClick(View view) {
                 try {
-                    softwareUpdateManager.GetSoftwareAssignments(callback);
+                    softwareUpdateManager.GetSoftwareAssignments();
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            };
+        });
+
+	commissionedFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Log.v(LOG_TAG, "Sending GetPendingInstallations");
+                    softwareUpdateManager.GetPendingInstallations();
                 } catch (Exception e) {
                     Log.e(LOG_TAG, e.getMessage());
                 }
@@ -195,7 +205,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void commissionAssignment(String uuid) {
         try {
-            softwareUpdateManager.CommissionAssignment(callback, uuid);
+            softwareUpdateManager.CommissionAssignment(uuid);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
         }

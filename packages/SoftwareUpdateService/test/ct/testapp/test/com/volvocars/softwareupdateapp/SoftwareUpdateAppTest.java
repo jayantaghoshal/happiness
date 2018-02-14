@@ -116,7 +116,7 @@ public class SoftwareUpdateAppTest {
 
 
         UiObject2 card = mDevice.findObject(By.clazz("android.widget.FrameLayout").res("com.volvocars.softwareupdateapp:id/assignmentCV").hasDescendant(textSelector));
-        UiObject2 button = card.findObject(By.clazz("android.widget.ImageView").res("com.volvocars.softwareupdateapp:id/commissionImage"));
+        UiObject2 button = card.findObject(By.clazz("android.widget.ImageView").res("com.volvocars.softwareupdateapp:id/overflow"));
 
         button.click();
 
@@ -134,7 +134,41 @@ public class SoftwareUpdateAppTest {
 
         textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
         assertFalse(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-
     }
 
+    /*
+    @Test
+    public void happyGetPendingInstallations() {
+        Context context = InstrumentationRegistry.getContext();
+        final Intent intent = context.getPackageManager().getLaunchIntentForPackage(SOFTWAREUPDATEAPP_PACKAGE);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+
+        mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
+
+        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(actionFab).click();
+
+        BySelector getAvailableFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getAvailableFab").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(getAvailableFab), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(getAvailableFab).click();
+
+        BySelector getCommissionedFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getCommissionedFab").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(getCommissionedFab), LAUNCH_TIMEOUT));
+        mDevice.findObject(getCommissionedFab).click();
+
+        BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
+        assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
+
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/installationStatus").text("PENDING");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+    }
+    */
 }

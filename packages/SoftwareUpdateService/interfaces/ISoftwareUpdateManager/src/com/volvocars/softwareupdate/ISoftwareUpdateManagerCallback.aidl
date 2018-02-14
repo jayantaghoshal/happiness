@@ -4,34 +4,27 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 
+import com.volvocars.softwareupdate.SoftwareInformation;
+
 /**
  * A callback interface to enable non-blocking request calls
  */
 oneway interface ISoftwareUpdateManagerCallback {
+
     /**
      * Notify client about a new state
      */
     void UpdateState(in int state);
 
     /**
-     * Notify client about new Software Assignment List
+     * Notify Client About Update Software List.
      */
-    void UpdateSoftwareAssignmentList(in List<SoftwareAssignment> software_list);
+    void UpdateSoftwareList(in List<SoftwareInformation> software_list);
 
     /**
      * Notify client about a state change of a specific assignment
      */
     void UpdateSoftwareState(in String uuid, in int state);
-
-    /**
-    * Notify client about new Pending Installations (Installation Order List)
-    */
-    void UpdatePendingInstallations(in List<InstallationOrder> installation_order_list);
-
-    /**
-    * Notify client about new DownloadInfo for a software assignement
-    */
-    void UpdateDownloadInfo(in String uuid, in DownloadInfo download_info);
 
     /**
      * Notify client of Error

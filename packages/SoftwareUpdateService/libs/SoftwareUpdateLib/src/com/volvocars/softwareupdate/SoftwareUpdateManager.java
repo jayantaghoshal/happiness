@@ -61,21 +61,27 @@ public class SoftwareUpdateManager implements ServiceConnection {
         }
     }
 
-    public void GetSoftwareAssignments(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+    public void GetSoftwareAssignments() throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetSoftwareAssignments(callback);
+            softwareUpdateManager.GetSoftwareAssignments();
         }
     }
 
-    public void CommissionAssignment(ISoftwareUpdateManagerCallback callback, String uuid) throws RemoteException {
+    public void CommissionAssignment(String uuid) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.CommissionAssignment(callback, uuid);
+            softwareUpdateManager.CommissionAssignment(uuid);
         }
     }
 
-    public void GetPendingInstallations(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+    public void GetPendingInstallations() throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetPendingInstallations(callback);
+            softwareUpdateManager.GetPendingInstallations();
+        }
+    }
+
+    public void GetDownloadInfo(String uuid) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.GetDownloadInfo(uuid);
         }
     }
 }

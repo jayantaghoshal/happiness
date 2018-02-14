@@ -30,8 +30,8 @@ oneway interface ISoftwareManagementApiCallback {
 
     /**
     * Return the result for GetDownloadInfo
-    * @param uuids         The id for the installation order
+    * @param code          The HTTP cose of the response
     * @param download_info The download information of the installation order.
     */
-    void DownloadInfo(in String uuid, in DownloadInfo download_info);
+    void DownloadInfo(in int code, in DownloadInfo download_info);
 }

@@ -70,14 +70,14 @@
       "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
     },
     "this": "pendingInstallations",
-    "installation_orders": []
+    "installation_order": []
   },
+
   "commission": {
     "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
     "client_id": "FTKR1EDXBPB10452",
     "reasen": "USER"
   },
-
   "preDownloadInfo": [
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9"

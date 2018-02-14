@@ -90,4 +90,13 @@ public class SoftwareManagementApi implements ServiceConnection {
             software_management.GetPendingInstallations(callback);
         }
     }
+
+    /**
+    *
+    */
+    public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.GetDownloadInfo(uuid, callback);
+        }
+    }
 }

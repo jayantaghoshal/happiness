@@ -47,20 +47,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     /**
-     * Update the Software Assignment List for all registered clients. remove all clients that doesn't respond.
-     * @param software_list The list with software that all clients should be updated with.
-     */
-    public void UpdateSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
-        for (ISoftwareUpdateManagerCallback c : clients) {
-            try {
-                c.UpdateSoftwareAssignmentList(software_list);
-            } catch (RemoteException e) {
-                clients.remove(c);
-            }
-        }
-    }
-
-    /**
      * Update the state of a Software Assignment
      * @param uuid The UUID of the concerned Software Assignment
      * @param sate The new state of the Software Assignment
@@ -75,10 +61,10 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         }
     }
 
-    public void UpdatePendingInstallations(List<InstallationOrder> installation_order_list) {
+    public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
         for (ISoftwareUpdateManagerCallback c : clients) {
             try {
-                c.UpdatePendingInstallations(installation_order_list);
+                c.UpdateSoftwareList(software_list);
             } catch (RemoteException e) {
                 clients.remove(c);
             }
@@ -87,7 +73,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
 
     @Override
     public void GetState(ISoftwareUpdateManagerCallback callback) {
-        Log.v(LOG_TAG, "GetState");
         clients.add(callback);
         try {
             callback.UpdateState(service.GetState());
@@ -97,22 +82,22 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void GetSoftwareAssignments(ISoftwareUpdateManagerCallback callback) {
-        service.GetSoftwareAssignmentList(callback);
+    public void GetSoftwareAssignments() {
+        service.GetSoftwareAssignmentList();
     }
 
     @Override
-    public void CommissionAssignment(ISoftwareUpdateManagerCallback callback, String uuid) {
-        service.CommissionAssignment(callback, uuid);
+    public void CommissionAssignment(String uuid) {
+        service.CommissionAssignment(uuid);
     }
 
     @Override
-    public void GetPendingInstallations(ISoftwareUpdateManagerCallback callback) {
-        service.GetPendingInstallations(callback);
+    public void GetPendingInstallations() {
+        service.GetPendingInstallations();
     }
 
     @Override
-    public void GetDownloadInfo(String uuid, ISoftwareUpdateManagerCallback callback) throws RemoteException {
-        //TODO: implement
+    public void GetDownloadInfo(String uuid) throws RemoteException {
+        service.GetDownloadInfo(uuid);
     }
 }

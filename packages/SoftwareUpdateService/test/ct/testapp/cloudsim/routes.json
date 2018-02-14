@@ -4,5 +4,6 @@
     "/softwaremanagement-1/mapUpdates": "/mapUpdates",
     "/softwaremanagement-1/downloads": "/downloads",
     "/softwaremanagement-1/deleteNotification": "/deleteNotification",
-    "/softwaremanagement-1/commission": "/commission"
+    "/softwaremanagement-1/commission": "/commission",
+    "/softwaremanagement-1/pendingInstallations": "/pendingInstallations"
 }

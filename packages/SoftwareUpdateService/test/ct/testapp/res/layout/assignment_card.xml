@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/textlayout"
         android:layout_width="600dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-
+        android:layout_height="wrap_content">
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -15,42 +12,75 @@
             app:cardCornerRadius="@dimen/cardCornerRadius"
             app:cardElevation="@dimen/cardElevation"
             app:cardUseCompatPadding="true"
-        >
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="60dp"
+            android:layout_marginEnd="8dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/defaultPadding"
-            >
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:textSize="25sp"
-                android:text="Title"
                 android:textColor="@color/titleDark"
                 />
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/name"
                 android:textSize="15sp"
-                android:text="Description"
                 />
-
-            <ImageView
-                android:id="@+id/commissionImage"
+            <TextView
+                android:id="@+id/swId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/installationId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/installationStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/downloads"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+        </LinearLayout>
+        <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="top|right"
+                android:paddingRight="@dimen/defaultPadding"
+                android:paddingLeft="@dimen/defaultPadding"
+                android:paddingBottom="@dimen/defaultPadding"
+                android:paddingTop="@dimen/defaultPadding"
+                />
+        <ImageView
+                android:id="@+id/overflow"
                 android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="bottom|right"
-                android:layout_below="@+id/description"
+                android:layout_below="@+id/state"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_get_app_36dp" />
-        </RelativeLayout>
-
+                android:src="@drawable/ic_dots" />
     </android.support.v7.widget.CardView>
-    </LinearLayout>
+</RelativeLayout>
