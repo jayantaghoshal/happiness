@@ -51,7 +51,6 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",       standard_caps),
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",       standard_caps),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps),
-    TradefedTest("vendor/volvocars/hardware/netman/test/ct/InterfaceTest",       standard_caps),
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
