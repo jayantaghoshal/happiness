@@ -314,7 +314,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Response response = cloudConnection.doGetRequest(uris.downloads + "/" + uuid, headers, timeout);
+            Response response = cloudConnection.doGetRequest(uris.downloads + "?id=" + uuid, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -329,7 +329,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
-            downloadInfoResponse.downloadInfo =  XmlParser.ParseDownloadInfo(stream);
+            downloadInfoResponse.downloadInfo = XmlParser.ParseDownloadInfo(stream);
             downloadInfoResponse.code = response.httpResponse;
 
         } catch (XmlPullParserException ex) {
@@ -341,7 +341,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
         return downloadInfoResponse;
     }
-
 
     private boolean HandleHttpResponseCode(final int code) {
 

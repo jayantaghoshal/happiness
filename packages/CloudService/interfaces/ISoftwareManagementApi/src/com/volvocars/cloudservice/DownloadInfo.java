@@ -11,10 +11,10 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class DownloadInfo implements Parcelable {
-    public String uuid;
-    public String install_notification_uri;
-    public String installation_order_id;
-    public ArrayList<String> downloads;
+    public String uuid = "";
+    public String install_notification_uri = "";
+    public String installation_order_id = "";
+    public ArrayList<String> downloads = new ArrayList();
 
     public static final Creator<DownloadInfo> CREATOR = new Creator<DownloadInfo>() {
         @Override

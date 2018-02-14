@@ -90,7 +90,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.assignment_card, parent, false);
-        Log.v("SwupADapter", "hello ");
         return new MyViewHolder(itemView);
     }
 

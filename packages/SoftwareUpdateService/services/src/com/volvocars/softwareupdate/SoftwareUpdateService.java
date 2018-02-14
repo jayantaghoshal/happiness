@@ -136,9 +136,6 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void GetSoftwareAssignmentList() {
-        /**
-         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
-         */
         if (swapi != null) {
             try {
                 swapi.GetSoftwareAssigmentList(swapiCallback);
@@ -149,10 +146,6 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void CommissionAssignment(String uuid) {
-        /**
-         * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
-         */
-
         if (swapi != null) {
             try {
                 swapi.CommissionSoftwareAssignment(uuid, swapiCallback);
@@ -165,10 +158,6 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void GetPendingInstallations() {
-        /**
-        * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
-        */
-
         if (swapi != null) {
             try {
                 Log.v(LOG_TAG, "GetPendingInstallations");
@@ -179,11 +168,13 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void GetDownloadInfo(String uuid) throws RemoteException {
-        /**
-        * Construct a Callback tailored to the needs of this specific call. Maybe we can solve this in a much nicer way?
-        */
+    public void doGetDownloadInfo(List<InstallationOrder> list) {
+        for (InstallationOrder io : list) {
+            GetDownloadInfo(io.uuid);
+        }
+    }
 
+    public void GetDownloadInfo(String uuid) {
         if (swapi != null) {
             try {
                 swapi.GetDownloadInfo(uuid, swapiCallback);
@@ -233,10 +224,9 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void UpdateSoftwareList(DownloadInfo downloadInfo) {
-
         boolean found = false;
         for (SoftwareInformation information : softwareInformationList) {
-            if (downloadInfo.uuid.equals(information.softwareId)) {
+            if (downloadInfo.uuid.equals(information.installationId)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
                 break;
@@ -244,6 +234,7 @@ public class SoftwareUpdateService extends Service {
         }
         if (!found) {
             // Weird..?
+            Log.e(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid not found in list which is weird...");
         }
 
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);

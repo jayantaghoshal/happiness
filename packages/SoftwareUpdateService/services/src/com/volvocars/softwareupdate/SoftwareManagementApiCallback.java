@@ -56,6 +56,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
         if (200 == code) {
             service.UpdateSoftwareListWithInstallationOrders(installation_order_list);
+            service.doGetDownloadInfo(installation_order_list);
         } else {
             //try {
             //    callback.ProvideErrorMessage(code, "Request for Pending Installations failed.");
@@ -67,6 +68,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void DownloadInfo(int code, DownloadInfo info) {
-        //TODO: implement
+        if (200 == code) {
+            service.UpdateSoftwareList(info);
+        }
     }
 }

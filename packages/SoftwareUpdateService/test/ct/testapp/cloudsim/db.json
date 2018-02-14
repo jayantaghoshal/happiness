@@ -80,7 +80,12 @@
   },
   "preDownloadInfo": [
     {
-      "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9"
+      "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+      "downloads": [
+        {
+          "file": "/path/to/file.txt"
+        }
+      ]
     },
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa"

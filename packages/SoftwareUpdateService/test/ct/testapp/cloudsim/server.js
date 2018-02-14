@@ -29,7 +29,10 @@ router.render = function (req, res) {
     tag = "commission"
   } else if(req._parsedUrl.pathname == '/pendingInstallations') {
     tag = "pending_installations"
-  } else {
+  } else if(req._parsedUrl.pathname == '/downloads') {
+    tag = "downloads"
+  }
+   else {
     return res.send(data)
   }
   var str = js2xmlparser.parse(tag, data)
@@ -84,6 +87,16 @@ server.post('/commission', function (req, res, next) {
   next()
 })
 
+server.get('/downloads', function(req, res, next) {
+  var d = db.get('downloads')
+      for (j = 0; j < d.value().length; j++) {
+        if (d.value()[j]['id'] == req.query.id) {
+          var tmpObj = d.value()[j]
+          var str = js2xmlparser.parse("downloads", tmpObj)
+          return res.send(str)
+        }
+      }
+})
 server.use(router)
 server.listen(3000, function () {
   console.log('JSON Server is running')
