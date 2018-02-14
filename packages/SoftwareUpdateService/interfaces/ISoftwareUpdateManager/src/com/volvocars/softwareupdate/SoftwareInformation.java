@@ -16,7 +16,7 @@ import android.os.Parcelable;
 
 public class SoftwareInformation implements Parcelable {
     public enum SoftwareState {
-        AVAILABLE, COMMISSIONED, DOWNLOAD_PENDING, DOWNLOADING, DOWNLOADED, INSTALL_PENDING, INSTALLING, INSTALLED, UNDEFINED
+        AVAILABLE, COMMISSIONED, DOWNLOAD_PENDING, DOWNLOADING_META, DOWNLOADING, DOWNLOADED, INSTALL_PENDING, INSTALLING, INSTALLED, UNDEFINED
     };
 
     public SoftwareState softwareState = SoftwareState.UNDEFINED;
@@ -58,7 +58,7 @@ public class SoftwareInformation implements Parcelable {
     }
 
     public SoftwareInformation(InstallationOrder installationOrder) {
-        this.softwareState = SoftwareState.COMMISSIONED;
+        this.softwareState = SoftwareState.DOWNLOAD_PENDING;
         this.softwareId = installationOrder.software.uuid;
         this.name = installationOrder.software.name;
         this.description = installationOrder.software.description;
@@ -68,13 +68,13 @@ public class SoftwareInformation implements Parcelable {
     }
 
     public void AddInstallationOrder(InstallationOrder installationOrder) {
-        this.softwareState = SoftwareState.COMMISSIONED;
+        this.softwareState = SoftwareState.DOWNLOAD_PENDING;
         this.installationId = installationOrder.uuid;
         this.installationStatus = installationOrder.status;
     }
 
     public void AddDownloadInfo(DownloadInfo downloadInfo) {
-        this.softwareState = SoftwareState.DOWNLOAD_PENDING;
+        this.softwareState = SoftwareState.DOWNLOADING_META;
         this.downloads = downloadInfo.downloads;
     }
 

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<configuration description="SoftwareManagementTest">
+<configuration description="Software Management Test -- Tests Get Assignments and Commission Assignment">
 
+<!--
     <target_preparer class="com.android.tradefed.targetprep.DeviceSetup">
         <option name="screen-always-on" value="ON" />
     </target_preparer>
-
+-->
     <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
         <option name="apk-name" value="softwareupdateapp.apk" />
     </target_preparer>
 
     <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
-        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/testapp/prepare.sh" />
+        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments/prepare.sh" />
+
         <option name="host-setup-command" value="adb reverse tcp:3000 tcp:3000" />
 
-        <option name="host-teardown-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/testapp/teardown.sh" />
+        <option name="host-teardown-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/cloudsim/teardown.sh" />
     </target_preparer>
 
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
@@ -28,7 +30,11 @@
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">
         <option name="package" value="com.volvocars.softwareupdateapp" />
         <option name="runtime-hint" value="40s" />
+        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyGetSoftwareAssignmentsList" />
+        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyCommissionAssignment" />
+
     </test>
+
     <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />
     <result_reporter class="com.android.tradefed.result.XmlResultReporter" />
 </configuration>

@@ -68,7 +68,9 @@ test_plan_hourly = test_plan_gate + [
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
     # a reboot.
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/testapp", standard_caps),
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps),
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps),
+
     Disabled(VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps),
             reason="Waiting on new signal DB in VIP",
             jira_issue="",

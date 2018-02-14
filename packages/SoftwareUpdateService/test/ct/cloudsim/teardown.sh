@@ -9,6 +9,6 @@ adb shell log "kill json-server"
 kill -9 "$(pgrep 'node')"
 
 # Save database used during test run for post test analysis
-cp "${SCRIPT_DIR}/cloudsim/db.json" "${SCRIPT_DIR}/cloudsim/db.json.run"
-cp "${SCRIPT_DIR}/cloudsim/db.json.bak" "${SCRIPT_DIR}/cloudsim/db.json"
-rm "${SCRIPT_DIR}/cloudsim/db.json.bak"
+cp "${SCRIPT_DIR}/db.json" "${SCRIPT_DIR}/db.json.run"
+cp "${SCRIPT_DIR}/db.json.bak" "${SCRIPT_DIR}/db.json"
+rm "${SCRIPT_DIR}/db.json.bak"
