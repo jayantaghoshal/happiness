@@ -23,7 +23,7 @@ time make droid vts tradefed-all
 
 # Make OTA package
 time make dist
-DIST_FILE="${REPO_ROOT_DIR}/out/dist/ihu_vcc-target_files-eng.ihu.zip"
+DIST_FILE="${REPO_ROOT_DIR}/out/dist/ihu_vcc-target_files-${BUILD_NUMBER}.zip"
 OTA_UPDATE_FILE="${REPO_ROOT_DIR}/out/ota_update.zip"
 time "${REPO_ROOT_DIR}"/build/tools/releasetools/ota_from_target_files --block "${DIST_FILE}" "${OTA_UPDATE_FILE}"
 
