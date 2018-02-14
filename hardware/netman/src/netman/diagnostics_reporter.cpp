@@ -50,7 +50,11 @@ DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* 
 
     eth_gw_address_ = lcfg_->GetString("tcam0", "ip-address");
 
-    apix_traffic_splitting_ = IptablesConfig().isSplitTrafficSet(interfaces_[APIX].name, eth_gw_address_);
+    try {
+        apix_traffic_splitting_ = IptablesConfig().isSplitTrafficSet(interfaces_[APIX].name, eth_gw_address_);
+    } catch (const std::runtime_error& e) {
+        ALOGE("%s", e.what());
+    }
 
     IDataCollector::registerForNotifications("default", this);
     IDispatcher::GetDefaultDispatcher().Enqueue([this] { check_link(); });
@@ -135,8 +139,13 @@ Return<DidWriteStatusCode> DiagnosticsReporter::setApixOnObd(const ::android::ha
     bool action = (APIX_OBD_ON == data[0]);
 
     // Configure iptables to mirror APIX traffic to TCAM
-    if (!IptablesConfig().configureSplitTraffic(interfaces_[APIX].name, eth_gw_address_, action)) {
-        ALOGE("Failed to configure APIX-OBD traffic split");
+    try {
+        if (!IptablesConfig().configureSplitTraffic(interfaces_[APIX].name, eth_gw_address_, action)) {
+            ALOGE("Failed to configure APIX-OBD traffic split");
+            return DidWriteStatusCode::CONDITIONS_NOT_CORRECT;
+        }
+    } catch (const std::runtime_error& e) {
+        ALOGE("%s", e.what());
         return DidWriteStatusCode::CONDITIONS_NOT_CORRECT;
     }
 
