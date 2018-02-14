@@ -13,6 +13,7 @@ PRODUCT_PACKAGES += \
     dataelements-hidl-server \
     ipcbd \
     iplmd \
+    lscd \
     dimmanager \
     gnssd \
     carconfig-updater \
