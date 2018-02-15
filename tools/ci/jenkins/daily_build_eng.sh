@@ -16,9 +16,9 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
 # Build image, vts & tradefed
-ihuci vbf inc SWL2 # Increment part number suffix
 MP_PART_NUMBER=$(ihuci vbf get SWL2)
 export MP_PART_NUMBER
+ihuci vbf inc SWL2 # Increment part number suffix
 time make droid vts tradefed-all
 
 # Make OTA package
