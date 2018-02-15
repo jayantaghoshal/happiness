@@ -16,6 +16,8 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
+from com.dtmilano.android.viewclient import ViewClient
+
 
 from generated.pyDataElements import \
     FrSignalInterface
@@ -24,10 +26,50 @@ class VehicleHalCommon():
 
     def __init__(self, dut, system_uid):
 
+        try:
+            dut.hal.InitHidlHal(
+                target_type="vehicle",
+                target_basepaths=dut.libPaths,
+                target_version=2.0,
+                target_package="android.hardware.automotive.vehicle",
+                target_component_name="IVehicle")
+        except:
+            e = str(sys.exc_info()[0])
+            asserts.assertTrue(False, "VHAL init fail with error: " + str(e) + " Is VHAL up and running?")
+            raise
+
         self.vehicle = dut.hal.vehicle
         self.vehicle.SetCallerUid(system_uid)
         self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
         self.flexray = FrSignalInterface()
+        self.dut = dut
+
+
+    def getViewClient(self):
+        kwargs1 = {'ignoreversioncheck': False, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
+        device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
+        kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
+                   'autodump': False, 'startviewserver': True, 'compresseddump': True}
+        return ViewClient(device, serialno, **kwargs2), device
+
+    def setUpVendorExtension(self):
+        self.dut.adb.shell('input keyevent 3')
+        self.dut.adb.shell('am start -n \"com.volvocars.halmodulesink/com.volvocars.halmodulesink.MainActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
+
+        _s = 0.5
+        vc, device = self.getViewClient()
+
+        # Open menu drawer button
+        # Not possible to press with buttonId, using coordinates instead
+        device.touchDip(35.0, 110.0, 0)
+        vc.sleep(_s)
+
+        # Open vendor extension
+        vc.dump(window=-1)
+        vendorExtension = vc.findViewWithTextOrRaise("VendorExtension")
+
+        vendorExtension.touch()
+        vc.sleep(_s)
 
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.
@@ -228,3 +270,4 @@ class VehicleHalCommon():
         if self.flexray.connected:
             read_value = fdx_signal.get()
             asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ))
+
