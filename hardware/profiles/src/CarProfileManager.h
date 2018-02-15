@@ -37,7 +37,8 @@ using namespace SettingsFramework;
 
 class CarProfileManager : public ICarProfileManager, public ::android::hardware::hidl_death_recipient {
   public:
-    CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider, android::sp<SettingsManager> manager);
+    CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider,
+                      const android::sp<SettingsManager>& manager);
     Return<void> subscribeUserChange(const sp<IProfileChangedHandler>& cb) override;
     Return<void> requestSwitchUser(const hidl_string& androidUserId) override;
     Return<KeyId> getUserProfileInformation(const hidl_string& androidUserId) override;
@@ -52,6 +53,8 @@ class CarProfileManager : public ICarProfileManager, public ::android::hardware:
 
   private:
     void disconnectProfileFromKey(ProfileIdentifier profile);
+
+    const std::string UNUSED_ANDROID_USER;
 
     ApplicationDataElement::DESender<autosar::ProfChg_info> prof_chg_sender_;
     ApplicationDataElement::DEReceiver<autosar::ProfPenSts1_info> prof_pen_sts1_receiver_;
@@ -80,8 +83,6 @@ class CarProfileManager : public ICarProfileManager, public ::android::hardware:
 
     enum class State { IDLE, KEY_SEARCH_ACTIVE };
     State state_;
-
-    const std::string UNUSED_ANDROID_USER = "0";
 };
 
 }  // namespace implementation

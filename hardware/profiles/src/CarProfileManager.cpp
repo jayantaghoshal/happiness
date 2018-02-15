@@ -31,8 +31,9 @@ namespace andrHw = ::android::hardware;
 static constexpr uint64_t IPROFILE_HAL_DEATH_COOKIE = 0xDEAD;
 
 CarProfileManager::CarProfileManager(std::shared_ptr<TimerManagerInterface> time_provider,
-                                     android::sp<SettingsManager> manager)
-    : time_provider_(std::move(time_provider)),
+                                     const android::sp<SettingsManager>& manager)
+    : UNUSED_ANDROID_USER("0"),
+      time_provider_(std::move(time_provider)),
       prof_chg_timer_handle_(nullptr),
       // TODO (TS) what is the default android user? Now set to "0"
       s_android_user_(SettingId::AndroidUserId, UNUSED_ANDROID_USER, manager),
