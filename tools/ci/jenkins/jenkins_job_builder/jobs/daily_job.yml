@@ -40,6 +40,7 @@
 - job:
     name: ihu_daily
     project-type: multijob
+    description: Link to test report - http://gotsvl1416.got.volvocars.net/daily_test_report/<BUILD_NUMBER>
     node: high
     scm:
         - git:
@@ -66,7 +67,7 @@
             - username-password-separated:
                 credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
                 username: JENKINS_USER
-                password: JENKINS_PASSWORD
+                password: JENKINS_API_PASSWORD
     builders:
       - multijob:
           name: Build
@@ -144,12 +145,17 @@
       
       - shell:
             !include-raw:
-                - bootstrap_ihu_report_generation.sh    
+                - bootstrap_ihu_hourly_daily_common.sh    
 
 - job:
     name: ihu_daily_build_vcc_eng
     defaults: daily_job_defaults
     node: daily_build
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily
+            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -172,6 +178,11 @@
     name: ihu_daily_build_vcc_userdebug
     defaults: daily_job_defaults
     node: daily_build
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily
+            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -193,6 +204,11 @@
     name: ihu_daily_build_vcc_user
     defaults: daily_job_defaults
     node: daily_build
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily
+            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
     properties:
         - build-discarder:
             days-to-keep: 30
