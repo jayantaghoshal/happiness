@@ -19,6 +19,9 @@
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
   <project name="vendor/google/apps/GoogleServices" path="vendor/volvocars/apps/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
 
+  <!-- Boost-1.64.0 -->
+  <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="4caecf161ca6a435010cd8705e50884a6fa406df"/>
+
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/external/curl"/>
   <project name="aosp/platform/external/curl" path="external/curl" revision="5730c1ed690d43020d5d937cb8e7c2e9a92898c6"/>
@@ -73,9 +76,6 @@
 
   <remove-project name="vendor/delphi/android_ihu_vipimages" />
   <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="c575b21120dda60ee6d88bdda8e6515a761f8273" />
-
-  <!-- Boost_1_66_0 -->
-  <project name="vendor/volvocars/external/boost" path="vendor/volvocars/external/boost_1_66_0" revision="595e113a9e43d40b756c171a3d81d20b8a6d3508"/>
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
