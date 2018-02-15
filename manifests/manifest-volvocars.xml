@@ -75,7 +75,7 @@
   <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="b862ea0de8697acdb9644e9672e0386e1a6c27cd"/>
 
   <remove-project name="vendor/delphi/android_ihu_vipimages" />
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="c575b21120dda60ee6d88bdda8e6515a761f8273" />
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="4940da26880e328279b7d7df3460084198516a2d" />
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
