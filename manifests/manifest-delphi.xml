@@ -119,7 +119,7 @@
   <project name="vendor/delphi/ihu_vf_common" path="device/delphi/vcc_ihu/private/camera/ihu_vf_common" revision="f85d253e4bbf6e9531fb89a4b0c34a2139b61444" />
 
   <!-- Common Delphi building blocks -->
-  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="74c9a2e621a625f794e9e9287203cf4a71acc1ae"/>
+  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="3278eebf8fec2d649467ffcf4b83e0cf7505a0b4"/>
   <project name="vendor/delphi/Delphi_Android_Platform_Support" path="vendor/aptiv/components/libdelphi_platform" revision="ab6dc87cf1c04fbe6c43a524fc00f71fffcd8f93"/>
   <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="aac6ca825e6d3b07958eeca792021853fd28c971"/>
   <project name="vendor/delphi/AShmemService" path="vendor/aptiv/components/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498"/>
@@ -149,7 +149,7 @@
   <project name="vendor/delphi/binaries_android_tunermngr" path="vendor/aptiv/components/vcc_ihu_tuner" revision="36865dd5035a8c20efb1626fe46423fca393b384" />
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="1ff46eb8fd8b3fde9895932db3f485a80d7ecbf8"/>
 
-  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="7352ed6c0d6e65edbe53285ef61bbd96ea945f2d" />
+  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="80e287c9ef9812b55d137f95c5f8805ec2150731" />
   <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="08f50ae7b11e0a6351955e85b408163fb533d9a3" />
   <project name="vendor/delphi/android_vendor" path="vendor/delphi" revision="7ccc2445783d38a871105ffb0668c3e85afc9fc9" />
   <project name="vendor/delphi/android_ihu_vipimages" path="vendor/delphi/vcc_ihu/common/vip_images" revision="9e3b2213b9ea7d429ffbf77a897b9222d54120fd" />
