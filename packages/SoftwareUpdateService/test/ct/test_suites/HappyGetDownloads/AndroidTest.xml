@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<configuration description="Software Management Test -- Tests Get Assignments and Commission Assignment">
+<configuration description="Software Management Test -- Tests Get Downloads">
 
+<!--
     <target_preparer class="com.android.tradefed.targetprep.DeviceSetup">
         <option name="screen-always-on" value="ON" />
     </target_preparer>
-
+-->
     <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
         <option name="apk-name" value="softwareupdateapp.apk" />
     </target_preparer>
 
     <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
-        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments/prepare.sh" />
+        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads/prepare.sh" />
 
         <option name="host-setup-command" value="adb reverse tcp:3000 tcp:3000" />
 
@@ -29,8 +30,7 @@
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">
         <option name="package" value="com.volvocars.softwareupdateapp" />
         <option name="runtime-hint" value="40s" />
-        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyGetSoftwareAssignmentsList" />
-        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyCommissionAssignment" />
+        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyGetDownloads" />
 
     </test>
 

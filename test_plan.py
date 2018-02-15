@@ -74,6 +74,7 @@ test_plan_hourly = test_plan_gate + [
     # a reboot.
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps),
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps),
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps),
 
     Disabled(VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps),
             reason="Waiting on new signal DB in VIP",

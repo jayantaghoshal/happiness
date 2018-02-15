@@ -7,7 +7,6 @@
     "host": "localhost",
     "port": 3000
   },
-
   "features-1": {
     "this": "features-1",
     "feature": [
@@ -19,7 +18,6 @@
       }
     ]
   },
-
   "softwaremanagement-1": {
     "this": "softwaremanagement-1",
     "available_updates": "/softwaremanagement-1/availableUpdates",
@@ -29,7 +27,6 @@
     "delete_notification": "/softwaremanagement-1/deleteNotification",
     "pending_installations": "/softwaremanagement-1/pendingInstallations"
   },
-
   "availableUpdates": {
     "@": {
       "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_updates",
@@ -38,15 +35,6 @@
     },
     "this": "availableupdates",
     "software": [
-      {
-        "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
-        "name": "Security patch for IHU",
-        "short_description": "Solves a security problem",
-        "long_description": {
-          "textblock": "An interesting and informative text describing the patch"
-        },
-        "size": "366.4"
-      },
       {
         "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
         "name": "Spotify",
@@ -70,22 +58,42 @@
       "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
     },
     "this": "pendingInstallations",
-    "installation_order": []
+    "installation_order": [
+      {
+        "id": 0,
+        "status": "PENDING",
+        "created_by": "1FTKR1EDXBPB10452",
+        "created": "2002-05-30T09:00:00",
+        "downloads_uri": "/downloads/",
+        "install_notifications_uri": "installnotifications",
+        "installation_report_uri": "/installationreport",
+        "software": [
+          {
+            "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+            "name": "Security patch for IHU",
+            "short_description": "Solves a security problem",
+            "long_description": {
+              "textblock": "An interesting and informative text describing the patch"
+            },
+            "size": "366.4"
+          }
+        ]
+      }
+    ]
   },
-
   "commission": {
     "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
     "client_id": "FTKR1EDXBPB10452",
     "reasen": "USER"
   },
-
   "preDownloadInfo": [
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
-      "downloads":
-        {
-          "file": ["/path/to/file.txt", "/path/to/otherfile.txt"]
-        }
+      "downloads": {
+        "file": [
+          "/path/to/file.txt"
+        ]
+      }
     },
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
@@ -95,6 +103,14 @@
       }
     }
   ],
-
-  "downloads": []
+  "downloads": [
+    {
+      "id": 0,
+      "downloads": {
+        "file": [
+          "/path/to/file.txt"
+        ]
+      }
+    }
+  ]
 }

@@ -155,11 +155,6 @@ public class SoftwareUpdateAppTest {
 
         mDevice.findObject(actionFab).click();
 
-        BySelector getAvailableFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getAvailableFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(getAvailableFab), LAUNCH_TIMEOUT));
-
-        mDevice.findObject(getAvailableFab).click();
-
         BySelector getCommissionedFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getCommissionedFab").enabled(true);
         assertTrue(mDevice.wait(Until.hasObject(getCommissionedFab), LAUNCH_TIMEOUT));
         mDevice.findObject(getCommissionedFab).click();
@@ -174,4 +169,32 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
     }
 
+    @Test
+    public void happyGetDownloads() {
+        Context context = InstrumentationRegistry.getContext();
+        final Intent intent = context.getPackageManager().getLaunchIntentForPackage(SOFTWAREUPDATEAPP_PACKAGE);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+
+        mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
+
+        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(actionFab).click();
+
+        BySelector getCommissionedFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getCommissionedFab").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(getCommissionedFab), LAUNCH_TIMEOUT));
+        mDevice.findObject(getCommissionedFab).click();
+
+        BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
+        assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
+
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Security patch for IHU");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOADING META");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+    }
 }
