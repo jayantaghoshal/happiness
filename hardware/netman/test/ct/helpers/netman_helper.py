@@ -51,6 +51,14 @@ class NetmanHelper(BaseHelper):
         logging.info(str(conf))
         return conf
 
+    def get_ip_link_conf(self, interface, run_in_vcc_namespace=True):
+        cmd = self._format_cmd_line(["ip -d link show", interface], run_in_vcc_namespace)
+        ip_link_output = self.execute_cmd(cmd)
+        conf = {}
+        conf["vlan_id"] = self._parse_vlan_id(ip_link_output)
+        conf["egress_qos"] = self._parse_egress_qos(ip_link_output)
+        return conf
+
     def set_broadcast_address(self, interface, broadcast_address, run_in_vcc_namespace=True):
         cmd = self._format_cmd_line(["ifconfig", interface, "broadcast", broadcast_address], run_in_vcc_namespace)
         self.execute_cmd(cmd)
@@ -94,6 +102,12 @@ class NetmanHelper(BaseHelper):
 
     def get_mac_address(self, interface, run_in_vcc_namespace=True):
         return self.get_interface_conf(interface, run_in_vcc_namespace)["mac_address"]
+
+    def get_vlan_id(self, interface, run_in_vcc_namespace=True):
+        return self.get_ip_link_conf(interface,run_in_vcc_namespace)["vlan_id"]
+
+    def get_egress_qos(self, interface, run_in_vcc_namespace=True):
+        return self.get_ip_link_conf(interface, run_in_vcc_namespace)["egress_qos"]
 
     def interface_down(self, interface, run_in_vcc_namespace=True):
         cmd = self._format_cmd_line(["ifconfig", interface, "down"], run_in_vcc_namespace)
@@ -169,3 +183,11 @@ class NetmanHelper(BaseHelper):
     def _parse_mac_address(self, ifconfig_output):
         groups = re.search(r"HWaddr (\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{2})", str(ifconfig_output))
         return groups.group(1) if groups else ""
+
+    def _parse_egress_qos(self, ip_output):
+        groups = re.search(r"egress-qos-map { \d{1}:(\d{1}) }", str(ip_output))
+        return int(groups.group(1)) if groups else None
+
+    def _parse_vlan_id(self, ip_output):
+        groups = re.search(r"vlan protocol 802.1Q id (\d{3})", str(ip_output))
+        return int(groups.group(1)) if groups else None
