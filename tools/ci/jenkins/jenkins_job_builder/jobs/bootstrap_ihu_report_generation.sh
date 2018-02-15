@@ -5,9 +5,6 @@
 
 set -xv
 set +e
-
-cd "$WORKSPACE"
-
 mkdir -p "$BUILD_NUMBER"
 
 #shellcheck disable=SC2046
@@ -29,17 +26,26 @@ tar xvfz ./vcc_test_results_"$JOB_NAME"_test-apix_*.tar.gz -C $(find . -type d -
 
 rm -rf ./*.tar.gz
 
+
+git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ xml_to_json_results.py | tar -x
+
+git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ json_to_html_results.py | tar -x
+
+git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ test_reporting.py | tar -x
+
+git archive --remote=ssh://jenkins-icup_android@gotsvl1415.got.volvocars.net:29421/vendor/volvocars HEAD:tools/ci/test_report_generation/ volvo_logo.png | tar -x
+
 set +x
-curl -X GET -u "$JENKINS_USER":"$JENKINS_API_PASSWORD" https://icup_android.jenkins.cm.volvocars.biz/job/"$JOB_NAME"/"$BUILD_NUMBER"/api/json?pretty=true > changelog.json
+curl -X GET -u "$JENKINS_USER":"$JENKINS_PASSWORD" https://icup_android.jenkins.cm.volvocars.biz/job/"$JOB_NAME"/"$BUILD_NUMBER"/api/json?pretty=true > changelog.json
 set -x
 
-python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/xml_to_json_results.py
+python3 xml_to_json_results.py
 
-python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/json_to_html_results.py
+python3 json_to_html_results.py
 
-python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/test_reporting.py
+python3 test_reporting.py
 
-python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/load_results_to_mongodb.py
+rm -rf xml_to_json_results.py json_to_html_results.py test_reporting.py
 
 cd "$WORKSPACE"
 

@@ -43,7 +43,6 @@
 - job:
     name: ihu_hourly
     project-type: multijob
-    description: Link to test report - http://gotsvl1416.got.volvocars.net/hourly_test_report/<BUILD_NUMBER>
     node: high
     scm:
         - git:
@@ -63,7 +62,7 @@
             - username-password-separated:
                 credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
                 username: JENKINS_USER
-                password: JENKINS_API_PASSWORD            
+                password: JENKINS_PASSWORD            
     notifications:
         - http:
             url: http://10.251.165.223:5000/events
@@ -137,16 +136,11 @@
 
       - shell:
             !include-raw:
-                - bootstrap_ihu_hourly_daily_common.sh
+                - bootstrap_ihu_report_generation.sh
 - job:
     name: ihu_hourly_build-eng
     defaults: hourly_job_defaults
     node: hourly_build
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_hourly
-            description: UPSTREAM_JOB can be used to fetch info about ihu_hourly.
     properties:
         #TODO: Duplicated from the hourly_job_defaults, don't know how to append things to the default.
         - build-discarder:
