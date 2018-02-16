@@ -44,6 +44,37 @@ cc_library_shared {
     compile_multilib: "64",
 }
 
+cc_library_static {
+    name: "libcarconfig_reader_mock",
+    vendor: true,
+    defaults: ["volvocars_cc_defaults_hq"],
+    generated_headers: [
+        "cc_parameterlist_gen",
+    ],
+
+    srcs: [
+        "mock/carconfig_mock.cpp",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    export_static_lib_headers: [
+        "libgmock",
+    ],
+
+    static_libs: [
+        "libgmock",
+        "libgtest",
+    ],
+
+}
+
 // This lib is to be used from the carconfig_updater
 cc_library_shared {
     name: "libcarconfig_writer",
