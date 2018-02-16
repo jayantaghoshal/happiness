@@ -339,7 +339,7 @@ def getIntTypeStr(limits: Tuple[int, int]) -> str:
 
 def crcFileToDefine(infile: str, outfile: str, definename: str):
     s = "// " + infile + "\n"
-    with open(infile, 'r', encoding="utf-8") as file:
+    with open(infile, 'rb') as file:
 
         #TODO: This is incredibly slow (up to 20 sec), can we use another algorithm?
         #      Maybe call out to another process... linux crc32 takes 0,07sec on the same file.
@@ -349,6 +349,6 @@ def crcFileToDefine(infile: str, outfile: str, definename: str):
         s += "#ifndef " + definename + "\n"
         s += "#define "+  definename + " " + str(crc) + "\n"
         s += "#endif\n"
-    with open(outfile, 'w', encoding="utf-8") as file:
-        file.write(s)
+    with open(outfile, 'w', encoding="utf-8") as f2:
+        f2.write(s)
 

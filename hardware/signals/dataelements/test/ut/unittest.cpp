@@ -34,7 +34,7 @@ using uint8 = uint8_t;
 using uint16 = uint16_t;
 using uint32 = uint32_t;
 using boolean = bool;
-#include "gen/MpRouter_Signals.h"
+#include "gen/MpRouter_Signals.h.noautoformat"
 
 #define LOG_TAG "Dataelements.UnitTest"
 #include <cutils/log.h>

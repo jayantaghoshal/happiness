@@ -14,9 +14,9 @@ subdirs = [
 genrule {
     name: "libdataelements_crcgen",
     tool_files: ["crc16cmd.py"],
-    cmd: "python $(location crc16cmd.py) $(in) MP_ROUTER_CRC > $(out)",
+    cmd: "python3 $(location crc16cmd.py) $(in) MP_ROUTER_CRC > $(out)",
     srcs: [
-        "vector/gen/MpRouter_Signals.h",
+        "vector/gen/MpRouter_Signals.h.noautoformat",
     ],
     out: [
         "Mp_Router_crc.h",

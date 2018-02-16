@@ -5,5 +5,5 @@
 
 // databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Com.arxml
 #ifndef COM_CRC
-#define COM_CRC 59546
+#define COM_CRC 36736
 #endif
