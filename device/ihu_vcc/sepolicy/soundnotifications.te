@@ -3,3 +3,9 @@ type soundnotifications, domain;
 type soundnotifications_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(soundnotifications)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(soundnotifications)
+allow soundnotifications hwservicemanager_prop:file { getattr open read };
+
+vndbinder_use(soundnotifications)

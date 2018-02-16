@@ -3,7 +3,6 @@ type netboyd, domain;
 type netboyd_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(netboyd)
-#permissive netboyd;
 
 allow netboyd self:udp_socket { create ioctl };
 allowxperm netboyd self:udp_socket ioctl { SIOCGIFNAME SIOCGIFFLAGS SIOCSIFFLAGS SIOCETHTOOL };
@@ -16,10 +15,6 @@ allow netboyd self:netlink_kobject_uevent_socket { read };
 
 allow netboyd ip-vcc_exec:file execute_no_trans;
 allow netboyd unlabeled:file { open read };
-
-#allow netboyd shell_exec:file { read open execute execute_no_trans getattr };
-#allow netboyd ip_exec:file { read open execute execute_no_trans getattr };
-#allow netboyd toolbox_exec:file { read open execute execute_no_trans getattr };
 
 allow netboyd vendor_shell_exec:file execute_no_trans;
 

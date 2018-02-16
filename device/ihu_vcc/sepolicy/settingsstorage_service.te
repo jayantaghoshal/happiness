@@ -1,0 +1,8 @@
+type settingsstorage_service, domain;
+type settingsstorage_service_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(settingsstorage_service)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(settingsstorage_service)
+allow settingsstorage_service hwservicemanager_prop:file { getattr open read };

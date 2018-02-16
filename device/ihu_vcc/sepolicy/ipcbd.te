@@ -9,5 +9,7 @@ allow ipcbd iplmd:binder call;
 allow ipcbd self:udp_socket { read write };
 allow ipcbd self:tcp_socket { connect setopt };
 
-# port?
 allow ipcbd port:tcp_socket name_connect;
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(ipcbd)

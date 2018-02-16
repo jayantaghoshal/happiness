@@ -4,8 +4,11 @@ type iplmd_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(iplmd)
 
-allow iplmd hwservicemanager:binder { call transfer };
 allow iplmd system_file:dir r_dir_perms;
 allow iplmd system_file:file r_file_perms;
 
-allow iplmd ipcbd:binder call;
+allow iplmd ipcbd:binder { call transfer };
+allow iplmd dataelements-hidl-server:binder { call transfer };
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(iplmd)

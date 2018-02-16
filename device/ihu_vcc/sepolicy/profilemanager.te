@@ -2,3 +2,7 @@ type profilemanager_service, domain;
 type profilemanager_service_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(profilemanager_service)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(profilemanager_service)
+allow profilemanager_service hwservicemanager_prop:file r_file_perms;

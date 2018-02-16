@@ -11,5 +11,7 @@ allow carconfig-updater carconfig_default_config_file:file { r_file_perms };
 
 
 allow carconfig-updater dataelements-hidl-server:binder { call transfer };
-allow carconfig-updater hwservicemanager:binder { call transfer };
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(carconfig-updater)
 allow carconfig-updater hwservicemanager_prop:file { getattr open read };
