@@ -1,2 +1,5 @@
 # netns device, used by ip
 type netns_device, dev_type;
+
+# vehicle_comm device, ACM usb used by vehicle_signals_daemon
+type vehicle_comm_device, dev_type;

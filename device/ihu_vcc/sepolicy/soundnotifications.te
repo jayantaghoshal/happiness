@@ -9,3 +9,7 @@ hwbinder_use(soundnotifications)
 allow soundnotifications hwservicemanager_prop:file { getattr open read };
 
 vndbinder_use(soundnotifications)
+
+allow soundnotifications dataelements-hidl-server:binder { call transfer };
+allow soundnotifications ashmemservice:binder call;
+allow soundnotifications ashmemservice:fd use;

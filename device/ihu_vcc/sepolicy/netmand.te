@@ -5,21 +5,23 @@ type netmand_exec, exec_type, file_type, vendor_file_type;
 init_daemon_domain(netmand)
 hal_client_domain(netmand, hal_uds_diagnostics)
 
-allow netmand self:netlink_kobject_uevent_socket read;
+allow netmand self:netlink_kobject_uevent_socket { read bind create setopt };
+allow netmand self:netlink_route_socket { bind create getattr nlmsg_read nlmsg_write read setopt write };
 allow netmand self:udp_socket { create ioctl };
 allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
 
-allow netmand self:capability { net_admin net_raw kill };
+allow netmand self:capability { net_admin net_raw kill sys_module };
 allow netmand netns_device:dir { read open };
 allow netmand netmand_exec:file execute_no_trans;
 allow netmand rootfs:dir mounton;
 
 allow netmand self:capability2 wake_alarm;
-allow netmand self:netlink_kobject_uevent_socket read;
-allow netmand sysfs:file { getattr open read };
+
+allow netmand sysfs:file rw_file_perms;
+allow netmand sysfs:dir r_dir_perms;
 
 allow netmand self:rawip_socket { create getopt setopt };
-allow netmand proc_net:file getattr;
+allow netmand proc_net:file rw_file_perms;
 
 set_prop(netmand, netmand_prop)
 

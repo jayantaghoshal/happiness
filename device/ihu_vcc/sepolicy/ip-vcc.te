@@ -20,6 +20,7 @@ allow ip-vcc system_file:file { execute read };
 allow ip-vcc proc_overcommit_memory:file { open read };
 allow ip-vcc sysfs:dir search;
 allow ip-vcc sysfs_devices_system_cpu:dir search;
+allow ip-vcc sysfs:dir mounton;
 
 allow ip-vcc device:dir search;
 allow ip-vcc properties_device:dir getattr;

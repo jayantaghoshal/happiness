@@ -5,6 +5,7 @@ type gnssd_exec, exec_type, file_type, vendor_file_type;
 init_daemon_domain(gnssd)
 
 allow gnssd ipcbd:binder { call transfer };
+allow gnssd system_server:binder call;
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(gnssd)

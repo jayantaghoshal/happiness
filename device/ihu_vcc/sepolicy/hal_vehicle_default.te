@@ -8,6 +8,7 @@ allow hal_vehicle_default socket_device:dir { create open write add_name };
 allow hal_vehicle_default socket_device:sock_file { create open read write };
 
 allow hal_vehicle_default dataelements-hidl-server:binder { call transfer };
+allow hal_vehicle_default audiomanager:binder call;
+allow hal_vehicle_default settingsstorage_service:binder { call transfer };
 
 vndbinder_use(hal_vehicle_default)
-allow hal_vehicle_default vndservicemanager:binder call;

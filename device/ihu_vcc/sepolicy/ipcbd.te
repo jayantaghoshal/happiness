@@ -13,3 +13,4 @@ allow ipcbd port:tcp_socket name_connect;
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(ipcbd)
+allow ipcbd hwservicemanager_prop:file { getattr open read };

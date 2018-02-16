@@ -12,3 +12,4 @@ allow iplmd dataelements-hidl-server:binder { call transfer };
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(iplmd)
+allow iplmd hwservicemanager_prop:file { getattr open read };

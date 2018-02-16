@@ -7,21 +7,22 @@ init_daemon_domain(netboyd)
 allow netboyd self:udp_socket { create ioctl };
 allowxperm netboyd self:udp_socket ioctl { SIOCGIFNAME SIOCGIFFLAGS SIOCSIFFLAGS SIOCETHTOOL };
 
-allow netboyd self:capability { net_admin net_raw kill };
+allow netboyd self:capability { net_admin net_raw kill sys_module };
 
 allow netboyd self:netlink_route_socket { create write nlmsg_read read setopt bind getattr nlmsg_write };
 
-allow netboyd self:netlink_kobject_uevent_socket { read };
+allow netboyd self:netlink_kobject_uevent_socket { read bind create setopt };
 
 allow netboyd ip-vcc_exec:file execute_no_trans;
 allow netboyd unlabeled:file { open read };
 
 allow netboyd vendor_shell_exec:file execute_no_trans;
 
-allow netboyd self:capability sys_module;
-
 r_dir_file(netboyd, netns_device)
 
 set_prop(netboyd, netboyd_prop)
 
 allow netboyd proc:file r_file_perms;
+
+allow netboyd sysfs:dir r_dir_perms;
+allow netboyd sysfs:file rw_file_perms;
