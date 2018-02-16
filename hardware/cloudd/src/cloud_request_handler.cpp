@@ -5,6 +5,8 @@
 
 #include "cloud_request_handler.h"
 
+#include <fstream>
+
 #include <IDispatcher.h>
 
 #define LOG_TAG "CloudD.service"
@@ -141,18 +143,37 @@ int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
 }
 
 int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata) {
+    CloudRequest* cr = static_cast<CloudRequest*>(userdata);
+
     const size_t real_size = size * nmemb;
+    bool success = false;
 
-    std::string* write_buffer = static_cast<std::string*>(userdata);
+    if (!cr->GetFilePath().empty()) {
+        std::ofstream out_file;
+        out_file.open(cr->GetFilePath(), std::ios_base::app);
+        if (out_file.is_open()) {
+            out_file.write(ptr, real_size);
+            success = true;
+        } else {
+            ALOGW("Failed to write to file: %s", cr->GetFilePath().c_str());
+        }
+        out_file.close();
+    } else {
+        std::string* write_buffer = cr->GetResponseDataBuffer();
 
-    try {
-        write_buffer->append(ptr, real_size);
-    } catch (...) {
-        ALOGW("Failed to write to request buffer");
-        return 0;
+        try {
+            write_buffer->append(ptr, real_size);
+            success = true;
+        } catch (...) {
+            ALOGW("Failed to write to request buffer");
+        }
     }
 
-    return real_size;
+    if (success) {
+        return real_size;
+    } else {
+        return 0;
+    }
 }
 
 int CloudRequestHandler::DebugCallback(CURL* handle, curl_infotype type, char* data, size_t size, void* userp) {
@@ -252,7 +273,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
 
     // Write callback and write location
     verified_curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, WriteCallback);
-    verified_curl_easy_setopt(easy, CURLOPT_WRITEDATA, request->GetResponseDataBuffer());
+    verified_curl_easy_setopt(easy, CURLOPT_WRITEDATA, request.get());
     // Save Header data
     verified_curl_easy_setopt(easy, CURLOPT_HEADERDATA, request->GetResponseHeaderBuffer());
 

@@ -58,6 +58,9 @@ class CloudService : public ICloudConnection {
     Return<void> doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
                                uint32_t timeout, doPostRequest_cb _hidl_cb);
 
+    Return<void> downloadRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& file_path,
+                                 uint32_t timeout, downloadRequest_cb _hidl_cb);
+
     /*
      * Helper method to create a parseable Response out of data received from curl after a successful request.
      * @parm code HTTP status code

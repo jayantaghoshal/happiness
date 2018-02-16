@@ -39,6 +39,8 @@ class CloudRequest {
     std::string response_data_;
     std::string response_header_;
 
+    std::string file_path_;
+
   public:
     CloudRequest(std::shared_ptr<CertHandlerInterface> cert_handler = nullptr)
         : url_(""),
@@ -79,5 +81,8 @@ class CloudRequest {
 
     std::string* GetResponseDataBuffer();
     std::string* GetResponseHeaderBuffer();
+
+    std::string GetFilePath() { return file_path_; }
+    void SetFilePath(std::string file_path) { file_path_ = file_path; }
 };
 }  // namespace Connectivity

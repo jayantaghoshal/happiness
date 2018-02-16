@@ -33,7 +33,6 @@ bool CloudService::Initialize() {
     } else {
         ALOGV("Http binder service register ok");
     }
-
     return FetchEntryPoint();
 }
 
@@ -62,6 +61,7 @@ bool CloudService::FetchEntryPoint() {
         ALOGD("CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
 
         state_ = ConnectionState::CONNECTED;
+
     });
 
     try {
@@ -70,6 +70,7 @@ bool CloudService::FetchEntryPoint() {
         ALOGE("Failed to fetch entry point: %s", e.what());
         return false;
     }
+
     return true;
 }
 
@@ -222,6 +223,73 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
         cr->SetRequestMethod(CloudRequest::HttpMethod::POST);
         cr->SetRequestBody(std::string(body.c_str()));
         cr->SetURL(url);
+        cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
+            promise.set_value(BuildResponse(code, data, header));
+        });
+
+        std::vector<std::string> header_list;
+        for (auto header : headers) {
+            header_list.push_back(std::string(header.name.c_str()) + ":" + std::string(header.value.c_str()));
+        }
+
+        cr->SetHeaderList(header_list);
+
+        cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
+
+    } catch (const std::exception& e) {
+        ALOGW("Failed to initiate cloud request: %s", e.what());
+        Response error;
+        error.httpResponse = 400;  // Bad request.
+        _hidl_cb(error);
+        return Void();
+    }
+
+    Response response;
+    std::chrono::milliseconds span(timeout);
+    if (future_response.wait_for(span) != std::future_status::timeout) {
+        response = future_response.get();
+    } else {
+        response.httpResponse = 408;  // HTTP code for time out
+    }
+
+    _hidl_cb(response);
+
+    return Void();
+}
+
+Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHeaders& headers,
+                                           const hidl_string& file_path, uint32_t timeout,
+                                           downloadRequest_cb _hidl_cb) {
+    if (state_ != ConnectionState::CONNECTED) {
+        ALOGW("Illegal call: CEP URL not fetch yet.");
+        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        Response error;
+        error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
+        _hidl_cb(error);
+        return Void();
+    }
+
+    std::string url = cep_url_ + ":" + std::to_string(cep_port_);
+    std::string path(uri.c_str());
+
+    size_t pos = path.find("/", 0);
+    if (0 == pos) {
+        url = url + path;
+    } else {
+        url = url + "/" + path;
+    }
+
+    std::promise<Response> promise;
+    std::future<Response> future_response = promise.get_future();
+
+    std::shared_ptr<CloudRequest> cr;
+
+    try {
+        cr = std::make_shared<CloudRequest>(cert_handler_);
+
+        cr->SetTimeout(std::chrono::milliseconds(timeout));
+        cr->SetURL(url);
+        cr->SetFilePath(file_path);
         cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
             promise.set_value(BuildResponse(code, data, header));
         });

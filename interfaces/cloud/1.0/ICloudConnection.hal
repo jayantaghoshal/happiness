@@ -13,7 +13,7 @@ interface ICloudConnection
 
     /**
     * Send GET request - blocking call
-    * @param uri URI
+    * @param uri     Path to the resource
     * @param headers Http headers to be added to the request
     * @param timeout time in millisecond to wait for receiving the response
       //TODO: timeout value can be set to e.g. 0xFFFF which is different from http timeout error code
@@ -23,12 +23,24 @@ interface ICloudConnection
 
     /**
      * Send a POST request to the cloud - blocking call
-     * @param uri URI
+     * @param uri     Path to the resource
      * @param headers Http headers to be added to the request
-     * @param body The body of the erequest
+     * @param body    The body of the erequest
      * @param timeout time in millisecond to wait for receiving the response
       //TODO: timeout value can be set to e.g. 0xFFFF which is different from http timeout error code
      * @returns responseData Response on the request
      **/
     doPostRequest(string uri, HttpHeaders headers, string body, uint32_t timeout) generates (Response responseData);
+
+
+    /**
+     * Download a file from to the cloud - blocking call
+     * @param uri       Path to the resource
+     * @param headers   Http headers to be added to the request
+     * @param file_path Path where resource should be stored
+     * @param timeout   time in millisecond to wait for receiving the response
+      //TODO: timeout value can be set to e.g. 0xFFFF which is different from http timeout error code
+     * @returns responseData Response on the request
+     **/
+    downloadRequest(string uri, HttpHeaders headers, string file_path, uint32_t timeout) generates (Response responseData);
 };
