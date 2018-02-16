@@ -122,7 +122,7 @@ public class IlluminationControl {
                 Log.v(TAG, "MANUAL_ILLUMINATION BrightnessValue " +BrightnessValue);
             }
         }
-        if(mLatestNight ==1){// Its day so max brightness
+        if(mLatestNight == 0){// Its day so max brightness
             max = 255 ;
         }
         else{
