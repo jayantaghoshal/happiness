@@ -20,7 +20,7 @@ LanguageCommentFeatures = collections.namedtuple('LanguageCommentFeatures', ['fi
                                                                              'bodyline_suffix',
                                                                              'headers_matcher',
                                                                              'headers_to_replace',
-                                                                             'supports_shebang'])
+                                                                             'line_patterns_allowed_before_copyright'])
 
 CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
@@ -33,7 +33,7 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         bodyline_suffix='\n',
                                         headers_matcher=[CStyleGenericRegex],
                                         headers_to_replace=[CStyleReplaceableRegex],
-                                        supports_shebang=False
+                                        line_patterns_allowed_before_copyright=[]
                                         )
 
 HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
@@ -45,10 +45,11 @@ HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     bodyline_suffix='\n',
                                                     headers_matcher=[HashStartGenericRegex],
                                                     headers_to_replace=[HashStartReplaceableRegex],
-                                                    supports_shebang=False
+                                                    line_patterns_allowed_before_copyright=[]
                                                     )
 
-HashStartLanguageWithShebangFeatures = HashStartLanguageFeatures._replace(supports_shebang=True)
+HashStartLanguageWithShebangFeatures = HashStartLanguageFeatures._replace(
+    line_patterns_allowed_before_copyright=["^#!.*", "^#\s?coding\s?=.*"])
 
 CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
                  "This file is covered by LICENSE file in the root of this project"
@@ -144,28 +145,35 @@ def __add_header_to_body(file_body: str, lang: LanguageCommentFeatures):
 
 
 def __replace_headers_in_body(file_body: str, lang: LanguageCommentFeatures):
-    shebang_statement = None
+    saved_lines_allowed_before_copyright = []
+    file_lines = file_body.splitlines(keepends=True)    #keepends to preserve potential trailing newline end of file
+    file_body_below_allowed_lines = ""
+    scanning_allowed_lines = True
+    for line in file_lines:
+        if scanning_allowed_lines:
+            line_ok = False
+            for allowed_line_pattern in lang.line_patterns_allowed_before_copyright:
+                if re.match(allowed_line_pattern, line):
+                    saved_lines_allowed_before_copyright.append(line)
+                    line_ok = True
+                    break
+            if not line_ok:
+                scanning_allowed_lines = False
 
-    # extract the shebang from the top of the file
-    if lang.supports_shebang and file_body.startswith("#!"):
-        shebang_statement, file_body = file_body.split('\n', 1)
-        # removing of trailing whitespace needed for reproducibility,
-        file_body = sanitize_whitespace(file_body)
+        if not scanning_allowed_lines:
+            file_body_below_allowed_lines += line
 
-    decopyrighted = __remove_header_from_body(file_body, lang)
-
-    # recover the shebang if the header was only thing above it
-    if lang.supports_shebang and decopyrighted.startswith("#!"):
-        shebang_statement, decopyrighted = decopyrighted.split('\n', 1)
-        # removing of trailing whitespace needed for reproducibility,
-        decopyrighted = sanitize_whitespace(decopyrighted)
+    # removing of trailing whitespace needed for reproducibility,
+    file_body_below_allowed_lines = sanitize_whitespace(file_body_below_allowed_lines)
+    decopyrighted = __remove_header_from_body(file_body_below_allowed_lines, lang)
+    # removing of trailing whitespace needed for reproducibility,
+    decopyrighted = sanitize_whitespace(decopyrighted)
 
     with_copyright_applied = __add_header_to_body(decopyrighted, lang)
-
-    if shebang_statement is not None:
-        with_copyright_applied = shebang_statement + "\n\n" + with_copyright_applied
-
-    return with_copyright_applied
+    if len(saved_lines_allowed_before_copyright) > 0:
+        saved_lines_allowed_before_copyright.append("\n")
+    with_copyright_and_saved_lines_applied = "".join(saved_lines_allowed_before_copyright + [with_copyright_applied])
+    return with_copyright_and_saved_lines_applied
 
 
 def get_contents_with_header_applied(filename: str):
