@@ -44,7 +44,7 @@ public class VehicleHal extends IVehicleCallback.Stub {
     private final HandlerThread mHandlerThread;
 
     /** Might be re-assigned if Vehicle HAL is reconnected. */
-    private volatile HalClient mHalClient;
+    private volatile HalClient vehicleHalClient;
 
     private final HashMap<Integer, SubscribeOptions> mSubscribedProperties = new HashMap<>();
     private volatile HashMap<Integer, VehiclePropConfig> mAllProperties = new HashMap<>();
@@ -55,14 +55,14 @@ public class VehicleHal extends IVehicleCallback.Stub {
         mHandlerThread = new HandlerThread("VEHICLE-HAL");
         mHandlerThread.start();
         this.vehicle = vehicle;
-        mHalClient = new HalClient(this.vehicle, mHandlerThread.getLooper(), this /*IVehicleCallback*/);
+        vehicleHalClient = new HalClient(this.vehicle, mHandlerThread.getLooper(), this /*IVehicleCallback*/);
     }
 
     public void release() {
         synchronized (this) {
             for (int p : mSubscribedProperties.keySet()) {
                 try {
-                    mHalClient.unsubscribe(p);
+                    vehicleHalClient.unsubscribe(p);
                 } catch (RemoteException e) {
                     //  Ignore exceptions on shutdown path.
                     Log.w(TAG, "Failed to unsubscribe", e);
@@ -83,22 +83,17 @@ public class VehicleHal extends IVehicleCallback.Stub {
      * Use it for direct access for the VehicleHal
      * @return
      */
-    public Collection<VehiclePropConfig> getAllPropConfigsDirect() {
-        try {
-            mAllProperties.clear();
-            Set<VehiclePropConfig> properties;
-            properties = new HashSet<>(mHalClient.getAllPropConfigs());
-            synchronized (this) {
-                // Create map of all properties
-                for (VehiclePropConfig p : properties) {
-                    mAllProperties.put(p.prop, p);
-                }
+    public Collection<VehiclePropConfig> getAllPropConfigsDirect() throws RemoteException{
+        mAllProperties.clear();
+        Set<VehiclePropConfig> properties;
+        properties = new HashSet<>(vehicleHalClient.getAllPropConfigs());
+        synchronized (this) {
+            // Create map of all properties
+            for (VehiclePropConfig p : properties) {
+                mAllProperties.put(p.prop, p);
             }
-            return mAllProperties.values();
-        } catch (RemoteException e) {
-            e.printStackTrace();
         }
-        return null;
+        return mAllProperties.values();
     }
 
     public VehiclePropValue get(int propertyId) throws PropertyTimeoutException {
@@ -113,7 +108,7 @@ public class VehicleHal extends IVehicleCallback.Stub {
         VehiclePropValue propValue = new VehiclePropValue();
         propValue.prop = propertyId;
         propValue.areaId = areaId;
-        return mHalClient.getValue(propValue);
+        return vehicleHalClient.getValue(propValue);
     }
 
     public <T> T get(Class clazz, int propertyId) throws PropertyTimeoutException {
@@ -128,7 +123,7 @@ public class VehicleHal extends IVehicleCallback.Stub {
     public <T> T get(Class clazz, VehiclePropValue requestedPropValue)
             throws PropertyTimeoutException {
         VehiclePropValue propValue;
-        propValue = mHalClient.getValue(requestedPropValue);
+        propValue = vehicleHalClient.getValue(requestedPropValue);
 
         if (clazz == Integer.class || clazz == int.class) {
             return (T) propValue.value.int32Values.get(0);
@@ -157,20 +152,20 @@ public class VehicleHal extends IVehicleCallback.Stub {
 
     public VehiclePropValue get(VehiclePropValue requestedPropValue)
             throws PropertyTimeoutException {
-        return mHalClient.getValue(requestedPropValue);
+        return vehicleHalClient.getValue(requestedPropValue);
     }
 
     public void set(VehiclePropValue propValue) throws PropertyTimeoutException {
-        mHalClient.setValue(propValue);
+        vehicleHalClient.setValue(propValue);
     }
 
     VehiclePropValueSetter set(int propId) {
-        return new VehiclePropValueSetter(mHalClient, propId, NO_AREA);
+        return new VehiclePropValueSetter(vehicleHalClient, propId, NO_AREA);
     }
 
 
     VehiclePropValueSetter set(int propId, int areaId) {
-        return new VehiclePropValueSetter(mHalClient, propId, areaId);
+        return new VehiclePropValueSetter(vehicleHalClient, propId, areaId);
     }
 
     static boolean isPropertySubscribable(VehiclePropConfig config) {

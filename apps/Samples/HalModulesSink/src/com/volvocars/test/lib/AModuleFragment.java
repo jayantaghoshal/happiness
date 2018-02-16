@@ -6,6 +6,7 @@
 package com.volvocars.test.lib;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -62,5 +64,20 @@ public abstract class AModuleFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         //Save the fragment state handling
+    }
+
+    /**
+     * Shows error message with TOAST on the screen
+     * @param context
+     * @param message
+     * @param e exception
+     */
+    public static void logErrorWithToast(Context context, String message ,Exception e){
+        if (e == null){
+            Log.e(TAG, message);
+        } else {
+            Log.e(TAG, message,e);
+        }
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

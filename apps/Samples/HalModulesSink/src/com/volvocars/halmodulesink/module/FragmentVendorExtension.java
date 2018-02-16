@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.halmodulesink;
+package com.volvocars.halmodulesink.module;
 
 import android.car.hardware.CarVendorExtensionManager;
 import android.hardware.automotive.vehicle.V2_0.VehicleArea;
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.volvocars.halmodulesink.R;
 import com.volvocars.test.lib.AModuleFragment;
 import com.volvocars.test.lib.ModuleVendorExtension;
 
@@ -30,7 +31,7 @@ public class FragmentVendorExtension extends AModuleFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_vendor_extension, null);
         moduleVendorExtensionM = new ModuleVendorExtension(getActivity());
         Button setting0Button = (Button) root.findViewById(R.id.buttonSettingOff);

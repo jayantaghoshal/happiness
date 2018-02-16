@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.halmodulesink.module;
+package com.volvocars.halmodulesink.module.vehiclehal;
 
 import android.app.Activity;
 import android.hardware.automotive.vehicle.V2_0.IVehicle;
@@ -32,22 +32,20 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import static android.hardware.automotive.vehicle.V2_0.VehicleProperty.AUDIO_PARAMETERS;
-
 import static java.util.Objects.nonNull;
 
 public class FragmentVehicleHal extends AModuleFragment {
     public static final String TAG = FragmentVehicleHal.class.getSimpleName();
     public static final String TITLE = "VehicleHal";
     public static final String logCatregex = "logcat -d com.volvocars.halmodulesink:ERROR *:S";
-    private IVehicle mVehicle;
-    private String mVehicleInterfaceName;
+    private IVehicle vehicleManager;
+    private String vehicleManagerInterfaceName;
     private EditText editPropId;
-    private EditText editData;
     private Button setPropButton;
-    private volatile TextView mLog;
+    private EditText editData;
+    private volatile TextView terminalLog;
     private Activity activity;
-    private VehicleHal mHal;
+    private VehicleHal vehicleHal;
 
     @Nullable
     private static IVehicle getVehicle() {
@@ -63,31 +61,39 @@ public class FragmentVehicleHal extends AModuleFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_vehicle_hal, null);
         activity = getActivity();
-        mLog = (TextView) root.findViewById(R.id.log);
+        terminalLog = (TextView) root.findViewById(R.id.log);
         editPropId = (EditText) root.findViewById(R.id.vehicleHalPropIdEdit);
         editData = (EditText) root.findViewById(R.id.vehicleHalStringData);
         setPropButton = (Button) root.findViewById(R.id.vehicleHalSetButton);
         setPropButton.setOnClickListener(event -> {
-            setProp(Integer.valueOf(editPropId.getText().toString()),
-                    editPropId.getText().toString());
+            try {
+                setProp(Integer.valueOf(editPropId.getText().toString()),
+                        editPropId.getText().toString());
+            } catch (NumberFormatException e){
+                if (vehicleManager == null) {
+                    logErrorWithToast(getActivity(), "Input should be integer", e);
+                }
+            }
         });
-        mLog.setText("Getting Vehicle…\n");
-        mVehicle = getVehicle();
+        terminalLog.setText("Getting Vehicle…\n");
+        vehicleManager = getVehicle();
 
-        if (mVehicle == null) {
-            throw new IllegalStateException("Vehicle HAL service is not available.");
+        if (vehicleManager == null) {
+            Log.e(TAG, "Vehicle HAL service is not available.");
+            terminalLog.setText("Vehicle HAL service is not available.");
+            return root;
         }
         try {
-            mVehicleInterfaceName = mVehicle.interfaceDescriptor();
+            vehicleManagerInterfaceName = vehicleManager.interfaceDescriptor();
         } catch (RemoteException e) {
             throw new IllegalStateException("Unable to get Vehicle HAL interface descriptor", e);
         }
-        mHal = new VehicleHal(mVehicle);
+        vehicleHal = new VehicleHal(vehicleManager);
 
-        Log.i(TAG, "Connected to " + mVehicleInterfaceName);
+        Log.i(TAG, "Connected to " + vehicleManagerInterfaceName);
 
         runBackgroundAndUpdate(() -> {
 
@@ -117,8 +123,8 @@ public class FragmentVehicleHal extends AModuleFragment {
                 printLogCat();
             }
             activity.runOnUiThread(() -> {
-                mLog.setText(mLog.getText().toString() + logBuilder);
-                mLog.invalidate();
+                terminalLog.setText(terminalLog.getText().toString() + logBuilder);
+                terminalLog.invalidate();
             });
         });
 
@@ -137,7 +143,7 @@ public class FragmentVehicleHal extends AModuleFragment {
             if (nonNull(allPropConfig)) {
                 allPropConfig.forEach(vehiclePropConfig -> {
                     try {
-                        VehiclePropValue value = mHal.get(vehiclePropConfig.prop);
+                        VehiclePropValue value = vehicleHal.get(vehiclePropConfig.prop);
                         logBuilder.append("\n");
                         logBuilder.append((nonNull(value)) ? value.toString()
                                 : "got Null using prop value:" + vehiclePropConfig.prop);
@@ -153,8 +159,8 @@ public class FragmentVehicleHal extends AModuleFragment {
             Log.d(TAG, "done executing for the prop values");
             printLogCat();
             activity.runOnUiThread(() -> {
-                mLog.setText(mLog.getText().toString() + logBuilder);
-                mLog.invalidate();
+                terminalLog.setText(terminalLog.getText().toString() + logBuilder);
+                terminalLog.invalidate();
             });
         });
 
@@ -169,15 +175,15 @@ public class FragmentVehicleHal extends AModuleFragment {
     }
 
     ArrayList<VehiclePropConfig> getAllPropConfigs() throws RemoteException {
-        return mVehicle.getAllPropConfigs();
+        return vehicleManager.getAllPropConfigs();
     }
 
     public String getVIN() throws RemoteException {
         String value = "";
         try {
-            value = mHal.get(String.class, VehicleProperty.INFO_VIN);
+            value = vehicleHal.get(String.class, VehicleProperty.INFO_VIN);
         } catch (PropertyTimeoutException e) {
-            Log.e(TAG, "Unable to read property", e);
+            logErrorWithToast(getActivity(), "Unable to read property", e);
         }
         return value;
     }
@@ -188,7 +194,7 @@ public class FragmentVehicleHal extends AModuleFragment {
         value.prop = propId;
         value.value.stringValue = data;
         try {
-            mHal.set(value);
+            vehicleHal.set(value);
         } catch (PropertyTimeoutException e) {
             Log.e(TAG, "Cannot set value, exception: ", e);
         }
@@ -211,7 +217,7 @@ public class FragmentVehicleHal extends AModuleFragment {
                 log.append(line);
             }
             updateUI(() -> {
-                mLog.append(log);
+                terminalLog.append(log);
             });
         } catch (IOException e) {
         }

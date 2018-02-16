@@ -19,8 +19,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.volvocars.halmodulesink.module.FragmentVehicleHal;
-import com.volvocars.halmodulesink.module.FragmentVehicleHalGeneric;
+import com.volvocars.halmodulesink.module.FragmentOne;
+import com.volvocars.halmodulesink.module.FragmentVendorExtension;
+import com.volvocars.halmodulesink.module.vehiclehal.FragmentVehicleHal;
+import com.volvocars.halmodulesink.module.vehiclehal.FragmentVehicleHalGeneric;
 
 import java.util.HashMap;
 

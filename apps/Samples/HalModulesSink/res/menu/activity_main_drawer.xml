@@ -4,10 +4,12 @@
     <!--Adds menu to the drawer'
      TODO: Add search or list -->
     <group android:checkableBehavior="single">
+        <!--Example-->
         <item
             android:id="@+id/nav_menu1"
             android:icon="@drawable/ic_launcher"
             android:title="Example Module" />
+        <!--Actual existing modules-->
         <item
             android:id="@+id/nav_menu2"
             android:icon="@drawable/ic_launcher"

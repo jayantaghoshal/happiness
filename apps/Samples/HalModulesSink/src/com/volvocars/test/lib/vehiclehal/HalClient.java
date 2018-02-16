@@ -36,7 +36,7 @@ class HalClient {
 
     private static final int SLEEP_BETWEEN_RETRIABLE_INVOKES_MS = 50;
 
-    private final IVehicle mVehicle;
+    private final IVehicle vehicleManager;
 
     private final IVehicleCallback mInternalCallback;
 
@@ -50,27 +50,27 @@ class HalClient {
      * @param callback to propagate notifications from Vehicle HAL in the provided looper thread
      */
     HalClient(IVehicle vehicle, Looper looper, IVehicleCallback callback) {
-        mVehicle = vehicle;
+        vehicleManager = vehicle;
         Handler handler = new CallbackHandler(looper, callback);
         mInternalCallback = new VehicleCallback(handler);
     }
 
     ArrayList<VehiclePropConfig> getAllPropConfigs() throws RemoteException {
-        return mVehicle.getAllPropConfigs();
+        return vehicleManager.getAllPropConfigs();
     }
 
     public void subscribe(SubscribeOptions... options) throws RemoteException {
-        mVehicle.subscribe(mInternalCallback, new ArrayList<>(Arrays.asList(options)));
+        vehicleManager.subscribe(mInternalCallback, new ArrayList<>(Arrays.asList(options)));
     }
 
     public void unsubscribe(int prop) throws RemoteException {
-        mVehicle.unsubscribe(mInternalCallback, prop);
+        vehicleManager.unsubscribe(mInternalCallback, prop);
     }
 
     public void setValue(VehiclePropValue propValue) throws PropertyTimeoutException {
         int status = invokeRetriable(() -> {
             try {
-                return mVehicle.set(propValue);
+                return vehicleManager.set(propValue);
             } catch (RemoteException e) {
                 Log.e(TAG, "Failed to set value", e);
                 return StatusCode.TRY_AGAIN;
@@ -125,7 +125,7 @@ class HalClient {
     private ValueResult internalGet(VehiclePropValue requestedPropValue) {
         final ValueResult result = new ValueResult();
         try {
-            mVehicle.get(requestedPropValue,
+            vehicleManager.get(requestedPropValue,
                     (status, propValue) -> {
                         result.status = status;
                         result.propValue = propValue;
