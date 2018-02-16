@@ -42,6 +42,9 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
     private boolean fabExpanded = false;
 
+    private static long lastClickedTime = 0;
+    private static final int doubleClickInterval = 500;
+
     private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
         @Override
         public void UpdateState(int state) {
@@ -55,8 +58,9 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
+            Log.v(LOG_TAG, "UpdateSoftwareList");
             swInfos.clear();
-            for(SoftwareInformation si : software_list) {
+            for (SoftwareInformation si : software_list) {
                 swInfos.add(si);
             }
 
@@ -141,19 +145,32 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             @Override
             public void onClick(View view) {
                 try {
-                    softwareUpdateManager.GetSoftwareAssignments();
+                    long currentClickTime = System.currentTimeMillis();
+                    if (!(currentClickTime - lastClickedTime <= doubleClickInterval))
+                    {
+                        Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
+                        softwareUpdateManager.GetSoftwareAssignments();
+                        lastClickedTime = System.currentTimeMillis();
+                    }
                 } catch (Exception e) {
                     Log.e(LOG_TAG, e.getMessage());
                 }
             };
         });
 
-	commissionedFab.setOnClickListener(new View.OnClickListener() {
+        commissionedFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    Log.v(LOG_TAG, "Sending GetPendingInstallations");
-                    softwareUpdateManager.GetPendingInstallations();
+                    long currentClickTime = System.currentTimeMillis();
+                    if (currentClickTime - lastClickedTime <= doubleClickInterval)
+                    {
+                    } else {
+                        Log.v(LOG_TAG, "Sending GetPendingInstallations");
+                        softwareUpdateManager.GetPendingInstallations();
+                        lastClickedTime = System.currentTimeMillis();
+                    }
+
                 } catch (Exception e) {
                     Log.e(LOG_TAG, e.getMessage());
                 }

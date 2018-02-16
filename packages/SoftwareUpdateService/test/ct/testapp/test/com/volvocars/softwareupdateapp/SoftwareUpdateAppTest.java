@@ -166,7 +166,7 @@ public class SoftwareUpdateAppTest {
         BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOAD_PENDING");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOAD PENDING");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
     }
 

@@ -3,7 +3,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/textlayout"
         android:layout_width="600dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp">
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -11,11 +14,7 @@
             app:cardBackgroundColor="@color/cardview_light_background"
             app:cardCornerRadius="@dimen/cardCornerRadius"
             app:cardElevation="@dimen/cardElevation"
-            app:cardUseCompatPadding="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="60dp"
-            android:layout_marginEnd="8dp">
-
+            app:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,32 +33,82 @@
                 android:id="@+id/desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="italic"
                 android:textSize="15sp"
                 />
-            <TextView
-                android:id="@+id/swId"
-                android:layout_width="wrap_content"
+           <LinearLayout
+                android:id="@+id/swIdLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Software id: "
                 />
-            <TextView
-                android:id="@+id/installationId"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/swId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/installationIdLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Installation id: "
                 />
-            <TextView
-                android:id="@+id/installationStatus"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/installationId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/installationStatusLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Installation status: "
                 />
-            <TextView
+                <TextView
+                    android:id="@+id/installationStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/downloadsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Downloads: "
+                />
+                <TextView
                 android:id="@+id/downloads"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 />
+            </LinearLayout>
         </LinearLayout>
         <TextView
                 android:id="@+id/state"
@@ -81,6 +130,6 @@
                 android:layout_gravity="bottom|right"
                 android:layout_below="@+id/state"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_dots" />
+                android:src="@drawable/ic_more_vert_black_24dp"/>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

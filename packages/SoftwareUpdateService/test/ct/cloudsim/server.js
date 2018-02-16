@@ -96,6 +96,8 @@ server.get('/downloads', function(req, res, next) {
           return res.send(str)
         }
       }
+
+      return res.status(405).send({ error: "Nope, cant do that." })
 })
 server.use(router)
 server.listen(3000, function () {

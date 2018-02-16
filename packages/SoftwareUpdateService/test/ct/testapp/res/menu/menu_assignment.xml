@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/commission"
-        android:orderInCategory="1"
+        android:orderInCategory="0"
         android:title="Commission assignment"
         android:textSize="20dp"/>
 </menu>
