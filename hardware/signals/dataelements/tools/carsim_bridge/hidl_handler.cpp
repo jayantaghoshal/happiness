@@ -25,6 +25,7 @@ namespace CarSim {
                                                              Dir dir, const ::android::hardware::hidl_string& data) {
     // Avoid spamming the tender client by keeping shut for half a second
     // TODO REMOVE when client can handle it.
+    ALOGD("Signal changed %s", signalName.c_str());
     if (first_run_) {
         first_run_ = false;
         connection_timestamp_ = std::chrono::steady_clock::now();
@@ -48,7 +49,6 @@ namespace CarSim {
             keepConnAlive->Send(jsonData);
         }
     } catch (const std::exception& ex) {
-        printf("Error: HidlHandler::signalChanged (internal ex: %s), exiting...\n", ex.what());
         ALOGD("Error: HidlHandler::signalChanged (internal ex: %s), exiting...", ex.what());
     }
 

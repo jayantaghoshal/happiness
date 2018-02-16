@@ -22,39 +22,57 @@ using namespace vendor::volvocars::hardware::signals::V1_0;
 
 const int PORT{8080};
 
+class DeathRecipientToFunction : public android::hardware::hidl_death_recipient {
+  public:
+    DeathRecipientToFunction(const std::function<void()> onDeath) : onDeath{onDeath} {}
+    void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override {
+        (void)who;
+        onDeath();
+    }
+
+  private:
+    const std::function<void()> onDeath;
+};
+
 int main(int argc, char* argv[]) {
     static std::string tag = "*";
     static Dir dir;
     CarSim::SocketServer server{PORT};
 
+    const ::android::sp<DeathRecipientToFunction> deathSubscriber = new DeathRecipientToFunction([&] {
+        ALOGE("Lost connection to HIDL server");
+        std::exit(-2);
+    });
+
     try {
         while (true) {
             // Connect to client
-            printf("Listen to client connection request...\n");
+            ALOGD("Listen to client connection request...");
             auto connection = server.Connect();
-            printf("Connected.\n");
-
-            // Subscribe HIDL
-            printf("Subscribe to HIDL signals.\n");
+            ALOGD("Connected, Subscribe to HIDL signals.");
             ::android::sp<ISignals> service = ISignals::getService();
             ::android::sp<CarSim::HidlHandler> myCallBackObj(new CarSim::HidlHandler());
             myCallBackObj->SetSocketConnection(connection);
 
+            auto result = service->linkToDeath(deathSubscriber, 1234);
+            if (!result.isOk()) {
+                ALOGE("Failed to linkToDeath");
+                return -1;
+            }
+
             auto subscribe = service->subscribe(tag, dir, myCallBackObj);
             if (!subscribe.isOk()) {
-                printf("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...\n",
-                       subscribe.description().c_str());
-                ALOGD("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
+                ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
                       subscribe.description().c_str());
                 return 0;
             }
+            ALOGD("Subscribe to HIDL signals done");
 
             try {
                 while (true) {
                     std::string message = connection->Read();
 
                     if (message.empty()) {
-                        printf("Connection closed by client.\n");
                         ALOGV("Connection closed by client.");
                         break;  // break out to reconnect while-loop
                     }
