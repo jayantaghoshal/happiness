@@ -38,6 +38,17 @@ VIP_VBF_IMAGES_PATH := vendor/delphi/vcc_ihu/common/vip_images/ihu_abl_car/propr
 PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(VIP_VBF_IMAGES_PATH),vendor/vip-update)
 
 ##############################################################
+# TODO remove this temporary hack
+# lines belowe were moved between swdl bb_reprogramming and device release repo.
+##############################################################
+MP_PART_NUMBER ?= 00000000DEV
+ENABLE_AUTO_FLASHING ?= 0
+
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.build.mp.part_number=$(MP_PART_NUMBER) \
+    persist.swdl.EnableAutoFlashing=$(ENABLE_AUTO_FLASHING) \
+
+##############################################################
 # System UI
 ##############################################################
 PRODUCT_PACKAGES += \
