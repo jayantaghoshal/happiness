@@ -158,9 +158,16 @@ def assemble_commit_messages(base_dir: str,
                     continue
                 proj_repo = git.Repo(os.path.join(base_dir, details[1]['path']))
                 commit_body_prefix_addition = ""
-                for rev in proj_repo.run_git(['rev-list',
-                                            '^{}'.format(details[0]['revision']),
-                                                        details[1]['revision']]).splitlines():
+                revlist = [] # type: List[str]
+                try:
+                    revlist = proj_repo.run_git(['rev-list',
+                                                 '^{}'.format(details[0]['revision']),
+                                                 details[1]['revision']]).splitlines()
+                except Exception:
+                    print("ERROR: Failed to execute 'git {}'".format(" ".join(['rev-list',
+                                                                               '^{}'.format(details[0]['revision']),
+                                                                               details[1]['revision']])))
+                for rev in revlist:
                     rev_info = git_commit_info(proj_repo, rev)
                     if rev_info['title'] in commit_title_postfix:
                         # Replace title postfix with real commit message if previous was a merge commit
