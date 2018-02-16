@@ -22,9 +22,9 @@ oneway interface ISoftwareUpdateManagerCallback {
     void UpdateSoftwareList(in List<SoftwareInformation> software_list);
 
     /**
-     * Notify client about a state change of a specific assignment
-     */
-    void UpdateSoftwareState(in String uuid, in int state);
+    * Notify client about update of software
+    */
+    void UpdateSoftware(in SoftwareInformation software);
 
     /**
      * Notify client of Error

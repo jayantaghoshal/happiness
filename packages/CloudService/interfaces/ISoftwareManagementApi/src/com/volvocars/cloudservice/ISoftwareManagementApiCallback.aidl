@@ -10,9 +10,10 @@ import com.volvocars.cloudservice.InstallationOrder;
 oneway interface ISoftwareManagementApiCallback {
     /**
      * Return result for CommissionSoftwareAssignment when received.
+     * @param uuid Id of commissioned software
      * @param code The HTTP code of the response
      */
-    void CommissionStatus(in int code);
+    void CommissionStatus(in String uuid, in int code);
 
     /**
      * Return result for GetSoftwareAssignmentList when received.

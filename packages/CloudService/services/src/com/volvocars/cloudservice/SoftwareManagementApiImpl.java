@@ -370,10 +370,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
             throws RemoteException {
         if (!softwareManagementAvailable) {
-            callback.CommissionStatus(-1);
+            callback.CommissionStatus(uuid, -1);
         }
 
-        callback.CommissionStatus(CommissionSoftwareAssignment(uuid));
+        callback.CommissionStatus(uuid, CommissionSoftwareAssignment(uuid));
     }
 
     /**

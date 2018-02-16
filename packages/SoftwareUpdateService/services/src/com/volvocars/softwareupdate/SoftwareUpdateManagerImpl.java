@@ -46,26 +46,21 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         }
     }
 
-    /**
-     * Update the state of a Software Assignment
-     * @param uuid The UUID of the concerned Software Assignment
-     * @param sate The new state of the Software Assignment
-     */
-    public void UpdateSoftwareAssignmentState(String uuid, int state) {
+    public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
         for (ISoftwareUpdateManagerCallback c : clients) {
             try {
-                c.UpdateSoftwareState(uuid, state);
+                c.UpdateSoftwareList(software_list);
             } catch (RemoteException e) {
                 clients.remove(c);
             }
         }
     }
 
-    public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
-        for (ISoftwareUpdateManagerCallback c : clients) {
+    public void UpdateSoftware(SoftwareInformation software) {
+        for(ISoftwareUpdateManagerCallback c : clients) {
             try {
-                c.UpdateSoftwareList(software_list);
-            } catch (RemoteException e) {
+                c.UpdateSoftware(software);
+            } catch (Exception e) {
                 clients.remove(c);
             }
         }

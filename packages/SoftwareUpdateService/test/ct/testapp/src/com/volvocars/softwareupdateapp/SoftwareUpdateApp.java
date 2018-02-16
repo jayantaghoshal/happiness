@@ -68,8 +68,19 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         }
 
         @Override
-        public void UpdateSoftwareState(String uuid, int state) {
-            Log.v(LOG_TAG, "UpdateSoftwareState");
+        public void UpdateSoftware(SoftwareInformation software) {
+            for (SoftwareInformation si : swInfos)
+            {
+                if (si.softwareId.equals(software.softwareId)) {
+                    swInfos.set(swInfos.indexOf(si), software);
+                    break;
+                }
+            }
+            updateAdapter();
+
+            for(SoftwareInformation si : swInfos) {
+                Log.v(LOG_TAG, "State: " + si.softwareState.name());
+            }
         }
 
         @Override

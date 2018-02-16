@@ -8,6 +8,8 @@ package com.volvocars.softwareupdate;
 import android.os.RemoteException;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
+import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
+
 import java.util.List;
 import android.util.Log;
 
@@ -28,8 +30,9 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     }
 
     @Override
-    public void CommissionStatus(int code) {
-        if (code != 200) {
+    public void CommissionStatus(String uuid, int code) {
+        if (code == 200) {
+            service.UpdateSoftwareState(uuid, SoftwareState.COMMISSIONED);
             //try {
             //    callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");
             //} catch (RemoteException e) {

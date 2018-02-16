@@ -52,40 +52,6 @@ public class SoftwareUpdateService extends Service {
 
             state = 1;
             softwareUpdateManager.UpdateState(state);
-
-            ISoftwareManagementApiCallback.Stub swapiCallback = new ISoftwareManagementApiCallback.Stub() {
-
-                @Override
-                public void CommissionStatus(int code) {
-                }
-
-                @Override
-                public void SoftwareAssignmentList(int code, List<SoftwareAssignment> softwareAssigmentList) {
-                    Log.v(LOG_TAG,
-                            "SoftwareAssignmentList callback when SoftwareUpdateService started, what to do with this list?");
-                }
-
-                @Override
-                public void PendingInstallations(int code, List<InstallationOrder> installationOrderList) {
-                    Log.v(LOG_TAG,
-                            "PendingInstallations callback when SoftwareUpdateService started, what to do with this list?");
-                }
-
-                @Override
-                public void DownloadInfo(int code, DownloadInfo info) {
-                    //TODO: implement
-                }
-            };
-
-            if (swapi != null) {
-                try {
-                    swapi.GetSoftwareAssigmentList(swapiCallback);
-                    swapi.GetPendingInstallations(swapiCallback);
-                } catch (RemoteException e) {
-                    Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
-                }
-            }
-
         }
 
         @Override
@@ -187,9 +153,6 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
-
-        softwareInformationList.clear();
-
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
             for (SoftwareInformation information : softwareInformationList) {
@@ -238,5 +201,20 @@ public class SoftwareUpdateService extends Service {
         }
 
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
+    }
+
+    public void UpdateSoftwareState(String uuid, SoftwareInformation.SoftwareState state) {
+        boolean found = false;
+        for (SoftwareInformation information : softwareInformationList) {
+            if (uuid.equals(information.softwareId)) {
+                found = true;
+                information.softwareState = state;
+                softwareUpdateManager.UpdateSoftware(information);
+                break;
+            }
+        }
+        if (!found) {
+            Log.e(LOG_TAG, "UpdateSoftwareState, uuid not found in list which is weird...");
+        }
     }
 }
