@@ -11,6 +11,7 @@
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="85898a66f5663469d5dacc549b87d7ffd573fc73"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="1e58d48a83af29084ef09d76dc4058a28f4e3215"/>
+  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="1521ee95479ac086a7ce7f28bca2be187a624034"/>
 
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="5330b03640b8d5bec88978d8524aeb897d66d63e"/>
