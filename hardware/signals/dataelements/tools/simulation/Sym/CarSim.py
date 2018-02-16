@@ -404,7 +404,7 @@ class App:
 
         #arxmldata
         arxmldata = arxml.load(os.path.join(os.path.dirname(__file__),
-                                           "../../../", "AutosarCodeGen/databases/SPA2210_IHUVOLVO27_161214_AR403_UnFlattened_Splitted_WithSparePNC_Swc.arxml"))
+                                           "../../../", "AutosarCodeGen/databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml"))
 
         self.element_name_to_data_element = {}
 
@@ -504,7 +504,7 @@ class App:
         self.bAddSenderPort.grid(row=buttonRow, column=0, sticky=tkinter.W)
 
         self.eAddSenderPort = tkinter.ttk.Entry(masterFrame, width=30)
-        self.eAddSenderPort.insert(0, "VehSpdLgt")
+        self.eAddSenderPort.insert(0, "VehSpdLgtSafe")
         self.eAddSenderPort.grid(row=buttonRow, column=1, sticky=tkinter.W)
 
 
