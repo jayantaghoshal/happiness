@@ -75,4 +75,15 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
             service.UpdateSoftwareList(info);
         }
     }
+
+    /**
+    * Return the result of GetDownloadData
+    * @param code         The latest HTTP code when downloading
+    * @param downloadInfo The latest information regaring the download
+    */
+    @Override
+    public void DownloadData(int code, DownloadInfo downloadInfo) {
+
+    }
+
 }

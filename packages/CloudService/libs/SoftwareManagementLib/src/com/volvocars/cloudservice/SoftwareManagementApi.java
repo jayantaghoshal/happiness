@@ -99,4 +99,13 @@ public class SoftwareManagementApi implements ServiceConnection {
             software_management.GetDownloadInfo(uuid, callback);
         }
     }
+
+    /**
+    * Get Download data
+    * @param downloadInfo Contains information of what to be downloaded
+    * @param callback     Callback to be called when the status of the download changes
+    */
+    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) /* throws RemonteException */ {
+        // TODO
+    }
 }

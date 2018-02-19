@@ -75,7 +75,7 @@ public class SoftwareInformation implements Parcelable {
 
     public void AddDownloadInfo(DownloadInfo downloadInfo) {
         this.softwareState = SoftwareState.DOWNLOADING_META;
-        this.downloads = downloadInfo.downloads;
+        this.downloads = downloadInfo.resourceUris;
     }
 
     @Override

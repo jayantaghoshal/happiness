@@ -19,18 +19,25 @@ oneway interface ISoftwareManagementApi {
      * @param id The id of the assignment to fetch.
      * @param callback
      */
-     void CommissionSoftwareAssignment(in String uuid, in ISoftwareManagementApiCallback callback);
+    void CommissionSoftwareAssignment(in String uuid, in ISoftwareManagementApiCallback callback);
 
     /**
     * Get a list of pending installations (installation orders)
     * @param callback
     */
-     void GetPendingInstallations(in ISoftwareManagementApiCallback callback);
+    void GetPendingInstallations(in ISoftwareManagementApiCallback callback);
 
     /**
     * Get Download Info for an installation order
     * @param uuid installation order id
     * @param callback
     */
-     void GetDownloadInfo(in String uuid, in ISoftwareManagementApiCallback callback);
+    void GetDownloadInfo(in String uuid, in ISoftwareManagementApiCallback callback);
+
+    /**
+    * Get Download data
+    * @param downloadInfo Contains information of what to be downloaded
+    * @param callback     Callback to be called when the status of the download changes
+    */
+    void GetDownloadData(in DownloadInfo downloadInfo, in ISoftwareManagementApiCallback callback);
 }

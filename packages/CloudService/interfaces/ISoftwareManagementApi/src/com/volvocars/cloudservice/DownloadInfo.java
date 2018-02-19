@@ -12,9 +12,10 @@ import java.util.ArrayList;
 
 public class DownloadInfo implements Parcelable {
     public String uuid = "";
-    public String install_notification_uri = "";
-    public String installation_order_id = "";
-    public ArrayList<String> downloads = new ArrayList();
+    public String installNotificationUri = "";
+    public String installationOrderId = "";
+    public ArrayList<String> resourceUris = new ArrayList();
+    public ArrayList<String> downloadedResources = new ArrayList();
 
     public static final Creator<DownloadInfo> CREATOR = new Creator<DownloadInfo>() {
         @Override
@@ -38,29 +39,24 @@ public class DownloadInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uuid);
-        dest.writeString(install_notification_uri);
-        dest.writeString(installation_order_id);
-        dest.writeInt(downloads.size());
-        for (String d : downloads) {
-            dest.writeString(d);
-        }
+        dest.writeString(installNotificationUri);
+        dest.writeString(installationOrderId);
+        dest.writeStringList(resourceUris);
+        dest.writeStringList(downloadedResources);
     }
 
     @Override
     public String toString() {
-        String string = uuid + "\n" + install_notification_uri + "\n" + installation_order_id;
+        String string = uuid + "\n" + installNotificationUri + "\n" + installationOrderId;
         return string;
     }
 
     public void readFromParcel(Parcel in) {
         uuid = in.readString();
-        install_notification_uri = in.readString();
-        installation_order_id = in.readString();
-        int size = in.readInt();
-
-        for (int i = 0; i  < size; i++) {
-            downloads.add(in.readString());
-        }
+        installNotificationUri = in.readString();
+        installationOrderId = in.readString();
+        resourceUris = in.createStringArrayList();
+        downloadedResources = in.createStringArrayList();
     }
 
     @Override

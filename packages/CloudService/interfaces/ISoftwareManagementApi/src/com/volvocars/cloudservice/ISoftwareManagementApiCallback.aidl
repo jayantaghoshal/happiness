@@ -35,4 +35,11 @@ oneway interface ISoftwareManagementApiCallback {
     * @param download_info The download information of the installation order.
     */
     void DownloadInfo(in int code, in DownloadInfo download_info);
+
+    /**
+    * Return the result of GetDownloadData
+    * @param code         The latest HTTP code when downloading
+    * @param downloadInfo The latest information regaring the download
+    */
+    void DownloadData(in int code, in DownloadInfo downloadInfo);
 }

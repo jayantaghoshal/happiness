@@ -609,13 +609,13 @@ public final class XmlParser {
                     downloadInfo.uuid = ParseString("id", parser);
                 } else if (tag.equals("install_notification_uri")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    downloadInfo.install_notification_uri = ParseString("install_notification_uri", parser);
+                    downloadInfo.installNotificationUri = ParseString("install_notification_uri", parser);
                 } else if (tag.equals("installation_order_id")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    downloadInfo.installation_order_id = ParseString("installation_order_id", parser);
+                    downloadInfo.installationOrderId = ParseString("installation_order_id", parser);
                 } else if (tag.equals("downloads")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    downloadInfo.downloads = ParseDownloadPaths(parser);
+                    downloadInfo.resourceUris = ParseDownloadPaths(parser);
                 } else if (tag.equals("Signature")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);

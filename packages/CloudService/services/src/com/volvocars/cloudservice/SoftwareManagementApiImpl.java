@@ -404,4 +404,14 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(uuid);
         callback.DownloadInfo(downloadInfoResponse.code, downloadInfoResponse.downloadInfo);
     }
+
+
+    /**
+    * Get Download data
+    * @param downloadInfo Contains information of what to be downloaded
+    * @param callback     Callback to be called when the status of the download changes
+    */
+    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) /* throws RemonteException */ {
+        // TODO
+    }
 }
