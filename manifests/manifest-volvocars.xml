@@ -52,6 +52,9 @@
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="664c525517c0b5296c9a6176018edde83144cd60"/>
 
   <!-- Aptiv Overrides -->
+  <remove-project name="vendor/delphi/binaries_android_diagnostics" />
+  <project name="vendor/delphi/android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="d0a37e6bea5206dfa5ec6998cef58e4a6a4a8d9b" />
+
   <remove-project name="vendor/delphi/binaries_android_most"/>
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="78ab688ef202164a9d2bbeeaa34b0b281cc2dbeb"/>
 
