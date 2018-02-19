@@ -12,4 +12,3 @@ struct Response {
     vec<uint8_t> responseData;
     uint16_t httpResponse;
 };
-

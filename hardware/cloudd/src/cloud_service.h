@@ -7,6 +7,7 @@
 
 #include <IDispatcher.h>
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnection.h>
+#include <vendor/volvocars/hardware/cloud/1.0/ICloudConnectionDownloadResponseCallback.h>
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnectionEventListener.h>
 #include <list>
 #include "certificate_handler_interface.h"
@@ -23,6 +24,7 @@ using ::android::hardware::Void;
 using ::android::hardware::hidl_string;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnection;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionEventListener;
+using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionDownloadResponseCallback;
 using ::vendor::volvocars::hardware::cloud::V1_0::Response;
 namespace Connectivity {
 
@@ -59,7 +61,8 @@ class CloudService : public ICloudConnection {
                                uint32_t timeout, doPostRequest_cb _hidl_cb);
 
     Return<void> downloadRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& file_path,
-                                 uint32_t timeout, downloadRequest_cb _hidl_cb);
+                                 uint32_t timeout,
+                                 const android::sp<ICloudConnectionDownloadResponseCallback>& callback);
 
     /*
      * Helper method to create a parseable Response out of data received from curl after a successful request.
@@ -77,6 +80,8 @@ class CloudService : public ICloudConnection {
     std::shared_ptr<CloudRequestHandler> cloud_request_handler_;
     std::shared_ptr<CertHandlerInterface> cert_handler_;
     EntryPointFetcher entry_point_fetcher_;
+
+    std::shared_ptr<CloudRequest> download_request_;
 
     std::string cep_url_;
     int cep_port_;

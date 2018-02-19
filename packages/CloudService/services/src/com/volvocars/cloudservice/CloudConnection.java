@@ -92,23 +92,15 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
         return response;
     }
 
-    public Response downloadRequest(String uri, ArrayList<HttpHeaderField> headers, String file_path, int timeout) {
+    public void downloadRequest(String uri, ArrayList<HttpHeaderField> headers, String file_path, int timeout) {
 
         Log.v(LOG_TAG, "downloadRequest");
-
-        Response response = null;
         try {
-            response = cloud_connection.downloadRequest(uri, headers, file_path, timeout);
-
-            if(!checkResponse(response)) {
-                response = null;
-            }
-
+            cloud_connection.downloadRequest(uri, headers, file_path, timeout, null);
         } catch (RemoteException ex) {
             // Something went bananas with binder.. What do?
             Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
         }
-        return response;
     }
 
     private boolean checkResponse(Response response) {

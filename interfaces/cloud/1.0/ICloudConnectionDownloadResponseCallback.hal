@@ -1,0 +1,10 @@
+package vendor.volvocars.hardware.cloud@1.0;
+
+interface ICloudConnectionDownloadResponseCallback
+{
+    /**
+     * Update status of download to upper layers
+     * @param response      Response data for the download
+     */
+    oneway updateDownloadStatus(Response response);
+};

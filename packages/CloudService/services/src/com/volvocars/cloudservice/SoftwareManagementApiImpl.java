@@ -405,7 +405,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         callback.DownloadInfo(downloadInfoResponse.code, downloadInfoResponse.downloadInfo);
     }
 
-
     /**
     * Get Download data
     * @param downloadInfo Contains information of what to be downloaded

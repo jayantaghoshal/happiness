@@ -259,13 +259,10 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
 
 Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHeaders& headers,
                                            const hidl_string& file_path, uint32_t timeout,
-                                           downloadRequest_cb _hidl_cb) {
+                                           const android::sp<ICloudConnectionDownloadResponseCallback>& callback) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
-        Response error;
-        error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
-        _hidl_cb(error);
         return Void();
     }
 
@@ -279,19 +276,14 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHea
         url = url + "/" + path;
     }
 
-    std::promise<Response> promise;
-    std::future<Response> future_response = promise.get_future();
-
-    std::shared_ptr<CloudRequest> cr;
-
     try {
-        cr = std::make_shared<CloudRequest>(cert_handler_);
+        download_request_ = std::make_shared<CloudRequest>(cert_handler_);
 
-        cr->SetTimeout(std::chrono::milliseconds(timeout));
-        cr->SetURL(url);
-        cr->SetFilePath(file_path);
-        cr->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
-            promise.set_value(BuildResponse(code, data, header));
+        download_request_->SetTimeout(std::chrono::milliseconds(timeout));
+        download_request_->SetURL(url);
+        download_request_->SetFilePath(file_path);
+        download_request_->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
+            callback->updateDownloadStatus(BuildResponse(code, data, header));
         });
 
         std::vector<std::string> header_list;
@@ -299,29 +291,16 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHea
             header_list.push_back(std::string(header.name.c_str()) + ":" + std::string(header.value.c_str()));
         }
 
-        cr->SetHeaderList(header_list);
+        download_request_->SetHeaderList(header_list);
 
-        cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
+        cloud_request_handler_->SendCloudRequest(
+                download_request_);  // May throw Runtime Exception if curl fails to set options.
 
     } catch (const std::exception& e) {
         ALOGW("Failed to initiate cloud request: %s", e.what());
-        Response error;
-        error.httpResponse = 400;  // Bad request.
-        _hidl_cb(error);
-        return Void();
     }
 
-    Response response;
-    std::chrono::milliseconds span(timeout);
-    if (future_response.wait_for(span) != std::future_status::timeout) {
-        response = future_response.get();
-    } else {
-        response.httpResponse = 408;  // HTTP code for time out
-    }
-
-    _hidl_cb(response);
-
-    return Void();
+    return Void();  // TODO: return download id
 }
 
 }  // namespace Connectivity

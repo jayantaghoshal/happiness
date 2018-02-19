@@ -80,6 +80,8 @@ GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnection.ja
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnection.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+$(GEN): $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ICloudConnectionEventListener.hal
 $(GEN): $(LOCAL_PATH)/ICloudConnectionEventListener.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
@@ -97,12 +99,35 @@ $(GEN): $(LOCAL_PATH)/ICloudConnection.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
+# Build ICloudConnectionDownloadResponseCallback.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionDownloadResponseCallback.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.cloud@1.0::ICloudConnectionDownloadResponseCallback
+
+$(GEN): $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build ICloudConnectionEventListener.hal
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionEventListener.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionEventListener.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
@@ -195,6 +220,8 @@ GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnection.ja
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnection.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+$(GEN): $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ICloudConnectionEventListener.hal
 $(GEN): $(LOCAL_PATH)/ICloudConnectionEventListener.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
@@ -212,12 +239,35 @@ $(GEN): $(LOCAL_PATH)/ICloudConnection.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
+# Build ICloudConnectionDownloadResponseCallback.hal
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionDownloadResponseCallback.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.cloud@1.0::ICloudConnectionDownloadResponseCallback
+
+$(GEN): $(LOCAL_PATH)/ICloudConnectionDownloadResponseCallback.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build ICloudConnectionEventListener.hal
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionEventListener.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionEventListener.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \

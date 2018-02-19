@@ -6,6 +6,7 @@ filegroup {
         "types.hal",
         "ICertificateHandler.hal",
         "ICloudConnection.hal",
+        "ICloudConnectionDownloadResponseCallback.hal",
         "ICloudConnectionEventListener.hal",
     ],
 }
@@ -21,6 +22,7 @@ genrule {
         "vendor/volvocars/hardware/cloud/1.0/types.cpp",
         "vendor/volvocars/hardware/cloud/1.0/CertificateHandlerAll.cpp",
         "vendor/volvocars/hardware/cloud/1.0/CloudConnectionAll.cpp",
+        "vendor/volvocars/hardware/cloud/1.0/CloudConnectionDownloadResponseCallbackAll.cpp",
         "vendor/volvocars/hardware/cloud/1.0/CloudConnectionEventListenerAll.cpp",
     ],
 }
@@ -45,6 +47,11 @@ genrule {
         "vendor/volvocars/hardware/cloud/1.0/BnHwCloudConnection.h",
         "vendor/volvocars/hardware/cloud/1.0/BpHwCloudConnection.h",
         "vendor/volvocars/hardware/cloud/1.0/BsCloudConnection.h",
+        "vendor/volvocars/hardware/cloud/1.0/ICloudConnectionDownloadResponseCallback.h",
+        "vendor/volvocars/hardware/cloud/1.0/IHwCloudConnectionDownloadResponseCallback.h",
+        "vendor/volvocars/hardware/cloud/1.0/BnHwCloudConnectionDownloadResponseCallback.h",
+        "vendor/volvocars/hardware/cloud/1.0/BpHwCloudConnectionDownloadResponseCallback.h",
+        "vendor/volvocars/hardware/cloud/1.0/BsCloudConnectionDownloadResponseCallback.h",
         "vendor/volvocars/hardware/cloud/1.0/ICloudConnectionEventListener.h",
         "vendor/volvocars/hardware/cloud/1.0/IHwCloudConnectionEventListener.h",
         "vendor/volvocars/hardware/cloud/1.0/BnHwCloudConnectionEventListener.h",

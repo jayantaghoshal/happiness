@@ -2,6 +2,7 @@ package vendor.volvocars.hardware.cloud@1.0;
 
 
 import ICloudConnectionEventListener;
+import ICloudConnectionDownloadResponseCallback;
 
 interface ICloudConnection
 {
@@ -34,13 +35,13 @@ interface ICloudConnection
 
 
     /**
-     * Download a file from to the cloud - blocking call
-     * @param uri       Path to the resource
-     * @param headers   Http headers to be added to the request
-     * @param file_path Path where resource should be stored
-     * @param timeout   time in millisecond to wait for receiving the response
-      //TODO: timeout value can be set to e.g. 0xFFFF which is different from http timeout error code
-     * @returns responseData Response on the request
+     * Download a file from to the cloud - Non-blocking call
+     * @param uri           Path to the resource
+     * @param headers       Http headers to be added to the request
+     * @param file_path     Path where resource should be stored
+     * @param timeout       Time in millisecond to wait for receiving the responses
+     * @param callback      Callback method to call when download is complete
      **/
-    downloadRequest(string uri, HttpHeaders headers, string file_path, uint32_t timeout) generates (Response responseData);
+    downloadRequest(string uri, HttpHeaders headers, string file_path, uint32_t timeout,
+                    ICloudConnectionDownloadResponseCallback callback);
 };

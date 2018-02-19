@@ -11,11 +11,11 @@ interface ICloudConnectionEventListener
     /**
      * Called when daemon entered an error state.
      * @param reason An error string explaining the erronoues state.
-     **/
+     */
     oneway enteredErrorState(string reason);
 
     /**
      * Placeholder for MQTT push notification
-     **/
+     */
     oneway shoulderTap(string tap);
 };
