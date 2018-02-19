@@ -90,27 +90,27 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def testDisk(self):
-        requirement = 95
+        requirement = 75
         self.dut.shell.InvokeTerminal("my_shell5")
         my_shell = getattr(self.dut.shell, "my_shell5")
-        shell_response = my_shell.Execute(["df"])
-        number_of_disks = re.findall('dm\s*-\s*([^\n\r]*)', shell_response[const.STDOUT][0])
-        disk_load = {}
+        number_of_disks = [] # type: typing.List[str]
+        shell_response = my_shell.Execute(["df","-h"])
+        vendor = re.findall('([^\n]*/\s*vendor\s*)', shell_response[const.STDOUT][0])[0]
+        number_of_disks.append(vendor)
+        data = re.findall('([^\n]*/\s*data\s*)', shell_response[const.STDOUT][0])[0]
+        number_of_disks.append(data)
+        cache = re.findall('([^\n]*/\s*cache\s*)', shell_response[const.STDOUT][0])[0]
+        number_of_disks.append(cache)
+        disk_load = {}# type: typing.Dict[str, Dict[str, List[str]]]
 
         for disk in number_of_disks:
             disk_load[str(disk)] = {}
             disk_load[str(disk)]['usage'] = [x.strip() for x in str(disk).split()[1:]]
-
-            #Size
-            logging.info("Total size: " + str(disk_load[str(disk)]['usage'][0]))
-            #Used
-            logging.info("Used: " + str(disk_load[str(disk)]['usage'][1]))
-            #Available
-            logging.info("Available: " + str(disk_load[str(disk)]['usage'][2]))
-            #Usage -%
-            logging.info("Usage: " + str(disk_load[str(disk)]['usage'][3]))
-            #Mount Location
-            logging.info("Mount on: " + str(disk_load[str(disk)]['usage'][4]))
+            #Logging
+            logging.info("Size for " + str(disk_load[str(disk)]['usage'][4]) + ": "+ str(disk_load[str(disk)]['usage'][0])
+                         + " Used: " + str(disk_load[str(disk)]['usage'][1])
+                         + " Available: " + str(disk_load[str(disk)]['usage'][2])
+                         + " Usage: " + str(disk_load[str(disk)]['usage'][3]))
 
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
