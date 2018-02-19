@@ -7,6 +7,7 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
+VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -24,17 +25,25 @@ rm -rf out  # Remove previous OUT_DIR for clean build.
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
-# Build image, vts & tradefed
-time make droid
-time make vts
-time make tradefed-all
+# Check vts package is up to date
+time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
+
+# Build image & tradefed
+time make droid tradefed-all
+
+# Download VTS package from artifactory
+# Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
+if [ "$(checkIfVtsPackageUpToDate "$VTS_REPO_HASH")" == "rebuilt" ];then
+    echo "VTS package has already been built"
+else
+    artifactory pull vts_build_package "$VTS_REPO_HASH" outVTS.tgz || die "Could not fetch out archive from Artifactory."
+    mkdir -p -m 755 vtsPackage
+    tar xvf outVTS.tgz -C vtsPackage/
+    cp -r -n -a vtsPackage/out/* out/
+fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly || die "Build Unit and Component tests failed"
-
-# Workaround broken config file that prevents vts from running
-# TODO: Remove when config file is fixed
-rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.config
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly --ciflow true || die "Build Unit and Component tests failed"
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz
@@ -56,6 +65,11 @@ redis-cli set icup_android.jenkins."${JOB_NAME}".latest.job_number "${BUILD_NUMB
 
 #TODO: Check if this is valid
 #time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py "${JOB_NAME}" "${BUILD_NUMBER}" pass || true
+
+# Clean up vtsPackages
+rm -rf vtsPackage/
+
+rm -rf outVTS.tgz
 
 # Cleanup
 rm ${OUT_ARCHIVE}

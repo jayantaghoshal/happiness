@@ -18,6 +18,31 @@ C_ERROR="\033[0;31m"
 #C_OK="\033[0;32m"
 C_OFF="\033[0m"
 
+function buildNewVtsPackage() {
+    #Build latest vts
+    cd "$REPO_ROOT_DIR"; make vts
+
+    OUT_ARCHIVE=outVTS.tgz
+    tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
+            ./out/target/product/ihu_vcc/data \
+            ./out/host/linux-x86/bin \
+            ./out/host/linux-x86/vts/android-vts \
+            ./out/host/linux-x86/tradefed || die "Could not create out archive"
+
+    #Push latest vts build package to artifactory
+    artifactory push vts_build_package "$VTS_HASH" "${OUT_ARCHIVE}" || die "Could not push archive to Artifactory."
+}
+
+function checkIfVtsPackageUpToDate() {
+    VTS_HASH=$1
+        if [ "$(artifactory show vts_build_package "$VTS_HASH" outVTS.tgz)" ]; then
+            echo "exists"
+        else
+            buildNewVtsPackage
+            echo "rebuilt"
+        fi
+}
+
 function die() {
     message=$1
     echo -e "${C_ERROR}${message}${C_OFF}"

@@ -7,6 +7,7 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
+VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -46,10 +47,22 @@ if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
     trap 'git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go' EXIT SIGINT SIGTERM
 fi
 
-# Build image and test utils
-time make droid
-time make vts
-time make tradefed-all
+# Check vts package is up to date
+time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
+
+# Build image & tradefed
+time make droid tradefed-all
+
+# Download VTS package from artifactory
+# Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
+if [ "$(checkIfVtsPackageUpToDate "$VTS_REPO_HASH")" == "rebuilt" ];then
+    echo "VTS package has already been built"
+else
+    artifactory pull vts_build_package "$VTS_REPO_HASH" outVTS.tgz || die "Could not fetch out archive from Artifactory."
+    mkdir -p -m 755 vtsPackage
+    tar xvf outVTS.tgz -C vtsPackage/
+    cp -r -n -a vtsPackage/out/* out/
+fi
 
 # Restore library.go
 if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
@@ -57,7 +70,7 @@ if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate || die "Build Unit and Component tests failed"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate --ciflow true || die "Build Unit and Component tests failed"
 
 # Push out files required for gate_test.sh to Artifactory.
 #
@@ -86,3 +99,8 @@ time mmma vendor/volvocars
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
+
+# Clean up vtsPackages
+rm -rf vtsPackage/
+
+rm -rf outVTS.tgz

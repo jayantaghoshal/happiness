@@ -93,7 +93,7 @@ def check_result(test_result: NamedTestResult) -> None:
         print("The current test case %s does not generate a JSON file" % test_result.name)
 
 
-def build_testcases(tests_to_run: List[IhuBaseTest]):
+def build_testcases(tests_to_run: List[IhuBaseTest], skip_build_vts):
     all_vts_tests = [t for t in tests_to_run if isinstance(t, VTSTest)]
     all_tradefed_tests = [t for t in tests_to_run if isinstance(t, TradefedTest)]
     logging.debug("VTS tests: %r" % all_vts_tests)
@@ -106,11 +106,17 @@ def build_testcases(tests_to_run: List[IhuBaseTest]):
     if len(all_vts_tests) > 0:
         logger.info("Found VTS test cases, building VTS")
         test_modules_to_build.append("test/vts/runners/target/gtest")
-        run_in_lunched_env("make vts -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
+        if(skip_build_vts == "CI_FLOW"):
+            print("CI flow, skip multi VTS build")
+        else:
+            run_in_lunched_env("make vts -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
 
     if len(all_tradefed_tests) > 0:
         logger.info("Found Tradefed test cases, building tradefed-all")
-        run_in_lunched_env("make tradefed-all -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
+        if(skip_build_vts== "CI_FLOW"):
+            print("CI flow, skip multi tradefed build")
+        else:
+            run_in_lunched_env("make tradefed-all -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
 
     if len(test_modules_to_build) > 0:
         print(test_modules_to_build)
@@ -225,6 +231,7 @@ def main():
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
     build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
                         type=str,
@@ -276,11 +283,18 @@ def main():
                 run_parser.print_usage()
                 sys.exit(1)
 
+    def get_option():
+        if args.ciflow == "true":
+            return "CI_FLOW"
+        elif args.ciflow == "false":
+            return "BUILD"
+
     if args.program == "analyze":
         detect_loose_test_cases()
     elif args.program == "build":
         plan = get_plan()
-        build_testcases(plan)
+        skip_build_vts = get_option()
+        build_testcases(plan, skip_build_vts)
     elif args.program == "run":
         plan = get_plan()
         capabilities = set(args.capabilities)
