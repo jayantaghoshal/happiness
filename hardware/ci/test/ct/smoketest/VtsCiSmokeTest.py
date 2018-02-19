@@ -115,6 +115,29 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
 
+
+    def testCrashes(self):
+        self.dut.shell.InvokeTerminal("crash_shell")
+        my_shell = getattr(self.dut.shell, "crash_shell")
+        shell_response = my_shell.Execute(["ls /data/tombstones"])
+        shell_response_stdout = shell_response[const.STDOUT][0].strip()
+        tombstones_files = [x for x in shell_response_stdout.split("\n") if len(x) > 0]
+        if len(tombstones_files) > 0:
+            logging.info("Found tombstones:")
+        crashing_processes = []
+        for t in tombstones_files:
+            tombstone_output = my_shell.Execute(["cat /data/tombstones/%s" %t ])[const.STDOUT][0]
+            pidmatches = re.findall("^pid:.*>>>(.*)<<<.*$", tombstone_output, re.MULTILINE)
+            if pidmatches:
+                crashing_processes.extend(pidmatches)
+            else:
+                crashing_processes.append("???")
+            logging.info("Tombstone: %s : %s" % (t, tombstone_output))
+        asserts.assertEqual(0, len(tombstones_files),
+                            "No crashes are allowed, found tombstones in /data/tombstones on the device. "
+                            "Crashing apps: [%s]. Full tombstone-details in logs" % ", ".join(crashing_processes))
+
+
     def get_data(self, cores):
         self.dut.shell.InvokeTerminal("data_shell")
         my_shell = getattr(self.dut.shell, "data_shell")
