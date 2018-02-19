@@ -28,7 +28,8 @@ static void sendAvmpMessageToVip(const vipcomm::SignalID header, const void* buf
 static void initInternalDataelements(void);
 
 static void validateAvmpVersionAndSinkMessage(Message_Send_T* message) {
-    if (avmpVersionCheckOk == VersionHandshakeStatus::Ok) {
+    bool HACK = true;  // TODO(PSS370-17469): Remove hack once VIP has fixed checksum generation
+    if (HACK || (avmpVersionCheckOk == VersionHandshakeStatus::Ok)) {
         messageSend(message);
     } else {
         // Actually it's not possible to reach this line as vipcomm::initializeSink() where sinks are initialized
