@@ -273,9 +273,9 @@ void TransportServices::generateErrorPdu(Pdu& errorPdu, const Pdu& pdu, ErrorCod
     // VCM seems to follow ASN in 31841985 and use PER (bits laid out as specified above) so we do
     // the same.
 
-    // Concerning the BUSY_ERROR flag:
+    // Concerning the BUSY flag:
     // In [IHU-15163], the conclusion was to move the responsibility the applications/services
-    // to handle the BUSY_ERROR flag. Only the applications/services themselves will know
+    // to handle the BUSY flag. Only the applications/services themselves will know
     // how many simultaneous requests they are able to handle. Probably this should be configurable
     // in some way.
 
@@ -414,7 +414,7 @@ void TransportServices::processIncomingPdu(Pdu&& pdu, Message::Ecu sourceEcu) {
             // * If no RESPONSE is sent, but the m_incomingRequestCb returns true, an ACK must be sent here since
             //   then the RESPONSE will be delivered at a later time.
             // * If an ERROR for this REQUEST is sent during the state, no ACK shall be sent.
-            // * BUSY_ERROR is handled by the application/service. See comment in [IHU-15163] and comment in
+            // * BUSY is handled by the application/service. See comment in [IHU-15163] and comment in
             //   TransportServices::generateErrorPdu()
 
             Message m(std::move(pdu));
@@ -504,8 +504,7 @@ void TransportServices::processIncomingPdu(Pdu&& pdu, Message::Ecu sourceEcu) {
     }
 }
 
-void TransportServices::handleIncomingAck(const Pdu& pdu, Message::Ecu sourceEcu) {
-    (void)(sourceEcu);
+void TransportServices::handleIncomingAck(const Pdu& pdu, Message::Ecu /*sourceEcu*/) {
     TrackMessage* pTm = this->getTrackMessage(pdu.header.sender_handle_id);
 
     // Did we find something that matches the ACK?
@@ -580,8 +579,8 @@ void TransportServices::handleIncomingError(const Pdu& pdu) {
                 static_cast<TransportServices::ErrorCode>((pdu.payload[0] & 0b01111000) >> 3);
 
         // Handle the busy error
-        if (errorCode == TransportServices::ErrorCode::BUSY_ERROR) {
-            ALOGI("Response=BUSY_ERROR. Let the timeout handling resend the message. SenderhandleID=0x%08X",
+        if (errorCode == TransportServices::ErrorCode::BUSY) {
+            ALOGI("Response=BUSY. Let the timeout handling resend the message. SenderhandleID=0x%08X",
                   pdu.header.sender_handle_id);
             return;
         }
@@ -662,14 +661,35 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
     // ALOGD("Timeout on message 0x%08X, state: 0x%02X", pMsg->pPdu->header.sender_handle_id,
     //                            pMsg->state);
     switch (tm.state) {
-        case TrackMessage::WAIT_FOR_RESPONSE_ACK:
+        case TrackMessage::WAIT_FOR_RESPONSE_ACK: {
             ALOGW("Timed out while waiting for ACK on sent response: %s, state: 0x%02X",
                   Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
-            // We expected an ACK on the response we sent, but got a timeout.
-            // Update timeout levels and resend message
-            if (!tm.wfa.increaseTimeout()) {
-                ALOGW("Max ACK timeouts. No more resends allowed for response: %s, state: 0x%02X",
+            // initialized to 1 on purpose as signal is present in queue if ACK has timed out
+            int enqueued_duplicates = 1;
+
+            if (tm.msg.pdu.header.operation_type == IpCmdTypes::OperationType::NOTIFICATION) {
+                enqueued_duplicates =
+                        std::count_if(m_pendingMessages.begin(), m_pendingMessages.end(),
+                                      [& senderHandleId = id, &ecu = tm.msg.ecu ](std::unique_ptr<TrackMessage> & pTm) {
+                                          constexpr uint32_t seq_number_mask = 0xFFFFFF00;
+                                          return pTm->msg.ecu == ecu &&
+                                                 (senderHandleId & seq_number_mask) ==
+                                                         (pTm->msg.pdu.header.sender_handle_id & seq_number_mask);
+                                      });
+            }
+
+            if (enqueued_duplicates > 1) {
+                ALOGW("Multiple NOTIFICATION requests for same serviceId + operationId. Message will not be "
+                      "re-transmitted. message %s state : 0x%02X",
+                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+
+                this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
+            } else if (!tm.wfa.increaseTimeout()) {
+                // We expected an ACK on the response we sent, but got a timeout.
+                // Update timeout levels and resend message
+                ALOGW("Max ACK timeouts. No more resends allowed for response: %s, "
+                      "state: 0x%02X",
                       Pdu::toString(tm.msg.pdu).c_str(), tm.state);
 
                 this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
@@ -682,7 +702,7 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
 
                 this->sendPdu(tm.msg.ecu, tm.msg.pdu);
             }
-            break;
+        } break;
 
         case TrackMessage::WAIT_FOR_NOTIFICATION_ACK:
             ALOGW("Timed out while waiting for ACK on sent notification: %s, state: 0x%02X",
@@ -707,7 +727,7 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
 
                 // Create error pdu
                 Pdu errorPdu;
-                generateErrorPdu(errorPdu, pTm->msg.pdu, TransportServices::ErrorCode::TIMEOUT_ERROR, 0);
+                generateErrorPdu(errorPdu, pTm->msg.pdu, TransportServices::ErrorCode::TIMEOUT, 0);
 
                 // Create message and set pdu.
                 Message m(std::move(errorPdu));
@@ -744,7 +764,7 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
 
                 // Create error pdu
                 Pdu errorPdu;
-                generateErrorPdu(errorPdu, pTm->msg.pdu, TransportServices::ErrorCode::TIMEOUT_ERROR, 0);
+                generateErrorPdu(errorPdu, pTm->msg.pdu, TransportServices::ErrorCode::TIMEOUT, 0);
 
                 // Create message and set pdu.
                 Message m(std::move(errorPdu));

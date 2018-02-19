@@ -100,7 +100,7 @@ class TransportServices : public ITransportServices {
      */
     void sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo = 0) override;
 
-    static const uint8_t PROTOCOL_VERSION = 2;  ///< Which protocol version that is implemented with this class.
+    static const uint8_t PROTOCOL_VERSION = 3;  ///< Which protocol version that is implemented with this class.
 
   protected:
     /**

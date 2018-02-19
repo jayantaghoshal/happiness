@@ -13,9 +13,9 @@ TimeoutInfo::TimeoutInfo()
 
 TimeoutInfo::TimeoutInfo(std::chrono::milliseconds timeout, uint32_t max_retries)
     : baseTimeout_(timeout),
-      timeoutValue_(timeout),
       maxRetries_(max_retries),
       multiplier_(LocalconfigParameters::getInstance().getDefaultAckMultiplier()),
+      timeoutValue_(timeout),
       retry_(0) {}
 
 bool TimeoutInfo::increaseTimeout() {

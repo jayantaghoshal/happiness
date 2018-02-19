@@ -148,7 +148,7 @@ Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryI
     // Prepare caller data
     std::shared_ptr<MessageDispatcher::CallerData> caller_data = std::make_shared<MessageDispatcher::CallerData>();
 
-    caller_data->responseCallback = [this, callbackHandler, caller_data](Message& message) {
+    caller_data->responseCallback = [callbackHandler, caller_data](Message& message) {
         if (caller_data->errorType == ITransportServices::ErrorType::OK) {
             Msg msg;
             msg.ecu = (vendor::volvocars::hardware::common::V1_0::Ecu)message.ecu;

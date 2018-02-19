@@ -33,11 +33,11 @@ class ITransportServices {
         INVALID_OPERATION_ID = 0x02,
         INVALID_OPERATION_TYPE = 0x03,
         INVALID_PROTOCOL_VERSION = 0x04,
-        SEGMENTATION_ERROR = 0x05,
+        PROCESSING = 0x05,
         INVALID_LENGTH = 0x06,
         APPLICATION_ERROR = 0x07,
-        TIMEOUT_ERROR = 0x08,
-        BUSY_ERROR = 0x09
+        TIMEOUT = 0x08,
+        BUSY = 0x09
     };
 
     enum ErrorType {

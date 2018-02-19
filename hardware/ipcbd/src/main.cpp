@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
         ALOGE("Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
               "\nExamples:\n 1. infotainment UDP\n"
               "\n2. iplm UDPB\n3. dim TCP DIM\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     std::string service_name = argv[1];
@@ -162,18 +162,18 @@ int main(int argc, char* argv[]) {
         } else if (protocol == "TCP") {
             if (argc < 4) {
                 ALOGE("Needs ECU name. Check .rc file");
-                return 1;
+                return EXIT_FAILURE;
             }
             if (std::string(argv[3]) == "DIM") {
                 sock = std::make_shared<TcpSocket>(dispatcher, Message::Ecu::DIM);
                 transport.setSocket(sock.get());
             } else {
                 ALOGE("Only DIM is supported currently");
-                return 1;
+                return EXIT_FAILURE;
             }
         } else {
             ALOGE("Unknown protocol specified");
-            return 1;
+            return EXIT_FAILURE;
         }
 
         MessageDispatcher msgDispatcher{&transport, dispatcher};
@@ -189,5 +189,8 @@ int main(int argc, char* argv[]) {
         ALOGI("exiting ...");
     } catch (const SocketException& e) {
         ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
+        return EXIT_FAILURE;
     }
+
+    return EXIT_SUCCESS;
 }
