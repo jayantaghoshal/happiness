@@ -9,11 +9,6 @@
 #include <cstdint>
 #include "ipcommandbus/local_config_parameters.h"
 
-#ifdef ENABLE_TESTS
-class TransportServicesFixture;
-class TimeoutInfoFixture;
-#endif  // ENABLE_TESTS
-
 namespace Connectivity {
 class TimeoutInfo {
   public:
@@ -33,11 +28,6 @@ class TimeoutInfo {
 
     std::chrono::milliseconds timeoutValue_;
     uint32_t retry_;
-
-#ifdef ENABLE_TESTS
-    friend TransportServicesFixture;
-    friend class ::TimeoutInfoFixture;
-#endif  // ENABLE_TESTS
 };
 
-}  // Connectivity
+}  // namespace Connectivity

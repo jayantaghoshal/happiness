@@ -20,19 +20,12 @@
 #include "ipcommandbus/idiagnostics_client.h"
 #include "ipcommandbus/vcc_pdu_header.h"
 
-#ifdef ENABLE_TESTS
-class MessageDispatcherFixture;
-#endif  // ENABLE_TESTS
-
 namespace Connectivity {
 /**
  * Handles messages routing to and from the TransportService.
  */
 class MessageDispatcher {
   public:
-#ifdef ENABLE_TESTS
-    friend class ::MessageDispatcherFixture;
-#endif  // ENABLE_TESTS
     typedef std::uint32_t Icb_ErrorCode;
 
     struct Icb_OpGeneric_Error_t {
