@@ -9,7 +9,6 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.app.Service;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
@@ -24,9 +23,7 @@ import android.util.Log;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import vendor.volvocars.hardware.profiles.V1_0.ICarProfileManager;
 
@@ -43,7 +40,7 @@ public class UserSwitchService extends Service {
     private ICarProfileManager carProfileManager;
     private UserSwitchManagerHMI userSwitchManagerHMI;
     private ActivityManager activityManager;
-    private UserManager userM;
+    private UserManager userManager;
     private String mProfileManagerInterfaceName;
     private ProfileManagerDeathRecipient mProfileDeathRecipient =
             new ProfileManagerDeathRecipient();
@@ -52,7 +49,7 @@ public class UserSwitchService extends Service {
     public void onCreate() {
         Log.i(TAG, "onCreate");
         activityManager = getBaseContext().getSystemService(ActivityManager.class);
-        userM = getBaseContext().getSystemService(UserManager.class);
+        userManager = getBaseContext().getSystemService(UserManager.class);
         userSwitchManagerHMI = new UserSwitchManagerHMI();
 
         Log.v(TAG, "Registering for the serviceNotification service.");
@@ -69,7 +66,7 @@ public class UserSwitchService extends Service {
             Log.d(TAG, "Failed to register service start notification", e);
             return;
         } catch (InterruptedException ex) {
-            Log.w(TAG,"Failed to register thread sleep Interrupted.");
+            Log.w(TAG, "Failed to register thread sleep Interrupted.");
             Thread.currentThread().interrupted();
             return;
         }
@@ -95,26 +92,25 @@ public class UserSwitchService extends Service {
 
     /**
      * Switch user
-     * @param volvoUser
      */
-    public void switchUser(VolvoUser volvoUser) {
-        Log.d(TAG, "switchUser is called with VolvoUser: " + volvoUser);
-        int value = volvoUser.getId();
-        if (volvoUser.getId() == -1) {
-            List<UserInfo> listUser = userM.getUsers(false);
-            // Many users has the same name? it is possible by the android...
-            Optional<UserInfo> result = listUser.stream().filter(
-                    u -> u.name.equals(volvoUser.getName()))
-                    .findAny();
-            if (result.isPresent()) {
-                value = result.get().id;
-            }
-        }
-
-        Log.d(TAG, "Value switch user to : " + value);
-        final boolean switchStatus = activityManager.switchUser(value);
-        Log.d(TAG, "Current user: " + userM.getUserName());
+    public void switchUser(int androidUserId) {
+        Log.d(TAG, "switchUser is called with androidUserId: " + androidUserId);
+        final boolean switchStatus = activityManager.switchUser(androidUserId);
+        Log.d(TAG, "Current user: " + userManager.getUserName());
         Log.d(TAG, "Switch user status: " + switchStatus);
+
+        // CEM changed but android user not, therefore change it back
+        try {
+            userSwitchManagerHMI.switchUser(String.valueOf(androidUserId),
+                    new IUserSwitchCallBack.Stub() {
+                        @Override
+                        public void handleResponse(UserSwitchResult result) throws RemoteException {
+                            Log.d(TAG, "Switch user status from CEM: " + switchStatus);
+                        }
+                    });
+        } catch (RemoteException e) { // TODO: smart way handling async users
+            Log.e(TAG, " Something really went wrong" + switchStatus, e);
+        }
 
         //TODO(PSS370-14385): ...  that this has to be removed
 //        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity
@@ -129,22 +125,28 @@ public class UserSwitchService extends Service {
      * Create User and pair with the Profile
      */
     public void createUser(VolvoUser volvoUser) throws RemoteException {
-        UserInfo userInfo = userM.createUser(volvoUser.getName(), UserInfo.FLAG_ADMIN);
+        UserInfo userInfo = userManager.createUser(volvoUser.name, volvoUser.flags);
         Log.d(TAG, "Created UserInfo userInfo: " + userInfo);
         if (userInfo != null) {
             boolean result = carProfileManager.pairAndroidUserToUnusedVehicleProfile(
                     userInfo.id + "");
             Log.d(TAG, "pairAndroidUserToUnusedVehicleProfile has a result: " + result);
 
-            //TODO: add callbacks for the AIDL interface
             if (!result) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("No available profiles")
                         .setTitle("Warning!");
                 AlertDialog dialog = builder.create();
+                userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
+                        UserSwitchResult.ERROR);
+            } else {
+                userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
+                        UserSwitchResult.SUCCESS);
             }
         } else {
             Log.e(TAG, "No User info");
+            userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
+                    UserSwitchResult.ERROR);
         }
     }
 
@@ -176,7 +178,7 @@ public class UserSwitchService extends Service {
                     profileManager.linkToDeath(mProfileDeathRecipient, 0);
                     carProfileManager = profileManager;
                     userSwitchManagerHMI.init(UserSwitchService.this,
-                            carProfileManager);
+                            carProfileManager, userManager);
                 }
             } catch (RemoteException e) {
                 Log.e(TAG, "CarProfileManager service not responding", e);
