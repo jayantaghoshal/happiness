@@ -16,11 +16,11 @@ variables
   // Define global variables for this CAPL file
 
   /*--- #GenHeader Begin# --- begin generated comment ---
-  | Generated on Thursday, februari 15, 2018, 17:11:18
+  | Generated on Tuesday, februari 20, 2018, 08:03:58
   | By ModelGenerator for SPA 1.0.0.3, ModelGeneratorSPADLL 3.1.1.0
   | Package SPA 3.0.0
   | Target Bus: Backbone; Channel: FR1; DB Cluster: Backbone;
-  | From Database: SPA2610_ConfigurationsSPA_Backbone_170920.xml
+  | From Database: SPA2610_ConfigurationsSPA_Backbone_171027.xml
   | CANoe Version 9.0.133.0
     --- #GenHeader End  # --- end generated comment --- */
 

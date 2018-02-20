@@ -21,6 +21,15 @@ variables
 
 on start
 {
+  //Disable built in simulations
+  @sysvar::_SPACommon::CarConfig::SimulationControl = @_SPACommon::SimulationControl::Off;
+  @sysvar::_SPACommon::GParVehBattU::SimulationControl = @_SPACommon::SimulationControl::Off;
+  @sysvar::_SPACommon::GParTiAndDate::SimulationControl = @_SPACommon::SimulationControl::Off;
+  //TODO: Disabling VIN here does not work
+  @sysvar::_SPACommon::VIN::SimulationControl = @_SPACommon::SimulationControl::Off;
+  @sysvar::_SPACommon::CarTiGlb::SimulationControl = @_SPACommon::SimulationControl::Off;
+
+
   @sysvar::IL::Power=1;
   @sysvar::IL::Ignition=1;
   @sysvar::NM_FR1::StateControl::StartCommunication=1;
