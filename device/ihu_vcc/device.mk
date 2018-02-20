@@ -145,7 +145,8 @@ PRODUCT_PACKAGES += \
 
 # privapp-permissions whitelisting
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.control_privapp_permissions=log
+    ro.control_privapp_permissions=log \
+    config.disable_networktime=1
 
 PRODUCT_COPY_FILES += \
     $(GMS)/etc/permissions/privapp-permissions-google.xml:system/etc/permissions/privapp-permissions-google.xml
