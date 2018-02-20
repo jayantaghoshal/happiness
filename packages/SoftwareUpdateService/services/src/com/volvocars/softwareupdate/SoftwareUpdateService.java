@@ -152,6 +152,20 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
+    public void download(DownloadInfo downloadInfo) {
+        if (swapi != null) {
+            try {
+                swapi.GetDownloadData(downloadInfo, swapiCallback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot download.. No contact with SWAPI.. I'm sad...");
+            }
+        }
+        else {
+            Log.e(LOG_TAG, "SWAPI null");
+        }
+
+    }
+
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;

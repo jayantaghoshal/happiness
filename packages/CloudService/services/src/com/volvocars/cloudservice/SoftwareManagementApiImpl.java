@@ -30,6 +30,9 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private boolean softwareManagementAvailable = false;
 
+    private ISoftwareManagementApiCallback softwareManagementApiCallback = null;
+    private DownloadInfo currentDownloadInfo;
+
     private class SwListResponse<T> {
         private ArrayList<T> swlist = new ArrayList<T>();
         private int code = -1;
@@ -163,6 +166,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private String GetSystemLanguage() {
+        Log.v(LOG_TAG, "Note: GetSystemLanguage is not tested, maybe do so?");
         switch (CarConfigApi.getValue(CarConfigEnums.CC_197_SystemLanguage.class)) {
         case Arabic:
             return "ar-BH";
@@ -342,6 +346,69 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         return downloadInfoResponse;
     }
 
+    private void FetchDownloadData() {
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        //Todo: Content-Disposition header?
+        Log.v(LOG_TAG, "Should Content-Disposition header be included in downloadRequest? (Not implemented)");
+
+        int timeout = 20000;
+
+        // Cannot arrive here if resourceUris is empty, safe to ignore IndexOutOfBoundException
+        String uri = currentDownloadInfo.resourceUris.get(0);
+
+        // If resource URI does not contain any '/' an IndexOutOfBoundException will be thrown.
+        Log.w(LOG_TAG, "FetchDownloadData: Currently ignoring potential IndexOutOfBoundException");
+        String filepath = "/data/local/tmp" + uri.substring(uri.lastIndexOf("/"));
+
+        cloudConnection.downloadRequest(uri, headers, filepath, timeout);
+
+        Log.v(LOG_TAG, "Trying to download \"" + uri + "\" to filepath \"" + filepath + "\"");
+    }
+
+    private void FetchNextDownloadData() {
+        currentDownloadInfo.downloadedResources.add(currentDownloadInfo.resourceUris.get(0));
+        currentDownloadInfo.resourceUris.remove(0);
+
+        if (currentDownloadInfo.resourceUris.isEmpty()) {
+            Log.v(LOG_TAG, "Download finished...");
+
+            try {
+                softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
+            } catch (RemoteException ex) {
+                // Something went bananas with binder.. What do?
+                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: " + ex.getMessage());
+            }
+            softwareManagementApiCallback = null;
+            currentDownloadInfo = null;
+        } else {
+            Log.v(LOG_TAG, "Downloading next file...");
+            FetchDownloadData();
+        }
+    }
+
+    public void downloadStatusUpdate(Response response) {
+        //Check if download_id match currentDownloadId?
+
+        Log.v(LOG_TAG, "File download finished with response " + response.httpResponse);
+
+        if (response.httpResponse != 200) {
+            Log.e(LOG_TAG, "Download failed with error code: " + response.httpResponse);
+            try {
+                softwareManagementApiCallback.DownloadData(response.httpResponse, currentDownloadInfo);
+            } catch (RemoteException ex) {
+                // Something went bananas with binder.. What do?
+                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: " + ex.getMessage());
+            }
+            softwareManagementApiCallback = null;
+            currentDownloadInfo = null;
+        }
+        else {
+            FetchNextDownloadData();
+        }
+    }
+
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -410,7 +477,25 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     * @param downloadInfo Contains information of what to be downloaded
     * @param callback     Callback to be called when the status of the download changes
     */
-    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) /* throws RemonteException */ {
-        // TODO
+    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
+        if (!softwareManagementAvailable) {
+            callback.DownloadData(-1, null);
+            return;
+        }
+
+        //TODO: Verify that no download is in progress already, if so... call callback function with some busy info...
+        if (softwareManagementApiCallback != null) {
+            Log.w(LOG_TAG, "Download already in progress, try later...");
+            callback.DownloadData(-1, null);
+            return;
+        }
+
+        Log.v(LOG_TAG, "Download requested, try to download " + downloadInfo.resourceUris.size() + " files");
+
+        softwareManagementApiCallback = callback;
+        currentDownloadInfo = downloadInfo;
+
+        FetchDownloadData();
     }
 }

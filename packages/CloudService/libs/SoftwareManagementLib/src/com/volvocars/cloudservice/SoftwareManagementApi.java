@@ -105,7 +105,9 @@ public class SoftwareManagementApi implements ServiceConnection {
     * @param downloadInfo Contains information of what to be downloaded
     * @param callback     Callback to be called when the status of the download changes
     */
-    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) /* throws RemonteException */ {
-        // TODO
+    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.GetDownloadData(downloadInfo, callback);
+        }
     }
 }
