@@ -2,6 +2,10 @@
 type carsim_bridge, domain;
 type carsim_bridge_exec, exec_type, file_type, vendor_file_type;
 
+userdebug_or_eng(`
 init_daemon_domain(carsim_bridge)
 
 allow carsim_bridge ip-vcc_exec:file entrypoint;
+
+net_domain(carsim_bridge)
+')
