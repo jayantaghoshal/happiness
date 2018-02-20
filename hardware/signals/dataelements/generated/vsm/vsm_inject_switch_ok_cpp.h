@@ -3600,8 +3600,8 @@
             ALOG(LOG_VERBOSE, "VSMInject", "Received PtCluTq (%u)", ComConf_ComSignalGroup_igPtCluTq_mrx);
             const PtCluTq& rteValue = *static_cast<const PtCluTq*>(buffer);
             autosar::PtCluTq_info::data_elem_type deValue;
-            deValue.PtCluTq = static_cast<decltype(deValue.PtCluTq)>( toUnsignedFromRaw<11>(rteValue.PtCluTqPtCluTq) ) * 1.0 + 0.0;
-            deValue.PtCluTqDyn = static_cast<decltype(deValue.PtCluTqDyn)>( toUnsignedFromRaw<11>(rteValue.PtCluTqPtCluTqDyn) ) * 1.0 + 0.0;
+            deValue.PtCluTq = static_cast<decltype(deValue.PtCluTq)>( toUnsignedFromRaw<11>(rteValue.PtCluTqPtCluTq) ) * 1.0 + -1024.0;
+            deValue.PtCluTqDyn = static_cast<decltype(deValue.PtCluTqDyn)>( toUnsignedFromRaw<11>(rteValue.PtCluTqPtCluTqDyn) ) * 1.0 + -1024.0;
             deValue.PtCluTqQly = static_cast<decltype(deValue.PtCluTqQly)>(rteValue.PtCluTqPtCluTqQly);
 
             PtCluTq_de->inject(deValue);

@@ -66,7 +66,7 @@ def parse_type(swc_data: autosar.arxml.ARXml,
             if numerator[1] == '1.0':
                 underlying_type = getIntTypeStr(lim)
                 scale = 1
-                offset = 0
+                offset = numerator[0]
             else:
                 scale = numerator[1]
                 offset = numerator[0]

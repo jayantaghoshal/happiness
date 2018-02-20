@@ -4871,8 +4871,8 @@ struct ProfLimd1 {
  * \struct PtCluTq1
  */
 struct PtCluTq1 {
-    int16_t PtCluTq; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )*/
-    int16_t PtCluTqDyn; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )*/
+    int16_t PtCluTq; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+-1024.0, raw is unsigned, 11 bits )*/
+    int16_t PtCluTqDyn; /*!<Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+-1024.0, raw is unsigned, 11 bits )*/
     Qly3 PtCluTqQly;
 };
 
