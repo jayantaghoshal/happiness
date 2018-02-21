@@ -22,7 +22,7 @@
             log: 0
     wrappers:
         - timeout:
-            timeout: 180
+            timeout: 240
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
