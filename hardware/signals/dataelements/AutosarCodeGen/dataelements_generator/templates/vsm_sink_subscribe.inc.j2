@@ -1,0 +1,51 @@
+
+{% macro transfer_scale(destination, source, offset, scale) -%}
+{{destination}} = round(({{source}} - {{offset}}) / {{scale}});
+{%- endmacro %}
+
+{% macro transfer_transfer(destination, source) -%}
+{{destination}} = static_cast<decltype({{destination}})>({{source}});
+{%- endmacro %}
+
+
+{% macro transfer_arraycopy(destination, source, name) -%}
+for (unsigned int i=0; i<{{source}}.size(); ++i) { {{destination}}[i] = static_cast<std::remove_reference<decltype( *{{destination}} )>::type>( {{source}}[i] ); }
+{%- endmacro %}
+
+
+{% macro transfer_master(destination, source, transfertype) -%}
+{%- if transfertype.type == "scale" -%}
+    {{ transfer_scale(destination, source, transfertype.offset, transfertype.scale) }}
+{%- elif transfertype.type == "identical" -%}
+    {{ transfer_transfer(destination, source) }}
+{%- elif transfertype.type == "array" -%}
+    {{ transfer_arraycopy(destination, source) }}
+{%- elif transfertype.type == "struct" -%}
+    {% for m in transfertype.members %}
+        {{ transfer_master(destination + "." + m.rteattr,  source + "." + m.membername,  m.transfer) }}
+    {%- endfor %}
+{%- else %}
+    ERROR UNKNOWN TRANSFERTYPE {{transfertype.type}}, {{transfertype}}
+{% endif %}
+{%- endmacro %}
+
+{% for de_de in all_dataelements if not de_de.is_insignal and not de_de.is_internal %}
+{% if de_de.isSignal %}
+    {{de_de.de_dataelementname}}_de = new DESink<autosar::{{de_de.de_dataelementname}}_info>();
+    {{de_de.de_dataelementname}}_de->subscribe([]() {
+        auto deValue = {{de_de.de_dataelementname}}_de->get().value();
+        {{de_de.rtename}} rteValue;
+        {{transfer_master('rteValue', 'deValue', de_de.transfer)}}
+        sendAvmpMessageToVip( ComConf_ComSignal_is{{de_de.rtename}}_mtx, &rteValue, sizeof(rteValue) );
+    });
+{%- else %}
+    {{de_de.de_dataelementname}}_de = new DESink<autosar::{{de_de.de_dataelementname}}_info>();
+    {{de_de.de_dataelementname}}_de->subscribe([]() {
+        auto deValue = {{de_de.de_dataelementname}}_de->get().value();
+        {{de_de.rtename}} rteValue;
+        {{transfer_master('rteValue', 'deValue', de_de.transfer)}}
+
+        sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_ig{{de_de.rtename}}_mtx, &rteValue, sizeof(rteValue) );
+    });
+{%- endif %}
+{%- endfor %}

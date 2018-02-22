@@ -11,6 +11,7 @@
  * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
 
+
     static DEInjector<autosar::ADataRawSafe_info>* ADataRawSafe_de=nullptr;
 
     static DEInjector<autosar::AccAutResuWarnReq_info>* AccAutResuWarnReq_de=nullptr;
@@ -327,8 +328,8 @@
 
     static DEInjector<autosar::HudSts_info>* HudSts_de=nullptr;
 
-// ***************************************
-// HvBattEgyAvlDcha3 not found in Com file
+    // ***************************************
+    // HvBattEgyAvlDcha3 not found in Com file
 
     static DEInjector<autosar::HvBattSmtActv_info>* HvBattSmtActv_de=nullptr;
 
@@ -394,8 +395,8 @@
 
     static DEInjector<autosar::MirrFoldStsAtPass_info>* MirrFoldStsAtPass_de=nullptr;
 
-// ***************************************
-// MtrlSnsrT not found in Com file
+    // ***************************************
+    // MtrlSnsrT not found in Com file
 
     static DEInjector<autosar::NFSDataFront_info>* NFSDataFront_de=nullptr;
 
@@ -545,8 +546,8 @@
 
     static DEInjector<autosar::SeatVentnAutCdn_info>* SeatVentnAutCdn_de=nullptr;
 
-// ***************************************
-// SetOfLangAck not found in Com file
+    // ***************************************
+    // SetOfLangAck not found in Com file
 
     static DEInjector<autosar::SftyCchAccSts_info>* SftyCchAccSts_de=nullptr;
 
@@ -713,5 +714,4 @@
     static DEInjector<autosar::iTPMSCalSts_info>* iTPMSCalSts_de=nullptr;
 
     static DEInjector<autosar::iTPMSTirePMSts_info>* iTPMSTirePMSts_de=nullptr;
-
 // clang-format on

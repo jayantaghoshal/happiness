@@ -1,200 +1,47 @@
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
+import typing
 from typing import List, Dict
+import jinja2
 
 from .model import DE_Element, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical, DE_Boolean, \
     DE_Struct, DE_Array
 from .render_cpp_basic import escape_cpp_comment, create_cpp_brief_comment, get_cpp_type
 
-GEN_DATAELEMENTS_HPP_CLASS_TEMPLATE = """%sstruct %s : %spublic DataElemInfo {
-    using data_elem_type = %s;%s
-
-    static const char* Name();
-    static const char* TypeName();
-    static Dir Direction();
-
-    const char* name() const override;
-    const char* typeName() const override;
-    Dir direction() const override;
-};
-
-
-"""
-
-GEN_DATAELEMENTS_CPP_CLASS_TEMPLATE = """//==========================================
-const char* {CLASS}::Name() { return \"%s\"; }
-const char* {CLASS}::TypeName() { return \"%s\"; }
-Dir {CLASS}::Direction() { return %s; }
-
-const char* {CLASS}::name() const { return Name(); }
-const char* {CLASS}::typeName() const { return TypeName(); }
-Dir {CLASS}::direction() const { return Direction(); }
-
-
-"""
-
-# ******************************************************************
-# VSM TEMPLATES
-GEN_VSM_ALL_DATAELEMENTS = """new autosar::{CLASS}(),\n"""
-
-GEN_VSM_INJECT_VARIABLE_TEMPLATE = """    static DEInjector<autosar::{DATAELEM}_info>* {DATAELEM}_de=nullptr;
-
-"""
-
-GEN_VSM_INJECT_INSTANCE_TEMPLATE = """    {DATAELEM}_de = new DEInjector<autosar::{DATAELEM}_info>();
-
-"""
-
-GEN_VSM_INJECT_SIGNAL_SWITCH_OK = """    case ComConf_ComSignal_is{RTETYPE}_mrx:
-    {
-        if (sizeof({RTETYPE}) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received {RTETYPE} (%u)", ComConf_ComSignal_is{RTETYPE}_mrx);
-            const {RTETYPE}& rteValue = *static_cast<const {RTETYPE}*>(buffer);
-            autosar::{DATAELEM}_info::data_elem_type deValue;
-            {TRANSFER};
-            {DATAELEM}_de->inject(deValue);
-        } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {RTETYPE} (%u). Got %zu , expected %lu", ComConf_ComSignal_is{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));
-        }
-    }
-    break;
-
-"""
-
-GEN_VSM_SINK_TRANSFER_ARRAY_COPY = """for (unsigned int i=0; i<deValue.size(); ++i) rteValue[i] = static_cast<std::remove_reference<decltype( *rteValue )>::type>( deValue[i] )"""
-GEN_VSM_SINK_SIGNALGROUP_TRANSFER_SCALE = """    rteValue.{RTEATTR} = round((deValue.{DEATTR} - {OFFSET}) / {SCALE})"""
-GEN_VSM_SINK_SIGNALGROUP_TRANSFER = """    rteValue.{RTEATTR} = static_cast<decltype(rteValue.{RTEATTR})>(deValue.{DEATTR})"""
-GEN_VSM_SINK_SIGNAL_TRANSFER_SCALE = """rteValue = round((deValue - {OFFSET}) / {SCALE})"""
-GEN_VSM_SINK_SIGNAL_TRANSFER = """rteValue = static_cast<decltype(rteValue)>(deValue)"""
-GEN_VSM_SINK_SIGNALGROUP_SUBSCRIBE = """{DATAELEM}_de = new DESink<autosar::{DATAELEM}_info>();
-{DATAELEM}_de->subscribe([]() {
-    auto deValue = {DATAELEM}_de->get().value();
-    {RTETYPE} rteValue;
-{TRANSFER}
-    sendAvmpMessageToVip( SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mtx, &rteValue, sizeof(rteValue) );
-});
-
-"""
-GEN_VSM_SINK_SIGNAL_SUBSCRIBE = """{DATAELEM}_de = new DESink<autosar::{DATAELEM}_info>();
-{DATAELEM}_de->subscribe([]() {
-    auto deValue = {DATAELEM}_de->get().value();
-    {RTETYPE} rteValue;
-    {TRANSFER};
-    sendAvmpMessageToVip( ComConf_ComSignal_is{RTETYPE}_mtx, &rteValue, sizeof(rteValue) );
-});
-
-"""
-GEN_VSM_SINK_VARIABLE_TEMPLATE = """    static DESink<autosar::{DATAELEM}_info>* {DATAELEM}_de=nullptr;
-
-"""
-GEN_VSM_INJECT_SIGNALGROUP_TRANSFER_LINEAR = """            deValue.{DEATTR} = static_cast<decltype(deValue.{DEATTR})>( {FUNC}<{SIZE}>(rteValue.{RTEATTR}) )"""
-GEN_VSM_INJECT_SIGNALGROUP_TRANSFER = """            deValue.{DEATTR} = static_cast<decltype(deValue.{DEATTR})>(rteValue.{RTEATTR})"""
-GEN_VSM_INJECT_SIGNAL_TRANSFER_LINEAR = """deValue = static_cast<decltype(deValue)>( {FUNC}<{SIZE}>(rteValue) )"""
-GEN_VSM_INJECT_SIGNAL_TRANSFER = """deValue = static_cast<decltype(deValue)>(rteValue)"""
-GEN_VSM_INJECT_TRANSFER_ARRAY_COPY = """for (unsigned int i=0; i<deValue.size(); ++i) deValue[i] = static_cast<autosar::{DATAELEM}_info::data_elem_type::value_type>( rteValue[i] )"""
-GEN_VSM_INJECT_SIGNAL_SWITCH_ERROR = """    case ComConf_ComSignal_is{RTETYPE}_mrx:
-        {DATAELEM}_de->error(errorCode);
-        break;
-
-"""
-GEN_VSM_INJECT_SIGNALGROUP_SWITCH_ERROR = """    case SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mrx:
-        {DATAELEM}_de->error(errorCode);
-        break;
-
-"""
-GEN_VSM_INJECT_SIGNALGROUP_SWITCH_OK = """    case SignalGroup|ComConf_ComSignalGroup_ig{RTETYPE}_mrx:
-    {
-        if (sizeof({RTETYPE}) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received {RTETYPE} (%u)", ComConf_ComSignalGroup_ig{RTETYPE}_mrx);
-            const {RTETYPE}& rteValue = *static_cast<const {RTETYPE}*>(buffer);
-            autosar::{DATAELEM}_info::data_elem_type deValue;
-{TRANSFER}
-            {DATAELEM}_de->inject(deValue);
-        } else {
-            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {RTETYPE} (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_ig{RTETYPE}_mrx, length, static_cast<unsigned long>(sizeof({RTETYPE})));
-        }
-    }
-    break;
-
-"""
-
 
 def render_dataelments(header: str, footer: str, all_de_elements: List[DE_Element], all_types: Dict[DE_Type_Key, DE_BaseType]):
-
-    # TODO: Split this into VIP and DataElements?
-
-
-    dataElementsHeaderStr = header + """#pragma once
-
-#include \"gen_datatypes.h\"
-
-namespace autosar {
-
-// This enum must match the enum Dir defined in the ISigals/types.hal
-enum class Dir : uint16_t {
-    IN = 0,
-    OUT = 1,
-    INTERNAL = 2
-};
-
-struct DataElemInfo {
-    virtual ~DataElemInfo() = default;
-    virtual const char* name() const=0;
-    virtual const char* typeName() const=0;
-    virtual Dir direction() const=0;
-};
-
-/*!
- * \\brief Provide compile time info if a data-element is in or out
- */
-class InTag {
-};
-
-class OutTag {
-};
-
-class InternalTag : public InTag, public OutTag {
-};\n\n
-"""
-
-    dataElemetsCppStr = header + """#include \"gen_dataelements.h\"
-
-
-namespace autosar {
-
-"""
-    gen_vsm_all_dataelements_cpp = header + "\n"
-    gen_vsm_inject_variable_cpp = header + "\n"
-    gen_vsm_inject_instance_cpp = header + "\n"
-    gen_vsm_inject_switch_ok_cpp = header + "\n"
-    gen_vsm_inject_switch_error_cpp = header + "\n"
-    gen_vsm_sink_variable_cpp = header + "\n"
-    gen_vsm_sink_subscribe_cpp = header + "\n"
-
+    templateelements = []
 
     for de_de in all_de_elements:
-        tmpTransferInject = ''
-        tmpTransferSink = ''
-
         de_type = all_types[de_de.de_type_id]
+
+        transfer = None # type: typing.Any
+
         if isinstance(de_type, DE_Value):
-            func = "toSignedFromRaw" if de_type.is_signed else "toUnsignedFromRaw"
-            tmpTransferInject = GEN_VSM_INJECT_SIGNAL_TRANSFER_LINEAR.replace("{FUNC}", func).replace("{SIZE}", str(de_type.nr_of_bits))
-            tmpTransferSink = GEN_VSM_SINK_SIGNAL_TRANSFER_SCALE.replace("{SCALE}", str(de_type.scale)).replace(
-                "{OFFSET}", str(de_type.offset))
-
-            if not de_type.no_scale:
-                tmpTransferInject += " * " + str(de_type.scale) + " + " + str(de_type.offset)
-
+            transfer = {
+                "type": "scale",
+                "no_scale" : de_type.no_scale,
+                "nr_of_bits": de_type.nr_of_bits,
+                "is_signed": de_type.is_signed,
+                "offset": de_type.offset,
+                "scale" : de_type.scale
+            }
         elif isinstance(de_type, DE_Identical):
-            tmpTransferInject = GEN_VSM_INJECT_SIGNAL_TRANSFER
-            tmpTransferSink = GEN_VSM_SINK_SIGNAL_TRANSFER
+            transfer = {
+                "type" : "identical"
+            }
         elif isinstance(de_type, DE_Boolean):
-            tmpTransferInject = GEN_VSM_INJECT_SIGNAL_TRANSFER
-            tmpTransferSink = GEN_VSM_SINK_SIGNAL_TRANSFER
+            transfer = {
+                "type": "identical"
+            }
         elif isinstance(de_type, DE_Struct):
             if not de_de.is_internal:
+                transfer = {
+                    "type": "struct",
+                    "members": []
+                }
+
                 for e in sorted(de_type.children, key=lambda x: x.member_name):
                     subType = all_types[e.de_type_id]
                     rteattr = de_de.rte_attr_map[e.member_name]
@@ -203,114 +50,88 @@ namespace autosar {
                         member_name += "_"
 
                     if isinstance(subType, DE_Value):
-                        func = "toSignedFromRaw" if subType.is_signed else "toUnsignedFromRaw"
-
-                        if subType.scale is not None:
-                            tmpTransferInject += GEN_VSM_INJECT_SIGNALGROUP_TRANSFER_LINEAR.replace("{FUNC}", func).replace(
-                                "{SIZE}", str(subType.nr_of_bits)).replace("{DEATTR}", member_name).replace("{RTEATTR}",
-                                                                                      rteattr) + " * " + str(subType.scale) + " + " + str(subType.offset) + ";\n"
-                            tmpTransferSink += GEN_VSM_SINK_SIGNALGROUP_TRANSFER_SCALE.replace("{DEATTR}",
-                                                                                               member_name).replace(
-                                "{RTEATTR}", rteattr).replace("{SCALE}", str(subType.scale)).replace("{OFFSET}", str(subType.offset)) + ";\n"
-                        else:
-                            tmpTransferInject += GEN_VSM_INJECT_SIGNALGROUP_TRANSFER_LINEAR.replace("{FUNC}",
-                                                                                                    func).replace(
-                                "{SIZE}", str(subType.nr_of_bits)).replace("{DEATTR}", member_name).replace("{RTEATTR}",
-                                                                                                        rteattr) + ";\n"
-                            tmpTransferSink += GEN_VSM_SINK_SIGNALGROUP_TRANSFER.replace("{DEATTR}", member_name).replace(
-                                "{RTEATTR}", rteattr) + ";\n"
+                        member_transfer = {
+                            "type": "scale",
+                            "no_scale": subType.no_scale,
+                            "nr_of_bits": subType.nr_of_bits,
+                            "is_signed": subType.is_signed,
+                            "offset": subType.offset,
+                            "scale": subType.scale
+                        }
                     else:
-                        tmpTransferInject += \
-                            GEN_VSM_INJECT_SIGNALGROUP_TRANSFER.replace("{DEATTR}", member_name).replace("{RTEATTR}",
-                                                                                                    rteattr) + ";\n"
-                        tmpTransferSink += GEN_VSM_SINK_SIGNALGROUP_TRANSFER.replace("{DEATTR}", member_name).replace(
-                            "{RTEATTR}", rteattr) + ";\n"
+                        member_transfer = {
+                            "type": "identical"
+                        }
+
+                    transfer["members"].append({
+                        "rteattr": rteattr,
+                        "membername": member_name,
+                        "transfer": member_transfer
+                    })
+
             else:
                 pass #????
         elif isinstance(de_type, DE_Array):
-            tmpTransferInject = GEN_VSM_INJECT_TRANSFER_ARRAY_COPY.replace("{DATAELEM}", de_de.de_dataelementname)
-            if (de_de.isSignal):
-                tmpTransferSink = GEN_VSM_SINK_TRANSFER_ARRAY_COPY
-            else:
-                tmpTransferSink = "    " + GEN_VSM_SINK_TRANSFER_ARRAY_COPY + ";"
+            transfer = {
+                "type": "array"
+            }
         else:
-            tmpTransferInject = GEN_VSM_INJECT_SIGNAL_TRANSFER
-            tmpTransferSink = GEN_VSM_SINK_SIGNAL_TRANSFER
+            transfer = {
+                "type": "identical"
+            }
 
         if de_de.description != "":
-            descComment = "/*!\n * \\brief Signal %s\n * %s\n */\n" % (de_de.de_dataelementname, escape_cpp_comment(de_de.description.strip()))
+            descComment = "/*!\n * \\brief Signal %s\n * %s\n */" % (de_de.de_dataelementname, escape_cpp_comment(de_de.description.strip()))
         else:
-            descComment = "/*!\n * \\brief Signal %s\n */\n" % (de_de.de_dataelementname)
+            descComment = "/*!\n * \\brief Signal %s\n */" % (de_de.de_dataelementname)
+
 
         if de_de.is_internal:
-            dirtag = "InternalTag, "
+            dirtag = "InternalTag"
         else:
-            dirtag = "InTag, " if de_de.is_insignal else "OutTag, "
+            dirtag = "InTag" if de_de.is_insignal else "OutTag"
 
         range_comment = ""
         if isinstance(de_type, (DE_Value, DE_Identical)):
             range_comment = " " + create_cpp_brief_comment(de_type.desc.strip())
 
-        dataElementsHeaderStr += GEN_DATAELEMENTS_HPP_CLASS_TEMPLATE % (descComment, de_de.de_dataelementname + "_info", dirtag, get_cpp_type(de_type), range_comment)
         if de_de.is_internal:
             direct = "Dir::INTERNAL"
         else:
             direct = "Dir::IN" if de_de.is_insignal else "Dir::OUT"
 
-        tmpStr = GEN_DATAELEMENTS_CPP_CLASS_TEMPLATE % (de_de.de_dataelementname, get_cpp_type(de_type), direct)
-        dataElemetsCppStr += tmpStr.replace("{CLASS}", de_de.de_dataelementname + "_info")
-        gen_vsm_all_dataelements_cpp += GEN_VSM_ALL_DATAELEMENTS.replace("{CLASS}", de_de.de_dataelementname + "_info")
-        if de_de.is_insignal:
-            if not de_de.is_internal:
-                gen_vsm_inject_variable_cpp += GEN_VSM_INJECT_VARIABLE_TEMPLATE.replace("{RTETYPE}",
-                                                                                        de_de.rtename).replace(
-                    "{DATAELEM}", de_de.de_dataelementname)
-                gen_vsm_inject_instance_cpp += GEN_VSM_INJECT_INSTANCE_TEMPLATE.replace("{RTETYPE}",
-                                                                                        de_de.rtename).replace(
-                    "{DATAELEM}", de_de.de_dataelementname)
-                if de_de.isSignal:
-                    gen_vsm_inject_switch_ok_cpp += GEN_VSM_INJECT_SIGNAL_SWITCH_OK.replace("{RTETYPE}",
-                                                                                            de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname).replace("{TRANSFER}", tmpTransferInject)
-                    gen_vsm_inject_switch_error_cpp += GEN_VSM_INJECT_SIGNAL_SWITCH_ERROR.replace("{RTETYPE}",
-                                                                                                  de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname)
-                else:
-                    gen_vsm_inject_switch_ok_cpp += GEN_VSM_INJECT_SIGNALGROUP_SWITCH_OK.replace("{RTETYPE}",
-                                                                                                 de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname).replace("{TRANSFER}", tmpTransferInject)
-                    gen_vsm_inject_switch_error_cpp += GEN_VSM_INJECT_SIGNALGROUP_SWITCH_ERROR.replace("{RTETYPE}",
-                                                                                                       de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname)
-            else:
-                gen_vsm_inject_variable_cpp += "// ***************************************\n// " + de_de.de_dataelementname + " not found in Com file\n\n"
-                gen_vsm_inject_instance_cpp += "// ***************************************\n// " + de_de.de_dataelementname + " not found in Com file\n\n"
-        else:
-            if not de_de.is_internal:
-                gen_vsm_sink_variable_cpp += GEN_VSM_SINK_VARIABLE_TEMPLATE.replace("{RTETYPE}",
-                                                                                    de_de.rtename).replace(
-                    "{DATAELEM}", de_de.de_dataelementname)
-                if de_de.isSignal:
-                    gen_vsm_sink_subscribe_cpp += GEN_VSM_SINK_SIGNAL_SUBSCRIBE.replace("{RTETYPE}",
-                                                                                        de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname).replace("{TRANSFER}", tmpTransferSink)
-                else:
-                    gen_vsm_sink_subscribe_cpp += GEN_VSM_SINK_SIGNALGROUP_SUBSCRIBE.replace("{RTETYPE}",
-                                                                                             de_de.rtename).replace(
-                        "{DATAELEM}", de_de.de_dataelementname).replace("{TRANSFER}", tmpTransferSink)
+        templateelements.append({
+            "de_dataelementname" : de_de.de_dataelementname,
+            "is_insignal"        : de_de.is_insignal,
+            "is_internal"        : de_de.is_internal,
+            "isSignal"           : de_de.isSignal,
+            "rtename"            : de_de.rtename,
+            "desc_comment"       : descComment,
+            "dirtag"             : dirtag,
+            "range_comment"      : range_comment,
+            "direct"             : direct,
+            "transfer"           : transfer,
+            "cpp_type"           : get_cpp_type(all_types[de_de.de_type_id])
+        })
 
-    dataElementsHeaderStr += "} // end of namespace\n"
-    dataElemetsCppStr += "} // end of namespace\n"
+    templatedata = {
+        "all_dataelements" : templateelements
+    }
 
-    dataElementsHeaderStr += footer
-    dataElemetsCppStr += footer
-    gen_vsm_all_dataelements_cpp += footer
-    gen_vsm_inject_variable_cpp += footer
-    gen_vsm_inject_instance_cpp += footer
-    gen_vsm_inject_switch_ok_cpp += footer
-    gen_vsm_inject_switch_error_cpp += footer
-    gen_vsm_sink_variable_cpp += footer
-    gen_vsm_sink_subscribe_cpp += footer
+    j2env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader('./dataelements_generator/templates/'),
+    )
+    dataElemetsCppStr = header + j2env.get_template("gen_dataelements.cpp.j2").render(**templatedata) + footer
+    dataElementsHeaderStr = header + j2env.get_template("gen_dataelements.h.j2").render(**templatedata) + footer
+    gen_vsm_all_dataelements_cpp = header + j2env.get_template("vsm_all_dataelements.inc.j2").render(**templatedata) + footer
+    gen_vsm_inject_instance_cpp = header +  j2env.get_template("vsm_inject_instances.inc.j2").render(**templatedata) + footer
+    gen_vsm_inject_switch_error_cpp = header + j2env.get_template("vsm_inject_switch_error.inc.j2").render(**templatedata) + footer
+    gen_vsm_inject_switch_ok_cpp = header +  j2env.get_template("vsm_inject_switch_ok.inc.j2").render(**templatedata) + footer
+    gen_vsm_inject_variable_cpp = header + j2env.get_template("vsm_inject_variables.inc.j2").render(
+        **templatedata) + footer
+    gen_vsm_sink_subscribe_cpp = header + j2env.get_template("vsm_sink_subscribe.inc.j2").render(**templatedata) + footer
+    gen_vsm_sink_variable_cpp = header +  j2env.get_template("vsm_sink_variables.inc.j2").render(**templatedata) + footer
+
 
     return (dataElementsHeaderStr,
             dataElemetsCppStr,

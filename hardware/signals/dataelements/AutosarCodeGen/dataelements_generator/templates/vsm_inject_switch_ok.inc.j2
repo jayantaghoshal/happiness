@@ -1,0 +1,60 @@
+{% macro transfer_scale(destination, source, nr_of_bits, offset, scale, no_scale, is_signed) -%}
+{%- set func = "toSignedFromRaw" if is_signed else "toUnsignedFromRaw" -%}
+{{destination}} = static_cast<decltype({{destination}})>( {{func}}<{{nr_of_bits}}>({{source}}) ){% if not no_scale %} * {{scale}} + {{offset}}{% endif %};
+{%- endmacro %}
+
+{% macro transfer_transfer(destination, source) -%}
+{{destination}} = static_cast<decltype({{destination}})>({{source}});
+{%- endmacro %}
+
+{% macro transfer_arraycopy(de_dataelementname, destination, source) -%}
+for (unsigned int i=0; i<deValue.size(); ++i) { deValue[i] = static_cast<autosar::{{de_dataelementname}}_info::data_elem_type::value_type>( rteValue[i] ); }
+{%- endmacro %}
+
+{% macro transfer_master(de_dataelementname, destination, source, transfertype) -%}
+    {%- if transfertype.type == "scale" -%}
+        {{ transfer_scale(destination, source, transfertype.nr_of_bits, transfertype.offset, transfertype.scale, transfertype.no_scale, transfertype.is_signed) }}
+    {%- elif transfertype.type == "identical" -%}
+        {{ transfer_transfer(destination, source) }}
+    {%- elif transfertype.type == "array" -%}
+        {{ transfer_arraycopy(de_dataelementname, destination, source) }}
+    {%- elif transfertype.type == "struct" -%}
+        {% for m in transfertype.members %}
+            {{transfer_master(de_dataelementname, destination + "." + m.membername, source + "." + m.rteattr,  m.transfer)}}
+        {%- endfor %}
+    {%- else %}
+    ERROR UNKNOWN TRANSFERTYPE {{transfertype.type}}, {{transfertype}}
+    {% endif %}
+{%- endmacro %}
+
+{% for de_de in all_dataelements if de_de.is_insignal and not de_de.is_internal -%}
+{% if de_de.isSignal %}
+    case ComConf_ComSignal_is{{de_de.rtename}}_mrx:
+    {
+        if (sizeof({{de_de.rtename}}) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignal_is{{de_de.rtename}}_mrx);
+            const {{de_de.rtename}}& rteValue = *static_cast<const {{de_de.rtename}}*>(buffer);
+            autosar::{{de_de.de_dataelementname}}_info::data_elem_type deValue;
+            {{transfer_master(de_de.de_dataelementname, 'deValue', 'rteValue', de_de.transfer)}}
+            {{de_de.de_dataelementname}}_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {{de_de.rtename}} (%u). Got %zu , expected %lu", ComConf_ComSignal_is{{de_de.rtename}}_mrx, length, static_cast<unsigned long>(sizeof({{de_de.rtename}})));
+        }
+    }
+    break;
+{%- else %}
+    case SignalGroup|ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx:
+    {
+        if (sizeof({{de_de.rtename}}) == length) {
+            ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx);
+            const {{de_de.rtename}}& rteValue = *static_cast<const {{de_de.rtename}}*>(buffer);
+            autosar::{{de_de.de_dataelementname}}_info::data_elem_type deValue;
+            {{transfer_master(de_de.de_dataelementname, 'deValue', 'rteValue', de_de.transfer)}}
+            {{de_de.de_dataelementname}}_de->inject(deValue);
+        } else {
+            ALOG(LOG_ERROR, "VSMInject", "Wrong buffer size received for {{de_de.rtename}} (%u). Got %zu, expected %lu", ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx, length, static_cast<unsigned long>(sizeof({{de_de.rtename}})));
+        }
+    }
+    break;
+{%- endif %}
+{% endfor %}

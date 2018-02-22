@@ -43,6 +43,8 @@ class InternalTag : public InTag, public OutTag {
 };
 
 
+
+
 /*!
  * \brief Signal ADataRawSafe
  * IMU acceleration data
@@ -1144,7 +1146,6 @@ struct CchForFuEco_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdLockgProtnStsToHmi
  * Signal sent from the Driver door module to the Driver information module to inform if the electric child lock  is ative or not
- *
  */
 struct ChdLockgProtnStsToHmi_info : InTag, public DataElemInfo {
     using data_elem_type = OnOffSafe1;
@@ -1162,7 +1163,6 @@ struct ChdLockgProtnStsToHmi_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdWinProtnStsAtDrvrRe
  * Signal sent from the rear driver door module to the Driver door module that informs of the local status of the power window disable functionality.
- *
  */
 struct ChdWinProtnStsAtDrvrRe_info : InTag, public DataElemInfo {
     using data_elem_type = OnOff1;
@@ -1180,7 +1180,6 @@ struct ChdWinProtnStsAtDrvrRe_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal ChdWinProtnStsAtPassRe
  * Signal sent from the rear passenger door module to the Driver door module that informs of the local status of the power window disable functionality.
- *
  */
 struct ChdWinProtnStsAtPassRe_info : InTag, public DataElemInfo {
     using data_elem_type = OnOff1;
@@ -1349,7 +1348,6 @@ struct ClimaWarn_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal CllsnAidSnvtySeld
  * Distribution of the setting Collision Avoidance Sensitivity Level
- *
  */
 struct CllsnAidSnvtySeld_info : OutTag, public DataElemInfo {
     using data_elem_type = SnvtyPen1;
@@ -9605,7 +9603,6 @@ struct WhlRotToothCntr_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtDrv
  * Signal sent to inform the rest of the car of the window position status for the front driver side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- *
  */
 struct WinPosnStsAtDrv_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9623,7 +9620,6 @@ struct WinPosnStsAtDrv_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtDrvrRe
  * Signal sent to inform the rest of the car of the window position status for the rear driver side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- *
  */
 struct WinPosnStsAtDrvrRe_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9641,7 +9637,6 @@ struct WinPosnStsAtDrvrRe_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtPass
  * Signal sent to inform the rest of the car of the window position status for the front passenger side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- *
  */
 struct WinPosnStsAtPass_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9659,7 +9654,6 @@ struct WinPosnStsAtPass_info : InTag, public DataElemInfo {
 /*!
  * \brief Signal WinPosnStsAtPassRe
  * Signal sent to inform the rest of the car of the window position status for the rear passenger side door. The value of the signal is either an approximated percentage of openness, of the window is moving or if the position is unkown.
- *
  */
 struct WinPosnStsAtPassRe_info : InTag, public DataElemInfo {
     using data_elem_type = WinAndRoofAndCurtPosnTyp;
@@ -9827,6 +9821,5 @@ struct iTPMSTirePMSts_info : InTag, public DataElemInfo {
 };
 
 
-} // end of namespace
-
+} // namespace autosar
 // clang-format on

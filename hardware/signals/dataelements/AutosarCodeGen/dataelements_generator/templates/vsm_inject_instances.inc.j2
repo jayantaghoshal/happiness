@@ -1,0 +1,8 @@
+{% for de_de in all_dataelements if de_de.is_insignal %}
+{% if not de_de.is_internal %}
+    {{de_de.de_dataelementname}}_de = new DEInjector<autosar::{{de_de.de_dataelementname}}_info>();
+{%- else %}
+    // ***************************************
+    // {{de_de.de_dataelementname}} not found in Com file
+{%- endif %}
+{%- endfor %}
