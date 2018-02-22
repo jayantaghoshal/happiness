@@ -49,9 +49,8 @@ bool WriteFile(const std::string& path, const std::string& text) {
 
     if (file.is_open()) {
         file << text;
-        if (file) return true;
     }
-    return false;
+    return file.good();
 }
 
 bool SetProxyArp(const char* interface_name) {
@@ -198,24 +197,20 @@ bool SetLinkSpeed(const std::string& interface_name) {
 }
 
 bool IsInterfaceUp(const char* interface_name) {
-    struct ifreq ifr_req;
-    memset(&ifr_req, 0, sizeof(struct ifreq));
-    std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
-
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (inet_sock_fd == -1) {
-        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
+    std::ifstream istr(std::string("/sys/class/net/") + interface_name + "/flags");
+    if (!istr.good()) {
+        ALOGE("%s: Failed to read sysfs for interface", interface_name);
         return false;
     }
 
-    if (ioctl(inet_sock_fd, SIOCGIFFLAGS, &ifr_req) == -1) {
-        ALOGE("%s: Failed to get flags for interface", interface_name);
-        close(inet_sock_fd);
+    int if_flags;
+    istr >> std::hex >> if_flags;
+    if (!istr.good()) {
+        ALOGE("%s: Invalid argument for interface flags", interface_name);
         return false;
     }
 
-    close(inet_sock_fd);
-    return (ifr_req.ifr_flags & IFF_UP) != 0;
+    return (if_flags & IFF_UP) != 0;
 }
 
 std::string GetIpAddress(const std::string& interface_name) {
@@ -391,52 +386,35 @@ bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* n
 }
 
 bool SetMtu(const uint32_t mtu, const char* interface_name) {
-    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd == -1) {
-        ALOGE("Unable to open socket for set MTU address for device %s", interface_name);
+    std::ofstream ostr(std::string("/sys/class/net/") + interface_name + "/mtu");
+    if (!ostr.good()) {
+        ALOGE("%s: Failed to read sysfs for interface", interface_name);
         return false;
     }
 
-    // Set MTU size for ethernet device
-    struct ifreq ifr_mtu_size;
-
-    std::strncpy(ifr_mtu_size.ifr_name, interface_name, IFNAMSIZ);
-    ifr_mtu_size.ifr_addr.sa_family = AF_INET;
-    ifr_mtu_size.ifr_mtu = mtu;
-    if (ioctl(sockfd, SIOCSIFMTU, &ifr_mtu_size) == -1) {
-        ALOGE("Unable to set MTU for device %s", interface_name);
-        close(sockfd);
-        return false;
+    ostr << mtu;
+    if (!ostr.good()) {
+        ALOGE("%s: Failed to set mtu for interface", interface_name);
     }
 
-    ALOGV("%s: MTU set to %i", interface_name, mtu);
-
-    close(sockfd);
-    return true;
+    return ostr.good();
 }
 
 std::uint32_t GetMtu(const std::string& interface_name) {
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (inet_sock_fd == -1) {
-        ALOGE("Failed to open AF_INET socket.");
-        throw std::system_error(EFAULT, std::system_category());
-    }
-
-    struct ifreq ifr;
-    std::memset(&ifr, 0, sizeof(ifr));
-
-    ifr.ifr_addr.sa_family = AF_INET;
-    std::strncpy(ifr.ifr_name, interface_name.c_str(), IFNAMSIZ);
-
-    if (ioctl(inet_sock_fd, SIOCGIFMTU, &ifr) == -1) {
-        ALOGE("%s: ioctl call get mtu failed. Error is [%s]", interface_name.c_str(), strerror(errno));
-        close(inet_sock_fd);
+    std::ifstream istr(std::string("/sys/class/net/") + interface_name + "/mtu");
+    if (!istr.good()) {
+        ALOGE("%s: Failed to read sysfs for interface", interface_name.c_str());
         return 0;
     }
 
-    close(inet_sock_fd);
+    int mtu;
+    istr >> mtu;
+    if (!istr.good()) {
+        ALOGE("%s: Failed to get mtu for interface", interface_name.c_str());
+        return 0;
+    }
 
-    return ifr.ifr_mtu;
+    return mtu;
 }
 
 bool SetMacAddress(const std::vector<uint8_t>& mac_address, const char* interface_name) {
@@ -525,64 +503,55 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_c
 }
 
 bool BringInterfaceUp(const char* interface_name) {
-    struct ifreq ifr_req;
-    memset(&ifr_req, 0, sizeof(struct ifreq));
-    std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
-
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (inet_sock_fd == -1) {
-        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
-        close(inet_sock_fd);
+    std::ifstream istr(std::string("/sys/class/net/") + interface_name + "/flags");
+    if (!istr.good()) {
+        ALOGE("%s: Failed to read sysfs for interface", interface_name);
         return false;
     }
 
-    if (ioctl(inet_sock_fd, SIOCGIFFLAGS, &ifr_req) == -1) {
-        ALOGE("Failed to get flags for %s interface", interface_name);
-        close(inet_sock_fd);
+    int if_flags;
+    istr >> std::hex >> if_flags;
+    if (!istr.good()) {
+        ALOGE("%s: Invalid argument for interface flags", interface_name);
         return false;
     }
 
-    ifr_req.ifr_flags |= (IFF_UP | IFF_RUNNING);
+    if_flags |= (IFF_UP | IFF_RUNNING);
 
-    if (ioctl(inet_sock_fd, SIOCSIFFLAGS, &ifr_req) == -1) {
+    std::ofstream ostr(std::string("/sys/class/net/") + interface_name + "/flags");
+    if (!ostr.good()) {
         ALOGE("Failed to bring %s interface up", interface_name);
-        close(inet_sock_fd);
         return false;
     }
+    ostr << "0x" << std::hex << if_flags;
 
-    close(inet_sock_fd);
-
-    return true;
+    return ostr.good();
 }
 
 bool TakeInterfaceDown(const char* interface_name) {
-    struct ifreq ifr_req;
-    memset(&ifr_req, 0, sizeof(struct ifreq));
-    std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
-
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (inet_sock_fd == -1) {
-        ALOGE("Failed to open AF_INET socket. Interface will not be configured");
-        close(inet_sock_fd);
+    std::ifstream istr(std::string("/sys/class/net/") + interface_name + "/flags");
+    if (!istr.good()) {
+        ALOGE("%s: Failed to read sysfs for interface", interface_name);
         return false;
     }
 
-    if (ioctl(inet_sock_fd, SIOCGIFFLAGS, &ifr_req) == -1) {
-        ALOGE("Failed to get flags for %s interface", interface_name);
-        close(inet_sock_fd);
+    int if_flags;
+    istr >> std::hex >> if_flags;
+    if (!istr.good()) {
+        ALOGE("%s: Invalid argument for interface flags", interface_name);
         return false;
     }
 
-    ifr_req.ifr_flags &= ~(IFF_UP | IFF_RUNNING);
+    if_flags &= ~(IFF_UP | IFF_RUNNING);
 
-    if (ioctl(inet_sock_fd, SIOCSIFFLAGS, &ifr_req) == -1) {
-        ALOGE("Failed to bring %s interface up", interface_name);
-        close(inet_sock_fd);
+    std::ofstream ostr(std::string("/sys/class/net/") + interface_name + "/flags");
+    if (!ostr.good()) {
+        ALOGE("Failed to take %s interface down", interface_name);
         return false;
     }
+    ostr << "0x" << std::hex << if_flags;
 
-    close(inet_sock_fd);
-    return true;
+    return ostr.good();
 }
 
 void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std::string& ns,
