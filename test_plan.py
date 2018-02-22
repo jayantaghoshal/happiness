@@ -76,11 +76,7 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps),
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps),
 
-    Disabled(VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps),
-            reason="Waiting on new signal DB in VIP",
-            jira_issue="",
-            deadline="2018-03-31"
-    ),
+    VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps | {cp.flexray}),
 ]
 
 test_plan_nightly = test_plan_hourly + [
