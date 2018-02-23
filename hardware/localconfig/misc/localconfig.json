@@ -69,7 +69,14 @@
       "mac-address": "02:00:00:02:12:01",
       "mtu": 1500,
       "vlan": [
-          "name=tcam0_ac, id=172, prio=3, ip-address=198.19.101.66, netmask=255.255.255.224, broadcast-address=198.19.101.95"
+          "name=tcam0_ac, id=172, prio=3, ip-address=198.19.101.66, netmask=255.255.255.224, broadcast-address=198.19.101.95",
+          "name=tcam0_ba, id=186, prio=2, ip-address=192.168.15.2, netmask=255.255.255.240, broadcast-address=192.168.15.15",
+          "name=tcam0_bb, id=187, prio=2, ip-address=198.19.101.130, netmask=255.255.255.224, broadcast-address=198.19.101.159",
+          "name=tcam0_bc, id=188, prio=3, ip-address=198.19.101.162, netmask=255.255.255.224, broadcast-address=198.19.101.191",
+          "name=tcam0_bd, id=189, prio=2, ip-address=198.19.101.194, netmask=255.255.255.224, broadcast-address=198.19.101.223",
+          "name=tcam0_be, id=190, prio=5, ip-address=198.19.102.2, netmask=255.255.255.224, broadcast-address=198.19.102.31",
+          "name=tcam0_bf, id=191, prio=4, ip-address=198.19.102.33, netmask=255.255.255.224, broadcast-address=198.19.102.63",
+          "name=tcam0_ca, id=202, prio=2, ip-address=198.19.102.66, netmask=255.255.255.224, broadcast-address=198.19.102.95"
       ]
   },
   "meth0": {
