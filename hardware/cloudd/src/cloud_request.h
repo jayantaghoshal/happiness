@@ -50,7 +50,10 @@ class CloudRequest {
           use_https_(true),
           timeout_(36000000),
           body_(""),
-          method_{GET} {}
+          method_{GET},
+          response_data_(""),
+          response_header_(""),
+          file_path_("") {}
 
     ~CloudRequest() { curl_easy_cleanup(curl_handle_); };
 
