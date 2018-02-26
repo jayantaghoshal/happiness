@@ -1,0 +1,18 @@
+
+cc_library_shared {
+    name : "libihulog",
+    defaults: ["climate_defaults"],
+    srcs:["ivi-logging.cpp"],
+    shared_libs: [
+        "libc++",
+        "liblog",
+    ],
+    local_include_dirs: [
+        "include",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+//LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined

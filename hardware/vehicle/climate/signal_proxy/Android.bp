@@ -1,0 +1,26 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name : "climate_signalproxy",
+    defaults: ["climate_defaults"],    
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "libihulog",
+        "libdataelements",
+    ],
+    local_include_dirs: [
+        "include",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+    tidy_checks: [
+        //"cppcoreguidelines-*",
+    ],
+}

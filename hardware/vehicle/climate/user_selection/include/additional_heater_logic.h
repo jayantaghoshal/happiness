@@ -1,0 +1,31 @@
+/*===========================================================================*\
+* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
+* Delphi Confidential
+\*===========================================================================*/
+
+#pragma once
+#include "notifiable_property.h"
+#include "settings_proxy.h"
+
+#include <Application_dataelement.h>
+#include <v0/org/volvocars/climate/UserSelection.hpp>
+
+using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
+
+class AdditionalHeaterLogic
+{
+public:
+    AdditionalHeaterLogic(NotifiableProperty<UserSelectionGen::OffOnSelection>& additionalHeater,
+                          std::unique_ptr<SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>                   additionalHeaterSetting);
+    void request(UserSelectionGen::OffOnType);
+
+private:
+    void sendSignal();
+
+    NotifiableProperty<UserSelectionGen::OffOnSelection>& additionalHeater_;
+    std::unique_ptr<SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>                   additionalHeaterSetting_;
+
+    ApplicationDataElement::DESender<autosar::HeatrDurgDrvgReqd_info> HeatrDurgDrvgReqd_;
+
+    bool additionalHeaterAvaiable_;
+};

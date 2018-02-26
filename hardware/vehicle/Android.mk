@@ -71,7 +71,8 @@ LOCAL_STATIC_LIBRARIES := \
     delphi-vehicle-hal-interfaces-lib \
     libaudioparameters \
     libaudio_comms_convert \
-    libccparameterlistgen
+    libccparameterlistgen \
+	climate_firstrow
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \

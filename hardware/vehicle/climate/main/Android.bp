@@ -1,0 +1,31 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name : "climate_main",
+    defaults: ["climate_defaults"],
+    srcs: [
+        "climate_main.cpp",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "libihulog",
+    ],
+    static_libs: [
+        "libccparameterlistgen",
+        "climate_user_selection",
+        "climate_firstrow",
+        "climate_common",
+        "climate_vf_common",
+        "climate_commonapi_pregen",
+        "climate_signalproxy"
+    ], 
+    tidy_checks: [
+        //"cppcoreguidelines-*",
+    ],
+}
