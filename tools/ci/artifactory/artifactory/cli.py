@@ -18,9 +18,10 @@ class ArgumentHandler(object):
             Command line tool to interact with Artifactory
 
             Commands:
-            push     - Upload files to Artifactory
-            pull     - Download files from Artifactory
-            show     - View attributes
+            push        - Upload files to Artifactory
+            pull        - Download files from Artifactory
+            pull-latest - Download latest files or folder
+            show        - View attributes
             ''')
         )
 
@@ -63,7 +64,7 @@ class ArgumentHandler(object):
         push_parser.set_defaults(func=self.push)
 
         ##
-        # Create the parser for the "pull" commnad
+        # Create the parser for the "pull" command
         #
         pull_parser = subparsers.add_parser('pull',
                                             description='Download files from Artifactory')
@@ -85,7 +86,7 @@ class ArgumentHandler(object):
             'files',
             nargs='*',
             metavar='FILE',
-            help='Files to upload'
+            help='Files to download'
         )
 
         pull_parser.add_argument(
@@ -96,8 +97,37 @@ class ArgumentHandler(object):
 
         pull_parser.set_defaults(func=self.pull)
 
+
         ##
-        # Create the parser for the "show" commnad
+        # Create the parser for the "pull-latest" command
+        #
+        pull_latest_parser = subparsers.add_parser('pull-latest',
+                                            description='Download latest files from Artifactory')
+
+        pull_latest_parser.add_argument(
+            'project',
+            metavar='PROJECT-NAME',
+            help='Jenkins project name to get the latest files or file'
+        )
+
+        pull_latest_parser.add_argument(
+            'files',
+            nargs='*',
+            metavar='FILE',
+            help='Files to download'
+        )
+
+        pull_latest_parser.add_argument(
+            '-d', '--dir',
+            default=os.getcwd(),
+            help='Directory path where to put the downloaded files'
+        )
+
+        pull_latest_parser.set_defaults(func=self.pull_latest)
+
+
+        ##
+        # Create the parser for the "show" command
         #
         show_parser = subparsers.add_parser('show',
                                             description='Show content in Artifactory')
@@ -134,6 +164,18 @@ class ArgumentHandler(object):
             uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
             artifactory.deploy_artifact(uri, file)
 
+
+    def pull_latest(self, args):
+        artifactory = Artifactory()
+        uri = "ICUP_ANDROID_CI/%s" % (args.project)
+        latest_job = artifactory.retreive_latest_uri(uri)
+        if not args.files:
+            artifactory.retrieve_artifacts(latest_job, args.dir)
+        else:
+            for file in args.files:
+                uri = latest_job + "/%s" % (file)
+                artifactory.retrieve_artifact(uri, args.dir)
+
     def pull(self, args):
         artifactory = Artifactory()
         if not args.files:
@@ -143,6 +185,7 @@ class ArgumentHandler(object):
             for file in args.files:
                 uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, file)
                 artifactory.retrieve_artifact(uri, args.dir)
+
 
     def show(self, args):
         artifactory = Artifactory()
