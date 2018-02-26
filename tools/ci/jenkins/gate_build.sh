@@ -51,7 +51,10 @@ VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
-time make droid tradefed-all
+# Note: skip ABI check occasionally create a race condition in build img, with less threads could resolve the issue.
+# (The total time of make droid is almost the same regardless -j16 or -j64)
+time make -j16 droid
+time make -j64 tradefed-all
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/

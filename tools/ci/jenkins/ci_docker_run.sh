@@ -36,7 +36,7 @@ function docker_run() {
 
   #shellcheck disable=SC2048
   #shellcheck disable=2086
-  "${DOCKER_BUILD_DIR}"/run.sh \
+  SKIP_ABI_CHECKS=1 "${DOCKER_BUILD_DIR}"/run.sh \
     --env-file="${SCRIPT_DIR}"/env.list \
     ${volumes} \
     $*
