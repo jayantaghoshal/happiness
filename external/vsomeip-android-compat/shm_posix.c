@@ -42,8 +42,7 @@ makeshmpath(const char *origpath, char *shmpath, size_t len)
 	char buf[SHA256_DIGEST_STRING_LENGTH];
 	SHA256Data(origpath, strlen(origpath), buf);
 #endif
-	// TODO (Samuel.Idowu) : Fix path in Android P when /vendor/data is writable.
-	snprintf(shmpath, len, "/data/local/tmp/%s.shm", origpath);
+	snprintf(shmpath, len, "/data/vendor/vcc/%s.shm", origpath);
 }
 
 int
