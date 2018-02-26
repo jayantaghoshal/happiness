@@ -55,7 +55,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
                 process_running = my_shell.Execute(["top -n1"])
                 logging.info("top -n1")
                 logging.info(process_running[const.STDOUT][0])
-                asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%")
+                asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
 
         logging.info("Cpu cores: " + number_of_cores)
         logging.info("model_name: " + model_name)
