@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 
@@ -37,61 +37,54 @@
 #include "vfc_driving_climatisation.h"
 #include "vfc_visibility.h"
 
-
 using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 
-namespace common
-{
-namespace daemon
-{
+namespace common {
+namespace daemon {
 class Factory;
 }
 }
 
 class SettingFactory;
 
-class FirstRowFactory final
-{
+class FirstRowFactory final {
+  public:
+    FirstRowFactory(const android::sp<SettingsFramework::SettingsManager>& settingsManager,
+                    tarmac::timeprovider::TimerManagerInterface& timeProvider, signal_proxy::Proxies& proxies,
+                    UserSelectionFactory& userSelections, common::daemon::Factory& commonFactory);
 
-public:
-    FirstRowFactory(android::sp<SettingsFramework::SettingsManager> settingsManager,
-                    tarmac::timeprovider::TimerManagerInterface& timeProvider,
-                    signal_proxy::Proxies&   proxies,
-                    UserSelectionFactory&    userSelections,
-                    common::daemon::Factory& commonFactory);
-
-private:
-    SettingFactory        sf_;
+  private:
+    SettingFactory sf_;
     UserSelectionFactory& userSelections_;
-    tarmac::timeprovider::TimerManagerInterface&          timeProvider_;
+    tarmac::timeprovider::TimerManagerInterface& timeProvider_;
 
-public:
+  public:
     // First row notifiable properties
-    NotifiableProperty<FirstRowGen::AirDistributionAngle>    airDistribution_;
-    NotifiableProperty<FirstRowGen::AutoClimateState>        autoClimate_;
-    NotifiableProperty<AutoClimateLogic::AutoClimateEvent>   autoClimateEvent_;
-    NotifiableProperty<FirstRowGen::CleanzoneState>          cleanZone_;
+    NotifiableProperty<FirstRowGen::AirDistributionAngle> airDistribution_;
+    NotifiableProperty<FirstRowGen::AutoClimateState> autoClimate_;
+    NotifiableProperty<AutoClimateLogic::AutoClimateEvent> autoClimateEvent_;
+    NotifiableProperty<FirstRowGen::CleanzoneState> cleanZone_;
     NotifiableProperty<ClimateResetLogic::ClimateResetEvent> climateReset_;
-    NotifiableProperty<FirstRowGen::FanLevelFrontValue>      fanLevelFront_;
-    NotifiableProperty<FirstRowGen::ManualRecircState>       manualRecirc_;
-    NotifiableProperty<FirstRowGen::AirConditionerState>     airConditioner_;
-    NotifiableProperty<double>                               driverConvertedTemp_;
-    NotifiableProperty<double>                               driverStoredTemp_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>            driverStoredTempHiLoN_;
-    NotifiableProperty<FirstRowGen::StateType>               driverTempState_;
-    NotifiableProperty<double>                               passengerConvertedTemp_;
-    NotifiableProperty<double>                               passengerStoredTemp_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>            passengerStoredTempHiLoN_;
-    NotifiableProperty<double>                               passengerTemp_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>            passengerTempHiLoN_;
-    NotifiableProperty<FirstRowGen::StateType>               passengerTempState_;
+    NotifiableProperty<FirstRowGen::FanLevelFrontValue> fanLevelFront_;
+    NotifiableProperty<FirstRowGen::ManualRecircState> manualRecirc_;
+    NotifiableProperty<FirstRowGen::AirConditionerState> airConditioner_;
+    NotifiableProperty<double> driverConvertedTemp_;
+    NotifiableProperty<double> driverStoredTemp_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> driverStoredTempHiLoN_;
+    NotifiableProperty<FirstRowGen::StateType> driverTempState_;
+    NotifiableProperty<double> passengerConvertedTemp_;
+    NotifiableProperty<double> passengerStoredTemp_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> passengerStoredTempHiLoN_;
+    NotifiableProperty<double> passengerTemp_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> passengerTempHiLoN_;
+    NotifiableProperty<FirstRowGen::StateType> passengerTempState_;
 
     NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState> electricDefrosterWindscreen_;
-    NotifiableProperty<FirstRowGen::ElectricDefrosterRearState>       electricDefrosterRear_;
-    NotifiableProperty<FirstRowGen::ElectricDefrosterPopupState>      electricDefrosterWindscreenPopup_;
-    NotifiableProperty<FirstRowGen::ElectricDefrosterPopupState>      electricDefrosterRearPopup_;
+    NotifiableProperty<FirstRowGen::ElectricDefrosterRearState> electricDefrosterRear_;
+    NotifiableProperty<FirstRowGen::ElectricDefrosterPopupState> electricDefrosterWindscreenPopup_;
+    NotifiableProperty<FirstRowGen::ElectricDefrosterPopupState> electricDefrosterRearPopup_;
 
-private:
+  private:
     NotifiableProperty<FirstRowGen::HeatAttribute> seatHeatDriver_;
     NotifiableProperty<FirstRowGen::HeatAttribute> seatHeatPassenger_;
     NotifiableProperty<FirstRowGen::HeatAttribute> steeringWheelHeat_;
@@ -100,54 +93,54 @@ private:
 
     NotifiableProperty<FirstRowGen::IonizerState> ionizer_;
 
-public:
-    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>&                    getSeatHeatDriverProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>&                    getSeatHeatPassengerProperty();
+  public:
+    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>& getSeatHeatDriverProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>& getSeatHeatPassengerProperty();
     ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& getElectricDefrosterWindscreenProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterRearState>&       getElectricDefrosterRearProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterRearState>& getElectricDefrosterRearProperty();
     ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterPopupState>& getElectricDefrosterWindscreenPopupProperty();
     ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterPopupState>& getElectricDefrosterRearPopupProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>&               getSteeringWheelHeatProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::VentAttribute>&               getSeatVentDriverProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::VentAttribute>&               getSeatVentPassengerProperty();
-    ReadOnlyNotifiableProperty<FirstRowGen::IonizerState>&                getIonizerProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>& getSteeringWheelHeatProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::VentAttribute>& getSeatVentDriverProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::VentAttribute>& getSeatVentPassengerProperty();
+    ReadOnlyNotifiableProperty<FirstRowGen::IonizerState>& getIonizerProperty();
 
     // First row logic
-    Dispatcher                            fanLevelFrontnDispatcher_;
-    FanLevelFrontLogic                    fanLevelFrontLogic_;
-    AirDistributionLogic                  airDistributionLogic_;
-    AutoClimateLogic                      autoClimateLogic_;
-    CleanZoneLogic                        cleanZoneLogic_;
-    ClimateResetLogic                     climateResetLogic_;
-    Dispatcher                            manualRecircDispatcher_;
-    ManualRecircLogic                     manualRecircLogic_;
-    AirConditionerLogic                   airConditionerLogic_;
-    Dispatcher                            electricDefrosterWindscreenDispatcher_;
-    ElectricDefrosterWindscreenLogic      electricDefrosterWindscreenLogic_;
-    ElectricDefrosterRearPopupLogic       electricDefrosterRearPopupLogic_;
-    Dispatcher                            electricDefrosterRearDispatcher_;
-    ElectricDefrosterRearLogic            electricDefrosterRearLogic_;
-    SeatHeatLogic                         seatHeatDriverLogic_;
-    SeatHeatLogic                         seatHeatPassengerLogic_;
+    Dispatcher fanLevelFrontnDispatcher_;
+    FanLevelFrontLogic fanLevelFrontLogic_;
+    AirDistributionLogic airDistributionLogic_;
+    AutoClimateLogic autoClimateLogic_;
+    CleanZoneLogic cleanZoneLogic_;
+    ClimateResetLogic climateResetLogic_;
+    Dispatcher manualRecircDispatcher_;
+    ManualRecircLogic manualRecircLogic_;
+    AirConditionerLogic airConditionerLogic_;
+    Dispatcher electricDefrosterWindscreenDispatcher_;
+    ElectricDefrosterWindscreenLogic electricDefrosterWindscreenLogic_;
+    ElectricDefrosterRearPopupLogic electricDefrosterRearPopupLogic_;
+    Dispatcher electricDefrosterRearDispatcher_;
+    ElectricDefrosterRearLogic electricDefrosterRearLogic_;
+    SeatHeatLogic seatHeatDriverLogic_;
+    SeatHeatLogic seatHeatPassengerLogic_;
     ElectricDefrosterWindscreenPopupLogic electricDefrosterWindscreenPopupLogic_;
 
     // Do not change the order of the temperature proxy and logic
-    TemperatureProxy                        temperatureProxy_;
-    TemperatureLogic                        driverTemperatureLogic_;
-    TemperatureLogic                        passengerTemperatureLogic_;
-    TemperatureSyncLogic                    temperatureSyncLogic_;
+    TemperatureProxy temperatureProxy_;
+    TemperatureLogic driverTemperatureLogic_;
+    TemperatureLogic passengerTemperatureLogic_;
+    TemperatureSyncLogic temperatureSyncLogic_;
     common::daemon::TemperatureSynchronizer temperatureSynchronizer_;
-    MaxDefrosterLogic                       maxDefrosterLogic_;
-    SteeringWheelHeatLogic                  steeringWheelHeatLogic_;
-    SeatVentLogic                           seatVentDriverLogic_;
-    SeatVentLogic                           seatVentPassengerLogic_;
-    first_row::IonizerLogic                 ionizerLogic_;
-    Dispatcher                              defrosterWindscreenCCSMDispatcher_;
-    DefrosterWindscreenCCSM                 defrosterWindscreenCCSM_;
-    DefrosterRearCCSM                       defrosterRearCCSM_;
+    MaxDefrosterLogic maxDefrosterLogic_;
+    SteeringWheelHeatLogic steeringWheelHeatLogic_;
+    SeatVentLogic seatVentDriverLogic_;
+    SeatVentLogic seatVentPassengerLogic_;
+    first_row::IonizerLogic ionizerLogic_;
+    Dispatcher defrosterWindscreenCCSMDispatcher_;
+    DefrosterWindscreenCCSM defrosterWindscreenCCSM_;
+    DefrosterRearCCSM defrosterRearCCSM_;
 
     // VFC
-    Dispatcher                   VFCDrivingClimatisationDispatcher_;
+    Dispatcher VFCDrivingClimatisationDispatcher_;
     VFCDrivingClimatisationLogic VFCDrivingClimatisationLogic_;
-    VFCVisibilityLogic           VFCVisibilityLogic_;
+    VFCVisibilityLogic VFCVisibilityLogic_;
 };

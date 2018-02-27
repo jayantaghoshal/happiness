@@ -1,33 +1,31 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #include "climate_main.h"
 
 #include "kpi_log.h"
-#include "logging_context.h"
 #include "libsettings/settingsmanagerhidl.h"
+#include "logging_context.h"
 
 #include <chrono>
-
 
 LOG_SET_DEFAULT_CONTEXT(mainContext)
 
 using namespace std::chrono_literals;
 
-ClimateMain::ClimateMain()    
-    : tarmacDispatcher_{tarmac::eventloop::IDispatcher::CreateDispatcher()}
-    , settingsManager_{new SettingsFramework::SettingsManagerHidl(*tarmacDispatcher_)}
-    , timeProvider_{tarmacDispatcher_}
-    , signalProxies_{}
-    //, commonFactory_{}
-    , user_selection{settingsManager_}
-    , first_row{settingsManager_, timeProvider_, signalProxies_, user_selection, commonFactory_ }
-    //, parking_climate{commonFactory_}
-    //, second_and_third_row{ signalProxies_, commonFactory_ }
+ClimateMain::ClimateMain()
+    : tarmacDispatcher_{tarmac::eventloop::IDispatcher::CreateDispatcher()},
+      settingsManager_{new SettingsFramework::SettingsManagerHidl(*tarmacDispatcher_)},
+      timeProvider_{tarmacDispatcher_},
+      signalProxies_{}  //, commonFactory_{}
+      ,
+      user_selection{settingsManager_},
+      first_row{settingsManager_, timeProvider_, signalProxies_, user_selection, commonFactory_}
+//, parking_climate{commonFactory_}
+//, second_and_third_row{ signalProxies_, commonFactory_ }
 {
-
     // =======================================================================================
     // Each time a User Settings Signal is sent out the VFC UserInputSettings shall be activated. At startup several
     // User

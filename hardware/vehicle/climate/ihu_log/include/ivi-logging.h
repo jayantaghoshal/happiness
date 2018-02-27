@@ -1,6 +1,8 @@
 /*
- * Copyright 2017, Volvo Car Corporation
-*/
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #ifndef IVI_LOGGING_H
 #define IVI_LOGGING_H
 
@@ -8,23 +10,16 @@
 
 namespace fsapi {
 
-auto getDefaultContext = [](){};
-
+auto getDefaultContext = []() {};
 }
 
 namespace logging {
 
-enum class LogLevel {
-  None, Fatal, Error, Warning, Info, Debug, Verbose
-};
+enum class LogLevel { None, Fatal, Error, Warning, Info, Debug, Verbose };
 
-enum class LogDetailLevel {
-  LogCompactSpaced, LogCompact, LogVerbose
-};
+enum class LogDetailLevel { LogCompactSpaced, LogCompact, LogVerbose };
 
-
-class LogClass
-{
+class LogClass {
   private:
     void logE();
     void logW();
@@ -41,7 +36,7 @@ class LogClass
     LogClass& writeFormatted();
     LogClass& writeFormatted(const char* fmt, ...);
 
-    LogClass& operator<<(const char *str) {
+    LogClass& operator<<(const char* str) {
         this->writeFormatted("%s", str);
         return *this;
     }
@@ -56,12 +51,37 @@ class LogClass
         return *this;
     }
 
+    LogClass& operator<<(const uint32_t& i) {
+        this->writeFormatted("%lu", i);
+        return *this;
+    }
+
+    LogClass& operator<<(const bool& i) {
+        this->writeFormatted("%d", static_cast<int>(i));
+        return *this;
+    }
+
+    LogClass& operator<<(const double& i) {
+        this->writeFormatted("%d", i);
+        return *this;
+    }
+
+    LogClass& operator<<(const long& i) {
+        this->writeFormatted("%ld", i);
+        return *this;
+    }
+
+    LogClass& operator<<(const long long& i) {
+        this->writeFormatted("%lld", i);
+        return *this;
+    }
+
     LogClass& operator<<(const volatile int& i) {
         this->writeFormatted("%d", i);
         return *this;
     }
 
-    LogClass& operator<<(void *p) {
+    LogClass& operator<<(void* p) {
         this->writeFormatted("%p", p);
         return *this;
     }
@@ -75,24 +95,25 @@ class LogClass
 };
 
 class DefaultLogContext {
-    public:
-    using LogData=logging::LogClass;
+  public:
+    using LogData = logging::LogClass;
 };
 
-#define log_with_severity(severity, ...) logging::LogClass(__FILE__, __FUNCTION__, __LINE__, severity).writeFormatted(__VA_ARGS__)
+#define log_with_severity(severity, ...) \
+    logging::LogClass(__FILE__, __FUNCTION__, __LINE__, severity).writeFormatted(__VA_ARGS__)
 
-#define log_fatal(...) log_with_severity(logging::LogLevel::Fatal, ## __VA_ARGS__)
+#define log_fatal(...) log_with_severity(logging::LogLevel::Fatal, ##__VA_ARGS__)
 
-#define log_error(...) log_with_severity(logging::LogLevel::Error, ## __VA_ARGS__)
+#define log_error(...) log_with_severity(logging::LogLevel::Error, ##__VA_ARGS__)
 
-#define log_verbose(...) log_with_severity(logging::LogLevel::Verbose, ## __VA_ARGS__)
+#define log_verbose(...) log_with_severity(logging::LogLevel::Verbose, ##__VA_ARGS__)
 
-#define log_info(...) log_with_severity(logging::LogLevel::Info, ## __VA_ARGS__)
+#define log_info(...) log_with_severity(logging::LogLevel::Info, ##__VA_ARGS__)
 
-#define log_warn(...) log_with_severity(logging::LogLevel::Warning, ## __VA_ARGS__)
+#define log_warn(...) log_with_severity(logging::LogLevel::Warning, ##__VA_ARGS__)
 #define log_warning(...) log_warn(__VA_ARGS__)
 
-#define log_debug(...) log_with_severity(logging::LogLevel::Debug, ## __VA_ARGS__)
+#define log_debug(...) log_with_severity(logging::LogLevel::Debug, ##__VA_ARGS__)
 
 #define LOG_DECLARE_CONTEXT(contextName, contextShortID, contextDescription)
 #define LOG_DECLARE_DEFAULT_CONTEXT(contextName, contextShortID, contextDescription)
@@ -101,12 +122,9 @@ class DefaultLogContext {
 #define LOG_IMPORT_CONTEXT(context)
 #define LOG_SET_DEFAULT_CONTEXT(context)
 
-namespace ConsoleLogContext
-{
-  void setupLogger(logging::LogLevel globalLoglevel, logging::LogDetailLevel globalDetailsLevel);
+namespace ConsoleLogContext {
+void setupLogger(logging::LogLevel globalLoglevel, logging::LogDetailLevel globalDetailsLevel);
+}
 }
 
-
-}
-
-#endif // IVI-LOGGING_H
+#endif  // IVI-LOGGING_H

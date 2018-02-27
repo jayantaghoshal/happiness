@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name : "climate_vf_common",
+    name: "climate_vf_common",
     defaults: ["climate_defaults"],
     srcs: [
         "source/*.cpp",

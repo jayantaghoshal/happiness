@@ -18,9 +18,8 @@ namespace volvocars {
 namespace climate {
 
 struct CommonTypes {
-    public:
-    
-    struct ReturnCode : CommonApiEnumeration<int32_t>  {
+  public:
+    struct ReturnCode : CommonApiEnumeration<int32_t> {
         enum Literal : int32_t {
             SUCCESS = 0,
             FUNCTION_NOT_PRESENT = 1,
@@ -32,12 +31,10 @@ struct CommonTypes {
             TIMESTAMP_INVALID = 7,
             CAR_IN_USE = 8
         };
-        
-        ReturnCode() 
-            : CommonApiEnumeration<int32_t>(static_cast<int32_t>(Literal::SUCCESS)) {}
-        ReturnCode(Literal _literal) 
-            : CommonApiEnumeration<int32_t>(static_cast<int32_t>(_literal)) {}
-    
+
+        ReturnCode() : CommonApiEnumeration<int32_t>(static_cast<int32_t>(Literal::SUCCESS)) {}
+        ReturnCode(Literal _literal) : CommonApiEnumeration<int32_t>(static_cast<int32_t>(_literal)) {}
+
         inline bool validate() const {
             switch (value_) {
                 case static_cast<int32_t>(Literal::SUCCESS):
@@ -49,75 +46,68 @@ struct CommonTypes {
                 case static_cast<int32_t>(Literal::NOT_READY):
                 case static_cast<int32_t>(Literal::TIMESTAMP_INVALID):
                 case static_cast<int32_t>(Literal::CAR_IN_USE):
-                return true;
-            default:
-                return false;
+                    return true;
+                default:
+                    return false;
             }
         }
-    
-        inline bool operator==(const ReturnCode &_other) const { return (value_ == _other.value_); }
-        inline bool operator!=(const ReturnCode &_other) const { return (value_ != _other.value_); }
-        inline bool operator<=(const ReturnCode &_other) const { return (value_ <= _other.value_); }
-        inline bool operator>=(const ReturnCode &_other) const { return (value_ >= _other.value_); }
-        inline bool operator<(const ReturnCode &_other) const { return (value_ < _other.value_); }
-        inline bool operator>(const ReturnCode &_other) const { return (value_ > _other.value_); }
-        
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast<int32_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast<int32_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast<int32_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast<int32_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast<int32_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast<int32_t>(_value)); }
+
+        inline bool operator==(const ReturnCode& _other) const { return (value_ == _other.value_); }
+        inline bool operator!=(const ReturnCode& _other) const { return (value_ != _other.value_); }
+        inline bool operator<=(const ReturnCode& _other) const { return (value_ <= _other.value_); }
+        inline bool operator>=(const ReturnCode& _other) const { return (value_ >= _other.value_); }
+        inline bool operator<(const ReturnCode& _other) const { return (value_ < _other.value_); }
+        inline bool operator>(const ReturnCode& _other) const { return (value_ > _other.value_); }
+
+        inline bool operator==(const Literal& _value) const { return (value_ == static_cast<int32_t>(_value)); }
+        inline bool operator!=(const Literal& _value) const { return (value_ != static_cast<int32_t>(_value)); }
+        inline bool operator<=(const Literal& _value) const { return (value_ <= static_cast<int32_t>(_value)); }
+        inline bool operator>=(const Literal& _value) const { return (value_ >= static_cast<int32_t>(_value)); }
+        inline bool operator<(const Literal& _value) const { return (value_ < static_cast<int32_t>(_value)); }
+        inline bool operator>(const Literal& _value) const { return (value_ > static_cast<int32_t>(_value)); }
     };
-    
+
     struct TemperatureState : CommonApiEnumeration<int32_t> {
-        enum Literal : int32_t {
-            AVAILABLE = 0,
-            SYSTEM_ERROR = 1,
-            DISABLED = 2,
-            NOT_PRESENT = 3
-        };
-        
-        TemperatureState() 
-            : CommonApiEnumeration<int32_t>(static_cast<int32_t>(Literal::AVAILABLE)) {}
-        TemperatureState(Literal _literal) 
-            : CommonApiEnumeration<int32_t>(static_cast<int32_t>(_literal)) {}
-    
+        enum Literal : int32_t { AVAILABLE = 0, SYSTEM_ERROR = 1, DISABLED = 2, NOT_PRESENT = 3 };
+
+        TemperatureState() : CommonApiEnumeration<int32_t>(static_cast<int32_t>(Literal::AVAILABLE)) {}
+        TemperatureState(Literal _literal) : CommonApiEnumeration<int32_t>(static_cast<int32_t>(_literal)) {}
+
         inline bool validate() const {
             switch (value_) {
                 case static_cast<int32_t>(Literal::AVAILABLE):
                 case static_cast<int32_t>(Literal::SYSTEM_ERROR):
                 case static_cast<int32_t>(Literal::DISABLED):
                 case static_cast<int32_t>(Literal::NOT_PRESENT):
-                return true;
-            default:
-                return false;
+                    return true;
+                default:
+                    return false;
             }
         }
-    
-        inline bool operator==(const TemperatureState &_other) const { return (value_ == _other.value_); }
-        inline bool operator!=(const TemperatureState &_other) const { return (value_ != _other.value_); }
-        inline bool operator<=(const TemperatureState &_other) const { return (value_ <= _other.value_); }
-        inline bool operator>=(const TemperatureState &_other) const { return (value_ >= _other.value_); }
-        inline bool operator<(const TemperatureState &_other) const { return (value_ < _other.value_); }
-        inline bool operator>(const TemperatureState &_other) const { return (value_ > _other.value_); }
-        
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast<int32_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast<int32_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast<int32_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast<int32_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast<int32_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast<int32_t>(_value)); }
+
+        inline bool operator==(const TemperatureState& _other) const { return (value_ == _other.value_); }
+        inline bool operator!=(const TemperatureState& _other) const { return (value_ != _other.value_); }
+        inline bool operator<=(const TemperatureState& _other) const { return (value_ <= _other.value_); }
+        inline bool operator>=(const TemperatureState& _other) const { return (value_ >= _other.value_); }
+        inline bool operator<(const TemperatureState& _other) const { return (value_ < _other.value_); }
+        inline bool operator>(const TemperatureState& _other) const { return (value_ > _other.value_); }
+
+        inline bool operator==(const Literal& _value) const { return (value_ == static_cast<int32_t>(_value)); }
+        inline bool operator!=(const Literal& _value) const { return (value_ != static_cast<int32_t>(_value)); }
+        inline bool operator<=(const Literal& _value) const { return (value_ <= static_cast<int32_t>(_value)); }
+        inline bool operator>=(const Literal& _value) const { return (value_ >= static_cast<int32_t>(_value)); }
+        inline bool operator<(const Literal& _value) const { return (value_ < static_cast<int32_t>(_value)); }
+        inline bool operator>(const Literal& _value) const { return (value_ > static_cast<int32_t>(_value)); }
     };
 
-}; // struct CommonTypes
+};  // struct CommonTypes
 
-} // namespace climate
-} // namespace volvocars
-} // namespace org
-} // namespace v0
+}  // namespace climate
+}  // namespace volvocars
+}  // namespace org
+}  // namespace v0
 
 // Compatibility
 namespace v0_1 = v0;
 
-#endif // V0_ORG_VOLVOCARS_CLIMATE_Common_Types_HPP_
+#endif  // V0_ORG_VOLVOCARS_CLIMATE_Common_Types_HPP_

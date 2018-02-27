@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 #include "notifiable_property.h"
@@ -12,18 +12,21 @@
 
 using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
 
-class AdditionalHeaterLogic
-{
-public:
+class AdditionalHeaterLogic {
+  public:
     AdditionalHeaterLogic(NotifiableProperty<UserSelectionGen::OffOnSelection>& additionalHeater,
-                          std::unique_ptr<SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>                   additionalHeaterSetting);
+                          std::unique_ptr<SettingsProxy<int, SettingsFramework::UserScope::USER,
+                                                        SettingsFramework::UserScope::NOT_USER_RELATED>>
+                                  additionalHeaterSetting);
     void request(UserSelectionGen::OffOnType);
 
-private:
+  private:
     void sendSignal();
 
     NotifiableProperty<UserSelectionGen::OffOnSelection>& additionalHeater_;
-    std::unique_ptr<SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>                   additionalHeaterSetting_;
+    std::unique_ptr<
+            SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>
+            additionalHeaterSetting_;
 
     ApplicationDataElement::DESender<autosar::HeatrDurgDrvgReqd_info> HeatrDurgDrvgReqd_;
 

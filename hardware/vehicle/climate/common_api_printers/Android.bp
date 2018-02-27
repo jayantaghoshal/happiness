@@ -4,11 +4,11 @@
  */
 
 cc_library_shared {
-    name : "climate_commonapi_printers",
+    name: "climate_commonapi_printers",
     defaults: ["climate_defaults"],
     srcs: ["source/*"],
     static_libs: [
-        "climate_commonapi_pregen"
+        "climate_commonapi_pregen",
     ],
     shared_libs: [
         "libihulog",

@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #include "steering_wheel_heat_logic.h"
 
@@ -17,179 +17,144 @@
 LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
 
 using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
-using FirstRowGen      = v0::org::volvocars::climate::FirstRow;
+using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 using namespace std::chrono_literals;
 
-autosar::SteerWhlHeatgOnCmdTyp SteeringWheelHeatLogic::convertHeatLevelToAutosar(FirstRowGen::HeatLevel level)
-{
-    switch (level)
-    {
-    case FirstRowGen::HeatLevel::OFF:
-        return autosar::SteerWhlHeatgOnCmdTyp::Off;
-    case FirstRowGen::HeatLevel::LO:
-        return autosar::SteerWhlHeatgOnCmdTyp::Lo;
-    case FirstRowGen::HeatLevel::MED:
-        return autosar::SteerWhlHeatgOnCmdTyp::Med;
-    case FirstRowGen::HeatLevel::HI:
-        return autosar::SteerWhlHeatgOnCmdTyp::Hi;
-    default:
-        return autosar::SteerWhlHeatgOnCmdTyp::Off;
+autosar::SteerWhlHeatgOnCmdTyp SteeringWheelHeatLogic::convertHeatLevelToAutosar(FirstRowGen::HeatLevel level) {
+    switch (level) {
+        case FirstRowGen::HeatLevel::OFF:
+            return autosar::SteerWhlHeatgOnCmdTyp::Off;
+        case FirstRowGen::HeatLevel::LO:
+            return autosar::SteerWhlHeatgOnCmdTyp::Lo;
+        case FirstRowGen::HeatLevel::MED:
+            return autosar::SteerWhlHeatgOnCmdTyp::Med;
+        case FirstRowGen::HeatLevel::HI:
+            return autosar::SteerWhlHeatgOnCmdTyp::Hi;
+        default:
+            return autosar::SteerWhlHeatgOnCmdTyp::Off;
     }
 }
 
-FirstRowGen::HeatLevel const
-SteeringWheelHeatLogic::convertLevelTypeToHeatLevel(UserSelectionGen::LevelType const level)
-{
-    switch (level)
-    {
-    case UserSelectionGen::LevelType::LO:
-        return FirstRowGen::HeatLevel::LO;
-    case UserSelectionGen::LevelType::MED:
-        return FirstRowGen::HeatLevel::MED;
-    case UserSelectionGen::LevelType::HI:
-        return FirstRowGen::HeatLevel::HI;
-    default:
-        return FirstRowGen::HeatLevel::OFF;
+FirstRowGen::HeatLevel const SteeringWheelHeatLogic::convertLevelTypeToHeatLevel(
+        UserSelectionGen::LevelType const level) {
+    switch (level) {
+        case UserSelectionGen::LevelType::LO:
+            return FirstRowGen::HeatLevel::LO;
+        case UserSelectionGen::LevelType::MED:
+            return FirstRowGen::HeatLevel::MED;
+        case UserSelectionGen::LevelType::HI:
+            return FirstRowGen::HeatLevel::HI;
+        default:
+            return FirstRowGen::HeatLevel::OFF;
     }
 }
 
-bool SteeringWheelHeatLogic::steeringWheelHeatersPresent()
-{
-    return carconfig::getValue<CarConfigParams::CC186_HeatedSteeringWheelType>()
-           == CarConfigParams::CC186_HeatedSteeringWheelType::Heated_steering_wheel;
+bool SteeringWheelHeatLogic::steeringWheelHeatersPresent() {
+    return carconfig::getValue<CarConfigParams::CC186_HeatedSteeringWheelType>() ==
+           CarConfigParams::CC186_HeatedSteeringWheelType::Heated_steering_wheel;
 }
 
 SteeringWheelHeatLogic::SteeringWheelHeatLogic(
-    NotifiableProperty<FirstRowGen::HeatAttribute>&               heatAttribute,
-    ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoSteeringWheelHeatOn,
-    ReadOnlyNotifiableProperty<UserSelectionGen::LevelSelection>& autoSteeringWheelHeatLevel,
-    SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>&               steeringWheelHeatLevelSetting,
-    tarmac::timeprovider::TimerManagerInterface const&                                          timeProvider)
-    : shareHeatAttribute_{ heatAttribute }
-    , setting_{ steeringWheelHeatLevelSetting }
-    , active_{ false }
-    , timeProvider_{ timeProvider }
-    , timeProviderTimeout_{ util::readLocalConfig<std::chrono::seconds>("Determination_timeout") }
-    , autoSteeringWheelHeatOn_(autoSteeringWheelHeatOn)
-    , autoSteeringWheelHeatLevel_(autoSteeringWheelHeatLevel)
-{
-
+        NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
+        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoSteeringWheelHeatOn,
+        ReadOnlyNotifiableProperty<UserSelectionGen::LevelSelection>& autoSteeringWheelHeatLevel,
+        SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& steeringWheelHeatLevelSetting,
+        tarmac::timeprovider::TimerManagerInterface const& timeProvider)
+    : shareHeatAttribute_{heatAttribute},
+      setting_{steeringWheelHeatLevelSetting},
+      active_{false},
+      timeProvider_{timeProvider},
+      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Determination_timeout")},
+      autoSteeringWheelHeatOn_(autoSteeringWheelHeatOn),
+      autoSteeringWheelHeatLevel_(autoSteeringWheelHeatLevel) {
     log_debug() << "timeProviderTimeout_ :" << timeProviderTimeout_.count();
 
-    if (steeringWheelHeatersPresent())
-    {
+    if (steeringWheelHeatersPresent()) {
         vehicleModeSignal_.subscribe([this] { handleVehicleMode(); });
         setting_.subscribe([this]() { request(setting_.get()); });
         steeringWheelHeatgAutCdnSignal_.subscribe([this] { handleSteeringWheelHeatAutoSignal(); });
-    }
-    else
-    {
+    } else {
         shareHeatAttribute_.set(FirstRowGen::HeatState::NOT_PRESENT, FirstRowGen::HeatLevel::OFF);
     }
 }
 
-void SteeringWheelHeatLogic::handleSteeringWheelHeatAutoSignal(void)
-{
-    if (steeringWheelHeatgAutCdnSignal_.get().value() == autosar::OnOff1::On)
-    {
+void SteeringWheelHeatLogic::handleSteeringWheelHeatAutoSignal() {
+    if (steeringWheelHeatgAutCdnSignal_.get().value() == autosar::OnOff1::On) {
         log_debug() << "steeringWheelHeatgAutCdnSignal_ is On";
 
         auto difference = timeProvider_.steady_clock_now() - initialTime_;
-        if (difference < timeProviderTimeout_)
-        {
-            auto const level
-                = static_cast<UserSelectionGen::LevelType>(autoSteeringWheelHeatLevel_.get().getCurrentLevel());
+        if (difference < timeProviderTimeout_) {
+            auto const level =
+                    static_cast<UserSelectionGen::LevelType>(autoSteeringWheelHeatLevel_.get().getCurrentLevel());
             log_debug() << "steeringWheelHeatgAutCdnSignal_ callback, "
                            "autoSteeringWheelHeatOn_ is ON, set to auto, "
                         << convertLevelTypeToHeatLevel(level);
             shareHeatAttribute_.set(FirstRowGen::HeatState::AUTO, convertLevelTypeToHeatLevel(level));
             setSteeringWheelHeat(convertHeatLevelToAutosar(convertLevelTypeToHeatLevel(level)));
-        }
-        else
-        {
+        } else {
             log_warn() << "Auto condition received after timeout; ignoring...";
         }
     }
 }
 
-void SteeringWheelHeatLogic::handleSteeringWheelHeatAutoMode(void)
-{
-    if (autoSteeringWheelHeatOn_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON)
-    {
+void SteeringWheelHeatLogic::handleSteeringWheelHeatAutoMode() {
+    if (autoSteeringWheelHeatOn_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON) {
         initialTime_ = timeProvider_.steady_clock_now();
-        if (steeringWheelHeatgAutCdnSignal_.get().isOk()
-            && steeringWheelHeatgAutCdnSignal_.get().value() == autosar::OnOff1::On)
-        {
-            auto const level
-                = static_cast<UserSelectionGen::LevelType>(autoSteeringWheelHeatLevel_.get().getCurrentLevel());
+        if (steeringWheelHeatgAutCdnSignal_.get().isOk() &&
+            steeringWheelHeatgAutCdnSignal_.get().value() == autosar::OnOff1::On) {
+            auto const level =
+                    static_cast<UserSelectionGen::LevelType>(autoSteeringWheelHeatLevel_.get().getCurrentLevel());
             log_debug() << "HandleAuto, autoSteeringWheelHeatOn_ is ON, set to auto, "
                         << convertLevelTypeToHeatLevel(level);
             shareHeatAttribute_.set(FirstRowGen::HeatState::AUTO, convertLevelTypeToHeatLevel(level));
             setSteeringWheelHeat(convertHeatLevelToAutosar(convertLevelTypeToHeatLevel(level)));
-        }
-        else
-        {
+        } else {
             log_debug() << "HandleAuto, autoSteeringWheelHeatOn_ is ON, set to auto, OFF";
             shareHeatAttribute_.set(FirstRowGen::HeatState::AUTO, FirstRowGen::HeatLevel::OFF);
             setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp::Off);
         }
-    }
-    else
-    {
+    } else {
         log_debug() << "HandleAuto, autoSteeringWhlHeatOn_ is OFF, set to manual, " << setting_.get();
         shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, setting_.get());
         setSteeringWheelHeat(convertHeatLevelToAutosar(setting_.get()));
     }
 }
 
-void SteeringWheelHeatLogic::request(FirstRowGen::HeatLevel const level)
-{
-    if (steeringWheelHeatersPresent() && activationCheckOk())
-    {
+void SteeringWheelHeatLogic::request(FirstRowGen::HeatLevel const level) {
+    if (steeringWheelHeatersPresent() && activationCheckOk()) {
         std::lock_guard<std::recursive_mutex> lock(mutex_);
         log_debug() << "SteeringWheelHeatLogic request, set to manual, " << level;
         shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, level);
         setSteeringWheelHeat(convertHeatLevelToAutosar(level));
         setting_.set(static_cast<FirstRowGen::HeatLevel::Literal>(level.value_));
-    }
-    else
-    {
+    } else {
         log_warn() << "SteeringWheelHeatLogic request, when not active";
     }
 }
 
-bool SteeringWheelHeatLogic::activationCheckOk() const
-{
-    auto carMode   = vehicleModeSignal_.get().value().CarModSts1_;
+bool SteeringWheelHeatLogic::activationCheckOk() const {
+    auto carMode = vehicleModeSignal_.get().value().CarModSts1_;
     auto usageMode = vehicleModeSignal_.get().value().UsgModSts;
 
     auto carModeStatusOk = (carMode == autosar::CarModSts1::CarModNorm) || (carMode == autosar::CarModSts1::CarModDyno);
-    auto usageModeOk     = usageMode == autosar::UsgModSts1::UsgModDrvg;
+    auto usageModeOk = usageMode == autosar::UsgModSts1::UsgModDrvg;
 
     log_debug() << "SeSteeringWheelHeatLogic activationCheck returns: " << (carModeStatusOk && usageModeOk);
 
     return carModeStatusOk && usageModeOk;
 }
 
-bool SteeringWheelHeatLogic::signalsOk() const
-{
-    return vehicleModeSignal_.get().isOk();
-}
+bool SteeringWheelHeatLogic::signalsOk() const { return vehicleModeSignal_.get().isOk(); }
 
-void SteeringWheelHeatLogic::handleVehicleMode()
-{
-    if (signalsOk())
-    {
-        if (activationCheckOk())
-        {
+void SteeringWheelHeatLogic::handleVehicleMode() {
+    if (signalsOk()) {
+        if (activationCheckOk()) {
             log_debug() << "SteeringWheelHeatLogic, "
                         << "Car Mode: " << static_cast<int>(vehicleModeSignal_.get().value().CarModSts1_)
                         << ", Usg Mode: " << static_cast<int>(vehicleModeSignal_.get().value().UsgModSts);
 
             handleSteeringWheelHeatAutoMode();
-        }
-        else
-        {
+        } else {
             auto level = static_cast<FirstRowGen::HeatLevel::Literal>(shareHeatAttribute_.get().getHeatLevel().value_);
             setting_.set(level);
 
@@ -197,16 +162,13 @@ void SteeringWheelHeatLogic::handleVehicleMode()
             shareHeatAttribute_.set(FirstRowGen::HeatState::DISABLED, FirstRowGen::HeatLevel::OFF);
             setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp::Off);
         }
-    }
-    else
-    {
+    } else {
         log_error() << "SteeringWheelHeatLogic, signal in error state";
         shareHeatAttribute_.set(FirstRowGen::HeatState::DISABLED, FirstRowGen::HeatLevel::OFF);
         setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp::Off);
     }
 }
 
-void SteeringWheelHeatLogic::setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp level)
-{
+void SteeringWheelHeatLogic::setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp level) {
     steeringWheelHeatSignal_.send(level);
 }

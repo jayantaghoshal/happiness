@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #include "electric_defroster_rear_logic.h"
 
@@ -15,33 +15,28 @@ using namespace SettingsFramework;
 using namespace autosar;
 using namespace std::chrono_literals;
 
-namespace
-{
+namespace {
 auto LOG_PREFIX = "ElectricDefrosterRear: ";
 }
 
 ElectricDefrosterRearLogic::ElectricDefrosterRearLogic(
-    NotifiableProperty<ElectricDefrosterRearState>&               ElectricDefrosterRear,
-    ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear,
-    IDispatcher&                                                  timerDispatcher,
-    autosar::HmiDefrstElecReq&                                    hmiDefrstElecReq)
-    : electricDefrosterRearState_(ElectricDefrosterRear)
-    , timeout_(std::chrono::milliseconds{
-          static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0) })
-    , autoRearRequest_(autoDefrosterRear)
-    , currentElectricDefrosterRearState_(ElectricDefrosterRearState::OFF)
-    , requestedElectricDefrosterRearState_(ElectricDefrosterRearState::OFF)
-    , usageModeLast_(autosar::UsgModSts1::UsgModAbdnd)
-    , carModeLast_(autosar::CarModSts1::CarModDyno)
-    , driveModeLast_(autosar::DrvModReqType1::Undefd)
-    , hmiDefrosterRearStatusLast_(autosar::ActrDefrstSts::Off)
-    , hmiDefrosterMirrorStatusLast_(autosar::ActrDefrstSts::Off)
-    , hmiElectricDefrosterRearRequestLast_(autosar::ActrReq::Off)
-    , hmiElectricDefrosterMirrorRequestLast_(autosar::ActrReq::Off)
-    , driveMode_()
-    , timerDispatcher_(timerDispatcher)
-    , hmiDefrstElecReq_(hmiDefrstElecReq)
-{
+        NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
+        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear, IDispatcher& timerDispatcher,
+        autosar::HmiDefrstElecReq& hmiDefrstElecReq)
+    : electricDefrosterRearState_(ElectricDefrosterRear),
+      timeout_(std::chrono::milliseconds{
+              static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0)}),
+      autoRearRequest_(autoDefrosterRear),
+      currentElectricDefrosterRearState_(ElectricDefrosterRearState::OFF),
+      requestedElectricDefrosterRearState_(ElectricDefrosterRearState::OFF),
+      usageModeLast_(autosar::UsgModSts1::UsgModAbdnd),
+      carModeLast_(autosar::CarModSts1::CarModDyno),
+      driveModeLast_(autosar::DrvModReqType1::Undefd),
+      hmiDefrosterRearStatusLast_(autosar::ActrDefrstSts::Off),
+      hmiDefrosterMirrorStatusLast_(autosar::ActrDefrstSts::Off),
+      driveMode_(),
+      timerDispatcher_(timerDispatcher),
+      hmiDefrstElecReq_(hmiDefrstElecReq) {
     registerFsm();
 
     transitionToState(InternalElectricDefrosterRearState::SYSTEM_OK);
@@ -55,40 +50,29 @@ ElectricDefrosterRearLogic::ElectricDefrosterRearLogic(
     handleVehicleMode();
 }
 
-bool ElectricDefrosterRearLogic::isInState(int state)
-{
-    return inState(state);
-}
+bool ElectricDefrosterRearLogic::isInState(int state) { return inState(state); }
 
-void ElectricDefrosterRearLogic::request(ElectricDefrosterRearRequest requestedState)
-{
+void ElectricDefrosterRearLogic::request(ElectricDefrosterRearRequest requestedState) {
     log_debug() << LOG_PREFIX << "request = " << requestedState << " current = " << electricDefrosterRearState_.get();
-    if (electricDefrosterRearState_.get() != requestedState)
-    {
+    if (electricDefrosterRearState_.get() != requestedState) {
         requestedElectricDefrosterRearState_.value_ = requestedState.value_;
-        currentElectricDefrosterRearState_          = electricDefrosterRearState_.get();
+        currentElectricDefrosterRearState_ = electricDefrosterRearState_.get();
         changeStateOnTrigger();
         currentElectricDefrosterRearState_ = electricDefrosterRearState_.get();
     }
 }
 
-void ElectricDefrosterRearLogic::request(OnOff requestedState)
-{
-    log_debug() << LOG_PREFIX << "requestCCSM " << (requestedState ? "ON" : "OFF");
+void ElectricDefrosterRearLogic::request(OnOff requestedState) {
+    log_debug() << LOG_PREFIX << "requestCCSM " << (requestedState == OnOff::On ? "ON" : "OFF");
 
-    if (requestedState)
-    {
+    if (requestedState == OnOff::On) {
         request(FirstRowGen::ElectricDefrosterRearRequest::ON);
-    }
-    else
-    {
+    } else {
         request(FirstRowGen::ElectricDefrosterRearRequest::OFF);
     }
 }
 
-void ElectricDefrosterRearLogic::registerFsm()
-{
-
+void ElectricDefrosterRearLogic::registerFsm() {
     createState(InternalElectricDefrosterRearState::INIT);
     registerMainInitState(InternalElectricDefrosterRearState::INIT);
 
@@ -114,12 +98,9 @@ void ElectricDefrosterRearLogic::registerFsm()
 
     addStateEntry(InternalElectricDefrosterRearState::ACTIVE, [this]() {
         log_debug() << LOG_PREFIX << "State: ACTIVE";
-        if (activeCheck())
-        {
+        if (activeCheck()) {
             executeTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::AUTO);
-        }
-        else
-        {
+        } else {
             executeTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::MANUAL);
         }
     });
@@ -143,13 +124,10 @@ void ElectricDefrosterRearLogic::registerFsm()
 
     addStateEntry(InternalElectricDefrosterRearState::MANUAL, [this]() {
         log_debug() << LOG_PREFIX << "State: MANUAL";
-        if (initManualOnCheck())
-        {
+        if (initManualOnCheck()) {
             executeTransition(InternalElectricDefrosterRearState::MANUAL,
                               InternalElectricDefrosterRearState::MANUAL_ON);
-        }
-        else
-        {
+        } else {
             executeTransition(InternalElectricDefrosterRearState::MANUAL,
                               InternalElectricDefrosterRearState::MANUAL_OFF);
         }
@@ -163,11 +141,10 @@ void ElectricDefrosterRearLogic::registerFsm()
         sendSignal(autosar::ActrReq::On);
 
         timerDispatcher_.Start(timeout_, [this]() {
-            if ((hmiDefrosterRearStatusLast_ != ActrDefrstSts::On
-                 && hmiDefrosterRearStatusLast_ != ActrDefrstSts::Limited)
-                && (hmiDefrosterMirrorStatusLast_ != ActrDefrstSts::On
-                    && hmiDefrosterMirrorStatusLast_ != ActrDefrstSts::Limited))
-            {
+            if ((hmiDefrosterRearStatusLast_ != ActrDefrstSts::On &&
+                 hmiDefrosterRearStatusLast_ != ActrDefrstSts::Limited) &&
+                (hmiDefrosterMirrorStatusLast_ != ActrDefrstSts::On &&
+                 hmiDefrosterMirrorStatusLast_ != ActrDefrstSts::Limited)) {
                 transitionToState(InternalElectricDefrosterRearState::MANUAL_OFF);
             }
         });
@@ -186,57 +163,45 @@ void ElectricDefrosterRearLogic::registerFsm()
     });
 
     createTransition(InternalElectricDefrosterRearState::INIT, InternalElectricDefrosterRearState::SYSTEM_OK);
-    createTransition(InternalElectricDefrosterRearState::SYSTEM_OK,
-                     InternalElectricDefrosterRearState::SYSTEM_ERROR,
+    createTransition(InternalElectricDefrosterRearState::SYSTEM_OK, InternalElectricDefrosterRearState::SYSTEM_ERROR,
                      [this]() { return !signalOK(); });
-    createTransition(InternalElectricDefrosterRearState::SYSTEM_ERROR,
-                     InternalElectricDefrosterRearState::SYSTEM_OK,
+    createTransition(InternalElectricDefrosterRearState::SYSTEM_ERROR, InternalElectricDefrosterRearState::SYSTEM_OK,
                      [this]() { return signalOK(); });
-    createTransition(InternalElectricDefrosterRearState::NOT_ACTIVE,
-                     InternalElectricDefrosterRearState::ACTIVE,
+    createTransition(InternalElectricDefrosterRearState::NOT_ACTIVE, InternalElectricDefrosterRearState::ACTIVE,
                      [this]() { return activationCheck(); });
-    createTransition(InternalElectricDefrosterRearState::ACTIVE,
-                     InternalElectricDefrosterRearState::NOT_ACTIVE,
+    createTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::NOT_ACTIVE,
                      [this]() { return !activationCheck(); });
 
     createTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::AUTO);
     createTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::MANUAL);
 
     createTransition(InternalElectricDefrosterRearState::AUTO, InternalElectricDefrosterRearState::AUTO_OFF);
-    createTransition(InternalElectricDefrosterRearState::AUTO, InternalElectricDefrosterRearState::MANUAL, [this]() {
-        return manualCheck();
-    });
-    createTransition(InternalElectricDefrosterRearState::AUTO_OFF,
-                     InternalElectricDefrosterRearState::AUTO_ON,
+    createTransition(InternalElectricDefrosterRearState::AUTO, InternalElectricDefrosterRearState::MANUAL,
+                     [this]() { return manualCheck(); });
+    createTransition(InternalElectricDefrosterRearState::AUTO_OFF, InternalElectricDefrosterRearState::AUTO_ON,
                      [this]() { return autoOnCheck(); });
-    createTransition(InternalElectricDefrosterRearState::AUTO_ON,
-                     InternalElectricDefrosterRearState::AUTO_OFF,
+    createTransition(InternalElectricDefrosterRearState::AUTO_ON, InternalElectricDefrosterRearState::AUTO_OFF,
                      [this]() { return autoOffCheck(); });
 
     createTransition(InternalElectricDefrosterRearState::MANUAL, InternalElectricDefrosterRearState::MANUAL_OFF);
     createTransition(InternalElectricDefrosterRearState::MANUAL, InternalElectricDefrosterRearState::MANUAL_ON);
-    createTransition(InternalElectricDefrosterRearState::MANUAL_ON,
-                     InternalElectricDefrosterRearState::MANUAL_OFF,
+    createTransition(InternalElectricDefrosterRearState::MANUAL_ON, InternalElectricDefrosterRearState::MANUAL_OFF,
                      [this]() { return manualOffCheck(); });
-    createTransition(InternalElectricDefrosterRearState::MANUAL_OFF,
-                     InternalElectricDefrosterRearState::MANUAL_ON,
+    createTransition(InternalElectricDefrosterRearState::MANUAL_OFF, InternalElectricDefrosterRearState::MANUAL_ON,
                      [this]() { return manualOnCheck(); });
 }
 
 /*=====================================================*/
 /*                  Subscribe Functions                */
 /*=====================================================*/
-void ElectricDefrosterRearLogic::handleHmiDefrosterStatus()
-{
+void ElectricDefrosterRearLogic::handleHmiDefrosterStatus() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
     autosar::HmiDefrstElecSts status = hmiDefrosterStatus_.get().value();
 
-    if (hmiDefrosterStatus_.get().isOk())
-    {
-        if (hmiDefrosterRearStatusLast_ != status.Re || hmiDefrosterMirrorStatusLast_ != status.Mirrr)
-        {
-            hmiDefrosterRearStatusLast_   = status.Re;
+    if (hmiDefrosterStatus_.get().isOk()) {
+        if (hmiDefrosterRearStatusLast_ != status.Re || hmiDefrosterMirrorStatusLast_ != status.Mirrr) {
+            hmiDefrosterRearStatusLast_ = status.Re;
             hmiDefrosterMirrorStatusLast_ = status.Mirrr;
             log_verbose() << LOG_PREFIX
                           << "HmiDefrosterRearStatus   : " << static_cast<int>(hmiDefrosterRearStatusLast_);
@@ -245,42 +210,35 @@ void ElectricDefrosterRearLogic::handleHmiDefrosterStatus()
         }
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
 
-void ElectricDefrosterRearLogic::handleDriveMode()
-{
+void ElectricDefrosterRearLogic::handleDriveMode() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
-    if (driveMode_.get().isOk())
-    {
+    if (driveMode_.get().isOk()) {
         driveModeLast_ = driveMode_.get().value();
         log_verbose() << LOG_PREFIX << "DriveMode : " << static_cast<int>(driveModeLast_);
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
 
-void ElectricDefrosterRearLogic::handleVehicleMode()
-{
+void ElectricDefrosterRearLogic::handleVehicleMode() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
-    if (vehicleMode_.get().isOk())
-    {
+    if (vehicleMode_.get().isOk()) {
         usageModeLast_ = vehicleMode_.get().value().UsgModSts;
-        carModeLast_   = vehicleMode_.get().value().CarModSts1_;
+        carModeLast_ = vehicleMode_.get().value().CarModSts1_;
         log_verbose() << LOG_PREFIX << "CarMode   : " << static_cast<int>(carModeLast_);
         log_verbose() << LOG_PREFIX << "UsageMode : " << static_cast<int>(usageModeLast_);
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
@@ -288,123 +246,103 @@ void ElectricDefrosterRearLogic::handleVehicleMode()
 /*=====================================================*/
 /*                  Check Functions                    */
 /*=====================================================*/
-bool ElectricDefrosterRearLogic::activationCheck()
-{
-    return (usageModeLast_ == autosar::UsgModSts1::UsgModDrvg
-            && (carModeLast_ == autosar::CarModSts1::CarModDyno || carModeLast_ == autosar::CarModSts1::CarModNorm));
+bool ElectricDefrosterRearLogic::activationCheck() {
+    return (usageModeLast_ == autosar::UsgModSts1::UsgModDrvg &&
+            (carModeLast_ == autosar::CarModSts1::CarModDyno || carModeLast_ == autosar::CarModSts1::CarModNorm));
 }
-bool ElectricDefrosterRearLogic::activeCheck()
-{
+bool ElectricDefrosterRearLogic::activeCheck() {
     log_debug() << LOG_PREFIX << "Auto Rear Value = " << autoRearRequest_.get().getCurrentSelection();
 
-    return autoRearRequest_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON
-           && (driveModeLast_ != autosar::DrvModReqType1::DrvMod1
-               && driveModeLast_ != autosar::DrvModReqType1::DrvMod8);
+    return autoRearRequest_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON &&
+           (driveModeLast_ != autosar::DrvModReqType1::DrvMod1 && driveModeLast_ != autosar::DrvModReqType1::DrvMod8);
 }
 
-bool ElectricDefrosterRearLogic::autoOnCheck()
-{
+bool ElectricDefrosterRearLogic::autoOnCheck() {
     log_debug() << "ElectricDefrosterRear, hmiDefrosterRearStatusLast_ = "
                 << static_cast<int>(hmiDefrosterRearStatusLast_);
     log_debug() << "ElectricDefrosterRear, hmiDefrosterMirrorStatusLast_ = "
                 << static_cast<int>(hmiDefrosterMirrorStatusLast_);
-    return (hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::AutoCdn
-            || hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::AutoCdn);
+    return (hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::AutoCdn ||
+            hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::AutoCdn);
 }
 
-bool ElectricDefrosterRearLogic::autoOffCheck()
-{
-    return (hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::AutoCdn
-            && hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::AutoCdn);
+bool ElectricDefrosterRearLogic::autoOffCheck() {
+    return (hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::AutoCdn &&
+            hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::AutoCdn);
 }
-bool ElectricDefrosterRearLogic::manualCheck()
-{
-    return ((hasChangedTo(ElectricDefrosterRearState::OFF)
-             || hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::NotAvailable
-             || hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::NotAvailable)
-            || (hasChangedTo(ElectricDefrosterRearState::ON)));
+bool ElectricDefrosterRearLogic::manualCheck() {
+    return ((hasChangedTo(ElectricDefrosterRearState::OFF) ||
+             hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::NotAvailable ||
+             hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::NotAvailable) ||
+            (hasChangedTo(ElectricDefrosterRearState::ON)));
 }
 
-bool ElectricDefrosterRearLogic::initManualOnCheck()
-{
-    return (hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::NotAvailable
-            && hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::NotAvailable
-            && electricDefrosterRearState_.get() == ElectricDefrosterRearState::OFF);
+bool ElectricDefrosterRearLogic::initManualOnCheck() {
+    return (hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::NotAvailable &&
+            hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::NotAvailable &&
+            electricDefrosterRearState_.get() == ElectricDefrosterRearState::OFF);
 }
 
-bool ElectricDefrosterRearLogic::manualOffCheck()
-{
-    return (hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::NotAvailable
-            || hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::NotAvailable
-            || hasChangedTo(ElectricDefrosterRearState::OFF)
-            || hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::TmrOff
-            || hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::TmrOff
-            || (!timerDispatcher_.IsRunning() && hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::On
-                && hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::Limited
-                && hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::On
-                && hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::Limited));
+bool ElectricDefrosterRearLogic::manualOffCheck() {
+    return (hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::NotAvailable ||
+            hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::NotAvailable ||
+            hasChangedTo(ElectricDefrosterRearState::OFF) ||
+            hmiDefrosterRearStatusLast_ == autosar::ActrDefrstSts::TmrOff ||
+            hmiDefrosterMirrorStatusLast_ == autosar::ActrDefrstSts::TmrOff ||
+            (!timerDispatcher_.IsRunning() && hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::On &&
+             hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::Limited &&
+             hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::On &&
+             hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::Limited));
 }
 
-bool ElectricDefrosterRearLogic::manualOnCheck()
-{
-    return ((hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::NotAvailable
-             && hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::NotAvailable)
-            && (hasChangedTo(ElectricDefrosterRearState::ON)));
+bool ElectricDefrosterRearLogic::manualOnCheck() {
+    return ((hmiDefrosterRearStatusLast_ != autosar::ActrDefrstSts::NotAvailable &&
+             hmiDefrosterMirrorStatusLast_ != autosar::ActrDefrstSts::NotAvailable) &&
+            (hasChangedTo(ElectricDefrosterRearState::ON)));
 }
 
-void ElectricDefrosterRearLogic::changeStateOnTrigger()
-{
-    if (inState(InternalElectricDefrosterRearState::NOT_ACTIVE))
-    {
+void ElectricDefrosterRearLogic::changeStateOnTrigger() {
+    if (inState(InternalElectricDefrosterRearState::NOT_ACTIVE)) {
         executeTransition(InternalElectricDefrosterRearState::NOT_ACTIVE, InternalElectricDefrosterRearState::ACTIVE);
     }
-    if (inState(InternalElectricDefrosterRearState::ACTIVE))
-    {
+    if (inState(InternalElectricDefrosterRearState::ACTIVE)) {
         executeTransition(InternalElectricDefrosterRearState::ACTIVE, InternalElectricDefrosterRearState::NOT_ACTIVE);
-        if (!inState(InternalElectricDefrosterRearState::NOT_ACTIVE))
-        {
-            if (inState(InternalElectricDefrosterRearState::AUTO))
+        if (!inState(InternalElectricDefrosterRearState::NOT_ACTIVE)) {
+            if (inState(InternalElectricDefrosterRearState::AUTO)) {
                 executeTransition(InternalElectricDefrosterRearState::AUTO, InternalElectricDefrosterRearState::MANUAL);
-            if (inState(InternalElectricDefrosterRearState::AUTO_OFF))
+            }
+            if (inState(InternalElectricDefrosterRearState::AUTO_OFF)) {
                 executeTransition(InternalElectricDefrosterRearState::AUTO_OFF,
                                   InternalElectricDefrosterRearState::AUTO_ON);
-            else if (inState(InternalElectricDefrosterRearState::AUTO_ON))
+            } else if (inState(InternalElectricDefrosterRearState::AUTO_ON)) {
                 executeTransition(InternalElectricDefrosterRearState::AUTO_ON,
                                   InternalElectricDefrosterRearState::AUTO_OFF);
-            if (inState(InternalElectricDefrosterRearState::MANUAL_OFF))
-            {
+            }
+            if (inState(InternalElectricDefrosterRearState::MANUAL_OFF)) {
                 executeTransition(InternalElectricDefrosterRearState::MANUAL_OFF,
                                   InternalElectricDefrosterRearState::MANUAL_ON);
-            }
-            else if (inState(InternalElectricDefrosterRearState::MANUAL_ON))
+            } else if (inState(InternalElectricDefrosterRearState::MANUAL_ON)) {
                 executeTransition(InternalElectricDefrosterRearState::MANUAL_ON,
                                   InternalElectricDefrosterRearState::MANUAL_OFF);
+            }
         }
-    }
-    else if (inState(InternalElectricDefrosterRearState::SYSTEM_ERROR))
-    {
+    } else if (inState(InternalElectricDefrosterRearState::SYSTEM_ERROR)) {
         log_debug() << LOG_PREFIX << "SYSTEM_ERROR => SYSTEM_OK";
         executeTransition(InternalElectricDefrosterRearState::SYSTEM_ERROR,
                           InternalElectricDefrosterRearState::SYSTEM_OK);
     }
 }
 
-bool ElectricDefrosterRearLogic::checkSignalOK()
-{
-    if (signalOK())
-    {
-        if (inState(InternalElectricDefrosterRearState::SYSTEM_ERROR))
-        {
+bool ElectricDefrosterRearLogic::checkSignalOK() {
+    if (signalOK()) {
+        if (inState(InternalElectricDefrosterRearState::SYSTEM_ERROR)) {
             setState(localState_);
             executeTransition(InternalElectricDefrosterRearState::SYSTEM_ERROR,
                               InternalElectricDefrosterRearState::SYSTEM_OK);
         }
         return true;
-    }
-    else
-    {
-        if (inState(InternalElectricDefrosterRearState::SYSTEM_OK))
-        {
+    } else {
+        if (inState(InternalElectricDefrosterRearState::SYSTEM_OK)) {
             localState_ = electricDefrosterRearState_.get();
             executeTransition(InternalElectricDefrosterRearState::SYSTEM_OK,
                               InternalElectricDefrosterRearState::SYSTEM_ERROR);
@@ -413,12 +351,10 @@ bool ElectricDefrosterRearLogic::checkSignalOK()
     }
 }
 
-bool ElectricDefrosterRearLogic::signalOK()
-{
+bool ElectricDefrosterRearLogic::signalOK() {
     auto ok = driveMode_.get().isOk() && vehicleMode_.get().isOk() && hmiDefrosterStatus_.get().isOk();
 
-    if (!ok)
-    {
+    if (!ok) {
         log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " << vehicleMode_.get().isOk()
                       << " : " << hmiDefrosterStatus_.get().isOk();
     }
@@ -426,19 +362,16 @@ bool ElectricDefrosterRearLogic::signalOK()
     return ok;
 }
 
-bool ElectricDefrosterRearLogic::hasChangedTo(ElectricDefrosterRearState value)
-{
+bool ElectricDefrosterRearLogic::hasChangedTo(ElectricDefrosterRearState value) {
     return ((currentElectricDefrosterRearState_ != value) && (requestedElectricDefrosterRearState_ == value));
 }
 
-void ElectricDefrosterRearLogic::setState(ElectricDefrosterRearState newState)
-{
+void ElectricDefrosterRearLogic::setState(ElectricDefrosterRearState newState) {
     electricDefrosterRearState_.set(newState);
 }
 
-void ElectricDefrosterRearLogic::sendSignal(autosar::ActrReq elecReq)
-{
-    hmiDefrstElecReq_.ReElecReq   = elecReq;
+void ElectricDefrosterRearLogic::sendSignal(autosar::ActrReq elecReq) {
+    hmiDefrstElecReq_.ReElecReq = elecReq;
     hmiDefrstElecReq_.MirrElecReq = elecReq;
     hmiElectricDefrosterRearRequest_.send(hmiDefrstElecReq_);
 }

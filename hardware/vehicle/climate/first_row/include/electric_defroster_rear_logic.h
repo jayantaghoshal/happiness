@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 #include "dfsm.h"
@@ -11,22 +11,20 @@
 #include <Application_dataelement.h>
 #include <ECD_dataelement.h>
 #include <dispatcher.h>
-#include <mutex>
 #include <libsettings/setting.h>
+#include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
 #include <v0/org/volvocars/climate/UserSelection.hpp>
 
 using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
-using FirstRowGen      = v0::org::volvocars::climate::FirstRow;
+using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 
-class ElectricDefrosterRearLogic final : private DFsm_Main, public IDefroster
-{
-public:
-    using ElectricDefrosterRearState   = FirstRowGen::ElectricDefrosterRearState;
+class ElectricDefrosterRearLogic final : private DFsm_Main, public IDefroster {
+  public:
+    using ElectricDefrosterRearState = FirstRowGen::ElectricDefrosterRearState;
     using ElectricDefrosterRearRequest = FirstRowGen::ElectricDefrosterRearRequest;
 
-    enum InternalElectricDefrosterRearState
-    {
+    enum InternalElectricDefrosterRearState {
         INIT = 0,
         SYSTEM_OK,
         NOT_ACTIVE,
@@ -40,10 +38,9 @@ public:
         SYSTEM_ERROR
     };
 
-    ElectricDefrosterRearLogic(NotifiableProperty<ElectricDefrosterRearState>&               ElectricDefrosterRear,
+    ElectricDefrosterRearLogic(NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
                                ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear,
-                               IDispatcher&                                                  timerDispatcher,
-                               autosar::HmiDefrstElecReq&                                    hmiDefrstElecReq);
+                               IDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);
 
     ~ElectricDefrosterRearLogic() = default;
 
@@ -53,7 +50,7 @@ public:
 
     bool isInState(int state);
 
-private:
+  private:
     // LIN button 5
     void registerFsm();
 
@@ -76,7 +73,7 @@ private:
     void changeStateOnTrigger();
     bool checkSignalOK();
     bool signalOK();
-    bool hasChangedTo(ElectricDefrosterRearState state);
+    bool hasChangedTo(ElectricDefrosterRearState value);
     void setState(ElectricDefrosterRearState newState);
     void sendSignal(autosar::ActrReq elecReq);
 
@@ -84,7 +81,7 @@ private:
     NotifiableProperty<ElectricDefrosterRearState>& electricDefrosterRearState_;
 
     std::chrono::milliseconds timeout_;
-    std::recursive_mutex      mutex_;
+    std::recursive_mutex mutex_;
 
     ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoRearRequest_;
 
@@ -96,23 +93,20 @@ private:
     ElectricDefrosterRearState requestedElectricDefrosterRearState_;
 
     // Last values used for flank triggering
-    autosar::UsgModSts1     usageModeLast_;
-    autosar::CarModSts1     carModeLast_;
+    autosar::UsgModSts1 usageModeLast_;
+    autosar::CarModSts1 carModeLast_;
     autosar::DrvModReqType1 driveModeLast_;
-    autosar::ActrDefrstSts  hmiDefrosterRearStatusLast_;
-    autosar::ActrDefrstSts  hmiDefrosterMirrorStatusLast_;
-
-    autosar::ActrReq hmiElectricDefrosterRearRequestLast_;
-    autosar::ActrReq hmiElectricDefrosterMirrorRequestLast_;
+    autosar::ActrDefrstSts hmiDefrosterRearStatusLast_;
+    autosar::ActrDefrstSts hmiDefrosterMirrorStatusLast_;
 
     // FlexRay signals
-    ECDDataElement::DESink<autosar::DrvModReq_info>                      driveMode_;
+    ECDDataElement::DESink<autosar::DrvModReq_info> driveMode_;
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehicleMode_;
 
     // Both for mirror and Rear
-    ApplicationDataElement::DESender<autosar::HmiDefrstElecReq_info>   hmiElectricDefrosterRearRequest_;
+    ApplicationDataElement::DESender<autosar::HmiDefrstElecReq_info> hmiElectricDefrosterRearRequest_;
     ApplicationDataElement::DEReceiver<autosar::HmiDefrstElecSts_info> hmiDefrosterStatus_;
 
-    IDispatcher&               timerDispatcher_;
+    IDispatcher& timerDispatcher_;
     autosar::HmiDefrstElecReq& hmiDefrstElecReq_;
 };

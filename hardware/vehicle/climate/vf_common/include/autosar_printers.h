@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 
@@ -9,15 +9,14 @@
 
 #include <gen_datatypes.h>
 
-namespace autosar
-{
+namespace autosar {
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const UsgModSts1& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const CarModSts1& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out,
-                                                const VehModMngtGlbSafe1&            value);
+                                                const VehModMngtGlbSafe1& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const FctSts2& value);
 
@@ -38,7 +37,7 @@ logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogD
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const MirrFoldStsTyp& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out,
-                                                const VisnImgAgWideInUse&            value);
+                                                const VisnImgAgWideInUse& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const CamIndReq& value);
 
@@ -58,11 +57,9 @@ logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogD
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const TrlrPrsntSts& value);
 
-logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const PrkgTypVld1&  value);
+logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const PrkgTypVld1& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const IndOfPrkgAutSts& value);
 
 logging::DefaultLogContext::LogData& operator<<(logging::DefaultLogContext::LogData& out, const PrkgAutSts3& value);
-
-
 }

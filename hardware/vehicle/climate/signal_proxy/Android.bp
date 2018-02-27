@@ -4,8 +4,8 @@
  */
 
 cc_library_static {
-    name : "climate_signalproxy",
-    defaults: ["climate_defaults"],    
+    name: "climate_signalproxy",
+    defaults: ["climate_defaults"],
     shared_libs: [
         "libhidlbase",
         "libhidltransport",

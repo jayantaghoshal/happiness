@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 #include "dispatcher.h"
@@ -9,41 +9,38 @@
 #include "max_defroster_logic.h"
 #include "notifiable_property.h"
 
-#include <chrono>
 #include <Application_dataelement.h>
+#include <chrono>
 #include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
 
 using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 
-class DefrosterWindscreenCCSM
-{
-public:
+class DefrosterWindscreenCCSM {
+  public:
     DefrosterWindscreenCCSM(
-        ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>&                maxDefroster,
-        ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& windscreenDefroster,
-        IDispatcher&                                                               dispatcher,
-        IDefroster&                                                                electricDefrosterWindscreenLogic,
-        IDefroster& electricDefrosterWindscreenPopupLogic,
-        IDefroster& maxDefrosterLogic);
+            ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster,
+            ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen,
+            IDispatcher& dispatcher, IDefroster& electricDefrosterWindscreenLogic,
+            IDefroster& electricDefrosterWindscreenPopupLogic, IDefroster& maxDefrosterLogic);
 
     ~DefrosterWindscreenCCSM() = default;
 
-private:
+  private:
     void updateButtonLed();
 
     void updateMaxDefroster();
     void setMaxDefrosterAndDefrosterWindscreen();
 
-    ApplicationDataElement::DEReceiver<autosar::Btn4ForUsrSwtPanFrntReq_info>    defrosterButtonReq_;
+    ApplicationDataElement::DEReceiver<autosar::Btn4ForUsrSwtPanFrntReq_info> defrosterButtonReq_;
     ApplicationDataElement::DESender<autosar::LiForBtn4ForUsrSwtPanFrntCmd_info> defrosterButtonLedReq_;
 
-    ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>&                maxDefroster_;
+    ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster_;
     ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen_;
 
-    IDispatcher&              dispatcher_;
+    IDispatcher& dispatcher_;
     std::chrono::milliseconds dispatcherTimeout_;
-    std::recursive_mutex      mutex_;
+    std::recursive_mutex mutex_;
 
     std::vector<SubscriptionHandle> subscriptions_;
 

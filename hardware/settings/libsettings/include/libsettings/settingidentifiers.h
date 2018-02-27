@@ -17,10 +17,6 @@ enum class SettingId : uint32_t {
     TestSetting9,
     TestSetting10,
     LastActiveProfileId,
-    Climate_TemperatureLeft_Celcius,
-    Climate_TemperatureRight_Celcius,
-    Climate_FanLevelLeft,
-    Climate_FanLevelRight,
     CurveSpeedAdapt_On,
     DriveAwayInfoSetting,
     AndroidUserId,
@@ -59,7 +55,7 @@ enum class SettingId : uint32_t {
     Climate_IonizerDyno,
     Climate_TemperatureSync,
     Climate_TemperatureSyncDyno,
-    Climate_AutoDriverSeatHeat,                  
+    Climate_AutoDriverSeatHeat,
     Climate_AutoDriverSeatHeatDyno,
     Climate_AutoDriverSeatHeatLevel,
     Climate_AutoDriverSeatHeatLevelDyno,
@@ -83,6 +79,5 @@ enum class SettingId : uint32_t {
     Climate_AutoRearDefrosterDyno,
     Climate_AdditionalHeater,
     Climate_AdditionalHeaterDyno,
-
 
 };

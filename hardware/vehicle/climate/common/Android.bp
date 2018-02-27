@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name : "climate_common",
+    name: "climate_common",
     defaults: ["climate_defaults"],
     srcs: [
         "source/*.cpp",
@@ -34,10 +34,10 @@ cc_library_static {
     export_include_dirs: [
         "include",
     ],
-    export_static_lib_headers : [
+    export_static_lib_headers: [
         "climate_vf_common",
     ],
-    export_shared_lib_headers : [
+    export_shared_lib_headers: [
         "libtarmac",
         "libdataelements",
         "libsettings",

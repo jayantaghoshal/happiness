@@ -1,7 +1,7 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #include "electric_defroster_windscreen_logic.h"
 
@@ -19,36 +19,30 @@ using namespace SettingsFramework;
 using namespace autosar;
 using namespace std::chrono_literals;
 
-namespace
-{
+namespace {
 auto LOG_PREFIX = "ElectricDefrosterWindscreen: ";
 }
 
 ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenLogic(
-    NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
-    ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>&      autoDefrosterFront,
-    IDispatcher&                                                       timerDispatcher,
-    autosar::HmiDefrstElecReq&                                         hmiDefrstElecReq)
-    : electricDefrosterWindscreenState_{ ElectricWindscreen }
-    , timeout_(std::chrono::milliseconds{
-          static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0) })
-    , autoFrontRequest_(autoDefrosterFront)
-    , requestElectricDefrosterWindscreenState_(ElectricDefrosterWindscreenState::OFF)
-    , usageModeLast_(autosar::UsgModSts1::UsgModAbdnd)
-    , carModeLast_(autosar::CarModSts1::CarModDyno)
-    , driveModeLast_(autosar::DrvModReqType1::Undefd)
-    , hmiDefrosterWindscreenStatusLast_(autosar::ActrDefrstSts::Off)
-    , timerDispatcher_(timerDispatcher)
-    , hmiDefrstElecReq_(hmiDefrstElecReq)
-{
+        NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
+        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront, IDispatcher& timerDispatcher,
+        autosar::HmiDefrstElecReq& hmiDefrstElecReq)
+    : electricDefrosterWindscreenState_{ElectricWindscreen},
+      timeout_(std::chrono::milliseconds{
+              static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0)}),
+      autoFrontRequest_(autoDefrosterFront),
+      requestElectricDefrosterWindscreenState_(ElectricDefrosterWindscreenState::OFF),
+      usageModeLast_(autosar::UsgModSts1::UsgModAbdnd),
+      carModeLast_(autosar::CarModSts1::CarModDyno),
+      driveModeLast_(autosar::DrvModReqType1::Undefd),
+      hmiDefrosterWindscreenStatusLast_(autosar::ActrDefrstSts::Off),
+      timerDispatcher_(timerDispatcher),
+      hmiDefrstElecReq_(hmiDefrstElecReq) {
     registerFsm();
 
-    if (!carConfigOk())
-    {
+    if (!carConfigOk()) {
         transitionToState(InternalElectricDefrosterWindscreenState::CARCONFIG_INVALID);
-    }
-    else
-    {
+    } else {
         transitionToState(InternalElectricDefrosterWindscreenState::SYSTEM_OK);
         vehicleModes_.subscribe([this]() { handleVehicleMode(); });
         driveMode_.subscribe([this]() { handleDriveMode(); });
@@ -60,56 +54,37 @@ ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenLogic(
     }
 }
 
-bool ElectricDefrosterWindscreenLogic::isInState(int state)
-{
-    return inState(state);
-}
+bool ElectricDefrosterWindscreenLogic::isInState(int state) { return inState(state); }
 
-void ElectricDefrosterWindscreenLogic::request(ElectricDefrosterWindscreenRequest requestedState)
-{
+void ElectricDefrosterWindscreenLogic::request(ElectricDefrosterWindscreenRequest requestedState) {
     log_debug() << LOG_PREFIX << "request = " << requestedState
                 << "current = " << electricDefrosterWindscreenState_.get();
-    if (electricDefrosterWindscreenState_.get() != requestedState)
-    {
-        if (inState(InternalElectricDefrosterWindscreenState::AUTO)
-            || (inState(InternalElectricDefrosterWindscreenState::MANUAL)
-                && hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable))
-        {
+    if (electricDefrosterWindscreenState_.get() != requestedState) {
+        if (inState(InternalElectricDefrosterWindscreenState::AUTO) ||
+            (inState(InternalElectricDefrosterWindscreenState::MANUAL) &&
+             hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable)) {
             requestElectricDefrosterWindscreenState_.value_ = requestedState.value_;
             changeStateOnTrigger();
         }
     }
 }
 
-void ElectricDefrosterWindscreenLogic::request(OnOff requestedState)
-{
+void ElectricDefrosterWindscreenLogic::request(OnOff requestedState) {
     log_debug() << LOG_PREFIX << "requestCCSM " << requestedState;
 
-    if (requestedState == OnOff::On)
-    {
+    if (requestedState == OnOff::On) {
         request(FirstRowGen::ElectricDefrosterWindscreenRequest::ON);
-    }
-    else
-    {
+    } else {
         request(FirstRowGen::ElectricDefrosterWindscreenRequest::OFF);
     }
 }
 
-bool ElectricDefrosterWindscreenLogic::carConfigOk()
-{
-    const CarConfigParams::CC122_HeatedWindscreenType HeatedWindscreen
-        = carconfig::getValue<CarConfigParams::CC122_HeatedWindscreenType>();
-
-    if (HeatedWindscreen == CarConfigParams::CC122_HeatedWindscreenType::Heated_Frontscreen)
-    {
-        return true;
-    }
-
-    return false;
+bool ElectricDefrosterWindscreenLogic::carConfigOk() {
+    const auto HeatedWindscreen = carconfig::getValue<CarConfigParams::CC122_HeatedWindscreenType>();
+    return (HeatedWindscreen == CarConfigParams::CC122_HeatedWindscreenType::Heated_Frontscreen);
 }
 
-void ElectricDefrosterWindscreenLogic::registerFsm()
-{
+void ElectricDefrosterWindscreenLogic::registerFsm() {
     // Setup Main FSM
     createState(InternalElectricDefrosterWindscreenState::INIT);
     registerMainInitState(INIT);
@@ -141,12 +116,9 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
 
     addStateEntry(InternalElectricDefrosterWindscreenState::ACTIVE, [this]() {
         log_debug() << LOG_PREFIX << "State: ACTIVE";
-        if (activeCheck())
-        {
+        if (activeCheck()) {
             transitionToState(InternalElectricDefrosterWindscreenState::AUTO);
-        }
-        else
-        {
+        } else {
             transitionToState(InternalElectricDefrosterWindscreenState::MANUAL);
         }
     });
@@ -170,13 +142,10 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
 
     addStateEntry(InternalElectricDefrosterWindscreenState::MANUAL, [this]() {
         log_debug() << LOG_PREFIX << "State: MANUAL";
-        if (initManualOnCheck())
-        {
+        if (initManualOnCheck()) {
             executeTransition(InternalElectricDefrosterWindscreenState::MANUAL,
                               InternalElectricDefrosterWindscreenState::MANUAL_ON);
-        }
-        else
-        {
+        } else {
             executeTransition(InternalElectricDefrosterWindscreenState::MANUAL,
                               InternalElectricDefrosterWindscreenState::MANUAL_OFF);
         }
@@ -191,9 +160,8 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
 
         timerDispatcher_.Start(timeout_, [this]() {
 
-            if ((hmiDefrosterWindscreenStatusLast_ != ActrDefrstSts::On
-                 && hmiDefrosterWindscreenStatusLast_ != ActrDefrstSts::Limited))
-            {
+            if ((hmiDefrosterWindscreenStatusLast_ != ActrDefrstSts::On &&
+                 hmiDefrosterWindscreenStatusLast_ != ActrDefrstSts::Limited)) {
                 transitionToState(InternalElectricDefrosterWindscreenState::MANUAL_OFF);
             }
         });
@@ -222,17 +190,13 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
     createTransition(InternalElectricDefrosterWindscreenState::INIT,
                      InternalElectricDefrosterWindscreenState::SYSTEM_OK);
     createTransition(InternalElectricDefrosterWindscreenState::SYSTEM_OK,
-                     InternalElectricDefrosterWindscreenState::SYSTEM_ERROR,
-                     [this]() { return !signalOK(); });
+                     InternalElectricDefrosterWindscreenState::SYSTEM_ERROR, [this]() { return !signalOK(); });
     createTransition(InternalElectricDefrosterWindscreenState::SYSTEM_ERROR,
-                     InternalElectricDefrosterWindscreenState::SYSTEM_OK,
-                     [this]() { return signalOK(); });
+                     InternalElectricDefrosterWindscreenState::SYSTEM_OK, [this]() { return signalOK(); });
     createTransition(InternalElectricDefrosterWindscreenState::NOT_ACTIVE,
-                     InternalElectricDefrosterWindscreenState::ACTIVE,
-                     [this]() { return activationCheck(); });
+                     InternalElectricDefrosterWindscreenState::ACTIVE, [this]() { return activationCheck(); });
     createTransition(InternalElectricDefrosterWindscreenState::ACTIVE,
-                     InternalElectricDefrosterWindscreenState::NOT_ACTIVE,
-                     [this]() { return !activationCheck(); });
+                     InternalElectricDefrosterWindscreenState::NOT_ACTIVE, [this]() { return !activationCheck(); });
 
     createTransition(InternalElectricDefrosterWindscreenState::ACTIVE, InternalElectricDefrosterWindscreenState::AUTO);
     createTransition(InternalElectricDefrosterWindscreenState::ACTIVE,
@@ -240,26 +204,21 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
 
     createTransition(InternalElectricDefrosterWindscreenState::AUTO,
                      InternalElectricDefrosterWindscreenState::AUTO_OFF);
-    createTransition(InternalElectricDefrosterWindscreenState::AUTO,
-                     InternalElectricDefrosterWindscreenState::MANUAL,
+    createTransition(InternalElectricDefrosterWindscreenState::AUTO, InternalElectricDefrosterWindscreenState::MANUAL,
                      [this]() { return manualCheck(); });
     createTransition(InternalElectricDefrosterWindscreenState::AUTO_OFF,
-                     InternalElectricDefrosterWindscreenState::AUTO_ON,
-                     [this]() { return autoOnCheck(); });
+                     InternalElectricDefrosterWindscreenState::AUTO_ON, [this]() { return autoOnCheck(); });
     createTransition(InternalElectricDefrosterWindscreenState::AUTO_ON,
-                     InternalElectricDefrosterWindscreenState::AUTO_OFF,
-                     [this]() { return autoOffCheck(); });
+                     InternalElectricDefrosterWindscreenState::AUTO_OFF, [this]() { return autoOffCheck(); });
 
     createTransition(InternalElectricDefrosterWindscreenState::MANUAL,
                      InternalElectricDefrosterWindscreenState::MANUAL_OFF);
     createTransition(InternalElectricDefrosterWindscreenState::MANUAL,
                      InternalElectricDefrosterWindscreenState::MANUAL_ON);
     createTransition(InternalElectricDefrosterWindscreenState::MANUAL_OFF,
-                     InternalElectricDefrosterWindscreenState::MANUAL_ON,
-                     [this]() { return manualOnCheck(); });
+                     InternalElectricDefrosterWindscreenState::MANUAL_ON, [this]() { return manualOnCheck(); });
     createTransition(InternalElectricDefrosterWindscreenState::MANUAL_ON,
-                     InternalElectricDefrosterWindscreenState::MANUAL_OFF,
-                     [this]() { return manualOffCheck(); });
+                     InternalElectricDefrosterWindscreenState::MANUAL_OFF, [this]() { return manualOffCheck(); });
 }
 
 /*=====================================================*/
@@ -267,56 +226,46 @@ void ElectricDefrosterWindscreenLogic::registerFsm()
 /*=====================================================*/
 
 // This signal is only considered when going from NOT_ACTIVE to ACTIVE
-void ElectricDefrosterWindscreenLogic::handleDriveMode()
-{
+void ElectricDefrosterWindscreenLogic::handleDriveMode() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
-    if (driveMode_.get().isOk())
-    {
+    if (driveMode_.get().isOk()) {
         driveModeLast_ = driveMode_.get().value();
         log_verbose() << LOG_PREFIX << "DriveMode : " << static_cast<int>(driveModeLast_);
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
 
-void ElectricDefrosterWindscreenLogic::handleVehicleMode()
-{
+void ElectricDefrosterWindscreenLogic::handleVehicleMode() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
-    if (vehicleModes_.get().isOk())
-    {
-        carModeLast_   = vehicleModes_.get().value().CarModSts1_;
+    if (vehicleModes_.get().isOk()) {
+        carModeLast_ = vehicleModes_.get().value().CarModSts1_;
         usageModeLast_ = vehicleModes_.get().value().UsgModSts;
         log_verbose() << LOG_PREFIX << "CarMode_ : " << carModeLast_;
         log_verbose() << LOG_PREFIX << "UsageMode_ : " << usageModeLast_;
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
 
-void ElectricDefrosterWindscreenLogic::handleHmiDefrosterStatus()
-{
+void ElectricDefrosterWindscreenLogic::handleHmiDefrosterStatus() {
     std::lock_guard<std::recursive_mutex> locker(mutex_);
 
-    if (hmiDefrosterWindscreenStatus_.get().isOk())
-    {
-        if (hmiDefrosterWindscreenStatusLast_ != hmiDefrosterWindscreenStatus_.get().value().Frnt)
-        {
+    if (hmiDefrosterWindscreenStatus_.get().isOk()) {
+        if (hmiDefrosterWindscreenStatusLast_ != hmiDefrosterWindscreenStatus_.get().value().Frnt) {
             hmiDefrosterWindscreenStatusLast_ = hmiDefrosterWindscreenStatus_.get().value().Frnt;
             log_verbose() << LOG_PREFIX
                           << "HmiDefrosterWindscreenStatus_ : " << static_cast<int>(hmiDefrosterWindscreenStatusLast_);
         }
     }
 
-    if (checkSignalOK())
-    {
+    if (checkSignalOK()) {
         changeStateOnTrigger();
     }
 }
@@ -324,126 +273,99 @@ void ElectricDefrosterWindscreenLogic::handleHmiDefrosterStatus()
 /*=====================================================*/
 /*                  Check Functions                    */
 /*=====================================================*/
-bool ElectricDefrosterWindscreenLogic::activationCheck()
-{
-    return usageModeLast_ == autosar::UsgModSts1::UsgModDrvg
-           && (carModeLast_ == autosar::CarModSts1::CarModDyno || carModeLast_ == autosar::CarModSts1::CarModNorm);
+bool ElectricDefrosterWindscreenLogic::activationCheck() {
+    return usageModeLast_ == autosar::UsgModSts1::UsgModDrvg &&
+           (carModeLast_ == autosar::CarModSts1::CarModDyno || carModeLast_ == autosar::CarModSts1::CarModNorm);
 }
 
-bool ElectricDefrosterWindscreenLogic::activeCheck()
-{
+bool ElectricDefrosterWindscreenLogic::activeCheck() {
     log_debug() << LOG_PREFIX
                 << "Auto Front Value = " << static_cast<int>(autoFrontRequest_.get().getCurrentSelection());
-    return autoFrontRequest_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON
-           && (driveModeLast_ != autosar::DrvModReqType1::DrvMod1
-               && driveModeLast_ != autosar::DrvModReqType1::DrvMod8);
+    return autoFrontRequest_.get().getCurrentSelection() == UserSelectionGen::OffOnType::ON &&
+           (driveModeLast_ != autosar::DrvModReqType1::DrvMod1 && driveModeLast_ != autosar::DrvModReqType1::DrvMod8);
 }
 
-bool ElectricDefrosterWindscreenLogic::autoOnCheck()
-{
+bool ElectricDefrosterWindscreenLogic::autoOnCheck() {
     return hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::AutoCdn;
 }
 
-bool ElectricDefrosterWindscreenLogic::autoOffCheck()
-{
+bool ElectricDefrosterWindscreenLogic::autoOffCheck() {
     return hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::AutoCdn;
 }
 
-bool ElectricDefrosterWindscreenLogic::manualCheck()
-{
-    return (hasChangedTo(ElectricDefrosterWindscreenState::ON)
-            && electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::OFF)
-           || ((hasChangedTo(ElectricDefrosterWindscreenState::OFF)
-                || hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::NotAvailable)
-               && electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::ON);
+bool ElectricDefrosterWindscreenLogic::manualCheck() {
+    return (hasChangedTo(ElectricDefrosterWindscreenState::ON) &&
+            electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::OFF) ||
+           ((hasChangedTo(ElectricDefrosterWindscreenState::OFF) ||
+             hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::NotAvailable) &&
+            electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::ON);
 }
 
-bool ElectricDefrosterWindscreenLogic::initManualOnCheck()
-{
-    return (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable)
-           && (electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::OFF);
+bool ElectricDefrosterWindscreenLogic::initManualOnCheck() {
+    return (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable) &&
+           (electricDefrosterWindscreenState_.get() == ElectricDefrosterWindscreenState::OFF);
 }
 
-bool ElectricDefrosterWindscreenLogic::manualOffCheck()
-{
-    return (hasChangedTo(ElectricDefrosterWindscreenState::OFF)
-            || hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::TmrOff
-            || hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::NotAvailable
-            || (!timerDispatcher_.IsRunning() && (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::On)
-                && (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::Limited)));
+bool ElectricDefrosterWindscreenLogic::manualOffCheck() {
+    return (hasChangedTo(ElectricDefrosterWindscreenState::OFF) ||
+            hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::TmrOff ||
+            hmiDefrosterWindscreenStatusLast_ == autosar::ActrDefrstSts::NotAvailable ||
+            (!timerDispatcher_.IsRunning() && (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::On) &&
+             (hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::Limited)));
 }
 
-bool ElectricDefrosterWindscreenLogic::manualOnCheck()
-{
-    return hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable
-           && hasChangedTo(ElectricDefrosterWindscreenState::ON);
+bool ElectricDefrosterWindscreenLogic::manualOnCheck() {
+    return hmiDefrosterWindscreenStatusLast_ != autosar::ActrDefrstSts::NotAvailable &&
+           hasChangedTo(ElectricDefrosterWindscreenState::ON);
 }
 /*=====================================================*/
 /*                  Help Functions                     */
 /*=====================================================*/
-void ElectricDefrosterWindscreenLogic::changeStateOnTrigger()
-{
-    if (inState(InternalElectricDefrosterWindscreenState::NOT_ACTIVE))
-    {
+void ElectricDefrosterWindscreenLogic::changeStateOnTrigger() {
+    if (inState(InternalElectricDefrosterWindscreenState::NOT_ACTIVE)) {
         executeTransition(InternalElectricDefrosterWindscreenState::NOT_ACTIVE,
                           InternalElectricDefrosterWindscreenState::ACTIVE);
     }
-    if (inState(InternalElectricDefrosterWindscreenState::ACTIVE))
-    {
+    if (inState(InternalElectricDefrosterWindscreenState::ACTIVE)) {
         executeTransition(InternalElectricDefrosterWindscreenState::ACTIVE,
                           InternalElectricDefrosterWindscreenState::NOT_ACTIVE);
 
-        if (!inState(InternalElectricDefrosterWindscreenState::NOT_ACTIVE))
-        {
-            if (inState(InternalElectricDefrosterWindscreenState::AUTO))
-            {
+        if (!inState(InternalElectricDefrosterWindscreenState::NOT_ACTIVE)) {
+            if (inState(InternalElectricDefrosterWindscreenState::AUTO)) {
                 executeTransition(InternalElectricDefrosterWindscreenState::AUTO,
                                   InternalElectricDefrosterWindscreenState::MANUAL);
             }
-            if (inState(InternalElectricDefrosterWindscreenState::AUTO_OFF))
-            {
+            if (inState(InternalElectricDefrosterWindscreenState::AUTO_OFF)) {
                 executeTransition(InternalElectricDefrosterWindscreenState::AUTO_OFF,
                                   InternalElectricDefrosterWindscreenState::AUTO_ON);
-            }
-            else if (inState(InternalElectricDefrosterWindscreenState::AUTO_ON))
-            {
+            } else if (inState(InternalElectricDefrosterWindscreenState::AUTO_ON)) {
                 executeTransition(InternalElectricDefrosterWindscreenState::AUTO_ON,
                                   InternalElectricDefrosterWindscreenState::AUTO_OFF);
             }
-            if (inState(InternalElectricDefrosterWindscreenState::MANUAL_OFF))
-            {
+            if (inState(InternalElectricDefrosterWindscreenState::MANUAL_OFF)) {
                 executeTransition(InternalElectricDefrosterWindscreenState::MANUAL_OFF,
                                   InternalElectricDefrosterWindscreenState::MANUAL_ON);
-            }
-            else if (inState(InternalElectricDefrosterWindscreenState::MANUAL_ON))
-            {
+            } else if (inState(InternalElectricDefrosterWindscreenState::MANUAL_ON)) {
                 executeTransition(InternalElectricDefrosterWindscreenState::MANUAL_ON,
                                   InternalElectricDefrosterWindscreenState::MANUAL_OFF);
             }
         }
     }
-    if (inState(ElectricDefrosterWindscreenLogic::SYSTEM_ERROR))
-    {
+    if (inState(ElectricDefrosterWindscreenLogic::SYSTEM_ERROR)) {
         executeTransition(InternalElectricDefrosterWindscreenState::SYSTEM_ERROR,
                           InternalElectricDefrosterWindscreenState::SYSTEM_OK);
     }
 }
 
-bool ElectricDefrosterWindscreenLogic::checkSignalOK()
-{
-    if (signalOK())
-    {
-        if (inState(InternalElectricDefrosterWindscreenState::SYSTEM_ERROR))
-        {
+bool ElectricDefrosterWindscreenLogic::checkSignalOK() {
+    if (signalOK()) {
+        if (inState(InternalElectricDefrosterWindscreenState::SYSTEM_ERROR)) {
             setState(localState_);
             transitionToState(InternalElectricDefrosterWindscreenState::SYSTEM_OK);
         }
         return true;
-    }
-    else
-    {
-        if (inState(InternalElectricDefrosterWindscreenState::SYSTEM_OK))
-        {
+    } else {
+        if (inState(InternalElectricDefrosterWindscreenState::SYSTEM_OK)) {
             localState_ = electricDefrosterWindscreenState_.get();
             transitionToState(InternalElectricDefrosterWindscreenState::SYSTEM_ERROR);
         }
@@ -451,12 +373,10 @@ bool ElectricDefrosterWindscreenLogic::checkSignalOK()
     }
 }
 
-bool ElectricDefrosterWindscreenLogic::signalOK()
-{
+bool ElectricDefrosterWindscreenLogic::signalOK() {
     auto ok = (driveMode_.get().isOk() && vehicleModes_.get().isOk() && hmiDefrosterWindscreenStatus_.get().isOk());
 
-    if (!ok)
-    {
+    if (!ok) {
         log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " << vehicleModes_.get().isOk()
                       << " : " << hmiDefrosterWindscreenStatus_.get().isOk();
     }
@@ -464,19 +384,16 @@ bool ElectricDefrosterWindscreenLogic::signalOK()
     return ok;
 }
 
-bool ElectricDefrosterWindscreenLogic::hasChangedTo(ElectricDefrosterWindscreenState value)
-{
+bool ElectricDefrosterWindscreenLogic::hasChangedTo(ElectricDefrosterWindscreenState value) {
     return (electricDefrosterWindscreenState_.get() != value && requestElectricDefrosterWindscreenState_ == value);
 }
 
-void ElectricDefrosterWindscreenLogic::setState(ElectricDefrosterWindscreenState newState)
-{
+void ElectricDefrosterWindscreenLogic::setState(ElectricDefrosterWindscreenState newState) {
     electricDefrosterWindscreenState_.set(newState);
     requestElectricDefrosterWindscreenState_ = newState;
 }
 
-void ElectricDefrosterWindscreenLogic::sendSignal(autosar::ActrReq elecReq)
-{
+void ElectricDefrosterWindscreenLogic::sendSignal(autosar::ActrReq elecReq) {
     hmiDefrstElecReq_.FrntElecReq = elecReq;
     hmiDefrosterRequest_.send(hmiDefrstElecReq_);
 }

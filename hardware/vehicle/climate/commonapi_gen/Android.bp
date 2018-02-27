@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name : "climate_commonapi_pregen",
+    name: "climate_commonapi_pregen",
     defaults: ["climate_defaults"],
     local_include_dirs: [
         ".",

@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name : "climate_user_selection",
+    name: "climate_user_selection",
     defaults: ["climate_defaults"],
     srcs: [
         "source/*.cpp",
@@ -34,8 +34,8 @@ cc_library_static {
         "common_api",
     ],
     export_include_dirs: [
-        "include",   
-        "common_api",     
+        "include",
+        "common_api",
     ],
     export_shared_lib_headers: [
         "libcarconfig_reader",

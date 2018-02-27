@@ -4,15 +4,14 @@
  */
 
 cc_defaults {
-    //TODO(climateport) : Dont use volvocars_defaults yet to avoid too many clang-tidy warnings
-    name : "climate_defaults",
-    compile_multilib: "64",
-    vendor: true,
-
-    cflags: [
-        "-fexceptions",
-        "-Wall",
-        "-Wextra",
+    name: "climate_defaults",
+    defaults: ["volvocars_cc_defaults_hq"],
+    tidy_checks: [
+        "-readability-redundant-member-init", // old climate code uses this a lot
+        "-readability-named-parameter", // old climate code uses this a lot
+        "-google-readability-todo",
+        "-cert-err58-cpp", // const std::array can't be static?! TODO: Find workaround and enable check
+        "-google-runtime-references", // old climate code uses this a lot
     ],
 }
 

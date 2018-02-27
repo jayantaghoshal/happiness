@@ -1,83 +1,78 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
 
 #include "infotainment_status.h"
 
-//TODO(climateport): NSM
+// TODO(climateport): NSM
 //#include "nodestate_client.h"
 #include "notifiable_property.h"
 #include "temperature_converter.h"
 
-//TODO(climateport): NSM
+// TODO(climateport): NSM
 //#include <NodeStateTypes.h>
 //#include <cedric/cedric_nodestate.h>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
 
 class FirstRowFactory;
 
-namespace second_and_third_row
-{
+namespace second_and_third_row {
 class Factory;
 }
 
-namespace common
-{
-namespace daemon
-{
+namespace common {
+namespace daemon {
 using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 
-class Factory final
-{
+class Factory final {
     friend FirstRowFactory;
     friend second_and_third_row::Factory;
 
-public:
+  public:
     Factory();
 
     ReadOnlyNotifiableProperty<FirstRowGen::TemperatureSyncState>& getTemperatureSyncProperty();
-    ReadOnlyNotifiableProperty<double>&                            getDriverTempProperty();
-    ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>&         getDriverTempHiLoNProperty();
+    ReadOnlyNotifiableProperty<double>& getDriverTempProperty();
+    ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& getDriverTempHiLoNProperty();
 
-    ReadOnlyNotifiableProperty<double>&                    getTempRearLeft();
+    ReadOnlyNotifiableProperty<double>& getTempRearLeft();
     ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& getTempHiLoNRearLeft();
-    ReadOnlyNotifiableProperty<double>&                    getTempRearRight();
+    ReadOnlyNotifiableProperty<double>& getTempRearRight();
     ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& getTempHiLoNRearRight();
 
     ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& getMaxDefrosterProperty();
 
     // Node State Manager related functionality
     ReadOnlyNotifiableProperty<InfotainmentStatus::State>& getNodeSessionStateProperty();
-    ReadOnlyNotifiableProperty<bool>&                      getWakeupByIPLMProperty();
-    ReadOnlyNotifiableProperty<bool>&                      getShutdownInProgressProperty();
-    NotifiableProperty<bool>&                              getDataSentByParkingClimateIPLinkProperty();
+    ReadOnlyNotifiableProperty<bool>& getWakeupByIPLMProperty();
+    ReadOnlyNotifiableProperty<bool>& getShutdownInProgressProperty();
 
-private:
+  private:
     NotifiableProperty<FirstRowGen::TemperatureSyncState> temperatureSync_;
-    NotifiableProperty<double>                            driverTemp_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>         driverTempHiLoN_;
-    NotifiableProperty<double>                            tempRearLeft_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>         tempHiLoNRearLeft_;
-    NotifiableProperty<double>                            tempRearRight_;
-    NotifiableProperty<autosar::HmiCmptmtTSpSpcl>         tempHiLoNRearRight_;
-    NotifiableProperty<FirstRowGen::MaxDefrosterState>    maxDefroster_;
+    NotifiableProperty<double> driverTemp_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> driverTempHiLoN_;
+    NotifiableProperty<double> tempRearLeft_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> tempHiLoNRearLeft_;
+    NotifiableProperty<double> tempRearRight_;
+    NotifiableProperty<autosar::HmiCmptmtTSpSpcl> tempHiLoNRearRight_;
+    NotifiableProperty<FirstRowGen::MaxDefrosterState> maxDefroster_;
 
     TemperatureConverter temperatureConverter_;
 
     // Node State Manager related functionality
-    //TODO(climateport): NSM removed
-    //cedric::core::NodeState nodeState_;
+    // TODO(climateport): NSM removed
+    // cedric::core::NodeState nodeState_;
 
     NotifiableProperty<InfotainmentStatus::State> nodeSessionState_;
-    NotifiableProperty<bool>                      wakeupByIPLM_;
-    NotifiableProperty<bool>                      shutdownInProgress_;
+    NotifiableProperty<bool> wakeupByIPLM_;
+    NotifiableProperty<bool> shutdownInProgress_;
 
     InfotainmentStatus infotainmentStatus_;
-    //TODO(climateport): NSM removed
-    //NodeStateClient    nodeStateClient_;
+    // TODO(climateport): NSM removed
+    // NodeStateClient    nodeStateClient_;
 };
 }
 }

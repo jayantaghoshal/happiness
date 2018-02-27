@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name : "climate_main",
+    name: "climate_main",
     defaults: ["climate_defaults"],
     srcs: [
         "climate_main.cpp",
@@ -23,8 +23,8 @@ cc_library_static {
         "climate_common",
         "climate_vf_common",
         "climate_commonapi_pregen",
-        "climate_signalproxy"
-    ], 
+        "climate_signalproxy",
+    ],
     tidy_checks: [
         //"cppcoreguidelines-*",
     ],
