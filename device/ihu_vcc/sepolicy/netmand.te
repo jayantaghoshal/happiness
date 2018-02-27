@@ -2,33 +2,38 @@
 type netmand, domain;
 type netmand_exec, exec_type, file_type, vendor_file_type;
 
-init_daemon_domain(netmand)
+type proc_netmand, file_type;
+
+domain_auto_trans(netmand, iptables-vcc_exec, iptables-vcc)
+
+domain_auto_trans(netmand, ip6tables-vcc_exec, iptables-vcc)
+
+domain_auto_trans(netmand, ip-vcc_exec, ip-vcc)
+domain_auto_trans(netmand, vendor_shell_exec, iptables-vcc)
+
+# When netmand creates /mnt/iptables.rules then it should be
+# labeled with iptables_data_file
+file_type_auto_trans(netmand, tmpfs, iptables_data_file)
+
+net_domain(netmand)
+
+binder_call(netmand, hwservicemanager)
 hal_client_domain(netmand, hal_uds_diagnostics)
-
-allow netmand self:netlink_kobject_uevent_socket { read bind create setopt };
-allow netmand self:netlink_route_socket { bind create getattr nlmsg_read nlmsg_write read setopt write };
-allow netmand self:udp_socket { create ioctl };
-allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
-
-allow netmand self:capability { net_admin net_raw kill sys_module };
-allow netmand netns_device:dir { read open };
-allow netmand netmand_exec:file execute_no_trans;
-allow netmand rootfs:dir mounton;
-
-allow netmand self:capability2 wake_alarm;
-
-allow netmand sysfs:file rw_file_perms;
-allow netmand sysfs:dir r_dir_perms;
-
-allow netmand self:rawip_socket { create getopt setopt };
-allow netmand proc_net:file rw_file_perms;
 
 set_prop(netmand, netmand_prop)
 
-#domain_auto_trans(netman, ip-vcc_exec, ip-vcc)
-#allow netman ip-vcc_exec:file entrypoint;
+allow netmand proc_netmand:file rw_file_perms;
+allow netmand proc_netmand:dir r_dir_perms;
 
-allow netmand hwservicemanager:binder call;
+allow netmand ip-vcc:fd use;
 
-allow netmand iptables-vcc_exec:file execute_no_trans;
-allow netmand ip6tables-vcc_exec:file execute_no_trans;
+allow netmand sysfs:file rw_file_perms;
+allow netmand sysfs:dir r_file_perms;
+
+allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
+
+allow netmand self:capability { net_admin net_raw sys_module dac_override };
+allow netmand self:capability2 wake_alarm;
+allow netmand self:netlink_kobject_uevent_socket { bind setopt read create };
+allow netmand self:udp_socket create;
+

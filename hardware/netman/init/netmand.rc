@@ -6,4 +6,3 @@ service netmand /vendor/bin/ip netns exec vcc /vendor/bin/netmand
     user root
     group root
     oneshot
-    seclabel u:r:netmand:s0

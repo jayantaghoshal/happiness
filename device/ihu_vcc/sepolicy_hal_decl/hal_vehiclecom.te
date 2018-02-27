@@ -1,0 +1,15 @@
+#define vehiclecom hal
+type hal_vehiclecom_hwservice, hwservice_manager_type;
+
+# TODO use hal_attribute() when available in P
+attribute hal_vehiclecom;
+expandattribute hal_vehiclecom true;
+attribute hal_vehiclecom_client;
+expandattribute hal_vehiclecom_client true;
+attribute hal_vehiclecom_server;
+expandattribute hal_vehiclecom_server false;
+
+
+binder_call(hal_vehiclecom_client, hal_vehiclecom_server)
+add_hwservice(hal_vehiclecom_server, hal_vehiclecom_hwservice)
+allow hal_vehiclecom_client hal_vehiclecom_hwservice:hwservice_manager find;

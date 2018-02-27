@@ -44,9 +44,6 @@
 # ip6tables-save
 /vendor/bin/ip6tables-save u:object_r:ip6tables-save-vcc_exec:s0
 
-# netns device
-/dev/vendor/netns(/.*)? u:object_r:netns_device:s0
-
 # carconfig-updater
 /vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0
 
@@ -67,3 +64,9 @@
 
 # dimmanager execution rights
 /vendor/bin/dimmanager u:object_r:dimmanager_exec:s0
+
+# localconfig
+/vendor/etc/localconfig(/.*) u:object_r:localconfig_data_file:s0
+
+/mnt/iptables\.rules u:object_r:iptables_data_file:s0
+

@@ -3,4 +3,3 @@ service netboyd /vendor/bin/netboyd
     user root
     group root
     oneshot
-    seclabel u:r:netboyd:s0
