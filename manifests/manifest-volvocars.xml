@@ -21,7 +21,7 @@
   <project name="vendor/google/apps/GoogleServices" path="vendor/volvocars/apps/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
 
   <!-- Boost-1.64.0 -->
-  <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="4caecf161ca6a435010cd8705e50884a6fa406df"/>
+  <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049"/>
 
   <!-- vSomeIP-2.10.10 -->
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="fbf60fa95d2d9ceea4f1f018332e7f8afe24dbf3"/>
