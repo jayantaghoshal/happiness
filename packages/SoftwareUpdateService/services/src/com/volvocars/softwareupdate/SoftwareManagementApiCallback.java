@@ -86,7 +86,10 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void DownloadData(int code, DownloadInfo downloadInfo) {
         if (200 == code) {
             Log.v(LOG_TAG, "Download succeeded");
-        } else Log.v(LOG_TAG, "Download failed: " + code);
+            service.UpdateSoftwareList(downloadInfo);
+        } else {
+            Log.v(LOG_TAG, "Download failed: " + code);
+        }
     }
 
 }

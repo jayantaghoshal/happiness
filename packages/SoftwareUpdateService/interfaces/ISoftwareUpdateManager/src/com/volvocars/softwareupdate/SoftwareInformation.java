@@ -32,6 +32,8 @@ public class SoftwareInformation implements Parcelable {
     public ArrayList<String> downloads = new ArrayList();
     public String downloadFilePath = "";
 
+    public ArrayList<String> downloadedResources = new ArrayList();
+
     public static final Creator<SoftwareInformation> CREATOR =
         new Creator<SoftwareInformation>() {
             @Override public SoftwareInformation createFromParcel(Parcel in) {
@@ -76,6 +78,15 @@ public class SoftwareInformation implements Parcelable {
     public void AddDownloadInfo(DownloadInfo downloadInfo) {
         this.softwareState = SoftwareState.DOWNLOADING_META;
         this.downloads = downloadInfo.resourceUris;
+        this.downloadedResources = downloadInfo.downloadedResources;
+
+        if(!this.downloads.isEmpty()) {
+            this.softwareState = SoftwareState.DOWNLOADING;
+        } else {
+            if (!this.downloadedResources.isEmpty()) {
+                this.softwareState = SoftwareState.DOWNLOADED;
+            }
+        }
     }
 
     @Override
@@ -90,11 +101,14 @@ public class SoftwareInformation implements Parcelable {
 
         dest.writeStringList(downloads);
         dest.writeString(downloadFilePath);
+
+        dest.writeStringList(downloadedResources);
     }
 
     @Override
     public String toString() {
-        String string = softwareId + "\n" + name + "\n" + description + "\n";
+        String string = softwareId + "\n" + softwareState.name() + "\n" + name + "\n" + description +
+                        "\nDownloads: " + downloads.toString() + "\nResources: " + downloadedResources.toString();
         return string;
     }
 
@@ -109,6 +123,8 @@ public class SoftwareInformation implements Parcelable {
 
         downloads = in.createStringArrayList();
         downloadFilePath = in.readString();
+
+        downloadedResources = in.createStringArrayList();
     }
 
     @Override

@@ -384,6 +384,14 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             currentDownloadInfo = null;
         } else {
             Log.v(LOG_TAG, "Downloading next file...");
+
+            try {
+                softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
+            } catch (RemoteException ex) {
+                // Something went bananas with binder.. What do?
+                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: " + ex.getMessage());
+            }
+
             FetchDownloadData();
         }
     }

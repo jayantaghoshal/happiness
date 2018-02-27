@@ -109,6 +109,24 @@
                 android:textSize="15sp"
                 />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/downloadedResourcesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Downloaded Resources: "
+                />
+                <TextView
+                android:id="@+id/downloadedResources"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            </LinearLayout>
         </LinearLayout>
         <TextView
                 android:id="@+id/state"

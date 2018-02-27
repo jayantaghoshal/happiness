@@ -58,9 +58,10 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
-            Log.v(LOG_TAG, "UpdateSoftwareList");
+            Log.v(LOG_TAG, "SoftwareList:");
             swInfos.clear();
             for (SoftwareInformation si : software_list) {
+                Log.v(LOG_TAG, "" + si.toString());
                 swInfos.add(si);
             }
 
@@ -71,16 +72,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         public void UpdateSoftware(SoftwareInformation software) {
             for (SoftwareInformation si : swInfos)
             {
+                Log.v(LOG_TAG, "UpdateSoftware: " + si.toString());
                 if (si.softwareId.equals(software.softwareId)) {
                     swInfos.set(swInfos.indexOf(si), software);
                     break;
                 }
             }
             updateAdapter();
-
-            for(SoftwareInformation si : swInfos) {
-                Log.v(LOG_TAG, "State: " + si.softwareState.name());
-            }
         }
 
         @Override

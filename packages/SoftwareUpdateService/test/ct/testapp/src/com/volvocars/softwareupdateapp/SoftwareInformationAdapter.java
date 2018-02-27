@@ -30,8 +30,8 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
     private ISoftwareUpdateApp softwareUpdateApp;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView swId, name, desc, installationId, installationStatus, state, downloads;
-        public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout;
+        public TextView swId, name, desc, installationId, installationStatus, state, downloads, downloadedResources;
+        public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout, downloadedResourcesLayout;
         public ImageView overflow;
         public CardView cardView;
         private boolean moreInfo = false;
@@ -46,6 +46,8 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             installationIdLayout = (LinearLayout) view.findViewById(R.id.installationIdLayout);
             downloads = (TextView) view.findViewById(R.id.downloads);
             downloadsLayout = (LinearLayout) view.findViewById(R.id.downloadsLayout);
+            downloadedResourcesLayout = (LinearLayout) view.findViewById(R.id.downloadedResourcesLayout);
+            downloadedResources = (TextView) view.findViewById(R.id.downloadedResources);
             installationStatus = (TextView) view.findViewById(R.id.installationStatus);
             installationStatusLayout = (LinearLayout) view.findViewById(R.id.installationStatusLayout);
             state = (TextView) view.findViewById(R.id.state);
@@ -142,6 +144,16 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.downloadsLayout.setVisibility(View.VISIBLE);
         else
             holder.downloadsLayout.setVisibility(View.INVISIBLE);
+
+        str = "";
+        for (String download : swInfo.downloadedResources) {
+            str += download + "\n";
+        }
+        holder.downloadedResources.setText(str);
+        if (holder.moreInfo && !swInfo.downloadedResources.isEmpty())
+            holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
+        else
+            holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
