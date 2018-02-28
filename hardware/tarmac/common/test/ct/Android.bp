@@ -1,12 +1,12 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 cc_test {
     name: "VtsTarmacCommonCTTestCases",
     defaults: ["volvocars_cc_defaults_hq_tests"],
-    srcs: ["timer_system_test.cpp"],
+    srcs: ["*.cpp"],
 
     shared_libs: ["liblog"],
     static_libs: [
