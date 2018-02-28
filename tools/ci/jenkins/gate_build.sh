@@ -7,7 +7,6 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
-VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -47,6 +46,7 @@ if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
     trap 'git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go' EXIT SIGINT SIGTERM
 fi
 
+VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 # Check vts package is up to date
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
