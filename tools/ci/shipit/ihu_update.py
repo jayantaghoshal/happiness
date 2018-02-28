@@ -100,12 +100,6 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
              5. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.""")
 
     try:
-        adb_bootmode = run([adb_executable, "get-state"], timeout_sec=60)
-        logger.info("Bootmode before: %s", adb_bootmode)
-    except Exception as e:
-        logger.info("Could not check bootmode, probably not booted, continue anyway. Reason: %r" % e)
-
-    try:
         if is_vip_app:
             VIP.writeline("sm alw 1")
             VIP.expect_line(".*SysM- Always_On: 1.*", 15)
@@ -113,6 +107,12 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
         if is_vip_pbl:
             VIP.writeline("sm st_off")
             VIP.expect_line(".*Disabling startup timer.*", 15)
+
+        try:
+            adb_bootmode = run([adb_executable, "get-state"], timeout_sec=60)
+            logger.info("Bootmode before: %s", adb_bootmode)
+        except Exception as e:
+            logger.info("Could not check bootmode, probably not booted, continue anyway. Reason: %r" % e)
 
         if update_mp:
             logger.info("Updating MP software (via Fastboot)")
@@ -149,12 +149,22 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
             run(['bash', 'fastboot.sh', '--abl', '--disable-verity'],
                 cwd=bsp_provided_flashfiles_path)
+            try:
+                # TODO decrease timeout after vip flashing stabilizes
+                wait_for_device_adb(adb_executable, timeout_sec=15 * 60)
+            except Exception:
+                logger.error("Booting after fastboot failed, VIP can be a reason...")
+                VIP.writeline("swdl er")  # brutal swdl e
+                VIP.expect_line(".*PBL Version.*", 15)
+                # This is only extra 15 minutes if VIP Power moding is broken again...
+                wait_for_device_adb(adb_executable, timeout_sec=15 * 60)
+                pass
 
-            wait_for_device_adb(adb_executable)
             logger.info("ADB available, current properties:")
             dump_props(adb_executable)
 
-            wait_for_boot_completed(adb_executable)
+            # TODO decrease timeout after vip flashing stabilizes
+            wait_for_boot_and_flashing_completed(adb_executable, timeout_sec=15 * 60)
             logger.info("Boot and postboot operations completed, current properties:")
             dump_props(adb_executable)
 
@@ -225,7 +235,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("New VIP APP booted successfully")
 
             wait_for_device_adb(adb_executable)
-            wait_for_boot_completed(adb_executable)
+            wait_for_boot_and_flashing_completed(adb_executable)
             logger.info("MP booted successfully with new VIP APP")
 
         else:
@@ -254,22 +264,44 @@ def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSer
         logger.info("In VIP PBL unit does not booted into device mode, forcing...")
         boot_mp_to_android(ihu_serials.vip)
         wait_for_device_adb(adb_executable)
-        wait_for_boot_completed(adb_executable)
+        wait_for_boot_and_flashing_completed(adb_executable)
 
 
-def wait_for_boot_completed(adb_executable: str):
+def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8):
     then = time.time()
     while True:
         try:
-            output = run([adb_executable,
-                          "shell", 'getprop', 'sys.boot_completed'],
-                         timeout_sec=7)
+            boot_completed = run([adb_executable,
+                                  "shell", 'getprop', 'sys.boot_completed'],
+                                 timeout_sec=7)
+            session = run([adb_executable,
+                           "shell", 'getprop', 'ro.boot.swdl.session'],
+                          timeout_sec=7)
         except Exception:
-            output = "0"  # Ignore if the command times out
-        if output == "1":
-            break
-        if time.time() > then + 60 * 4:  # Wait four minutes after the ADB service becomes available.
-            raise RuntimeError("Wait for boot timeout. property sys.boot_completed==1 not found.")
+            boot_completed = "0"  # Ignore if the command times out
+            session = ""
+
+        if boot_completed == "1" and session == "default":
+            vip_auto_flashing = run([adb_executable,
+                                     "shell", 'getprop', 'persist.swdl.EnableAutoFlashing'],
+                                    timeout_sec=1)
+            if vip_auto_flashing == "1":
+                vip_ok = run([adb_executable,
+                              "shell", 'getprop', 'swdl.vip_version_ok'],
+                             timeout_sec=1)
+                if vip_ok == "1":
+                    break
+            else:
+                break
+        else:
+            pass  # continue polling
+
+        if time.time() > then + timeout_sec:
+            logger.error("Waiting for booting and flashing failed, properties snapshot:")
+            dump_props(adb_executable)
+            raise RuntimeError("""Wait for boot and flashing timeout.
+                                  Probably unit not booting up successfully or flashing services
+                                  fail to ensure consistent software versions.""")
         time.sleep(4)
 
 
@@ -281,10 +313,9 @@ def wait_for_device_adb(adb_executable, timeout_sec=60 * 7):
 
 
 def dump_props(adb_executable, timeout_sec=15):
-    all_properties = run([adb_executable,
+    run([adb_executable,
                           'shell', 'getprop'],
                          timeout_sec=timeout_sec)
-    logger.info(all_properties)
 
 
 def str2bool(v: str) -> bool:

@@ -42,7 +42,7 @@ PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(VIP_VBF_IMAGES_PATH),ven
 # lines belowe were moved between swdl bb_reprogramming and device release repo.
 ##############################################################
 MP_PART_NUMBER ?= 00000000DEV
-ENABLE_AUTO_FLASHING ?= 0
+ENABLE_AUTO_FLASHING ?= 1
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.build.mp.part_number=$(MP_PART_NUMBER) \
