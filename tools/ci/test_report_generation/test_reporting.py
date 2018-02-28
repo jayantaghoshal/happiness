@@ -47,7 +47,7 @@ def send_hourly_failed_email(commiter_name: str, commiter_mail: str, report_link
 
 def fetch_commiters_name():
     JENKINS_USER = os.environ["JENKINS_USER"]
-    JENKINS_PASSWORD = os.environ["JENKINS_PASSWORD"]
+    JENKINS_PASSWORD = os.environ["JENKINS_API_PASSWORD"]
 
     # fetch json data of changeset
     with open(os.path.join(out_dir, "changelog.json"), 'r') as f:
