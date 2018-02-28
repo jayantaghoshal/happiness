@@ -17,23 +17,10 @@ namespace {
 std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
 }  // namespace
 
-SettingBase::SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope)
-    : userScope_(userScope), name_(name), context{context}, handle_(-1) {
+SettingBase::SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope)
+    : userScope_(userScope), name_(name), context{std::move(context)}, handle_(-1) {
     ALOGV("SettingBase ctor %d, userScope=%d", name, userScope);
-    handle_ = context->attachSetting(
-            name_, userScope,
-            [this](const std::string& stringdata, ProfileIdentifier profileId) {
-                ALOGV("onDataChangedBase, data=%s", stringdata.c_str());
-                initialized = true;
-                onDataChanged(stringdata, profileId);  // NOLINT: Virtual function will exist on dispatcher thread
-                ALOGV("onDataChangedBaseDone");
-            },
-            [this](ProfileIdentifier profileId) {
-                ALOGV("onSettingResetBase");
-                initialized = true;
-                onSettingReset(profileId);  // NOLINT: Virtual function will exist on dispatcher thread
-                ALOGV("onSettingResetBaseDone");
-            });
+
     ALOGV("SettingBase ctor done");
 }
 

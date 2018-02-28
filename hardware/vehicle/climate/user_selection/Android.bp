@@ -8,6 +8,7 @@ cc_library_static {
     defaults: ["climate_defaults"],
     srcs: [
         "source/*.cpp",
+        "common_api/*.cpp",
     ],
     shared_libs: [
         "libhidlbase",
@@ -21,13 +22,13 @@ cc_library_static {
         "libtarmac",
         "libsettings",
         "libihulog",
-        "climate_commonapi_printers",
     ],
     static_libs: [
         "libccparameterlistgen",
-        "climate_common",
         "climate_vf_common",
         "climate_commonapi_pregen",
+        "climate_commonapi_printers",
+        "climate_common",
     ],
     local_include_dirs: [
         "include",
@@ -37,10 +38,14 @@ cc_library_static {
         "include",
         "common_api",
     ],
+    export_static_lib_headers: [
+        "libccparameterlistgen",
+        "climate_common",
+        "climate_vf_common",
+        "climate_commonapi_pregen",
+        "climate_commonapi_printers",
+    ],
     export_shared_lib_headers: [
         "libcarconfig_reader",
-    ],
-    tidy_checks: [
-        //"cppcoreguidelines-*",
     ],
 }

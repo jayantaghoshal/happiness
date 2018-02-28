@@ -20,7 +20,7 @@ namespace SettingsFramework {
 
 class SettingBase {
   public:
-    SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope);
+    SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope);
     virtual ~SettingBase();
     void setCallback(std::function<void()>&& settingChangedCallback);
 
@@ -40,6 +40,8 @@ class SettingBase {
     virtual void onSettingReset(ProfileIdentifier profileId) = 0;
 
     const android::sp<SettingsManager> context;
+
+  protected:
     SettingsHandle handle_;
 };
 

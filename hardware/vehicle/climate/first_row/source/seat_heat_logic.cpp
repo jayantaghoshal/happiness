@@ -73,7 +73,7 @@ SeatHeatLogic::SeatHeatLogic(UserLocation userLocation, autosar::HmiSeatClima& s
       seatClimate_{seatClimate},
       seatHeatSignal_{getSeatHeatSignal()},
       timeProvider_{timeProvider},
-      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Determination_timeout")},
+      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout")},
       autoSeatHeatOn_(autoSeatHeatOn),
       autoSeatHeatLevel_(autoSeatHeatLevel) {
     log_debug() << "timeProviderTimeout_ :" << timeProviderTimeout_.count();

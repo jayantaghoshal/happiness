@@ -25,8 +25,8 @@ auto LOG_PREFIX = "ElectricDefrosterWindscreen: ";
 
 ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenLogic(
         NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
-        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront, IDispatcher& timerDispatcher,
-        autosar::HmiDefrstElecReq& hmiDefrstElecReq)
+        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront,
+        ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq)
     : electricDefrosterWindscreenState_{ElectricWindscreen},
       timeout_(std::chrono::milliseconds{
               static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0)}),

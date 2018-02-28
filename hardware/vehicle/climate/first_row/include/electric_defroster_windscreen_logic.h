@@ -1,31 +1,29 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
 
 #pragma once
+#include <Application_dataelement.h>
+#include <ECD_dataelement.h>
+#include <legacydispatcher.h>
+#include <libsettings/setting.h>
+#include <mutex>
+#include <v0/org/volvocars/climate/FirstRow.hpp>
+#include <v0/org/volvocars/climate/UserSelection.hpp>
 #include "dfsm.h"
 #include "idefroster.h"
 #include "notifiable_property.h"
-#include <Application_dataelement.h>
-#include <ECD_dataelement.h>
-#include <dispatcher.h>
-#include <mutex>
-#include <libsettings/setting.h>
-#include <v0/org/volvocars/climate/FirstRow.hpp>
-#include <v0/org/volvocars/climate/UserSelection.hpp>
 
 using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
-using FirstRowGen      = v0::org::volvocars::climate::FirstRow;
+using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 
-class ElectricDefrosterWindscreenLogic : private DFsm_Main, public IDefroster
-{
-public:
-    using ElectricDefrosterWindscreenState   = FirstRowGen::ElectricDefrosterWindscreenState;
+class ElectricDefrosterWindscreenLogic : private DFsm_Main, public IDefroster {
+  public:
+    using ElectricDefrosterWindscreenState = FirstRowGen::ElectricDefrosterWindscreenState;
     using ElectricDefrosterWindscreenRequest = FirstRowGen::ElectricDefrosterWindscreenRequest;
 
-    enum InternalElectricDefrosterWindscreenState
-    {
+    enum InternalElectricDefrosterWindscreenState {
         INIT = 0,
         CARCONFIG_INVALID,
         SYSTEM_OK,
@@ -41,10 +39,9 @@ public:
     };
 
     ElectricDefrosterWindscreenLogic(
-        NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
-        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>&      autoDefrosterFront,
-        IDispatcher&                                                       timerDispatcher,
-        autosar::HmiDefrstElecReq&                                         hmiDefrstElecReq);
+            NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
+            ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront,
+            ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);
 
     // PA_REQUEST_Defrost_WindscreenState
     void request(ElectricDefrosterWindscreenRequest requestedState);
@@ -52,7 +49,7 @@ public:
 
     bool isInState(int state);
 
-private:
+  private:
     bool carConfigOk();
 
     void registerFsm();
@@ -85,7 +82,7 @@ private:
     NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& electricDefrosterWindscreenState_;
 
     std::chrono::milliseconds timeout_;
-    std::recursive_mutex      mutex_;
+    std::recursive_mutex mutex_;
 
     // GET_S_Auto_Front_Defroster ?
     ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoFrontRequest_;
@@ -97,18 +94,18 @@ private:
     ElectricDefrosterWindscreenState requestElectricDefrosterWindscreenState_;
 
     // stored values
-    autosar::UsgModSts1     usageModeLast_;
-    autosar::CarModSts1     carModeLast_;
+    autosar::UsgModSts1 usageModeLast_;
+    autosar::CarModSts1 carModeLast_;
     autosar::DrvModReqType1 driveModeLast_;
-    autosar::ActrDefrstSts  hmiDefrosterWindscreenStatusLast_;
-    autosar::ActrReq        hmiElectricDefrosterWindscreenRequestLast_;
+    autosar::ActrDefrstSts hmiDefrosterWindscreenStatusLast_;
+    autosar::ActrReq hmiElectricDefrosterWindscreenRequestLast_;
 
-    IDispatcher&               timerDispatcher_;
+    ILegacyDispatcher& timerDispatcher_;
     autosar::HmiDefrstElecReq& hmiDefrstElecReq_;
 
     // FlexRay signals
-    ECDDataElement::DESink<autosar::DrvModReq_info>                      driveMode_;
+    ECDDataElement::DESink<autosar::DrvModReq_info> driveMode_;
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehicleModes_;
-    ApplicationDataElement::DEReceiver<autosar::HmiDefrstElecSts_info>   hmiDefrosterWindscreenStatus_;
-    ApplicationDataElement::DESender<autosar::HmiDefrstElecReq_info>     hmiDefrosterRequest_;
+    ApplicationDataElement::DEReceiver<autosar::HmiDefrstElecSts_info> hmiDefrosterWindscreenStatus_;
+    ApplicationDataElement::DESender<autosar::HmiDefrstElecReq_info> hmiDefrosterRequest_;
 };

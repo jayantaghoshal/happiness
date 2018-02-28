@@ -11,8 +11,7 @@ LOG_SET_DEFAULT_CONTEXT(UserSelectionContext)
 
 using namespace v0::org::volvocars::climate;
 
-UserSelectionStubImpl::UserSelectionStubImpl(UserSelectionFactory& logicFactory)
-    : remoteEventHandler_(this), InterfaceVersion(0, 1), logicFactory_(logicFactory) {}
+UserSelectionStubImpl::UserSelectionStubImpl(UserSelectionFactory& logicFactory) : logicFactory_(logicFactory) {}
 
 void UserSelectionStubImpl::initStubAdapter() {
     subscriptionHandles_.push_back(logicFactory_.autoDriverSeatHeat_.subscribe([this](const auto&) {
@@ -37,7 +36,7 @@ void UserSelectionStubImpl::initStubAdapter() {
         log_debug() << "fireAutoPassengerSeatHeatLevelAttributeChanged("
                     << logicFactory_.autoPassengerSeatHeatLevel_.get().getCurrentLevel().value_ << ")";
         // getStubAdapter()->fireAutoPassengerSeatHeatLevelAttributeChanged(
-            logicFactory_.autoPassengerSeatHeatLevel_.get());
+        logicFactory_.autoPassengerSeatHeatLevel_.get();
     }));
 
     subscriptionHandles_.push_back(logicFactory_.autoSteeringWheelHeat_.subscribe([this](const auto&) {
@@ -50,7 +49,7 @@ void UserSelectionStubImpl::initStubAdapter() {
         log_debug() << "fireAutoSteeringWheelHeatLevelAttributeChanged("
                     << logicFactory_.autoSteeringWheelHeatLevel_.get().getCurrentLevel().value_ << ")";
         // getStubAdapter()->fireAutoSteeringWheelHeatLevelAttributeChanged(
-            logicFactory_.autoSteeringWheelHeatLevel_.get());
+        logicFactory_.autoSteeringWheelHeatLevel_.get();
     }));
 
     subscriptionHandles_.push_back(logicFactory_.manualRecircTimer_.subscribe([this](const auto&) {
@@ -69,7 +68,7 @@ void UserSelectionStubImpl::initStubAdapter() {
         log_debug() << "firePreconditioningHeatSourceAttributeChanged("
                     << logicFactory_.preconditioningHeatSource_.get().getCurrentSelection().value_ << ")";
         // getStubAdapter()->firePreconditioningHeatSourceAttributeChanged(
-            logicFactory_.preconditioningHeatSource_.get());
+        logicFactory_.preconditioningHeatSource_.get();
     }));
 
     subscriptionHandles_.push_back(logicFactory_.autoFrontDefroster_.subscribe([this](const auto&) {
@@ -89,8 +88,6 @@ void UserSelectionStubImpl::initStubAdapter() {
                     << logicFactory_.additionalHeater_.get().getCurrentSelection().value_ << ")";
         // getStubAdapter()->fireAdditionalHeaterAttributeChanged(logicFactory_.additionalHeater_.get());
     }));
-
-    return &remoteEventHandler_;
 }
 
 const UserSelection::OffOnSelection& UserSelectionStubImpl::getAutoDriverSeatHeatAttribute() {

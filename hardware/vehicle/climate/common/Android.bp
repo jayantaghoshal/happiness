@@ -11,8 +11,9 @@ cc_library_static {
     ],
     static_libs: [
         "libccparameterlistgen",
-        "climate_vf_common",
         "climate_commonapi_pregen",
+        "climate_commonapi_printers",
+        "climate_vf_common",
     ],
     shared_libs: [
         "libhidlbase",
@@ -26,7 +27,6 @@ cc_library_static {
         "libtarmac",
         "libsettings",
         "libihulog",
-        "climate_commonapi_printers",
     ],
     local_include_dirs: [
         "include",
@@ -36,14 +36,13 @@ cc_library_static {
     ],
     export_static_lib_headers: [
         "climate_vf_common",
+        "climate_commonapi_pregen",
+        "climate_commonapi_printers",
     ],
     export_shared_lib_headers: [
         "libtarmac",
         "libdataelements",
         "libsettings",
         "libihulog",
-    ],
-    tidy_checks: [
-        //"cppcoreguidelines-*",
     ],
 }

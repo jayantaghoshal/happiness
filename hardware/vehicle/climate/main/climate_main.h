@@ -19,13 +19,14 @@
 
 class ClimateMain final {
   public:
-    ClimateMain();
+    ClimateMain(const std::shared_ptr<tarmac::eventloop::IDispatcher>& tarmacDispatcher);
 
-  private:
+    // TODO:(climateport): temporary public to make testing easier, should be private
+  public:
     std::shared_ptr<tarmac::eventloop::IDispatcher> tarmacDispatcher_;
     android::sp<SettingsFramework::SettingsManager> settingsManager_;
     tarmac::timeprovider::TimeProvider timeProvider_;
-
+    bool hackToInitGlobalLegacyDispatcher;
     signal_proxy::Proxies signalProxies_;
     common::daemon::Factory commonFactory_;
     UserSelectionFactory user_selection;

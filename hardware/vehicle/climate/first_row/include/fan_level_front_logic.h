@@ -6,7 +6,7 @@
 #pragma once
 #include "climate_reset_logic.h"
 #include "dfsm.h"
-#include "idispatcher.h"
+#include "ilegacydispatcher.h"
 #include "notifiable_property.h"
 #include "settings_proxy.h"
 #include "v0/org/volvocars/climate/FirstRow.hpp"
@@ -28,7 +28,7 @@ class FanLevelFrontLogic : private DFsm_Main {
                        ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster,
                        ReadOnlyNotifiableProperty<FirstRowGen::AutoClimateState>& autoClimate,
                        ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset,
-                       IDispatcher& timerDispatcher);
+                       ILegacyDispatcher& timerDispatcher);
 
     virtual ~FanLevelFrontLogic() = default;
 
@@ -65,7 +65,7 @@ class FanLevelFrontLogic : private DFsm_Main {
     ReadOnlyNotifiableProperty<FirstRowGen::AutoClimateState>& autoClimate_;
     ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset_;
 
-    IDispatcher& timerDispatcher_;
+    ILegacyDispatcher& timerDispatcher_;
 
     // FlexRay signal
     ApplicationDataElement::DESender<autosar::HmiHvacFanLvlFrnt_info> fanLevelFrontSignal_;

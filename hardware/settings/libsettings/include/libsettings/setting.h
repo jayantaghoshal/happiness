@@ -27,7 +27,17 @@ template <typename T, UserScope userScope>
 class Setting : public SettingBase {
   public:
     Setting(const SettingId& name, const T& defaultValue, android::sp<SettingsManager> context)
-        : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {}
+        : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {
+        handle_ = context->attachSetting(name_, userScope,
+                                         [this](const std::string& stringdata, ProfileIdentifier profileId) {
+                                             initialized = true;
+                                             onDataChanged(stringdata, profileId);
+                                         },
+                                         [this](ProfileIdentifier profileId) {
+                                             initialized = true;
+                                             onSettingReset(profileId);
+                                         });
+    }
 
     void setCallback(std::function<void(const ValueProfile<T>&)>&& settingChangedCallback) {
         callbackToApplicationOnSettingChanged_ = std::move(settingChangedCallback);

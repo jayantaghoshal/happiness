@@ -1,21 +1,21 @@
-/*===========================================================================*\
-* Copyright 2017 Delphi Technologies, Inc., All Rights Reserved.
-* Delphi Confidential
-\*===========================================================================*/
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
 #pragma once
 
 #include <chrono>
 #include <functional>
 
 /**
- * Dispatcher Interface
+ *LegacyDispatcher Interface
  * The dispatcher interface can only handle ONE dispatch job at a time. If you want several
  * dispatch jobs to run in parallel you need to instanciate several interfaces.
  */
-class IDispatcher
-{
-public:
-    virtual ~IDispatcher() = default;
+class ILegacyDispatcher {
+  public:
+    virtual ~ILegacyDispatcher() = default;
 
     /**
      * Start a dispatcher that will call a specific callback upon timeout. If there is a currently running
@@ -26,10 +26,8 @@ public:
      * @param[in] repeat Callback function will be repeatedly called
      * @return Returns true if a running dispatcher was cancelled before starting the new one. False otherwise.
      */
-    virtual bool Start(std::chrono::milliseconds timeout,
-                       std::function<void(void)> timeout_function,
-                       bool                      repeat = false)
-        = 0;
+    virtual void Start(std::chrono::milliseconds timeout, std::function<void(void)> timeout_function,
+                       bool repeat = false) = 0;
 
     /**
      * Start a dispatcher and call it immediately. This is a convenience method for Start(0,func);
@@ -46,13 +44,13 @@ public:
      * @param[in] repeat Callback function will be repeatedly called
      * @return Returns true if a running dispatcher was cancelled before starting the new one. False otherwise.
      */
-    virtual bool Restart(std::chrono::milliseconds timeout, bool repeat = false) = 0;
+    virtual void Restart(std::chrono::milliseconds timeout, bool repeat = false) = 0;
 
     /**
      * Cancel the dispatcher.
      * @return Returns true if a running dispatcher was cancelled. False otherwise.
      */
-    virtual bool Cancel() = 0;
+    virtual void Cancel() = 0;
 
     /**
      * See if there is a dispatcher running or not.

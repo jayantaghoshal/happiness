@@ -6,6 +6,10 @@
 cc_defaults {
     name: "climate_defaults",
     defaults: ["volvocars_cc_defaults_hq"],
+    tidy: false,
+    cflags: [
+        "-g",
+    ],
     tidy_checks: [
         "-readability-redundant-member-init", // old climate code uses this a lot
         "-readability-named-parameter", // old climate code uses this a lot

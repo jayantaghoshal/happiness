@@ -75,7 +75,8 @@ FanLevelFrontLogic::FanLevelFrontLogic(
         NotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFront,
         ReadOnlyNotifiableProperty<FirstRowGen::FirstRow::MaxDefrosterState>& maxDefroster,
         ReadOnlyNotifiableProperty<FirstRowGen::FirstRow::AutoClimateState>& autoClimate,
-        ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset, IDispatcher& timerDispatcher)
+        ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset,
+        ILegacyDispatcher& timerDispatcher)
     : autoFanLevelSetting_{autoFanLevelSetting},
       fanLevelFrontSetting_{fanLevelFrontSetting},
       fanLevelFront_{fanLevelFront},
@@ -85,7 +86,7 @@ FanLevelFrontLogic::FanLevelFrontLogic(
       timerDispatcher_{timerDispatcher},
       mutex_{},
       subscriptions_{},
-      timeout_{util::readLocalConfig<std::chrono::seconds>("LCFG_FanLevelFront_timeout")},
+      timeout_{util::readLocalConfig<std::chrono::seconds>("Climate_FanLevelFront_timeout")},
       climateControl_{NONE},
       reqFanLevel_{FirstRowGen::FanLevelFrontValue::OFF},
       currentFanLevel_{FirstRowGen::FanLevelFrontValue::OFF},

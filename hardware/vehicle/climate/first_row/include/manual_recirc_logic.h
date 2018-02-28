@@ -7,8 +7,8 @@
 
 #include "auto_climate_logic.h"
 #include "climate_reset_logic.h"
-#include "dispatcher.h"
 #include "fan_level_front_logic.h"
+#include "legacydispatcher.h"
 #include "max_defroster_logic.h"
 #include "notifiable_property.h"
 #include "settings_proxy.h"
@@ -32,7 +32,7 @@ class ManualRecircLogic {
                                     UserScope::NOT_USER_RELATED>& settingManualRecirc,
                       NotifiableProperty<FirstRowGen::ManualRecircState>& sharedManualRecirc,
                       ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset,
-                      IDispatcher& timerDispatcher,
+                      ILegacyDispatcher& timerDispatcher,
                       ReadOnlyNotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFront,
                       ReadOnlyNotifiableProperty<AutoClimateLogic::AutoClimateEvent>& autoClimate,
                       ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster);
@@ -67,7 +67,7 @@ class ManualRecircLogic {
     std::recursive_mutex mutex_;
     bool isActive_;
     bool carConfig_;
-    IDispatcher& timerDispatcher_;
+    ILegacyDispatcher& timerDispatcher_;
     std::chrono::minutes timeout_;
 
     // Flexray signals

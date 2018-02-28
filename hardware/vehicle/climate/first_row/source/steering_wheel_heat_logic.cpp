@@ -64,7 +64,7 @@ SteeringWheelHeatLogic::SteeringWheelHeatLogic(
       setting_{steeringWheelHeatLevelSetting},
       active_{false},
       timeProvider_{timeProvider},
-      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Determination_timeout")},
+      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout")},
       autoSteeringWheelHeatOn_(autoSteeringWheelHeatOn),
       autoSteeringWheelHeatLevel_(autoSteeringWheelHeatLevel) {
     log_debug() << "timeProviderTimeout_ :" << timeProviderTimeout_.count();

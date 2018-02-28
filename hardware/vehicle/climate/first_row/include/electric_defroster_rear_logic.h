@@ -10,7 +10,7 @@
 
 #include <Application_dataelement.h>
 #include <ECD_dataelement.h>
-#include <dispatcher.h>
+#include <legacydispatcher.h>
 #include <libsettings/setting.h>
 #include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
@@ -40,7 +40,7 @@ class ElectricDefrosterRearLogic final : private DFsm_Main, public IDefroster {
 
     ElectricDefrosterRearLogic(NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
                                ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear,
-                               IDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);
+                               ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);
 
     ~ElectricDefrosterRearLogic() = default;
 
@@ -107,6 +107,6 @@ class ElectricDefrosterRearLogic final : private DFsm_Main, public IDefroster {
     ApplicationDataElement::DESender<autosar::HmiDefrstElecReq_info> hmiElectricDefrosterRearRequest_;
     ApplicationDataElement::DEReceiver<autosar::HmiDefrstElecSts_info> hmiDefrosterStatus_;
 
-    IDispatcher& timerDispatcher_;
+    ILegacyDispatcher& timerDispatcher_;
     autosar::HmiDefrstElecReq& hmiDefrstElecReq_;
 };

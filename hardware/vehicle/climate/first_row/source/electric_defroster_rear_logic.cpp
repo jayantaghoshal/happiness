@@ -21,8 +21,8 @@ auto LOG_PREFIX = "ElectricDefrosterRear: ";
 
 ElectricDefrosterRearLogic::ElectricDefrosterRearLogic(
         NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
-        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear, IDispatcher& timerDispatcher,
-        autosar::HmiDefrstElecReq& hmiDefrstElecReq)
+        ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear,
+        ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq)
     : electricDefrosterRearState_(ElectricDefrosterRear),
       timeout_(std::chrono::milliseconds{
               static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0)}),

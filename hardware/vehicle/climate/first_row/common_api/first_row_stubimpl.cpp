@@ -15,52 +15,52 @@ LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
 using namespace v0::org::volvocars::climate;
 
 FirstRowStubImpl::FirstRowStubImpl(FirstRowFactory& logicFactory, common::daemon::Factory& commonFactory)
-    :, logicFactory_{logicFactory}, commonFactory_{commonFactory} {}
+    : logicFactory_{logicFactory}, commonFactory_{commonFactory} {}
 
 void FirstRowStubImpl::initStubAdapter() {
     SubscriptionHandle subscriptionHandle;
 
-    subscriptionHandles_.push_back(logicFactory_.airConditioner_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.airConditioner_.subscribe([](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
         // getStubAdapter()->fireAirConditionerAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.airDistribution_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.airDistribution_.subscribe([](const auto& state) {
         log_debug() << "fireAirDistributionAttributeChanged " << state;
         // getStubAdapter()->fireAirDistributionAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.autoClimate_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.autoClimate_.subscribe([](const auto& state) {
         log_debug() << "fireAutoClimateAttributeChanged " << state;
         // getStubAdapter()->fireAutoClimateAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.cleanZone_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.cleanZone_.subscribe([](const auto& state) {
         log_debug() << "fireCleanzoneAttributeChanged " << state;
         // getStubAdapter()->fireCleanzoneAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.fanLevelFront_.subscribe([](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
         // getStubAdapter()->fireFanLevelFrontAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.manualRecirc_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.manualRecirc_.subscribe([](const auto& state) {
         log_debug() << "fireManualRecircAttributeChanged " << state;
         // getStubAdapter()->fireManualRecircAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([](const auto& state) {
         log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
         // getStubAdapter()->fireElectricDefrosterWindscreenAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.electricDefrosterRear_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.electricDefrosterRear_.subscribe([](const auto& state) {
         log_debug() << "fireElectricDefrosterRearAttributeChanged " << state;
         // getStubAdapter()->fireElectricDefrosterRearAttributeChanged(state);
     }));
 
-    subscriptionHandles_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([](const auto& state) {
         log_debug() << "fireMaxDefrosterAttributeChanged " << state;
         // getStubAdapter()->fireMaxDefrosterAttributeChanged(state);
     }));
@@ -97,51 +97,49 @@ void FirstRowStubImpl::initStubAdapter() {
         // getStubAdapter()->firePassengerTemperatureAttributeChanged(pubVal);
     }));
 
-    subscriptionHandles_.push_back(
-            commonFactory_.getTemperatureSyncProperty().subscribe([this](const auto& syncAttribute) {
-                log_info() << "fireTemperatureSyncAttributeChanged, " << syncAttribute;
-                // getStubAdapter()->fireTemperatureSyncAttributeChanged(syncAttribute);
-            }));
+    subscriptionHandles_.push_back(commonFactory_.getTemperatureSyncProperty().subscribe([](const auto& syncAttribute) {
+        log_info() << "fireTemperatureSyncAttributeChanged, " << syncAttribute;
+        // getStubAdapter()->fireTemperatureSyncAttributeChanged(syncAttribute);
+    }));
+
+    subscriptionHandles_.push_back(logicFactory_.getSeatHeatDriverProperty().subscribe([](const auto& heatAttribute) {
+        log_debug() << "fireSeatHeatDriverAttributeChanged, " << heatAttribute;
+        // getStubAdapter()->fireSeatHeatDriverAttributeChanged(heatAttribute);
+    }));
 
     subscriptionHandles_.push_back(
-            logicFactory_.getSeatHeatDriverProperty().subscribe([this](const auto& heatAttribute) {
-                log_debug() << "fireSeatHeatDriverAttributeChanged, " << heatAttribute;
-                // getStubAdapter()->fireSeatHeatDriverAttributeChanged(heatAttribute);
-            }));
-
-    subscriptionHandles_.push_back(
-            logicFactory_.getSeatHeatPassengerProperty().subscribe([this](const auto& heatAttribute) {
+            logicFactory_.getSeatHeatPassengerProperty().subscribe([](const auto& heatAttribute) {
                 log_debug() << "fireSeatHeatPassengerAttributeChanged, " << heatAttribute;
                 // getStubAdapter()->fireSeatHeatPassengerAttributeChanged(heatAttribute);
             }));
 
-    subscriptionHandles_.push_back(logicFactory_.electricDefrosterRearPopup_.subscribe([this](const auto& state) {
+    subscriptionHandles_.push_back(logicFactory_.electricDefrosterRearPopup_.subscribe([](const auto& state) {
         log_debug() << "fireElectricDefrosterRearPopupAttributeChanged " << state;
         // getStubAdapter()->fireElectricDefrosterRearPopupAttributeChanged(state);
     }));
 
     subscriptionHandles_.push_back(
-            logicFactory_.getElectricDefrosterWindscreenPopupProperty().subscribe([this](const auto& state) {
+            logicFactory_.getElectricDefrosterWindscreenPopupProperty().subscribe([](const auto& state) {
                 log_debug() << "fireElectricDefrosterWindscreenPopupAttributeChanged " << state;
                 // getStubAdapter()->fireElectricDefrosterWindscreenPopupAttributeChanged(state);
             }));
 
-    subscriptionHandles_.push_back(logicFactory_.getSteeringWheelHeatProperty().subscribe([this](auto heatAttribute) {
+    subscriptionHandles_.push_back(logicFactory_.getSteeringWheelHeatProperty().subscribe([](auto heatAttribute) {
         log_debug() << "fireSteeringWheelHeatAttributeChanged, " << heatAttribute;
         // getStubAdapter()->fireSteeringWheelHeatAttributeChanged(heatAttribute);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.getSeatVentDriverProperty().subscribe([this](auto ventAttribute) {
+    subscriptionHandles_.push_back(logicFactory_.getSeatVentDriverProperty().subscribe([](auto ventAttribute) {
         log_debug() << "fireSeatVentDriverAttributeChanged, " << ventAttribute;
         // getStubAdapter()->fireSeatVentDriverAttributeChanged(ventAttribute);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.getSeatVentPassengerProperty().subscribe([this](auto ventAttribute) {
+    subscriptionHandles_.push_back(logicFactory_.getSeatVentPassengerProperty().subscribe([](auto ventAttribute) {
         log_debug() << "fireSeatVentPassengerAttributeChanged, " << ventAttribute;
         // getStubAdapter()->fireSeatVentPassengerAttributeChanged(ventAttribute);
     }));
 
-    subscriptionHandles_.push_back(logicFactory_.getIonizerProperty().subscribe([this](auto ionizerAttribute) {
+    subscriptionHandles_.push_back(logicFactory_.getIonizerProperty().subscribe([](auto ionizerAttribute) {
         log_debug() << "fireIonizerAttributeChanged" << ionizerAttribute;
         // getStubAdapter()->fireIonizerAttributeChanged(ionizerAttribute);
     }));

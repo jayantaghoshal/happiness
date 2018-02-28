@@ -4,8 +4,8 @@
  */
 
 #pragma once
-#include "dispatcher.h"
 #include "electric_defroster_windscreen_logic.h"
+#include "legacydispatcher.h"
 #include "max_defroster_logic.h"
 #include "notifiable_property.h"
 
@@ -21,7 +21,7 @@ class DefrosterWindscreenCCSM {
     DefrosterWindscreenCCSM(
             ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster,
             ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen,
-            IDispatcher& dispatcher, IDefroster& electricDefrosterWindscreenLogic,
+            ILegacyDispatcher& dispatcher, IDefroster& electricDefrosterWindscreenLogic,
             IDefroster& electricDefrosterWindscreenPopupLogic, IDefroster& maxDefrosterLogic);
 
     ~DefrosterWindscreenCCSM() = default;
@@ -38,7 +38,7 @@ class DefrosterWindscreenCCSM {
     ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster_;
     ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen_;
 
-    IDispatcher& dispatcher_;
+    ILegacyDispatcher& dispatcher_;
     std::chrono::milliseconds dispatcherTimeout_;
     std::recursive_mutex mutex_;
 

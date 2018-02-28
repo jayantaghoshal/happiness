@@ -8,6 +8,7 @@
 #include "kpi_log.h"
 #include "libsettings/settingsmanagerhidl.h"
 #include "logging_context.h"
+#include "vfc_helper.h"
 
 #include <chrono>
 
@@ -15,10 +16,18 @@ LOG_SET_DEFAULT_CONTEXT(mainContext)
 
 using namespace std::chrono_literals;
 
-ClimateMain::ClimateMain()
-    : tarmacDispatcher_{tarmac::eventloop::IDispatcher::CreateDispatcher()},
+namespace {
+bool initGlobalLegacyDispatcher(tarmac::timeprovider::TimeProvider* time_provider) {
+    LegacyDispatcher::setGlobalInstanceHackTimeProvider(time_provider);
+    return true;
+}
+}  // namespace
+
+ClimateMain::ClimateMain(const std::shared_ptr<tarmac::eventloop::IDispatcher>& tarmacDispatcher)
+    : tarmacDispatcher_{tarmacDispatcher},
       settingsManager_{new SettingsFramework::SettingsManagerHidl(*tarmacDispatcher_)},
       timeProvider_{tarmacDispatcher_},
+      hackToInitGlobalLegacyDispatcher{initGlobalLegacyDispatcher(&timeProvider_)},
       signalProxies_{}  //, commonFactory_{}
       ,
       user_selection{settingsManager_},
@@ -36,9 +45,9 @@ ClimateMain::ClimateMain()
     // InActive
     // Since we cannot directly detect that transition we do this at start-up instead.
     // The requirement says 3 secs for a "normal" user settings signal but we give it some more time at startup
-    request_vfc(Vfc::UserInputSettings, 10s);
-    request_vfc(Vfc::DriverInformationCenterStackDisplayPoll, 3s);
+    ApplicationDataElement::Helper::request_vfc(Vfc::UserInputSettings, 10s);
+    ApplicationDataElement::Helper::request_vfc(Vfc::DriverInformationCenterStackDisplayPoll, 3s);
     // =======================================================================================
 
-    log_info() << KPI_MARKER << "Climate service ready";
+    log_info() << KPI_MARKER << "Climate service ready" << hackToInitGlobalLegacyDispatcher;
 }

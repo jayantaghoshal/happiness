@@ -46,7 +46,7 @@ ManualRecircLogic::ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen
                                                    UserScope::NOT_USER_RELATED>& settingManualRecirc,
                                      NotifiableProperty<FirstRowGen::ManualRecircState>& sharedManualRecirc,
                                      ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset,
-                                     IDispatcher& timerDispatcher,
+                                     ILegacyDispatcher& timerDispatcher,
                                      ReadOnlyNotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFront,
                                      ReadOnlyNotifiableProperty<AutoClimateLogic::AutoClimateEvent>& autoClimate,
                                      ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster)
@@ -65,7 +65,7 @@ ManualRecircLogic::ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen
       isActive_{false},
       carConfig_{false},
       timerDispatcher_{timerDispatcher},
-      timeout_{util::readLocalConfig<std::chrono::minutes>("LCFG_Manual_Recirc")} {
+      timeout_{util::readLocalConfig<std::chrono::minutes>("Climate_Manual_Recirc")} {
     carConfig_ = carConfigState();
 
     auto handleSignals = [this] {

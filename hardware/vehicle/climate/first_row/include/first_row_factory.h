@@ -19,6 +19,7 @@
 #include "fan_level_front_logic.h"
 #include "first_row_stubimpl.hpp"
 #include "ionizer_logic.h"
+#include "legacydispatcher.h"
 #include "manual_recirc_logic.h"
 #include "max_defroster_logic.h"
 #include "notifiable_property.h"
@@ -106,19 +107,19 @@ class FirstRowFactory final {
     ReadOnlyNotifiableProperty<FirstRowGen::IonizerState>& getIonizerProperty();
 
     // First row logic
-    Dispatcher fanLevelFrontnDispatcher_;
+    LegacyDispatcher fanLevelFrontnDispatcher_;
     FanLevelFrontLogic fanLevelFrontLogic_;
     AirDistributionLogic airDistributionLogic_;
     AutoClimateLogic autoClimateLogic_;
     CleanZoneLogic cleanZoneLogic_;
     ClimateResetLogic climateResetLogic_;
-    Dispatcher manualRecircDispatcher_;
+    LegacyDispatcher manualRecircDispatcher_;
     ManualRecircLogic manualRecircLogic_;
     AirConditionerLogic airConditionerLogic_;
-    Dispatcher electricDefrosterWindscreenDispatcher_;
+    LegacyDispatcher electricDefrosterWindscreenDispatcher_;
     ElectricDefrosterWindscreenLogic electricDefrosterWindscreenLogic_;
     ElectricDefrosterRearPopupLogic electricDefrosterRearPopupLogic_;
-    Dispatcher electricDefrosterRearDispatcher_;
+    LegacyDispatcher electricDefrosterRearDispatcher_;
     ElectricDefrosterRearLogic electricDefrosterRearLogic_;
     SeatHeatLogic seatHeatDriverLogic_;
     SeatHeatLogic seatHeatPassengerLogic_;
@@ -135,12 +136,12 @@ class FirstRowFactory final {
     SeatVentLogic seatVentDriverLogic_;
     SeatVentLogic seatVentPassengerLogic_;
     first_row::IonizerLogic ionizerLogic_;
-    Dispatcher defrosterWindscreenCCSMDispatcher_;
+    LegacyDispatcher defrosterWindscreenCCSMDispatcher_;
     DefrosterWindscreenCCSM defrosterWindscreenCCSM_;
     DefrosterRearCCSM defrosterRearCCSM_;
 
     // VFC
-    Dispatcher VFCDrivingClimatisationDispatcher_;
+    LegacyDispatcher VFCDrivingClimatisationDispatcher_;
     VFCDrivingClimatisationLogic VFCDrivingClimatisationLogic_;
     VFCVisibilityLogic VFCVisibilityLogic_;
 };

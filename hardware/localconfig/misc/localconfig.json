@@ -110,5 +110,11 @@
   },
   "vehiclefunctions.adas.LCFG_DAI_Enabled": true,
   "vehiclefunctions.profiles.T_PassiveKeysearch_Timeout_ms": 1000,
-  "vehiclefunctions.profiles.T_Keysearch_Timeout_ms": 1000
+  "vehiclefunctions.profiles.T_Keysearch_Timeout_ms": 1000,
+  "Climate_Defroster_delay" :1.0,
+  "Climate_defroster_timeout" :3.0,
+  "Climate_FanLevelFront_timeout" : 120,
+  "Climate_Manual_Recirc": 20,
+  "Climate_Determination_timeout" : 20,
+  "Climate_AdditionalHeaterAvailability": false
 }

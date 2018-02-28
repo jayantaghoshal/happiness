@@ -21,5 +21,3 @@ cc_library_shared {
         "-cert-dcl50-cpp", // variadic macros required for ivi logging
     ],
 }
-
-//LOCAL_CPPFLAGS := -Wno-non-virtual-dtor -fexceptions -Wno-unused-parameter -Wno-macro-redefined

@@ -17,7 +17,7 @@ const std::chrono::seconds timeout{30};
 const std::chrono::seconds timeoutMargin{10};
 }
 
-VFCDrivingClimatisationLogic::VFCDrivingClimatisationLogic(IDispatcher& timerDispatcher)
+VFCDrivingClimatisationLogic::VFCDrivingClimatisationLogic(ILegacyDispatcher& timerDispatcher)
     : timerDispatcher_(timerDispatcher), activate_(false) {
     log_debug() << "VFCDrivingClimatisationLogic()";
 
@@ -66,15 +66,15 @@ void VFCDrivingClimatisationLogic::handleSignals() {
 
     if (!activate_ && timerDispatcher_.IsRunning()) {
         timerDispatcher_.Cancel();
-        request_vfc(Vfc::DrivingClimatisation, 0s);
+        ApplicationDataElement::Helper::request_vfc(Vfc::DrivingClimatisation, 0s);
     } else if (activate_ && !timerDispatcher_.IsRunning()) {
         log_debug() << "request_vfc(Vfc::DrivingClimatisation)";
-        request_vfc(Vfc::DrivingClimatisation, timeout + timeoutMargin);
+        ApplicationDataElement::Helper::request_vfc(Vfc::DrivingClimatisation, timeout + timeoutMargin);
 
         timerDispatcher_.Start(timeout, [this]() {
             if (activate_) {
                 log_verbose() << "request_vfc(Vfc::DrivingClimatisation)";
-                request_vfc(Vfc::DrivingClimatisation, timeout + timeoutMargin);
+                ApplicationDataElement::Helper::request_vfc(Vfc::DrivingClimatisation, timeout + timeoutMargin);
                 timerDispatcher_.Restart(timeout);
             }
         });
