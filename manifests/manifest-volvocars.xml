@@ -102,4 +102,13 @@
   <!-- Patch liblog to silence clang-tidy nagging about readability-implicit-bool-conversion in ALOGV macro -->
   <remove-project name="aosp/platform/system/core"/>
   <project name="aosp/platform/system/core" path="system/core" revision="b0970180aff022035260ada58d1f6b9acd98c59e"/>
+
+  <!-- GDB -->
+  <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
+
+  <!-- Patch received from kok.fatt.chan@intel.com by email to get gdbserver working.
+        Info from ravisankar.madasamy@intel.com (2018-03-06): "Patches are integrated in mainline and you will receive it officially in our next external release on WW11."
+   -->
+  <remove-project name="aosp/platform/prebuilts/misc"/>
+  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="e6c41f8dbaaea17d897956787913c41e93b5e7f9"/>
 </manifest>
