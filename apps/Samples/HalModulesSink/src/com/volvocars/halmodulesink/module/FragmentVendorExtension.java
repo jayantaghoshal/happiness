@@ -40,6 +40,34 @@ public class FragmentVendorExtension extends AModuleFragment {
         Button settingCsaButtonOff = (Button) root.findViewById(R.id.buttonCsaOff);
         Button settingCsaButtonOn = (Button) root.findViewById(R.id.buttonCsaOn);
         testTextView = (EditText) root.findViewById(R.id.testLog);
+        setting0Button.setVisibility(View.INVISIBLE);
+        setting1Button.setVisibility(View.INVISIBLE);
+        setting2Button.setVisibility(View.INVISIBLE);
+        settingCsaButtonOff.setVisibility(View.INVISIBLE);
+        settingCsaButtonOn.setVisibility(View.INVISIBLE);
+
+
+        runBackgroundAndUpdate(() -> {
+            try {
+                CarVendorExtensionManager carVEManager = moduleVendorExtensionM.getCarVEManager();
+                if (moduleVendorExtensionM.isFeatureAvailable(Integer.class, VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL)){
+                    updateUI(()-> {
+                        setting0Button.setVisibility(View.VISIBLE);
+                        setting1Button.setVisibility(View.VISIBLE);
+                        setting2Button.setVisibility(View.VISIBLE);
+                    });
+                }
+                if (moduleVendorExtensionM.isFeatureAvailable(Boolean.class, VehicleProperty.CURVE_SPEED_ADAPTION_ON, VehicleArea.GLOBAL)){
+                    updateUI(()-> {
+                        settingCsaButtonOff.setVisibility(View.VISIBLE);
+                        settingCsaButtonOn.setVisibility(View.VISIBLE);
+                    });
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error", e);
+            }
+        });
+
 
         setting0Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,8 +84,10 @@ public class FragmentVendorExtension extends AModuleFragment {
                                 VehicleProperty.DAI_SETTING,
                                 VehicleArea.GLOBAL,
                                 0);
+
                         text.append("Value set to: " + carVEManager.getProperty(Integer.class,
                                 VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL) + "\n\n");
+
                     } catch (Exception e) {
                         Log.e(TAG, "Error", e);
                     }
@@ -142,13 +172,13 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
-                                VehicleProperty.DAI_SETTING,
+                        carVEManager.setProperty(Boolean.class,
+                                VehicleProperty.CURVE_SPEED_ADAPTION_ON,
                                 VehicleArea.GLOBAL,
-                                0);
+                                false);
 
-                        text.append("Value set to: " + carVEManager.getProperty(Integer.class,
-                                VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL) + "\n\n");
+                        text.append("Value set to: " + carVEManager.getProperty(Boolean.class,
+                                VehicleProperty.CURVE_SPEED_ADAPTION_ON, VehicleArea.GLOBAL) + "\n\n");
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error", e);
@@ -173,13 +203,13 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
-                                VehicleProperty.DAI_SETTING,
+                        carVEManager.setProperty(Boolean.class,
+                                VehicleProperty.CURVE_SPEED_ADAPTION_ON,
                                 VehicleArea.GLOBAL,
-                                1);
+                                true);
 
-                        text.append("Value set to: " + carVEManager.getProperty(Integer.class,
-                                VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL) + "\n\n");
+                        text.append("Value set to: " + carVEManager.getProperty(Boolean.class,
+                                VehicleProperty.CURVE_SPEED_ADAPTION_ON, VehicleArea.GLOBAL) + "\n\n");
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error", e);
