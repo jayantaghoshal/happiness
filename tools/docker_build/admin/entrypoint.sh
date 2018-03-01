@@ -117,6 +117,12 @@ do
 done
 unset IFS
 
+# Take group ownership of /dev/ttyUSB* due to a change in docker version 17.12
+# which results in incorrect permissions in /dev
+for tty_file in /dev/ttyUSB*
+do
+  sudo -E chgrp ${CONTAINER_USERNAME} "$tty_file"
+done
 
 sudo -E \
     -u "${CONTAINER_USERNAME}" \
