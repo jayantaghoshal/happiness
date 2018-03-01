@@ -151,7 +151,13 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                 cwd=bsp_provided_flashfiles_path)
 
             wait_for_device_adb(adb_executable)
+            logger.info("ADB available, current properties:")
+            dump_props(adb_executable)
+
             wait_for_boot_completed(adb_executable)
+            logger.info("Boot and postboot operations completed, current properties:")
+            dump_props(adb_executable)
+
             logger.info("----------------------------")
             logger.info("Flash and reboot complete")
             logger.info("ro.build.version.release: %s",
@@ -179,11 +185,11 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             ensure_device_mode_for_vip_flashing(adb_executable, ihu_serials)
 
             try:  # ugly hack until SSBL gets proper partnum in header (so we can lazy load)
-                check_output_logged([adb_executable,
-                                     "shell",
-                                     "vbf_flasher",
-                                     "/vendor/vip-update/pbl/vip-ssbl.VBF"],
-                                    timeout_sec=60 * 2)
+                run([adb_executable,
+                     "shell",
+                     "vbf_flasher",
+                     "/vendor/vip-update/pbl/vip-ssbl.VBF"],
+                    timeout_sec=60 * 2)
             except Exception:
                 # If it fails because it is already loaded we can ignore
                 # If it fails from any other reason next step will fail anyway
@@ -269,9 +275,16 @@ def wait_for_boot_completed(adb_executable: str):
 
 def wait_for_device_adb(adb_executable, timeout_sec=60 * 7):
     logging.info("Wait for device to enter device-mode via ADB")
-    check_output_logged([adb_executable,
-                         "wait-for-device"],
-                        timeout_sec=timeout_sec)
+    run([adb_executable,
+         "wait-for-device"],
+        timeout_sec=timeout_sec)
+
+
+def dump_props(adb_executable, timeout_sec=15):
+    all_properties = run([adb_executable,
+                          'shell', 'getprop'],
+                         timeout_sec=timeout_sec)
+    logger.info(all_properties)
 
 
 def str2bool(v: str) -> bool:
