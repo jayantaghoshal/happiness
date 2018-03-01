@@ -70,6 +70,9 @@
                 username: JENKINS_USER
                 password: JENKINS_API_PASSWORD
     builders:
+      - shell:
+            !include-raw:
+                - bootstrap_vcc_ci.sh
       - multijob:
           name: Build
           condition: ALWAYS

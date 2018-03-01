@@ -73,6 +73,9 @@
             timeout: 10000
             log: 0
     builders:
+      - shell:
+            !include-raw:
+                - bootstrap_vcc_ci.sh
       - multijob:
           name: Build
           condition: ALWAYS
