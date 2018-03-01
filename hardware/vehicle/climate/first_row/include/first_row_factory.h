@@ -17,7 +17,6 @@
 #include "electric_defroster_windscreen_logic.h"
 #include "electric_defroster_windscreen_popup_logic.h"
 #include "fan_level_front_logic.h"
-#include "first_row_stubimpl.hpp"
 #include "ionizer_logic.h"
 #include "legacydispatcher.h"
 #include "manual_recirc_logic.h"

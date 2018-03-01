@@ -32,6 +32,7 @@ using namespace autosar;
 using namespace std::chrono_literals;
 
 int main() {
+    /*
     std::cout << "hej";
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher = tarmac::eventloop::IDispatcher::CreateDispatcher();
 
@@ -69,6 +70,7 @@ int main() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
+    */
 }
 
 /*

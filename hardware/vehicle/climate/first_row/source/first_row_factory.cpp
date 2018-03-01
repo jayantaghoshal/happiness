@@ -11,7 +11,6 @@
 #include "setting_factory.h"
 
 #include <cc_parameterlist.h>
-#include <first_row_stubimpl.hpp>
 #include <user_selection_stubimpl.hpp>
 
 LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
@@ -164,9 +163,6 @@ FirstRowFactory::FirstRowFactory(const android::sp<SettingsFramework::SettingsMa
       VFCDrivingClimatisationLogic_{VFCDrivingClimatisationDispatcher_},
       VFCVisibilityLogic_{} {
     // TODO(climateport): Common API setup was here
-
-    auto climateService = std::make_shared<v0::org::volvocars::climate::FirstRowStubImpl>(*this, commonFactory);
-    climateService->initStubAdapter();
 }
 
 ReadOnlyNotifiableProperty<FirstRowGen::HeatAttribute>& FirstRowFactory::getSeatHeatDriverProperty() {

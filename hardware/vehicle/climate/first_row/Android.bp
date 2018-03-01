@@ -8,7 +8,6 @@ cc_library_static {
     defaults: ["climate_defaults"],
     srcs: [
         "source/*.cpp",
-        "common_api/*.cpp",
     ],
     shared_libs: [
         "libhidlbase",
@@ -34,11 +33,9 @@ cc_library_static {
     ],
     local_include_dirs: [
         "include",
-        "common_api",
     ],
     export_include_dirs: [
         "include",
-        "common_api",
     ],
     export_shared_lib_headers: [
         "libdataelements",

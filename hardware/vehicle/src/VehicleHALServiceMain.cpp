@@ -25,6 +25,7 @@
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "carconfigmodule.h"
+#include "climate_main.h"
 #include "systeminformationmodule.h"
 
 #undef LOG_TAG
@@ -34,19 +35,36 @@ namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal_10 = vendor::volvocars::hardware::vehiclehal::V1_0;
 
 int main(int /* argc */, char* /* argv */ []) {
-    tarmac::eventloop::IDispatcher& dispatcher = tarmac::eventloop::IDispatcher::GetDefaultDispatcher();
+    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher = tarmac::eventloop::IDispatcher::CreateDispatcher();
     android::sp<SettingsFramework::SettingsManagerHidl> settings_manager =
-            new SettingsFramework::SettingsManagerHidl(dispatcher);
+            new SettingsFramework::SettingsManagerHidl(*dispatcher);
 
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
     auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
+
+    ////////////////////////////////////////////////////////////////
+    // CLIMATE
+
+    std::unique_ptr<ClimateMain> m;
+    // std::unique_ptr<v0::org::volvocars::climate::FirstRowStubImpl> climateService;
+    dispatcher->EnqueueTask([&]() { m.reset(new ClimateMain(dispatcher)); });
+
+    // tarmac::timeprovider::TimeProvider time_provider{dispatcher};
+    // LegacyDispatcher::setGlobalInstanceHackTimeProvider(time_provider);
+    // signal_proxy::Proxies signal_proxies;
+    // common::daemon::Factory commonFactory_;
+    // UserSelectionFactory user_selection{settings_manager};
+    // FirstRowFactory first_row{settings_manager, time_provider, signal_proxies, user_selection, commonFactory_};
+
+    ////////////////////////////////////////////////////////////////
+    // CLIMATE
 
     // Create Modules
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
     auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
-    auto hvacModule = std::make_unique<HvacModule>(hal.get());
+    auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_);
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
     auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
