@@ -34,27 +34,31 @@ public class FragmentVendorExtension extends AModuleFragment {
                              Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_vendor_extension, null);
         moduleVendorExtensionM = new ModuleVendorExtension(getActivity());
-        Button setting0Button = (Button) root.findViewById(R.id.buttonSettingOff);
-        Button setting1Button = (Button) root.findViewById(R.id.buttonSettingVisual);
-        Button setting2Button = (Button) root.findViewById(R.id.buttonSettingVisualAndSound);
+        Button settingDaiOff = (Button) root.findViewById(R.id.buttonSettingOff);
+        Button settingDaiVisual = (Button) root.findViewById(R.id.buttonSettingVisual);
+        Button settingDaiVisualSound = (Button) root.findViewById(R.id.buttonSettingVisualAndSound);
         Button settingCsaButtonOff = (Button) root.findViewById(R.id.buttonCsaOff);
         Button settingCsaButtonOn = (Button) root.findViewById(R.id.buttonCsaOn);
+        Button settingConnSafetyOff = (Button) root.findViewById(R.id.buttonConnSafetyOff);
+        Button settingConnSafetyOn = (Button) root.findViewById(R.id.buttonConnSafetyOn);
+
         testTextView = (EditText) root.findViewById(R.id.testLog);
-        setting0Button.setVisibility(View.INVISIBLE);
-        setting1Button.setVisibility(View.INVISIBLE);
-        setting2Button.setVisibility(View.INVISIBLE);
+        settingDaiOff.setVisibility(View.INVISIBLE);
+        settingDaiVisual.setVisibility(View.INVISIBLE);
+        settingDaiVisualSound.setVisibility(View.INVISIBLE);
         settingCsaButtonOff.setVisibility(View.INVISIBLE);
         settingCsaButtonOn.setVisibility(View.INVISIBLE);
-
+        settingConnSafetyOff.setVisibility(View.INVISIBLE);
+        settingConnSafetyOn.setVisibility(View.INVISIBLE);
 
         runBackgroundAndUpdate(() -> {
             try {
                 CarVendorExtensionManager carVEManager = moduleVendorExtensionM.getCarVEManager();
                 if (moduleVendorExtensionM.isFeatureAvailable(Integer.class, VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL)){
                     updateUI(()-> {
-                        setting0Button.setVisibility(View.VISIBLE);
-                        setting1Button.setVisibility(View.VISIBLE);
-                        setting2Button.setVisibility(View.VISIBLE);
+                        settingDaiOff.setVisibility(View.VISIBLE);
+                        settingDaiVisual.setVisibility(View.VISIBLE);
+                        settingDaiVisualSound.setVisibility(View.VISIBLE);
                     });
                 }
                 if (moduleVendorExtensionM.isFeatureAvailable(Boolean.class, VehicleProperty.CURVE_SPEED_ADAPTION_ON, VehicleArea.GLOBAL)){
@@ -63,13 +67,18 @@ public class FragmentVendorExtension extends AModuleFragment {
                         settingCsaButtonOn.setVisibility(View.VISIBLE);
                     });
                 }
+                if (moduleVendorExtensionM.isFeatureAvailable(Integer.class, VehicleProperty.CONNECTED_SAFETY_ON, VehicleArea.GLOBAL)){
+                    updateUI(()-> {
+                        settingConnSafetyOff.setVisibility(View.VISIBLE);
+                        settingConnSafetyOn.setVisibility(View.VISIBLE);
+                    });
+                }
             } catch (Exception e) {
                 Log.e(TAG, "Error", e);
             }
         });
 
-
-        setting0Button.setOnClickListener(new View.OnClickListener() {
+        settingDaiOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 text.append("Connecting to the car Service...\n");
@@ -99,7 +108,7 @@ public class FragmentVendorExtension extends AModuleFragment {
                 });
             }
         });
-        setting1Button.setOnClickListener(new View.OnClickListener() {
+        settingDaiVisual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 text.append("Connecting to the car Service...\n");
@@ -125,12 +134,10 @@ public class FragmentVendorExtension extends AModuleFragment {
                         testTextView.setText(text);
                         testTextView.invalidate();
                     });
-
                 });
-
             }
         });
-        setting2Button.setOnClickListener(new View.OnClickListener() {
+        settingDaiVisualSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 text.append("Connecting to the car Service...\n");
@@ -138,7 +145,6 @@ public class FragmentVendorExtension extends AModuleFragment {
                 Log.d(TAG, "setOnClickListener()");
                 runBackgroundAndUpdate(() -> {
                     try {
-
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
@@ -157,8 +163,6 @@ public class FragmentVendorExtension extends AModuleFragment {
                         testTextView.invalidate();
                     });
                 });
-
-
             }
         });
         settingCsaButtonOff.setOnClickListener(new View.OnClickListener() {
@@ -187,9 +191,7 @@ public class FragmentVendorExtension extends AModuleFragment {
                         testTextView.setText(text);
                         testTextView.invalidate();
                     });
-
                 });
-
             }
         });
         settingCsaButtonOn.setOnClickListener(new View.OnClickListener() {
@@ -218,9 +220,65 @@ public class FragmentVendorExtension extends AModuleFragment {
                         testTextView.setText(text);
                         testTextView.invalidate();
                     });
-
                 });
+            }
+        });
+        settingConnSafetyOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                text.append("Connecting to the car Service...\n");
+                testTextView.setText(text);
+                Log.d(TAG, "setOnClickListener()");
+                runBackgroundAndUpdate(() -> {
+                    try {
+                        CarVendorExtensionManager carVEManager =
+                                moduleVendorExtensionM.getCarVEManager();
 
+                        carVEManager.setProperty(Integer.class,
+                                VehicleProperty.CONNECTED_SAFETY_ON,
+                                VehicleArea.GLOBAL,
+                                0);
+
+                        text.append("Value set to: " + carVEManager.getProperty(Integer.class,
+                                VehicleProperty.CONNECTED_SAFETY_ON, VehicleArea.GLOBAL) + "\n\n");
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error", e);
+                    }
+                    updateUI(() -> {
+                        testTextView.setText(text);
+                        testTextView.invalidate();
+                    });
+                });
+            }
+        });
+        settingConnSafetyOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                text.append("Connecting to the car Service...\n");
+                testTextView.setText(text);
+                Log.d(TAG, "setOnClickListener()");
+                runBackgroundAndUpdate(() -> {
+                    try {
+                        CarVendorExtensionManager carVEManager =
+                                moduleVendorExtensionM.getCarVEManager();
+
+                        carVEManager.setProperty(Integer.class,
+                                VehicleProperty.CONNECTED_SAFETY_ON,
+                                VehicleArea.GLOBAL,
+                                1);
+
+                        text.append("Value set to: " + carVEManager.getProperty(Integer.class,
+                                VehicleProperty.CONNECTED_SAFETY_ON, VehicleArea.GLOBAL) + "\n\n");
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error", e);
+                    }
+                    updateUI(() -> {
+                        testTextView.setText(text);
+                        testTextView.invalidate();
+                    });
+                });
             }
         });
         return root;

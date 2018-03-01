@@ -77,6 +77,7 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps),
 
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps | {cp.flexray}),
+    VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",          standard_caps),
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/IlluminationControlTest", standard_caps),
 ]
