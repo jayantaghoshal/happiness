@@ -41,3 +41,4 @@ python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/test_repor
 
 python3 "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/load_results_to_mongodb.py
 
+cp "$WORKSPACE"/vendor/volvocars/tools/ci/test_report_generation/volvo_logo.png "$BUILD_NUMBER"/volvo_logo.png
