@@ -12,6 +12,6 @@
         <option name="test-module-name" value="VtsProfileComponentTest"/>
         <option name="test-case-path" value="VtsProfileComponentTest"/>
         <option name="precondition-lshal" value="vendor.volvocars.hardware.profiles@1.0-impl"/>
-        <option name="test-timeout" value="1m"/>
+        <option name="test-timeout" value="2m"/>
     </test>
 </configuration>
