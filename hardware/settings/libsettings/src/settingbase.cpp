@@ -50,7 +50,22 @@ std::string SettingBase::getStringData(ProfileIdentifier profid) const {
 }
 
 void SettingBase::setStringData(const std::string& data, ProfileIdentifier profid) {
-    assertInitialized();
+    // assertInitialized();
+    if (!initialized) {
+        // If you end up here you most likely have a initialization order bug in your application code.
+        // It means you try to store a setting before reading/receiving the previously stored value. Doing so
+        // kindof defeats the purpose of storing the value persistently.
+        //
+        // If the set-request was triggered by a user action it is probably more correct to use the new value but we've
+        // observed multiple
+        // cases of application code incorrectly calling set during startup which would overwrite stored settings so
+        // we've been forced
+        // to choose ignore as default.
+        ALOGE("Attempt to set setting [%d] before stored value has been received. This is most likely a bug in "
+              "application code. Set request will be ignored.",
+              name_);
+        return;
+    }
 
     if (userScope_ == UserScope::NOT_USER_RELATED && profid != ProfileIdentifier::None) {
         throw std::runtime_error("Attempt to setStringData for profile on non-profile releated setting, name=" +

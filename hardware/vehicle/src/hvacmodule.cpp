@@ -61,6 +61,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
             temperature_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
                     std::make_unique<PropertyHandlerFloat>(
                             [this](float left_temp) {
+                                ALOGD("Temp request %f", left_temp);
                                 logicFactory_.driverTemperatureLogic_.request(left_temp);
                                 return 0;
                             },
@@ -74,6 +75,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
             temperature_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
                     std::make_unique<PropertyHandlerFloat>(
                             [this](float right_temp) {
+                                ALOGD("Temp request %f", right_temp);
                                 logicFactory_.passengerTemperatureLogic_.request(right_temp);
                                 return 0;
                             },
@@ -83,6 +85,45 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
 
         // Property handler configured, put it in map
         propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(temperature_property);
+    }
+    {  // Fan level, HVAC_FAN_SPEED
+        PropertyAndConfig fan_property;
+
+        // Config for all zones
+        fan_property.prop_config.prop = toInt(VehicleProperty::HVAC_FAN_SPEED);
+        fan_property.prop_config.access = VehiclePropertyAccess::READ_WRITE;
+        fan_property.prop_config.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+        fan_property.prop_config.supportedAreas = toInt(VehicleAreaZone::ROW_1);
+        fan_property.prop_config.areaConfigs.resize(1);
+        fan_property.prop_config.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
+        fan_property.prop_config.areaConfigs[0].minInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::OFF);
+        fan_property.prop_config.areaConfigs[0].maxInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::MAX);
+
+        // Fan
+        vhal20::VehiclePropValue prop_value;
+        prop_value.prop = fan_property.prop_config.prop;
+        prop_value.areaId = toInt(VehicleAreaZone::ROW_1);
+
+        // Put Helper for fanLevel in map
+        fan_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
+                std::make_unique<PropertyHandlerInt32>(
+                        [this](int fan_speed) {
+                            ALOGD("Fan speed request %d", fan_speed);
+                            // TODO: Proper range handling
+                            if (fan_speed < 0 || fan_speed > 6) {
+                                return 0;
+                            }
+
+                            FirstRow::FanLevelFrontRequest req(
+                                    static_cast<FirstRow::FanLevelFrontRequest::Literal>(fan_speed));
+                            logicFactory_.fanLevelFrontLogic_.requestFanLevel(req);
+                            return 0;
+                        },
+                        [this]() { return &dummy3; },
+                        [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+
+        // Property handler configured, put it in map
+        propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(fan_property);
     }
 
     subs_.push_back(logicFactory_.airConditioner_.subscribe([](const auto& state) {
@@ -206,6 +247,8 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
         log_debug() << "fireIonizerAttributeChanged" << ionizerAttribute;
         // getStubAdapter()->fireIonizerAttributeChanged(ionizerAttribute);
     }));
+
+    ALOGD("Hvac initialized");
 }
 
 /* Cleanzone */

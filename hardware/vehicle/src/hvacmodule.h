@@ -76,4 +76,5 @@ class HvacModule : public vccvhal10::impl::ModulePropertyHandler {
 
     NotifiableProperty<float> dummy1;
     NotifiableProperty<float> dummy2;
+    NotifiableProperty<int> dummy3;
 };

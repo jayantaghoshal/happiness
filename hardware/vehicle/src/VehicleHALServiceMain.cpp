@@ -24,6 +24,7 @@
 #include "vhal_modules/curve_speed_adaption_module.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
+#include <future>
 #include "carconfigmodule.h"
 #include "climate_main.h"
 #include "systeminformationmodule.h"
@@ -45,9 +46,15 @@ int main(int /* argc */, char* /* argv */ []) {
     ////////////////////////////////////////////////////////////////
     // CLIMATE
 
+    std::promise<void> p;
+    std::future<void> f = p.get_future();
     std::unique_ptr<ClimateMain> m;
     // std::unique_ptr<v0::org::volvocars::climate::FirstRowStubImpl> climateService;
-    dispatcher->EnqueueTask([&]() { m.reset(new ClimateMain(dispatcher)); });
+    dispatcher->EnqueueTask([&]() {
+        m.reset(new ClimateMain(dispatcher));
+        p.set_value();
+    });
+    f.wait();
 
     // tarmac::timeprovider::TimeProvider time_provider{dispatcher};
     // LegacyDispatcher::setGlobalInstanceHackTimeProvider(time_provider);
@@ -61,7 +68,7 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Create Modules
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
-    auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
+    // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_);
@@ -76,7 +83,7 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Register modules
     powerModule->registerToVehicleHal();
-    audioModule->registerToVehicleHal();
+    // audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
     hvacModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
