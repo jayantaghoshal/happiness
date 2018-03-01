@@ -49,10 +49,11 @@ hals_to_check = [
     "vendor.volvocars.hardware.settings@1.0::ISettingsStorage/default"
 ]
 
-# Add specific propperties and expected value to check with getprop
+# Add specific properties and expected value to check with getprop
 expected_properties = [
     ("netboyd.startup_completed", "1"),
-    ("netmand.startup_completed", "1")
+    ("netmand.startup_completed", "1"),
+    ("ro.boot.swdl.session", "default"),
 ]
 
 # Add full path of a file to check if it exsist
