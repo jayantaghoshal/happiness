@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
@@ -79,7 +79,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",          standard_caps),
-    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/IlluminationControlTest", standard_caps),
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps),
 ]
 
 test_plan_nightly = test_plan_hourly + [

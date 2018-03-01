@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -108,7 +108,7 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
 
         try {
             mActivityRule.getActivity().unRegisterChangeCallback();
-            runCommand("killall InjectFlexRayIllumination &");
+            runCommand("killall InjectDEForBrightness &");
         }
         catch (InterruptedException ex){
             Log.d(TAG,ex.getMessage());
@@ -136,13 +136,15 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
      */
     @Test
     public void TestBrightnessIsSettable() throws Exception {
-        runCommand("/data/local/tmp/InjectFlexRayIllumination night &");
+        runCommand("/data/local/tmp/InjectDEForBrightness illtest night &");
         OnBrightnessChangeImpl impl = new OnBrightnessChangeImpl();
         mActivityRule.getActivity().registerChangeCallback(impl);
         Log.d(TAG,"Lets wait ");
         assertTrue(mLatch.await(TIMEOUT_S, TimeUnit.SECONDS));
         mActivityRule.getActivity().unRegisterChangeCallback();
         Log.d(TAG,"TestBrightnessIsSettable Test Done");
+        runCommand("/data/local/tmp/InjectDEForBrightness illtest day noloop &"); //just inject day signal
+        Thread.sleep(500); //to be sure that its injected
     }
     /**
      * Test verifies that the brightness is NOT settable
@@ -156,11 +158,10 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
      */
     @Test
     public void TestBrightnessFull() throws Exception {
-        runCommand("/data/local/tmp/InjectFlexRayIllumination &");
+        runCommand("/data/local/tmp/InjectDEForBrightness illtest day &");
         OnBrightnessChangeImplTestFull impl = new OnBrightnessChangeImplTestFull();
         mActivityRule.getActivity().registerChangeCallback(impl);
         assertFalse(mLatch.await(TIMEOUT_BRIGHTNESSFULL, TimeUnit.SECONDS)); //shouldn't be release before timeout.
         assertEquals(mActivityRule.getActivity().getBrightness(), 255);
     }
-
 }

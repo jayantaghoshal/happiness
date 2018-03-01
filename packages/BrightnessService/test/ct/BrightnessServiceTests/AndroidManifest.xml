@@ -3,6 +3,8 @@
     package="com.volvocars.brightnesstest">
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission
+        android:name="android.permission.DUMP" />
     <application>
         <activity android:name=".IlluminationControl">
             <intent-filter>
