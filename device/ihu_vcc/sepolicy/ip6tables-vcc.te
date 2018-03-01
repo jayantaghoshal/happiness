@@ -1,0 +1,9 @@
+# ip6tables
+type ip6tables-vcc, domain;
+type ip6tables-vcc_exec, exec_type, file_type, vendor_file_type;
+
+type ip6tables-restore-vcc, domain;
+type ip6tables-restore-vcc_exec, exec_type, file_type, vendor_file_type;
+
+type ip6tables-save-vcc, domain;
+type ip6tables-save-vcc_exec, exec_type, file_type, vendor_file_type;

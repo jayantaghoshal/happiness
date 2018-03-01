@@ -49,6 +49,20 @@ class Artifactory(object):
         response.raise_for_status()
         return response
 
+    def retreive_latest_uri(self, path):
+        list_of_builds = self.properties(path)
+        creation_dates = []
+        build_uris = []
+
+        for build in list_of_builds.json()['children']:
+            build_uri = path + build['uri']
+            list_of_jobs = self.properties(build_uri)
+            creation_dates.append(list_of_jobs.json()['created'])
+            build_uris.append(build_uri)
+
+        latest_position = creation_dates.index(max(creation_dates))
+        return build_uris[latest_position]
+
     def _verify_checksum(self, filename, checksum):
         calculated_checksum = self._check_sum("md5", filename)
         if checksum != calculated_checksum:
@@ -111,4 +125,3 @@ class Artifactory(object):
         if not "ARTIFACTORY_API_KEY" in os.environ:
             sys.exit("Environment variable ARTIFACTORY_API_KEY is missing!")
         return os.environ.get('ARTIFACTORY_API_KEY')
-

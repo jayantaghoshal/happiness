@@ -143,10 +143,9 @@ int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
 }
 
 int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata) {
-    CloudRequest* cr = static_cast<CloudRequest*>(userdata);
-
-    const size_t real_size = size * nmemb;
     bool success = false;
+    const size_t real_size = size * nmemb;
+    CloudRequest* cr = static_cast<CloudRequest*>(userdata);
 
     if (!cr->GetFilePath().empty()) {
         std::ofstream out_file;
@@ -174,6 +173,20 @@ int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_
     } else {
         return 0;
     }
+}
+
+int CloudRequestHandler::WriteHeaderCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata) {
+    const size_t real_size = size * nmemb;
+
+    std::string* write_buffer = static_cast<std::string*>(userdata);
+
+    try {
+        write_buffer->append(ptr, real_size);
+        return real_size;
+    } catch (...) {
+        ALOGW("Failed to write to request buffer");
+    }
+    return 0;
 }
 
 int CloudRequestHandler::DebugCallback(CURL* handle, curl_infotype type, char* data, size_t size, void* userp) {
@@ -276,6 +289,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     verified_curl_easy_setopt(easy, CURLOPT_WRITEDATA, request.get());
     // Save Header data
     verified_curl_easy_setopt(easy, CURLOPT_HEADERDATA, request->GetResponseHeaderBuffer());
+    verified_curl_easy_setopt(easy, CURLOPT_HEADERFUNCTION, WriteHeaderCallback);
 
     // Debug logging
     char const* const verboseEnv = getenv("NWH_CLOUDREQUEST_VERBOSE");

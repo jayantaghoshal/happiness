@@ -73,6 +73,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void DownloadInfo(int code, DownloadInfo info) {
         if (200 == code) {
             service.UpdateSoftwareList(info);
+            service.download(info);
         }
     }
 
@@ -83,7 +84,12 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     */
     @Override
     public void DownloadData(int code, DownloadInfo downloadInfo) {
-
+        if (200 == code) {
+            Log.v(LOG_TAG, "Download succeeded");
+            service.UpdateSoftwareList(downloadInfo);
+        } else {
+            Log.v(LOG_TAG, "Download failed: " + code);
+        }
     }
 
 }

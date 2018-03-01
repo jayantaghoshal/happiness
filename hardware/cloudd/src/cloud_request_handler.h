@@ -41,6 +41,7 @@ class CloudRequestHandler : public CloudRequestHandlerInterface,
     static int TimerCallback(CURLM* multi, long timeout_ms, void* user_data);
     static int Perform(CURL* multi, curl_socket_t fd);
     static int WriteCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata);
+    static int WriteHeaderCallback(char* ptr, const size_t size, const size_t nmemb, void* userdata);
 
     static int OnCreateOpenSslContext(CURL* curl, void* ssl_ctx, void* user_param);
 

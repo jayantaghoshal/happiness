@@ -10,6 +10,8 @@ LOCAL_SRC_FILES += $(call all-java-files-under, aidl)
 LOCAL_SRC_FILES += $(call all-java-files-under, src)
 LOCAL_SRC_FILES += $(call all-java-files-under, test)
 LOCAL_SRC_FILES += aidl/com/volvocars/userswitch/IUserSwitchService.aidl
+LOCAL_SRC_FILES += aidl/com/volvocars/userswitch/IUserSwitchCallBack.aidl
+
 LOCAL_AIDL_INCLUDES += $(LOCAL_PATH)/aidl
 LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res
 

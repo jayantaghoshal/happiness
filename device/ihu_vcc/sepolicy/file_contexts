@@ -26,6 +26,24 @@
 # iproute2
 /vendor/bin/ip u:object_r:ip-vcc_exec:s0
 
+# iptables
+/vendor/bin/iptables u:object_r:iptables-vcc_exec:s0
+
+# iptables-restore
+/vendor/bin/iptables-restore u:object_r:iptables-restore-vcc_exec:s0
+
+# iptables-save
+/vendor/bin/iptables-save u:object_r:iptables-save-vcc_exec:s0
+
+# ip6tables
+/vendor/bin/ip6tables u:object_r:ip6tables-vcc_exec:s0
+
+# ip6tables-restore
+/vendor/bin/ip6tables-restore u:object_r:ip6tables-restore-vcc_exec:s0
+
+# ip6tables-save
+/vendor/bin/ip6tables-save u:object_r:ip6tables-save-vcc_exec:s0
+
 # netns device
 /dev/vendor/netns(/.*)? u:object_r:netns_device:s0
 

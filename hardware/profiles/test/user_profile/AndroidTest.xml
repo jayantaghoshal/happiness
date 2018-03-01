@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration description="Profile handling for VTS ComponentTest test cases">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="push-group" value="HalHidlHostTest.push"/>
+        <option name="cleanup" value="true"/>
+<!--need something to clean?-->
+    </target_preparer>
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsProfileComponentTest"/>
+        <option name="test-case-path" value="VtsProfileComponentTest"/>
+        <option name="precondition-lshal" value="vendor.volvocars.hardware.profiles@1.0-impl"/>
+        <option name="test-timeout" value="1m"/>
+    </test>
+</configuration>

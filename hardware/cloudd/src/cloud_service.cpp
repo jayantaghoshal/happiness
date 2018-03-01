@@ -282,9 +282,10 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHea
         download_request_->SetTimeout(std::chrono::milliseconds(timeout));
         download_request_->SetURL(url);
         download_request_->SetFilePath(file_path);
-        download_request_->SetCallback([&](std::int32_t code, const std::string& data, const std::string& header) {
-            callback->updateDownloadStatus(BuildResponse(code, data, header));
-        });
+        download_request_->SetCallback(
+                [this, callback](std::int32_t code, const std::string& data, const std::string& header) {
+                    callback->updateDownloadStatus(BuildResponse(code, data, header));
+                });
 
         std::vector<std::string> header_list;
         for (auto header : headers) {
@@ -300,7 +301,7 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHea
         ALOGW("Failed to initiate cloud request: %s", e.what());
     }
 
-    return Void();  // TODO: return download id
+    return Void();
 }
 
 }  // namespace Connectivity

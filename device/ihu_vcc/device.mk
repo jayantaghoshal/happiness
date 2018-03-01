@@ -66,7 +66,6 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    VccTunerApp \
     BrightnessService \
 
 ##############################################################
@@ -114,7 +113,8 @@ PRODUCT_PACKAGES += \
     signal_toggle_sender \
     carconfig-client-tester \
     hisipcmd \
-    apix_setup_sock_util
+    apix_setup_sock_util \
+    changecarconfig
 endif
 
 ##############################################################

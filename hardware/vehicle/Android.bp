@@ -4,6 +4,5 @@
  */
 
 subdirs = [
-    "tools",
-    "climate",
+    "*",
 ]

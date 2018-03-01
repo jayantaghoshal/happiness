@@ -10,12 +10,13 @@
         <option name="push" value="spec/hardware/interfaces/automotive/vehicle/2.0/vts/types.vts->/data/local/tmp/spec/android/hardware/automotive/vehicle/2.0/types.vts"/>
         <option name="push" value="DATA/lib/android.hardware.automotive.vehicle@2.0-vts.driver.so->/data/local/tmp/32/android.hardware.automotive.vehicle@2.0-vts.driver.so"/>
         <option name="push" value="DATA/lib64/android.hardware.automotive.vehicle@2.0-vts.driver.so->/data/local/tmp/64/android.hardware.automotive.vehicle@2.0-vts.driver.so"/>
+        <option name="push" value="changecarconfig->/data/local/tmp/changecarconfig"/>
     </target_preparer>
     <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="VtsDAISettingComponentTest"/>
         <option name="test-case-path" value="VtsDAISettingComponentTest"/>
         <option name="precondition-lshal" value="android.hardware.automotive.vehicle@2.0"/>
-        <option name="test-timeout" value="1m"/>
+        <option name="test-timeout" value="3m"/>
     </test>
 </configuration>

@@ -110,4 +110,9 @@ public class CloudService extends Service {
     public void enteredErrorState(String reason) {
         Log.e(LOG_TAG, "Entered Error State: " + reason);
     }
+
+    public void notifyDownloadStatus(Response response) {
+        Log.v(LOG_TAG, "notifyDownloadStatus: Calling software_management_api.downloadStatusUpdate()");
+        software_management_api.downloadStatusUpdate(response);
+    }
 }

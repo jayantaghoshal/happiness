@@ -36,12 +36,34 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         self.dut.shell.InvokeTerminal("one")
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         results = self.dut.shell.one.Execute("id -u system")
-        system_uid = results[const.STDOUT][0].strip()
+        self.system_uid = results[const.STDOUT][0].strip()
 
-        self.vHalCommon = VehicleHalCommon(self.dut, system_uid)
         self.flexray = FrSignalInterface()
 
-    def testDriveAwayInformationSetting(self):
+    def testDriveAwayInfoCCDisabled(self):
+        self.dut.shell.one.Execute("changecarconfig 315 1")
+        self.dut.shell.one.Execute("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("one")
+        self.flexray = FrSignalInterface()
+        self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
+
+        # TODO: Check buttons, should they be vissable, not visable or grayed out. How is this supposed to be verified?
+
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, self.flexray.DriveAwayInfoActvReq.map.Off)
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, self.flexray.DriveAwayInfoSoundWarnActvReq.map.Off)
+
+    def testDriveAwayInfoCCEnabled(self):
+        self.dut.shell.one.Execute("changecarconfig 315 3")
+        self.dut.shell.one.Execute("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("one")
+        self.flexray = FrSignalInterface()
+        self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
 
         self.vHalCommon.setUpVendorExtension()
 

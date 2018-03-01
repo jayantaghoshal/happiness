@@ -8,6 +8,7 @@ package com.volvocars.userswitch;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.UserInfo;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Test Application where it starts the service and provides testing for sending commands
@@ -39,7 +41,8 @@ public class MainActivityTest extends Activity {
     private Button dumpUserButton;
     private Button deleteUserButton;
     private ActivityManager activityManager;
-    private UserManager userM;
+    private Context context;
+    private UserManager userManager;
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -62,12 +65,13 @@ public class MainActivityTest extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_test);
+        context = this;
+        userManager = getBaseContext().getSystemService(UserManager.class);
         mLog = findViewById(R.id.log);
         valueEditText = findViewById(R.id.editTextUserId);
         createButton = findViewById(R.id.pairUserButtonCreate);
         switchButton = findViewById(R.id.pairUserButtonSwitch);
-        pairButton = findViewById(R.id.pairUserButtonPair);
         dumpUserButton = findViewById(R.id.dumpUserButton);
         deleteUserButton = findViewById(R.id.deleteUserButton);
 
@@ -77,7 +81,7 @@ public class MainActivityTest extends Activity {
         mLog.setText("Starting service…\n");
         startService(serviceIntent);
         activityManager = getBaseContext().getSystemService(ActivityManager.class);
-        userM = getBaseContext().getSystemService(UserManager.class);
+        userManager = getBaseContext().getSystemService(UserManager.class);
 
         mLog.append("Binding service…\n");
         bindService(serviceIntent, mConnection, BIND_AUTO_CREATE);
@@ -89,12 +93,8 @@ public class MainActivityTest extends Activity {
             switchUserButton(valueEditText.getText().toString());
         });
 
-        pairButton.setOnClickListener(event -> {
-            pairButton();
-        });
-
         dumpUserButton.setOnClickListener(event -> {
-            List<UserInfo> listUser = userM.getUsers(false);
+            List<UserInfo> listUser = userManager.getUsers(false);
             Log.d(TAG, listUser.toString());
             mLog.append("users: " + listUser.toString());
         });
@@ -102,75 +102,84 @@ public class MainActivityTest extends Activity {
         deleteUserButton.setOnClickListener(event -> {
             deleteUser(valueEditText.getText().toString());
         });
-
-    }
-
-    private void pairButton() {
-        try {
-            mService.pairUserTokey();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     private void createUser(String userName) {
         if (userName == null || userName.isEmpty()) {
             userName = "TestUser";
         }
+        String volvoUserName = userName;
         mLog.append("Requesting createUser listing… " + userName + "\n");
-        long start = System.currentTimeMillis();
-        long end = 0;
         try {
-            VolvoUser user = new VolvoUser(userName, -1, -1);
-            mService.createUser(user);
+            VolvoUser user = new VolvoUser(-1, volvoUserName, VolvoUser.FLAG_ADMIN);
+            mService.createUser(user, new IUserSwitchCallBack.Stub() {
+                @Override
+                public void handleResponse(UserSwitchResult result) throws RemoteException {
+                    // check also if name is created
+                    boolean isNameExist = userManager.getUsers().stream().anyMatch(
+                            u -> u.name.equals(volvoUserName));
+                    if (isNameExist && result.equals(UserSwitchResult.SUCCESS)) {
+                        showMessage(result.name());
+                    } else {
+                        showMessage(UserSwitchResult.ERROR.name());
+                    }
+                }
+            });
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        mLog.append(
-                "File listing took " + (((double) end - (double) start) / 1000d) + " seconds, or "
-                        + (end - start) + " milliseconds.\n");
-
     }
 
     private void switchUserButton(String userName) {
         mLog.append("Requesting user switch.…\n");
-        long start = System.currentTimeMillis();
-        long end = 0;
-        int value = -1;
-        try {
-            value = Integer.valueOf(userName);
-
-        } catch (Exception e) {
-
-        }
 
         try {
-            VolvoUser user = new VolvoUser(userName, value, -1);
-            mService.switchUser(user);
+            mService.switchUser(userName, new IUserSwitchCallBack.Stub() {
+                @Override
+                public void handleResponse(UserSwitchResult result) throws RemoteException {
+                    showMessage(result.name());
+                }
+            });
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        mLog.append(
-                "File listing took " + (((double) end - (double) start) / 1000d) + " seconds, or "
-                        + (end - start) + " milliseconds.\n");
+
     }
 
-    private void deleteUser(String userName) {
-        if (userName == null || userName.isEmpty()) {
-            userName = "TestUser";
+    private void deleteUser(String testNameOrId) {
+        if (testNameOrId == null || testNameOrId.isEmpty()) {
+            showMessage("Name or ID is required!");
+            return;
         }
-        mLog.append("Requesting deleteUser listing… " + userName + "\n");
-        long start = System.currentTimeMillis();
-        long end = 0;
+        mLog.append("Requesting deleteUser listing… " + testNameOrId + "\n");
         try {
-            VolvoUser user = new VolvoUser(userName, -1, -1);
-            mService.deleteUser(user);
+            int checkInt = Integer.valueOf(testNameOrId);
+        } catch (Exception e) {
+            List<UserInfo> listUser = userManager.getUsers(false);
+            String findAndroidUserId = testNameOrId;
+            Optional<UserInfo> result = listUser.stream().filter(
+                    u -> u.name.equals(findAndroidUserId)).findAny();
+            if (result.isPresent()) {
+                testNameOrId = result.get().id + "";
+            } else {
+                showMessage("No user found: " + testNameOrId);
+                return;
+            }
+        }
+        try {
+            mService.deleteUser(testNameOrId, new IUserSwitchCallBack.Stub() {
+                @Override
+                public void handleResponse(UserSwitchResult result) throws RemoteException {
+                    showMessage(result.name());
+                }
+            });
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        mLog.append(
-                "File listing took " + (((double) end - (double) start) / 1000d) + " seconds, or "
-                        + (end - start) + " milliseconds.\n");
+    }
 
+    private void showMessage(String message) {
+        mLog.clearComposingText();
+        mLog.setText(message);
     }
 }

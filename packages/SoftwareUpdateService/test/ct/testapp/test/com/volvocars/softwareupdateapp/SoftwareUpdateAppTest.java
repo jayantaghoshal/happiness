@@ -194,7 +194,7 @@ public class SoftwareUpdateAppTest {
         BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Security patch for IHU");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOADING META");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOADED");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
     }
 }

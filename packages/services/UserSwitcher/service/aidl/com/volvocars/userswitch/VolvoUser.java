@@ -7,82 +7,91 @@ package com.volvocars.userswitch;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
+import android.os.UserHandle;
 
 /**
- * This class represents the user information
+ * User information
+ * Android User Info is shortened
  */
+
 public class VolvoUser implements Parcelable {
+    public int id;
+    public String name;
+    public int flags;
+
+    public static final int FLAG_MASK_USER_TYPE = 255;
+    public static final int FLAG_PRIMARY = 1;
+    public static final int FLAG_ADMIN = 2;
+    public static final int FLAG_GUEST = 4;
+    public static final int FLAG_RESTRICTED = 8;
+    public static final int FLAG_INITIALIZED = 16;
+    public static final int FLAG_MANAGED_PROFILE = 32;
+    public static final int FLAG_DISABLED = 64;
+
 
     public static final Creator<VolvoUser> CREATOR = new Creator<VolvoUser>() {
-        @Override
-        public VolvoUser[] newArray(int size) {
-            return new VolvoUser[size];
-        }
-
-        @Override
         public VolvoUser createFromParcel(Parcel source) {
             return new VolvoUser(source);
         }
+
+        public VolvoUser[] newArray(int size) {
+            return new VolvoUser[size];
+        }
     };
-    private String name;
-    private int id;
-    private int volvoProfile;
 
-    public VolvoUser(Parcel source) {
-        name = source.readString();
-        id = source.readInt();
-        volvoProfile = source.readInt();
+    public VolvoUser(int id) {
+        this(id, "", 0);
     }
 
-    public VolvoUser(String name, int id, int volvoProfile) {
-        this.name = name;
+    public VolvoUser(int id, String name, int flags) {
         this.id = id;
-        this.volvoProfile = volvoProfile;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
+        this.flags = flags;
     }
 
-    public int getId() {
-        return id;
+    public boolean isPrimary() {
+        return (this.flags & 1) == 1;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public boolean isAdmin() {
+        return (this.flags & 2) == 2;
     }
 
-    public String getIdString() {
-        return String.valueOf(id);
+    public boolean isGuest() {
+        return (this.flags & 4) == 4;
     }
 
-    public int getVolvoProfile() {
-        return volvoProfile;
+    public boolean isRestricted() {
+        return (this.flags & 8) == 8;
     }
 
-    public void setVolvoProfile(int volvoProfile) {
-        this.volvoProfile = volvoProfile;
+    public boolean isManagedProfile() {
+        return (this.flags & 32) == 32;
     }
 
-    @Override
+    public boolean isEnabled() {
+        return (this.flags & 64) != 64;
+    }
+
+    public String toString() {
+        return "VolvoUser{" + this.id + ":" + this.name + ":" + Integer.toHexString(this.flags) + "}";
+    }
+
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int parcelableFlags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeInt(this.flags);
 
-        dest.writeString(name);
-        dest.writeInt(id);
-        dest.writeInt(volvoProfile);
     }
 
-    @Override
-    public String toString() {
-        return "name: " + name + "  androidId: " + id + "  volvoId: " + volvoProfile;
+    private VolvoUser(Parcel source) {
+        this.id = source.readInt();
+        this.name = source.readString();
+        this.flags = source.readInt();
     }
 }

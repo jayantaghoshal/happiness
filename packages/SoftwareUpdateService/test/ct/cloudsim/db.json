@@ -84,14 +84,14 @@
       "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
       "downloads":
         {
-          "file": ["/path/to/file.txt", "/path/to/otherfile.txt"]
+          "file": ["/test/helloworld.txt"]
         }
     },
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
       "downloads":
       {
-        "file": ["/path/to/some/file.txt"]
+        "file": ["/test/helloworld.txt", "/test/helloworld2.txt"]
       }
     }
   ],

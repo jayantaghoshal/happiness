@@ -58,6 +58,13 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
         // TODO: Place holder for MQTT
     }
 
+    public class DownloadResponseCallback extends ICloudConnectionDownloadResponseCallback.Stub {
+        @Override
+        public void updateDownloadStatus(Response response) {
+            Log.v(LOG_TAG, "updateDownloadStatus: Calling service.notifyDownloadStatus()");
+            service.notifyDownloadStatus(response);
+        }
+    }
     public Response doGetRequest(String uri, ArrayList<HttpHeaderField> headers, int timeout) {
         Response response = null;
         try {
@@ -95,8 +102,9 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     public void downloadRequest(String uri, ArrayList<HttpHeaderField> headers, String file_path, int timeout) {
 
         Log.v(LOG_TAG, "downloadRequest");
+        DownloadResponseCallback downloadCallback = new DownloadResponseCallback();
         try {
-            cloud_connection.downloadRequest(uri, headers, file_path, timeout, null);
+            cloud_connection.downloadRequest(uri, headers, file_path, timeout, downloadCallback);
         } catch (RemoteException ex) {
             // Something went bananas with binder.. What do?
             Log.e(LOG_TAG, "Something went bananas with binder: " + ex.getMessage());
