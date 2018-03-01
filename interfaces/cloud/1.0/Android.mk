@@ -126,8 +126,6 @@ GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionEve
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionEventListener.hal
-$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
-$(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
@@ -266,8 +264,6 @@ GEN := $(intermediates)/vendor/volvocars/hardware/cloud/V1_0/ICloudConnectionEve
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICloudConnectionEventListener.hal
-$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
-$(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
         $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
