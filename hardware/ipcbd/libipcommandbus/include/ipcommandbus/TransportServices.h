@@ -23,8 +23,10 @@ namespace Connectivity {
  */
 class TransportServices : public ITransportServices {
   public:
-    TransportServices(tarmac::eventloop::IDispatcher& timeProvider, tarmac::eventloop::IDispatcher& threadDispatcher,
-                      Message::Ecu selfEcu, bool useWfaTimer = true);
+    TransportServices(tarmac::eventloop::IDispatcher& timeProvider,
+                      tarmac::eventloop::IDispatcher& threadDispatcher,
+                      Message::Ecu selfEcu,
+                      bool useWfaTimer = true);
 
     static const char* ErrorTypeToCString(ErrorType error_type);
 

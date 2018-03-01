@@ -511,7 +511,10 @@ void HandleDecodeError(ASN_Result pResult, U8 serviceId, U16 combinedId, U8 oper
     /* This function handles decode errors. Should reply with an Ack with error code TBD */
 }
 
-void HandleIncomingMessageData_S(ASN_Session session, ASN_Stream stream, U8 serviceId, U16 operationId,
+void HandleIncomingMessageData_S(ASN_Session session,
+                                 ASN_Stream stream,
+                                 U8 serviceId,
+                                 U16 operationId,
                                  U8 operationType) {
     U32 combinedId;
     combinedId = (U32)operationType | ((U32)operationId << 8) | ((U32)serviceId << 24);

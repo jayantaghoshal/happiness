@@ -52,12 +52,17 @@ class SoundWrapper : public com::delphi::BnAudioManagerCallback {  // Maybe a be
 
     virtual ::android::binder::Status soundStopped(int32_t connectionId) override;
 
-    void onPlayStarted(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
+    void onPlayStarted(const AudioTable::SoundType getSoundType,
+                       const AudioTable::SoundComponent getSoundComponent,
                        const int32_t connectionID);
-    void onPlayStopped(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
-                       const int32_t connectionID, const int32_t getReason);
-    void onPlayFailed(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
-                      const int32_t connectionID, const int32_t getErr);
+    void onPlayStopped(const AudioTable::SoundType getSoundType,
+                       const AudioTable::SoundComponent getSoundComponent,
+                       const int32_t connectionID,
+                       const int32_t getReason);
+    void onPlayFailed(const AudioTable::SoundType getSoundType,
+                      const AudioTable::SoundComponent getSoundComponent,
+                      const int32_t connectionID,
+                      const int32_t getErr);
     void onPlayBackgroundStarted(const int32_t connectionID) { (void)connectionID; }
     void onPlayBackgroundStopped(const int32_t connectionID, const int32_t reason) {
         (void)connectionID;

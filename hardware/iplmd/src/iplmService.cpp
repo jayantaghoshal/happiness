@@ -60,8 +60,9 @@ void IplmService::StartSubscribe() {
         SubscribeResult result;
         // Install callback
         // TODO: Handle subscriber ID returned from subscribe?
-        ipcbServer_->subscribe(0xFFFF, 0xFF01, OperationType::NOTIFICATION_CYCLIC, this,
-                               [&result](SubscribeResult sr) { result = sr; });
+        ipcbServer_->subscribe(0xFFFF, 0xFF01, OperationType::NOTIFICATION_CYCLIC, this, [&result](SubscribeResult sr) {
+            result = sr;
+        });
         if (!result.commandResult.success) {
             ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
         }
@@ -79,15 +80,22 @@ void IplmService::serviceDied(uint64_t, const android::wp<IBase>&) {
     exit(EXIT_SUCCESS);
 }
 void IplmService::HandleMessageRcvd(const Msg& msg) {
-    ALOGV("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
-          (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
+    ALOGV("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)",
+          msg.pdu.header.serviceID,
+          (int)msg.pdu.header.operationID,
+          (int)msg.pdu.header.operationType,
+          msg.pdu.header.seqNbr,
+          (int)msg.pdu.payload.size());
 
     if (OperationType::ERROR == msg.pdu.header.operationType) return;
 
     first_contact = true;
     ALOGV("Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
           ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
-          ToString(static_cast<Prio>(msg.pdu.payload.data()[1])), (int)msg.ecu, (int)Ecu::VCM, (int)Ecu::TEM);
+          ToString(static_cast<Prio>(msg.pdu.payload.data()[1])),
+          (int)msg.ecu,
+          (int)Ecu::VCM,
+          (int)Ecu::TEM);
 
     if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) {
         if (msg.ecu == Ecu::VCM)
@@ -188,7 +196,9 @@ bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
         ALOGW("Flexray wakeup not sent "
               "(registeredServices [%d], rg1_availabilityStatus_ [%d]), first_contact[%d], "
               "flexray_wakeup_attempted[%d]",
-              (int)iplm_data_.registered_LSCs_.size(), iplm_data_.rg1_availabilityStatus_.all(), first_contact,
+              (int)iplm_data_.registered_LSCs_.size(),
+              iplm_data_.rg1_availabilityStatus_.all(),
+              first_contact,
               flexray_wakeup_attempted);
 
         return false;
@@ -341,7 +351,8 @@ void IplmService::CreateAndSendIpActivityMessage() {
 }
 
 bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg, const Prio prio) {
-    return std::any_of(iplm_data.registered_LSCs_.cbegin(), iplm_data.registered_LSCs_.cend(),
+    return std::any_of(iplm_data.registered_LSCs_.cbegin(),
+                       iplm_data.registered_LSCs_.cend(),
                        [rg, prio](const ServicePrioMap::value_type& item) {
                            if (item.second.rg_ & ResourceGroup::RG_1) {
                                return item.second.prio_rg1_ == prio;
@@ -354,7 +365,8 @@ bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const Resource
 }
 
 bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg) {
-    return std::any_of(iplm_data.registered_LSCs_.cbegin(), iplm_data.registered_LSCs_.cend(),
+    return std::any_of(iplm_data.registered_LSCs_.cbegin(),
+                       iplm_data.registered_LSCs_.cend(),
                        [rg](const ServicePrioMap::value_type& item) { return (item.second.rg_ & rg); });
 }
 
@@ -451,7 +463,8 @@ const char* IplmService::ToString(const XResourceGroupPrio prio) {
     }
 }
 
-Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName, XResourceGroup _rg,
+Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName,
+                                               XResourceGroup _rg,
                                                XResourceGroupPrio _prio) {
     ALOGI("Request called for service (%s) and RG (%s) and prio (%s)", lscName.c_str(), ToString(_rg), ToString(_prio));
 

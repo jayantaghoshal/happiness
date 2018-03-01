@@ -26,7 +26,9 @@ class DimLinkedItem final : public DimItem {
      * @param trunc[in] sets text trucation position
      * @param select[in] indicates if item is selectable
      */
-    DimLinkedItem(uint16_t id, uint16_t groupID, ItemType itemType,
+    DimLinkedItem(uint16_t id,
+                  uint16_t groupID,
+                  ItemType itemType,
                   TextAlignment align = TextAlignment::Alignment_Center,
                   TextTruncation trunc = TextTruncation::Truncation_Right,
                   ItemSelectable select = ItemSelectable::Selectable_True);

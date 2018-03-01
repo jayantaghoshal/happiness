@@ -87,7 +87,8 @@ void DiagnosticsReporter::check_link() {
 }
 
 Return<void> DiagnosticsReporter::onRegistration(const ::android::hardware::hidl_string& fqName,
-                                                 const ::android::hardware::hidl_string& name, bool preexisting) {
+                                                 const ::android::hardware::hidl_string& name,
+                                                 bool preexisting) {
     (void)fqName;
     (void)name;
     (void)preexisting;

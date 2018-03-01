@@ -187,8 +187,12 @@ void KeyManagerModule::ProcessMessage(vip_msg& msg) {
         case FID_hisip_version_response: {
             bool same_version = (msg.data[0] == hisip_version_message[0]) && (msg.data[1] == hisip_version_message[1]);
             if (!same_version) {
-                ALOGE("[%s] Power HISIP versions not matching! VIP: 0x%02x 0x%02x - MP: 0x%02x 0x%02x", __FUNCTION__,
-                      msg.data[0], msg.data[1], hisip_version_message[0], hisip_version_message[1]);
+                ALOGE("[%s] Power HISIP versions not matching! VIP: 0x%02x 0x%02x - MP: 0x%02x 0x%02x",
+                      __FUNCTION__,
+                      msg.data[0],
+                      msg.data[1],
+                      hisip_version_message[0],
+                      hisip_version_message[1]);
             }
             break;
         }
@@ -202,8 +206,12 @@ void KeyManagerModule::ProcessMessage(vip_msg& msg) {
             ALOGD("HID_COMMANDS_RPT_FID: HID_CMD_INPUT_DEVICE = 0x%02X, HID_CMD_KEY_ID = 0x%02X, "
                   "HID_CMD_KEY_VALUE = 0x%02X, HID_CMD_TIME_STAMP_H = 0x%02X, HID_CMD_TIME_STAMP_L = 0x%02X, "
                   "HID_CMD_FRAME_SIZE = 0x%02X",
-                  msg.data[HID_CMD_INPUT_DEVICE], msg.data[HID_CMD_KEY_ID], msg.data[HID_CMD_KEY_VALUE],
-                  msg.data[HID_CMD_TIME_STAMP_H], msg.data[HID_CMD_TIME_STAMP_L], msg.data[HID_CMD_FRAME_SIZE]);
+                  msg.data[HID_CMD_INPUT_DEVICE],
+                  msg.data[HID_CMD_KEY_ID],
+                  msg.data[HID_CMD_KEY_VALUE],
+                  msg.data[HID_CMD_TIME_STAMP_H],
+                  msg.data[HID_CMD_TIME_STAMP_L],
+                  msg.data[HID_CMD_FRAME_SIZE]);
 
             if (INPUT_KNOB == msg.data[HID_CMD_INPUT_DEVICE]) {
                 processKnob(msg.data);

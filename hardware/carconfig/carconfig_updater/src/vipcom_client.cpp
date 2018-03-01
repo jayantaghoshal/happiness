@@ -89,7 +89,9 @@ void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) 
         if (_payload[1] == 0 /*cc_175*/ && _payload[2] == 0 /*cc_181*/) {
             ALOGI("Received correct values form VIP");
         } else {
-            ALOGI("FID: 0x%X, Received unexpected values from VIP with data: 0x%X, 0x%X", _fid, _payload[1],
+            ALOGI("FID: 0x%X, Received unexpected values from VIP with data: 0x%X, 0x%X",
+                  _fid,
+                  _payload[1],
                   _payload[2]);
         }
 

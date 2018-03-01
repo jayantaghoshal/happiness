@@ -19,7 +19,9 @@ namespace InfotainmentIpBus {
 namespace Utils {
 
 template <class MsgTypePtr>
-bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session& m_session_msgd, MsgTypePtr& pDecodedMsg,
+bool DecodeMessage(std::vector<uint8_t> payload,
+                   ASN_Session& m_session_msgd,
+                   MsgTypePtr& pDecodedMsg,
                    MsgTypePtr (*createFunc)(ASN_Session session),
                    ASN_Result (*decodeFunc)(MsgTypePtr ThisPtr, ASN_Session session, ASN_Stream stream)) {
     ASN_Session_Reset(m_session_msgd);
@@ -38,8 +40,12 @@ bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session& m_session_msgd, Ms
 
         const ASN_Result ASN_retcode = decodeFunc(pDecodedMsg, m_session_msgd, m_stream_msgd);
         if (ASN_retcode) {
-            ALOG(LOG_ERROR, ASN_LOG_TAG, "Payload decoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)(size: %d)",
-                 AsnErrCodeToString(ASN_retcode->error).c_str(), ASN_retcode->linenumber, (int)payload.size());
+            ALOG(LOG_ERROR,
+                 ASN_LOG_TAG,
+                 "Payload decoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)(size: %d)",
+                 AsnErrCodeToString(ASN_retcode->error).c_str(),
+                 ASN_retcode->linenumber,
+                 (int)payload.size());
 
             return false;
         }
@@ -49,8 +55,10 @@ bool DecodeMessage(std::vector<uint8_t> payload, ASN_Session& m_session_msgd, Ms
 }
 
 template <class MsgTypePtr>
-void encodeMessage(MsgTypePtr pMsg, ASN_Result (*encodeFunc)(MsgTypePtr, ASN_Stream),
-                   U32 (*encodedSizeFunc)(MsgTypePtr), std::vector<uint8_t>* bufPayload) {
+void encodeMessage(MsgTypePtr pMsg,
+                   ASN_Result (*encodeFunc)(MsgTypePtr, ASN_Stream),
+                   U32 (*encodedSizeFunc)(MsgTypePtr),
+                   std::vector<uint8_t>* bufPayload) {
     // Prepare payload
     // - Align the size of the ASN1 payload buffer on 8-bit boundary
     const U32 encodedSizeInBits = encodedSizeFunc(pMsg);
@@ -63,8 +71,12 @@ void encodeMessage(MsgTypePtr pMsg, ASN_Result (*encodeFunc)(MsgTypePtr, ASN_Str
 
     ASN_Result res = encodeFunc(pMsg, stream);
     if (res != ASN_RESULT_OK) {
-        ALOG(LOG_ERROR, ASN_LOG_TAG, "%s: ASN1 encoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)",
-             __FUNCTION__, InfotainmentIpBus::Utils::AsnErrCodeToString(res->error).c_str(), res->linenumber);
+        ALOG(LOG_ERROR,
+             ASN_LOG_TAG,
+             "%s: ASN1 encoding failed (ASN error '%s' @ InfotainmentIpBus.c: %u)",
+             __FUNCTION__,
+             InfotainmentIpBus::Utils::AsnErrCodeToString(res->error).c_str(),
+             res->linenumber);
         return;  // TODO: Report error to upper layers????????
     }
 }

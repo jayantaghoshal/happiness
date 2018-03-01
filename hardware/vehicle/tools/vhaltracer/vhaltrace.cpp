@@ -20,7 +20,8 @@ namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 #include "vhal_util.h"
 
 void SubscribeToProperty(const ::android::sp<vhal20::IVehicle>& service,
-                         const ::android::sp<VhalListener>& vhal_listener, int32_t prop_id) {
+                         const ::android::sp<VhalListener>& vhal_listener,
+                         int32_t prop_id) {
     ::android::hardware::hidl_vec<vhal20::SubscribeOptions> options = {
             {.propId = prop_id, .flags = vhal20::SubscribeFlags::DEFAULT},
     };

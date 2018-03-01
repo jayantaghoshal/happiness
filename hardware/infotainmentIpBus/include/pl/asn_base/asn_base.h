@@ -563,8 +563,12 @@ ASN_PrintableString ASN_PrintableString_Create(ASN_Session session);
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low,
-                                      U32 high, const char* characterSet);
+ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr,
+                                      ASN_Session session,
+                                      ASN_Stream stream,
+                                      U32 low,
+                                      U32 high,
+                                      const char* characterSet);
 
 /** Encode an ASN_PrintableString
 ***
@@ -585,7 +589,10 @@ ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr, ASN_Session s
 ***         in the generated code.
 ***
 ***/
-ASN_Result ASN_PrintableString_Encode(ASN_PrintableString ThisPtr, ASN_Stream stream, U32 low, U32 high,
+ASN_Result ASN_PrintableString_Encode(ASN_PrintableString ThisPtr,
+                                      ASN_Stream stream,
+                                      U32 low,
+                                      U32 high,
                                       const char* characterSet);
 
 /** Get size in bits to store a encoded ASN_PrintableString

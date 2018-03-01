@@ -96,7 +96,9 @@ EmulatedVehicleHal::EmulatedVehicleHal(VehiclePropertyStore* propStore)
     : mPropStore(propStore),
       mHvacPowerProps(std::begin(kHvacPowerProperties), std::end(kHvacPowerProperties)),
       mRecurrentTimer(std::bind(&EmulatedVehicleHal::onContinuousPropertyTimer, this, std::placeholders::_1)),
-      mFakeValueGenerator(std::bind(&EmulatedVehicleHal::onFakeValueGenerated, this, std::placeholders::_1,
+      mFakeValueGenerator(std::bind(&EmulatedVehicleHal::onFakeValueGenerated,
+                                    this,
+                                    std::placeholders::_1,
                                     std::placeholders::_2)) {
     initStaticConfig();
     for (size_t i = 0; i < arraysize(kVehicleProperties); i++) {

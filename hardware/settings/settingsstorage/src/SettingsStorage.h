@@ -41,7 +41,8 @@ class ProfileListener : public profileHidl::IProfileChangedHandler,
     ProfileListener(std::function<void(profileHidl::ProfileIdentifier)> onProfileChange);
     Return<void> profileChanged(const andrHw::hidl_string& android_user_id,
                                 profileHidl::ProfileIdentifier new_profile_id) override;
-    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
+    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName,
+                                        const andrHw::hidl_string& name,
                                         bool preexisting) override;
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
@@ -63,7 +64,8 @@ class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recip
     SettingsStorage();
     ~SettingsStorage();
 
-    Return<void> set(SettingsIdHidl key, profileHidl::ProfileIdentifier profileId,
+    Return<void> set(SettingsIdHidl key,
+                     profileHidl::ProfileIdentifier profileId,
                      const andrHw::hidl_string& data) override;
     Return<void> get(SettingsIdHidl key, profileHidl::ProfileIdentifier profileId, get_cb _hidl_cb) override;
     Return<void> subscribe(SettingsIdHidl key, UserScope userScope, const sp<ISettingsListener>& listener) override;

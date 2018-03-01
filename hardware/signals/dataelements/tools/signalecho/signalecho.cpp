@@ -53,7 +53,8 @@ int main(int argc, char** argv) {
     usleep(10);
 
     if (numberOfCallbackCalls != expectedNumberOfCalls) {
-        ALOGE("numberOfCallbackCalls: %d did not meet the expected number of calls: %d", numberOfCallbackCalls,
+        ALOGE("numberOfCallbackCalls: %d did not meet the expected number of calls: %d",
+              numberOfCallbackCalls,
               expectedNumberOfCalls);
         return 1;
     }

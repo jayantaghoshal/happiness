@@ -198,7 +198,9 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
     vehicle_com_client->onMessageRcvdCallback = [&message_received, request, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
+        ALOGD("Message received in client (%d, %d, %d)",
+              msg.pdu.header.serviceID,
+              msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         if (msg.pdu.header.serviceID == request.header.service_id &&
             msg.pdu.header.operationID == request.header.operation_id && msg.pdu.header.seqNbr == 0) {
@@ -208,8 +210,8 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     };
 
     SubscribeResult result;
-    ipcb_daemon_->subscribe(0x1, 0x1, OperationType::REQUEST, vehicle_com_client,
-                            [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(
+            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
 
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id = result.subscriberId;
@@ -277,7 +279,9 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
     vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
+        ALOGD("Message received in client (%d, %d, %d)",
+              msg.pdu.header.serviceID,
+              msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
         if (2 == message_received) {
@@ -290,13 +294,13 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
 
     // Register two subscribers
     SubscribeResult result;
-    ipcb_daemon_->subscribe(0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client,
-                            [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(
+            0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id_1 = result.subscriberId;
 
-    ipcb_daemon_->subscribe(0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client,
-                            [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(
+            0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id_2 = result.subscriberId;
 
@@ -353,7 +357,9 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
     vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Message received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
+        ALOGD("Message received in client (%d, %d, %d)",
+              msg.pdu.header.serviceID,
+              msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
         p_msg_cb_triggered.set_value(true);
@@ -364,13 +370,13 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
 
     // Register two subscribers
     SubscribeResult result;
-    ipcb_daemon_->subscribe(0x1, 0x1, OperationType::REQUEST, vehicle_com_client,
-                            [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(
+            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id = result.subscriberId;
 
-    ipcb_daemon_->subscribe(0x1, 0x1, OperationType::REQUEST, vehicle_com_client,
-                            [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(
+            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
     EXPECT_FALSE(result.commandResult.success);
 
     // Setup a request PDU to send from Ipcb simulator to IpcbD
@@ -435,8 +441,8 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     // Send message from IpcbD
     ALOGI("TestRequestResponse, Send message");
     CommandResult cresult;
-    ipcb_daemon_->sendRequest(message, {false, 0, 0}, vehicle_com_client,
-                              [&cresult](CommandResult cr) { cresult = cr; });
+    ipcb_daemon_->sendRequest(
+            message, {false, 0, 0}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     // Read PDU in Ipcb Simulator, expect that we got an ACK on our request
@@ -457,7 +463,9 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
     vehicle_com_client->onResponseRcvdCallback = [&response_received, response, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Response received in client (%d, %d, %d)", msg.pdu.header.serviceID, msg.pdu.header.operationID,
+        ALOGD("Response received in client (%d, %d, %d)",
+              msg.pdu.header.serviceID,
+              msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         if (msg.pdu.header.serviceID == response.header.service_id &&
             msg.pdu.header.operationID == response.header.operation_id && msg.pdu.header.seqNbr == 0) {
@@ -521,8 +529,8 @@ TEST_F(VtsIpcbdComponentTest, TestNoAckRetry) {
     message.pdu.header.seqNbr = sequenceId_++;
 
     CommandResult cresult;
-    ipcb_daemon_->sendRequest(message, {false, 0, 0}, vehicle_com_client,
-                              [&cresult](CommandResult cr) { cresult = cr; });
+    ipcb_daemon_->sendRequest(
+            message, {false, 0, 0}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     Pdu read_pdu;
@@ -631,8 +639,8 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
     // Send message from IpcbD
     ALOGI("TestNoResponseRetry, Send message");
     CommandResult cresult;
-    ipcb_daemon_->sendRequest(message, {true, 2, 500}, vehicle_com_client,
-                              [&cresult](CommandResult cr) { cresult = cr; });
+    ipcb_daemon_->sendRequest(
+            message, {true, 2, 500}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     // Receive message from IpcbD

@@ -37,7 +37,8 @@ void avmpMessageInject(uint8_t* msg_data, const uint32_t data_size) {
         handleAvmpCtrlMsg(avmpHeader, msg_data, data_size);
     } else {
         vsm_inject_inject((avmp::signalIdMask & avmpHeader) | (avmp::signalGroupMask & avmpHeader),
-                          static_cast<void*>(&msg_data[avmp::payloadOffset]), 0 != (avmp::errorMask & avmpHeader),
+                          static_cast<void*>(&msg_data[avmp::payloadOffset]),
+                          0 != (avmp::errorMask & avmpHeader),
                           data_size - avmp::avmpHeaderSize);
     }
 }
@@ -50,7 +51,8 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t* msg_data, cons
     if (avmp::heartBeatMsgId == ctrlMsgId) {
         if ((avmp::avmpHeaderSize + avmp::heartBeatPayloadSize) != data_size) {
             ALOGW("Heart beat message has incorrect size, expected %d received %d",
-                  (avmp::avmpHeaderSize + avmp::heartBeatPayloadSize), data_size);
+                  (avmp::avmpHeaderSize + avmp::heartBeatPayloadSize),
+                  data_size);
 
             return;
         }
@@ -69,7 +71,8 @@ static void handleAvmpCtrlMsg(const uint16_t avmpHeader, uint8_t* msg_data, cons
     } else if (avmp::versionHandshakeMsgId == ctrlMsgId) {
         if ((avmp::avmpHeaderSize + avmp::versHandshakePayloadSize) != data_size) {
             ALOGW("Version handshake message has incorrect size expected = %d but received %d",
-                  (avmp::avmpHeaderSize + avmp::versHandshakePayloadSize), data_size);
+                  (avmp::avmpHeaderSize + avmp::versHandshakePayloadSize),
+                  data_size);
             return;
         }
 

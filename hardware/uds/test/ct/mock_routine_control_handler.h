@@ -35,7 +35,8 @@ struct MockRoutineControlHandler : public IRoutineControlHandler {
     }
 
     ::android::hardware::Return<void> getAsynchronousRoutineResults(
-            const RoutineExecutionResultsRequest& request, getAsynchronousRoutineResults_cb _hidl_cb) override {
+            const RoutineExecutionResultsRequest& request,
+            getAsynchronousRoutineResults_cb _hidl_cb) override {
         _hidl_cb(GetAsynchronousRoutineResults(request));
         return ::android::hardware::Void();
     }

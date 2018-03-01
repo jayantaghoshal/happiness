@@ -144,8 +144,10 @@ class DataElemValue : public DataElemValueBase {
      */
     value_type value() const {
         if (isError()) {
-            ALOG(LOG_ERROR, "DataElementValue",
-                 "DEReceiver, reading value() of signal that is in error state, signalname: %s", name().c_str());
+            ALOG(LOG_ERROR,
+                 "DataElementValue",
+                 "DEReceiver, reading value() of signal that is in error state, signalname: %s",
+                 name().c_str());
         }
         return m_value;
     }

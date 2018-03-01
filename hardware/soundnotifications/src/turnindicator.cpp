@@ -22,8 +22,11 @@ TurnIndicator::TurnIndicator() : previous_IndcrDisp1WdSts(IndcrSts1::Off) {
     indcrRecevier.subscribe([&]() {
         ALOGV("indcr received");
 
-        injectSignals(indcrRecevier.get(), fltIndLeFrontReceiver.get(), fltIndLeReReceiver.get(),
-                      fltIndRiFrontReceiver.get(), fltIndRiReReceiver.get());
+        injectSignals(indcrRecevier.get(),
+                      fltIndLeFrontReceiver.get(),
+                      fltIndLeReReceiver.get(),
+                      fltIndRiFrontReceiver.get(),
+                      fltIndRiReReceiver.get());
 
     });
 }

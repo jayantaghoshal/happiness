@@ -25,7 +25,9 @@ class DimImage final : public DimItem {
      * @param trunc[in] sets text tructation position
      * @param select[in] indicates if item is selectable
      */
-    DimImage(uint16_t id, uint16_t groupID, TextAlignment align = TextAlignment::Alignment_Center,
+    DimImage(uint16_t id,
+             uint16_t groupID,
+             TextAlignment align = TextAlignment::Alignment_Center,
              TextTruncation trunc = TextTruncation::Truncation_Right,
              ItemSelectable select = ItemSelectable::Selectable_True);
 

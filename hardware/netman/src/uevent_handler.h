@@ -50,7 +50,9 @@ class UeventHandler {
     std::string ExtractAttribute(const std::string& cursor_line, const std::string& attribute);
 
   private:
-    static int HandleSysfsEntry(const char* filepath, const struct stat* /*info*/, int typeflag,
+    static int HandleSysfsEntry(const char* filepath,
+                                const struct stat* /*info*/,
+                                int typeflag,
                                 struct FTW* /*pathinfo*/);
 };
 

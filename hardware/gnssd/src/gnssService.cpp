@@ -54,10 +54,12 @@ void GnssService::StartSubscribe() {
         SubscribeResult resultPosNotification, resultPosCyclic, resultAccNotification, resultAccCyclic;
         // TODO: Handle subscription ID returned from subscribe in order to unsubscribe?
 
-        auto returnPosNotification = ipcbServer_->subscribe(
-                (uint16_t)VccIpCmd::ServiceId::Positioning, (uint16_t)VccIpCmd::OperationId::GNSSPositionData,
-                OperationType::NOTIFICATION, this_as_callback,
-                [&resultPosNotification](SubscribeResult sr) { resultPosNotification = sr; });
+        auto returnPosNotification =
+                ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                       (uint16_t)VccIpCmd::OperationId::GNSSPositionData,
+                                       OperationType::NOTIFICATION,
+                                       this_as_callback,
+                                       [&resultPosNotification](SubscribeResult sr) { resultPosNotification = sr; });
         if (returnPosNotification.isOk() && resultPosNotification.commandResult.success) {
             // Save subscription ID
             pos_notification_id = resultPosNotification.subscriberId;
@@ -68,7 +70,8 @@ void GnssService::StartSubscribe() {
 
         auto returnPosCyclic = ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
                                                       (uint16_t)VccIpCmd::OperationId::GNSSPositionData,
-                                                      OperationType::NOTIFICATION_CYCLIC, this_as_callback,
+                                                      OperationType::NOTIFICATION_CYCLIC,
+                                                      this_as_callback,
                                                       [&resultPosCyclic](SubscribeResult sr) { resultPosCyclic = sr; });
         if (returnPosCyclic.isOk() && resultPosCyclic.commandResult.success) {
             // Save subscription ID
@@ -78,10 +81,12 @@ void GnssService::StartSubscribe() {
             subscriptionsfailed = true;
         }
 
-        auto returnAccNotification = ipcbServer_->subscribe(
-                (uint16_t)VccIpCmd::ServiceId::Positioning, (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                OperationType::NOTIFICATION, this_as_callback,
-                [&resultAccNotification](SubscribeResult sr) { resultAccNotification = sr; });
+        auto returnAccNotification =
+                ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
+                                       (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
+                                       OperationType::NOTIFICATION,
+                                       this_as_callback,
+                                       [&resultAccNotification](SubscribeResult sr) { resultAccNotification = sr; });
 
         if (returnAccNotification.isOk() && resultAccNotification.commandResult.success) {
             // Save subscription ID
@@ -93,7 +98,8 @@ void GnssService::StartSubscribe() {
 
         auto returnAccCyclic = ipcbServer_->subscribe((uint16_t)VccIpCmd::ServiceId::Positioning,
                                                       (uint16_t)VccIpCmd::OperationId::GNSSPositionDataAccuracy,
-                                                      OperationType::NOTIFICATION_CYCLIC, this_as_callback,
+                                                      OperationType::NOTIFICATION_CYCLIC,
+                                                      this_as_callback,
                                                       [&resultAccCyclic](SubscribeResult sr) { resultAccCyclic = sr; });
         if (returnAccCyclic.isOk() && resultAccCyclic.commandResult.success) {
             // Save subscription ID
@@ -165,12 +171,17 @@ void GnssService::unsubscribeAll() {
 
 // Methods from vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
 Return<void> GnssService::onMessageRcvd(const Msg& msg) {
-    ALOGV("onMessageRcvd %04X.%04X.%02d 0x%08X(size: %d)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID,
-          (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr, (int)msg.pdu.payload.size());
+    ALOGV("onMessageRcvd %04X.%04X.%02d 0x%08X(size: %d)",
+          msg.pdu.header.serviceID,
+          (int)msg.pdu.header.operationID,
+          (int)msg.pdu.header.operationType,
+          msg.pdu.header.seqNbr,
+          (int)msg.pdu.payload.size());
 
     // Handle error ? Should not be possible to get here i think....
     if (OperationType::ERROR == msg.pdu.header.operationType) {
-        ALOGE("Received Error! (%04X.%04X) This is not handled!", msg.pdu.header.serviceID,
+        ALOGE("Received Error! (%04X.%04X) This is not handled!",
+              msg.pdu.header.serviceID,
               (int)msg.pdu.header.operationID);
 
         return Void();
@@ -211,18 +222,28 @@ bool GnssService::Initialize() {
 void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
     Icb_OpGNSSPositionData_Response p = nullptr;
 
-    ALOGV("cbGNSSPositionDataNotification %04X.%04X.%02d 0x%08X. size: %d", (int)msg.pdu.header.serviceID,
-          (int)msg.pdu.header.operationID, (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr,
+    ALOGV("cbGNSSPositionDataNotification %04X.%04X.%02d 0x%08X. size: %d",
+          (int)msg.pdu.header.serviceID,
+          (int)msg.pdu.header.operationID,
+          (int)msg.pdu.header.operationType,
+          msg.pdu.header.seqNbr,
           (int)msg.pdu.payload.size());
 
-    if (InfotainmentIpBus::Utils::DecodeMessage(msg.pdu.payload, m_session_msgd, p,
+    if (InfotainmentIpBus::Utils::DecodeMessage(msg.pdu.payload,
+                                                m_session_msgd,
+                                                p,
                                                 Icb_OpGNSSPositionData_Response_Create,
                                                 Icb_OpGNSSPositionData_Response_Decode)) {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionData->utcTime);
-        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld", p->gnssPositionData->utcTime->year, p->gnssPositionData->utcTime->month,
-              p->gnssPositionData->utcTime->day, p->gnssPositionData->utcTime->hour,
-              p->gnssPositionData->utcTime->minute, p->gnssPositionData->utcTime->second, mssince1970);
+        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
+              p->gnssPositionData->utcTime->year,
+              p->gnssPositionData->utcTime->month,
+              p->gnssPositionData->utcTime->day,
+              p->gnssPositionData->utcTime->hour,
+              p->gnssPositionData->utcTime->minute,
+              p->gnssPositionData->utcTime->second,
+              mssince1970);
 
 #ifdef OpGNSSPositionData_PRINT_ENABLED
         Icb_OpGNSSPositionData_Response_Print(p);
@@ -270,19 +291,28 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
 void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
     Icb_OpGNSSPositionDataAccuracy_Response p = nullptr;
 
-    ALOGV("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d", (int)msg.pdu.header.serviceID,
-          (int)msg.pdu.header.operationID, (int)msg.pdu.header.operationType, msg.pdu.header.seqNbr,
+    ALOGV("cbGNSSPositionDataAccuracyNotification %04X.%04X.%02d 0x%08X. size: %d",
+          (int)msg.pdu.header.serviceID,
+          (int)msg.pdu.header.operationID,
+          (int)msg.pdu.header.operationType,
+          msg.pdu.header.seqNbr,
           (int)msg.pdu.payload.size());
 
-    if (InfotainmentIpBus::Utils::DecodeMessage(msg.pdu.payload, m_session_msgd, p,
+    if (InfotainmentIpBus::Utils::DecodeMessage(msg.pdu.payload,
+                                                m_session_msgd,
+                                                p,
                                                 Icb_OpGNSSPositionDataAccuracy_Response_Create,
                                                 Icb_OpGNSSPositionDataAccuracy_Response_Decode)) {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
-        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld", p->gnssPositionDataAccuracy->utcTime->year,
-              p->gnssPositionDataAccuracy->utcTime->month, p->gnssPositionDataAccuracy->utcTime->day,
-              p->gnssPositionDataAccuracy->utcTime->hour, p->gnssPositionDataAccuracy->utcTime->minute,
-              p->gnssPositionDataAccuracy->utcTime->second, mssince1970);
+        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
+              p->gnssPositionDataAccuracy->utcTime->year,
+              p->gnssPositionDataAccuracy->utcTime->month,
+              p->gnssPositionDataAccuracy->utcTime->day,
+              p->gnssPositionDataAccuracy->utcTime->hour,
+              p->gnssPositionDataAccuracy->utcTime->minute,
+              p->gnssPositionDataAccuracy->utcTime->second,
+              mssince1970);
 
 #ifdef OpGNSSPositionDataAccuracy_PRINT_ENABLED
         Icb_OpGNSSPositionDataAccuracy_Response_Print(p);

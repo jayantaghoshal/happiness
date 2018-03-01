@@ -349,7 +349,9 @@ bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* n
 
         // Set IP address
         if (ioctl(inet_sock_fd, SIOCSIFADDR, &ifr) == -1) {
-            ALOGE("%s: ioctl call set ip address %s failed for device. Error is [%s]", interface_name, ip_addr,
+            ALOGE("%s: ioctl call set ip address %s failed for device. Error is [%s]",
+                  interface_name,
+                  ip_addr,
                   strerror(errno));
             close(inet_sock_fd);
             return false;
@@ -438,7 +440,9 @@ bool SetMacAddress(const std::vector<uint8_t>& mac_address, const char* interfac
     std::string printable_mac_address(mac_address.begin(), mac_address.end());
     if (ioctl(sockfd, SIOCSIFHWADDR, &ifr_mac) == -1) {
         close(sockfd);
-        ALOGE("Unable to set MAC address (%s) for %s, errno %s.", printable_mac_address.c_str(), interface_name,
+        ALOGE("Unable to set MAC address (%s) for %s, errno %s.",
+              printable_mac_address.c_str(),
+              interface_name,
               strerror(errno));
         return false;
     }
@@ -458,8 +462,13 @@ void PrintInterfaceConfiguration(const std::string& context, const InterfaceConf
     ALOGV("Interface configuration: %s", context.c_str());
     ALOGV("Interface name: %s", conf.name.c_str());
     ALOGV("Mac address: %s", conf.mac_address.c_str());
-    ALOGV("Mac address bytes: %02x:%02x:%02x:%02x:%02x:%02x", conf.mac_address_bytes[0], conf.mac_address_bytes[1],
-          conf.mac_address_bytes[2], conf.mac_address_bytes[3], conf.mac_address_bytes[4], conf.mac_address_bytes[5]);
+    ALOGV("Mac address bytes: %02x:%02x:%02x:%02x:%02x:%02x",
+          conf.mac_address_bytes[0],
+          conf.mac_address_bytes[1],
+          conf.mac_address_bytes[2],
+          conf.mac_address_bytes[3],
+          conf.mac_address_bytes[4],
+          conf.mac_address_bytes[5]);
     ALOGV("IP address: %s", conf.ip_address.c_str());
     ALOGV("Broadcast address: %s", conf.broadcast_address.c_str());
     ALOGV("Netmask: %s", conf.netmask.c_str());
@@ -554,7 +563,8 @@ bool TakeInterfaceDown(const char* interface_name) {
     return ostr.good();
 }
 
-void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std::string& ns,
+void MoveNetworkInterfaceToNamespace(const std::string& current_name,
+                                     const std::string& ns,
                                      const std::string& new_name) {
     std::stringstream move_network_interface_cmd;
 
@@ -570,8 +580,12 @@ void MoveNetworkInterfaceToNamespace(const std::string& current_name, const std:
                          std::string("Failed to move ") + current_name);
 }
 
-bool SetupInterface(const char* interface_name, const std::vector<uint8_t>& mac_address, const char* ip_addr,
-                    const char* netmask, const char* broadcast_addr, const uint32_t mtu) {
+bool SetupInterface(const char* interface_name,
+                    const std::vector<uint8_t>& mac_address,
+                    const char* ip_addr,
+                    const char* netmask,
+                    const char* broadcast_addr,
+                    const uint32_t mtu) {
     ALOGD("%s: Setting configuration for network interface", interface_name);
 
     // TODO (Patrik Moberg): Remove hard coded implementation. General refactoring needed.
@@ -637,7 +651,9 @@ bool SetupVLan(const InterfaceConfiguration& interface_configuration) {
                 if (e.code().value() != ENOENT) throw;
             }
 
-            if (!SetIpAddress(entry.at("name").c_str(), entry.at("ip-address").c_str(), entry.at("netmask").c_str(),
+            if (!SetIpAddress(entry.at("name").c_str(),
+                              entry.at("ip-address").c_str(),
+                              entry.at("netmask").c_str(),
                               entry.at("broadcast-address").c_str())) {
                 return false;
             }

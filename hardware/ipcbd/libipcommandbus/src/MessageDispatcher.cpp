@@ -28,8 +28,8 @@ MessageDispatcher::MessageDispatcher(ITransportServices* transport, IDispatcher&
             std::bind(&MessageDispatcher::IPCBThread_cbIncomingNotification, this, std::placeholders::_1));
     m_transport->registerIncomingResponseCallback(
             std::bind(&MessageDispatcher::IPCBThread_cbIncomingResponse, this, std::placeholders::_1));
-    m_transport->registerErrorOnRequestCallback(std::bind(&MessageDispatcher::IPCBThread_cbIncomingError, this,
-                                                          std::placeholders::_1, std::placeholders::_2));
+    m_transport->registerErrorOnRequestCallback(std::bind(
+            &MessageDispatcher::IPCBThread_cbIncomingError, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void MessageDispatcher::setDiagnostics(IDiagnosticsClient* diagnostics) {
@@ -42,8 +42,11 @@ uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId servic
                                                     IpCmdTypes::OperationId operationId,
                                                     IpCmdTypes::OperationType operationType,
                                                     MessageCallback messageCb) {
-    ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'", (unsigned int)serviceId,
-          (unsigned int)operationId, (unsigned int)operationType, IpCmdTypes::toString(operationType));
+    ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'",
+          (unsigned int)serviceId,
+          (unsigned int)operationId,
+          (unsigned int)operationType,
+          IpCmdTypes::toString(operationType));
 
     std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
 
@@ -184,20 +187,26 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
             ALOGW("No callback registered for service %s'. Responding 'invalid op. type'.",
                   Pdu::toString(msg.pdu).c_str());
 
-            m_transport->sendError(msg.ecu, msg.pdu, ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
+            m_transport->sendError(msg.ecu,
+                                   msg.pdu,
+                                   ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
                                    static_cast<std::uint16_t>(msg.pdu.header.operation_type));
         } else if (serviceExists) {
             // The operation id is not supported at all (for any operation type).
             ALOGW("No callback registered for service %s. Responding 'invalid op. id'.",
                   Pdu::toString(msg.pdu).c_str());
 
-            m_transport->sendError(msg.ecu, msg.pdu, ITransportServices::ErrorCode::INVALID_OPERATION_ID,
+            m_transport->sendError(msg.ecu,
+                                   msg.pdu,
+                                   ITransportServices::ErrorCode::INVALID_OPERATION_ID,
                                    static_cast<std::uint16_t>(msg.pdu.header.operation_id));
         } else {
             ALOGW("No callback registered for service %s. Responding 'invalid service id'.",
                   Pdu::toString(msg.pdu).c_str());
 
-            m_transport->sendError(msg.ecu, msg.pdu, ITransportServices::ErrorCode::INVALID_SERVICE_ID,
+            m_transport->sendError(msg.ecu,
+                                   msg.pdu,
+                                   ITransportServices::ErrorCode::INVALID_SERVICE_ID,
                                    static_cast<std::uint16_t>(msg.pdu.header.service_id));
         }
         return false;
@@ -212,7 +221,9 @@ void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message& msg) {
             ALOGW("Application registered to handle incoming request died (%s). Responding 'invalid op. type'.",
                   Pdu::toString(msg.pdu).c_str());
 
-            m_transport->sendError(msg.ecu, msg.pdu, ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
+            m_transport->sendError(msg.ecu,
+                                   msg.pdu,
+                                   ITransportServices::ErrorCode::INVALID_OPERATION_TYPE,
                                    static_cast<std::uint16_t>(msg.pdu.header.operation_type));
         }
     } else {
@@ -310,7 +321,9 @@ void MessageDispatcher::IPCBThread_cbIncomingError(Message& msg, ITransportServi
 }
 
 void MessageDispatcher::AppThread_cbIncomingError(Message& msg, ITransportServices::ErrorType eType) {
-    ALOGD("Incoming error %u,  %s from %s", static_cast<uint32_t>(eType), Pdu::toString(msg.pdu).c_str(),
+    ALOGD("Incoming error %u,  %s from %s",
+          static_cast<uint32_t>(eType),
+          Pdu::toString(msg.pdu).c_str(),
           Message::EcuStr(msg.ecu));
 
     RequestsMap::iterator itc = m_requestsMap.find(msg.pdu.header.sender_handle_id);
@@ -375,8 +388,11 @@ void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& 
         }
     }
 
-    ALOGW("DecodeGenericError: error: 0x%X-%d:0x%X for %s, byte0 = 0x%02x'", errorReturn.errorCode,
-          errorReturn.exists__optional__errorInfo, errorReturn.errorInfo, Pdu::toString(msg.pdu).c_str(),
+    ALOGW("DecodeGenericError: error: 0x%X-%d:0x%X for %s, byte0 = 0x%02x'",
+          errorReturn.errorCode,
+          errorReturn.exists__optional__errorInfo,
+          errorReturn.errorInfo,
+          Pdu::toString(msg.pdu).c_str(),
           msg.pdu.payload[0]);
 }
 

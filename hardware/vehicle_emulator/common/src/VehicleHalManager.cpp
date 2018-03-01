@@ -145,7 +145,9 @@ Return<StatusCode> VehicleHalManager::subscribe(const sp<IVehicleCallback>& call
         if (areas != 0 && ((areas & config->supportedAreas) != areas)) {
             ALOGE("Failed to subscribe property 0x%x. Requested areas 0x%x are "
                   "out of supported range of 0x%x",
-                  prop, ops.vehicleAreas, config->supportedAreas);
+                  prop,
+                  ops.vehicleAreas,
+                  config->supportedAreas);
             return StatusCode::INVALID_ARG;
         }
 
@@ -154,8 +156,8 @@ Return<StatusCode> VehicleHalManager::subscribe(const sp<IVehicleCallback>& call
     }
 
     std::list<SubscribeOptions> updatedOptions;
-    auto res = mSubscriptionManager.addOrUpdateSubscription(getClientId(callback), callback, verifiedOptions,
-                                                            &updatedOptions);
+    auto res = mSubscriptionManager.addOrUpdateSubscription(
+            getClientId(callback), callback, verifiedOptions, &updatedOptions);
     if (StatusCode::OK != res) {
         ALOGW("%s failed to subscribe, error code: %d", __func__, res);
         return res;
@@ -183,10 +185,11 @@ void VehicleHalManager::init() {
 
     mHidlVecOfVehiclePropValuePool.resize(kMaxHidlVecOfVehiclPropValuePoolSize);
 
-    mBatchingConsumer.run(&mEventQueue, kHalEventBatchingTimeWindow,
-                          std::bind(&VehicleHalManager::onBatchHalEvent, this, _1));
+    mBatchingConsumer.run(
+            &mEventQueue, kHalEventBatchingTimeWindow, std::bind(&VehicleHalManager::onBatchHalEvent, this, _1));
 
-    mHal->init(&mValueObjectPool, std::bind(&VehicleHalManager::onHalEvent, this, _1),
+    mHal->init(&mValueObjectPool,
+               std::bind(&VehicleHalManager::onHalEvent, this, _1),
                std::bind(&VehicleHalManager::onHalPropertySetError, this, _1, _2, _3));
 
     // Initialize index with vehicle configurations received from VehicleHal.
@@ -236,7 +239,8 @@ void VehicleHalManager::onBatchHalEvent(const std::vector<VehiclePropValuePtr>& 
         }
         auto status = cv.client->getCallback()->onPropertyEvent(vec);
         if (!status.isOk()) {
-            ALOGE("Failed to notify client %s, err: %s", toString(cv.client->getCallback()).c_str(),
+            ALOGE("Failed to notify client %s, err: %s",
+                  toString(cv.client->getCallback()).c_str(),
                   status.description().c_str());
         }
     }
@@ -257,13 +261,15 @@ float VehicleHalManager::checkSampleRate(const VehiclePropConfig& config, float 
         if (sampleRate > config.maxSampleRate) {
             ALOGW("Sample rate %f is higher than max %f. Setting sampling rate "
                   "to max.",
-                  sampleRate, config.maxSampleRate);
+                  sampleRate,
+                  config.maxSampleRate);
             return config.maxSampleRate;
         }
         if (sampleRate < config.minSampleRate) {
             ALOGW("Sample rate %f is lower than min %f. Setting sampling rate "
                   "to min.",
-                  sampleRate, config.minSampleRate);
+                  sampleRate,
+                  config.minSampleRate);
             return config.minSampleRate;
         }
     }

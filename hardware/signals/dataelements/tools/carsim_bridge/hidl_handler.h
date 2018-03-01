@@ -25,7 +25,8 @@ namespace CarSim {
 class HidlHandler : public ISignalsChangedCallback {
   public:
     // The callbackfunction for HIDL
-    ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
+    ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName,
+                                                    Dir dir,
                                                     const ::android::hardware::hidl_string& data) override;
 
     // The handle to client connection.

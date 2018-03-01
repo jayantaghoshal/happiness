@@ -972,7 +972,8 @@ void Icb_OpSVTStatus_Notification_Print(Icb_OpSVTStatus_Notification ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpSVTStatus_Notification_Decode(Icb_OpSVTStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSVTStatus_Notification_Decode(Icb_OpSVTStatus_Notification ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -1107,7 +1108,8 @@ void Icb_OpTNStatus_Notification_Print(Icb_OpTNStatus_Notification ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTNStatus_Notification_Decode(Icb_OpTNStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTNStatus_Notification_Decode(Icb_OpTNStatus_Notification ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -1582,7 +1584,8 @@ void Icb_OpServiceActivation_Response_Print(Icb_OpServiceActivation_Response Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpServiceActivation_Response_Decode(Icb_OpServiceActivation_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceActivation_Response_Decode(Icb_OpServiceActivation_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -2106,7 +2109,8 @@ void Icb_OpTextMessage_SetRequest_Print(Icb_OpTextMessage_SetRequest ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTextMessage_SetRequest_Decode(Icb_OpTextMessage_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTextMessage_SetRequest_Decode(Icb_OpTextMessage_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -2216,7 +2220,8 @@ void Icb_OpIHUSystemInfo_Response_Print(Icb_OpIHUSystemInfo_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpIHUSystemInfo_Response_Decode(Icb_OpIHUSystemInfo_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpIHUSystemInfo_Response_Decode(Icb_OpIHUSystemInfo_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -2721,7 +2726,8 @@ void Icb_OpSoHWarning_Notification_Print(Icb_OpSoHWarning_Notification ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpSoHWarning_Notification_Decode(Icb_OpSoHWarning_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSoHWarning_Notification_Decode(Icb_OpSoHWarning_Notification ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_SBWarning_Decode(ThisPtr->sbWarning, session, stream));
@@ -2874,7 +2880,8 @@ void Icb_OpServiceBooking_Notification_Print(Icb_OpServiceBooking_Notification T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpServiceBooking_Notification_Decode(Icb_OpServiceBooking_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceBooking_Notification_Decode(Icb_OpServiceBooking_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->exists__optional__sbText, session, stream));
@@ -2958,7 +2965,8 @@ void Icb_OpSoHPackageUploaded_Notification_Print(Icb_OpSoHPackageUploaded_Notifi
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSoHPackageUploaded_Notification_Decode(Icb_OpSoHPackageUploaded_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(ASN_UTF8String_Decode(ThisPtr->packetID, session, stream, 0, 40));
     ASN_DECODE_CHECK(Icb_GenericOkStatus_Decode(&ThisPtr->result, session, stream));
@@ -3060,7 +3068,8 @@ void Icb_OpPSIMResetDataCounter_SetRequest_Print(Icb_OpPSIMResetDataCounter_SetR
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMResetDataCounter_SetRequest_Decode(Icb_OpPSIMResetDataCounter_SetRequest ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -3134,7 +3143,8 @@ void Icb_OpPSIMResetDataCounter_Response_Print(Icb_OpPSIMResetDataCounter_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMResetDataCounter_Response_Decode(Icb_OpPSIMResetDataCounter_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMResetDataCounter_Response_Decode(Icb_OpPSIMResetDataCounter_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -3299,7 +3309,8 @@ void Icb_AutomaticAPNConfiguration_Print(Icb_AutomaticAPNConfiguration ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_AutomaticAPNConfiguration_Decode(Icb_AutomaticAPNConfiguration ThisPtr, ASN_Session session,
+ASN_Result Icb_AutomaticAPNConfiguration_Decode(Icb_AutomaticAPNConfiguration ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->exists__optional__configuration, session, stream));
@@ -3510,7 +3521,8 @@ void Icb_OpPSIMConnect_SetRequest_Print(Icb_OpPSIMConnect_SetRequest ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMConnect_SetRequest_Decode(Icb_OpPSIMConnect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnect_SetRequest_Decode(Icb_OpPSIMConnect_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
@@ -3562,7 +3574,8 @@ void Icb_OpPSIMConnect_Response_Print(Icb_OpPSIMConnect_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMConnect_Response_Decode(Icb_OpPSIMConnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnect_Response_Decode(Icb_OpPSIMConnect_Response ThisPtr,
+                                             ASN_Session session,
                                              ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
@@ -3749,7 +3762,8 @@ void Icb_OpPSIMRoamingConfiguration_SetRequest_Print(Icb_OpPSIMRoamingConfigurat
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMRoamingConfiguration_SetRequest_Decode(Icb_OpPSIMRoamingConfiguration_SetRequest ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -3818,7 +3832,8 @@ void Icb_OpPSIMRoamingConfiguration_Response_Print(Icb_OpPSIMRoamingConfiguratio
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMRoamingConfiguration_Response_Decode(Icb_OpPSIMRoamingConfiguration_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -3886,7 +3901,8 @@ void Icb_OpAccessRightPinCode_Response_Print(Icb_OpAccessRightPinCode_Response T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpAccessRightPinCode_Response_Decode(Icb_OpAccessRightPinCode_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpAccessRightPinCode_Response_Decode(Icb_OpAccessRightPinCode_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -4012,7 +4028,8 @@ void Icb_OpFactoryDefaultRestore_Response_Print(Icb_OpFactoryDefaultRestore_Resp
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpFactoryDefaultRestore_Response_Decode(Icb_OpFactoryDefaultRestore_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream) {
+                                                       ASN_Session session,
+                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->restorationResult, session, stream));
     return ASN_RESULT_OK;
@@ -4064,7 +4081,8 @@ void Icb_OpConnectivityStatus_Response_Print(Icb_OpConnectivityStatus_Response T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpConnectivityStatus_Response_Decode(Icb_OpConnectivityStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpConnectivityStatus_Response_Decode(Icb_OpConnectivityStatus_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->generalConnectivityAvailable, session, stream));
@@ -4117,7 +4135,8 @@ void Icb_OpConnectivityStatus_Notification_Print(Icb_OpConnectivityStatus_Notifi
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpConnectivityStatus_Notification_Decode(Icb_OpConnectivityStatus_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->generalConnectivityAvailable, session, stream));
     return ASN_RESULT_OK;
@@ -4238,7 +4257,8 @@ void Icb_OpWorkshopWlanDetected_Notification_Print(Icb_OpWorkshopWlanDetected_No
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpWorkshopWlanDetected_Notification_Decode(Icb_OpWorkshopWlanDetected_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->mode, session, stream, 0, 2));
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->nomadicDevicePresent, session, stream));
@@ -4351,7 +4371,8 @@ void Icb_OpInternetSourceCtrlBT_SetRequest_Print(Icb_OpInternetSourceCtrlBT_SetR
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpInternetSourceCtrlBT_SetRequest_Decode(Icb_OpInternetSourceCtrlBT_SetRequest ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
     return ASN_RESULT_OK;
@@ -4403,7 +4424,8 @@ void Icb_OpInternetSourceCtrlBT_Response_Print(Icb_OpInternetSourceCtrlBT_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpInternetSourceCtrlBT_Response_Decode(Icb_OpInternetSourceCtrlBT_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetSourceCtrlBT_Response_Decode(Icb_OpInternetSourceCtrlBT_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
@@ -4456,7 +4478,8 @@ void Icb_OpInternetSourceCtrlBT_Notification_Print(Icb_OpInternetSourceCtrlBT_No
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpInternetSourceCtrlBT_Notification_Decode(Icb_OpInternetSourceCtrlBT_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
     return ASN_RESULT_OK;
@@ -4509,7 +4532,8 @@ void Icb_OpInternetSourceCtrlUSB_SetRequest_Print(Icb_OpInternetSourceCtrlUSB_Se
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpInternetSourceCtrlUSB_SetRequest_Decode(Icb_OpInternetSourceCtrlUSB_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
     return ASN_RESULT_OK;
@@ -4562,7 +4586,8 @@ void Icb_OpInternetSourceCtrlUSB_Response_Print(Icb_OpInternetSourceCtrlUSB_Resp
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpInternetSourceCtrlUSB_Response_Decode(Icb_OpInternetSourceCtrlUSB_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream) {
+                                                       ASN_Session session,
+                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
     return ASN_RESULT_OK;
@@ -4615,7 +4640,8 @@ void Icb_OpInternetSourceCtrlUSB_Notification_Print(Icb_OpInternetSourceCtrlUSB_
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpInternetSourceCtrlUSB_Notification_Decode(Icb_OpInternetSourceCtrlUSB_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream) {
+                                                           ASN_Session session,
+                                                           ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OnOffSetting_Decode(&ThisPtr->onOff, session, stream));
     return ASN_RESULT_OK;
@@ -4707,7 +4733,8 @@ void Icb_OpPSIMMessage_SetRequest_Print(Icb_OpPSIMMessage_SetRequest ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMMessage_SetRequest_Decode(Icb_OpPSIMMessage_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMMessage_SetRequest_Decode(Icb_OpPSIMMessage_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -5074,7 +5101,8 @@ void Icb_OpWLANSTADisconnect_Response_Print(Icb_OpWLANSTADisconnect_Response Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANSTADisconnect_Response_Decode(Icb_OpWLANSTADisconnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTADisconnect_Response_Decode(Icb_OpWLANSTADisconnect_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -5317,7 +5345,8 @@ void Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_Print(Icb_OpWLANSTAForgetReme
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_Decode(Icb_OpWLANSTAForgetRememberedNetwk_SetRequest ThisPtr,
-                                                                ASN_Session session, ASN_Stream stream) {
+                                                                ASN_Session session,
+                                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -5387,7 +5416,8 @@ void Icb_OpWLANSTAForgetRememberedNetwk_Response_Print(Icb_OpWLANSTAForgetRememb
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_Response_Decode(Icb_OpWLANSTAForgetRememberedNetwk_Response ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream) {
+                                                              ASN_Session session,
+                                                              ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -5509,7 +5539,8 @@ void Icb_OpPSIMSecurity_Response_Print(Icb_OpPSIMSecurity_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMSecurity_Response_Decode(Icb_OpPSIMSecurity_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMSecurity_Response_Decode(Icb_OpPSIMSecurity_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -6727,7 +6758,8 @@ void Icb_OpPSIMSignalStrength_Notification_Print(Icb_OpPSIMSignalStrength_Notifi
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMSignalStrength_Notification_Decode(Icb_OpPSIMSignalStrength_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -6904,7 +6936,8 @@ void Icb_OpPremiumAudio_SetRequest_Print(Icb_OpPremiumAudio_SetRequest ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPremiumAudio_SetRequest_Decode(Icb_OpPremiumAudio_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPremiumAudio_SetRequest_Decode(Icb_OpPremiumAudio_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -6973,7 +7006,8 @@ void Icb_OpPremiumAudio_Response_Print(Icb_OpPremiumAudio_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPremiumAudio_Response_Decode(Icb_OpPremiumAudio_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPremiumAudio_Response_Decode(Icb_OpPremiumAudio_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -7146,7 +7180,8 @@ void Icb_OpDLCConnectedSignal_Response_Print(Icb_OpDLCConnectedSignal_Response T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDLCConnectedSignal_Response_Decode(Icb_OpDLCConnectedSignal_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDLCConnectedSignal_Response_Decode(Icb_OpDLCConnectedSignal_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -7896,7 +7931,8 @@ void Icb_NrOfSatellitesPerSystem_Print(Icb_NrOfSatellitesPerSystem ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_NrOfSatellitesPerSystem_Decode(Icb_NrOfSatellitesPerSystem ThisPtr, ASN_Session session,
+ASN_Result Icb_NrOfSatellitesPerSystem_Decode(Icb_NrOfSatellitesPerSystem ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -8529,7 +8565,8 @@ void Icb_OpRemoteDiagnosticLink_Notification_Print(Icb_OpRemoteDiagnosticLink_No
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpRemoteDiagnosticLink_Notification_Decode(Icb_OpRemoteDiagnosticLink_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -8653,7 +8690,8 @@ void Icb_OpTextFromOperatorToUser_Notification_Print(Icb_OpTextFromOperatorToUse
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpTextFromOperatorToUser_Notification_Decode(Icb_OpTextFromOperatorToUser_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -8722,7 +8760,8 @@ void Icb_OpCurrentJ2534Session_Notification_Print(Icb_OpCurrentJ2534Session_Noti
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpCurrentJ2534Session_Notification_Decode(Icb_OpCurrentJ2534Session_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -8981,7 +9020,8 @@ void Icb_OpRequestUserAuthentication_Request_Print(Icb_OpRequestUserAuthenticati
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpRequestUserAuthentication_Request_Decode(Icb_OpRequestUserAuthentication_Request ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -9105,7 +9145,8 @@ void Icb_OpTextFromUserToOperator_Notification_Print(Icb_OpTextFromUserToOperato
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpTextFromUserToOperator_Notification_Decode(Icb_OpTextFromUserToOperator_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -9174,7 +9215,8 @@ void Icb_OpRequestRemoteDiagnostics_Notification_Print(Icb_OpRequestRemoteDiagno
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpRequestRemoteDiagnostics_Notification_Decode(Icb_OpRequestRemoteDiagnostics_Notification ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream) {
+                                                              ASN_Session session,
+                                                              ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -9243,7 +9285,8 @@ void Icb_OpAbortRemoteDiagnostics_Notification_Print(Icb_OpAbortRemoteDiagnostic
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpAbortRemoteDiagnostics_Notification_Decode(Icb_OpAbortRemoteDiagnostics_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -9633,7 +9676,8 @@ void Icb_OpCancelDownload_SetRequest_Print(Icb_OpCancelDownload_SetRequest ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpCancelDownload_SetRequest_Decode(Icb_OpCancelDownload_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCancelDownload_SetRequest_Decode(Icb_OpCancelDownload_SetRequest ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_UUID_Decode(ThisPtr->software, session, stream));
@@ -9685,7 +9729,8 @@ void Icb_OpCancelDownload_Response_Print(Icb_OpCancelDownload_Response ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpCancelDownload_Response_Decode(Icb_OpCancelDownload_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCancelDownload_Response_Decode(Icb_OpCancelDownload_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_GenericOkStatus_Decode(&ThisPtr->status, session, stream));
@@ -10064,7 +10109,8 @@ void Icb_OpLocalStorage_Response_Print(Icb_OpLocalStorage_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpLocalStorage_Response_Decode(Icb_OpLocalStorage_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpLocalStorage_Response_Decode(Icb_OpLocalStorage_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -10133,7 +10179,8 @@ void Icb_OpTvmVehicleInfo_Response_Print(Icb_OpTvmVehicleInfo_Response ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTvmVehicleInfo_Response_Decode(Icb_OpTvmVehicleInfo_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTvmVehicleInfo_Response_Decode(Icb_OpTvmVehicleInfo_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -10202,7 +10249,8 @@ void Icb_OpTvmVehicleInfo_Notification_Print(Icb_OpTvmVehicleInfo_Notification T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTvmVehicleInfo_Notification_Decode(Icb_OpTvmVehicleInfo_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTvmVehicleInfo_Notification_Decode(Icb_OpTvmVehicleInfo_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -10301,8 +10349,11 @@ ASN_Result Icb_ArrayOf_ClimateTimer_SetSize(Icb_ArrayOf_ClimateTimer ThisPtr, AS
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_ClimateTimer_Decode(Icb_ArrayOf_ClimateTimer ThisPtr, ASN_Session session, ASN_Stream stream,
-                                           S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_ClimateTimer_Decode(Icb_ArrayOf_ClimateTimer ThisPtr,
+                                           ASN_Session session,
+                                           ASN_Stream stream,
+                                           S32 min,
+                                           S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -10389,7 +10440,10 @@ ASN_Result Icb_ArrayOf_OnOff_SetSize(Icb_ArrayOf_OnOff ThisPtr, ASN_Session sess
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_OnOff_Decode(Icb_ArrayOf_OnOff ThisPtr, ASN_Session session, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_OnOff_Decode(Icb_ArrayOf_OnOff ThisPtr,
+                                    ASN_Session session,
+                                    ASN_Stream stream,
+                                    S32 min,
                                     S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -10467,7 +10521,8 @@ ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_Encode(Icb_OpGenericSett
 }
 
 ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_SetSize(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr,
-                                                                ASN_Session session, U32 size) {
+                                                                ASN_Session session,
+                                                                U32 size) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
@@ -10486,7 +10541,8 @@ ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_SetSize(Icb_OpGenericSet
 }
 
 ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_Decode(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr,
-                                                               ASN_Session session, ASN_Stream stream) {
+                                                               ASN_Session session,
+                                                               ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, 0, 50));
@@ -10581,7 +10637,10 @@ ASN_Result Icb_ArrayOf_Setting_SetSize(Icb_ArrayOf_Setting ThisPtr, ASN_Session 
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_Setting_Decode(Icb_ArrayOf_Setting ThisPtr, ASN_Session session, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_Setting_Decode(Icb_ArrayOf_Setting ThisPtr,
+                                      ASN_Session session,
+                                      ASN_Stream stream,
+                                      S32 min,
                                       S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -10675,7 +10734,10 @@ ASN_Result Icb_ArrayOf_SBWarning_SetSize(Icb_ArrayOf_SBWarning ThisPtr, ASN_Sess
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_SBWarning_Decode(Icb_ArrayOf_SBWarning ThisPtr, ASN_Session session, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_SBWarning_Decode(Icb_ArrayOf_SBWarning ThisPtr,
+                                        ASN_Session session,
+                                        ASN_Stream stream,
+                                        S32 min,
                                         S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -10737,7 +10799,9 @@ U32 Icb_ArrayOf_WLANFrequencyBand_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_WLANFrequencyBand_Encode(Icb_ArrayOf_WLANFrequencyBand ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_WLANFrequencyBand_Encode(Icb_ArrayOf_WLANFrequencyBand ThisPtr,
+                                                ASN_Stream stream,
+                                                S32 min,
                                                 S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -10766,8 +10830,11 @@ ASN_Result Icb_ArrayOf_WLANFrequencyBand_SetSize(Icb_ArrayOf_WLANFrequencyBand T
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_WLANFrequencyBand_Decode(Icb_ArrayOf_WLANFrequencyBand ThisPtr, ASN_Session session,
-                                                ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_WLANFrequencyBand_Decode(Icb_ArrayOf_WLANFrequencyBand ThisPtr,
+                                                ASN_Session session,
+                                                ASN_Stream stream,
+                                                S32 min,
+                                                S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -10862,8 +10929,11 @@ ASN_Result Icb_ArrayOf_WLANConnDevice_SetSize(Icb_ArrayOf_WLANConnDevice ThisPtr
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_WLANConnDevice_Decode(Icb_ArrayOf_WLANConnDevice ThisPtr, ASN_Session session, ASN_Stream stream,
-                                             S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_WLANConnDevice_Decode(Icb_ArrayOf_WLANConnDevice ThisPtr,
+                                             ASN_Session session,
+                                             ASN_Stream stream,
+                                             S32 min,
+                                             S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -10908,7 +10978,8 @@ Icb_ArrayOf_AvailableNetworkInformation Icb_ArrayOf_AvailableNetworkInformation_
     return value;
 }
 
-U32 Icb_ArrayOf_AvailableNetworkInformation_EncodedSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr, S32 min,
+U32 Icb_ArrayOf_AvailableNetworkInformation_EncodedSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
+                                                        S32 min,
                                                         S32 max) {
     U32 i;
     U32 length = ASN_U32CountBits(min, max);
@@ -10926,7 +10997,9 @@ U32 Icb_ArrayOf_AvailableNetworkInformation_SessionSize(S32 min, S32 max) {
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Encode(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                          ASN_Stream stream, S32 min, S32 max) {
+                                                          ASN_Stream stream,
+                                                          S32 min,
+                                                          S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_ENCODE_CHECK(U32_Encode(ThisPtr->actual_size, stream, min, max));
@@ -10937,7 +11010,8 @@ ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Encode(Icb_ArrayOf_AvailableN
 }
 
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_SetSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                           ASN_Session session, U32 size) {
+                                                           ASN_Session session,
+                                                           U32 size) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
 
@@ -10962,7 +11036,10 @@ ASN_Result Icb_ArrayOf_AvailableNetworkInformation_SetSize(Icb_ArrayOf_Available
 }
 
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Decode(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream, S32 min, S32 max) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream,
+                                                          S32 min,
+                                                          S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -10975,7 +11052,8 @@ ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Decode(Icb_ArrayOf_AvailableN
 }
 
 Icb_AvailableNetworkInformation Icb_ArrayOf_AvailableNetworkInformation_GetIndex(
-        Icb_ArrayOf_AvailableNetworkInformation ThisPtr, U32 index) {
+        Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
+        U32 index) {
     if (index < ThisPtr->min_size || index > ThisPtr->max_size) return (Icb_AvailableNetworkInformation)NULL;
     return ThisPtr->data_array[index];
 }
@@ -11117,7 +11195,9 @@ U32 Icb_ArrayOf_NetworkOperator_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_NetworkOperator_Encode(Icb_ArrayOf_NetworkOperator ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_NetworkOperator_Encode(Icb_ArrayOf_NetworkOperator ThisPtr,
+                                              ASN_Stream stream,
+                                              S32 min,
                                               S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11152,8 +11232,11 @@ ASN_Result Icb_ArrayOf_NetworkOperator_SetSize(Icb_ArrayOf_NetworkOperator ThisP
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_NetworkOperator_Decode(Icb_ArrayOf_NetworkOperator ThisPtr, ASN_Session session,
-                                              ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_NetworkOperator_Decode(Icb_ArrayOf_NetworkOperator ThisPtr,
+                                              ASN_Session session,
+                                              ASN_Stream stream,
+                                              S32 min,
+                                              S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11214,7 +11297,9 @@ U32 Icb_ArrayOf_RadioFrequencyHz_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_RadioFrequencyHz_Encode(Icb_ArrayOf_RadioFrequencyHz ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_RadioFrequencyHz_Encode(Icb_ArrayOf_RadioFrequencyHz ThisPtr,
+                                               ASN_Stream stream,
+                                               S32 min,
                                                S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11243,8 +11328,11 @@ ASN_Result Icb_ArrayOf_RadioFrequencyHz_SetSize(Icb_ArrayOf_RadioFrequencyHz Thi
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_RadioFrequencyHz_Decode(Icb_ArrayOf_RadioFrequencyHz ThisPtr, ASN_Session session,
-                                               ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_RadioFrequencyHz_Decode(Icb_ArrayOf_RadioFrequencyHz ThisPtr,
+                                               ASN_Session session,
+                                               ASN_Stream stream,
+                                               S32 min,
+                                               S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11305,7 +11393,9 @@ U32 Icb_ArrayOf_ApprovalStatusType_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_ApprovalStatusType_Encode(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_ApprovalStatusType_Encode(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                 ASN_Stream stream,
+                                                 S32 min,
                                                  S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11316,7 +11406,8 @@ ASN_Result Icb_ArrayOf_ApprovalStatusType_Encode(Icb_ArrayOf_ApprovalStatusType 
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Session session,
+ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                  ASN_Session session,
                                                   U32 size) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11341,8 +11432,11 @@ ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_ApprovalStatusType_Decode(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Session session,
-                                                 ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_ApprovalStatusType_Decode(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                 ASN_Session session,
+                                                 ASN_Stream stream,
+                                                 S32 min,
+                                                 S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11403,7 +11497,9 @@ U32 Icb_ArrayOf_SoftwareProduct_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_SoftwareProduct_Encode(Icb_ArrayOf_SoftwareProduct ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_SoftwareProduct_Encode(Icb_ArrayOf_SoftwareProduct ThisPtr,
+                                              ASN_Stream stream,
+                                              S32 min,
                                               S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11438,8 +11534,11 @@ ASN_Result Icb_ArrayOf_SoftwareProduct_SetSize(Icb_ArrayOf_SoftwareProduct ThisP
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_SoftwareProduct_Decode(Icb_ArrayOf_SoftwareProduct ThisPtr, ASN_Session session,
-                                              ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_SoftwareProduct_Decode(Icb_ArrayOf_SoftwareProduct ThisPtr,
+                                              ASN_Session session,
+                                              ASN_Stream stream,
+                                              S32 min,
+                                              S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11627,8 +11726,11 @@ ASN_Result Icb_ArrayOf_PartIdentifier_SetSize(Icb_ArrayOf_PartIdentifier ThisPtr
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_PartIdentifier_Decode(Icb_ArrayOf_PartIdentifier ThisPtr, ASN_Session session, ASN_Stream stream,
-                                             S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_PartIdentifier_Decode(Icb_ArrayOf_PartIdentifier ThisPtr,
+                                             ASN_Session session,
+                                             ASN_Stream stream,
+                                             S32 min,
+                                             S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11689,7 +11791,9 @@ U32 Icb_ArrayOf_InstallationData_SessionSize(S32 min, S32 max) {
 }
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
-ASN_Result Icb_ArrayOf_InstallationData_Encode(Icb_ArrayOf_InstallationData ThisPtr, ASN_Stream stream, S32 min,
+ASN_Result Icb_ArrayOf_InstallationData_Encode(Icb_ArrayOf_InstallationData ThisPtr,
+                                               ASN_Stream stream,
+                                               S32 min,
                                                S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
@@ -11724,8 +11828,11 @@ ASN_Result Icb_ArrayOf_InstallationData_SetSize(Icb_ArrayOf_InstallationData Thi
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_InstallationData_Decode(Icb_ArrayOf_InstallationData ThisPtr, ASN_Session session,
-                                               ASN_Stream stream, S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_InstallationData_Decode(Icb_ArrayOf_InstallationData ThisPtr,
+                                               ASN_Session session,
+                                               ASN_Stream stream,
+                                               S32 min,
+                                               S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11820,8 +11927,11 @@ ASN_Result Icb_ArrayOf_InstalledData_SetSize(Icb_ArrayOf_InstalledData ThisPtr, 
     return ASN_RESULT_OK;
 }
 
-ASN_Result Icb_ArrayOf_InstalledData_Decode(Icb_ArrayOf_InstalledData ThisPtr, ASN_Session session, ASN_Stream stream,
-                                            S32 min, S32 max) {
+ASN_Result Icb_ArrayOf_InstalledData_Decode(Icb_ArrayOf_InstalledData ThisPtr,
+                                            ASN_Session session,
+                                            ASN_Stream stream,
+                                            S32 min,
+                                            S32 max) {
     ASN_Result result = ASN_RESULT_OK;
     U32 i;
     ASN_DECODE_CHECK(U32_Decode(&ThisPtr->actual_size, session, stream, min, max));
@@ -11970,7 +12080,8 @@ void Icb_OpTelematicSettings_SetRequest_Print(Icb_OpTelematicSettings_SetRequest
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTelematicSettings_SetRequest_Decode(Icb_OpTelematicSettings_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTelematicSettings_SetRequest_Decode(Icb_OpTelematicSettings_SetRequest ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12045,7 +12156,8 @@ void Icb_OpTelematicSettings_Response_Print(Icb_OpTelematicSettings_Response Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTelematicSettings_Response_Decode(Icb_OpTelematicSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTelematicSettings_Response_Decode(Icb_OpTelematicSettings_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12114,7 +12226,8 @@ void Icb_OpPositionData_Response_Print(Icb_OpPositionData_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPositionData_Response_Decode(Icb_OpPositionData_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPositionData_Response_Decode(Icb_OpPositionData_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12202,7 +12315,8 @@ void Icb_WGS84SimplePositionData_Print(Icb_WGS84SimplePositionData ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_WGS84SimplePositionData_Decode(Icb_WGS84SimplePositionData ThisPtr, ASN_Session session,
+ASN_Result Icb_WGS84SimplePositionData_Decode(Icb_WGS84SimplePositionData ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12293,7 +12407,8 @@ void Icb_OpSubscriptionActivation_SetRequest_Print(Icb_OpSubscriptionActivation_
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSubscriptionActivation_SetRequest_Decode(Icb_OpSubscriptionActivation_SetRequest ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -12370,7 +12485,8 @@ void Icb_OpSubscriptionActivation_Response_Print(Icb_OpSubscriptionActivation_Re
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSubscriptionActivation_Response_Decode(Icb_OpSubscriptionActivation_Response ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -12439,7 +12555,8 @@ void Icb_OpSubscriptionActivation_Notification_Print(Icb_OpSubscriptionActivatio
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSubscriptionActivation_Notification_Decode(Icb_OpSubscriptionActivation_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -12513,7 +12630,8 @@ void Icb_OpServiceActivation_SetRequest_Print(Icb_OpServiceActivation_SetRequest
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpServiceActivation_SetRequest_Decode(Icb_OpServiceActivation_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceActivation_SetRequest_Decode(Icb_OpServiceActivation_SetRequest ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12631,7 +12749,8 @@ void Icb_OpRescueStatus_Response_Print(Icb_OpRescueStatus_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpRescueStatus_Response_Decode(Icb_OpRescueStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpRescueStatus_Response_Decode(Icb_OpRescueStatus_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12763,7 +12882,8 @@ void Icb_OpRescueStatus_Notification_Print(Icb_OpRescueStatus_Notification ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpRescueStatus_Notification_Decode(Icb_OpRescueStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpRescueStatus_Notification_Decode(Icb_OpRescueStatus_Notification ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -12854,7 +12974,8 @@ void Icb_OpSendToCarConfirmation_SetRequest_Print(Icb_OpSendToCarConfirmation_Se
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSendToCarConfirmation_SetRequest_Decode(Icb_OpSendToCarConfirmation_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -12931,7 +13052,8 @@ void Icb_OpSendToCarConfirmation_Response_Print(Icb_OpSendToCarConfirmation_Resp
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSendToCarConfirmation_Response_Decode(Icb_OpSendToCarConfirmation_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream) {
+                                                       ASN_Session session,
+                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -13095,7 +13217,8 @@ void Icb_OpSendToCar_SetRequest_Print(Icb_OpSendToCar_SetRequest ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpSendToCar_SetRequest_Decode(Icb_OpSendToCar_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSendToCar_SetRequest_Decode(Icb_OpSendToCar_SetRequest ThisPtr,
+                                             ASN_Session session,
                                              ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -13173,7 +13296,8 @@ void Icb_OpUserPrivacySettings_Notification_Print(Icb_OpUserPrivacySettings_Noti
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpUserPrivacySettings_Notification_Decode(Icb_OpUserPrivacySettings_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -13248,7 +13372,8 @@ void Icb_OpClimateTimers_SetRequest_Print(Icb_OpClimateTimers_SetRequest ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpClimateTimers_SetRequest_Decode(Icb_OpClimateTimers_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpClimateTimers_SetRequest_Decode(Icb_OpClimateTimers_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->timestamp, session, stream));
@@ -13317,7 +13442,8 @@ void Icb_OpClimateTimers_Response_Print(Icb_OpClimateTimers_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpClimateTimers_Response_Decode(Icb_OpClimateTimers_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpClimateTimers_Response_Decode(Icb_OpClimateTimers_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->timestamp, session, stream));
@@ -13432,7 +13558,8 @@ void Icb_OpGenericSettingSynch_Request_Print(Icb_OpGenericSettingSynch_Request T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpGenericSettingSynch_Request_Decode(Icb_OpGenericSettingSynch_Request ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGenericSettingSynch_Request_Decode(Icb_OpGenericSettingSynch_Request ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->time, session, stream));
@@ -13495,7 +13622,8 @@ void Icb_OpGenericSettingSynch_SetRequest_Print(Icb_OpGenericSettingSynch_SetReq
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpGenericSettingSynch_SetRequest_Decode(Icb_OpGenericSettingSynch_SetRequest ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream) {
+                                                       ASN_Session session,
+                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->time, session, stream));
     ASN_DECODE_CHECK(Icb_ArrayOf_Setting_Decode(ThisPtr->settings, session, stream, 0, 50));
@@ -13557,7 +13685,8 @@ void Icb_OpGenericSettingSynch_Response_Print(Icb_OpGenericSettingSynch_Response
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpGenericSettingSynch_Response_Decode(Icb_OpGenericSettingSynch_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGenericSettingSynch_Response_Decode(Icb_OpGenericSettingSynch_Response ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->time, session, stream));
@@ -13620,7 +13749,8 @@ void Icb_OpGenericSettingSynch_Notification_Print(Icb_OpGenericSettingSynch_Noti
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpGenericSettingSynch_Notification_Decode(Icb_OpGenericSettingSynch_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_DateTime_Decode(ThisPtr->time, session, stream));
     ASN_DECODE_CHECK(Icb_ArrayOf_Setting_Decode(ThisPtr->settings, session, stream, 0, 50));
@@ -13791,7 +13921,8 @@ void Icb_OpSoHPacketSend_SetRequestNoReturn_Print(Icb_OpSoHPacketSend_SetRequest
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpSoHPacketSend_SetRequestNoReturn_Decode(Icb_OpSoHPacketSend_SetRequestNoReturn ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->exists__optional__sbText, session, stream));
     ASN_DECODE_CHECK(BOOL_Decode(&ThisPtr->exists__optional__sbMainCause, session, stream));
@@ -13875,7 +14006,8 @@ void Icb_OpPSIMDataCounter_Response_Print(Icb_OpPSIMDataCounter_Response ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMDataCounter_Response_Decode(Icb_OpPSIMDataCounter_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMDataCounter_Response_Decode(Icb_OpPSIMDataCounter_Response ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -13949,7 +14081,8 @@ void Icb_OpPSIMNetworkConfiguration_SetRequest_Print(Icb_OpPSIMNetworkConfigurat
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMNetworkConfiguration_SetRequest_Decode(Icb_OpPSIMNetworkConfiguration_SetRequest ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -14019,7 +14152,8 @@ void Icb_OpPSIMNetworkConfiguration_Response_Print(Icb_OpPSIMNetworkConfiguratio
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMNetworkConfiguration_Response_Decode(Icb_OpPSIMNetworkConfiguration_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -14092,7 +14226,8 @@ void Icb_OpPSIMConnectionStatus_Response_Print(Icb_OpPSIMConnectionStatus_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMConnectionStatus_Response_Decode(Icb_OpPSIMConnectionStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnectionStatus_Response_Decode(Icb_OpPSIMConnectionStatus_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_PSIMConnectionStatus_Decode(&ThisPtr->status, session, stream));
@@ -14153,7 +14288,8 @@ void Icb_OpPSIMConnectionStatus_Notification_Print(Icb_OpPSIMConnectionStatus_No
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMConnectionStatus_Notification_Decode(Icb_OpPSIMConnectionStatus_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_PSIMConnectionStatus_Decode(&ThisPtr->status, session, stream));
     ASN_DECODE_CHECK(Icb_WirelessTechnology_Decode(&ThisPtr->technology, session, stream));
@@ -14207,7 +14343,8 @@ void Icb_OpInternetGateway_SetRequest_Print(Icb_OpInternetGateway_SetRequest Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpInternetGateway_SetRequest_Decode(Icb_OpInternetGateway_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetGateway_SetRequest_Decode(Icb_OpInternetGateway_SetRequest ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_Ecu_Decode(&ThisPtr->internetGateway, session, stream));
@@ -14259,7 +14396,8 @@ void Icb_OpInternetGateway_Response_Print(Icb_OpInternetGateway_Response ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpInternetGateway_Response_Decode(Icb_OpInternetGateway_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetGateway_Response_Decode(Icb_OpInternetGateway_Response ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_Ecu_Decode(&ThisPtr->internetGateway, session, stream));
@@ -14312,7 +14450,8 @@ void Icb_OpConnectWorkshopWlan_Notification_Print(Icb_OpConnectWorkshopWlan_Noti
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpConnectWorkshopWlan_Notification_Decode(Icb_OpConnectWorkshopWlan_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_WorkshopWlanConnectionResult_Decode(&ThisPtr->connectionResult, session, stream));
     return ASN_RESULT_OK;
@@ -14365,7 +14504,8 @@ void Icb_OpCurrentInternetSource_SetRequest_Print(Icb_OpCurrentInternetSource_Se
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpCurrentInternetSource_SetRequest_Decode(Icb_OpCurrentInternetSource_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_InternetSource_Decode(&ThisPtr->currentinternetsource, session, stream));
     return ASN_RESULT_OK;
@@ -14418,7 +14558,8 @@ void Icb_OpCurrentInternetSource_Response_Print(Icb_OpCurrentInternetSource_Resp
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpCurrentInternetSource_Response_Decode(Icb_OpCurrentInternetSource_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream) {
+                                                       ASN_Session session,
+                                                       ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_InternetSource_Decode(&ThisPtr->currentinternetsource, session, stream));
     return ASN_RESULT_OK;
@@ -14471,7 +14612,8 @@ void Icb_OpCurrentInternetSource_Notification_Print(Icb_OpCurrentInternetSource_
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpCurrentInternetSource_Notification_Decode(Icb_OpCurrentInternetSource_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream) {
+                                                           ASN_Session session,
+                                                           ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_InternetSource_Decode(&ThisPtr->currentinternetsource, session, stream));
     return ASN_RESULT_OK;
@@ -14658,7 +14800,8 @@ void Icb_OpWLANMode_Notification_Print(Icb_OpWLANMode_Notification ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANMode_Notification_Decode(Icb_OpWLANMode_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANMode_Notification_Decode(Icb_OpWLANMode_Notification ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -14726,7 +14869,8 @@ void Icb_OpWLANFreqBandSelect_SetRequest_Print(Icb_OpWLANFreqBandSelect_SetReque
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANFreqBandSelect_SetRequest_Decode(Icb_OpWLANFreqBandSelect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANFreqBandSelect_SetRequest_Decode(Icb_OpWLANFreqBandSelect_SetRequest ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -14801,7 +14945,8 @@ void Icb_OpWLANFreqBandSelect_Response_Print(Icb_OpWLANFreqBandSelect_Response T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANFreqBandSelect_Response_Decode(Icb_OpWLANFreqBandSelect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANFreqBandSelect_Response_Decode(Icb_OpWLANFreqBandSelect_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -14946,7 +15091,8 @@ void Icb_OpWLANAPSSID_SetRequest_Print(Icb_OpWLANAPSSID_SetRequest ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPSSID_SetRequest_Decode(Icb_OpWLANAPSSID_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPSSID_SetRequest_Decode(Icb_OpWLANAPSSID_SetRequest ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15083,7 +15229,8 @@ void Icb_OpWLANAPPasswd_SetRequest_Print(Icb_OpWLANAPPasswd_SetRequest ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPPasswd_SetRequest_Decode(Icb_OpWLANAPPasswd_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPPasswd_SetRequest_Decode(Icb_OpWLANAPPasswd_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15152,7 +15299,8 @@ void Icb_OpWLANAPPasswd_Response_Print(Icb_OpWLANAPPasswd_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPPasswd_Response_Decode(Icb_OpWLANAPPasswd_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPPasswd_Response_Decode(Icb_OpWLANAPPasswd_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15221,7 +15369,8 @@ void Icb_OpWLANAPConnDev_Response_Print(Icb_OpWLANAPConnDev_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPConnDev_Response_Decode(Icb_OpWLANAPConnDev_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPConnDev_Response_Decode(Icb_OpWLANAPConnDev_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15290,7 +15439,8 @@ void Icb_OpWLANAPConnDev_Notification_Print(Icb_OpWLANAPConnDev_Notification Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPConnDev_Notification_Decode(Icb_OpWLANAPConnDev_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPConnDev_Notification_Decode(Icb_OpWLANAPConnDev_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15366,7 +15516,8 @@ void Icb_OpWLANSTAConnect_SetRequest_Print(Icb_OpWLANSTAConnect_SetRequest ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANSTAConnect_SetRequest_Decode(Icb_OpWLANSTAConnect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAConnect_SetRequest_Decode(Icb_OpWLANSTAConnect_SetRequest ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15443,7 +15594,8 @@ void Icb_OpWLANSTAConnect_Response_Print(Icb_OpWLANSTAConnect_Response ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANSTAConnect_Response_Decode(Icb_OpWLANSTAConnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAConnect_Response_Decode(Icb_OpWLANSTAConnect_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15539,7 +15691,8 @@ void Icb_OpWLANAPStatusSettings_Response_Print(Icb_OpWLANAPStatusSettings_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANAPStatusSettings_Response_Decode(Icb_OpWLANAPStatusSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPStatusSettings_Response_Decode(Icb_OpWLANAPStatusSettings_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15645,7 +15798,8 @@ void Icb_OpWLANSTAStatus_Response_Print(Icb_OpWLANSTAStatus_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANSTAStatus_Response_Decode(Icb_OpWLANSTAStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAStatus_Response_Decode(Icb_OpWLANSTAStatus_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15733,7 +15887,8 @@ void Icb_OpWLANSTAStatus_Notification_Print(Icb_OpWLANSTAStatus_Notification Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpWLANSTAStatus_Notification_Decode(Icb_OpWLANSTAStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAStatus_Notification_Decode(Icb_OpWLANSTAStatus_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15833,7 +15988,8 @@ void Icb_AvailableNetworkInformation_Print(Icb_AvailableNetworkInformation ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_AvailableNetworkInformation_Decode(Icb_AvailableNetworkInformation ThisPtr, ASN_Session session,
+ASN_Result Icb_AvailableNetworkInformation_Decode(Icb_AvailableNetworkInformation ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -15915,7 +16071,8 @@ void Icb_OpWLANSTARememberedNetwks_Response_Print(Icb_OpWLANSTARememberedNetwks_
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpWLANSTARememberedNetwks_Response_Decode(Icb_OpWLANSTARememberedNetwks_Response ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -15990,7 +16147,8 @@ void Icb_OpPSIMSecurity_SetRequest_Print(Icb_OpPSIMSecurity_SetRequest ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMSecurity_SetRequest_Decode(Icb_OpPSIMSecurity_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMSecurity_SetRequest_Decode(Icb_OpPSIMSecurity_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -16061,7 +16219,8 @@ void Icb_OpPSIMEnterCode_SetRequest_Print(Icb_OpPSIMEnterCode_SetRequest ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMEnterCode_SetRequest_Decode(Icb_OpPSIMEnterCode_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMEnterCode_SetRequest_Decode(Icb_OpPSIMEnterCode_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -16130,7 +16289,8 @@ void Icb_OpPSIMRegisterState_Response_Print(Icb_OpPSIMRegisterState_Response Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMRegisterState_Response_Decode(Icb_OpPSIMRegisterState_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMRegisterState_Response_Decode(Icb_OpPSIMRegisterState_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -16291,7 +16451,8 @@ void Icb_OpPSIMNetworkOperators_Response_Print(Icb_OpPSIMNetworkOperators_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpPSIMNetworkOperators_Response_Decode(Icb_OpPSIMNetworkOperators_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMNetworkOperators_Response_Decode(Icb_OpPSIMNetworkOperators_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -16361,7 +16522,8 @@ void Icb_OpPSIMNetworkOperatorCommand_SetRequest_Print(Icb_OpPSIMNetworkOperator
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_SetRequest_Decode(Icb_OpPSIMNetworkOperatorCommand_SetRequest ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream) {
+                                                              ASN_Session session,
+                                                              ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -16437,7 +16599,8 @@ void Icb_OpPSIMNetworkOperatorCommand_Response_Print(Icb_OpPSIMNetworkOperatorCo
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Response_Decode(Icb_OpPSIMNetworkOperatorCommand_Response ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream) {
+                                                            ASN_Session session,
+                                                            ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -16515,7 +16678,8 @@ void Icb_OpPSIMNetworkOperatorCommand_Notification_Print(Icb_OpPSIMNetworkOperat
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Notification_Decode(Icb_OpPSIMNetworkOperatorCommand_Notification ThisPtr,
-                                                                ASN_Session session, ASN_Stream stream) {
+                                                                ASN_Session session,
+                                                                ASN_Stream stream) {
     ASN_Result result = ASN_RESULT_OK;
     ASN_DECODE_CHECK(Icb_OperatorSelection_Decode(ThisPtr->status, session, stream));
     ASN_DECODE_CHECK(Icb_GenericOkStatus_Decode(&ThisPtr->operatorSelectionResult, session, stream));
@@ -16664,7 +16828,8 @@ void Icb_OpPSIMPhoneOperationMode_Response_Print(Icb_OpPSIMPhoneOperationMode_Re
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpPSIMPhoneOperationMode_Response_Decode(Icb_OpPSIMPhoneOperationMode_Response ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream) {
+                                                        ASN_Session session,
+                                                        ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -16901,7 +17066,8 @@ void Icb_OpCallHandling_SetRequest_Print(Icb_OpCallHandling_SetRequest ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpCallHandling_SetRequest_Decode(Icb_OpCallHandling_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCallHandling_SetRequest_Decode(Icb_OpCallHandling_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17002,7 +17168,8 @@ void Icb_OpTEMIdentification_Response_Print(Icb_OpTEMIdentification_Response Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTEMIdentification_Response_Decode(Icb_OpTEMIdentification_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMIdentification_Response_Decode(Icb_OpTEMIdentification_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17080,7 +17247,8 @@ void Icb_OpTEMRadioMode_SetRequest_Print(Icb_OpTEMRadioMode_SetRequest ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTEMRadioMode_SetRequest_Decode(Icb_OpTEMRadioMode_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMRadioMode_SetRequest_Decode(Icb_OpTEMRadioMode_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17148,7 +17316,8 @@ void Icb_OpTEMRadioMode_Response_Print(Icb_OpTEMRadioMode_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTEMRadioMode_Response_Decode(Icb_OpTEMRadioMode_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMRadioMode_Response_Decode(Icb_OpTEMRadioMode_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17217,7 +17386,8 @@ void Icb_OpTunerFrequencies_Response_Print(Icb_OpTunerFrequencies_Response ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpTunerFrequencies_Response_Decode(Icb_OpTunerFrequencies_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTunerFrequencies_Response_Decode(Icb_OpTunerFrequencies_Response ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17286,7 +17456,8 @@ void Icb_OpDeadReckonedPosition_Response_Print(Icb_OpDeadReckonedPosition_Respon
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDeadReckonedPosition_Response_Decode(Icb_OpDeadReckonedPosition_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeadReckonedPosition_Response_Decode(Icb_OpDeadReckonedPosition_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17830,7 +18001,8 @@ void Icb_OpRemoteDiagnosticInfo_Notification_Print(Icb_OpRemoteDiagnosticInfo_No
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpRemoteDiagnosticInfo_Notification_Decode(Icb_OpRemoteDiagnosticInfo_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -17910,7 +18082,8 @@ void Icb_OpCurrentDoIPState_Notification_Print(Icb_OpCurrentDoIPState_Notificati
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpCurrentDoIPState_Notification_Decode(Icb_OpCurrentDoIPState_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCurrentDoIPState_Notification_Decode(Icb_OpCurrentDoIPState_Notification ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -17983,7 +18156,8 @@ void Icb_OpCurrentDoIPConnection_Notification_Print(Icb_OpCurrentDoIPConnection_
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpCurrentDoIPConnection_Notification_Decode(Icb_OpCurrentDoIPConnection_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream) {
+                                                           ASN_Session session,
+                                                           ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -18052,7 +18226,8 @@ void Icb_OpRequestUserAuthentication_Response_Print(Icb_OpRequestUserAuthenticat
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpRequestUserAuthentication_Response_Decode(Icb_OpRequestUserAuthentication_Response ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream) {
+                                                           ASN_Session session,
+                                                           ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -18120,7 +18295,8 @@ void Icb_OpUpdateDaCMode_Notification_Print(Icb_OpUpdateDaCMode_Notification Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpUpdateDaCMode_Notification_Decode(Icb_OpUpdateDaCMode_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpUpdateDaCMode_Notification_Decode(Icb_OpUpdateDaCMode_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18189,7 +18365,8 @@ void Icb_OpApprovalStatus_Response_Print(Icb_OpApprovalStatus_Response ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpApprovalStatus_Response_Decode(Icb_OpApprovalStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpApprovalStatus_Response_Decode(Icb_OpApprovalStatus_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18258,7 +18435,8 @@ void Icb_OpApprovalStatus_Notification_Print(Icb_OpApprovalStatus_Notification T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpApprovalStatus_Notification_Decode(Icb_OpApprovalStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpApprovalStatus_Notification_Decode(Icb_OpApprovalStatus_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18343,7 +18521,8 @@ void Icb_OpDownloadStatus_Response_Print(Icb_OpDownloadStatus_Response ThisPtr) 
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDownloadStatus_Response_Decode(Icb_OpDownloadStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDownloadStatus_Response_Decode(Icb_OpDownloadStatus_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18519,7 +18698,8 @@ void Icb_OpDownloadSoftware_SetRequest_Print(Icb_OpDownloadSoftware_SetRequest T
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDownloadSoftware_SetRequest_Decode(Icb_OpDownloadSoftware_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDownloadSoftware_SetRequest_Decode(Icb_OpDownloadSoftware_SetRequest ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18588,7 +18768,8 @@ void Icb_OpDeletedSoftware_SetRequest_Print(Icb_OpDeletedSoftware_SetRequest Thi
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDeletedSoftware_SetRequest_Decode(Icb_OpDeletedSoftware_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeletedSoftware_SetRequest_Decode(Icb_OpDeletedSoftware_SetRequest ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18673,7 +18854,8 @@ void Icb_OpDeviceInstall_SetRequest_Print(Icb_OpDeviceInstall_SetRequest ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDeviceInstall_SetRequest_Decode(Icb_OpDeviceInstall_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeviceInstall_SetRequest_Decode(Icb_OpDeviceInstall_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18782,7 +18964,8 @@ void Icb_OpDeviceInstall_Response_Print(Icb_OpDeviceInstall_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpDeviceInstall_Response_Decode(Icb_OpDeviceInstall_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeviceInstall_Response_Decode(Icb_OpDeviceInstall_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -18952,7 +19135,8 @@ void Icb_OpEcallSettings_SetRequest_Print(Icb_OpEcallSettings_SetRequest ThisPtr
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpEcallSettings_SetRequest_Decode(Icb_OpEcallSettings_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpEcallSettings_SetRequest_Decode(Icb_OpEcallSettings_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -19027,7 +19211,8 @@ void Icb_OpEcallSettings_Response_Print(Icb_OpEcallSettings_Response ThisPtr) {
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpEcallSettings_Response_Decode(Icb_OpEcallSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpEcallSettings_Response_Decode(Icb_OpEcallSettings_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
@@ -19181,7 +19366,8 @@ void Icb_OpWLANChannelFreqInfo_Notification_Print(Icb_OpWLANChannelFreqInfo_Noti
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpWLANChannelFreqInfo_Notification_Decode(Icb_OpWLANChannelFreqInfo_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream) {
+                                                         ASN_Session session,
+                                                         ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -19398,7 +19584,8 @@ void Icb_OpGNSSPositionDataAccuracy_Response_Print(Icb_OpGNSSPositionDataAccurac
 #endif /* #ifdef ASN_PRINT */
 
 ASN_Result Icb_OpGNSSPositionDataAccuracy_Response_Decode(Icb_OpGNSSPositionDataAccuracy_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream) {
+                                                          ASN_Session session,
+                                                          ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;
 
@@ -19467,7 +19654,8 @@ void Icb_OpGNSSPositionData_Response_Print(Icb_OpGNSSPositionData_Response ThisP
 }
 #endif /* #ifdef ASN_PRINT */
 
-ASN_Result Icb_OpGNSSPositionData_Response_Decode(Icb_OpGNSSPositionData_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGNSSPositionData_Response_Decode(Icb_OpGNSSPositionData_Response ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream) {
     BOOL hasExtensions;
     ASN_Result result = ASN_RESULT_OK;

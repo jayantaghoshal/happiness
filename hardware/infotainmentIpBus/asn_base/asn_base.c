@@ -838,8 +838,12 @@ ASN_PrintableString ASN_PrintableString_Create(ASN_Session session) {
     return ThisPtr;
 }
 
-ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr, ASN_Session session, ASN_Stream stream, U32 low,
-                                      U32 high, const char* characterSet) {
+ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr,
+                                      ASN_Session session,
+                                      ASN_Stream stream,
+                                      U32 low,
+                                      U32 high,
+                                      const char* characterSet) {
     U32 i;
     ASN_Result result;
     ASN_BYTE charSetMinMax[2];
@@ -894,7 +898,10 @@ ASN_Result ASN_PrintableString_Decode(ASN_PrintableString ThisPtr, ASN_Session s
     return ASN_RESULT_OK;
 }
 
-ASN_Result ASN_PrintableString_Encode(ASN_PrintableString ThisPtr, ASN_Stream stream, U32 low, U32 high,
+ASN_Result ASN_PrintableString_Encode(ASN_PrintableString ThisPtr,
+                                      ASN_Stream stream,
+                                      U32 low,
+                                      U32 high,
                                       const char* characterSet) {
     ASN_Result result;
     U32 i;

@@ -26,7 +26,8 @@ std::string SocketConnection::Read() {
     std::string headerMessage = ReadMessage(kHeaderTag.size() + kHeaderMessageLength);
 
     if (headerMessage.substr(0, kHeaderTag.size()) != kHeaderTag) {
-        ALOGD("ERROR: SocketConnection::Read, Incorrect Message header tag, expected: %s, got %s", kHeaderTag.c_str(),
+        ALOGD("ERROR: SocketConnection::Read, Incorrect Message header tag, expected: %s, got %s",
+              kHeaderTag.c_str(),
               headerMessage.c_str());
         return "";  // Invalid message
     }
@@ -67,8 +68,8 @@ std::string SocketConnection::ReadMessage(int messageLength) {
 
     ssize_t totalNumberOfBytesRead{0};
     while (totalNumberOfBytesRead < messageLength) {
-        ssize_t numberOfBytesRead = read(*socket_fd_Ptr_, messageBuffer.data() + totalNumberOfBytesRead,
-                                         messageLength - totalNumberOfBytesRead);
+        ssize_t numberOfBytesRead = read(
+                *socket_fd_Ptr_, messageBuffer.data() + totalNumberOfBytesRead, messageLength - totalNumberOfBytesRead);
 
         if (numberOfBytesRead <= 0) {
             throw std::runtime_error("Error: SocketConnection::ReadMessage->numberOfBytesRead <= 0 (internal ex: " +

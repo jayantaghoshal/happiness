@@ -125,7 +125,9 @@ Return<void> CloudService::registerCloudConnectionEventListener(
     return Void();
 }
 
-Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, uint32_t timeout,
+Return<void> CloudService::doGetRequest(const hidl_string& uri,
+                                        const HttpHeaders& headers,
+                                        uint32_t timeout,
                                         doGetRequest_cb _hidl_cb) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
@@ -190,8 +192,11 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     return Void();
 }
 
-Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
-                                         uint32_t timeout, doPostRequest_cb _hidl_cb) {
+Return<void> CloudService::doPostRequest(const hidl_string& uri,
+                                         const HttpHeaders& headers,
+                                         const hidl_string& body,
+                                         uint32_t timeout,
+                                         doPostRequest_cb _hidl_cb) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -257,8 +262,10 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
     return Void();
 }
 
-Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHeaders& headers,
-                                           const hidl_string& file_path, uint32_t timeout,
+Return<void> CloudService::downloadRequest(const hidl_string& uri,
+                                           const HttpHeaders& headers,
+                                           const hidl_string& file_path,
+                                           uint32_t timeout,
                                            const android::sp<ICloudConnectionDownloadResponseCallback>& callback) {
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");

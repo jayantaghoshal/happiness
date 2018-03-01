@@ -35,8 +35,9 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
     if ((Message::Ecu::ALL == ecu) || (Message::Ecu::IHU == ecu)) {
         // Look up IHU info from ECU map
         auto it = std::find_if(
-                ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                [](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == Message::Ecu::IHU; });
+                ecu_ip_map_.begin(), ecu_ip_map_.end(), [](const std::pair<Message::Ecu, EcuAddress>& pair) {
+                    return pair.first == Message::Ecu::IHU;
+                });
 
         if (it == ecu_ip_map_.end()) {
             ALOGW("IHU not found in ECU map!");
@@ -50,8 +51,9 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
         if (Message::Ecu::ALL == ecu) {
             // Look up ALL (broadcast) info from ECU map
             it = std::find_if(
-                    ecu_ip_map_.begin(), ecu_ip_map_.end(),
-                    [](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == Message::Ecu::ALL; });
+                    ecu_ip_map_.begin(), ecu_ip_map_.end(), [](const std::pair<Message::Ecu, EcuAddress>& pair) {
+                        return pair.first == Message::Ecu::ALL;
+                    });
 
             if (it == ecu_ip_map_.end()) {
                 ALOGW("\"ALL\" (broadcast) not found in ECU map!");
@@ -120,7 +122,8 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
         if (Message::Ecu::ALL != ecu_) {
             ALOGE("Can not send broadcast on ordinary socket! (socket set up for %d "
                   "and trying to send to %d",
-                  ecu_, ecu);
+                  ecu_,
+                  ecu);
 
             return;
         }
@@ -131,12 +134,14 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
         if (Message::Ecu::ALL == ecu_) {
             ALOGE("Can not send normal packet on broadcast socket! (socket set up "
                   "for %d and trying to send to %d",
-                  ecu_, ecu);
+                  ecu_,
+                  ecu);
             return;
         }
     }
 
-    auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
+    auto it = std::find_if(ecu_ip_map_.begin(),
+                           ecu_ip_map_.end(),
                            [ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
 
     if (it == ecu_ip_map_.end()) {
@@ -156,8 +161,12 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
 
     while (remaining_bytes > 0) {
         int ret = -1;
-        ret = sendto(socket_fd_, reinterpret_cast<const void*>(&buffer[sent_bytes]), remaining_bytes, 0,
-                     reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
+        ret = sendto(socket_fd_,
+                     reinterpret_cast<const void*>(&buffer[sent_bytes]),
+                     remaining_bytes,
+                     0,
+                     reinterpret_cast<struct sockaddr*>(&sa),
+                     static_cast<socklen_t>(sizeof(sa)));
 
         if (-1 == ret) {
             if (errno == EINTR) {
@@ -194,8 +203,12 @@ void UdpSocket::readEventHandler() {
     memset(static_cast<void*>(&sa_out), 0, addrlen);
     sa_out.sin_family = AF_INET;
 
-    if (0 > recvfrom(socket_fd_, static_cast<void*>(buffer.data()), packet_length, 0,
-                     reinterpret_cast<struct sockaddr*>(&sa_out), &addrlen)) {
+    if (0 > recvfrom(socket_fd_,
+                     static_cast<void*>(buffer.data()),
+                     packet_length,
+                     0,
+                     reinterpret_cast<struct sockaddr*>(&sa_out),
+                     &addrlen)) {
         // socket suddenly failed. Could be a wakeup from suspend.
         dispatcher_.EnqueueWithDelay(std::chrono::milliseconds(200), [this] { resetup(); });
         return;
@@ -211,7 +224,8 @@ void UdpSocket::readEventHandler() {
     const std::string fromIp = std::string(buf);
     const auto fromPort = ntohs(sa_out.sin_port);
 
-    auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
+    auto it = std::find_if(ecu_ip_map_.begin(),
+                           ecu_ip_map_.end(),
                            [&fromIp, fromPort](const std::pair<Message::Ecu, EcuAddress>& pair) {
                                return (pair.second.ip == fromIp && pair.second.port == fromPort);
                            });

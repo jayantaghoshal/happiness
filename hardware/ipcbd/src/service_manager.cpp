@@ -28,8 +28,11 @@ ServiceManager::ServiceManager(std::string service_name, ::Connectivity::Message
 }
 
 // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
-Return<void> ServiceManager::subscribe(uint16_t serviceID, uint16_t operationID, OperationType operationType,
-                                       const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) {
+Return<void> ServiceManager::subscribe(uint16_t serviceID,
+                                       uint16_t operationID,
+                                       OperationType operationType,
+                                       const sp<IMessageCallback>& callbackHandler,
+                                       subscribe_cb _hidl_cb) {
     ALOGV("+ Ipcb::subscribeMessage");
 
     if (operationType == OperationType::RESPONSE || operationType == OperationType::ERROR) {
@@ -40,7 +43,9 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID, uint16_t operationID,
 
     uint64_t subscriberId = 0;
     subscriberId = messageDispatcher_.registerMessageCallback(
-            serviceID, operationID, (IpCmdTypes::OperationType)operationType,
+            serviceID,
+            operationID,
+            (IpCmdTypes::OperationType)operationType,
             [this, callbackHandler](Message& message, uint64_t& registeredReceiverId) {
                 ALOGD("+ Ipcb::registerMessageCallback called");
                 Msg msg;
@@ -102,7 +107,8 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     // Prepare header
     Pdu pdu;
-    pdu.createHeader(msg.pdu.header.serviceID, msg.pdu.header.operationID,
+    pdu.createHeader(msg.pdu.header.serviceID,
+                     msg.pdu.header.operationID,
                      (IpCmdTypes::OperationType)msg.pdu.header.operationType,
                      msg.pdu.header.encoded ? IpCmdTypes::DataType::ENCODED : IpCmdTypes::DataType::NOT_ENCODED,
                      msg.pdu.header.seqNbr);
@@ -116,7 +122,9 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGV(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
+    ALOGV(" Sending message (%04X.%04X) to %s",
+          message.pdu.header.service_id,
+          message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
 
     // Send the request
@@ -130,8 +138,10 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
     return Void();
 }
 
-Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryInfo,
-                                         const sp<IResponseCallback>& callbackHandler, sendRequest_cb _hidl_cb) {
+Return<void> ServiceManager::sendRequest(const Msg& msg,
+                                         const RetryInfo& retryInfo,
+                                         const sp<IResponseCallback>& callbackHandler,
+                                         sendRequest_cb _hidl_cb) {
     ALOGV("+ Ipcb::sendRequest");
 
     if ((OperationType)msg.pdu.header.operationType != OperationType::REQUEST &&
@@ -184,7 +194,8 @@ Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryI
 
     // Prepare header
     Pdu pdu;
-    pdu.createHeader(msg.pdu.header.serviceID, msg.pdu.header.operationID,
+    pdu.createHeader(msg.pdu.header.serviceID,
+                     msg.pdu.header.operationID,
                      (IpCmdTypes::OperationType)msg.pdu.header.operationType,
                      msg.pdu.header.encoded ? IpCmdTypes::DataType::ENCODED : IpCmdTypes::DataType::NOT_ENCODED,
                      msg.pdu.header.seqNbr);
@@ -198,7 +209,9 @@ Return<void> ServiceManager::sendRequest(const Msg& msg, const RetryInfo& retryI
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGV(" Sending message (%04X.%04X) to %s", message.pdu.header.service_id, message.pdu.header.operation_id,
+    ALOGV(" Sending message (%04X.%04X) to %s",
+          message.pdu.header.service_id,
+          message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
 
     // Send the request

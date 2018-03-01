@@ -62,7 +62,8 @@ const int32_t kGenerateFakeDataControllingProperty =
         0x0666 | VehiclePropertyGroup::VENDOR | VehicleArea::GLOBAL | VehiclePropertyType::COMPLEX;
 
 const int32_t kHvacPowerProperties[] = {
-        toInt(VehicleProperty::HVAC_FAN_SPEED), toInt(VehicleProperty::HVAC_FAN_DIRECTION),
+        toInt(VehicleProperty::HVAC_FAN_SPEED),
+        toInt(VehicleProperty::HVAC_FAN_DIRECTION),
 };
 
 struct ConfigDeclaration {
@@ -180,8 +181,9 @@ const ConfigDeclaration kVehicleProperties[]{
                     .access = VehiclePropertyAccess::READ_WRITE,
                     .changeMode = VehiclePropertyChangeMode::ON_CHANGE,
                     .supportedAreas = toInt(VehicleAreaZone::ROW_1),
-                    .areaConfigs = {VehicleAreaConfig{
-                            .areaId = toInt(VehicleAreaZone::ROW_1), .minInt32Value = 1, .maxInt32Value = 15}}},
+                    .areaConfigs = {VehicleAreaConfig{.areaId = toInt(VehicleAreaZone::ROW_1),
+                                                      .minInt32Value = 1,
+                                                      .maxInt32Value = 15}}},
          .initialValue = {.int32Values = {3}}},
 
         {.config =

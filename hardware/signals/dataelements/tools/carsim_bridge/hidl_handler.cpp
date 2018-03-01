@@ -22,7 +22,8 @@ using namespace vendor::volvocars::hardware::signals::V1_0;
 namespace CarSim {
 
 ::android::hardware::Return<void> HidlHandler::signalChanged(const ::android::hardware::hidl_string& signalName,
-                                                             Dir dir, const ::android::hardware::hidl_string& data) {
+                                                             Dir dir,
+                                                             const ::android::hardware::hidl_string& data) {
     // Avoid spamming the tender client by keeping shut for half a second
     // TODO REMOVE when client can handle it.
     ALOGD("Signal changed %s", signalName.c_str());

@@ -65,8 +65,10 @@ class MessageDispatcher {
      * @param[in] operationType             The operation  to match with
      * @param[in] messageCb                 The callback function to call
      */
-    uint64_t registerMessageCallback(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId,
-                                     IpCmdTypes::OperationType operationType, MessageCallback messageCb);
+    uint64_t registerMessageCallback(IpCmdTypes::ServiceId serviceId,
+                                     IpCmdTypes::OperationId operationId,
+                                     IpCmdTypes::OperationType operationType,
+                                     MessageCallback messageCb);
 
     bool unregisterCallback(uint64_t registeredReceiverId);
 
@@ -90,8 +92,11 @@ class MessageDispatcher {
      * Container for information about a registered message receiver.
      */
     struct RegInfo {
-        RegInfo(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId,
-                IpCmdTypes::OperationType operationType, uint64_t registeredReceiverId, MessageCallback messageCb)
+        RegInfo(IpCmdTypes::ServiceId serviceId,
+                IpCmdTypes::OperationId operationId,
+                IpCmdTypes::OperationType operationType,
+                uint64_t registeredReceiverId,
+                MessageCallback messageCb)
             : serviceId(serviceId),
               operationId(operationId),
               operationType(operationType),

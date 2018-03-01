@@ -82,7 +82,8 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      * @param[in] _rg             Resource group being requested
      * @param[in] _prio           priority for the requested resource group
      */
-    Return<bool> requestResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup,
+    Return<bool> requestResourceGroup(const hidl_string& lscName,
+                                      XResourceGroup resourceGroup,
                                       XResourceGroupPrio resourceGroupPrio) override;
 
     /**

@@ -13,7 +13,8 @@
 namespace Connectivity {
 class TcpSocket final : public Socket {
   public:
-    TcpSocket(tarmac::eventloop::IDispatcher& dispatcher, Message::Ecu ecu,
+    TcpSocket(tarmac::eventloop::IDispatcher& dispatcher,
+              Message::Ecu ecu,
               EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
     ~TcpSocket();
 

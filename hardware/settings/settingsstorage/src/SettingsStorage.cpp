@@ -25,7 +25,8 @@ ProfileListener::ProfileListener(std::function<void(profileHidl::ProfileIdentifi
     profileHidl::ICarProfileManager::registerForNotifications("default", this);
 }
 
-andrHw::Return<void> ProfileListener::onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
+andrHw::Return<void> ProfileListener::onRegistration(const andrHw::hidl_string& fqName,
+                                                     const andrHw::hidl_string& name,
                                                      bool preexisting) {
     ALOGV("onRegistration, fqName=%s, name=%s, preexisting=%d", fqName.c_str(), name.c_str(), preexisting);
 
@@ -196,7 +197,8 @@ void SettingsStorage::onProfileChange(profileHidl::ProfileIdentifier profileId) 
     }
 }
 
-Return<void> SettingsStorage::set(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId,
+Return<void> SettingsStorage::set(const SettingsIdHidl key,
+                                  profileHidl::ProfileIdentifier profileId,
                                   const hidl_string& data) {
     ALOGD("set %d = %s", key, data.c_str());
 
@@ -249,7 +251,8 @@ Return<void> SettingsStorage::get(const SettingsIdHidl key, profileHidl::Profile
     return andrHw::Return<void>();
 }
 
-Return<void> SettingsStorage::subscribe(const SettingsIdHidl key, UserScope userScope,
+Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
+                                        UserScope userScope,
                                         const sp<ISettingsListener>& listener) {
     ALOGD("subscribe key=%d, userScope=%hu", key, userScope);
 

@@ -12,7 +12,8 @@ namespace V1_0 {
 namespace implementation {
 
 // Methods from ::android::hardware::gnss::V1_0::IGnssGeofenceCallback follow.
-Return<void> GnssGeofenceCallback::gnssGeofenceTransitionCb(int32_t geofenceId, const GnssLocation& location,
+Return<void> GnssGeofenceCallback::gnssGeofenceTransitionCb(int32_t geofenceId,
+                                                            const GnssLocation& location,
                                                             IGnssGeofenceCallback::GeofenceTransition transition,
                                                             int64_t timestamp) {
     // TODO implement

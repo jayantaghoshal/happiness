@@ -25,7 +25,8 @@ struct MockDataHandler : public IDataHandler {
     }
 
     ::android::hardware::Return<DidWriteStatusCode> writeDidValue(
-            uint16_t did, const ::android::hardware::hidl_vec<uint8_t>& data) override {
+            uint16_t did,
+            const ::android::hardware::hidl_vec<uint8_t>& data) override {
         return this->WriteDidValue(did, data);
     }
 };

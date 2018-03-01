@@ -110,9 +110,16 @@ Return<void> Gnss::deleteAidingData(IGnss::GnssAidingData /*aidingDataFlags*/) {
     return Void();
 }
 
-Return<bool> Gnss::setPositionMode(IGnss::GnssPositionMode mode, IGnss::GnssPositionRecurrence recurrence,
-                                   uint32_t minIntervalMs, uint32_t preferredAccuracyMeters, uint32_t preferredTimeMs) {
-    ALOGV("setPositionMode %hhu %u %u %u %u", mode, recurrence, minIntervalMs, preferredAccuracyMeters,
+Return<bool> Gnss::setPositionMode(IGnss::GnssPositionMode mode,
+                                   IGnss::GnssPositionRecurrence recurrence,
+                                   uint32_t minIntervalMs,
+                                   uint32_t preferredAccuracyMeters,
+                                   uint32_t preferredTimeMs) {
+    ALOGV("setPositionMode %hhu %u %u %u %u",
+          mode,
+          recurrence,
+          minIntervalMs,
+          preferredAccuracyMeters,
           preferredTimeMs);
     return true;
 }

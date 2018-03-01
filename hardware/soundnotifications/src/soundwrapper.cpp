@@ -99,7 +99,8 @@ SoundWrapper::Result Sound::play(bool continuous) {
                 return SoundWrapper::Result::OK;
             } else {
                 if (!_continuous) {
-                    ALOGW("Sound::play failed to playSound %s. Error: %s", _name.c_str(),
+                    ALOGW("Sound::play failed to playSound %s. Error: %s",
+                          _name.c_str(),
                           status.exceptionMessage().string());
                     _state = State::Idle;  // stay in Idle
                     return SoundWrapper::Result::PLAY_FAILED;
@@ -157,7 +158,8 @@ SoundWrapper::Result Sound::stop() {
                 ALOGV("Sound::stop Playing->Stopping %s", _name.c_str());
                 return SoundWrapper::Result::OK;
             } else {
-                ALOGE("Sound::stop failed to stopSound %s, jumping to Idle %s", status.exceptionMessage().string(),
+                ALOGE("Sound::stop failed to stopSound %s, jumping to Idle %s",
+                      status.exceptionMessage().string(),
                       _name.c_str());
                 _state = State::Idle;  // got to Idle
                 return SoundWrapper::Result::PLAY_FAILED;
@@ -442,7 +444,8 @@ bool SoundWrapper::isPlaying(SoundID soundid) {
     }
 }
 
-void SoundWrapper::onPlayStarted(const AudioTable::SoundType type, const AudioTable::SoundComponent component,
+void SoundWrapper::onPlayStarted(const AudioTable::SoundType type,
+                                 const AudioTable::SoundComponent component,
                                  const int32_t connectionID) {
     (void)connectionID;
     std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
@@ -463,8 +466,10 @@ void SoundWrapper::onPlayStarted(const AudioTable::SoundType type, const AudioTa
     }
 }
 
-void SoundWrapper::onPlayStopped(const AudioTable::SoundType type, const AudioTable::SoundComponent component,
-                                 const int32_t connectionID, const int32_t reason) {
+void SoundWrapper::onPlayStopped(const AudioTable::SoundType type,
+                                 const AudioTable::SoundComponent component,
+                                 const int32_t connectionID,
+                                 const int32_t reason) {
     (void)connectionID;
     std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
     std::shared_ptr<Sound> sound;
@@ -484,8 +489,10 @@ void SoundWrapper::onPlayStopped(const AudioTable::SoundType type, const AudioTa
     }
 }
 
-void SoundWrapper::onPlayFailed(const AudioTable::SoundType type, const AudioTable::SoundComponent component,
-                                const int32_t connectionID, const int32_t error) {
+void SoundWrapper::onPlayFailed(const AudioTable::SoundType type,
+                                const AudioTable::SoundComponent component,
+                                const int32_t connectionID,
+                                const int32_t error) {
     (void)connectionID;
     std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
     std::shared_ptr<Sound> sound;

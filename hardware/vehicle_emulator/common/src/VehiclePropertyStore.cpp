@@ -105,7 +105,8 @@ std::unique_ptr<VehiclePropValue> VehiclePropertyStore::readValueOrNull(const Ve
     return internalValue ? std::make_unique<VehiclePropValue>(*internalValue) : nullptr;
 }
 
-std::unique_ptr<VehiclePropValue> VehiclePropertyStore::readValueOrNull(int32_t prop, int32_t area,
+std::unique_ptr<VehiclePropValue> VehiclePropertyStore::readValueOrNull(int32_t prop,
+                                                                        int32_t area,
                                                                         int64_t token) const {
     RecordId recId = {prop, isGlobalProp(prop) ? 0 : area, token};
     MuxGuard g(mLock);

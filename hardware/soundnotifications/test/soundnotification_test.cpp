@@ -34,7 +34,8 @@ int main(int argc, char* argv[]) {
     printf("Sound notification test app.\n");
 
     if (argc < 2) {
-        printf("No sound index provided\nUsage: %s <sound index>. Sound index from 0 to %i\n", argv[0],
+        printf("No sound index provided\nUsage: %s <sound index>. Sound index from 0 to %i\n",
+               argv[0],
                (int32_t)(AudioTable::getSources().size() - 1));
         return 1;
     }
@@ -91,8 +92,8 @@ int main(int argc, char* argv[]) {
 
     auto sound = AudioTable::getSources().at(sound_index);
     printf("Will play notification sound id: %i, name: %s\n", std::get<2>(sound), std::get<3>(sound));
-    status = service->playSound(static_cast<int32_t>(std::get<0>(sound)), static_cast<int32_t>(std::get<1>(sound)),
-                                &currentConnection);
+    status = service->playSound(
+            static_cast<int32_t>(std::get<0>(sound)), static_cast<int32_t>(std::get<1>(sound)), &currentConnection);
     printf("playSound status: %s connectionID: %ld\n", status.toString8().string(), currentConnection);
     fflush(stdout);
     usleep(1000000);

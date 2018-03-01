@@ -52,7 +52,8 @@ ActiveSafetyModule::ActiveSafetyModule(
                                 return 0;
                             },
                             [this]() { return m_DAISettingImpl.DAISetting(); },
-                            [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+                            [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); },
+                            prop_value);
 
             // Property handler configured, put it in map
             propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] =

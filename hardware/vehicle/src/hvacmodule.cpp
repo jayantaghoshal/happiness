@@ -56,7 +56,8 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
                                 return 0;
                             },
                             [this]() { return m_tempImpl.temperatureLeftValue(); },
-                            [this](VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+                            [this](VehiclePropValue prop_value) { pushProp(prop_value); },
+                            prop_value);
         }
         {  // Right temperature
             prop_value.areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
@@ -69,7 +70,8 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
                                 return 0;
                             },
                             [this]() { return m_tempImpl.temperatureRightValue(); },
-                            [this](VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+                            [this](VehiclePropValue prop_value) { pushProp(prop_value); },
+                            prop_value);
         }
 
         // Property handler configured, put it in map
@@ -102,7 +104,8 @@ HvacModule::HvacModule(::android::hardware::automotive::vehicle::V2_0::impl::IVe
                             return 0;
                         },
                         [this]() { return m_fanLevelImpl.fanLevelValue(); },
-                        [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+                        [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); },
+                        prop_value);
 
         // Property handler configured, put it in map
         propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(fan_property);

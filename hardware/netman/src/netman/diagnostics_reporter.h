@@ -40,7 +40,8 @@ class DiagnosticsReporter final : public virtual ::android::RefBase,
     ::android::hardware::Return<void> readDidValue(uint16_t did, readDidValue_cb _hidl_cb) override;
 
     ::android::hardware::Return<::vendor::volvocars::hardware::uds::V1_0::DidWriteStatusCode> writeDidValue(
-            uint16_t did, const ::android::hardware::hidl_vec<uint8_t>& data) override;
+            uint16_t did,
+            const ::android::hardware::hidl_vec<uint8_t>& data) override;
 
     bool isApixOnObdParamValid(const ::android::hardware::hidl_vec<uint8_t>& data);
 

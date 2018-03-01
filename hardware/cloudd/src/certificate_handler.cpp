@@ -182,7 +182,8 @@ EVP_PKEYUnqPtr KeyFromPem(std::string pem_data) {
     return private_key;
 }
 
-CertHandler::CertHandler(const std::string& client_cert_pem, const std::string& client_key_pem,
+CertHandler::CertHandler(const std::string& client_cert_pem,
+                         const std::string& client_key_pem,
                          const std::string& ca_cert)
     : m_ca_cert{X509Null()}, m_client_cert{X509Null()}, m_client_key{EVP_PKeyNull()} {
     // Set up the static cert
@@ -363,7 +364,8 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
             AUTHORITY_INFO_ACCESS_free(values);
             X509_free(server_cert);
         } else {
-            ALOGE("Unable to SSL connect to VCC sensus server (ret code %d) (%s)", err,
+            ALOGE("Unable to SSL connect to VCC sensus server (ret code %d) (%s)",
+                  err,
                   ERR_error_string(ERR_get_error(), nullptr));
             return OcspRetCode::Ok;
         }

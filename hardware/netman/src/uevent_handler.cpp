@@ -81,7 +81,9 @@ std::string UeventHandler::ExtractAttribute(const std::string& cursor_line, cons
     return value;
 }
 
-int UeventHandler::HandleSysfsEntry(const char* filepath, const struct stat* /*info*/, int typeflag,
+int UeventHandler::HandleSysfsEntry(const char* filepath,
+                                    const struct stat* /*info*/,
+                                    int typeflag,
                                     struct FTW* /*pathinfo*/) {
     // NOTE: NTFW requires callback function to return 0 as an indication proceed
 
@@ -108,7 +110,8 @@ int UeventHandler::HandleSysfsEntry(const char* filepath, const struct stat* /*i
     }
 
     const std::vector<std::string> ignored_interface_list{"lo", "sit0"};
-    auto it = std::find_if(ignored_interface_list.cbegin(), ignored_interface_list.cend(),
+    auto it = std::find_if(ignored_interface_list.cbegin(),
+                           ignored_interface_list.cend(),
                            [&interface_name](const std::string& item) { return (interface_name == item); });
     if (it != ignored_interface_list.cend()) {
         return 0;  // filter out 'lo' and 'sit0'

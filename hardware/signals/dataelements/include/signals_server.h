@@ -38,18 +38,22 @@ class SignalsServer final : public ISignals {
     std::vector<Result> get_all_matching(const ::android::hardware::hidl_string& filter, const Dir dir);
 
   public:
-    ::android::hardware::Return<void> subscribe(const ::android::hardware::hidl_string&, Dir dir,
+    ::android::hardware::Return<void> subscribe(const ::android::hardware::hidl_string&,
+                                                Dir dir,
                                                 const ::android::sp<ISignalsChangedCallback>& cb) override;
 
-    ::android::hardware::Return<void> send(const ::android::hardware::hidl_string& signalname, Dir dir,
+    ::android::hardware::Return<void> send(const ::android::hardware::hidl_string& signalname,
+                                           Dir dir,
                                            const ::android::hardware::hidl_string& data) override;
 
     using get_cb = std::function<void(const ::android::hardware::hidl_string& data)>;
-    ::android::hardware::Return<void> get(const ::android::hardware::hidl_string& signalname, Dir dir,
+    ::android::hardware::Return<void> get(const ::android::hardware::hidl_string& signalname,
+                                          Dir dir,
                                           get_cb _hidl_cb) override;
 
     using get_all_cb = std::function<void(const ::android::hardware::hidl_vec<Result>& data)>;
-    ::android::hardware::Return<void> get_all(const ::android::hardware::hidl_string& filter, const Dir dir,
+    ::android::hardware::Return<void> get_all(const ::android::hardware::hidl_string& filter,
+                                              const Dir dir,
                                               get_all_cb _hidl_cb) override;
 };
 }

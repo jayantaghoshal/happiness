@@ -54,13 +54,20 @@ class CloudService : public ICloudConnection {
     // Methods from ICloudConnection follow.
     Return<void> registerCloudConnectionEventListener(const android::sp<ICloudConnectionEventListener>& listener);
 
-    Return<void> doGetRequest(const hidl_string& uri, const HttpHeaders& headers, uint32_t timeout,
+    Return<void> doGetRequest(const hidl_string& uri,
+                              const HttpHeaders& headers,
+                              uint32_t timeout,
                               doGetRequest_cb _hidl_cb);
 
-    Return<void> doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
-                               uint32_t timeout, doPostRequest_cb _hidl_cb);
+    Return<void> doPostRequest(const hidl_string& uri,
+                               const HttpHeaders& headers,
+                               const hidl_string& body,
+                               uint32_t timeout,
+                               doPostRequest_cb _hidl_cb);
 
-    Return<void> downloadRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& file_path,
+    Return<void> downloadRequest(const hidl_string& uri,
+                                 const HttpHeaders& headers,
+                                 const hidl_string& file_path,
                                  uint32_t timeout,
                                  const android::sp<ICloudConnectionDownloadResponseCallback>& callback);
 

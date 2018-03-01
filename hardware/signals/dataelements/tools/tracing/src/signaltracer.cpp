@@ -98,9 +98,13 @@ bool readSignalData(const std::string& signalName, Dir direction, std::string& s
     char* signalValue = NULL;
     sd_bus_error error = SD_BUS_ERROR_NULL;
 
-    auto retval = sd_bus_get_property_string(
-            bus_, interfaces[direction].interface.c_str(), interfaces[direction].objectpath.c_str(),
-            interfaces[direction].interface.c_str(), signalName.c_str(), &error, &signalValue);
+    auto retval = sd_bus_get_property_string(bus_,
+                                             interfaces[direction].interface.c_str(),
+                                             interfaces[direction].objectpath.c_str(),
+                                             interfaces[direction].interface.c_str(),
+                                             signalName.c_str(),
+                                             &error,
+                                             &signalValue);
 
     if (retval < 0) {
         return false;
@@ -152,7 +156,8 @@ void addMatchForChangedSignals() {
                 sd_bus_add_match(bus_, NULL, matchString.c_str(), signals_changed, (void*)(intptr_t)interface.first);
 
         if (ret_val < 0) {
-            printf("Failed to add match for SignalsChanged: ret_val= %d matchstring = %s \n", ret_val,
+            printf("Failed to add match for SignalsChanged: ret_val= %d matchstring = %s \n",
+                   ret_val,
                    matchString.c_str());
         }
     }
@@ -169,8 +174,14 @@ void printCurrentSignalsForDir(Dir dir) {
     sd_bus_error error = SD_BUS_ERROR_NULL;
 
     // Read all property names for the given interface
-    int r = sd_bus_call_method(bus_, interfaces[dir].interface.c_str(), interfaces[dir].objectpath.c_str(),
-                               "org.freedesktop.DBus.Properties", "GetAll", &error, &reply, "s",
+    int r = sd_bus_call_method(bus_,
+                               interfaces[dir].interface.c_str(),
+                               interfaces[dir].objectpath.c_str(),
+                               "org.freedesktop.DBus.Properties",
+                               "GetAll",
+                               &error,
+                               &reply,
+                               "s",
                                interfaces[dir].interface.c_str());
     if (r < 0) {
         printf("Failed to sd_bus_call_method org.freedesktop.DBus.Properties.GetAll: ret_val= %d \n", r);

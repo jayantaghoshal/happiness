@@ -561,7 +561,8 @@ U32 Icb_OpSVTStatus_Notification_EncodedSize(Icb_OpSVTStatus_Notification ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpSVTStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpSVTStatus_Notification_Decode(Icb_OpSVTStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSVTStatus_Notification_Decode(Icb_OpSVTStatus_Notification ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpSVTStatus_Notification_Encode(Icb_OpSVTStatus_Notification ThisPtr, ASN_Stream stream);
 Icb_OpSVTStatus_Notification Icb_OpSVTStatus_Notification_Create(ASN_Session session);
@@ -600,7 +601,8 @@ U32 Icb_OpTNStatus_Notification_EncodedSize(Icb_OpTNStatus_Notification ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTNStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTNStatus_Notification_Decode(Icb_OpTNStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTNStatus_Notification_Decode(Icb_OpTNStatus_Notification ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpTNStatus_Notification_Encode(Icb_OpTNStatus_Notification ThisPtr, ASN_Stream stream);
 Icb_OpTNStatus_Notification Icb_OpTNStatus_Notification_Create(ASN_Session session);
@@ -722,7 +724,8 @@ U32 Icb_OpServiceActivation_Response_EncodedSize(Icb_OpServiceActivation_Respons
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpServiceActivation_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpServiceActivation_Response_Decode(Icb_OpServiceActivation_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceActivation_Response_Decode(Icb_OpServiceActivation_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpServiceActivation_Response_Encode(Icb_OpServiceActivation_Response ThisPtr, ASN_Stream stream);
 Icb_OpServiceActivation_Response Icb_OpServiceActivation_Response_Create(ASN_Session session);
@@ -879,7 +882,8 @@ U32 Icb_OpTextMessage_SetRequest_EncodedSize(Icb_OpTextMessage_SetRequest ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTextMessage_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTextMessage_SetRequest_Decode(Icb_OpTextMessage_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTextMessage_SetRequest_Decode(Icb_OpTextMessage_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpTextMessage_SetRequest_Encode(Icb_OpTextMessage_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpTextMessage_SetRequest Icb_OpTextMessage_SetRequest_Create(ASN_Session session);
@@ -904,7 +908,8 @@ U32 Icb_OpIHUSystemInfo_Response_EncodedSize(Icb_OpIHUSystemInfo_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpIHUSystemInfo_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpIHUSystemInfo_Response_Decode(Icb_OpIHUSystemInfo_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpIHUSystemInfo_Response_Decode(Icb_OpIHUSystemInfo_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpIHUSystemInfo_Response_Encode(Icb_OpIHUSystemInfo_Response ThisPtr, ASN_Stream stream);
 Icb_OpIHUSystemInfo_Response Icb_OpIHUSystemInfo_Response_Create(ASN_Session session);
@@ -1031,7 +1036,8 @@ U32 Icb_OpSoHWarning_Notification_EncodedSize(Icb_OpSoHWarning_Notification This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpSoHWarning_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpSoHWarning_Notification_Decode(Icb_OpSoHWarning_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSoHWarning_Notification_Decode(Icb_OpSoHWarning_Notification ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpSoHWarning_Notification_Encode(Icb_OpSoHWarning_Notification ThisPtr, ASN_Stream stream);
 Icb_OpSoHWarning_Notification Icb_OpSoHWarning_Notification_Create(ASN_Session session);
@@ -1069,7 +1075,8 @@ U32 Icb_OpServiceBooking_Notification_EncodedSize(Icb_OpServiceBooking_Notificat
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpServiceBooking_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpServiceBooking_Notification_Decode(Icb_OpServiceBooking_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceBooking_Notification_Decode(Icb_OpServiceBooking_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpServiceBooking_Notification_Encode(Icb_OpServiceBooking_Notification ThisPtr, ASN_Stream stream);
 Icb_OpServiceBooking_Notification Icb_OpServiceBooking_Notification_Create(ASN_Session session);
@@ -1091,7 +1098,8 @@ U32 Icb_OpSoHPackageUploaded_Notification_EncodedSize(Icb_OpSoHPackageUploaded_N
 U32 Icb_OpSoHPackageUploaded_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSoHPackageUploaded_Notification_Decode(Icb_OpSoHPackageUploaded_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpSoHPackageUploaded_Notification_Encode(Icb_OpSoHPackageUploaded_Notification ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpSoHPackageUploaded_Notification Icb_OpSoHPackageUploaded_Notification_Create(ASN_Session session);
@@ -1139,7 +1147,8 @@ U32 Icb_OpPSIMResetDataCounter_SetRequest_EncodedSize(Icb_OpPSIMResetDataCounter
 U32 Icb_OpPSIMResetDataCounter_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMResetDataCounter_SetRequest_Decode(Icb_OpPSIMResetDataCounter_SetRequest ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpPSIMResetDataCounter_SetRequest_Encode(Icb_OpPSIMResetDataCounter_SetRequest ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpPSIMResetDataCounter_SetRequest Icb_OpPSIMResetDataCounter_SetRequest_Create(ASN_Session session);
@@ -1160,7 +1169,8 @@ U32 Icb_OpPSIMResetDataCounter_Response_EncodedSize(Icb_OpPSIMResetDataCounter_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMResetDataCounter_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMResetDataCounter_Response_Decode(Icb_OpPSIMResetDataCounter_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMResetDataCounter_Response_Decode(Icb_OpPSIMResetDataCounter_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpPSIMResetDataCounter_Response_Encode(Icb_OpPSIMResetDataCounter_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMResetDataCounter_Response Icb_OpPSIMResetDataCounter_Response_Create(ASN_Session session);
@@ -1202,7 +1212,8 @@ U32 Icb_AutomaticAPNConfiguration_EncodedSize(Icb_AutomaticAPNConfiguration This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_AutomaticAPNConfiguration_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_AutomaticAPNConfiguration_Decode(Icb_AutomaticAPNConfiguration ThisPtr, ASN_Session session,
+ASN_Result Icb_AutomaticAPNConfiguration_Decode(Icb_AutomaticAPNConfiguration ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_AutomaticAPNConfiguration_Encode(Icb_AutomaticAPNConfiguration ThisPtr, ASN_Stream stream);
 Icb_AutomaticAPNConfiguration Icb_AutomaticAPNConfiguration_Create(ASN_Session session);
@@ -1251,7 +1262,8 @@ U32 Icb_OpPSIMConnect_SetRequest_EncodedSize(Icb_OpPSIMConnect_SetRequest ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMConnect_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMConnect_SetRequest_Decode(Icb_OpPSIMConnect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnect_SetRequest_Decode(Icb_OpPSIMConnect_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpPSIMConnect_SetRequest_Encode(Icb_OpPSIMConnect_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpPSIMConnect_SetRequest Icb_OpPSIMConnect_SetRequest_Create(ASN_Session session);
@@ -1271,7 +1283,8 @@ U32 Icb_OpPSIMConnect_Response_EncodedSize(Icb_OpPSIMConnect_Response ThisPtr);
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMConnect_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMConnect_Response_Decode(Icb_OpPSIMConnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnect_Response_Decode(Icb_OpPSIMConnect_Response ThisPtr,
+                                             ASN_Session session,
                                              ASN_Stream stream);
 ASN_Result Icb_OpPSIMConnect_Response_Encode(Icb_OpPSIMConnect_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMConnect_Response Icb_OpPSIMConnect_Response_Create(ASN_Session session);
@@ -1330,7 +1343,8 @@ U32 Icb_OpPSIMRoamingConfiguration_SetRequest_EncodedSize(Icb_OpPSIMRoamingConfi
 U32 Icb_OpPSIMRoamingConfiguration_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMRoamingConfiguration_SetRequest_Decode(Icb_OpPSIMRoamingConfiguration_SetRequest ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpPSIMRoamingConfiguration_SetRequest_Encode(Icb_OpPSIMRoamingConfiguration_SetRequest ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpPSIMRoamingConfiguration_SetRequest Icb_OpPSIMRoamingConfiguration_SetRequest_Create(ASN_Session session);
@@ -1351,7 +1365,8 @@ U32 Icb_OpPSIMRoamingConfiguration_Response_EncodedSize(Icb_OpPSIMRoamingConfigu
 U32 Icb_OpPSIMRoamingConfiguration_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMRoamingConfiguration_Response_Decode(Icb_OpPSIMRoamingConfiguration_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpPSIMRoamingConfiguration_Response_Encode(Icb_OpPSIMRoamingConfiguration_Response ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpPSIMRoamingConfiguration_Response Icb_OpPSIMRoamingConfiguration_Response_Create(ASN_Session session);
@@ -1371,7 +1386,8 @@ U32 Icb_OpAccessRightPinCode_Response_EncodedSize(Icb_OpAccessRightPinCode_Respo
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpAccessRightPinCode_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpAccessRightPinCode_Response_Decode(Icb_OpAccessRightPinCode_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpAccessRightPinCode_Response_Decode(Icb_OpAccessRightPinCode_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpAccessRightPinCode_Response_Encode(Icb_OpAccessRightPinCode_Response ThisPtr, ASN_Stream stream);
 Icb_OpAccessRightPinCode_Response Icb_OpAccessRightPinCode_Response_Create(ASN_Session session);
@@ -1404,7 +1420,8 @@ U32 Icb_OpFactoryDefaultRestore_Response_EncodedSize(Icb_OpFactoryDefaultRestore
 U32 Icb_OpFactoryDefaultRestore_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpFactoryDefaultRestore_Response_Decode(Icb_OpFactoryDefaultRestore_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream);
+                                                       ASN_Session session,
+                                                       ASN_Stream stream);
 ASN_Result Icb_OpFactoryDefaultRestore_Response_Encode(Icb_OpFactoryDefaultRestore_Response ThisPtr, ASN_Stream stream);
 Icb_OpFactoryDefaultRestore_Response Icb_OpFactoryDefaultRestore_Response_Create(ASN_Session session);
 #ifdef ASN_PRINT
@@ -1423,7 +1440,8 @@ U32 Icb_OpConnectivityStatus_Response_EncodedSize(Icb_OpConnectivityStatus_Respo
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpConnectivityStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpConnectivityStatus_Response_Decode(Icb_OpConnectivityStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpConnectivityStatus_Response_Decode(Icb_OpConnectivityStatus_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpConnectivityStatus_Response_Encode(Icb_OpConnectivityStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpConnectivityStatus_Response Icb_OpConnectivityStatus_Response_Create(ASN_Session session);
@@ -1444,7 +1462,8 @@ U32 Icb_OpConnectivityStatus_Notification_EncodedSize(Icb_OpConnectivityStatus_N
 U32 Icb_OpConnectivityStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpConnectivityStatus_Notification_Decode(Icb_OpConnectivityStatus_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpConnectivityStatus_Notification_Encode(Icb_OpConnectivityStatus_Notification ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpConnectivityStatus_Notification Icb_OpConnectivityStatus_Notification_Create(ASN_Session session);
@@ -1484,7 +1503,8 @@ U32 Icb_OpWorkshopWlanDetected_Notification_EncodedSize(Icb_OpWorkshopWlanDetect
 U32 Icb_OpWorkshopWlanDetected_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpWorkshopWlanDetected_Notification_Decode(Icb_OpWorkshopWlanDetected_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpWorkshopWlanDetected_Notification_Encode(Icb_OpWorkshopWlanDetected_Notification ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpWorkshopWlanDetected_Notification Icb_OpWorkshopWlanDetected_Notification_Create(ASN_Session session);
@@ -1522,7 +1542,8 @@ U32 Icb_OpInternetSourceCtrlBT_SetRequest_EncodedSize(Icb_OpInternetSourceCtrlBT
 U32 Icb_OpInternetSourceCtrlBT_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpInternetSourceCtrlBT_SetRequest_Decode(Icb_OpInternetSourceCtrlBT_SetRequest ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlBT_SetRequest_Encode(Icb_OpInternetSourceCtrlBT_SetRequest ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpInternetSourceCtrlBT_SetRequest Icb_OpInternetSourceCtrlBT_SetRequest_Create(ASN_Session session);
@@ -1542,7 +1563,8 @@ U32 Icb_OpInternetSourceCtrlBT_Response_EncodedSize(Icb_OpInternetSourceCtrlBT_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpInternetSourceCtrlBT_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpInternetSourceCtrlBT_Response_Decode(Icb_OpInternetSourceCtrlBT_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetSourceCtrlBT_Response_Decode(Icb_OpInternetSourceCtrlBT_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlBT_Response_Encode(Icb_OpInternetSourceCtrlBT_Response ThisPtr, ASN_Stream stream);
 Icb_OpInternetSourceCtrlBT_Response Icb_OpInternetSourceCtrlBT_Response_Create(ASN_Session session);
@@ -1563,7 +1585,8 @@ U32 Icb_OpInternetSourceCtrlBT_Notification_EncodedSize(Icb_OpInternetSourceCtrl
 U32 Icb_OpInternetSourceCtrlBT_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpInternetSourceCtrlBT_Notification_Decode(Icb_OpInternetSourceCtrlBT_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlBT_Notification_Encode(Icb_OpInternetSourceCtrlBT_Notification ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpInternetSourceCtrlBT_Notification Icb_OpInternetSourceCtrlBT_Notification_Create(ASN_Session session);
@@ -1584,7 +1607,8 @@ U32 Icb_OpInternetSourceCtrlUSB_SetRequest_EncodedSize(Icb_OpInternetSourceCtrlU
 U32 Icb_OpInternetSourceCtrlUSB_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpInternetSourceCtrlUSB_SetRequest_Decode(Icb_OpInternetSourceCtrlUSB_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlUSB_SetRequest_Encode(Icb_OpInternetSourceCtrlUSB_SetRequest ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpInternetSourceCtrlUSB_SetRequest Icb_OpInternetSourceCtrlUSB_SetRequest_Create(ASN_Session session);
@@ -1605,7 +1629,8 @@ U32 Icb_OpInternetSourceCtrlUSB_Response_EncodedSize(Icb_OpInternetSourceCtrlUSB
 U32 Icb_OpInternetSourceCtrlUSB_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpInternetSourceCtrlUSB_Response_Decode(Icb_OpInternetSourceCtrlUSB_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream);
+                                                       ASN_Session session,
+                                                       ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlUSB_Response_Encode(Icb_OpInternetSourceCtrlUSB_Response ThisPtr, ASN_Stream stream);
 Icb_OpInternetSourceCtrlUSB_Response Icb_OpInternetSourceCtrlUSB_Response_Create(ASN_Session session);
 #ifdef ASN_PRINT
@@ -1625,7 +1650,8 @@ U32 Icb_OpInternetSourceCtrlUSB_Notification_EncodedSize(Icb_OpInternetSourceCtr
 U32 Icb_OpInternetSourceCtrlUSB_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpInternetSourceCtrlUSB_Notification_Decode(Icb_OpInternetSourceCtrlUSB_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream);
+                                                           ASN_Session session,
+                                                           ASN_Stream stream);
 ASN_Result Icb_OpInternetSourceCtrlUSB_Notification_Encode(Icb_OpInternetSourceCtrlUSB_Notification ThisPtr,
                                                            ASN_Stream stream);
 Icb_OpInternetSourceCtrlUSB_Notification Icb_OpInternetSourceCtrlUSB_Notification_Create(ASN_Session session);
@@ -1650,7 +1676,8 @@ U32 Icb_OpPSIMMessage_SetRequest_EncodedSize(Icb_OpPSIMMessage_SetRequest ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMMessage_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMMessage_SetRequest_Decode(Icb_OpPSIMMessage_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMMessage_SetRequest_Decode(Icb_OpPSIMMessage_SetRequest ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpPSIMMessage_SetRequest_Encode(Icb_OpPSIMMessage_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpPSIMMessage_SetRequest Icb_OpPSIMMessage_SetRequest_Create(ASN_Session session);
@@ -1788,7 +1815,8 @@ U32 Icb_OpWLANSTADisconnect_Response_EncodedSize(Icb_OpWLANSTADisconnect_Respons
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANSTADisconnect_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANSTADisconnect_Response_Decode(Icb_OpWLANSTADisconnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTADisconnect_Response_Decode(Icb_OpWLANSTADisconnect_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpWLANSTADisconnect_Response_Encode(Icb_OpWLANSTADisconnect_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANSTADisconnect_Response Icb_OpWLANSTADisconnect_Response_Create(ASN_Session session);
@@ -1853,7 +1881,8 @@ U32 Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_EncodedSize(Icb_OpWLANSTAForge
 U32 Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_Decode(Icb_OpWLANSTAForgetRememberedNetwk_SetRequest ThisPtr,
-                                                                ASN_Session session, ASN_Stream stream);
+                                                                ASN_Session session,
+                                                                ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_Encode(Icb_OpWLANSTAForgetRememberedNetwk_SetRequest ThisPtr,
                                                                 ASN_Stream stream);
 Icb_OpWLANSTAForgetRememberedNetwk_SetRequest Icb_OpWLANSTAForgetRememberedNetwk_SetRequest_Create(ASN_Session session);
@@ -1874,7 +1903,8 @@ U32 Icb_OpWLANSTAForgetRememberedNetwk_Response_EncodedSize(Icb_OpWLANSTAForgetR
 U32 Icb_OpWLANSTAForgetRememberedNetwk_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_Response_Decode(Icb_OpWLANSTAForgetRememberedNetwk_Response ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream);
+                                                              ASN_Session session,
+                                                              ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAForgetRememberedNetwk_Response_Encode(Icb_OpWLANSTAForgetRememberedNetwk_Response ThisPtr,
                                                               ASN_Stream stream);
 Icb_OpWLANSTAForgetRememberedNetwk_Response Icb_OpWLANSTAForgetRememberedNetwk_Response_Create(ASN_Session session);
@@ -1924,7 +1954,8 @@ U32 Icb_OpPSIMSecurity_Response_EncodedSize(Icb_OpPSIMSecurity_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMSecurity_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMSecurity_Response_Decode(Icb_OpPSIMSecurity_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMSecurity_Response_Decode(Icb_OpPSIMSecurity_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpPSIMSecurity_Response_Encode(Icb_OpPSIMSecurity_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMSecurity_Response Icb_OpPSIMSecurity_Response_Create(ASN_Session session);
@@ -2216,7 +2247,8 @@ U32 Icb_OpPSIMSignalStrength_Notification_EncodedSize(Icb_OpPSIMSignalStrength_N
 U32 Icb_OpPSIMSignalStrength_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMSignalStrength_Notification_Decode(Icb_OpPSIMSignalStrength_Notification ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpPSIMSignalStrength_Notification_Encode(Icb_OpPSIMSignalStrength_Notification ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpPSIMSignalStrength_Notification Icb_OpPSIMSignalStrength_Notification_Create(ASN_Session session);
@@ -2286,7 +2318,8 @@ U32 Icb_OpPremiumAudio_SetRequest_EncodedSize(Icb_OpPremiumAudio_SetRequest This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPremiumAudio_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPremiumAudio_SetRequest_Decode(Icb_OpPremiumAudio_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPremiumAudio_SetRequest_Decode(Icb_OpPremiumAudio_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpPremiumAudio_SetRequest_Encode(Icb_OpPremiumAudio_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpPremiumAudio_SetRequest Icb_OpPremiumAudio_SetRequest_Create(ASN_Session session);
@@ -2306,7 +2339,8 @@ U32 Icb_OpPremiumAudio_Response_EncodedSize(Icb_OpPremiumAudio_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPremiumAudio_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPremiumAudio_Response_Decode(Icb_OpPremiumAudio_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPremiumAudio_Response_Decode(Icb_OpPremiumAudio_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpPremiumAudio_Response_Encode(Icb_OpPremiumAudio_Response ThisPtr, ASN_Stream stream);
 Icb_OpPremiumAudio_Response Icb_OpPremiumAudio_Response_Create(ASN_Session session);
@@ -2380,7 +2414,8 @@ U32 Icb_OpDLCConnectedSignal_Response_EncodedSize(Icb_OpDLCConnectedSignal_Respo
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDLCConnectedSignal_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDLCConnectedSignal_Response_Decode(Icb_OpDLCConnectedSignal_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDLCConnectedSignal_Response_Decode(Icb_OpDLCConnectedSignal_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpDLCConnectedSignal_Response_Encode(Icb_OpDLCConnectedSignal_Response ThisPtr, ASN_Stream stream);
 Icb_OpDLCConnectedSignal_Response Icb_OpDLCConnectedSignal_Response_Create(ASN_Session session);
@@ -2569,7 +2604,8 @@ U32 Icb_NrOfSatellitesPerSystem_EncodedSize(Icb_NrOfSatellitesPerSystem ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_NrOfSatellitesPerSystem_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_NrOfSatellitesPerSystem_Decode(Icb_NrOfSatellitesPerSystem ThisPtr, ASN_Session session,
+ASN_Result Icb_NrOfSatellitesPerSystem_Decode(Icb_NrOfSatellitesPerSystem ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_NrOfSatellitesPerSystem_Encode(Icb_NrOfSatellitesPerSystem ThisPtr, ASN_Stream stream);
 Icb_NrOfSatellitesPerSystem Icb_NrOfSatellitesPerSystem_Create(ASN_Session session);
@@ -2720,7 +2756,8 @@ U32 Icb_OpRemoteDiagnosticLink_Notification_EncodedSize(Icb_OpRemoteDiagnosticLi
 U32 Icb_OpRemoteDiagnosticLink_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpRemoteDiagnosticLink_Notification_Decode(Icb_OpRemoteDiagnosticLink_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpRemoteDiagnosticLink_Notification_Encode(Icb_OpRemoteDiagnosticLink_Notification ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpRemoteDiagnosticLink_Notification Icb_OpRemoteDiagnosticLink_Notification_Create(ASN_Session session);
@@ -2753,7 +2790,8 @@ U32 Icb_OpTextFromOperatorToUser_Notification_EncodedSize(Icb_OpTextFromOperator
 U32 Icb_OpTextFromOperatorToUser_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpTextFromOperatorToUser_Notification_Decode(Icb_OpTextFromOperatorToUser_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpTextFromOperatorToUser_Notification_Encode(Icb_OpTextFromOperatorToUser_Notification ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpTextFromOperatorToUser_Notification Icb_OpTextFromOperatorToUser_Notification_Create(ASN_Session session);
@@ -2774,7 +2812,8 @@ U32 Icb_OpCurrentJ2534Session_Notification_EncodedSize(Icb_OpCurrentJ2534Session
 U32 Icb_OpCurrentJ2534Session_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpCurrentJ2534Session_Notification_Decode(Icb_OpCurrentJ2534Session_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpCurrentJ2534Session_Notification_Encode(Icb_OpCurrentJ2534Session_Notification ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpCurrentJ2534Session_Notification Icb_OpCurrentJ2534Session_Notification_Create(ASN_Session session);
@@ -2844,7 +2883,8 @@ U32 Icb_OpRequestUserAuthentication_Request_EncodedSize(Icb_OpRequestUserAuthent
 U32 Icb_OpRequestUserAuthentication_Request_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpRequestUserAuthentication_Request_Decode(Icb_OpRequestUserAuthentication_Request ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpRequestUserAuthentication_Request_Encode(Icb_OpRequestUserAuthentication_Request ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpRequestUserAuthentication_Request Icb_OpRequestUserAuthentication_Request_Create(ASN_Session session);
@@ -2877,7 +2917,8 @@ U32 Icb_OpTextFromUserToOperator_Notification_EncodedSize(Icb_OpTextFromUserToOp
 U32 Icb_OpTextFromUserToOperator_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpTextFromUserToOperator_Notification_Decode(Icb_OpTextFromUserToOperator_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpTextFromUserToOperator_Notification_Encode(Icb_OpTextFromUserToOperator_Notification ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpTextFromUserToOperator_Notification Icb_OpTextFromUserToOperator_Notification_Create(ASN_Session session);
@@ -2898,7 +2939,8 @@ U32 Icb_OpRequestRemoteDiagnostics_Notification_EncodedSize(Icb_OpRequestRemoteD
 U32 Icb_OpRequestRemoteDiagnostics_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpRequestRemoteDiagnostics_Notification_Decode(Icb_OpRequestRemoteDiagnostics_Notification ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream);
+                                                              ASN_Session session,
+                                                              ASN_Stream stream);
 ASN_Result Icb_OpRequestRemoteDiagnostics_Notification_Encode(Icb_OpRequestRemoteDiagnostics_Notification ThisPtr,
                                                               ASN_Stream stream);
 Icb_OpRequestRemoteDiagnostics_Notification Icb_OpRequestRemoteDiagnostics_Notification_Create(ASN_Session session);
@@ -2919,7 +2961,8 @@ U32 Icb_OpAbortRemoteDiagnostics_Notification_EncodedSize(Icb_OpAbortRemoteDiagn
 U32 Icb_OpAbortRemoteDiagnostics_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpAbortRemoteDiagnostics_Notification_Decode(Icb_OpAbortRemoteDiagnostics_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpAbortRemoteDiagnostics_Notification_Encode(Icb_OpAbortRemoteDiagnostics_Notification ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpAbortRemoteDiagnostics_Notification Icb_OpAbortRemoteDiagnostics_Notification_Create(ASN_Session session);
@@ -3039,7 +3082,8 @@ U32 Icb_OpCancelDownload_SetRequest_EncodedSize(Icb_OpCancelDownload_SetRequest 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpCancelDownload_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpCancelDownload_SetRequest_Decode(Icb_OpCancelDownload_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCancelDownload_SetRequest_Decode(Icb_OpCancelDownload_SetRequest ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_OpCancelDownload_SetRequest_Encode(Icb_OpCancelDownload_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpCancelDownload_SetRequest Icb_OpCancelDownload_SetRequest_Create(ASN_Session session);
@@ -3059,7 +3103,8 @@ U32 Icb_OpCancelDownload_Response_EncodedSize(Icb_OpCancelDownload_Response This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpCancelDownload_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpCancelDownload_Response_Decode(Icb_OpCancelDownload_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCancelDownload_Response_Decode(Icb_OpCancelDownload_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpCancelDownload_Response_Encode(Icb_OpCancelDownload_Response ThisPtr, ASN_Stream stream);
 Icb_OpCancelDownload_Response Icb_OpCancelDownload_Response_Create(ASN_Session session);
@@ -3190,7 +3235,8 @@ U32 Icb_OpLocalStorage_Response_EncodedSize(Icb_OpLocalStorage_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpLocalStorage_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpLocalStorage_Response_Decode(Icb_OpLocalStorage_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpLocalStorage_Response_Decode(Icb_OpLocalStorage_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpLocalStorage_Response_Encode(Icb_OpLocalStorage_Response ThisPtr, ASN_Stream stream);
 Icb_OpLocalStorage_Response Icb_OpLocalStorage_Response_Create(ASN_Session session);
@@ -3210,7 +3256,8 @@ U32 Icb_OpTvmVehicleInfo_Response_EncodedSize(Icb_OpTvmVehicleInfo_Response This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTvmVehicleInfo_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTvmVehicleInfo_Response_Decode(Icb_OpTvmVehicleInfo_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTvmVehicleInfo_Response_Decode(Icb_OpTvmVehicleInfo_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpTvmVehicleInfo_Response_Encode(Icb_OpTvmVehicleInfo_Response ThisPtr, ASN_Stream stream);
 Icb_OpTvmVehicleInfo_Response Icb_OpTvmVehicleInfo_Response_Create(ASN_Session session);
@@ -3230,7 +3277,8 @@ U32 Icb_OpTvmVehicleInfo_Notification_EncodedSize(Icb_OpTvmVehicleInfo_Notificat
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTvmVehicleInfo_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTvmVehicleInfo_Notification_Decode(Icb_OpTvmVehicleInfo_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTvmVehicleInfo_Notification_Decode(Icb_OpTvmVehicleInfo_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpTvmVehicleInfo_Notification_Encode(Icb_OpTvmVehicleInfo_Notification ThisPtr, ASN_Stream stream);
 Icb_OpTvmVehicleInfo_Notification Icb_OpTvmVehicleInfo_Notification_Create(ASN_Session session);
@@ -3253,8 +3301,11 @@ U32 Icb_ArrayOf_ClimateTimer_EncodedSize(Icb_ArrayOf_ClimateTimer ThisPtr, S32 m
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_ClimateTimer_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_ClimateTimer_Decode(Icb_ArrayOf_ClimateTimer ThisPtr, ASN_Session session, ASN_Stream stream,
-                                           S32 max, S32 min);
+ASN_Result Icb_ArrayOf_ClimateTimer_Decode(Icb_ArrayOf_ClimateTimer ThisPtr,
+                                           ASN_Session session,
+                                           ASN_Stream stream,
+                                           S32 max,
+                                           S32 min);
 ASN_Result Icb_ArrayOf_ClimateTimer_Encode(Icb_ArrayOf_ClimateTimer ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_ClimateTimer Icb_ArrayOf_ClimateTimer_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_ClimateTimer_SetSize(Icb_ArrayOf_ClimateTimer ThisPtr, ASN_Session session, U32 size);
@@ -3276,7 +3327,10 @@ U32 Icb_ArrayOf_OnOff_EncodedSize(Icb_ArrayOf_OnOff ThisPtr, S32 min, S32 max);
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_OnOff_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_OnOff_Decode(Icb_ArrayOf_OnOff ThisPtr, ASN_Session session, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_OnOff_Decode(Icb_ArrayOf_OnOff ThisPtr,
+                                    ASN_Session session,
+                                    ASN_Stream stream,
+                                    S32 max,
                                     S32 min);
 ASN_Result Icb_ArrayOf_OnOff_Encode(Icb_ArrayOf_OnOff ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_OnOff Icb_ArrayOf_OnOff_Create(ASN_Session session);
@@ -3300,12 +3354,14 @@ U32 Icb_OpGenericSettingSynch_Request_settingIDs_EncodedSize(Icb_OpGenericSettin
 U32 Icb_OpGenericSettingSynch_Request_settingIDs_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_Decode(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr,
-                                                               ASN_Session session, ASN_Stream stream);
+                                                               ASN_Session session,
+                                                               ASN_Stream stream);
 ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_Encode(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr,
                                                                ASN_Stream stream);
 Icb_OpGenericSettingSynch_Request_settingIDs Icb_OpGenericSettingSynch_Request_settingIDs_Create(ASN_Session session);
 ASN_Result Icb_OpGenericSettingSynch_Request_settingIDs_SetSize(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr,
-                                                                ASN_Session session, U32 size);
+                                                                ASN_Session session,
+                                                                U32 size);
 #ifdef ASN_PRINT
 void Icb_OpGenericSettingSynch_Request_settingIDs_Print(Icb_OpGenericSettingSynch_Request_settingIDs ThisPtr);
 #endif /* #ifdef ASN_PRINT */
@@ -3324,7 +3380,10 @@ U32 Icb_ArrayOf_Setting_EncodedSize(Icb_ArrayOf_Setting ThisPtr, S32 min, S32 ma
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_Setting_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_Setting_Decode(Icb_ArrayOf_Setting ThisPtr, ASN_Session session, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_Setting_Decode(Icb_ArrayOf_Setting ThisPtr,
+                                      ASN_Session session,
+                                      ASN_Stream stream,
+                                      S32 max,
                                       S32 min);
 ASN_Result Icb_ArrayOf_Setting_Encode(Icb_ArrayOf_Setting ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_Setting Icb_ArrayOf_Setting_Create(ASN_Session session);
@@ -3347,7 +3406,10 @@ U32 Icb_ArrayOf_SBWarning_EncodedSize(Icb_ArrayOf_SBWarning ThisPtr, S32 min, S3
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_SBWarning_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_SBWarning_Decode(Icb_ArrayOf_SBWarning ThisPtr, ASN_Session session, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_SBWarning_Decode(Icb_ArrayOf_SBWarning ThisPtr,
+                                        ASN_Session session,
+                                        ASN_Stream stream,
+                                        S32 max,
                                         S32 min);
 ASN_Result Icb_ArrayOf_SBWarning_Encode(Icb_ArrayOf_SBWarning ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_SBWarning Icb_ArrayOf_SBWarning_Create(ASN_Session session);
@@ -3370,9 +3432,14 @@ U32 Icb_ArrayOf_WLANFrequencyBand_EncodedSize(Icb_ArrayOf_WLANFrequencyBand This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_WLANFrequencyBand_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_WLANFrequencyBand_Decode(Icb_ArrayOf_WLANFrequencyBand ThisPtr, ASN_Session session,
-                                                ASN_Stream stream, S32 max, S32 min);
-ASN_Result Icb_ArrayOf_WLANFrequencyBand_Encode(Icb_ArrayOf_WLANFrequencyBand ThisPtr, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_WLANFrequencyBand_Decode(Icb_ArrayOf_WLANFrequencyBand ThisPtr,
+                                                ASN_Session session,
+                                                ASN_Stream stream,
+                                                S32 max,
+                                                S32 min);
+ASN_Result Icb_ArrayOf_WLANFrequencyBand_Encode(Icb_ArrayOf_WLANFrequencyBand ThisPtr,
+                                                ASN_Stream stream,
+                                                S32 max,
                                                 S32 min);
 Icb_ArrayOf_WLANFrequencyBand Icb_ArrayOf_WLANFrequencyBand_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_WLANFrequencyBand_SetSize(Icb_ArrayOf_WLANFrequencyBand ThisPtr, ASN_Session session, U32 size);
@@ -3394,8 +3461,11 @@ U32 Icb_ArrayOf_WLANConnDevice_EncodedSize(Icb_ArrayOf_WLANConnDevice ThisPtr, S
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_WLANConnDevice_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_WLANConnDevice_Decode(Icb_ArrayOf_WLANConnDevice ThisPtr, ASN_Session session, ASN_Stream stream,
-                                             S32 max, S32 min);
+ASN_Result Icb_ArrayOf_WLANConnDevice_Decode(Icb_ArrayOf_WLANConnDevice ThisPtr,
+                                             ASN_Session session,
+                                             ASN_Stream stream,
+                                             S32 max,
+                                             S32 min);
 ASN_Result Icb_ArrayOf_WLANConnDevice_Encode(Icb_ArrayOf_WLANConnDevice ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_WLANConnDevice Icb_ArrayOf_WLANConnDevice_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_WLANConnDevice_SetSize(Icb_ArrayOf_WLANConnDevice ThisPtr, ASN_Session session, U32 size);
@@ -3413,18 +3483,25 @@ struct Icb_ArrayOf_AvailableNetworkInformation_t {
     Icb_AvailableNetworkInformation* data_array;
 };
 
-U32 Icb_ArrayOf_AvailableNetworkInformation_EncodedSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr, S32 min,
+U32 Icb_ArrayOf_AvailableNetworkInformation_EncodedSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
+                                                        S32 min,
                                                         S32 max);
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_AvailableNetworkInformation_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Decode(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream, S32 max, S32 min);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream,
+                                                          S32 max,
+                                                          S32 min);
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_Encode(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                          ASN_Stream stream, S32 max, S32 min);
+                                                          ASN_Stream stream,
+                                                          S32 max,
+                                                          S32 min);
 Icb_ArrayOf_AvailableNetworkInformation Icb_ArrayOf_AvailableNetworkInformation_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_AvailableNetworkInformation_SetSize(Icb_ArrayOf_AvailableNetworkInformation ThisPtr,
-                                                           ASN_Session session, U32 size);
+                                                           ASN_Session session,
+                                                           U32 size);
 #ifdef ASN_PRINT
 void Icb_ArrayOf_AvailableNetworkInformation_Print(Icb_ArrayOf_AvailableNetworkInformation ThisPtr);
 #endif /* #ifdef ASN_PRINT */
@@ -3465,8 +3542,11 @@ U32 Icb_ArrayOf_NetworkOperator_EncodedSize(Icb_ArrayOf_NetworkOperator ThisPtr,
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_NetworkOperator_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_NetworkOperator_Decode(Icb_ArrayOf_NetworkOperator ThisPtr, ASN_Session session,
-                                              ASN_Stream stream, S32 max, S32 min);
+ASN_Result Icb_ArrayOf_NetworkOperator_Decode(Icb_ArrayOf_NetworkOperator ThisPtr,
+                                              ASN_Session session,
+                                              ASN_Stream stream,
+                                              S32 max,
+                                              S32 min);
 ASN_Result Icb_ArrayOf_NetworkOperator_Encode(Icb_ArrayOf_NetworkOperator ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_NetworkOperator Icb_ArrayOf_NetworkOperator_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_NetworkOperator_SetSize(Icb_ArrayOf_NetworkOperator ThisPtr, ASN_Session session, U32 size);
@@ -3488,9 +3568,14 @@ U32 Icb_ArrayOf_RadioFrequencyHz_EncodedSize(Icb_ArrayOf_RadioFrequencyHz ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_RadioFrequencyHz_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_RadioFrequencyHz_Decode(Icb_ArrayOf_RadioFrequencyHz ThisPtr, ASN_Session session,
-                                               ASN_Stream stream, S32 max, S32 min);
-ASN_Result Icb_ArrayOf_RadioFrequencyHz_Encode(Icb_ArrayOf_RadioFrequencyHz ThisPtr, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_RadioFrequencyHz_Decode(Icb_ArrayOf_RadioFrequencyHz ThisPtr,
+                                               ASN_Session session,
+                                               ASN_Stream stream,
+                                               S32 max,
+                                               S32 min);
+ASN_Result Icb_ArrayOf_RadioFrequencyHz_Encode(Icb_ArrayOf_RadioFrequencyHz ThisPtr,
+                                               ASN_Stream stream,
+                                               S32 max,
                                                S32 min);
 Icb_ArrayOf_RadioFrequencyHz Icb_ArrayOf_RadioFrequencyHz_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_RadioFrequencyHz_SetSize(Icb_ArrayOf_RadioFrequencyHz ThisPtr, ASN_Session session, U32 size);
@@ -3512,12 +3597,18 @@ U32 Icb_ArrayOf_ApprovalStatusType_EncodedSize(Icb_ArrayOf_ApprovalStatusType Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_ApprovalStatusType_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_ApprovalStatusType_Decode(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Session session,
-                                                 ASN_Stream stream, S32 max, S32 min);
-ASN_Result Icb_ArrayOf_ApprovalStatusType_Encode(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_ApprovalStatusType_Decode(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                 ASN_Session session,
+                                                 ASN_Stream stream,
+                                                 S32 max,
+                                                 S32 min);
+ASN_Result Icb_ArrayOf_ApprovalStatusType_Encode(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                 ASN_Stream stream,
+                                                 S32 max,
                                                  S32 min);
 Icb_ArrayOf_ApprovalStatusType Icb_ArrayOf_ApprovalStatusType_Create(ASN_Session session);
-ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType ThisPtr, ASN_Session session,
+ASN_Result Icb_ArrayOf_ApprovalStatusType_SetSize(Icb_ArrayOf_ApprovalStatusType ThisPtr,
+                                                  ASN_Session session,
                                                   U32 size);
 #ifdef ASN_PRINT
 void Icb_ArrayOf_ApprovalStatusType_Print(Icb_ArrayOf_ApprovalStatusType ThisPtr);
@@ -3537,8 +3628,11 @@ U32 Icb_ArrayOf_SoftwareProduct_EncodedSize(Icb_ArrayOf_SoftwareProduct ThisPtr,
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_SoftwareProduct_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_SoftwareProduct_Decode(Icb_ArrayOf_SoftwareProduct ThisPtr, ASN_Session session,
-                                              ASN_Stream stream, S32 max, S32 min);
+ASN_Result Icb_ArrayOf_SoftwareProduct_Decode(Icb_ArrayOf_SoftwareProduct ThisPtr,
+                                              ASN_Session session,
+                                              ASN_Stream stream,
+                                              S32 max,
+                                              S32 min);
 ASN_Result Icb_ArrayOf_SoftwareProduct_Encode(Icb_ArrayOf_SoftwareProduct ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_SoftwareProduct Icb_ArrayOf_SoftwareProduct_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_SoftwareProduct_SetSize(Icb_ArrayOf_SoftwareProduct ThisPtr, ASN_Session session, U32 size);
@@ -3582,8 +3676,11 @@ U32 Icb_ArrayOf_PartIdentifier_EncodedSize(Icb_ArrayOf_PartIdentifier ThisPtr, S
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_PartIdentifier_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_PartIdentifier_Decode(Icb_ArrayOf_PartIdentifier ThisPtr, ASN_Session session, ASN_Stream stream,
-                                             S32 max, S32 min);
+ASN_Result Icb_ArrayOf_PartIdentifier_Decode(Icb_ArrayOf_PartIdentifier ThisPtr,
+                                             ASN_Session session,
+                                             ASN_Stream stream,
+                                             S32 max,
+                                             S32 min);
 ASN_Result Icb_ArrayOf_PartIdentifier_Encode(Icb_ArrayOf_PartIdentifier ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_PartIdentifier Icb_ArrayOf_PartIdentifier_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_PartIdentifier_SetSize(Icb_ArrayOf_PartIdentifier ThisPtr, ASN_Session session, U32 size);
@@ -3605,9 +3702,14 @@ U32 Icb_ArrayOf_InstallationData_EncodedSize(Icb_ArrayOf_InstallationData ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_InstallationData_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_InstallationData_Decode(Icb_ArrayOf_InstallationData ThisPtr, ASN_Session session,
-                                               ASN_Stream stream, S32 max, S32 min);
-ASN_Result Icb_ArrayOf_InstallationData_Encode(Icb_ArrayOf_InstallationData ThisPtr, ASN_Stream stream, S32 max,
+ASN_Result Icb_ArrayOf_InstallationData_Decode(Icb_ArrayOf_InstallationData ThisPtr,
+                                               ASN_Session session,
+                                               ASN_Stream stream,
+                                               S32 max,
+                                               S32 min);
+ASN_Result Icb_ArrayOf_InstallationData_Encode(Icb_ArrayOf_InstallationData ThisPtr,
+                                               ASN_Stream stream,
+                                               S32 max,
                                                S32 min);
 Icb_ArrayOf_InstallationData Icb_ArrayOf_InstallationData_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_InstallationData_SetSize(Icb_ArrayOf_InstallationData ThisPtr, ASN_Session session, U32 size);
@@ -3629,8 +3731,11 @@ U32 Icb_ArrayOf_InstalledData_EncodedSize(Icb_ArrayOf_InstalledData ThisPtr, S32
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_ArrayOf_InstalledData_SessionSize(S32 min, S32 max);
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_ArrayOf_InstalledData_Decode(Icb_ArrayOf_InstalledData ThisPtr, ASN_Session session, ASN_Stream stream,
-                                            S32 max, S32 min);
+ASN_Result Icb_ArrayOf_InstalledData_Decode(Icb_ArrayOf_InstalledData ThisPtr,
+                                            ASN_Session session,
+                                            ASN_Stream stream,
+                                            S32 max,
+                                            S32 min);
 ASN_Result Icb_ArrayOf_InstalledData_Encode(Icb_ArrayOf_InstalledData ThisPtr, ASN_Stream stream, S32 max, S32 min);
 Icb_ArrayOf_InstalledData Icb_ArrayOf_InstalledData_Create(ASN_Session session);
 ASN_Result Icb_ArrayOf_InstalledData_SetSize(Icb_ArrayOf_InstalledData ThisPtr, ASN_Session session, U32 size);
@@ -3671,7 +3776,8 @@ U32 Icb_OpTelematicSettings_SetRequest_EncodedSize(Icb_OpTelematicSettings_SetRe
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTelematicSettings_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTelematicSettings_SetRequest_Decode(Icb_OpTelematicSettings_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTelematicSettings_SetRequest_Decode(Icb_OpTelematicSettings_SetRequest ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream);
 ASN_Result Icb_OpTelematicSettings_SetRequest_Encode(Icb_OpTelematicSettings_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpTelematicSettings_SetRequest Icb_OpTelematicSettings_SetRequest_Create(ASN_Session session);
@@ -3691,7 +3797,8 @@ U32 Icb_OpTelematicSettings_Response_EncodedSize(Icb_OpTelematicSettings_Respons
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTelematicSettings_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTelematicSettings_Response_Decode(Icb_OpTelematicSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTelematicSettings_Response_Decode(Icb_OpTelematicSettings_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpTelematicSettings_Response_Encode(Icb_OpTelematicSettings_Response ThisPtr, ASN_Stream stream);
 Icb_OpTelematicSettings_Response Icb_OpTelematicSettings_Response_Create(ASN_Session session);
@@ -3711,7 +3818,8 @@ U32 Icb_OpPositionData_Response_EncodedSize(Icb_OpPositionData_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPositionData_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPositionData_Response_Decode(Icb_OpPositionData_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPositionData_Response_Decode(Icb_OpPositionData_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpPositionData_Response_Encode(Icb_OpPositionData_Response ThisPtr, ASN_Stream stream);
 Icb_OpPositionData_Response Icb_OpPositionData_Response_Create(ASN_Session session);
@@ -3734,7 +3842,8 @@ U32 Icb_WGS84SimplePositionData_EncodedSize(Icb_WGS84SimplePositionData ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_WGS84SimplePositionData_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_WGS84SimplePositionData_Decode(Icb_WGS84SimplePositionData ThisPtr, ASN_Session session,
+ASN_Result Icb_WGS84SimplePositionData_Decode(Icb_WGS84SimplePositionData ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_WGS84SimplePositionData_Encode(Icb_WGS84SimplePositionData ThisPtr, ASN_Stream stream);
 Icb_WGS84SimplePositionData Icb_WGS84SimplePositionData_Create(ASN_Session session);
@@ -3757,7 +3866,8 @@ U32 Icb_OpSubscriptionActivation_SetRequest_EncodedSize(Icb_OpSubscriptionActiva
 U32 Icb_OpSubscriptionActivation_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSubscriptionActivation_SetRequest_Decode(Icb_OpSubscriptionActivation_SetRequest ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpSubscriptionActivation_SetRequest_Encode(Icb_OpSubscriptionActivation_SetRequest ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpSubscriptionActivation_SetRequest Icb_OpSubscriptionActivation_SetRequest_Create(ASN_Session session);
@@ -3778,7 +3888,8 @@ U32 Icb_OpSubscriptionActivation_Response_EncodedSize(Icb_OpSubscriptionActivati
 U32 Icb_OpSubscriptionActivation_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSubscriptionActivation_Response_Decode(Icb_OpSubscriptionActivation_Response ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpSubscriptionActivation_Response_Encode(Icb_OpSubscriptionActivation_Response ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpSubscriptionActivation_Response Icb_OpSubscriptionActivation_Response_Create(ASN_Session session);
@@ -3799,7 +3910,8 @@ U32 Icb_OpSubscriptionActivation_Notification_EncodedSize(Icb_OpSubscriptionActi
 U32 Icb_OpSubscriptionActivation_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSubscriptionActivation_Notification_Decode(Icb_OpSubscriptionActivation_Notification ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpSubscriptionActivation_Notification_Encode(Icb_OpSubscriptionActivation_Notification ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpSubscriptionActivation_Notification Icb_OpSubscriptionActivation_Notification_Create(ASN_Session session);
@@ -3820,7 +3932,8 @@ U32 Icb_OpServiceActivation_SetRequest_EncodedSize(Icb_OpServiceActivation_SetRe
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpServiceActivation_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpServiceActivation_SetRequest_Decode(Icb_OpServiceActivation_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpServiceActivation_SetRequest_Decode(Icb_OpServiceActivation_SetRequest ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream);
 ASN_Result Icb_OpServiceActivation_SetRequest_Encode(Icb_OpServiceActivation_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpServiceActivation_SetRequest Icb_OpServiceActivation_SetRequest_Create(ASN_Session session);
@@ -3848,7 +3961,8 @@ U32 Icb_OpRescueStatus_Response_EncodedSize(Icb_OpRescueStatus_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpRescueStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpRescueStatus_Response_Decode(Icb_OpRescueStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpRescueStatus_Response_Decode(Icb_OpRescueStatus_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpRescueStatus_Response_Encode(Icb_OpRescueStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpRescueStatus_Response Icb_OpRescueStatus_Response_Create(ASN_Session session);
@@ -3876,7 +3990,8 @@ U32 Icb_OpRescueStatus_Notification_EncodedSize(Icb_OpRescueStatus_Notification 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpRescueStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpRescueStatus_Notification_Decode(Icb_OpRescueStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpRescueStatus_Notification_Decode(Icb_OpRescueStatus_Notification ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_OpRescueStatus_Notification_Encode(Icb_OpRescueStatus_Notification ThisPtr, ASN_Stream stream);
 Icb_OpRescueStatus_Notification Icb_OpRescueStatus_Notification_Create(ASN_Session session);
@@ -3898,7 +4013,8 @@ U32 Icb_OpSendToCarConfirmation_SetRequest_EncodedSize(Icb_OpSendToCarConfirmati
 U32 Icb_OpSendToCarConfirmation_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSendToCarConfirmation_SetRequest_Decode(Icb_OpSendToCarConfirmation_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpSendToCarConfirmation_SetRequest_Encode(Icb_OpSendToCarConfirmation_SetRequest ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpSendToCarConfirmation_SetRequest Icb_OpSendToCarConfirmation_SetRequest_Create(ASN_Session session);
@@ -3920,7 +4036,8 @@ U32 Icb_OpSendToCarConfirmation_Response_EncodedSize(Icb_OpSendToCarConfirmation
 U32 Icb_OpSendToCarConfirmation_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSendToCarConfirmation_Response_Decode(Icb_OpSendToCarConfirmation_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream);
+                                                       ASN_Session session,
+                                                       ASN_Stream stream);
 ASN_Result Icb_OpSendToCarConfirmation_Response_Encode(Icb_OpSendToCarConfirmation_Response ThisPtr, ASN_Stream stream);
 Icb_OpSendToCarConfirmation_Response Icb_OpSendToCarConfirmation_Response_Create(ASN_Session session);
 #ifdef ASN_PRINT
@@ -3962,7 +4079,8 @@ U32 Icb_OpSendToCar_SetRequest_EncodedSize(Icb_OpSendToCar_SetRequest ThisPtr);
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpSendToCar_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpSendToCar_SetRequest_Decode(Icb_OpSendToCar_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpSendToCar_SetRequest_Decode(Icb_OpSendToCar_SetRequest ThisPtr,
+                                             ASN_Session session,
                                              ASN_Stream stream);
 ASN_Result Icb_OpSendToCar_SetRequest_Encode(Icb_OpSendToCar_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpSendToCar_SetRequest Icb_OpSendToCar_SetRequest_Create(ASN_Session session);
@@ -3983,7 +4101,8 @@ U32 Icb_OpUserPrivacySettings_Notification_EncodedSize(Icb_OpUserPrivacySettings
 U32 Icb_OpUserPrivacySettings_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpUserPrivacySettings_Notification_Decode(Icb_OpUserPrivacySettings_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpUserPrivacySettings_Notification_Encode(Icb_OpUserPrivacySettings_Notification ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpUserPrivacySettings_Notification Icb_OpUserPrivacySettings_Notification_Create(ASN_Session session);
@@ -4004,7 +4123,8 @@ U32 Icb_OpClimateTimers_SetRequest_EncodedSize(Icb_OpClimateTimers_SetRequest Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpClimateTimers_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpClimateTimers_SetRequest_Decode(Icb_OpClimateTimers_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpClimateTimers_SetRequest_Decode(Icb_OpClimateTimers_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpClimateTimers_SetRequest_Encode(Icb_OpClimateTimers_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpClimateTimers_SetRequest Icb_OpClimateTimers_SetRequest_Create(ASN_Session session);
@@ -4026,7 +4146,8 @@ U32 Icb_OpClimateTimers_Response_EncodedSize(Icb_OpClimateTimers_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpClimateTimers_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpClimateTimers_Response_Decode(Icb_OpClimateTimers_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpClimateTimers_Response_Decode(Icb_OpClimateTimers_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpClimateTimers_Response_Encode(Icb_OpClimateTimers_Response ThisPtr, ASN_Stream stream);
 Icb_OpClimateTimers_Response Icb_OpClimateTimers_Response_Create(ASN_Session session);
@@ -4066,7 +4187,8 @@ U32 Icb_OpGenericSettingSynch_Request_EncodedSize(Icb_OpGenericSettingSynch_Requ
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpGenericSettingSynch_Request_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpGenericSettingSynch_Request_Decode(Icb_OpGenericSettingSynch_Request ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGenericSettingSynch_Request_Decode(Icb_OpGenericSettingSynch_Request ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpGenericSettingSynch_Request_Encode(Icb_OpGenericSettingSynch_Request ThisPtr, ASN_Stream stream);
 Icb_OpGenericSettingSynch_Request Icb_OpGenericSettingSynch_Request_Create(ASN_Session session);
@@ -4088,7 +4210,8 @@ U32 Icb_OpGenericSettingSynch_SetRequest_EncodedSize(Icb_OpGenericSettingSynch_S
 U32 Icb_OpGenericSettingSynch_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpGenericSettingSynch_SetRequest_Decode(Icb_OpGenericSettingSynch_SetRequest ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream);
+                                                       ASN_Session session,
+                                                       ASN_Stream stream);
 ASN_Result Icb_OpGenericSettingSynch_SetRequest_Encode(Icb_OpGenericSettingSynch_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpGenericSettingSynch_SetRequest Icb_OpGenericSettingSynch_SetRequest_Create(ASN_Session session);
 #ifdef ASN_PRINT
@@ -4108,7 +4231,8 @@ U32 Icb_OpGenericSettingSynch_Response_EncodedSize(Icb_OpGenericSettingSynch_Res
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpGenericSettingSynch_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpGenericSettingSynch_Response_Decode(Icb_OpGenericSettingSynch_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGenericSettingSynch_Response_Decode(Icb_OpGenericSettingSynch_Response ThisPtr,
+                                                     ASN_Session session,
                                                      ASN_Stream stream);
 ASN_Result Icb_OpGenericSettingSynch_Response_Encode(Icb_OpGenericSettingSynch_Response ThisPtr, ASN_Stream stream);
 Icb_OpGenericSettingSynch_Response Icb_OpGenericSettingSynch_Response_Create(ASN_Session session);
@@ -4130,7 +4254,8 @@ U32 Icb_OpGenericSettingSynch_Notification_EncodedSize(Icb_OpGenericSettingSynch
 U32 Icb_OpGenericSettingSynch_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpGenericSettingSynch_Notification_Decode(Icb_OpGenericSettingSynch_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpGenericSettingSynch_Notification_Encode(Icb_OpGenericSettingSynch_Notification ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpGenericSettingSynch_Notification Icb_OpGenericSettingSynch_Notification_Create(ASN_Session session);
@@ -4178,7 +4303,8 @@ U32 Icb_OpSoHPacketSend_SetRequestNoReturn_EncodedSize(Icb_OpSoHPacketSend_SetRe
 U32 Icb_OpSoHPacketSend_SetRequestNoReturn_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpSoHPacketSend_SetRequestNoReturn_Decode(Icb_OpSoHPacketSend_SetRequestNoReturn ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpSoHPacketSend_SetRequestNoReturn_Encode(Icb_OpSoHPacketSend_SetRequestNoReturn ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpSoHPacketSend_SetRequestNoReturn Icb_OpSoHPacketSend_SetRequestNoReturn_Create(ASN_Session session);
@@ -4200,7 +4326,8 @@ U32 Icb_OpPSIMDataCounter_Response_EncodedSize(Icb_OpPSIMDataCounter_Response Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMDataCounter_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMDataCounter_Response_Decode(Icb_OpPSIMDataCounter_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMDataCounter_Response_Decode(Icb_OpPSIMDataCounter_Response ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpPSIMDataCounter_Response_Encode(Icb_OpPSIMDataCounter_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMDataCounter_Response Icb_OpPSIMDataCounter_Response_Create(ASN_Session session);
@@ -4221,7 +4348,8 @@ U32 Icb_OpPSIMNetworkConfiguration_SetRequest_EncodedSize(Icb_OpPSIMNetworkConfi
 U32 Icb_OpPSIMNetworkConfiguration_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMNetworkConfiguration_SetRequest_Decode(Icb_OpPSIMNetworkConfiguration_SetRequest ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkConfiguration_SetRequest_Encode(Icb_OpPSIMNetworkConfiguration_SetRequest ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpPSIMNetworkConfiguration_SetRequest Icb_OpPSIMNetworkConfiguration_SetRequest_Create(ASN_Session session);
@@ -4242,7 +4370,8 @@ U32 Icb_OpPSIMNetworkConfiguration_Response_EncodedSize(Icb_OpPSIMNetworkConfigu
 U32 Icb_OpPSIMNetworkConfiguration_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMNetworkConfiguration_Response_Decode(Icb_OpPSIMNetworkConfiguration_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkConfiguration_Response_Encode(Icb_OpPSIMNetworkConfiguration_Response ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpPSIMNetworkConfiguration_Response Icb_OpPSIMNetworkConfiguration_Response_Create(ASN_Session session);
@@ -4263,7 +4392,8 @@ U32 Icb_OpPSIMConnectionStatus_Response_EncodedSize(Icb_OpPSIMConnectionStatus_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMConnectionStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMConnectionStatus_Response_Decode(Icb_OpPSIMConnectionStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMConnectionStatus_Response_Decode(Icb_OpPSIMConnectionStatus_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpPSIMConnectionStatus_Response_Encode(Icb_OpPSIMConnectionStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMConnectionStatus_Response Icb_OpPSIMConnectionStatus_Response_Create(ASN_Session session);
@@ -4285,7 +4415,8 @@ U32 Icb_OpPSIMConnectionStatus_Notification_EncodedSize(Icb_OpPSIMConnectionStat
 U32 Icb_OpPSIMConnectionStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMConnectionStatus_Notification_Decode(Icb_OpPSIMConnectionStatus_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpPSIMConnectionStatus_Notification_Encode(Icb_OpPSIMConnectionStatus_Notification ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpPSIMConnectionStatus_Notification Icb_OpPSIMConnectionStatus_Notification_Create(ASN_Session session);
@@ -4305,7 +4436,8 @@ U32 Icb_OpInternetGateway_SetRequest_EncodedSize(Icb_OpInternetGateway_SetReques
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpInternetGateway_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpInternetGateway_SetRequest_Decode(Icb_OpInternetGateway_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetGateway_SetRequest_Decode(Icb_OpInternetGateway_SetRequest ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpInternetGateway_SetRequest_Encode(Icb_OpInternetGateway_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpInternetGateway_SetRequest Icb_OpInternetGateway_SetRequest_Create(ASN_Session session);
@@ -4325,7 +4457,8 @@ U32 Icb_OpInternetGateway_Response_EncodedSize(Icb_OpInternetGateway_Response Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpInternetGateway_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpInternetGateway_Response_Decode(Icb_OpInternetGateway_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpInternetGateway_Response_Decode(Icb_OpInternetGateway_Response ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpInternetGateway_Response_Encode(Icb_OpInternetGateway_Response ThisPtr, ASN_Stream stream);
 Icb_OpInternetGateway_Response Icb_OpInternetGateway_Response_Create(ASN_Session session);
@@ -4346,7 +4479,8 @@ U32 Icb_OpConnectWorkshopWlan_Notification_EncodedSize(Icb_OpConnectWorkshopWlan
 U32 Icb_OpConnectWorkshopWlan_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpConnectWorkshopWlan_Notification_Decode(Icb_OpConnectWorkshopWlan_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpConnectWorkshopWlan_Notification_Encode(Icb_OpConnectWorkshopWlan_Notification ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpConnectWorkshopWlan_Notification Icb_OpConnectWorkshopWlan_Notification_Create(ASN_Session session);
@@ -4367,7 +4501,8 @@ U32 Icb_OpCurrentInternetSource_SetRequest_EncodedSize(Icb_OpCurrentInternetSour
 U32 Icb_OpCurrentInternetSource_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpCurrentInternetSource_SetRequest_Decode(Icb_OpCurrentInternetSource_SetRequest ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpCurrentInternetSource_SetRequest_Encode(Icb_OpCurrentInternetSource_SetRequest ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpCurrentInternetSource_SetRequest Icb_OpCurrentInternetSource_SetRequest_Create(ASN_Session session);
@@ -4388,7 +4523,8 @@ U32 Icb_OpCurrentInternetSource_Response_EncodedSize(Icb_OpCurrentInternetSource
 U32 Icb_OpCurrentInternetSource_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpCurrentInternetSource_Response_Decode(Icb_OpCurrentInternetSource_Response ThisPtr,
-                                                       ASN_Session session, ASN_Stream stream);
+                                                       ASN_Session session,
+                                                       ASN_Stream stream);
 ASN_Result Icb_OpCurrentInternetSource_Response_Encode(Icb_OpCurrentInternetSource_Response ThisPtr, ASN_Stream stream);
 Icb_OpCurrentInternetSource_Response Icb_OpCurrentInternetSource_Response_Create(ASN_Session session);
 #ifdef ASN_PRINT
@@ -4408,7 +4544,8 @@ U32 Icb_OpCurrentInternetSource_Notification_EncodedSize(Icb_OpCurrentInternetSo
 U32 Icb_OpCurrentInternetSource_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpCurrentInternetSource_Notification_Decode(Icb_OpCurrentInternetSource_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream);
+                                                           ASN_Session session,
+                                                           ASN_Stream stream);
 ASN_Result Icb_OpCurrentInternetSource_Notification_Encode(Icb_OpCurrentInternetSource_Notification ThisPtr,
                                                            ASN_Stream stream);
 Icb_OpCurrentInternetSource_Notification Icb_OpCurrentInternetSource_Notification_Create(ASN_Session session);
@@ -4466,7 +4603,8 @@ U32 Icb_OpWLANMode_Notification_EncodedSize(Icb_OpWLANMode_Notification ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANMode_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANMode_Notification_Decode(Icb_OpWLANMode_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANMode_Notification_Decode(Icb_OpWLANMode_Notification ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpWLANMode_Notification_Encode(Icb_OpWLANMode_Notification ThisPtr, ASN_Stream stream);
 Icb_OpWLANMode_Notification Icb_OpWLANMode_Notification_Create(ASN_Session session);
@@ -4486,7 +4624,8 @@ U32 Icb_OpWLANFreqBandSelect_SetRequest_EncodedSize(Icb_OpWLANFreqBandSelect_Set
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANFreqBandSelect_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANFreqBandSelect_SetRequest_Decode(Icb_OpWLANFreqBandSelect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANFreqBandSelect_SetRequest_Decode(Icb_OpWLANFreqBandSelect_SetRequest ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpWLANFreqBandSelect_SetRequest_Encode(Icb_OpWLANFreqBandSelect_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpWLANFreqBandSelect_SetRequest Icb_OpWLANFreqBandSelect_SetRequest_Create(ASN_Session session);
@@ -4507,7 +4646,8 @@ U32 Icb_OpWLANFreqBandSelect_Response_EncodedSize(Icb_OpWLANFreqBandSelect_Respo
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANFreqBandSelect_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANFreqBandSelect_Response_Decode(Icb_OpWLANFreqBandSelect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANFreqBandSelect_Response_Decode(Icb_OpWLANFreqBandSelect_Response ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpWLANFreqBandSelect_Response_Encode(Icb_OpWLANFreqBandSelect_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANFreqBandSelect_Response Icb_OpWLANFreqBandSelect_Response_Create(ASN_Session session);
@@ -4547,7 +4687,8 @@ U32 Icb_OpWLANAPSSID_SetRequest_EncodedSize(Icb_OpWLANAPSSID_SetRequest ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPSSID_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPSSID_SetRequest_Decode(Icb_OpWLANAPSSID_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPSSID_SetRequest_Decode(Icb_OpWLANAPSSID_SetRequest ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpWLANAPSSID_SetRequest_Encode(Icb_OpWLANAPSSID_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPSSID_SetRequest Icb_OpWLANAPSSID_SetRequest_Create(ASN_Session session);
@@ -4586,7 +4727,8 @@ U32 Icb_OpWLANAPPasswd_SetRequest_EncodedSize(Icb_OpWLANAPPasswd_SetRequest This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPPasswd_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPPasswd_SetRequest_Decode(Icb_OpWLANAPPasswd_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPPasswd_SetRequest_Decode(Icb_OpWLANAPPasswd_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpWLANAPPasswd_SetRequest_Encode(Icb_OpWLANAPPasswd_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPPasswd_SetRequest Icb_OpWLANAPPasswd_SetRequest_Create(ASN_Session session);
@@ -4606,7 +4748,8 @@ U32 Icb_OpWLANAPPasswd_Response_EncodedSize(Icb_OpWLANAPPasswd_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPPasswd_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPPasswd_Response_Decode(Icb_OpWLANAPPasswd_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPPasswd_Response_Decode(Icb_OpWLANAPPasswd_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpWLANAPPasswd_Response_Encode(Icb_OpWLANAPPasswd_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPPasswd_Response Icb_OpWLANAPPasswd_Response_Create(ASN_Session session);
@@ -4626,7 +4769,8 @@ U32 Icb_OpWLANAPConnDev_Response_EncodedSize(Icb_OpWLANAPConnDev_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPConnDev_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPConnDev_Response_Decode(Icb_OpWLANAPConnDev_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPConnDev_Response_Decode(Icb_OpWLANAPConnDev_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpWLANAPConnDev_Response_Encode(Icb_OpWLANAPConnDev_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPConnDev_Response Icb_OpWLANAPConnDev_Response_Create(ASN_Session session);
@@ -4646,7 +4790,8 @@ U32 Icb_OpWLANAPConnDev_Notification_EncodedSize(Icb_OpWLANAPConnDev_Notificatio
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPConnDev_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPConnDev_Notification_Decode(Icb_OpWLANAPConnDev_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPConnDev_Notification_Decode(Icb_OpWLANAPConnDev_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpWLANAPConnDev_Notification_Encode(Icb_OpWLANAPConnDev_Notification ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPConnDev_Notification Icb_OpWLANAPConnDev_Notification_Create(ASN_Session session);
@@ -4667,7 +4812,8 @@ U32 Icb_OpWLANSTAConnect_SetRequest_EncodedSize(Icb_OpWLANSTAConnect_SetRequest 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANSTAConnect_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANSTAConnect_SetRequest_Decode(Icb_OpWLANSTAConnect_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAConnect_SetRequest_Decode(Icb_OpWLANSTAConnect_SetRequest ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAConnect_SetRequest_Encode(Icb_OpWLANSTAConnect_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpWLANSTAConnect_SetRequest Icb_OpWLANSTAConnect_SetRequest_Create(ASN_Session session);
@@ -4688,7 +4834,8 @@ U32 Icb_OpWLANSTAConnect_Response_EncodedSize(Icb_OpWLANSTAConnect_Response This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANSTAConnect_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANSTAConnect_Response_Decode(Icb_OpWLANSTAConnect_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAConnect_Response_Decode(Icb_OpWLANSTAConnect_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAConnect_Response_Encode(Icb_OpWLANSTAConnect_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANSTAConnect_Response Icb_OpWLANSTAConnect_Response_Create(ASN_Session session);
@@ -4712,7 +4859,8 @@ U32 Icb_OpWLANAPStatusSettings_Response_EncodedSize(Icb_OpWLANAPStatusSettings_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANAPStatusSettings_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANAPStatusSettings_Response_Decode(Icb_OpWLANAPStatusSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANAPStatusSettings_Response_Decode(Icb_OpWLANAPStatusSettings_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpWLANAPStatusSettings_Response_Encode(Icb_OpWLANAPStatusSettings_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANAPStatusSettings_Response Icb_OpWLANAPStatusSettings_Response_Create(ASN_Session session);
@@ -4736,7 +4884,8 @@ U32 Icb_OpWLANSTAStatus_Response_EncodedSize(Icb_OpWLANSTAStatus_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANSTAStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANSTAStatus_Response_Decode(Icb_OpWLANSTAStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAStatus_Response_Decode(Icb_OpWLANSTAStatus_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAStatus_Response_Encode(Icb_OpWLANSTAStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpWLANSTAStatus_Response Icb_OpWLANSTAStatus_Response_Create(ASN_Session session);
@@ -4757,7 +4906,8 @@ U32 Icb_OpWLANSTAStatus_Notification_EncodedSize(Icb_OpWLANSTAStatus_Notificatio
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpWLANSTAStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpWLANSTAStatus_Notification_Decode(Icb_OpWLANSTAStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpWLANSTAStatus_Notification_Decode(Icb_OpWLANSTAStatus_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpWLANSTAStatus_Notification_Encode(Icb_OpWLANSTAStatus_Notification ThisPtr, ASN_Stream stream);
 Icb_OpWLANSTAStatus_Notification Icb_OpWLANSTAStatus_Notification_Create(ASN_Session session);
@@ -4781,7 +4931,8 @@ U32 Icb_AvailableNetworkInformation_EncodedSize(Icb_AvailableNetworkInformation 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_AvailableNetworkInformation_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_AvailableNetworkInformation_Decode(Icb_AvailableNetworkInformation ThisPtr, ASN_Session session,
+ASN_Result Icb_AvailableNetworkInformation_Decode(Icb_AvailableNetworkInformation ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_AvailableNetworkInformation_Encode(Icb_AvailableNetworkInformation ThisPtr, ASN_Stream stream);
 Icb_AvailableNetworkInformation Icb_AvailableNetworkInformation_Create(ASN_Session session);
@@ -4802,7 +4953,8 @@ U32 Icb_OpWLANSTARememberedNetwks_Response_EncodedSize(Icb_OpWLANSTARememberedNe
 U32 Icb_OpWLANSTARememberedNetwks_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpWLANSTARememberedNetwks_Response_Decode(Icb_OpWLANSTARememberedNetwks_Response ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpWLANSTARememberedNetwks_Response_Encode(Icb_OpWLANSTARememberedNetwks_Response ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpWLANSTARememberedNetwks_Response Icb_OpWLANSTARememberedNetwks_Response_Create(ASN_Session session);
@@ -4823,7 +4975,8 @@ U32 Icb_OpPSIMSecurity_SetRequest_EncodedSize(Icb_OpPSIMSecurity_SetRequest This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMSecurity_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMSecurity_SetRequest_Decode(Icb_OpPSIMSecurity_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMSecurity_SetRequest_Decode(Icb_OpPSIMSecurity_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpPSIMSecurity_SetRequest_Encode(Icb_OpPSIMSecurity_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpPSIMSecurity_SetRequest Icb_OpPSIMSecurity_SetRequest_Create(ASN_Session session);
@@ -4843,7 +4996,8 @@ U32 Icb_OpPSIMEnterCode_SetRequest_EncodedSize(Icb_OpPSIMEnterCode_SetRequest Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMEnterCode_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMEnterCode_SetRequest_Decode(Icb_OpPSIMEnterCode_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMEnterCode_SetRequest_Decode(Icb_OpPSIMEnterCode_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpPSIMEnterCode_SetRequest_Encode(Icb_OpPSIMEnterCode_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpPSIMEnterCode_SetRequest Icb_OpPSIMEnterCode_SetRequest_Create(ASN_Session session);
@@ -4863,7 +5017,8 @@ U32 Icb_OpPSIMRegisterState_Response_EncodedSize(Icb_OpPSIMRegisterState_Respons
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMRegisterState_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMRegisterState_Response_Decode(Icb_OpPSIMRegisterState_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMRegisterState_Response_Decode(Icb_OpPSIMRegisterState_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpPSIMRegisterState_Response_Encode(Icb_OpPSIMRegisterState_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMRegisterState_Response Icb_OpPSIMRegisterState_Response_Create(ASN_Session session);
@@ -4905,7 +5060,8 @@ U32 Icb_OpPSIMNetworkOperators_Response_EncodedSize(Icb_OpPSIMNetworkOperators_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpPSIMNetworkOperators_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpPSIMNetworkOperators_Response_Decode(Icb_OpPSIMNetworkOperators_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpPSIMNetworkOperators_Response_Decode(Icb_OpPSIMNetworkOperators_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkOperators_Response_Encode(Icb_OpPSIMNetworkOperators_Response ThisPtr, ASN_Stream stream);
 Icb_OpPSIMNetworkOperators_Response Icb_OpPSIMNetworkOperators_Response_Create(ASN_Session session);
@@ -4926,7 +5082,8 @@ U32 Icb_OpPSIMNetworkOperatorCommand_SetRequest_EncodedSize(Icb_OpPSIMNetworkOpe
 U32 Icb_OpPSIMNetworkOperatorCommand_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_SetRequest_Decode(Icb_OpPSIMNetworkOperatorCommand_SetRequest ThisPtr,
-                                                              ASN_Session session, ASN_Stream stream);
+                                                              ASN_Session session,
+                                                              ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_SetRequest_Encode(Icb_OpPSIMNetworkOperatorCommand_SetRequest ThisPtr,
                                                               ASN_Stream stream);
 Icb_OpPSIMNetworkOperatorCommand_SetRequest Icb_OpPSIMNetworkOperatorCommand_SetRequest_Create(ASN_Session session);
@@ -4948,7 +5105,8 @@ U32 Icb_OpPSIMNetworkOperatorCommand_Response_EncodedSize(Icb_OpPSIMNetworkOpera
 U32 Icb_OpPSIMNetworkOperatorCommand_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Response_Decode(Icb_OpPSIMNetworkOperatorCommand_Response ThisPtr,
-                                                            ASN_Session session, ASN_Stream stream);
+                                                            ASN_Session session,
+                                                            ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Response_Encode(Icb_OpPSIMNetworkOperatorCommand_Response ThisPtr,
                                                             ASN_Stream stream);
 Icb_OpPSIMNetworkOperatorCommand_Response Icb_OpPSIMNetworkOperatorCommand_Response_Create(ASN_Session session);
@@ -4970,7 +5128,8 @@ U32 Icb_OpPSIMNetworkOperatorCommand_Notification_EncodedSize(Icb_OpPSIMNetworkO
 U32 Icb_OpPSIMNetworkOperatorCommand_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Notification_Decode(Icb_OpPSIMNetworkOperatorCommand_Notification ThisPtr,
-                                                                ASN_Session session, ASN_Stream stream);
+                                                                ASN_Session session,
+                                                                ASN_Stream stream);
 ASN_Result Icb_OpPSIMNetworkOperatorCommand_Notification_Encode(Icb_OpPSIMNetworkOperatorCommand_Notification ThisPtr,
                                                                 ASN_Stream stream);
 Icb_OpPSIMNetworkOperatorCommand_Notification Icb_OpPSIMNetworkOperatorCommand_Notification_Create(ASN_Session session);
@@ -5012,7 +5171,8 @@ U32 Icb_OpPSIMPhoneOperationMode_Response_EncodedSize(Icb_OpPSIMPhoneOperationMo
 U32 Icb_OpPSIMPhoneOperationMode_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpPSIMPhoneOperationMode_Response_Decode(Icb_OpPSIMPhoneOperationMode_Response ThisPtr,
-                                                        ASN_Session session, ASN_Stream stream);
+                                                        ASN_Session session,
+                                                        ASN_Stream stream);
 ASN_Result Icb_OpPSIMPhoneOperationMode_Response_Encode(Icb_OpPSIMPhoneOperationMode_Response ThisPtr,
                                                         ASN_Stream stream);
 Icb_OpPSIMPhoneOperationMode_Response Icb_OpPSIMPhoneOperationMode_Response_Create(ASN_Session session);
@@ -5074,7 +5234,8 @@ U32 Icb_OpCallHandling_SetRequest_EncodedSize(Icb_OpCallHandling_SetRequest This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpCallHandling_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpCallHandling_SetRequest_Decode(Icb_OpCallHandling_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCallHandling_SetRequest_Decode(Icb_OpCallHandling_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpCallHandling_SetRequest_Encode(Icb_OpCallHandling_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpCallHandling_SetRequest Icb_OpCallHandling_SetRequest_Create(ASN_Session session);
@@ -5097,7 +5258,8 @@ U32 Icb_OpTEMIdentification_Response_EncodedSize(Icb_OpTEMIdentification_Respons
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTEMIdentification_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTEMIdentification_Response_Decode(Icb_OpTEMIdentification_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMIdentification_Response_Decode(Icb_OpTEMIdentification_Response ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpTEMIdentification_Response_Encode(Icb_OpTEMIdentification_Response ThisPtr, ASN_Stream stream);
 Icb_OpTEMIdentification_Response Icb_OpTEMIdentification_Response_Create(ASN_Session session);
@@ -5117,7 +5279,8 @@ U32 Icb_OpTEMRadioMode_SetRequest_EncodedSize(Icb_OpTEMRadioMode_SetRequest This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTEMRadioMode_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTEMRadioMode_SetRequest_Decode(Icb_OpTEMRadioMode_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMRadioMode_SetRequest_Decode(Icb_OpTEMRadioMode_SetRequest ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpTEMRadioMode_SetRequest_Encode(Icb_OpTEMRadioMode_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpTEMRadioMode_SetRequest Icb_OpTEMRadioMode_SetRequest_Create(ASN_Session session);
@@ -5137,7 +5300,8 @@ U32 Icb_OpTEMRadioMode_Response_EncodedSize(Icb_OpTEMRadioMode_Response ThisPtr)
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTEMRadioMode_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTEMRadioMode_Response_Decode(Icb_OpTEMRadioMode_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTEMRadioMode_Response_Decode(Icb_OpTEMRadioMode_Response ThisPtr,
+                                              ASN_Session session,
                                               ASN_Stream stream);
 ASN_Result Icb_OpTEMRadioMode_Response_Encode(Icb_OpTEMRadioMode_Response ThisPtr, ASN_Stream stream);
 Icb_OpTEMRadioMode_Response Icb_OpTEMRadioMode_Response_Create(ASN_Session session);
@@ -5157,7 +5321,8 @@ U32 Icb_OpTunerFrequencies_Response_EncodedSize(Icb_OpTunerFrequencies_Response 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpTunerFrequencies_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpTunerFrequencies_Response_Decode(Icb_OpTunerFrequencies_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpTunerFrequencies_Response_Decode(Icb_OpTunerFrequencies_Response ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_OpTunerFrequencies_Response_Encode(Icb_OpTunerFrequencies_Response ThisPtr, ASN_Stream stream);
 Icb_OpTunerFrequencies_Response Icb_OpTunerFrequencies_Response_Create(ASN_Session session);
@@ -5177,7 +5342,8 @@ U32 Icb_OpDeadReckonedPosition_Response_EncodedSize(Icb_OpDeadReckonedPosition_R
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDeadReckonedPosition_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDeadReckonedPosition_Response_Decode(Icb_OpDeadReckonedPosition_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeadReckonedPosition_Response_Decode(Icb_OpDeadReckonedPosition_Response ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpDeadReckonedPosition_Response_Encode(Icb_OpDeadReckonedPosition_Response ThisPtr, ASN_Stream stream);
 Icb_OpDeadReckonedPosition_Response Icb_OpDeadReckonedPosition_Response_Create(ASN_Session session);
@@ -5310,7 +5476,8 @@ U32 Icb_OpRemoteDiagnosticInfo_Notification_EncodedSize(Icb_OpRemoteDiagnosticIn
 U32 Icb_OpRemoteDiagnosticInfo_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpRemoteDiagnosticInfo_Notification_Decode(Icb_OpRemoteDiagnosticInfo_Notification ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpRemoteDiagnosticInfo_Notification_Encode(Icb_OpRemoteDiagnosticInfo_Notification ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpRemoteDiagnosticInfo_Notification Icb_OpRemoteDiagnosticInfo_Notification_Create(ASN_Session session);
@@ -5332,7 +5499,8 @@ U32 Icb_OpCurrentDoIPState_Notification_EncodedSize(Icb_OpCurrentDoIPState_Notif
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpCurrentDoIPState_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpCurrentDoIPState_Notification_Decode(Icb_OpCurrentDoIPState_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpCurrentDoIPState_Notification_Decode(Icb_OpCurrentDoIPState_Notification ThisPtr,
+                                                      ASN_Session session,
                                                       ASN_Stream stream);
 ASN_Result Icb_OpCurrentDoIPState_Notification_Encode(Icb_OpCurrentDoIPState_Notification ThisPtr, ASN_Stream stream);
 Icb_OpCurrentDoIPState_Notification Icb_OpCurrentDoIPState_Notification_Create(ASN_Session session);
@@ -5353,7 +5521,8 @@ U32 Icb_OpCurrentDoIPConnection_Notification_EncodedSize(Icb_OpCurrentDoIPConnec
 U32 Icb_OpCurrentDoIPConnection_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpCurrentDoIPConnection_Notification_Decode(Icb_OpCurrentDoIPConnection_Notification ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream);
+                                                           ASN_Session session,
+                                                           ASN_Stream stream);
 ASN_Result Icb_OpCurrentDoIPConnection_Notification_Encode(Icb_OpCurrentDoIPConnection_Notification ThisPtr,
                                                            ASN_Stream stream);
 Icb_OpCurrentDoIPConnection_Notification Icb_OpCurrentDoIPConnection_Notification_Create(ASN_Session session);
@@ -5374,7 +5543,8 @@ U32 Icb_OpRequestUserAuthentication_Response_EncodedSize(Icb_OpRequestUserAuthen
 U32 Icb_OpRequestUserAuthentication_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpRequestUserAuthentication_Response_Decode(Icb_OpRequestUserAuthentication_Response ThisPtr,
-                                                           ASN_Session session, ASN_Stream stream);
+                                                           ASN_Session session,
+                                                           ASN_Stream stream);
 ASN_Result Icb_OpRequestUserAuthentication_Response_Encode(Icb_OpRequestUserAuthentication_Response ThisPtr,
                                                            ASN_Stream stream);
 Icb_OpRequestUserAuthentication_Response Icb_OpRequestUserAuthentication_Response_Create(ASN_Session session);
@@ -5394,7 +5564,8 @@ U32 Icb_OpUpdateDaCMode_Notification_EncodedSize(Icb_OpUpdateDaCMode_Notificatio
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpUpdateDaCMode_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpUpdateDaCMode_Notification_Decode(Icb_OpUpdateDaCMode_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpUpdateDaCMode_Notification_Decode(Icb_OpUpdateDaCMode_Notification ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpUpdateDaCMode_Notification_Encode(Icb_OpUpdateDaCMode_Notification ThisPtr, ASN_Stream stream);
 Icb_OpUpdateDaCMode_Notification Icb_OpUpdateDaCMode_Notification_Create(ASN_Session session);
@@ -5414,7 +5585,8 @@ U32 Icb_OpApprovalStatus_Response_EncodedSize(Icb_OpApprovalStatus_Response This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpApprovalStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpApprovalStatus_Response_Decode(Icb_OpApprovalStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpApprovalStatus_Response_Decode(Icb_OpApprovalStatus_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpApprovalStatus_Response_Encode(Icb_OpApprovalStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpApprovalStatus_Response Icb_OpApprovalStatus_Response_Create(ASN_Session session);
@@ -5434,7 +5606,8 @@ U32 Icb_OpApprovalStatus_Notification_EncodedSize(Icb_OpApprovalStatus_Notificat
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpApprovalStatus_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpApprovalStatus_Notification_Decode(Icb_OpApprovalStatus_Notification ThisPtr, ASN_Session session,
+ASN_Result Icb_OpApprovalStatus_Notification_Decode(Icb_OpApprovalStatus_Notification ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpApprovalStatus_Notification_Encode(Icb_OpApprovalStatus_Notification ThisPtr, ASN_Stream stream);
 Icb_OpApprovalStatus_Notification Icb_OpApprovalStatus_Notification_Create(ASN_Session session);
@@ -5456,7 +5629,8 @@ U32 Icb_OpDownloadStatus_Response_EncodedSize(Icb_OpDownloadStatus_Response This
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDownloadStatus_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDownloadStatus_Response_Decode(Icb_OpDownloadStatus_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDownloadStatus_Response_Decode(Icb_OpDownloadStatus_Response ThisPtr,
+                                                ASN_Session session,
                                                 ASN_Stream stream);
 ASN_Result Icb_OpDownloadStatus_Response_Encode(Icb_OpDownloadStatus_Response ThisPtr, ASN_Stream stream);
 Icb_OpDownloadStatus_Response Icb_OpDownloadStatus_Response_Create(ASN_Session session);
@@ -5498,7 +5672,8 @@ U32 Icb_OpDownloadSoftware_SetRequest_EncodedSize(Icb_OpDownloadSoftware_SetRequ
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDownloadSoftware_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDownloadSoftware_SetRequest_Decode(Icb_OpDownloadSoftware_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDownloadSoftware_SetRequest_Decode(Icb_OpDownloadSoftware_SetRequest ThisPtr,
+                                                    ASN_Session session,
                                                     ASN_Stream stream);
 ASN_Result Icb_OpDownloadSoftware_SetRequest_Encode(Icb_OpDownloadSoftware_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpDownloadSoftware_SetRequest Icb_OpDownloadSoftware_SetRequest_Create(ASN_Session session);
@@ -5518,7 +5693,8 @@ U32 Icb_OpDeletedSoftware_SetRequest_EncodedSize(Icb_OpDeletedSoftware_SetReques
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDeletedSoftware_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDeletedSoftware_SetRequest_Decode(Icb_OpDeletedSoftware_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeletedSoftware_SetRequest_Decode(Icb_OpDeletedSoftware_SetRequest ThisPtr,
+                                                   ASN_Session session,
                                                    ASN_Stream stream);
 ASN_Result Icb_OpDeletedSoftware_SetRequest_Encode(Icb_OpDeletedSoftware_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpDeletedSoftware_SetRequest Icb_OpDeletedSoftware_SetRequest_Create(ASN_Session session);
@@ -5540,7 +5716,8 @@ U32 Icb_OpDeviceInstall_SetRequest_EncodedSize(Icb_OpDeviceInstall_SetRequest Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDeviceInstall_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDeviceInstall_SetRequest_Decode(Icb_OpDeviceInstall_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeviceInstall_SetRequest_Decode(Icb_OpDeviceInstall_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpDeviceInstall_SetRequest_Encode(Icb_OpDeviceInstall_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpDeviceInstall_SetRequest Icb_OpDeviceInstall_SetRequest_Create(ASN_Session session);
@@ -5564,7 +5741,8 @@ U32 Icb_OpDeviceInstall_Response_EncodedSize(Icb_OpDeviceInstall_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpDeviceInstall_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpDeviceInstall_Response_Decode(Icb_OpDeviceInstall_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpDeviceInstall_Response_Decode(Icb_OpDeviceInstall_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpDeviceInstall_Response_Encode(Icb_OpDeviceInstall_Response ThisPtr, ASN_Stream stream);
 Icb_OpDeviceInstall_Response Icb_OpDeviceInstall_Response_Create(ASN_Session session);
@@ -5605,7 +5783,8 @@ U32 Icb_OpEcallSettings_SetRequest_EncodedSize(Icb_OpEcallSettings_SetRequest Th
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpEcallSettings_SetRequest_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpEcallSettings_SetRequest_Decode(Icb_OpEcallSettings_SetRequest ThisPtr, ASN_Session session,
+ASN_Result Icb_OpEcallSettings_SetRequest_Decode(Icb_OpEcallSettings_SetRequest ThisPtr,
+                                                 ASN_Session session,
                                                  ASN_Stream stream);
 ASN_Result Icb_OpEcallSettings_SetRequest_Encode(Icb_OpEcallSettings_SetRequest ThisPtr, ASN_Stream stream);
 Icb_OpEcallSettings_SetRequest Icb_OpEcallSettings_SetRequest_Create(ASN_Session session);
@@ -5625,7 +5804,8 @@ U32 Icb_OpEcallSettings_Response_EncodedSize(Icb_OpEcallSettings_Response ThisPt
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpEcallSettings_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpEcallSettings_Response_Decode(Icb_OpEcallSettings_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpEcallSettings_Response_Decode(Icb_OpEcallSettings_Response ThisPtr,
+                                               ASN_Session session,
                                                ASN_Stream stream);
 ASN_Result Icb_OpEcallSettings_Response_Encode(Icb_OpEcallSettings_Response ThisPtr, ASN_Stream stream);
 Icb_OpEcallSettings_Response Icb_OpEcallSettings_Response_Create(ASN_Session session);
@@ -5669,7 +5849,8 @@ U32 Icb_OpWLANChannelFreqInfo_Notification_EncodedSize(Icb_OpWLANChannelFreqInfo
 U32 Icb_OpWLANChannelFreqInfo_Notification_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpWLANChannelFreqInfo_Notification_Decode(Icb_OpWLANChannelFreqInfo_Notification ThisPtr,
-                                                         ASN_Session session, ASN_Stream stream);
+                                                         ASN_Session session,
+                                                         ASN_Stream stream);
 ASN_Result Icb_OpWLANChannelFreqInfo_Notification_Encode(Icb_OpWLANChannelFreqInfo_Notification ThisPtr,
                                                          ASN_Stream stream);
 Icb_OpWLANChannelFreqInfo_Notification Icb_OpWLANChannelFreqInfo_Notification_Create(ASN_Session session);
@@ -5718,7 +5899,8 @@ U32 Icb_OpGNSSPositionDataAccuracy_Response_EncodedSize(Icb_OpGNSSPositionDataAc
 U32 Icb_OpGNSSPositionDataAccuracy_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 ASN_Result Icb_OpGNSSPositionDataAccuracy_Response_Decode(Icb_OpGNSSPositionDataAccuracy_Response ThisPtr,
-                                                          ASN_Session session, ASN_Stream stream);
+                                                          ASN_Session session,
+                                                          ASN_Stream stream);
 ASN_Result Icb_OpGNSSPositionDataAccuracy_Response_Encode(Icb_OpGNSSPositionDataAccuracy_Response ThisPtr,
                                                           ASN_Stream stream);
 Icb_OpGNSSPositionDataAccuracy_Response Icb_OpGNSSPositionDataAccuracy_Response_Create(ASN_Session session);
@@ -5738,7 +5920,8 @@ U32 Icb_OpGNSSPositionData_Response_EncodedSize(Icb_OpGNSSPositionData_Response 
 #ifdef ENABLE_ASN_SESSION_SIZE
 U32 Icb_OpGNSSPositionData_Response_SessionSize();
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
-ASN_Result Icb_OpGNSSPositionData_Response_Decode(Icb_OpGNSSPositionData_Response ThisPtr, ASN_Session session,
+ASN_Result Icb_OpGNSSPositionData_Response_Decode(Icb_OpGNSSPositionData_Response ThisPtr,
+                                                  ASN_Session session,
                                                   ASN_Stream stream);
 ASN_Result Icb_OpGNSSPositionData_Response_Encode(Icb_OpGNSSPositionData_Response ThisPtr, ASN_Stream stream);
 Icb_OpGNSSPositionData_Response Icb_OpGNSSPositionData_Response_Create(ASN_Session session);

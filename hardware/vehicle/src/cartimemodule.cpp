@@ -131,8 +131,13 @@ bool CarTimeHal::GetTimeFromFlexray(VehiclePropValue& prop_value) {
             prop_value.value.int64Values[0] = epoch1970;
             return true;
         } else {
-            ALOGW("Failed to convert CEM time to epoch (%d-%d-%d %d:%d:%d)", datetime.Yr1, datetime.Mth1, datetime.Day,
-                  datetime.Hr1, datetime.Mins1, datetime.Sec1);
+            ALOGW("Failed to convert CEM time to epoch (%d-%d-%d %d:%d:%d)",
+                  datetime.Yr1,
+                  datetime.Mth1,
+                  datetime.Day,
+                  datetime.Hr1,
+                  datetime.Mins1,
+                  datetime.Sec1);
             return false;
         }
     } else {

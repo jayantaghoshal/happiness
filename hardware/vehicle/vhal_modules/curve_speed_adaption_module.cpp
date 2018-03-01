@@ -120,14 +120,16 @@ CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(
                         return 0;
                     },
                     [this]() { return &vhal_value_; },
-                    [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
+                    [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); },
+                    prop_value);
 
     // Property handler configured, put it in map
     propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(property);
 }
 
 void CurveSpeedAdaptionModule::CheckSystemError() {
-    ALOGV("CheckSystemError: is_alivetimeout_=%d, is_invalid_crvtspdadpv_signal_=%d", is_alivetimeout_,
+    ALOGV("CheckSystemError: is_alivetimeout_=%d, is_invalid_crvtspdadpv_signal_=%d",
+          is_alivetimeout_,
           is_invalid_crvtspdadpv_signal_);
     is_error_ = (is_alivetimeout_ || is_invalid_crvtspdadpv_signal_);
 

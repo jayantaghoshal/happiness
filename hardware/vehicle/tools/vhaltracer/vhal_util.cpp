@@ -58,7 +58,8 @@ std::string GetVehicleZoneNameByVehicleAreaAndAreaId(vhal20::VehicleArea vehicle
 }
 
 template <typename TValue, typename TExtraCast = TValue>
-void DumpArray(const ::android::hardware::hidl_vec<TValue>& values, bool include_array_index,
+void DumpArray(const ::android::hardware::hidl_vec<TValue>& values,
+               bool include_array_index,
                const std::string& indentation) {
     int i = 0;
     for (const auto& current_value : values) {
@@ -72,7 +73,8 @@ void DumpArray(const ::android::hardware::hidl_vec<TValue>& values, bool include
 }
 
 void GetAndDumpPropertyValue(const ::android::sp<vhal20::IVehicle>& service,
-                             const vhal20::VehiclePropValue& property_value, const std::string indentation) {
+                             const vhal20::VehiclePropValue& property_value,
+                             const std::string indentation) {
     std::string name = GetPropertyName(property_value.prop);
     auto status_result = service->get(
             property_value,
@@ -136,15 +138,18 @@ void DumpProperties(const ::android::sp<vhal20::IVehicle>& service,
 
         // PROPERTY Info
         printf("\n\nVehicleProperty : %s [%s] [%s] [%s] [propid=0x%08x]\n",
-               GetPropertyName(property_config.prop).c_str(), vhal20::toString(vehicle_property_group).c_str(),
-               vhal20::toString(vehicle_area).c_str(), vhal20::toString(vehicle_property_type).c_str(),
+               GetPropertyName(property_config.prop).c_str(),
+               vhal20::toString(vehicle_property_group).c_str(),
+               vhal20::toString(vehicle_area).c_str(),
+               vhal20::toString(vehicle_property_type).c_str(),
                property_config.prop);
 
         // property CONFIG Info
         printf("\n");
         printf("   VehiclePropConfig\n");
         printf("    .access: %d ( %s )\n", property_config.access, vhal20::toString(property_config.access).c_str());
-        printf("    .changeMode: %d ( %s )\n", property_config.changeMode,
+        printf("    .changeMode: %d ( %s )\n",
+               property_config.changeMode,
                vhal20::toString(property_config.changeMode).c_str());
         printf("    .supportedAreas: %d\n", property_config.supportedAreas);
         printf("    .configFlags: %d\n", property_config.configFlags);  // Dont know what this is for
@@ -164,7 +169,8 @@ void DumpProperties(const ::android::sp<vhal20::IVehicle>& service,
             for (const vhal20::VehicleAreaConfig& area_config : property_config.areaConfigs) {
                 printf("\n");
                 printf("   VehicleAreaConfigs\n");
-                printf("    .areaId=%d [%s]\n", area_config.areaId,
+                printf("    .areaId=%d [%s]\n",
+                       area_config.areaId,
                        GetVehicleZoneNameByVehicleAreaAndAreaId(vehicle_area, area_config.areaId).c_str());
                 printf("    .minInt32Value: %d\n", area_config.minInt32Value);
                 printf("    .maxInt32Value: %d\n", area_config.maxInt32Value);

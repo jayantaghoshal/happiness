@@ -21,7 +21,8 @@ SettingBase::SettingBase(const android::sp<SettingsManager>& context, const Sett
     : userScope_(userScope), name_(name), context{context}, handle_(-1) {
     ALOGV("SettingBase ctor %d, userScope=%d", name, userScope);
     handle_ = context->attachSetting(
-            name_, userScope,
+            name_,
+            userScope,
             [this](const std::string& stringdata, ProfileIdentifier profileId) {
                 ALOGV("onDataChangedBase, data=%s", stringdata.c_str());
                 initialized = true;

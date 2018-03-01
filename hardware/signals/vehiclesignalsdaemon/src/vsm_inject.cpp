@@ -145,8 +145,10 @@ void vsm_inject_inject(uint16_t signalId, void* buffer, bool injectError, const 
 
     if (true == injectError) {
         if (avmp::errorPayloadSize != length) {
-            ALOGE("Erroneous length received for error signal = %d, expected = %d, received = %d", signalId,
-                  avmp::errorPayloadSize, length);
+            ALOGE("Erroneous length received for error signal = %d, expected = %d, received = %d",
+                  signalId,
+                  avmp::errorPayloadSize,
+                  length);
             return;
         }
 

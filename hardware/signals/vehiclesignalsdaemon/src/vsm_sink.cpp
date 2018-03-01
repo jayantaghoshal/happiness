@@ -71,8 +71,8 @@ static void initInternalDataelements(void) {
 
             // Send via AVMP.
             const uint8_t vfcbuffer[2] = {vfcId, seconds};
-            sendAvmpMessageToVip(avmp::controlMsgMask | avmp::activateVfcMsgId, vfcbuffer,
-                                 avmp::activateVfcPayloadSize);
+            sendAvmpMessageToVip(
+                    avmp::controlMsgMask | avmp::activateVfcMsgId, vfcbuffer, avmp::activateVfcPayloadSize);
         }
     });
 }

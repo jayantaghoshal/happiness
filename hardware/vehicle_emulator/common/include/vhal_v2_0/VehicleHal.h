@@ -74,7 +74,8 @@ class VehicleHal {
      */
     virtual void onCreate() {}
 
-    void init(VehiclePropValuePool* valueObjectPool, const HalEventFunction& onHalEvent,
+    void init(VehiclePropValuePool* valueObjectPool,
+              const HalEventFunction& onHalEvent,
               const HalErrorFunction& onHalError) {
         mValuePool = valueObjectPool;
         mOnHalEvent = onHalEvent;

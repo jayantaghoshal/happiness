@@ -50,8 +50,10 @@ struct Gnss : public IGnss {
     Return<bool> injectTime(int64_t timeMs, int64_t timeReferenceMs, int32_t uncertaintyMs) override;
     Return<bool> injectLocation(double latitudeDegrees, double longitudeDegrees, float accuracyMeters) override;
     Return<void> deleteAidingData(IGnss::GnssAidingData aidingDataFlags) override;
-    Return<bool> setPositionMode(IGnss::GnssPositionMode mode, IGnss::GnssPositionRecurrence recurrence,
-                                 uint32_t minIntervalMs, uint32_t preferredAccuracyMeters,
+    Return<bool> setPositionMode(IGnss::GnssPositionMode mode,
+                                 IGnss::GnssPositionRecurrence recurrence,
+                                 uint32_t minIntervalMs,
+                                 uint32_t preferredAccuracyMeters,
                                  uint32_t preferredTimeMs) override;
     Return<sp<IAGnssRil>> getExtensionAGnssRil() override;
     Return<sp<IGnssGeofencing>> getExtensionGnssGeofencing() override;

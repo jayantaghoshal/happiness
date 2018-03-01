@@ -26,7 +26,8 @@ void SystemInformationModule::StartSubscribe() {
     });
 }
 
-std::string SystemInformationModule::asStdString(const autosar::Vin1& block1, const autosar::Vin1& block2,
+std::string SystemInformationModule::asStdString(const autosar::Vin1& block1,
+                                                 const autosar::Vin1& block2,
                                                  const autosar::Vin1& block3) {
     std::stringstream s;
     s << block1.VINSignalPos1 << block1.VINSignalPos2 << block1.VINSignalPos3 << block1.VINSignalPos4

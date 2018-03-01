@@ -323,8 +323,13 @@ TEST_F(DETest, stressTest) {
     std::mutex receiverMutex;
     bool failed = false;  // Used to only show the first error instead of spamming too much
 
-    receiver.subscribeVal([&expectedDataSequence, &lastReceivedIndex, &nrOfReceived, &lastDistance, &receivedIndices,
-                           &receiverMutex, &failed](auto signalValue) {
+    receiver.subscribeVal([&expectedDataSequence,
+                           &lastReceivedIndex,
+                           &nrOfReceived,
+                           &lastDistance,
+                           &receivedIndices,
+                           &receiverMutex,
+                           &failed](auto signalValue) {
         std::unique_lock<std::mutex> receiverLock(receiverMutex);
         if (failed) return;
 
