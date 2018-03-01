@@ -16,7 +16,7 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
-from com.dtmilano.android.viewclient import ViewClient
+from com.dtmilano.android.viewclient import ViewClient, ViewNotFoundException
 
 
 from generated.pyDataElements import \
@@ -43,6 +43,14 @@ class VehicleHalCommon():
         self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
         self.flexray = FrSignalInterface()
         self.dut = dut
+
+    def assert_ViewNotFoundException(self, vc, buttonId):
+        exceptionRaised = False
+        try:
+            vc.findViewByIdOrRaise(buttonId)
+        except ViewNotFoundException:
+            exceptionRaised = True
+        asserts.assertTrue(exceptionRaised, buttonId + " was found when it should be invisible")
 
 
     def getViewClient(self):
