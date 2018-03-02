@@ -35,7 +35,7 @@ class JenkinsBuild(object):
         self.duration = self._duration(build)
         for change_set in build["changeSet"]["items"]:
             self.author = change_set["authorEmail"]
-            self.message = change_set["msg"][0:49]
+            self.message = change_set["msg"][0:49+11] # "Auto bump:" + 50 characters (recommended git first line length)
             self.commit_id = change_set["commitId"][0:7]
         for action in build["actions"]:
             if "parameters" in action:

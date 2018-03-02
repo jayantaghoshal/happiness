@@ -103,21 +103,21 @@ class BuildsCommand(BaseCommand):
                    build.branch,
                    build.commit_id,
                    build.zuul_change_ids]
-        elif re.match("ihu_image_build", self._options.job) is not None:
-            # Image build
-            row = [build.number,
-                   build.time,
-                   build.result,
-                   build.host,
-                   build.duration,
-                   build.commit_id]
         elif re.match("ihu_\w+_test", self._options.job) is not None:
-            # Hourly, Daily jobs
+            # Hourly, Daily sub jobs
             row = [build.number,
                    build.time,
                    build.result,
                    build.host,
                    build.duration]
+        else:
+            # Hourly, Daily top jobs
+            row = [build.number,
+                   build.time,
+                   build.result,
+                   build.duration,
+                   build.commit_id,
+                   build.message]
         return row
 
     def _headers(self):
@@ -131,12 +131,12 @@ class BuildsCommand(BaseCommand):
         elif re.match("ihu_gate_\w+", self._options.job) is not None:
             # Commit Gate jobs
             headers = ["ID", "Time", "Result", "Host", "Duration", "Repo", "Branch", "Zuul Commit ID", "ZUUL Change IDs"]
-        elif re.match("ihu_image_build", self._options.job) is not None:
-            # Image build
-            headers = ["ID", "Time", "Result", "Host", "Duration", "Commit ID"]
         elif re.match("ihu_\w+_test", self._options.job) is not None:
-            # Hourly, Daily jobs
+            # Hourly, Daily sub jobs
             headers = ["ID", "Time", "Result", "Host", "Duration"]
+        else:
+            # Hourly, Daily top jobs
+            headers = ["ID", "Time", "Result", "Duration", "Commit ID", "Commit Message"]
         return headers
 
     def _jenkins(self):
