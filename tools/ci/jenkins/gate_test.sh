@@ -8,6 +8,9 @@ SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
+# Update the manifests based on the templates for gate test
+time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local no_sync
+
 # Sync repos required for build/envsetup.sh and lunch so we can run VTS.
 repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/services/Car aosp/device/sample
 repo_sync vendor/delphi/android_device_release vendor/delphi/android_device
