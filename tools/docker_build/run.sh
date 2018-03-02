@@ -23,7 +23,8 @@ fi
 
 # Handle options
 ENV_FILE_OPT=
-VOLUMES="--volume=$HOME:$HOME --volume=$PWD:$PWD --volume=/dev/bus/usb:/dev/bus/usb"
+VOLUMES="--volume=$HOME:$HOME --volume=$REPO_ROOT_DIR:$REPO_ROOT_DIR --volume=$PWD:$PWD \
+         --volume=/dev/bus/usb:/dev/bus/usb"
 
 
 for i in "$@"
