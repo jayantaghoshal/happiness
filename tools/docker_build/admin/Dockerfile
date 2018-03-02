@@ -217,7 +217,8 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
  	future futures google-api-python-client \
     httplib2 oauth2client pyasn1 pyasn1-modules \
     rsa six uritemplate protobuf certifi chardet \
-    idna requests urllib3
+    idna requests urllib3 \
+    parse ply oauth2client
 
 ##################################################
 # Install VCCCI_MESSAGES python package from SWF1
