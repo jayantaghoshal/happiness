@@ -17,7 +17,7 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 
 public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallback.Stub {
-    private static final String LOG_TAG = "SwUpManagementApiCallback";
+    private static final String LOG_TAG = "SwManagementApiCallback";
 
     SoftwareUpdateService service = null;
 
@@ -31,6 +31,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void CommissionStatus(String uuid, int code) {
+        Log.v(LOG_TAG, "Got result of commissioning assignment [" + uuid + "]: " + code);
         if (code == 200) {
             service.UpdateSoftwareState(uuid, SoftwareState.COMMISSIONED);
             //try {
@@ -43,6 +44,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
+        Log.v(LOG_TAG, "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
+
         if (code == 200) {
             service.UpdateSoftwareList(software_list);
         } else {
@@ -57,8 +60,10 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
+        Log.v(LOG_TAG, "Got result of getting pending installations [size of list: " + installation_order_list.size() + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareListWithInstallationOrders(installation_order_list);
+            Log.v(LOG_TAG, "Received pending installations, asking service to get download information of each installation order from the list");
             service.doGetDownloadInfo(installation_order_list);
         } else {
             //try {
@@ -71,8 +76,10 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void DownloadInfo(int code, DownloadInfo info) {
+        Log.v(LOG_TAG, "Got result of getting download information [" + info.uuid + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(info);
+            Log.v(LOG_TAG, "Received download information, ask service to download according to information");
             service.download(info);
         }
     }
@@ -84,11 +91,9 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     */
     @Override
     public void DownloadData(int code, DownloadInfo downloadInfo) {
+        Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.uuid + "]: " + code);
         if (200 == code) {
-            Log.v(LOG_TAG, "Download succeeded");
             service.UpdateSoftwareList(downloadInfo);
-        } else {
-            Log.v(LOG_TAG, "Download failed: " + code);
         }
     }
 

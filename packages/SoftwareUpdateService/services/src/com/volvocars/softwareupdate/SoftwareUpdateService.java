@@ -33,7 +33,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 *
 */
 public class SoftwareUpdateService extends Service {
-    private static final String LOG_TAG = "SwUpdService";
+    private static final String LOG_TAG = "SoftwareUpdate.Service";
 
     private Context context;
 
@@ -48,7 +48,7 @@ public class SoftwareUpdateService extends Service {
     private SoftwareManagementApiConnectionCallback swapiConnectionCallback = new SoftwareManagementApiConnectionCallback() {
         @Override
         public void onServiceConnected() {
-            Log.d(LOG_TAG, "Connected to SWAPI");
+            Log.v(LOG_TAG, "Connected to SoftwareManagementApi");
 
             state = 1;
             softwareUpdateManager.UpdateState(state);
@@ -56,7 +56,7 @@ public class SoftwareUpdateService extends Service {
 
         @Override
         public void onServiceDisconnected() {
-            Log.d(LOG_TAG, "Connection to SWAPI was lost. How to handle?");
+            Log.d(LOG_TAG, "Connection to SoftwareManagementApi was lost. How to handle?");
             state = 0;
         }
     };
@@ -106,20 +106,23 @@ public class SoftwareUpdateService extends Service {
             try {
                 swapi.GetSoftwareAssigmentList(swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot fetch Software Assignment List.. No contact with SWAPI.. I'm sad...");
+                Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: RemoteException [" + e.getMessage() + "]");
             }
+        } else {
+            Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: Local SoftwareManagementApi variable is null");
         }
     }
 
     public void CommissionAssignment(String uuid) {
         if (swapi != null) {
             try {
+                Log.v(LOG_TAG, "Commissioning assignment with uuid: " + uuid);
                 swapi.CommissionSoftwareAssignment(uuid, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot commission software assignment.. No contact with SWAPI.. I'm sad...");
+                Log.e(LOG_TAG, "CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "SWAPI null");
+            Log.e(LOG_TAG, "CommissionAssignment failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -129,8 +132,10 @@ public class SoftwareUpdateService extends Service {
                 Log.v(LOG_TAG, "GetPendingInstallations");
                 swapi.GetPendingInstallations(swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot fetch Pending Installations... No contact with SWAPI.. I'm sad...");
+                Log.e(LOG_TAG, "GetPendingInstallations failed: RemoteException [" + e.getMessage() + "]");
             }
+        } else {
+            Log.e(LOG_TAG, "GetPendingInstallations failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -143,27 +148,31 @@ public class SoftwareUpdateService extends Service {
     public void GetDownloadInfo(String uuid) {
         if (swapi != null) {
             try {
+                Log.v(LOG_TAG, "Get download information for assignment with uuid: " + uuid);
                 swapi.GetDownloadInfo(uuid, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot get download information.. No contact with SWAPI.. I'm sad...");
+                Log.e(LOG_TAG, "GetDownloadInfo failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "SWAPI null");
+            Log.e(LOG_TAG, "GetDownloadInfo failed: Local SoftwareManagementApi variable is null");
         }
     }
 
     public void download(DownloadInfo downloadInfo) {
+        GetDownloadData(downloadInfo);
+    }
+
+    public void GetDownloadData(DownloadInfo downloadInfo) {
         if (swapi != null) {
             try {
+                Log.v(LOG_TAG, "Get download data for downloadInfo with uuid: " + downloadInfo.uuid);
                 swapi.GetDownloadData(downloadInfo, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Cannot download.. No contact with SWAPI.. I'm sad...");
+                Log.e(LOG_TAG, "GetDownloadData failed: RemoteException [" + e.getMessage() + "]");
             }
+        } else {
+            Log.e(LOG_TAG, "GetDownloadData failed: Local SoftwareManagementApi variable is null");
         }
-        else {
-            Log.e(LOG_TAG, "SWAPI null");
-        }
-
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
@@ -210,8 +219,7 @@ public class SoftwareUpdateService extends Service {
             }
         }
         if (!found) {
-            // Weird..?
-            Log.e(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid not found in list which is weird...");
+            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid [" + downloadInfo.uuid + "] not found in list which is weird...");
         }
 
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
@@ -228,7 +236,7 @@ public class SoftwareUpdateService extends Service {
             }
         }
         if (!found) {
-            Log.e(LOG_TAG, "UpdateSoftwareState, uuid not found in list which is weird...");
+            Log.v(LOG_TAG, "UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
         }
     }
 }

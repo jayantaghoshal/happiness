@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Library/wrapper class that is used to access SoftwareUpdateManager features
  */
 public class SoftwareUpdateManager implements ServiceConnection {
-    private static final String LOG_TAG = "SWUPDATE";
+    private static final String LOG_TAG = "SoftwareUpdateManager.Lib";
     private static final String PACKAGENAME = "com.volvocars.softwareupdate";
     private static final String PACKAGENAME_SERVICENAME = "com.volvocars.softwareupdate.SoftwareUpdateService";
     private Context context = null;
