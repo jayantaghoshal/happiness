@@ -24,6 +24,7 @@ LOCAL_SRC_FILES := \
      src/keymanagermodule.cpp \
      src/activeuserprofilemodule.cpp \
      src/modulepropertyhandler.cpp \
+     src/propertyhandler.cpp \
      src/systeminformationmodule.cpp \
      src/illuminationmodule.cpp \
      src/cartimemodule.cpp \

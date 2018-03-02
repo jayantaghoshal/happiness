@@ -8,6 +8,7 @@
 #include "first_row_factory.h"
 #include "modulepropertyhandler.h"
 #include "notifiable_property.h"
+#include "propertyhandler.h"
 using namespace v0::org::volvocars::climate;
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
@@ -15,10 +16,10 @@ namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
 using GenericReply = std::function<void(CommonTypes::ReturnCode)>;
 
-class HvacModule : public vccvhal10::impl::ModulePropertyHandler {
+class HvacModule {
   public:
     HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactory& logicFactory,
-               common::daemon::Factory& commonFactory);
+               common::daemon::Factory& commonFactory, std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher);
 
     // ClimateStub interface
   public:
@@ -74,7 +75,12 @@ class HvacModule : public vccvhal10::impl::ModulePropertyHandler {
   private:
     std::vector<SubscriptionHandle> subs_;
 
-    NotifiableProperty<float> dummy1;
-    NotifiableProperty<float> dummy2;
-    NotifiableProperty<int> dummy3;
+    MultiZonePropertyHandler<float> prop_temperature;
+    VhalPropertyHandler<bool> prop_recirculation;
+    VhalPropertyHandler<bool> prop_autoclimate;
+    MultiZonePropertyHandler<bool> prop_defroster;
+    VhalPropertyHandler<bool> prop_maxdefroster;
+    VhalPropertyHandler<bool> prop_ac;
+    VhalPropertyHandler<int32_t> prop_fanlevelfront;
+    VhalPropertyHandler<int32_t> prop_fandir;
 };

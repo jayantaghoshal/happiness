@@ -71,7 +71,7 @@ int main(int /* argc */, char* /* argv */ []) {
     // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
-    auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_);
+    auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_, dispatcher);
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
     auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
@@ -85,7 +85,8 @@ int main(int /* argc */, char* /* argv */ []) {
     powerModule->registerToVehicleHal();
     // audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
-    hvacModule->registerToVehicleHal();
+    // TODO: Keep HVAC registerToVehicleHal?
+    // hvacModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
     systemInformationModule->registerToVehicleHal();

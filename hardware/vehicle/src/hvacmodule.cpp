@@ -28,171 +28,131 @@ using namespace std::placeholders;
 
 using namespace android;
 
+namespace {
+vhal20::VehiclePropConfig boolConfig(VehicleProperty prop, int32_t zones) {
+    vhal20::VehiclePropConfig c;
+    c.prop = toInt(prop);
+    c.access = VehiclePropertyAccess::READ_WRITE;
+    c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+    c.supportedAreas = zones;
+    c.areaConfigs.resize(0);  // Important to not init this for bool properties!
+    return c;
+}
+
+vhal20::VehiclePropConfig propconfig_temperature() {
+    vhal20::VehiclePropConfig c;
+    c.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
+    c.access = VehiclePropertyAccess::READ_WRITE;
+    c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+    c.supportedAreas = toInt(VehicleAreaZone::ROW_1_LEFT) | VehicleAreaZone::ROW_1_RIGHT;
+    c.areaConfigs.resize(2);
+    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
+    c.areaConfigs[0].minFloatValue = 17;  // TODO carconfig?
+    c.areaConfigs[0].maxFloatValue = 27;  // TODO carconfig?
+    c.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
+    c.areaConfigs[1].minFloatValue = 17;  // TODO carconfig?
+    c.areaConfigs[1].maxFloatValue = 27;  // TODO carconfig?
+    return c;
+}
+
+vhal20::VehiclePropConfig propconfig_autoclimate() {
+    return boolConfig(VehicleProperty::HVAC_AUTO_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
+}
+
+vhal20::VehiclePropConfig propconfig_recirculation() {
+    return boolConfig(VehicleProperty::HVAC_RECIRC_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
+}
+
+vhal20::VehiclePropConfig propconfig_acon() {
+    return boolConfig(VehicleProperty::HVAC_AC_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
+}
+
+vhal20::VehiclePropConfig propconfig_defroster() {
+    return boolConfig(VehicleProperty::HVAC_DEFROSTER,
+                      toInt(VehicleAreaWindow::FRONT_WINDSHIELD) | toInt(VehicleAreaWindow::REAR_WINDSHIELD));
+}
+vhal20::VehiclePropConfig propconfig_maxdefrost() {
+    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
+}
+
+vhal20::VehiclePropConfig propconfig_fanlevelfront() {
+    vhal20::VehiclePropConfig c;
+    c.prop = toInt(VehicleProperty::HVAC_FAN_SPEED);
+    c.access = VehiclePropertyAccess::READ_WRITE;
+    c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+    c.supportedAreas = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs.resize(1);
+    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs[0].minInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::OFF);
+    c.areaConfigs[0].maxInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::MAX);
+    return c;
+}
+
+vhal20::VehiclePropConfig propconfig_fandirection() {
+    vhal20::VehiclePropConfig c;
+    c.prop = toInt(VehicleProperty::HVAC_FAN_DIRECTION);
+    c.access = VehiclePropertyAccess::READ_WRITE;
+    c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
+    c.supportedAreas = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs.resize(1);
+    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs[0].minInt32Value = 0;
+    c.areaConfigs[0].maxInt32Value = toInt(vhal20::VehicleHvacFanDirection::DEFROST_AND_FLOOR);
+    return c;
+}
+
+}  // namespace
+
 HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactory& logicFactory,
-                       common::daemon::Factory& commonFactory)
-    : vccvhal10::impl::ModulePropertyHandler{vehicleHal}, logicFactory_{logicFactory}, commonFactory_{commonFactory} {
-    {  // Temperature, HVAC_TEMPERATURE_SET
-        PropertyAndConfig temperature_property;
+                       common::daemon::Factory& commonFactory,
+                       std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher)
+    : logicFactory_{logicFactory},
+      commonFactory_{commonFactory},
+      prop_temperature(propconfig_temperature(), dispatcher, vehicleHal),
+      prop_recirculation(propconfig_recirculation(), true, dispatcher, vehicleHal),
+      prop_autoclimate(propconfig_autoclimate(), true, dispatcher, vehicleHal),
+      prop_defroster(propconfig_defroster(), dispatcher, vehicleHal),
+      prop_maxdefroster(propconfig_maxdefrost(), true, dispatcher, vehicleHal),
+      prop_ac(propconfig_acon(), true, dispatcher, vehicleHal),
+      prop_fanlevelfront(propconfig_fanlevelfront(), 3, dispatcher, vehicleHal),
+      prop_fandir(propconfig_fandirection(), toInt(vhal20::VehicleHvacFanDirection::FACE_AND_FLOOR) |
+                                                     toInt(vhal20::VehicleHvacFanDirection::DEFROST),
+                  dispatcher, vehicleHal) {
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Temperature
 
-        // Config for all zones
-        temperature_property.prop_config.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
-        temperature_property.prop_config.access = VehiclePropertyAccess::READ_WRITE;
-        temperature_property.prop_config.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-        temperature_property.prop_config.supportedAreas =
-                toInt(VehicleAreaZone::ROW_1_LEFT) | VehicleAreaZone::ROW_1_RIGHT;
-        temperature_property.prop_config.areaConfigs.resize(2);
-        temperature_property.prop_config.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-        temperature_property.prop_config.areaConfigs[0].minFloatValue = 17;  // TODO carconfig?
-        temperature_property.prop_config.areaConfigs[0].maxFloatValue = 27;  // TODO carconfig?
-        temperature_property.prop_config.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
-        temperature_property.prop_config.areaConfigs[1].minFloatValue = 17;  // TODO carconfig?
-        temperature_property.prop_config.areaConfigs[1].maxFloatValue = 27;  // TODO carconfig?
-
-        // TODO(climateport): Map left/right zone to passenger/driver
-
-        // Temp common
-        VehiclePropValue prop_value;
-        prop_value.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
-
-        {  // Left temperature
-            prop_value.areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-
-            // Put Helper for tempLeft in map
-            temperature_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
-                    std::make_unique<PropertyHandlerFloat>(
-                            [this](float left_temp) {
-                                ALOGD("Temp request %f", left_temp);
-                                logicFactory_.driverTemperatureLogic_.request(left_temp);
-                                return 0;
-                            },
-                            [this]() { return &dummy1; }, [this](VehiclePropValue prop_value) { pushProp(prop_value); },
-                            prop_value);
+    prop_temperature.registerToVehicleHal();
+    prop_temperature.subscribe_set_prop([&](float temperature, int32_t areaId) {
+        if (areaId == toInt(VehicleAreaZone::ROW_1_LEFT)) {
+            ALOGD("Request temp left %f", temperature);
+            logicFactory_.driverTemperatureLogic_.request(temperature);
+        } else if (areaId == toInt(VehicleAreaZone::ROW_1_RIGHT)) {
+            ALOGD("Request temp right %f", temperature);
+            logicFactory_.passengerTemperatureLogic_.request(temperature);
         }
-        {  // Right temperature
-            prop_value.areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
+    });
 
-            // Put Helper for tempRight in map
-            temperature_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
-                    std::make_unique<PropertyHandlerFloat>(
-                            [this](float right_temp) {
-                                ALOGD("Temp request %f", right_temp);
-                                logicFactory_.passengerTemperatureLogic_.request(right_temp);
-                                return 0;
-                            },
-                            [this]() { return &dummy2; }, [this](VehiclePropValue prop_value) { pushProp(prop_value); },
-                            prop_value);
-        }
-
-        // Property handler configured, put it in map
-        propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(temperature_property);
-    }
-    {  // Fan level, HVAC_FAN_SPEED
-        PropertyAndConfig fan_property;
-
-        // Config for all zones
-        fan_property.prop_config.prop = toInt(VehicleProperty::HVAC_FAN_SPEED);
-        fan_property.prop_config.access = VehiclePropertyAccess::READ_WRITE;
-        fan_property.prop_config.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-        fan_property.prop_config.supportedAreas = toInt(VehicleAreaZone::ROW_1);
-        fan_property.prop_config.areaConfigs.resize(1);
-        fan_property.prop_config.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
-        fan_property.prop_config.areaConfigs[0].minInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::OFF);
-        fan_property.prop_config.areaConfigs[0].maxInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::MAX);
-
-        // Fan
-        vhal20::VehiclePropValue prop_value;
-        prop_value.prop = fan_property.prop_config.prop;
-        prop_value.areaId = toInt(VehicleAreaZone::ROW_1);
-
-        // Put Helper for fanLevel in map
-        fan_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =
-                std::make_unique<PropertyHandlerInt32>(
-                        [this](int fan_speed) {
-                            ALOGD("Fan speed request %d", fan_speed);
-                            // TODO: Proper range handling
-                            if (fan_speed < 0 || fan_speed > 6) {
-                                return 0;
-                            }
-
-                            FirstRow::FanLevelFrontRequest req(
-                                    static_cast<FirstRow::FanLevelFrontRequest::Literal>(fan_speed));
-                            logicFactory_.fanLevelFrontLogic_.requestFanLevel(req);
-                            return 0;
-                        },
-                        [this]() { return &dummy3; },
-                        [this](vhal20::VehiclePropValue prop_value) { pushProp(prop_value); }, prop_value);
-
-        // Property handler configured, put it in map
-        propertyhandlers_[static_cast<vccvhal10::VehicleProperty>(prop_value.prop)] = std::move(fan_property);
-    }
-
-    subs_.push_back(logicFactory_.airConditioner_.subscribe([](const auto& state) {
-        log_debug() << "fireAirConditionerAttributeChanged " << state;
-        // getStubAdapter()->fireAirConditionerAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.airDistribution_.subscribe([](const auto& state) {
-        log_debug() << "fireAirDistributionAttributeChanged " << state;
-        // getStubAdapter()->fireAirDistributionAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.autoClimate_.subscribe([](const auto& state) {
-        log_debug() << "fireAutoClimateAttributeChanged " << state;
-        // getStubAdapter()->fireAutoClimateAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.cleanZone_.subscribe([](const auto& state) {
-        log_debug() << "fireCleanzoneAttributeChanged " << state;
-        // getStubAdapter()->fireCleanzoneAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.fanLevelFront_.subscribe([](const auto& state) {
-        log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        // getStubAdapter()->fireFanLevelFrontAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.manualRecirc_.subscribe([](const auto& state) {
-        log_debug() << "fireManualRecircAttributeChanged " << state;
-        // getStubAdapter()->fireManualRecircAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([](const auto& state) {
-        log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
-        // getStubAdapter()->fireElectricDefrosterWindscreenAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.electricDefrosterRear_.subscribe([](const auto& state) {
-        log_debug() << "fireElectricDefrosterRearAttributeChanged " << state;
-        // getStubAdapter()->fireElectricDefrosterRearAttributeChanged(state);
-    }));
-
-    subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([](const auto& state) {
-        log_debug() << "fireMaxDefrosterAttributeChanged " << state;
-        // getStubAdapter()->fireMaxDefrosterAttributeChanged(state);
-    }));
-
-    subs_.push_back(logicFactory_.driverConvertedTemp_.subscribe([this](const auto&) {
+    subs_.push_back(logicFactory_.driverConvertedTemp_.subscribe([this](const auto& value) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        // getStubAdapter()->fireDriverTemperatureAttributeChanged(pubVal);
+        prop_temperature.myPushProp(value, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
-
     subs_.push_back(logicFactory_.driverTempState_.subscribe([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        // getStubAdapter()->fireDriverTemperatureAttributeChanged(pubVal);
+        // TODO: PA Availability to VHAL
     }));
 
-    subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribe([this](const auto&) {
+    subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribe([this](const auto& value) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        // getStubAdapter()->firePassengerTemperatureAttributeChanged(pubVal);
+        prop_temperature.myPushProp(value, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
     subs_.push_back(logicFactory_.passengerTempState_.subscribe([this](const auto&) {
@@ -200,7 +160,174 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        // getStubAdapter()->firePassengerTemperatureAttributeChanged(pubVal);
+        // TODO: PA Availability to VHAL
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Fan level
+
+    prop_fanlevelfront.registerToVehicleHal();
+    prop_fanlevelfront.subscribe_set_prop([&](int32_t fan_speed) {
+        ALOGD("Fan speed request %d", fan_speed);
+        // TODO: Proper range handling
+        if (fan_speed < 0 || fan_speed > 6) {
+            return;  // TODO: Return error
+        }
+
+        FirstRow::FanLevelFrontRequest req(static_cast<FirstRow::FanLevelFrontRequest::Literal>(fan_speed));
+        logicFactory_.fanLevelFrontLogic_.requestFanLevel(req);
+    });
+    subs_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
+        log_debug() << "fireFanLevelFrontAttributeChanged " << state;
+        prop_fanlevelfront.myPushProp(static_cast<int32_t>(state.value_));
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Auto
+
+    prop_autoclimate.registerToVehicleHal();
+    prop_autoclimate.subscribe_set_prop([&](bool auto_on) {
+        ALOGD("Request auto climate %d", auto_on);
+        logicFactory_.autoClimateLogic_.requestAutoClimate();
+    });
+    subs_.push_back(logicFactory_.autoClimate_.subscribe([this](const auto& state) {
+        log_debug() << "fireAutoClimateAttributeChanged " << state;
+        bool on = (state == FirstRowGen::AutoClimateState::ON);
+        prop_autoclimate.myPushProp(on);
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Recirc
+
+    prop_recirculation.registerToVehicleHal();
+    prop_recirculation.subscribe_set_prop([&](bool recirculation_on) {
+        ALOGD("Request recirculation %d", recirculation_on);
+        logicFactory_.manualRecircLogic_.requestManualRecirc(recirculation_on ? FirstRowGen::ManualRecircRequest::ON
+                                                                              : FirstRowGen::ManualRecircRequest::OFF);
+    });
+    subs_.push_back(logicFactory_.manualRecirc_.subscribe([this](const auto& state) {
+        log_debug() << "fireManualRecircAttributeChanged " << state;
+        prop_recirculation.myPushProp(state == FirstRowGen::ManualRecircState::ON);
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // (Electric) Defrost
+
+    prop_defroster.registerToVehicleHal();
+    prop_defroster.subscribe_set_prop([&](bool defroster_on, int32_t areaId) {
+        if (areaId == toInt(VehicleAreaWindow::REAR_WINDSHIELD)) {
+            ALOGD("Request rear electric defroster %d", defroster_on);
+            logicFactory_.electricDefrosterRearLogic_.request(defroster_on
+                                                                      ? FirstRowGen::ElectricDefrosterRearRequest::ON
+                                                                      : FirstRowGen::ElectricDefrosterRearRequest::OFF);
+            logicFactory_.electricDefrosterRearPopupLogic_.requestElectricDefrosterRear(
+                    defroster_on ? FirstRowGen::ElectricDefrosterRearRequest::ON
+                                 : FirstRowGen::ElectricDefrosterRearRequest::OFF);
+        } else if (areaId == toInt(VehicleAreaWindow::FRONT_WINDSHIELD)) {
+            ALOGD("Request front electric defroster %d", defroster_on);
+            logicFactory_.electricDefrosterWindscreenLogic_.request(
+                    defroster_on ? FirstRowGen::ElectricDefrosterWindscreenRequest::ON
+                                 : FirstRowGen::ElectricDefrosterWindscreenRequest::OFF);
+            logicFactory_.electricDefrosterWindscreenPopupLogic_.requestElectricDefrosterWindscreen(
+                    defroster_on ? FirstRowGen::ElectricDefrosterWindscreenRequest::ON
+                                 : FirstRowGen::ElectricDefrosterWindscreenRequest::OFF);
+        }
+    });
+    subs_.push_back(logicFactory_.electricDefrosterRear_.subscribe([this](const auto& state) {
+        log_debug() << "fireAirConditionerAttributeChanged " << state;
+        prop_defroster.myPushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+                                  toInt(VehicleAreaWindow::REAR_WINDSHIELD));
+    }));
+    subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([this](const auto& state) {
+        log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
+        prop_defroster.myPushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+                                  toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Max defrost
+
+    prop_maxdefroster.registerToVehicleHal();
+    prop_maxdefroster.subscribe_set_prop([&](bool maxdefroster_on) {
+        ALOGD("Request maxdefrost %d", maxdefroster_on);
+        logicFactory_.maxDefrosterLogic_.request(maxdefroster_on ? FirstRow::MaxDefrosterRequest::ON
+                                                                 : FirstRow::MaxDefrosterRequest::OFF);
+    });
+    subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([this](const auto& state) {
+        log_debug() << "fireMaxDefrosterAttributeChanged " << state;
+        prop_maxdefroster.myPushProp(state == FirstRowGen::MaxDefrosterState::ON);
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // AC
+
+    prop_ac.registerToVehicleHal();
+    prop_ac.subscribe_set_prop([&](bool ac_on) {
+        ALOGD("Request AC %d", ac_on);
+        logicFactory_.airConditionerLogic_.requestAirConditioner(ac_on ? FirstRowGen::AirConditionerRequest::AUTO
+                                                                       : FirstRowGen::AirConditionerRequest::OFF);
+    });
+    subs_.push_back(logicFactory_.airConditioner_.subscribe([this](const auto& state) {
+        log_debug() << "fireAirConditionerAttributeChanged " << state;
+        prop_ac.myPushProp(state == FirstRowGen::AirConditionerState::AUTO);
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Air distribution
+
+    static const std::vector<std::pair<FirstRowGen::AirDistributionAngle, int32_t>> air_dist_conversions{
+            {std::make_pair(FirstRowGen::AirDistributionAngle::FLOOR, toInt(VehicleHvacFanDirection::FLOOR)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::VENT, toInt(VehicleHvacFanDirection::FACE)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::DEFROST, toInt(VehicleHvacFanDirection::DEFROST)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::FLOOR_DEFROST,
+                            toInt(VehicleHvacFanDirection::FLOOR) | toInt(VehicleHvacFanDirection::DEFROST)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::FLOOR_VENT,
+                            toInt(VehicleHvacFanDirection::FLOOR) | toInt(VehicleHvacFanDirection::FACE)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::VENT_DEFROST,
+                            toInt(VehicleHvacFanDirection::FACE) | toInt(VehicleHvacFanDirection::DEFROST)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::FLOOR_VENT_DEFROST,
+                            toInt(VehicleHvacFanDirection::FLOOR) | toInt(VehicleHvacFanDirection::FACE) |
+                                    toInt(VehicleHvacFanDirection::DEFROST)),
+             // TODO: Auto=All OK???
+             std::make_pair(FirstRowGen::AirDistributionAngle::AUTO, toInt(VehicleHvacFanDirection::FLOOR) |
+                                                                             toInt(VehicleHvacFanDirection::FACE) |
+                                                                             toInt(VehicleHvacFanDirection::DEFROST)),
+             std::make_pair(FirstRowGen::AirDistributionAngle::DISABLED, 0)}};
+
+    prop_fandir.registerToVehicleHal();
+    prop_fandir.subscribe_set_prop([this](int32_t fan_dir) {
+        for (const auto& c : air_dist_conversions) {
+            if (c.second == fan_dir) {
+                // TODO: Remove static_cast, ok for now as the enums are identical
+                logicFactory_.airDistributionLogic_.request(
+                        static_cast<FirstRowGen::AirDistributionAngleRequest::Literal>(c.first.value_));
+                return;
+            }
+        }
+        // TODO: Return/log error
+    });
+    subs_.push_back(logicFactory_.airDistribution_.subscribe([this](const auto& state) {
+        log_debug() << "fireAirDistributionAttributeChanged " << state;
+
+        for (const auto& c : air_dist_conversions) {
+            if (c.first == state) {
+                prop_fandir.myPushProp(c.second);
+                return;
+            }
+        }
+
+        // TODO: Return/log error
+    }));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Old not yet ported
+
+    subs_.push_back(logicFactory_.cleanZone_.subscribe([](const auto& state) {
+        log_debug() << "fireCleanzoneAttributeChanged " << state;
+        // getStubAdapter()->fireCleanzoneAttributeChanged(state);
     }));
 
     subs_.push_back(commonFactory_.getTemperatureSyncProperty().subscribe([](const auto& syncAttribute) {
@@ -251,172 +378,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     ALOGD("Hvac initialized");
 }
 
-/* Cleanzone */
-const FirstRow::CleanzoneState& HvacModule::getCleanzoneAttribute() {
-    static FirstRow::CleanzoneState val;
-    val = logicFactory_.cleanZone_.get();
-    return val;
-}
-
-/* Air Conditioner */
-const FirstRow::AirConditionerState& HvacModule::getAirConditionerAttribute() {
-    static FirstRow::AirConditionerState val;
-    val = logicFactory_.airConditioner_.get();
-    return val;
-}
-
-void HvacModule::requestAirConditioner(FirstRow::AirConditionerRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.airConditionerLogic_.requestAirConditioner(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-/* Air Distribution */
-
-const FirstRow::AirDistributionAngle& HvacModule::getAirDistributionAttribute() {
-    static FirstRow::AirDistributionAngle val;
-    val = logicFactory_.airDistribution_.get();
-    return val;
-}
-
-void HvacModule::requestAirDistribution(FirstRow::AirDistributionAngleRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.airDistributionLogic_.request(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
 /* Climate Reset */
 void HvacModule::requestClimateReset(GenericReply _reply) {
     logicFactory_.climateResetLogic_.request();
-    _reply(CommonTypes::ReturnCode::SUCCESS);
-}
-
-/* Fan level front */
-const FirstRow::FanLevelFrontValue& HvacModule::getFanLevelFrontAttribute() {
-    static FirstRow::FanLevelFrontValue val;
-    val = logicFactory_.fanLevelFront_.get();
-    return val;
-}
-
-void HvacModule::requestFanLevelFront(FirstRow::FanLevelFrontRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.fanLevelFrontLogic_.requestFanLevel(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-/* Max Defroster */
-const FirstRow::MaxDefrosterState& HvacModule::getMaxDefrosterAttribute() {
-    static FirstRow::MaxDefrosterState val;
-    val = commonFactory_.getMaxDefrosterProperty().get();
-    return val;
-}
-
-void HvacModule::requestMaxDefroster(FirstRow::MaxDefrosterRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.maxDefrosterLogic_.request(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-/* Auto Climate */
-const FirstRow::AutoClimateState& HvacModule::getAutoClimateAttribute() {
-    static FirstRow::AutoClimateState val;
-    val = logicFactory_.autoClimate_.get();
-    return val;
-}
-
-void HvacModule::requestAutoClimate(GenericReply _reply) {
-    logicFactory_.autoClimateLogic_.requestAutoClimate();
-    _reply(CommonTypes::ReturnCode::SUCCESS);
-}
-
-// Manual Recirc
-
-const FirstRow::ManualRecircState& HvacModule::getManualRecircAttribute() {
-    static FirstRow::ManualRecircState val;
-    val = logicFactory_.manualRecirc_.get();
-    return val;
-}
-
-void HvacModule::requestManualRecirc(FirstRow::ManualRecircRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.manualRecircLogic_.requestManualRecirc(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-/* Electric Defroster Windscreen */
-
-const FirstRow::ElectricDefrosterWindscreenState& HvacModule::getElectricDefrosterWindscreenAttribute() {
-    static FirstRow::ElectricDefrosterWindscreenState val;
-    val = logicFactory_.getElectricDefrosterWindscreenProperty().get();
-    return val;
-}
-
-void HvacModule::requestElectricDefrosterWindscreen(FirstRow::ElectricDefrosterWindscreenRequest _value,
-                                                    GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.electricDefrosterWindscreenLogic_.request(_value);
-        logicFactory_.electricDefrosterWindscreenPopupLogic_.requestElectricDefrosterWindscreen(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-/* Electric Defroster Rear */
-
-const FirstRow::ElectricDefrosterRearState& HvacModule::getElectricDefrosterRearAttribute() {
-    static FirstRow::ElectricDefrosterRearState val;
-    val = logicFactory_.getElectricDefrosterRearProperty().get();
-    return val;
-}
-
-void HvacModule::requestElectricDefrosterRear(FirstRow::ElectricDefrosterRearRequest _value, GenericReply _reply) {
-    if (_value.validate()) {
-        logicFactory_.electricDefrosterRearLogic_.request(_value);
-        logicFactory_.electricDefrosterRearPopupLogic_.requestElectricDefrosterRear(_value);
-        _reply(CommonTypes::ReturnCode::SUCCESS);
-    } else {
-        _reply(CommonTypes::ReturnCode::INVALID_REQUEST);
-    }
-}
-
-// Driver temperature
-
-const FirstRow::TemperatureAttribute& HvacModule::getDriverTemperatureAttribute() {
-    static FirstRow::TemperatureAttribute val;
-    val.setValue(logicFactory_.driverConvertedTemp_.get());
-    val.setCurrState(logicFactory_.driverTempState_.get());
-    val.setRange(logicFactory_.driverTemperatureLogic_.range());
-    return val;
-}
-
-// Passenger temperature
-
-const FirstRow::TemperatureAttribute& HvacModule::getPassengerTemperatureAttribute() {
-    static FirstRow::TemperatureAttribute val;
-    val.setValue(logicFactory_.passengerConvertedTemp_.get());
-    val.setCurrState(logicFactory_.passengerTempState_.get());
-    val.setRange(logicFactory_.passengerTemperatureLogic_.range());
-    return val;
-}
-
-void HvacModule::requestPassengerTemperature(double _value, GenericReply _reply) {
-    logicFactory_.passengerTemperatureLogic_.request(_value);
     _reply(CommonTypes::ReturnCode::SUCCESS);
 }
 
