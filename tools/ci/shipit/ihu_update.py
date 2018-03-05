@@ -8,17 +8,15 @@
 
 
 import os
-import re
-import subprocess
 import time
 import argparse
 import logging
 import logging.config
 import json
-import socket
+import shutil
+
 from shipit.serial_mapping import open_serials, PortMapping, VipSerial, MpSerial, IhuSerials
 from shipit import serial_mapping
-from shipit import recording_serial
 from shipit.process_tools import check_output_logged
 
 logger = logging.getLogger("ihu_update")
@@ -385,6 +383,12 @@ def main() -> None:
                         required=False,
                         help="Repo root directory",
                         default="$ANDROID_BUILD_TOP")
+
+    parser.add_argument("--aosp-out-dir",
+                        required=False,
+                        help="Build out/ directory, used only when --aosp-root-dir does not exists",
+                        default="")
+
     parser.add_argument("--vip-port", '--vip_port',
                         required=False,
                         help="TTY device connected to VIP console UART",
@@ -408,9 +412,29 @@ def main() -> None:
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
-    build_dir = os.path.expandvars(parsed_args.aosp_root_dir)
-    build_out_dir = os.path.join(build_dir, "out")
-    logger.info("Start flash with args %r", parsed_args)
+    logger.info("Starting parsing for args:\r\n %r", parsed_args)
+
+    aosp_root_dir = os.path.expandvars(parsed_args.aosp_root_dir)
+    aosp_out_dir = os.path.expandvars(parsed_args.aosp_out_dir)
+
+    if os.path.isdir(aosp_root_dir):
+        if os.path.isdir(aosp_out_dir):
+            build_out_dir = aosp_out_dir
+        else:
+            build_out_dir = os.path.join(aosp_root_dir, "out")
+    else:
+        if os.path.isdir(aosp_out_dir):
+            build_out_dir = aosp_out_dir
+        else:
+            raise Exception("--aosp-root-dir does not exists and --aosp-out-dir was not specified / is also missing")
+
+    # prepend host tools from out directory to PATH so fastboot.sh pick them.
+    os.environ['PATH'] = os.path.abspath(os.path.join(build_out_dir, 'host', 'linux-x86', 'bin')) + \
+                         os.pathsep + \
+                         os.environ['PATH']
+
+    logger.info("When calling without full path using fastboot from %r", shutil.which('fastboot'))
+    logger.info("When calling without full path using adb from %r", shutil.which('adb'))
 
     if parsed_args.swap_tty:
         port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
