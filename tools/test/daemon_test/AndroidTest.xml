@@ -9,7 +9,7 @@
     <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
            <option name="test-module-name" value="VtsDaemonTest"/>
-           <option name="test-case-path" value="volvocars/tools/test/daemon_test/VtsDaemonTest"/>
+           <option name="test-case-path" value="VtsDaemonTest"/>
            <option name="test-timeout" value="3m"/>
        </test>
 </configuration>

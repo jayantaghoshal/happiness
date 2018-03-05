@@ -17,8 +17,10 @@
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="0178b9c6a5dd70ab25add5a019907ce8e6b14886"/>
 
   <!-- Volvo Cars partner apps -->
+
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="c469b468179ee55f340bde69ebe7fa3ce3a83c24"/>
-  <project name="vendor/google/apps/GoogleServices" path="vendor/volvocars/apps/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
+  <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="3d0cea1660f01b564919c5559046c7ee09363552"/>
+
 
   <!-- Boost-1.64.0 -->
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049"/>

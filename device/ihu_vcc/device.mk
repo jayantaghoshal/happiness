@@ -121,59 +121,9 @@ endif
 # Google Services
 ##############################################################
 
-GMS = vendor/volvocars/apps/google/GoogleServices
-
-# GMS mandatory core packages
-PRODUCT_PACKAGES += \
-    ConfigUpdater \
-    GoogleBackupTransport \
-    GoogleExtServices \
-    GoogleExtShared \
-    GoogleFeedback \
-    GoogleOneTimeInitializer \
-    GooglePackageInstaller \
-    GooglePartnerSetup \
-    GooglePrintRecommendationService \
-    GoogleServicesFramework \
-    GoogleCalendarSyncAdapter \
-    GoogleContactsSyncAdapter \
-    GoogleTTS \
-    GmsCore \
-    Phonesky \
-    SetupWizard \
-    WebViewGoogle
-
-# privapp-permissions whitelisting
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.control_privapp_permissions=log \
-    config.disable_networktime=1
-
-PRODUCT_COPY_FILES += \
-    $(GMS)/etc/permissions/privapp-permissions-google.xml:system/etc/permissions/privapp-permissions-google.xml
-    $(GMS)/etc/sysconfig/google.xml:system/etc/sysconfig/google.xml
-
-# GMS mandatory application packages
-# Note: Duo is mandatory for telephony devices, whereas Hangouts is for non-telephony devices.
-# The following apps are not currently in the build, but can be enabled
-#    Drive \
-#    Gmail2 \
-#    Duo \
-#    Hangouts \
-#    Music2 \
-#    Photos \
-#    Velvet \
-#    Videos \
-#    YouTube
-
-PRODUCT_PACKAGES += \
-    Chrome \
-    Maps \
-    MapsGearhead \
-# TODO (Abhijeet Shirolikar) GoogleAssistant is disabled as current integrated version for audio-hal does not implement
-# AUDIO_ROUTE_POLICY resulting in Car service to continuously crash. Re-enable packages below once required props are
-# implemented in audio-hal
-#    GoogleAssistant \
-#    GoogleAssistantTextQuery
+# Call gms makefile in vendor/google/apps/GAS to include all
+# everything in GAS delivery
+$(call inherit-product, vendor/volvocars/apps/google/GAS/google/products/gms.mk)
 
 ##############################################################
 # VCC required Linux kernel modules
