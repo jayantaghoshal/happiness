@@ -21,7 +21,7 @@ from shipit import serial_mapping
 from shipit import recording_serial
 from shipit.process_tools import check_output_logged
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("ihu_update")
 
 
 def run(cmd, **kwargs) -> str:
@@ -49,7 +49,7 @@ def mp_bootpin_prod(vip_serial: VipSerial) -> None:
 
 
 def boot_mp_to_abl_cmdline(vip_serial: VipSerial) -> None:
-    logging.info("Boot into ABL CMD line")
+    logger.info("Boot into ABL CMD line")
 
     mp_reset_low(vip_serial)
     mp_bootpin_abl(vip_serial)
@@ -58,7 +58,7 @@ def boot_mp_to_abl_cmdline(vip_serial: VipSerial) -> None:
 
 
 def boot_mp_to_android(vip_serial: VipSerial) -> None:
-    logging.info("Boot into android")
+    logger.info("Boot into android")
     mp_reset_low(vip_serial)
     mp_bootpin_prod(vip_serial)
     time.sleep(1)
@@ -155,6 +155,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                 pass
 
             try:
+                logger.info("Fist boot after fastboot  and ABL updates")
                 # TODO decrease timeout after vip flashing stabilizes
                 wait_for_device_adb(adb_executable, timeout_sec=15 * 60)
             except Exception:
@@ -248,7 +249,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
         else:
             logger.info("NOT Flashing VIP")
 
-        logging.info("Flash completed")
+        logger.info("Flash completed")
     except Exception:
         # Sleep some as it's nice to have output of VIP+MP shortly after exception also, in case of bad timing
         time.sleep(2)
@@ -304,7 +305,10 @@ def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSer
 
 
 def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8) -> None:
-    then = time.time()
+    logger.info("Wait for device to complete boot/onboot actions with timeout %r", timeout_sec)
+
+    started_at = time.time()
+    finished_by_deadline = started_at + timeout_sec
     while True:
         try:
             boot_completed = run([adb_executable,
@@ -313,28 +317,34 @@ def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8
             session = run([adb_executable,
                            "shell", 'getprop', 'ro.boot.swdl.session'],
                           timeout_sec=7)
-        except Exception:
-            boot_completed = "0"  # Ignore if the command times out
-            session = ""
 
-        if boot_completed == "1" and session == "default":
-            vip_auto_flashing = run([adb_executable,
-                                     "shell", 'getprop', 'persist.swdl.EnableAutoFlashing'],
-                                    timeout_sec=1)
-            if vip_auto_flashing == "1":
-                vip_ok = run([adb_executable,
-                              "shell", 'getprop', 'swdl.vip_version_ok'],
-                             timeout_sec=1)
-                if vip_ok == "1":
+            if boot_completed == "1" and session == "default":
+                vip_auto_flashing = run([adb_executable,
+                                         "shell", 'getprop', 'persist.swdl.EnableAutoFlashing'],
+                                        timeout_sec=1)
+                if vip_auto_flashing == "1":
+                    vip_version_ok = run([adb_executable,
+                                          "shell", 'getprop', 'swdl.vip_version_ok'],
+                                         timeout_sec=1)
+                    if vip_version_ok == "1":
+                        break
+                else:
                     break
             else:
-                break
-        else:
-            pass  # continue polling
+                pass  # continue polling
 
-        if time.time() > then + timeout_sec:
+        except Exception:
+            pass
+
+        if time.time() > finished_by_deadline:
             logger.error("Waiting for booting and flashing failed, properties snapshot:")
-            dump_props(adb_executable)
+
+            try:
+                dump_props(adb_executable)
+            except Exception:
+                # best effort to store properties failed.
+                pass
+
             raise RuntimeError("""Wait for boot and flashing timeout.
                                   Probably unit not booting up successfully or flashing services
                                   fail to ensure consistent software versions.""")
@@ -342,10 +352,11 @@ def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8
 
 
 def wait_for_device_adb(adb_executable, timeout_sec=60 * 7) -> None:
-    logging.info("Wait for device to enter device-mode via ADB")
+    logger.info("Wait for device to enter device-mode via ADB with timeout %r", timeout_sec)
     run([adb_executable,
          "wait-for-device"],
         timeout_sec=timeout_sec)
+    logger.info("Unit entered ADB mode")
 
 
 def dump_props(adb_executable, timeout_sec=15) -> None:
