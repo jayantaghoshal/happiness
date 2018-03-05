@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import subprocess
@@ -63,6 +63,8 @@ def check_file(filename: str) -> typing.Iterable[LoggingViolation]:
 
     last_include_index = file_contents.rfind("#include")
     last_include_logging_header_index = max(file_contents.rfind("#include <cutils/log.h>"),
+                                            file_contents.rfind("#include <log/log.h>"),
+                                            file_contents.rfind("#include <android/log.h>"),
                                             file_contents.rfind("#include <android-base/logging.h>"))
 
     if last_include_index == last_include_logging_header_index:
