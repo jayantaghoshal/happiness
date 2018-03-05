@@ -77,7 +77,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
     try:
         ihu_serials = open_serials(port_mapping)
         vip, mp = ihu_serials.vip, ihu_serials.mp
-    except Exception as e:
+    except Exception:
         print("""Failed to open Serial ports")
           Troubleshooting:")
             1. USB-to-Serial cables connected?")
@@ -364,26 +364,33 @@ def str2bool(v: str) -> bool:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Update an IHU using fastboot.")
-    parser.add_argument("--product", default="ihu_vcc", help="Product")
-    parser.add_argument("--hardware", default="", help="Hardware")
-    parser.add_argument("--aosp_root_dir", required=False,
+    parser = argparse.ArgumentParser(description="Bulletproof update an IHU using 2 serials and USB.")
+    parser.add_argument("--product",
+                        help="Product",
+                        default="ihu_vcc")
+
+    parser.add_argument("--aosp-root-dir", '--aosp_root_dir',
+                        required=False,
                         help="Repo root directory",
                         default="$ANDROID_BUILD_TOP")
-    parser.add_argument(
-        "--vip_port", required=False, help="TTY device connected to VIP console UART", default="/dev/ttyUSB0")
-    parser.add_argument(
-        "--mp_port", required=False, help="TTY device connected to MP console UART", default="/dev/ttyUSB1")
-    parser.add_argument(
-        "--swap_tty", required=False, action="store_true", help="Swap VIP and MP serial port")
+    parser.add_argument("--vip-port", '--vip_port',
+                        required=False,
+                        help="TTY device connected to VIP console UART",
+                        default="/dev/ttyUSB0")
+
+    parser.add_argument("--mp-port", '--mp_port',
+                        required=False,
+                        help="TTY device connected to MP console UART",
+                        default="/dev/ttyUSB1")
+
+    parser.add_argument("--swap-tty", '--swap_tty',
+                        required=False,
+                        action="store_true",
+                        help="Swap VIP and MP serial port")
 
     parser.add_argument("--update-vip", default=False, type=str2bool, help="Also flash VIP with vbf-flasher")
     parser.add_argument("--update-mp", default=True, type=str2bool, help="Flash MP software via fastboot")
     parsed_args = parser.parse_args()
-
-    if socket.gethostname() != "aic-docker":
-        raise RuntimeError("Script seems to be running outside the docker container, exiting")
 
     with open(os.path.dirname(__file__) + "/logging.json", "rt") as f:
         log_config = json.load(f)
@@ -391,16 +398,13 @@ def main() -> None:
 
     build_dir = os.path.expandvars(parsed_args.aosp_root_dir)
     build_out_dir = os.path.join(build_dir, "out")
-    logging.info("Start flash with args %r", parsed_args)
+    logger.info("Start flash with args %r", parsed_args)
 
     if parsed_args.swap_tty:
         port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
     else:
         port_mapping = PortMapping(parsed_args.vip_port, parsed_args.mp_port)
     product = parsed_args.product
-
-    if parsed_args.hardware != "":
-        logger.warning("Hardware is auto detected, stop passing it manually")
 
     flash_image(port_mapping,
                 product,
