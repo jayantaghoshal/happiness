@@ -24,31 +24,31 @@ from shipit.process_tools import check_output_logged
 logger = logging.getLogger(__name__)
 
 
-def run(cmd, **kwargs):
+def run(cmd, **kwargs) -> str:
     return check_output_logged(cmd, **kwargs).decode().strip(" \t\n\r")
 
 
-def mp_reset_low(vip_serial: VipSerial):
+def mp_reset_low(vip_serial: VipSerial) -> None:
     vip_serial.writeline("gpio 1.10 0 o")
 
 
-def mp_reset_high(vip_serial: VipSerial):
+def mp_reset_high(vip_serial: VipSerial) -> None:
     vip_serial.writeline("gpio 1.10 1 o")
 
 
-def mp_bootpin_abl(vip_serial: VipSerial):
+def mp_bootpin_abl(vip_serial: VipSerial) -> None:
     vip_serial.writeline("gpio 8.10 0 o")
     vip_serial.writeline("gpio 1.2 0 o")
     vip_serial.writeline("gpio 1.3 0 o")
 
 
-def mp_bootpin_prod(vip_serial: VipSerial):
+def mp_bootpin_prod(vip_serial: VipSerial) -> None:
     vip_serial.writeline("gpio 8.10 1 o")
     vip_serial.writeline("gpio 1.2 0 o")
     vip_serial.writeline("gpio 1.3 0 o")
 
 
-def boot_mp_to_abl_cmdline(vip_serial: VipSerial):
+def boot_mp_to_abl_cmdline(vip_serial: VipSerial) -> None:
     logging.info("Boot into ABL CMD line")
 
     mp_reset_low(vip_serial)
@@ -57,7 +57,7 @@ def boot_mp_to_abl_cmdline(vip_serial: VipSerial):
     mp_reset_high(vip_serial)
 
 
-def boot_mp_to_android(vip_serial: VipSerial):
+def boot_mp_to_android(vip_serial: VipSerial) -> None:
     logging.info("Boot into android")
     mp_reset_low(vip_serial)
     mp_bootpin_prod(vip_serial)
@@ -65,7 +65,7 @@ def boot_mp_to_android(vip_serial: VipSerial):
     mp_reset_high(vip_serial)
 
 
-def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, update_mp: bool, update_vip: bool):
+def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, update_mp: bool, update_vip: bool) -> None:
     adb_executable = os.path.join(build_out_dir, "host", "linux-x86", "bin", "adb")
     fastboot_executable = os.path.join(build_out_dir, "host", "linux-x86", "bin", "fastboot")
     bsp_provided_flashfiles_path = os.path.join(build_out_dir,
@@ -76,6 +76,7 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
 
     try:
         ihu_serials = open_serials(port_mapping)
+        vip, mp = ihu_serials.vip, ihu_serials.mp
     except Exception as e:
         print("""Failed to open Serial ports")
           Troubleshooting:")
@@ -86,9 +87,8 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             4. Maybe you have multiple or renamed /dev/ttyUSB-devices, use --mp_port and --vip_port to choose explicitly""")
         return
 
-    VIP, MP = ihu_serials.vip, ihu_serials.mp
-    is_vip_app = serial_mapping.verify_serial_is_vip_app(ihu_serials.vip)
-    is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(ihu_serials.vip)
+    is_vip_app = serial_mapping.verify_serial_is_vip_app(vip)
+    is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(vip)
     if not (is_vip_app or is_vip_pbl):
         raise RuntimeError(
             """VIP not detected.
@@ -101,61 +101,68 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
 
     try:
         if is_vip_app:
-            VIP.writeline("sm alw 1")
-            VIP.expect_line(".*SysM- Always_On: 1.*", 15)
+            vip.writeline("sm alw 1")
+            vip.expect_line(".*SysM- Always_On: 1.*", 15)
 
         if is_vip_pbl:
-            VIP.writeline("sm st_off")
-            VIP.expect_line(".*Disabling startup timer.*", 15)
-
-        try:
-            adb_bootmode = run([adb_executable, "get-state"], timeout_sec=60)
-            logger.info("Bootmode before: %s", adb_bootmode)
-        except Exception as e:
-            logger.info("Could not check bootmode, probably not booted, continue anyway. Reason: %r" % e)
+            vip.writeline("sm st_off")
+            vip.expect_line(".*Disabling startup timer.*", 15)
 
         if update_mp:
             logger.info("Updating MP software (via Fastboot)")
             logger.info("Starting ABL command line")
-            boot_mp_to_abl_cmdline(ihu_serials.vip)
+            boot_mp_to_abl_cmdline(vip)
+            confirm_mp_abl_on_serial(mp)
+            start_fastboot_from_mp_abl_cmdline(mp)
 
-            logger.info("Waiting for ABL commandline, it is usually quick but"
-                        "it might take longer in case ABL has some update/init work to do.")
-            MP.expect_line(">>>.*", 3 * 60, "Is the MP UART connected? Or do you have the TTY open already?")
-            logger.info("ABL command line confirmed, boot into fastboot")
-            MP.writeline("boot elk")
-            MP.expect_line("==> jump to image.*", 30)
-            MP.expect_line("USB for fastboot transport layer selected", 30)
-            logger.info("Fastboot confirmed on console")
-
-            # Verify that the Fastboot protocol is working between host and target.
-            fastboot_timeout_s = 10
-            while fastboot_timeout_s > 0:
-                fastboot_devices = run([fastboot_executable, "devices"])
-                if fastboot_devices:
-                    logger.info("Fastboot device over cable: %s" % fastboot_devices)
-                    break
-                fastboot_timeout_s -= 1
-                time.sleep(1)
-
-            if fastboot_timeout_s == 0:
-                raise Exception("No Fastboot device found. Did you forget to connect host with target?")
+            wait_for_host_target_fastboot_connection(fastboot_executable)
 
             # Ensure that after flashing completes the pin is in correct state
             # fastboot reboot boots into android anyway, but toggling reset afterwards should not cause
             # booting to abl
-            mp_bootpin_prod(ihu_serials.vip)
+            mp_bootpin_prod(vip)
 
             logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
             run(['bash', 'fastboot.sh', '--abl', '--disable-verity'],
                 cwd=bsp_provided_flashfiles_path)
+
+            logger.info("Waiting for confirmation that system rebooted...")
+
+            try:
+                mp.expect_line("Rebooting ...", timeout_sec=30)
+            except Exception:
+                logger.error("Rebooting failed, assuming that its only reboot and flashing was still ok", exc_info=True)
+                boot_mp_to_android(vip)
+                mp.expect_line("abl-APL:.*", timeout_sec=2 * 60)
+
+            try:
+                logger.info("Waiting for confirmation that previous ABL uses abl_update_1...")
+                mp.expect_line("Searching for ABL update partition abl_update_1.*", timeout_sec=60)
+
+                logger.info("Waiting for ABL update confirmation")
+                mp.expect_line("Update time:.*", timeout_sec=120)
+                logger.info("ABL update completed.")
+            except Exception:
+                logger.error("Failed for confirm ABL self update...", exc_info=True)
+                logger.info("Trying manually...")
+                boot_mp_to_abl_cmdline(vip)
+                confirm_mp_abl_on_serial(mp)
+                mp.writeline("update mmc1:@0")
+                mp.expect_line("Update time:.*", timeout_sec=120)
+                logger.info("ABL updated, rebooting")
+                mp_bootpin_prod(vip)
+                mp.writeline("reset")
+                pass
+
             try:
                 # TODO decrease timeout after vip flashing stabilizes
                 wait_for_device_adb(adb_executable, timeout_sec=15 * 60)
             except Exception:
-                logger.error("Booting after fastboot failed, VIP can be a reason...")
-                VIP.writeline("swdl er")  # brutal swdl e
-                VIP.expect_line(".*PBL Version.*", 15)
+                logger.error("Booting after fastboot failed, VIP power moding ignoring go to programming session"
+                             "can be a reason...", exc_info=True)
+                vip.writeline("swdl er")  # brutal swdl e
+                vip.expect_line(".*PBL Version.*", 15)
+                logger.info("Booted PBL, either vip auto flash starts or we will get timout.")
                 # This is only extra 15 minutes if VIP Power moding is broken again...
                 wait_for_device_adb(adb_executable, timeout_sec=15 * 60)
                 pass
@@ -180,17 +187,17 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("Flashing VIP")
 
             try:
-                VIP.writeline("swdl e")  # normal swdl e
-                VIP.expect_line(".*PBL Version.*", 15)
+                vip.writeline("swdl e")  # normal swdl e
+                vip.expect_line(".*PBL Version.*", 15)
             except Exception:
-                logger.warning("As usually swdl e failed due to power moding, go for emergency one")
-                VIP.writeline("swdl er")  # brutal swdl e
+                logger.warning("As usually swdl e failed due to power moding, go for emergency one", exc_info=True)
+                vip.writeline("swdl er")  # brutal swdl e
 
-            serial_mapping.verify_serial_is_vip_pbl(ihu_serials.vip, timeout_sec=15)
+            serial_mapping.verify_serial_is_vip_pbl(vip, timeout_sec=15)
             time.sleep(1)
 
-            VIP.writeline("sm st_off")
-            VIP.expect_line(".*Disabling startup timer.*", 15)
+            vip.writeline("sm st_off")
+            vip.expect_line(".*Disabling startup timer.*", 15)
 
             ensure_device_mode_for_vip_flashing(adb_executable, ihu_serials)
 
@@ -214,11 +221,11 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             logger.info("VIP PBL update finished with result %s", output)
 
             logger.info("Rebooting VIP...")
-            VIP.writeline("swdl e")
-            VIP.expect_line(".*PBL Version.*", 15)
+            vip.writeline("swdl e")
+            vip.expect_line(".*PBL Version.*", 15)
 
-            VIP.writeline("sm st_off")
-            VIP.expect_line(".*Disabling startup timer.*", 15)
+            vip.writeline("sm st_off")
+            vip.expect_line(".*Disabling startup timer.*", 15)
 
             ensure_device_mode_for_vip_flashing(adb_executable, ihu_serials)
 
@@ -229,8 +236,8 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
                          timeout_sec=60 * 2)
             logger.info("VIP APP update finished with result %r", output)
 
-            VIP.writeline("sm restart")  # new command, already in our PBL
-            VIP.expect_line("Rebooting to normal mode", 30, hint="Reseting VIP app failed, try power cycling")
+            vip.writeline("sm restart")  # new command, already in our PBL
+            vip.expect_line("Rebooting to normal mode", 30, hint="Reseting VIP app failed, try power cycling")
 
             logger.info("New VIP APP booted successfully")
 
@@ -247,11 +254,40 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
         time.sleep(2)
         raise
     finally:
-        ihu_serials.vip.close()
-        ihu_serials.mp.close()
+        vip.close()
+        mp.close()
 
 
-def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSerials):
+def wait_for_host_target_fastboot_connection(fastboot_executable: str) -> None:
+    logger.info("Verifying that the fastboot protocol is working between host and target...")
+    fastboot_timeout_s = 10
+    while fastboot_timeout_s > 0:
+        fastboot_devices = run([fastboot_executable, "devices"])
+        if fastboot_devices:
+            logger.info("Fastboot device over cable: %s" % fastboot_devices)
+            break
+        fastboot_timeout_s -= 1
+        time.sleep(1)
+    if fastboot_timeout_s == 0:
+        raise Exception("No Fastboot device found. Did you forget to connect host with target?")
+
+
+def start_fastboot_from_mp_abl_cmdline(mp: MpSerial) -> None:
+    logger.info("Booting fastboot from ABL command line...")
+    mp.writeline("boot elk")
+    mp.expect_line("==> jump to image.*", 30)
+    mp.expect_line("USB for fastboot transport layer selected", 30)
+    logger.info("Fastboot confirmed on console")
+
+
+def confirm_mp_abl_on_serial(mp: MpSerial) -> None:
+    logger.info("Waiting for ABL commandline, it is usually quick but"
+                "it might take longer in case ABL has some update/init work to do.")
+    mp.expect_line(">>>.*", 3 * 60, "Is the MP UART connected? Or do you have the TTY open already?")
+    logger.info("ABL command line confirmed")
+
+
+def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSerials) -> None:
     try:
         wait_for_device_adb(adb_executable)
         adb_bootmode = run([adb_executable,
@@ -267,7 +303,7 @@ def ensure_device_mode_for_vip_flashing(adb_executable: str, ihu_serials: IhuSer
         wait_for_boot_and_flashing_completed(adb_executable)
 
 
-def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8):
+def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8) -> None:
     then = time.time()
     while True:
         try:
@@ -305,17 +341,17 @@ def wait_for_boot_and_flashing_completed(adb_executable: str, timeout_sec=60 * 8
         time.sleep(4)
 
 
-def wait_for_device_adb(adb_executable, timeout_sec=60 * 7):
+def wait_for_device_adb(adb_executable, timeout_sec=60 * 7) -> None:
     logging.info("Wait for device to enter device-mode via ADB")
     run([adb_executable,
          "wait-for-device"],
         timeout_sec=timeout_sec)
 
 
-def dump_props(adb_executable, timeout_sec=15):
+def dump_props(adb_executable, timeout_sec=15) -> None:
     run([adb_executable,
-                          'shell', 'getprop'],
-                         timeout_sec=timeout_sec)
+         'shell', 'getprop'],
+        timeout_sec=timeout_sec)
 
 
 def str2bool(v: str) -> bool:
@@ -327,7 +363,7 @@ def str2bool(v: str) -> bool:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Update an IHU using fastboot.")
     parser.add_argument("--product", default="ihu_vcc", help="Product")
