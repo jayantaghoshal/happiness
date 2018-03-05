@@ -9,7 +9,7 @@
 
 #include <IDispatcher.h>
 
-#define LOG_TAG "CloudD.service"
+#define LOG_TAG "CloudD.RequestHandler"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
