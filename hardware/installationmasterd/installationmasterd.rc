@@ -1,0 +1,6 @@
+service installationmasterd /vendor/bin/hw/installationmasterd
+    class vcc_net
+    oneshot
+    user root
+    group root
+    seclabel u:r:installationmasterd:s0

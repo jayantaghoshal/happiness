@@ -4,20 +4,30 @@
  */
 
 cc_defaults {
-    name: "instmast_cc_defaults",
+    name: "installationmasterd_cc_defaults",
     defaults: ["volvocars_cc_defaults"],
     tidy_checks: [
     ],
 }
 
 cc_binary {
-    name: "instmastd",
-    defaults: ["instmast_cc_defaults"],
+    name: "installationmasterd",
+    init_rc: ["installationmasterd.rc"],
+    relative_install_path: "hw",
+    vendor: true,
+    cpp_std: "c++14",
+    defaults: ["installationmasterd_cc_defaults"],
     srcs: [
         "src/main.cpp",
         "src/installation_master_daemon.cpp",
     ],
 
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
     local_include_dirs: [
         "src/",
     ],
@@ -27,14 +37,18 @@ cc_binary {
 
     shared_libs: [
         "liblog",
-        "libcutils",
+        "libutils",
+        "libtarmac",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libz",
         "vendor.volvocars.hardware.installationmaster@1.0",
     ],
 
     static_libs: [
     ],
 
-    init_rc: ["installationmaster.rc"],
     required: [
     ],
 }

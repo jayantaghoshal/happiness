@@ -22,7 +22,8 @@ PRODUCT_PACKAGES += \
     vendor.volvocars.hardware.uds@1.0-service \
     vendor.volvocars.hardware.profiles@1.0-impl \
     soundnotifications \
-    vendor.volvocars.hardware.settingsstorage@1.0-service
+    vendor.volvocars.hardware.settingsstorage@1.0-service \
+    installationmasterd \
 
 #############################################################
 # VCC System Apps/Services

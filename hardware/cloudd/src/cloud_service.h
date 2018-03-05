@@ -26,6 +26,7 @@ using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnection;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionEventListener;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionDownloadResponseCallback;
 using ::vendor::volvocars::hardware::cloud::V1_0::Response;
+
 namespace Connectivity {
 
 /*

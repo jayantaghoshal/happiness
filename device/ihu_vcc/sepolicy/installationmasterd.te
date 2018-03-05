@@ -1,0 +1,8 @@
+# installationmasterd service
+type installationmasterd, domain;
+type installationmasterd_exec, exec_type, file_type, vendor_file_type;
+init_daemon_domain(installationmasterd)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(installationmasterd)
+allow installationmasterd hwservicemanager_prop:file { getattr open read };

@@ -3,7 +3,9 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <IDispatcher.h>
 #include <cutils/log.h>
+#include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 #include <memory>
 
@@ -11,6 +13,8 @@
 
 #undef LOG_TAG
 #define LOG_TAG "InstMast"
+using namespace tarmac::eventloop;
+using namespace android::hardware;
 
 // Setup signal handlers
 void SigTermHandler(int fd) {
@@ -18,6 +22,9 @@ void SigTermHandler(int fd) {
     read(fd, &sigdata, sizeof(sigdata));
 
     ALOGD("SIGTERM received...");
+
+    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
 void SigHupHandler(int fd) {
@@ -32,6 +39,9 @@ void SigIntHandler(int fd) {
     read(fd, &sigdata, sizeof(sigdata));
 
     ALOGD("SIGINT received...");
+
+    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
 bool InitSignals() {
@@ -64,6 +74,12 @@ bool InitSignals() {
         return false;
     }
 
+    IDispatcher::GetDefaultDispatcher().AddFd(termfd, [termfd]() { SigTermHandler(termfd); });
+
+    IDispatcher::GetDefaultDispatcher().AddFd(hupfd, [hupfd]() { SigHupHandler(hupfd); });
+
+    IDispatcher::GetDefaultDispatcher().AddFd(intfd, [intfd]() { SigIntHandler(intfd); });
+
     return true;
 }
 
@@ -71,11 +87,15 @@ using namespace com::volvocars::installationmaster;
 
 // ===============================================================
 // MAIN
-int main(void) {
+int main() {
     InitSignals();
 
     std::unique_ptr<InstallationMasterDaemon> installation_master_daemon = std::make_unique<InstallationMasterDaemon>();
 
+    if (installation_master_daemon->Initialize()) {
+        configureRpcThreadpool(1, true /*callerWillJoin*/);
+        joinRpcThreadpool();
+    }
     ALOGI("exiting ...");
 
     return 0;
