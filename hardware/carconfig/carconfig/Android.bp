@@ -58,10 +58,12 @@ cc_library_static {
 
     local_include_dirs: [
         "include",
+        "mock",
     ],
 
     export_include_dirs: [
         "include",
+        "mock",
     ],
 
     export_static_lib_headers: [

@@ -88,12 +88,13 @@ cc_library_static {
     srcs: [
         "src/dataelemvalue.cpp",
         "src/dataelementframework.cpp",
+        "src/internalsignals.cpp",
         "src/dataelementcommbus_standalone.cpp",
         "src/vipcomm/VipFramework.cpp",
         "src/vipcomm/VipFramework_crc.cpp",
         "generated/gen_dataelements.cpp",
         "generated/gen_jsonencdec.cpp",
-        "src/signals_server.cpp",
+        "src/vfc_helper.cpp",
     ],
 
     cppflags: [

@@ -153,7 +153,7 @@ class Setting : public SettingBase {
         }
     }
 
-  private:
+  protected:
     std::function<void(const ValueProfile<T>&)> callbackToApplicationOnSettingChanged_;
     mutable ValueProfile<T> value_;
     const T default_;
