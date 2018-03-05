@@ -27,7 +27,7 @@ DIST_FILE="${REPO_ROOT_DIR}/out/dist/ihu_vcc-target_files-${BUILD_NUMBER}.zip"
 OTA_UPDATE_FILE="${REPO_ROOT_DIR}/out/ota_update.zip"
 time "${REPO_ROOT_DIR}"/build/tools/releasetools/ota_from_target_files --block "${DIST_FILE}" "${OTA_UPDATE_FILE}"
 
-# Build vendor/volovcar tests (Unit and Component Tests) # Not relevant to daily build
+# Build vendor/volvocars tests (Unit and Component Tests) # Not relevant to daily build
 # TODO: fix it for building daily tests
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=nightly || die "Build Unit and Component tests failed"
 
@@ -43,14 +43,22 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed || die "Could not create out archive"
+            ./out/host/linux-x86/tradefed
 
 du -sh "$OUT_ARCHIVE"
 
+IHU_UPDATE_ARCHIVE=ihu_update.tgz
+time tar -c --use-compress-program='pigz -1' -f "${IHU_UPDATE_ARCHIVE}" \
+            --directory="$REPO_ROOT_DIR" \
+            ./vendor/volvocars/tools/ci/shipit
+
 # Upload to Artifactory
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_FILE}" || die "Could not push dist file to Artifactory."
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OTA_UPDATE_FILE}" || die "Could not push ota update file to Artifactory."
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}"
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${IHU_UPDATE_ARCHIVE}"
+
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_FILE}"
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OTA_UPDATE_FILE}"
 
 # Cleanup
 rm ${OUT_ARCHIVE}
+rm ${IHU_UPDATE_ARCHIVE}
