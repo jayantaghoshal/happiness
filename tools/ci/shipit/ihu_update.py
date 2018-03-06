@@ -6,7 +6,6 @@
 # TODO: Don't use adb command line, use https://github.com/android/platform_development/blob/master/testrunner/adb_interface.py
 #       Right now we are missing platform_development repo from intel AOSP delivery
 
-
 import os
 import time
 import argparse
@@ -382,7 +381,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Bulletproof update an IHU using 2 serials and USB.")
     parser.add_argument("--product",
                         help="Product",
-                        default="ihu_vcc")
+                        default="$TARGET_PRODUCT")
 
     parser.add_argument("--aosp-root-dir", '--aosp_root_dir',
                         required=False,
@@ -445,7 +444,19 @@ def main() -> None:
         port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
     else:
         port_mapping = PortMapping(parsed_args.vip_port, parsed_args.mp_port)
-    product = parsed_args.product
+
+    products_dir = os.path.join(build_out_dir, 'target', 'product')
+    product_path = os.path.expandvars(os.path.join(products_dir, parsed_args.product))
+
+    if os.path.isdir(product_path):
+        product = os.path.expandvars(parsed_args.product)
+    else:
+        raise Exception(
+            "Provided product " + parsed_args.product +
+            " after ENV expansion yielded not existing out path " +
+            product_path, " see \"" + products_dir + "\" for already built products you have available")
+
+    logger.info("Using product %r, files from %r", product, product_path)
 
     flash_image(port_mapping,
                 product,
