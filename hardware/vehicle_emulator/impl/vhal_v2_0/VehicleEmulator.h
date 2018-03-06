@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_VehicleHalEmulator_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_VehicleHalEmulator_H_
+#pragma once
 
 #include <log/log.h>
 #include <memory>
@@ -111,5 +110,3 @@ class VehicleEmulator {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_VehicleHalEmulator_H_

@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_
-#define android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_
+#pragma once
 
 #include <list>
 #include <map>
@@ -172,5 +171,3 @@ class SubscriptionManager {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_

@@ -88,5 +88,4 @@ def verify_guard2once(path: str):
         current_content = load_source_code(path)
         fixed_content = _get_guard2once_content(path)
         if current_content != fixed_content:
-            pass  # do not enforce in this commit.
-            # raise CodeFormatInvalidError("Invalid #include guards (should be #pragma once)", path)
+            raise CodeFormatInvalidError("Invalid #include guards (should be #pragma once)", path)

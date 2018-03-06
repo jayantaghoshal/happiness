@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_ConcurrentQueue_H_
-#define android_hardware_automotive_vehicle_V2_0_ConcurrentQueue_H_
+#pragma once
 
 #include <atomic>
 #include <condition_variable>
@@ -153,5 +152,3 @@ class BatchingConsumer {
 };
 
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_ConcurrentQueue_H_

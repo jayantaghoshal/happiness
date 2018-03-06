@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_PropertyDb_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_PropertyDb_H_
+#pragma once
 
 #include <cstdint>
 #include <memory>
@@ -104,5 +103,3 @@ class VehiclePropertyStore {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_PropertyDb_H_

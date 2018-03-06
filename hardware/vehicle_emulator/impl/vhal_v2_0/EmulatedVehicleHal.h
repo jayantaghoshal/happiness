@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_EmulatedVehicleHal_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_EmulatedVehicleHal_H_
+#pragma once
 
 #include <sys/socket.h>
 #include <map>
@@ -95,5 +94,3 @@ class EmulatedVehicleHal : public EmulatedVehicleHalIface {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_EmulatedVehicleHal_H_

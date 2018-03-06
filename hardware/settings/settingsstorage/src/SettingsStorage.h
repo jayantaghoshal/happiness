@@ -3,8 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#ifndef VENDOR_VOLVOCARS_HARDWARE_SETTINGS_V1_0_SETTINGSSTORAGE_H
-#define VENDOR_VOLVOCARS_HARDWARE_SETTINGS_V1_0_SETTINGSSTORAGE_H
+#pragma once
 
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
@@ -92,5 +91,3 @@ class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recip
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor
-
-#endif  // VENDOR_VOLVOCARS_HARDWARE_SETTINGS_V1_0_SETTINGSSTORAGE_H

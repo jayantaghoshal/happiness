@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_DefaultConfig_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_DefaultConfig_H_
+#pragma once
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include <vhal_v2_0/VehicleUtils.h>
@@ -367,5 +366,3 @@ const ConfigDeclaration kVehicleProperties[]{
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_DefaultConfig_H_

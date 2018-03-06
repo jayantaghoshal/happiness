@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_
+#pragma once
 
 #include <chrono>
 
@@ -126,5 +125,3 @@ class FakeValueGenerator {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_

@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_
-#define android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_
+#pragma once
 
 #include <android/hardware/automotive/vehicle/2.0/types.h>
 #include <ios>
@@ -188,5 +187,3 @@ inline std::string vecToString(const hidl_vec<T>& vec) {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_
