@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -23,6 +23,7 @@ CarConfigVipCom::CarConfigVipCom() {
 CarConfigVipCom::~CarConfigVipCom() {
     // Make sure we can exit thread functions and join threads
     DesipClient::setExitListen(true);
+    android::IPCThreadState::self()->stopProcess();
 
     if (vipReader.joinable()) {
         vipReader.join();
