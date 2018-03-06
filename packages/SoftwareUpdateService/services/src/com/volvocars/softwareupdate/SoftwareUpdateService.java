@@ -40,6 +40,7 @@ public class SoftwareUpdateService extends Service {
     private SoftwareUpdateManagerImpl softwareUpdateManager;
 
     private SoftwareManagementApi swapi = null;
+    private InstallationMaster installationMaster = null;
 
     private int state = 0; // Dummy state
 
@@ -73,6 +74,9 @@ public class SoftwareUpdateService extends Service {
         swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
         swapiCallback = new SoftwareManagementApiCallback(this);
         softwareInformationList = new ArrayList();
+
+        installationMaster = new InstallationMaster();
+        installationMaster.init();
 
         // Provide SUSApi
         softwareUpdateManager = new SoftwareUpdateManagerImpl(this);
@@ -174,6 +178,16 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
+    public void assignInstallation(String uuid) {
+        if (installationMaster != null) {
+
+            Log.v(LOG_TAG, "Assigning installation for installation order with uuid:" + uuid);
+            installationMaster.assignInstallation(uuid);
+        } else {
+            Log.e(LOG_TAG, "ConfirmInstallation failed: Local InstallationMaster variable is null");
+        }
+    }
+
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
@@ -218,7 +232,8 @@ public class SoftwareUpdateService extends Service {
             }
         }
         if (!found) {
-            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid [" + downloadInfo.uuid + "] not found in list which is weird...");
+            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid [" + downloadInfo.uuid
+                    + "] not found in list which is weird...");
         }
 
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
