@@ -164,12 +164,14 @@ def is_external_thirdparty(file_path: str) -> bool:
 def verify_file_path(file_path):
     if not is_external_thirdparty(file_path):
         codeformat.verify_source_file_format(file_path)
+        codeformat.verify_guard2once(file_path)
         copyrightheader.verify_copyright_headers(file_path)
         linters.run_for_file(file_path)
 
 
 def fix_file_path(file_path):
     if not is_external_thirdparty(file_path):
+        codeformat.apply_guard2once(file_path)
         codeformat.apply_source_file_format(file_path)
         copyrightheader.fix_copyright_headers(file_path)
         linters.run_for_file(file_path)
