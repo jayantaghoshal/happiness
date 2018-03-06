@@ -121,6 +121,7 @@ unset IFS
 # which results in incorrect permissions in /dev
 for tty_file in /dev/ttyUSB*
 do
+  [ -e "$tty_file" ] || continue
   sudo -E chgrp ${CONTAINER_USERNAME} "$tty_file"
 done
 
