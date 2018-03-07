@@ -172,7 +172,9 @@ RUN apt-get install -y \
     python-autopep8 \
     python-pep8
 
-RUN pip3 install mypy \
+# mypy has been set to version 0.560 because Autosar code generation for
+# hardware signal data elements, does not currently work with later versions
+RUN pip3 install mypy==0.560 \
                  pylint \
                  flake8
 
