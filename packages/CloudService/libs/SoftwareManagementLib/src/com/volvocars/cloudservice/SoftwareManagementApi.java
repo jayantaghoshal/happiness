@@ -123,8 +123,10 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    *
-    */
+     * Return the result for GetDownloadInfo
+     * @param code          The HTTP cose of the response
+     * @param download_info The download information of the installation order.
+     */
     public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetDownloadInfo(uuid, callback);
@@ -132,13 +134,24 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    * Get Download data
-    * @param downloadInfo Contains information of what to be downloaded
-    * @param callback     Callback to be called when the status of the download changes
-    */
+     * Get Download data
+     * @param downloadInfo Contains information of what to be downloaded
+     * @param callback     Callback to be called when the status of the download changes
+     */
     public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetDownloadData(downloadInfo, callback);
+        }
+    }
+
+    /**
+     * Post InstallationReport
+     * @param installationReport Report to be posted
+     * @param callback           Callback to be called when the status of the download changes
+     */
+    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.PostInstallationReport(installationReport, callback);
         }
     }
 }

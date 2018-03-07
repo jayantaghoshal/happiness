@@ -23,23 +23,30 @@ oneway interface ISoftwareManagementApiCallback {
     void SoftwareAssignmentList(in int code, in List<SoftwareAssignment> software_list);
 
     /**
-    * Return result for GetPendingInstallations when received.
-    * @param code                    The HTTP code of the response
-    * @param installation_order_list The list of InstallationOrders
-    */
+     * Return result for GetPendingInstallations when received.
+     * @param code                    The HTTP code of the response
+     * @param installation_order_list The list of InstallationOrders
+     */
     void PendingInstallations(in int code, in List<InstallationOrder> installation_order_list);
 
     /**
-    * Return the result for GetDownloadInfo
-    * @param code          The HTTP cose of the response
-    * @param download_info The download information of the installation order.
-    */
+     * Return the result for GetDownloadInfo
+     * @param code          The HTTP cose of the response
+     * @param download_info The download information of the installation order.
+     */
     void DownloadInfo(in int code, in DownloadInfo download_info);
 
     /**
-    * Return the result of GetDownloadData
-    * @param code         The latest HTTP code when downloading
-    * @param downloadInfo The latest information regaring the download
-    */
+     * Return the result of GetDownloadData
+     * @param code         The latest HTTP code when downloading
+     * @param downloadInfo The latest information regaring the download
+     */
     void DownloadData(in int code, in DownloadInfo downloadInfo);
+
+    /**
+     * Return the result of PostInstallationReport
+     * @param code The HTTP code of the response
+     * @param installationOrderId UUID of the posted Installation Report
+     */
+    void InstallationReportStatus(in int code, in String installationOrderId);
 }

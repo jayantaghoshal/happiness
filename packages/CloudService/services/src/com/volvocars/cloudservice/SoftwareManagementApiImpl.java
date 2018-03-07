@@ -515,4 +515,13 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         FetchDownloadData();
     }
+
+    /**
+     * Post InstallationReport
+     * @param installationReport Report to be posted
+     * @param callback           Callback to be called when the status of the download changes
+     */
+    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) {
+
+    }
 }

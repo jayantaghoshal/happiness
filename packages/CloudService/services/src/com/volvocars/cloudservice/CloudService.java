@@ -31,21 +31,16 @@ public class CloudService extends Service {
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
-        try {
 
-            if (foundation_services_api == null) {
-                foundation_services_api = new FoundationServicesApiImpl();
-            }
-            if (software_management_api == null) {
-                software_management_api = new SoftwareManagementApiImpl();
-            }
-            if (cloud_connection == null) {
-                cloud_connection = new CloudConnection(this);
-                cloud_connection.init();
-            }
-
-        } catch (Exception ex) {
-            Log.e(LOG_TAG, "Unhandled exception:\n" + ex.getMessage());
+        if (foundation_services_api == null) {
+            foundation_services_api = new FoundationServicesApiImpl();
+        }
+        if (software_management_api == null) {
+            software_management_api = new SoftwareManagementApiImpl();
+        }
+        if (cloud_connection == null) {
+            cloud_connection = new CloudConnection(this);
+            cloud_connection.init();
         }
     }
 

@@ -97,4 +97,13 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
         }
     }
 
+    /**
+     * Return the result of PostInstallationReport
+     * @param code The HTTP code of the response
+     * @param installationOrderId UUID of the posted Installation Report
+     */
+    public void InstallationReportStatus(int code, String installationOrderId) {
+        Log.v(LOG_TAG, "Got result of posting Installation Report [" + installationOrderId + "]: " + code);
+    }
+
 }
