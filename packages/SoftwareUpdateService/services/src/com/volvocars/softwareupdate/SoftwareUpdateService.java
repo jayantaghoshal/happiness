@@ -76,7 +76,6 @@ public class SoftwareUpdateService extends Service {
 
         // Provide SUSApi
         softwareUpdateManager = new SoftwareUpdateManagerImpl(this);
-
     }
 
     public IBinder onBind(Intent intent) {

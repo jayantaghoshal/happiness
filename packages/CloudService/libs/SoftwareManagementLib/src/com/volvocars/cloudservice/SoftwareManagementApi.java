@@ -26,11 +26,42 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     private SoftwareManagementApiConnectionCallback softwareManagementApiConnectionCallback = null;
 
+    private DeathRecipient death = new DeathRecipient(this);
+
+    final class DeathRecipient implements IBinder.DeathRecipient {
+
+        private SoftwareManagementApi client;
+        private int retries = 0;
+
+        DeathRecipient(SoftwareManagementApi client) {
+            this.client = client;
+        }
+
+        @Override
+        public void binderDied() {
+            Log.e(LOG_TAG, "CloudService died");
+
+            if(retries < 5) {
+                Log.d(LOG_TAG, "Trying CloudService again... Attempt " + (retries + 1));
+                retries++;
+                client.connect();
+            } else {
+                Log.d(LOG_TAG, "CloudService seems unreliable, no more attempts to connect.");
+            }
+        }
+    }
+
     @Override
     public void onServiceConnected(ComponentName className, IBinder service) {
         software_management = ISoftwareManagementApi.Stub.asInterface(service);
         service_bound = true;
         softwareManagementApiConnectionCallback.onServiceConnected();
+
+        try {
+            service.linkToDeath(death, 0 /* flags */);
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Unable to register Death Recipient. :(");
+        }
     }
 
     @Override
