@@ -26,7 +26,7 @@ using namespace testing;
 namespace TestSteeringWhlHeat {
 using namespace std::chrono_literals;
 
-auto const LCFG_DeterminationTimeout = std::string{"Determination_timeout"};
+auto const LCFG_DeterminationTimeout = std::string{"Climate_Determination_timeout"};
 auto const lcfgTimeout = int{60};  // Measured in seconds
 auto const timeout = std::chrono::seconds{lcfgTimeout};
 auto const defaultTimeout = 20s;

@@ -79,7 +79,7 @@ class RecircTest : public Test {
         ON_CALL(carConfig_, getValue(to_undrl(CC174::ParamNumber)))
                 .WillByDefault(Return(to_undrl(CC174::Air_Quality_System)));
 
-        ON_CALL(localConfig, getIntValue("LCFG_Manual_Recirc")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig, getIntValue("Climate_Manual_Recirc")).WillByDefault(Return(&lcfgTimeout));
 
         setVehicleMode(UsgModSts1::UsgModInActv, CarModSts1::CarModNorm);
         setClimaActv(OnOff1::Off);

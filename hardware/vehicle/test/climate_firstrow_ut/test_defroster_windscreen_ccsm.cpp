@@ -17,7 +17,7 @@
 #include <gtest/gtest.h>
 
 namespace {
-const std::string LCFG_ClimateDefrosterDelay("Defroster_delay");
+const std::string LCFG_ClimateDefrosterDelay("Climate_Defroster_delay");
 
 const double lcfgDelay = 2.0;
 }

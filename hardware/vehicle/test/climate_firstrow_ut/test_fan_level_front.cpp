@@ -61,7 +61,7 @@ class FanLevelFrontTest : public ::testing::Test {
 
         resetVehicleMode();
 
-        ON_CALL(localConfig_, getIntValue("LCFG_FanLevelFront_timeout")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig_, getIntValue("Climate_FanLevelFront_timeout")).WillByDefault(Return(&lcfgTimeout));
 
         setMaxDefrosterSetting(FirstRowGen::MaxDefrosterState::OFF);
         setAutoClimateSetting(FirstRowGen::AutoClimateState::OFF);
@@ -446,7 +446,7 @@ TEST_F(FanLevelFrontTest, TestClimateActive) {
 TEST_F(FanLevelFrontTest, TestTimeout) {
     int timeout = 3;
 
-    EXPECT_CALL(localConfig_, getIntValue("LCFG_FanLevelFront_timeout")).WillRepeatedly(Return(&timeout));
+    EXPECT_CALL(localConfig_, getIntValue("Climate_FanLevelFront_timeout")).WillRepeatedly(Return(&timeout));
 
     auto fan = createFanLevelFrontLogic();
 
