@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # TODO: Don't use adb command line, use https://github.com/android/platform_development/blob/master/testrunner/adb_interface.py
@@ -282,8 +282,13 @@ def start_fastboot_from_mp_abl_cmdline(mp: MpSerial) -> None:
 def confirm_mp_abl_on_serial(mp: MpSerial) -> None:
     logger.info("Waiting for ABL commandline, it is usually quick but"
                 "it might take longer in case ABL has some update/init work to do.")
-    mp.expect_line(">>>.*", 30, "Is the MP UART connected? Or do you have the TTY open already?"
+
+    mp.expect_line("abl-APL:.*", 30, "Is the MP UART connected? Or do you have the TTY open already?"
                                 "If it seems that ABL was executing some extra action - report bug!")
+
+    mp.expect_line(">>>.*", 180, "ABL started but we did not received final prompt."
+                                 "If it seems that ABL was executing some extra action - report bug!")
+
     logger.info("ABL command line confirmed")
 
 
