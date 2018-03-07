@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -51,6 +51,8 @@ public class FragmentVendorExtension extends AModuleFragment {
         settingConnSafetyOff.setVisibility(View.INVISIBLE);
         settingConnSafetyOn.setVisibility(View.INVISIBLE);
 
+        // Dummy
+
         runBackgroundAndUpdate(() -> {
             try {
                 CarVendorExtensionManager carVEManager = moduleVendorExtensionM.getCarVEManager();
@@ -89,9 +91,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
+                        carVEManager.setGlobalProperty(Integer.class,
                                 VehicleProperty.DAI_SETTING,
-                                VehicleArea.GLOBAL,
                                 0);
 
                         text.append("Value set to: " + carVEManager.getProperty(Integer.class,
@@ -119,9 +120,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
+                        carVEManager.setGlobalProperty(Integer.class,
                                 VehicleProperty.DAI_SETTING,
-                                VehicleArea.GLOBAL,
                                 1);
 
                         text.append("Value set to: " + carVEManager.getProperty(Integer.class,
@@ -148,12 +148,11 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
+                        carVEManager.setGlobalProperty(Integer.class,
                                 VehicleProperty.DAI_SETTING,
-                                VehicleArea.GLOBAL,
                                 2);
-                        text.append("Value set to: " + carVEManager.getProperty(Integer.class,
-                                VehicleProperty.DAI_SETTING, VehicleArea.GLOBAL) + "\n\n");
+                        text.append("Value set to: " + carVEManager.getGlobalProperty(Integer.class,
+                                VehicleProperty.DAI_SETTING) + "\n\n");
 
                     } catch (Exception e) {
                         Log.e(TAG, "Error", e);
@@ -176,9 +175,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Boolean.class,
+                        carVEManager.setGlobalProperty(Boolean.class,
                                 VehicleProperty.CURVE_SPEED_ADAPTION_ON,
-                                VehicleArea.GLOBAL,
                                 false);
 
                         text.append("Value set to: " + carVEManager.getProperty(Boolean.class,
@@ -205,9 +203,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Boolean.class,
+                        carVEManager.setGlobalProperty(Boolean.class,
                                 VehicleProperty.CURVE_SPEED_ADAPTION_ON,
-                                VehicleArea.GLOBAL,
                                 true);
 
                         text.append("Value set to: " + carVEManager.getProperty(Boolean.class,
@@ -234,9 +231,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
+                        carVEManager.setGlobalProperty(Integer.class,
                                 VehicleProperty.CONNECTED_SAFETY_ON,
-                                VehicleArea.GLOBAL,
                                 0);
 
                         text.append("Value set to: " + carVEManager.getProperty(Integer.class,
@@ -263,9 +259,8 @@ public class FragmentVendorExtension extends AModuleFragment {
                         CarVendorExtensionManager carVEManager =
                                 moduleVendorExtensionM.getCarVEManager();
 
-                        carVEManager.setProperty(Integer.class,
+                        carVEManager.setGlobalProperty(Integer.class,
                                 VehicleProperty.CONNECTED_SAFETY_ON,
-                                VehicleArea.GLOBAL,
                                 1);
 
                         text.append("Value set to: " + carVEManager.getProperty(Integer.class,

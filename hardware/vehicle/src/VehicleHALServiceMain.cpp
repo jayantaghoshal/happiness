@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -34,9 +34,9 @@ namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal_10 = vendor::volvocars::hardware::vehiclehal::V1_0;
 
 int main(int /* argc */, char* /* argv */ []) {
-    tarmac::eventloop::IDispatcher& dispatcher = tarmac::eventloop::IDispatcher::GetDefaultDispatcher();
+    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher = tarmac::eventloop::IDispatcher::CreateDispatcher();
     android::sp<SettingsFramework::SettingsManagerHidl> settings_manager =
-            new SettingsFramework::SettingsManagerHidl(dispatcher);
+            new SettingsFramework::SettingsManagerHidl(*dispatcher);
 
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
     auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
@@ -54,7 +54,8 @@ int main(int /* argc */, char* /* argv */ []) {
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
     auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
-    auto curve_speed_adaption_module = std::make_unique<CurveSpeedAdaptionModule>(hal.get(), settings_manager);
+    auto curve_speed_adaption_module =
+            std::make_unique<CurveSpeedAdaptionModule>(hal.get(), dispatcher, settings_manager);
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -69,7 +70,6 @@ int main(int /* argc */, char* /* argv */ []) {
     sensorModule->registerToVehicleHal();
     connectedSafetyModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
-    curve_speed_adaption_module->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
