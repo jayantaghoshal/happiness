@@ -85,6 +85,7 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services", standard_caps),
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps),
 
+    VTSTest("vendor/volvocars/hardware/evs/libdbg/test/ut",                    standard_caps),
 ]
 
 test_plan_nightly = test_plan_hourly + [
