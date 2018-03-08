@@ -60,9 +60,9 @@ test_plan_hourly = test_plan_gate + [
              deadline="2018-02-28"
     ),
     Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}),
-             reason="Microphone HAL not fully implemented",
+             reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
              jira_issue="PSS370-15982",
-             deadline="2018-02-28"
+             deadline="2018-04-28"
     ),
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",       standard_caps | {cp.audio}),
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",              standard_caps),
