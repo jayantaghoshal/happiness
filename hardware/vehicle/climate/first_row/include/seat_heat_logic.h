@@ -15,6 +15,7 @@
 #include "settings_proxy.h"
 #include "timer_manager_interface.h"
 
+#include <vcc/localconfig.h>
 #include <atomic>
 #include <memory>
 #include <mutex>
@@ -28,8 +29,8 @@ class SeatHeatLogic {
     using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
 
   public:
-    SeatHeatLogic(UserLocation userLocation, autosar::HmiSeatClima& seatClimate,
-                  NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
+    SeatHeatLogic(const vcc::LocalConfigReaderInterface* lcfg, UserLocation userLocation,
+                  autosar::HmiSeatClima& seatClimate, NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
                   NotifiableProperty<UserSelectionGen::OffOnSelection>& autoSeatHeatOn,
                   NotifiableProperty<UserSelectionGen::LevelSelection>& autoSeatHeatLevel,
                   SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& seatHeatLevelSetting,
@@ -55,6 +56,8 @@ class SeatHeatLogic {
     NotifiableProperty<FirstRowGen::HeatAttribute>& shareHeatAttribute_;
     SubscriptionHandle shareHeatAttributeHandel_;
     SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& sHeatLevel_;
+    FirstRowGen::HeatLevel::Literal sHeatLevelGETPORT_;
+
     std::atomic_bool active_;
     std::chrono::steady_clock::time_point initialTime_;
 

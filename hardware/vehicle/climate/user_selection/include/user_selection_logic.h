@@ -41,11 +41,15 @@ class UserSelectionLogic {
   private:
     UserSelectionLogic(NotifiableProperty<SharedType>& selection,
                        std::unique_ptr<SettingsProxyInterface<int>> settingSelection, bool carConfigValid)
-        : selection_{selection}, settingSelection_{std::move(settingSelection)}, carConfigValid_{carConfigValid} {
-        auto handleSelection = [this] {
+        : selection_{selection},
+          settingSelection_{std::move(settingSelection)},
+          settingSelectionGETPORT_{settingSelection_->defaultValuePORTHELPER()},
+          carConfigValid_{carConfigValid} {
+        auto handleSelection = [this](auto newSetting) {
+            settingSelectionGETPORT_ = newSetting;
             if (carConfigValid_) {
                 selection_.set({SelectionStateType::Literal::AVAILABLE,
-                                static_cast<typename SelectionType::Literal>(settingSelection_->get())});
+                                static_cast<typename SelectionType::Literal>(settingSelectionGETPORT_)});
             } else {
                 selection_.set(
                         {SelectionStateType::Literal::NOT_PRESENT, static_cast<typename SelectionType::Literal>(0)});
@@ -57,7 +61,7 @@ class UserSelectionLogic {
         };
 
         settingSelection_->subscribe(handleSelection);
-        handleSelection();
+        handleSelection(settingSelection_->defaultValuePORTHELPER());
     }
 
     template <typename T>
@@ -76,6 +80,7 @@ class UserSelectionLogic {
   private:
     NotifiableProperty<SharedType>& selection_;
     std::unique_ptr<SettingsProxyInterface<int>> settingSelection_;
+    int settingSelectionGETPORT_;
     bool const carConfigValid_;
 };
 }

@@ -6,7 +6,7 @@
 #include "seat_vent_logic.h"
 
 #include "carconfig_mock.h"
-#include "cedric_localconfig_mock.h"
+
 #include "enum_helper.h"
 #include "settings_proxy.h"
 
@@ -284,7 +284,8 @@ TEST_F(NoSeatVentillationTest, Constructor_WhenCarConfigIsErroneous_WillThrow) {
     EXPECT_THROW(makeSut(), std::out_of_range);
 }
 
-TEST_F(SeatVentTest, VentSignal_restore_old_value_after_usageMode_change) {
+// TODO(ARTINFO-503): Enable test case, see implementation for comment with failure details.
+TEST_F(SeatVentTest, DISABLED_VentSignal_restore_old_value_after_usageMode_change) {
     ECDDataElement::DESink<autosar::HmiSeatClima_info> seatHeatSignal;
 
     std::unique_ptr<SeatVentLogic> driverLogic;

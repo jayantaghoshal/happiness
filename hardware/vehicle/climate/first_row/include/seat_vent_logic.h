@@ -50,6 +50,7 @@ class SeatVentLogic {
     NotifiableProperty<FirstRowGen::VentAttribute>& shareVentAttribute_;
     SubscriptionHandle shareVentAttributeHandel_;
     SettingsProxyInterface<FirstRowGen::VentLevel::Literal>& sVentLevel_;
+    FirstRowGen::VentLevel::Literal sVentLevelGETPORT_;
 
     autosar::HmiSeatClima& seatClimate_;
     autosar::SeatClimaLvl& seatVentSignal_;

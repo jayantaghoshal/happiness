@@ -22,6 +22,7 @@ AirConditionerLogic::AirConditionerLogic(
         ReadOnlyNotifiableProperty<AutoClimateLogic::AutoClimateEvent>& autoClimateEvent,
         ReadOnlyNotifiableProperty<ClimateResetLogic::ClimateResetEvent>& climateReset)
     : settingAirConditioner(sAirConditioner),
+      settingAirConditionerGETPORT{settingAirConditioner.defaultValuePORTHELPER()},
       shareAirConditioner(airConditioner),
       shareFanLevelFront(fanLevelFront),
       shareMaxDefroster(maxDefroster),
@@ -37,25 +38,25 @@ AirConditionerLogic::AirConditionerLogic(
 
             if (isActive != isActive_) {
                 isActive_ = isActive;
-                setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get());
+                setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT);
             }
         } else {
             isActive_ = false;
-            setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get(), true);
+            setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT, true);
 
             log_warning() << "AirConditionerLogic, signal(s) in error state";
         }
     };
 
     fanLevelFrontId_ = shareFanLevelFront.subscribe(
-            [this](const auto&) { this->setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get()); });
+            [this](const auto&) { this->setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT); });
 
     maxDefrosterId_ = shareMaxDefroster.subscribe([this](const auto&) {
         if (shareMaxDefroster.get() == FirstRowGen::MaxDefrosterState::ON) {
             log_debug() << "AirConditionerLogic Max defroster ON";
             this->setState(isActive_, shareFanLevelFront.get(), FirstRowGen::AirConditionerState::AUTO);
         } else {
-            this->setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get());
+            this->setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT);
         }
     });
 
@@ -77,8 +78,10 @@ AirConditionerLogic::AirConditionerLogic(
     climateActiveSignal_.subscribe(handleSignals);
     VehModMngtGlbSafe1_.subscribe(handleSignals);
 
-    settingAirConditioner.subscribe(
-            [this]() { this->setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get()); });
+    settingAirConditioner.subscribe([this](auto newSetting) {
+        settingAirConditionerGETPORT = newSetting;
+        this->setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT);
+    });
 
     // Initialization
     handleSignals();
@@ -103,7 +106,7 @@ void AirConditionerLogic::requestAirConditioner(FirstRowGen::AirConditionerReque
         log_error() << "AirConditionerLogic: AC request DISABLE not a valid request";
     }
 
-    setState(isActive_, shareFanLevelFront.get(), settingAirConditioner.get());
+    setState(isActive_, shareFanLevelFront.get(), settingAirConditionerGETPORT);
 }
 
 void AirConditionerLogic::setState(bool isActive, const FirstRowGen::FanLevelFrontValue fanLevel,

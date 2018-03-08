@@ -26,12 +26,13 @@ bool initGlobalLegacyDispatcher(tarmac::timeprovider::TimeProvider* time_provide
 ClimateMain::ClimateMain(const std::shared_ptr<tarmac::eventloop::IDispatcher>& tarmacDispatcher)
     : tarmacDispatcher_{tarmacDispatcher},
       settingsManager_{new SettingsFramework::SettingsManagerHidl(*tarmacDispatcher_)},
+      lcfg_{vcc::LocalConfigDefault()},
       timeProvider_{tarmacDispatcher_},
       hackToInitGlobalLegacyDispatcher{initGlobalLegacyDispatcher(&timeProvider_)},
       signalProxies_{}  //, commonFactory_{}
       ,
-      user_selection{settingsManager_},
-      first_row{settingsManager_, timeProvider_, signalProxies_, user_selection, commonFactory_}
+      user_selection{lcfg_, settingsManager_},
+      first_row{lcfg_, settingsManager_, timeProvider_, signalProxies_, user_selection, commonFactory_}
 //, parking_climate{commonFactory_}
 //, second_and_third_row{ signalProxies_, commonFactory_ }
 {

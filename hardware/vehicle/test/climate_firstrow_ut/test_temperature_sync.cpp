@@ -253,14 +253,14 @@ TEST_F(TemperatureSyncRequestTest, Request_WhenSyncIsOn_WillSetSettingToOn) {
     sut_->request(FirstRowGen::TemperatureSyncRequest::ON);
 
     EXPECT_EQ(FirstRowGen::TemperatureSyncState::ON, temperatureSync_.get());
-    EXPECT_EQ(temperatureSyncSetting_->get(), true);
+    EXPECT_EQ(temperatureSyncNormal_.get(), true);
 }
 
 TEST_F(TemperatureSyncRequestTest, Request_WhenSyncIsOff_WillSetSettingToOff) {
     sut_->request(FirstRowGen::TemperatureSyncRequest::OFF);
 
     EXPECT_EQ(FirstRowGen::TemperatureSyncState::OFF, temperatureSync_.get());
-    EXPECT_EQ(temperatureSyncSetting_->get(), false);
+    EXPECT_EQ(temperatureSyncNormal_.get(), false);
 }
 
 class TemperatureSyncTemperatureOverrideTest : public TemperatureSyncTest

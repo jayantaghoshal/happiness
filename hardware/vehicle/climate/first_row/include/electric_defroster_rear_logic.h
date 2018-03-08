@@ -12,6 +12,7 @@
 #include <ECD_dataelement.h>
 #include <legacydispatcher.h>
 #include <libsettings/setting.h>
+#include <vcc/localconfig.h>
 #include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
 #include <v0/org/volvocars/climate/UserSelection.hpp>
@@ -38,7 +39,8 @@ class ElectricDefrosterRearLogic final : private DFsm_Main, public IDefroster {
         SYSTEM_ERROR
     };
 
-    ElectricDefrosterRearLogic(NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
+    ElectricDefrosterRearLogic(const vcc::LocalConfigReaderInterface* lcfg,
+                               NotifiableProperty<ElectricDefrosterRearState>& ElectricDefrosterRear,
                                ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterRear,
                                ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);
 

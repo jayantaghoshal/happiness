@@ -33,6 +33,7 @@ class IonizerLogic final {
     NotifiableProperty<FirstRowGen::IonizerState>& ionizer_;
     SettingsProxy<bool, SettingsFramework::UserScope::NOT_USER_RELATED, SettingsFramework::UserScope::NOT_USER_RELATED>&
             ionizerSetting_;
+    bool ionizerSettingGETPORT_;
 
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehicleModeSignal_;
     ApplicationDataElement::DEReceiver<autosar::ClimaActv_info> climaActvSignal_;

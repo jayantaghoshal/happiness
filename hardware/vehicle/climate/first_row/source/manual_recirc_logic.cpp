@@ -40,7 +40,8 @@ bool carConfigState() {
 }
 }  // namespace
 
-ManualRecircLogic::ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& RecircTimer,
+ManualRecircLogic::ManualRecircLogic(const vcc::LocalConfigReaderInterface* lcfg,
+                                     ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& RecircTimer,
                                      ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& AirQualitySensor,
                                      SettingsProxy<FirstRowGen::ManualRecircState::Literal, UserScope::USER,
                                                    UserScope::NOT_USER_RELATED>& settingManualRecirc,
@@ -61,11 +62,12 @@ ManualRecircLogic::ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen
       shareAutoClimateId{},
       shareAirQualitySensorId{},
       sManualRecircProxy{settingManualRecirc},
+      sManualRecircProxyGETPORT{sManualRecircProxy.defaultValuePORTHELPER()},
       sharedManualRecirc_{sharedManualRecirc},
       isActive_{false},
       carConfig_{false},
       timerDispatcher_{timerDispatcher},
-      timeout_{util::readLocalConfig<std::chrono::minutes>("Climate_Manual_Recirc")} {
+      timeout_{util::readLocalConfig<std::chrono::minutes>("Climate_Manual_Recirc", lcfg)} {
     carConfig_ = carConfigState();
 
     auto handleSignals = [this] {
@@ -86,8 +88,10 @@ ManualRecircLogic::ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen
     // Init all states and values
     handleSignals();
 
-    sManualRecircProxy.subscribe(
-            [this]() { setStateAndValue(isActive_, shareFanLevelFront.get(), shareMaxDefroster.get()); });
+    sManualRecircProxy.subscribe([this](auto newSetting) {
+        sManualRecircProxyGETPORT = newSetting;
+        setStateAndValue(isActive_, shareFanLevelFront.get(), shareMaxDefroster.get());
+    });
 
     shareAirQualitySensorId = shareAirQualitySensor.subscribe([this](const auto) {
         this->setStateAndValue(isActive_, shareFanLevelFront.get(), shareMaxDefroster.get());
@@ -153,7 +157,7 @@ void ManualRecircLogic::setStateAndValue(bool isActive, FirstRowGen::FanLevelFro
         } else {
             auto currentManualRecirc = FirstRowGen::ManualRecircState::OFF;
 
-            currentManualRecirc = sManualRecircProxy.get();
+            currentManualRecirc = sManualRecircProxyGETPORT;
 
             switch (currentManualRecirc) {
                 case FirstRowGen::ManualRecircState::ON:

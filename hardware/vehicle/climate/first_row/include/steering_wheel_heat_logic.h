@@ -16,6 +16,7 @@
 #include "notifiable_property.h"
 #include "settings_proxy.h"
 
+#include <vcc/localconfig.h>
 #include <atomic>
 #include <memory>
 #include <mutex>
@@ -26,7 +27,8 @@ class SteeringWheelHeatLogic {
     using UserSelectionGen = v0::org::volvocars::climate::UserSelection;
 
   public:
-    SteeringWheelHeatLogic(NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
+    SteeringWheelHeatLogic(const vcc::LocalConfigReaderInterface* lcfg,
+                           NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
                            ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoSteeringWheelHeatOn,
                            ReadOnlyNotifiableProperty<UserSelectionGen::LevelSelection>& autoSteeringWheelHeatLevel,
                            SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& steeringWheelHeatLevelSetting,
@@ -50,6 +52,7 @@ class SteeringWheelHeatLogic {
     NotifiableProperty<FirstRowGen::HeatAttribute>& shareHeatAttribute_;
     SubscriptionHandle shareHeatAttributeHandel_;
     SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& setting_;
+    FirstRowGen::HeatLevel::Literal settingGETPORT;
     std::atomic_bool active_;
     std::chrono::steady_clock::time_point initialTime_;
 

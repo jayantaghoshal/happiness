@@ -18,8 +18,9 @@ using namespace SettingsFramework;
 
 class UserSelectionFactory final {
   public:
-    UserSelectionFactory(const android::sp<SettingsFramework::SettingsManager>& settingsManager);
-
+    UserSelectionFactory(const vcc::LocalConfigReaderInterface* lcfg,
+                         const android::sp<SettingsFramework::SettingsManager>& settingsManager);
+    user_selection::setting_factory::UserSelectionSettingFactory settingsFactory_;
     // Driver Auto Seat Heat
     NotifiableProperty<UserSelectionGen::OffOnSelection> autoDriverSeatHeat_;
     NotifiableProperty<UserSelectionGen::LevelSelection> autoDriverSeatHeatLevel_;

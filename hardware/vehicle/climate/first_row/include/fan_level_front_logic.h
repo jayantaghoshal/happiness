@@ -13,6 +13,7 @@
 
 #include <Application_dataelement.h>
 #include <libsettings/setting.h>
+#include <vcc/localconfig.h>
 #include <chrono>
 
 using FirstRowGen = v0::org::volvocars::climate::FirstRow;
@@ -21,7 +22,8 @@ class FanLevelFrontLogic : private DFsm_Main {
   public:
     enum FanLevelFrontState { INIT = 0, CARCONFIG_INVALID, SYSTEM_OK, SYSTEM_ERROR, NOT_ACTIVE, ACTIVE, ON, OFF };
 
-    FanLevelFrontLogic(SettingsProxyInterface<FirstRowGen::FanLevelFrontValue::Literal>& autoFanLevelSetting,
+    FanLevelFrontLogic(const vcc::LocalConfigReaderInterface* lcfg,
+                       SettingsProxyInterface<FirstRowGen::FanLevelFrontValue::Literal>& autoFanLevelSetting,
                        SettingsProxy<FirstRowGen::FanLevelFrontValue::Literal, SettingsFramework::UserScope::USER,
                                      SettingsFramework::UserScope::NOT_USER_RELATED>& fanLevelFrontSetting,
                        NotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFront,
@@ -59,6 +61,8 @@ class FanLevelFrontLogic : private DFsm_Main {
     SettingsProxyInterface<FirstRowGen::FanLevelFrontValue::Literal>& autoFanLevelSetting_;
     SettingsProxy<FirstRowGen::FanLevelFrontValue::Literal, SettingsFramework::UserScope::USER,
                   SettingsFramework::UserScope::NOT_USER_RELATED>& fanLevelFrontSetting_;
+    FirstRowGen::FanLevelFrontValue::Literal autoFanLevelSettingGETPORT_;
+    FirstRowGen::FanLevelFrontValue::Literal fanLevelFrontSettingGETPORT_;
 
     NotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFront_;
     ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster_;

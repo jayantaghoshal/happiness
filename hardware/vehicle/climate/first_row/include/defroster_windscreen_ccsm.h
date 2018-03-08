@@ -10,6 +10,7 @@
 #include "notifiable_property.h"
 
 #include <Application_dataelement.h>
+#include <vcc/localconfig.h>
 #include <chrono>
 #include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
@@ -19,6 +20,7 @@ using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 class DefrosterWindscreenCCSM {
   public:
     DefrosterWindscreenCCSM(
+            const vcc::LocalConfigReaderInterface* lcfg,
             ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster,
             ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen,
             ILegacyDispatcher& dispatcher, IDefroster& electricDefrosterWindscreenLogic,

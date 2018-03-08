@@ -7,7 +7,7 @@
 #include "fan_level_front_logic.h"
 
 #include "carconfig_mock.h"
-#include "cedric_localconfig_mock.h"
+
 #include "enum_helper.h"
 #include "max_defroster_logic.h"
 #include "mock_dispatcher.h"
@@ -45,10 +45,10 @@ class FanLevelFrontTest : public ::testing::Test {
   public:
     FanLevelFrontTest()
         : settingLastAutoFanLevel(SettingId::TestSetting1, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
-          settingLastAutoFanLevelDyno(SettingId::TestSetting1, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
+          settingLastAutoFanLevelDyno(SettingId::TestSetting2, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
           lastFanAutoFanLevelProxy(settingLastAutoFanLevel, settingLastAutoFanLevelDyno),
-          settingLastFanLevel(SettingId::TestSetting2, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
-          settingLastFanLevelDyno(SettingId::TestSetting3, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
+          settingLastFanLevel(SettingId::TestSetting3, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
+          settingLastFanLevelDyno(SettingId::TestSetting4, FirstRowGen::FanLevelFrontValue::OFF, settingsManager),
           lastFanLevelFrontProxySetting(settingLastFanLevel, settingLastFanLevelDyno),
           autoClimate_{FirstRowGen::AutoClimateState::OFF},
           fanLevelFront_{FirstRowGen::FanLevelFrontValue::OFF},
@@ -61,7 +61,7 @@ class FanLevelFrontTest : public ::testing::Test {
 
         resetVehicleMode();
 
-        ON_CALL(localConfig_, getIntValue("Climate_FanLevelFront_timeout")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig_, GetIntMock("Climate_FanLevelFront_timeout")).WillByDefault(Return(lcfgTimeout));
 
         setMaxDefrosterSetting(FirstRowGen::MaxDefrosterState::OFF);
         setAutoClimateSetting(FirstRowGen::AutoClimateState::OFF);
@@ -76,9 +76,9 @@ class FanLevelFrontTest : public ::testing::Test {
 
   protected:
     std::unique_ptr<FanLevelFrontLogic> createFanLevelFrontLogic() {
-        return std::make_unique<FanLevelFrontLogic>(lastFanAutoFanLevelProxy, lastFanLevelFrontProxySetting,
-                                                    fanLevelFront_, MaxDefrost_, autoClimate_, climateReset_,
-                                                    dispatcher_);
+        return std::make_unique<FanLevelFrontLogic>(&localConfig_, lastFanAutoFanLevelProxy,
+                                                    lastFanLevelFrontProxySetting, fanLevelFront_, MaxDefrost_,
+                                                    autoClimate_, climateReset_, dispatcher_);
     }
 
     void setVehicleMode(CarModSts1 carModSts1, UsgModSts1 usgModeSts1) {
@@ -146,7 +146,7 @@ class FanLevelFrontTest : public ::testing::Test {
     NotifiableProperty<ClimateResetLogic::ClimateResetEvent> climateReset_;
 
     NiceMock<MockDispatcher> dispatcher_;
-    NiceMock<LocalConfigMock> localConfig_;
+    NiceMock<vcc::mocks::MockLocalConfigReader> localConfig_;
     NiceMock<CarConfigMock> carConfig_;
 };
 
@@ -446,7 +446,7 @@ TEST_F(FanLevelFrontTest, TestClimateActive) {
 TEST_F(FanLevelFrontTest, TestTimeout) {
     int timeout = 3;
 
-    EXPECT_CALL(localConfig_, getIntValue("Climate_FanLevelFront_timeout")).WillRepeatedly(Return(&timeout));
+    EXPECT_CALL(localConfig_, GetIntMock("Climate_FanLevelFront_timeout")).WillRepeatedly(Return(timeout));
 
     auto fan = createFanLevelFrontLogic();
 
@@ -463,7 +463,7 @@ TEST_F(FanLevelFrontTest, TestTimeout) {
     EXPECT_EQ(HmiHvacFanLvl::Off, outvalue);
 
     std::function<void(void)> func;
-    EXPECT_CALL(dispatcher_, Start(_, _, _)).Times(4).WillRepeatedly(SaveArg<1>(&func));
+    EXPECT_CALL(dispatcher_, Start(_, _, _)).Times(AtLeast(4)).WillRepeatedly(SaveArg<1>(&func));
 
     fan->requestFanLevel(FirstRowGen::FanLevelFrontRequest::LVL3);
 

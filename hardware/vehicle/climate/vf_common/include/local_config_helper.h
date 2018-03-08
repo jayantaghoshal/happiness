@@ -14,6 +14,7 @@
 namespace util {
 
 namespace detail {
+
 template <typename T>
 constexpr bool is_localconfig_type_v =
         std::is_same<T, char>::value;  // TODO(climateport): char=hack to make this always false to avoid GetValue<T>
@@ -42,22 +43,19 @@ struct readLocalConfig {
 
 template <>
 struct readLocalConfig<int, true> {
-    static int apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static int apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         return lcfg->GetInt(parameter);
     }
 };
 template <>
 struct readLocalConfig<bool, false> {
-    static bool apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static bool apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         return lcfg->GetBool(parameter);
     }
 };
 template <>
 struct readLocalConfig<double, false> {
-    static double apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static double apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         return lcfg->GetDouble(parameter);
     }
 };
@@ -65,8 +63,7 @@ struct readLocalConfig<double, false> {
 template <>
 struct readLocalConfig<std::chrono::seconds, false> {
     using Type = std::chrono::seconds;
-    static Type apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static Type apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         const auto value = lcfg->GetInt(parameter);
         return Type{value};
     }
@@ -75,8 +72,7 @@ struct readLocalConfig<std::chrono::seconds, false> {
 template <>
 struct readLocalConfig<std::chrono::minutes, false> {
     using Type = std::chrono::minutes;
-    static Type apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static Type apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         const auto value = lcfg->GetInt(parameter);
         return Type{value};
     }
@@ -85,8 +81,7 @@ struct readLocalConfig<std::chrono::minutes, false> {
 template <>
 struct readLocalConfig<std::chrono::milliseconds, false> {
     using Type = std::chrono::milliseconds;
-    static Type apply(std::string const& parameter) {
-        auto* lcfg = vcc::LocalConfigDefault();
+    static Type apply(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
         const auto value = lcfg->GetInt(parameter);
         return Type{value};
     }
@@ -94,7 +89,7 @@ struct readLocalConfig<std::chrono::milliseconds, false> {
 }
 
 template <typename T>
-T readLocalConfig(std::string const& parameter) {
-    return detail::readLocalConfig<T>::apply(parameter);
+T readLocalConfig(std::string const& parameter, const vcc::LocalConfigReaderInterface* lcfg) {
+    return detail::readLocalConfig<T>::apply(parameter, lcfg);
 }
 }

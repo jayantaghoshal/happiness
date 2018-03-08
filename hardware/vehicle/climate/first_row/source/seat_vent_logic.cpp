@@ -22,12 +22,19 @@ SeatVentLogic::SeatVentLogic(UserLocation userLocation, autosar::HmiSeatClima& s
     : userLocation_{userLocation},
       shareVentAttribute_{ventAttribute},
       sVentLevel_{seatVentLevelSetting},
+      sVentLevelGETPORT_{sVentLevel_.defaultValuePORTHELPER()},
       seatClimate_{seatClimate},
       seatVentSignal_{getSeatVentSignal()} {
     if (seatVentilationPresent()) {
+        // TODO(ARTINFO-503): Callback order on vehicleModeSignal vs sVentLevel_(dyno) is undefined,
+        //                   old code covered this up by calling Setting.get() which no longer exists
+        //                   Need to run full logic in both callbacks.
         vehicleModeSignal_.subscribe(std::bind(&SeatVentLogic::handleVehicleMode, this));
         if (userLocation == UserLocation::DRIVER) {
-            sVentLevel_.subscribe([this]() { request(sVentLevel_.get()); });
+            sVentLevel_.subscribe([this](auto newSetting) {
+                sVentLevelGETPORT_ = newSetting;
+                request(newSetting);
+            });
         }
     } else {
         shareVentAttribute_.set(FirstRowGen::VentState::NOT_PRESENT, FirstRowGen::VentLevel::OFF);
@@ -108,9 +115,9 @@ void SeatVentLogic::handleVehicleMode() {
                         << "Car Mode: " << static_cast<int>(vehicleModeSignal_.get().value().CarModSts1_)
                         << ", Usg Mode: " << static_cast<int>(vehicleModeSignal_.get().value().UsgModSts);
 
-            log_debug() << "Setting Seat Ventilation, Manual Mode, " << sVentLevel_.get();
-            shareVentAttribute_.set(FirstRowGen::VentState::MANUAL, sVentLevel_.get());
-            sendSignal(convertVentLevelToAutosar(sVentLevel_.get()));
+            log_debug() << "Setting Seat Ventilation, Manual Mode, " << sVentLevelGETPORT_;
+            shareVentAttribute_.set(FirstRowGen::VentState::MANUAL, sVentLevelGETPORT_);
+            sendSignal(convertVentLevelToAutosar(sVentLevelGETPORT_));
         } else {
             log_debug() << "SeatVentLogic, set to DISABLED, off";
             shareVentAttribute_.set(FirstRowGen::VentState::DISABLED, FirstRowGen::VentLevel::OFF);

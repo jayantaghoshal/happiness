@@ -22,6 +22,11 @@ class SettingBase {
   public:
     SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope);
     virtual ~SettingBase();
+    SettingBase(const SettingBase&) = delete;
+    SettingBase(SettingBase&&) = delete;
+    SettingBase& operator=(const SettingBase&) = delete;
+    SettingBase& operator=(SettingBase&&) = delete;
+
     void setCallback(std::function<void()>&& settingChangedCallback);
 
   protected:
@@ -33,6 +38,8 @@ class SettingBase {
 
     const UserScope userScope_;
     bool initialized = false;
+
+  public:
     const SettingId name_;
 
   private:

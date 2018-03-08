@@ -31,6 +31,7 @@ auto LOG_PREFIX = "DefrosterWindscreenCCSM: ";
 }  // namespace
 
 DefrosterWindscreenCCSM::DefrosterWindscreenCCSM(
+        const vcc::LocalConfigReaderInterface* lcfg,
         ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster,
         ReadOnlyNotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& defrosterWindscreen,
         ILegacyDispatcher& dispatcher, IDefroster& electricDefrosterWindscreenLogic,
@@ -39,7 +40,7 @@ DefrosterWindscreenCCSM::DefrosterWindscreenCCSM(
       defrosterWindscreen_{defrosterWindscreen},
       dispatcher_{dispatcher},
       dispatcherTimeout_{std::chrono::milliseconds{
-              static_cast<int>(util::readLocalConfig<double>("Climate_Defroster_delay") * 1000.0)}},
+              static_cast<int>(util::readLocalConfig<double>("Climate_Defroster_delay", lcfg) * 1000.0)}},
       mutex_{},
       subscriptions_{},
       electricDefrosterWindscreenLogic_{electricDefrosterWindscreenLogic},

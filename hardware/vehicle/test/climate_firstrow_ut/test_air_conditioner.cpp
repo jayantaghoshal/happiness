@@ -66,7 +66,6 @@ class AirConditionerTest : public ::testing::Test {
         setFanLevelSetting(FirstRowGen::FanLevelFrontValue::OFF);
         setAutoClimateSetting(AutoClimateLogic::AutoClimateEvent::NO_REQ);
         setClimateReset(ClimateResetLogic::ClimateResetEvent::NO_REQ);
-        settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::OFF);
         settingAirConditioner.set(FirstRowGen::AirConditionerState::OFF);
         resetVehicleMode();
     }
@@ -77,7 +76,6 @@ class AirConditionerTest : public ::testing::Test {
         setFanLevelSetting(FirstRowGen::FanLevelFrontValue::OFF);
         setAutoClimateSetting(AutoClimateLogic::AutoClimateEvent::NO_REQ);
         setClimateReset(ClimateResetLogic::ClimateResetEvent::NO_REQ);
-        settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::OFF);
         settingAirConditioner.set(FirstRowGen::AirConditionerState::OFF);
         resetVehicleMode();
     }
@@ -582,7 +580,6 @@ TEST_F(AirConditionerTest, test_that_ac_setting_is_saved_when_user_presses_auto_
 }
 
 TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno_off_when_reciving_carmode) {
-    settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::OFF);
     settingAirConditioner.set(FirstRowGen::AirConditionerState::AUTO);
     setFanLevelSetting(FirstRowGen::FanLevelFrontValue::LVL1);
 
@@ -594,7 +591,6 @@ TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno
 }
 
 TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno_off_when_carmode_is_set) {
-    settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::OFF);
     settingAirConditioner.set(FirstRowGen::AirConditionerState::AUTO);
     setFanLevelSetting(FirstRowGen::FanLevelFrontValue::LVL1);
     setVehicleMode(UsgModSts1::UsgModDrvg, CarModSts1::CarModDyno);
@@ -608,7 +604,6 @@ TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno
 TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno_auto) {
     setVehicleMode(UsgModSts1::UsgModDrvg, CarModSts1::CarModNorm);
 
-    settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::AUTO);
     settingAirConditioner.set(FirstRowGen::AirConditionerState::OFF);
     setFanLevelSetting(FirstRowGen::FanLevelFrontValue::LVL1);
 
@@ -619,13 +614,12 @@ TEST_F(AirConditionerTest, test_that_ac_is_initilized_to_the_ac_setting_for_dyno
 
     setVehicleMode(UsgModSts1::UsgModDrvg, CarModSts1::CarModDyno);
 
-    EXPECT_EQ(FirstRowGen::AirConditionerState::AUTO, shareAirConditioner.get());
+    EXPECT_EQ(FirstRowGen::AirConditionerState::OFF, shareAirConditioner.get());
 }
 
 TEST_F(AirConditionerTest, test_that_ac_is_work_with_profile_change) {
     setVehicleMode(UsgModSts1::UsgModDrvg, CarModSts1::CarModNorm);
 
-    settingAirConditionerDyno.set(FirstRowGen::AirConditionerState::AUTO);
     settingAirConditioner.set(FirstRowGen::AirConditionerState::OFF);
     setFanLevelSetting(FirstRowGen::FanLevelFrontValue::LVL1);
 

@@ -42,8 +42,8 @@ class TemperatureProxy {
   private:
     bool isCarModDyno() const;
 
-    template <class Setting, class SharedObject>
-    void connect(Setting& setting, SharedObject& sharedObject);
+    template <class Setting, class SharedObject, typename T>
+    void connect(Setting& setting, SharedObject& sharedObject, T& member);
     template <typename Value, class Setting>
     void update(Value value, Value& signalValue, Setting& setting);
 
@@ -72,6 +72,10 @@ class TemperatureProxy {
                   SettingsFramework::UserScope::NOT_USER_RELATED>& sTemperaturePassengerProxy_;
     SettingsProxy<autosar::HmiCmptmtTSpSpcl, SettingsFramework::UserScope::NOT_USER_RELATED,
                   SettingsFramework::UserScope::NOT_USER_RELATED>& sTemperaturePassengerHiLoNProxy_;
+    double sTemperatureDriverProxyGETPORT_;
+    autosar::HmiCmptmtTSpSpcl sTemperatureDriverHiLoNProxyGETPORT_;
+    double sTemperaturePassengerProxyGETPORT_;
+    autosar::HmiCmptmtTSpSpcl sTemperaturePassengerHiLoNProxyGETPORT_;
 
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehModMngtGlbSafe1_;
     ApplicationDataElement::DESender<autosar::HmiCmptmtTSp_info> hmiCmptmtTSp_;

@@ -23,4 +23,8 @@ class IDataElementCommBus {
     virtual void addName(autosar::Dir dir, const std::string& name) = 0;
 
     virtual ~IDataElementCommBus() {}
+
+    virtual void reset(){
+            // Only used by unit tests
+    };
 };

@@ -3,10 +3,11 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <vcc/localconfig.h>
 #include "electric_defroster_windscreen_logic.h"
 
 #include "carconfig_mock.h"
-#include "cedric_localconfig_mock.h"
+
 #include "enum_helper.h"
 #include "mock_dispatcher.h"
 #include "notifiable_property.h"
@@ -42,7 +43,7 @@ class ElectricDefrosterWindscreenTest : public ::testing::Test {
         ON_CALL(carConfig_, getValue(to_undrl(CC122::ParamNumber)))
                 .WillByDefault(Return(to_undrl(CC122::Heated_Frontscreen)));
 
-        ON_CALL(localConfig, getDoubleValue("Climate_defroster_timeout")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig, GetDoubleMock("Climate_defroster_timeout")).WillByDefault(Return(lcfgTimeout));
         ON_CALL(dispatcher, IsRunning()).WillByDefault(Return(false));
 
         setHmiDefrostStatus(ActrDefrstSts::Off);
@@ -103,7 +104,7 @@ class ElectricDefrosterWindscreenTest : public ::testing::Test {
 
     void createSut() {
         sut_ = std::unique_ptr<ElectricDefrosterWindscreenLogic>(new ElectricDefrosterWindscreenLogic(
-                electricDefrosterWindscreen_, sAutoDefrosterFront, dispatcher, hmiDefrstElecReq_));
+                &localConfig, electricDefrosterWindscreen_, sAutoDefrosterFront, dispatcher, hmiDefrstElecReq_));
     }
 
     NotifiableProperty<ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenState> electricDefrosterWindscreen_;
@@ -112,7 +113,7 @@ class ElectricDefrosterWindscreenTest : public ::testing::Test {
     DEInjector<autosar::HmiDefrstElecSts_info> hmiDefrosterStatus;
     DEInjector<autosar::VehModMngtGlbSafe1_info> driverMode;
     DESender<autosar::DrvModReq_info> driveMode;
-    NiceMock<LocalConfigMock> localConfig;
+    NiceMock<vcc::mocks::MockLocalConfigReader> localConfig;
     NiceMock<CarConfigMock> carConfig_;
     NiceMock<MockDispatcher> dispatcher;
     std::unique_ptr<ElectricDefrosterWindscreenLogic> sut_;

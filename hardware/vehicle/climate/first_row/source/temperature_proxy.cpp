@@ -119,6 +119,10 @@ TemperatureProxy::TemperatureProxy(
       sTemperatureDriverHiLoNProxy_{sTemperatureDriverHiLoNProxy},
       sTemperaturePassengerProxy_{sTemperaturePassengerProxy},
       sTemperaturePassengerHiLoNProxy_{sTemperaturePassengerHiLoNProxy},
+      sTemperatureDriverProxyGETPORT_{sTemperatureDriverProxy.defaultValuePORTHELPER()},
+      sTemperatureDriverHiLoNProxyGETPORT_{sTemperatureDriverHiLoNProxy.defaultValuePORTHELPER()},
+      sTemperaturePassengerProxyGETPORT_{sTemperaturePassengerProxy.defaultValuePORTHELPER()},
+      sTemperaturePassengerHiLoNProxyGETPORT_{sTemperaturePassengerHiLoNProxy.defaultValuePORTHELPER()},
       vehModMngtGlbSafe1_{},
       hmiCmptmtTSp_{},
       currentHmiCmptmtTSp_{hmiCmptmtTSp},
@@ -180,11 +184,11 @@ TemperatureProxy::TemperatureProxy(
             break;
     }
 
-    storedDriverTemp_.set(sTemperatureDriverProxy_.get());
-    storedDriverTempHiLoN_.set(sTemperatureDriverHiLoNProxy_.get());
+    storedDriverTemp_.set(sTemperatureDriverProxy_.defaultValuePORTHELPER());
+    storedDriverTempHiLoN_.set(sTemperatureDriverHiLoNProxy_.defaultValuePORTHELPER());
 
-    connect(sTemperatureDriverProxy_, storedDriverTemp_);
-    connect(sTemperatureDriverHiLoNProxy_, storedDriverTempHiLoN_);
+    connect(sTemperatureDriverProxy_, storedDriverTemp_, sTemperatureDriverProxyGETPORT_);
+    connect(sTemperatureDriverHiLoNProxy_, storedDriverTempHiLoN_, sTemperatureDriverHiLoNProxyGETPORT_);
 
     updateDriverTemp(storedDriverTemp.get());
     updateDriverTempHiLoN(storedDriverTempHiLoN.get());
@@ -195,11 +199,11 @@ TemperatureProxy::TemperatureProxy(
     auto const passengerPresent = updatePassengerTemp && updatePassengerTempHiLoN;
 
     if (passengerPresent) {
-        storedPassengerTemp_.set(sTemperaturePassengerProxy_.get());
-        storedPassengerTempHiLoN_.set(sTemperaturePassengerHiLoNProxy_.get());
+        storedPassengerTemp_.set(sTemperaturePassengerProxy_.defaultValuePORTHELPER());
+        storedPassengerTempHiLoN_.set(sTemperaturePassengerHiLoNProxy_.defaultValuePORTHELPER());
 
-        connect(sTemperaturePassengerProxy_, storedPassengerTemp_);
-        connect(sTemperaturePassengerHiLoNProxy_, storedPassengerTempHiLoN_);
+        connect(sTemperaturePassengerProxy_, storedPassengerTemp_, sTemperaturePassengerProxyGETPORT_);
+        connect(sTemperaturePassengerHiLoNProxy_, storedPassengerTempHiLoN_, sTemperaturePassengerHiLoNProxyGETPORT_);
 
         updatePassengerTemp(storedPassengerTemp.get());
         updatePassengerTempHiLoN(storedPassengerTempHiLoN.get());
@@ -213,9 +217,12 @@ TemperatureProxy::TemperatureProxy(
 
 TemperatureProxy::~TemperatureProxy() = default;
 
-template <class Setting, class SharedObject>
-void TemperatureProxy::connect(Setting& setting, SharedObject& sharedObject) {
-    setting.subscribe([&setting, &sharedObject]() { sharedObject.set(setting.get()); });
+template <class Setting, class SharedObject, typename T>
+void TemperatureProxy::connect(Setting& setting, SharedObject& sharedObject, T& memberGETPORT) {
+    setting.subscribe([&sharedObject, &memberGETPORT](auto newSetting) {
+        memberGETPORT = newSetting;
+        sharedObject.set(newSetting);
+    });
 }
 
 template <typename Value, class Setting>
@@ -254,10 +261,10 @@ void TemperatureProxy::updatePassenger(autosar::HmiCmptmtTSpSpcl tempHiLoN,
 
 void TemperatureProxy::handleCarMod(bool isPassengerPresent) {
     if (isPassengerPresent) {
-        storedPassengerTemp_.set(sTemperaturePassengerProxy_.get());
-        storedPassengerTempHiLoN_.set(sTemperaturePassengerHiLoNProxy_.get());
+        storedPassengerTemp_.set(sTemperaturePassengerProxyGETPORT_);
+        storedPassengerTempHiLoN_.set(sTemperaturePassengerHiLoNProxyGETPORT_);
     }
 
-    storedDriverTemp_.set(sTemperatureDriverProxy_.get());
-    storedDriverTempHiLoN_.set(sTemperatureDriverHiLoNProxy_.get());
+    storedDriverTemp_.set(sTemperatureDriverProxyGETPORT_);
+    storedDriverTempHiLoN_.set(sTemperatureDriverHiLoNProxyGETPORT_);
 }

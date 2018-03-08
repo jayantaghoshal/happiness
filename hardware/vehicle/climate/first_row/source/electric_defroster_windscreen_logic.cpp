@@ -24,12 +24,13 @@ auto LOG_PREFIX = "ElectricDefrosterWindscreen: ";
 }
 
 ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenLogic(
+        const vcc::LocalConfigReaderInterface* lcfg,
         NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
         ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront,
         ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq)
     : electricDefrosterWindscreenState_{ElectricWindscreen},
       timeout_(std::chrono::milliseconds{
-              static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout") * 1000.0)}),
+              static_cast<int>(util::readLocalConfig<double>("Climate_defroster_timeout", lcfg) * 1000.0)}),
       autoFrontRequest_(autoDefrosterFront),
       requestElectricDefrosterWindscreenState_(ElectricDefrosterWindscreenState::OFF),
       usageModeLast_(autosar::UsgModSts1::UsgModAbdnd),

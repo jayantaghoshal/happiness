@@ -7,7 +7,6 @@
 #include <ECD_dataelement.h>
 #include <carconfig.h>
 #include <cc_parameterlist.h>
-#include <cedric_localconfig_mock.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include "notifiable_property.h"

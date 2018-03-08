@@ -26,7 +26,8 @@ class ManualRecircLogic {
     using userSelectionGen = v0::org::volvocars::climate::UserSelection;
 
   public:
-    ManualRecircLogic(ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& RecircTimer,
+    ManualRecircLogic(const vcc::LocalConfigReaderInterface* lcfg,
+                      ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& RecircTimer,
                       ReadOnlyNotifiableProperty<userSelectionGen::OffOnSelection>& AirQualitySensor,
                       SettingsProxy<FirstRowGen::ManualRecircState::Literal, UserScope::USER,
                                     UserScope::NOT_USER_RELATED>& settingManualRecirc,
@@ -62,6 +63,7 @@ class ManualRecircLogic {
 
     SettingsProxy<FirstRowGen::ManualRecircState::Literal, UserScope::USER, UserScope::NOT_USER_RELATED>&
             sManualRecircProxy;
+    FirstRowGen::ManualRecircState::Literal sManualRecircProxyGETPORT;
 
     NotifiableProperty<FirstRowGen::ManualRecircState>& sharedManualRecirc_;
     std::recursive_mutex mutex_;

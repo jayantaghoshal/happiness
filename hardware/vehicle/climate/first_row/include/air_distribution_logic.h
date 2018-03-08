@@ -56,8 +56,10 @@ class AirDistributionLogic {
     SubscriptionHandle maxDefrosterSubscriptionId_;
     SubscriptionHandle climateResetSubscriptionId_;
 
+    
     SettingsProxy<FirstRowGen::AirDistributionAngle::Literal, SettingsFramework::UserScope::USER,
                   SettingsFramework::UserScope::NOT_USER_RELATED>& sAirDistribution;
+    FirstRowGen::AirDistributionAngle::Literal sAirDistributionGETPORT;
 
     NotifiableProperty<AirDistributionAngle>& value_;
     ReadOnlyNotifiableProperty<FirstRowGen::FanLevelFrontValue>& shareFanLevelFront;

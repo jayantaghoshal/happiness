@@ -34,22 +34,23 @@ auto LOG_PREFIX = "AdditionalHeater: ";
 }  // namespace
 
 AdditionalHeaterLogic::AdditionalHeaterLogic(
+        const vcc::LocalConfigReaderInterface* lcfg,
         NotifiableProperty<UserSelectionGen::OffOnSelection>& additionalHeater,
         std::unique_ptr<
                 SettingsProxy<int, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::NOT_USER_RELATED>>
                 additionalHeaterSetting)
     : additionalHeater_{additionalHeater},
       additionalHeaterSetting_{std::move(additionalHeaterSetting)},
-      additionalHeaterAvaiable_{util::readLocalConfig<bool>("Climate_AdditionalHeaterAvailability")} {
+      additionalHeaterAvaiable_{util::readLocalConfig<bool>("Climate_AdditionalHeaterAvailability", lcfg)} {
     if (carConfigOk() && additionalHeaterAvaiable_) {
-        auto updateSharedObject = [this]() {
-            additionalHeater_.set(UserSelectionGen::OffOnSelection{
-                    UserSelectionGen::StateType::AVAILABLE,
-                    static_cast<UserSelectionGen::OffOnType::Literal>(additionalHeaterSetting_->get())});
+        auto updateSharedObject = [this](auto newSetting) {
+            additionalHeater_.set(
+                    UserSelectionGen::OffOnSelection{UserSelectionGen::StateType::AVAILABLE,
+                                                     static_cast<UserSelectionGen::OffOnType::Literal>(newSetting)});
             sendSignal();
         };
 
-        updateSharedObject();
+        updateSharedObject(additionalHeaterSetting_->defaultValuePORTHELPER());
 
         additionalHeaterSetting_->subscribe(updateSharedObject);
     } else {

@@ -5,9 +5,9 @@
 
 #include <Application_dataelement.h>
 #include <ECD_dataelement.h>
-#include <cedric_localconfig_mock.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <vcc/localconfig.h>
 #include <chrono>
 #include <thread>
 #include <v0/org/volvocars/climate/UserSelection.hpp>
@@ -39,7 +39,7 @@ class ElectricDefrosterRearTest : public ::testing::Test {
         : electricDefrosterRear_(ElectricDefrosterRearState::DISABLED),
           sAutoDefrosterRear({UserSelectionGen::StateType::NOT_PRESENT, UserSelectionGen::OffOnType::OFF}),
           lcfgTimeout(3.1) {
-        ON_CALL(localConfig, getDoubleValue("Climate_defroster_timeout")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig, GetDoubleMock("Climate_defroster_timeout")).WillByDefault(Return(lcfgTimeout));
         ON_CALL(dispatcher, IsRunning()).WillByDefault(Return(false));
 
         resetSignals();
@@ -63,7 +63,7 @@ class ElectricDefrosterRearTest : public ::testing::Test {
     DEInjector<autosar::HmiDefrstElecSts_info> hmiDefrstSts;
     DEInjector<autosar::Btn5ForUsrSwtPanFrntReq_info> btn5FrntReq;
 
-    NiceMock<LocalConfigMock> localConfig;
+    NiceMock<vcc::mocks::MockLocalConfigReader> localConfig;
     NiceMock<MockDispatcher> dispatcher;
 
     DESink<autosar::HmiDefrstElecReq_info> hmiDefrosterRequest;
@@ -130,7 +130,7 @@ class ElectricDefrosterRearTest : public ::testing::Test {
 
     void createSut() {
         sut_ = std::unique_ptr<ElectricDefrosterRearLogic>(new ElectricDefrosterRearLogic(
-                electricDefrosterRear_, sAutoDefrosterRear, dispatcher, hmiDefrstElecReq_));
+                &localConfig, electricDefrosterRear_, sAutoDefrosterRear, dispatcher, hmiDefrstElecReq_));
     }
 };
 

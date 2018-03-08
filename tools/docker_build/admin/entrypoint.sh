@@ -81,6 +81,7 @@ echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 SCRIPT_FILE=/tmp/command_to_run.sh
 cat >$SCRIPT_FILE <<EOL
 #!/bin/bash
+
 if [ -f ${BUILD_ENV_SETUP} ]; then
    source ${BUILD_ENV_SETUP}
    lunch ihu_vcc-eng

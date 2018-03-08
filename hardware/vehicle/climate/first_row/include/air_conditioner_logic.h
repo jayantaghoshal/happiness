@@ -35,6 +35,7 @@ class AirConditionerLogic {
   private:
     SettingsProxy<FirstRowGen::AirConditionerState::Literal, UserScope::USER, UserScope::NOT_USER_RELATED>&
             settingAirConditioner;
+    FirstRowGen::AirConditionerState::Literal settingAirConditionerGETPORT;
 
     SubscriptionHandle airConditionerId_;
     SubscriptionHandle fanLevelFrontId_;

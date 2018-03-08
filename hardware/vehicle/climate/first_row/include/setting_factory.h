@@ -99,4 +99,7 @@ class SettingFactory {
     SettingsFramework::Setting<bool, UserScope::NOT_USER_RELATED> ionizer_;
     SettingsFramework::Setting<bool, UserScope::NOT_USER_RELATED> ionizerDyno_;
     SettingsProxy<bool, UserScope::NOT_USER_RELATED, UserScope::NOT_USER_RELATED> ionizerProxy_;
+
+    SettingsFramework::Setting<bool, UserScope::USER> tempSync_{SettingId::Climate_TemperatureSync, false, sm_};
+    SettingsFramework::Setting<bool, UserScope::USER> tempSyncDyno_{SettingId::Climate_TemperatureSyncDyno, false, sm_};
 };

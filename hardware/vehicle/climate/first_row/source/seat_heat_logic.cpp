@@ -60,7 +60,8 @@ bool seatHeatersPresent() {
 }
 }  // namespace
 
-SeatHeatLogic::SeatHeatLogic(UserLocation userLocation, autosar::HmiSeatClima& seatClimate,
+SeatHeatLogic::SeatHeatLogic(const vcc::LocalConfigReaderInterface* lcfg, UserLocation userLocation,
+                             autosar::HmiSeatClima& seatClimate,
                              NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
                              NotifiableProperty<UserSelectionGen::OffOnSelection>& autoSeatHeatOn,
                              NotifiableProperty<UserSelectionGen::LevelSelection>& autoSeatHeatLevel,
@@ -69,19 +70,26 @@ SeatHeatLogic::SeatHeatLogic(UserLocation userLocation, autosar::HmiSeatClima& s
     : userLocation_{userLocation},
       shareHeatAttribute_{heatAttribute},
       sHeatLevel_{seatHeatLevelSetting},
+      sHeatLevelGETPORT_{seatHeatLevelSetting.defaultValuePORTHELPER()},
       active_{false},
       seatClimate_{seatClimate},
       seatHeatSignal_{getSeatHeatSignal()},
       timeProvider_{timeProvider},
-      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout")},
+      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout", lcfg)},
       autoSeatHeatOn_(autoSeatHeatOn),
       autoSeatHeatLevel_(autoSeatHeatLevel) {
     log_debug() << "timeProviderTimeout_ :" << timeProviderTimeout_.count();
 
     if (seatHeatersPresent()) {
+        // TODO(ARTINFO-503): Callback order on vehicleModeSignal vs sHeatLevel_(dyno) is undefined,
+        //                   old code covered this up by calling Setting.get() which no longer exists
+        //                   Need to run full logic in both callbacks.
         vehicleModeSignal_.subscribe([this]() { handleVehicleMode(); });
         if (userLocation == UserLocation::DRIVER) {
-            sHeatLevel_.subscribe([this]() { request(sHeatLevel_.get()); });
+            sHeatLevel_.subscribe([this](auto newSetting) {
+                sHeatLevelGETPORT_ = newSetting;
+                request(newSetting);
+            });
         }
     } else {
         shareHeatAttribute_.set(FirstRowGen::HeatState::NOT_PRESENT, FirstRowGen::HeatLevel::OFF);
@@ -141,10 +149,10 @@ void SeatHeatLogic::handleAuto() {
         }
         seatHeatgAutCdnSignal_.subscribe([this] { handleSeatHeatAutoSignal(); });
     } else {
-        log_debug() << "HandleAuto, autoSeatHeatOn_ is OFF, set to manual, " << sHeatLevel_.get();
-        shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, sHeatLevel_.get());
+        log_debug() << "HandleAuto, autoSeatHeatOn_ is OFF, set to manual, " << sHeatLevelGETPORT_;
+        shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, sHeatLevelGETPORT_);
         seatHeatgAutCdnSignal_.subscribe([] {});
-        sendSignal(toAutosar(sHeatLevel_.get()));
+        sendSignal(toAutosar(sHeatLevelGETPORT_));
     }
 }
 

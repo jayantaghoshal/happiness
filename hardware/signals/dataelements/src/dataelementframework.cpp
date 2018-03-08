@@ -88,8 +88,11 @@ const DataElemValueBase* DataElementFramework::get(const std::string& name) cons
 }
 
 #ifdef UNIT_TEST
+
 void DataElementFramework::reset() {
+    m_commBus->reset();
     // set all existing to ERROR(-1)
+
     auto iter = m_dataElementListeners.begin();
     while (iter != m_dataElementListeners.end()) {
         const std::list<INewDataElement*>& subs = iter->second.second;

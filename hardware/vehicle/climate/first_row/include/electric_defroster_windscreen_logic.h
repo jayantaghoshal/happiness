@@ -8,6 +8,7 @@
 #include <ECD_dataelement.h>
 #include <legacydispatcher.h>
 #include <libsettings/setting.h>
+#include <vcc/localconfig.h>
 #include <mutex>
 #include <v0/org/volvocars/climate/FirstRow.hpp>
 #include <v0/org/volvocars/climate/UserSelection.hpp>
@@ -39,6 +40,7 @@ class ElectricDefrosterWindscreenLogic : private DFsm_Main, public IDefroster {
     };
 
     ElectricDefrosterWindscreenLogic(
+            const vcc::LocalConfigReaderInterface* lcfg,
             NotifiableProperty<FirstRowGen::ElectricDefrosterWindscreenState>& ElectricWindscreen,
             ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoDefrosterFront,
             ILegacyDispatcher& timerDispatcher, autosar::HmiDefrstElecReq& hmiDefrstElecReq);

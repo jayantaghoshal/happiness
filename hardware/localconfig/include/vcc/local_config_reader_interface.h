@@ -193,11 +193,36 @@ namespace vcc {
 namespace mocks {
 class MockLocalConfigReader : public LocalConfigReaderInterface {
   public:
-    MOCK_CONST_METHOD1(GetString, std::string(std::initializer_list<std::string>));
-    MOCK_CONST_METHOD1(GetInt, int(std::initializer_list<std::string>));
-    MOCK_CONST_METHOD1(GetBool, bool(std::initializer_list<std::string>));
-    MOCK_CONST_METHOD1(GetDouble, double(std::initializer_list<std::string>));
-    MOCK_CONST_METHOD1(GetStringArray, std::vector<std::string>(std::initializer_list<std::string>));
+    MOCK_CONST_METHOD1(GetStringMock, std::string(std::string));
+    MOCK_CONST_METHOD1(GetIntMock, int(std::string));
+    MOCK_CONST_METHOD1(GetBoolMock, bool(std::string));
+    MOCK_CONST_METHOD1(GetDoubleMock, double(std::string));
+    MOCK_CONST_METHOD1(GetStringArrayMock, std::vector<std::string>(std::string));
+
+    virtual std::string GetString(std::initializer_list<std::string> keys_path) const override {
+        if (keys_path.size() != 1) throw std::runtime_error("Mock only supports one key");
+        return GetStringMock(*(keys_path.begin()));
+    }
+
+    virtual int GetInt(std::initializer_list<std::string> keys_path) const override {
+        if (keys_path.size() != 1) throw std::runtime_error("Mock only supports one key");
+        return GetIntMock(*(keys_path.begin()));
+    }
+
+    virtual bool GetBool(std::initializer_list<std::string> keys_path) const override {
+        if (keys_path.size() != 1) throw std::runtime_error("Mock only supports one key");
+        return GetBoolMock(*(keys_path.begin()));
+    }
+
+    virtual double GetDouble(std::initializer_list<std::string> keys_path) const override {
+        if (keys_path.size() != 1) throw std::runtime_error("Mock only supports one key");
+        return GetDoubleMock(*(keys_path.begin()));
+    }
+
+    virtual std::vector<std::string> GetStringArray(std::initializer_list<std::string> keys_path) const override {
+        if (keys_path.size() != 1) throw std::runtime_error("Mock only supports one key");
+        return GetStringArrayMock(*(keys_path.begin()));
+    }
 };
 
 }  // namespace mocks

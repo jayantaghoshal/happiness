@@ -8,12 +8,19 @@
 #include <libsettings/settingsmanager.h>
 
 template <typename T, SettingsFramework::UserScope userScope>
-class CompatSetting : public SettingsFramework::Setting<T, userScope> {
+class CompatSetting final : public SettingsFramework::Setting<T, userScope> {
   public:
     CompatSetting(SettingId id, T defaultValue, android::sp<SettingsFramework::SettingsManager> sm)
-        : SettingsFramework::Setting<T, userScope>{id, defaultValue, sm} {}
+        : SettingsFramework::Setting<T, userScope>{id, defaultValue, sm}, overriddenDefault_{defaultValue} {}
     virtual ~CompatSetting() = default;
     T get() { return SettingsFramework::Setting<T, userScope>::value_.value; }
+
+    // Override default added to simplify compatibility with old unit tests and to make behavior more clear
+    T defaultValue() const override { return overriddenDefault_; }
+    void overrideDefaultValue(T newDefault) { overriddenDefault_ = newDefault; }
+
+  private:
+    T overriddenDefault_;
 };
 
 class MockSettingsManager : public SettingsFramework::SettingsManager {

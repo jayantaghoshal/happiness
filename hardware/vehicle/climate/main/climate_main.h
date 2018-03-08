@@ -25,6 +25,7 @@ class ClimateMain final {
   public:
     std::shared_ptr<tarmac::eventloop::IDispatcher> tarmacDispatcher_;
     android::sp<SettingsFramework::SettingsManager> settingsManager_;
+    const vcc::LocalConfigReaderInterface* lcfg_;
     tarmac::timeprovider::TimeProvider timeProvider_;
     bool hackToInitGlobalLegacyDispatcher;
     signal_proxy::Proxies signalProxies_;

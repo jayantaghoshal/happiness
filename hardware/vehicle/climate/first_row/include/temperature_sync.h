@@ -53,6 +53,7 @@ class TemperatureSyncLogic {
 
     std::unique_ptr<SettingsProxy<bool, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::USER>>
             temperatureSyncSetting_;
+    bool temperatureSyncSettingGETPORT_;
 
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehicleModeSignal_;
     ApplicationDataElement::DEReceiver<autosar::ClimaActv_info> climaActvSignal_;

@@ -84,6 +84,7 @@ AirDistributionLogic::AirDistributionLogic(
         ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& maxDefroster)
     : climateControl_{getHvacTypeFromCarConfig()},
       sAirDistribution{settingAirDistribution},
+      sAirDistributionGETPORT{sAirDistribution.defaultValuePORTHELPER()},
       value_{AirDistribution},
       shareFanLevelFront(fanLevel),
       shareAutoClimate{autoClimate},
@@ -136,16 +137,17 @@ AirDistributionLogic::AirDistributionLogic(
             } else {
                 log_debug() << "AirDistributionLogic: Handling max defroster off. Go to saved value";
                 this->setStateAndValue(isActive_, shareFanLevelFront.get(),
-                                       static_cast<AirDistributionAngle::Literal>(sAirDistribution.get()));
+                                       static_cast<AirDistributionAngle::Literal>(sAirDistributionGETPORT));
             }
         }
     });
 
-    value_.set(static_cast<AirDistributionAngle::Literal>(sAirDistribution.get()));
+    value_.set(static_cast<AirDistributionAngle::Literal>(sAirDistributionGETPORT));
 
-    sAirDistribution.subscribe([this]() {
+    sAirDistribution.subscribe([this](auto newSetting) {
         log_debug() << "AirDistributionLogic: Setting updated";
-        request(static_cast<AirDistributionAngleRequest::Literal>(sAirDistribution.get()));
+        sAirDistributionGETPORT = newSetting;
+        request(static_cast<AirDistributionAngleRequest::Literal>(sAirDistributionGETPORT));
     });
 }
 
@@ -184,7 +186,7 @@ void AirDistributionLogic::handleSignals() {
             }
         } else {
             log_debug() << "AirDistributionLogic: transitioning to active, reading setting";
-            angle = static_cast<AirDistributionAngle::Literal>(sAirDistribution.get());
+            angle = static_cast<AirDistributionAngle::Literal>(sAirDistributionGETPORT);
         }
     } else {
         log_debug() << "AirDistributionLogic: transitioning to not_active";

@@ -18,6 +18,7 @@ class DataElementCommBus_standalone : public IDataElementCommBus {
     void addName(autosar::Dir dir, const std::string& name) override;
     void send(const std::string& name, const std::string& payload, autosar::Dir dir) override;
     virtual ~DataElementCommBus_standalone() = default;
+    void reset() override;
 
   private:
     std::function<void(const std::string& name, const std::string& payload)> _callback;
@@ -50,3 +51,5 @@ void DataElementCommBus_standalone::addName(autosar::Dir dir, const std::string&
         }
     }
 }
+
+void DataElementCommBus_standalone::reset() { _datacache.clear(); }

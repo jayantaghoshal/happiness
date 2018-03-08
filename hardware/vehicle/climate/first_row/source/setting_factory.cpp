@@ -55,7 +55,5 @@ SettingFactory::SettingFactory(const android::sp<SettingsFramework::SettingsMana
       ionizerProxy_{ionizer_, ionizerDyno_} {}
 
 std::unique_ptr<SettingsProxy<bool, UserScope::USER, UserScope::USER>> SettingFactory::createTemperatureSyncProxy() {
-    return std::make_unique<SettingsProxy<bool, UserScope::USER, UserScope::USER>>(
-            SettingsFramework::Setting<bool, UserScope::USER>{SettingId::Climate_TemperatureSync, false, sm_},
-            SettingsFramework::Setting<bool, UserScope::USER>{SettingId::Climate_TemperatureSyncDyno, false, sm_});
+    return std::make_unique<SettingsProxy<bool, UserScope::USER, UserScope::USER>>(tempSync_, tempSyncDyno_);
 }

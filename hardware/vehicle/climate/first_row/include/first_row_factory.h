@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <vcc/localconfig.h>
 #include "air_conditioner_logic.h"
 #include "air_distribution_logic.h"
 #include "auto_climate_logic.h"
@@ -49,7 +50,8 @@ class SettingFactory;
 
 class FirstRowFactory final {
   public:
-    FirstRowFactory(const android::sp<SettingsFramework::SettingsManager>& settingsManager,
+    FirstRowFactory(const vcc::LocalConfigReaderInterface* lcfg,
+                    const android::sp<SettingsFramework::SettingsManager>& settingsManager,
                     tarmac::timeprovider::TimerManagerInterface& timeProvider, signal_proxy::Proxies& proxies,
                     UserSelectionFactory& userSelections, common::daemon::Factory& commonFactory);
 

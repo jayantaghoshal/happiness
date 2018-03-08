@@ -95,6 +95,7 @@ cc_library_static {
         "generated/gen_dataelements.cpp",
         "generated/gen_jsonencdec.cpp",
         "src/vfc_helper.cpp",
+        "src/signals_server.cpp",
     ],
 
     cppflags: [

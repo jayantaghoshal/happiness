@@ -55,23 +55,30 @@ bool SteeringWheelHeatLogic::steeringWheelHeatersPresent() {
 }
 
 SteeringWheelHeatLogic::SteeringWheelHeatLogic(
-        NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
+        const vcc::LocalConfigReaderInterface* lcfg, NotifiableProperty<FirstRowGen::HeatAttribute>& heatAttribute,
         ReadOnlyNotifiableProperty<UserSelectionGen::OffOnSelection>& autoSteeringWheelHeatOn,
         ReadOnlyNotifiableProperty<UserSelectionGen::LevelSelection>& autoSteeringWheelHeatLevel,
         SettingsProxyInterface<FirstRowGen::HeatLevel::Literal>& steeringWheelHeatLevelSetting,
         tarmac::timeprovider::TimerManagerInterface const& timeProvider)
     : shareHeatAttribute_{heatAttribute},
       setting_{steeringWheelHeatLevelSetting},
+      settingGETPORT{setting_.defaultValuePORTHELPER()},
       active_{false},
       timeProvider_{timeProvider},
-      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout")},
+      timeProviderTimeout_{util::readLocalConfig<std::chrono::seconds>("Climate_Determination_timeout", lcfg)},
       autoSteeringWheelHeatOn_(autoSteeringWheelHeatOn),
       autoSteeringWheelHeatLevel_(autoSteeringWheelHeatLevel) {
     log_debug() << "timeProviderTimeout_ :" << timeProviderTimeout_.count();
 
     if (steeringWheelHeatersPresent()) {
+        // TODO(ARTINFO-503): Callback order on vehicleModeSignal vs setting_(dyno) is undefined,
+        //                   old code covered this up by calling Setting.get() which no longer exists
+        //                   Need to run full logic in both callbacks.
         vehicleModeSignal_.subscribe([this] { handleVehicleMode(); });
-        setting_.subscribe([this]() { request(setting_.get()); });
+        setting_.subscribe([this](auto newSetting) {
+            settingGETPORT = newSetting;
+            request(newSetting);
+        });
         steeringWheelHeatgAutCdnSignal_.subscribe([this] { handleSteeringWheelHeatAutoSignal(); });
     } else {
         shareHeatAttribute_.set(FirstRowGen::HeatState::NOT_PRESENT, FirstRowGen::HeatLevel::OFF);
@@ -114,9 +121,9 @@ void SteeringWheelHeatLogic::handleSteeringWheelHeatAutoMode() {
             setSteeringWheelHeat(autosar::SteerWhlHeatgOnCmdTyp::Off);
         }
     } else {
-        log_debug() << "HandleAuto, autoSteeringWhlHeatOn_ is OFF, set to manual, " << setting_.get();
-        shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, setting_.get());
-        setSteeringWheelHeat(convertHeatLevelToAutosar(setting_.get()));
+        log_debug() << "HandleAuto, autoSteeringWhlHeatOn_ is OFF, set to manual, " << settingGETPORT;
+        shareHeatAttribute_.set(FirstRowGen::HeatState::MANUAL, settingGETPORT);
+        setSteeringWheelHeat(convertHeatLevelToAutosar(settingGETPORT));
     }
 }
 

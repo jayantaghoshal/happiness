@@ -164,7 +164,11 @@ class FDXConnection:
     def receiver(self):
         parser = FdxCommandParser()
         logger.info("Starting receiver")
-        watch_list = [self.sock, self.close_pipe[0]]
+        if os.name == "nt":
+            # TODO: Fix close wakeup for windows
+            watch_list = [self.sock]
+        else:
+            watch_list = [self.sock, self.close_pipe[0]]
         while True:
             try:
                 buffer_size = 1024 * 8

@@ -7,6 +7,7 @@
 
 #include <ECD_dataelement.h>
 #include <gtest/gtest.h>
+#include <future>
 #include "mock_settingsmanager.h"
 
 namespace TestSettingsProxy {
@@ -17,7 +18,8 @@ class SettingsProxyTest : public ::testing::Test {
   public:
     SettingsProxyTest()
         : setting{SettingId::TestSetting1, EnumClass::FIRST, settingsManager},
-          settingsDyno{SettingId::TestSetting2, EnumClass::FIFTH, settingsManager}
+          settingsDyno{SettingId::TestSetting2, EnumClass::FIFTH, settingsManager},
+          capturedValue{setting.defaultValue()}
 
     {
         setting.set(EnumClass::FIRST);
@@ -38,6 +40,9 @@ class SettingsProxyTest : public ::testing::Test {
 
     CompatSetting<EnumClass, SettingsFramework::UserScope::USER> settingsDyno;
     ECDDataElement::DEInjector<autosar::VehModMngtGlbSafe1_info> driverMode;
+    EnumClass capturedValue;
+
+    void captureValue(EnumClass x) { capturedValue = x; }
 };
 
 TEST_F(SettingsProxyTest, InitializeNormalMode) {
@@ -45,7 +50,9 @@ TEST_F(SettingsProxyTest, InitializeNormalMode) {
     SettingsProxy<EnumClass, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::USER> sut(setting,
                                                                                                          settingsDyno);
 
-    EXPECT_EQ(EnumClass::FIRST, sut.get());
+    sut.subscribe([&](auto value) { captureValue(value); });
+
+    EXPECT_EQ(EnumClass::FIRST, capturedValue);
 }
 
 TEST_F(SettingsProxyTest, InitializeDynoMode) {
@@ -53,7 +60,9 @@ TEST_F(SettingsProxyTest, InitializeDynoMode) {
     SettingsProxy<EnumClass, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::USER> sut(setting,
                                                                                                          settingsDyno);
 
-    EXPECT_EQ(EnumClass::FIFTH, sut.get());
+    sut.subscribe([&](auto value) { captureValue(value); });
+
+    EXPECT_EQ(EnumClass::FIFTH, capturedValue);
 }
 
 TEST_F(SettingsProxyTest, TestChangeValueInDynoMode) {
@@ -63,7 +72,9 @@ TEST_F(SettingsProxyTest, TestChangeValueInDynoMode) {
 
     sut.set(EnumClass::SECOND);
 
-    EXPECT_EQ(EnumClass::SECOND, sut.get());
+    sut.subscribe([&](auto value) { captureValue(value); });
+
+    EXPECT_EQ(EnumClass::SECOND, capturedValue);
 }
 
 TEST_F(SettingsProxyTest, TestChangeValueInDynoModeAndGoBackToNormal) {
@@ -75,7 +86,9 @@ TEST_F(SettingsProxyTest, TestChangeValueInDynoModeAndGoBackToNormal) {
 
     setVehicleMode(autosar::UsgModSts1::UsgModDrvg, autosar::CarModSts1::CarModNorm);
 
-    EXPECT_EQ(EnumClass::FIRST, sut.get());
+    sut.subscribe([&](auto value) { captureValue(value); });
+
+    EXPECT_EQ(EnumClass::FIRST, capturedValue);
 }
 
 TEST_F(SettingsProxyTest, TestChangeBackAndForthBetweenNormalModeAndDynoModeAndChangeValue) {
@@ -83,32 +96,36 @@ TEST_F(SettingsProxyTest, TestChangeBackAndForthBetweenNormalModeAndDynoModeAndC
     SettingsProxy<EnumClass, SettingsFramework::UserScope::USER, SettingsFramework::UserScope::USER> sut(setting,
                                                                                                          settingsDyno);
 
-    EXPECT_EQ(EnumClass::FIRST, sut.get());
+    sut.subscribe([&](auto value) { captureValue(value); });
+
+    EXPECT_EQ(EnumClass::FIRST, capturedValue);
 
     sut.set(EnumClass::SECOND);
-    EXPECT_EQ(EnumClass::SECOND, sut.get());
+
+    EXPECT_EQ(EnumClass::SECOND, capturedValue);
 
     setVehicleMode(autosar::UsgModSts1::UsgModDrvg, autosar::CarModSts1::CarModDyno);
 
-    EXPECT_EQ(EnumClass::FIFTH, sut.get());
+    EXPECT_EQ(EnumClass::FIFTH, capturedValue);
 
     sut.set(EnumClass::FORTH);
-    EXPECT_EQ(EnumClass::FORTH, sut.get());
+
+    EXPECT_EQ(EnumClass::FORTH, capturedValue);
 
     setVehicleMode(autosar::UsgModSts1::UsgModDrvg, autosar::CarModSts1::CarModNorm);
 
-    EXPECT_EQ(EnumClass::SECOND, sut.get());
+    EXPECT_EQ(EnumClass::SECOND, capturedValue);
 
     sut.set(EnumClass::THIRD);
-    EXPECT_EQ(EnumClass::THIRD, sut.get());
+
+    EXPECT_EQ(EnumClass::THIRD, capturedValue);
 
     setVehicleMode(autosar::UsgModSts1::UsgModDrvg, autosar::CarModSts1::CarModDyno);
 
-    // It should now use the defaultValue
-    EXPECT_EQ(EnumClass::FIFTH, sut.get());
+    EXPECT_EQ(EnumClass::FIFTH, capturedValue);
 
     setVehicleMode(autosar::UsgModSts1::UsgModDrvg, autosar::CarModSts1::CarModNorm);
 
-    EXPECT_EQ(EnumClass::THIRD, sut.get());
+    EXPECT_EQ(EnumClass::THIRD, capturedValue);
 }
 }

@@ -7,13 +7,14 @@
 #include "mock_dispatcher.h"
 
 #include "carconfig_mock.h"
-#include "cedric_localconfig_mock.h"
+
 #include "enum_helper.h"
 
 #include <ECD_dataelement.h>
 #include <cc_parameterlist.h>
 #include <gtest/gtest.h>
 #include <libsettings/setting.h>
+#include <vcc/localconfig.h>
 #include <memory>
 #include <tuple>
 #include "mock_settingsmanager.h"
@@ -79,7 +80,7 @@ class RecircTest : public Test {
         ON_CALL(carConfig_, getValue(to_undrl(CC174::ParamNumber)))
                 .WillByDefault(Return(to_undrl(CC174::Air_Quality_System)));
 
-        ON_CALL(localConfig, getIntValue("Climate_Manual_Recirc")).WillByDefault(Return(&lcfgTimeout));
+        ON_CALL(localConfig, GetIntMock("Climate_Manual_Recirc")).WillByDefault(Return(lcfgTimeout));
 
         setVehicleMode(UsgModSts1::UsgModInActv, CarModSts1::CarModNorm);
         setClimaActv(OnOff1::Off);
@@ -96,8 +97,8 @@ class RecircTest : public Test {
 
     void makeSut() {
         _sut = std::unique_ptr<ManualRecircLogic>(new ManualRecircLogic(
-                shareRecircTimer, shareAirQualitySensor, sManualRecircProxy, recirc, shareClimateReset, dispatcher,
-                shareFanLevelFront, shareAutoClimate, shareMaxDefroster));
+                &localConfig, shareRecircTimer, shareAirQualitySensor, sManualRecircProxy, recirc, shareClimateReset,
+                dispatcher, shareFanLevelFront, shareAutoClimate, shareMaxDefroster));
     }
 
   protected:
@@ -126,7 +127,7 @@ class RecircTest : public Test {
     }
 
     void setRecircDynoSetting(FirstRowGen::ManualRecircState recirc) {
-        sManualRecircDyno.set(static_cast<FirstRowGen::ManualRecircState::Literal>(recirc.value_));
+        sManualRecircDyno.overrideDefaultValue(static_cast<FirstRowGen::ManualRecircState::Literal>(recirc.value_));
     }
 
     userSelectionGen::OffOnSelection onOff;
@@ -149,7 +150,7 @@ class RecircTest : public Test {
 
     NotifiableProperty<FirstRowGen::ManualRecircState> recirc;
     NiceMock<MockDispatcher> dispatcher;
-    NiceMock<LocalConfigMock> localConfig;
+    NiceMock<vcc::mocks::MockLocalConfigReader> localConfig;
     NiceMock<CarConfigMock> carConfig_;
 
     std::unique_ptr<ManualRecircLogic> _sut;

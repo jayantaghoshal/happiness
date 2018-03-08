@@ -56,6 +56,7 @@ TemperatureSyncLogic::TemperatureSyncLogic(
       rearRightTempHiLoN_{rearRightTempHiLoN},
       maxDefroster_{maxDefroster},
       temperatureSyncSetting_{std::move(temperatureSyncSetting)},
+      temperatureSyncSettingGETPORT_{temperatureSyncSetting_->defaultValuePORTHELPER()},
       vehicleModeSignal_{},
       climaActvSignal_{},
       carConfigOk_{},
@@ -78,8 +79,9 @@ TemperatureSyncLogic::TemperatureSyncLogic(
             this->updateState();
         }));
 
-        temperatureSyncSetting_->subscribe([this] {
+        temperatureSyncSetting_->subscribe([this](auto newSetting) {
             std::lock_guard<std::recursive_mutex> lock(mutex_);
+            temperatureSyncSettingGETPORT_ = newSetting;
             updateState();
         });
 
@@ -114,7 +116,7 @@ TemperatureSyncLogic::TemperatureSyncLogic(
 
 void TemperatureSyncLogic::updateState() {
     if (isActive()) {
-        if (temperatureSyncSetting_->get()) {
+        if (temperatureSyncSettingGETPORT_) {
             temperatureSync_.set(FirstRowGen::TemperatureSyncState::ON);
         } else {
             temperatureSync_.set(FirstRowGen::TemperatureSyncState::OFF);

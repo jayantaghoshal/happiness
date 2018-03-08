@@ -37,6 +37,7 @@ IonizerLogic::IonizerLogic(NotifiableProperty<FirstRowGen::IonizerState>& ionize
                                          SettingsFramework::UserScope::NOT_USER_RELATED>& ionizerSetting)
     : ionizer_{ionizer},
       ionizerSetting_{ionizerSetting},
+      ionizerSettingGETPORT_{ionizerSetting_.defaultValuePORTHELPER()},
       vehicleModeSignal_{},
       climaActvSignal_{},
       airClngReqSignal_{},
@@ -47,8 +48,9 @@ IonizerLogic::IonizerLogic(NotifiableProperty<FirstRowGen::IonizerState>& ionize
     carConfigOk_ = isPresent();
 
     if (carConfigOk_) {
-        ionizerSetting_.subscribe([this] {
+        ionizerSetting_.subscribe([this](auto newSetting) {
             std::lock_guard<Mutex> lock(mutex_);
+            ionizerSettingGETPORT_ = newSetting;
             log_debug() << LOG_PREFIX << "sIonizer changed";
             update();
         });
@@ -138,7 +140,7 @@ void IonizerLogic::update() {
         airClngReqSignal_.send(autosar::OnOffNoReq::NoReq);
     } else {
         if (isActive_) {
-            if (ionizerSetting_.get()) {
+            if (ionizerSettingGETPORT_) {
                 state = FirstRowGen::IonizerState::ON;
                 airClngReqSignal_.send(autosar::OnOffNoReq::On);
             } else {

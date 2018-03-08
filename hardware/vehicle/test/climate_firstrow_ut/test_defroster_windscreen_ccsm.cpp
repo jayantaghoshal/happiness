@@ -3,10 +3,11 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <vcc/localconfig.h>
 #include "defroster_windscreen_ccsm.h"
 
 #include "carconfig_mock.h"
-#include "cedric_localconfig_mock.h"
+
 #include "enum_helper.h"
 #include "mock_defroster.h"
 #include "mock_dispatcher.h"
@@ -17,7 +18,6 @@
 #include <gtest/gtest.h>
 
 namespace {
-const std::string LCFG_ClimateDefrosterDelay("Climate_Defroster_delay");
 
 const double lcfgDelay = 2.0;
 }
@@ -41,7 +41,7 @@ class DefrosterWindscreenCCSMTest : public Test {
           maxDefrosterLogic_{} {
         ON_CALL(carConfig_, getValue(to_undrl(CC122::ParamNumber))).WillByDefault(Return(to_undrl(ccParam)));
 
-        ON_CALL(localConfig_, getDoubleValue(LCFG_ClimateDefrosterDelay)).WillByDefault(Return(&lcfgDelay));
+        ON_CALL(localConfig_, GetDoubleMock("Climate_Defroster_delay")).WillByDefault(Return(lcfgDelay));
 
         frontDefrosterButtonReq_.inject(autosar::PsdNotPsd::NotPsd);
     }
@@ -50,15 +50,15 @@ class DefrosterWindscreenCCSMTest : public Test {
 
   protected:
     void createSut() {
-        sut_ = std::make_unique<DefrosterWindscreenCCSM>(maxDefroster_, defrosterWindscreen_, dispatcher_,
-                                                         electricDefrosterWindscreenLogic_,
+        sut_ = std::make_unique<DefrosterWindscreenCCSM>(&localConfig_, maxDefroster_, defrosterWindscreen_,
+                                                         dispatcher_, electricDefrosterWindscreenLogic_,
                                                          electricDefrosterWindscreenPopupLogic_, maxDefrosterLogic_);
     }
 
     static ECDDataElement::DEInjector<autosar::Btn4ForUsrSwtPanFrntReq_info> frontDefrosterButtonReq_;
     static ECDDataElement::DESink<autosar::LiForBtn4ForUsrSwtPanFrntCmd_info> frontDefrosterButtonLedReq_;
 
-    NiceMock<LocalConfigMock> localConfig_;
+    NiceMock<vcc::mocks::MockLocalConfigReader> localConfig_;
     NiceMock<CarConfigMock> carConfig_;
     NiceMock<MockDispatcher> dispatcher_;
     std::unique_ptr<DefrosterWindscreenCCSM> sut_;

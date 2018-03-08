@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-cc_test {
+cc_binary {
     name: "climate_firstrow_test",
     defaults: [
         "climate_defaults",
@@ -16,6 +16,8 @@ cc_test {
         "-Wno-unused-lambda-capture",
         "-Wno-unused-parameter",
         "-DUNIT_TEST=1",
+        "-DGTEST_OS_LINUX_ANDROID=1",
+        "-g",
     ],
     shared_libs: [
         "libhidlbase",
@@ -24,7 +26,6 @@ cc_test {
         "liblog",
         "vendor.volvocars.hardware.profiles@1.0",
         "liblocalconfig",
-        "libcarconfig_reader",
         "libtarmac",
         "libsettings",
         "libihulog",
@@ -40,6 +41,8 @@ cc_test {
         "libcarconfig_reader_mock",
         "libccparameterlistgen",
         "libgmock",
+        "libgtest",
+        "libgtest_main",
         "libdataelements_unittest",
     ],
     local_include_dirs: [

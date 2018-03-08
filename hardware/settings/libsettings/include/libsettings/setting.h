@@ -40,13 +40,14 @@ class Setting : public SettingBase {
     }
 
     void setCallback(std::function<void(const ValueProfile<T>&)>&& settingChangedCallback) {
+        ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "setCallback, key=%d", name_);
         callbackToApplicationOnSettingChanged_ = std::move(settingChangedCallback);
         if (initialized && callbackToApplicationOnSettingChanged_) {
             callbackToApplicationOnSettingChanged_(value_);
         }
     }
 
-    T defaultValue() const { return default_; }
+    virtual T defaultValue() const { return default_; }
 
     /*
      * Get value for the given profile.
@@ -88,11 +89,17 @@ class Setting : public SettingBase {
         if (userScope == UserScope::NOT_USER_RELATED || newValue.profileId == value_.profileId ||
             newValue.profileId == ProfileIdentifier::None) {
             const bool dirty = (value_.value != newValue.value);
-            value_ = newValue;
-            const nlohmann::json j(encodeToJson<T>(newValue.value));
-            setStringData(j.dump(), newValue.profileId);
 
             if (dirty) {
+                value_ = newValue;
+                {
+                    // NOTE: Only notifying server in case client thinks setting is dirty,
+                    //      requires client to be fully synchronized with server.
+                    //      This should always be the case as we only allow one client per setting.
+                    const nlohmann::json j(encodeToJson<T>(newValue.value));
+                    setStringData(j.dump(), newValue.profileId);
+                }
+
                 if (callbackToApplicationOnSettingChanged_) {
                     callbackToApplicationOnSettingChanged_(value_);
                 }
@@ -149,7 +156,10 @@ class Setting : public SettingBase {
             value_ = ValueProfile<T>(default_, profileId);
         }
         if (callbackToApplicationOnSettingChanged_) {
+            ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, notify application callback key=%d", name_);
             callbackToApplicationOnSettingChanged_(value_);
+        } else {
+            ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, no application callback key=%d", name_);
         }
     }
 
