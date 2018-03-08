@@ -47,7 +47,7 @@ then
     ping -c1 ${VECTOR_FDX_IP}
 elif [ "${JOB_NAME}" = "ihu_hourly_test-audio" ]
 then
-    capability="audio"
+    capability="audio cem"
 elif [ "${JOB_NAME}" = "ihu_hourly_test-apix" ]
 then
     capability="apix"
