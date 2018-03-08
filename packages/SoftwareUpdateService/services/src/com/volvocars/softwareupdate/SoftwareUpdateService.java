@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -11,10 +11,14 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.os.RemoteException;
 
 import android.util.Log;
+import vendor.volvocars.hardware.installationmaster.V1_0.InstallNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +27,12 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.softwareupdate.InstallationPopup.InstallOption;
+import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
-import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
-import com.volvocars.cloudservice.SoftwareAssignment;
 
 /**
 *
@@ -40,12 +45,15 @@ public class SoftwareUpdateService extends Service {
     private SoftwareUpdateManagerImpl softwareUpdateManager;
 
     private SoftwareManagementApi swapi = null;
-    private InstallationMaster installationMaster = null;
+    private static InstallationMaster installationMaster = null;
 
     private int state = 0; // Dummy state
 
     private ArrayList<SoftwareInformation> softwareInformationList;
     private SoftwareManagementApiCallback swapiCallback;
+
+    private static Handler messageHandler = new MessageHandler();
+
     private SoftwareManagementApiConnectionCallback swapiConnectionCallback = new SoftwareManagementApiConnectionCallback() {
         @Override
         public void onServiceConnected() {
@@ -75,7 +83,7 @@ public class SoftwareUpdateService extends Service {
         swapiCallback = new SoftwareManagementApiCallback(this);
         softwareInformationList = new ArrayList();
 
-        installationMaster = new InstallationMaster();
+        installationMaster = new InstallationMaster(this);
         installationMaster.init();
 
         // Provide SUSApi
@@ -188,6 +196,20 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
+    public void onInstallationNotification(String uuid, String notification)
+    {
+        Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
+        if (notification.equals(InstallNotification.toString(InstallNotification.INSTALLATION_STARTED))) {
+            UpdateSoftwareState(uuid, SoftwareState.INSTALLING);
+        } else if (notification.equals(InstallNotification.toString(InstallNotification.INSTALLATION_COMPLETE))) {
+            UpdateSoftwareState(uuid, SoftwareState.INSTALLED);
+        }
+        else {
+            Log.d(LOG_TAG, "InstallNotification of type " + notification + "is not handled");
+        }
+
+    }
+
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
@@ -242,7 +264,7 @@ public class SoftwareUpdateService extends Service {
     public void UpdateSoftwareState(String uuid, SoftwareInformation.SoftwareState state) {
         boolean found = false;
         for (SoftwareInformation information : softwareInformationList) {
-            if (uuid.equals(information.softwareId)) {
+            if (uuid.equals(information.softwareId) || uuid.equals(information.installationId)) {
                 found = true;
                 information.softwareState = state;
                 softwareUpdateManager.UpdateSoftware(information);
@@ -251,6 +273,42 @@ public class SoftwareUpdateService extends Service {
         }
         if (!found) {
             Log.v(LOG_TAG, "UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
+        }
+    }
+
+    public void showInstallationPopup(DownloadInfo info) {
+        Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
+
+        for (SoftwareInformation information : softwareInformationList) {
+            if (info.uuid.equals(information.installationId)) {
+                Intent intent = new Intent(this, InstallationPopup.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(InstallationPopup.NAME, information.name);
+                intent.putExtra(InstallationPopup.UUID, information.installationId);
+                intent.putExtra("MESSENGER", new Messenger(messageHandler));
+                startActivity(intent);
+            }
+        }
+    }
+
+    public static class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message message) {
+            Bundle bundle = message.getData();
+            InstallOption option = (InstallOption) bundle.get(InstallationPopup.OPTION);
+            String uuid = (String) bundle.get(InstallationPopup.UUID);
+            switch(option) {
+                case INSTALL:
+                    Log.v(LOG_TAG, "handleMessage: [option: INSTALL, uuid: " + uuid + "]");
+                    installationMaster.assignInstallation(uuid);
+                    break;
+                case CANCEL:
+                    Log.v(LOG_TAG, "handleMessage: [option: CANCEL, uuid: " + uuid + "]");
+                    break;
+                case POSTPONE:
+                    Log.v(LOG_TAG, "handleMessage: [option: POSTPONE, uuid: " + uuid + "]");
+                    break;
+            }
         }
     }
 }

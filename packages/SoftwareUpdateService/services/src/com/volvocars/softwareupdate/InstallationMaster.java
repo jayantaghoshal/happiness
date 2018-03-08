@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -14,6 +14,12 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
 
     private IInstallationMaster installationmaster = null;
 
+    private SoftwareUpdateService service = null;
+
+    public InstallationMaster(SoftwareUpdateService service) {
+        this.service = service;
+    }
+
     public void init() {
         try {
             installationmaster = IInstallationMaster.getService();
@@ -25,9 +31,9 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
 
     @Override
     public void installNotification(String installationOrder, int notification) {
-        Log.d(LOG_TAG,
-                "installNotification [installationOrder: " + installationOrder + ", notification: " + notification + "]");
-        //TODO: send this info to service
+        Log.d(LOG_TAG, "installNotification [installationOrder: " + installationOrder + ", notification: "
+                + InstallNotification.toString(notification) + "]");
+        service.onInstallationNotification(installationOrder, InstallNotification.toString(notification));
     }
 
     @Override
@@ -41,7 +47,7 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
         try {
             installationmaster.assignInstallation(uuid);
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "Error in assignInstallation: RemoteException [" +e.getMessage() + "]");
+            Log.e(LOG_TAG, "Error in assignInstallation: RemoteException [" + e.getMessage() + "]");
         }
     }
 }

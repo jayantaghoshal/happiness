@@ -1,11 +1,12 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 package com.volvocars.softwareupdate;
 
 import android.os.RemoteException;
+
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
@@ -94,6 +95,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
         Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.uuid + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
+            service.showInstallationPopup(downloadInfo);
         }
     }
 
