@@ -29,7 +29,8 @@ def main(args):
             sync = False
         elif syncMode == "sync":
             sync = True
-        autobumper.on_commit(aosp_root_dir, sync)
+        repository = args[3]
+        autobumper.on_commit(aosp_root_dir, sync, repository)
     elif mode == "autobump":
         if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')
