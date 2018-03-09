@@ -20,3 +20,13 @@ DerivePointerAlignment: false
 AllowAllParametersOfDeclarationOnNextLine: false
 BinPackArguments: false
 BinPackParameters: false
+
+---
+
+Language:     Java
+BasedOnStyle: Google
+
+# Deviation accepted on 2017-11-06 to use 4 spaces
+AccessModifierOffset: -2
+ContinuationIndentWidth: 8
+IndentWidth:     4
