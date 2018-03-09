@@ -36,11 +36,10 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/host/linux-x86/tradefed
 du -sh "${OUT_ARCHIVE}"
 
-# Create archive dist.tgz
-DIST_ARCHIVE=dist.tgz
-time tar -c --use-compress-program='pigz -1' -f "${DIST_ARCHIVE}" \
-            --directory="${REPO_ROOT_DIR}/out" \
-            ./dist
+# Create archive dist.zip (zip format required to download single file within archive in Artifactory)
+DIST_ARCHIVE=dist.zip
+# shellcheck disable=SC1065
+time (cd "${REPO_ROOT_DIR}/out" && zip -r - dist) > "${DIST_ARCHIVE}"
 du -sh "${DIST_ARCHIVE}"
 
 # Create archive ihu_update.tgz
