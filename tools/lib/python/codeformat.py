@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
@@ -16,6 +16,7 @@ class CodeFormatInvalidError(Exception):
 
 CLANG_FORMAT_BINARY = external_tool_finder.find_tool('clang-format', 'CLANG_FORMAT_BINARY')
 GUARD2ONCE_CMD = external_tool_finder.find_tool('guard2once', 'GUARD2ONCE_CMD')
+CHECKGUARD_CMD = external_tool_finder.find_tool('checkguard', 'CHECKGUARD_CMD')
 BP_FORMAT_BINARY = external_tool_finder.find_tool('bpfmt', 'BP_FORMAT_BINARY')
 
 clang_header_extensions = ['.hpp', '.h']
@@ -52,8 +53,12 @@ def apply_source_file_format(path: str):
 
 
 def _get_guard2once_content(path) -> str:
+    subprocess.check_output([CHECKGUARD_CMD, path], stderr=subprocess.STDOUT).decode()
+
     try:
-        fixed_content = subprocess.check_output([GUARD2ONCE_CMD, path, '--stdout']).decode()
+        guard2once_env = os.environ.copy()
+        guard2once_env["PYTHONIOENCODING"] = "utf8"
+        fixed_content = subprocess.check_output([GUARD2ONCE_CMD, path, '--stdout'], env=guard2once_env).decode()
         if len(fixed_content) < 10:
             # unicode error returns empty content
             fixed_content = load_source_code(path)
