@@ -74,7 +74,8 @@ server.post('/commission', function (req, res, next) {
       for (j = 0; j < d.value().length; j++) {
         if (d.value()[j]['id'] == req.body.id) {
           var tmpObj = Object.assign({}, d.value()[j])
-          tmpObj['id'] = counter
+          tmpObj['id'] = req.body.id
+          tmpObj['installation_order_id'] = counter
           db.get('downloads').push(tmpObj).write()
           break
         }
@@ -90,7 +91,7 @@ server.post('/commission', function (req, res, next) {
 server.get('/downloads', function(req, res, next) {
   var d = db.get('downloads')
       for (j = 0; j < d.value().length; j++) {
-        if (d.value()[j]['id'] == req.query.id) {
+        if (d.value()[j]['installation_order_id'] == req.query.id) {
           var tmpObj = d.value()[j]
           var str = js2xmlparser.parse("downloads", tmpObj)
           return res.send(str)

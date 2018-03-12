@@ -1,10 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include "cloud_request_handler.h"
 
+#include <boost/filesystem.hpp>
 #include <fstream>
 
 #include <IDispatcher.h>
@@ -149,6 +150,15 @@ int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_
     CloudRequest* cr = static_cast<CloudRequest*>(userdata);
 
     if (!cr->GetFilePath().empty()) {
+        // Create directory if it doesn't exist already
+        boost::filesystem::path file_name = cr->GetFilePath().c_str();
+        boost::filesystem::path folder_name = file_name.parent_path();
+        ALOGD("Check if path exists: %s", folder_name.string().c_str());
+        if (!boost::filesystem::exists(folder_name)) {
+            ALOGD("Directory does not exist, create it");
+            boost::filesystem::create_directories(folder_name);
+        }
+
         std::ofstream out_file;
         out_file.open(cr->GetFilePath(), std::ios_base::app);
         if (out_file.is_open()) {

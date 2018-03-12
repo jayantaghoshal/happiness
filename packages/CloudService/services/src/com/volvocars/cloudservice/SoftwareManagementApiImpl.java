@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -368,12 +368,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         // If resource URI does not contain any '/' an IndexOutOfBoundException will be thrown.
         Log.w(LOG_TAG, "FetchDownloadData: Currently ignoring potential IndexOutOfBoundException");
-        String filepath = "/data/local/tmp" + uri.substring(uri.lastIndexOf("/"));
+        String filepath = "/data/vendor/ota/" + currentDownloadInfo.installationOrderId + uri.substring(uri.lastIndexOf("/"));
 
-        Log.v(LOG_TAG, "Calling downloadRequest with uri: " + uri + "and filepath: " + filepath);
+        Log.v(LOG_TAG, "Calling downloadRequest with uri: \"" + uri + "\" and filepath: \"" + filepath + "\"");
         cloudConnection.downloadRequest(uri, headers, filepath, timeout);
-
-        Log.v(LOG_TAG, "Trying to download \"" + uri + "\" to filepath \"" + filepath + "\"");
     }
 
     private void FetchNextDownloadData() {

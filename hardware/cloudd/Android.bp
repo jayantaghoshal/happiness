@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -46,7 +46,10 @@ cc_binary {
         "vendor.volvocars.hardware.cloud@1.0",
     ],
 
-    static_libs: ["libcurl"],
+    static_libs: [
+        "libcurl",
+        "libboost_1_64_0_vcc",
+    ],
 
     local_include_dirs: ["src"],
 
