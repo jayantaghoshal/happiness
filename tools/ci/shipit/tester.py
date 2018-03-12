@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import argparse
@@ -24,6 +24,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Di
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
+from handle_result import store_result
 
 sys.path.append(vcc_root)
 import test_plan    # NOQA
@@ -188,11 +189,21 @@ def print_test_summary(test_results: List[NamedTestResult]):
             print("")
 
 
-
-def run_testcases(tests_to_run: List[IhuBaseTest]):
-    test_results = [] # type: List[NamedTestResult]
+def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
+    test_results = []  # type: List[NamedTestResult]
     for t in tests_to_run:
+        if ci_reporting:
+            try:
+                store_result.clean_old_results()
+            except Exception:
+                print("Cleaning old results failed")
+                ci_reporting = False  # It will prohibit running rest of mongodb operation
         test_result = run_test(t)
+        if ci_reporting and not isinstance(t, Disabled):
+            try:
+                store_result.load_test_results(t, test_result)
+            except Exception:
+                print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
         check_result(test_results[-1])
 
@@ -247,6 +258,8 @@ def main():
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
     run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    run_parser.add_argument(
+        '--ci_reporting', default='false', choices=['true', 'false'])
     build_parser.add_argument('--test_component', default=None,
                             help="Run without a plan and test a specified directory only")
     run_parser.add_argument('--test_component', default=None,
@@ -297,6 +310,7 @@ def main():
         build_testcases(plan, skip_build_vts)
     elif args.program == "run":
         plan = get_plan()
+        ci_reporting = args.ci_reporting
         capabilities = set(args.capabilities)
         if len(args.capabilities) == 0:
             print("ERROR: No capabilities specified, no tests will be able to run")
@@ -313,7 +327,7 @@ def main():
             selected_tests = [t for t in supported_tests if is_all_selected_caps_in_required(t)]
         else:
             selected_tests = supported_tests
-        run_testcases(selected_tests)
+        run_testcases(selected_tests, ci_reporting)
     else:
         root_parser.print_usage()
         sys.exit(1)
@@ -352,3 +366,4 @@ def detect_loose_test_cases():
 
 if __name__ == "__main__":
     main()
+

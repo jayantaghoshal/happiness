@@ -45,4 +45,4 @@ done
 set -e
 
 # Run Unit and Component tests for vendor/volvocars
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --ci_reporting true -c ihu-generic adb mp-serial vip-serial

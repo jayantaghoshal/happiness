@@ -28,6 +28,11 @@
                                 <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     publishers:
@@ -178,6 +183,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_hourly
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.    
     builders:
         - config-file-provider:
             files:
@@ -210,6 +219,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_hourly
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     builders:
         - config-file-provider:
             files:
@@ -242,6 +255,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_hourly
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.            
     builders:
         - config-file-provider:
             files:
@@ -274,6 +291,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_hourly_build-eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_hourly
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     builders:
         - config-file-provider:
             files:
