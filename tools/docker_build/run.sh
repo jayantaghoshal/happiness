@@ -10,6 +10,22 @@ REPO_ROOT_DIR="$(readlink -f "${SCRIPT_DIR}/../../../..")"
 DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
 DOCKER_IMAGE="$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")"
 
+# prune is always disabled, enabled by flag
+OPT_RUN_DOCKER_SYSTEM_PRUNE=false
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+
+function _docker_system_prune()
+{
+    # we would like to run a cleanup in the docker
+    # environment, we ensure that the latest image
+    # won't be deleted, everything else is wiped
+    build_latest_img=$(python "${THIS_DIR}/get_image_rev.py" -I "${THIS_DIR}/image.ref")
+    docker system prune --force --filter "label!=org.label-schema.vcs-ref=${build_latest_img}" &> /dev/null
+    echo 'Cleaning docker engine'
+}
+
+
 IS_TERMINAL=false
 # Check if STDOUT descriptor (1) is associated with a terminal device
 if [[ -t 1 ]]; then
@@ -46,11 +62,21 @@ case $i in
     VOLUMES="$VOLUMES $i"
     shift
     ;;
+    --docker-prune)
+    OPT_RUN_DOCKER_SYSTEM_PRUNE=true
+    # ensure that we consume the argument
+    # docker command doesn't understand it
+    shift
+    ;;
     *)
             # unknown option
     ;;
 esac
 done
+
+if ${OPT_RUN_DOCKER_SYSTEM_PRUNE}; then
+    _docker_system_prune
+fi
 
 
 # Containers can be left dangling if you close the terminal running a contianer, then
