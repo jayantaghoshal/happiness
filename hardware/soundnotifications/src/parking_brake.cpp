@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -34,8 +34,6 @@ SoundNotifications::Chassis::ParkingBrake::ParkingBrake() : state(EPBState::Idle
  ***************************************************************************************************************/
 
 void SoundNotifications::Chassis::ParkingBrake::OnSignalChange() {
-    SoundWrapper::Result result = SoundWrapper::Result::INVALID_STATE;
-
     switch (state) {
         case EPBState::Idle:
             if (VehSpdLgtSafe.get().isOk() && EpbLampReq.get().isOk() &&
@@ -44,9 +42,9 @@ void SoundNotifications::Chassis::ParkingBrake::OnSignalChange() {
                  EpbLampReq.get().value().EpbLampReq == autosar::EpbLampReqType1::Flash3)) {
                 state = EPBState::Active;
                 ALOGD("ActiveSafetyWarnings: play EPBLampRequestWarning");
-                result = SoundWrapper::play({AudioTable::SoundType::ElectricalParkingBrakeEPB,
-                                             AudioTable::SoundComponent::NotAvailable});  // this will/should play for
-                                                                                          // ever, see sound matrix
+                SoundWrapper::play({AudioTable::SoundType::ElectricalParkingBrakeEPB,
+                                    AudioTable::SoundComponent::NotAvailable});  // this will/should play for
+                                                                                 // ever, see sound matrix
             }
             break;
         case EPBState::Active:
@@ -56,15 +54,9 @@ void SoundNotifications::Chassis::ParkingBrake::OnSignalChange() {
                 VehSpdLgtSafe.get().value().VehSpdLgt <= MINSPEED) {
                 state = EPBState::Idle;
                 ALOGD("ActiveSafetyWarnings: stop EPBLampRequestWarning");
-                result = SoundWrapper::stop(
+                SoundWrapper::stop(
                         {AudioTable::SoundType::ElectricalParkingBrakeEPB, AudioTable::SoundComponent::NotAvailable});
             }
             break;
-    }
-
-    if (result == SoundWrapper::Result::OK) {
-        ALOGV("Play parking brake sound OK");
-    } else if (result == SoundWrapper::Result::PLAY_FAILED) {
-        ALOGW("Fail play parking brake sound");
     }
 }
