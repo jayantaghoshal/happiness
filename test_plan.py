@@ -82,6 +82,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",             standard_caps | {cp.cem}),
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps),
     VTSTest("vendor/volvocars/hardware/soundnotifications",                             standard_caps),
+    VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                    standard_caps),
 
     # Unit Test
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services", standard_caps),

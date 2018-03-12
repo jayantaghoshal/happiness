@@ -1,0 +1,26 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "vhalsmoketest",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+    srcs: [
+        "*.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libhwbinder",
+        "vendor.volvocars.hardware.vehiclehal@1.0",
+        "android.hardware.automotive.vehicle@2.0",
+    ],
+    static_libs: ["libgmock"],
+    test_suites: ["vts"],
+}

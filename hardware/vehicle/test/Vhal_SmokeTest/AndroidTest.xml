@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies the Vhal Properties available for applications
+If property with Ivalid Zone is accessed it shows that  property Id along with the zone requested by application .
+-->
+<configuration description="Vhal Smoke test">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="vhalsmoketest->/vendor/bin/test/vhalsmoketest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" > 
+        <option name="native-test-device-path" value="/vendor/bin/test" />   
+        <option name="module-name" value="vhalsmoketest" />
+        <option name="runtime-hint" value="2s" />
+    </test>
+</configuration>
