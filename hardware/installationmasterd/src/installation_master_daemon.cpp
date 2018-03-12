@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -34,9 +34,13 @@ Return<void> InstallationMasterDaemon::assignInstallation(const hidl_string& ins
     ALOGI("assignInstallation for installationOrder: %s", installationOrder.c_str());
 
     // Used for testing! Todo: Replace with real implementation
-    for (auto& listener : listeners_) {
-        listener->installNotification(installationOrder, InstallNotification::INSTALLATION_STARTED);
-    }
+    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f =
+            [installationOrder](auto it) {
+                return (*it)->installNotification(installationOrder, InstallNotification::INSTALLATION_STARTED);
+            };
+
+    TryNotifyListener(f);
+
     return Void();
 }
 
@@ -55,9 +59,11 @@ Return<void> InstallationMasterDaemon::verifyDownload(const hidl_string& install
     _hidl_cb(data_files);
 
     InstallationSummary summary;
-    for (auto& listener : listeners_) {
-        listener->installationReport(installationOrder, summary);
-    }
+    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f =
+            [installationOrder, summary](auto it) { return (*it)->installationReport(installationOrder, summary); };
+
+    TryNotifyListener(f);
+
     return Void();
 }
 
@@ -69,6 +75,23 @@ Return<void> InstallationMasterDaemon::registerInstallationStatusListener(
         const android::sp<IInstallationMasterEventListener>& eventListener) {
     listeners_.push_back(eventListener);
     return Void();
+}
+
+void InstallationMasterDaemon::TryNotifyListener(
+        const std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)>& f) {
+    auto it = listeners_.begin();
+
+    while (it != listeners_.end()) {
+        auto result = f(it);
+        result.isOk();
+        if (result.isDeadObject()) {
+            it = listeners_.erase(it);
+            ALOGW("Dead object => removing");
+        } else {
+            ALOGV("Object is ok");
+            ++it;
+        }
+    }
 }
 
 }  // namespace installationmaster
