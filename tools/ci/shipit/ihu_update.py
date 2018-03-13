@@ -62,7 +62,11 @@ def boot_mp_to_android(vip_serial: VipSerial) -> None:
     mp_reset_high(vip_serial)
 
 
-def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, update_mp: bool, update_vip: bool) -> None:
+def flash_image(port_mapping: PortMapping,
+                product: str, build_out_dir: str,
+                update_mp: bool,
+                update_vip: bool,
+                disable_verity: bool) -> None:
     adb_executable = os.path.join(build_out_dir, "host", "linux-x86", "bin", "adb")
     fastboot_executable = os.path.join(build_out_dir, "host", "linux-x86", "bin", "fastboot")
     bsp_provided_flashfiles_path = os.path.join(build_out_dir,
@@ -119,8 +123,13 @@ def flash_image(port_mapping: PortMapping, product: str, build_out_dir: str, upd
             # booting to abl
             mp_bootpin_prod(vip)
 
-            logger.info("Running fastboot.sh inside " + bsp_provided_flashfiles_path)
-            run(['bash', 'fastboot.sh', '--abl', '--disable-verity'],
+            fastboot_command = ['bash', 'fastboot.sh', '--abl']
+            if disable_verity:
+                fastboot_command += ['--disable-verity']
+
+            logger.info("Running %r inside %r", fastboot_command, bsp_provided_flashfiles_path)
+
+            run(fastboot_command,
                 cwd=bsp_provided_flashfiles_path)
 
             logger.info("Waiting for confirmation that system rebooted...")
@@ -283,7 +292,7 @@ def confirm_mp_abl_on_serial(mp: MpSerial) -> None:
                 "it might take longer in case ABL has some update/init work to do.")
 
     mp.expect_line("abl-APL:.*", 30, "Is the MP UART connected? Or do you have the TTY open already?"
-                                "If it seems that ABL was executing some extra action - report bug!")
+                                     "If it seems that ABL was executing some extra action - report bug!")
 
     mp.expect_line(">>>.*", 180, "ABL started but we did not received final prompt."
                                  "If it seems that ABL was executing some extra action - report bug!")
@@ -408,6 +417,11 @@ def main() -> None:
                         action="store_true",
                         help="Swap VIP and MP serial port")
 
+    parser.add_argument("--disable-verity",
+                        required=False,
+                        action="store_true",
+                        help="Disable dm-verity")
+
     parser.add_argument("--update-vip", default=False, type=str2bool, help="Also flash VIP with vbf-flasher")
     parser.add_argument("--update-mp", default=True, type=str2bool, help="Flash MP software via fastboot")
     parsed_args = parser.parse_args()
@@ -418,8 +432,8 @@ def main() -> None:
 
     logger.info("Starting parsing for args:\r\n %r", parsed_args)
 
-    aosp_root_dir = os.path.expandvars(parsed_args.aosp_root_dir)
-    aosp_out_dir = os.path.expandvars(parsed_args.aosp_out_dir)
+    aosp_root_dir = os.path.expanduser(os.path.expandvars(parsed_args.aosp_root_dir))
+    aosp_out_dir = os.path.expanduser(os.path.expandvars(parsed_args.aosp_out_dir))
 
     if os.path.isdir(aosp_root_dir):
         if os.path.isdir(aosp_out_dir):
@@ -430,7 +444,10 @@ def main() -> None:
         if os.path.isdir(aosp_out_dir):
             build_out_dir = aosp_out_dir
         else:
-            raise Exception("--aosp-root-dir does not exists and --aosp-out-dir was not specified / is also missing")
+            logger.info("--aosp-root-dir expanded to %r", aosp_root_dir)
+            logger.info("--aosp-out-dir expanded to %r", aosp_out_dir)
+            raise Exception("--aosp-root-dir does not exists and --aosp-out-dir was not "
+                            "specified / is also missing")
 
     # prepend host tools from out directory to PATH so fastboot.sh pick them.
     os.environ['PATH'] = os.path.abspath(os.path.join(build_out_dir, 'host', 'linux-x86', 'bin')) + \
@@ -462,7 +479,8 @@ def main() -> None:
                 product,
                 build_out_dir,
                 update_mp=parsed_args.update_mp,
-                update_vip=parsed_args.update_vip)
+                update_vip=parsed_args.update_vip,
+                disable_verity=parsed_args.disable_verity)
 
 
 if __name__ == "__main__":
