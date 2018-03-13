@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -27,7 +27,18 @@ template <typename T, UserScope userScope>
 class Setting : public SettingBase {
   public:
     Setting(const SettingId& name, const T& defaultValue, android::sp<SettingsManager> context)
-        : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {}
+        : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {
+        handle_ = context->attachSetting(name_,
+                                         userScope,
+                                         [this](const std::string& stringdata, ProfileIdentifier profileId) {
+                                             initialized = true;
+                                             onDataChanged(stringdata, profileId);
+                                         },
+                                         [this](ProfileIdentifier profileId) {
+                                             initialized = true;
+                                             onSettingReset(profileId);
+                                         });
+    }
 
     void setCallback(std::function<void(const ValueProfile<T>&)>&& settingChangedCallback) {
         callbackToApplicationOnSettingChanged_ = std::move(settingChangedCallback);
@@ -36,7 +47,7 @@ class Setting : public SettingBase {
         }
     }
 
-    T defaultValue() const { return default_; }
+    virtual T defaultValue() const { return default_; }
 
     /*
      * Get value for the given profile.
@@ -80,11 +91,17 @@ class Setting : public SettingBase {
         if (userScope == UserScope::NOT_USER_RELATED || newValue.profileId == value_.profileId ||
             newValue.profileId == ProfileIdentifier::None) {
             const bool dirty = (value_.value != newValue.value);
-            value_ = newValue;
-            const nlohmann::json j(encodeToJson<T>(newValue.value));
-            setStringData(j.dump(), newValue.profileId);
 
             if (dirty) {
+                value_ = newValue;
+                {
+                    // NOTE: Only notifying server in case client thinks setting is dirty,
+                    //      requires client to be fully synchronized with server.
+                    //      This should always be the case as we only allow one client per setting.
+                    const nlohmann::json j(encodeToJson<T>(newValue.value));
+                    setStringData(j.dump(), newValue.profileId);
+                }
+
                 if (callbackToApplicationOnSettingChanged_) {
                     callbackToApplicationOnSettingChanged_(value_);
                 }
@@ -154,7 +171,11 @@ class Setting : public SettingBase {
 
   private:
     std::function<void(const ValueProfile<T>&)> callbackToApplicationOnSettingChanged_;
+
+  protected:
     mutable ValueProfile<T> value_;
+
+  private:
     const T default_;
 };
 }  // namespace SettingsFramework

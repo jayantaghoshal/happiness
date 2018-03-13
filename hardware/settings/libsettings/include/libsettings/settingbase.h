@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -20,8 +20,13 @@ namespace SettingsFramework {
 
 class SettingBase {
   public:
-    SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope);
+    SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope);
     virtual ~SettingBase();
+    SettingBase(const SettingBase&) = delete;
+    SettingBase(SettingBase&&) = delete;
+    SettingBase& operator=(const SettingBase&) = delete;
+    SettingBase& operator=(SettingBase&&) = delete;
+
     void setCallback(std::function<void()>&& settingChangedCallback);
 
   protected:
@@ -33,13 +38,17 @@ class SettingBase {
 
     const UserScope userScope_;
     bool initialized = false;
-    const SettingId name_;
+
+  public:
+    const SettingId name_;  // Only public for logging purposes, avoid relying on this in application code
 
   private:
     virtual void onDataChanged(const std::string& stringData, ProfileIdentifier profileId) = 0;
     virtual void onSettingReset(ProfileIdentifier profileId) = 0;
 
     const android::sp<SettingsManager> context;
+
+  protected:
     SettingsHandle handle_;
 };
 

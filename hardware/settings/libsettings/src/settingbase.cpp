@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -17,25 +17,9 @@ namespace {
 std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
 }  // namespace
 
-SettingBase::SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope)
-    : userScope_(userScope), name_(name), context{context}, handle_(-1) {
+SettingBase::SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope)
+    : userScope_(userScope), name_(name), context{std::move(context)}, handle_(-1) {
     ALOGV("SettingBase ctor %d, userScope=%d", name, userScope);
-    handle_ = context->attachSetting(
-            name_,
-            userScope,
-            [this](const std::string& stringdata, ProfileIdentifier profileId) {
-                ALOGV("onDataChangedBase, data=%s", stringdata.c_str());
-                initialized = true;
-                onDataChanged(stringdata, profileId);  // NOLINT: Virtual function will exist on dispatcher thread
-                ALOGV("onDataChangedBaseDone");
-            },
-            [this](ProfileIdentifier profileId) {
-                ALOGV("onSettingResetBase");
-                initialized = true;
-                onSettingReset(profileId);  // NOLINT: Virtual function will exist on dispatcher thread
-                ALOGV("onSettingResetBaseDone");
-            });
-    ALOGV("SettingBase ctor done");
 }
 
 SettingBase::~SettingBase() {
@@ -64,7 +48,20 @@ std::string SettingBase::getStringData(ProfileIdentifier profid) const {
 }
 
 void SettingBase::setStringData(const std::string& data, ProfileIdentifier profid) {
-    assertInitialized();
+    // assertInitialized();
+    if (!initialized) {
+        // If you end up here you most likely have a initialization order bug in your application code.
+        // It means you try to store a setting before reading/receiving the previously stored value. Doing so
+        // kindof defeats the purpose of storing the value persistently.
+        //
+        // If the set-request was triggered by a user action it is probably more correct to use the new value but we've
+        // observed multiple cases of application code incorrectly calling set during startup which would overwrite
+        // stored settings so we've been forced to choose ignore as default.
+        ALOGE("Attempt to set setting [%d] before stored value has been received. This is most likely a bug in "
+              "application code. Set request will be ignored.",
+              name_);
+        return;
+    }
 
     if (userScope_ == UserScope::NOT_USER_RELATED && profid != ProfileIdentifier::None) {
         throw std::runtime_error("Attempt to setStringData for profile on non-profile releated setting, name=" +
