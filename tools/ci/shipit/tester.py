@@ -273,6 +273,8 @@ def main():
             return test_plan.test_plan_hourly
         elif args.plan == "nightly":
             return test_plan.test_plan_nightly
+        elif args.plan == "staging":
+            return test_plan.test_plan_staging
         else:
             if args.test_component:
                 androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")

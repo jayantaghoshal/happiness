@@ -92,3 +92,7 @@ test_plan_hourly = test_plan_gate + [
 test_plan_nightly = test_plan_hourly + [
 
 ]
+
+test_plan_staging = [
+
+]
