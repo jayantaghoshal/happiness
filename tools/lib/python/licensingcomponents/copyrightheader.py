@@ -8,6 +8,7 @@ import re
 from datetime import datetime
 from ihuutils.sourcecode import sanitize_whitespace
 
+
 class LicenseHeaderInvalidError(Exception):
     def __init__(self, violation, source_file):
         # Call the base class constructor with the parameters it needs
@@ -127,6 +128,7 @@ def get_lang(filename: str):
     lang = KnownLanguages.get(ext)
     return lang
 
+
 def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures):
     """ Get Copyright information from the file_body content
 
@@ -183,6 +185,7 @@ def __add_header_to_body(file_body: str, copyright_year: str, lang: LanguageComm
 
     return copyright_header + file_body
 
+
 def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeatures):
     """ Filter the lines in the file body before the copyright as specified by lang
 
@@ -195,7 +198,7 @@ def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeature
             second value is a string with the filtered file body.
     """
     saved_lines_before_copyright = []
-    file_lines = file_body.splitlines(keepends=True)    #keepends to preserve potential trailing newline end of file
+    file_lines = file_body.splitlines(keepends=True)  # keepends to preserve potential trailing newline end of file
     filtered_file_body = ""
     scanning_allowed_lines = True
     for line in file_lines:
@@ -274,6 +277,7 @@ def get_contents_with_header_applied(filename: str):
 
     return with_copyright_applied, file_body
 
+
 def verify_copyright_in_file(filename: str):
     """ Verify the Copyright header in the specified file
 
@@ -306,6 +310,7 @@ def verify_copyright_in_file(filename: str):
         # If the Copyright header contains a year range verify that the range is valid
         if int(info.end_year) <= int(info.start_year) or current_year < int(info.end_year):
             raise LicenseHeaderInvalidError("Copyright header invalid year range", filename)
+
 
 def fix_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
     if isinstance(file_or_files_list, str):
