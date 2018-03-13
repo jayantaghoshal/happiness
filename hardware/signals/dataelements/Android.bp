@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -88,11 +88,13 @@ cc_library_static {
     srcs: [
         "src/dataelemvalue.cpp",
         "src/dataelementframework.cpp",
+        "src/internalsignals.cpp",
         "src/dataelementcommbus_standalone.cpp",
         "src/vipcomm/VipFramework.cpp",
         "src/vipcomm/VipFramework_crc.cpp",
         "generated/gen_dataelements.cpp",
         "generated/gen_jsonencdec.cpp",
+        "src/vfc_helper.cpp",
         "src/signals_server.cpp",
     ],
 

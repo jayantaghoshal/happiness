@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -88,8 +88,11 @@ const DataElemValueBase* DataElementFramework::get(const std::string& name) cons
 }
 
 #ifdef UNIT_TEST
+
 void DataElementFramework::reset() {
+    m_commBus->reset();
     // set all existing to ERROR(-1)
+
     auto iter = m_dataElementListeners.begin();
     while (iter != m_dataElementListeners.end()) {
         const std::list<INewDataElement*>& subs = iter->second.second;

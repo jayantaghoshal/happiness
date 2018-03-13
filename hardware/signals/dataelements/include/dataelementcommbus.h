@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -23,4 +23,8 @@ class IDataElementCommBus {
     virtual void addName(autosar::Dir dir, const std::string& name) = 0;
 
     virtual ~IDataElementCommBus() {}
+
+#ifdef UNIT_TEST
+    virtual void reset(){};
+#endif
 };
