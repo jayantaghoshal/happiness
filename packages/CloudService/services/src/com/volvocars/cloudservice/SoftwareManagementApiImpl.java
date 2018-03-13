@@ -33,6 +33,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     private ISoftwareManagementApiCallback softwareManagementApiCallback = null;
     private DownloadInfo currentDownloadInfo;
 
+    private XmlSerializerWrapper xmlWrapper = new XmlSerializerWrapper();
+
     private class SwListResponse<T> {
         private ArrayList<T> swlist = new ArrayList<T>();
         private int code = -1;
@@ -385,7 +387,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG,
+                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
             }
             softwareManagementApiCallback = null;
             currentDownloadInfo = null;
@@ -396,7 +399,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG,
+                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
             }
 
             FetchDownloadData();
@@ -414,14 +418,40 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 softwareManagementApiCallback.DownloadData(response.httpResponse, currentDownloadInfo);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG,
+                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
             }
             softwareManagementApiCallback = null;
             currentDownloadInfo = null;
-        }
-        else {
+        } else {
             FetchNextDownloadData();
         }
+    }
+
+    private int postInstallNotification(InstallNotification notification) {
+        Log.v(LOG_TAG,
+                "notification: [softwareid: " + notification.softwareId + ", installationOrderId: "
+                        + notification.installationOrderId + ", StatusCode: "
+                        + notification.notification.status.statusCode.toString() + ", SubStatusCode: "
+                        + notification.notification.status.subStatusCode.toString() + ", SubStatusReason: "
+                        + notification.notification.status.subStatusReason.toString() + "]");
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.InstallNotification+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        String body = xmlWrapper.serializeInstallNotification(notification);
+
+        Log.v(LOG_TAG, "Calling doPostRequest with uri: " + softwareManagementUri + " and body: " + body);
+        Response response = cloudConnection.doPostRequest(softwareManagementUri + "/installNotification", headers, body,
+                timeout); //TODO: retrieve uri from software?
+
+        return response.httpResponse;
     }
 
     private boolean HandleHttpResponseCode(final int code) {
@@ -521,5 +551,19 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      */
     public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) {
 
+    }
+
+    /**
+    * Post InstallNotification
+    * @param notification InstallNotification to be posted
+    * @param callback     Callback to be called
+    */
+    public void PostInstallNotification(InstallNotification notification, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
+        if (!softwareManagementAvailable) {
+            callback.InstallNotificationStatus(-1, notification.installationOrderId);
+            return;
+        }
+        callback.InstallNotificationStatus(postInstallNotification(notification), notification.installationOrderId);
     }
 }

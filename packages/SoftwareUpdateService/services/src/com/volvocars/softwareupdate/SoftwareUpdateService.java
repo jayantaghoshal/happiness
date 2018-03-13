@@ -29,9 +29,11 @@ import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.softwareupdate.InstallationPopup.InstallOption;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
+import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
+import com.volvocars.cloudservice.Status;
 
 /**
 *
@@ -195,16 +197,28 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void onInstallationNotification(String uuid, String notification)
-    {
+    public void onInstallationNotification(String uuid, String notification) {
         Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
+
+        Log.w(LOG_TAG, "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
+        InstallNotification installNotification = new InstallNotification();
+        installNotification.installationOrderId = uuid;
+
         if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_STARTED))) {
             UpdateSoftwareState(uuid, SoftwareState.INSTALLING);
+            installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
+            installNotification.notification.status.subStatusCode = Status.SubStatusCode.INSTALLATION_STARTED;
+
         } else if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_COMPLETE))) {
             UpdateSoftwareState(uuid, SoftwareState.INSTALLED);
-        }
-        else {
+        } else {
             Log.d(LOG_TAG, "InstallNotification of type " + notification + "is not handled");
+        }
+
+        try {
+            swapi.PostInstallNotification(installNotification, swapiCallback);
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "onInstallationNotification failed: RemoteException [" + e.getMessage() + "]");
         }
     }
 
@@ -295,17 +309,17 @@ public class SoftwareUpdateService extends Service {
             Bundle bundle = message.getData();
             InstallOption option = (InstallOption) bundle.get(InstallationPopup.OPTION);
             String uuid = (String) bundle.get(InstallationPopup.UUID);
-            switch(option) {
-                case INSTALL:
-                    Log.v(LOG_TAG, "handleMessage: [option: INSTALL, uuid: " + uuid + "]");
-                    installationMaster.assignInstallation(uuid);
-                    break;
-                case CANCEL:
-                    Log.v(LOG_TAG, "handleMessage: [option: CANCEL, uuid: " + uuid + "]");
-                    break;
-                case POSTPONE:
-                    Log.v(LOG_TAG, "handleMessage: [option: POSTPONE, uuid: " + uuid + "]");
-                    break;
+            switch (option) {
+            case INSTALL:
+                Log.v(LOG_TAG, "handleMessage: [option: INSTALL, uuid: " + uuid + "]");
+                installationMaster.assignInstallation(uuid);
+                break;
+            case CANCEL:
+                Log.v(LOG_TAG, "handleMessage: [option: CANCEL, uuid: " + uuid + "]");
+                break;
+            case POSTPONE:
+                Log.v(LOG_TAG, "handleMessage: [option: POSTPONE, uuid: " + uuid + "]");
+                break;
             }
         }
     }

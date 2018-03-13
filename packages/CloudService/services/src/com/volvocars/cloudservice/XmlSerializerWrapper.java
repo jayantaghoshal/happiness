@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -164,4 +164,63 @@ public final class XmlSerializerWrapper {
         return writer.toString();
     }
 
+    /*
+     * ########################################################################
+     * #                        Installation NOTIFICATION                     #
+     * ########################################################################
+     */
+
+    private static void writeStatus(XmlSerializer serializer, Status status) throws IOException {
+        serializer.startTag(null, "status");
+
+        writeTextTag(serializer, "status_code", status.statusCode.toString());
+        writeTextTag(serializer, "sub_status_code", status.subStatusCode.toString());
+        writeTextTag(serializer, "sub_status_reason", status.subStatusReason.toString());
+
+        serializer.endTag(null, "status");
+    }
+
+    public static String serializeInstallNotification(InstallNotification notification) {
+        StringWriter writer = new StringWriter();
+        XmlSerializer serializer = Xml.newSerializer();
+
+        try {
+            serializer.setOutput(writer);
+
+            //serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            serializer.startDocument(null, null);
+
+            String defaultNamespace = "http://schemas.volvocars.biz/conncar/foundation_services/software_management/install_notification";
+            String signatureNamespace = "http://www.w3.org/2000/09/xmldsig#";
+            String instanceNamespace = "http://www.w3.org/2001/XMLSchema-instance";
+            serializer.setPrefix("", defaultNamespace);
+            serializer.setPrefix("ds", signatureNamespace);
+            serializer.setPrefix("xsi", instanceNamespace);
+            serializer.startTag(defaultNamespace, "install_notification");
+            serializer.attribute(instanceNamespace, "schemaLocation", "http://schemas.volvocars.biz/conncar/foundation_services/software_management/install_notification install_notification.xsd");
+
+            writeTextTag(serializer, "id", notification.softwareId);
+            writeTextTag(serializer, "installation_order_id", notification.installationOrderId);
+            writeStatus(serializer, notification.notification.status);
+
+            signDocument(serializer, signatureNamespace);
+
+            serializer.endTag(defaultNamespace, "install_notification");
+
+            serializer.endDocument();
+
+        } catch (IOException e) {
+            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IOException: [" + e.getMessage() + "]");
+            return null;
+        } catch (IllegalStateException e) {
+            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IllegalStateException: [" + e.getMessage() + "]");
+            return null;
+        } catch (IllegalArgumentException e) {
+            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IllegalArgumentException: [" + e.getMessage() + "]");
+            return null;
+        }
+
+        return writer.toString();
+    }
 }

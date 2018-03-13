@@ -4,6 +4,7 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationReport;
+import com.volvocars.cloudservice.InstallNotification;
 
 /**
  * An interface to access all the Software Management features.
@@ -48,4 +49,11 @@ oneway interface ISoftwareManagementApi {
      * @param callback           Callback to be called when the status of the download changes
      */
     void PostInstallationReport(in InstallationReport installationReport, in ISoftwareManagementApiCallback callback);
+
+    /**
+    * Post InstallNotification
+    * @param notification InstallNotification to be posted
+    * @param callback     Callback to be called
+    */
+    void PostInstallNotification(in InstallNotification notification, in ISoftwareManagementApiCallback callback);
 }

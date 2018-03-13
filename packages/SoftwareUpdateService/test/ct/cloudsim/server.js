@@ -61,7 +61,7 @@ server.post('/commission', function (req, res, next) {
       installation_order_data['created_by'] = "1FTKR1EDXBPB10452"
       installation_order_data['created'] = "2002-05-30T09:00:00"
       installation_order_data['downloads_uri'] = "/downloads/" //+ counter
-      installation_order_data['install_notifications_uri'] = "installnotifications"
+      installation_order_data['install_notifications_uri'] = "/installNotification"
       installation_order_data['installation_report_uri'] = "/installationreport"
       installation_order_data['software'] = [tmp]
       var installation_order = {}
@@ -100,6 +100,12 @@ server.get('/downloads', function(req, res, next) {
 
       return res.status(405).send({ error: "Nope, cant do that." })
 })
+
+server.post('/installNotification', function (req, res, next) {
+  req.method = 'GET'
+  next()
+})
+
 server.use(router)
 server.listen(3000, function () {
   console.log('JSON Server is running')
