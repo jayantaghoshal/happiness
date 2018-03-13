@@ -56,4 +56,11 @@ oneway interface ISoftwareManagementApi {
     * @param callback     Callback to be called
     */
     void PostInstallNotification(in InstallNotification notification, in ISoftwareManagementApiCallback callback);
+
+    /**
+    * Get InstallNotification
+    * @param installationOrderId Installation order id
+    * @param callback            Callback to be called
+    */
+    void GetInstallNotification(in String installationOrderId, in ISoftwareManagementApiCallback callback);
 }

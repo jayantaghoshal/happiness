@@ -202,23 +202,27 @@ public class SoftwareUpdateService extends Service {
 
         Log.w(LOG_TAG, "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
         InstallNotification installNotification = new InstallNotification();
-        installNotification.installationOrderId = uuid;
-
-        if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_STARTED))) {
-            UpdateSoftwareState(uuid, SoftwareState.INSTALLING);
+        if (notification.equals("INSTALLATION_STARTED"))
             installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
-            installNotification.notification.status.subStatusCode = Status.SubStatusCode.INSTALLATION_STARTED;
-
-        } else if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_COMPLETE))) {
-            UpdateSoftwareState(uuid, SoftwareState.INSTALLED);
-        } else {
-            Log.d(LOG_TAG, "InstallNotification of type " + notification + "is not handled");
-        }
+        installNotification.installationOrderId = uuid;
 
         try {
             swapi.PostInstallNotification(installNotification, swapiCallback);
         } catch (RemoteException e) {
             Log.e(LOG_TAG, "onInstallationNotification failed: RemoteException [" + e.getMessage() + "]");
+        }
+    }
+
+    public void GetInstallNotification(String installationOrderId) {
+        if (swapi != null) {
+            try {
+                Log.v(LOG_TAG, "GetInstallNotification [installationOrderId: " + installationOrderId + "]");
+                swapi.GetInstallNotification(installationOrderId, swapiCallback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");            }
+        }
+        else {
+            Log.e(LOG_TAG, "GetInstallNotification failed: Local SoftwareManagementApi variable is null");
         }
     }
 

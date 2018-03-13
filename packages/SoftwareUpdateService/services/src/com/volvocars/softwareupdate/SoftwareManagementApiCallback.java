@@ -8,7 +8,9 @@ package com.volvocars.softwareupdate;
 import android.os.RemoteException;
 
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.SoftwareAssignment;
+import com.volvocars.cloudservice.Status;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 
 import java.util.List;
@@ -21,7 +23,6 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     private static final String LOG_TAG = "SwManagementApiCallback";
 
     SoftwareUpdateService service = null;
-
 
     public SoftwareManagementApiCallback(SoftwareUpdateService service) {
         this.service = service;
@@ -45,7 +46,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
-        Log.v(LOG_TAG, "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
+        Log.v(LOG_TAG,
+                "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
 
         if (code == 200) {
             service.UpdateSoftwareList(software_list);
@@ -61,10 +63,12 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-        Log.v(LOG_TAG, "Got result of getting pending installations [size of list: " + installation_order_list.size() + "]: " + code);
+        Log.v(LOG_TAG, "Got result of getting pending installations [size of list: " + installation_order_list.size()
+                + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareListWithInstallationOrders(installation_order_list);
-            Log.v(LOG_TAG, "Received pending installations, asking service to get download information of each installation order from the list");
+            Log.v(LOG_TAG,
+                    "Received pending installations, asking service to get download information of each installation order from the list");
             service.doGetDownloadInfo(installation_order_list);
         } else {
             //try {
@@ -115,6 +119,23 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     */
     public void InstallNotificationStatus(int code, String installationOrderId) {
         Log.v(LOG_TAG, "Got result of posting Installation Notification [" + installationOrderId + "]: " + code);
+    }
+
+    /**
+    * Return the InstallNotification
+    * @param code The HTTP code of the response
+    * @param notification The InstallNotification
+    */
+    public void InstallNotification(int code, InstallNotification notification) {
+        Log.v(LOG_TAG,
+                "Got result of getting Installation Notification [" + notification.installationOrderId + "]: " + code);
+        if (notification.notification.status.statusCode == Status.StatusCode.IN_PROGRESS)
+            service.UpdateSoftwareState(notification.installationOrderId, SoftwareState.INSTALLING);
+        else if (notification.notification.status.statusCode == Status.StatusCode.OK)
+            service.UpdateSoftwareState(notification.installationOrderId, SoftwareState.INSTALLED);
+        else
+            Log.d(LOG_TAG, "InstallNotification with status " + notification.notification.status.statusCode.toString()
+                    + " is not handled");
     }
 
 }

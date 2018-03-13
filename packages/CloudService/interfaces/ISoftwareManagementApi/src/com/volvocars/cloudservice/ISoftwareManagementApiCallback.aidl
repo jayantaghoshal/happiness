@@ -57,4 +57,12 @@ oneway interface ISoftwareManagementApiCallback {
     * @param installationOrderId installation order Id
     */
     void InstallNotificationStatus(in int code, in String installationOrderId);
+
+    /**
+    * Return the InstallNotification
+    * @param code The HTTP code of the response
+    * @param notification The InstallNotification
+    */
+    void InstallNotification(in int code, in InstallNotification notification);
+
 }

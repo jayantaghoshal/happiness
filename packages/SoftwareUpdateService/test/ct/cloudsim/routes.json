@@ -1,10 +1,11 @@
 {
-    "/softwaremanagement-1/availableUpdates" : "/availableUpdates",
+    "/softwaremanagement-1/availableUpdates": "/availableUpdates",
     "/softwaremanagement-1/availableAccessories": "/availableAccessories",
     "/softwaremanagement-1/mapUpdates": "/mapUpdates",
     "/softwaremanagement-1/downloads?id=:id": "/downloads?id=:id",
     "/softwaremanagement-1/deleteNotification": "/deleteNotification",
     "/softwaremanagement-1/commission": "/commission",
     "/softwaremanagement-1/pendingInstallations": "/pendingInstallations",
-    "/softwaremanagement-1/installNotification": "/installNotification"
+    "/softwaremanagement-1/installNotification": "/installNotification",
+    "/softwaremanagement-1/installNotification?installation_order_id=:installation_order_id": "/installNotification?installation_order_id=:installation_order_id"
 }

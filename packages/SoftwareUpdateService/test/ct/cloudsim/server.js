@@ -109,6 +109,7 @@ function getValue(xml, tag) {
   return xml.substring(startPos, endPos);
 }
 
+var idCounter = 1000;
 server.post('/installNotification', function (req, res, next) {
   var t = {};
   var obj = {};
@@ -117,27 +118,56 @@ server.post('/installNotification', function (req, res, next) {
   var xml = t['<?xml version'];
 
   var tag = "id";
-  obj['id'] = getValue(xml, tag);
+  obj['software_id'] = getValue(xml, tag);
 
   tag = "installation_order_id";
   obj[tag] = getValue(xml, tag);
 
-  var statusObj = {};
+  var notificationObj = {};
   tag = "status_code";
-  statusObj[tag] = getValue(xml, tag);
+  notificationObj[tag] = getValue(xml, tag);
 
   tag = "sub_status_code";
-  statusObj[tag] = getValue(xml, tag);
+  notificationObj[tag] = getValue(xml, tag);
 
-  tag = "sub_status_reason";
-  statusObj[tag] = getValue(xml, tag);
-
-  obj['status'] = statusObj;
+  notificationObj['id'] = idCounter;
+  idCounter++;
+  notificationObj['created'] = "2017-05-30T09:00";
+  notificationObj['timestamp'] = "2017-05-30T09:00";
+  obj['notification'] = notificationObj;
 
   db.get('installNotification').push(obj).write();
 
   req.method = 'GET';
   next();
+})
+
+server.get('/installNotification', function (req, res, next) {
+  var d = db.get('installNotification');
+  for (j = 0; j < d.value().length; j++) {
+    if (d.value()[j]['installation_order_id'] == req.query.installation_order_id) {
+      var tmpObj = d.value()[j];
+      var str = js2xmlparser.parse("install_notifications", tmpObj);
+    }
+  }
+
+  d = db.get('downloads');
+  for (j = 0; j < d.value().length; j++) {
+    if (d.value()[j]['installation_order_id'] == req.query.installation_order_id) {
+      var tmpObj = d.value()[j];
+      d.remove(tmpObj).write();
+    }
+  }
+
+  d = db.get('pendingInstallations').get('installation_order');
+  for (j = 0; j < d.value().length; j++) {
+    if (d.value()[j]['id'] == req.query.installation_order_id) {
+      var tmpObj = d.value()[j];
+      d.remove(tmpObj).write();
+    }
+  }
+
+  return res.send(str);
 });
 
 server.use(router);

@@ -45,6 +45,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         private int code = -1;
     }
 
+    private class InstallNotificationResponse {
+        private InstallNotification notification = new InstallNotification();
+        private int code = -1;
+    }
+
     public SoftwareManagementApiImpl() {
     }
 
@@ -370,7 +375,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         // If resource URI does not contain any '/' an IndexOutOfBoundException will be thrown.
         Log.w(LOG_TAG, "FetchDownloadData: Currently ignoring potential IndexOutOfBoundException");
-        String filepath = "/data/vendor/ota/" + currentDownloadInfo.installationOrderId + uri.substring(uri.lastIndexOf("/"));
+        String filepath = "/data/vendor/ota/" + currentDownloadInfo.installationOrderId
+                + uri.substring(uri.lastIndexOf("/"));
 
         Log.v(LOG_TAG, "Calling downloadRequest with uri: \"" + uri + "\" and filepath: \"" + filepath + "\"");
         cloudConnection.downloadRequest(uri, headers, filepath, timeout);
@@ -454,6 +460,51 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         return response.httpResponse;
     }
 
+    private InstallNotificationResponse fetchInstallNotification(String installationOrderId) {
+        Log.v(LOG_TAG, "fetchInstallNotification: [installationOrderId: " + installationOrderId + "]");
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.InstallNotification+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        InstallNotificationResponse notificationResponse = new InstallNotificationResponse();
+
+        try {
+            // Send request
+            Log.v(LOG_TAG, "Calling doGetRequest with uri: /installNotification" + "and query: ?installation_order_id=" + installationOrderId);
+            Response response = cloudConnection.doGetRequest("/installNotification/?installation_order_id=" + installationOrderId, headers, timeout);
+
+            if (!HandleHttpResponseCode(response.httpResponse)) {
+                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
+            }
+
+            // Parse response
+            byte[] bytesdata = new byte[response.responseData.size()];
+            for (int i = 0; i < bytesdata.length; i++) {
+                bytesdata[i] = response.responseData.get(i);
+            }
+
+            InputStream stream = new ByteArrayInputStream(bytesdata);
+
+            notificationResponse.notification = XmlParser.ParseInstallNotification(stream);
+            notificationResponse.code = response.httpResponse;
+
+        } catch (XmlPullParserException ex) {
+             //Something went bananas with the parsing.. What do?
+            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+        } catch (IOException ex) {
+             //Something went bananas with the streams.. What do?
+            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
+        }
+
+        return notificationResponse;
+    }
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -564,6 +615,22 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             callback.InstallNotificationStatus(-1, notification.installationOrderId);
             return;
         }
+
         callback.InstallNotificationStatus(postInstallNotification(notification), notification.installationOrderId);
+    }
+
+    /**
+    * Get InstallNotification
+    * @param installationOrderId Installation order id
+    * @param callback            Callback to be called
+    */
+    public void GetInstallNotification(String installationOrderId, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (!softwareManagementAvailable) {
+            callback.InstallNotification(-1, null);
+            return;
+        }
+
+        InstallNotificationResponse notificationResponse = fetchInstallNotification(installationOrderId);
+        callback.InstallNotification(notificationResponse.code, notificationResponse.notification);
     }
 }

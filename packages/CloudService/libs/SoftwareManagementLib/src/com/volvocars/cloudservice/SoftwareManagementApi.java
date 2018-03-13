@@ -41,7 +41,7 @@ public class SoftwareManagementApi implements ServiceConnection {
         public void binderDied() {
             Log.e(LOG_TAG, "CloudService died");
 
-            if (retries < 5) {
+            if(retries < 5) {
                 Log.d(LOG_TAG, "Trying CloudService again... Attempt " + (retries + 1));
                 retries++;
                 client.connect();
@@ -138,8 +138,7 @@ public class SoftwareManagementApi implements ServiceConnection {
      * @param downloadInfo Contains information of what to be downloaded
      * @param callback     Callback to be called when the status of the download changes
      */
-    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback)
-            throws RemoteException {
+    public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetDownloadData(downloadInfo, callback);
         }
@@ -167,6 +166,17 @@ public class SoftwareManagementApi implements ServiceConnection {
                 Log.v(LOG_TAG, "PostInstallNotification: " + notification.installationOrderId);
         if (software_management != null && service_bound) {
             software_management.PostInstallNotification(notification, callback);
+        }
+    }
+
+    /**
+    * Get InstallNotification
+    * @param installationOrderId Installation order id
+    * @param callback            Callback to be called
+    */
+    public void GetInstallNotification(String installationOrderId, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.GetInstallNotification(installationOrderId, callback);
         }
     }
 }

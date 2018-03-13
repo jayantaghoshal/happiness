@@ -74,6 +74,44 @@ public class Status implements Parcelable {
         subStatusReason = SubStatusReason.valueOf(in.readString());
     }
 
+    public static StatusCode stringToStatusCode(String str) {
+        switch (str) {
+            case "UNKNOWN": return StatusCode.UNKNOWN;
+            case "OK": return StatusCode.OK;
+            case "FAILED": return StatusCode.FAILED;
+            case "IN_PROGRESS": return StatusCode.IN_PROGRESS;
+            case "CANCELLED": return StatusCode.CANCELLED;
+            default: return StatusCode.UNKNOWN;
+        }
+    }
+
+    public static SubStatusCode stringToSubStatusCode(String str) {
+        switch (str) {
+            case "UNKNOWN": return SubStatusCode.UNKNOWN;
+            case "ASSIGNMENT_COMMISSIONED": return SubStatusCode.ASSIGNMENT_COMMISSIONED;
+            case "DOWNLOAD_STARTED": return SubStatusCode.DOWNLOAD_STARTED;
+            case "DOWNLOAD_COMPLETED": return SubStatusCode.DOWNLOAD_COMPLETED;
+            case "INSTALLATION_IN_PROGRESS": return SubStatusCode.INSTALLATION_IN_PROGRESS;
+            case "INSTALLATION_STARTED": return SubStatusCode.INSTALLATION_STARTED;
+            case "UNINSTALLATION_STARTED": return SubStatusCode.UNINSTALLATION_STARTED;
+            case "INSTALLATION_DEFERRED": return SubStatusCode.INSTALLATION_DEFERRED;
+            case "VALIDATION_OK": return SubStatusCode.VALIDATION_OK;
+            case "DOWNLOAD_OK": return SubStatusCode.DOWNLOAD_OK;
+            case "WAIT_FOR_RESTART": return SubStatusCode.WAIT_FOR_RESTART;
+            case "ASSIGNMENT_REJECTED": return SubStatusCode.ASSIGNMENT_REJECTED;
+            case "DOWNLOAD_ABORTED": return SubStatusCode.DOWNLOAD_ABORTED;
+            case "INSTALLATION_ABORTED": return SubStatusCode.INSTALLATION_ABORTED;
+            case "DOWNLOAD_FAILED": return SubStatusCode.DOWNLOAD_FAILED;
+            case "INSTALLATION_FAILED": return SubStatusCode.INSTALLATION_FAILED;
+            case "INSTALLATION_FAILED_CRITICAL": return SubStatusCode.INSTALLATION_FAILED_CRITICAL;
+            case "NO_DIAGNOSTIC_RESPONSE": return SubStatusCode.NO_DIAGNOSTIC_RESPONSE;
+            case "VALIDATION_FAILED": return SubStatusCode.VALIDATION_FAILED;
+            case "INSTALLATION_COMPLETED": return SubStatusCode.INSTALLATION_COMPLETED;
+            case "UNINSTALLATION_COMPLETED": return SubStatusCode.UNINSTALLATION_COMPLETED;
+            case "UNINSTALLATION_FAILED": return SubStatusCode.UNINSTALLATION_FAILED;
+            default: return SubStatusCode.UNKNOWN;
+        }
+    }
     @Override
     public int describeContents() {
         // As long there are no children, this function is quite useless?
