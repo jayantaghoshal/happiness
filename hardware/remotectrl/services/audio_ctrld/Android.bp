@@ -1,0 +1,36 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+    name: "remotectrl_audioctrld",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    local_include_dirs: [
+        "include/",
+    ],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    static_libs: [
+        "libremotectrl_common_headers",
+        "libremotectrl_modulebase",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libvsomeip_2_10_10",
+        "libvsomeip_cfg_2_10_10",
+        "libhidlbase",
+        "libhidltransport",
+        "vendor.volvocars.hardware.remotectrl@1.0",
+    ],
+
+    relative_install_path: "hw",
+
+    init_rc: ["init/remotectrl_audioctrld.rc"],
+}

@@ -24,6 +24,8 @@ PRODUCT_PACKAGES += \
     soundnotifications \
     vendor.volvocars.hardware.settingsstorage@1.0-service \
     installationmasterd \
+    remotectrl_routerd \
+    remotectrl_audioctrld \
 
 #############################################################
 # VCC System Apps/Services

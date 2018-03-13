@@ -1,0 +1,5 @@
+service remotectrl_routerd /vendor/bin/ip netns exec vcc /vendor/bin/remotectrl_routerd
+    class vcc_net
+    setenv VSOMEIP_CONFIGURATION "/vendor/etc/vsomeip/vsomeip.json"
+    user root
+    group root
