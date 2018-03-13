@@ -13,6 +13,7 @@ cd "${REPO_ROOT_DIR}"
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
+source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
 # Download from Artifactory
 artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"

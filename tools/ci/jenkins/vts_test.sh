@@ -19,6 +19,7 @@ tar xfz out.tgz || die "Unpack out.tgz failed"
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
+source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
 set +e
 for tmp in 1 2 3
