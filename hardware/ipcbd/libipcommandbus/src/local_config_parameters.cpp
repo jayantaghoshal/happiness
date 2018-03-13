@@ -54,9 +54,13 @@ void LocalconfigParameters::InitTimeoutValues() {
     lcfg_->TryGetValue(&defaultRespNumRetries_, "CONN_numberOfRetriesWFR");
     lcfg_->TryGetValue(&defaultRespMultiplier_, "CONN_increaseTimerValueWFR");
 
-    ALOGD("Ack: timeout: %lli retries: %i multiplier: %f\n", defaultAckTimeout_.count(), defaultAckNumRetries_,
+    ALOGD("Ack: timeout: %lli retries: %i multiplier: %f\n",
+          defaultAckTimeout_.count(),
+          defaultAckNumRetries_,
           defaultAckMultiplier_);
-    ALOGD("Resp: timeout: %lli retires: %i multiplier: %f\n", defaultRespTimeout_.count(), defaultRespNumRetries_,
+    ALOGD("Resp: timeout: %lli retires: %i multiplier: %f\n",
+          defaultRespTimeout_.count(),
+          defaultRespNumRetries_,
           defaultRespMultiplier_);
 }
 

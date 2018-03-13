@@ -41,7 +41,8 @@ TcpSocket::~TcpSocket() {
 void TcpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { ready_cb_ = std::move(readReadyCb); }
 
 void TcpSocket::setup(const Message::Ecu& ecu) {
-    auto it = std::find_if(ecu_ip_map_.begin(), ecu_ip_map_.end(),
+    auto it = std::find_if(ecu_ip_map_.begin(),
+                           ecu_ip_map_.end(),
                            [ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
     if (it == ecu_ip_map_.end()) {
         ALOGD("No ECU");

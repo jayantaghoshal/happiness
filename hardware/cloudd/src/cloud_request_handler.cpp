@@ -9,7 +9,7 @@
 
 #include <IDispatcher.h>
 
-#define LOG_TAG "CloudD.service"
+#define LOG_TAG "CloudD.RequestHandler"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -70,7 +70,8 @@ int CloudRequestHandler::SocketCallback(CURL* easy, curl_socket_t fd, int operat
         if (!s) {
             ALOGV("Adding data: %s\n", whatstr[operation]);
             IDispatcher::GetDefaultDispatcher().AddFd(
-                    fd, [request_handler, fd]() { return Perform(request_handler->GetMultiHandle(), fd); },
+                    fd,
+                    [request_handler, fd]() { return Perform(request_handler->GetMultiHandle(), fd); },
                     EPOLLIN | EPOLLOUT);
         }
     }

@@ -1,1 +1,3 @@
-vendor.volvocars.hardware.uds::IDataCollector                 u:object_r:hal_uds_diagnostics_hwservice:s0
+vendor.volvocars.hardware.uds::IDataCollector u:object_r:hal_uds_diagnostics_hwservice:s0
+vendor.volvocars.hardware.vehiclecom::IVehicleCom u:object_r:hal_vehiclecom_hwservice:s0
+vendor.volvocars.hardware.vehiclecom::IIplm u:object_r:hal_iplm_hwservice:s0

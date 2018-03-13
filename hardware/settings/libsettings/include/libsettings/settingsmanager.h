@@ -21,7 +21,8 @@ class SettingsManager : public virtual android::RefBase {
   public:
     virtual ~SettingsManager() = default;
 
-    virtual SettingsHandle attachSetting(const SettingId& name, UserScope u,
+    virtual SettingsHandle attachSetting(const SettingId& name,
+                                         UserScope u,
                                          std::function<void(const std::string&, ProfileIdentifier)> onSettingChanged,
                                          std::function<void(ProfileIdentifier p)> onSettingReset) = 0;
     virtual void detachSetting(const SettingId& name, SettingsHandle handle) = 0;

@@ -42,31 +42,37 @@ CarProfileManager::CarProfileManager(std::shared_ptr<TimerManagerInterface> time
       current_profile_(ProfileIdentifier::None),
       state_(State::IDLE) {
     // Keep mapping between android user and profile in sync with paired users
-    s_android_user_.setCallback(
-            [this](const auto&) {
-                ALOGV("s_android_user callback triggered");
-                const std::vector<IdPen> all_id{
-                        IdPen::Prof1,  IdPen::Prof2, IdPen::Prof3, IdPen::Prof4, IdPen::Prof5,
-                        IdPen::Prof6,  IdPen::Prof7, IdPen::Prof8, IdPen::Prof9, IdPen::Prof10,
-                        IdPen::Prof11, IdPen::Prof12};  // TODO (TS) IdPen::Prof13 == Guest. How will that be used??
-                                                        // android_user_to_profile_.clear();
-                decltype(android_user_to_profile_) android_user_to_profile_temp;
-                decltype(unused_profiles_) unused_profiles_temp;
-                for (const auto id : all_id) {
-                    auto android_user =
-                            s_android_user_.getForProfile(static_cast<SettingsFramework::ProfileIdentifier>(id));
-                    if (android_user != UNUSED_ANDROID_USER) {
-                        android_user_to_profile_temp.emplace(android_user, id);
-                    } else {
-                        unused_profiles_temp.push(id);
-                    }
-                }
-                {  // lock scope
-                    std::lock_guard<std::mutex> lock(profile_storage_lock_);
-                    android_user_to_profile_ = android_user_to_profile_temp;
-                    unused_profiles_ = unused_profiles_temp;
-                }
-            });
+    s_android_user_.setCallback([this](const auto&) {
+        ALOGV("s_android_user callback triggered");
+        const std::vector<IdPen> all_id{IdPen::Prof1,
+                                        IdPen::Prof2,
+                                        IdPen::Prof3,
+                                        IdPen::Prof4,
+                                        IdPen::Prof5,
+                                        IdPen::Prof6,
+                                        IdPen::Prof7,
+                                        IdPen::Prof8,
+                                        IdPen::Prof9,
+                                        IdPen::Prof10,
+                                        IdPen::Prof11,
+                                        IdPen::Prof12};  // TODO (TS) IdPen::Prof13 == Guest. How will that be used??
+                                                         // android_user_to_profile_.clear();
+        decltype(android_user_to_profile_) android_user_to_profile_temp;
+        decltype(unused_profiles_) unused_profiles_temp;
+        for (const auto id : all_id) {
+            auto android_user = s_android_user_.getForProfile(static_cast<SettingsFramework::ProfileIdentifier>(id));
+            if (android_user != UNUSED_ANDROID_USER) {
+                android_user_to_profile_temp.emplace(android_user, id);
+            } else {
+                unused_profiles_temp.push(id);
+            }
+        }
+        {  // lock scope
+            std::lock_guard<std::mutex> lock(profile_storage_lock_);
+            android_user_to_profile_ = android_user_to_profile_temp;
+            unused_profiles_ = unused_profiles_temp;
+        }
+    });
 
     // Handle the notifications caused by the profile change acknowledged by CEM
     s_current_profile_.setCallback([this](const auto& current_profile) {
@@ -194,7 +200,8 @@ Return<bool> CarProfileManager::pairAndroidUserToUnusedVehicleProfile(const hidl
         std::lock_guard<std::mutex> lock(profile_storage_lock_);
         const auto& user_it = android_user_to_profile_.find(androidUserId);
         if (user_it != android_user_to_profile_.end()) {
-            ALOGI("Android user %s is already mapped to profile %d", androidUserId.c_str(),
+            ALOGI("Android user %s is already mapped to profile %d",
+                  androidUserId.c_str(),
                   static_cast<int>(user_it->second));
             return true;
         }

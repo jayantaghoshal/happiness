@@ -25,7 +25,8 @@ using ::android::hardware::hidl_string;
 class SignalsChangedMock : public ISignalsChangedCallback {
   public:
     MOCK_METHOD3(signalChanged,
-                 ::android::hardware::Return<void>(const ::android::hardware::hidl_string& signalName, Dir dir,
+                 ::android::hardware::Return<void>(const ::android::hardware::hidl_string& signalName,
+                                                   Dir dir,
                                                    const ::android::hardware::hidl_string& data));
 };
 

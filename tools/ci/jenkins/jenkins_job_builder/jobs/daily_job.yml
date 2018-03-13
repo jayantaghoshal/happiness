@@ -70,6 +70,9 @@
                 username: JENKINS_USER
                 password: JENKINS_API_PASSWORD
     builders:
+      - shell:
+            !include-raw:
+                - bootstrap_vcc_ci.sh
       - multijob:
           name: Build
           condition: ALWAYS
@@ -116,14 +119,35 @@
               kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}    
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}   
+      - multijob:
+          name: VTS
+          condition: ALWAYS
+          projects:
+            - name: ihu_daily_vts1-generic
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_vts2-generic
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_vts3-generic
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - copyartifact:
           project: ihu_daily_test-generic
           target: ihu_daily_test-generic_results/
           which-build: multijob-build
           optional: true
           flatten: true
-
       - copyartifact:
           project: ihu_daily_test-flexray
           target: ihu_daily_test-flexray_results/
@@ -136,14 +160,30 @@
           which-build: multijob-build
           optional: true
           flatten: true
-
       - copyartifact:
           project: ihu_daily_test-apix
           target: ihu_daily_test-apix_results/
           which-build: multijob-build
           optional: true
           flatten: true  
-      
+      - copyartifact:
+          project: ihu_daily_vts1-generic
+          target: ihu_daily_vts/1/
+          which-build: multijob-build
+          optional: true
+          flatten: true
+      - copyartifact:
+          project: ihu_daily_vts2-generic
+          target: ihu_daily_vts/2/
+          which-build: multijob-build
+          optional: true
+          flatten: true
+      - copyartifact:
+          project: ihu_daily_vts3-generic
+          target: ihu_daily_vts/3/
+          which-build: multijob-build
+          optional: true
+          flatten: true
       - shell:
             !include-raw:
                 - bootstrap_ihu_hourly_daily_common.sh    
@@ -173,7 +213,6 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_daily_build_eng.sh
-
 
 - job:
     name: ihu_daily_build_vcc_userdebug
@@ -359,3 +398,118 @@
             allow-empty: 'true'
             latest-only: 'true'
             only-if-success: 'false'
+
+- job:
+    name: ihu_daily_vts1-generic
+    defaults: daily_job_defaults
+    node: daily_test-generic
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vts.sh
+    publishers:
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+
+- job:
+    name: ihu_daily_vts2-generic
+    defaults: daily_job_defaults
+    node: daily_test-generic
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vts.sh
+    publishers:
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+
+- job:
+    name: ihu_daily_vts3-generic
+    defaults: daily_job_defaults
+    node: daily_test-generic
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vts.sh
+    publishers:
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+            

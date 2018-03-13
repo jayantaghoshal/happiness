@@ -69,6 +69,6 @@ namespace autosar {\n
 
             dTStr += "};\n\n"
 
-    dTStr += "} // end of namespace\n"
+    dTStr += "} // namespace autosar\n"
     dTStr += footer
     return dTStr

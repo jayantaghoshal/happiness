@@ -27,11 +27,13 @@ class DataElementCommBusHIDL final : public IDataElementCommBus,
             std::function<void(const std::string& name, const std::string& payload)>&& newDataElementCallback) override;
     void addName(autosar::Dir dir, const std::string& name) override;
     void send(const std::string& name, const std::string& payload, autosar::Dir dir) override;
-    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
+    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName,
+                                        const andrHw::hidl_string& name,
                                         bool preexisting) override;
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
-    andrHw::Return<void> signalChanged(const andrHw::hidl_string& signalName, dataElemHidl::Dir dir,
+    andrHw::Return<void> signalChanged(const andrHw::hidl_string& signalName,
+                                       dataElemHidl::Dir dir,
                                        const andrHw::hidl_string& data) override;
 
     static DataElementCommBusHIDL& instance() noexcept;
@@ -42,9 +44,12 @@ class DataElementCommBusHIDL final : public IDataElementCommBus,
     void resendMessages(::android::sp<dataElemHidl::ISignals>& vsd_proxy);
     void resendSubscriptions(::android::sp<dataElemHidl::ISignals>& vsd_proxy_local);
     void connectToVsdProxyAndResend();
-    void sendWithoutProxyMutex(const std::string& name, const std::string& payload, const autosar::Dir dir,
+    void sendWithoutProxyMutex(const std::string& name,
+                               const std::string& payload,
+                               const autosar::Dir dir,
                                ::android::sp<dataElemHidl::ISignals>& vsd_proxy);
-    void addNameWithoutProxyMutex(const autosar::Dir dir, const std::string& name,
+    void addNameWithoutProxyMutex(const autosar::Dir dir,
+                                  const std::string& name,
                                   ::android::sp<dataElemHidl::ISignals>& vsd_proxy_local);
 
     std::mutex pendingMessageMutex_;

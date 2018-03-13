@@ -19,7 +19,7 @@ import java.util.ArrayList;
 * CloudService is the main service for communcating with clouddeamon.
 */
 public class CloudService extends Service {
-    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_TAG = "CloudService.Service";
     private static final String FSAPI = "FoundationServicesApi";
     private static final String SOFTWARE_MANAGEMENT = "SoftwareManagementApi";
 
@@ -31,21 +31,16 @@ public class CloudService extends Service {
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
-        try {
 
-            if (foundation_services_api == null) {
-                foundation_services_api = new FoundationServicesApiImpl();
-            }
-            if (software_management_api == null) {
-                software_management_api = new SoftwareManagementApiImpl();
-            }
-            if (cloud_connection == null) {
-                cloud_connection = new CloudConnection(this);
-                cloud_connection.init();
-            }
-
-        } catch (Exception ex) {
-            Log.e(LOG_TAG, "Unhandled exception:\n" + ex.getMessage());
+        if (foundation_services_api == null) {
+            foundation_services_api = new FoundationServicesApiImpl();
+        }
+        if (software_management_api == null) {
+            software_management_api = new SoftwareManagementApiImpl();
+        }
+        if (cloud_connection == null) {
+            cloud_connection = new CloudConnection(this);
+            cloud_connection.init();
         }
     }
 
@@ -80,27 +75,26 @@ public class CloudService extends Service {
             return software_management_api;
         } else {
             //handling for when couldnt find mathing binder?
-            Log.w(LOG_TAG, "Trying to bind with unknown action: " + action);
+            Log.d(LOG_TAG, "Trying to bind with unknown action: " + action);
             return null;
         }
     }
 
     public void isConnected(boolean connected) {
+        Log.v(LOG_TAG, "isConnected: " + connected);
         if (!connected) {
             return;
         }
 
         try {
-            Log.v(LOG_TAG, "FSAPI init");
             foundation_services_api.init(cloud_connection);
 
-            Log.v(LOG_TAG, "Call feature available");
+            Log.v(LOG_TAG, "Calling fsapi.GetFeatureAvailable(SoftwareManagement)");
             Feature software_management = foundation_services_api.getFeatureAvailable("SoftwareManagement");
             if (software_management != null) {
-                Log.v(LOG_TAG, "SWMAPI init");
                 software_management_api.init(cloud_connection, software_management.uri);
             } else {
-                Log.w(LOG_TAG, "Software Management is not available");
+                Log.e(LOG_TAG, "Software Management is not available");
             }
         } catch (Exception ex) {
             Log.e(LOG_TAG, "Unhandled exception:\n" + ex.getMessage());

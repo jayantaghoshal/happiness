@@ -1,12 +1,12 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import typing
 import collections
 import os
 import re
+from datetime import datetime
 from ihuutils.sourcecode import sanitize_whitespace
-
 
 class LicenseHeaderInvalidError(Exception):
     def __init__(self, violation, source_file):
@@ -18,24 +18,36 @@ LanguageCommentFeatures = collections.namedtuple('LanguageCommentFeatures', ['fi
                                                                              'endline',
                                                                              'bodyline_prefix',
                                                                              'bodyline_suffix',
+                                                                             'headers_info',
                                                                              'headers_matcher',
                                                                              'headers_to_replace',
                                                                              'line_patterns_allowed_before_copyright'])
 
+CopyrightInfo = collections.namedtuple("CopyrightInfo", ['start_year',
+                                                         'end_year',
+                                                         'company'])
+
+CStyleInfoRegex = re.compile(r'^/\*\n\s\*\sCopyright\s(?P<start_year>20\d{2})'
+                             r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*?(?:\n\s\*.*?){2}/',
+                             re.IGNORECASE)
 CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
                                 re.IGNORECASE)
-CStyleReplaceableRegex = re.compile(r'(^/\*[\s\S]*?((Copyright)|(\[2017\])).*?((Delphi)|(Volvo))[\s\S]*?\*/)',
+CStyleReplaceableRegex = re.compile(r'(^/\*\n\s\*\sCopyright.*(Delphi|Volvo)(.*\n)*?\s\*/)',
                                     re.IGNORECASE)
 
 CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
                                         endline=' */\n\n',
                                         bodyline_prefix=' * ',
                                         bodyline_suffix='\n',
+                                        headers_info=[CStyleInfoRegex],
                                         headers_matcher=[CStyleGenericRegex],
                                         headers_to_replace=[CStyleReplaceableRegex],
                                         line_patterns_allowed_before_copyright=[]
                                         )
 
+HashStartInfoRegex = re.compile(r'^#\sCopyright\s(?P<start_year>20\d{2})'
+                                r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*',
+                                re.IGNORECASE);
 HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
 HashStartReplaceableRegex = re.compile(r'(^#.*?(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)*?\n)',
                                        re.IGNORECASE)
@@ -43,6 +55,7 @@ HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
                                                     bodyline_prefix='# ',
                                                     bodyline_suffix='\n',
+                                                    headers_info=[HashStartInfoRegex],
                                                     headers_matcher=[HashStartGenericRegex],
                                                     headers_to_replace=[HashStartReplaceableRegex],
                                                     line_patterns_allowed_before_copyright=[]
@@ -114,6 +127,33 @@ def get_lang(filename: str):
     lang = KnownLanguages.get(ext)
     return lang
 
+def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures):
+    """ Get Copyright information from the file_body content
+
+    Args:
+        file_body: File content to get copyright information from
+        lang: Properties for the language used in the file_body's source file
+
+    Returns:
+        A CopyrightInfo tuple with the year and company name from the file_body
+
+        None if no matching Copyright header was found in the file_body
+    """
+    assert isinstance(lang, LanguageCommentFeatures)
+
+    match = None
+    for regex in lang.headers_info:
+        match = regex.search(file_body)
+        if match is not None:
+            break;
+
+    if match is None:
+        return None
+
+    return CopyrightInfo(start_year=match.group('start_year'),
+                         end_year=match.group('end_year'),
+                         company=match.group('company'))
+
 
 def __remove_header_from_body(file_body: str, lang: LanguageCommentFeatures):
     assert isinstance(lang, LanguageCommentFeatures)
@@ -127,12 +167,12 @@ def __remove_header_from_body(file_body: str, lang: LanguageCommentFeatures):
     return file_body_without_headers
 
 
-def __add_header_to_body(file_body: str, lang: LanguageCommentFeatures):
+def __add_header_to_body(file_body: str, copyright_year: str, lang: LanguageCommentFeatures):
     copyright_header = lang.firstline
 
     for line in CommentPattern.splitlines(keepends=False):
         copyright_header += lang.bodyline_prefix
-        copyright_header += line.replace('{year}', '2017')
+        copyright_header += line.replace('{year}', copyright_year)
         copyright_header += lang.bodyline_suffix
 
     copyright_header += lang.endline
@@ -143,36 +183,68 @@ def __add_header_to_body(file_body: str, lang: LanguageCommentFeatures):
 
     return copyright_header + file_body
 
+def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeatures):
+    """ Filter the lines in the file body before the copyright as specified by lang
 
-def __replace_headers_in_body(file_body: str, lang: LanguageCommentFeatures):
-    saved_lines_allowed_before_copyright = []
+        Args:
+            file_body: File content to filter
+            lang: Properties for the language used in the file_body's source file
+
+        Returns:
+            Two values, the first one is a list of all the lines that has been filtered from the file body and the
+            second value is a string with the filtered file body.
+    """
+    saved_lines_before_copyright = []
     file_lines = file_body.splitlines(keepends=True)    #keepends to preserve potential trailing newline end of file
-    file_body_below_allowed_lines = ""
+    filtered_file_body = ""
     scanning_allowed_lines = True
     for line in file_lines:
         if scanning_allowed_lines:
             line_ok = False
             for allowed_line_pattern in lang.line_patterns_allowed_before_copyright:
                 if re.match(allowed_line_pattern, line):
-                    saved_lines_allowed_before_copyright.append(line)
+                    saved_lines_before_copyright.append(line)
                     line_ok = True
                     break
             if not line_ok:
                 scanning_allowed_lines = False
 
         if not scanning_allowed_lines:
-            file_body_below_allowed_lines += line
+            filtered_file_body += line
+
+    return saved_lines_before_copyright, filtered_file_body
+
+
+def __replace_headers_in_body(file_body: str, lang: LanguageCommentFeatures):
+    removed_headers, filtered_file_body = __filter_lines_before_copyright(file_body, lang)
+
+    # Get year and company information from the current Copyright header if there is one
+    info = __get_copyright_info_from_body(filtered_file_body, lang)
+    current_year = datetime.now().year
+    copyright_year = None
+
+    if info is not None:
+        if info.company == "Delphi":
+            # If the company is Delphi a new copyright header shall be written
+            copyright_year = str(current_year)
+        elif current_year > int(info.start_year):
+            # If the Copyright header contains an older year the header shall be written with a range from then to now
+            copyright_year = "{0}-{1}".format(info.start_year, str(current_year))
+
+    # If none of the above clauses apply write the current year in the Copyright header
+    if copyright_year is None:
+        copyright_year = str(current_year)
 
     # removing of trailing whitespace needed for reproducibility,
-    file_body_below_allowed_lines = sanitize_whitespace(file_body_below_allowed_lines)
-    decopyrighted = __remove_header_from_body(file_body_below_allowed_lines, lang)
+    filtered_file_body = sanitize_whitespace(filtered_file_body)
+    decopyrighted = __remove_header_from_body(filtered_file_body, lang)
     # removing of trailing whitespace needed for reproducibility,
     decopyrighted = sanitize_whitespace(decopyrighted)
 
-    with_copyright_applied = __add_header_to_body(decopyrighted, lang)
-    if len(saved_lines_allowed_before_copyright) > 0:
-        saved_lines_allowed_before_copyright.append("\n")
-    with_copyright_and_saved_lines_applied = "".join(saved_lines_allowed_before_copyright + [with_copyright_applied])
+    with_copyright_applied = __add_header_to_body(decopyrighted, copyright_year, lang)
+    if len(removed_headers) > 0:
+        removed_headers.append("\n")
+    with_copyright_and_saved_lines_applied = "".join(removed_headers + [with_copyright_applied])
     return with_copyright_and_saved_lines_applied
 
 
@@ -202,6 +274,38 @@ def get_contents_with_header_applied(filename: str):
 
     return with_copyright_applied, file_body
 
+def verify_copyright_in_file(filename: str):
+    """ Verify the Copyright header in the specified file
+
+    Args:
+        filename: The file to verify
+
+    Raises:
+        LicenseHeaderInvalidError: If the Copyright header is invalid
+    """
+    assert isinstance(filename, str)
+    file_path = os.path.abspath(filename)
+
+    with open(file_path, 'r', encoding="utf-8") as file:
+        file_body = file.read()
+
+    lang = get_lang(file_path)
+
+    _, filtered_file_body = __filter_lines_before_copyright(file_body, lang)
+    filtered_file_body = sanitize_whitespace(filtered_file_body)
+    info = __get_copyright_info_from_body(filtered_file_body, lang)
+    current_year = datetime.now().year
+
+    if info is None:
+        # Copyright head has unknown format
+        raise LicenseHeaderInvalidError("Copyright header invalid", filename)
+    elif int(info.start_year) < 2017:
+        # The old script was hard coded to only accept 2017, so copyright before that is not allowed
+        raise LicenseHeaderInvalidError("Copyright header invalid year", filename)
+    elif info.end_year is not None:
+        # If the Copyright header contains a year range verify that the range is valid
+        if int(info.end_year) <= int(info.start_year) or current_year < int(info.end_year):
+            raise LicenseHeaderInvalidError("Copyright header invalid year range", filename)
 
 def fix_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
     if isinstance(file_or_files_list, str):
@@ -227,10 +331,7 @@ def verify_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterab
         files = list(file_or_files_list)
 
     for f in filter_ignored(files):
-
-        fixed, original = get_contents_with_header_applied(f)
-        if fixed != original:
-            raise LicenseHeaderInvalidError("Copyright header invalid", f)
+        verify_copyright_in_file(f)
     pass
 
 

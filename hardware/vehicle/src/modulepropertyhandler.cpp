@@ -91,7 +91,8 @@ std::vector<VehiclePropConfig> ModulePropertyHandler::listProperties() {
 ModulePropertyHandler::PropertyHandlerFloat::PropertyHandlerFloat(
         const std::function<int(float)> set_prop,
         const std::function<ReadOnlyNotifiableProperty<float>*()> notifiable_prop_getter,
-        const std::function<void(vhal20::VehiclePropValue)> pushProp, vhal20::VehiclePropValue prop_value)
+        const std::function<void(vhal20::VehiclePropValue)> pushProp,
+        vhal20::VehiclePropValue prop_value)
     : set_prop_(set_prop), notifiable_prop_getter_(notifiable_prop_getter), prop_value_(prop_value) {
     prop_value_.value.floatValues.resize(1);
 
@@ -116,7 +117,8 @@ vhal20::VehiclePropValue ModulePropertyHandler::PropertyHandlerFloat::get() {
 ModulePropertyHandler::PropertyHandlerInt32::PropertyHandlerInt32(
         const std::function<int(int)> set_prop,
         const std::function<ReadOnlyNotifiableProperty<int>*()> notifiable_prop_getter,
-        const std::function<void(vhal20::VehiclePropValue)> pushProp, vhal20::VehiclePropValue prop_value)
+        const std::function<void(vhal20::VehiclePropValue)> pushProp,
+        vhal20::VehiclePropValue prop_value)
     : set_prop_(set_prop), notifiable_prop_getter_(notifiable_prop_getter), prop_value_(prop_value) {
     prop_value_.value.int32Values.resize(1);
 

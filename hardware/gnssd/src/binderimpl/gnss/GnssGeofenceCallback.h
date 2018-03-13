@@ -29,7 +29,8 @@ using ::android::sp;
 
 struct GnssGeofenceCallback : public IGnssGeofenceCallback {
     // Methods from ::android::hardware::gnss::V1_0::IGnssGeofenceCallback follow.
-    Return<void> gnssGeofenceTransitionCb(int32_t geofenceId, const GnssLocation& location,
+    Return<void> gnssGeofenceTransitionCb(int32_t geofenceId,
+                                          const GnssLocation& location,
                                           IGnssGeofenceCallback::GeofenceTransition transition,
                                           int64_t timestamp) override;
     Return<void> gnssGeofenceStatusCb(IGnssGeofenceCallback::GeofenceAvailability status,

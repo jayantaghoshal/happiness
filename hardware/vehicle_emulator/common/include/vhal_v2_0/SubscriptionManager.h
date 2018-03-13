@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_
-#define android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_
+#pragma once
 
 #include <list>
 #include <map>
@@ -102,7 +101,8 @@ class SubscriptionManager {
      * Updates subscription. Returns the vector of properties subscription that
      * needs to be updated in VehicleHAL.
      */
-    StatusCode addOrUpdateSubscription(ClientId clientId, const sp<IVehicleCallback>& callback,
+    StatusCode addOrUpdateSubscription(ClientId clientId,
+                                       const sp<IVehicleCallback>& callback,
                                        const hidl_vec<SubscribeOptions>& optionList,
                                        std::list<SubscribeOptions>* outUpdatedOptions);
 
@@ -111,7 +111,8 @@ class SubscriptionManager {
      * dispatching to its clients.
      */
     std::list<HalClientValues> distributeValuesToClients(
-            const std::vector<recyclable_ptr<VehiclePropValue>>& propValues, SubscribeFlags flags) const;
+            const std::vector<recyclable_ptr<VehiclePropValue>>& propValues,
+            SubscribeFlags flags) const;
 
     std::list<sp<HalClient>> getSubscribedClients(int32_t propId, int32_t area, SubscribeFlags flags) const;
     /**
@@ -170,5 +171,3 @@ class SubscriptionManager {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_SubscriptionManager_H_

@@ -1,0 +1,3 @@
+genfscon nsfs / u:object_r:nsfs_netns_vcc:s0
+genfscon proc /sys/net/ipv4/conf/tcam0 u:object_r:proc_netmand:s0
+genfscon proc /sys/net/ipv4/conf/meth0 u:object_r:proc_netmand:s0

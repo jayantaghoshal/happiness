@@ -23,7 +23,8 @@ std::string GetPropertyName(int32_t prop);
 std::string GetVehicleZoneNameByVehicleAreaAndAreaId(vhal20::VehicleArea vehicle_area, int32_t area_id);
 
 void GetAndDumpPropertyValue(const ::android::sp<vhal20::IVehicle>& service,
-                             const vhal20::VehiclePropValue& property_value, const std::string indentation);
+                             const vhal20::VehiclePropValue& property_value,
+                             const std::string indentation);
 void DumpPropertyValue(const vhal20::VehiclePropValue& property_value, std::string indentation = "");
 
 void DumpProperties(const ::android::sp<vhal20::IVehicle>& service,

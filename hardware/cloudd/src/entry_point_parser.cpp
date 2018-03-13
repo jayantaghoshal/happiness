@@ -27,8 +27,8 @@ EntryPointParser::EntryPoint parse(const char* const data_nullterminated) throw(
     const std::string port_str = std::string{port_element->GetText()};
     const int port = std::stoi(port_str);
 
-    return EntryPointParser::EntryPoint{std::string{client_uri_element->GetText()},
-                                        std::string{host_uri_element->GetText()}, port};
+    return EntryPointParser::EntryPoint{
+            std::string{client_uri_element->GetText()}, std::string{host_uri_element->GetText()}, port};
 }
 }
 }

@@ -8,8 +8,9 @@ interface IIplmCallback
      * Callback for registerService, onResourceGroupStatus
      * @param1: ResourceGroup
      * @param2: ResourceGroupStatus
+     * @param3: ResourceGroupPrio
      */
-    oneway onResourceGroupStatus(ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus);
+    oneway onResourceGroupStatus(ResourceGroup resourceGroup, ResourceGroupStatus resourceGroupStatus, ResourceGroupPrio resourceGroupPrio);
 
     /**
      * Callback for registerService, onNodeStatus

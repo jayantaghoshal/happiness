@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_VehicleHal_H
-#define android_hardware_automotive_vehicle_V2_0_VehicleHal_H
+#pragma once
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include "VehicleObjectPool.h"
@@ -74,7 +73,8 @@ class VehicleHal {
      */
     virtual void onCreate() {}
 
-    void init(VehiclePropValuePool* valueObjectPool, const HalEventFunction& onHalEvent,
+    void init(VehiclePropValuePool* valueObjectPool,
+              const HalEventFunction& onHalEvent,
               const HalErrorFunction& onHalError) {
         mValuePool = valueObjectPool;
         mOnHalEvent = onHalEvent;
@@ -105,5 +105,3 @@ class VehicleHal {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_VehicleHal_H_

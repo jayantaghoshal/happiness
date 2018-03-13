@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_
-#define android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_
+#pragma once
 
 #include <chrono>
 
@@ -58,18 +57,22 @@ class FakeValueGenerator {
 
     ~FakeValueGenerator() = default;
 
-    void startGeneratingHalEvents(std::chrono::nanoseconds interval, int propId, float initialValue, float dispersion,
+    void startGeneratingHalEvents(std::chrono::nanoseconds interval,
+                                  int propId,
+                                  float initialValue,
+                                  float dispersion,
                                   float increment) {
         MuxGuard g(mLock);
 
         removeLocked(propId);
 
-        mGenCfg.insert({propId, GeneratorCfg{
-                                        .initialValue = initialValue,
-                                        .currentValue = initialValue,
-                                        .dispersion = dispersion,
-                                        .increment = increment,
-                                }});
+        mGenCfg.insert({propId,
+                        GeneratorCfg{
+                                .initialValue = initialValue,
+                                .currentValue = initialValue,
+                                .dispersion = dispersion,
+                                .increment = increment,
+                        }});
 
         mRecurrentTimer.registerRecurrentEvent(interval, propId);
     }
@@ -122,5 +125,3 @@ class FakeValueGenerator {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_impl_FakeHalEventGenerator_H_

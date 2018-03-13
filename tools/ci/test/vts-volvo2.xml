@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!--
+This is part of the complete Gootls VTS.
+It is separated into three pieces as it then is easier to run on many
+devices and it will be faster.
+We also have issues with logs building up during tests making long test
+runs sometimes fail. Lastly we also need to remove some modules from 
+the plan as they do not execute properly.
+-->
+
+<configuration description="VTS Volvo Test Plan 2">
+  <include name="vts-base" />
+  <option name="plan" value="vts-volvo2" />
+  <option name="test-tag" value="vts-volvo2" />
+  <option name="vts-plan-result:plan-name" value="vts-volvo2" />
+
+  <option name="compatibility:test-arg" value="com.android.tradefed.testtype.VtsMultiDeviceTest:precondition-vintf-override:true" />
+
+  <!-- From vts-hal-hidl.xml: Internal Only --> <!-- VERY TIGHT, 95% DATA-->
+  <!--<option name="compatibility:include-filter" value="VtsHalAudioEffectV2_0Target" /> CAUSES INFINITE BOOT MODE, CAN BE RUN ON NEXT APTIV UPDATE -->
+  <option name="compatibility:include-filter" value="VtsHalAudioV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalGraphicsComposerV2_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalGraphicsMapperV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalTetherOffloadConfigV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalTetherOffloadControlV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalVrV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalBiometricsFingerprintV2_1Target" />
+<!--  <option name="compatibility:include-filter" value="VtsHalBroadcastradioV1_0Target" /> 15 MIN TIMEOUT -->
+  <option name="compatibility:include-filter" value="VtsHalCameraProviderV2_4Target" /> 
+  <option name="compatibility:include-filter" value="VtsHalCasV1_0Target" /> 
+  <option name="compatibility:include-filter" value="VtsHalConfigstoreV1_0Target" /> 
+  <option name="compatibility:include-filter" value="VtsHalContexthubV1_0Target" /> 
+  <option name="compatibility:include-filter" value="VtsHalDrmV1_0Target" />
+<!--  <option name="compatibility:include-filter" value="VtsHalGatekeeperV1_0Target" /> 15 MIN TIMEOUT -->
+  <option name="compatibility:include-filter" value="VtsHalGnssV1_0Target" />
+
+
+</configuration>

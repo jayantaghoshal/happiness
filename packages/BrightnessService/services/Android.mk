@@ -14,8 +14,8 @@ LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
 LOCAL_STATIC_JAVA_LIBRARIES := vendor.volvocars.hardware.vehiclehal-V1.0-java-static \
-android.hardware.automotive.vehicle-V2.0-java-static
-
+android.hardware.automotive.vehicle-V2.0-java-static \
+vendor.volvocars.hardware.iplm-V1.0-java-static
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 64
 

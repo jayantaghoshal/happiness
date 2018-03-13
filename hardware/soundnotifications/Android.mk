@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := \
 	src/soundnotifications.cpp \
 	src/soundwrapper.cpp \
 	src/turnindicator.cpp \
+	src/parking_brake.cpp \
 
 LOCAL_SHARED_LIBRARIES := \
     libdataelements \
@@ -28,8 +29,7 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libbinder \
     libtraceclient \
-    libAudioManagerBinder \
-    libAudioManagerCallbackBinder
+    vendor.delphi.audiomanager@1.0
 
 LOCAL_STATIC_LIBRARIES := \
     libaudiotable

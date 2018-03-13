@@ -47,7 +47,7 @@ then
     ping -c1 ${VECTOR_FDX_IP}
 elif [ "${JOB_NAME}" = "ihu_hourly_test-audio" ]
 then
-    capability="audio"
+    capability="audio cem"
 elif [ "${JOB_NAME}" = "ihu_hourly_test-apix" ]
 then
     capability="apix"
@@ -60,7 +60,7 @@ set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=hourly --ci_reporting true -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
 
 set -e

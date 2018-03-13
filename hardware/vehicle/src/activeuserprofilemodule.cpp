@@ -38,7 +38,8 @@ ActiveUserProfileHal::ActiveUserProfileHal(vhal20::impl::IVehicleHalImpl* vehicl
     pushProp(active_user_profile_);
 
     prof_pen_sts1_receiver_.subscribe([
-        this, active_user_profile = active_user_profile_
+        this,
+        active_user_profile = active_user_profile_
     ]() mutable {  // Copy active_user_profile_ by value due to multi threaded
         if (getUserProfileFromFlexray(active_user_profile)) {
             ALOGI("ActiveUserProfile changed to: %d", active_user_profile.value.int32Values[0]);

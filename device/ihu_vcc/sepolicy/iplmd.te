@@ -7,9 +7,12 @@ init_daemon_domain(iplmd)
 allow iplmd system_file:dir r_dir_perms;
 allow iplmd system_file:file r_file_perms;
 
-allow iplmd ipcbd:binder { call transfer };
-allow iplmd dataelements-hidl-server:binder { call transfer };
+hal_server_domain(iplmd, hal_vehiclecom)
+hal_server_domain(iplmd, hal_iplm)
 
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
+binder_call(iplmd, ipcbd)
+binder_call(iplmd, lscd)
+binder_call(iplmd, dataelements-hidl-server)
+
 hwbinder_use(iplmd)
-allow iplmd hwservicemanager_prop:file { getattr open read };
+

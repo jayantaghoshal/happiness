@@ -17,7 +17,9 @@ namespace settingsHidl = vendor::volvocars::hardware::settings::V1_0;
 
 class SettingsUpdate {
   public:
-    SettingsUpdate(const SettingId& key, const ProfileIdentifier profileId, const std::string& data,
+    SettingsUpdate(const SettingId& key,
+                   const ProfileIdentifier profileId,
+                   const std::string& data,
                    const settingsHidl::SettingsChangeReason reason)
         : key_{key}, profileId_{profileId}, data_{data}, reason_{reason} {}
     const SettingId key_;
@@ -33,7 +35,8 @@ class SettingsManagerHidl : public SettingsManager,
   public:
     SettingsManagerHidl(tarmac::eventloop::IDispatcher& dispatcher);
 
-    virtual SettingsHandle attachSetting(const SettingId& name, UserScope u,
+    virtual SettingsHandle attachSetting(const SettingId& name,
+                                         UserScope u,
                                          std::function<void(const std::string&, ProfileIdentifier)> onSettingChanged,
                                          std::function<void(ProfileIdentifier p)> onSettingReset);
     void detachSetting(const SettingId& name, SettingsHandle handle) override;
@@ -41,10 +44,12 @@ class SettingsManagerHidl : public SettingsManager,
     void setRawData(const SettingId& name, ProfileIdentifier profid, const std::string& data) override;
 
     andrHw::Return<void> settingsForCurrentUserChanged(
-            const uint32_t key, settingsHidl::SettingsChangeReason reason,
+            const uint32_t key,
+            settingsHidl::SettingsChangeReason reason,
             ::vendor::volvocars::hardware::profiles::V1_0::ProfileIdentifier currentProfile) override;
 
-    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName, const andrHw::hidl_string& name,
+    andrHw::Return<void> onRegistration(const andrHw::hidl_string& fqName,
+                                        const andrHw::hidl_string& name,
                                         bool preexisting) override;
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 

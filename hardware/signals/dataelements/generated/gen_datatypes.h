@@ -5563,6 +5563,6 @@ struct WipgInfo {
     OnOff1 WiprInWipgAr;
 };
 
-} // end of namespace
+} // namespace autosar
 
 // clang-format on

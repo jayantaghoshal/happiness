@@ -7,6 +7,7 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 export PIP_CONFIG_FILE="/usr/local/pip/pip.conf"
+export VTS_PYPI_PATH="${PIP_CONFIG_FILE}" # Will be used in Android P with the same purpose as the above
 
 if [ -z "${WORKSPACE}" ]; then
   WORKSPACE=$(readlink -f "${REPO_ROOT_DIR}"/..)

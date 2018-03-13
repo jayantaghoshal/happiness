@@ -19,7 +19,8 @@ DiagnosticTestResultsReporterImpl::DiagnosticTestResultsReporterImpl(uint32_t dt
     : DiagnosticTestResultsReporterImpl(dtc_id, std::chrono::seconds(2)) {}
 
 DiagnosticTestResultsReporterImpl::DiagnosticTestResultsReporterImpl(
-        uint32_t dtc_id, std::chrono::steady_clock::duration reporting_interval)
+        uint32_t dtc_id,
+        std::chrono::steady_clock::duration reporting_interval)
     : dtc_id_(dtc_id), reporting_interval_(reporting_interval) {}
 
 void DiagnosticTestResultsReporterImpl::ReportTestPass() { ReportStatus(DiagnosticCheckStatus::PASSED); }

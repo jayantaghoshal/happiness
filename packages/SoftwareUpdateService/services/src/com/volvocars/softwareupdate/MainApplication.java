@@ -11,11 +11,11 @@ import android.content.Intent;
 import android.util.Log;
 
 public class MainApplication extends Application {
-    private static final String LOGTAG = "SoftwareUpdate";
+    private static final String LOGTAG = "SoftwareUpdate.MainApp";
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.v(LOGTAG, "onCreate() Main");
+        Log.v(LOGTAG, "SoftwareUpdate.MainApplication created, sending intent to start SoftwareUpdateService");
         Intent intent = new Intent(this, SoftwareUpdateService.class);
         startService(intent);
     }

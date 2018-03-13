@@ -40,6 +40,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
     }
 
     public Feature getFeatureAvailable(String feature) {
+        Log.v(LOG_TAG, "getFeatureAvailable [" + feature + "]");
         //Setup request fields
         HttpHeaderField field = new HttpHeaderField();
         field.value = "application/volvo.cloud.Features+XML";
@@ -54,7 +55,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             byte[] bytesdata = new byte[response.responseData.size()];
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                Log.d(LOG_TAG, "Http Response Code: " + response.httpResponse
                         + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
@@ -71,10 +72,10 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             }
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG, "Something went bananas with the parsing: " + ex.getMessage());
+            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Something went bananas with the streams: " + ex.getMessage());
+            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
         return null;

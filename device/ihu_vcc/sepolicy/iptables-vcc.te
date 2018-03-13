@@ -1,9 +1,33 @@
 # iptables
 type iptables-vcc, domain;
+
+type iptables_data_file, file_type;
+
 type iptables-vcc_exec, exec_type, file_type, vendor_file_type;
-
-type iptables-restore-vcc, domain;
 type iptables-restore-vcc_exec, exec_type, file_type, vendor_file_type;
-
-type iptables-save-vcc, domain;
 type iptables-save-vcc_exec, exec_type, file_type, vendor_file_type;
+
+type ip6tables-vcc_exec, exec_type, file_type, vendor_file_type;
+type ip6tables-restore-vcc_exec, exec_type, file_type, vendor_file_type;
+type ip6tables-save-vcc_exec, exec_type, file_type, vendor_file_type;
+
+allow iptables-vcc ip-vcc_exec:file execute_no_trans;
+allow iptables-vcc ip6tables-vcc_exec:file execute_no_trans;
+allow iptables-vcc iptables-vcc_exec:file execute_no_trans;
+
+allow iptables-vcc iptables_data_file:file r_file_perms;
+
+allow iptables-vcc netmand:fd use;
+
+allow iptables-vcc proc_net:file getattr;
+
+allow iptables-vcc self:capability { net_admin net_raw };
+allow iptables-vcc self:netlink_route_socket { write getattr setopt nlmsg_write read bind create };
+allow iptables-vcc netmand:netlink_kobject_uevent_socket { read write };
+allow iptables-vcc self:rawip_socket { getopt create setopt };
+allow iptables-vcc self:udp_socket { create ioctl };
+
+# Acquire advisory lock on /system/etc/xtables.lock
+allow iptables-vcc system_file:file lock;
+
+

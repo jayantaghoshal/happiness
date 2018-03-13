@@ -42,7 +42,8 @@ bool restartClient::restart() {
     unsigned type = NSM_SHUTDOWNTYPE_NORMAL;
 
     /* Issue the method call and store the response message in m */
-    r = sd_bus_call_method(bus, "org.genivi.NodeStateManager",              /* service to contact */
+    r = sd_bus_call_method(bus,
+                           "org.genivi.NodeStateManager",                   /* service to contact */
                            "/org/genivi/NodeStateManager/LifecycleControl", /* object path */
                            "org.genivi.NodeStateManager.LifecycleControl",  /* interface name */
                            "RequestNodeRestart",                            /* method name */

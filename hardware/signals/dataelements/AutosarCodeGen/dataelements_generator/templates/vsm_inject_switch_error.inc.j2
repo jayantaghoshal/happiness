@@ -1,0 +1,11 @@
+{% for de_de in all_dataelements if de_de.is_insignal and not de_de.is_internal -%}
+{% if de_de.isSignal %}
+    case ComConf_ComSignal_is{{de_de.rtename}}_mrx:
+        {{de_de.de_dataelementname}}_de->error(errorCode);
+        break;
+{%- else %}
+    case SignalGroup|ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx:
+        {{de_de.de_dataelementname}}_de->error(errorCode);
+        break;
+{%- endif %}
+{% endfor %}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,6 +7,7 @@ package com.volvocars.brightnessservice;
 
 import android.app.Service;
 import android.content.Intent;
+import android.hardware.automotive.vehicle.V2_0.VehiclePropValue;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -17,7 +18,11 @@ import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
 import android.os.Process;
+import java.util.NoSuchElementException;
 import android.hardware.automotive.vehicle.V2_0.IVehicle;
+
+import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
+
 /**
  *
  * BrightnessService is a service that controls the brightness of the screen.
@@ -70,11 +75,24 @@ public class BrightnessService extends Service {
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = serviceThread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-        try {
-            mVehicle = IVehicle.getService();
-        }
-        catch(RemoteException ex){
-            Log.e(TAG, ex.getMessage());
+        while (true) {
+            try {
+                mVehicle=IVehicle.getService();
+
+                if(mVehicle != null){
+                    break;
+                }
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            catch(RemoteException ex){
+                Log.e(TAG,ex.getMessage());
+            }
+            catch(NoSuchElementException ex){
+                Log.e(TAG, "No such element exception, VHAL DOWN");
+            }
         }
         mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mCSDConsumerManager = new CSDConsumerManager(mVehicle,mPowerManager);

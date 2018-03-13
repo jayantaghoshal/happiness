@@ -42,7 +42,8 @@ class VhalListener : public vhal20::IVehicleCallback, public ::android::hardware
         return ::android::hardware::Return<void>();
     }
 
-    ::android::hardware::Return<void> onPropertySetError(vhal20::StatusCode /* errorCode */, int32_t /* propId */,
+    ::android::hardware::Return<void> onPropertySetError(vhal20::StatusCode /* errorCode */,
+                                                         int32_t /* propId */,
                                                          int32_t /* areaId */) override {
         // We don't set values, so we don't listen for set errors
         return ::android::hardware::Return<void>();

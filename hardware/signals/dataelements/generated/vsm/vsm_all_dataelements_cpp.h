@@ -10,7 +10,6 @@
  * Copyright 2017 Delphi Technologies, Inc., All Rights Reserved. Delphi Confidential
  * Source: databases/SPA2610_IHUVOLVO43_170920_UnFlattened_Splitted__WithSparePNC_Swc.arxml
  */
-
 new autosar::ADataRawSafe_info(),
 new autosar::AccAdprSpdLimActv_info(),
 new autosar::AccAdprTurnSpdActv_info(),

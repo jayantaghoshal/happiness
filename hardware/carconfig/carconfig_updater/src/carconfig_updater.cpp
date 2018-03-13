@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -46,9 +46,17 @@ void CarConfigUpdater::frameReceiver(CarConfigList& buff, uint32_t timeout) {
     ccReceiver.subscribe([&buff, &frameCount, &ccReceiver]() {
         auto frame = ccReceiver.get().value();
         uint32_t zeroBasedBlkID = frame.BlkIDBytePosn1 - 1;
-        ALOGV("Got VehCfgPrm frame: %d Param %d - %d:   %d, %d, %d, %d, %d, %d, %d", frame.BlkIDBytePosn1,
-              (zeroBasedBlkID * 7) + 1, (zeroBasedBlkID * 7) + 7, frame.CCPBytePosn2, frame.CCPBytePosn3,
-              frame.CCPBytePosn4, frame.CCPBytePosn5, frame.CCPBytePosn6, frame.CCPBytePosn7, frame.CCPBytePosn8);
+        ALOGV("Got VehCfgPrm frame: %d Param %d - %d:   %d, %d, %d, %d, %d, %d, %d",
+              frame.BlkIDBytePosn1,
+              (zeroBasedBlkID * 7) + 1,
+              (zeroBasedBlkID * 7) + 7,
+              frame.CCPBytePosn2,
+              frame.CCPBytePosn3,
+              frame.CCPBytePosn4,
+              frame.CCPBytePosn5,
+              frame.CCPBytePosn6,
+              frame.CCPBytePosn7,
+              frame.CCPBytePosn8);
 
         if (zeroBasedBlkID < kCCFrames) {
             frameCount.insert(zeroBasedBlkID);
@@ -85,8 +93,10 @@ void CarConfigUpdater::writeEmptyFile(std::string filePath) {
     fs.close();
 }
 
-void CarConfigUpdater::checkReceivedValues(const std::map<int, std::vector<int>> ccParamList, CarConfigList& buff,
-                                           bool& allParamsReceived, bool& allParamsOK,
+void CarConfigUpdater::checkReceivedValues(const std::map<int, std::vector<int>> ccParamList,
+                                           CarConfigList& buff,
+                                           bool& allParamsReceived,
+                                           bool& allParamsOK,
                                            std::map<uint32_t, uint8_t>& errorList) {
     allParamsReceived = true;
     allParamsOK = true;
@@ -117,7 +127,8 @@ void CarConfigUpdater::checkReceivedValues(const std::map<int, std::vector<int>>
     }
 }
 
-void CarConfigUpdater::checkExistingParams(const std::map<int, std::vector<int>> ccParamList, bool& allParamsOK,
+void CarConfigUpdater::checkExistingParams(const std::map<int, std::vector<int>> ccParamList,
+                                           bool& allParamsOK,
                                            std::map<uint32_t, uint8_t>& errorList) {
     CarConfigReader ccReader;
 
@@ -216,7 +227,11 @@ std::vector<uint8_t> CarConfigUpdater::carconfigParamFaultsPack(std::map<uint32_
 }
 
 bool CarConfigUpdater::setStateAndSendDiagnostics(
-        bool stateConfigured, bool allParamsReceived, bool allParamsOk, bool paramsChanged, bool allStoredParamsOk,
+        bool stateConfigured,
+        bool allParamsReceived,
+        bool allParamsOk,
+        bool paramsChanged,
+        bool allStoredParamsOk,
         std::map<uint32_t, uint8_t> receivedBadParams,
         std::map<uint32_t, uint8_t> storedBadParams,  // diagnosticsClient &diagClient, //TODO add diagnostics
         bool& rebootNeeded) {
@@ -343,9 +358,14 @@ int32_t CarConfigUpdater::runUpdater() {
     // Send DTCs and set DIDs.
     // diagClient.connect();
     bool rebootIsRequired = false;
-    bool configured = setStateAndSendDiagnostics(emptyFileExists(carconfig_configured_filename), allParamsReceived,
-                                                 allParamsOk, paramsChanged, allOldParamsOk, receivedBadParams,
-                                                 storedBadParams, /*diagClient,*/ rebootIsRequired);
+    bool configured = setStateAndSendDiagnostics(emptyFileExists(carconfig_configured_filename),
+                                                 allParamsReceived,
+                                                 allParamsOk,
+                                                 paramsChanged,
+                                                 allOldParamsOk,
+                                                 receivedBadParams,
+                                                 storedBadParams,
+                                                 /*diagClient,*/ rebootIsRequired);
     // Set state to configured
     if (configured) {
         writeEmptyFile(carconfig_configured_filename);

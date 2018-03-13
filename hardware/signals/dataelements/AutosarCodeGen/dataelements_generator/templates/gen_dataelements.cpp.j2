@@ -1,0 +1,17 @@
+#include "gen_dataelements.h"
+
+
+namespace autosar {
+{% for de_de in all_dataelements %}
+
+//==========================================
+const char* {{de_de.de_dataelementname}}_info::Name() { return "{{de_de.de_dataelementname}}"; }
+const char* {{de_de.de_dataelementname}}_info::TypeName() { return "{{de_de.cpp_type}}"; }
+Dir {{de_de.de_dataelementname}}_info::Direction() { return {{de_de.direct}}; }
+
+const char* {{de_de.de_dataelementname}}_info::name() const { return Name(); }
+const char* {{de_de.de_dataelementname}}_info::typeName() const { return TypeName(); }
+Dir {{de_de.de_dataelementname}}_info::direction() const { return Direction(); }
+{% endfor %}
+
+} // namespace autosar

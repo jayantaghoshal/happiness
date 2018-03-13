@@ -33,13 +33,15 @@ public class MainActivityTest extends Activity {
 
     public static final String TAG = MainActivityTest.class.getSimpleName();
     private IUserSwitchService mService;
-    private TextView mLog;
+    private TextView textResult;
+    private TextView textOwner;
     private EditText valueEditText;
     private Button createButton;
     private Button switchButton;
     private Button pairButton;
     private Button dumpUserButton;
     private Button deleteUserButton;
+    private Button getUserIdButton;
     private ActivityManager activityManager;
     private Context context;
     private UserManager userManager;
@@ -47,9 +49,9 @@ public class MainActivityTest extends Activity {
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            mLog.append("Service binded!\n");
+            textResult.append("Service binded!\n");
             mService = IUserSwitchService.Stub.asInterface(service);
-            mLog.append("Calling switch user!\n");
+            textResult.append("Calling switch user!\n");
         }
 
         @Override
@@ -58,7 +60,7 @@ public class MainActivityTest extends Activity {
             // This method is only invoked when the service quits from the other end or gets killed
             // Invoking exit() from the AIDL interface makes the Service kill itself, thus
             // invoking this.
-            mLog.append("Service disconnected.\n");
+            textResult.append("Service disconnected.\n");
         }
     };
 
@@ -68,39 +70,48 @@ public class MainActivityTest extends Activity {
         setContentView(R.layout.activity_main_test);
         context = this;
         userManager = getBaseContext().getSystemService(UserManager.class);
-        mLog = findViewById(R.id.log);
+        textResult = findViewById(R.id.textLog);
+        textOwner = findViewById(R.id.textOwner);
         valueEditText = findViewById(R.id.editTextUserId);
         createButton = findViewById(R.id.pairUserButtonCreate);
         switchButton = findViewById(R.id.pairUserButtonSwitch);
         dumpUserButton = findViewById(R.id.dumpUserButton);
         deleteUserButton = findViewById(R.id.deleteUserButton);
+        getUserIdButton = findViewById(R.id.getUserIdButton);
 
         Intent serviceIntent = new Intent(this, UserSwitchService.class);
 
         // Remove it after TrustService
-        mLog.setText("Starting service…\n");
+        textResult.setText("Starting service…\n");
         startService(serviceIntent);
         activityManager = getBaseContext().getSystemService(ActivityManager.class);
         userManager = getBaseContext().getSystemService(UserManager.class);
 
-        mLog.append("Binding service…\n");
+        textResult.append("Binding service…\n");
         bindService(serviceIntent, mConnection, BIND_AUTO_CREATE);
-        createButton.setOnClickListener((event) -> {
-            createUser(valueEditText.getText().toString());
-        });
 
-        switchButton.setOnClickListener(event -> {
-            switchUserButton(valueEditText.getText().toString());
-        });
+        textOwner.setText(String.valueOf(ActivityManager.getCurrentUser()));
+        createButton.setOnClickListener(event -> createUser(valueEditText.getText().toString()));
+        switchButton.setOnClickListener(event -> switchUserButton(valueEditText.getText().toString()));
 
         dumpUserButton.setOnClickListener(event -> {
             List<UserInfo> listUser = userManager.getUsers(false);
             Log.d(TAG, listUser.toString());
-            mLog.append("users: " + listUser.toString());
+            textResult.append("users: " + listUser.toString());
         });
 
-        deleteUserButton.setOnClickListener(event -> {
-            deleteUser(valueEditText.getText().toString());
+        deleteUserButton.setOnClickListener(event -> deleteUser(valueEditText.getText().toString()));
+
+        getUserIdButton.setOnClickListener(event -> {
+            List<UserInfo> listUser = userManager.getUsers(false);
+            Optional<UserInfo> result = listUser.stream().filter(
+                    u -> u.name.equals(valueEditText.getText().toString()))
+                    .findAny();
+            if (result.isPresent()) {
+                textResult.setText(result.get().id + "");
+            } else {
+                textResult.setText("ERROR");
+            }
         });
     }
 
@@ -109,7 +120,7 @@ public class MainActivityTest extends Activity {
             userName = "TestUser";
         }
         String volvoUserName = userName;
-        mLog.append("Requesting createUser listing… " + userName + "\n");
+        textResult.append("Requesting createUser listing… " + userName + "\n");
         try {
             VolvoUser user = new VolvoUser(-1, volvoUserName, VolvoUser.FLAG_ADMIN);
             mService.createUser(user, new IUserSwitchCallBack.Stub() {
@@ -131,7 +142,7 @@ public class MainActivityTest extends Activity {
     }
 
     private void switchUserButton(String userName) {
-        mLog.append("Requesting user switch.…\n");
+        textResult.append("Requesting user switch.…\n");
 
         try {
             mService.switchUser(userName, new IUserSwitchCallBack.Stub() {
@@ -151,7 +162,7 @@ public class MainActivityTest extends Activity {
             showMessage("Name or ID is required!");
             return;
         }
-        mLog.append("Requesting deleteUser listing… " + testNameOrId + "\n");
+        textResult.append("Requesting deleteUser listing… " + testNameOrId + "\n");
         try {
             int checkInt = Integer.valueOf(testNameOrId);
         } catch (Exception e) {
@@ -179,7 +190,7 @@ public class MainActivityTest extends Activity {
     }
 
     private void showMessage(String message) {
-        mLog.clearComposingText();
-        mLog.setText(message);
+        textResult.clearComposingText();
+        textResult.setText(message);
     }
 }

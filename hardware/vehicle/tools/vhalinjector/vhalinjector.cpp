@@ -24,7 +24,8 @@ std::string GetPropertyName(int32_t prop) {
     }
 }
 
-void SetProperty(vhal20::VehiclePropValue* property_value, const std::string& value,
+void SetProperty(vhal20::VehiclePropValue* property_value,
+                 const std::string& value,
                  ::android::sp<vhal20::IVehicle> service) {
     const auto property_type =
             static_cast<vhal20::VehiclePropertyType>(property_value->prop & vhal20::VehiclePropertyType::MASK);

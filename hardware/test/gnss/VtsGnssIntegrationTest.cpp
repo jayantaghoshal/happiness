@@ -219,8 +219,12 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     ASSERT_TRUE(gnssServer_ != NULL);
     gnssServer_->setCallback(callback);
     callback->onLocationCallback = [&promise](const GnssLocation& location) {
-        ALOGD("Lat: %f Long: %f, time %lu, altitudeMeters %f, speed %f, heading %f", location.latitudeDegrees,
-              location.longitudeDegrees, location.timestamp, location.altitudeMeters, location.speedMetersPerSec,
+        ALOGD("Lat: %f Long: %f, time %lu, altitudeMeters %f, speed %f, heading %f",
+              location.latitudeDegrees,
+              location.longitudeDegrees,
+              location.timestamp,
+              location.altitudeMeters,
+              location.speedMetersPerSec,
               location.bearingDegrees);
 
         EXPECT_FLOAT_EQ(location.latitudeDegrees, -20.025057);
@@ -242,7 +246,8 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     temp_pdu.createHeader((IpCmdTypes::ServiceId)Connectivity::VccIpCmd::ServiceId::Positioning,
                           (IpCmdTypes::OperationId)Connectivity::VccIpCmd::OperationId::GNSSPositionData,
                           Connectivity::IpCmdTypes::OperationType::NOTIFICATION,
-                          Connectivity::IpCmdTypes::DataType::ENCODED, 1);
+                          Connectivity::IpCmdTypes::DataType::ENCODED,
+                          1);
     temp_pdu.header.protocol_version = 2;
     msg->gnssPositionData->utcTime->year = 2017;
     msg->gnssPositionData->utcTime->month = 10;
@@ -257,8 +262,8 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     msg->gnssPositionData->heading = 234;
 
     ALOGD("Encode message!");
-    InfotainmentIpBus::Utils::encodeMessage(msg, Icb_OpGNSSPositionData_Response_Encode,
-                                            Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
+    InfotainmentIpBus::Utils::encodeMessage(
+            msg, Icb_OpGNSSPositionData_Response_Encode, Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
     temp_pdu.setPayload(std::move(payload));
     IpcbSimulator CyclicInjector("127.0.0.1", 60012, 60001, 0);
     CyclicInjector.SendPdu(temp_pdu);

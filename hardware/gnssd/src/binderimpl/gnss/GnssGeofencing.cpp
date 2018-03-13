@@ -17,9 +17,13 @@ Return<void> GnssGeofencing::setCallback(const sp<IGnssGeofenceCallback>& callba
     return Void();
 }
 
-Return<void> GnssGeofencing::addGeofence(int32_t geofenceId, double latitudeDegrees, double longitudeDegrees,
-                                         double radiusMeters, IGnssGeofenceCallback::GeofenceTransition lastTransition,
-                                         int32_t monitorTransitions, uint32_t notificationResponsivenessMs,
+Return<void> GnssGeofencing::addGeofence(int32_t geofenceId,
+                                         double latitudeDegrees,
+                                         double longitudeDegrees,
+                                         double radiusMeters,
+                                         IGnssGeofenceCallback::GeofenceTransition lastTransition,
+                                         int32_t monitorTransitions,
+                                         uint32_t notificationResponsivenessMs,
                                          uint32_t unknownTimerMs) {
     // TODO implement
     return Void();

@@ -25,13 +25,23 @@
 /**
  * Called when property is read, implemented elsewhere in the C++ world
  */
-int vsm_signal_property_read(sd_bus* bus, const char* path, const char* interface, const char* property,
-                             sd_bus_message* reply, void* userdata, sd_bus_error* ret_error);
+int vsm_signal_property_read(sd_bus* bus,
+                             const char* path,
+                             const char* interface,
+                             const char* property,
+                             sd_bus_message* reply,
+                             void* userdata,
+                             sd_bus_error* ret_error);
 /**
  * Called when property is written, implemented elsewhere in the C++ world
  */
-int vsm_signal_property_write(sd_bus* bus, const char* path, const char* interface, const char* property,
-                              sd_bus_message* value, void* userdata, sd_bus_error* ret_error);
+int vsm_signal_property_write(sd_bus* bus,
+                              const char* path,
+                              const char* interface,
+                              const char* property,
+                              sd_bus_message* value,
+                              void* userdata,
+                              sd_bus_error* ret_error);
 
 int vsm_signal_method_set(sd_bus_message* m, void* userdata, sd_bus_error* ret_error);
 
@@ -48,8 +58,11 @@ sd_bus_vtable get_vtable_wrproperty(const char* name, sd_bus_property_get_t gett
     return r;
 }
 
-sd_bus_vtable get_vtable_method(const char* name, const char* signature, const char* result,
-                                sd_bus_message_handler_t handler, int flags) {
+sd_bus_vtable get_vtable_method(const char* name,
+                                const char* signature,
+                                const char* result,
+                                sd_bus_message_handler_t handler,
+                                int flags) {
     const sd_bus_vtable r = SD_BUS_METHOD(name, signature, result, handler, flags);
     return r;
 }
@@ -95,7 +108,7 @@ void endBuildVtable(sd_bus_vtable* table, int index) {
     table[index + 1] = get_vtable_signal(VSM_STARTED_SIGNAL_NAME, "");
     /*A return value "s" is defined as when the SD_BUS_VTABLE_METHOD_NO_REPLY it was not found when the client was
      * trying to call it  */
-    table[index + 2] = get_vtable_method(VSM_SET_DE_SIGNAL_METHOD_NAME, "ss", "s", vsm_signal_method_set,
-                                         SD_BUS_VTABLE_UNPRIVILEGED);
+    table[index + 2] = get_vtable_method(
+            VSM_SET_DE_SIGNAL_METHOD_NAME, "ss", "s", vsm_signal_method_set, SD_BUS_VTABLE_UNPRIVILEGED);
     table[index + 3] = get_vtable_end();
 }

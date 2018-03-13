@@ -101,7 +101,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         number_of_disks.append(data)
         cache = re.findall('([^\n]*/\s*cache\s*)', shell_response[const.STDOUT][0])[0]
         number_of_disks.append(cache)
-        disk_load = {}# type: typing.Dict[str, Dict[str, List[str]]]
+        disk_load = {}# type: typing.Dict[str, typing.Dict[str, typing.List[str]]]
 
         for disk in number_of_disks:
             disk_load[str(disk)] = {}

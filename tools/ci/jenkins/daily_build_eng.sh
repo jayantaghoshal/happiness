@@ -8,8 +8,6 @@ SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
-
-
 export USE_CCACHE=false
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
@@ -21,19 +19,11 @@ export MP_PART_NUMBER
 ihuci vbf inc SWL2 # Increment part number suffix
 time make droid vts tradefed-all
 
-# Make OTA package
+# Make dist (dist, OTA & VBF)
 time make dist
-DIST_FILE="${REPO_ROOT_DIR}/out/dist/ihu_vcc-target_files-${BUILD_NUMBER}.zip"
-OTA_UPDATE_FILE="${REPO_ROOT_DIR}/out/ota_update.zip"
-time "${REPO_ROOT_DIR}"/build/tools/releasetools/ota_from_target_files --block "${DIST_FILE}" "${OTA_UPDATE_FILE}"
 
-# Build vendor/volovcar tests (Unit and Component Tests) # Not relevant to daily build
-# TODO: fix it for building daily tests
+# Build tests for daily (plan=nightly)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=nightly || die "Build Unit and Component tests failed"
-
-# Workaround broken config file that prevents vts from running
-# TODO: Remove when config file is fixed
-rm -f out/host/linux-x86/vts/android-vts/testcases/VtsClimateComponentTest.config
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz
@@ -43,14 +33,28 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/target/product/ihu_vcc/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed || die "Could not create out archive"
+            ./out/host/linux-x86/tradefed
+du -sh "${OUT_ARCHIVE}"
 
-du -sh "$OUT_ARCHIVE"
+# Create archive dist.zip (zip format required to download single file within archive in Artifactory)
+DIST_ARCHIVE=dist.zip
+# shellcheck disable=SC1065
+time (cd "${REPO_ROOT_DIR}/out" && zip -r - dist) > "${DIST_ARCHIVE}"
+du -sh "${DIST_ARCHIVE}"
+
+# Create archive ihu_update.tgz
+IHU_UPDATE_ARCHIVE=ihu_update.tgz
+time tar -c --use-compress-program='pigz -1' -f "${IHU_UPDATE_ARCHIVE}" \
+            --directory="$REPO_ROOT_DIR" \
+            ./vendor/volvocars/tools/ci/shipit
+du -sh "${IHU_UPDATE_ARCHIVE}"
 
 # Upload to Artifactory
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_FILE}" || die "Could not push dist file to Artifactory."
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OTA_UPDATE_FILE}" || die "Could not push ota update file to Artifactory."
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}"
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_ARCHIVE}"
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${IHU_UPDATE_ARCHIVE}"
 
 # Cleanup
-rm ${OUT_ARCHIVE}
+rm "${OUT_ARCHIVE}"
+rm "${DIST_ARCHIVE}"
+rm "${IHU_UPDATE_ARCHIVE}"

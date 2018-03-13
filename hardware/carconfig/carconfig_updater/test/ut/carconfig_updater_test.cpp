@@ -31,10 +31,14 @@ using ::testing::Return;
 using ::testing::Field;
 using ::testing::AtLeast;
 
-extern bool setStateAndSendDiagnostics(bool stateConfigured, bool allParamsReceived, bool allParamsOk,
-                                       bool paramsChanged, bool allStoredParamsOk,
+extern bool setStateAndSendDiagnostics(bool stateConfigured,
+                                       bool allParamsReceived,
+                                       bool allParamsOk,
+                                       bool paramsChanged,
+                                       bool allStoredParamsOk,
                                        std::map<uint32_t, uint8_t> receivedBadParams,
-                                       std::map<uint32_t, uint8_t> storedBadParams, diagnosticsClient& diagClient,
+                                       std::map<uint32_t, uint8_t> storedBadParams,
+                                       diagnosticsClient& diagClient,
                                        bool& rebootNeeded);
 
 typedef std::map<uint32_t, uint8_t> paramMap_t;
@@ -281,8 +285,9 @@ TEST_F(CarConfigUpdaterTestFixture, storeReceivedParameter_givenValidUpdatedPara
 
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(504).WillRepeatedly(Return(ccVal));
 
-    EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 2),
-                                                 Field(&ccValue::status, ccStatus::GOOD))))
+    EXPECT_CALL(
+            *mockCarconfigFile,
+            setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 2), Field(&ccValue::status, ccStatus::GOOD))))
             .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
@@ -308,8 +313,10 @@ TEST_F(CarConfigUpdaterTestFixture,
 
     EXPECT_CALL(*mockCarconfigFile, getValue(_)).Times(504).WillRepeatedly(Return(ccVal));
 
-    EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 1),
-                                                 Field(&ccValue::status, ccStatus::INVALID))))
+    EXPECT_CALL(
+            *mockCarconfigFile,
+            setValue(_,
+                     (Field(&ccValue::raw, 2), Field(&ccValue::subs, 1), Field(&ccValue::status, ccStatus::INVALID))))
             .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
@@ -328,8 +335,10 @@ TEST_F(CarConfigUpdaterTestFixture,
         buff[i].value = 2;
     }
 
-    EXPECT_CALL(*mockCarconfigFile, setValue(_, (Field(&ccValue::raw, 2), Field(&ccValue::subs, 255),
-                                                 Field(&ccValue::status, ccStatus::INVALID))))
+    EXPECT_CALL(
+            *mockCarconfigFile,
+            setValue(_,
+                     (Field(&ccValue::raw, 2), Field(&ccValue::subs, 255), Field(&ccValue::status, ccStatus::INVALID))))
             .Times(504);
 
     storeReceivedParameter(*mockCarconfigFile, tmpFilePath, buff);
@@ -451,9 +460,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
 
     EXPECT_CALL(mockDiagClient, registerDID(11031, registerValues)).Times(1);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_TRUE(result);
     EXPECT_TRUE(mRebootNeeded);
@@ -483,9 +498,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_AllReceivedAnd
     EXPECT_CALL(mockDiagClient, updateDID(11031, updateValues)).Times(1);
     EXPECT_CALL(mockDiagClient, sendDiagnosticsMessage(12040, expDidStatusCodes)).Times(1);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -515,9 +536,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     EXPECT_CALL(mockDiagClient, registerDID(11031, expectedRegisterContent)).Times(1);
     EXPECT_CALL(mockDiagClient, updateDID(11031, expectedStoredContent)).Times(1);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -547,9 +574,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_BulkState_NotAllReceived
     EXPECT_CALL(mockDiagClient, registerDID(11031, expectedRegisterContent)).Times(1);
     EXPECT_CALL(mockDiagClient, updateDID(11031, expectedStoredContent)).Times(0);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -585,9 +618,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
     // we DO NOT expected a call to the DID functionality
     EXPECT_CALL(mockDiagClient, updateDID(11031, expectedStoredContent)).Times(0);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_FALSE(result);
     EXPECT_FALSE(mRebootNeeded);
@@ -623,9 +662,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
     // we DO NOT expected a call to the DID functionality
     EXPECT_CALL(mockDiagClient, updateDID(11031, expectedStoredContent)).Times(0);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, true);
@@ -660,9 +705,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_AllRecei
 
     EXPECT_CALL(mockDiagClient, sendDiagnosticsMessage(12040, expDiagnosticCodes)).Times(1);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);
@@ -698,9 +749,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF, setStateLogic_ConfiguredState_NotAllRe
 
     EXPECT_CALL(mockDiagClient, sendDiagnosticsMessage(12040, expDiagnosticCodes)).Times(0);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);
@@ -738,9 +795,15 @@ TEST_F(CarConfigUpdateSetStateLogicBulkF,
     // in this case we DO expect an diagnostic code to be set
     EXPECT_CALL(mockDiagClient, sendDiagnosticsMessage(12040, expDiagnosticCodes)).Times(0);
 
-    result = setStateAndSendDiagnostics(mIsConfigured, mAllParamsReceived, mAllParamsOk, mParamsChanged, mStoredParamOk,
-                                        mReceivedParam, mStoredBadParams,
-                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)), mRebootNeeded);
+    result = setStateAndSendDiagnostics(mIsConfigured,
+                                        mAllParamsReceived,
+                                        mAllParamsOk,
+                                        mParamsChanged,
+                                        mStoredParamOk,
+                                        mReceivedParam,
+                                        mStoredBadParams,
+                                        *(reinterpret_cast<diagnosticsClient*>(&mockDiagClient)),
+                                        mRebootNeeded);
 
     EXPECT_EQ(result, false);
     EXPECT_EQ(mRebootNeeded, false);

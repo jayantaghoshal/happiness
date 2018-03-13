@@ -50,7 +50,14 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         self.flexray = FrSignalInterface()
         self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
 
+        self.vHalCommon.setUpVendorExtension()
+        vc, device = self.vHalCommon.getViewClient()
+        vc.dump(window=-1)
+
         # TODO: Check buttons, should they be vissable, not visable or grayed out. How is this supposed to be verified?
+        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingOff")
+        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingVisual")
+        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingVisualAndSound")
 
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, self.flexray.DriveAwayInfoActvReq.map.Off)
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, self.flexray.DriveAwayInfoSoundWarnActvReq.map.Off)

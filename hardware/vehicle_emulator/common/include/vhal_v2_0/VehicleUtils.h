@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_VehicleUtils_H_
-#define android_hardware_automotive_vehicle_V2_0_VehicleUtils_H_
+#pragma once
 
 #include <memory>
 
@@ -77,5 +76,3 @@ void shallowCopy(VehiclePropValue* dest, const VehiclePropValue& src);
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_VehicleUtils_H_

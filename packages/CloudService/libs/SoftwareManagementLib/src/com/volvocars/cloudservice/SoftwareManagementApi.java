@@ -26,11 +26,42 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     private SoftwareManagementApiConnectionCallback softwareManagementApiConnectionCallback = null;
 
+    private DeathRecipient death = new DeathRecipient(this);
+
+    final class DeathRecipient implements IBinder.DeathRecipient {
+
+        private SoftwareManagementApi client;
+        private int retries = 0;
+
+        DeathRecipient(SoftwareManagementApi client) {
+            this.client = client;
+        }
+
+        @Override
+        public void binderDied() {
+            Log.e(LOG_TAG, "CloudService died");
+
+            if(retries < 5) {
+                Log.d(LOG_TAG, "Trying CloudService again... Attempt " + (retries + 1));
+                retries++;
+                client.connect();
+            } else {
+                Log.d(LOG_TAG, "CloudService seems unreliable, no more attempts to connect.");
+            }
+        }
+    }
+
     @Override
     public void onServiceConnected(ComponentName className, IBinder service) {
         software_management = ISoftwareManagementApi.Stub.asInterface(service);
         service_bound = true;
         softwareManagementApiConnectionCallback.onServiceConnected();
+
+        try {
+            service.linkToDeath(death, 0 /* flags */);
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Unable to register Death Recipient. :(");
+        }
     }
 
     @Override
@@ -92,8 +123,10 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    *
-    */
+     * Return the result for GetDownloadInfo
+     * @param code          The HTTP cose of the response
+     * @param download_info The download information of the installation order.
+     */
     public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetDownloadInfo(uuid, callback);
@@ -101,13 +134,24 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    * Get Download data
-    * @param downloadInfo Contains information of what to be downloaded
-    * @param callback     Callback to be called when the status of the download changes
-    */
+     * Get Download data
+     * @param downloadInfo Contains information of what to be downloaded
+     * @param callback     Callback to be called when the status of the download changes
+     */
     public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetDownloadData(downloadInfo, callback);
+        }
+    }
+
+    /**
+     * Post InstallationReport
+     * @param installationReport Report to be posted
+     * @param callback           Callback to be called when the status of the download changes
+     */
+    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (software_management != null && service_bound) {
+            software_management.PostInstallationReport(installationReport, callback);
         }
     }
 }

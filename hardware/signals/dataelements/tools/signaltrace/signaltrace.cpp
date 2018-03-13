@@ -31,7 +31,8 @@ const char* dirStr(Dir dir) {
 
 class SignalChangedCallback : public ISignalsChangedCallback {
   public:
-    ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName, Dir dir,
+    ::android::hardware::Return<void> signalChanged(const ::android::hardware::hidl_string& signalName,
+                                                    Dir dir,
                                                     const ::android::hardware::hidl_string& data) override {
         printf("[%s] %s %s\n", dirStr(dir), signalName.c_str(), data.c_str());
         fflush(stdout);  // Important, when piping through grep (non interative terminal), \n does not flush the output.
@@ -80,7 +81,8 @@ class DeathRecipientToFunction : public android::hardware::hidl_death_recipient 
 
 class HidlSubscriber {
   public:
-    HidlSubscriber(::android::sp<ISignals> alreadyConnectedService, const std::string& filter,
+    HidlSubscriber(::android::sp<ISignals> alreadyConnectedService,
+                   const std::string& filter,
                    const std::set<Dir>& dirs);
 
   private:
@@ -104,15 +106,18 @@ bool HidlSubscriber::resubscribe() {
     for (const Dir& d : dirs) {
         auto subscribe = service->subscribe(filter, d, signalChangedListener);
         if (!subscribe.isOk()) {
-            printf("ERROR: Failed to subscribe to server with dir=%s and filter=%s . Description: %s\n", dirStr(d),
-                   filter.c_str(), subscribe.description().c_str());
+            printf("ERROR: Failed to subscribe to server with dir=%s and filter=%s . Description: %s\n",
+                   dirStr(d),
+                   filter.c_str(),
+                   subscribe.description().c_str());
             return false;
         }
     }
     return true;
 }
 
-HidlSubscriber::HidlSubscriber(::android::sp<ISignals> alreadyConnectedService, const std::string& filter,
+HidlSubscriber::HidlSubscriber(::android::sp<ISignals> alreadyConnectedService,
+                               const std::string& filter,
                                const std::set<Dir>& dirs)
     : service{alreadyConnectedService},
       signalChangedListener{new SignalChangedCallback()},

@@ -16,11 +16,17 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
-from com.dtmilano.android.viewclient import ViewClient
+from com.dtmilano.android.viewclient import ViewClient, ViewNotFoundException
 
 
 from generated.pyDataElements import \
     FrSignalInterface
+
+property_list = [
+    ('CONNECTED_SAFETY_ON', 557842436),
+    ('DAI_SETTING', 557842437),
+    ('CURVE_SPEED_ADAPTION_ON', 555745286),
+]
 
 class VehicleHalCommon():
 
@@ -43,6 +49,20 @@ class VehicleHalCommon():
         self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
         self.flexray = FrSignalInterface()
         self.dut = dut
+
+    def get_id(self, property):
+        for prop in property_list:
+            if prop[0] == property:
+                return prop[1]
+        return 0
+
+    def assert_ViewNotFoundException(self, vc, buttonId):
+        exceptionRaised = False
+        try:
+            vc.findViewByIdOrRaise(buttonId)
+        except ViewNotFoundException:
+            exceptionRaised = True
+        asserts.assertTrue(exceptionRaised, buttonId + " was found when it should be invisible")
 
 
     def getViewClient(self):
@@ -270,4 +290,8 @@ class VehicleHalCommon():
         if self.flexray.connected:
             read_value = fdx_signal.get()
             asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ))
+
+    def assert_prop_equals(self, propId, expected_value):
+        value = self.readVhalProperty(propId)
+        asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
 

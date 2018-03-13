@@ -1,0 +1,30 @@
+package vendor.volvocars.hardware.installationmaster@1.0;
+
+import IInstallationMasterEventListener;
+
+interface IInstallationMaster
+{
+    /**
+     * Assigns an installation order for installation. Provided that both the Installation Master and SoftwareUpdateService
+     * uses the same working directory (e.g., /vendor/data/OTA), Installation Master will find the installation order that
+     * is assigned for installation in that directory. The progress of the installation will be broadcasted to all registered
+     * IInstallationMasterEventListeners.
+     * @param installationOrder The UUID of the installation order to install.
+     */
+    oneway assignInstallation(string installationOrder);
+
+    /**
+     * Ask installation master to verify downloaded files against an installation order. If verification failes,
+     * an installation report will be created and returned, (else null ?)
+     * @param installationOrder The UUID of the the Installation order to verify.
+     * @return datafiles        List of data files and their status.
+     */
+    verifyDownload(string installationOrder) generates (vec<DataFile> datafiles);
+
+    /**
+     * Register a handle to the client for the installation master to call.
+     * @param eventListener An implemetination of Iimel
+     */
+    oneway registerInstallationStatusListener(IInstallationMasterEventListener eventListener);
+
+};

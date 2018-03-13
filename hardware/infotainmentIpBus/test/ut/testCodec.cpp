@@ -124,7 +124,9 @@ TEST_F(TypeConvHelpersTest, EncodeWOSession) {
              &extendedData_1}};
     Icb_ChannelData channelData_p = &channelData[0];
     Icb_ReceiverChannelData_t receiverChannels = {0,  // min and max taken from Icb_ReceiverChannelData_EncodedSize()
-                                                  127, 1, &channelData_p};
+                                                  127,
+                                                  1,
+                                                  &channelData_p};
 
     gnssPositionData.receiverChannels = &receiverChannels;
 
@@ -134,8 +136,8 @@ TEST_F(TypeConvHelpersTest, EncodeWOSession) {
     ALOGI("Starting encode data!");
     std::vector<uint8_t> payload;
 
-    InfotainmentIpBus::Utils::encodeMessage(&gnssPos, Icb_OpGNSSPositionData_Response_Encode,
-                                            Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
+    InfotainmentIpBus::Utils::encodeMessage(
+            &gnssPos, Icb_OpGNSSPositionData_Response_Encode, Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
 
     //------------------ Decode ---------------------
     ALOGI("Starting decode data!");
@@ -145,7 +147,9 @@ TEST_F(TypeConvHelpersTest, EncodeWOSession) {
 
     Icb_OpGNSSPositionData_Response decodedGnssPos = nullptr;
 
-    InfotainmentIpBus::Utils::DecodeMessage(payload, m_session_msgd, decodedGnssPos,
+    InfotainmentIpBus::Utils::DecodeMessage(payload,
+                                            m_session_msgd,
+                                            decodedGnssPos,
                                             Icb_OpGNSSPositionData_Response_Create,
                                             Icb_OpGNSSPositionData_Response_Decode);
 
@@ -251,8 +255,8 @@ TEST_F(TypeConvHelpersTest, EncodeWithSession) {
     ALOGI("Starting encode data!");
     std::vector<uint8_t> payload;
 
-    InfotainmentIpBus::Utils::encodeMessage(gnssPos, Icb_OpGNSSPositionData_Response_Encode,
-                                            Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
+    InfotainmentIpBus::Utils::encodeMessage(
+            gnssPos, Icb_OpGNSSPositionData_Response_Encode, Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
 
     //------------------ Decode ---------------------
     ALOGI("Starting decode data!");
@@ -263,7 +267,9 @@ TEST_F(TypeConvHelpersTest, EncodeWithSession) {
 
     Icb_OpGNSSPositionData_Response decodedGnssPos = nullptr;
 
-    InfotainmentIpBus::Utils::DecodeMessage(payload, m_session_rcv, decodedGnssPos,
+    InfotainmentIpBus::Utils::DecodeMessage(payload,
+                                            m_session_rcv,
+                                            decodedGnssPos,
                                             Icb_OpGNSSPositionData_Response_Create,
                                             Icb_OpGNSSPositionData_Response_Decode);
 

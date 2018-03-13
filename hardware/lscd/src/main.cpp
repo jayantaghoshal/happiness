@@ -110,30 +110,31 @@ int main(void) {
     bool drivingActive = false;
     const hidl_string& lscName("Lsc1");
 
-    _vehModMngtGlbSafe1.subscribe([&_vehModMngtGlbSafe1, &lscservice1, &lscservice2, &lscservice3, &lscName,
-                                   &drivingActive]() {
-        const auto signal_state_value = _vehModMngtGlbSafe1.get();
-        if (!drivingActive && signal_state_value.isOk() &&
-            signal_state_value.value().UsgModSts == autosar::UsgModSts1::UsgModDrvg)  // 13 == Driving
-        {
-            ALOGI("Request signal received");
-            lscservice1->RegisterLSC("Lsc1");
-            lscservice2->RegisterLSC("Lsc2");
-            lscservice3->RegisterLSC("Lsc3");
+    _vehModMngtGlbSafe1.subscribe(
+            [&_vehModMngtGlbSafe1, &lscservice1, &lscservice2, &lscservice3, &lscName, &drivingActive]() {
+                const auto signal_state_value = _vehModMngtGlbSafe1.get();
+                if (!drivingActive && signal_state_value.isOk() &&
+                    signal_state_value.value().UsgModSts == autosar::UsgModSts1::UsgModDrvg)  // 13 == Driving
+                {
+                    ALOGI("Request signal received");
+                    lscservice1->RegisterLSC("Lsc1");
+                    lscservice2->RegisterLSC("Lsc2");
+                    lscservice3->RegisterLSC("Lsc3");
 
-            lscservice1->RequestResourceGroup(lscName, ResourceGroup::ResourceGroup1, ResourceGroupPrio::Normal);
-            drivingActive = true;
-        } else if (drivingActive && signal_state_value.isOk() &&
-                   signal_state_value.value().UsgModSts != autosar::UsgModSts1::UsgModDrvg) {
-            ALOGI("ReleaseResourceGroup signal received :");
-            lscservice1->ReleaseResourceGroup(lscName, ResourceGroup::ResourceGroup1);
-            lscservice1->UnregisterLSC("Lsc1");
-            lscservice2->UnregisterLSC("Lsc2");
-            lscservice3->UnregisterLSC("Lsc3");
-            drivingActive = false;
-        }
-        ALOGD("UsgModSts1: %d", signal_state_value.value().UsgModSts);
-    });
+                    lscservice1->RequestResourceGroup(
+                            lscName, ResourceGroup::ResourceGroup1, ResourceGroupPrio::Normal);
+                    drivingActive = true;
+                } else if (drivingActive && signal_state_value.isOk() &&
+                           signal_state_value.value().UsgModSts != autosar::UsgModSts1::UsgModDrvg) {
+                    ALOGI("ReleaseResourceGroup signal received :");
+                    lscservice1->ReleaseResourceGroup(lscName, ResourceGroup::ResourceGroup1);
+                    lscservice1->UnregisterLSC("Lsc1");
+                    lscservice2->UnregisterLSC("Lsc2");
+                    lscservice3->UnregisterLSC("Lsc3");
+                    drivingActive = false;
+                }
+                ALOGD("UsgModSts1: %d", signal_state_value.value().UsgModSts);
+            });
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 

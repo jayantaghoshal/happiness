@@ -40,7 +40,9 @@ auto createIptcHandle() {
     return iptc_handle;
 }
 
-void createIptablesStructs(const std::string& interface, const std::string& gateway_ip_address, iptc_info& iptc_info,
+void createIptablesStructs(const std::string& interface,
+                           const std::string& gateway_ip_address,
+                           iptc_info& iptc_info,
                            ipt_entry& search_mask) {
     // Calculate sizes and offsets
     std::uint32_t size_ipt_entry = sizeof(iptc_info.entry);
@@ -83,7 +85,8 @@ void createIptablesStructs(const std::string& interface, const std::string& gate
 namespace vcc {
 namespace netman {
 
-bool IptablesConfig::configureSplitTraffic(const std::string& interface, const std::string& gateway_ip_address,
+bool IptablesConfig::configureSplitTraffic(const std::string& interface,
+                                           const std::string& gateway_ip_address,
                                            bool add) {
     iptc_info iptc_info = {};
     auto iptc_handle{createIptcHandle()};
@@ -93,19 +96,25 @@ bool IptablesConfig::configureSplitTraffic(const std::string& interface, const s
 
     // PREROUTING
     if (add) {
-        if (0 == iptc_check_entry("PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                  reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
-            if (0 == iptc_insert_entry("PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry), 0,
-                                       iptc_handle.get())) {
+        if (0 == iptc_check_entry("PREROUTING",
+                                  static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                  reinterpret_cast<unsigned char*>(&search_mask),
+                                  iptc_handle.get())) {
+            if (0 == iptc_insert_entry(
+                             "PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry), 0, iptc_handle.get())) {
                 ALOGE("Could not insert a mangle TEE rules in iptables %s", iptc_strerror(errno));
                 return false;
             }
         }
     } else {
-        if (1 == iptc_check_entry("PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                  reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
-            if (0 == iptc_delete_entry("PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                       reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
+        if (1 == iptc_check_entry("PREROUTING",
+                                  static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                  reinterpret_cast<unsigned char*>(&search_mask),
+                                  iptc_handle.get())) {
+            if (0 == iptc_delete_entry("PREROUTING",
+                                       static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                       reinterpret_cast<unsigned char*>(&search_mask),
+                                       iptc_handle.get())) {
                 ALOGE("Could not delete a mangle rules in iptables %s", iptc_strerror(errno));
                 return false;
             }
@@ -120,19 +129,25 @@ bool IptablesConfig::configureSplitTraffic(const std::string& interface, const s
     memset(iptc_info.entry.ip.outiface_mask, 0xFF, interface.size() + 1);
 
     if (add) {
-        if (0 == iptc_check_entry("POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                  reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
-            if (0 == iptc_insert_entry("POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry), 0,
-                                       iptc_handle.get())) {
+        if (0 == iptc_check_entry("POSTROUTING",
+                                  static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                  reinterpret_cast<unsigned char*>(&search_mask),
+                                  iptc_handle.get())) {
+            if (0 == iptc_insert_entry(
+                             "POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry), 0, iptc_handle.get())) {
                 ALOGE("Could not insert a mangle TEE rules in iptables %s", iptc_strerror(errno));
                 return false;
             }
         }
     } else {
-        if (1 == iptc_check_entry("POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                  reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
-            if (0 == iptc_delete_entry("POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                                       reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
+        if (1 == iptc_check_entry("POSTROUTING",
+                                  static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                  reinterpret_cast<unsigned char*>(&search_mask),
+                                  iptc_handle.get())) {
+            if (0 == iptc_delete_entry("POSTROUTING",
+                                       static_cast<struct ipt_entry*>(&iptc_info.entry),
+                                       reinterpret_cast<unsigned char*>(&search_mask),
+                                       iptc_handle.get())) {
                 ALOGE("Could not delete a mangle rules in iptables %s", iptc_strerror(errno));
                 return false;
             }
@@ -157,8 +172,10 @@ bool IptablesConfig::isSplitTrafficSet(const std::string& interface, const std::
     createIptablesStructs(interface, gateway_ip_address, iptc_info, search_mask);
 
     // Check if PREROUTING rule exists
-    if (0 == iptc_check_entry("PREROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                              reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
+    if (0 == iptc_check_entry("PREROUTING",
+                              static_cast<struct ipt_entry*>(&iptc_info.entry),
+                              reinterpret_cast<unsigned char*>(&search_mask),
+                              iptc_handle.get())) {
         return false;
     }
 
@@ -167,8 +184,10 @@ bool IptablesConfig::isSplitTrafficSet(const std::string& interface, const std::
     memset(iptc_info.entry.ip.outiface_mask, 0xFF, interface.size() + 1);
 
     // Check if POSTROUTING rule exists
-    if (0 == iptc_check_entry("POSTROUTING", static_cast<struct ipt_entry*>(&iptc_info.entry),
-                              reinterpret_cast<unsigned char*>(&search_mask), iptc_handle.get())) {
+    if (0 == iptc_check_entry("POSTROUTING",
+                              static_cast<struct ipt_entry*>(&iptc_info.entry),
+                              reinterpret_cast<unsigned char*>(&search_mask),
+                              iptc_handle.get())) {
         return false;
     }
 

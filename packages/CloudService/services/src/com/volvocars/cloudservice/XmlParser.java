@@ -180,7 +180,7 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     uris = ParseSoftwareManagementElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
@@ -227,7 +227,7 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else if (tag.equals("pending_installations")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
                     uris.pending_installations = ParseString("pending_installations", parser);
                 } else if (tag.equals("closed_installations")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
@@ -236,14 +236,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("software_management")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -272,10 +272,10 @@ public final class XmlParser {
             } else if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("available_updates")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
                     list = ParseAvailableUpdatesElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
@@ -283,7 +283,7 @@ public final class XmlParser {
             }
             eventType = parser.next();
         }
-        Log.v(LOG_TAG, "End of Docume nt");
+        Log.v(LOG_TAG, "End of Document");
 
         Log.v(LOG_TAG, "- ParseSoftwareAssignments");
 
@@ -314,14 +314,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("available_updates")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -348,7 +348,7 @@ public final class XmlParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("id")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
                     software.uuid = ParseString(tag, parser);
                 } else if (tag.equals("name")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
@@ -356,11 +356,8 @@ public final class XmlParser {
                 } else if (tag.equals("icon")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if (tag.equals("icon")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
                 } else if (tag.equals("short_description")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
                     software.description = ParseString(tag, parser);
                 } else if (tag.equals("long_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
@@ -387,14 +384,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("software")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -431,7 +428,7 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     list = ParsePendingInstallationsElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
@@ -470,14 +467,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("pending_installations")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -528,14 +525,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     installationOrder.software = ParseSoftwareElement(parser);
                 }   else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("installation_order")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -572,7 +569,7 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     downloadInfo = ParseDownloadInfoElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
@@ -620,14 +617,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("downloads")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
@@ -657,14 +654,14 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     downloads.add(ParseString("file", parser));
                 } else {
-                    Log.w(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("downloads")) {
                     depth--;
                 } else {
-                    Log.v(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
                 Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");

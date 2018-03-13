@@ -17,10 +17,24 @@ namespace {
 std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
 }  // namespace
 
-SettingBase::SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope)
-    : userScope_(userScope), name_(name), context{std::move(context)}, handle_(-1) {
+SettingBase::SettingBase(const android::sp<SettingsManager>& context, const SettingId& name, UserScope userScope)
+    : userScope_(userScope), name_(name), context{context}, handle_(-1) {
     ALOGV("SettingBase ctor %d, userScope=%d", name, userScope);
-
+    handle_ = context->attachSetting(
+            name_,
+            userScope,
+            [this](const std::string& stringdata, ProfileIdentifier profileId) {
+                ALOGV("onDataChangedBase, data=%s", stringdata.c_str());
+                initialized = true;
+                onDataChanged(stringdata, profileId);  // NOLINT: Virtual function will exist on dispatcher thread
+                ALOGV("onDataChangedBaseDone");
+            },
+            [this](ProfileIdentifier profileId) {
+                ALOGV("onSettingResetBase");
+                initialized = true;
+                onSettingReset(profileId);  // NOLINT: Virtual function will exist on dispatcher thread
+                ALOGV("onSettingResetBaseDone");
+            });
     ALOGV("SettingBase ctor done");
 }
 
@@ -57,10 +71,8 @@ void SettingBase::setStringData(const std::string& data, ProfileIdentifier profi
         // kindof defeats the purpose of storing the value persistently.
         //
         // If the set-request was triggered by a user action it is probably more correct to use the new value but we've
-        // observed multiple
-        // cases of application code incorrectly calling set during startup which would overwrite stored settings so
-        // we've been forced
-        // to choose ignore as default.
+        // observed multiple cases of application code incorrectly calling set during startup which would overwrite 
+        // stored settings so we've been forced to choose ignore as default.
         ALOGE("Attempt to set setting [%d] before stored value has been received. This is most likely a bug in "
               "application code. Set request will be ignored.",
               name_);

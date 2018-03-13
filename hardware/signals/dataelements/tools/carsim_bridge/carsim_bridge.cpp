@@ -83,7 +83,9 @@ int main(int argc, char* argv[]) {
                     nlohmann::json jdata = j["Data"];
                     std::string signal_data = jdata.dump();
 
-                    ALOGV("signal_name:%s\nsignal_dir:%zd\nsignal_data:%s", signal_name.c_str(), signal_dir,
+                    ALOGV("signal_name:%s\nsignal_dir:%zd\nsignal_data:%s",
+                          signal_name.c_str(),
+                          signal_dir,
                           signal_data.c_str());
 
                     // Send message to HIDL

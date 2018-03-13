@@ -15,6 +15,7 @@
 
 namespace autosar {
 
+
 //==========================================
 const char* ADataRawSafe_info::Name() { return "ADataRawSafe"; }
 const char* ADataRawSafe_info::TypeName() { return "ADataRawSafe1"; }
@@ -5635,6 +5636,5 @@ const char* iTPMSTirePMSts_info::typeName() const { return TypeName(); }
 Dir iTPMSTirePMSts_info::direction() const { return Direction(); }
 
 
-} // end of namespace
-
+} // namespace autosar
 // clang-format on

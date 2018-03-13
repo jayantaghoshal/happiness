@@ -42,14 +42,16 @@ void DataElementCommBusHIDL::send(const std::string& name, const std::string& pa
 }
 
 // Param vsd_proxy_local should be a local copy
-void DataElementCommBusHIDL::sendWithoutProxyMutex(const std::string& name, const std::string& payload,
+void DataElementCommBusHIDL::sendWithoutProxyMutex(const std::string& name,
+                                                   const std::string& payload,
                                                    const autosar::Dir dir,
                                                    ::android::sp<dataElemHidl::ISignals>& vsd_proxy_local) {
     if (vsd_proxy_local != nullptr) {
         auto result = vsd_proxy_local->send(name, static_cast<dataElemHidl::Dir>(dir), payload);
         if (!result.isOk()) {
             ALOGW("Error %s while writing property: %s. Message will be send if service becomes available",
-                  result.description().c_str(), name.c_str());
+                  result.description().c_str(),
+                  name.c_str());
         }
     }
 }
@@ -66,13 +68,15 @@ void DataElementCommBusHIDL::setNewDataElementHandler(
     }
 }
 
-void DataElementCommBusHIDL::addNameWithoutProxyMutex(const autosar::Dir dir, const std::string& name,
+void DataElementCommBusHIDL::addNameWithoutProxyMutex(const autosar::Dir dir,
+                                                      const std::string& name,
                                                       ::android::sp<dataElemHidl::ISignals>& vsd_proxy_local) {
     if (vsd_proxy_local != nullptr) {
         auto result = vsd_proxy_local->subscribe(name, static_cast<dataElemHidl::Dir>(dir), this);
         if (!result.isOk()) {
             ALOGE("Signaling service not available: %s, subscription of %s not registered",
-                  result.description().c_str(), name.c_str());
+                  result.description().c_str(),
+                  name.c_str());
         }
     }
 }
@@ -155,7 +159,8 @@ void DataElementCommBusHIDL::connectToVsdProxyAndResend() {
 }
 
 andrHw::Return<void> DataElementCommBusHIDL::onRegistration(const andrHw::hidl_string& fqName,
-                                                            const andrHw::hidl_string& name, bool preexisting) {
+                                                            const andrHw::hidl_string& name,
+                                                            bool preexisting) {
     ALOGI("Signal service started callback received");
     connectToVsdProxyAndResend();
     return andrHw::Void();
@@ -177,7 +182,8 @@ void DataElementCommBusHIDL::serviceDied(uint64_t cookie, const android::wp<::an
     ALOGE("Signal service died callback received");
 }
 
-andrHw::Return<void> DataElementCommBusHIDL::signalChanged(const andrHw::hidl_string& signalName, dataElemHidl::Dir dir,
+andrHw::Return<void> DataElementCommBusHIDL::signalChanged(const andrHw::hidl_string& signalName,
+                                                           dataElemHidl::Dir dir,
                                                            const andrHw::hidl_string& data) {
     ALOGV("Signal %s changed to %s", signalName.c_str(), data.c_str());
 
@@ -185,7 +191,8 @@ andrHw::Return<void> DataElementCommBusHIDL::signalChanged(const andrHw::hidl_st
         try {
             dataElementCallback_(signalName, data);
         } catch (std::exception& e) {
-            ALOGE("Dataelement callback throw an exception: %s while receiving signal: %s", e.what(),
+            ALOGE("Dataelement callback throw an exception: %s while receiving signal: %s",
+                  e.what(),
                   signalName.c_str());
         }
     }

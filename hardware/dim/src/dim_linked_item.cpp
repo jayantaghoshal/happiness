@@ -8,8 +8,12 @@
 namespace vcc {
 namespace dim {
 
-DimLinkedItem::DimLinkedItem(uint16_t id, uint16_t groupID, ItemType itemType, TextAlignment align,
-                             TextTruncation trunc, ItemSelectable select)
+DimLinkedItem::DimLinkedItem(uint16_t id,
+                             uint16_t groupID,
+                             ItemType itemType,
+                             TextAlignment align,
+                             TextTruncation trunc,
+                             ItemSelectable select)
     : itemType_(itemType), DimItem(id, groupID, align, trunc, select) {}
 
 DimItem::ItemType DimLinkedItem::GetType() const { return itemType_; }

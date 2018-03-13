@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
@@ -17,7 +17,9 @@ LOCAL_C_INCLUDES += \
 LOCAL_CPPFLAGS += -fexceptions
 LOCAL_CPPFLAGS += -Wno-macro-redefined
 
-LOCAL_MODULE := hw/carconfig-updater
+LOCAL_MODULE := carconfig-updater
+LOCAL_MODULE_RELATIVE_PATH := hw
+
 
 LOCAL_VENDOR_MODULE := true
 LOCAL_MULTILIB := 64

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -125,8 +125,12 @@ Return<void> CloudService::registerCloudConnectionEventListener(
     return Void();
 }
 
-Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeaders& headers, uint32_t timeout,
+Return<void> CloudService::doGetRequest(const hidl_string& uri,
+                                        const HttpHeaders& headers,
+                                        uint32_t timeout,
                                         doGetRequest_cb _hidl_cb) {
+    ALOGV("doGetRequest with uri: %s", uri.c_str());
+
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -145,7 +149,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     } else {
         url = url + "/" + path;
     }
-
+    ALOGV("doGetRequest url: %s", url.c_str());
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
 
@@ -190,8 +194,12 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri, const HttpHeader
     return Void();
 }
 
-Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeaders& headers, const hidl_string& body,
-                                         uint32_t timeout, doPostRequest_cb _hidl_cb) {
+Return<void> CloudService::doPostRequest(const hidl_string& uri,
+                                         const HttpHeaders& headers,
+                                         const hidl_string& body,
+                                         uint32_t timeout,
+                                         doPostRequest_cb _hidl_cb) {
+    ALOGV("doPostRequest with uri: %s and body: %s", uri.c_str(), body.c_str());
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -210,6 +218,8 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
     } else {
         url = url + "/" + path;
     }
+
+    ALOGV("doPostRequest url: %s", url.c_str());
 
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
@@ -257,9 +267,13 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri, const HttpHeade
     return Void();
 }
 
-Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHeaders& headers,
-                                           const hidl_string& file_path, uint32_t timeout,
+Return<void> CloudService::downloadRequest(const hidl_string& uri,
+                                           const HttpHeaders& headers,
+                                           const hidl_string& file_path,
+                                           uint32_t timeout,
                                            const android::sp<ICloudConnectionDownloadResponseCallback>& callback) {
+    ALOGV("downloadRequest with uri: %s and file_path: %s", uri.c_str(), file_path.c_str());
+
     if (state_ != ConnectionState::CONNECTED) {
         ALOGW("Illegal call: CEP URL not fetch yet.");
         ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
@@ -275,6 +289,7 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri, const HttpHea
     } else {
         url = url + "/" + path;
     }
+    ALOGV("downloadRequest url: %s", url.c_str());
 
     try {
         download_request_ = std::make_shared<CloudRequest>(cert_handler_);

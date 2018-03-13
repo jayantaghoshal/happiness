@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_VehicleHalManager_H_
-#define android_hardware_automotive_vehicle_V2_0_VehicleHalManager_H_
+#pragma once
 
 #include <inttypes.h>
 #include <stdint.h>
@@ -118,5 +117,3 @@ class VehicleHalManager : public IVehicle {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_VehicleHalManager_H_

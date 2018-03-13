@@ -1,0 +1,57 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "installationmasterd_cc_defaults",
+    defaults: ["volvocars_cc_defaults"],
+    tidy_checks: [
+    ],
+}
+
+cc_binary {
+    name: "installationmasterd",
+    init_rc: ["installationmasterd.rc"],
+    relative_install_path: "hw",
+    vendor: true,
+    cpp_std: "c++14",
+    defaults: ["installationmasterd_cc_defaults"],
+    srcs: [
+        "src/main.cpp",
+        "src/installation_master_daemon.cpp",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    local_include_dirs: [
+        "src/",
+    ],
+
+    include_dirs: [
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libtarmac",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libz",
+        "vendor.volvocars.hardware.installationmaster@1.0",
+    ],
+
+    static_libs: [
+    ],
+
+    required: [
+    ],
+}
+
+subdirs = [
+]

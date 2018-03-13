@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_
-#define android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_
+#pragma once
 
 #include <android/hardware/automotive/vehicle/2.0/types.h>
 #include <ios>
@@ -49,10 +48,13 @@ const VehiclePropConfig kVehicleProperties[] = {
          .access = VehiclePropertyAccess::READ_WRITE,
          .changeMode = VehiclePropertyChangeMode::ON_CHANGE,
          .supportedAreas = static_cast<int32_t>(VehicleAreaZone::ROW_1_LEFT | VehicleAreaZone::ROW_1_RIGHT),
-         .areaConfigs = {VehicleAreaConfig{
-                                 .areaId = toInt(VehicleAreaZone::ROW_1_LEFT), .minInt32Value = 1, .maxInt32Value = 7},
+         .areaConfigs = {VehicleAreaConfig{.areaId = toInt(VehicleAreaZone::ROW_1_LEFT),
+                                           .minInt32Value = 1,
+                                           .maxInt32Value = 7},
                          VehicleAreaConfig{
-                                 .areaId = toInt(VehicleAreaZone::ROW_1_RIGHT), .minInt32Value = 1, .maxInt32Value = 5,
+                                 .areaId = toInt(VehicleAreaZone::ROW_1_RIGHT),
+                                 .minInt32Value = 1,
+                                 .maxInt32Value = 5,
                          }}},
 
         // Write-only property
@@ -60,12 +62,14 @@ const VehiclePropConfig kVehicleProperties[] = {
          .access = VehiclePropertyAccess::WRITE,
          .changeMode = VehiclePropertyChangeMode::ON_SET,
          .supportedAreas = static_cast<int32_t>(VehicleAreaZone::ROW_1_LEFT | VehicleAreaZone::ROW_1_RIGHT),
-         .areaConfigs =
-                 {VehicleAreaConfig{
-                          .areaId = toInt(VehicleAreaZone::ROW_1_LEFT), .minInt32Value = 64, .maxInt32Value = 80},
-                  VehicleAreaConfig{
-                          .areaId = toInt(VehicleAreaZone::ROW_1_RIGHT), .minInt32Value = 64, .maxInt32Value = 80,
-                  }}},
+         .areaConfigs = {VehicleAreaConfig{.areaId = toInt(VehicleAreaZone::ROW_1_LEFT),
+                                           .minInt32Value = 64,
+                                           .maxInt32Value = 80},
+                         VehicleAreaConfig{
+                                 .areaId = toInt(VehicleAreaZone::ROW_1_RIGHT),
+                                 .minInt32Value = 64,
+                                 .maxInt32Value = 80,
+                         }}},
 
         {.prop = toInt(VehicleProperty::INFO_FUEL_CAPACITY),
          .access = VehiclePropertyAccess::READ,
@@ -156,10 +160,11 @@ inline void assertAllExistsAnyOrder(std::initializer_list<T> expected, const Col
     ASSERT_EQ(0u, expectedSet.size()) << msg << "\nDoesn't contain expected value.";
 }
 
-#define ASSERT_ALL_EXISTS(...)                                                                                      \
-    assertAllExistsAnyOrder(__VA_ARGS__, (std::string("Called from: ") + std::string(__FILE__) + std::string(":") + \
-                                          std::to_string(__LINE__))                                                 \
-                                                 .c_str());
+#define ASSERT_ALL_EXISTS(...)                                                                                   \
+    assertAllExistsAnyOrder(                                                                                     \
+            __VA_ARGS__,                                                                                         \
+            (std::string("Called from: ") + std::string(__FILE__) + std::string(":") + std::to_string(__LINE__)) \
+                    .c_str());
 
 template <typename T>
 inline std::string enumToHexString(T value) {
@@ -182,5 +187,3 @@ inline std::string vecToString(const hidl_vec<T>& vec) {
 }  // namespace automotive
 }  // namespace hardware
 }  // namespace android
-
-#endif  // android_hardware_automotive_vehicle_V2_0_VehicleDebugUtils_H_

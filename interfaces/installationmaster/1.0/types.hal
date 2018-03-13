@@ -1,0 +1,71 @@
+package vendor.volvocars.hardware.installationmaster@1.0;
+
+enum InstallNotification : uint32_t {
+    UNKNOWN,
+    DOWNLOAD_VERIFIED,
+    DOWNLOAD_INVALID,
+    INSTALLATION_STARTED,
+    INSTALLATION_COMPLETE
+};
+
+enum EcuStatus : uint8_t {
+    UNKNOWN,
+    VERIFIED,
+    INSTALLED,
+    FAILED_CRITICAL,
+    FAILED,
+    NOT_STARTED
+};
+
+enum SoftwarePartStatus : uint8_t {
+    UNKNOWN,
+    UN_INSTALLED,
+    INSTALLED,
+    FAILED_CRITICAL,
+    FAILED,
+    NOT_STARTED
+};
+
+enum TargetStorageId : uint8_t {
+    UNKNOWN,
+    LOCAL_STORAGE_NORMAL,
+    LOCAL_STORAGE_BOOT
+};
+
+enum DataFileStatus : uint8_t {
+    UNKNOWN,
+    STORED,
+    DOWNLOADED,
+    FAILED,
+    NOT_STARTED,
+    VERIFIED
+};
+
+struct DataFile {
+    string identifier;
+    TargetStorageId storage;
+    DataFileStatus status;
+};
+
+struct SoftwarePart {
+    string identifier;
+    uint32_t retries;
+    uint64_t measuredInstallationTime;
+    SoftwarePartStatus status;
+};
+
+struct Ecu {
+    string ecuAddress;
+    uint32_t retries;
+    uint32_t status;
+    vec<SoftwarePart> softwareParts;
+};
+
+struct InstallationSummary {
+    string softwareId;
+    uint64_t timestamp;
+    uint32_t repeatedResets;
+    uint64_t totalInstallationTime;
+    vec<Ecu> ecus;
+};
+

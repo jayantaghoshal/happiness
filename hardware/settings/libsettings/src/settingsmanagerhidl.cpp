@@ -27,7 +27,9 @@ SettingsManagerHidl::SettingsManagerHidl(tarmac::eventloop::IDispatcher& dispatc
 }
 
 SettingsHandle SettingsManagerHidl::attachSetting(
-        const SettingId& name, UserScope u, std::function<void(const std::string&, ProfileIdentifier)> onSettingChanged,
+        const SettingId& name,
+        UserScope u,
+        std::function<void(const std::string&, ProfileIdentifier)> onSettingChanged,
         std::function<void(ProfileIdentifier p)> onSettingReset) {
     ALOGV("attachSetting key=%d, userscope=%d", name, u);
 
@@ -88,8 +90,8 @@ std::string SettingsManagerHidl::getRawData(const SettingId& name, const Profile
     const auto p = static_cast<profilesHidl::ProfileIdentifier>(profid);
 
     std::string resultOuter;
-    auto result = settingsProxyCopy->get(toHidl(name), p,
-                                         [&resultOuter](andrHw::hidl_string result) { resultOuter = result; });
+    auto result = settingsProxyCopy->get(
+            toHidl(name), p, [&resultOuter](andrHw::hidl_string result) { resultOuter = result; });
     if (!result.isOk()) {
         throw std::runtime_error("Failed to get setting " + toString(name) + ", error: %s" + result.description());
     }
@@ -114,7 +116,8 @@ void SettingsManagerHidl::setRawData(const SettingId& name, ProfileIdentifier pr
 }
 
 andrHw::Return<void> SettingsManagerHidl::onRegistration(const andrHw::hidl_string& fqName,
-                                                         const andrHw::hidl_string& name, bool preexisting) {
+                                                         const andrHw::hidl_string& name,
+                                                         bool preexisting) {
     ALOGV("onRegistration, fqName=%s, name=%s, preexisting=%d", fqName.c_str(), name.c_str(), preexisting);
 
     settingsProxy = settingsHidl::ISettingsStorage::getService();
@@ -147,7 +150,9 @@ void SettingsManagerHidl::serviceDied(uint64_t cookie, const android::wp<::andro
 }
 
 andrHw::Return<void> SettingsManagerHidl::settingsForCurrentUserChanged(
-        const uint32_t key, settingsHidl::SettingsChangeReason reason, profilesHidl::ProfileIdentifier currentProfile) {
+        const uint32_t key,
+        settingsHidl::SettingsChangeReason reason,
+        profilesHidl::ProfileIdentifier currentProfile) {
     const auto name = fromHidl(key);
     ALOGV("settingsForCurrentUserChanged, name=%d", name);
     std::string data;

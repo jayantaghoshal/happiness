@@ -30,9 +30,14 @@ using ::android::sp;
 struct GnssGeofencing : public IGnssGeofencing {
     // Methods from ::android::hardware::gnss::V1_0::IGnssGeofencing follow.
     Return<void> setCallback(const sp<IGnssGeofenceCallback>& callback) override;
-    Return<void> addGeofence(int32_t geofenceId, double latitudeDegrees, double longitudeDegrees, double radiusMeters,
-                             IGnssGeofenceCallback::GeofenceTransition lastTransition, int32_t monitorTransitions,
-                             uint32_t notificationResponsivenessMs, uint32_t unknownTimerMs) override;
+    Return<void> addGeofence(int32_t geofenceId,
+                             double latitudeDegrees,
+                             double longitudeDegrees,
+                             double radiusMeters,
+                             IGnssGeofenceCallback::GeofenceTransition lastTransition,
+                             int32_t monitorTransitions,
+                             uint32_t notificationResponsivenessMs,
+                             uint32_t unknownTimerMs) override;
     Return<void> pauseGeofence(int32_t geofenceId) override;
     Return<void> resumeGeofence(int32_t geofenceId, int32_t monitorTransitions) override;
     Return<void> removeGeofence(int32_t geofenceId) override;

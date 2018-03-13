@@ -1,0 +1,18 @@
+package vendor.volvocars.hardware.installationmaster@1.0;
+
+interface IInstallationMasterEventListener
+{
+    /**
+     * Notify the listnener about the status of an ongoing installation
+     * @param installationOrder The UUID of the installation order in progress
+     * @param notification      The status of the installation
+     */
+    oneway installNotification(string installationOrder, InstallNotification notification);
+
+    /**
+     * Notify the listnener of a newly created installation report
+     * @param installationOrder   The UUID of the installation order attempted to be installed
+     * @param installationSummary The installation summary part of the report of an attempt of install
+     */
+    oneway installationReport(string installationOrder, InstallationSummary installationSummary);
+};

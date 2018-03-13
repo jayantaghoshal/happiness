@@ -1,4 +1,5 @@
 #define uds_diagnostics hal
+type hal_uds_diagnostics_hwservice, hwservice_manager_type;
 
 # TODO use hal_attribute() when available in P
 attribute hal_uds_diagnostics;

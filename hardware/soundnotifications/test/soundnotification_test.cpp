@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,34 +7,72 @@
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
 #include <binder/ProcessState.h>
-#include <com/delphi/BnAudioManagerCallback.h>
-#include <com/delphi/BpAudioManager.h>
+#include <vendor/delphi/audiomanager/1.0/IAudioManager.h>
+#include "vendor/delphi/audiomanager/1.0/types.h"
+
 #include <cutils/log.h>
+#include <stdint.h>
+#include <atomic>
+#include <chrono>
+#include <iostream>
+#include <thread>
 #include <tuple>
 
 #undef LOG_TAG
 #define LOG_TAG "SountNotificationTest"
 
+static std::atomic_bool exitApp(false);
+static std::atomic_bool connected(false);
+static std::atomic_bool disconnected(true);
+
 namespace {
 
-class AudioManagerCbImpl : public com::delphi::BnAudioManagerCallback {
+class AudioManagerCbImpl : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {
   public:
-    android::binder::Status soundStopped(int32_t connId) override {
-        printf("%s connId:%d\n", __func__, connId);
-        return android::binder::Status::ok();
+    virtual ::android::hardware::Return<void> onDisconnected(uint32_t connectionID) override {
+        printf("%s %d\n", __FUNCTION__, connectionID);
+        fflush(stdout);
+        // exitApp = true;
+        connected = false;
+        disconnected = true;
+        return android::hardware::Return<void>();
+    }
+
+    virtual ::android::hardware::Return<void> onConnected(uint32_t connectionID) override {
+        printf("%s %d\n", __FUNCTION__, connectionID);
+        fflush(stdout);
+        connected = true;
+        disconnected = false;
+        return android::hardware::Return<void>();
+    }
+
+    virtual ::android::hardware::Return<void> onWavFileFinished(uint32_t cId) override {
+        printf("%s %d\n", __FUNCTION__, cId);
+        fflush(stdout);
+        return android::hardware::Return<void>();
+    }
+    virtual ::android::hardware::Return<void> onRampedIn(uint32_t connectionID) override {
+        printf("%s %d\n", __FUNCTION__, connectionID);
+        fflush(stdout);
+        return android::hardware::Return<void>();
+    }
+    virtual ::android::hardware::Return<void> ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) override {
+        printf("%s sink: %d, volume: %d\n", __FUNCTION__, sinkId, volume);
+        fflush(stdout);
+        return android::hardware::Return<void>();
     }
 };
 }
 
 int main(int argc, char* argv[]) {
-    android::sp<com::delphi::IAudioManager> service;
+    android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> service_;
     android::sp<android::IBinder> binderInterface;
-    int64_t currentConnection;
 
     printf("Sound notification test app.\n");
 
     if (argc < 2) {
-        printf("No sound index provided\nUsage: %s <sound index>. Sound index from 0 to %i\n", argv[0],
+        printf("No sound index provided\nUsage: %s <sound index>. Sound index from 0 to %i\n",
+               argv[0],
                (int32_t)(AudioTable::getSources().size() - 1));
         return 1;
     }
@@ -47,54 +85,47 @@ int main(int argc, char* argv[]) {
 
     using namespace android;
 
-    sp<IServiceManager> sm = defaultServiceManager();
+    while (service_.get() == nullptr) {
+        service_ = vendor::delphi::audiomanager::V1_0::IAudioManager::getService();
 
-    if (sm.get() == nullptr) {
-        printf("service manager is null\n");
-        return 1;
-    }
-
-    printf("%s: Starting getService(am_service)\n", __FUNCTION__);
-    int retries = 3;
-    while (binderInterface.get() == nullptr && --retries >= 0) {
-        binderInterface = sm->getService(String16("am_service"));
-
-        if (binderInterface.get() == nullptr) {
-            printf("%s: getService(am_service) failed\n", __FUNCTION__);
+        if (service_ == nullptr) {
+            printf("%s: getService(am_service) failed\n", __func__);
             fflush(stdout);
-            usleep(500000);
+            sleep(1);
         }
     }
-    printf("%s: getService(am_service) %p\n", __FUNCTION__, binderInterface.get());
-    if (binderInterface.get() == nullptr) {
-        printf("%s: am_service is null, audio will be broken\n", __FUNCTION__);
-        return 1;
-    }
-
-    service = interface_cast<com::delphi::IAudioManager>(binderInterface);
-
-    if (service.get() == nullptr) {
-        printf("am_service is null\n");
-        return 1;
-    }
-
-    binder::Status status;
+    using namespace vendor::delphi::audiomanager::V1_0;
 
     // subscribe
-    sp<com::delphi::IAudioManagerCallback> callback(new AudioManagerCbImpl);
-    status = service->subscribe(callback);
-    if (!status.isOk()) {
-        printf("subscribe failed with status: %s\n", status.exceptionMessage().string());
+    sp<vendor::delphi::audiomanager::V1_0::IAudioManagerCallback> callback(new AudioManagerCbImpl);
+    hardware::Return<void> ret = service_->subscribe(callback);
+    if (!ret.isOk()) {
+        printf("subscribe failed with status: %s\n", ret.description().c_str());
+        return 1;
     }
-
-    currentConnection = -1;
 
     auto sound = AudioTable::getSources().at(sound_index);
     printf("Will play notification sound id: %i, name: %s\n", std::get<2>(sound), std::get<3>(sound));
-    status = service->playSound(static_cast<int32_t>(std::get<0>(sound)), static_cast<int32_t>(std::get<1>(sound)),
-                                &currentConnection);
-    printf("playSound status: %s connectionID: %ld\n", status.toString8().string(), currentConnection);
     fflush(stdout);
-    usleep(1000000);
-    service->stopSound(currentConnection);
+    for (int count = 0; count < 3; count++) {
+        ret = service_->playSound(static_cast<int32_t>(std::get<0>(sound)),
+                                  static_cast<int32_t>(std::get<1>(sound)),
+                                  [&](AMStatus s, int64_t cId) {
+                                      printf("playSound status: %d connectionID: %ld\n", s, cId);
+                                      fflush(stdout);
+                                      if (s != AMStatus::OK) {
+                                          exitApp = true;
+                                      }
+                                  });
+
+        // wait for connection
+        while (!connected.load() && !exitApp.load()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100LL));
+        }
+        // now wait for disconnection
+        while (!disconnected.load() && !exitApp.load()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100LL));
+        }
+    }
+    service_->unsubscribe(callback);
 }

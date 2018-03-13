@@ -21,7 +21,9 @@ using namespace tarmac::eventloop;
 
 namespace Connectivity {
 
-TransportServices::TransportServices(IDispatcher& timeProvider, IDispatcher& threadDispatcher, Message::Ecu selfEcu,
+TransportServices::TransportServices(IDispatcher& timeProvider,
+                                     IDispatcher& threadDispatcher,
+                                     Message::Ecu selfEcu,
                                      bool useWfaTimer)
     : timeProvider{timeProvider}, threadDispatcher{threadDispatcher}, m_useWfaTimer(useWfaTimer), selfEcu{selfEcu} {}
 
@@ -188,10 +190,10 @@ TrackMessage* TransportServices::getTrackMessage(uint32_t senderHandleId) {
     //    >> Req: The applications shall use the SenderHandleID and the IP-source address to distinguish between
     //    >> different messages.
 
-    auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
-                           [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
-                               return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
-                           });
+    auto it = std::find_if(
+            m_pendingMessages.begin(), m_pendingMessages.end(), [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
+                return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
+            });
 
     if (m_pendingMessages.end() != it) {
         return (*it).get();
@@ -201,10 +203,10 @@ TrackMessage* TransportServices::getTrackMessage(uint32_t senderHandleId) {
 }
 
 std::unique_ptr<TrackMessage> TransportServices::removeTrackMessage(uint32_t senderHandleId) {
-    auto it = std::find_if(m_pendingMessages.begin(), m_pendingMessages.end(),
-                           [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
-                               return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
-                           });
+    auto it = std::find_if(
+            m_pendingMessages.begin(), m_pendingMessages.end(), [&senderHandleId](std::unique_ptr<TrackMessage>& pTm) {
+                return (senderHandleId == pTm->msg.pdu.header.sender_handle_id);
+            });
 
     if (m_pendingMessages.end() != it) {
         std::unique_ptr<TrackMessage> pTm = std::move(*it);
@@ -494,8 +496,8 @@ void TransportServices::processIncomingPdu(Pdu&& pdu, Message::Ecu sourceEcu) {
             break;
         default: {
             ALOGE("Unknown operation type: %s", IpCmdTypes::toString(pdu.header.operation_type));
-            this->sendError(sourceEcu, pdu, INVALID_OPERATION_TYPE,
-                            static_cast<std::uint16_t>(pdu.header.operation_type));
+            this->sendError(
+                    sourceEcu, pdu, INVALID_OPERATION_TYPE, static_cast<std::uint16_t>(pdu.header.operation_type));
             assert(m_diagnostics);
             assert(m_applicationThreadDispatcher);
             m_applicationThreadDispatcher->Enqueue(
@@ -663,14 +665,16 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
     switch (tm.state) {
         case TrackMessage::WAIT_FOR_RESPONSE_ACK: {
             ALOGW("Timed out while waiting for ACK on sent response: %s, state: 0x%02X",
-                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(),
+                  tm.state);
 
             // initialized to 1 on purpose as signal is present in queue if ACK has timed out
             int enqueued_duplicates = 1;
 
             if (tm.msg.pdu.header.operation_type == IpCmdTypes::OperationType::NOTIFICATION) {
                 enqueued_duplicates =
-                        std::count_if(m_pendingMessages.begin(), m_pendingMessages.end(),
+                        std::count_if(m_pendingMessages.begin(),
+                                      m_pendingMessages.end(),
                                       [& senderHandleId = id, &ecu = tm.msg.ecu ](std::unique_ptr<TrackMessage> & pTm) {
                                           constexpr uint32_t seq_number_mask = 0xFFFFFF00;
                                           return pTm->msg.ecu == ecu &&
@@ -682,7 +686,8 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
             if (enqueued_duplicates > 1) {
                 ALOGW("Multiple NOTIFICATION requests for same serviceId + operationId. Message will not be "
                       "re-transmitted. message %s state : 0x%02X",
-                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                      Pdu::toString(tm.msg.pdu).c_str(),
+                      tm.state);
 
                 this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
             } else if (!tm.wfa.increaseTimeout()) {
@@ -690,7 +695,8 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
                 // Update timeout levels and resend message
                 ALOGW("Max ACK timeouts. No more resends allowed for response: %s, "
                       "state: 0x%02X",
-                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                      Pdu::toString(tm.msg.pdu).c_str(),
+                      tm.state);
 
                 this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
             } else {
@@ -706,18 +712,21 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
 
         case TrackMessage::WAIT_FOR_NOTIFICATION_ACK:
             ALOGW("Timed out while waiting for ACK on sent notification: %s, state: 0x%02X",
-                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(),
+                  tm.state);
             break;
 
         case TrackMessage::WAIT_FOR_REQUEST_ACK:
         case TrackMessage::WAIT_FOR_SET_REQUEST_NO_RETURN_ACK:
             ALOGW("Timed out while waiting for ACK on sent request: %s, state: 0x%02X",
-                  Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                  Pdu::toString(tm.msg.pdu).c_str(),
+                  tm.state);
 
             // Update timeout levels and resend message
             if (!tm.wfa.increaseTimeout()) {
                 ALOGW("Max ACK timeouts. No more resends allowed for request: %s', state: 0x%02X",
-                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                      Pdu::toString(tm.msg.pdu).c_str(),
+                      tm.state);
 
                 //  Remove message from pending list
                 std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);
@@ -749,12 +758,14 @@ void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandl
             break;
 
         case TrackMessage::WAIT_FOR_REQUEST_RESPONSE:
-            ALOGW("Timed out while waiting for response: %s, state: 0x%02X", Pdu::toString(tm.msg.pdu).c_str(),
+            ALOGW("Timed out while waiting for response: %s, state: 0x%02X",
+                  Pdu::toString(tm.msg.pdu).c_str(),
                   tm.state);
             // Update timeout levels and resend message
             if (!tm.wfr.increaseTimeout()) {
                 ALOGW("Max response timeouts. No more resends allowed for request: %s , state: 0x%02X",
-                      Pdu::toString(tm.msg.pdu).c_str(), tm.state);
+                      Pdu::toString(tm.msg.pdu).c_str(),
+                      tm.state);
 
                 //  Remove message from pending list
                 std::unique_ptr<TrackMessage> pTm = this->removeTrackMessage(tm.msg.pdu.header.sender_handle_id);

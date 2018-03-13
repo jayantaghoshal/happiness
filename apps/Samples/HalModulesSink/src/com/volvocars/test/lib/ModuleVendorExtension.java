@@ -9,14 +9,18 @@ package com.volvocars.test.lib;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.CarVendorExtensionManager;
 import android.content.Context;
+import android.hardware.automotive.vehicle.V2_0.VehicleArea;
 import android.os.Looper;
 import android.support.car.Car;
 import android.support.car.CarConnectionCallback;
 import android.support.car.CarNotConnectedException;
 import android.util.Log;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
 
 
 public class ModuleVendorExtension {
@@ -37,6 +41,7 @@ public class ModuleVendorExtension {
 
                 @Override
                 public void onErrorEvent(final int propertyId, final int zone) {
+                    Log.d(TAG, propertyId + " : " + zone);
                 }
             };
     private Car mCar;
@@ -52,6 +57,7 @@ public class ModuleVendorExtension {
                     try {
                         carVEManager = (CarVendorExtensionManager) mCar.getCarManager(
                                 android.car.Car.VENDOR_EXTENSION_SERVICE);
+                        registerCallback();
                     } catch (CarNotConnectedException e) {
                         Log.e(TAG, "Car not connected in onConnected", e);
                     }
@@ -67,7 +73,7 @@ public class ModuleVendorExtension {
             };
     public ModuleVendorExtension(Context context) {
         mContext = context;
-        init();
+        CompletableFuture.runAsync(() -> init());
     }
 
     // todo: Create an new Exception with good name
@@ -77,7 +83,7 @@ public class ModuleVendorExtension {
             Log.e(TAG, "should run in different thread!");
             throw new Exception("Run on different thread! you are using the main thread");
         }
-        if (semaphore.tryAcquire(10, TimeUnit.MILLISECONDS)) {
+        if (semaphore.tryAcquire(10, TimeUnit.SECONDS)) {
             semaphore.release();
         } else {
             throw new Exception("No Car.connect()");
@@ -99,6 +105,15 @@ public class ModuleVendorExtension {
             } catch (Exception e) {
                 Log.d(TAG, "ERROR: Car.connect() has problems: ", e);
             }
+        }
+    }
+
+    public <E> Boolean isFeatureAvailable(Class<E> propertyClass, int propId, int area) {
+        try {
+            carVEManager.getProperty(propertyClass, propId, area);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

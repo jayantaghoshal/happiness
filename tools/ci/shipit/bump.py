@@ -24,7 +24,12 @@ def main(args):
         branch = args[2]
         autobumper.check_manifest(aosp_root_dir, branch)
     elif mode == "local":
-        autobumper.on_commit(aosp_root_dir)
+        syncMode = args[2]
+        if syncMode == "no_sync":
+            sync = False
+        elif syncMode == "sync":
+            sync = True
+        autobumper.on_commit(aosp_root_dir, sync)
     elif mode == "autobump":
         if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')

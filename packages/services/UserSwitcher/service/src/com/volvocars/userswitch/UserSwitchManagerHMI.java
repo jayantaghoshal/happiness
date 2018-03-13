@@ -79,6 +79,15 @@ public class UserSwitchManagerHMI extends IUserSwitchService.Stub {
     public void switchUser(String androidUserId, IUserSwitchCallBack callback)
             throws RemoteException {
         Log.d(TAG, String.format("Received switchUser - %s", androidUserId));
+
+        // Validation
+        try {
+            int isInteger = Integer.valueOf(androidUserId);
+        } catch (NumberFormatException ex){
+            callback.handleResponse(UserSwitchResult.ERROR);
+            return;
+        }
+
         putCallBackMap(Integer.valueOf(androidUserId), callback);
         carProfileManager.requestSwitchUser(androidUserId);
     }

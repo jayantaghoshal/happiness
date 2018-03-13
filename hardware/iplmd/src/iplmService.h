@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -82,7 +82,8 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      * @param[in] _rg             Resource group being requested
      * @param[in] _prio           priority for the requested resource group
      */
-    Return<bool> requestResourceGroup(const hidl_string& lscName, XResourceGroup resourceGroup,
+    Return<bool> requestResourceGroup(const hidl_string& lscName,
+                                      XResourceGroup resourceGroup,
                                       XResourceGroupPrio resourceGroupPrio) override;
 
     /**

@@ -45,8 +45,11 @@ void Pdu::toData(std::vector<uint8_t>& buffer) const {
     buffer.insert(buffer.end(), payload.begin(), payload.end());
 }
 
-void Pdu::createHeader(IpCmdTypes::ServiceId serviceId, IpCmdTypes::OperationId operationId,
-                       IpCmdTypes::OperationType operationType, IpCmdTypes::DataType dataType, uint8_t sequenceId) {
+void Pdu::createHeader(IpCmdTypes::ServiceId serviceId,
+                       IpCmdTypes::OperationId operationId,
+                       IpCmdTypes::OperationType operationType,
+                       IpCmdTypes::DataType dataType,
+                       uint8_t sequenceId) {
     header.service_id = serviceId;
     header.operation_id = operationId;
     header.length = VCCPDUHeader::DATA_SIZE - 8;

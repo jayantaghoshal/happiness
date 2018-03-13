@@ -4,11 +4,11 @@
 # This file is covered by LICENSE file in the root of this project
 
 WORKING_DIR="$(pwd)"
-SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
-REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}/../../../..")
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")"; pwd)"
+REPO_ROOT_DIR="$(readlink -f "${SCRIPT_DIR}/../../../..")"
 
 DOCKER_IMAGE_REFERENCE_FILE="${SCRIPT_DIR}"/image.ref
-DOCKER_IMAGE=$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")
+DOCKER_IMAGE="$(cat "${DOCKER_IMAGE_REFERENCE_FILE}")"
 
 IS_TERMINAL=false
 # Check if STDOUT descriptor (1) is associated with a terminal device
@@ -23,7 +23,9 @@ fi
 
 # Handle options
 ENV_FILE_OPT=
-VOLUMES="--volume=$HOME:$HOME --volume=$PWD:$PWD --volume=/dev/bus/usb:/dev/bus/usb"
+VOLUMES="--volume=$HOME:$HOME --volume=$REPO_ROOT_DIR:$REPO_ROOT_DIR --volume=$PWD:$PWD \
+         --volume=/dev/bus/usb:/dev/bus/usb"
+
 
 for i in "$@"
 do

@@ -13,5 +13,20 @@ AccessModifierOffset: -2
 ContinuationIndentWidth: 8
 IndentWidth:     4
 
-#Deviation for reproducible behavior
+# Deviation for reproducible behavior of pointer position
 DerivePointerAlignment: false
+
+# More readable function calls/declarations
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+
+---
+
+Language:     Java
+BasedOnStyle: Google
+
+# Deviation accepted on 2017-11-06 to use 4 spaces
+AccessModifierOffset: -2
+ContinuationIndentWidth: 8
+IndentWidth:     4

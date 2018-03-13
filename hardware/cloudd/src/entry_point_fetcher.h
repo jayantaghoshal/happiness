@@ -46,7 +46,8 @@ class EntryPointFetcher final {
     static EntryPointParser::EntryPoint parse(const char* const data);
 
   private:
-    void RequestCallbackHandler(std::int32_t http_response_code, const std::string& data,
+    void RequestCallbackHandler(std::int32_t http_response_code,
+                                const std::string& data,
                                 const std::string& header) throw(std::runtime_error);
     void GetEntryPoint();
     void worker();

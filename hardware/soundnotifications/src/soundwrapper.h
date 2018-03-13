@@ -1,21 +1,24 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 
 #include <AudioTable.h>
+#include <vendor/delphi/audiomanager/1.0/IAudioManager.h>
+#include "vendor/delphi/audiomanager/1.0/types.h"
+//#ifndef UNIT_TEST
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
 #include <binder/ProcessState.h>
-#include <com/delphi/BnAudioManagerCallback.h>
-#include <com/delphi/BpAudioManager.h>
+//#endif
 #include <cutils/log.h>
 
 namespace SoundNotifications {
 
-class SoundWrapper : public com::delphi::BnAudioManagerCallback {  // Maybe a better name could be found
+class SoundWrapper
+        : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {  // Maybe a better name could be found
 
   public:
     // A "sound" is uniquely identified with SoundID
@@ -31,41 +34,48 @@ class SoundWrapper : public com::delphi::BnAudioManagerCallback {  // Maybe a be
     enum class Result {
         OK,
         INVALID_STATE,  // The user of this API called play() or stop() in an invalid state
-        PLAY_FAILED     // The underlying cedric::audio API call failed (maybe we dont need two separate result codes??)
+        PLAY_FAILED     // The underlying API call failed (maybe we dont need two separate result codes??)
     };
 
     // Start playing the given sound id
-    // If continuous==true the sound will be re-triggered as soon as onPlayStopped is received
-    // Even if continuous==false the sound may anyhow play forever if the sound is defined as non-flank triggered in the
-    // prio matrix.
-    static Result play(SoundID soundid, bool continuous = false);
+    static Result play(SoundID soundid);
 
     // Stop playing the given sound id. This should probably ONLY be called for Non-flank triggerd sounds
     static Result stop(SoundID soundid);
 
     static bool isPlaying(SoundID soundid);
+    static SoundWrapper* instance();
 
     ~SoundWrapper();
 
-  private:           // Audio callback methods for sound status check
-    SoundWrapper();  // shall not be created by anyone except the SoundWrapper::play() method that creates a singleton
+    bool getInitialized() const;
 
-    virtual ::android::binder::Status soundStopped(int32_t connectionId) override;
+    bool init(vendor::delphi::audiomanager::V1_0::IAudioManager* service = nullptr);
+    void cleanup();
 
-    void onPlayStarted(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
-                       const int32_t connectionID);
-    void onPlayStopped(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
-                       const int32_t connectionID, const int32_t getReason);
-    void onPlayFailed(const AudioTable::SoundType getSoundType, const AudioTable::SoundComponent getSoundComponent,
-                      const int32_t connectionID, const int32_t getErr);
+    // reimplemented for IAudioManagerCallback
+    virtual ::android::hardware::Return<void> onDisconnected(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> onConnected(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> onWavFileFinished(uint32_t cId) override;
+    virtual ::android::hardware::Return<void> onRampedIn(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) override;
+
+  private:
+    SoundWrapper();
+
+    void onPlayFailed(const AudioTable::SoundType type,
+                      const AudioTable::SoundComponent component,
+                      const int32_t connectionID,
+                      const int32_t error);
     void onPlayBackgroundStarted(const int32_t connectionID) { (void)connectionID; }
     void onPlayBackgroundStopped(const int32_t connectionID, const int32_t reason) {
         (void)connectionID;
         (void)reason;
     }
 
-    static android::sp<com::delphi::IAudioManager> am_service;
-    static android::sp<android::IBinder> binderInterface;
+    static android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> am_service;
+
+    std::atomic_bool initialized{false};
 
 #ifdef UNIT_TEST
   public:

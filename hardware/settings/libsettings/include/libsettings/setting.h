@@ -62,7 +62,9 @@ class Setting : public SettingBase {
 
         const auto stringdata = getStringData(profileId);
         if (stringdata == "") {
-            ALOG(LOG_INFO, SETTINGS_LOG_TAG, "%s:getStringData returned empty string. Fallback to default value",
+            ALOG(LOG_INFO,
+                 SETTINGS_LOG_TAG,
+                 "%s:getStringData returned empty string. Fallback to default value",
                  __FUNCTION__);
             return default_;
         }
@@ -140,7 +142,11 @@ class Setting : public SettingBase {
     }
 
     void onDataChanged(const std::string& stringData, ProfileIdentifier profileId) override {
-        ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, name=%d, value=%s, profileid=%d", name_, stringData.c_str(),
+        ALOG(LOG_VERBOSE,
+             SETTINGS_LOG_TAG,
+             "OnDataChanged, name=%d, value=%s, profileid=%d",
+             name_,
+             stringData.c_str(),
              profileId);
         if (userScope == UserScope::NOT_USER_RELATED) {
             profileId = ProfileIdentifier::None;
@@ -150,9 +156,12 @@ class Setting : public SettingBase {
             T v = parse(stringData);
             value_ = ValueProfile<T>(v, profileId);
         } catch (const std::exception& e) {
-            ALOG(LOG_ERROR, SETTINGS_LOG_TAG,
-                 "Failed to parse stored setting. Fallback to default. Key=%d, Value=%s, Error=%s", name_,
-                 stringData.c_str(), e.what());
+            ALOG(LOG_ERROR,
+                 SETTINGS_LOG_TAG,
+                 "Failed to parse stored setting. Fallback to default. Key=%d, Value=%s, Error=%s",
+                 name_,
+                 stringData.c_str(),
+                 e.what());
             value_ = ValueProfile<T>(default_, profileId);
         }
         if (callbackToApplicationOnSettingChanged_) {

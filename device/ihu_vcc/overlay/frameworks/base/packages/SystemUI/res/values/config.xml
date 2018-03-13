@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource overrides for car system ui. -->
+<resources>
+    <!-- Show the notification shade on drag -->
+    <bool name="config_enableNotificationShadeDrag">true</bool>
+</resources>

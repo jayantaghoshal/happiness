@@ -82,8 +82,8 @@ public class IlluminationControl {
                     }
                     break;
                 }
+                Log.e(TAG, "subscribe failed permanently: ");
             }
-            Log.e(TAG, "subscribe failed permanently: ");
         }
         catch (RemoteException ex) {
             Log.e(TAG, ex.getMessage());

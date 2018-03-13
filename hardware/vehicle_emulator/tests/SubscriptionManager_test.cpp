@@ -123,7 +123,8 @@ TEST_F(SubscriptionManagerTest, negativeCases) {
 
     // Wrong prop
     clients = manager.getSubscribedClients(toInt(VehicleProperty::AP_POWER_BOOTUP_REASON),
-                                           toInt(VehicleAreaZone::ROW_1_LEFT), SubscribeFlags::HAL_EVENT);
+                                           toInt(VehicleAreaZone::ROW_1_LEFT),
+                                           SubscribeFlags::HAL_EVENT);
     ASSERT_TRUE(clients.empty());
 
     // Wrong flag
@@ -142,9 +143,11 @@ TEST_F(SubscriptionManagerTest, mulipleSubscriptions) {
     // Same property, but different zone, to make sure we didn't unsubscribe
     // from previous zone.
     ASSERT_EQ(StatusCode::OK,
-              manager.addOrUpdateSubscription(1, cb1, {SubscribeOptions{.propId = PROP1,
-                                                                        .vehicleAreas = toInt(VehicleAreaZone::ROW_2),
-                                                                        .flags = SubscribeFlags::DEFAULT}},
+              manager.addOrUpdateSubscription(1,
+                                              cb1,
+                                              {SubscribeOptions{.propId = PROP1,
+                                                                .vehicleAreas = toInt(VehicleAreaZone::ROW_2),
+                                                                .flags = SubscribeFlags::DEFAULT}},
                                               &updatedOptions));
 
     clients = manager.getSubscribedClients(PROP1, toInt(VehicleAreaZone::ROW_1_LEFT), SubscribeFlags::DEFAULT);

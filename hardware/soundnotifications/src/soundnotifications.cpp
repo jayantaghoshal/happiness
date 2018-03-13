@@ -5,6 +5,10 @@
 
 #include <cutils/log.h>
 #include <hidl/HidlTransportSupport.h>
+
+#include "soundwrapper.h"
+
+#include "parking_brake.h"
 #include "turnindicator.h"
 
 #undef LOG_TAG
@@ -15,9 +19,18 @@ int32_t main(int argc, char* argv[]) {
     (void)argv;
     ALOGI("Starting service...");
 
+    while (!SoundNotifications::SoundWrapper::instance()->init()) {
+        usleep(1000000);  // sleep 1000ms between reties
+    }
+    ALOGI("Connected to Audio Manager service...");
+
     auto turnIndicatorModule =
             std::unique_ptr<SoundNotifications::TurnIndicator>(new SoundNotifications::TurnIndicator());
     (void)turnIndicatorModule;
+    auto parkingBreakModule =
+            std::unique_ptr<SoundNotifications::Chassis::ParkingBrake>(new SoundNotifications::Chassis::ParkingBrake());
+    (void)parkingBreakModule;
+
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
     android::hardware::joinRpcThreadpool();
     ALOGI("Leaving.");

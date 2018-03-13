@@ -12,7 +12,9 @@ extern "C" {
 extern int createReturnValue;
 extern bool createCalledFromTest;
 extern int createCalled;
-extern int __real_pthread_create(pthread_t* thread, const pthread_attr_t* attr, void* (*start_routine)(void*),
+extern int __real_pthread_create(pthread_t* thread,
+                                 const pthread_attr_t* attr,
+                                 void* (*start_routine)(void*),
                                  void* arg);
 }
 

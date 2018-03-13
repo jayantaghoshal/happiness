@@ -25,7 +25,9 @@ class DimLabel final : public DimItem {
      * @param trunc[in] sets text tructation position
      * @param select[in] indicates if item is selectable
      */
-    DimLabel(uint16_t id, uint16_t groupID, TextAlignment align = TextAlignment::Alignment_Left,
+    DimLabel(uint16_t id,
+             uint16_t groupID,
+             TextAlignment align = TextAlignment::Alignment_Left,
              TextTruncation trunc = TextTruncation::Truncation_Right,
              ItemSelectable select = ItemSelectable::Selectable_True);
 

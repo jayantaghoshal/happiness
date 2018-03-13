@@ -70,7 +70,10 @@ void IpcbSimulator::Setup() {
 void IpcbSimulator::CreateAndSendIpActivityMessage() {
     Pdu pdu;
     ALOGD("Send Activity Message");
-    pdu.createHeader(0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, IpCmdTypes::DataType::NOT_ENCODED,
+    pdu.createHeader(0xFFFF,
+                     0xFF01,
+                     IpCmdTypes::OperationType::NOTIFICATION_CYCLIC,
+                     IpCmdTypes::DataType::NOT_ENCODED,
                      sequenceId_);
 
     pdu.header.protocol_version = 2;
@@ -80,8 +83,12 @@ void IpcbSimulator::CreateAndSendIpActivityMessage() {
 
     buffer_.clear();
     pdu.toData(buffer_);
-    if (sendto(local_socket_, reinterpret_cast<const void*>(&buffer_[0]), buffer_.size(), 0,
-               reinterpret_cast<struct sockaddr*>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
+    if (sendto(local_socket_,
+               reinterpret_cast<const void*>(&buffer_[0]),
+               buffer_.size(),
+               0,
+               reinterpret_cast<struct sockaddr*>(&remote_addr_),
+               static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
         ALOGD("Failed to send UDP packet!");
     }
 
@@ -101,8 +108,12 @@ bool IpcbSimulator::SendPdu(Pdu pdu) {
     buffer_.clear();
     pdu.toData(buffer_);
 
-    if (sendto(local_socket_, reinterpret_cast<const void*>(&buffer_[0]), buffer_.size(), 0,
-               reinterpret_cast<struct sockaddr*>(&remote_addr_), static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
+    if (sendto(local_socket_,
+               reinterpret_cast<const void*>(&buffer_[0]),
+               buffer_.size(),
+               0,
+               reinterpret_cast<struct sockaddr*>(&remote_addr_),
+               static_cast<socklen_t>(sizeof(remote_addr_))) == -1) {
         ALOGE("sendto failed with error: %s", strerror(errno));
         return false;
     }
@@ -131,8 +142,12 @@ bool IpcbSimulator::ReceivePdu(Pdu& pdu, const uint32_t timeout_sec) {
 
     rd_buffer.resize(packet_length);
 
-    if (0 > recvfrom(local_socket_, static_cast<void*>(rd_buffer.data()), packet_length, 0,
-                     reinterpret_cast<struct sockaddr*>(&local_addr_), &addrlen_)) {
+    if (0 > recvfrom(local_socket_,
+                     static_cast<void*>(rd_buffer.data()),
+                     packet_length,
+                     0,
+                     reinterpret_cast<struct sockaddr*>(&local_addr_),
+                     &addrlen_)) {
         ALOGE("recvfrom failed with error: %s", strerror(errno));
         return false;
     }

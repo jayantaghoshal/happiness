@@ -273,8 +273,8 @@ TEST_F(IplmTestFixture, ReciveActivityMessage) {
 
     // Create activity message
     IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
-    temp_pdu.createHeader(0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC,
-                          IpCmdTypes::DataType::NOT_ENCODED, 1);
+    temp_pdu.createHeader(
+            0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, IpCmdTypes::DataType::NOT_ENCODED, 1);
     temp_pdu.header.protocol_version = 2;
     temp_pdu.setPayload(std::vector<uint8_t>({0x01, (uint8_t)0x00, 0, 0}));
     ipcbSimulator.SendPdu(temp_pdu);
@@ -285,7 +285,8 @@ TEST_F(IplmTestFixture, ReciveActivityMessage) {
 
         lscMocker->RegisterLSC("iplmd-test");
         lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
-            ALOGD("+ onNodeStatusCallback ecuStatus: %s, completed: %s", ecuStatus ? "true" : "false",
+            ALOGD("+ onNodeStatusCallback ecuStatus: %s, completed: %s",
+                  ecuStatus ? "true" : "false",
                   promise_complete ? "true" : "false");
             if (ecuStatus && !promise_complete) {
                 promise_complete = true;

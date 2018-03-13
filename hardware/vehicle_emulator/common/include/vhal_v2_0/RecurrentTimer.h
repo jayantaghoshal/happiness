@@ -19,8 +19,7 @@
  * limitations under the License.
  */
 
-#ifndef android_hardware_automotive_vehicle_V2_0_RecurrentTimer_H_
-#define android_hardware_automotive_vehicle_V2_0_RecurrentTimer_H_
+#pragma once
 
 #include <atomic>
 #include <chrono>
@@ -148,5 +147,3 @@ class RecurrentTimer {
     Action mAction;
     std::unordered_map<int32_t, RecurrentEvent> mCookieToEventsMap;
 };
-
-#endif  // android_hardware_automotive_vehicle_V2_0_RecurrentTimer_H

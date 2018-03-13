@@ -4,10 +4,11 @@
 from .model import DE_BaseType, DE_Value, DE_Boolean, DE_Identical
 
 
-def escape_cpp_comment(text):
-    s=text.replace("*/", "* /")
-    s=s.replace("\n", "\n * ")
-    s=s.replace("\"", "")
+def escape_cpp_comment(text: str):
+    s = text.strip()
+    s = s.replace("*/", "* /")
+    s = s.replace("\"", "")
+    s = "\n * ".join((s.rstrip() for s in s.splitlines()))
     return s
 
 def create_cpp_comment(text):

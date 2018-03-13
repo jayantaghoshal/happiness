@@ -172,7 +172,9 @@ RUN apt-get install -y \
     python-autopep8 \
     python-pep8
 
-RUN pip3 install mypy \
+# mypy has been set to version 0.560 because Autosar code generation for
+# hardware signal data elements, does not currently work with later versions
+RUN pip3 install mypy==0.560 \
                  pylint \
                  flake8
 
@@ -215,7 +217,8 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
  	future futures google-api-python-client \
     httplib2 oauth2client pyasn1 pyasn1-modules \
     rsa six uritemplate protobuf certifi chardet \
-    idna requests urllib3
+    idna requests urllib3 \
+    parse ply oauth2client
 
 ##################################################
 # Install VCCCI_MESSAGES python package from SWF1

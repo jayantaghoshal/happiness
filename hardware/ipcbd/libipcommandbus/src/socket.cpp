@@ -107,8 +107,8 @@ void Socket::setup(int domain, int type, int protocol) {
         throw SocketException(errno, "Socket creation failed ...");
     }
 
-    set_option(IPPROTO_IP, IP_TOS,
-               getIpPrecedenceValue(LocalconfigParameters::getInstance().getNetworkControlPriority()));
+    set_option(
+            IPPROTO_IP, IP_TOS, getIpPrecedenceValue(LocalconfigParameters::getInstance().getNetworkControlPriority()));
 
     dispatcher_.AddFd(socket_fd_, [this] {
         if (read_ready_cb_) read_ready_cb_();

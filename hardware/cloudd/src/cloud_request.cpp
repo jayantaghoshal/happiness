@@ -31,6 +31,7 @@ void CloudRequest::SetURL(std::string url) {
             positions.push_back(pos);
             pos = url.find(http, pos + 1);
             use_https_ = false;
+            ALOGV("use_https false");
         }
 
         pos = url.find(https, 0);
@@ -38,6 +39,7 @@ void CloudRequest::SetURL(std::string url) {
             positions.push_back(pos);
             pos = url.find(https, pos + 1);
             use_https_ = true;
+            ALOGV("use_https true");
         }
 
         if (positions.empty() || (positions.size() > 1) ||
@@ -46,6 +48,7 @@ void CloudRequest::SetURL(std::string url) {
         } else {
             // To validate an URL is extremely complex and consumes enormous resources, so lets not?
             url_ = url;
+            ALOGV("url_ = %s", url_.c_str());
         }
 
     } else {

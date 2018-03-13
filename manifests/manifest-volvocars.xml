@@ -9,24 +9,29 @@
   <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="85898a66f5663469d5dacc549b87d7ffd573fc73"/>
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="1e58d48a83af29084ef09d76dc4058a28f4e3215"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="e47e6b13f8326d6261fb0169de0f72a662db72b3"/>
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="67a707965c542e1c671775a8fc0f096dc7ea335d"/>
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="1521ee95479ac086a7ce7f28bca2be187a624034"/>
 
   <!-- APPS -->
-  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="5330b03640b8d5bec88978d8524aeb897d66d63e"/>
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="0178b9c6a5dd70ab25add5a019907ce8e6b14886"/>
 
   <!-- Volvo Cars partner apps -->
-  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a"/>
-  <project name="vendor/google/apps/GoogleServices" path="vendor/volvocars/apps/google/GoogleServices" revision="011466f7149155ef9d454fb803b0c9809dc73ed2"/>
+
+  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="c469b468179ee55f340bde69ebe7fa3ce3a83c24"/>
+  <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="3d0cea1660f01b564919c5559046c7ee09363552"/>
+
 
   <!-- Boost-1.64.0 -->
-  <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="4caecf161ca6a435010cd8705e50884a6fa406df"/>
+  <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049"/>
 
   <!-- vSomeIP-2.10.10 -->
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="fbf60fa95d2d9ceea4f1f018332e7f8afe24dbf3"/>
 
   <!-- AOSP Overrides -->
+  <remove-project name="aosp/platform/frameworks/base"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="073cb75e16410916006f5543337d1e38e40fc07d"/>
+
   <remove-project name="aosp/platform/external/curl"/>
   <project name="aosp/platform/external/curl" path="external/curl" revision="5730c1ed690d43020d5d937cb8e7c2e9a92898c6"/>
 
@@ -55,8 +60,13 @@
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="664c525517c0b5296c9a6176018edde83144cd60"/>
 
   <!-- Aptiv Overrides -->
+  <!-- Diagnostics is often preintegrated here, please do not remove, only comment out when integrating full baselines (no patches in this repo) -->
   <remove-project name="vendor/delphi/binaries_android_diagnostics" />
   <project name="vendor/delphi/android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="d0a37e6bea5206dfa5ec6998cef58e4a6a4a8d9b" />
+
+  <!-- SWDL is often preintegrated here, please do not remove, only comment out when integrating full baselines (no patches in this repo) -->
+  <remove-project name="vendor/delphi/bb_reprogramming" />
+  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="15c5576b4f409b26eda862c0542dd425ba28de28"/>
 
   <remove-project name="vendor/delphi/binaries_android_most"/>
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="78ab688ef202164a9d2bbeeaa34b0b281cc2dbeb"/>
@@ -94,4 +104,13 @@
   <!-- Patch liblog to silence clang-tidy nagging about readability-implicit-bool-conversion in ALOGV macro -->
   <remove-project name="aosp/platform/system/core"/>
   <project name="aosp/platform/system/core" path="system/core" revision="b0970180aff022035260ada58d1f6b9acd98c59e"/>
+
+  <!-- GDB -->
+  <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
+
+  <!-- Patch received from kok.fatt.chan@intel.com by email to get gdbserver working.
+        Info from ravisankar.madasamy@intel.com (2018-03-06): "Patches are integrated in mainline and you will receive it officially in our next external release on WW11."
+   -->
+  <remove-project name="aosp/platform/prebuilts/misc"/>
+  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="e6c41f8dbaaea17d897956787913c41e93b5e7f9"/>
 </manifest>

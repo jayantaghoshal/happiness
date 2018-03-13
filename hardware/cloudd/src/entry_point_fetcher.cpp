@@ -29,7 +29,8 @@ EntryPointFetcher::EntryPointFetcher(std::shared_ptr<CertHandlerInterface> cert_
                                      const bool allow_retry)
     : cert_handler_{cert_handler}, cloud_request_handler_{cloud_request_handler}, allow_retry_{allow_retry} {}
 
-void EntryPointFetcher::RequestCallbackHandler(std::int32_t http_response_code, const std::string& data,
+void EntryPointFetcher::RequestCallbackHandler(std::int32_t http_response_code,
+                                               const std::string& data,
                                                const std::string& header) throw(std::runtime_error) {
     using namespace std::chrono_literals;
     const std::array<std::chrono::milliseconds, 1> retry_times = {{1000ms}};

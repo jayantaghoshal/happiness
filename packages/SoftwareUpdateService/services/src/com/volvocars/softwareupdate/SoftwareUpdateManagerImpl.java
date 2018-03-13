@@ -21,7 +21,7 @@ import java.util.List;
  * Implementation of Foundation service API.
  */
 public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
-    private static final String LOG_TAG = "SwUpdManager";
+    private static final String LOG_TAG = "SoftwareUpdate.Manager";
 
     private ArrayList<ISoftwareUpdateManagerCallback> clients = new ArrayList();
 
@@ -36,7 +36,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      * @param state State to be sent to all registered clients
      */
     public void UpdateState(int state) {
-        Log.v(LOG_TAG, "UpdateState");
+        Log.v(LOG_TAG, "Update state to [" + state + "]");
         for(ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateState(state);
@@ -47,6 +47,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
+        Log.v(LOG_TAG, "Update SoftwareList with a list of size " + software_list.size());
         for (ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateSoftwareList(software_list);
@@ -57,6 +58,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     public void UpdateSoftware(SoftwareInformation software) {
+        Log.v(LOG_TAG, "Update software assinment with software id: " + software.softwareId);
         for(ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateSoftware(software);

@@ -76,7 +76,8 @@ using TimePointType = typename std::enable_if<is_time_point<T>::value, T>::type;
 template <typename T>
 using JsonDecodeType =
         typename std::enable_if<(!std::is_base_of<ICustomSetting, T>::value) && (!std::is_enum<T>::value) &&
-                                        (!is_duration<T>::value) && (!is_time_point<T>::value),
+                                        (!is_duration<T>::value) &&
+                                        (!is_time_point<T>::value),
                                 T>::type;
 
 template <typename T>

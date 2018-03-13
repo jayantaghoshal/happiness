@@ -41,11 +41,16 @@ class ServiceManager : public IVehicleCom {
     ServiceManager(std::string service_name, ::Connectivity::MessageDispatcher& msgDispatcher);
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom follow.
-    Return<void> subscribe(uint16_t serviceID, uint16_t operationID, OperationType operationType,
-                           const sp<IMessageCallback>& callbackHandler, subscribe_cb _hidl_cb) override;
+    Return<void> subscribe(uint16_t serviceID,
+                           uint16_t operationID,
+                           OperationType operationType,
+                           const sp<IMessageCallback>& callbackHandler,
+                           subscribe_cb _hidl_cb) override;
     Return<void> unsubscribe(uint64_t subscriberId, unsubscribe_cb _hidl_cb) override;
     Return<void> sendMessage(const Msg& msg, const RetryInfo& retryInfo, sendMessage_cb _hidl_cb) override;
-    Return<void> sendRequest(const Msg& msg, const RetryInfo& retryInfo, const sp<IResponseCallback>& callbackHandler,
+    Return<void> sendRequest(const Msg& msg,
+                             const RetryInfo& retryInfo,
+                             const sp<IResponseCallback>& callbackHandler,
                              sendRequest_cb _hidl_cb) override;
 
   private:

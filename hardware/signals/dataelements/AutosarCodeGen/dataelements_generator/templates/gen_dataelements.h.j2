@@ -1,0 +1,50 @@
+#pragma once
+
+#include "gen_datatypes.h"
+
+namespace autosar {
+
+// This enum must match the enum Dir defined in the ISigals/types.hal
+enum class Dir : uint16_t {
+    IN = 0,
+    OUT = 1,
+    INTERNAL = 2
+};
+
+struct DataElemInfo {
+    virtual ~DataElemInfo() = default;
+    virtual const char* name() const=0;
+    virtual const char* typeName() const=0;
+    virtual Dir direction() const=0;
+};
+
+/*!
+ * \brief Provide compile time info if a data-element is in or out
+ */
+class InTag {
+};
+
+class OutTag {
+};
+
+class InternalTag : public InTag, public OutTag {
+};
+
+
+{% for de_de in all_dataelements %}
+
+{{de_de.desc_comment }}
+struct {{de_de.de_dataelementname}}_info : {{de_de.dirtag}}, public DataElemInfo {
+    using data_elem_type = {{de_de.cpp_type}};{{de_de.range_comment}}
+
+    static const char* Name();
+    static const char* TypeName();
+    static Dir Direction();
+
+    const char* name() const override;
+    const char* typeName() const override;
+    Dir direction() const override;
+};
+{% endfor %}
+
+} // namespace autosar

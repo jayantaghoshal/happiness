@@ -1,0 +1,3 @@
+{% for de_de in all_dataelements if not de_de.is_insignal and not de_de.is_internal %}
+    static DESink<autosar::{{de_de.de_dataelementname}}_info>* {{de_de.de_dataelementname}}_de=nullptr;
+{% endfor %}
