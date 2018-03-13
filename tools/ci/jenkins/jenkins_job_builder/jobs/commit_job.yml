@@ -333,6 +333,21 @@
                 <customProjectName>ihu_check_test</customProjectName>
                 <customPrefix>CommitGate</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+
+- job:
+    name: ihu_hmi_commit_check
+    defaults: commit_job_defaults
+    node: high
+    builders:
+        - shell:
+            !include-raw:
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_hmi_commit_check.sh
+    publishers:
+      - archive:
+          artifacts: '${workspace}/**/build/reports/*'
+          allow-empty: true
+
 - project:
     name: ihu
     node: master
