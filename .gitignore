@@ -32,3 +32,6 @@ build.log.*
 
 #PyCharm / Android Studio / Jetbrains Tools
 .idea
+
+#Java
+.class
