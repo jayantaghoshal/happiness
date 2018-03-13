@@ -36,7 +36,7 @@ Return<void> InstallationMasterDaemon::assignInstallation(const hidl_string& ins
     // Used for testing! Todo: Replace with real implementation
     std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f =
             [installationOrder](auto it) {
-                return (*it)->installNotification(installationOrder, InstallNotification::INSTALLATION_STARTED);
+                return (*it)->installNotification(installationOrder, InstallationStatus::INSTALLATION_STARTED);
             };
 
     TryNotifyListener(f);

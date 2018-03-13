@@ -18,8 +18,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import android.util.Log;
-import vendor.volvocars.hardware.installationmaster.V1_0.InstallNotification;
-
+import vendor.volvocars.hardware.installationmaster.V1_0.InstallationStatus;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,15 +198,14 @@ public class SoftwareUpdateService extends Service {
     public void onInstallationNotification(String uuid, String notification)
     {
         Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
-        if (notification.equals(InstallNotification.toString(InstallNotification.INSTALLATION_STARTED))) {
+        if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_STARTED))) {
             UpdateSoftwareState(uuid, SoftwareState.INSTALLING);
-        } else if (notification.equals(InstallNotification.toString(InstallNotification.INSTALLATION_COMPLETE))) {
+        } else if (notification.equals(InstallationStatus.toString(InstallationStatus.INSTALLATION_COMPLETE))) {
             UpdateSoftwareState(uuid, SoftwareState.INSTALLED);
         }
         else {
             Log.d(LOG_TAG, "InstallNotification of type " + notification + "is not handled");
         }
-
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {

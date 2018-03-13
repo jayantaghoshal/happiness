@@ -32,8 +32,8 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
     @Override
     public void installNotification(String installationOrder, int notification) {
         Log.d(LOG_TAG, "installNotification [installationOrder: " + installationOrder + ", notification: "
-                + InstallNotification.toString(notification) + "]");
-        service.onInstallationNotification(installationOrder, InstallNotification.toString(notification));
+                + InstallationStatus.toString(notification) + "]");
+        service.onInstallationNotification(installationOrder, InstallationStatus.toString(notification));
     }
 
     @Override

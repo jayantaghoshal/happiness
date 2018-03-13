@@ -7,7 +7,7 @@ interface IInstallationMasterEventListener
      * @param installationOrder The UUID of the installation order in progress
      * @param notification      The status of the installation
      */
-    oneway installNotification(string installationOrder, InstallNotification notification);
+    oneway installNotification(string installationOrder, InstallationStatus notification);
 
     /**
      * Notify the listnener of a newly created installation report
