@@ -1,6 +1,6 @@
 package vendor.volvocars.hardware.installationmaster@1.0;
 
-enum InstallNotification : uint32_t {
+enum InstallationStatus : uint32_t {
     UNKNOWN,
     DOWNLOAD_VERIFIED,
     DOWNLOAD_INVALID,

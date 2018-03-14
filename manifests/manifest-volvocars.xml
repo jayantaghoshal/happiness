@@ -26,7 +26,7 @@
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049"/>
 
   <!-- vSomeIP-2.10.10 -->
-  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="fbf60fa95d2d9ceea4f1f018332e7f8afe24dbf3"/>
+  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="59783680ea17d8a76cac0f2b90dd67d0ea825506"/>
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/frameworks/base"/>
@@ -96,7 +96,7 @@
 
   <!-- Upstream to Intel -->
   <remove-project name="bsp/kernel/bxt"/>
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="d150d741b2738567edbe9325feb60d4e6a795a4c"/>
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="0b7df69cfb6de086aa2841a5f85bad15a986fd5f"/>
 
   <remove-project name="bsp/vendor/intel/external/open-avb"/>
   <project name="bsp/vendor/intel/external/open-avb" path="vendor/intel/external/open-avb" revision="6bfc97369e9063aebdd2937727ce0a3f8f790a11"/>

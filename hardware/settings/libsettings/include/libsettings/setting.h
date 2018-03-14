@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -28,7 +28,8 @@ class Setting : public SettingBase {
   public:
     Setting(const SettingId& name, const T& defaultValue, android::sp<SettingsManager> context)
         : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {
-        handle_ = context->attachSetting(name_, userScope,
+        handle_ = context->attachSetting(name_,
+                                         userScope,
                                          [this](const std::string& stringdata, ProfileIdentifier profileId) {
                                              initialized = true;
                                              onDataChanged(stringdata, profileId);
@@ -165,16 +166,17 @@ class Setting : public SettingBase {
             value_ = ValueProfile<T>(default_, profileId);
         }
         if (callbackToApplicationOnSettingChanged_) {
-            ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, notify application callback key=%d", name_);
             callbackToApplicationOnSettingChanged_(value_);
-        } else {
-            ALOG(LOG_VERBOSE, SETTINGS_LOG_TAG, "OnDataChanged, no application callback key=%d", name_);
         }
     }
 
-  protected:
+  private:
     std::function<void(const ValueProfile<T>&)> callbackToApplicationOnSettingChanged_;
+
+  protected:
     mutable ValueProfile<T> value_;
+
+  private:
     const T default_;
 };
 }  // namespace SettingsFramework

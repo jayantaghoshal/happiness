@@ -64,14 +64,13 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
                 playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
                           static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
                           testing::_))
-            .Times(1);
+    Times(1);
     //.WillOnce(testing::Return(ret));
 
     // DO the call to soundwrapper
-    auto result = SoundWrapper::play(
+    SoundWrapper::play(
             SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight));
 
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
     // SImulate callback
 
     // Idle->Starting->Playing->Idle

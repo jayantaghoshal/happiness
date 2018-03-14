@@ -19,6 +19,7 @@ tar xfz out.tgz || die "Unpack out.tgz failed"
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
+source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
 set +e
 for tmp in 1 2 3
@@ -30,7 +31,7 @@ do
     elif [ $tmp -eq 3 ]; then
         die "Failed to flash IHU image" # failed after three attempts
     else
-        python3 "${SCRIPT_DIR}"/ihu_ipm_reboot.py # reboot ihu on flashing failures
+        python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/ihu_ipm_reboot.py # reboot ihu on flashing failures
     fi
 done
 set -e

@@ -1,16 +1,17 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 #include <vendor/volvocars/hardware/installationmaster/1.0/IInstallationMaster.h>
 #include <vendor/volvocars/hardware/installationmaster/1.0/IInstallationMasterEventListener.h>
+#include <list>
 
 using ::vendor::volvocars::hardware::installationmaster::V1_0::DataFile;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::IInstallationMaster;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::IInstallationMasterEventListener;
-using ::vendor::volvocars::hardware::installationmaster::V1_0::InstallNotification;
+using ::vendor::volvocars::hardware::installationmaster::V1_0::InstallationStatus;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::InstallationSummary;
 
 using ::android::hardware::Return;
@@ -24,7 +25,7 @@ namespace installationmaster {
 
 class InstallationMasterDaemon : public IInstallationMaster {
   private:
-    std::vector<android::sp<IInstallationMasterEventListener> > listeners_;
+    std::list<android::sp<IInstallationMasterEventListener>> listeners_;
 
   public:
     InstallationMasterDaemon() = default;
@@ -59,6 +60,9 @@ class InstallationMasterDaemon : public IInstallationMaster {
      * @param eventListener An implemetination of Iimel
      */
     Return<void> registerInstallationStatusListener(const android::sp<IInstallationMasterEventListener>& eventListener);
+
+    void TryNotifyListener(
+            const std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)>& f);
 };
 
 }  // namespace installationmaster

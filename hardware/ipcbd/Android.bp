@@ -7,3 +7,41 @@ subdirs = [
     "libipcommandbus",
     "test/ct",
 ]
+
+cc_binary {
+
+    name: "ipcbd",
+
+    defaults: [
+        "volvocars_cc_defaults",
+    ],
+
+    init_rc: [
+        "ipcbd-infotainment.rc",
+        "ipcbd-iplm.rc",
+        "ipcbd-dim.rc",
+    ],
+
+    relative_install_path: "hw",
+
+    srcs: [
+        "src/main.cpp",
+        "src/service_manager.cpp",
+        "src/diagnostics_client.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libtarmac",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhardware",
+        "libhwbinder",
+        "libipcommandbus",
+        "vendor.volvocars.hardware.common@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
+    ],
+
+}

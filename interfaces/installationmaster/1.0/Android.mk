@@ -93,9 +93,9 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build types.hal (InstallNotification)
+# Build types.hal (InstallationStatus)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallNotification.java
+GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallationStatus.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -105,7 +105,7 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.installationmaster@1.0::types.InstallNotification
+        vendor.volvocars.hardware.installationmaster@1.0::types.InstallationStatus
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -324,9 +324,9 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build types.hal (InstallNotification)
+# Build types.hal (InstallationStatus)
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallNotification.java
+GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallationStatus.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
@@ -336,7 +336,7 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.installationmaster@1.0::types.InstallNotification
+        vendor.volvocars.hardware.installationmaster@1.0::types.InstallationStatus
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)

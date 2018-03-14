@@ -32,7 +32,9 @@ for (unsigned int i=0; i<deValue.size(); ++i) { deValue[i] = static_cast<autosar
     case ComConf_ComSignal_is{{de_de.rtename}}_mrx:
     {
         if (sizeof({{de_de.rtename}}) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignal_is{{de_de.rtename}}_mrx);
+            IF_ALOG(LOG_VERBOSE, "VSMInject") {
+                ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignal_is{{de_de.rtename}}_mrx);
+            }
             const {{de_de.rtename}}& rteValue = *static_cast<const {{de_de.rtename}}*>(buffer);
             autosar::{{de_de.de_dataelementname}}_info::data_elem_type deValue;
             {{transfer_master(de_de.de_dataelementname, 'deValue', 'rteValue', de_de.transfer)}}
@@ -46,7 +48,9 @@ for (unsigned int i=0; i<deValue.size(); ++i) { deValue[i] = static_cast<autosar
     case SignalGroup|ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx:
     {
         if (sizeof({{de_de.rtename}}) == length) {
-            ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx);
+            IF_ALOG(LOG_VERBOSE, "VSMInject") {
+                ALOG(LOG_VERBOSE, "VSMInject", "Received {{de_de.rtename}} (%u)", ComConf_ComSignalGroup_ig{{de_de.rtename}}_mrx);
+            }
             const {{de_de.rtename}}& rteValue = *static_cast<const {{de_de.rtename}}*>(buffer);
             autosar::{{de_de.de_dataelementname}}_info::data_elem_type deValue;
             {{transfer_master(de_de.de_dataelementname, 'deValue', 'rteValue', de_de.transfer)}}

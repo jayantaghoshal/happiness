@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -40,7 +40,7 @@ class SettingBase {
     bool initialized = false;
 
   public:
-    const SettingId name_;
+    const SettingId name_;  // Only public for logging purposes, avoid relying on this in application code
 
   private:
     virtual void onDataChanged(const std::string& stringData, ProfileIdentifier profileId) = 0;
