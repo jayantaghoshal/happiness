@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import queue
@@ -921,3 +921,35 @@ class App:
 
     def set_filter(self, filter):
         self.filterBindVar.set(filter)
+
+    # method added to keep working scripts, used external_send
+    def external_send(self, topic, value, value_type):
+        if topic[0:3] == "/o/":
+            in_or_out = 1
+        else:
+            in_or_out = 0
+
+        dataelement_name = topic[3:]
+        to_send = {
+            "SignalName": dataelement_name,
+            "Dir": in_or_out,
+            "Data": {
+                "state": 0,
+                "timestamp": int(time.time()),
+                "type": value_type,
+                "value": value
+            }
+        }
+        # ToDo:
+        # Before we send signal of we should update the port_sender/widget
+        # so that sent value is shown in HMI. This should be done either by
+        # inputing value above to app.handle_message(...) or by
+        # app.handle_signal(...). Not sure of which of these should be used.
+        # Since handle_message(...) calls code in the module that calls
+        # external_send(...), then something circular could happen?
+        #
+        # Once the port_sender/widget is updated, then could use the send function
+        # of that, instead of sending json directly, but not sure there is that
+        # much benefit.
+
+        self.connection.send(json.dumps(to_send))
