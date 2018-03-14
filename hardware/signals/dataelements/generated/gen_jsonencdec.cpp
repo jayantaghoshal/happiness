@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -4088,6 +4088,6 @@ WipgInfo fromJson<WipgInfo>(const json& object) {
 }
 
 
-} // end of namespace
+} // namespace autosar
 
 // clang-format on

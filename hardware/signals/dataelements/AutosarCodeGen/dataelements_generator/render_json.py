@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 from typing import List, Dict
@@ -149,8 +149,8 @@ AllButAREnum<T> fromJson(const json& j) {
             func_fromjson_str += "    return v;\n}\n\n\n"
 
             gen_jsonenc_cpp_contents += func_tojson_str + "\n" + func_fromjson_str
-    gen_jsonenc_h_contents += "} // end of namespace\n"
-    gen_jsonenc_cpp_contents += "} // end of namespace\n"
+    gen_jsonenc_h_contents += "} // namespace autosar\n"
+    gen_jsonenc_cpp_contents += "} // namespace autosar\n"
     gen_jsonenc_h_contents += footer
     gen_jsonenc_cpp_contents += footer
 
