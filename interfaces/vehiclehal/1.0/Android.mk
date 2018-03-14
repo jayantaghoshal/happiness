@@ -18,6 +18,26 @@ LOCAL_JAVA_LIBRARIES := \
 
 
 #
+# Build types.hal (PAStatus)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/vehiclehal/V1_0/PAStatus.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hardware:hardware/interfaces \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.vehiclehal@1.0::types.PAStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
 # Build types.hal (VehicleProperty)
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/vehiclehal/V1_0/VehicleProperty.java
@@ -53,6 +73,26 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     android.hardware.automotive.vehicle-V2.0-java-static \
     android.hidl.base-V1.0-java-static \
 
+
+#
+# Build types.hal (PAStatus)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/vehiclehal/V1_0/PAStatus.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hardware:hardware/interfaces \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.vehiclehal@1.0::types.PAStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
 # Build types.hal (VehicleProperty)

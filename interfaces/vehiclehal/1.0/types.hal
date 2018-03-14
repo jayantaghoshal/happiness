@@ -74,4 +74,23 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:BOOLEAN
       | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Curve Speed adaption
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    CURVE_SPEED_ADAPTION_STATUS = (
+      0x0007
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+};
+
+enum PAStatus: int32_t {
+  NotAvailable = 0,
+  Disabled = 1,
+  Active = 2,
+  SystemError = 3,
 };

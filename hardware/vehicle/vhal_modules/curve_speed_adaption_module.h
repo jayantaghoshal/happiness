@@ -12,6 +12,7 @@
 
 #include "modulepropertyhandler.h"
 #include "notifiable_property.h"
+#include "papropertyhandler.h"
 #include "propertyhandler.h"
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
@@ -25,7 +26,7 @@ class CurveSpeedAdaptionModule {
                              android::sp<SettingsFramework::SettingsManagerHidl> manager);
 
   private:
-    VhalPropertyHandler<bool> prop_curve_speed_adaption_on;
+    PAPropHandler<bool> PA_prop_curve_speed_adaption;
 
     SettingsFramework::Setting<bool, SettingsFramework::UserScope::USER> setting_;
     DESender<autosar::AccAdprTurnSpdActv_info> accadpr_turnspd_actv_flexray_sender_;

@@ -25,6 +25,7 @@ LOCAL_SRC_FILES := \
      src/activeuserprofilemodule.cpp \
      src/modulepropertyhandler.cpp \
      src/propertyhandler.cpp \
+     src/papropertyhandler.cpp \
      src/systeminformationmodule.cpp \
      src/illuminationmodule.cpp \
      src/cartimemodule.cpp \

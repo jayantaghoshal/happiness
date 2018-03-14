@@ -34,7 +34,10 @@ vhal20::VehiclePropConfig propconfig_curve_speed_adaption_on() {
 CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
                                                    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
                                                    android::sp<SettingsFramework::SettingsManagerHidl> manager)
-    : prop_curve_speed_adaption_on(propconfig_curve_speed_adaption_on(), dispatcher, vehicleHal),
+    : PA_prop_curve_speed_adaption(propconfig_curve_speed_adaption_on(),
+                                   vccvhal10::VehicleProperty::CURVE_SPEED_ADAPTION_STATUS,
+                                   dispatcher,
+                                   vehicleHal),
       setting_(SettingId::CurveSpeedAdapt_On, true, manager) {
     // Check if enabled
     auto car_config_23 = carconfig::getValue<CC23_CruiseControlType>();
@@ -60,8 +63,8 @@ CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(vhal20::impl::IVehicleHalImpl
     });
 
     // Start listen to Vhal
-    prop_curve_speed_adaption_on.registerToVehicleHal();
-    prop_curve_speed_adaption_on.subscribe_set_prop([&](bool value, int32_t zone) {
+    PA_prop_curve_speed_adaption.registerToVehicleHal();
+    PA_prop_curve_speed_adaption.subscribe_set_prop([&](bool value, int32_t zone) {
         (void)zone;
         ALOGV("VHAL is changed, lets update (Setting->MainLoop->Vhal/Flexray): %d", value);
         setting_.set(value);
@@ -107,14 +110,14 @@ void CurveSpeedAdaptionModule::Update() {
 
     if (is_error_) {
         SetFlexray(false, current_profile_);
-        prop_curve_speed_adaption_on.PushProp(false);  // Set Vhal
+        PA_prop_curve_speed_adaption.PushProp(false, vccvhal10::PAStatus::SystemError);  // Set Vhal
     } else {
         if (!is_active_) {
             SetFlexray(false, current_profile_);
-            prop_curve_speed_adaption_on.PushProp(false);  // Set Vhal
+            PA_prop_curve_speed_adaption.PushProp(false, vccvhal10::PAStatus::Disabled);  // Set Vhal
         } else {
             SetFlexray(curve_speed_adaption_on_, current_profile_);
-            prop_curve_speed_adaption_on.PushProp(curve_speed_adaption_on_);  // Set Vhal
+            PA_prop_curve_speed_adaption.PushProp(curve_speed_adaption_on_, vccvhal10::PAStatus::Active);  // Set Vhal
         }
     }
 }
