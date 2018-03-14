@@ -186,8 +186,15 @@
           flatten: true
       - shell:
             !include-raw:
-                - bootstrap_ihu_hourly_daily_common.sh    
-
+                - bootstrap_ihu_hourly_daily_common.sh
+    publishers:
+      - trigger-parameterized-builds:
+        - project:
+            - ihu_staging
+          condition: ALWAYS
+          predefined-parameters: |
+            GIT_COMMIT=${GIT_COMMIT}
+            GIT_URL=${GIT_URL}
 - job:
     name: ihu_daily_build_vcc_eng
     defaults: daily_job_defaults

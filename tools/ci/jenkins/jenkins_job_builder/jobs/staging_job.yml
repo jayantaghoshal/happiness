@@ -46,10 +46,14 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
-    triggers:
-        - reverse:
-            jobs: 'ihu_daily'
-            result: 'failure'
+        - string:
+            name: GIT_COMMIT
+            default: ''
+            description: Normally sent from the triggering job (ihu_daily)
+        - string:
+            name: GIT_URL
+            default: ''
+            description: Normally sent from the triggering job (ihu_daily)
     wrappers:
         - credentials-binding:
             - username-password-separated:
@@ -57,36 +61,39 @@
                 username: JENKINS_USER
                 password: JENKINS_API_PASSWORD
     builders:
-      - shell:
-            !include-raw:
-                - bootstrap_vcc_ci.sh
-      - multijob:
-          name: Staging
-          condition: ALWAYS
-          projects:
-            - name: ihu_staging_test-generic
-              current-parameters: true
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_staging_test-flexray
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_staging_test-audio
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_staging_test-apix
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}     
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
+        - multijob:
+            name: Staging
+            condition: ALWAYS
+            projects:
+              - name: ihu_staging_test-generic
+                current-parameters: true
+                predefined-parameters: |
+                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
+              - name: ihu_staging_test-flexray
+                current-parameters: true
+                kill-phase-on: NEVER
+                predefined-parameters: |
+                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
+              - name: ihu_staging_test-audio
+                current-parameters: true
+                kill-phase-on: NEVER
+                predefined-parameters: |
+                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
+              - name: ihu_staging_test-apix
+                current-parameters: true
+                kill-phase-on: NEVER
+                predefined-parameters: |
+                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
 
 - job:
     name: ihu_staging_test-generic
