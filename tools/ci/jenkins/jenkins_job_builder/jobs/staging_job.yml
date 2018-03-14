@@ -39,7 +39,7 @@
 - job:
     name: ihu_staging
     project-type: multijob
-    description: Link to test report - http://gotsvl1416.got.volvocars.net/daily_test_report/<BUILD_NUMBER>
+    description: Link to test report - http://gotsvl1416.got.volvocars.net/staging_test_report/<BUILD_NUMBER>
     node: high
     parameters:
         - run:
@@ -49,7 +49,7 @@
     triggers:
         - reverse:
             jobs: 'ihu_daily'
-            result: 'success'
+            result: 'failure'
     wrappers:
         - credentials-binding:
             - username-password-separated:
@@ -98,6 +98,12 @@
                 - file-id: 61535809-5c5c-4721-9a65-e3587159647a
                   target: $HOME/lab_config.json
                   variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
         - shell:
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
@@ -120,6 +126,12 @@
                 - file-id: 61535809-5c5c-4721-9a65-e3587159647a
                   target: $HOME/lab_config.json
                   variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
         - shell:
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
@@ -142,6 +154,12 @@
                 - file-id: 61535809-5c5c-4721-9a65-e3587159647a
                   target: $HOME/lab_config.json
                   variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
         - shell:
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
@@ -164,6 +182,12 @@
                 - file-id: 61535809-5c5c-4721-9a65-e3587159647a
                   target: $HOME/lab_config.json
                   variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
         - shell:
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
