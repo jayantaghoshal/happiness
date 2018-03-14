@@ -177,7 +177,7 @@ public class CSDConsumerManager {
      * Callback class used when subscribing to property events in VehicleHal.
      * onPropertyEvent we call onApPowerStateChange or onIgnitionChange depending on type.
      * */
-    private class VehicleCallback extends IVehicleCallback.Stub {
+    public class VehicleCallback extends IVehicleCallback.Stub {
         @Override
         public void onPropertyEvent(ArrayList<VehiclePropValue> propValues) {
             for (VehiclePropValue propValue : propValues) {

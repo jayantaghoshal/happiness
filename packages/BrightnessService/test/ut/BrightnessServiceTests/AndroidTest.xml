@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="IlluminationControl-Test">
+    <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
+        <option name="apk-name" value="brightnessserviceunittest.apk" />
+    </target_preparer>
+   <test class="com.android.tradefed.testtype.AndroidJUnitTest">
+       <option name="package" value="com.volvocars.brightnessservice.tests" />
+       <option name="runtime-hint" value="7s" />
+   </test>
+   <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />
+   <result_reporter class="com.android.tradefed.result.XmlResultReporter" />
+</configuration>
