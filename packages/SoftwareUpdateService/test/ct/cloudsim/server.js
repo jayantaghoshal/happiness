@@ -2,7 +2,7 @@ var jsonServer = require('/usr/local/lib/node_modules/json-server')
 var js2xmlparser = require('/usr/local/lib/node_modules/js2xmlparser')
 var server = jsonServer.create()
 var router = jsonServer.router(__dirname + '/db.json')
-var middlewares = jsonServer.defaults({static:__dirname + '/public'})
+var middlewares = jsonServer.defaults({ static: __dirname + '/public' })
 
 var db = router.db
 
@@ -27,12 +27,12 @@ router.render = function (req, res) {
     tag = "available_updates"
   } else if (req._parsedUrl.pathname == '/commission') {
     tag = "commission"
-  } else if(req._parsedUrl.pathname == '/pendingInstallations') {
+  } else if (req._parsedUrl.pathname == '/pendingInstallations') {
     tag = "pending_installations"
-  } else if(req._parsedUrl.pathname == '/downloads') {
+  } else if (req._parsedUrl.pathname == '/downloads') {
     tag = "downloads"
   }
-   else {
+  else {
     return res.send(data)
   }
   var str = js2xmlparser.parse(tag, data)
@@ -88,22 +88,56 @@ server.post('/commission', function (req, res, next) {
   next()
 })
 
-server.get('/downloads', function(req, res, next) {
+server.get('/downloads', function (req, res, next) {
   var d = db.get('downloads')
-      for (j = 0; j < d.value().length; j++) {
-        if (d.value()[j]['installation_order_id'] == req.query.id) {
-          var tmpObj = d.value()[j]
-          var str = js2xmlparser.parse("downloads", tmpObj)
-          return res.send(str)
-        }
-      }
+  for (j = 0; j < d.value().length; j++) {
+    if (d.value()[j]['installation_order_id'] == req.query.id) {
+      var tmpObj = d.value()[j]
+      var str = js2xmlparser.parse("downloads", tmpObj)
+      return res.send(str)
+    }
+  }
 
-      return res.status(405).send({ error: "Nope, cant do that." })
+  return res.status(405).send({ error: "Nope, cant do that." })
 })
 
+function getValue(xml, tag) {
+  var startTag = '<' + tag + '>';
+  var endTag = '</' + tag + '>';
+  startPos = xml.indexOf(startTag) + startTag.length;
+  endPos = xml.indexOf(endTag);
+  return xml.substring(startPos, endPos);
+}
+
 server.post('/installNotification', function (req, res, next) {
-  req.method = 'GET'
-  next()
+  var t = {};
+  var obj = {};
+
+  t = req.body;
+  var xml = t['<?xml version'];
+
+  var tag = "id";
+  obj['id'] = getValue(xml, tag);
+
+  tag = "installation_order_id";
+  obj[tag] = getValue(xml, tag);
+
+  var statusObj = {};
+  tag = "status_code";
+  statusObj[tag] = getValue(xml, tag);
+
+  tag = "sub_status_code";
+  statusObj[tag] = getValue(xml, tag);
+
+  tag = "sub_status_reason";
+  statusObj[tag] = getValue(xml, tag);
+
+  obj['status'] = statusObj;
+
+  db.get('installNotification').push(obj).write();
+
+  req.method = 'GET';
+  next();
 })
 
 server.use(router)

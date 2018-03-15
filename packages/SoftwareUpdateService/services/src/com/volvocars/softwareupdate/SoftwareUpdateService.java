@@ -259,7 +259,7 @@ public class SoftwareUpdateService extends Service {
     public void UpdateSoftwareList(DownloadInfo downloadInfo) {
         boolean found = false;
         for (SoftwareInformation information : softwareInformationList) {
-            if (downloadInfo.uuid.equals(information.installationId)) {
+            if (downloadInfo.installationOrderId.equals(information.installationId)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
                 break;
@@ -292,7 +292,7 @@ public class SoftwareUpdateService extends Service {
         Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
 
         for (SoftwareInformation information : softwareInformationList) {
-            if (info.uuid.equals(information.installationId)) {
+            if (info.installationOrderId.equals(information.installationId)) {
                 Intent intent = new Intent(this, InstallationPopup.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(InstallationPopup.NAME, information.name);
