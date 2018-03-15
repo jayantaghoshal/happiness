@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -14,8 +14,9 @@ namespace ApplicationDataElement {
 
 class DataElementsExecutionContext {
   public:
+    virtual ~DataElementsExecutionContext() = default;
     virtual void assertInExecutionContext() = 0;
-    virtual void enqueueFunction(std::function<void()> func) = 0;
+    virtual void enqueueFunction(std::function<void()>&& func) = 0;
 };
 
 /*!
@@ -25,12 +26,14 @@ class DataElementsExecutionContext {
  * that inherits from the InTag or the InternalTag.
  */
 template <typename S>
-class DESynchronousReceiver {
+class DESynchronousReceiver final {
   public:
-    DESynchronousReceiver(DataElementsExecutionContext& context) : context_{context}, {
+    DESynchronousReceiver(DataElementsExecutionContext& context)
+        : _value(DataElemValue<S>::ERROR(-1)), context_{context} {
         receiver.subscribe([&]() {
             // TODO(performance): Inefficient copies?
-            auto value = receiver.get() context.enqueueFunction([this, value]() {
+            auto value = receiver.get();
+            context_.enqueueFunction([this, value]() {
                 _value = value;
                 performCallback();
             });
@@ -128,16 +131,15 @@ class DESynchronousReceiver {
 
   private:
     // These have no meaning really
-    DESynchronousReceiver(const DEReceiver&) = delete;
-    DESynchronousReceiver(const DEReceiver&&) = delete;
-    DESynchronousReceiver& operator=(const DEReceiver&) = delete;
-    DESynchronousReceiver& operator=(const DEReceiver&&) = delete;
+    DESynchronousReceiver(const DESynchronousReceiver&) = delete;
+    DESynchronousReceiver(const DESynchronousReceiver&&) = delete;
+    DESynchronousReceiver& operator=(const DESynchronousReceiver&) = delete;
+    DESynchronousReceiver& operator=(const DESynchronousReceiver&&) = delete;
 
-    std::mutex valueMutex;
     CallbackWrapper<DataElemValue<S>> _callback;
     DataElemValue<S> _value;
     DEReceiver<S> receiver;
-    DataElementsExecutionContext& context;
+    DataElementsExecutionContext& context_;
 };
 
 }  // end of namespace

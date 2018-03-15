@@ -15,24 +15,26 @@
 #include "papropertyhandler.h"
 #include "propertyhandler.h"
 
+#include <gsl/gsl>
+#include "Application_dataelement_synchronous.h"
+#include "utils/vf_context.h"
+
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 using namespace ApplicationDataElement;
 
 class CurveSpeedAdaptionModule {
   public:
-    CurveSpeedAdaptionModule(vhal20::impl::IVehicleHalImpl*,
-                             std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                             android::sp<SettingsFramework::SettingsManagerHidl> manager);
+    CurveSpeedAdaptionModule(gsl::not_null<VFContext*> ctx);
 
   private:
     PAPropHandler<bool> PA_prop_curve_speed_adaption;
 
     SettingsFramework::Setting<bool, SettingsFramework::UserScope::USER> setting_;
     DESender<autosar::AccAdprTurnSpdActv_info> accadpr_turnspd_actv_flexray_sender_;
-    DEReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
-    DEReceiver<autosar::CrvtSpdWarnSts_info> crvtspdwarn_flexray_receiver_;
-    DEReceiver<autosar::CrvtSpdAdpvSts_info> crvtspdadpv_flexray_receiver_;
+    DESynchronousReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
+    DESynchronousReceiver<autosar::CrvtSpdWarnSts_info> crvtspdwarn_flexray_receiver_;
+    DESynchronousReceiver<autosar::CrvtSpdAdpvSts_info> crvtspdadpv_flexray_receiver_;
 
     // "States"
     bool is_error_ = false;

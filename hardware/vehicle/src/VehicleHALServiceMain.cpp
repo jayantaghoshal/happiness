@@ -27,9 +27,11 @@
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include <future>
+#include "Application_dataelement_synchronous.h"
 #include "carconfigmodule.h"
 #include "climate_main.h"
 #include "systeminformationmodule.h"
+#include "utils/vf_context.h"
 
 #undef LOG_TAG
 #define LOG_TAG "automotive.vehicle2.0"
@@ -38,12 +40,16 @@ namespace vhal_20 = android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal_10 = vendor::volvocars::hardware::vehiclehal::V1_0;
 
 int main(int /* argc */, char* /* argv */ []) {
-    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher = tarmac::eventloop::IDispatcher::CreateDispatcher();
+    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher =
+            tarmac::eventloop::IDispatcher::CreateDispatcher(false);
     android::sp<SettingsFramework::SettingsManagerHidl> settings_manager =
             new SettingsFramework::SettingsManagerHidl(*dispatcher);
+    DEDispatcher dataelements{dispatcher};
 
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
     auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
+
+    VFContext ctx{dispatcher, settings_manager, dataelements, *(hal.get()), vcc::LocalConfigDefault()};
 
     ////////////////////////////////////////////////////////////////
     // CLIMATE
@@ -80,11 +86,11 @@ int main(int /* argc */, char* /* argv */ []) {
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
     auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
-    auto curve_speed_adaption_module =
-            std::make_unique<CurveSpeedAdaptionModule>(hal.get(), dispatcher, settings_manager);
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
     auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
     auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
+
+    CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -112,7 +118,10 @@ int main(int /* argc */, char* /* argv */ []) {
     ALOGI("Ready starting VCC VHAL Daemon");
 
     ALOGI("waiting to join thread ...");
+
+    std::thread dispatcherThread([&]() { dispatcher->RunUntil([]() { return false; }); });
     android::hardware::joinRpcThreadpool();
+    dispatcherThread.join();
 
     return 0;
 }

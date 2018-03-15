@@ -16,6 +16,7 @@ LOCAL_PROPRIETARY_MODULE := true
 PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.delphi@2.0-service
 
 LOCAL_SRC_FILES := \
+     src/utils/vf_context.cpp \
      src/VehicleHALServiceMain.cpp \
      src/carconfigmodule.cpp \
      src/hvacmodule.cpp \
@@ -42,6 +43,7 @@ LOCAL_SRC_FILES := \
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src \
+    $(LOCAL_PATH)/utils \
     $(LOCAL_PATH)/vhal_modules
 
 LOCAL_SHARED_LIBRARIES := \
@@ -79,7 +81,8 @@ LOCAL_STATIC_LIBRARIES := \
     climate_common \
     climate_vf_common \
     climate_commonapi_printers \
-    climate_commonapi_pregen
+    climate_commonapi_pregen \
+	libgsl
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib

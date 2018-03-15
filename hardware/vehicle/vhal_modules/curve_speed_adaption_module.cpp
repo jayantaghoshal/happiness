@@ -31,14 +31,15 @@ vhal20::VehiclePropConfig propconfig_curve_speed_adaption_on() {
     return BoolConfig(prop);
 }
 
-CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
-                                                   std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                                                   android::sp<SettingsFramework::SettingsManagerHidl> manager)
+CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(gsl::not_null<VFContext*> ctx)
     : PA_prop_curve_speed_adaption(propconfig_curve_speed_adaption_on(),
                                    vccvhal10::VehicleProperty::CURVE_SPEED_ADAPTION_STATUS,
-                                   dispatcher,
-                                   vehicleHal),
-      setting_(SettingId::CurveSpeedAdapt_On, true, manager) {
+                                   ctx->dispatcher,
+                                   &(ctx->vhal)),
+      setting_(SettingId::CurveSpeedAdapt_On, true, ctx->settings),
+      vehmod_flexray_receiver_{ctx->dataelements},
+      crvtspdwarn_flexray_receiver_{ctx->dataelements},
+      crvtspdadpv_flexray_receiver_{ctx->dataelements} {
     // Check if enabled
     auto car_config_23 = carconfig::getValue<CC23_CruiseControlType>();
     auto car_config_148 = carconfig::getValue<CC148_CurveSpeedSupportType>();
