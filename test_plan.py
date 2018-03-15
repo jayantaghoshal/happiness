@@ -55,11 +55,7 @@ test_plan_hourly = test_plan_gate + [
     TradefedTest("vendor/volvocars/tools/test/log_analyzer", standard_caps),
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct", standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/test/keypanel", standard_caps | {cp.flexray}),
-    Disabled(VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps),
-             reason="To be refactored to fit with localconfig changes",
-             jira_issue="PSS370-17352",
-             deadline="2018-02-28"
-    ),
+    VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps),
     Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}),
              reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
              jira_issue="PSS370-15982",

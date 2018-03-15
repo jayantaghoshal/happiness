@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -37,15 +37,17 @@ public class MainActivity extends Activity
     private final Semaphore mConnectionWait = new Semaphore(0);
     private static final String mockedLocalConfigPath = "/data/local/tmp/localconfig.json";
     // Valid Key Integer type
-    private static final String LCFINT_IIPM_LMN_NoofNodesRG1 = "IIPS_LM_NofNodesRG1";
+    private static final String LCFINT_KEY = "TEST_KEY_INTEGER";
     // Valid Key Double type
-    private static final String LCFDB_CONN_TMR_WFA = "CONN_increaseTimerValueWFA";
+    private static final String LCFDB_KEY = "TEST_KEY_DOUBLE";
     // Valid Key String type
-    private static final String LCF_IIPS_IPADDR_LOCAL = "IIPS_IpAddress_LOCAL";
+    private static final String LCFSTRING_KEY = "TEST_KEY_STRING";
+    // Valid Key Boolean type
+    private static final String LCF_TEST_BOOLEAN = "TEST_KEY_BOOLEAN";
     // Local Values
-    private static final int LCF_INT_IIPS_LM_NofNodesRG1_VAL = 3;
-    private static final double LCF_DB_CONN_TMR_WFA_VAL = 1.5;
-    private static final String LCF_STR_IIPS_IPADDR_LOCAL = "198.18.34.1";
+    private static final int LCF_INT_VAL = 50;
+    private static final double LCF_DB_VAL = 8.5;
+    private static final String LCF_STR_VAL = "KEY_TYPE_STRING";
 
     private static final double DELTA = 1e-15;
 
@@ -133,14 +135,14 @@ public class MainActivity extends Activity
         int lcf = 0;
 
         try {
-            lcf = mlocalcfgapi.getLocalConfigInteger(LCFINT_IIPM_LMN_NoofNodesRG1);
+            lcf = mlocalcfgapi.getLocalConfigInteger(LCFINT_KEY);
         } catch (LcfgNotConnectedException | RuntimeException e) {
 
             Log.v(TAG_LCLCFG_CTS,"+ LocalConfigGetInteger + | " + e.getMessage());
             blContout_flag = true;
         }
         assertFalse(blContout_flag);
-        assertEquals(LCF_INT_IIPS_LM_NofNodesRG1_VAL,lcf);
+        assertEquals(LCF_INT_VAL,lcf);
 
         mlocalcfgapi.disconnectlocalConfig();
     }
@@ -161,7 +163,7 @@ public class MainActivity extends Activity
         double lcf = 0.0;
 
         try {
-            lcf = mlocalcfgapi.getLocalConfigDouble(LCFDB_CONN_TMR_WFA);
+            lcf = mlocalcfgapi.getLocalConfigDouble(LCFDB_KEY);
         } catch (LcfgNotConnectedException | RuntimeException e) {
 
             Log.v(TAG_LCLCFG_CTS,"+ LocalConfigGetDouble + | " + e.getMessage());
@@ -169,7 +171,7 @@ public class MainActivity extends Activity
         }
         assertFalse(blContout_flag);
 
-        assertEquals(LCF_DB_CONN_TMR_WFA_VAL,lcf,DELTA);
+        assertEquals(LCF_DB_VAL,lcf,DELTA);
 
         mlocalcfgapi.disconnectlocalConfig();
     }
@@ -189,7 +191,7 @@ public class MainActivity extends Activity
         String lcf = "";
 
         try {
-            lcf = mlocalcfgapi.getLocalConfigString(LCF_IIPS_IPADDR_LOCAL);
+            lcf = mlocalcfgapi.getLocalConfigString(LCFSTRING_KEY);
         } catch (LcfgNotConnectedException | RuntimeException e) {
 
             Log.v(TAG_LCLCFG_CTS,"+ LocalConfigGetString + | " + e.getMessage());
@@ -198,7 +200,7 @@ public class MainActivity extends Activity
 
         assertFalse(blContout_flag);
 
-        assertEquals(LCF_STR_IIPS_IPADDR_LOCAL,lcf);
+        assertEquals(LCF_STR_VAL,lcf);
 
         mlocalcfgapi.disconnectlocalConfig();
     }
@@ -309,7 +311,7 @@ public class MainActivity extends Activity
         // Note : At the time of this testing LocalConfig doesn't support boolean  key type
         // Assuming this Invaild key exception this test is evaluated as Success
         try {
-            lcf = mlocalcfgapi.getLocalConfigBoolean("Boolean_type");
+            lcf = mlocalcfgapi.getLocalConfigBoolean(LCF_TEST_BOOLEAN);
         } catch (LcfgNotConnectedException e) {
 
             Log.v(TAG_LCLCFG_CTS,"+ LocalConfigGetBoolean + | " + e.getMessage());
@@ -319,11 +321,7 @@ public class MainActivity extends Activity
              isRuntimeException = true;
         }
 
-        assertFalse(blContout_flag);
-
-        assertTrue(isRuntimeException);
-
-        assertEquals(false,lcf);
+        assertTrue(lcf);
 
         mlocalcfgapi.disconnectlocalConfig();
     }
@@ -344,7 +342,7 @@ public class MainActivity extends Activity
         String lcf = "";
         // Input key of integer type
         try {
-            lcf = mlocalcfgapi.getLocalConfigString(LCFINT_IIPM_LMN_NoofNodesRG1);
+            lcf = mlocalcfgapi.getLocalConfigString(LCFINT_KEY);
         }
         catch (LcfgNotConnectedException e)
         {
@@ -375,7 +373,7 @@ public class MainActivity extends Activity
         assertFalse(blContout_flag);
         // Input key of String type
         try {
-            double lcf = mlocalcfgapi.getLocalConfigDouble(LCF_IIPS_IPADDR_LOCAL);
+            double lcf = mlocalcfgapi.getLocalConfigDouble(LCFSTRING_KEY);
         }
         catch (LcfgNotConnectedException e)
         {
@@ -405,7 +403,7 @@ public class MainActivity extends Activity
         }
          assertFalse(blContout_flag);
         try {
-            int lcf = mlocalcfgapi.getLocalConfigInteger(LCFDB_CONN_TMR_WFA);
+            int lcf = mlocalcfgapi.getLocalConfigInteger(LCFDB_KEY);
         } catch (LcfgNotConnectedException e) {
              Log.v(TAG_LCLCFG_CTS,"+ LocalConfigGetInteger_Mismatchtype + | " + e.getMessage());
         }

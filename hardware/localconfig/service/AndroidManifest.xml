@@ -33,11 +33,5 @@
                 <action android:name="android.volvocars.localconfig.ILocalConfig" />
             </intent-filter>
         </service>
-        <receiver android:name=".BootReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.PRE_BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>

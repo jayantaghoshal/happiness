@@ -1,8 +1,10 @@
 {
+  "TEST_KEY_INTEGER": 50,
   "IIPS_LM_NofNodesRG1": 3,
   "IIPS_LM_NofNodesRG3": 3,
   "IIPS_LM_RequestMonitoringTimeout": 3000,
   "IIPS_LM_NofLSCs": 3,
+  "TEST_KEY_STRING": "KEY_TYPE_STRING",
   "IIPS_IpAddress_LOCAL": "198.19.101.66",
   "IIPS_IpAddress_BROADCAST": "198.19.101.95",
   "IIPS_IpAddress_VCM":  "198.19.101.65",
@@ -25,6 +27,7 @@
   "CONN_increaseTimerValueWFA": 1.5,
   "CONN_defaultTimeoutWFR": 1000,
   "CONN_numberOfRetriesWFR": 2,
+  "TEST_KEY_DOUBLE": 8.5,
   "CONN_increaseTimerValueWFR": 2.0,
   "CommonPSIM_TEM_PSIMSecurity_TimeoutMs": 2000,
   "CommonPSIM_TEM_PSIMEnterCode_TimeoutMs": 2000,
@@ -108,6 +111,7 @@
       ]
     }
   },
+  "TEST_KEY_BOOLEAN": true,
   "vehiclefunctions.adas.LCFG_DAI_Enabled": true,
   "vehiclefunctions.profiles.T_PassiveKeysearch_Timeout_ms": 1000,
   "vehiclefunctions.profiles.T_Keysearch_Timeout_ms": 1000

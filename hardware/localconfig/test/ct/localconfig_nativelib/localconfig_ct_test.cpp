@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -20,9 +20,11 @@ struct LocalConfigOnTargetTest : public ::Test {
 TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetInt) { EXPECT_NO_THROW(lcfg_->GetInt("IIPS_LM_NofNodesRG1")); }
 
 TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetDouble) {
-    EXPECT_THAT(lcfg_->GetDouble("CONN_increaseTimerValueWFA"), DoubleEq(1.5));
+    EXPECT_THAT(lcfg_->GetDouble("TEST_KEY_DOUBLE"), DoubleEq(8.5));
 }
 
 TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetString) {
-    EXPECT_THAT(lcfg_->GetString("IIPS_IpAddress_LOCAL"), StrEq("198.18.34.1"));
+    EXPECT_THAT(lcfg_->GetString("TEST_KEY_STRING"), StrEq("KEY_TYPE_STRING"));
 }
+
+TEST_F(LocalConfigOnTargetTest, LocalConfigTestGetBoolean) { EXPECT_TRUE(lcfg_->GetBool("TEST_KEY_BOOLEAN")); }
