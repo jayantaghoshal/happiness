@@ -16,6 +16,7 @@ source "${SCRIPT_DIR}/common.sh"
 (repo sync --force-sync --detach prebuilts/build-tools)
 
 commit-check.sh verify vendor/volvocars
+licensing-components.py software-bom vendor/volvocars/ .
 
 (cd vendor/volvocars/tools/ci/shipit && ./analyze.sh)
 (cd vendor/volvocars/tools/ci/shipit && python3 -m unittest)

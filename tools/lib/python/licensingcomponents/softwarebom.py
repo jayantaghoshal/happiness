@@ -20,7 +20,7 @@ def software_bom(root, output_directory):
     validation_result = validation.build_and_validate_licensing_info(components_infos, source_directories)
 
     os.makedirs(output_directory, exist_ok=True)
-    bom_html_file_path = os.path.join(output_directory, 'software-bom.html')
+    bom_html_file_path = os.path.join(output_directory, 'vcc-software-bom.html')
 
     with open(bom_html_file_path, 'w', encoding="utf-8") as file:
         template = env.get_template('software-bom.html')

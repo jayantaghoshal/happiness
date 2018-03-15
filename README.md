@@ -11,7 +11,7 @@ To build the complete system:
    vendor/volvocars/tools/docker_build/run.sh "lunch ihu_vcc-eng && make -j8"
 
 
-See also: https://c1.confluence.cm.volvocars.biz/display/IHUA/06+Development 
+See also: https://c1.confluence.cm.volvocars.biz/display/IHUA/Project+-+IHU+Android
 
 
 
