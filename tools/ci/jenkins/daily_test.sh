@@ -43,6 +43,9 @@ capability=""
 if [ "${JOB_NAME}" = "ihu_daily_test-flexray" ]
 then
     capability="flexray"
+    #shellcheck disable=SC2016
+    eval 'export VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)' # find and export VECTOR_FDX_IP
+    ping -c1 "${VECTOR_FDX_IP}"
 elif [ "${JOB_NAME}" = "ihu_daily_test-audio" ]
 then
     capability="audio"
