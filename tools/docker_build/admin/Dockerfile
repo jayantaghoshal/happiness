@@ -113,7 +113,6 @@ RUN apt-get install -y \
     protobuf-compiler \
     python-virtualenv
 
-
 ##################################################
 # Install android view client, used for android test automation
 # https://github.com/dtmilano/AndroidViewClient/wiki
@@ -164,7 +163,6 @@ RUN pip3 install docopt \
 RUN apt-get install -y \
     git-review
 
-
 ##################################################
 # Static analysis tools
 RUN apt-get install -y \
@@ -188,7 +186,6 @@ RUN pip install typing
 # Tools required for CarSim
 RUN apt-get install -y \
     python3-tk
-
 
 ##################################################
 # Tools required for Cloud Simulation
@@ -221,12 +218,26 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
     parse ply oauth2client
 
 ##################################################
-# Install VCCCI_MESSAGES python package from SWF1
+# Install python package from SWF1 Artifactory PyPi
+#
 ARG swf1_pypi_user
 ARG swf1_pypi_pass
 
-RUN pip install pika
-RUN pip install vccci_messages==1.4.1 ci_confighub==0.1.6 --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+# MySQLClient required by SWAT
+RUN apt-get update && apt-get install -y \
+    libmysqlclient20 \
+    mysql-common \
+    libmysqlclient-dev
+
+# Dependencies to SWAT
+RUN pip2 install \
+    BeautifulSoup==3.2.1 \
+    invoke==0.21.0 \
+    openpyxl==2.3.3
+
+RUN pip2 install \
+    SWAT==4.3.1 \
+    --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 ##################################################
 # Clean up apt package information to make image smaller
