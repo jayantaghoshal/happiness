@@ -90,8 +90,8 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build -
 
 OUT_ARCHIVE=out.tgz
 time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
-            ./out/target/product/ihu_vcc/fast_flashfiles \
-            ./out/target/product/ihu_vcc/data \
+            ./out/target/product/ihu_abl_car/fast_flashfiles \
+            ./out/target/product/ihu_abl_car/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed || die "Could not create out archive"

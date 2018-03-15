@@ -1,8 +1,8 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # Only include this folder for VCC targets (or other upstream targets will suffer)
-ifneq ($(filter ihu_vcc, $(TARGET_DEVICE)),)
+ifneq ($(filter ihu_vcc, $(TARGET_PRODUCT)),)
   LOCAL_PATH:= $(call my-dir)
 
   LOCAL_PATH_MAKEFILES := $(call all-makefiles-under,$(LOCAL_PATH))

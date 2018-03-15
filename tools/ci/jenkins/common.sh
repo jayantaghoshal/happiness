@@ -25,7 +25,7 @@ function buildNewVtsPackage() {
 
     OUT_ARCHIVE=outVTS.tgz
     tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
-            ./out/target/product/ihu_vcc/data \
+            ./out/target/product/ihu_abl_car/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
             ./out/host/linux-x86/tradefed || die "Could not create out archive"

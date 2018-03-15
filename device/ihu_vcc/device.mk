@@ -33,26 +33,23 @@ PRODUCT_PACKAGES += \
     LcfService
 
 ##############################################################
-# VIP update VBFs
+# SWDL stuff
 ##############################################################
-VIP_VBF_IMAGES_PATH := vendor/delphi/vcc_ihu/common/vip_images/ihu_abl_car/proprietary
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(VIP_VBF_IMAGES_PATH),vendor/vip-update)
-
-##############################################################
-# TODO remove this temporary hack
-# lines belowe were moved between swdl bb_reprogramming and device release repo.
-##############################################################
+# This is also set by Aptiv, but kept it here in case we want to override(?)
 MP_PART_NUMBER ?= 00000000DEV
+# We set 1, but before Aptiv set it to 0
 ENABLE_AUTO_FLASHING ?= 1
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.build.mp.part_number=$(MP_PART_NUMBER) \
-    persist.swdl.EnableAutoFlashing=$(ENABLE_AUTO_FLASHING) \
 
 ##############################################################
 # System UI
+#
+# TODO: The librs_jni package is needed by HMI and added here
+#       explicitly. It is being pulled in by some other
+#       package in master, but since trying to integrate
+#       Aptivs Kraken product config, it seems to be missing.
 ##############################################################
 PRODUCT_PACKAGES += \
+    librs_jni \
     VolvoLauncher \
     VccLauncher \
     CarLatinIME
@@ -66,6 +63,7 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
+    VccTunerApp \
     BrightnessService \
 
 ##############################################################
@@ -92,9 +90,8 @@ PRODUCT_PACKAGES += \
 # Files to deploy to target
 #############################################l#################
 PRODUCT_COPY_FILES += \
-    vendor/volvocars/device/ihu_vcc/init.rc:root/init.${TARGET_PRODUCT}.rc \
-    vendor/volvocars/device/ihu_vcc/init.recovery.rc:root/init.recovery.${TARGET_PRODUCT}.rc \
-    vendor/volvocars/device/ihu_vcc/ueventd.rc:root/ueventd.${TARGET_PRODUCT}.rc
+    vendor/volvocars/device/ihu_vcc/init.rc:vendor/etc/init/init.${TARGET_PRODUCT}.rc \
+    vendor/volvocars/device/ihu_vcc/init.recovery.rc:vendor/etc/init/init.recovery.${TARGET_PRODUCT}.rc \
 
 ##############################################################
 # Hardware permissions on target
@@ -134,3 +131,5 @@ KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connecti
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
     KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_eng_diffconfig
 endif
+
+##############################################################

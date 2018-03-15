@@ -1,2 +1,0 @@
-# Inherit Delphi's ueventd.rc
-import ueventd.ihu_abl_car.rc

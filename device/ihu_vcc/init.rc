@@ -1,6 +1,3 @@
-# Inherit Delphi's init.rc
-import init.ihu_abl_car.rc
-
 #setup network namespaces
 on post-fs
     mkdir /dev/vendor/

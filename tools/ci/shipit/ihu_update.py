@@ -463,10 +463,10 @@ def main() -> None:
         port_mapping = PortMapping(parsed_args.vip_port, parsed_args.mp_port)
 
     products_dir = os.path.join(build_out_dir, 'target', 'product')
-    product_path = os.path.expandvars(os.path.join(products_dir, parsed_args.product))
+    product_path = os.environ['ANDROID_PRODUCT_OUT']
 
     if os.path.isdir(product_path):
-        product = os.path.expandvars(parsed_args.product)
+        product = os.path.basename(product_path)
     else:
         raise Exception(
             "Provided product " + parsed_args.product +
