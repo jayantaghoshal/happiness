@@ -10,12 +10,12 @@
   <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="e47e6b13f8326d6261fb0169de0f72a662db72b3"/>
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ed9f194f37ece207befa3e18ee7b5b28729fe08a"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="67a707965c542e1c671775a8fc0f096dc7ea335d"/>
-  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="1521ee95479ac086a7ce7f28bca2be187a624034"/>
+  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="12c6cec6a76b6f74b418208640ebda08af955a5c"/>
 
   <!-- APPS -->
-  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="0178b9c6a5dd70ab25add5a019907ce8e6b14886"/>
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a"/>
 
   <!-- Volvo Cars partner apps -->
 
