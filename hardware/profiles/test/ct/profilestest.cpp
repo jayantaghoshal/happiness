@@ -36,10 +36,10 @@ class ProfilesTests : public ::testing::Test {
     ProfilesTests() {
         // TODO (TS) Replace this stop and start when we have an alternative way to reset the settings
         // NOTE: Starting server without any existing DB usually takes 150ms, need to take this into account in tests
-        system("stop settingstorage-hidl-server");      // NOLINT
-        system("rm /data/vendor/vehiclesettings.db*");  // NOLINT
-        system("start settingstorage-hidl-server");     // NOLINT
-        system("stop vehicle-signals-daemon");          // NOLINT
+        system("stop settingstorage-hidl-server");                      // NOLINT
+        system("rm /data/vendor/vehiclesettings/vehiclesettings.db*");  // NOLINT
+        system("start settingstorage-hidl-server");                     // NOLINT
+        system("stop vehicle-signals-daemon");                          // NOLINT
         std::this_thread::sleep_for(300ms);
 
         profile_manager_ = ICarProfileManager::getService();

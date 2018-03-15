@@ -92,7 +92,7 @@ SettingsStorage::SettingsStorage() {
     {
         // NOTE: Since we run WAL mode, you also have to copy the xxx-shm and xxx-wal file
         //      in case you want to debug the contents on host side.
-        const int status = sqlite3_open("/data/vendor/vehiclesettings.db", &db_);
+        const int status = sqlite3_open("/data/vendor/vehiclesettings/vehiclesettings.db", &db_);
         if (status != 0) {
             ALOGW("Can't open database: %s", sqlite3_errmsg(db_));
             throw SqliteException("Can't open database", status, db_);

@@ -57,6 +57,9 @@
 /vendor/etc/carconfig-default.csv u:object_r:carconfig_default_config_file:s0
 /oem_config/carconfig(/.*)? u:object_r:carconfig_config_files:s0
 
+# StorageSettings files
+/data/vendor/vehiclesettings(/.*)? u:object_r:vehiclesettings_data_file:s0
+
 # carsim_bridge
 /vendor/bin/carsim_bridge u:object_r:carsim_bridge_exec:s0
 

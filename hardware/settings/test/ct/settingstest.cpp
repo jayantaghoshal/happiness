@@ -28,10 +28,11 @@ class SettingTest : public ::testing::Test {
   public:
     SettingTest() {
         // NOTE: Starting server without any existing DB usually takes 150ms, need to take this into account in tests
-        system("stop settingstorage-hidl-server");      // NOLINT
-        system("rm /data/vendor/vehiclesettings.db*");  // NOLINT
-        system("start settingstorage-hidl-server");     // NOLINT
+        system("stop settingstorage-hidl-server");                      // NOLINT
+        system("rm /data/vendor/vehiclesettings/vehiclesettings.db*");  // NOLINT
+        system("start settingstorage-hidl-server");                     // NOLINT
         manager_ = new SettingsManagerHidl{*dispatcher};
+        std::this_thread::sleep_for(300ms);
     };
 
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher =
