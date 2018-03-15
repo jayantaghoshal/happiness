@@ -16,7 +16,6 @@ namespace SettingsFramework {
 
 template <typename T>
 struct ValueProfile {
-    ValueProfile(const T& v) : value(v), profileId(ProfileIdentifier::None) {}
     ValueProfile(const T& v, ProfileIdentifier p) : value(v), profileId(p) {}
 
     T value;
@@ -27,7 +26,7 @@ template <typename T, UserScope userScope>
 class Setting : public SettingBase {
   public:
     Setting(const SettingId& name, const T& defaultValue, android::sp<SettingsManager> context)
-        : SettingBase(context, name, userScope), value_(defaultValue), default_(defaultValue) {
+        : SettingBase(context, name, userScope), value_(defaultValue, ProfileIdentifier::None), default_(defaultValue) {
         handle_ = context->attachSetting(name_,
                                          userScope,
                                          [this](const std::string& stringdata, ProfileIdentifier profileId) {
