@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
@@ -79,6 +79,8 @@ def on_commit(aosp_root_dir: str, sync: bool, repository: str):
         process_tools.check_output_logged(["repo", "sync",
                                         "--jobs=6",
                                         "--no-clone-bundle",
+                                        "--force-sync",
+                                        "--detach",
                                         "--current-branch"], cwd=aosp_root_dir)
 
 def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,

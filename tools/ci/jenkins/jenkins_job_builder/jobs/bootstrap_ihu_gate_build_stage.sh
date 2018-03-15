@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -uex
@@ -91,7 +91,7 @@ if [[ -d .repo ]]; then
     (cd .repo/manifests && git reset --hard HEAD || true)
 fi
 bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
-bootstrap_docker_run "repo sync --no-clone-bundle --current-branch -q -j8 vendor/volvocars"
+bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars"
 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail
