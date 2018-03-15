@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -223,7 +223,7 @@ const unsigned char* SettingsStorage::getData(const SettingsIdHidl key, profileH
     sqlite3_bind_int(select_setting_stmt_, 2, static_cast<int32_t>(profileId));
     int status = sqlite3_step(select_setting_stmt_);
     if (status == SQLITE_DONE) {
-        ALOGD("getData no data found");
+        ALOGV("getData no data found for key %d", key);
         // No row found
         return nullptr;
     }
@@ -238,7 +238,11 @@ const unsigned char* SettingsStorage::getData(const SettingsIdHidl key, profileH
     // sqlite guarantees these always null terminated (or null for empy)
     const unsigned char* data = sqlite3_column_text(select_setting_stmt_, 0);
 
-    ALOGD("getData found data %s", data);
+    if (data == nullptr) {
+        ALOGV("getData key=%d found data with empty/null content", key);
+    } else {
+        ALOGV("getData key=%d found data %s", key, data);
+    }
     return data;
 }
 
