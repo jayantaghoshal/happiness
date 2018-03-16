@@ -1,0 +1,23 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_shared {
+    name: "libihulog",
+    defaults: ["climate_defaults"],
+    srcs: ["ivi-logging.cpp"],
+    shared_libs: [
+        "libc++",
+        "liblog",
+    ],
+    local_include_dirs: [
+        "include",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+    tidy_checks: [
+        "-cert-dcl50-cpp", // variadic macros required for ivi logging
+    ],
+}

@@ -1,0 +1,51 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+    name: "climate_firstrow_test",
+    defaults: [
+        "climate_defaults",
+        "volvocars_cc_defaults_hq_tests",
+    ],
+    srcs: [
+        "*.cpp",
+    ],
+    cflags: [
+        "-Wno-unused-lambda-capture",
+        "-Wno-unused-parameter",
+        "-DUNIT_TEST=1",
+        "-DGTEST_OS_LINUX_ANDROID=1",
+        "-g",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "vendor.volvocars.hardware.profiles@1.0",
+        "liblocalconfig",
+        "libtarmac",
+        "libsettings",
+        "libihulog",
+    ],
+    static_libs: [
+        "climate_firstrow",
+        "climate_signalproxy",
+        "climate_user_selection",
+        "climate_common",
+        "climate_vf_common",
+        "climate_commonapi_printers",
+        "climate_commonapi_pregen",
+        "libcarconfig_reader_mock",
+        "libccparameterlistgen",
+        "libgmock",
+        "libgtest",
+        "libgtest_main",
+        "libdataelements_unittest",
+    ],
+    local_include_dirs: [
+        "mock",
+    ],
+}

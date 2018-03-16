@@ -1,0 +1,52 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name: "climate_firstrow",
+    defaults: ["climate_defaults"],
+    srcs: [
+        "source/*.cpp",
+    ],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "vendor.volvocars.hardware.profiles@1.0",
+        "libdataelements",
+        "liblocalconfig",
+        "libcarconfig_reader",
+        "libtarmac",
+        "libsettings",
+        "libihulog",
+    ],
+    static_libs: [
+        "libccparameterlistgen",
+        "climate_vf_common",
+        "climate_commonapi_pregen",
+        "climate_commonapi_printers",
+        "climate_signalproxy",
+        "climate_common",
+        "climate_user_selection",
+    ],
+    local_include_dirs: [
+        "include",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+    export_shared_lib_headers: [
+        "libdataelements",
+    ],
+    export_static_lib_headers: [
+        "libccparameterlistgen",
+        "climate_user_selection",
+        "climate_common",
+        "climate_vf_common",
+        "climate_commonapi_pregen",
+        "climate_signalproxy",
+        "climate_commonapi_printers",
+    ],
+}
