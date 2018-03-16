@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import collections
@@ -169,12 +169,28 @@ def verify_file_path(file_path):
         linters.run_for_file(file_path)
 
 
-def fix_file_path(file_path):
+def fix_file_path(file_path: str, is_precommit: bool):
     if not is_external_thirdparty(file_path):
         codeformat.apply_guard2once(file_path)
         codeformat.apply_source_file_format(file_path)
-        copyrightheader.fix_copyright_headers(file_path)
+
+        if is_precommit:
+            copyrightheader.fix_copyright_headers(file_path)
+        else:
+            try:
+                copyrightheader.verify_copyright_headers(file_path)
+            except copyrightheader.LicenseHeaderInvalidError:
+                copyrightheader.fix_copyright_headers(file_path)
+
         linters.run_for_file(file_path)
+
+
+def fix_file_path_on_error(file_path: str):
+    fix_file_path(file_path, is_precommit=False)
+
+
+def fix_file_path_on_precommit_hook(file_path: str):
+    fix_file_path(file_path, is_precommit=True)
 
 
 def verify_repo(repo_root, **kwargs):
@@ -184,9 +200,9 @@ def verify_repo(repo_root, **kwargs):
 
 def fix_repo(repo_root, **kwargs):
     paths = build_git_controlled_file_list(repo_root)
-    aggregate_and_exit_with_report_on_failure(paths, fix_file_path, error_types_tuple=ExpectedExceptions)
+    aggregate_and_exit_with_report_on_failure(paths, fix_file_path_on_error, error_types_tuple=ExpectedExceptions)
 
 
 def precommit_hook(repo_root, **kwargs):
     paths = build_git_controlled_changed_file_list(repo_root)
-    aggregate_and_exit_with_report_on_failure(paths, fix_file_path, error_types_tuple=ExpectedExceptions)
+    aggregate_and_exit_with_report_on_failure(paths, fix_file_path_on_precommit_hook, error_types_tuple=ExpectedExceptions)

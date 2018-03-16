@@ -1,8 +1,9 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
 import subprocess
+import shlex
 
 from typing import List, Optional
 
@@ -46,6 +47,16 @@ class Repo:
         repo._run_git(args, run_in_path=False)
 
         return repo
+
+    @classmethod
+    def ls_remote(cls, repository: str):
+        server = "https://icup_android.gerrit.cm.volvocars.biz/"
+
+        revision =  subprocess.check_output(shlex.split('git ls-remote ' + server + repository + ' refs/heads/master'))
+        revision = revision.decode("utf-8")
+        revision = revision.split("\t")[0]
+
+        return revision
 
     def add(self, path_specs: List[str]):
         self._run_git(['add', '--'] + path_specs)

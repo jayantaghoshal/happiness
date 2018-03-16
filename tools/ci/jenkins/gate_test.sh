@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 # Update the manifests based on the templates for gate test
-time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local no_sync
+time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local no_sync "${ZUUL_PROJECT}"
 
 # Sync repos required for build/envsetup.sh and lunch so we can run VTS.
 repo_sync aosp/platform/build bsp/device/delphi/volvoihu aosp/platform/packages/services/Car aosp/device/sample

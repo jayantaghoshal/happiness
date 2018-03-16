@@ -75,10 +75,10 @@ class HvacModule {
   private:
     std::vector<SubscriptionHandle> subs_;
 
-    MultiZonePropertyHandler<float> prop_temperature;
+    VhalPropertyHandler<float> prop_temperature;
     VhalPropertyHandler<bool> prop_recirculation;
     VhalPropertyHandler<bool> prop_autoclimate;
-    MultiZonePropertyHandler<bool> prop_defroster;
+    VhalPropertyHandler<bool> prop_defroster;
     VhalPropertyHandler<bool> prop_maxdefroster;
     VhalPropertyHandler<bool> prop_ac;
     VhalPropertyHandler<int32_t> prop_fanlevelfront;

@@ -35,3 +35,7 @@ build.log.*
 
 #Java
 .class
+
+#Sublime, workspace and project settings
+*.sublime-project
+*.sublime-workspace

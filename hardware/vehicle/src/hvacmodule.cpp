@@ -109,15 +109,13 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     : logicFactory_{logicFactory},
       commonFactory_{commonFactory},
       prop_temperature(propconfig_temperature(), dispatcher, vehicleHal),
-      prop_recirculation(propconfig_recirculation(), true, dispatcher, vehicleHal),
-      prop_autoclimate(propconfig_autoclimate(), true, dispatcher, vehicleHal),
+      prop_recirculation(propconfig_recirculation(), dispatcher, vehicleHal),
+      prop_autoclimate(propconfig_autoclimate(), dispatcher, vehicleHal),
       prop_defroster(propconfig_defroster(), dispatcher, vehicleHal),
-      prop_maxdefroster(propconfig_maxdefrost(), true, dispatcher, vehicleHal),
-      prop_ac(propconfig_acon(), true, dispatcher, vehicleHal),
-      prop_fanlevelfront(propconfig_fanlevelfront(), 3, dispatcher, vehicleHal),
-      prop_fandir(propconfig_fandirection(), toInt(vhal20::VehicleHvacFanDirection::FACE_AND_FLOOR) |
-                                                     toInt(vhal20::VehicleHvacFanDirection::DEFROST),
-                  dispatcher, vehicleHal) {
+      prop_maxdefroster(propconfig_maxdefrost(), dispatcher, vehicleHal),
+      prop_ac(propconfig_acon(), dispatcher, vehicleHal),
+      prop_fanlevelfront(propconfig_fanlevelfront(), dispatcher, vehicleHal),
+      prop_fandir(propconfig_fandirection(), dispatcher, vehicleHal) {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Temperature
 
@@ -137,7 +135,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        prop_temperature.myPushProp(value, toInt(VehicleAreaZone::ROW_1_LEFT));
+        prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
     subs_.push_back(logicFactory_.driverTempState_.subscribe([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
@@ -152,7 +150,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        prop_temperature.myPushProp(value, toInt(VehicleAreaZone::ROW_1_RIGHT));
+        prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
     subs_.push_back(logicFactory_.passengerTempState_.subscribe([this](const auto&) {
@@ -167,7 +165,8 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     // Fan level
 
     prop_fanlevelfront.registerToVehicleHal();
-    prop_fanlevelfront.subscribe_set_prop([&](int32_t fan_speed) {
+    prop_fanlevelfront.subscribe_set_prop([&](int32_t fan_speed,  int32_t areaId) {
+        (void)areaId;
         ALOGD("Fan speed request %d", fan_speed);
         // TODO: Proper range handling
         if (fan_speed < 0 || fan_speed > 6) {
@@ -179,35 +178,37 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     });
     subs_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        prop_fanlevelfront.myPushProp(static_cast<int32_t>(state.value_));
+        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Auto
 
     prop_autoclimate.registerToVehicleHal();
-    prop_autoclimate.subscribe_set_prop([&](bool auto_on) {
+    prop_autoclimate.subscribe_set_prop([&](bool auto_on,  int32_t areaId) {
+        (void)areaId;
         ALOGD("Request auto climate %d", auto_on);
         logicFactory_.autoClimateLogic_.requestAutoClimate();
     });
     subs_.push_back(logicFactory_.autoClimate_.subscribe([this](const auto& state) {
         log_debug() << "fireAutoClimateAttributeChanged " << state;
         bool on = (state == FirstRowGen::AutoClimateState::ON);
-        prop_autoclimate.myPushProp(on);
+        prop_autoclimate.PushProp(on);
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Recirc
 
     prop_recirculation.registerToVehicleHal();
-    prop_recirculation.subscribe_set_prop([&](bool recirculation_on) {
+    prop_recirculation.subscribe_set_prop([&](bool recirculation_on,  int32_t areaId) {
+        (void)areaId;
         ALOGD("Request recirculation %d", recirculation_on);
         logicFactory_.manualRecircLogic_.requestManualRecirc(recirculation_on ? FirstRowGen::ManualRecircRequest::ON
                                                                               : FirstRowGen::ManualRecircRequest::OFF);
     });
     subs_.push_back(logicFactory_.manualRecirc_.subscribe([this](const auto& state) {
         log_debug() << "fireManualRecircAttributeChanged " << state;
-        prop_recirculation.myPushProp(state == FirstRowGen::ManualRecircState::ON);
+        prop_recirculation.PushProp(state == FirstRowGen::ManualRecircState::ON);
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,12 +236,12 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     });
     subs_.push_back(logicFactory_.electricDefrosterRear_.subscribe([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
-        prop_defroster.myPushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+        prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
                                   toInt(VehicleAreaWindow::REAR_WINDSHIELD));
     }));
     subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([this](const auto& state) {
         log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
-        prop_defroster.myPushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+        prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
                                   toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
     }));
 
@@ -248,28 +249,30 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
     // Max defrost
 
     prop_maxdefroster.registerToVehicleHal();
-    prop_maxdefroster.subscribe_set_prop([&](bool maxdefroster_on) {
+    prop_maxdefroster.subscribe_set_prop([&](bool maxdefroster_on,  int32_t areaId) {
+        (void)areaId;
         ALOGD("Request maxdefrost %d", maxdefroster_on);
         logicFactory_.maxDefrosterLogic_.request(maxdefroster_on ? FirstRow::MaxDefrosterRequest::ON
                                                                  : FirstRow::MaxDefrosterRequest::OFF);
     });
     subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([this](const auto& state) {
         log_debug() << "fireMaxDefrosterAttributeChanged " << state;
-        prop_maxdefroster.myPushProp(state == FirstRowGen::MaxDefrosterState::ON);
+        prop_maxdefroster.PushProp(state == FirstRowGen::MaxDefrosterState::ON);
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // AC
 
     prop_ac.registerToVehicleHal();
-    prop_ac.subscribe_set_prop([&](bool ac_on) {
+    prop_ac.subscribe_set_prop([&](bool ac_on,  int32_t areaId) {
+        (void)areaId;
         ALOGD("Request AC %d", ac_on);
         logicFactory_.airConditionerLogic_.requestAirConditioner(ac_on ? FirstRowGen::AirConditionerRequest::AUTO
                                                                        : FirstRowGen::AirConditionerRequest::OFF);
     });
     subs_.push_back(logicFactory_.airConditioner_.subscribe([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
-        prop_ac.myPushProp(state == FirstRowGen::AirConditionerState::AUTO);
+        prop_ac.PushProp(state == FirstRowGen::AirConditionerState::AUTO);
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,7 +298,8 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
              std::make_pair(FirstRowGen::AirDistributionAngle::DISABLED, 0)}};
 
     prop_fandir.registerToVehicleHal();
-    prop_fandir.subscribe_set_prop([this](int32_t fan_dir) {
+    prop_fandir.subscribe_set_prop([this](int32_t fan_dir,  int32_t areaId) {
+        (void)areaId;
         for (const auto& c : air_dist_conversions) {
             if (c.second == fan_dir) {
                 // TODO: Remove static_cast, ok for now as the enums are identical
@@ -311,7 +315,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal, FirstRowFactor
 
         for (const auto& c : air_dist_conversions) {
             if (c.first == state) {
-                prop_fandir.myPushProp(c.second);
+                prop_fandir.PushProp(c.second);
                 return;
             }
         }

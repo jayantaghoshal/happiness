@@ -38,6 +38,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/evs/test/ut",                            standard_caps),
     # Climate included twice because the test case dynamically detects if FR hardware is present
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                        standard_caps | {cp.flexray}),
+    VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                       standard_caps | {cp.flexray}),
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                          standard_caps),
     VTSTest("vendor/volvocars/hardware/test/iplm",                              standard_caps),
     VTSTest("vendor/volvocars/hardware/test/gnss",                              standard_caps),
@@ -82,12 +83,18 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",             standard_caps | {cp.cem}),
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps),
     VTSTest("vendor/volvocars/hardware/soundnotifications",                             standard_caps),
+    VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                    standard_caps),
 
     # Unit Test
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services", standard_caps),
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps),
 
 ]
 
 test_plan_nightly = test_plan_hourly + [
+
+]
+
+test_plan_staging = [
 
 ]

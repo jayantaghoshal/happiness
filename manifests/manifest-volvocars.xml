@@ -6,7 +6,8 @@
   <default remote="origin" sync-c="true" sync-j="5"/>
 
   <!-- Volvo Cars -->
-  <project name="vendor/volvocars" path="vendor/volvocars" revision="${HEAD}"/>
+  <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD"/>
+  <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="e47e6b13f8326d6261fb0169de0f72a662db72b3"/>

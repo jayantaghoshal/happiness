@@ -36,6 +36,7 @@ public class UserSwitchService extends Service {
 
     public static final String TAG = "VccUserSwitchService";
     private static final int TIME_WAIT_MS = 500;
+    public static final int NUMBER_OF_PROFILE = 12; // TODO: should be defined by HAL layer
     private final Object mLock = new Object();
     private ICarProfileManager carProfileManager;
     private UserSwitchManagerHMI userSwitchManagerHMI;
@@ -71,6 +72,21 @@ public class UserSwitchService extends Service {
             return;
         }
         connectToProfileManager();
+
+        // Check available profiles and pair android primary user
+        try {
+            if (carProfileManager.getNrOfUnusedProfiles() == NUMBER_OF_PROFILE){
+                boolean result = carProfileManager.pairAndroidUserToUnusedVehicleProfile(
+                        userManager.getUserHandle() + "");
+                if (result){
+                    Log.d(TAG, "Successfully mapped the primary android user");
+                } else {
+                    Log.e(TAG, "Pairing a primary user failed");
+                }
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "Pairing a primary user failed",e);
+        }
         super.onCreate();
     }
 

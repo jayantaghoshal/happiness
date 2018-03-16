@@ -3,6 +3,7 @@ package com.volvocars.cloudservice;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.InstallNotification;
 
 /**
  * A callback interface to enable non-blocking request calls
@@ -49,4 +50,11 @@ oneway interface ISoftwareManagementApiCallback {
      * @param installationOrderId UUID of the posted Installation Report
      */
     void InstallationReportStatus(in int code, in String installationOrderId);
+
+    /**
+    * Return the result of PostInstallNotification
+    * @param code The HTTP code of the response
+    * @param installationOrderId installation order Id
+    */
+    void InstallNotificationStatus(in int code, in String installationOrderId);
 }

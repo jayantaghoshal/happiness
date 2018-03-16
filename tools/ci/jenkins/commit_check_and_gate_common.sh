@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -12,8 +12,8 @@ source "${SCRIPT_DIR}/common.sh"
 #uncommenting the following line
 # 64bit_sanity.py "$REPO_ROOT_DIR"/vendor/volvocars/ || die "64 bit build sanity check failed"
 
-(repo sync prebuilts/clang/host/linux-x86)
-(repo sync prebuilts/build-tools)
+(repo sync --force-sync --detach prebuilts/clang/host/linux-x86)
+(repo sync --force-sync --detach prebuilts/build-tools)
 
 commit-check.sh verify vendor/volvocars
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -58,7 +58,7 @@ function ihu_update() {
 }
 
 function repo_sync() {
-  repo sync --no-clone-bundle --current-branch -q -j8 "$@" || die "repo sync failed"
+  repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 "$@" || die "repo sync failed"
 }
 
 function clean_old_test_result_files() {

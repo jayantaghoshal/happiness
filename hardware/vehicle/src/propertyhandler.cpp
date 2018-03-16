@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,27 +7,53 @@
 
 using namespace android::hardware::automotive::vehicle::V2_0;
 using namespace std::placeholders;
-
 using namespace android;
 
 template <>
-void VhalPropertyHandler<int32_t>::myPushProp(int32_t value) {
-    value_.value.int32Values.resize(1);
-    value_.value.int32Values[0] = value;
-    pushProp(value_);
+void VhalPropertyHandler<int32_t>::PushProp(int32_t value, int32_t zone) {
+    if (IsGlobal()) zone = 0;  // Need better solution?
+
+    auto it = values_.find(zone);
+    if (it == values_.end()) {
+        return;
+    }
+
+    it->second.value.int32Values.resize(1);
+    it->second.value.int32Values[0] = value;
+    if (registeredWithVhal) {
+        pushProp(it->second);
+    }
 }
 template <>
-void VhalPropertyHandler<bool>::myPushProp(bool value) {
-    value_.value.int32Values.resize(1);
-    value_.value.int32Values[0] = value;
-    pushProp(value_);
+void VhalPropertyHandler<float>::PushProp(float value, int32_t zone) {
+    if (IsGlobal()) zone = 0;  // Need better solution?
+
+    auto it = values_.find(zone);
+    if (it == values_.end()) {
+        return;
+    }
+
+    it->second.value.floatValues.resize(1);
+    it->second.value.floatValues[0] = value;
+    if (registeredWithVhal) {
+        pushProp(it->second);
+    }
 }
 
 template <>
-void VhalPropertyHandler<float>::myPushProp(float value) {
-    value_.value.floatValues.resize(1);
-    value_.value.floatValues[0] = value;
-    pushProp(value_);
+void VhalPropertyHandler<bool>::PushProp(bool value, int32_t zone) {
+    if (IsGlobal()) zone = 0;  // Need better solution?
+
+    auto it = values_.find(zone);
+    if (it == values_.end()) {
+        return;
+    }
+
+    it->second.value.int32Values.resize(1);
+    it->second.value.int32Values[0] = value;
+    if (registeredWithVhal) {
+        pushProp(it->second);
+    }
 }
 
 template <>
@@ -35,86 +61,12 @@ int VhalPropertyHandler<int32_t>::setProp(const vhal20::VehiclePropValue& propVa
     if (propValue.value.int32Values.size() != 1) {
         return 1;
     }
-    int value = propValue.value.int32Values[0];
-    // TODO: weak_ptr this?
-    dispatcher_->Enqueue([this, value]() {
-        if (request_set_prop_) {
-            request_set_prop_(value);
+
+    if (!IsGlobal()) {
+        auto it = values_.find(propValue.areaId);
+        if (it == values_.end()) {
+            return 1;
         }
-    });
-    return 0;
-};
-
-template <>
-int VhalPropertyHandler<bool>::setProp(const vhal20::VehiclePropValue& propValue) {
-    if (propValue.value.int32Values.size() != 1) {
-        return 1;
-    }
-    bool value = propValue.value.int32Values[0];
-    // TODO: weak_ptr this?
-    dispatcher_->Enqueue([this, value]() {
-        if (request_set_prop_) {
-            request_set_prop_(value);
-        }
-    });
-    return 0;
-};
-template <>
-int VhalPropertyHandler<float>::setProp(const vhal20::VehiclePropValue& propValue) {
-    if (propValue.value.floatValues.size() != 1) {
-        return 1;
-    }
-    int value = propValue.value.floatValues[0];
-    // TODO: weak_ptr this?
-    dispatcher_->Enqueue([this, value]() {
-        if (request_set_prop_) {
-            request_set_prop_(value);
-        }
-    });
-    return 0;
-};
-
-template <>
-void MultiZonePropertyHandler<int32_t>::myPushProp(int32_t value, int32_t zone) {
-    auto it = values_.find(zone);
-    if (it == values_.end()) {
-        return;
-    }
-    it->second.value.int32Values.resize(1);
-    it->second.value.int32Values[0] = value;
-    pushProp(it->second);
-}
-template <>
-void MultiZonePropertyHandler<float>::myPushProp(float value, int32_t zone) {
-    auto it = values_.find(zone);
-    if (it == values_.end()) {
-        return;
-    }
-    it->second.value.floatValues.resize(1);
-    it->second.value.floatValues[0] = value;
-    pushProp(it->second);
-}
-
-template <>
-void MultiZonePropertyHandler<bool>::myPushProp(bool value, int32_t zone) {
-    auto it = values_.find(zone);
-    if (it == values_.end()) {
-        return;
-    }
-    it->second.value.int32Values.resize(1);
-    it->second.value.int32Values[0] = value;
-    pushProp(it->second);
-}
-
-template <>
-int MultiZonePropertyHandler<int32_t>::setProp(const vhal20::VehiclePropValue& propValue) {
-    if (propValue.value.int32Values.size() != 1) {
-        return 1;
-    }
-
-    auto it = values_.find(propValue.areaId);
-    if (it == values_.end()) {
-        return 1;
     }
 
     int32_t value = propValue.value.int32Values[0];
@@ -128,14 +80,16 @@ int MultiZonePropertyHandler<int32_t>::setProp(const vhal20::VehiclePropValue& p
     return 0;
 };
 template <>
-int MultiZonePropertyHandler<bool>::setProp(const vhal20::VehiclePropValue& propValue) {
+int VhalPropertyHandler<bool>::setProp(const vhal20::VehiclePropValue& propValue) {
     if (propValue.value.int32Values.size() != 1) {
         return 1;
     }
 
-    auto it = values_.find(propValue.areaId);
-    if (it == values_.end()) {
-        return 1;
+    if (!IsGlobal()) {
+        auto it = values_.find(propValue.areaId);
+        if (it == values_.end()) {
+            return 1;
+        }
     }
 
     bool value = propValue.value.int32Values[0];
@@ -149,14 +103,16 @@ int MultiZonePropertyHandler<bool>::setProp(const vhal20::VehiclePropValue& prop
     return 0;
 };
 template <>
-int MultiZonePropertyHandler<float>::setProp(const vhal20::VehiclePropValue& propValue) {
+int VhalPropertyHandler<float>::setProp(const vhal20::VehiclePropValue& propValue) {
     if (propValue.value.floatValues.size() != 1) {
         return 1;
     }
 
-    auto it = values_.find(propValue.areaId);
-    if (it == values_.end()) {
-        return 1;
+    if (!IsGlobal()) {
+        auto it = values_.find(propValue.areaId);
+        if (it == values_.end()) {
+            return 1;
+        }
     }
 
     float value = propValue.value.floatValues[0];
@@ -169,3 +125,14 @@ int MultiZonePropertyHandler<float>::setProp(const vhal20::VehiclePropValue& pro
     });
     return 0;
 };
+
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property, int32_t supportedAreas) {
+    vhal20::VehiclePropConfig config;
+    config.prop = vhal20::toInt(property);
+    config.access = vhal20::VehiclePropertyAccess::READ_WRITE;
+    config.changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE;
+    config.supportedAreas = supportedAreas;
+    config.areaConfigs.resize(0);  // Important to not init this for bool properties!
+
+    return config;
+}

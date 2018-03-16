@@ -1,10 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 
+#include <vhal_v2_0/VehicleUtils.h>
 #include <functional>
 #include <map>
 #include "IDispatcher.h"
@@ -19,65 +20,37 @@ namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 template <typename T>
 class VhalPropertyHandler : public vhal20::impl::ModuleBase {
   public:
-    VhalPropertyHandler(vhal20::VehiclePropConfig config, T default_value,
+    VhalPropertyHandler(vhal20::VehiclePropConfig config,
                         std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
                         vhal20::impl::IVehicleHalImpl* vehicleHal)
         : vhal20::impl::ModuleBase{vehicleHal}, config_{config}, dispatcher_{dispatcher} {
-        value_.prop = config.prop;
-        value_.areaId = config.areaConfigs[0].areaId;
-        (void)default_value;  // TODO: Put default_value into value_
-    }
-
-    int setProp(const vhal20::VehiclePropValue& propValue) override;
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
-                                                      vhal20::impl::Status& status) {
-        if (requestedPropValue.prop != config_.prop) {
-            status = vhal20::impl::Status::INVALID_PARAM_ERROR;
-            return nullptr;
-        }
-        status = vhal20::impl::Status::SUCCESS;
-        return std::make_unique<vhal20::VehiclePropValue>(value_);
-    }
-    std::vector<vhal20::VehiclePropValue> getAllPropValues() override { return {value_}; }
-    std::vector<vhal20::VehiclePropConfig> listProperties() override { return {config_}; };
-
-    void subscribe_set_prop(std::function<void(T)> func) { request_set_prop_ = func; };
-    void myPushProp(T value);
-
-  protected:
-    const vhal20::VehiclePropConfig config_;
-    vhal20::VehiclePropValue value_;
-    std::function<void(T)> request_set_prop_;
-    std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher_;
-};
-
-template <typename T>
-class MultiZonePropertyHandler : public vhal20::impl::ModuleBase {
-  public:
-    MultiZonePropertyHandler(vhal20::VehiclePropConfig config,
-                             std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                             vhal20::impl::IVehicleHalImpl* vehicleHal)
-        : vhal20::impl::ModuleBase{vehicleHal}, config_{config}, dispatcher_{dispatcher} {
-        for (int32_t i = 0; i < 32; i++) {
-            int32_t mask = (1 << i);
-            if ((mask & config.supportedAreas) != 0) {
-                vhal20::VehiclePropValue v{};
-                v.areaId = mask;
-                v.prop = config.prop;
-                values_.emplace(mask, v);
+        if (IsGlobal()) {
+            vhal20::VehiclePropValue property_value{};
+            property_value.areaId = 0;
+            property_value.prop = config.prop;
+            values_.emplace(property_value.areaId, property_value);
+        } else {
+            for (int32_t i = 0; i < 32; i++) {
+                int32_t mask = (1 << i);
+                if ((mask & config.supportedAreas) != 0) {
+                    vhal20::VehiclePropValue property_value{};
+                    property_value.areaId = mask;
+                    property_value.prop = config.prop;
+                    values_.emplace(mask, property_value);
+                }
             }
         }
     }
-
-    int setProp(const vhal20::VehiclePropValue& propValue) override;
     std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
-                                                      vhal20::impl::Status& status) {
+                                                      vhal20::impl::Status& status) override {
         if (requestedPropValue.prop != config_.prop) {
             status = vhal20::impl::Status::INVALID_PARAM_ERROR;
             return nullptr;
         }
 
-        auto it = values_.find(requestedPropValue.areaId);
+        const auto requestedAreaId = IsGlobal() ? 0 : requestedPropValue.areaId;
+        auto it = values_.find(requestedAreaId);
+
         if (it == values_.end()) {
             status = vhal20::impl::Status::INVALID_PARAM_ERROR;
             return nullptr;
@@ -86,6 +59,7 @@ class MultiZonePropertyHandler : public vhal20::impl::ModuleBase {
         status = vhal20::impl::Status::SUCCESS;
         return std::make_unique<vhal20::VehiclePropValue>(it->second);
     }
+
     std::vector<vhal20::VehiclePropValue> getAllPropValues() override {
         std::vector<vhal20::VehiclePropValue> all_prop_values;
         for (auto& v : values_) {
@@ -93,14 +67,29 @@ class MultiZonePropertyHandler : public vhal20::impl::ModuleBase {
         }
         return all_prop_values;
     }
-    std::vector<vhal20::VehiclePropConfig> listProperties() override { return {config_}; };
 
+    std::vector<vhal20::VehiclePropConfig> listProperties() override { return {config_}; };
+    int setProp(const vhal20::VehiclePropValue& propValue) override;
+
+    void registerToVehicleHal() override {
+        vhal20::impl::ModuleBase::registerToVehicleHal();
+        registeredWithVhal = true;
+    }
+
+    void PushProp(T value, int32_t zone = 0);
     void subscribe_set_prop(std::function<void(T value, int32_t zone)> func) { request_set_prop_ = func; };
-    void myPushProp(T value, int32_t zone);
 
   protected:
     const vhal20::VehiclePropConfig config_;
     std::map<int, vhal20::VehiclePropValue> values_;
     std::function<void(T value, int32_t zone)> request_set_prop_;
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher_;
+    bool registeredWithVhal = false;
+
+    bool IsGlobal() {
+        auto vehicle_area = static_cast<vhal20::VehicleArea>(config_.prop & vhal20::VehicleArea::MASK);
+        return (vehicle_area == vhal20::VehicleArea::GLOBAL);
+    }
 };
+
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property, int32_t supportedAreas = 0);

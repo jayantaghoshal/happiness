@@ -14,7 +14,7 @@ import sys
 import argparse
 
 REGEXP_SHA = re.compile(
-    r'^(?P<url>[\w\.]*:[\d]*)(?P<img_path>/.*)I(?P<image_tag>[a-f0-9]{40})$')
+    r'^(?P<url>[\w\.]*:[\d]*)(?P<img_path>/.*):(?P<image_tag>I?[a-f0-9]{40})$')
 PATH_IMAGE_REF = 'tools/docker_build/image.ref'
 
 
@@ -31,7 +31,7 @@ def main():
     try:
         f = open(args.imageref, 'r')
     except:
-        print("could not find image_ref file")
+        print >> sys.stderr, "could not find image_ref file"
         sys.exit(1)
 
     image_ref = f.readline()
@@ -39,6 +39,7 @@ def main():
 
     match = REGEXP_SHA.match(image_ref)
     if not match:
+        print >> sys.stderr, "content doesn't match regular expression"
         sys.exit(1)
 
     print(match.group('image_tag'))

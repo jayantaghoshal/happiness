@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -68,7 +68,7 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Create Modules
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
-    // auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
+    auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_, dispatcher);
@@ -79,14 +79,13 @@ int main(int /* argc */, char* /* argv */ []) {
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
     auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
-    auto curve_speed_adaption_module = std::make_unique<CurveSpeedAdaptionModule>(hal.get(), settings_manager);
+    auto curve_speed_adaption_module =
+            std::make_unique<CurveSpeedAdaptionModule>(hal.get(), dispatcher, settings_manager);
 
     // Register modules
     powerModule->registerToVehicleHal();
-    // audioModule->registerToVehicleHal();
+    audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
-    // TODO: Keep HVAC registerToVehicleHal?
-    // hvacModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
     systemInformationModule->registerToVehicleHal();
@@ -95,7 +94,6 @@ int main(int /* argc */, char* /* argv */ []) {
     sensorModule->registerToVehicleHal();
     connectedSafetyModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
-    curve_speed_adaption_module->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 

@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
@@ -64,7 +64,7 @@ def repo_init(aosp_root_dir: str, branch: str):
          "-b", branch],
         cwd=os.path.abspath(aosp_root_dir))
 
-def on_commit(aosp_root_dir: str, sync: bool):
+def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     # Zuul will have already cloned vendor/volvocars
 
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
@@ -73,21 +73,22 @@ def on_commit(aosp_root_dir: str, sync: bool):
     volvocars_repo = git.Repo(volvocars_repo_path)
 
     repo_init(aosp_root_dir, head_sha)
-
-    copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo)
+    copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo, repository)
 
     if sync:
         process_tools.check_output_logged(["repo", "sync",
                                         "--jobs=6",
                                         "--no-clone-bundle",
+                                        "--force-sync",
+                                        "--detach",
                                         "--current-branch"], cwd=aosp_root_dir)
-
-
 
 def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               volvocars_repo: git.Repo,
                                               manifest_repo: git.Repo,
-                                              stage_changes: bool = False):
+                                              repository: str,
+                                              stage_changes: bool = False,
+                                              using_zuul: bool = True):
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
 
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
@@ -96,7 +97,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
 
     for manifest_template_file in vcc_manifest_files:
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
-        manifest.update_file(aosp_root_dir, manifest_template_file, dest)
+        manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
         if stage_changes:
             manifest_repo.add([dest])
 
@@ -197,7 +198,9 @@ def post_merge(aosp_root_dir: str,
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir,
                                               git_repo,
                                               manifest_repo,
-                                              stage_changes=True)
+                                              repo_path_name,
+                                              stage_changes=True,
+                                              using_zuul=False)
 
     commit_title = "Auto bump"
 
