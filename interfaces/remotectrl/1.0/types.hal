@@ -1,0 +1,39 @@
+package vendor.volvocars.hardware.remotectrl@1.0;
+
+
+/**
+* Describes whether remotectrl operation is successful
+*/
+enum StatusCode : uint8_t {
+    SUCCESS,
+    ERROR,
+};
+
+///////////////////////////// VolumeCtrl ///////////////////
+////////////////////////////////////////////////////////////
+
+/**
+* Describes audio context.
+* This enum content has direct mapping with audio context exposed over the Convenience API
+*/
+enum AudioContext : uint8_t {
+  MUSIC_FLAG = 0x01,
+};
+
+/**
+* Volume level type
+*/
+typedef uint8_t VolumeLevel;
+
+/**
+* Request identifier type
+*/
+typedef uint16_t RequestIdentifier;
+
+/**
+* Type used to describe volume information (level and audio context)
+*/
+struct VolumeData {
+  AudioContext context;
+  VolumeLevel level;
+};

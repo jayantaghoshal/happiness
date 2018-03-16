@@ -91,4 +91,17 @@
             <instance>default</instance>
         </interface>
     </hal>
+    <hal format="hidl">
+        <name>vendor.volvocars.hardware.remotectrl</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>INativeRemoteVolumeCtrl</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>ISystemRemoteVolumeCtrl</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
 </manifest>
