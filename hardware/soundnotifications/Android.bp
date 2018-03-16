@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
-cc_defaults {
+cc_test {
     name: "VtsSoundNotificationTest",
-    defaults: ["volvocars_cc_defaults_hq_tests"],
+    defaults: ["volvocars_cc_defaults"],
 
     srcs: [
         "test/ut/soundwrapper_ut.cpp",
@@ -16,8 +16,7 @@ cc_defaults {
     ],
 
     include_dirs: [
-        "vendor/aptiv/components/audio/libAudioManagerBinder/include",
-        "vendor/aptiv/components/audio/libAudioManagerCallbackBinder/include",
+        "vendor/aptiv/components/audio/libaudiotable/include",
         "vendor/volvocars/hardware/soundnotifications/test/ut",
         "vendor/volvocars/hardware/soundnotifications/src",
     ],
@@ -36,6 +35,7 @@ cc_defaults {
         "libbinder",
         "libcutils",
         "libutils",
+        "libtarmac",
         "vendor.delphi.audiomanager@1.0",
     ],
     static_libs: [
@@ -43,5 +43,3 @@ cc_defaults {
     ],
     test_suites: ["vts"],
 }
-
-/*subdirs = ["test"]*/

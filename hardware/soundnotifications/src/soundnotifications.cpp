@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -19,7 +19,8 @@ int32_t main(int argc, char* argv[]) {
     (void)argv;
     ALOGI("Starting service...");
 
-    while (!SoundNotifications::SoundWrapper::instance()->init()) {
+    while (!SoundNotifications::SoundWrapper::instance()->init(
+            ::android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager>())) {
         usleep(1000000);  // sleep 1000ms between reties
     }
     ALOGI("Connected to Audio Manager service...");

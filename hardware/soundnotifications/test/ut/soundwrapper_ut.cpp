@@ -15,61 +15,50 @@
 #undef LOG_TAG
 #define LOG_TAG "soundwrapperUT.Tests"
 
-// implement missed references
-// vendor::delphi::audiomanager::V1_0::IAudioManager::~IAudioManager() {}
-// vendor::delphi::audiomanager::V1_0::IAudioManager::IAudioManager() {}
-// const android::String16 &com::delphi::IAudioManager::getInterfaceDescriptor() const {
-//    static android::String16 s("");
-//    return s;
-//}
-
-// const ::android::String16 com::delphi::IAudioManagerCallback::descriptor;
-// com::delphi::IAudioManagerCallback::~IAudioManagerCallback() {}
-// com::delphi::IAudioManagerCallback::IAudioManagerCallback() {}
-// const android::String16 &com::delphi::IAudioManagerCallback::getInterfaceDescriptor() const {
-//    static android::String16 s("");
-//    return s;
-//}
-
-//::android::sp<com::delphi::IAudioManager> com::delphi::IAudioManager::asInterface(
-//        android::sp<android::IBinder> const &) {
-//    return ::android::sp<com::delphi::IAudioManager>();
-//}
-
 using namespace SoundNotifications;
+
+Return<void> AudioManagerMock::subscribe(const ::android::sp<IAudioManagerCallback>& callback) {
+    callback_ = callback;
+    return Void();
+}
+
 ::android::hardware::Return<void> AudioManagerMock::unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-    (void)callback;
-    return android::hardware::Return<void>();
+    (void)callback.get();
+    return android::hardware::Void();
 }
 
 class SoundWrapperUT : public ::testing::Test {
   public:
     void SetUp() override {
         swrapper = SoundWrapper::instance();
-        am_service = new AudioManagerMock;
+        am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
         swrapper->init(am_service);
-        //        SoundWrapper::clearAll();
     }
-    void TearDown() override { delete am_service; }
+    void TearDown() override {}
     SoundWrapper* swrapper;
-    AudioManagerMock* am_service;
+    ::android::sp<AudioManagerMock> am_service;
 };
 
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
     ALOGI("Starting %s", test_info_->name());
 
-    android::hardware::Return<void> ret;
+    //    android::hardware::Return<void> ret;
+    //    EXPECT_CALL(*am_service, subscribe(::testing::_));
+    //    EXPECT_CALL(*am_service, unsubscribe(::testing::_));
 
     EXPECT_CALL(*am_service,
                 playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
                           static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
                           testing::_))
-    Times(1);
-    //.WillOnce(testing::Return(ret));
+            .Times(1);
+    //    //.WillOnce(testing::Return(ret));
 
+    auto soundToPlay =
+            SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight);
     // DO the call to soundwrapper
-    SoundWrapper::play(
-            SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight));
+    SoundWrapper::play(soundToPlay);
+    // Directly after play we shall be in state Starting
+    // EXPECT_TRUE(SoundWrapper::isPlaying(soundToPlay));
 
     // SImulate callback
 
@@ -95,11 +84,21 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
         */
 }
 
-/*
-TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound)
-{
+TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
     // Idle->Starting->Playing->Stopping->Idle
 
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
+                          static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
+                          testing::_))
+            .Times(1);
+    //    //.WillOnce(testing::Return(ret));
+
+    auto soundToPlay =
+            SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight);
+    // DO the call to soundwrapper
+    SoundWrapper::play(soundToPlay);
+    /*
     auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
     auto result      = SoundWrapper::play(soundToPlay);
     EXPECT_EQ(SoundWrapper::Result::OK, result);
@@ -123,9 +122,9 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound)
 
     // Advance state with onPlayStopped to take us back to Idle
     listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));*/
 }
-
+/*
 TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates)
 {
     // Idle->Starting->Stopping->Stopping->Idle

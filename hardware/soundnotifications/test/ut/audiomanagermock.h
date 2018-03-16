@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -12,6 +12,7 @@
 
 using namespace vendor::delphi::audiomanager::V1_0;
 using namespace ::android::hardware;
+
 class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManager {
   public:
     AudioManagerMock() {}
@@ -19,7 +20,8 @@ class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManage
 
     MOCK_METHOD3(playSound, Return<void>(int32_t soundType, int32_t soundComp, playSound_cb _aidl_return));
     MOCK_METHOD1(stopSound, Return<AMStatus>(int64_t connectionId));
-    MOCK_METHOD1(subscribe, Return<void>(const ::android::sp<IAudioManagerCallback>& callback));
+    // MOCK_METHOD1(subscribe, Return<void>(const ::android::sp<IAudioManagerCallback>& callback));
+    // MOCK_METHOD1(unsubscribe, Return<void>(const ::android::sp<IAudioManagerCallback>& callback));
     MOCK_METHOD2(setVolume, Return<void>(int32_t sinkId, int32_t volume));
     MOCK_METHOD1(setBass, Return<AMStatus>(int32_t step));
     MOCK_METHOD1(setTreble, Return<AMStatus>(int32_t step));
@@ -33,8 +35,16 @@ class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManage
     MOCK_METHOD0(getBalance, Return<int32_t>());
     MOCK_METHOD0(getFader, Return<int32_t>());
     MOCK_METHOD0(getSubwoofer, Return<int32_t>());
-    MOCK_METHOD1(getEqualizer, Return<int32_t>(int32_t band));
+    using getEqualizer_cb = std::function<void(AMStatus status, int32_t equalizerValue)>;
+    MOCK_METHOD2(getEqualizer, android::hardware::Return<void>(int32_t band, getEqualizer_cb _hidl_cb));
     MOCK_METHOD0(getLoudness, Return<int32_t>());
 
-    ::android::hardware::Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) override;
+    using defaultVolumeStep_cb = std::function<void(AMStatus status, int32_t volumeStep)>;
+    MOCK_METHOD3(defaultVolumeStep,
+                 android::hardware::Return<void>(int32_t soundType, int32_t soundComp, defaultVolumeStep_cb _hidl_cb));
+
+    Return<void> subscribe(const ::android::sp<IAudioManagerCallback>& callback);
+    Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback);
+
+    ::android::sp<IAudioManagerCallback> callback_;
 };
