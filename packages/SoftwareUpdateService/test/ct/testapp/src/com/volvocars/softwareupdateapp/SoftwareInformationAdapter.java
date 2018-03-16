@@ -174,11 +174,14 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                         holder.installationStatusLayout.setVisibility(View.VISIBLE);
                     if (!swInfo.downloads.isEmpty())
                         holder.downloadsLayout.setVisibility(View.VISIBLE);
+                    if (!swInfo.downloadedResources.isEmpty())
+                        holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
                 } else {
                     holder.swIdLayout.setVisibility(View.INVISIBLE);
                     holder.installationIdLayout.setVisibility(View.INVISIBLE);
                     holder.installationStatusLayout.setVisibility(View.INVISIBLE);
                     holder.downloadsLayout.setVisibility(View.INVISIBLE);
+                    holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
                 }
             }
         });
