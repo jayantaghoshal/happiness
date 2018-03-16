@@ -31,7 +31,7 @@ do
     elif [ $tmp -eq 3 ]; then
         die "Failed to flash IHU image" # failed after three attempts
     else
-        python3 "${SCRIPT_DIR}"/ihu_ipm_reboot.py # reboot ihu on flashing failures
+        python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/ihu_ipm_reboot.py # reboot ihu on flashing failures
     fi
 done
 set -e
@@ -42,13 +42,13 @@ adb shell getprop
 plan=""
 if [ "${JOB_NAME}" = "ihu_daily_vts1-generic" ]
 then
-    plan="../test/vts-volvo1.xml"
+    plan="vts-volvo1.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts2-generic" ]
 then
-	plan="../test/vts-volvo2.xml"
+	plan="vts-volvo2.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts3-generic" ]
 then
-	plan="../test/vts-volvo3.xml"
+	plan="vts-volvo3.xml"
 fi
 export plan
 
@@ -56,12 +56,12 @@ set +e
 
 # Run vts tests
 #TODO Copy this to the above if statement as the command for cts differ a bit?
-time vts-tradefed run commandAndExit "${SCRIPT_DIR}/${plan}" --skip-all-system-status-check --skip-preconditions #--abi x86_64
+time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/"${plan}" --skip-all-system-status-check --skip-preconditions #--abi x86_64
 
 # Compare to last run here and fail if new errors are found
 mkdir old
 (cd old; artifactory pull-latest "${JOB_NAME}" || echo "artifactory pull failed")
-python3 "${SCRIPT_DIR}"/compare_results.py ./out/host/linux-x86/vts/android-vts/results/ ./old
+python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/compare_results.py ./out/host/linux-x86/vts/android-vts/results/ ./old
 changestatus=$?
 
 set -e
