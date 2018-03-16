@@ -1,0 +1,39 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+    name: "climate_test",
+    defaults: ["climate_defaults"],
+    srcs: ["climate_test.cpp"],
+    shared_libs: [
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "liblog",
+        "libihulog",
+        "libdataelements",
+        "libihulog",
+        "libdataelements",
+        "liblocalconfig",
+        "libcarconfig_reader",
+        "libtarmac",
+        "libsettings",
+        "libihulog",
+    ],
+    static_libs: [
+        "libgmock",
+        "libgtest",
+        "climate_main",
+        "climate_firstrow",
+        "climate_signalproxy",
+        "climate_user_selection",
+        "climate_common",
+        "climate_vf_common",
+        "climate_commonapi_printers",
+        "climate_commonapi_pregen",
+    ],
+    //test_suites: ["vts"],
+
+}

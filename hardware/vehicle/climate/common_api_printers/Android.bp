@@ -1,0 +1,25 @@
+/*
+ * Copyright 2017 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name: "climate_commonapi_printers",
+    defaults: ["climate_defaults"],
+    srcs: ["source/*.cpp"],
+    static_libs: [
+        "climate_commonapi_pregen",
+    ],
+    shared_libs: [
+        "libihulog",
+    ],
+    local_include_dirs: [
+        "include",
+    ],
+    export_include_dirs: [
+        "include",
+    ],
+    export_static_lib_headers: [
+        "climate_commonapi_pregen",
+    ],
+}

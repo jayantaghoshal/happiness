@@ -1,0 +1,14 @@
+
+                 IHU log
+            =================
+
+This module provides the same API as ivilogging:
+    https://github.com/Pelagicore/ivi-logging.
+
+The log data is sent to 'Android logs' as ALOGx with LOG_TAG="IHU".
+
+The purpose is to let iCUP components keep their logging syntax and the
+used api (ivi-logging.h) at initial porting. Android.mk must include
+libihulog.
+
+

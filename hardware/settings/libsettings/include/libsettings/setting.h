@@ -87,7 +87,10 @@ class Setting : public SettingBase {
      */
     void setForProfile(const ValueProfile<T>& newValue) {
         ALOG(LOG_DEBUG, SETTINGS_LOG_TAG, "setForProfile, name=%d, profileid=%d", name_, newValue.profileId);
-        assertInitialized();
+
+        // TODO: Investigate if this assert should be here or not, see SettingBase::setStringData if (!initialized) for
+        // details.
+        // assertInitialized();
         if (userScope == UserScope::NOT_USER_RELATED || newValue.profileId == value_.profileId ||
             newValue.profileId == ProfileIdentifier::None) {
             const bool dirty = (value_.value != newValue.value);

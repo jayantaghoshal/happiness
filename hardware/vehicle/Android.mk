@@ -64,7 +64,8 @@ LOCAL_SHARED_LIBRARIES := \
     libAudioManagerBinder \
     libAudioManagerCallbackBinder \
     liblocalconfig \
-    libsettings
+    libsettings \
+    libihulog
 
 LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \
@@ -72,7 +73,15 @@ LOCAL_STATIC_LIBRARIES := \
     delphi-vehicle-hal-interfaces-lib \
     libaudioparameters \
     libaudio_comms_convert \
-    libccparameterlistgen
+    libccparameterlistgen \
+    climate_main \
+    climate_firstrow \
+    climate_signalproxy \
+    climate_user_selection \
+    climate_common \
+    climate_vf_common \
+    climate_commonapi_printers \
+    climate_commonapi_pregen
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib \
