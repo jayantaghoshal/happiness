@@ -72,7 +72,8 @@ PRODUCT_PACKAGES += \
 # Internal Apps
 ##############################################################
 PRODUCT_PACKAGES += \
-    VccUserSwitchService
+    VccUserSwitchService \
+    VehicleFunctions
 
 ##############################################################
 # Vendor apps
