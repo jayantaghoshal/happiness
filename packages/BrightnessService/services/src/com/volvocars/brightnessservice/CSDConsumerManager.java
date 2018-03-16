@@ -74,12 +74,12 @@ public class CSDConsumerManager {
                     //Since wo dont get latest values when we subscribe we do get on each property
                     VehiclePropValue requestedprop = new VehiclePropValue();
                     requestedprop.prop = VehicleProperty.AP_POWER_STATE;
-                    ValueResult vehicleApPowerStateprop = getVehiclePropValue(requestedprop);
+                    VehicleHalUtils.ValueResult vehicleApPowerStateprop = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
                     int vehicleApPowerState = vehicleApPowerStateprop.propValue.value.int32Values.get(0);
                     onApPowerStateChange(vehicleApPowerState);
 
                     requestedprop.prop = VehicleProperty.IGNITION_STATE;
-                    ValueResult vehicleignitionstateprop2 = getVehiclePropValue(requestedprop);
+                    VehicleHalUtils.ValueResult vehicleignitionstateprop2 = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
                     int ignitionState = vehicleignitionstateprop2.propValue.value.int32Values.get(0);
                     onIgnitionChange(ignitionState);
 
@@ -94,47 +94,6 @@ public class CSDConsumerManager {
         catch (InterruptedException ex) {
             Log.e(TAG, ex.getMessage());
         }
-    }
-    /**
-     * Helper function for setting property in Vehicle hal .
-     * @param propertyInt is the VehicleProperty id.
-     * @param valueToSet is the wanted value for the property,
-     * this function only sets the int32value!
-     * */
-    private void setVehiclePropValue(int propertyInt, int valueToSet) {
-        try {
-            VehiclePropValue setprop = new VehiclePropValue();
-            setprop.prop = propertyInt;
-            setprop.value.int32Values.add(valueToSet);
-            setprop.areaId = VehicleArea.GLOBAL;
-            int setResult = mVehicle.set(setprop);
-            Log.d(TAG, "set result " + setResult);
-        } catch (RemoteException ex) {
-            Log.e(TAG, ex.getMessage());
-        }
-    }
-
-    /**
-     * Helper function for doing a get against Vehicle hal.
-     * @param requestedPropValue is VehiclePropValue containing the wanted VehicleProperty
-     * */
-    private ValueResult getVehiclePropValue(VehiclePropValue requestedPropValue) {
-        final ValueResult result = new ValueResult();
-        try {
-            mVehicle.get(requestedPropValue,
-                    (status, propValue) -> {
-                        result.status = status;
-                        result.propValue = propValue;
-                    });
-        } catch (RemoteException e) {
-            Log.e(TAG, "Failed to get value from vehicle HAL", e);
-            result.status = 0;
-        }
-        return result;
-    }
-    private static class ValueResult {
-        int status;
-        VehiclePropValue propValue;
     }
     /**
      * Called on VehicleIgnitionState change
@@ -164,10 +123,10 @@ public class CSDConsumerManager {
     private void onApPowerStateChange(int powerstate){
         switch (powerstate){
             case VehicleApPowerState.ON_DISP_OFF:
-                setVehiclePropValue(VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_OFF);
+                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_OFF);
                 break;
             case VehicleApPowerState.ON_FULL:
-                setVehiclePropValue(VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_ON);
+                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_ON);
                 break;
             default:
                 break;
