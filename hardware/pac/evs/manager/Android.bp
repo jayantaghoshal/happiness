@@ -1,0 +1,86 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "vcc_pac_manager_defaults",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "vcc_pac_use_evs_hidl",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    cflags: [
+        "-DLOG_TAG=\"EvsManager\"",
+    ],
+}
+
+// Header library for clients that wants to use the EVS manager service
+cc_library_headers {
+    name: "android.hardware.automotive.evs.vcc@1.0-manager-header-lib",
+
+    defaults: [
+        "vcc_pac_manager_defaults",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+// Header library for the EVS manager unit tests
+cc_library_headers {
+    name: "android.hardware.automotive.evs.vcc@1.0-manager-test-header-lib",
+
+    defaults: [
+        "vcc_pac_manager_defaults",
+    ],
+
+    // Add the source directory to the include paths so the unit tests can find internal headers
+    export_include_dirs: [
+        "src",
+    ],
+}
+
+cc_library_static {
+    name: "android.hardware.automotive.evs.vcc@1.0-manager-static-lib",
+
+    defaults: [
+        "vcc_pac_manager_defaults",
+    ],
+
+    srcs: [
+        "src/evs_enumerator.cpp",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.automotive.evs.vcc@1.0-manager",
+
+    defaults: [
+        "vcc_pac_manager_defaults",
+        "vcc_pac_use_libdbg",
+        "vcc_pac_use_libpacconfig",
+    ],
+
+    header_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-header-lib",
+    ],
+
+    static_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-manager-static-lib",
+    ],
+
+    srcs: [
+        "src/evs_manager.cpp",
+    ],
+}
