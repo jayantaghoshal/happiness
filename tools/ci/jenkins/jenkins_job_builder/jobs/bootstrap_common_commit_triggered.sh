@@ -95,7 +95,7 @@ bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail
 # if there are unstaged changes. And we want builds to be reproducible so better to reset repos.
-bootstrap_docker_run "repo forall -c 'pwd; git reset --hard ; git clean -fdx'"
+bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; git clean -fdxq'"
 
 ################################################################################################
 ## Download the commit to check (for vendor/volvocars-repo)
