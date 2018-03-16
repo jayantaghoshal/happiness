@@ -17,37 +17,61 @@ from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
+
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from com.dtmilano.android.viewclient import ViewClient
-from fdx import fdx_client
-from fdx import fdx_description_file_parser
-from generated.pyDataElements import \
-    FrSignalInterface, \
-    UsgModSts, \
-    ClimaActv
-from vehiclehalcommon import VehicleHalCommon
+import vehiclehalcommon
+from generated.datatypes import VehModMngtGlbSafe1, HmiHvacFanLvl
+from generated import datatypes as DE
 
-ns_per_ms = 1000000
 
 class VtsClimateComponentTest(base_test.BaseTestClass):
     """Testing Climate functions"""
     def setUpClass(self):
+
+
+
         """Creates a mirror and init vehicle hal."""
         self.dut = self.registerController(android_device)[0]
 
-        self.dut.start()
-        self.dut.waitForBootCompletion()
+        #self.dut.start()
+        #self.dut.waitForBootCompletion()
 
         self.dut.shell.InvokeTerminal("one")
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         results = self.dut.shell.one.Execute("id -u system")
         self.system_uid = results[const.STDOUT][0].strip()
 
+        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
+
+
+    def tearDownClass(self):
+        try:
+            self.dut.shell.one.Execute("input keyevent 3")
+            self.fr.close()
+        except:
+            pass
+
+
     def testFanLevel(self):
         _s = 0.5
+        fr = self.fr
 
-        vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
-        fr = FrSignalInterface()
+        vehmod = VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
+        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
+
+        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
+
+
         vc, device = vHalCommon.getViewClient()
 
         # Open climate view
@@ -66,55 +90,54 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
         # Set climate to Active
         # TODO: Run negative tests
-        fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        fr.ClimaActv.send_repetitive(ClimaActv.map.On)
+        vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
+        fr.send_VehModMngtGlbSafe1(vehmod)
+        fr.send_ClimaActv(DE.OnOff1.On)
         vc.sleep(_s)
 
         # Set to OFF
         fan_off.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 0)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.Off)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off)
 
         # Set to Level 1
         fan_level_1.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 1)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutMinusMinus)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinusMinus)
 
         # Set to Level 2
         fan_level_2.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 2)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutMinus)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus)
 
         # Set to Level 3
         fan_level_3.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 3)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutoNorm)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutoNorm)
 
         # Set to Level 4
         fan_level_4.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 4)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutPlus)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlus)
 
         # Set to Level 5
         fan_level_5.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 5)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutPlusPlus)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlusPlus)
 
         # Set to Max
         fan_max.touch()
         vc.sleep(_s)
         vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 6)
-        vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.Max)
+        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Max)
 
-        # Close climate view
-        self.dut.shell.one.Execute("input keyevent 3")  # SELinux permissive mode
-        fr.ClimaActv.stop_send()
+
 
 if __name__ == "__main__":
     test_runner.main()

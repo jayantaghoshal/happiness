@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
@@ -85,13 +85,13 @@ class FdxCommandParser:
         if self.done:
             raise Exception("Parser already finished, create a new one to parse more commands")
 
-        expected_signature = struct.pack('=Q', fdxSignature)
+        expected_signature = bytearray(struct.pack('=Q', fdxSignature))
         for index in range(len(expected_signature)):
             b = yield
-            if b == ord(expected_signature[index]):
+            if b == expected_signature[index]:
                 index += 1
             else:
-                raise Exception("Expected byte %d at index %d, got %d" % (ord(expected_signature[index]), index, b))
+                raise Exception("Expected byte %d at index %d, got %d" % (expected_signature[index], index, b))
 
         received_major_version = yield
         if received_major_version != fdxMajorVersion:
@@ -141,6 +141,7 @@ class FDXConnection:
                  port=2809                  # type: int
                  ):
         # type: (...) -> None
+        logger.info("Connecting to %s:%d" % (ip, port))
         self.ip = ip
         self.port = port
         self.next_seq_nr_to_send = 0
@@ -182,8 +183,11 @@ class FDXConnection:
                     logger_lowlevel_rx.debug("Received message: %r", data)
                     gen = parser.feed()
                     gen.send(None)
-                    for d in data:
-                        gen.send(ord(d))
+
+                    # Convert to bytearray for py2/py3 compatibility (py2 returns string while py3 returns bytearray)
+                    data_bytes = bytearray(data)
+                    for d in data_bytes:
+                        gen.send(d)
                         if parser.done:
                             # TODO: I think we might be able to extract more accurate time stamps here if we combine multiple
                             # messages from the datagram to parse.

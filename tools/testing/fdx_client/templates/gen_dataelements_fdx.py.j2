@@ -1,0 +1,238 @@
+from . import datatypes
+from . import dataelements_abc
+import time
+import threading
+import os
+import logging
+import typing
+from enum import Enum
+from fdx import fdx_description_file_parser
+from fdx import fdx_client
+
+
+{% macro transfer_raw2phys(source, de_type) -%}
+{%- if isinstance(de_type, DE_Value) -%}
+    r2p_float({{source}}, {{de_type.scale}}, {{de_type.offset}})
+{%- else -%}
+    {{source}}
+{%- endif -%}
+{%- endmacro %}
+
+{% macro transfer_phys2raw(source, de_type) -%}
+{%- if isinstance(de_type, DE_Value) -%}
+    p2r_float({{source}}, {{de_type.scale}}, {{de_type.offset}})
+{%- elif isinstance(de_type, DE_Enum) -%}
+    _extract_enum_value(_get_if_not_None({{source}}))
+{%- else -%}
+    _get_if_not_None({{source}})
+{%- endif -%}
+{%- endmacro %}
+
+def _get_if_not_None(x):
+    if x is None:
+        raise AttributeError("Trying to send signal with empty data")
+    return x
+
+def _extract_enum_value(x):
+    if isinstance(x, Enum):
+        return x.value
+    return x
+
+def p2r_float(raw, scale, offset):
+    if raw is None:
+        raise AttributeError("Trying to send signal with empty data")
+    return (raw - offset) / scale
+
+def r2p_float(phyiscal, scale, offset):
+    return (phyiscal * scale) + offset
+
+ns_per_ms = 1000000
+
+# ag = assign_and_assert_same_group
+def _ag(item, value, group):
+    # type: (fdx_description_file_parser.Item, typing.Any, fdx_description_file_parser.Group) -> None
+    assert item.parent_group == group, "All signals in a datagroup should be in the same frame"
+    item.value_raw = value
+
+# gg = get_and_assert_same_group
+def _gg(item, group):
+    # type: (fdx_description_file_parser.Item, fdx_description_file_parser.Group) -> typing.Any
+    assert item.parent_group == group, "All signals in a datagroup should be in the same frame"
+    return item.value_raw
+
+
+
+class FrSignalInterface(dataelements_abc.DataElements):
+
+    def __init__(self, ip=None):
+
+        self.connected = False
+        self.logger = logging.getLogger(__name__)
+
+        (self.groups, self.sysvar_list, self.signal_list) = fdx_description_file_parser.parse(
+            os.path.join(os.path.dirname(__file__), "../../CANoe/SPA2610/FDXDescriptionFile.xml"))
+        self.fdx_items_by_rte_name = {s.name: s for s in self.signal_list}  # type: typing.Dict[str, fdx_description_file_parser.Item]
+
+        self.group_id_map = {g.group_id: g for g in self.groups}
+
+        received_group_ids = set()
+
+        def data_exchange(group_id, data):
+            received_group_ids.add(group_id)
+            group = self.group_id_map[group_id]
+            group.receive_data(data)
+
+        if ip is None:
+            ip = os.environ['VECTOR_FDX_IP']
+
+        try:
+            self.connection = fdx_client.FDXConnection(
+                data_exchange,
+                ip,
+                int(os.environ.get('VECTOR_FDX_PORT', '2809')))
+            self.connection.confirmed_stop()    # Stop in case previous test failed to stop
+            self.connection.confirmed_start()
+            self.verify_simulation_version()
+            groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
+            expected_group_ids = set([g.group_id for g in groups_to_subscribe])
+            for g in groups_to_subscribe:
+                # Sleep is Super ugly, super important. Seems like the Vector some times miss some free_running_request, this fixes it.
+                time.sleep(0.3)
+                self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
+
+            # Extra check that free_running_request for all group ids is working, it has shown some reliability issues (see sleep above)
+            deadline = time.time() + 3
+            while True:
+                missing_group_ids = expected_group_ids - received_group_ids
+                if len(missing_group_ids) == 0:
+                    break
+                time.sleep(0.05)
+                if time.time() < deadline:
+                    continue
+                else:
+                    raise Exception("Failed to subscribe to all groupids, missing: %r" % missing_group_ids)
+
+            self.connected = True
+        except:
+            self.connection.close()
+            raise
+
+
+        self.send_timer = threading.Timer(0.1, self._send_timer_func)
+        self.send_timer.daemon = True
+        self.timer_mutex = threading.Lock()
+        self.groups_on_timer = set()   # type: typing.Set[fdx_description_file_parser.Group]
+
+    def verify_simulation_version(self):
+        # SPA2210/FR_Body_LIN/SimulationDB/Simulation.vsysvar
+        EXPECTED_VERSION = 10
+        simulation_version = next((s for s in self.sysvar_list if s.msg_or_namespace == "Configuration::VersionInfo" and s.name == "SimulationVersion"))
+        deadline = time.time() + 20
+        while simulation_version.value_raw != EXPECTED_VERSION and time.time() < deadline:
+            self.connection.send_data_request(simulation_version.parent_group.group_id)
+            time.sleep(0.5)
+        if simulation_version.value_raw != EXPECTED_VERSION:
+            raise Exception("Simulation version mismatch! CANoe simulation version=%r, expected version=%d" % (simulation_version.value_raw, EXPECTED_VERSION))
+
+    def close(self):
+        with self.timer_mutex:
+            self.groups_on_timer.clear()
+        if self.connected:
+            self.connection.confirmed_stop()
+            self.connection.close()
+
+    def restart_timer(self):
+        # TODO: Investigate if 100ms is ok for all signals
+        self.send_timer = threading.Timer(0.1, self._send_timer_func)
+        self.send_timer.daemon = True
+        self.send_timer.start()
+
+    def _send_timer_func(self):
+        with self.timer_mutex:
+            for g in self.groups_on_timer:
+                self.connection.send_data_exchange(g.group_id, g.size, g.build_data())
+            if len(self.groups_on_timer) > 0:
+                self.restart_timer()
+
+    def add_group_to_send_timer(self, group):
+        # type: (fdx_description_file_parser.Group) -> None
+        with self.timer_mutex:
+            if len(self.groups_on_timer) == 0:
+                self.restart_timer()
+            self.groups_on_timer.add(group)
+
+    def remove_group_from_send_timer(self, group):
+        # type: (fdx_description_file_parser.Group) -> None
+        with self.timer_mutex:
+            self.groups_on_timer.remove(group)
+
+
+
+
+$$ for de_de in all_dataelements
+$$ if de_de.is_insignal
+    {{de_de.desc_comment }}
+    def send_{{de_de.de_dataelementname}}(self, data):
+        $$ if isinstance(de_de.type, DE_Struct)
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+            $$ for c in de_de.type.children if not c.member_name.endswith("Chks") and not c.member_name.endswith("Cntr"):
+                $$ if loop.index0 == 0:
+        group = self.fdx_items_by_rte_name["{{de_de.rte_attr_map[c.member_name]}}"].parent_group   #should be same in all
+        with group.mutex_lock:
+                $$ endif
+                $$ set subtype_name = get_py_type(all_types[c.de_type_id])
+                $$ set attrname = clean_member_name(c.member_name, "")
+            _ag(self.fdx_items_by_rte_name["{{de_de.rte_attr_map[c.member_name]}}"], {{transfer_phys2raw("data." ~ attrname , all_types[c.de_type_id])}}, group)
+            $$ endfor
+        $$ else
+            $$ if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+            $$ else
+        # type: ({{get_py_type(de_de.type)}}) -> None
+            $$ endif
+        fdx_item = self.fdx_items_by_rte_name["{{de_de.rtename}}"]
+        fdx_item.value_raw = {{transfer_phys2raw("data", de_de.type)}}
+        group = fdx_item.parent_group
+        $$ endif
+
+        self.connection.send_data_exchange(group.group_id, group.size, group.build_data())
+        self.add_group_to_send_timer(group)
+
+    def stop_{{de_de.de_dataelementname}}(self):
+        $$ if isinstance(de_de.type, DE_Struct)
+            $$ for c in de_de.type.children if not c.member_name.endswith("Chks") and not c.member_name.endswith("Cntr"):
+                $$ if loop.index0 == 0:
+        group = self.fdx_items_by_rte_name["{{de_de.rte_attr_map[c.member_name]}}"].parent_group
+                $$ endif
+            $$ endfor
+        $$ else
+        group = self.fdx_items_by_rte_name["{{de_de.rtename}}"].parent_group
+        $$ endif
+        self.remove_group_from_send_timer(group)
+$$ else
+    {{de_de.desc_comment }}
+    def get_{{de_de.de_dataelementname}}(self):
+        $$ if isinstance(de_de.type, DE_Struct)
+        # type: () -> datatypes.{{get_py_type(de_de.type)}}
+        data = datatypes.{{get_py_type(de_de.type)}}()
+            $$ for c in de_de.type.children if not c.member_name.endswith("Chks") and not c.member_name.endswith("Cntr"):
+                $$ if loop.index0 == 0:
+        group = self.fdx_items_by_rte_name["{{de_de.rte_attr_map[c.member_name]}}"].parent_group #should be same in all
+        with group.mutex_lock:
+                $$ endif
+                $$ set subtype_name = get_py_type(all_types[c.de_type_id])
+                $$ set attrname = clean_member_name(c.member_name, "")
+            data.{{attrname}} = {{transfer_raw2phys("_gg(self.fdx_items_by_rte_name['" ~ de_de.rte_attr_map[c.member_name] ~ "'], group)", all_types[c.de_type_id])}}
+            $$ endfor
+        return data
+        $$ else
+            $$ if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: () -> datatypes.{{get_py_type(de_de.type)}}
+            $$ else
+        # type: () -> {{get_py_type(de_de.type)}}
+            $$ endif
+        fdx_item = self.fdx_items_by_rte_name["{{de_de.rtename}}"]
+        return {{transfer_raw2phys("fdx_item.value_raw", de_de.type)}}
+        $$ endif
+$$ endif
+$$ endfor

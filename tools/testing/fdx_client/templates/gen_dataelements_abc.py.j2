@@ -1,0 +1,50 @@
+from . import datatypes
+from Sym import carsimconnection
+import json
+import time
+import threading
+import typing
+import abc
+
+class DataElements():
+    __metaclass__=abc.ABCMeta
+
+    @abc.abstractmethod
+    def close(self):
+        pass
+
+$$ for de_de in all_dataelements
+$$ if de_de.is_insignal
+    @abc.abstractmethod
+    def send_{{de_de.de_dataelementname}}(self, data):
+        $$ if isinstance(de_de.type, DE_Struct):
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+        $$ else:
+        $$ if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+        $$ else:
+        # type: ({{get_py_type(de_de.type)}}) -> None
+        $$ endif
+        $$ endif
+        pass
+
+    @abc.abstractmethod
+    def stop_{{de_de.de_dataelementname}}(self):
+        pass
+
+$$ else
+    @abc.abstractmethod
+    def get_{{de_de.de_dataelementname}}(self):
+        $$ if isinstance(de_de.type, DE_Struct):
+        # type: () -> (datatypes.{{get_py_type(de_de.type)}})
+        $$ else:
+        $$     if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: () -> datatypes.{{get_py_type(de_de.type)}}
+        $$     else
+        # type: () -> ({{get_py_type(de_de.type)}})
+        $$     endif
+        $$ endif
+        pass
+
+$$ endif
+$$ endfor

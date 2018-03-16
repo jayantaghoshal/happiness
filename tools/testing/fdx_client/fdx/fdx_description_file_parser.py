@@ -26,8 +26,11 @@ class Group():
         self.name = name
         self.size = size
         self.items = [] # type: List[Item]
-        # Mutex used here because fdx-receiver thread calling receive_data usually not same as reader thread,
-        # which is usually a test case calling Item.value()
+        # Mutex used here because
+        #   - For in-signals:  fdx-receiver thread calling receive_data usually not same as reader thread,
+        #                      which is usually a test case calling Item.value().
+        #   - For out-signals: items written by test case
+        #                      build_data called by sender timer thread
         # Recursive because build_data reads i.value_raw which also grabs a lock
         self.mutex_lock = threading.RLock()
 
@@ -37,7 +40,7 @@ class Group():
             raise Exception("Size of group not equals to sum(items in group), groupsize=%d, itemsize=%d"% (self.size, summed_size))
 
     def build_data(self):
-        # type: () -> str
+        # type: () -> bytearray
         data = bytearray(self.size)
         with self.mutex_lock:
             for i in self.items:
@@ -48,7 +51,7 @@ class Group():
                 else:
                     item_data = struct.pack(fdx_type_to_struct_map[i.type], i.value_raw)
                     data[i.offset:(i.offset + i.size)] = item_data
-        return str(data)
+        return data
 
     def receive_data(self, data):
         # type: (List[int]) -> None

@@ -17,8 +17,14 @@ from vts.runners.host import keys
 from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
+from vts.utils.python.controllers.adb import AdbProxy
 from subprocess import call
 from com.dtmilano.android.viewclient import ViewClient, ViewNotFoundException
+from Sym.carsimconnection import CarsimConnection
+from Sym.adb_connection import AdbCarsimConnection
+from generated.dataelements_carsim import CarsimSerializer
+from generated.dataelements_abc import DataElements
+from generated import dataelements_fdx
 
 from generated.pyDataElements import \
     FrSignalInterface, \
@@ -63,7 +69,7 @@ class VehicleHalCommon():
     active_view_client = None
     active_view_device = None
 
-    def __init__(self, dut, system_uid):
+    def __init__(self, dut, system_uid, with_flexray_legacy=True):
 
         try:
             dut.hal.InitHidlHal(
@@ -80,7 +86,8 @@ class VehicleHalCommon():
         self.vehicle = dut.hal.vehicle
         self.vehicle.SetCallerUid(system_uid)
         self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
-        self.flexray = FrSignalInterface()
+        if with_flexray_legacy:
+            self.flexray = FrSignalInterface()
         self.dut = dut
 
     def get_id(self, property):
@@ -439,3 +446,23 @@ class VehicleHalCommon():
         val = vHalProp['value']
         propExtracted = val["int32Values"][0]
         return propExtracted
+
+
+def get_dataelements_connection(adb, mode=None):
+    # type: (typing.Optional[AdbProxy], str) -> DataElements
+    if mode is None:
+        mode = os.environ.get("DATAELEMENTS_MODE", "adb")
+    if mode == "adb":
+        adbconnection = AdbCarsimConnection(None if adb is None else adb.shell, None if adb is None else adb.forward)
+        fr = CarsimSerializer(adbconnection, None)
+        adbconnection.connect()
+        return fr
+    elif mode == "ethernet":
+        connection = CarsimConnection()
+        fr = CarsimSerializer(connection, None)
+        connection.connect("localhost", 8080)
+        return fr
+    elif mode == "canoe":
+        return dataelements_fdx.FrSignalInterface()
+    else:
+        raise RuntimeError("Invalid DATAELEMENTS_MODE %r" % mode)

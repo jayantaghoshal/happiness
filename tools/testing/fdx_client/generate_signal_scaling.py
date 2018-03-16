@@ -1,20 +1,22 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 from argparse import ArgumentParser
 from typing import List, Dict, Tuple
 import sys
 import os
-import keyword
-import builtins
 from fdx import fdx_description_file_parser
 
 sys.path.append(os.path.join(
     os.path.realpath(os.path.dirname(__file__)),
     "..", "..", "..", "hardware", "signals", "dataelements", "AutosarCodeGen"))
 from dataelements_generator import model
+from dataelements_generator.model import DE_Element, DE_Type_Key, DE_BaseType, DE_Value, DE_Identical, DE_Boolean, \
+    DE_Struct, DE_Array, DE_Enum
 from dataelements_generator import getDatatypes
+from dataelements_generator import render_python_basic
 import autosar
+import typing
 import jinja2
 
 
@@ -24,12 +26,6 @@ def py_comment(s : str):
         return ""
     return "".join(("# " + line + "\n" for line in s.split("\n")))
 
-def clean_variable_name(n:str):
-    if keyword.iskeyword(n):
-        return n + "_"
-    if n in dir(builtins):
-        return n + "_"
-    return n
 
 #Returns the common signals between the signalDB (all_de_elements) and fdx_description-file (signals)
 def get_common_signals(all_types: Dict[model.DE_Type_Key, model.DE_BaseType],
@@ -109,6 +105,86 @@ def render(signals: List[fdx_description_file_parser.Item],
 
 
 
+SHARED_TEMPLATEDATA = {
+    "isinstance": isinstance,
+    # A bit ugly, these must be made available for isinstance inside templates
+    "DE_Array": DE_Array,
+    "DE_Struct": DE_Struct,
+    "DE_Enum": DE_Enum,
+    "DE_Value": DE_Value,
+}   # type: typing.Mapping[str, typing.Any]
+
+
+def render_dataelments(
+        swc_filename: str,
+        com_filename: str,
+        cmdline_args: str,
+        all_de_elements: List[DE_Element],
+        all_types: Dict[DE_Type_Key, DE_BaseType],
+        rte_name_to_de_name: Dict[str, str],
+        rte_name_to_de_type: Dict[str, DE_BaseType]):
+    templateelements = []
+
+    def sorted_types_by_typename(all_types: Dict[DE_Type_Key, DE_BaseType]):
+        return list(sorted(all_types.values(), key=lambda x: x.de_type_name))
+
+    def get_range_comment(x: DE_BaseType):
+        #TODO: Temporary just return the class name, extract proper comment here
+        return x
+
+    def escape_py_comment(comment: str, separator):
+        return py_comment(comment)
+
+
+    for de_de in all_de_elements:
+        de_type = all_types[de_de.de_type_id]
+        range_comment = de_type.desc.strip() if isinstance(de_type, (DE_Value, DE_Identical)) else ""
+
+        templateelements.append({
+            "de_dataelementname" : de_de.de_dataelementname,
+            "type"               : all_types[de_de.de_type_id],
+            "is_insignal"        : de_de.is_insignal,
+            "is_internal"        : de_de.is_internal,
+            "isSignal"           : de_de.isSignal,
+            "description"        : de_de.description,
+            "rtename"            : de_de.rtename,
+            "rte_attr_map"       : de_de.rte_attr_map,
+            "range_comment"      : range_comment,
+        })
+
+    templatedata = {
+        **SHARED_TEMPLATEDATA,
+        "all_dataelements" : templateelements,
+        "all_types": all_types,
+        "get_py_type": render_python_basic.get_py_type,
+        "clean_member_name": render_python_basic.clean_member_name,
+        "sorted_types": sorted_types_by_typename(all_types),
+        "escape_py_comment_including_prefix_if_nonempty": escape_py_comment,
+        "get_range_comment": get_range_comment,
+        "rte_name_to_de_name": rte_name_to_de_name
+    }
+
+    header = """#coding: utf-8
+#AUTO GENERATED FILE, do not modify by hand.
+# Generated with args: %s
+SWC_INPUT_FILE="%s"
+COM_INPUT_FILE="%s"
+""" % (cmdline_args, swc_filename, com_filename)
+
+    j2env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader('./templates/'),
+        line_statement_prefix="$$"
+    )
+    return (
+        header + j2env.get_template("gen_dataelements_abc.py.j2").render(**templatedata),
+        header + j2env.get_template("gen_dataelements_carsim.py.j2").render(**templatedata),
+        header + j2env.get_template("gen_datatypes.py.j2").render(**templatedata),
+        header + j2env.get_template("gen_dataelements_fdx.py.j2").render(**templatedata)
+    )
+
+
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument('-o', '--out', dest='outputname', help='Output file name of generated file',
@@ -131,6 +207,11 @@ def main():
     #TODO: Need to increase the frequency of some send_free_running_request
 
 
+
+
+
+
+
     fdx_path_relative_generated_script = os.path.relpath(args.fdxdescriptionfile, os.path.dirname(args.outputname))
 
     (common_signals, rte_name_to_de_name, rte_name_to_de_type) = get_common_signals(all_types, all_de_elements, signals)
@@ -141,14 +222,33 @@ def main():
     }
 
     j2env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader('.'),
+        loader=jinja2.FileSystemLoader('templates'),
     )
-    j2env.globals["clean_variable_name"] = clean_variable_name
+    j2env.globals["clean_variable_name"] = render_python_basic.clean_variable_name
     j2env.globals["py_comment"] = py_comment
     template = j2env.get_template("generator_template.py.j2")
 
     with open(args.outputname, "w", encoding="utf-8") as f:
         f.write(template.render(**templateData))
+
+
+    (abc_dataelements, carsim_dataelements, datatypes, fdx_dataelements) = render_dataelments(
+        os.path.split(args.swcinputfile)[-1],
+        os.path.split(args.cominputfile)[-1],
+        " ".join(sys.argv),
+        all_de_elements,
+        all_types,
+        rte_name_to_de_name,
+        rte_name_to_de_type)
+    with open("generated/dataelements_abc.py", "w", encoding="utf-8") as f:
+        f.write(abc_dataelements)
+    with open("generated/dataelements_carsim.py", "w", encoding="utf-8") as f:
+        f.write(carsim_dataelements)
+    with open("generated/datatypes.py", "w", encoding="utf-8") as f:
+        f.write(datatypes)
+    with open("generated/dataelements_fdx.py", "w", encoding="utf-8") as f:
+        f.write(fdx_dataelements)
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,38 @@
+from enum import Enum
+import typing
+
+{% for t in sorted_types  -%}
+{% if isinstance(t, DE_Enum) -%}
+#
+# \enum {{t.de_type_name}}{{escape_py_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+#
+class {{t.de_type_name}}(Enum):
+{%- for v in t.values %}
+    {{clean_member_name(v.name, "")}}={{v.value}}
+{%- endfor %}
+
+{% elif isinstance(t, DE_Array) -%}
+{% set inner_type = all_types[t.arrayitem_type_id] %}
+#
+# \brief array {{t.de_type_name}}{{escape_py_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+#
+{{t.de_type_name}} = typing.List[{{get_py_type(inner_type)}}]  # Max {{t.max_elements}} elements. {{t.desc}}
+
+{% elif isinstance(t, DE_Struct) -%}
+#
+# \struct {{t.de_type_name}}{{escape_py_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+#
+class {{t.de_type_name}}:
+    def __init__(self):
+    {%- for c in t.children -%}
+        {% set member_type = all_types[c.de_type_id] -%}
+        {% set member_type_name = get_py_type(member_type) -%}
+        {% set attrname = clean_member_name(c.member_name, "") -%}
+        {% set range_comment = get_range_comment(member_type) %}
+        #  {{range_comment}}
+        self.{{attrname}} = None  # type: {{member_type_name}}
+    {%- endfor %}
+
+
+{% endif -%}
+{%- endfor %}

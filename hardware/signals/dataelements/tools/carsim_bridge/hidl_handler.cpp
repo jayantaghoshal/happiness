@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -27,13 +27,6 @@ namespace CarSim {
     // Avoid spamming the tender client by keeping shut for half a second
     // TODO REMOVE when client can handle it.
     ALOGD("Signal changed %s", signalName.c_str());
-    if (first_run_) {
-        first_run_ = false;
-        connection_timestamp_ = std::chrono::steady_clock::now();
-    }
-    if ((std::chrono::steady_clock::now() - connection_timestamp_) < std::chrono::milliseconds(500)) {
-        return ::android::hardware::Void();
-    }
 
     // Send the data if connection.
     try {
@@ -42,12 +35,16 @@ namespace CarSim {
             nlohmann::json j;
             j["SignalName"] = nlohmann::json(std::string(signalName));
             j["Dir"] = nlohmann::json((int)dir);
-            j["Data"] = nlohmann::json(std::string(data));
+            // NOTE: Data is an opaque string (that happens to contain json) from carsims perspective, not a json
+            // object!!!
+            j["Data"] = std::string(data);
 
             std::string jsonData = j.dump();
             ALOGV("<server to client> %s", jsonData.c_str());
 
             keepConnAlive->Send(jsonData);
+        } else {
+            ALOGV("Not connected, signal not forwarded to client");
         }
     } catch (const std::exception& ex) {
         ALOGD("Error: HidlHandler::signalChanged (internal ex: %s), exiting...", ex.what());

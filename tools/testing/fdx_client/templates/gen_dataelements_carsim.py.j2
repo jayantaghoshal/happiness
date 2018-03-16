@@ -1,0 +1,189 @@
+from . import datatypes
+from . import dataelements_abc
+from Sym import carsimconnection
+import json
+import time
+import threading
+import typing
+from enum import Enum
+import sys
+if sys.version_info[0] == 3:
+    from queue import Queue
+else:
+    from Queue import Queue
+import logging
+import sys
+current_module = sys.modules[__name__]
+
+
+
+def _get_if_not_None(x):
+    if x is None:
+        raise AttributeError("Trying to send signal with empty data")
+    return x
+
+def _extract_enum_value(x):
+    if isinstance(x, Enum):
+        return x.value
+    return x
+
+
+{#TODO: Actually most things could be parsed during runtime, as long as the interface can be type checked from generated
+        code we are good.
+        But the dataelements parser is py3 and we need py2 in VTS so easier to just generate rather than rewrite
+        whole dataelements parser
+#}
+
+
+
+
+class CarsimSerializer(dataelements_abc.DataElements):
+    def __init__(self, connection, dataelement_rec_queue ):
+        # type: (carsimconnection.CarsimConnection, typing.Optional[Queue] ) -> None
+        self.connection = connection
+        self.datamap = {}   # type: typing.Dict[str, typing.Any]
+        self.dataelement_rec_queue = dataelement_rec_queue
+        self.raw_rec_queue = self.connection.receive_queue
+        self.process_thread = threading.Thread(target=self.process_messages)
+        self.process_thread.daemon=True
+        self.process_thread.start()
+
+    def process_messages(self):
+        while True:
+            if self.raw_rec_queue.empty():
+                time.sleep(0.05)
+                continue
+
+            msg = self.raw_rec_queue.get()  # type: carsimconnection.RawCarsimMessage
+            try:
+                self.handle_message(msg)
+            except Exception as e:
+                logging.exception("Exception %s in handle_signal %s" % (e, msg))
+            self.raw_rec_queue.task_done()
+
+    def handle_message(self, msg):
+        # type: (carsimconnection.RawCarsimMessage) -> None
+        if msg.name == "ActivateVfc":
+            return
+
+        if msg.state != 0:
+            self.datamap[msg.name] = "error" #TODO
+            return
+
+        parse_func = getattr(self, "_parse_" + msg.name)
+        parsed_dataelement = parse_func(msg.data)
+        self.datamap[msg.name] = parsed_dataelement
+
+        if self.dataelement_rec_queue is not None:
+            # Used by carsim to re-render the UI, not needed when using the get-functions
+            self.dataelement_rec_queue.put(carsimconnection.CarsimDataElementValue(msg.name, msg.state,parsed_dataelement))
+
+    def close(self):
+        self.connection.close()
+
+{#TODO: Should distinguish between insignal / outsignal #}
+
+{% for de_de in all_dataelements %}
+
+    {{de_de.desc_comment }}
+    def send_{{de_de.de_dataelementname}}(self, data):
+        $$ if isinstance(de_de.type, DE_Struct):
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+        s = toJson_{{get_py_type(de_de.type)}}(data)
+        $$ else:
+        $$ if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: (datatypes.{{get_py_type(de_de.type)}}) -> None
+        $$ else:
+        # type: ({{get_py_type(de_de.type)}}) -> None
+        $$ endif
+        $$ if isinstance(de_de.type, DE_Enum):
+        s = json.dumps(int(_extract_enum_value(data)))
+        $$ else:
+        s = json.dumps(_get_if_not_None(data))
+        $$ endif
+        $$ endif
+        name = "{{de_de.de_dataelementname}}"
+        self.connection.send_serialized_dataelement(name, type_map[name], is_insignal_map[name], s)
+
+    def stop_{{de_de.de_dataelementname}}(self):
+        name = "{{de_de.de_dataelementname}}"
+        self.connection.send_error(name, is_insignal_map[name], type_map[name])
+
+    def _parse_{{de_de.de_dataelementname}}(self, datastring):
+        $$ if isinstance(de_de.type, DE_Struct)
+        # type: (str) -> datatypes.{{get_py_type(de_de.type)}}
+        return fromJson_{{get_py_type(de_de.type)}}(datastring)
+        $$ else
+        $$     if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: (str) -> datatypes.{{get_py_type(de_de.type)}}
+        $$     else
+        # type: (str) -> {{get_py_type(de_de.type)}}
+        $$     endif
+        $$     if isinstance(de_de.type, DE_Enum)
+        return json.loads(datastring)
+        $$     else
+        return json.loads(datastring)
+        $$     endif
+        $$ endif
+    def get_{{de_de.de_dataelementname}}(self):
+        $$ if isinstance(de_de.type, DE_Struct):
+        # type: () -> (datatypes.{{get_py_type(de_de.type)}})
+        $$ else:
+        $$     if isinstance(de_de.type, (DE_Enum, DE_Array))
+        # type: () -> datatypes.{{get_py_type(de_de.type)}}
+        $$     else
+        # type: () -> ({{get_py_type(de_de.type)}})
+        $$     endif
+        $$ endif
+        return self.datamap["{{de_de.de_dataelementname}}"]
+
+{%- endfor %}
+
+
+
+{% for t in sorted_types -%}
+{% if isinstance(t, DE_Array) -%}
+{% elif isinstance(t, DE_Struct) -%}
+def fromJson_{{t.de_type_name}}(data):
+    # type: (str) -> datatypes.{{t.de_type_name}}
+    j = json.loads(data)
+    v = datatypes.{{t.de_type_name}}()
+    {% for c in t.children -%}
+    {% set subtype_name = get_py_type(all_types[c.de_type_id]) -%}
+    {% set json_name = clean_member_name(c.member_name, subtype_name ) -%}
+    {% set attrname = clean_member_name(c.member_name, "") -%}
+    v.{{attrname}} = j["{{json_name}}"]
+    {% endfor %}return v
+
+
+def toJson_{{t.de_type_name}}(v):
+    # type: (datatypes.{{t.de_type_name}}) -> str
+    return json.dumps({
+        {% for c in t.children -%}
+        {% set subtype_name = get_py_type(all_types[c.de_type_id]) -%}
+        {% set json_name = clean_member_name(c.member_name, subtype_name) -%}
+        {% set attrname = clean_member_name(c.member_name, "") -%}
+        {% if isinstance(all_types[c.de_type_id], DE_Enum) -%}
+        "{{json_name}}" : _extract_enum_value(_get_if_not_None(v.{{attrname}})),
+        {% elif isinstance(all_types[c.de_type_id], DE_Struct) -%}
+         DELIBERATE SYNTAX ERROR: v.{{attrname}} has struct inside struct, this is not supported
+        {%- else -%}
+        "{{attrname}}" : _get_if_not_None(v.{{attrname}}),
+        {%- endif %}
+        {% endfor %}
+    })
+{% endif -%}
+
+{% endfor %}
+
+{#TODO: int-signals in type #}
+type_map = {
+    $$ for de_de in all_dataelements:
+    "{{de_de.de_dataelementname}}" : "{{de_de.type.de_type_name}}",
+    $$ endfor
+}
+
+is_insignal_map = {
+{% for de_de in all_dataelements %}"{{de_de.de_dataelementname}}" : {{de_de.is_insignal}},
+{% endfor %}
+}

@@ -1,6 +1,6 @@
 # coding=utf-8
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # Signal scaling database
@@ -14,7 +14,6 @@
 import os
 import logging
 import time
-import threading
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
 
@@ -1165,6 +1164,10 @@ class FrSignalInterface:
             self.connection.confirmed_stop()
             self.connection.close()
 
+
+
+
+
 class BaseIntegerSender(object):
     fdx_name = ""
 
@@ -1172,7 +1175,6 @@ class BaseIntegerSender(object):
         # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
         self.signal_interface = signal_interface
         self.item = item
-        self.is_sending = False
 
     def r2p(cls, raw):
         return raw
@@ -1193,22 +1195,6 @@ class BaseIntegerSender(object):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
-    def add_timer(self, time_ms, func):
-        if self.is_sending:
-            self.t = threading.Timer(float(time_ms)/1000, func)
-            self.t.start()
-
-    def send_repetitive(self, value_physical):
-        self.is_sending = True
-        def bind_send():
-            self.send(value_physical)
-            self.add_timer(100.0, bind_send)
-        bind_send()
-
-    def stop_send(self):
-        self.is_sending = False
-        self.t.cancel()
-
 class BaseFloatSender(object):
     fdx_name = ""
 
@@ -1216,7 +1202,6 @@ class BaseFloatSender(object):
         # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
         self.signal_interface = signal_interface
         self.item = item
-        self.is_sending = False
 
     def r2p(cls, raw):
         return (raw * cls.scale) + cls.offset
@@ -1237,21 +1222,6 @@ class BaseFloatSender(object):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
-    def add_timer(self, time_ms, func):
-        if self.is_sending:
-            self.t = threading.Timer(float(time_ms)/1000, func)
-            self.t.start()
-
-    def send_repetitive(self, value_physical):
-        self.is_sending = True
-        def bind_send():
-            self.send(value_physical)
-            self.add_timer(100.0, bind_send)
-        bind_send()
-
-    def stop_send(self):
-        self.is_sending = False
-        self.t.cancel()
 
 class BaseBoolSender(object):
     fdx_name = ""
@@ -1260,7 +1230,6 @@ class BaseBoolSender(object):
         # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
         self.signal_interface = signal_interface
         self.item = item
-        self.is_sending = False
 
     def set(self, value_physical):
         self.item.value_raw = value_physical
@@ -1275,21 +1244,6 @@ class BaseBoolSender(object):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, value)
         return value
 
-    def add_timer(self, time_ms, func):
-        if self.is_sending:
-            self.t = threading.Timer(float(time_ms)/1000, func)
-            self.t.start()
-
-    def send_repetitive(self, value_physical):
-        self.is_sending = True
-        def bind_send():
-            self.send(value_physical)
-            self.add_timer(100.0, bind_send)
-        bind_send()
-
-    def stop_send(self):
-        self.is_sending = False
-        self.t.cancel()
 
 class BaseEnumSender(object):
     fdx_name = ""
@@ -1298,7 +1252,6 @@ class BaseEnumSender(object):
         # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
         self.signal_interface = signal_interface
         self.item = item
-        self.is_sending = False
 
     def set(self, value_physical):
         self.item.value_raw = value_physical
@@ -1312,23 +1265,6 @@ class BaseEnumSender(object):
         self.signal_interface.logger.debug('get %s=%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 
-    def add_timer(self, time_ms, func):
-        if self.is_sending:
-            self.t = threading.Timer(float(time_ms)/1000, func)
-            self.t.start()
-
-    def send_repetitive(self, value_physical):
-        self.is_sending = True
-        def bind_send():
-            self.send(value_physical)
-            self.add_timer(100.0, bind_send)
-        bind_send()
-
-    def stop_send(self):
-        self.is_sending = False
-        self.t.cancel()
-
-
 class BaseArraySender(object):
     fdx_name = ""
 
@@ -1336,7 +1272,6 @@ class BaseArraySender(object):
         # type: (FrSignalInterface, fdx_description_file_parser.Item) -> None
         self.signal_interface = signal_interface
         self.item = item
-        self.is_sending = False
 
     def set(self, value_physical):
         assert len(value_physical) == self.array_length
@@ -1352,21 +1287,7 @@ class BaseArraySender(object):
         self.signal_interface.logger.debug('get %%s=%%d',self.fdx_name, self.item.value_raw)
         return self.item.value_raw
 
-    def add_timer(self, time_ms, func):
-        if self.is_sending:
-            self.t = threading.Timer(float(time_ms)/1000, func)
-            self.t.start()
 
-    def send_repetitive(self, value_physical):
-        self.is_sending = True
-        def bind_send():
-            self.send(value_physical)
-            self.add_timer(100.0, bind_send)
-        bind_send()
-
-    def stop_send(self):
-        self.is_sending = False
-        self.t.close()
 
 ####################################################################################################
 
@@ -13366,7 +13287,7 @@ class PrpsnModSptBlkd(BaseEnumSender):
         super(PrpsnModSptBlkd, self).__init__(signal_interface, item)
 
 
-# Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
+# Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+-1024.0, raw is unsigned, 11 bits )
 class PtCluTqPtCluTq(BaseFloatSender):
     de_name     = "PtCluTq.PtCluTq"
     fdx_name    = "PtCluTqPtCluTq"
@@ -13374,7 +13295,7 @@ class PtCluTqPtCluTq(BaseFloatSender):
     min    = -1024
     max    = 1023
     scale  = 1.0
-    offset = 0.0
+    offset = -1024.0
 
 
     def __init__(self, signal_interface, item):
@@ -13382,7 +13303,7 @@ class PtCluTqPtCluTq(BaseFloatSender):
         super(PtCluTqPtCluTq, self).__init__(signal_interface, item)
 
 
-# Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+0.0, raw is unsigned, 11 bits )
+# Unit: NewtonMeter,  Range:-1024->1023, Resolution: (1.0*x+-1024.0, raw is unsigned, 11 bits )
 class PtCluTqPtCluTqDyn(BaseFloatSender):
     de_name     = "PtCluTq.PtCluTqDyn"
     fdx_name    = "PtCluTqPtCluTqDyn"
@@ -13390,7 +13311,7 @@ class PtCluTqPtCluTqDyn(BaseFloatSender):
     min    = -1024
     max    = 1023
     scale  = 1.0
-    offset = 0.0
+    offset = -1024.0
 
 
     def __init__(self, signal_interface, item):

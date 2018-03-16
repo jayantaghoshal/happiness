@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -35,8 +35,6 @@ class DeathRecipientToFunction : public android::hardware::hidl_death_recipient 
 };
 
 int main(int argc, char* argv[]) {
-    static std::string tag = "*";
-    static Dir dir;
     CarSim::SocketServer server{PORT};
 
     const ::android::sp<DeathRecipientToFunction> deathSubscriber = new DeathRecipientToFunction([&] {
@@ -60,11 +58,21 @@ int main(int argc, char* argv[]) {
                 return -1;
             }
 
-            auto subscribe = service->subscribe(tag, dir, myCallBackObj);
-            if (!subscribe.isOk()) {
-                ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
-                      subscribe.description().c_str());
-                return 0;
+            {
+                auto subscribe = service->subscribe("*", Dir::IN, myCallBackObj);
+                if (!subscribe.isOk()) {
+                    ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
+                          subscribe.description().c_str());
+                    return -1;
+                }
+            }
+            {
+                auto subscribe = service->subscribe("*", Dir::OUT, myCallBackObj);
+                if (!subscribe.isOk()) {
+                    ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
+                          subscribe.description().c_str());
+                    return -1;
+                }
             }
             ALOGD("Subscribe to HIDL signals done");
 
@@ -80,8 +88,9 @@ int main(int argc, char* argv[]) {
                     nlohmann::json j = nlohmann::json::parse(message);  // Parse the message to a json object
                     std::string signal_name = j["SignalName"];
                     Dir signal_dir = static_cast<Dir>(std::uint16_t(j["Dir"]));
-                    nlohmann::json jdata = j["Data"];
-                    std::string signal_data = jdata.dump();
+                    // NOTE: Data is an opaque string (that happens to contain json) from carsims perspective, not a
+                    // json object!!!
+                    std::string signal_data = j["Data"];
 
                     ALOGV("signal_name:%s\nsignal_dir:%zd\nsignal_data:%s",
                           signal_name.c_str(),
