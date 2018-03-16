@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -35,6 +35,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         public ImageView overflow;
         public CardView cardView;
         private boolean moreInfo = false;
+        private boolean showInstallNotifcationItem = false;
 
         public MyViewHolder(View view) {
             super(view);
@@ -74,7 +75,10 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(holder, sw));
         if (!holder.state.getText().equals(SoftwareInformation.SoftwareState.AVAILABLE.name()))
             popup.getMenu().findItem(R.id.commission).setVisible(false);
+        if (holder.state.getText().equals("INSTALL PENDING"))
+            holder.showInstallNotifcationItem = true;
 
+        popup.getMenu().findItem(R.id.installNotification).setVisible(holder.showInstallNotifcationItem);
         popup.show();
     }
 
@@ -97,6 +101,9 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                 softwareUpdateApp.commissionAssignment(swInfo.softwareId);
                 Toast.makeText(context, "Commissioning \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.installNotification:
+                softwareUpdateApp.getInstallNotification(swInfo.installationId);
+                Toast.makeText(context, "Get install notification \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
             default:
             }
             return false;
@@ -154,7 +161,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
         else
             holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
-
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -28,4 +28,11 @@ oneway interface ISoftwareUpdateManager {
     * @param uuid installation order id
     */
      void GetDownloadInfo(in String uuid);
+
+     /**
+     * Get InstallNotification for an installation order
+     * @param installionOrderId installationOrderId
+     */
+     void GetInstallNotification(in String installationOrderId);
+
 }

@@ -6,4 +6,9 @@
         android:orderInCategory="1"
         android:title="Commission assignment"
         android:textSize="20dp"/>
+    <item
+        android:id="@+id/installNotification"
+        android:orderInCategory="1"
+        android:title="Get install notification"
+        android:textSize="20dp"/>
 </menu>

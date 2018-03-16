@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -96,5 +96,9 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     @Override
     public void GetDownloadInfo(String uuid) throws RemoteException {
         service.GetDownloadInfo(uuid);
+    }
+    @Override
+    public void GetInstallNotification(String installationOrderId) throws RemoteException {
+        service.GetInstallNotification(installationOrderId);
     }
 }

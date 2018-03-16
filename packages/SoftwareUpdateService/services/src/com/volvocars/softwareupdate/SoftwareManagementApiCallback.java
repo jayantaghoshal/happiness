@@ -119,6 +119,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     */
     public void InstallNotificationStatus(int code, String installationOrderId) {
         Log.v(LOG_TAG, "Got result of posting Installation Notification [" + installationOrderId + "]: " + code);
+        if (200 == code)
+            service.UpdateSoftwareState(installationOrderId, SoftwareState.INSTALL_PENDING);
     }
 
     /**
@@ -137,5 +139,4 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
             Log.d(LOG_TAG, "InstallNotification with status " + notification.notification.status.statusCode.toString()
                     + " is not handled");
     }
-
 }
