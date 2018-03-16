@@ -7,14 +7,11 @@ import os
 import json
 
 def main():
-    try:
-        mapping_file = os.environ['IPM_MAP_FILE']  # Set in jenkins build env
-        lab_config_data=json.load(open(mapping_file))
-        hostname = os.environ["HOST_HOSTNAME"]
-        flexray_name = lab_config_data[hostname]["flexray"]
-        return lab_config_data[flexray_name]["ip"]
-    except Exception:
-        return ""
+    mapping_file = os.environ['IPM_MAP_FILE']  # Set in jenkins build env
+    lab_config_data=json.load(open(mapping_file))
+    hostname = os.environ["HOST_HOSTNAME"]
+    flexray_name = lab_config_data[hostname]["flexray"]
+    print(lab_config_data[flexray_name]["ip"])
 
 if __name__ == '__main__':
     main()
