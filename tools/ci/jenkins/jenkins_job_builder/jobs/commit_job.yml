@@ -127,6 +127,14 @@
                 - bootstrap_ramdisk.sh
                 - bootstrap_ihu_gate_build_stage.sh
                 - bootstrap_ihu_gate_build.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>CommitGate_ihu_gate_build</customProjectName>
+                <customPrefix>CommitGate</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_gate_test
@@ -142,6 +150,14 @@
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_gate_test.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>CommitGate_ihu_gate_test</customProjectName>
+                <customPrefix>CommitGate</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_gate_test_flexray

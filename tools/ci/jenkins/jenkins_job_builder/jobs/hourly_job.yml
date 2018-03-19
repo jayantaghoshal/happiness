@@ -173,6 +173,14 @@
                 - bootstrap_ramdisk.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_build_eng.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>IhuHourly_ihu_hourly_build-eng</customProjectName>
+                <customPrefix>IhuHourly</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_hourly_test-generic
@@ -209,6 +217,13 @@
             allow-empty: 'true'
             latest-only: 'true'
             only-if-success: 'false'
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>IhuHourly_ihu_hourly_test-generic</customProjectName>
+                <customPrefix>IhuHourly</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_hourly_test-flexray

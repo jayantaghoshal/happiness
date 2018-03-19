@@ -213,6 +213,14 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_daily_build_eng.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>IhuDaily_ihu_daily_build_vcc_eng</customProjectName>
+                <customPrefix>IhuDaily</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_daily_build_vcc_userdebug
@@ -299,6 +307,13 @@
             allow-empty: 'true'
             latest-only: 'true'
             only-if-success: 'false'
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>IhuDaily_ihu_daily_test-generic</customProjectName>
+                <customPrefix>IhuDaily</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_daily_test-flexray
