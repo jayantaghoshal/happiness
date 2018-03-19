@@ -8,6 +8,7 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD"/>
   <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
+  <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ed9f194f37ece207befa3e18ee7b5b28729fe08a"/>
