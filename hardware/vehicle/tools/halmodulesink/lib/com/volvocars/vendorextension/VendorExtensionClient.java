@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -14,6 +14,8 @@ import android.support.car.CarConnectionCallback;
 import android.support.car.CarNotConnectedException;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
@@ -22,6 +24,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import vendor.volvocars.hardware.vehiclehal.V1_0.PAStatus;
 import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
 
 /**
@@ -32,16 +35,91 @@ import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
 public class VendorExtensionClient {
 
     private static final String TAG = VendorExtensionClient.class.getSimpleName();
-    public static final int WAIT_TIME = 1000;
+    public static final int WAIT_TIME_MILLISECONDS = 1000;
+    public static final int CAR_CONNECT_WAIT_TIME_SECONDS = 5;
+    public static final int NO_AREA = 0;
     static Semaphore semaphore = new Semaphore(1);
     private static VendorExtensionClient sVendorExtensionClient;
     private Context context;
     private Car mCar;
     private CarVendorExtensionManager carVEManager;
-    public static final int NO_AREA = 0;
+    private List<VehiclePropertySupport> supportedFeatures;
+    private HashMap<Integer, ArrayList<VendorExtensionCallBack>> vendorCallBacks;
 
 
 // Init methods
+
+    private void init() {
+        vendorCallBacks = new HashMap<>();
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Thread interrupted", e);
+        }
+        // Add supported features
+        supportedFeatures.add(
+                new VehiclePropertySupport(Integer.class, VehicleProperty.DAI_SETTING,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Boolean.class, VehicleProperty.CURVE_SPEED_ADAPTION_ON,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Integer.class, VehicleProperty.CONNECTED_SAFETY_ON,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Integer.class, VehicleProperty.CURVE_SPEED_ADAPTION_STATUS,
+                        NO_AREA));
+
+        if (mCar == null) {
+            mCar = Car.createCar(context, mServiceConnectionCallback);
+            Log.d(TAG, "onCreate: Car.connect()");
+            try {
+                mCar.connect();
+            } catch (Exception e) {
+                Log.e(TAG, "ERROR: Car.connect() has problems: ", e);
+                semaphore.release();
+            }
+        }
+
+    }
+
+    /**
+     * Reconnect with the car service
+     * It clears all callbacks
+     *
+     * @return
+     */
+    public boolean reconnect() {
+        try {
+            // Check of it is blocked by other methods
+            if (semaphore.availablePermits() == 0) {
+                semaphore.release();
+            }
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Thread interrupted", e);
+        }
+
+        if (mCar.isConnected()) {
+            semaphore.release();
+            return true;
+        } else {
+            mCar.connect();
+        }
+
+        // Wait for the CarService connection
+        try {
+            if (semaphore.tryAcquire(CAR_CONNECT_WAIT_TIME_SECONDS, TimeUnit.SECONDS)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (InterruptedException e) {
+            Log.e(TAG, "ERROR: Car.connect() has problems: ", e);
+            return false;
+        }
+    }
+
     /**
      * Talks with the CarVendorExtensionManager
      */
@@ -53,6 +131,8 @@ public class VendorExtensionClient {
                     try {
                         carVEManager = (CarVendorExtensionManager) mCar.getCarManager(
                                 android.car.Car.VENDOR_EXTENSION_SERVICE);
+                        // Everytime car connect, we need to use new service, therefore clear callbacks
+                        vendorCallBacks.clear();
                         registerCallback();
                     } catch (CarNotConnectedException e) {
                         Log.e(TAG, "Car not connected in onConnected", e);
@@ -65,9 +145,14 @@ public class VendorExtensionClient {
                 @Override
                 public void onDisconnected(Car car) {
                     Log.d(TAG, "onDisconnected()");
+                    // Check if it happened middle of the way of connecting
+                    if (semaphore.availablePermits() == 0) {
+                        semaphore.release();
+                    }
+                    // It suggested that we can use the same object of the car
+                    reconnect();
                 }
             };
-    private List<VehiclePropertySupport> supportedFeatures;
 
     /**
      * Init
@@ -87,7 +172,7 @@ public class VendorExtensionClient {
      */
     private boolean validate() {
         try {
-            if (semaphore.tryAcquire(WAIT_TIME, TimeUnit.MILLISECONDS)) {
+            if (semaphore.tryAcquire(WAIT_TIME_MILLISECONDS, TimeUnit.MILLISECONDS)) {
                 semaphore.release();
                 return true;
             } else {
@@ -122,7 +207,7 @@ public class VendorExtensionClient {
     }
 
     /**
-     * Get propID value using Global zone
+     * GetStatus propID value using Global zone
      *
      * @param propID
      * @return
@@ -138,6 +223,36 @@ public class VendorExtensionClient {
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
                 .filter(feature -> feature.vehicleProperty == propID).findFirst();
         return carVEManager.getGlobalProperty(result.get().type, propID);
+    }
+
+    public int getStatus(int propID) throws NotSupportedException, android.car.CarNotConnectedException {
+        validate();
+        if (!isSupportedFeature(propID)) {
+            throw new NotSupportedException("This feature is not available (propID): " + propID);
+        }
+        Optional<VehiclePropertySupport> result = supportedFeatures.stream()
+                .filter(feature -> feature.vehicleProperty == propID).findFirst();
+        return (Integer) carVEManager.getGlobalProperty(result.get().type, propID);
+    }
+
+    /**
+     * GetStatus propID value using Zone Area information (make sure using zoned area information)
+     *
+     * @param propID
+     * @param area
+     * @return
+     * @throws NotSupportedException
+     * @throws android.car.CarNotConnectedException
+     */
+    public int getStatus(int propID, int area)
+            throws NotSupportedException, android.car.CarNotConnectedException {
+        validate();
+        if (!isSupportedFeature(propID)) {
+            throw new NotSupportedException("This feature is not available (propID): " + propID);
+        }
+        Optional<VehiclePropertySupport> result = supportedFeatures.stream()
+                .filter(feature -> feature.vehicleProperty == propID & feature.area == area).findFirst();
+        return (Integer) carVEManager.getProperty(result.get().type, propID, area);
     }
 
     /**
@@ -208,34 +323,6 @@ public class VendorExtensionClient {
             sVendorExtensionClient = new VendorExtensionClient(contextTemp);
         }
         return sVendorExtensionClient;
-    }
-
-    private void init() {
-        try {
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            Log.d(TAG, "Thread interrupted", e);
-        }
-        // Add supported features
-        supportedFeatures.add(
-                new VehiclePropertySupport(Integer.class, VehicleProperty.DAI_SETTING,
-                        NO_AREA));
-        supportedFeatures.add(
-                new VehiclePropertySupport(Boolean.class, VehicleProperty.CURVE_SPEED_ADAPTION_ON,
-                        NO_AREA));
-        supportedFeatures.add(
-                new VehiclePropertySupport(Integer.class, VehicleProperty.CONNECTED_SAFETY_ON,
-                        NO_AREA));
-        if (mCar == null) {
-            mCar = Car.createCar(context, mServiceConnectionCallback);
-            Log.d(TAG, "onCreate: Car.connect()");
-            try {
-                mCar.connect();
-            } catch (Exception e) {
-                Log.d(TAG, "ERROR: Car.connect() has problems: ", e);
-            }
-        }
-
     }
 
     // Feature handling methods
@@ -356,21 +443,31 @@ public class VendorExtensionClient {
         return getAvailableFeatures();
     }
 
-    public void registerCallback() {
+    private void registerCallback() {
         validate();
         try {
-            carVEManager.registerCallback(logCallBack);
+            carVEManager.registerCallback(mainCallBack);
         } catch (android.car.CarNotConnectedException e) {
             Log.e(TAG, "Car not connected in VEC");
         }
     }
 
-    public void registerCallback(CarVendorExtensionManager.CarVendorExtensionCallback mHardwareCallback) {
+    public void registerCallback(VendorExtensionCallBack callBack) {
         validate();
-        try {
-            carVEManager.registerCallback(mHardwareCallback);
-        } catch (android.car.CarNotConnectedException e) {
-            Log.e(TAG, "Car not connected in VEC");
+        ArrayList<VendorExtensionCallBack> foundExisting = vendorCallBacks.get(callBack.propId);
+        if (foundExisting != null) {
+            foundExisting.add(callBack);
+        } else {
+            ArrayList<VendorExtensionCallBack> newListener = new ArrayList<VendorExtensionCallBack>();
+            newListener.add(callBack);
+            vendorCallBacks.put(callBack.propId, newListener);
+        }
+    }
+
+    public void removeCallback(VendorExtensionCallBack callBack) {
+        ArrayList<VendorExtensionCallBack> foundExisting = vendorCallBacks.get(callBack.propId);
+        if (foundExisting != null) {
+            foundExisting.remove(callBack);
         }
     }
 
@@ -403,16 +500,30 @@ public class VendorExtensionClient {
         }
     }
 
-    private final CarVendorExtensionManager.CarVendorExtensionCallback logCallBack =
+    /**
+     * Callback for logging purpose
+     */
+    private final CarVendorExtensionManager.CarVendorExtensionCallback mainCallBack =
             new CarVendorExtensionManager.CarVendorExtensionCallback() {
                 @Override
                 public void onChangeEvent(final CarPropertyValue val) {
-                    Log.d(TAG, "onChangeEvent: " + val.toString());
+                    Log.d(TAG, "mainCallBack onChangeEvent" + val);
+                    ArrayList<VendorExtensionCallBack> listeners = vendorCallBacks.get(val.getPropertyId());
+                    if (listeners != null && !listeners.isEmpty()) {
+                        listeners.stream().filter(callback -> callback.areaId == val.getAreaId())
+                                .forEach(vendorExtensionCallBack -> vendorExtensionCallBack.onChangeEvent(val));
+                    }
                 }
 
+
                 @Override
-                public void onErrorEvent(final int propertyId, final int zone) {
-                    Log.d(TAG, "onChangeEvent: " + propertyId + " : " + zone);
+                public void onErrorEvent(int propertyId, int zone) {
+                    Log.d(TAG, "mainCallBack onErrorEvent" + propertyId);
+                    ArrayList<VendorExtensionCallBack> listeners = vendorCallBacks.get(propertyId);
+                    if (listeners != null && !listeners.isEmpty()) {
+                        listeners.stream().filter(callback -> callback.areaId == zone)
+                                .forEach(vendorExtensionCallBack -> vendorExtensionCallBack.onErrorEvent(propertyId, zone));
+                    }
                 }
             };
 
