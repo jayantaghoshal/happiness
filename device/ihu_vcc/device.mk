@@ -35,10 +35,12 @@ PRODUCT_PACKAGES += \
 ##############################################################
 # SWDL stuff
 ##############################################################
-# This is also set by Aptiv, but kept it here in case we want to override(?)
 MP_PART_NUMBER ?= 00000000DEV
-# We set 1, but before Aptiv set it to 0
-ENABLE_AUTO_FLASHING ?= 1
+ENABLE_AUTO_FLASHING := 1
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.build.mp.part_number=$(MP_PART_NUMBER) \
+    persist.swdl.EnableAutoFlashing=$(ENABLE_AUTO_FLASHING)
 
 ##############################################################
 # System UI

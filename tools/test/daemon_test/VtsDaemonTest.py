@@ -54,9 +54,9 @@ expected_properties = [
     ("netboyd.startup_completed", "1"),
     ("netmand.startup_completed", "1"),
     ("ro.boot.swdl.session", "default"),
+    ("persist.swdl.EnableAutoFlashing", "1"), # service ensuring VIP is on correct/matching baseline is enabled
 ]
 # fdegroot, caused by kraken, fix offline
-#    ("persist.swdl.EnableAutoFlashing", "1"), # service ensuring VIP is on correct/matching baseline is enabled
 #    ("swdl.vip_version_ok", "1"), # and it confirmed that version is ok (it might have been reflashed, but this is final confirmation)
 
 
