@@ -66,7 +66,7 @@
   <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="ee5eccecaa68a75c956f2ba9efae7aeb343852f8" />
 
   <remove-project name="vendor/delphi/android_devices"/>
-  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="2d6b645ae3a0e5a04042322e4bdee8faa9aa3cc4" >
+  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="0255565dd395b2f2e9ac23a9f880b98039215d7b" >
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate"/>
   </project>
 
