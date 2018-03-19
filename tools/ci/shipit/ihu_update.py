@@ -102,7 +102,7 @@ def flash_image(port_mapping: PortMapping,
 
     try:
         if is_vip_app:
-            vip.writeline("sm alw 1")
+            vip.writeline("sm alw 1 s")
             vip.expect_line(".*SysM- Always_On: 1.*", 15)
 
         if is_vip_pbl:
