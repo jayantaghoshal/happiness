@@ -218,7 +218,7 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>IhuDaily_ihu_daily_build_vcc_eng</customProjectName>
+                <customProjectName>ihu_daily_build_vcc_eng</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
@@ -311,7 +311,7 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>IhuDaily_ihu_daily_test-generic</customProjectName>
+                <customProjectName>ihu_daily_test-generic</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 

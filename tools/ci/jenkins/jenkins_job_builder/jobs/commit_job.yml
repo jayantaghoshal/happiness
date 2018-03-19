@@ -132,7 +132,7 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>CommitGate_ihu_gate_build</customProjectName>
+                <customProjectName>ihu_gate_build</customProjectName>
                 <customPrefix>CommitGate</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
@@ -155,7 +155,7 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>CommitGate_ihu_gate_test</customProjectName>
+                <customProjectName>ihu_gate_test</customProjectName>
                 <customPrefix>CommitGate</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
