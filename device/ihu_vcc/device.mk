@@ -96,6 +96,16 @@ PRODUCT_COPY_FILES += \
     vendor/volvocars/device/ihu_vcc/init.recovery.rc:vendor/etc/init/init.recovery.${TARGET_PRODUCT}.rc \
 
 ##############################################################
+# Aptiv init.rc file overrides
+# Be aware that to override files in PRODUCT_COPY_FILES, files
+# need to be added _FIRST_ in the list as the first instance
+# in the target filesystem is copied and all other that could
+# potentially overwrite the same target file are ignored.
+##############################################################
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/init_rc_files/init.delphi.vcc_ihu.doip_router.rc:root/init.delphi.vcc_ihu.doip_router.rc \
+
+##############################################################
 # Hardware permissions on target
 ##############################################################
 PRODUCT_COPY_FILES += \

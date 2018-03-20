@@ -54,7 +54,6 @@ APTIV_KRAKEN_DEVICE_PATH := device/aptiv/kraken
 # Include at the end of BSP's BoardConfig.mk
 PRODUCT_BOARD_CONFIG_APPEND := $(APTIV_KRAKEN_DEVICE_PATH)/BoardConfig-append.mk $(LOCAL_PATH)/BoardConfig.mk
 
-# If we call our device before kraken_product, ?= variables from us get used
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
 $(call inherit-product, $(APTIV_KRAKEN_DEVICE_PATH)/kraken_product.mk)
 
