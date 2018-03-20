@@ -243,7 +243,7 @@ def main():
     subparsers = root_parser.add_subparsers(dest="program")
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
-    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
@@ -340,7 +340,8 @@ def main():
 def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \
-                test_plan.test_plan_nightly
+                test_plan.test_plan_nightly + \
+                test_plan.test_plan_staging
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests
