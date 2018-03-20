@@ -124,11 +124,11 @@ def load_test_results(test, test_result: ResultData):
         test_detail["console_log"] = ""
         test_detail["result"] = False
 
-    if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ:
+    if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
         test_detail["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
         test_detail["top_test_job_name"] = os.environ["TOP_JOB_JOBNAME"]
     else:
-        test_detail["top_test_job_name"] = 0
+        test_detail["top_test_job_name"] = ""
         test_detail["top_test_job_build_number"] = 0
 
     if isinstance(test, VTSTest):
