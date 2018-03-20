@@ -89,7 +89,12 @@ def flash_image(port_mapping: PortMapping,
         return
 
     is_vip_app = serial_mapping.verify_serial_is_vip_app(vip)
-    is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(vip)
+
+    if is_vip_app:
+        is_vip_pbl = False
+    else:
+        is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(vip)
+
     if not (is_vip_app or is_vip_pbl):
         raise RuntimeError(
             """VIP not detected.
