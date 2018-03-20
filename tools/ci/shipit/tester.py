@@ -195,14 +195,16 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
         if ci_reporting:
             try:
                 store_result.clean_old_results()
-            except Exception:
+            except Exception as e:
+                print(e)
                 print("Cleaning old results failed")
                 ci_reporting = False  # It will prohibit running rest of mongodb operation
         test_result = run_test(t)
         if ci_reporting and not isinstance(t, Disabled):
             try:
                 store_result.load_test_results(t, test_result)
-            except Exception:
+            except Exception as e:
+                print(e)
                 print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
         check_result(test_results[-1])
