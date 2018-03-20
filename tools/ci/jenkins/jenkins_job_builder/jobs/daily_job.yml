@@ -195,6 +195,13 @@
           predefined-parameters: |
             GIT_COMMIT=${GIT_COMMIT}
             GIT_URL=${GIT_URL}
+      - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_daily</customProjectName>
+                <customPrefix>IhuDailyMaster</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 - job:
     name: ihu_daily_build_vcc_eng
     defaults: daily_job_defaults

@@ -147,6 +147,14 @@
       - shell:
             !include-raw:
                 - bootstrap_ihu_hourly_daily_common.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_hourly</customProjectName>
+                <customPrefix>IhuHourlyMaster</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 - job:
     name: ihu_hourly_build-eng
     defaults: hourly_job_defaults
