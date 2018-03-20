@@ -15,6 +15,8 @@ domain_auto_trans(netmand, vendor_shell_exec, iptables-vcc)
 # labeled with iptables_data_file
 file_type_auto_trans(netmand, tmpfs, iptables_data_file)
 
+allow netmand localconfig_data_file:file { getattr open read };
+
 net_domain(netmand)
 
 binder_call(netmand, hwservicemanager)
