@@ -74,14 +74,14 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build INativeRemoteVolumeCtrl.hal
+# Build INativeRemoteAudioCtrl.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/INativeRemoteVolumeCtrl.java
+GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/INativeRemoteAudioCtrl.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/INativeRemoteVolumeCtrl.hal
-$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
-$(GEN): $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/INativeRemoteAudioCtrl.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
+$(GEN): $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -90,19 +90,19 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.remotectrl@1.0::INativeRemoteVolumeCtrl
+        vendor.volvocars.hardware.remotectrl@1.0::INativeRemoteAudioCtrl
 
-$(GEN): $(LOCAL_PATH)/INativeRemoteVolumeCtrl.hal
+$(GEN): $(LOCAL_PATH)/INativeRemoteAudioCtrl.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build ISystemRemoteVolumeCtrl.hal
+# Build ISystemRemoteAudioCtrl.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/ISystemRemoteVolumeCtrl.java
+GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/ISystemRemoteAudioCtrl.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -111,9 +111,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.remotectrl@1.0::ISystemRemoteVolumeCtrl
+        vendor.volvocars.hardware.remotectrl@1.0::ISystemRemoteAudioCtrl
 
-$(GEN): $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_JAVA_LIBRARY)
@@ -191,14 +191,14 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build INativeRemoteVolumeCtrl.hal
+# Build INativeRemoteAudioCtrl.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/INativeRemoteVolumeCtrl.java
+GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/INativeRemoteAudioCtrl.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/INativeRemoteVolumeCtrl.hal
-$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
-$(GEN): $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/INativeRemoteAudioCtrl.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
+$(GEN): $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -207,19 +207,19 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.remotectrl@1.0::INativeRemoteVolumeCtrl
+        vendor.volvocars.hardware.remotectrl@1.0::INativeRemoteAudioCtrl
 
-$(GEN): $(LOCAL_PATH)/INativeRemoteVolumeCtrl.hal
+$(GEN): $(LOCAL_PATH)/INativeRemoteAudioCtrl.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build ISystemRemoteVolumeCtrl.hal
+# Build ISystemRemoteAudioCtrl.hal
 #
-GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/ISystemRemoteVolumeCtrl.java
+GEN := $(intermediates)/vendor/volvocars/hardware/remotectrl/V1_0/ISystemRemoteAudioCtrl.java
 $(GEN): $(HIDL)
 $(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 $(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
 $(GEN): $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
@@ -228,9 +228,9 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -Ljava \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.remotectrl@1.0::ISystemRemoteVolumeCtrl
+        vendor.volvocars.hardware.remotectrl@1.0::ISystemRemoteAudioCtrl
 
-$(GEN): $(LOCAL_PATH)/ISystemRemoteVolumeCtrl.hal
+$(GEN): $(LOCAL_PATH)/ISystemRemoteAudioCtrl.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_STATIC_JAVA_LIBRARY)

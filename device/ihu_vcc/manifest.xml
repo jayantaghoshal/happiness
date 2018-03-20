@@ -96,11 +96,11 @@
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>INativeRemoteVolumeCtrl</name>
+            <name>INativeRemoteAudioCtrl</name>
             <instance>default</instance>
         </interface>
         <interface>
-            <name>ISystemRemoteVolumeCtrl</name>
+            <name>ISystemRemoteAudioCtrl</name>
             <instance>default</instance>
         </interface>
     </hal>

@@ -4,8 +4,8 @@ filegroup {
     name: "vendor.volvocars.hardware.remotectrl@1.0_hal",
     srcs: [
         "types.hal",
-        "INativeRemoteVolumeCtrl.hal",
-        "ISystemRemoteVolumeCtrl.hal",
+        "INativeRemoteAudioCtrl.hal",
+        "ISystemRemoteAudioCtrl.hal",
     ],
 }
 
@@ -18,8 +18,8 @@ genrule {
     ],
     out: [
         "vendor/volvocars/hardware/remotectrl/1.0/types.cpp",
-        "vendor/volvocars/hardware/remotectrl/1.0/NativeRemoteVolumeCtrlAll.cpp",
-        "vendor/volvocars/hardware/remotectrl/1.0/SystemRemoteVolumeCtrlAll.cpp",
+        "vendor/volvocars/hardware/remotectrl/1.0/NativeRemoteAudioCtrlAll.cpp",
+        "vendor/volvocars/hardware/remotectrl/1.0/SystemRemoteAudioCtrlAll.cpp",
     ],
 }
 
@@ -33,16 +33,16 @@ genrule {
     out: [
         "vendor/volvocars/hardware/remotectrl/1.0/types.h",
         "vendor/volvocars/hardware/remotectrl/1.0/hwtypes.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/INativeRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/IHwNativeRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BnHwNativeRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BpHwNativeRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BsNativeRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/ISystemRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/IHwSystemRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BnHwSystemRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BpHwSystemRemoteVolumeCtrl.h",
-        "vendor/volvocars/hardware/remotectrl/1.0/BsSystemRemoteVolumeCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/INativeRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/IHwNativeRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BnHwNativeRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BpHwNativeRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BsNativeRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/ISystemRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/IHwSystemRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BnHwSystemRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BpHwSystemRemoteAudioCtrl.h",
+        "vendor/volvocars/hardware/remotectrl/1.0/BsSystemRemoteAudioCtrl.h",
     ],
 }
 
