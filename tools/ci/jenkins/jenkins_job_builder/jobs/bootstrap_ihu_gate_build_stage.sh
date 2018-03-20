@@ -94,6 +94,10 @@ bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/mani
 rm -rf ./* || sleep 30 && rm -rf ./*  # Try again if needed, due to dangling processes.
 bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars"
 
+if ! [ "$ZUUL_PROJECT" == "vendor/volvocars" ]; then
+    bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 ${ZUUL_PROJECT}"
+fi
+
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail
 # if there are unstaged changes. And we want builds to be reproducible so better to reset repos.
