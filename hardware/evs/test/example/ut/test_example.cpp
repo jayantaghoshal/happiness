@@ -10,12 +10,12 @@
 
 namespace {
 
-TEST(EVSExampleTestCase, LogTest) {
+TEST(EvsExampleTestCase, LogTest) {
     ALOGD("EVS Debug Log Test");
     ALOGI("EVS Info Log Test");
 }
 
-TEST(EVSExampleTestCase, NotEqualTest) {
+TEST(EvsExampleTestCase, NotEqualTest) {
     ASSERT_NE(1, 5);
     ASSERT_STRNE("Test", nullptr);
 }

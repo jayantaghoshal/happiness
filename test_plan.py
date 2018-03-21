@@ -38,7 +38,7 @@ test_plan_hourly = test_plan_gate + [
     ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
     VTSTest("vendor/volvocars/hardware/evs/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
-    VTSTest("vendor/volvocars/hardware/evs/test/ut",                                standard_caps), #Mikael Olsson
+    VTSTest("vendor/volvocars/hardware/evs/test/example/ut",                        standard_caps), #VtsEvsExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
     VTSTest("vendor/volvocars/hardware/netman/test/ct/apix_obd_traffic_split",      standard_caps), #Samuel Idowu

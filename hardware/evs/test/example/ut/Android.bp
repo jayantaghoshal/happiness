@@ -6,7 +6,7 @@
 cc_test {
 
     // A unique name for this module
-    name: "VtsEVSExampleTestCase",
+    name: "VtsEvsExampleTest",
 
     // Inherit default settings and flags. See vendor/volvocars/defaults/Android.bp
     defaults: [
@@ -25,8 +25,9 @@ cc_test {
         "liblog",
     ],
 
-    // Build with the GTest Library
-    gtest: true,
+    static_libs: [
+        "libgtest",
+    ],
 
     // Add this module to the VTS test suite
     test_suites: [
