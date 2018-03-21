@@ -40,7 +40,6 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/evs/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/evs/test/ut",                                standard_caps), #Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
-    TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
     VTSTest("vendor/volvocars/hardware/netman/test/ct/apix_obd_traffic_split",      standard_caps), #Samuel Idowu
     VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                        standard_caps), #Uguudei
@@ -50,9 +49,6 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications",                         standard_caps), #Uguudei
-    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
-    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
-    TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps), #Patrik Ingmarsson
 ]
 
@@ -61,10 +57,13 @@ test_plan_nightly = test_plan_hourly + [
 ]
 
 test_plan_staging = [
+    TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
+    TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
+    TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
     VTSTest("vendor/volvocars/hardware/profiles/test/ct",                           standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                           standard_caps), #Erik Elmeke
@@ -76,14 +75,15 @@ test_plan_staging = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting",       standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
-    TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
-    TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
-    TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
     # a reboot.
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
+    TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
 ]
