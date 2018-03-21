@@ -11,7 +11,7 @@ import logging.config
 import json
 import shutil
 
-from shipit.serial_mapping import open_serials, PortMapping, VipSerial, MpSerial, IhuSerials
+from shipit.serial_mapping import open_serials, swap_serials, PortMapping, VipSerial, MpSerial, IhuSerials
 from shipit import serial_mapping
 from shipit.process_tools import check_output_logged
 
@@ -58,7 +58,6 @@ def boot_mp_to_android(vip_serial: VipSerial) -> None:
     time.sleep(1)
     mp_reset_high(vip_serial)
 
-
 def flash_image(port_mapping: PortMapping,
                 android_product_out: str,
                 update_mp: bool,
@@ -83,29 +82,29 @@ def flash_image(port_mapping: PortMapping,
 
         return
 
-    is_vip_app = serial_mapping.verify_serial_is_vip_app(vip)
+    vip_type = vip.type()
 
-    if is_vip_app:
-        is_vip_pbl = False
-    else:
-        is_vip_pbl = serial_mapping.verify_serial_is_vip_pbl(vip)
-
-    if not (is_vip_app or is_vip_pbl):
-        raise RuntimeError(
-            """VIP not detected.
-            Troubleshooting:
-             1. Power on?
-             2. Serial connected?
-             3. Swap MP/VIP serial with --swap_tty argument?
-             4. Power cycle VIP
-             5. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.""")
+    if vip_type is None:
+        logger.info("VIP not detected. Trying to switch ttys")
+        ihu_serials = swap_serials(port_mapping, ihu_serials)
+        vip, mp = ihu_serials.vip, ihu_serials.mp
+        vip_type = vip.type()
+        if vip_type is None:
+            raise RuntimeError(
+                """VIP not detected.
+                Troubleshooting:
+                1. Power on?
+                2. Serial connected?
+                3. Power cycle VIP
+                4. Power off VIP and unplug USB, wait 2 minutes to fully discharge internal capacitor then power on again.
+                5. Make sure no gremlins are chewing on the serial cable.""")
 
     try:
-        if is_vip_app:
+        if vip_type == VipSerial.VIP_APP:
             vip.writeline("sm alw 1 s")
             vip.expect_line(".*SysM- Always_On: 1.*", 15)
 
-        if is_vip_pbl:
+        if vip_type == VipSerial.VIP_PBL:
             vip.writeline("sm st_off")
             vip.expect_line(".*Disabling startup timer.*", 15)
 
@@ -199,7 +198,8 @@ def flash_image(port_mapping: PortMapping,
                 logger.warning("As usually swdl e failed due to power moding, go for emergency one", exc_info=True)
                 vip.writeline("swdl er")  # brutal swdl e
 
-            serial_mapping.verify_serial_is_vip_pbl(vip, timeout_sec=15)
+            if not vip._is_vip_pbl(timeout_sec=15):
+                raise RuntimeError("No VIP PBL detected")
             time.sleep(1)
 
             vip.writeline("sm st_off")
@@ -401,11 +401,6 @@ def main() -> None:
                         help="TTY device connected to MP console UART",
                         default="/dev/ttyUSB1")
 
-    parser.add_argument("--swap-tty", '--swap_tty',
-                        required=False,
-                        action="store_true",
-                        help="Swap VIP and MP serial port")
-
     parser.add_argument("--disable-verity",
                         required=False,
                         action="store_true",
@@ -446,10 +441,7 @@ def main() -> None:
     logger.info("Using fastboot from %r", shutil.which('fastboot'))
     logger.info("Using adb from %r", shutil.which('adb'))
 
-    if parsed_args.swap_tty:
-        port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
-    else:
-        port_mapping = PortMapping(parsed_args.vip_port, parsed_args.mp_port)
+    port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
 
     flash_image(port_mapping=port_mapping,
                 android_product_out=android_product_out,

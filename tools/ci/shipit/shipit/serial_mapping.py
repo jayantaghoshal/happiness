@@ -3,7 +3,7 @@
 
 import re
 import time
-from typing import NamedTuple
+from typing import NamedTuple, Any
 from .recording_serial import RecordingSerial
 
 
@@ -45,7 +45,41 @@ class Serial(RecordingSerial):
 
 
 class VipSerial(Serial):
-    pass
+    VIP_APP = 0
+    VIP_PBL = 1
+
+    def type(self) -> Any:
+        if self._is_vip_app():
+            return VipSerial.VIP_APP
+        if self._is_vip_pbl():
+            return VipSerial.VIP_PBL
+        return None
+
+    def _is_vip_app(self, timeout_sec=5) -> bool:
+        self.writeline("version")
+        stop_time = time.time() + timeout_sec
+        while time.time() < stop_time:
+            line = self.readline(timeout_sec)
+            if not line:
+                continue
+            if re.match(r"\s*Project_ID.*VCC_IHU.*VIP", line) is not None:
+                return True
+            if re.match(r".*/sh: version: not found", line) is not None:
+                return False
+        return False
+
+    def _is_vip_pbl(self, timeout_sec=5) -> bool:
+        self.writeline("version")
+        stop_time = time.time() + timeout_sec
+        while time.time() < stop_time:
+            line = self.readline(timeout_sec)
+            if not line:
+                continue
+            if re.match(r".*PBL Version: PBL/.*", line) is not None:
+                return True
+            if re.match(r".*/sh: version: not found", line) is not None:
+                return False
+        return False
 
 
 class MpSerial(Serial):
@@ -56,35 +90,12 @@ PortMapping = NamedTuple("PortMapping", [("vip_tty_device", str), ("mp_tty_devic
 IhuSerials = NamedTuple("IhuSerials", [("vip", VipSerial), ("mp", MpSerial)])
 
 
-def verify_serial_is_vip_app(s: RecordingSerial, timeout_sec=5):
-    s.writeline("version")
-    stop_time = time.time() + timeout_sec
-    while time.time() < stop_time:
-        line = s.readline(timeout_sec)
-        if not line:
-            continue
-        if re.match(r"\s*Project_ID.*VCC_IHU.*VIP", line) is not None:
-            return True
-        if re.match(r".*/sh: version: not found", line) is not None:
-            return False
-    return False
-
-
-def verify_serial_is_vip_pbl(s: RecordingSerial, timeout_sec=5):
-    s.writeline("version")
-    stop_time = time.time() + timeout_sec
-    while time.time() < stop_time:
-        line = s.readline(timeout_sec)
-        if not line:
-            continue
-        if re.match(r".*PBL Version: PBL/.*", line) is not None:
-            return True
-        if re.match(r".*/sh: version: not found", line) is not None:
-            return False
-    return False
-
-
 def open_serials(ports: PortMapping) -> IhuSerials:
     vip = VipSerial(ports.vip_tty_device, 115200, timeout_sec=1, log_context_name="VIP")
     mp = MpSerial(ports.mp_tty_device, 115200, timeout_sec=1, log_context_name="_MP")
     return IhuSerials(vip, mp)
+
+def swap_serials(ports: PortMapping, serials: IhuSerials) -> IhuSerials:
+    serials.vip.close()
+    serials.mp.close()
+    return open_serials(PortMapping(ports.mp_tty_device, ports.vip_tty_device))
