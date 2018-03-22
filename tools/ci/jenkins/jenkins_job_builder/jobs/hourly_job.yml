@@ -117,36 +117,7 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}                
-      - copyartifact:
-          project: ihu_hourly_test-generic
-          target: ihu_hourly_test-generic_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
 
-      - copyartifact:
-          project: ihu_hourly_test-flexray
-          target: ihu_hourly_test-flexray_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_hourly_test-audio
-          target: ihu_hourly_test-audio_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-
-      - copyartifact:
-          project: ihu_hourly_test-apix
-          target: ihu_hourly_test-apix_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true  
-
-      - shell:
-            !include-raw:
-                - bootstrap_ihu_hourly_daily_common.sh
     publishers:
         - raw:
             xml: |
@@ -219,12 +190,7 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
+    publishers:            
         - raw:
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
@@ -262,12 +228,6 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_hourly_test-audio
@@ -298,12 +258,6 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_hourly_test-apix
@@ -334,9 +288,3 @@
             !include-raw:
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_hourly_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
