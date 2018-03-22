@@ -6,7 +6,7 @@
 cc_defaults {
     name: "libdbg_defaults",
 
-    defaults: ["volvocars_cc_defaults"],
+    defaults: ["volvocars_cc_defaults_hq"],
 
     export_include_dirs: ["include"],
 
@@ -19,6 +19,10 @@ cc_defaults {
     shared_libs: [
         "libcutils",
         "liblog",
+    ],
+
+    tidy_checks: [
+        "-cert-dcl50-cpp",
     ],
 
     srcs: [

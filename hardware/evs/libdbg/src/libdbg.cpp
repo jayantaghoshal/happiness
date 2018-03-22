@@ -28,7 +28,7 @@ bool pdgb(const char* log_tag,
     char property_log_level[PROPERTY_VALUE_MAX];
     int log_level = 0;
 
-    property_get(PROPERTY_LOG_LEVEL, property_log_level, NULL);
+    property_get(PROPERTY_LOG_LEVEL, property_log_level, nullptr);
 
     for (int i = 0; i < length; i++) {
         if (strcmp(property_log_level, kPossibleLogLevels[i]) == 0) {

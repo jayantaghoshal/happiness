@@ -20,7 +20,7 @@ TEST(libdbgTest, PropertyEqualTest) {
 
     char property_value_get[strlen(kPropertyValueSet)];
 
-    property_get(PROPERTY_LOGLEVEL, property_value_get, NULL);
+    property_get(PROPERTY_LOGLEVEL, property_value_get, nullptr);
 
     ASSERT_TRUE(strcmp(kPropertyValueSet, property_value_get) == 0);
 }
