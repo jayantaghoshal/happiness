@@ -62,8 +62,8 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps | {cp.flexray}), #Krzysztof Wesolowski
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
@@ -86,4 +86,6 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
+
 ]

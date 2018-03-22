@@ -1,9 +1,9 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
-cc_binary {
+cc_test {
     name: "climate_firstrow_test",
     defaults: [
         "climate_defaults",
@@ -19,6 +19,7 @@ cc_binary {
         "-DGTEST_OS_LINUX_ANDROID=1",
         "-g",
     ],
+
     shared_libs: [
         "libhidlbase",
         "libhidltransport",
@@ -48,4 +49,6 @@ cc_binary {
     local_include_dirs: [
         "mock",
     ],
+    test_suites: ["vts"],
+
 }

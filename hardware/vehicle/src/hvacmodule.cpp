@@ -179,7 +179,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_));
+        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_), toInt(VehicleAreaZone::ROW_1));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
