@@ -82,7 +82,8 @@ PRODUCT_PACKAGES += \
     librs_jni \
     VolvoLauncher \
     VccLauncher \
-    CarLatinIME
+    CarLatinIME \
+    SystemDialog
 
 ##############################################################
 # Internal Apps UI
