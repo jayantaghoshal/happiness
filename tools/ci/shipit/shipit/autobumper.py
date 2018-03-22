@@ -89,6 +89,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               repository: str,
                                               stage_changes: bool = False,
                                               using_zuul: bool = True):
+    print("Arguments for copy_and_apply...: stage_changes= %s using_zuul= %s" % (stage_changes, using_zuul))
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
 
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
@@ -98,10 +99,13 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     for manifest_template_file in vcc_manifest_files:
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
         manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
+        manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
+        manifest_repo.run_git(["diff"])
         if stage_changes:
             manifest_repo.add([dest])
 
     if not manifest_repo.any_changes(staged=stage_changes):
+        manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
         raise RuntimeError('No manifest changes found. Failed to clone/update repo(s)?')
 
 def get_changed_projects_from_manifest(manifest_repo: git.Repo) -> Dict[str, Dict[str, List[Dict[str, str]]]]:
