@@ -48,7 +48,9 @@ import android.hardware.automotive.vehicle.V2_0.StatusCode;
 import android.hardware.automotive.vehicle.V2_0.SubscribeOptions;
 import android.hardware.automotive.vehicle.V2_0.SubscribeFlags;
 
-public class MainApplication extends Application implements LocationListener {
+import android.os.HwBinder;
+
+public class MainApplication extends Application implements LocationListener, HwBinder.DeathRecipient {
     private BroadcastReceiver receiver;
     private SettingsObserver mSettingsObserver;
     private Handler mHandler;
@@ -200,6 +202,7 @@ public class MainApplication extends Application implements LocationListener {
         // Vehicle HAL properties
         try {
             mVehicle = IVehicle.getService();
+            mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
             mInternalCallback = new VehicleCallback();
             ArrayList<SubscribeOptions> options = new ArrayList<>();
             SubscribeOptions opts = new SubscribeOptions();
@@ -230,6 +233,12 @@ public class MainApplication extends Application implements LocationListener {
         };
 
         this.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void serviceDied(long cookie) {
+        Log.i(TimeUpdateLog.SERVICE_TAG, "Lost Connection to VHAL, re-spawning myself");
+        System.exit(0);
     }
 
     /**
