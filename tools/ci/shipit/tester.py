@@ -24,7 +24,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Di
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
-from handle_result import store_result
+from handle_result import store_result, test_visualisation
 
 sys.path.append(vcc_root)
 import test_plan    # NOQA
@@ -191,8 +191,23 @@ def print_test_summary(test_results: List[NamedTestResult]):
 
 def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
     test_results = []  # type: List[NamedTestResult]
+    if ci_reporting:# initialise visualizing Testcases in VCC CI
+        try:
+            if "UPSTREAM_JOB_GIT_REVISION" in os.environ and os.environ["UPSTREAM_JOB_GIT_REVISION"]:
+                GIT_COMMIT = os.environ["UPSTREAM_JOB_GIT_REVISION"]
+            elif "ZUUL_COMMIT" in os.environ and os.environ["ZUUL_COMMIT"]:
+                GIT_COMMIT = os.environ["ZUUL_COMMIT"]
+            vccciproxy = test_visualisation.VCCCIProxy(GIT_COMMIT)
+        except Exception as e:
+                print(e)
+                print("Initialization of VCC CI failed")
     for t in tests_to_run:
         if ci_reporting:
+            try:
+                vccciproxy.testcase_started(store_result.get_module_name(t))
+            except Exception as e:
+                print(e)
+                print("Testcase started message to VCC CI failed")
             try:
                 store_result.clean_old_results()
             except Exception as e:
@@ -201,6 +216,12 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
                 ci_reporting = False  # It will prohibit running rest of mongodb operation
         test_result = run_test(t)
         if ci_reporting and not isinstance(t, Disabled):
+            try:
+                vccciproxy.testcase_finished(store_result.get_module_name(
+                    t), store_result.get_result(test_result))
+            except Exception as e:
+                print(e)
+                print("Testcase finished message to VCC CI failed")
             try:
                 store_result.load_test_results(t, test_result)
             except Exception as e:
