@@ -20,7 +20,7 @@ class CommentedTreeBuilder(ET.TreeBuilder):
         self.end(ET.Comment)
 
 def update_file(project_root: str, template_path: str, output_path: str, repository: str, using_zuul: bool):
-    print("Arguments in update_file: " "project_root: "+ project_root + "template_path: " + template_path + "output_path: " + output_path + "repository: " + repository)
+    print("Arguments in update_file: " "project_root: "+ project_root + " template_path: " + template_path + " output_path: " + output_path + " repository: " + repository)
     parser = ET.XMLParser(target=CommentedTreeBuilder())
     tree = ET.parse(template_path, parser)
     root = tree.getroot()

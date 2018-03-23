@@ -98,12 +98,13 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
         print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
 
     for manifest_file in vcc_manifest_files:
-        print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
+        print("Manifests in vcc_manifest_files: " + manifest_file)
 
     for f in old_manifest_files_in_manifest_repo:
         os.unlink(f)
 
-    print("Number of manifest files: " + str(len(vcc_manifest_files)))
+    print("Number of vcc_manifest_files files: " + str(len(vcc_manifest_files)))
+    print("Number of old_manifest_files_in_manifest_repo files: " + str(len(old_manifest_files_in_manifest_repo)))
 
     for manifest_template_file in vcc_manifest_files:
         print("Checking this manifest file: " + str(manifest_template_file))
