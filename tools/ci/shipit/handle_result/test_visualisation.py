@@ -26,7 +26,7 @@ class VCCCIProxy(object):
         self.testsuite_name = os.environ["JOB_NAME"]
         self.test_job_build_number = int(os.environ["BUILD_NUMBER"])
         self.chain_id = redis_con.get(
-            "icup_android.gerrit.commit_id." + GIT_COMMIT + ".change_id")
+            "icup_android.gerrit.commit_id." + GIT_COMMIT + ".change_id").decode("utf-8")
         self.url_template = "https://icup_android.jenkins.cm.volvocars.biz/job/"
         self.target = "VCC-CI"
 

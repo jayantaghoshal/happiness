@@ -195,8 +195,9 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
         try:
             if "UPSTREAM_JOB_GIT_REVISION" in os.environ and os.environ["UPSTREAM_JOB_GIT_REVISION"]:
                 GIT_COMMIT = os.environ["UPSTREAM_JOB_GIT_REVISION"]
-            elif "ZUUL_COMMIT" in os.environ and os.environ["ZUUL_COMMIT"]:
-                GIT_COMMIT = os.environ["ZUUL_COMMIT"]
+            elif "ZUUL_CHANGE" in os.environ and os.environ["ZUUL_CHANGE"]:
+                GIT_COMMIT = test_visualisation.redis_con.get(
+                    "icup_android.gerrit.change_number." + os.environ["ZUUL_CHANGE"] + ".change_id").decode("utf-8")
             vccciproxy = test_visualisation.VCCCIProxy(GIT_COMMIT)
         except Exception as e:
                 print(e)
@@ -282,7 +283,7 @@ def main():
                                  "dont run generic test cases")
     run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     run_parser.add_argument(
-        '--ci_reporting', default='false', choices=['true', 'false'])
+        '--ci_reporting', action='store_true')
     build_parser.add_argument('--test_component', default=None,
                             help="Run without a plan and test a specified directory only")
     run_parser.add_argument('--test_component', default=None,
