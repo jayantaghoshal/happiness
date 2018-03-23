@@ -8,7 +8,7 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call all-java-files-under,src)
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
-ANDROID_PRODUCT_OUT:= $(TARGET_OUT_DATA_APPS)
+PRODUCT_OUT:= $(TARGET_OUT_DATA_APPS)
 
 LOCAL_STATIC_JAVA_LIBRARIES := ctstestrunner \
                                junit \
@@ -37,7 +37,7 @@ LOCAL_CPPFLAGS += -fexceptions
 LOCAL_CPPFLAGS += -Wno-macro-redefined
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
-ANDROID_PRODUCT_OUT:= $(TARGET_OUT_DATA_APPS)
+PRODUCT_OUT:= $(TARGET_OUT_DATA_APPS)
 
 include $(BUILD_EXECUTABLE)
 include $(call all-makefiles-under,$(LOCAL_PATH))
