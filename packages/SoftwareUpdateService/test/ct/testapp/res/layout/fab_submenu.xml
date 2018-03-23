@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_autorenew_white_36dp"
             app:backgroundTint="@color/fabLight"
-            app:fabSize="mini" />
+            />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/getCommissioned"
@@ -90,6 +90,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_autorenew_white_36dp"
             app:backgroundTint="@color/fabLight"
-            app:fabSize="mini" />
+            />
     </LinearLayout>
 </FrameLayout>
