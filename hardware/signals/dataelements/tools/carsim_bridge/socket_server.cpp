@@ -1,8 +1,10 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include "socket_server.h"
+#include <cerrno>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,8 +12,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <vector>
-
-#include "socket_server.h"
 #define LOG_TAG "CarSim_Bridge"
 
 namespace CarSim {
