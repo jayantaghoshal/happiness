@@ -15,7 +15,7 @@ redis_con = redis.Redis("gotsvl1416.got.volvocars.net")
 
 class VCCCIProxy(object):
 
-    def __init__(self, GIT_COMMIT: str) -> None:
+    def __init__(self, change_id: str) -> None:
         if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
             self.top_test_job_build_number = int(os.environ["TOP_JOB_NUMBER"])
             self.top_test_job_name = os.environ["TOP_JOB_JOBNAME"]
@@ -25,8 +25,8 @@ class VCCCIProxy(object):
 
         self.testsuite_name = os.environ["JOB_NAME"]
         self.test_job_build_number = int(os.environ["BUILD_NUMBER"])
-        self.chain_id = redis_con.get(
-            "icup_android.gerrit.commit_id." + GIT_COMMIT + ".change_id").decode("utf-8")
+
+        self.chain_id = change_id
         self.url_template = "https://icup_android.jenkins.cm.volvocars.biz/job/"
         self.target = "VCC-CI"
 
@@ -70,7 +70,7 @@ class VCCCIProxy(object):
         url = VCC_CI_API_URL + "/TestcaseStarted"
         logging.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
-        r = requests.post(url, data, headers=self.headers())
+        r = requests.post(url, json=json.dumps(data), headers=self.headers())
         logging.debug(str(r.status_code))
         logging.debug(r.text)
 
@@ -90,6 +90,6 @@ class VCCCIProxy(object):
         url = VCC_CI_API_URL + "/TestcaseFinished"
         logging.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
-        r = requests.post(url, data, headers=self.headers())
+        r = requests.post(url, json=json.dumps(data), headers=self.headers())
         logging.debug(str(r.status_code))
         logging.debug(r.text)

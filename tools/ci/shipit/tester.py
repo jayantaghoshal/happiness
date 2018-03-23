@@ -14,6 +14,7 @@ import sys
 import traceback
 import multiprocessing
 import xml.etree.ElementTree as ET
+
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
 
@@ -194,12 +195,16 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
     if ci_reporting:# initialise visualizing Testcases in VCC CI
         try:
             if "UPSTREAM_JOB_GIT_REVISION" in os.environ and os.environ["UPSTREAM_JOB_GIT_REVISION"]:
-                GIT_COMMIT = os.environ["UPSTREAM_JOB_GIT_REVISION"]
+                change_id = test_visualisation.redis_con.get(
+                    "icup_android.gerrit.commit_id." + os.environ["UPSTREAM_JOB_GIT_REVISION"] + ".change_id")
             elif "ZUUL_CHANGE" in os.environ and os.environ["ZUUL_CHANGE"]:
-                GIT_COMMIT = test_visualisation.redis_con.get(
-                    "icup_android.gerrit.change_number." + os.environ["ZUUL_CHANGE"] + ".change_id").decode("utf-8")
-            vccciproxy = test_visualisation.VCCCIProxy(GIT_COMMIT)
+                print("ZUUL_CHANGE:" + os.environ["ZUUL_CHANGE"])
+                change_id = ((test_visualisation.redis_con.get(
+                    "icup_android.gerrit.change_number." + os.environ["ZUUL_CHANGE"] + ".change_id")))
+            vccciproxy = test_visualisation.VCCCIProxy(
+                change_id.decode("utf-8"))
         except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Initialization of VCC CI failed")
     for t in tests_to_run:
@@ -207,11 +212,13 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
             try:
                 vccciproxy.testcase_started(store_result.get_module_name(t))
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Testcase started message to VCC CI failed")
             try:
                 store_result.clean_old_results()
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Cleaning old results failed")
                 ci_reporting = False  # It will prohibit running rest of mongodb operation
@@ -221,11 +228,13 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
                 vccciproxy.testcase_finished(store_result.get_module_name(
                     t), store_result.get_result(test_result))
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Testcase finished message to VCC CI failed")
             try:
                 store_result.load_test_results(t, test_result)
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
