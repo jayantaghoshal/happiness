@@ -50,7 +50,10 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 # to use the device name.
 MY_DEVICE_NAME=ihu_abl_car
 APTIV_KRAKEN_DEVICE_PATH := device/aptiv/kraken
+include $(APTIV_KRAKEN_DEVICE_PATH)/path_config.mk
 
+# Needed before BoardConfig.mk
+APTIV_PATH_DEVICE := device/delphi/volvoihu
 # Include at the end of BSP's BoardConfig.mk
 PRODUCT_BOARD_CONFIG_APPEND := $(APTIV_KRAKEN_DEVICE_PATH)/BoardConfig-append.mk $(LOCAL_PATH)/BoardConfig.mk
 
