@@ -37,7 +37,7 @@ def get_formatted_file_contents(path: str):
     if extension in clang_extensions:
         return subprocess.check_output([CLANG_FORMAT_BINARY, path]).decode()
     if extension in bp_extensions:
-        return subprocess.check_output([BP_FORMAT_BINARY, path]).decode()
+        return subprocess.check_output([BP_FORMAT_BINARY, "-o", path]).decode()
     if extension in whitespace_extensions:
         return sanitize_whitespace(load_source_code(path))
 
