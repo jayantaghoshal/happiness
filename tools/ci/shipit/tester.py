@@ -280,7 +280,7 @@ def main():
                                  "Ignore other tests even though your rig has capabilities enough to run them. "
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
-    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     run_parser.add_argument(
         '--ci_reporting', default='false', choices=['true', 'false'])
     build_parser.add_argument('--test_component', default=None,
