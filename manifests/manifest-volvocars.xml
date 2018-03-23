@@ -33,7 +33,7 @@
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="a3d143ba30ecb33339cd2675841fccb0fe3f5ee8" />
 
   <remove-project name="aosp/platform/external/iproute2" />
-  <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="c6b4e863bc8e6ccd53a676e7219a713fce30330b" />
+  <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
 
   <remove-project name="aosp/platform/packages/services/Car" />
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="1c15e7af3a7a63f11145b622dbb78b45a1f62de9" />
