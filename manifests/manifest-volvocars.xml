@@ -53,7 +53,7 @@
   <remove-project name="vendor/delphi/android_patches" />
   <remove-project name="bsp/external/memtester"/>
 
-  <project name="bsp/external/libncurses" path="vendor/aptiv/external/libncurses" revision="067ae32f7e4b45bb1cb7ba37d0ffe618905e049f" />
+  <project name="bsp/external/libncurses" path="vendor/aptiv/external/libncurses" revision="26b32ea6a29de8e16fcc229d942eec3b33414454" />
   <project name="bsp/external/vim" path="vendor/aptiv/external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40" />
 
   <!-- SWDL is often preintegrated here, please do not remove, only comment out when integrating full baselines (no patches in this repo) -->
