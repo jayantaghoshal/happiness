@@ -17,16 +17,6 @@
 
 using namespace SoundNotifications;
 
-Return<void> AudioManagerMock::subscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-    callback_ = callback;
-    return Void();
-}
-
-::android::hardware::Return<void> AudioManagerMock::unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-    (void)callback.get();
-    return android::hardware::Void();
-}
-
 class SoundWrapperUT : public ::testing::Test {
   public:
     void SetUp() override {
@@ -87,7 +77,8 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
     // Idle->Starting->Playing->Stopping->Idle
 
-    EXPECT_CALL(*am_service,
+    ALOGI("Starting %s", test_info_->name());
+    /*EXPECT_CALL(*am_service,
                 playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
                           static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
                           testing::_))
@@ -96,9 +87,10 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
 
     auto soundToPlay =
             SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight);
+
     // DO the call to soundwrapper
-    SoundWrapper::play(soundToPlay);
-    /*
+    //SoundWrapper::play(soundToPlay);
+
     auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
     auto result      = SoundWrapper::play(soundToPlay);
     EXPECT_EQ(SoundWrapper::Result::OK, result);
@@ -122,7 +114,8 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
 
     // Advance state with onPlayStopped to take us back to Idle
     listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));*/
+    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+ */
 }
 /*
 TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates)

@@ -20,8 +20,6 @@ class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManage
 
     MOCK_METHOD3(playSound, Return<void>(int32_t soundType, int32_t soundComp, playSound_cb _aidl_return));
     MOCK_METHOD1(stopSound, Return<AMStatus>(int64_t connectionId));
-    // MOCK_METHOD1(subscribe, Return<void>(const ::android::sp<IAudioManagerCallback>& callback));
-    // MOCK_METHOD1(unsubscribe, Return<void>(const ::android::sp<IAudioManagerCallback>& callback));
     MOCK_METHOD2(setVolume, Return<void>(int32_t sinkId, int32_t volume));
     MOCK_METHOD1(setBass, Return<AMStatus>(int32_t step));
     MOCK_METHOD1(setTreble, Return<AMStatus>(int32_t step));
@@ -43,8 +41,15 @@ class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManage
     MOCK_METHOD3(defaultVolumeStep,
                  android::hardware::Return<void>(int32_t soundType, int32_t soundComp, defaultVolumeStep_cb _hidl_cb));
 
-    Return<void> subscribe(const ::android::sp<IAudioManagerCallback>& callback);
-    Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback);
-
     ::android::sp<IAudioManagerCallback> callback_;
+
+    Return<void> subscribe(const ::android::sp<IAudioManagerCallback>& callback) {
+        callback_ = callback;
+        return Void();
+    }
+
+    ::android::hardware::Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
+        (void)callback.get();
+        return android::hardware::Void();
+    }
 };
