@@ -93,10 +93,20 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
 
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
+
+    for manifest_file in old_manifest_files_in_manifest_repo:
+        print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
+
+    for manifest_file in vcc_manifest_files:
+        print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
+
     for f in old_manifest_files_in_manifest_repo:
         os.unlink(f)
 
+    print("Number of manifest files: " + str(len(vcc_manifest_files)))
+
     for manifest_template_file in vcc_manifest_files:
+        print("Checking this manifest file: " + str(manifest_template_file))
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
         manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
         manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
