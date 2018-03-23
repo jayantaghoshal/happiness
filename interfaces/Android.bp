@@ -4,4 +4,5 @@ subdirs = [
 
 hidl_package_root {
     name: "vendor.volvocars.hardware",
+    path: "vendor/volvocars/interfaces",
 }
