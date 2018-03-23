@@ -29,7 +29,7 @@
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049"/>
 
   <!-- vSomeIP-2.10.10 -->
-  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="59783680ea17d8a76cac0f2b90dd67d0ea825506"/>
+  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="08e66c14738fe09c0d0b6d3e68a523922cc26282"/>
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/frameworks/base"/>
