@@ -5,6 +5,7 @@
 
 #include "iptables_config.h"
 
+#include <cerrno>
 #include <memory>
 #include <stdexcept>
 #include <string>
