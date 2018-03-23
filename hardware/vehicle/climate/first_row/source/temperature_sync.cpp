@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -129,6 +129,7 @@ void TemperatureSyncLogic::updateState() {
 }
 
 CommonTypesGen::ReturnCode TemperatureSyncLogic::request(FirstRowGen::TemperatureSyncRequest temperatureSyncRequest) {
+    log_debug() << LOG_PREFIX << "Request temp sync to " << temperatureSync_.get();
     if (carConfigOk_) {
         if (isActive()) {
             if (temperatureSyncRequest == FirstRowGen::TemperatureSyncRequest::ON) {
@@ -147,8 +148,6 @@ CommonTypesGen::ReturnCode TemperatureSyncLogic::request(FirstRowGen::Temperatur
         temperatureSync_.set(FirstRowGen::TemperatureSyncState::NOT_PRESENT);
         return CommonTypesGen::ReturnCode::FUNCTION_NOT_PRESENT;
     }
-
-    log_debug() << LOG_PREFIX << "Request temp sync to " << temperatureSync_.get();
 }
 
 bool TemperatureSyncLogic::isActive() {
