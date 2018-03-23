@@ -78,6 +78,8 @@ test_plan_staging = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting",       standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
+    VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
+
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger

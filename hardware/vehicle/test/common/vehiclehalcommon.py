@@ -7,6 +7,7 @@ import logging
 import time
 import sys
 import os
+import typing
 
 from vts.runners.host import asserts
 from vts.runners.host import base_test
@@ -18,15 +19,35 @@ from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 from com.dtmilano.android.viewclient import ViewClient, ViewNotFoundException
 
-
 from generated.pyDataElements import \
-    FrSignalInterface
+    FrSignalInterface, \
+    BaseEnumSender, \
+    BaseBoolSender, \
+    BaseFloatSender, \
+    BaseIntegerSender
+
+PydataElementsSenderType = typing.Union[BaseEnumSender, BaseBoolSender, BaseFloatSender, BaseIntegerSender]
 
 property_list = [
     ('CONNECTED_SAFETY_ON', 557842436),
     ('DAI_SETTING', 557842437),
     ('CURVE_SPEED_ADAPTION_ON', 555745286),
 ]
+
+def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec):
+    # type: (FrSignalInterface, PydataElementsSenderType, int, int) -> None
+
+    if fr_interface.connected:
+        end = time.time() + timeout_sec
+        read_value = fdx_signal.get()
+        while time.time() < end:
+            read_value = fdx_signal.get()
+            if read_value == expected_value:
+                break
+            time.sleep(0.2)
+        asserts.assertEqual(read_value, expected_value,
+                            "Expected signal %s to be %d within %d sec, got %d)" %
+                            (fdx_signal.fdx_name, expected_value, timeout_sec, fdx_signal.get()))
 
 class VehicleHalCommon():
 
@@ -233,8 +254,8 @@ class VehicleHalCommon():
             return val['stringValue']
         elif self.vtypes.VehiclePropertyType.INT32 == dataType or \
                 self.vtypes.VehiclePropertyType.BOOLEAN == dataType:
-            asserts.assertEqual(1, len(val["int32Values"]))
-            return val["int32Values"][0]
+                    asserts.assertEqual(1, len(val["int32Values"]))
+                    return val["int32Values"][0]
         elif self.vtypes.VehiclePropertyType.INT64 == dataType:
             asserts.assertEqual(1, len(val["int64Values"]))
             return val["int64Values"][0]
