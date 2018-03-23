@@ -49,6 +49,9 @@
     <linkfile dest="build/tools" src="tools"/>
   </project>
 
+  <remove-project name="aosp/platform/external/iptables" />
+  <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
+
   <!-- Aptiv Overrides -->
   <remove-project name="vendor/delphi/android_patches" />
   <remove-project name="bsp/external/memtester"/>
