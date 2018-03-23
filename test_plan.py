@@ -1,7 +1,7 @@
 # Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
+from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
 
 #
 # Rules to simplify merge errors as many people will be editing this file:

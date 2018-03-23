@@ -21,7 +21,7 @@ from typing import List, Set, Tuple
 import shipit.test_runner.test_types
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner import tradefed_test_runner
-from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
+from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
@@ -48,9 +48,12 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 
 def run_test(test: IhuBaseTest) -> ResultData:
     try:
-        if isinstance(test, VTSTest):
+        if isinstance(test, AndroidVTS):
             print(test)
-            return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+            return vts_test_run.vts_tradefed_run_module(test.module_name)
+        elif isinstance(test, VTSTest):
+            print(test)
+            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir))
         elif isinstance(test, TradefedTest):
             print(test)
             return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))

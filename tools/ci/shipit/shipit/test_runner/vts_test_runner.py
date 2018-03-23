@@ -27,16 +27,21 @@ from subprocess import check_output
 # into a python module import by replacing / with . To avoid cluttering the whole repo with
 # __init__.py files we set the test-case-path relative to the AndroidTest.xml directory and add that
 # directory to the PYTHONPATH here.
-def _create_env(test_module_dir_path: str) -> Dict[str, str]:
+def _create_env(test_module: str) -> Dict[str, str]:
     env = os.environ.copy()
     orig_value = env.get("PYTHONPATH")
-    env['PYTHONPATH'] = orig_value + os.pathsep + test_module_dir_path if orig_value else test_module_dir_path
+    env['PYTHONPATH'] = orig_value + os.pathsep + test_module if orig_value else test_module
     return env
 
-def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
-    module_name = read_module_name(os.path.join(test_module_dir_path, "AndroidTest.xml"))
-    logging.info("Running test module %s" % module_name)
 
+def vts_tradefed_run_file(test_module_dir: str) -> ResultData:
+    xml_path = os.path.join(test_module_dir, "AndroidTest.xml")
+    module_name = read_module_name(xml_path)
+    return vts_tradefed_run_module(module_name, _create_env(test_module_dir))
+
+
+def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.copy()) -> ResultData:
+    logging.info("Running test module %s" % module_name)
     try:
         os.unlink("/tmp/test_run_kpis.json")
     except FileNotFoundError:
@@ -45,7 +50,6 @@ def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
         os.unlink("/tmp/test_run_summary.json")
     except FileNotFoundError:
         pass
-
 
     max_test_time_sec = 60 * 60
     try:
@@ -60,7 +64,7 @@ def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
                                            "--module",
                                            module_name],
                                           timeout_sec=max_test_time_sec,
-                                          env=_create_env(test_module_dir_path)).decode().strip(" \n\r\t")
+                                          env=env).decode().strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
         raise VtsTestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
     except Exception as e:
@@ -167,7 +171,7 @@ def main():
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
-    vts_tradefed_run(getattr(parsed_args, "test-module-dir"))
+    vts_tradefed_run_file(getattr(parsed_args, "test-module-dir"))
 
     logging.info("Test completed")
 
