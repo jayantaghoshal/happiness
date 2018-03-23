@@ -53,8 +53,8 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
         android-support-v4 \
-        vendor.volvocars.hardware.vehiclehal-V1.0-java-static \
-        android.hardware.automotive.vehicle-V2.0-java-static \
+        vendor.volvocars.hardware.vehiclehal-V1.0-java \
+        android.hardware.automotive.vehicle-V2.0-java \
 
 
 # LOCAL_SHARED_LIBRARIES := libjsqlite

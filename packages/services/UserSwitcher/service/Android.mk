@@ -26,7 +26,7 @@ LOCAL_PROGUARD_ENABLED := disabled
 
 LOCAL_STATIC_JAVA_LIBRARIES += services.core \
         android.hidl.manager-V1.0-java \
-        vendor.volvocars.hardware.profiles-V1.0-java-static
+        vendor.volvocars.hardware.profiles-V1.0-java
 
 include $(BUILD_PACKAGE)
 
