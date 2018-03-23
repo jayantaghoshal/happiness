@@ -70,7 +70,7 @@ class VCCCIProxy(object):
         url = VCC_CI_API_URL + "/TestcaseStarted"
         logging.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
-        r = requests.post(url, json=json.dumps(data), headers=self.headers())
+        r = requests.post(url, data=json.dumps(data), headers=self.headers())  # type: ignore
         logging.debug(str(r.status_code))
         logging.debug(r.text)
 
@@ -90,6 +90,6 @@ class VCCCIProxy(object):
         url = VCC_CI_API_URL + "/TestcaseFinished"
         logging.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
-        r = requests.post(url, json=json.dumps(data), headers=self.headers())
+        r = requests.post(url, data=json.dumps(data), headers=self.headers())  # type: ignore
         logging.debug(str(r.status_code))
         logging.debug(r.text)
