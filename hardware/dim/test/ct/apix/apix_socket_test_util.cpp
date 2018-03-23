@@ -11,6 +11,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <cerrno>
+#include <cstring>
 
 #define LOG_TAG "ApixSetupSockUtil"
 #include <cutils/log.h>
