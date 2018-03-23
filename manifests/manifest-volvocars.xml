@@ -29,9 +29,6 @@
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="59783680ea17d8a76cac0f2b90dd67d0ea825506" />
 
   <!-- AOSP Overrides -->
-  <remove-project name="aosp/platform/frameworks/base" />
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="a3d143ba30ecb33339cd2675841fccb0fe3f5ee8" />
-
   <remove-project name="aosp/platform/external/iproute2" />
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
 
