@@ -20,6 +20,7 @@
     ],
 
     "routing" : "RemoteCtrl_Router",
+    "network" : "convapi",
 
     "services" :
     [
