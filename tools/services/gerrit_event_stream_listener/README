@@ -1,0 +1,18 @@
+Gerrit Event Stream Listener
+
+Listens on events from Gerrit streaming API
+
+Build image:
+./build.sh
+
+Debug app:
+GERRIT_USER=<CDSID> USER=<CDSID> ./debug.sh
+
+Run app in production:
+- Login to server gotsvl1415.got.volvocars.net
+- sudo su - jenkins-icup_android
+- cd /cm/services
+- repo sync --no-clone-bundle vendor/volvocars
+- cd gerrit_event_stream_listener
+- ./build.sh
+- JENKINS_API_KEY=<Jenkins API KEY> GERRIT_USER=<CDSID> USER=$USER ./run.sh

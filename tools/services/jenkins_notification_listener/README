@@ -1,0 +1,23 @@
+Jenkins Notification Listener 
+
+Listens on notification from Jenkins Notification plugin on port 3002
+
+Build image:
+./build.sh
+
+Debug app:
+JENKINS_API_KEY=<API-KEY> USER=<CDSID> ./debug.sh
+
+Run app in production:
+- Login to server gotsvl1415.got.volvocars.net
+- sudo su - jenkins-icup_android
+- cd /cm/services
+- repo sync --no-clone-bundle vendor/volvocars
+- cd jenkins_notification_listener
+- ./build.sh
+- JENKINS_API_KEY=<Jenkins API KEY> USER=<CDSID> ./run.sh
+
+TODO:
+- Using "flask run" is intended for development and not production.
+  Switch to some CGI/WSGI solution according to http://flask.pocoo.org/docs/0.12/deploying/ (Self hosted options section)
+
