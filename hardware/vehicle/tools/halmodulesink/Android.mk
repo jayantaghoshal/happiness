@@ -1,6 +1,5 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
-
 
 LOCAL_PATH:= $(call my-dir)
 
@@ -61,7 +60,8 @@ LOCAL_STATIC_JAVA_LIBRARIES += \
         android.hidl.manager-V1.0-java \
         vehicle-hal-support-lib \
         car-systemtest \
-        volvo.vendorextension
+        volvo.vendorextension  \
+        com.volvocars.userswitch.IUserswitch
 
 # Android Support library
 LOCAL_STATIC_ANDROID_LIBRARIES := \

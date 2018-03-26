@@ -22,6 +22,10 @@
             android:id="@+id/nav_menu4"
             android:icon="@drawable/ic_launcher"
             android:title="Vehicle Hal Generic" />
+        <item
+            android:id="@+id/nav_menu5"
+            android:icon="@drawable/ic_launcher"
+            android:title="User Switch" />
     </group>
 
 

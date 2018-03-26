@@ -34,7 +34,7 @@ import vendor.volvocars.hardware.profiles.V1_0.ICarProfileManager;
  * TODO: After TrustService is fixed, need to start the service as a TrustService
  */
 public class UserSwitchService extends Service {
-    public static final String TAG = "VccUserSwitchService";
+    public static final String TAG = UserSwitchService.class.getSimpleName();
     private static final int TIME_WAIT_MS = 500;
     private final Object mLock = new Object();
     private ICarProfileManager carProfileManager;

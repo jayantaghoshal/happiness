@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.volvocars.halmodulesink.module.FragmentOne;
+import com.volvocars.halmodulesink.module.FragmentSwitchUser;
 import com.volvocars.halmodulesink.module.FragmentVendorExtension;
 import com.volvocars.halmodulesink.module.vehiclehal.FragmentVehicleHal;
 import com.volvocars.halmodulesink.module.vehiclehal.FragmentVehicleHalGeneric;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity
                 FragmentVehicleHal.newInstance(fragmentManager, new FragmentVehicleHal(), this));
         fragments.put(R.id.nav_menu4, FragmentVehicleHalGeneric.newInstance(fragmentManager,
                 new FragmentVehicleHalGeneric(), this));
+        fragments.put(R.id.nav_menu5, FragmentVehicleHalGeneric.newInstance(fragmentManager,
+                new FragmentSwitchUser(), this));
 
         // Add custom icon for bigger size for the drawer
         getSupportActionBar().setHomeButtonEnabled(true);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -15,6 +15,7 @@ import android.content.pm.UserInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.Log;
 import android.widget.Button;
@@ -33,6 +34,7 @@ public class MainActivityTest extends Activity {
 
     public static final String TAG = MainActivityTest.class.getSimpleName();
     private IUserSwitchService mService;
+    private Context context;
     private TextView textResult;
     private TextView textOwner;
     private EditText valueEditText;
@@ -43,7 +45,6 @@ public class MainActivityTest extends Activity {
     private Button deleteUserButton;
     private Button getUserIdButton;
     private ActivityManager activityManager;
-    private Context context;
     private UserManager userManager;
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -83,13 +84,27 @@ public class MainActivityTest extends Activity {
 
         // Remove it after TrustService
         textResult.setText("Starting service…\n");
-        startService(serviceIntent);
+//        startService(serviceIntent);
         activityManager = getBaseContext().getSystemService(ActivityManager.class);
         userManager = getBaseContext().getSystemService(UserManager.class);
 
         textResult.append("Binding service…\n");
-        bindService(serviceIntent, mConnection, BIND_AUTO_CREATE);
+//        bindService(serviceIntent, mConnection, BIND_AUTO_CREATE);
 
+//        bindService(new Intent(MainActivityTest.this,
+//                UserSwitchService.class), mConnection, Context.BIND_AUTO_CREATE);
+
+
+        Intent intent = new Intent(IUserSwitchService.class.getName());
+
+        /*this is service name*/
+        intent.setAction("com.volvocars.userswitch.UserSwitchService");
+
+        /*From 5.0 annonymous intent calls are suspended so replacing with server app's package name*/
+        intent.setPackage("com.volvocars.userswitch");
+
+        // binding to remote service
+        context.bindServiceAsUser(intent, mConnection, BIND_AUTO_CREATE, UserHandle.SYSTEM);
         textOwner.setText(String.valueOf(ActivityManager.getCurrentUser()));
         createButton.setOnClickListener(event -> createUser(valueEditText.getText().toString()));
         switchButton.setOnClickListener(event -> switchUserButton(valueEditText.getText().toString()));
