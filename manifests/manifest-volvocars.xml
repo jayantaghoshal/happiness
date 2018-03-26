@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <include name="manifest-delphi.xml"/>
+  <include name="manifest-delphi.xml" />
 
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD"/>
@@ -35,15 +34,15 @@
   <remove-project name="aosp/platform/packages/services/Car" />
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="1c15e7af3a7a63f11145b622dbb78b45a1f62de9" />
 
-  <remove-project name="aosp/platform/build"/>
+  <remove-project name="aosp/platform/build" />
   <project name="aosp/platform/build" path="build/make" revision="2f899f13a5aeb6b5bf7f8f2286d9bd6686526cbf">
-    <copyfile dest="Makefile" src="core/root.mk"/>
-    <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk"/>
-    <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default"/>
-    <linkfile dest="build/core" src="core"/>
-    <linkfile dest="build/envsetup.sh" src="envsetup.sh"/>
-    <linkfile dest="build/target" src="target"/>
-    <linkfile dest="build/tools" src="tools"/>
+    <copyfile dest="Makefile" src="core/root.mk" />
+    <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk" />
+    <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default" />
+    <linkfile dest="build/core" src="core" />
+    <linkfile dest="build/envsetup.sh" src="envsetup.sh" />
+    <linkfile dest="build/target" src="target" />
+    <linkfile dest="build/tools" src="tools" />
   </project>
 
   <remove-project name="aosp/platform/external/iptables" />
@@ -51,7 +50,7 @@
 
   <!-- Aptiv Overrides -->
   <remove-project name="vendor/delphi/android_patches" />
-  <remove-project name="bsp/external/memtester"/>
+  <remove-project name="bsp/external/memtester" />
 
   <project name="bsp/external/libncurses" path="vendor/aptiv/external/libncurses" revision="26b32ea6a29de8e16fcc229d942eec3b33414454" />
   <project name="bsp/external/vim" path="vendor/aptiv/external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40" />
