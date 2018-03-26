@@ -51,7 +51,7 @@ class JenkinsClient(object):
 
 class VCCCIProxy(object):
     VCC_CI_API_URL="http://cimb.volvocars.biz/api/1.6.0"
-    TEST_REPORT_URL="http://10.251.165.178:3000"
+    TEST_REPORT_URL="http://gotsvl1416.got.volvocars.net:3001" # "https://ihu-ci.cm.volvocars.biz/reports"
 
     SUPPORTED_JOBS = [
         "icup_android_manifest_bump",
