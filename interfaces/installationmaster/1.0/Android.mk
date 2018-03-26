@@ -112,25 +112,6 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build types.hal (InstallationSummary)
-#
-GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallationSummary.java
-$(GEN): $(HIDL)
-$(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
-$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
-$(GEN): PRIVATE_CUSTOM_TOOL = \
-        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-        -Ljava \
-        -randroid.hidl:system/libhidl/transport \
-        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.installationmaster@1.0::types.InstallationSummary
-
-$(GEN): $(LOCAL_PATH)/types.hal
-	$(transform-generated-source)
-LOCAL_GENERATED_SOURCES += $(GEN)
-
-#
 # Build types.hal (SoftwarePart)
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/SoftwarePart.java
@@ -163,6 +144,25 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
         vendor.volvocars.hardware.installationmaster@1.0::types.SoftwarePartStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (Summary)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/Summary.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.installationmaster@1.0::types.Summary
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
@@ -343,25 +343,6 @@ $(GEN): $(LOCAL_PATH)/types.hal
 LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
-# Build types.hal (InstallationSummary)
-#
-GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/InstallationSummary.java
-$(GEN): $(HIDL)
-$(GEN): PRIVATE_HIDL := $(HIDL)
-$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
-$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
-$(GEN): PRIVATE_CUSTOM_TOOL = \
-        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-        -Ljava \
-        -randroid.hidl:system/libhidl/transport \
-        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
-        vendor.volvocars.hardware.installationmaster@1.0::types.InstallationSummary
-
-$(GEN): $(LOCAL_PATH)/types.hal
-	$(transform-generated-source)
-LOCAL_GENERATED_SOURCES += $(GEN)
-
-#
 # Build types.hal (SoftwarePart)
 #
 GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/SoftwarePart.java
@@ -394,6 +375,25 @@ $(GEN): PRIVATE_CUSTOM_TOOL = \
         -randroid.hidl:system/libhidl/transport \
         -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
         vendor.volvocars.hardware.installationmaster@1.0::types.SoftwarePartStatus
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build types.hal (Summary)
+#
+GEN := $(intermediates)/vendor/volvocars/hardware/installationmaster/V1_0/Summary.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.volvocars.hardware:vendor/volvocars/interfaces \
+        vendor.volvocars.hardware.installationmaster@1.0::types.Summary
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)

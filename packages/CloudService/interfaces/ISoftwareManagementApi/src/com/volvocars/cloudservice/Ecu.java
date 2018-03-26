@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -26,7 +26,7 @@ public class Ecu implements Parcelable {
     public int retries = 0;
     public Status status = Status.UNKNOWN;
 
-    List<SoftwarePart> softwareParts = new ArrayList();
+    public List<SoftwarePart> softwareParts = new ArrayList();
 
     public static final Creator<Ecu> CREATOR = new Creator<Ecu>() {
         @Override

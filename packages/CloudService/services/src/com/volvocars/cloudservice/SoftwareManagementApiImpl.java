@@ -505,6 +505,29 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         return notificationResponse;
     }
+
+    private int postInstallationReport(InstallationReport report) {
+        Log.v(LOG_TAG,
+                "report: [installationOrderId: " + report.installationOrderId + ", reportReason: " + report.reportReason.toString() + "]");
+
+        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
+
+        HttpHeaderField field = new HttpHeaderField();
+        field.name = "Accept";
+        field.value = "application/volvo.cloud.software.InstallationReport+XML";
+        headers.add(field);
+
+        int timeout = 20000;
+
+        String body = xmlWrapper.serializeInstallationReport(report);
+
+        Log.v(LOG_TAG, "Calling doPostRequest with uri: " + softwareManagementUri + " and body: " + body);
+        Response response = cloudConnection.doPostRequest(softwareManagementUri + "/installationreport", headers, body,
+                timeout); //TODO: retrieve uri from software?
+
+        return response.httpResponse;
+    }
+
     private boolean HandleHttpResponseCode(final int code) {
 
         return code == 200;
@@ -600,8 +623,13 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      * @param installationReport Report to be posted
      * @param callback           Callback to be called when the status of the download changes
      */
-    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) {
+    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) throws RemoteException {
+        if (!softwareManagementAvailable) {
+            callback.InstallationReportStatus(-1, installationReport.installationOrderId);
+            return;
+        }
 
+        callback.InstallationReportStatus(postInstallationReport(installationReport), installationReport.installationOrderId);
     }
 
     /**
@@ -611,6 +639,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     */
     public void PostInstallNotification(InstallNotification notification, ISoftwareManagementApiCallback callback)
             throws RemoteException {
+        Log.d(LOG_TAG, "PostInstall");
         if (!softwareManagementAvailable) {
             callback.InstallNotificationStatus(-1, notification.installationOrderId);
             return;

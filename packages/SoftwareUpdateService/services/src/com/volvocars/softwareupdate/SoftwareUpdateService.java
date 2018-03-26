@@ -19,13 +19,22 @@ import android.os.RemoteException;
 
 import android.util.Log;
 import vendor.volvocars.hardware.installationmaster.V1_0.InstallationStatus;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.volvocars.cloudservice.DownloadInfo;
+import com.volvocars.cloudservice.DownloadSummary;
+import com.volvocars.cloudservice.InstallationSummary;
+import com.volvocars.cloudservice.DataFile;
+import com.volvocars.cloudservice.Ecu;
+import com.volvocars.cloudservice.SoftwarePart;
+
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.InstallationReport;
 import com.volvocars.softwareupdate.InstallationPopup.InstallOption;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
@@ -204,12 +213,39 @@ public class SoftwareUpdateService extends Service {
         InstallNotification installNotification = new InstallNotification();
         if (notification.equals("INSTALLATION_STARTED"))
             installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
+        else if (notification.equals("INSTALLATION_COMPLETE"))
+            installNotification.notification.status.statusCode = Status.StatusCode.OK;
         installNotification.installationOrderId = uuid;
 
         try {
             swapi.PostInstallNotification(installNotification, swapiCallback);
         } catch (RemoteException e) {
             Log.e(LOG_TAG, "onInstallationNotification failed: RemoteException [" + e.getMessage() + "]");
+        }
+    }
+
+    public void onInstallationReport(String installationOrder, InstallationSummary installationSummary) {
+        Log.v(LOG_TAG, "onInstallationReport: [installationOrderID: " + installationOrder + ", installation summary: " + installationSummary.softwareId + "]");
+        Log.w(LOG_TAG, "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
+        InstallationReport installationReport = new InstallationReport();
+        DownloadSummary downloadSummary = new DownloadSummary();
+        DataFile file = new DataFile();
+        file.identifier = "hello world";
+        List<DataFile> dataFiles = new ArrayList();
+        dataFiles.add(file);
+
+        downloadSummary.dataFiles = dataFiles;
+
+        installationReport.installationOrderId = installationOrder;
+        installationReport.downloadSummary = downloadSummary;
+        installationReport.installationSummary = installationSummary;
+
+        Log.d(LOG_TAG, "created report");
+        try {
+            Log.i(LOG_TAG, "sending installation report");
+            swapi.PostInstallationReport(installationReport, swapiCallback);
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "onInstallationReport failed: RemoteException [" + e.getMessage() + "]");
         }
     }
 

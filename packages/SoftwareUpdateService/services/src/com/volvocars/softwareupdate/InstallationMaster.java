@@ -5,8 +5,12 @@
 
 package com.volvocars.softwareupdate;
 
+import com.volvocars.cloudservice.InstallationSummary;
+
 import android.os.RemoteException;
 import android.util.Log;
+import java.util.List;
+
 import vendor.volvocars.hardware.installationmaster.V1_0.*;
 
 public class InstallationMaster extends IInstallationMasterEventListener.Stub {
@@ -31,15 +35,22 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
 
     @Override
     public void installNotification(String installationOrder, int notification) {
-        Log.d(LOG_TAG, "installNotification [installationOrder: " + installationOrder + ", notification: "
+        Log.v(LOG_TAG, "installNotification [installationOrder: " + installationOrder + ", notification: "
                 + InstallationStatus.toString(notification) + "]");
         service.onInstallationNotification(installationOrder, InstallationStatus.toString(notification));
     }
 
     @Override
-    public void installationReport(String installationOrder, InstallationSummary installationSummary) {
-        Log.d(LOG_TAG, "installationReport [installationOrder: " + installationOrder);
-        //TODO: send this info to service
+    public void installationReport(String installationOrder, Summary summary) {
+        Log.v(LOG_TAG, "installationReport [installationOrder: " + installationOrder);
+
+        InstallationSummary installationSummary = new InstallationSummary();
+        installationSummary.softwareId = summary.softwareId;
+        installationSummary.timestamp = Long.toString(summary.timestamp);
+        installationSummary.repeatResets = summary.repeatedResets;
+        installationSummary.totalInstallationTime = summary.totalInstallationTime;
+        installationSummary.ecus = (List) summary.ecus;
+        service.onInstallationReport(installationOrder, installationSummary);
     }
 
     public void assignInstallation(String uuid) {
@@ -48,6 +59,15 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
             installationmaster.assignInstallation(uuid);
         } catch (RemoteException e) {
             Log.e(LOG_TAG, "Error in assignInstallation: RemoteException [" + e.getMessage() + "]");
+        }
+    }
+
+    public void verifyDownload(String installationOrderId) {
+        Log.v(LOG_TAG, "verifyDownload [installationOrderId: " + installationOrderId + "]");
+        try {
+            installationmaster.verifyDownload(installationOrderId);
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "Error in verifyDownload: RemoteException [" + e.getMessage() + "]");
         }
     }
 }
