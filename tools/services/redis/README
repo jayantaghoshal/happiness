@@ -1,0 +1,8 @@
+Redis
+
+Redis key/value store used by IHU CI
+
+Deploy to production:
+As root@gotsvl1416.got.volvocars.net run:
+docker run --name swf1-redis -d -p 6379:6379 -v /cm/redis/data:/data --restart unless-stopped redis redis-server --appendonly yes
+

@@ -132,9 +132,9 @@
   <project name="vendor/delphi/bb_util" path="vendor/aptiv/components/libutilities" revision="6f32b236e97b0098afd2dbc7294c23256c2c27e3" />
 
   <!-- Common Delphi building blocks that are delivered as binaries -->
-  <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="6159d823e41024a18b1542091e62c4c480c20d49" />
-  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="b2a6e1249c40e6dc4d4be6ec36b81292d7576376" />
-  <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="dcc488dbf6612deb01e07efda3c375a45e941b3d" />
+  <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="6159d823e41024a18b1542091e62c4c480c20d49"/>
+  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="beaa79d295701ee9c6f4f74114b204fea0f8f658"/>
+  <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="dcc488dbf6612deb01e07efda3c375a45e941b3d"/>
   <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="002356e55ce96ddfd10612de92ce062243941693" />
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="1ff46eb8fd8b3fde9895932db3f485a80d7ecbf8" />
   <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="4c1c945f0f45e6129e953a75378fdfb8def63ba5" />

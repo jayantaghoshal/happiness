@@ -5,6 +5,7 @@
 
 package com.volvocars.halmodulesink.module;
 
+import android.car.hardware.CarPropertyValue;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 
 import com.volvocars.halmodulesink.R;
 import com.volvocars.test.lib.AModuleFragment;
+import com.volvocars.vendorextension.VendorExtensionCallBack;
 import com.volvocars.vendorextension.VendorExtensionClient;
 
 import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
@@ -50,6 +52,24 @@ public class FragmentVendorExtension extends AModuleFragment {
         settingConnSafetyOn.setVisibility(View.INVISIBLE);
 
         // Dummy
+
+        runBackgroundAndUpdate(() -> {
+            try {
+                vendorExtensionClient.registerCallback(new VendorExtensionCallBack(0x21400003, 0) {
+                    @Override
+                    public void onChangeEvent(CarPropertyValue value) {
+                        Log.d(TAG, "onChangeEvent: Custom Works!");
+                    }
+
+                    @Override
+                    public void onErrorEvent(int propertyId, int zone) {
+                        Log.d(TAG, "onErrorEvent: Custom Works!");
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "Error", e);
+            }
+        });
 
         runBackgroundAndUpdate(() -> {
             try {
