@@ -49,6 +49,9 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications",                         standard_caps), #Uguudei
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps), #Patrik Ingmarsson
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -82,8 +85,5 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
 ]

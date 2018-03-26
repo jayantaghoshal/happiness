@@ -104,7 +104,7 @@
   ],
   "downloads": [
     {
-      "id": 0,
+      "installation_order_id": 0,
       "downloads": {
         "file": [
           "/test/helloworld.txt"
