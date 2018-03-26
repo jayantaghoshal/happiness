@@ -90,4 +90,10 @@ public class SoftwareUpdateManager implements ServiceConnection {
             softwareUpdateManager.GetInstallNotification(installationOrderId);
         }
     }
+
+    public void ShowInstallationPopup(String installationOrderId) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.ShowInstallationPopup(installationOrderId);
+        }
+    }
 }

@@ -246,4 +246,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             Log.e(LOG_TAG, e.getMessage());
         }
     }
+
+    @Override
+    public void showInstallationPopup(String installationOrderId) {
+        try {
+            softwareUpdateManager.ShowInstallationPopup(installationOrderId);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
+    }
 }

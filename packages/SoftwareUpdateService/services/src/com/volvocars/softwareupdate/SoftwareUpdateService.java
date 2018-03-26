@@ -209,7 +209,8 @@ public class SoftwareUpdateService extends Service {
     public void onInstallationNotification(String uuid, String notification) {
         Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
 
-        Log.w(LOG_TAG, "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
+        Log.w(LOG_TAG,
+                "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
         InstallNotification installNotification = new InstallNotification();
         if (notification.equals("INSTALLATION_STARTED"))
             installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
@@ -255,9 +256,9 @@ public class SoftwareUpdateService extends Service {
                 Log.v(LOG_TAG, "GetInstallNotification [installationOrderId: " + installationOrderId + "]");
                 swapi.GetInstallNotification(installationOrderId, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");            }
-        }
-        else {
+                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");
+            }
+        } else {
             Log.e(LOG_TAG, "GetInstallNotification failed: Local SoftwareManagementApi variable is null");
         }
     }
@@ -328,11 +329,11 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void showInstallationPopup(DownloadInfo info) {
+    public void showInstallationPopup(String installationOrderId) {
         Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
 
         for (SoftwareInformation information : softwareInformationList) {
-            if (info.installationOrderId.equals(information.installationId)) {
+            if (installationOrderId.equals(information.installationId)) {
                 Intent intent = new Intent(this, InstallationPopup.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(InstallationPopup.NAME, information.name);

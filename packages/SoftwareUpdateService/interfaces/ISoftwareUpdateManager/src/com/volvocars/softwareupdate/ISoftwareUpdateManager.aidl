@@ -35,4 +35,6 @@ oneway interface ISoftwareUpdateManager {
      */
      void GetInstallNotification(in String installationOrderId);
 
+     void ShowInstallationPopup(in String installationOrderId);
+
 }

@@ -99,7 +99,6 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
         Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.uuid + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
-            //service.showInstallationPopup(downloadInfo);
         }
     }
 
