@@ -31,8 +31,8 @@ CopyrightInfo = collections.namedtuple("CopyrightInfo", ['start_year',
 CStyleInfoRegex = re.compile(r'^/\*\n\s\*\sCopyright\s(?P<start_year>20\d{2})'
                              r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*?(?:\n\s\*.*?){2}/',
                              re.IGNORECASE)
-CStyleGenericRegex = re.compile(r'(^/\*.*Copyright.*?\*\/)',
-                                re.IGNORECASE)
+CStyleGenericRegex = re.compile(r'^\s\*\s(Copyright.*)',
+                                re.IGNORECASE | re.MULTILINE)
 CStyleReplaceableRegex = re.compile(r'(^/\*\n\s\*\sCopyright.*(Delphi|Volvo)(.*\n)*?\s\*/)',
                                     re.IGNORECASE)
 
@@ -49,7 +49,8 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
 HashStartInfoRegex = re.compile(r'^#\sCopyright\s(?P<start_year>20\d{2})'
                                 r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*',
                                 re.IGNORECASE);
-HashStartGenericRegex = re.compile(r'(^#.*Copyright.*?\n)')
+HashStartGenericRegex = re.compile(r'^#\s(Copyright.*)',
+                                   re.IGNORECASE | re.MULTILINE)
 HashStartReplaceableRegex = re.compile(r'(^#.*?(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)*?\n)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',

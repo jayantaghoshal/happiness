@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 """
@@ -43,7 +43,7 @@ def software_bom(root, output_path, **kwargs):
 
 @dispatch.on('list-copyright-headers')
 def list_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]], **kwargs):
-    list_copyright_headers(file_or_files_list)
+    copyrightheader.list_copyright_headers(file_or_files_list)
 
 
 @dispatch.on('fix-copyright-headers')
