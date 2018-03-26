@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.FrameLayout;
 import com.volvocars.softwareupdate.*;
+import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.*;
 import java.util.*;
 import android.support.design.widget.FloatingActionButton;
@@ -232,6 +233,15 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     public void commissionAssignment(String uuid) {
         try {
             softwareUpdateManager.CommissionAssignment(uuid);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
+    }
+
+    @Override
+    public void getInstallNotification(String installationOrderId) {
+        try {
+            softwareUpdateManager.GetInstallNotification(installationOrderId);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
         }

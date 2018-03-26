@@ -20,6 +20,7 @@ class CommentedTreeBuilder(ET.TreeBuilder):
         self.end(ET.Comment)
 
 def update_file(project_root: str, template_path: str, output_path: str, repository: str, using_zuul: bool):
+    print("Arguments in update_file: " "project_root: "+ project_root + " template_path: " + template_path + " output_path: " + output_path + " repository: " + repository)
     parser = ET.XMLParser(target=CommentedTreeBuilder())
     tree = ET.parse(template_path, parser)
     root = tree.getroot()
@@ -28,18 +29,24 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
         current_repo = project.get('name')
         revision = project.get('revision')
         if revision == "ZUUL_COMMIT_OR_HEAD":
+            print("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
             #check what sha to use, the ZUUL_COMMIT or HEAD from repository
             revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
+            print("current_repo = " + current_repo)
+            print("revision = " + revision)
             project.set('revision', revision)
 
     tree.write(output_path)
 
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
     if repo_with_commit != current_repo_in_tmp_manifest:
+        print("Checking master on Gerrit server for latest revision")
         revision = git.Repo.ls_remote(current_repo_in_tmp_manifest)
     elif (not using_zuul) and (repo_with_commit == current_repo_in_tmp_manifest):
+        print("Using GERRIT_NEWREV as revision")
         revision = os.environ['GERRIT_NEWREV']
     else:
+        print("Using ZUUL_COMMIT as revision")
         revision = os.environ['ZUUL_COMMIT']
 
     return revision

@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity
         fragments.put(R.id.nav_menu4, FragmentVehicleHalGeneric.newInstance(fragmentManager,
                 new FragmentVehicleHalGeneric(), this));
 
+        // Add custom icon for bigger size for the drawer
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.drawer_icon);
     }
 
     @Override

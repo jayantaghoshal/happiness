@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -82,6 +82,12 @@ public class SoftwareUpdateManager implements ServiceConnection {
     public void GetDownloadInfo(String uuid) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.GetDownloadInfo(uuid);
+        }
+    }
+
+    public void GetInstallNotification(String installationOrderId) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.GetInstallNotification(installationOrderId);
         }
     }
 }

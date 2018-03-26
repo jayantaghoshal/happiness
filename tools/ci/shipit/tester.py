@@ -14,6 +14,7 @@ import sys
 import traceback
 import multiprocessing
 import xml.etree.ElementTree as ET
+
 from os.path import join as pathjoin
 from typing import List, Set, Tuple
 
@@ -24,7 +25,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Di
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
-from handle_result import store_result
+from handle_result import store_result, test_visualisation
 
 sys.path.append(vcc_root)
 import test_plan    # NOQA
@@ -191,19 +192,49 @@ def print_test_summary(test_results: List[NamedTestResult]):
 
 def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
     test_results = []  # type: List[NamedTestResult]
+    if ci_reporting:# initialise visualizing Testcases in VCC CI
+        try:
+            if "UPSTREAM_JOB_GIT_REVISION" in os.environ and os.environ["UPSTREAM_JOB_GIT_REVISION"]:
+                change_id = test_visualisation.redis_con.get(
+                    "icup_android.gerrit.commit_id." + os.environ["UPSTREAM_JOB_GIT_REVISION"] + ".change_id")
+            elif "ZUUL_CHANGE" in os.environ and os.environ["ZUUL_CHANGE"]:
+                print("ZUUL_CHANGE:" + os.environ["ZUUL_CHANGE"])
+                change_id = ((test_visualisation.redis_con.get(
+                    "icup_android.gerrit.change_number." + os.environ["ZUUL_CHANGE"] + ".change_id")))
+            vccciproxy = test_visualisation.VCCCIProxy(
+                change_id.decode("utf-8"))
+        except Exception as e:
+                print(traceback.format_exc())
+                print(e)
+                print("Initialization of VCC CI failed")
     for t in tests_to_run:
         if ci_reporting:
             try:
+                vccciproxy.testcase_started(store_result.get_module_name(t))
+            except Exception as e:
+                print(traceback.format_exc())
+                print(e)
+                print("Testcase started message to VCC CI failed")
+            try:
                 store_result.clean_old_results()
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Cleaning old results failed")
                 ci_reporting = False  # It will prohibit running rest of mongodb operation
         test_result = run_test(t)
         if ci_reporting and not isinstance(t, Disabled):
             try:
+                vccciproxy.testcase_finished(store_result.get_module_name(
+                    t), store_result.get_result(test_result))
+            except Exception as e:
+                print(traceback.format_exc())
+                print(e)
+                print("Testcase finished message to VCC CI failed")
+            try:
                 store_result.load_test_results(t, test_result)
             except Exception as e:
+                print(traceback.format_exc())
                 print(e)
                 print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
@@ -243,7 +274,7 @@ def main():
     subparsers = root_parser.add_subparsers(dest="program")
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
-    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
@@ -259,9 +290,9 @@ def main():
                                  "Ignore other tests even though your rig has capabilities enough to run them. "
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
-    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly'])
+    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     run_parser.add_argument(
-        '--ci_reporting', default='false', choices=['true', 'false'])
+        '--ci_reporting', action='store_true')
     build_parser.add_argument('--test_component', default=None,
                             help="Run without a plan and test a specified directory only")
     run_parser.add_argument('--test_component', default=None,
@@ -340,7 +371,8 @@ def main():
 def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \
-                test_plan.test_plan_nightly
+                test_plan.test_plan_nightly + \
+                test_plan.test_plan_staging
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests

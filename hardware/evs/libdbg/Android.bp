@@ -1,0 +1,44 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "libdbg_defaults",
+
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    export_include_dirs: ["include"],
+
+    cppflags: [
+        "-Wunused",
+        "-Werror",
+        "-DLOG_TAG=\"libdgb\"",
+    ],
+
+    shared_libs: [
+        "libcutils",
+        "liblog",
+    ],
+
+    tidy_checks: [
+        "-cert-dcl50-cpp",
+    ],
+
+    srcs: [
+        "src/libdbg.cpp",
+    ],
+}
+
+cc_library_shared {
+    name: "libdbg",
+
+    defaults: ["libdbg_defaults"],
+}
+
+cc_library_static {
+    name: "libdbg_static",
+
+    defaults: ["libdbg_defaults"],
+
+}

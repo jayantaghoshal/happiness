@@ -7,7 +7,6 @@ package com.volvocars.brightnessservice;
 
 import android.app.Service;
 import android.content.Intent;
-import android.hardware.automotive.vehicle.V2_0.VehiclePropValue;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -21,18 +20,20 @@ import android.os.Process;
 import java.util.NoSuchElementException;
 import android.hardware.automotive.vehicle.V2_0.IVehicle;
 
-import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
+import android.os.HwBinder;
+
 
 /**
  *
  * BrightnessService is a service that controls the brightness of the screen.
 */
-public class BrightnessService extends Service {
+public class BrightnessService extends Service implements HwBinder.DeathRecipient {
 
     public static final String TAG = "BrightnessService";
     private IVehicle mVehicle = null;
     private CSDConsumerManager mCSDConsumerManager;
     private IlluminationControl mIlluminationControl;
+    private CleaningModeOverlay mCleaningModeOverlay;
     private Looper mServiceLooper = null;
     private ServiceHandler mServiceHandler = null;
     private PowerManager mPowerManager;
@@ -62,6 +63,7 @@ public class BrightnessService extends Service {
     @Override
     public void onDestroy() {
         Log.v(TAG, "onDestroy");
+        System.exit(0);
     }
 
     @Override
@@ -80,6 +82,7 @@ public class BrightnessService extends Service {
                 mVehicle=IVehicle.getService();
 
                 if(mVehicle != null){
+                    mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
                     break;
                 }
                 Thread.sleep(1000);
@@ -97,12 +100,20 @@ public class BrightnessService extends Service {
         mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mCSDConsumerManager = new CSDConsumerManager(mVehicle,mPowerManager);
         mIlluminationControl = new IlluminationControl(mServiceHandler,mVehicle);
-
+        mCleaningModeOverlay = new CleaningModeOverlay(mVehicle,this);
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public void serviceDied(long cookie) {
+        Log.i(TAG, "Lost Connection to VHAL, re-spawning myself");
+        stopSelf();
+    }
+
     /**
      * Change brightness of the screen, uses settings&/& lightshal.
      * @param brightnessValue int beetween 0-255

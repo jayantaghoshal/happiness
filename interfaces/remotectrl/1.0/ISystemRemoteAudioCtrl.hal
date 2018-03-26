@@ -4,7 +4,7 @@ package vendor.volvocars.hardware.remotectrl@1.0;
 * This interface shall be implemented and used by system service in
 * the android framework to get request notification from the native side.
 */
-interface ISystemRemoteVolumeCtrl {
+interface ISystemRemoteAudioCtrl {
 
   /**
   * Notify upper layer service that there is a request to get volume.
@@ -12,7 +12,7 @@ interface ISystemRemoteVolumeCtrl {
   * @param context Audio context of interest
   * @param requestIdentifier Identifier used to map request to response
   */
-  oneway getVolume(AudioContext context, RequestIdentifier requestIdentifier);
+  oneway getVolume(RequestIdentifier requestIdentifier, AudioContext context);
 
   /**
   * Notify upper layer service that there is a request to set volume.
@@ -20,5 +20,5 @@ interface ISystemRemoteVolumeCtrl {
   * @param data VolumeData indicate the volume level and audio context to modify
   * @param requestIdentifier Identifier used to map request to response
   */
-  oneway setVolume(VolumeData data, RequestIdentifier requestIdentifier);
+  oneway setVolume(RequestIdentifier requestIdentifier, VolumeData data);
 };

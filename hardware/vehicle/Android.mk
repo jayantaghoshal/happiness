@@ -22,6 +22,7 @@ LOCAL_SRC_FILES := \
      src/fanlevelimpl.cpp \
      src/tempimpl.cpp \
      src/keymanagermodule.cpp \
+     src/homebuttonmodule.cpp \
      src/activeuserprofilemodule.cpp \
      src/modulepropertyhandler.cpp \
      src/propertyhandler.cpp \

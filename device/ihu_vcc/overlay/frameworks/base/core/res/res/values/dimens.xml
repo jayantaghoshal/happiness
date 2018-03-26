@@ -1,7 +1,7 @@
 <resources>
-       <!-- Dimensions for Volvo 426 -->
-       <dimen name="status_bar_height">78dp</dimen>
-       <dimen name="navigation_bar_height">126dp</dimen>
+       <!-- Dimensions for Volvo -->
+       <dimen name="status_bar_height">132dp</dimen>
+       <dimen name="navigation_bar_height">120dp</dimen>
 
        <!-- Notifications -->
        <eat-comment/>

@@ -1,0 +1,38 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "libdbgTest",
+
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: [
+        "libdbg_test.cpp",
+    ],
+
+    cppflags: [
+        "-Werror",
+        "-DLOG_TAG=\"libdgb\"",
+        "-DLIBDBG_ENABLE_DEBUG",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libcutils",
+    ],
+
+    whole_static_libs: [
+        "libdbg_static",
+    ],
+
+    static_libs: [
+        "libgtest",
+    ],
+
+    test_suites: [
+        "vts",
+    ],
+
+}

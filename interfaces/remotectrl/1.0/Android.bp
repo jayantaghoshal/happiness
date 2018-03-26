@@ -5,8 +5,8 @@ hidl_interface {
     root: "vendor.volvocars.hardware",
     srcs: [
         "types.hal",
-        "INativeRemoteVolumeCtrl.hal",
-        "ISystemRemoteVolumeCtrl.hal",
+        "INativeRemoteAudioCtrl.hal",
+        "ISystemRemoteAudioCtrl.hal",
     ],
     interfaces: [
         "android.hidl.base@1.0",

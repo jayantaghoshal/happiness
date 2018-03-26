@@ -1,8 +1,13 @@
 - defaults:
-    name: daily_job_defaults
+    name: daily_build_defaults
     project-type: freestyle
     description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
     concurrent: false
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily
+            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -37,6 +42,146 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+
+- defaults:
+    name: daily_test_defaults
+    project-type: freestyle
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    concurrent: false
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_test_common.sh
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
+    wrappers:
+        - timestamps
+        - timeout:
+            timeout: 60
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    publishers:
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+- defaults:
+    name: daily_vts_defaults
+    project-type: freestyle
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    concurrent: false
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_daily_vts.sh
+    notifications:
+        - http:
+            url: http://10.251.165.223:5000/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
+    wrappers:
+        - timestamps
+        - timeout:
+            timeout: 240
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    publishers:
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
+            allow-empty: 'true'
+            latest-only: 'true'
+            only-if-success: 'false'
 
 - job:
     name: ihu_daily
@@ -195,25 +340,18 @@
           predefined-parameters: |
             GIT_COMMIT=${GIT_COMMIT}
             GIT_URL=${GIT_URL}
+      - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_daily</customProjectName>
+                <customPrefix>IhuDailyMaster</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+
 - job:
     name: ihu_daily_build_vcc_eng
-    defaults: daily_job_defaults
+    defaults: daily_build_defaults
     node: daily_build
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily
-            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
-    properties:
-        - build-discarder:
-            days-to-keep: 30
-            artifact-days-to-keep: 30
-        - raw:
-            xml: |
-                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
-                    <autoRebuild>false</autoRebuild>
-                    <rebuildDisabled>false</rebuildDisabled>
-                </com.sonyericsson.rebuild.RebuildSettings>
     builders:
         - shell:
             !include-raw:
@@ -231,23 +369,8 @@
 
 - job:
     name: ihu_daily_build_vcc_userdebug
-    defaults: daily_job_defaults
+    defaults: daily_build_defaults
     node: daily_build
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily
-            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
-    properties:
-        - build-discarder:
-            days-to-keep: 30
-            artifact-days-to-keep: 30
-        - raw:
-            xml: |
-                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
-                    <autoRebuild>false</autoRebuild>
-                    <rebuildDisabled>false</rebuildDisabled>
-                </com.sonyericsson.rebuild.RebuildSettings>
     builders:
         - shell:
             !include-raw:
@@ -257,23 +380,8 @@
 
 - job:
     name: ihu_daily_build_vcc_user
-    defaults: daily_job_defaults
+    defaults: daily_build_defaults
     node: daily_build
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily
-            description: UPSTREAM_JOB can be used to fetch info about ihu_daily.
-    properties:
-        - build-discarder:
-            days-to-keep: 30
-            artifact-days-to-keep: 30
-        - raw:
-            xml: |
-                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
-                    <autoRebuild>false</autoRebuild>
-                    <rebuildDisabled>false</rebuildDisabled>
-                </com.sonyericsson.rebuild.RebuildSettings>
     builders:
         - shell:
             !include-raw:
@@ -281,33 +389,10 @@
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_daily_build_user.sh
 
-
 - job:
     name: ihu_daily_test-generic
-    defaults: daily_job_defaults
+    defaults: daily_test_defaults
     node: daily_test-generic
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test_common.sh
     publishers:
         - archive:
             artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
@@ -324,214 +409,31 @@
 
 - job:
     name: ihu_daily_test-flexray
-    defaults: daily_job_defaults
+    defaults: daily_test_defaults
     node: daily_test-flexray
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily_test-audio
-    defaults: daily_job_defaults
+    defaults: daily_test_defaults
     node: daily_test-audio
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily_test-apix
-    defaults: daily_job_defaults
+    defaults: daily_test_defaults
     node: daily_test-apix
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily_vts1-generic
-    defaults: daily_job_defaults
+    defaults: daily_vts_defaults
     node: daily_test-generic
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_vts.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily_vts2-generic
-    defaults: daily_job_defaults
+    defaults: daily_vts_defaults
     node: daily_test-generic
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_vts.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily_vts3-generic
-    defaults: daily_job_defaults
+    defaults: daily_vts_defaults
     node: daily_test-generic
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Daily build ihu_vcc-eng failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_daily_vts.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
-            
+

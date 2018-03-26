@@ -24,15 +24,7 @@ Sound::Sound(const SoundWrapper::SoundID& soundID,
       _soundID(soundID),
       _name(AudioTable::getSourceName(soundID.type, soundID.component)),
       am_service(service),
-      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {
-    // subscribe
-    android::hardware::Return<void> ret = am_service->subscribe(this);
-    if (!ret.isOk()) {
-        ALOGE("Error subscribing to service events: %s", ret.description().c_str());
-    }
-}
-
-Sound::~Sound() { am_service->unsubscribe(this); }
+      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {}
 
 void Sound::onTimeout() {
     ALOGD("Sound::onTimeout %s", _name.c_str());
@@ -52,8 +44,9 @@ void Sound::play() {
                     static_cast<int32_t>(_soundID.type),
                     static_cast<int32_t>(_soundID.component),
                     [&](AMStatus s, int64_t cId) {
-                        connectionID = cId;
                         if (s == AMStatus::OK) {
+                            connectionID = cId;
+                            SoundWrapper::registerConnection(this, connectionID);
                             ALOGD("Sound::play Idle->Starting %s", _name.c_str());
                         } else {
                             ALOGW("Sound::play failed to playSound %s. AMStatus: %i", _name.c_str(), s);
@@ -187,65 +180,36 @@ void Sound::onPlayStopped(int32_t reason) {
     }
 }
 
-::android::hardware::Return<void> Sound::onDisconnected(uint32_t connectionID) {
-    ALOGD("%s %d", __FUNCTION__, connectionID);
-    return android::hardware::Return<void>();
-}
-
-::android::hardware::Return<void> Sound::onConnected(uint32_t connectionID) {
-    ALOGD("%s %d", __FUNCTION__, connectionID);
-    return android::hardware::Return<void>();
-}
-
-::android::hardware::Return<void> Sound::onWavFileFinished(uint32_t connectionID) {
-    ALOGD("%s %d", __FUNCTION__, connectionID);
-    if (getConnectionID() == connectionID) {
-        onPlayStopped(0);
-    }
-    return android::hardware::Return<void>();
-}
-
-::android::hardware::Return<void> Sound::onRampedIn(uint32_t connectionID) {
-    ALOGD("%s %d", __FUNCTION__, connectionID);
-    if (getConnectionID() == connectionID) {
-        onPlayStarted();
-    }
-
-    return android::hardware::Return<void>();
-}
-
-::android::hardware::Return<void> Sound::ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) {
-    ALOGD("%s sink: %d, volume: %d", __FUNCTION__, sinkId, volume);
-    return android::hardware::Return<void>();
-}
 // ==========================================================
 // implementation SoundWrapper
 
 // Only used by the SoundWrapper class
 static std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>> sounds;
+static std::map<int64_t, std::shared_ptr<Sound>> soundIds;
 static std::recursive_mutex soundsMutex;
+static std::recursive_mutex soundIdsMutex;
 
-SoundWrapper::SoundWrapper() {}
-
-bool SoundWrapper::init(vendor::delphi::audiomanager::V1_0::IAudioManager* service) {
+bool SoundWrapper::init(::android::sp<IAudioManager> service) {
     // for unit testing
-    if (service != nullptr) {
-        am_service = service;
-        initialized = true;
-        return true;
-    }
 
-    using namespace android;
+    if (service.get() != nullptr) {
+        am_service = ::android::sp<IAudioManager>(service);
+    } else {
+        while (am_service.get() == nullptr) {
+            am_service = IAudioManager::getService();
 
-    while (am_service == nullptr) {
-        am_service = vendor::delphi::audiomanager::V1_0::IAudioManager::getService();
-
-        if (am_service == nullptr) {
-            ALOGW("%s: getService(am_service) failed", __func__);
-            sleep(1);
+            if (am_service == nullptr) {
+                ALOGW("%s: getService(am_service) failed", __func__);
+                sleep(1);
+            }
         }
     }
-    using namespace vendor::delphi::audiomanager::V1_0;
+
+    // subscribe
+    android::hardware::Return<void> ret = am_service->subscribe(::android::sp<IAudioManagerCallback>(this));
+    if (!ret.isOk()) {
+        ALOGE("Error subscribing to service events: %s", ret.description().c_str());
+    }
 
     initialized = true;
     return true;
@@ -257,8 +221,6 @@ void SoundWrapper::cleanup() {
     sounds.clear();
 }
 
-SoundWrapper::~SoundWrapper() {}
-
 void SoundWrapper::play(SoundID soundid) {
     // call instance here. This will instantiate soundwrapper if its not done yet
     if (instance()->getInitialized()) {
@@ -266,7 +228,10 @@ void SoundWrapper::play(SoundID soundid) {
         std::shared_ptr<Sound> sound;
         {  // lock scope
             std::lock_guard<std::recursive_mutex> safeLock(soundsMutex);
+            (void)safeLock;
+
             i = sounds.find(soundid);
+
             if (i == sounds.end()) {
                 // no one has ever used this sound previously, lets create it
                 sound = std::make_shared<Sound>(soundid, am_service);
@@ -286,6 +251,7 @@ void SoundWrapper::stop(SoundID soundid) {
     std::shared_ptr<Sound> sound;
     {  // lock scope
         std::lock_guard<std::recursive_mutex> safeLock(soundsMutex);
+        (void)safeLock;
         i = sounds.find(soundid);
         if (i == sounds.end()) {
             // no one has ever used this sound so it has never been started -> report invalid state
@@ -298,11 +264,18 @@ void SoundWrapper::stop(SoundID soundid) {
     sound->stop();
 }
 
+void SoundWrapper::registerConnection(Sound* sound, int64_t connectionID) {
+    std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
+    (void)safeLock;
+    soundIds[connectionID] = std::shared_ptr<Sound>(sound);
+}
+
 bool SoundWrapper::isPlaying(SoundID soundid) {
     std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
     std::shared_ptr<Sound> sound;
     {  // lock scope
         std::lock_guard<std::recursive_mutex> safeLock(soundsMutex);
+        (void)safeLock;
         i = sounds.find(soundid);
         if (i == sounds.end()) {
             // no one has ever used this sound
@@ -319,7 +292,60 @@ SoundWrapper* SoundWrapper::instance() {
     return &soundWrapperInstance;
 }
 
+SoundWrapper::~SoundWrapper() {
+    if (initialized.load()) {
+        am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
+    }
+}
+
 bool SoundWrapper::getInitialized() const { return initialized.load(); }
+
+::android::hardware::Return<void> SoundWrapper::onDisconnected(uint32_t connectionID) {
+    ALOGD("%s %d", __FUNCTION__, connectionID);
+    std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
+    (void)safeLock;
+
+    return android::hardware::Return<void>();
+}
+
+::android::hardware::Return<void> SoundWrapper::onConnected(uint32_t connectionID) {
+    ALOGD("%s %d", __FUNCTION__, connectionID);
+    std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
+    (void)safeLock;
+
+    return android::hardware::Return<void>();
+}
+
+::android::hardware::Return<void> SoundWrapper::onWavFileFinished(uint32_t connectionID) {
+    ALOGD("%s %d", __FUNCTION__, connectionID);
+    std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
+    (void)safeLock;
+    std::map<int64_t, std::shared_ptr<Sound>>::iterator i = soundIds.find(static_cast<int64_t>(connectionID));
+    if (i != soundIds.end()) {
+        if (i->second->getConnectionID() == connectionID) {
+            i->second->onPlayStopped(0);
+        }
+    }
+    return android::hardware::Return<void>();
+}
+
+::android::hardware::Return<void> SoundWrapper::onRampedIn(uint32_t connectionID) {
+    ALOGD("%s %d", __FUNCTION__, connectionID);
+    std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
+    (void)safeLock;
+    std::map<int64_t, std::shared_ptr<Sound>>::iterator i = soundIds.find(static_cast<int64_t>(connectionID));
+    if (i != soundIds.end()) {
+        if (i->second->getConnectionID() == connectionID) {
+            i->second->onPlayStarted();
+        }
+    }
+    return android::hardware::Return<void>();
+}
+
+::android::hardware::Return<void> SoundWrapper::ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) {
+    ALOGD("%s sink: %d, volume: %d", __FUNCTION__, sinkId, volume);
+    return android::hardware::Return<void>();
+}
 
 // SoundID
 SoundWrapper::SoundID::SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c) : type(t), component(c) {}
@@ -333,7 +359,7 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
 }
 
 #ifdef UNIT_TEST
-void SoundWrapper::clearAll() { sounds.clear(); }
+// void SoundWrapper::clearAll() { sounds.clear(); }
 
 int SoundWrapper::getSoundState(SoundID soundid) {
     auto i = sounds.find(soundid);

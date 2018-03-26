@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -62,9 +62,9 @@ public class IlluminationControl {
                     //Since wo dont get latest values when we subscribe we do get on each property
                     VehiclePropValue requestedprop = new VehiclePropValue();
                     requestedprop.prop = VehicleProperty.NIGHT_MODE;
-                    ValueResult valueResultNightMode = getVehiclePropValue(requestedprop);
+                    VehicleHalUtils.ValueResult valueResultNightMode = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
                     requestedprop.prop = VehicleProperty.MANUAL_ILLUMINATION;
-                    ValueResult propValueManual = getVehiclePropValue(requestedprop);
+                    VehicleHalUtils.ValueResult propValueManual = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
                     Log.v(TAG, "propValueManual " + propValueManual.propValue.value.toString());
                     Log.v(TAG, "valueResultNightMode " + valueResultNightMode.propValue.value.toString());
 
@@ -131,33 +131,6 @@ public class IlluminationControl {
         Log.v(TAG, "max is " + max);
         return max;
     }
-    /**
-    * Helper function for doing a get against Vehicle hal.
-     * @param requestedPropValue is VehiclePropValue containing the wanted VehicleProperty
-    * */
-    private ValueResult getVehiclePropValue(VehiclePropValue requestedPropValue) {
-        final ValueResult result = new ValueResult();
-        try {
-            mVehicle.get(requestedPropValue,
-                    (status, propValue) -> {
-                        result.status = status;
-                        result.propValue = propValue;
-                    });
-        } catch (RemoteException e) {
-            Log.e(TAG, "Failed to get value from vehicle HAL", e);
-            result.status = 0;
-        }
-        return result;
-    }
-    /**
-     * Helper class for lambda callback in getVehiclePropValue
-     *  StatusCode and VehiclePropValue
-     * */
-    private static class ValueResult {
-        int status;
-        VehiclePropValue propValue;
-    }
-
     /**
      * Callback function used when subscribing to property events in VehicleHal.
      * onPropertyEvent we send the values to BrightnessService.

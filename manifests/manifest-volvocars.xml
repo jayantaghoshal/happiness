@@ -8,13 +8,13 @@
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="f096d1a128b9ec31b26f60682f4560b149b945f8" />
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="92e58bd0ca7d8026244825cbf554dba40dc90d41" />
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="ebacf278c84a70c03cc3c8af81143f569eed31e9" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="12c6cec6a76b6f74b418208640ebda08af955a5c" />
 
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a" />
-  <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="4f64d528d9457ca51e4413e08abed853ae99ddac" />
+  <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="20a4a0a786d746da30e0359b3f245b8c6fab3255" />
 
   <!-- Volvo Cars partner apps -->
 
@@ -26,7 +26,7 @@
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049" />
 
   <!-- vSomeIP-2.10.10 -->
-  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="59783680ea17d8a76cac0f2b90dd67d0ea825506" />
+  <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="25294b78f752dd17c37beda7854da66b190e5d24" />
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/external/iproute2" />
@@ -61,7 +61,7 @@
   <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="15c5576b4f409b26eda862c0542dd425ba28de28" />
 
   <remove-project name="vendor/delphi/android_vehicle-hal" />
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="f77488446d0c482752f3976ccdb04c531a93ee49" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="8cba2e74ad744d1859261779294957b16938c758" />
 
   <remove-project name="vendor/delphi/android_devices" />
   <project name="vendor/delphi/android_devices" path="device/aptiv" revision="af94d164914d3d571b35d8805d644a578c2b7ace">

@@ -94,6 +94,14 @@
                 predefined-parameters: |
                   UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                   UPSTREAM_JOB_GIT_URL=${GIT_URL}
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_staging</customProjectName>
+                <customPrefix>IhuStagingMaster</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
     name: ihu_staging_test-generic

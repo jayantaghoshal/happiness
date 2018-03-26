@@ -18,7 +18,10 @@
 
 namespace SoundNotifications {
 
-class SoundWrapper {  // Maybe a better name could be found
+class Sound;
+using namespace vendor::delphi::audiomanager::V1_0;
+
+class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name could be found
 
   public:
     // A "sound" is uniquely identified with SoundID
@@ -37,6 +40,7 @@ class SoundWrapper {  // Maybe a better name could be found
     // Stop playing the given sound id. This should probably ONLY be called for Non-flank triggerd sounds
     static void stop(SoundID soundid);
 
+    static void registerConnection(Sound* sound, int64_t connectionID);
     static bool isPlaying(SoundID soundid);
     static SoundWrapper* instance();
 
@@ -44,13 +48,20 @@ class SoundWrapper {  // Maybe a better name could be found
 
     bool getInitialized() const;
 
-    bool init(vendor::delphi::audiomanager::V1_0::IAudioManager* service = nullptr);
+    bool init(::android::sp<IAudioManager> service);
     void cleanup();
 
-  private:
-    SoundWrapper();
+    // reimplemented for IAudioManagerCallback
+    virtual ::android::hardware::Return<void> onDisconnected(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> onConnected(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> onWavFileFinished(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> onRampedIn(uint32_t connectionID) override;
+    virtual ::android::hardware::Return<void> ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) override;
 
-    static android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> am_service;
+  private:
+    SoundWrapper() = default;
+
+    static android::sp<IAudioManager> am_service;
 
     std::atomic_bool initialized{false};
 
@@ -68,7 +79,7 @@ class SoundWrapper {  // Maybe a better name could be found
  * also it has a facility to restart sound if needed
  */
 
-class Sound : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {
+class Sound {
   public:
     // Start playing the given sound id
     void play();
@@ -76,10 +87,9 @@ class Sound : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {
     // Stop playing the given sound id. This should probably ONLY be called for Non-flank triggerd sounds
     void stop();
 
-    Sound(const SoundWrapper::SoundID& soundID,
-          const android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager>& service);
+    Sound(const SoundWrapper::SoundID& soundID, const android::sp<IAudioManager>& service);
 
-    virtual ~Sound() override;
+    ~Sound() = default;
     // play callbacks but only for this sound
     void onPlayStarted();
     void onPlayStopped(int32_t reason);
@@ -96,13 +106,6 @@ class Sound : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {
     // Timer callback
     void onTimeout();
 
-    // reimplemented for IAudioManagerCallback
-    virtual ::android::hardware::Return<void> onDisconnected(uint32_t connectionID) override;
-    virtual ::android::hardware::Return<void> onConnected(uint32_t connectionID) override;
-    virtual ::android::hardware::Return<void> onWavFileFinished(uint32_t connectionID) override;
-    virtual ::android::hardware::Return<void> onRampedIn(uint32_t connectionID) override;
-    virtual ::android::hardware::Return<void> ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) override;
-
   private:
     State _state;
     std::recursive_mutex _stateMutex;
@@ -114,7 +117,7 @@ class Sound : public vendor::delphi::audiomanager::V1_0::IAudioManagerCallback {
     SoundWrapper::SoundID _soundID;
     // Sound name from AudioTable
     const std::string _name;
-    android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> am_service;
+    android::sp<IAudioManager> am_service;
     tarmac::eventloop::IDispatcher& restartTimer;
 };
 

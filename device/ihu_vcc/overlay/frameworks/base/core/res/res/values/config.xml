@@ -26,5 +26,8 @@
         Note: Modifed due to volvo requirements -->
     <integer name="config_screenBrightnessSettingMinimum">1</integer>
 
+    <!-- Specifies the path that is used by AdaptiveIconDrawable class to crop launcher icons. -->
+    <string name="config_icon_mask" translatable="false">"M0,77 L0,23 Q0,0 23,0 L77,0 Q100,0 100,23 L100,77 Q100,100 77,100 L23,100 Q0,100 0,77Z"</string>
+
 </resources>
 

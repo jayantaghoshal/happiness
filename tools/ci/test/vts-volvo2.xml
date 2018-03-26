@@ -31,8 +31,8 @@ the plan as they do not execute properly.
 
   <option name="compatibility:test-arg" value="com.android.tradefed.testtype.VtsMultiDeviceTest:precondition-vintf-override:true" />
 
-  <!-- From vts-hal-hidl.xml: Internal Only --> <!-- VERY TIGHT, 95% DATA-->
-  <!--<option name="compatibility:include-filter" value="VtsHalAudioEffectV2_0Target" /> CAUSES INFINITE BOOT MODE, CAN BE RUN ON NEXT APTIV UPDATE -->
+  <!-- From vts-hal-hidl.xml: Internal Only -->
+  <option name="compatibility:include-filter" value="VtsHalAudioEffectV2_0Target" />
   <option name="compatibility:include-filter" value="VtsHalAudioV2_0Target" />
   <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_0Target" />
   <option name="compatibility:include-filter" value="VtsHalGraphicsComposerV2_1Target" />
@@ -47,7 +47,7 @@ the plan as they do not execute properly.
   <option name="compatibility:include-filter" value="VtsHalConfigstoreV1_0Target" /> 
   <option name="compatibility:include-filter" value="VtsHalContexthubV1_0Target" /> 
   <option name="compatibility:include-filter" value="VtsHalDrmV1_0Target" />
-<!--  <option name="compatibility:include-filter" value="VtsHalGatekeeperV1_0Target" /> 15 MIN TIMEOUT -->
+  <option name="compatibility:include-filter" value="VtsHalGatekeeperV1_0Target" />
   <option name="compatibility:include-filter" value="VtsHalGnssV1_0Target" />
 
 

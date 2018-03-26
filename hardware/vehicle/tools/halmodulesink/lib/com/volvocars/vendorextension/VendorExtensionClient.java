@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
@@ -31,20 +32,9 @@ import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
 public class VendorExtensionClient {
 
     private static final String TAG = VendorExtensionClient.class.getSimpleName();
+    public static final int WAIT_TIME = 1000;
     static Semaphore semaphore = new Semaphore(1);
     private static VendorExtensionClient sVendorExtensionClient;
-    private final CarVendorExtensionManager.CarVendorExtensionCallback mHardwareCallback =
-            new CarVendorExtensionManager.CarVendorExtensionCallback() {
-                @Override
-                public void onChangeEvent(final CarPropertyValue val) {
-                    Log.d(TAG, val.toString());
-                }
-
-                @Override
-                public void onErrorEvent(final int propertyId, final int zone) {
-                    Log.d(TAG, propertyId + " : " + zone);
-                }
-            };
     private Context context;
     private Car mCar;
     private CarVendorExtensionManager carVEManager;
@@ -67,6 +57,7 @@ public class VendorExtensionClient {
                     } catch (CarNotConnectedException e) {
                         Log.e(TAG, "Car not connected in onConnected", e);
                     }
+
                     Log.d(TAG, "onConnected: Car.getCarManager()");
                     semaphore.release();
                 }
@@ -85,9 +76,28 @@ public class VendorExtensionClient {
      */
     private VendorExtensionClient(Context context) {
         this.context = context;
+        supportedFeatures = new Vector<>();
         CompletableFuture.runAsync(() -> init());
     }
 
+
+    /**
+     * Validation of the permission and connected Car
+     * TODO: implement netter exception handling such as throwing a car not connected
+     */
+    private boolean validate() {
+        try {
+            if (semaphore.tryAcquire(WAIT_TIME, TimeUnit.MILLISECONDS)) {
+                semaphore.release();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Interrupted a while waiting ... ", e);
+            return false;
+        }
+    }
 
 // CarVendorExtension handling methods
 
@@ -102,6 +112,7 @@ public class VendorExtensionClient {
      */
     public Object get(int propID, int area)
             throws NotSupportedException, android.car.CarNotConnectedException {
+        validate();
         if (!isSupportedFeature(propID)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
@@ -120,6 +131,7 @@ public class VendorExtensionClient {
      */
     public Object get(int propID)
             throws NotSupportedException, android.car.CarNotConnectedException {
+        validate();
         if (!isSupportedFeature(propID)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
@@ -136,6 +148,7 @@ public class VendorExtensionClient {
      * @return
      */
     public VehiclePropertySupport getVehiclePropertySupport(int propID, int area) {
+        validate();
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
                 .filter(feature -> feature.vehicleProperty == propID & feature.area == area).findFirst();
         return result.get();
@@ -154,6 +167,7 @@ public class VendorExtensionClient {
         if (!isSupportedFeature(propID)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
+        validate();
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
                 .filter(feature -> feature.vehicleProperty == propID).findFirst();
         carVEManager.setGlobalProperty(result.get().type,
@@ -172,6 +186,7 @@ public class VendorExtensionClient {
      */
     public void set(int propID, int area, Object data)
             throws NotSupportedException, android.car.CarNotConnectedException {
+        validate();
         if (!isSupportedFeature(propID)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
@@ -201,15 +216,6 @@ public class VendorExtensionClient {
         } catch (InterruptedException e) {
             Log.d(TAG, "Thread interrupted", e);
         }
-        if (mCar == null) {
-            mCar = Car.createCar(context, mServiceConnectionCallback);
-            Log.d(TAG, "onCreate: Car.connect()");
-            try {
-                mCar.connect();
-            } catch (Exception e) {
-                Log.d(TAG, "ERROR: Car.connect() has problems: ", e);
-            }
-        }
         // Add supported features
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.DAI_SETTING,
@@ -220,12 +226,23 @@ public class VendorExtensionClient {
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.CONNECTED_SAFETY_ON,
                         NO_AREA));
+        if (mCar == null) {
+            mCar = Car.createCar(context, mServiceConnectionCallback);
+            Log.d(TAG, "onCreate: Car.connect()");
+            try {
+                mCar.connect();
+            } catch (Exception e) {
+                Log.d(TAG, "ERROR: Car.connect() has problems: ", e);
+            }
+        }
+
     }
 
     // Feature handling methods
 
     /**
      * TODO: Maybe hide this? can get all information
+     *
      * @param propertyClass
      * @param propId
      * @param area
@@ -233,38 +250,45 @@ public class VendorExtensionClient {
      * @return
      */
     private <E> Boolean isFeatureAvailable(Class<E> propertyClass, int propId, int area) {
+        validate();
         return isFeatureAvailable(new VehiclePropertySupport(propertyClass, propId, area));
     }
 
     /**
      * Checks if this feature is available
+     *
      * @param propId
      * @param <E>
      * @return
      */
     public <E> Boolean isFeatureAvailable(int propId) {
+        validate();
         return isFeatureAvailable(propId, NO_AREA);
     }
 
     /**
      * Checks if this feature is available
+     *
      * @param propId
      * @param area
      * @param <E>
      * @return
      */
     public <E> Boolean isFeatureAvailable(int propId, int area) {
+        validate();
         return isFeatureAvailable(new VehiclePropertySupport(getVehiclePropertySupport(propId, area).type, propId, area));
     }
 
     /**
      * Checks if this feature is available, Maybe force to use only defined propIds.
      * Right now getProperty can get all the properties even not vendor extension.
+     *
      * @param vehiclePropertySupport
      * @param <E>
      * @return
      */
     private <E> Boolean isFeatureAvailable(VehiclePropertySupport vehiclePropertySupport) {
+        validate();
         try {
             carVEManager.getProperty(vehiclePropertySupport.type,
                     vehiclePropertySupport.vehicleProperty, vehiclePropertySupport.area);
@@ -276,36 +300,44 @@ public class VendorExtensionClient {
 
     /**
      * Checks if this feature supported by the API
+     *
      * @param propId
      * @return
      */
     public boolean isSupportedFeature(int propId) {
+        validate();
         return isSupportedFeature(propId, NO_AREA);
     }
 
     /**
      * Checks if this feature supported by the API
+     *
      * @param propId
      * @param areaId
      * @return
      */
     public boolean isSupportedFeature(int propId, int areaId) {
+        validate();
         return supportedFeatures.stream().anyMatch(
                 feature -> feature.vehicleProperty == propId & feature.area == areaId);
     }
 
     /**
      * Checks if this feature supported by the API
+     *
      * @return
      */
     public List<Integer> getSupportedFeatures() {
+        validate();
         return new Vector<Integer>(supportedFeatures.stream()
                 .filter(this::isFeatureAvailable)
                 .map(vehiclePropertySupport -> vehiclePropertySupport.vehicleProperty)
                 .collect(Collectors.toList()));
+
     }
 
     public List<Integer> getAvailableFeatures() {
+        validate();
         return new Vector<Integer>(supportedFeatures.stream()
                 .filter(this::isFeatureAvailable)
                 .map(vehiclePropertySupport -> vehiclePropertySupport.vehicleProperty)
@@ -314,23 +346,27 @@ public class VendorExtensionClient {
 
     /**
      * TODO: decide either supported features synced with vehicle hal and only allow public access "isSupportedFeature"
+     *
      * @return
      */
     public List<Integer> getAvailableFeaturesAndSupported() {
+        validate();
         supportedFeatures.stream().map(vehiclePropertySupport -> vehiclePropertySupport.available =
                 isFeatureAvailable(vehiclePropertySupport));
         return getAvailableFeatures();
     }
 
     public void registerCallback() {
+        validate();
         try {
-            carVEManager.registerCallback(mHardwareCallback);
+            carVEManager.registerCallback(logCallBack);
         } catch (android.car.CarNotConnectedException e) {
             Log.e(TAG, "Car not connected in VEC");
         }
     }
 
     public void registerCallback(CarVendorExtensionManager.CarVendorExtensionCallback mHardwareCallback) {
+        validate();
         try {
             carVEManager.registerCallback(mHardwareCallback);
         } catch (android.car.CarNotConnectedException e) {
@@ -341,7 +377,7 @@ public class VendorExtensionClient {
     /**
      * Wrap methods for getting and setting propId
      */
-    class VehiclePropertySupport implements Comparable <VehiclePropertySupport>{
+    class VehiclePropertySupport implements Comparable<VehiclePropertySupport> {
         Class type;
         Integer vehicleProperty;
         Integer area;
@@ -357,8 +393,8 @@ public class VendorExtensionClient {
         @Override
         public int compareTo(VehiclePropertySupport o) {
             if (this.type.equals(o.type) &&
-                    this.vehicleProperty==o.vehicleProperty &&
-                        this.area == o.area){
+                    this.vehicleProperty == o.vehicleProperty &&
+                    this.area == o.area) {
                 return 0;
             } else {
                 return 1;
@@ -366,6 +402,19 @@ public class VendorExtensionClient {
 
         }
     }
+
+    private final CarVendorExtensionManager.CarVendorExtensionCallback logCallBack =
+            new CarVendorExtensionManager.CarVendorExtensionCallback() {
+                @Override
+                public void onChangeEvent(final CarPropertyValue val) {
+                    Log.d(TAG, "onChangeEvent: " + val.toString());
+                }
+
+                @Override
+                public void onErrorEvent(final int propertyId, final int zone) {
+                    Log.d(TAG, "onChangeEvent: " + propertyId + " : " + zone);
+                }
+            };
 
     public class NotSupportedException extends Exception {
         public NotSupportedException(String message) {
