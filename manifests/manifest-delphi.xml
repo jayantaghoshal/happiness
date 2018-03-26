@@ -135,7 +135,7 @@
 
   <!-- Common Delphi building blocks that are delivered as binaries -->
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="60c8deacba4e5d45ac7492ee425a03d04209aaea"/>
-  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="b0d35ae74304e1c9b40e536c3cc3c26641bfa533"/>
+  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="beaa79d295701ee9c6f4f74114b204fea0f8f658"/>
   <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="59792a9c6904ca168a8f32cd7d1401aad888eff5"/>
   <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="002356e55ce96ddfd10612de92ce062243941693" />
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="1ff46eb8fd8b3fde9895932db3f485a80d7ecbf8"/>
