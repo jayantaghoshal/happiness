@@ -10,27 +10,15 @@ cc_test {
 
     // Inherit default settings and flags. See vendor/volvocars/defaults/Android.bp
     defaults: [
-        "volvocars_cc_defaults_hq_tests",
+        "volvocars_cc_defaults_hq_tests_pac_vts",
     ],
 
     srcs: [
         "test_example.cpp",
     ],
 
-    cppflags: [
-        "-Werror",
-    ],
-
     shared_libs: [
         "liblog",
     ],
 
-    static_libs: [
-        "libgtest",
-    ],
-
-    // Add this module to the VTS test suite
-    test_suites: [
-        "vts",
-    ],
 }

@@ -1,0 +1,96 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+// Common flags for PAC modules and tests
+cc_defaults {
+    name: "vcc_pac_common_flags",
+    cpp_std: "c++14",
+
+    cflags: [
+        "-Wunused",
+    ],
+}
+
+// Common debug flags for PAC modules and tests
+cc_defaults {
+    name: "vcc_pac_common_debug_flags",
+
+    cflags: [
+        "-O0", // Turn off optimization for debugging
+        "-g", // Enable debug symbols
+    ],
+}
+
+// Default for PAC module release build
+cc_defaults {
+    name: "volvocars_cc_defaults_hq_pac_release",
+
+    defaults: [
+        "vcc_pac_common_flags",
+        "volvocars_cc_defaults_hq",
+    ],
+
+    cflags: [
+        "-O2", // Enable optimization
+    ],
+}
+
+// Default for PAC module debug build
+cc_defaults {
+    name: "volvocars_cc_defaults_hq_pac_debug",
+
+    defaults: [
+        "vcc_pac_common_flags",
+        "vcc_pac_common_debug_flags",
+        "volvocars_cc_defaults_hq",
+    ],
+}
+
+// Default for PAC module VTS tests
+cc_defaults {
+    name: "volvocars_cc_defaults_hq_tests_pac_vts",
+
+    defaults: [
+        "vcc_pac_common_flags",
+        "vcc_pac_common_debug_flags",
+        "volvocars_cc_defaults_hq_tests",
+    ],
+
+    static_libs: [
+        "libgmock",
+        "libgtest",
+    ],
+
+    // Add this module to the VTS test suite
+    test_suites: [
+        "vts",
+    ],
+}
+
+// Includes the PAC log wrapper and its dependencies
+cc_defaults {
+    name: "vcc_pac_use_libdbg",
+
+    cflags: [
+        "-DLIBDBG_ENABLE_DEBUG", // Enable logging in the log wrapper
+    ],
+
+    shared_libs: [
+        "libdbg",
+        "liblog",
+    ],
+}
+
+// Includes the generated EVS HIDL interface and its dependencies
+cc_defaults {
+    name: "vcc_pac_use_evs_hidl",
+
+    shared_libs: [
+        "android.hardware.automotive.evs@1.0",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+    ],
+}
