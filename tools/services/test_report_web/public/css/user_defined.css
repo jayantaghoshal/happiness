@@ -1,0 +1,30 @@
+    fieldset {
+        border: 1px solid #15317E;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        border-radius: 8px;
+        padding: 30px;
+    }
+    
+    legend {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 0px;
+        margin-left: +10px;
+        width: 15%;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px 5px 5px 10px;
+        background-color: white;
+    }
+    
+    .user_defined_table td {
+        border-top: 0px;
+        padding: 0.20rem;
+    }
+    
+    .scrollable-menu {
+        height: auto;
+        max-height: 250px;
+        overflow-x: hidden;
+    }

@@ -1,0 +1,26 @@
+{
+    "name": "vcc_test_report",
+    "version": "1.0.0",
+    "description": "node js based web app for test reporting",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "cors": "^2.8.4",
+        "ejs": "^2.5.7",
+        "es6": "0.0.7",
+        "express": "^4.16.2",
+        "mongodb": "^3.0.3",
+        "nodemon": "^1.17.1",
+        "winston": "^2.4.1",
+        "winston-daily-rotate-file": "^3.0.1",
+        "xml": "^1.0.1"
+    },
+    "devDependencies": {
+        "ejs-lint": "^0.3.0"
+    }
+}
