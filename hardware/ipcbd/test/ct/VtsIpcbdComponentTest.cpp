@@ -86,7 +86,7 @@ class VtsIpcbdComponentTest : public ::Test {
         // run a process and create a streambuf that reads its stdout and stderr
         std::string pid_str = getCmdOut(
                 "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
-                "/vendor/bin/hw/ipcbd ipcb_test UDP & "
+                "/vendor/bin/ipcbd ipcb_test UDP & "
                 " echo $!");
 
         uint8_t count = 0;

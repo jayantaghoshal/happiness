@@ -12,7 +12,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := $(service_name)-service
 LOCAL_INIT_RC := $(service_name)-service.rc
 LOCAL_PROPRIETARY_MODULE := true
-LOCAL_MODULE_RELATIVE_PATH := hw
 PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.delphi@2.0-service
 
 LOCAL_SRC_FILES := \

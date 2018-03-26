@@ -1,4 +1,4 @@
-service vcc-vehicle-hal-2.0 /vendor/bin/hw/android.hardware.automotive.vehicle.vcc.emulator@2.0-service
+service vcc-vehicle-hal-2.0 /vendor/bin/android.hardware.automotive.vehicle.vcc.emulator@2.0-service
     class hal
     user vehicle_network
     group system inet

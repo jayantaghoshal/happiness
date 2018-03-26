@@ -18,7 +18,6 @@ LOCAL_CPPFLAGS += -fexceptions
 LOCAL_CPPFLAGS += -Wno-macro-redefined
 
 LOCAL_MODULE := carconfig-updater
-LOCAL_MODULE_RELATIVE_PATH := hw
 
 
 LOCAL_VENDOR_MODULE := true

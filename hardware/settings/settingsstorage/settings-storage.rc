@@ -1,4 +1,4 @@
-service settingstorage-hidl-server /vendor/bin/hw/vendor.volvocars.hardware.settingsstorage@1.0-service
+service settingstorage-hidl-server /vendor/bin/vendor.volvocars.hardware.settingsstorage@1.0-service
     class main
     user root
     group root

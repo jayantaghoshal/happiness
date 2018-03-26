@@ -1,4 +1,4 @@
-service ipcbd-iplm /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd iplm UDPB
+service ipcbd-iplm /system/bin/ip netns exec vcc /vendor/bin/ipcbd iplm UDPB
     class vcc_net
     oneshot
     user root

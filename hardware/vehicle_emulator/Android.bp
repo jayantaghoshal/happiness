@@ -111,7 +111,6 @@ cc_binary {
     defaults: ["vhal_v2_0_defaults_vcc"],
     init_rc: ["android.hardware.automotive.vehicle.vcc.emulator@2.0-service.rc"],
     vendor: true,
-    relative_install_path: "hw",
     srcs: ["VehicleService.cpp"],
     shared_libs: [
         "libbase",

@@ -1,4 +1,4 @@
-service lscd /vendor/bin/hw/lscd
+service lscd /vendor/bin/lscd
     class vcc_net
     user root
     group root

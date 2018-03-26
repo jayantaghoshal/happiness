@@ -20,7 +20,6 @@ LOCAL_CPPFLAGS += -fexceptions
 LOCAL_CPPFLAGS += -Wno-macro-redefined
 
 LOCAL_MODULE := vehicle-signals-daemon
-LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_VENDOR_MODULE := true
 LOCAL_MULTILIB := 64

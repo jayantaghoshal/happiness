@@ -1,4 +1,4 @@
-service iplmd /vendor/bin/hw/iplmd
+service iplmd /vendor/bin/iplmd
     class vcc_net
     user oem_2972
     group oem_2972

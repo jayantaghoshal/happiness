@@ -22,7 +22,6 @@ cc_binary {
         "ipcbd-dim.rc",
     ],
 
-    relative_install_path: "hw",
 
     srcs: [
         "src/main.cpp",

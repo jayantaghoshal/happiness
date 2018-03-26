@@ -30,7 +30,5 @@ cc_binary {
         "vendor.volvocars.hardware.remotectrl@1.0",
     ],
 
-    relative_install_path: "hw",
-
     init_rc: ["init/remotectrl_audioctrld.rc"],
 }

@@ -5,7 +5,6 @@
 
 cc_library_shared {
     name: "libsettings",
-    relative_install_path: "hw",
     proprietary: true,
     defaults: ["volvocars_cc_defaults_hq"],
     srcs: [

@@ -1,4 +1,4 @@
-service installationmasterd /vendor/bin/hw/installationmasterd
+service installationmasterd /vendor/bin/installationmasterd
     class vcc_net
     oneshot
     user root

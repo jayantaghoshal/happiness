@@ -1,4 +1,4 @@
-service uds_data_collector /vendor/bin/hw/vendor.volvocars.hardware.uds@1.0-service
+service uds_data_collector /vendor/bin/vendor.volvocars.hardware.uds@1.0-service
     class main
     user root
     group root

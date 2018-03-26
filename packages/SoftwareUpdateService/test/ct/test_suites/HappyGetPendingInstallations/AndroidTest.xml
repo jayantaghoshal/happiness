@@ -23,7 +23,7 @@
         <option name="run-command" value="am force-stop com.volvocars.cloudservice" />
         <option name="run-command" value="am force-stop com.volvocars.softwareupdate" />
         <option name="run-command" value="am force-stop com.volvocars.softwareupdateapp" />
-        <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/hw/cloudd" />
+        <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/cloudd" />
     </target_preparer>
 
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">
