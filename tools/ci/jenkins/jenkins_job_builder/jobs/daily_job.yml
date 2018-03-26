@@ -20,7 +20,7 @@
                 </com.sonyericsson.rebuild.RebuildSettings>
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -82,7 +82,7 @@
                 - bootstrap_ihu_daily_test_common.sh
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -149,7 +149,7 @@
                 - bootstrap_ihu_daily_vts.sh
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -203,7 +203,7 @@
             ignore-post-commit-hooks: True
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000

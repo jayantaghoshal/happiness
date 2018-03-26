@@ -41,7 +41,7 @@
           allow-empty: true
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -72,7 +72,7 @@
                 password: JENKINS_API_PASSWORD            
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
