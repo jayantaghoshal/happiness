@@ -19,15 +19,21 @@ using namespace SoundNotifications;
 
 class SoundWrapperUT : public ::testing::Test {
   public:
-    void SetUp() override {
+    static void SetUpTestCase() {
         swrapper = SoundWrapper::instance();
         am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
         swrapper->init(am_service);
     }
+
+    void SetUp() override {}
     void TearDown() override {}
-    SoundWrapper* swrapper;
-    ::android::sp<AudioManagerMock> am_service;
+
+    static SoundWrapper* swrapper;
+    static ::android::sp<AudioManagerMock> am_service;
 };
+
+::android::sp<AudioManagerMock> SoundWrapperUT::am_service = nullptr;
+SoundWrapper* SoundWrapperUT::swrapper = nullptr;
 
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
     ALOGI("Starting %s", test_info_->name());

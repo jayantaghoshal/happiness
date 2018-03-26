@@ -296,9 +296,12 @@ SoundWrapper* SoundWrapper::instance() {
 }
 
 SoundWrapper::~SoundWrapper() {
+    ALOGD("%s %d", __FUNCTION__, initialized.load());
     if (initialized.load()) {
         am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
     }
+
+    initialized = false;
 }
 
 bool SoundWrapper::getInitialized() const { return initialized.load(); }
@@ -362,7 +365,10 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
 }
 
 #ifdef UNIT_TEST
-void SoundWrapper::clearAll() { sounds.clear(); }
+void SoundWrapper::clearAll() {
+    ALOGD("%s", __FUNCTION__);
+    sounds.clear();
+}
 
 int SoundWrapper::getSoundState(SoundID soundid) {
     auto i = sounds.find(soundid);
