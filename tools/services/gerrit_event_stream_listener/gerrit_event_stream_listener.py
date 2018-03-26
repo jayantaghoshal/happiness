@@ -16,7 +16,6 @@ import logging
 import datetime
 import urllib.parse
 import re
-import pprint
 
 class RedisClient(object):
 
@@ -63,11 +62,11 @@ class GerritStream(object):
     def __init__(self, user, host, thread=True, port=29418, keyfile=None):
         self.gerrit = gerritlib.gerrit.Gerrit(host, user, port)
         if thread:
-            pprint.pprint(self.gerrit)
             self.gerrit.startWatching()
 
     def get_event(self):
         return self.gerrit.getEvent()
+
 
 class VCCCIProxy(object):
     VCC_CI_API_URL="http://cimb.volvocars.biz/api/1.6.0"
@@ -125,6 +124,7 @@ class VCCCIProxy(object):
         }
         url = self.VCC_CI_API_URL + "/SourceCreated"
         logging.info("POST request to %s", url)
+        self.print_json(data)
         if self.send_data():
             r = requests.post(url, data=json.dumps(data), headers=self.headers())
             logging.info(r.status_code)
@@ -138,6 +138,7 @@ class VCCCIProxy(object):
         }
         url = self.VCC_CI_API_URL + "/SourceAbandoned"
         logging.info("POST request to %s", url)
+        self.print_json(data)
         if self.send_data():
             r = requests.post(url, data=json.dumps(data), headers=self.headers())
             logging.info(r.status_code)
@@ -156,6 +157,7 @@ class VCCCIProxy(object):
         }
         url = self.VCC_CI_API_URL + "/SourcePublished"
         logging.info("POST request to %s", url)
+        self.print_json(data)
         if self.send_data():
             r = requests.post(url, data=json.dumps(data), headers=self.headers())
             logging.info(r.status_code)
@@ -189,6 +191,7 @@ class VCCCIProxy(object):
             }
             url = self.VCC_CI_API_URL + "/BaselineCreated"
             logging.info("POST request to %s", url)
+            self.print_json(data)
             if self.send_data():
                 r = requests.post(url, data=json.dumps(data), headers=self.headers())
                 logging.info(r.status_code)
@@ -197,7 +200,12 @@ class VCCCIProxy(object):
             logging.error(err)
 
     def project(self):
-        return self._event["project"]
+        if "project" in self._event:
+            return self._event["project"]
+        if "refUpdate" in self._event:
+            if "project" in self._event["refUpdate"]:
+                return self._event["refUpdate"]["project"]
+        return ""
 
     def branch(self):
         return self._event["change"]["branch"]
@@ -230,7 +238,7 @@ class VCCCIProxy(object):
         return self.username()
 
     def url(self):
-        self._event["change"]["url"]
+        return self._event["change"]["url"]
 
     def merge_time(self):
         return datetime.datetime.fromtimestamp(self._event["eventCreatedOn"]).strftime("%Y-%m-%dT%H:%M:%SZ")
