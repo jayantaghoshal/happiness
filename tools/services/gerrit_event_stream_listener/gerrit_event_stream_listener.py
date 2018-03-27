@@ -81,7 +81,7 @@ class VCCCIProxy(object):
                 self.event_type(),
                 self.project())
 
-            if self.supported_event:
+            if self.supported_event():
                 if(self.event_type() == "patchset-created"):
                     self.print_json(event)
                     self.chain_id_mapping()
