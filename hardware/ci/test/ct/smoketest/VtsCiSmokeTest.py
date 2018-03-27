@@ -127,11 +127,17 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def testCrashes(self):
+        def crash_allowed(process_name):
+            if process_name.strip() == "/vendor/bin/hw/vendor.volvocars.hardware.settingsstorage@1.0-service":
+                #TODO(ARTINFO-2180): Remove exclusion
+                return True
+            return False
+
         self.dut.shell.InvokeTerminal("crash_shell")
         my_shell = getattr(self.dut.shell, "crash_shell")
         shell_response = my_shell.Execute(["ls /data/tombstones"])
         shell_response_stdout = shell_response[const.STDOUT][0].strip()
-        tombstones_files = [x for x in shell_response_stdout.split("\n") if len(x) > 0]
+        tombstones_files = [x.strip() for x in shell_response_stdout.split("\n") if len(x) > 0]
         if len(tombstones_files) > 0:
             logging.info("Found tombstones:")
         crashing_processes = []
@@ -143,7 +149,9 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             else:
                 crashing_processes.append("???")
             logging.info("Tombstone: %s : %s" % (t, tombstone_output))
-        asserts.assertEqual(0, len(tombstones_files),
+
+        disallowed_crashes = [p for p in crashing_processes if not crash_allowed(p)]
+        asserts.assertEqual(0, len(disallowed_crashes),
                             "No crashes are allowed, found tombstones in /data/tombstones on the device. "
                             "Crashing apps: [%s]. Full tombstone-details in logs" % ", ".join(crashing_processes))
 
