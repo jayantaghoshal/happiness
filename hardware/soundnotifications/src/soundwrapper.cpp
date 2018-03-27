@@ -6,6 +6,7 @@
 #include "soundwrapper.h"
 #include <memory>
 #include <mutex>
+#include <string>
 
 #undef LOG_TAG
 #define LOG_TAG "SoundNotificationWrp"
@@ -22,14 +23,25 @@ Sound::Sound(const SoundWrapper::SoundID& soundID,
     : _state(State::Idle),
       connectionID(-1),
       _soundID(soundID),
-      _name(AudioTable::getSourceName(soundID.type, soundID.component)),
+      _name("invalid"),
       am_service(service),
-      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {}
+      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {
+    try {
+        _name = (AudioTable::getSourceName(soundID.type, soundID.component));
+        //(AudioTable::getSourceName(soundID.type, soundID.component));
+    } catch (std::invalid_argument iaex) {
+        ALOGW("Invalid combination of Type and Component");
+    }
+}
 
 void Sound::onTimeout() {
     ALOGD("Sound::onTimeout %s", _name.c_str());
     play();
 }
+
+void Sound::setState(int state) { _state = static_cast<State>(state); }
+
+SoundWrapper::SoundID Sound::getSoundID() const { return _soundID; }
 
 void Sound::play() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
@@ -195,8 +207,10 @@ static std::recursive_mutex soundIdsMutex;
 bool SoundWrapper::init(::android::sp<IAudioManager> service) {
     // for unit testing
 
-    if (service.get() != nullptr) {
-        am_service = ::android::sp<IAudioManager>(service);
+    if (service != nullptr) {
+        if (service != am_service) {
+            am_service = service;
+        }
     } else {
         while (am_service.get() == nullptr) {
             am_service = IAudioManager::getService();
@@ -270,7 +284,19 @@ void SoundWrapper::stop(SoundID soundid) {
 void SoundWrapper::registerConnection(Sound* sound, int64_t connectionID) {
     std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
     (void)safeLock;
-    soundIds[connectionID] = std::shared_ptr<Sound>(sound);
+    if (sound == nullptr) {
+        return;
+    }
+    std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
+    std::shared_ptr<Sound> sound_;
+    {  // lock scope
+        std::lock_guard<std::recursive_mutex> safeLock(soundsMutex);
+        (void)safeLock;
+        i = sounds.find(sound->getSoundID());
+        if (i != sounds.end()) {
+            soundIds[connectionID] = std::shared_ptr<Sound>(i->second);
+        }
+    }
 }
 
 bool SoundWrapper::isPlaying(SoundID soundid) {
@@ -368,6 +394,7 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
 void SoundWrapper::clearAll() {
     ALOGD("%s", __FUNCTION__);
     sounds.clear();
+    soundIds.clear();
 }
 
 int SoundWrapper::getSoundState(SoundID soundid) {
@@ -379,6 +406,18 @@ int SoundWrapper::getSoundState(SoundID soundid) {
         return -1;  // sound not found
     }
 }
+
+void SoundWrapper::setSoundState(SoundID soundid, int state) {
+    auto i = sounds.find(soundid);
+    std::shared_ptr<Sound> sound;
+    if (i != sounds.end()) {
+        i->second->setState(state);
+        return;
+    } else {
+        return;  // sound not found
+    }
+}
+
 #endif
 
 }  // namespace SoundNotifications

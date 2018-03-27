@@ -6,17 +6,22 @@
 #pragma once
 
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <vendor/delphi/audiomanager/1.0/IAudioManager.h>
 #include <vendor/delphi/audiomanager/1.0/IAudioManagerCallback.h>
 #include <vendor/delphi/audiomanager/1.0/types.h>
 
+#include <log/log.h>
+
 using namespace vendor::delphi::audiomanager::V1_0;
 using namespace ::android::hardware;
 
-class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManager {
+class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audiomanager::V1_0::IAudioManager {
   public:
     AudioManagerMock() {}
     virtual ~AudioManagerMock() {}
+
+    using playSound_cb = std::function<void(AMStatus status, int64_t connectionId)>;
 
     MOCK_METHOD3(playSound, Return<void>(int32_t soundType, int32_t soundComp, playSound_cb _aidl_return));
     MOCK_METHOD1(stopSound, Return<AMStatus>(int64_t connectionId));
@@ -45,11 +50,12 @@ class AudioManagerMock : public vendor::delphi::audiomanager::V1_0::IAudioManage
 
     Return<void> subscribe(const ::android::sp<IAudioManagerCallback>& callback) {
         callback_ = callback;
-        return Void();
+        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::subscribe: %p", callback.get());
+        return android::hardware::Status::fromStatusT(android::OK);
     }
 
-    ::android::hardware::Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-        (void)callback.get();
-        return android::hardware::Void();
+    Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
+        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::unsubscribe: %p", callback.get());
+        return android::hardware::Status::fromStatusT(android::OK);
     }
 };

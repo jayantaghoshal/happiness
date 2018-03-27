@@ -5,9 +5,9 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <inttypes.h>
+#include <log/log.h>
 #include <iostream>
-
-#include <cutils/log.h>
 
 #include <soundwrapper.h>
 #include "audiomanagermock.h"
@@ -16,20 +16,58 @@
 #define LOG_TAG "soundwrapperUT.Tests"
 
 using namespace SoundNotifications;
+using namespace AudioTable;
 
-class SoundWrapperUT : public ::testing::Test {
+using namespace testing;
+class SoundWrapperUT : public Test {
   public:
+    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
+                                                    int32_t soundComp,
+                                                    AudioManagerMock::playSound_cb _hidl_cb) {
+        ALOGI("AudioManagerMock::mockPlaySound: %i %i", soundType, soundComp);
+        connectionID++;
+        bool error = false;
+
+        try {
+            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
+                                      static_cast<AudioTable::SoundComponent>(soundComp));
+        } catch (std::invalid_argument iaex) {
+            ALOGW("AudioManagerMock::mockPlaySound. Invalid combination of Type and Component");
+            error = true;
+        }
+
+        if (!error) {
+            _hidl_cb(AMStatus::OK, connectionID);
+            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
+        } else {
+            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
+        }
+        return android::hardware::Status::fromStatusT(android::OK);
+    }
+
+    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
+        ALOGI("AudioManagerMock::mockStopSound. connection ID: %" PRId64, connectionId);
+        return AMStatus::OK;
+    }
+
     static void SetUpTestCase() {
         swrapper = SoundWrapper::instance();
         am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
         swrapper->init(am_service);
     }
 
-    void SetUp() override {}
+    void SetUp() override {
+        SoundWrapper::clearAll();
+        ON_CALL(*am_service.get(), playSound(_, _, _)).WillByDefault(Invoke(this, &SoundWrapperUT::mockPlaySound));
+        ON_CALL(*am_service.get(), stopSound(_)).WillByDefault(Invoke(this, &SoundWrapperUT::mockStopSound));
+    }
+
     void TearDown() override {}
 
+    virtual ~SoundWrapperUT() override = default;
     static SoundWrapper* swrapper;
     static ::android::sp<AudioManagerMock> am_service;
+    int64_t connectionID{0};
 };
 
 ::android::sp<AudioManagerMock> SoundWrapperUT::am_service = nullptr;
@@ -38,297 +76,202 @@ SoundWrapper* SoundWrapperUT::swrapper = nullptr;
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
     ALOGI("Starting %s", test_info_->name());
 
-    //    android::hardware::Return<void> ret;
-    //    EXPECT_CALL(*am_service, subscribe(::testing::_));
-    //    EXPECT_CALL(*am_service, unsubscribe(::testing::_));
-
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
-                          static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRight),
                           testing::_))
             .Times(1);
-    //    //.WillOnce(testing::Return(ret));
 
-    auto soundToPlay =
-            SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight);
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::TurnIndicator, SoundComponent::LeftRight);
     // DO the call to soundwrapper
     SoundWrapper::play(soundToPlay);
     // Directly after play we shall be in state Starting
-    // EXPECT_TRUE(SoundWrapper::isPlaying(soundToPlay));
-
-    // SImulate callback
-
-    // Idle->Starting->Playing->Idle
-
-    /*    auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
-        auto result      = SoundWrapper::play(soundToPlay);
-        EXPECT_EQ(SoundWrapper::Result::OK, result);
-        EXPECT_EQ(soundToPlay.type, playedSoundType);
-        EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-        EXPECT_TRUE(listener != nullptr);
-
-        // Directly after play we shall be in state Starting
-        EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
-
-        // Advance state with onPlayStarted to take us to state Playing
-        listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-        EXPECT_EQ(PlayState::Playing, SoundWrapper::getSoundState(soundToPlay));
-
-        // Advance state with onPlayStopped to take us back to Idle
-        listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-        EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
-        */
+    EXPECT_TRUE(SoundWrapper::isPlaying(soundToPlay));
+    ALOGI("Finishing %s", test_info_->name());
 }
 
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
+    ALOGI("Starting %s", test_info_->name());
     // Idle->Starting->Playing->Stopping->Idle
 
-    ALOGI("Starting %s", test_info_->name());
-    /*EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
-                          static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRight),
                           testing::_))
             .Times(1);
-    //    //.WillOnce(testing::Return(ret));
 
-    auto soundToPlay =
-            SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::LeftRight);
-
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::TurnIndicator, SoundComponent::LeftRight);
     // DO the call to soundwrapper
-    //SoundWrapper::play(soundToPlay);
+    SoundWrapper::play(soundToPlay);
 
-    auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
+    EXPECT_TRUE(SoundWrapper::isPlaying(soundToPlay));
 
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(1);
+    SoundWrapper::stop(soundToPlay);
 
-    // Advance state with onPlayStarted to take us to Playing
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(PlayState::Playing, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_FALSE(SoundWrapper::isPlaying(soundToPlay));
 
-    // Call stopSound() t go to state Stopping
-    result = SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, stoppedSoundType);
-    EXPECT_EQ(soundToPlay.component, stoppedSoundComponent);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
-
-    // Advance state with onPlayStopped to take us back to Idle
-    listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
- */
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
+    ALOGI("Finishing %s", test_info_->name());
 }
-/*
-TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates)
-{
+
+TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates) {
+    ALOGI("Starting %s", test_info_->name());
     // Idle->Starting->Stopping->Stopping->Idle
 
-    auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::TurnIndicator, SoundComponent::LeftRight);
 
+    EXPECT_EQ(-1, SoundWrapper::getSoundState(soundToPlay));
+
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRight),
+                          testing::_))
+            .Times(1);
+
+    SoundWrapper::play(soundToPlay);
     // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(1);
     // Stop before coming to Playing takes us to Stopping
-    result = SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
-
-    // When we get onPlayStarted we will stop the sound but stay in state
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(soundToPlay.type, stoppedSoundType);
-    EXPECT_EQ(soundToPlay.component, stoppedSoundComponent);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
-
-    // Advance state with onPlayStopped to take us back to Idle
-    listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    SoundWrapper::stop(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
+    ALOGI("Finishing %s", test_info_->name());
 }
 
-TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting)
-{
+TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
+    ALOGI("Starting %s", test_info_->name());
     // Idle->Starting->Playing->Stopping->Starting->Starting
-
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
+                          testing::_))
+            .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::TurnIndicator, SoundComponent::LeftRightBroken);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
-
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    SoundWrapper::play(soundToPlay);
 
     // Advance state with onPlayStarted to take us to Playing
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(PlayState::Playing, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
     // Call stopSound() to go to state Stopping
-    result = SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, stoppedSoundType);
-    EXPECT_EQ(soundToPlay.component, stoppedSoundComponent);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(1);
+    SoundWrapper::stop(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 
-    // Play again and we shall come to Starting
-    result = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    // Play again and we shall come to Playing
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
+                          testing::_))
+            .Times(1);
+    SoundWrapper::play(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
-    // If we get onPlayStopped here we shall START the sound again and stay in Starting
-    playedSoundType      = (SoundType)0xFFFF;
-    playedSoundComponent = (SoundComponent)0xFFFF;
-    listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 88, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
+                          testing::_))
+            .Times(1);
+    SoundWrapper::play(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
+    ALOGI("Finishing %s", test_info_->name());
 }
 
-TEST_F(SoundWrapperUT, onPlayFailedFromStarting_alwaysBackToIdle)
-{
+TEST_F(SoundWrapperUT, onPlayFailedFromStarting_alwaysBackToIdle) {
     // Idle->Starting->Idle
 
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::AndroidPhone),
+                          static_cast<int32_t>(SoundComponent::Left),
+                          testing::_))
+            .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
+    SoundWrapper::play(soundToPlay);
 
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
-
-    // Advance state with onPlayFailed to take us to state Idle
-    listener->onPlayFailed(soundToPlay.type, soundToPlay.component, 99, PlayError::Unknown);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    // Advance state with on play failed to take us to state Idle
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
 
-TEST_F(SoundWrapperUT, onPlayFailedFromPlaying_alwaysBackToIdle)
-{
+TEST_F(SoundWrapperUT, onPlayFailedFromPlaying_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
-
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::SSDoorOpenVehicleActive),
+                          static_cast<int32_t>(SoundComponent::Left),
+                          testing::_))
+            .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::SSDoorOpenVehicleActive, SoundComponent::Left);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
-
-    // Advance state with onPlayStarted to take us to Playing
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(PlayState::Playing, SoundWrapper::getSoundState(soundToPlay));
-
+    SoundWrapper::play(soundToPlay);
     // Advance state with onPlayFailed to take us to state Idle
-    listener->onPlayFailed(soundToPlay.type, soundToPlay.component, 99, PlayError::Unknown);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
 
-TEST_F(SoundWrapperUT, onPlayFailedFromStopping_alwaysBackToIdle)
-{
+TEST_F(SoundWrapperUT, onPlayFailedFromStopping_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
-
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::SSDoorOpenVehicleActive),
+                          static_cast<int32_t>(SoundComponent::Left),
+                          testing::_))
+            .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::SSDoorOpenVehicleActive, SoundComponent::Left);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
+    SoundWrapper::play(soundToPlay);
 
     SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
 
     // Advance state with onPlayFailed to take us to state Idle
-    listener->onPlayFailed(soundToPlay.type, soundToPlay.component, 99, PlayError::Unknown);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
 
-TEST_F(SoundWrapperUT, playSoundFailsInIdle_StayInIdle)
-{
+TEST_F(SoundWrapperUT, playSoundFailsInIdle_StayInIdle) {
     // Idle->Idle
-
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::AndroidPhone),
+                          static_cast<int32_t>(SoundComponent::Left),
+                          testing::_))
+            .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
-    playSoundResult  = false;
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::CEDRIC_FAILED, result);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    SoundWrapper::play(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
 
-TEST_F(SoundWrapperUT, playSoundFailsInStarting_ToIdle)
-{
-    // Idle->Starting->Idle
-
-    auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
-
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
-
-    // Advance state with onPlayStopped. playSound returns false -> we go to Idle
-    playSoundResult = false;
-    listener->onPlayStopped(soundToPlay.type, soundToPlay.component, 77, PlayStoppedReason::Finished);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
-}
-
-TEST_F(SoundWrapperUT, stopSoundFailsInStopping_toIdle)
-{
+TEST_F(SoundWrapperUT, stopSoundFailsInStopping_toIdle) {
     // Idle->Starting->Stopping->Idle
 
-    auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::BeltReminder),
+                          static_cast<int32_t>(SoundComponent::Right),
+                          testing::_))
+            .Times(1);
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Right);
+    SoundWrapper::play(soundToPlay);
 
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    // Idle because of invalid sound
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 
-    // Stop before coming to Playing takes us to Stopping
-    result = SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(PlayState::Stopping, SoundWrapper::getSoundState(soundToPlay));
+    SoundWrapper::stop(soundToPlay);
+    // still Idle
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 
     // When we get onPlayStarted we will stop the sound but it fails -> to Idle
-    stopSoundResult = false;
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
 
-TEST_F(SoundWrapperUT, stopSoundFailsInPlaying_toIdle)
-{
+TEST_F(SoundWrapperUT, stopSoundFailsInPlaying_toIdle) {
     // Idle->Starting->Playing->Idle
 
-    auto soundToPlay = SoundWrapper::SoundID(SoundType::HoodOpen, SoundComponent::Right);
-    auto result      = SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::OK, result);
-    EXPECT_EQ(soundToPlay.type, playedSoundType);
-    EXPECT_EQ(soundToPlay.component, playedSoundComponent);
-    EXPECT_TRUE(listener != nullptr);
-
-    // Directly after play we shall be in state Starting
-    EXPECT_EQ(PlayState::Starting, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_CALL(*am_service,
+                playSound(static_cast<int32_t>(SoundType::BeltReminder),
+                          static_cast<int32_t>(SoundComponent::Warn1),
+                          testing::_))
+            .Times(1);
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Warn1);
+    SoundWrapper::play(soundToPlay);
 
     // Advance state with onPlayStarted to take us to Playing
-    listener->onPlayStarted(soundToPlay.type, soundToPlay.component, 77);
-    EXPECT_EQ(PlayState::Playing, SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
-    // Call stopSound() but it fails -> goto Idle
-    stopSoundResult = false;
-    result          = SoundWrapper::stop(soundToPlay);
-    EXPECT_EQ(SoundWrapper::Result::CEDRIC_FAILED, result);
-    EXPECT_EQ(PlayState::Idle, SoundWrapper::getSoundState(soundToPlay));
+    // Expecting to call stopSound() twice
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(2);
+    SoundWrapper::stop(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
-*/

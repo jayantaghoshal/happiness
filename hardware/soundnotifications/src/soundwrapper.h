@@ -69,6 +69,7 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
   public:
     static void clearAll();
     static int getSoundState(SoundID);
+    static void setSoundState(SoundID, int state);
 #endif
 };
 
@@ -106,6 +107,10 @@ class Sound {
     // Timer callback
     void onTimeout();
 
+    void setState(int state);
+
+    SoundWrapper::SoundID getSoundID() const;
+
   private:
     State _state;
     std::recursive_mutex _stateMutex;
@@ -116,7 +121,7 @@ class Sound {
     // Which soundid we "are"
     SoundWrapper::SoundID _soundID;
     // Sound name from AudioTable
-    const std::string _name;
+    std::string _name;
     android::sp<IAudioManager> am_service;
     tarmac::eventloop::IDispatcher& restartTimer;
 };
