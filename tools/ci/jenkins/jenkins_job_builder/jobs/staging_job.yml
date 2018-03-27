@@ -54,12 +54,6 @@
             name: GIT_URL
             default: ''
             description: Normally sent from the triggering job (ihu_daily)
-    wrappers:
-        - credentials-binding:
-            - username-password-separated:
-                credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
-                username: JENKINS_USER
-                password: JENKINS_API_PASSWORD
     builders:
         - shell: |
             if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]

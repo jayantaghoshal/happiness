@@ -43,6 +43,9 @@ capability=""
 if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ]
 then
     capability="flexray"
+    export VECTOR_FDX_IP
+    VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
+    ping -c1 "${VECTOR_FDX_IP}"
 elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ]
 then
     capability="audio"

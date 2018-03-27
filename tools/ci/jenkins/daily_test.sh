@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -x
@@ -55,24 +55,16 @@ then
 fi
 export capability
 
-clean_old_test_result_files
-
 set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=nightly --ci_reporting -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
 
 set -e
 
-collect_test_result_files
-
-# Push logs and reports to Artifactory
-artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz
-artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/results/*.zip
-
-echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory/webapp/#/artifacts/browse/tree/General/ICUP_ANDROID_CI/${JOB_NAME}/${BUILD_NUMBER}"
+echo "Logs and results are stored in db"
 
 # Check status
 if [ $status -ne 0 ]; then
