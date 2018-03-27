@@ -9,7 +9,7 @@
 
 #include <libdbg.h>
 
-#define PROPERTY_LOGLEVEL "debug.evs.loglevel"
+#define PROPERTY_LOGLEVEL "debug.pac.loglevel"
 
 namespace {
 

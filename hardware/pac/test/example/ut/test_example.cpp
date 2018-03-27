@@ -5,17 +5,17 @@
 
 #include <gtest/gtest.h>
 
-#define LOG_TAG "EvsExampleTest"
+#define LOG_TAG "PacExampleTest"
 #include <log/log.h>
 
 namespace {
 
-TEST(EvsExampleTestCase, LogTest) {
-    ALOGD("EVS Debug Log Test");
-    ALOGI("EVS Info Log Test");
+TEST(PacExampleTestCase, LogTest) {
+    ALOGD("PAC Debug Log Test");
+    ALOGI("PAC Info Log Test");
 }
 
-TEST(EvsExampleTestCase, NotEqualTest) {
+TEST(PacExampleTestCase, NotEqualTest) {
     ASSERT_NE(1, 5);
     ASSERT_STRNE("Test", nullptr);
 }

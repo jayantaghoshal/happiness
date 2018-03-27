@@ -10,7 +10,7 @@
 #include <cstdio>
 
 #define ENUM_ANDROID_LOG_LEVEL_LAST_ITEM 8
-#define PROPERTY_LOG_LEVEL "debug.evs.loglevel"
+#define PROPERTY_LOG_LEVEL "debug.pac.loglevel"
 #define WRONG_LOG_LEVEL_MESSAGE " [WRONG LOG_LEVEL] "
 
 namespace {

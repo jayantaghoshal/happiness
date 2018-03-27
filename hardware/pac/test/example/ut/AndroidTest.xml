@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2017 The Android Open Source Project
+<!-- Copyright (C) 2018 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,23 +13,23 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<configuration description="Config for VTS libdbg Gtest">
+<configuration description="Configuration for PAC Example Test">
     <!--
         Define the target preparer class that shall be used to prepare the target for the test. In this case the
-        File pusher preparer class is used to transfer the EVS Example Test Case binary to the target.
+        File pusher preparer class is used to transfer the PAC Example Test binary to the target.
         See "<build root>/tools/tradefederation/core/src/<class path>.java" for available options
     -->
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="libdbgTest->/data/local/tmp/libdbgTest" />
+        <option name="push" value="VtsPacExampleTest->/data/local/tmp/VtsPacExampleTest" />
     </target_preparer>
     <!--
         Define the test class that shall be used to run the test. In this case the GTest class is used
-        as that's the test framework used for the EVS Example Test Case.
+        as that's the test framework used for the PAC Example Test
         See "<build root>/tools/tradefederation/core/src/<class path>.java" for available options
     -->
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="libdbgTest" />
+        <option name="module-name" value="VtsPacExampleTest" />
     </test>
 </configuration>

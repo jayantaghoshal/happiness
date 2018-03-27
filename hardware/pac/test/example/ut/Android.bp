@@ -6,7 +6,7 @@
 cc_test {
 
     // A unique name for this module
-    name: "VtsEvsExampleTest",
+    name: "VtsPacExampleTest",
 
     // Inherit default settings and flags. See vendor/volvocars/defaults/Android.bp
     defaults: [
