@@ -3,4 +3,8 @@
 <resources>
     <!-- Show the notification shade on drag -->
     <bool name="config_enableNotificationShadeDrag">true</bool>
+
+    <!-- Make sure to get the CarStatusBar - this will override Aptiv UI settings -->
+    <string name="config_statusBarComponent" translatable="false">com.android.systemui.statusbar.car.CarStatusBar</string>
+
 </resources>
