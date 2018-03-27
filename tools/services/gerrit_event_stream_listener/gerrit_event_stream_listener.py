@@ -97,20 +97,28 @@ class VCCCIProxy(object):
                     else:
                         self.source_published()
         except Exception:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                logging.error(repr(traceback.format_exception(exc_type,
+            self.print_json(self._event)
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            logging.error(repr(traceback.format_exception(exc_type,
                                                           exc_value,
                                                           exc_traceback)))
 
     def supported_event(self):
-        supported_projects = [
-            "manifest",
-            "vendor/volvocars"
-        ]
-        if self.project() in supported_projects:
-            if self.branch() == "master":
-                return True
-        return False
+        try:
+            supported_projects = [
+                "manifest",
+                "vendor/volvocars"
+            ]
+            if self.project() in supported_projects:
+                if self.branch() == "master":
+                    return True
+            return False
+        except Exception:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            logging.error(repr(traceback.format_exception(exc_type,
+                                                          exc_value,
+                                                          exc_traceback)))
+            return False
 
     def source_created(self):
         data = {
@@ -208,7 +216,10 @@ class VCCCIProxy(object):
         return ""
 
     def branch(self):
-        return self._event["change"]["branch"]
+        if "change" in self._event:
+            if "branch" in self._event["change"]:
+                return self._event["change"]["branch"]
+        return ""
 
     def event_type(self):
         return self._event["type"]
