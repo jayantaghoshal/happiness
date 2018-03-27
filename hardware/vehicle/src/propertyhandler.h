@@ -71,8 +71,8 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
     std::vector<vhal20::VehiclePropConfig> listProperties() override { return {config_}; };
     int setProp(const vhal20::VehiclePropValue& propValue) override;
 
-    void registerToVehicleHal() override {
-        vhal20::impl::ModuleBase::registerToVehicleHal();
+    void init() override {
+        vhal20::impl::ModuleBase::init();
         registeredWithVhal = true;
     }
 
