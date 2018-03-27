@@ -77,6 +77,8 @@
   <project name="bsp/vendor/intel/external/open-avb" path="hardware/intel/external/open-avb" revision="6bfc97369e9063aebdd2937727ce0a3f8f790a11" />
 
 
+  <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
+
   <!-- Patch received from kok.fatt.chan@intel.com by email to get gdbserver working.
         Info from ravisankar.madasamy@intel.com (2018-03-06): "Patches are integrated in mainline and you will receive it officially in our next external release on WW11."
    -->
