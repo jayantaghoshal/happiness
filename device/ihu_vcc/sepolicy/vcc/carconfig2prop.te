@@ -1,0 +1,9 @@
+#carconfig2prop service
+type carconfig2prop, domain;
+type carconfig2prop_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(carconfig2prop)
+set_prop(carconfig2prop, carconfig_prop)
+
+allow carconfig2prop carconfig_config_files:dir search;
+allow carconfig2prop carconfig_config_files:file { getattr open read };

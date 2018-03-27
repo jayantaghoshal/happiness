@@ -17,6 +17,7 @@ PRODUCT_PACKAGES += \
     dimmanager \
     gnssd \
     carconfig-updater \
+    carconfig2prop \
     desip_service \
     android.hardware.automotive.vehicle.vcc@2.0-service \
     vendor.volvocars.hardware.uds@1.0-service \
