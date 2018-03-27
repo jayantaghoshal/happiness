@@ -113,7 +113,7 @@ class VCCCIProxy(object):
     ]
 
     def __init__(self, jenkins):
-        self._jenkins = JenkinsClient
+        self._jenkins = jenkins
         self._notification = {}
 
     def process_notification(self, notification):
@@ -244,10 +244,11 @@ class VCCCIProxy(object):
         logs = []
         logs.append(self.url() + "consoleFull")
         if self.phase() == "COMPLETED":
-            logs.append("%s/tests?top_job_name=%s&build_number=%s" % (
-                self.TEST_REPORT_URL,
-                self.name(),
-                self.number()))
+            if self.name() not in self.SUB_JOBS:
+                logs.append("%s/tests?top_job_name=%s&build_number=%s" % (
+                    self.TEST_REPORT_URL,
+                    self.name(),
+                    self.number()))
         return logs
 
     def jenkins_build(self, name, number):

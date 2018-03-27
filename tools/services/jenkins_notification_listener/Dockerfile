@@ -19,4 +19,4 @@ COPY jenkins_notification_listener.py .
 
 ENV FLASK_APP /app/jenkins_notification_listener.py
 ENV LOG_DIR /tmp
-ENTRYPOINT ["/bin/sh", "-c", "/usr/local/bin/flask run --host=0.0.0.0 --port=3002 >> ${LOG_DIR}/jenkins_notification_server.log 2>&1" ]
+ENTRYPOINT ["/bin/sh", "-c", "/usr/local/bin/flask run --host=0.0.0.0 --port=3002 >> ${LOG_DIR}/jenkins_notification_listener.log 2>&1" ]

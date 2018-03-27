@@ -5,17 +5,21 @@ Listens on notification from Jenkins Notification plugin on port 3002
 Build image:
 ./build.sh
 
-Debug app:
+Debug app (on developer laptop):
 JENKINS_API_KEY=<API-KEY> USER=<CDSID> ./debug.sh
 
-Run app in production:
-- Login to server gotsvl1415.got.volvocars.net
+Run app in production (gotsvl1416):
+- Login to server gotsvl1416.got.volvocars.net
 - sudo su - jenkins-icup_android
 - cd /cm/services
 - repo sync --no-clone-bundle vendor/volvocars
 - cd jenkins_notification_listener
 - ./build.sh
 - JENKINS_API_KEY=<Jenkins API KEY> USER=<CDSID> ./run.sh
+- tail -100f log/jenkins_notification_listener.log
+
+Restart example (build & run):
+docker kill $(docker ps --filter ancestor=jenkins-notification-listener --format "{{.ID}}") && ./build.sh && USER=E9426001 ./run.sh
 
 TODO:
 - Using "flask run" is intended for development and not production.
