@@ -1,0 +1,63 @@
+#pragma once
+
+#include <json_v211.hpp>
+#include <type_traits>
+
+#include "gen_datatypes.h"
+
+using json = nlohmann::json;
+
+namespace autosar {
+
+// handles all enum types
+template<typename T> using AREnum = typename std::enable_if<std::is_enum<T>::value, T>::type;
+
+// handles everything EXCEPT enum (and the explicits below)
+template<typename T> using AllButAREnum = typename std::enable_if<!std::is_enum<T>::value, T>::type;
+
+template <typename T>
+json toJson(AREnum<T> e) {
+    return json((int)e);
+}
+
+template <typename T>
+AREnum<T> fromJson(const json& j) {
+    if (!j.is_number()) {
+        return T();
+    }
+    return static_cast<T>( j.get<int>() );
+}
+
+// handles everything EXCEPT enum (and the explicits below)
+template <typename T>
+json toJson(const AllButAREnum<T>& e) {
+    return json(e);
+}
+
+template <typename T>
+AllButAREnum<T> fromJson(const json& j) {
+    if ( j.is_array() || j.is_null() || j.is_object() ) {
+        return T();
+    }
+    return j.get<T>();
+}
+
+$$ for t in sorted_types
+    $$ if isinstance(t, DE_Array)
+        $$ set subtype_name = get_cpp_type(all_types[t.arrayitem_type_id])
+        $$ set arrayTypeStr = "std::array<%s,%d>" % (subtype_name, t.max_elements)
+// ==========================================
+// {{arrayTypeStr}}
+template <> json toJson<{{arrayTypeStr}}>(const {{arrayTypeStr}}& v);
+template <> {{arrayTypeStr}} fromJson<{{arrayTypeStr}}>(const json& object);
+
+    $$ elif isinstance(t, DE_Struct)
+// ==========================================
+// {{t.de_type_name}}
+template <> json toJson<{{t.de_type_name}}>(const {{t.de_type_name}}& v);
+template <> {{t.de_type_name}} fromJson<{{t.de_type_name}}>(const json& object);
+
+    $$ endif
+
+$$ endfor
+} // namespace autosar

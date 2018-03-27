@@ -14,7 +14,6 @@
 #include "gen_jsonencdec.h"
 
 namespace autosar {
-
 // ==========================================
 // ADataRawSafe1
 template <>
@@ -168,7 +167,7 @@ AmbTWithQly fromJson<AmbTWithQly>(const json& object) {
 template <>
 json toJson<std::array<uint8_t,8>>(const std::array<uint8_t,8>& v) {
     json j;
-    for (int i=0 ; i<8; ++i) {
+    for (int i=0 ; i < v.size(); ++i) {
         j.push_back(v[i]);
     }
     return j;
@@ -178,17 +177,16 @@ std::array<uint8_t,8> fromJson<std::array<uint8_t,8>>(const json& a) {
     if (!a.is_array()) {
         return std::array<uint8_t,8>();
     }
-    if (a.size()!=8) {
+    std::array<uint8_t,8> result;
+    if (a.size()!=result.max_size()) {
         return std::array<uint8_t,8>();
     }
-    std::array<uint8_t,8> result;
-    for (int i=0 ; i<8 ; ++i) {
+
+    for (int i=0 ; i < result.max_size() ; ++i) {
         result[i] = a[i].get<uint8_t>();
     }
     return result;
 }
-
-
 // ==========================================
 // AsyLaneChg1
 template <>
@@ -762,7 +760,7 @@ DrvrHmiDispdModPen fromJson<DrvrHmiDispdModPen>(const json& object) {
 template <>
 json toJson<std::array<uint8_t,254>>(const std::array<uint8_t,254>& v) {
     json j;
-    for (int i=0 ; i<254; ++i) {
+    for (int i=0 ; i < v.size(); ++i) {
         j.push_back(v[i]);
     }
     return j;
@@ -772,17 +770,16 @@ std::array<uint8_t,254> fromJson<std::array<uint8_t,254>>(const json& a) {
     if (!a.is_array()) {
         return std::array<uint8_t,254>();
     }
-    if (a.size()!=254) {
+    std::array<uint8_t,254> result;
+    if (a.size()!=result.max_size()) {
         return std::array<uint8_t,254>();
     }
-    std::array<uint8_t,254> result;
-    for (int i=0 ; i<254 ; ++i) {
+
+    for (int i=0 ; i < result.max_size() ; ++i) {
         result[i] = a[i].get<uint8_t>();
     }
     return result;
 }
-
-
 // ==========================================
 // DrvrHmiUserIfSetgReq
 template <>
@@ -4088,6 +4085,5 @@ WipgInfo fromJson<WipgInfo>(const json& object) {
 }
 
 
-} // namespace autosar
-
+} //namespace autosar
 // clang-format on
