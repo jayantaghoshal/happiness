@@ -44,14 +44,18 @@ SettingsHandle SettingsManagerHidl::attachSetting(
         ALOGV("attachSetting done %d", name);
     }
 
-    if (settingsProxy == nullptr) {
+    auto settingsProxyCopy = settingsProxy;
+    if (settingsProxyCopy == nullptr) {
         // Will automatically be subscribed once connected
         // TODO(ee): Fix proper attach/detach behavior? (not important when we only allow once instance per
         // name)
         return 1;
     }
     ALOGV("Settingshidl::attachSetting->subscribe");
-    settingsProxy->subscribe(toHidl(name), toHidl(u), this);
+    auto result = settingsProxyCopy->subscribe(toHidl(name), toHidl(u), this);
+    if (!result.isOk()) {
+        ALOGW("Failed to unsubscribe setting, key=%d", name);
+    }
     ALOGV("Settingshidl::done");
     return 1;  // TODO(ee): Fix proper attach/detach behavior? (not important when we only allow once instance per name)
 }
