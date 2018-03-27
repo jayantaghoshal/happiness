@@ -47,6 +47,7 @@ class SoundWrapperUT : public Test {
 
     ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
         ALOGI("AudioManagerMock::mockStopSound. connection ID: %" PRId64, connectionId);
+        swrapper->onDisconnected(static_cast<uint32_t>(connectionID));
         return AMStatus::OK;
     }
 
@@ -112,6 +113,7 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
     EXPECT_FALSE(SoundWrapper::isPlaying(soundToPlay));
 
     EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
+    EXPECT_EQ(static_cast<int64_t>(-1), SoundWrapper::getConnectionID(soundToPlay));
     ALOGI("Finishing %s", test_info_->name());
 }
 

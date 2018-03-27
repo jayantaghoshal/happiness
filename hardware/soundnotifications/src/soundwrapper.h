@@ -71,6 +71,7 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
   public:
     static void clearAll();
     static int getSoundState(SoundID);
+    static int64_t getConnectionID(SoundID soundid);
     static void setSoundState(SoundID, int state);
 #endif
 };
@@ -108,6 +109,7 @@ class Sound {
 
     // Timer callback
     void onTimeout();
+    void onDisconnected();
 
     void setState(int state);
 
