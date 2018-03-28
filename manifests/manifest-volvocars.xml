@@ -10,6 +10,8 @@
   <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
+  <!-- External resources-->
+  <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93"/>
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="123bc5f3b721386a30368e043808ff56124e8946"/>
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="d1eddf43747210df6c3f77f8fe9c42d3da73f00d"/>
@@ -18,7 +20,7 @@
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a"/>
   <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="4b0820c4f668cf35b7031ecb6f83d4d7365f4fef"/>
-  
+
   <!-- Volvo Cars partner apps -->
 
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="c469b468179ee55f340bde69ebe7fa3ce3a83c24"/>
@@ -58,7 +60,7 @@
 
   <project name="bsp/external/libncurses" path="external/libncurses" revision="067ae32f7e4b45bb1cb7ba37d0ffe618905e049f"/>
   <project name="bsp/external/vim" path="external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40"/>
-  
+
   <!-- SWDL is often preintegrated here, please do not remove, only comment out when integrating full baselines (no patches in this repo) -->
   <remove-project name="vendor/delphi/bb_reprogramming" />
   <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="15c5576b4f409b26eda862c0542dd425ba28de28"/>
