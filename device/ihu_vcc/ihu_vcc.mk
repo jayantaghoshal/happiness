@@ -49,6 +49,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 # This must match PRODUCT_DEVICE, it is used inside product_ihu.mk to copy files that are required
 # to use the device name.
 MY_DEVICE_NAME=ihu_abl_car
+VCC_DEVICE_PATH := vendor/volvocars/device/ihu_vcc
 APTIV_KRAKEN_DEVICE_PATH := device/aptiv/kraken
 include $(APTIV_KRAKEN_DEVICE_PATH)/path_config.mk
 
