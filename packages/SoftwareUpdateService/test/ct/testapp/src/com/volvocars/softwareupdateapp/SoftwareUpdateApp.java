@@ -6,9 +6,13 @@
 package com.volvocars.softwareupdateapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
@@ -23,7 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.DefaultItemAnimator;
-
+import android.support.v7.widget.Toolbar;
 import android.graphics.Rect;
 
 public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp {
@@ -71,8 +75,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void UpdateSoftware(SoftwareInformation software) {
-            for (SoftwareInformation si : swInfos)
-            {
+            for (SoftwareInformation si : swInfos) {
                 Log.v(LOG_TAG, "UpdateSoftware: " + si.toString());
                 if (si.softwareId.equals(software.softwareId)) {
                     swInfos.set(swInfos.indexOf(si), software);
@@ -131,6 +134,12 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         Log.v(LOG_TAG, "onCreate");
 
         setContentView(R.layout.activity_main);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar.setTitle("Software Update");
+
+        setSupportActionBar(myToolbar);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         layoutFabAvailable = (LinearLayout) findViewById(R.id.getAvailable);
         layoutFabCommissioned = (LinearLayout) findViewById(R.id.getCommissioned);
@@ -156,8 +165,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             public void onClick(View view) {
                 try {
                     long currentClickTime = System.currentTimeMillis();
-                    if (!(currentClickTime - lastClickedTime <= doubleClickInterval))
-                    {
+                    if (!(currentClickTime - lastClickedTime <= doubleClickInterval)) {
                         Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
                         softwareUpdateManager.GetSoftwareAssignments();
                         lastClickedTime = System.currentTimeMillis();
@@ -173,8 +181,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             public void onClick(View view) {
                 try {
                     long currentClickTime = System.currentTimeMillis();
-                    if (currentClickTime - lastClickedTime <= doubleClickInterval)
-                    {
+                    if (currentClickTime - lastClickedTime <= doubleClickInterval) {
                     } else {
                         Log.v(LOG_TAG, "Sending GetPendingInstallations");
                         softwareUpdateManager.GetPendingInstallations();
@@ -194,6 +201,33 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(10));
         recyclerView.setAdapter(adapter);
+    }
+
+    //Create actionbar with settings icon
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_actionbar_main, menu);
+
+        return true;
+    }
+
+    //React on actionbar icon clicked (settings)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.actionbarMain:
+            //Start SettingsActivity
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+
+        default:
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
