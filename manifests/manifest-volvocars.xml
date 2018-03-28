@@ -82,4 +82,13 @@
    -->
   <remove-project name="aosp/platform/prebuilts/misc" />
   <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="40ffd70b5ec696f26b14654ece01c2f9cdc08ff3" />
+
+
+  <!-- Revert patch in bionic by intel
+       From yong.yao@intel.com: 2018-03-28
+          The patch in bionic: it should be the mistake that someone forgot to remove it.
+          I just tested it and it could pass the build without this change, so you can remove it safely and directly.
+  -->
+  <remove-project name="aosp/platform/bionic" />
+  <project name="aosp/platform/bionic" path="bionic" revision="8277f4d9b31742b0795b829205099894b2848891" />
 </manifest>
