@@ -7,7 +7,7 @@
         <option name="cleanup" value="true" />
         <option name="push" value="flexray_test->/data/local/tmp/flexray_test" />
     </target_preparer>
-    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
            <option name="test-module-name" value="VtsFlexraySignalingCT_OneSendOneReceive"/>
            <option name="test-case-path" value="volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal/VtsFlexraySignalingCT_OneSendOneReceive"/>
