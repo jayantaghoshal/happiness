@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.volvocars.remotectrlappservices.audioctrl"
+          android:sharedUserId="android.uid.system">
+  <uses-permission android:name="android.volvocars.permission.REMOTE_CTRL"/>
+
+  <application
+    android:label="RemoteCtrlAppService.AudioCtrl"
+    android:exported="true">
+    <service android:persistent="true"
+             android:name=".AudioCtrlAppService"
+             android:exported="true">
+      <intent-filter>
+        <action android:name="com.volvocars.remotectrlappservices.audioctrl.AudioCtrlAppService.ACTION_VOLUME_CTRL" />
+      </intent-filter>
+    </service>
+  </application>
+</manifest>
+
+
+
+
+
