@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Screen Cleaning Component Test">
+    <target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer"/>
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="push-group" value="HalHidlHostTest.push"/>
+        <option name="cleanup" value="true"/>
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="ScreenCleaningTest"/>
+        <option name="test-case-path" value="ScreenCleaningTest"/>
+        <option name="test-timeout" value="1m"/>
+        <option name="runtime-hint" value="13s" />
+    </test>
+</configuration>
