@@ -36,7 +36,8 @@ PRODUCT_PACKAGES += \
     TimeZoneService \
     LcfService \
     timezones.db \
-    libjsqlite
+    libjsqlite \
+    RemoteAudioCtrlService \
 
 ##############################################################
 # SWDL stuff
