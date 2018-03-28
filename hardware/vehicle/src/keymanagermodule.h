@@ -15,7 +15,12 @@
 #include <string>
 #include <thread>
 
+#include "homebuttonmodule.h"
+#include "i_vehicle_hal_impl.h"
+#include "vendor/volvocars/hardware/vehiclehal/1.0/types.h"
+
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
+namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
 /**
  * Simple structure to contain messages coming from VIP
@@ -32,9 +37,16 @@ typedef struct {
 enum class ButtonStateType { kButtonPressed = 0, kButtonReleased };
 
 /**
+ * Home button longpress state
+ */
+enum class HomeButtonState { kHomeButtonLongInactive = 0, kHomeButtonLongActive };
+
+/**
  *  @brief Key Manager Desip Client class
  */
-class KeyManagerModule : public DesipClient, public vhal20::impl::ModuleBase {
+class KeyManagerModule : public DesipClient,
+                         public vhal20::impl::ModuleBase,
+                         public vendor::volvocars::hardware::HomeButtonCallback {
   public:
     KeyManagerModule(vhal20::impl::IVehicleHalImpl* vehicleHal);
 
@@ -46,9 +58,15 @@ class KeyManagerModule : public DesipClient, public vhal20::impl::ModuleBase {
     void init();
 
     std::vector<vhal20::VehiclePropConfig> listProperties() override;
+    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                      vhal20::impl::Status& /*status*/) override;
 
   private:
+    vendor::volvocars::hardware::HomeButtonModule home_button_handler_;
     const std::vector<vhal20::VehiclePropConfig> keyboard_prop_config_;
+    int homekeyjobid_ = 0;
+    HomeButtonState homekeystate_ = HomeButtonState::kHomeButtonLongInactive;
+    bool homelongpress_ = false;
 
     std::thread reader_thread_;
 
@@ -90,7 +108,18 @@ class KeyManagerModule : public DesipClient, public vhal20::impl::ModuleBase {
     void processKey(int8_t* data);
     void processKnob(int8_t* data);
 
+    /**
+     * Function for handling button presses and push values to HW_KEY_INPUT.
+     */
     uint8_t HandleButtonStateRequest(int key_code, ButtonStateType req);
+
+    /**
+    * Function for getting HomeButtonState as VehiclePropValue
+    * with all the appropriate fields.
+    */
+    vhal20::VehiclePropValue convertToLongpressPropValue(HomeButtonState homekeystate);
+
+    void HomeButtonPressed(bool pressed) override;
 
     /**
      *  @brief Power Modding Desip Client Listener class

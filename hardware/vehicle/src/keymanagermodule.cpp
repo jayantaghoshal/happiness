@@ -2,7 +2,7 @@
  * Copyright 2017 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
-
+#include <IDispatcher.h>
 #include <android/keycodes.h>
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
@@ -147,15 +147,24 @@ std::string BytesToHex(const int8_t bytes[], uint32_t length) {
 KeyManagerModule::KeyManagerModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
     : vhal20::impl::ModuleBase(vehicleHal),
       keyboard_prop_config_{{
-              // Property to control key events
-              .prop = toInt(vhal20::VehicleProperty::HW_KEY_INPUT),
-              .access = vhal20::VehiclePropertyAccess::READ,
-              .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
-              .supportedAreas = 0,
-              .areaConfigs = std::vector<vhal20::VehicleAreaConfig>(1),
-              .configFlags = 0,
-              .configArray = std::vector<int>(1),
-      }} {}
+                                    // Property to control key events
+                                    .prop = vhal20::toInt(vhal20::VehicleProperty::HW_KEY_INPUT),
+                                    .access = vhal20::VehiclePropertyAccess::READ,
+                                    .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
+                                    .supportedAreas = 0,
+                                    .areaConfigs = std::vector<vhal20::VehicleAreaConfig>(1),
+                                    .configFlags = 0,
+                                    .configArray = std::vector<int>(1),
+                            },
+                            {
+                                    .prop = vhal20::toInt(vccvhal10::VehicleProperty::HOME_KEY_LONGPRESS),
+                                    .access = vhal20::VehiclePropertyAccess::READ,
+                                    .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
+                                    .supportedAreas = vhal20::toInt(vhal20::VehicleAreaZone::WHOLE_CABIN),
+                                    .areaConfigs = std::vector<vhal20::VehicleAreaConfig>(1),
+                                    .configFlags = 0,
+                                    .configArray = std::vector<int>(1),
+                            }} {}
 
 KeyManagerModule::~KeyManagerModule() {
     // Make sure we can exit thread functions and join threads
@@ -173,6 +182,8 @@ void KeyManagerModule::init() {
 
     // Initialize HISIP version handshake with VIP
     SendVersionRequestMsg();
+
+    home_button_handler_.init(this);
 }
 
 void KeyManagerModule::VIPReader() {
@@ -321,6 +332,25 @@ std::vector<vhal20::VehiclePropConfig> KeyManagerModule::listProperties() {
     return keyboard_prop_config_;
 }
 
+std::unique_ptr<vhal20::VehiclePropValue> KeyManagerModule::getProp(const vhal20::VehiclePropValue& requestedPropValue,
+                                                                    vhal20::impl::Status& status) {
+    ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
+    vhal20::VehiclePropValue prop_value;
+    switch (requestedPropValue.prop) {
+        case vhal20::toInt(vccvhal10::VehicleProperty::HOME_KEY_LONGPRESS):
+            status = vhal20::impl::Status::SUCCESS;
+            prop_value = convertToLongpressPropValue(homekeystate_);
+            ALOGD("get prophomekeystate_: %d", homekeystate_);
+            break;
+        default:
+            ALOGW("Unknown getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
+            status = vhal20::impl::Status::PERMISSION_ERROR;
+            return nullptr;
+            break;
+    }
+    return std::make_unique<vhal20::VehiclePropValue>(prop_value);
+}
+
 void KeyManagerModule::SendToVIP(uint8_t fid, int8_t data[], uint32_t size) {
     ALOGV("[%s] AID: 0x%02X FID: 0x%02X HISIP data: %s", __func__, AID_keyboard, fid, BytesToHex(data, size).c_str());
 
@@ -357,3 +387,43 @@ android::binder::Status KeyManagerModule::VIPListener::deliverMessage(const Parc
 }
 
 String16 KeyManagerModule::VIPListener::getId() { return String16{"KeyManagerModule"}; }
+
+vhal20::VehiclePropValue KeyManagerModule::convertToLongpressPropValue(HomeButtonState homekeystate) {
+    vhal20::VehiclePropValue prop_value;
+    prop_value.timestamp = elapsedRealtimeNano();
+    prop_value.areaId = 0;
+    prop_value.prop = vhal20::toInt(vccvhal10::VehicleProperty::HOME_KEY_LONGPRESS);
+    prop_value.value.int32Values.resize(1);
+    prop_value.value.int32Values[0] = (int)homekeystate;
+    return prop_value;
+}
+
+void KeyManagerModule::HomeButtonPressed(bool pressed) {
+    if (pressed) {  // Home key down
+        ALOGD("Home keydown");
+        homekeyjobid_ = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+                std::chrono::microseconds(3000000), [&]() {
+                    HomeButtonState state = (homekeystate_ == HomeButtonState::kHomeButtonLongInactive)
+                                                    ? HomeButtonState::kHomeButtonLongActive
+                                                    : HomeButtonState::kHomeButtonLongInactive;
+                    vhal20::VehiclePropValue prop_value = convertToLongpressPropValue(state);
+                    pushProp(prop_value);
+                    homelongpress_ = true;
+                    ALOGD("Home LONGPRESS, %d", state);
+                });
+    } else {                                                                                          // Home key up
+        ALOGD("start homekeyup homekeystate_:%d,homelongpress_: %d", homekeystate_, homelongpress_);  // Home key up
+        tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(homekeyjobid_);
+        if (homekeystate_ == HomeButtonState::kHomeButtonLongInactive && !homelongpress_) {
+            HandleButtonStateRequest(0x03, ButtonStateType::kButtonPressed);
+            HandleButtonStateRequest(0x03, ButtonStateType::kButtonReleased);
+        } else if (homelongpress_) {
+            // update to new homekeystate when actually release the key
+            homekeystate_ = (homekeystate_ == HomeButtonState::kHomeButtonLongInactive)
+                                    ? HomeButtonState::kHomeButtonLongActive
+                                    : HomeButtonState::kHomeButtonLongInactive;
+        }
+        homelongpress_ = false;  // always clear flag longpress
+        ALOGD("End homekeyup homekeystate_:%d,homelongpress_: %d", homekeystate_, homelongpress_);
+    }
+}

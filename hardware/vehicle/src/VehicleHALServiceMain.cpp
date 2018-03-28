@@ -15,7 +15,6 @@
 #include "activeuserprofilemodule.h"
 #include "cartimemodule.h"
 #include "connectedsafety.h"
-#include "homebuttonmodule.h"
 #include "hvacmodule.h"
 #include "illuminationmodule.h"
 #include "keymanagermodule.h"
@@ -74,7 +73,6 @@ int main(int /* argc */, char* /* argv */ []) {
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_, dispatcher);
     auto keyManagerModule = std::make_unique<KeyManagerModule>(hal.get());
-    auto homeButtonModule = std::make_unique<vccvhal_10::impl::HomeButtonModule>(hal.get());
     auto systemInformationModule = std::make_unique<SystemInformationModule>(hal.get());
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
@@ -89,7 +87,6 @@ int main(int /* argc */, char* /* argv */ []) {
     audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
-    homeButtonModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();
     systemInformationModule->registerToVehicleHal();
     illuminationModule->registerToVehicleHal();
