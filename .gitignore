@@ -26,6 +26,9 @@ build.log.*
 .settings/org.eclipse.cdt.core.prefs
 .project
 .cproject
+## Plugins
+.pydevproject
+
 
 # Meld mergetool
 *.orig
