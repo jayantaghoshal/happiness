@@ -4,6 +4,8 @@
 import os
 import re
 import tempfile
+import pathlib
+import shutil
 import xml.etree.ElementTree as ET
 from . import git
 
@@ -28,8 +30,13 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     for project in root.iter('project'):
         current_repo = project.get('name')
         revision = project.get('revision')
+        repo_path = project.get('path')
         if revision == "ZUUL_COMMIT_OR_HEAD":
             print("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
+            #There was a problem men manifest path differ from Gerrit repo name
+            if repo_path != current_repo:
+                align_repo_path(repo_path, current_repo, project_root)
+
             #check what sha to use, the ZUUL_COMMIT or HEAD from repository
             revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
             print("current_repo = " + current_repo)
@@ -37,6 +44,19 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
             project.set('revision', revision)
 
     tree.write(output_path)
+
+def align_repo_path(repo_path: str, repo_name: str, project_root: str):
+        print("The repo path and the repo name is not equal in the manifest")
+        print(repo_path + " not equal to " + repo_name)
+        source_repo_path = os.path.join(project_root, repo_name)
+        path_to_create = os.path.join(project_root, repo_path)
+        print("Path to create: " + path_to_create)
+        pathlib.Path(path_to_create).mkdir(parents=True, exist_ok=True)
+
+        print("Moving folder: " + source_repo_path)
+        files = os.listdir(os.path.join(project_root, repo_name))
+        for f in files:
+            shutil.move(source_repo_path + "/" + f, path_to_create)
 
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
     if repo_with_commit != current_repo_in_tmp_manifest:
