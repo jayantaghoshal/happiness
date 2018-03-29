@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -24,19 +24,18 @@ import android.util.Log;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.Optional;
 
 import vendor.volvocars.hardware.profiles.V1_0.ICarProfileManager;
-
 
 /**
  * UserSwitchService starts the userswitch service that connects HMI client to Hal server
  * TODO: After TrustService is fixed, need to start the service as a TrustService
  */
 public class UserSwitchService extends Service {
-
     public static final String TAG = "VccUserSwitchService";
     private static final int TIME_WAIT_MS = 500;
-    public static final int NUMBER_OF_PROFILE = 12; // TODO: should be defined by HAL layer
     private final Object mLock = new Object();
     private ICarProfileManager carProfileManager;
     private UserSwitchManagerHMI userSwitchManagerHMI;
@@ -46,12 +45,26 @@ public class UserSwitchService extends Service {
     private ProfileManagerDeathRecipient mProfileDeathRecipient =
             new ProfileManagerDeathRecipient();
 
+    private UserInfo defaultGuest;
+
     @Override
     public void onCreate() {
         Log.i(TAG, "onCreate");
         activityManager = getBaseContext().getSystemService(ActivityManager.class);
         userManager = getBaseContext().getSystemService(UserManager.class);
         userSwitchManagerHMI = new UserSwitchManagerHMI();
+
+        List<UserInfo> listUser = userManager.getUsers(false);
+        Optional<UserInfo> result =
+                listUser.stream().filter(u -> u.name.equals("DEFAULT_GUEST")).findAny();
+        if (!result.isPresent()) {
+            // TODO (ARTINFO-507 - Guest Account) Change user flag for the defalut guest.
+            VolvoUser user = new VolvoUser(-1, "DEFAULT_GUEST", VolvoUser.FLAG_ADMIN);
+            defaultGuest = userManager.createUser(user.name, user.flags);
+            Log.d(TAG, "Created default guest: " + defaultGuest);
+        } else {
+            defaultGuest = result.get();
+        }
 
         Log.v(TAG, "Registering for the serviceNotification service.");
         try {
@@ -71,22 +84,8 @@ public class UserSwitchService extends Service {
             Thread.currentThread().interrupted();
             return;
         }
-        connectToProfileManager();
 
-        // Check available profiles and pair android primary user
-        try {
-            if (carProfileManager.getNrOfUnusedProfiles() == NUMBER_OF_PROFILE){
-                boolean result = carProfileManager.pairAndroidUserToUnusedVehicleProfile(
-                        userManager.getUserHandle() + "");
-                if (result){
-                    Log.d(TAG, "Successfully mapped the primary android user");
-                } else {
-                    Log.e(TAG, "Pairing a primary user failed");
-                }
-            }
-        } catch (RemoteException e) {
-            Log.e(TAG, "Pairing a primary user failed",e);
-        }
+        connectToProfileManager();
         super.onCreate();
     }
 
@@ -111,30 +110,42 @@ public class UserSwitchService extends Service {
      */
     public void switchUser(int androidUserId) {
         Log.d(TAG, "switchUser is called with androidUserId: " + androidUserId);
+        if (androidUserId == -1) {
+            Log.d(TAG, "unknown user received, switching to guest user");
+            androidUserId = defaultGuest.id;
+        }
+
         final boolean switchStatus = activityManager.switchUser(androidUserId);
         Log.d(TAG, "Current user: " + userManager.getUserName());
         Log.d(TAG, "Switch user status: " + switchStatus);
 
-        // CEM changed but android user not, therefore change it back
-        try {
-            userSwitchManagerHMI.switchUser(String.valueOf(androidUserId),
-                    new IUserSwitchCallBack.Stub() {
-                        @Override
-                        public void handleResponse(UserSwitchResult result) throws RemoteException {
-                            Log.d(TAG, "Switch user status from CEM: " + switchStatus);
-                        }
-                    });
-        } catch (RemoteException e) { // TODO: smart way handling async users
-            Log.e(TAG, " Something really went wrong" + switchStatus, e);
+        // CEM changed but android user not, therefore fallack to guest
+        if (!switchStatus) {
+            // TODO (Torbjörn Sandsgård) Add falut handling if this happens.
+            // Possibly we could retry a couple of times. We could also update the
+            // API towards HAL so that we could make sure that the mapping between androidUser and
+            // profileId is in sync.
+            try {
+                userSwitchManagerHMI.switchUser(
+                        String.valueOf(defaultGuest.id), new IUserSwitchCallBack.Stub() {
+                            @Override
+                            public void handleResponse(UserSwitchResult result)
+                                    throws RemoteException {
+                                Log.d(TAG, "Switch user status from CEM: " + switchStatus);
+                            }
+                        });
+            } catch (RemoteException e) { // TODO: smart way handling async users
+                Log.e(TAG, " Something really went wrong" + switchStatus, e);
+            }
         }
 
-        //TODO(PSS370-14385): ...  that this has to be removed
-//        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity
-// .KEYGUARD_SERVICE);
-//        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(Activity
-// .KEYGUARD_SERVICE);
-//        lock.disableKeyguard();
-        //keyguardManager.requestDismissKeyguard(new DismissListener());    //requires activity
+        // TODO(PSS370-14385): ...  that this has to be removed
+        //        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity
+        // .KEYGUARD_SERVICE);
+        //        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(Activity
+        // .KEYGUARD_SERVICE);
+        //        lock.disableKeyguard();
+        // keyguardManager.requestDismissKeyguard(new DismissListener());    //requires activity
     }
 
     /**
@@ -144,43 +155,41 @@ public class UserSwitchService extends Service {
         UserInfo userInfo = userManager.createUser(volvoUser.name, volvoUser.flags);
         Log.d(TAG, "Created UserInfo userInfo: " + userInfo);
         if (userInfo != null) {
-            boolean result = carProfileManager.pairAndroidUserToUnusedVehicleProfile(
-                    userInfo.id + "");
+            boolean result =
+                    carProfileManager.pairAndroidUserToUnusedVehicleProfile(userInfo.id + "");
             Log.d(TAG, "pairAndroidUserToUnusedVehicleProfile has a result: " + result);
 
             if (!result) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("No available profiles")
-                        .setTitle("Warning!");
+                builder.setMessage("No available profiles").setTitle("Warning!");
                 AlertDialog dialog = builder.create();
-                userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
-                        UserSwitchResult.ERROR);
+                userSwitchManagerHMI.getCallBackMap(volvoUser.id)
+                        .handleResponse(UserSwitchResult.ERROR);
             } else {
-                userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
-                        UserSwitchResult.SUCCESS);
+                userSwitchManagerHMI.getCallBackMap(volvoUser.id)
+                        .handleResponse(UserSwitchResult.SUCCESS);
             }
         } else {
             Log.e(TAG, "No User info");
-            userSwitchManagerHMI.getCallBackMap(volvoUser.id).handleResponse(
-                    UserSwitchResult.ERROR);
+            userSwitchManagerHMI.getCallBackMap(volvoUser.id)
+                    .handleResponse(UserSwitchResult.ERROR);
         }
     }
 
     private boolean registerForNotification(ServiceNotification serviceNotification)
             throws RemoteException {
-        return IServiceManager.getService()
-                .registerForNotifications(ICarProfileManager.kInterfaceName,
-                        "", serviceNotification);
+        return IServiceManager.getService().registerForNotifications(
+                ICarProfileManager.kInterfaceName, "", serviceNotification);
     }
 
-//    private void linkToDeath(ICarProfileManager carProfileManager,
-//            IHwBinder.DeathRecipient recipient) {
-//        try {
-//            carProfileManager.linkToDeath(recipient, 0);
-//        } catch (RemoteException e) {
-//            throw new IllegalStateException("Failed to linkToDeath ProfileManager");
-//        }
-//    }
+    //    private void linkToDeath(ICarProfileManager carProfileManager,
+    //            IHwBinder.DeathRecipient recipient) {
+    //        try {
+    //            carProfileManager.linkToDeath(recipient, 0);
+    //        } catch (RemoteException e) {
+    //            throw new IllegalStateException("Failed to linkToDeath ProfileManager");
+    //        }
+    //    }
 
     private void connectToProfileManager() {
         synchronized (mLock) {
@@ -193,8 +202,8 @@ public class UserSwitchService extends Service {
                 if (profileManager != null) {
                     profileManager.linkToDeath(mProfileDeathRecipient, 0);
                     carProfileManager = profileManager;
-                    userSwitchManagerHMI.init(UserSwitchService.this,
-                            carProfileManager, userManager);
+                    userSwitchManagerHMI.init(
+                            UserSwitchService.this, carProfileManager, userManager);
                 }
             } catch (RemoteException e) {
                 Log.e(TAG, "CarProfileManager service not responding", e);
@@ -215,17 +224,17 @@ public class UserSwitchService extends Service {
     protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
         if (checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
-            writer.println("Permission Denial: can't dump from from pid="
-                    + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid()
-                    + " without permission " + android.Manifest.permission.DUMP);
+            writer.println("Permission Denial: can't dump from from pid=" + Binder.getCallingPid()
+                    + ", uid=" + Binder.getCallingUid() + " without permission "
+                    + android.Manifest.permission.DUMP);
             return;
         }
         if (args == null || args.length == 0) {
             writer.println("*dump profile manager service*");
             writer.println("Profile Manager HAL Interface: " + mProfileManagerInterfaceName);
             writer.println("**Debug info**");
-            writer.println("Profile Manager HAL reconnected: "
-                    + mProfileDeathRecipient.deathCount + " times.");
+            writer.println("Profile Manager HAL reconnected: " + mProfileDeathRecipient.deathCount
+                    + " times.");
         }
     }
 
@@ -262,7 +271,7 @@ public class UserSwitchService extends Service {
             try {
                 carProfileManager.unlinkToDeath(this);
             } catch (RemoteException e) {
-                Log.e(TAG, "Failed to unlinkToDeath", e);  // TAG and continue.
+                Log.e(TAG, "Failed to unlinkToDeath", e); // TAG and continue.
             }
             // Clear all from the used places
             carProfileManager = null;
@@ -281,5 +290,4 @@ public class UserSwitchService extends Service {
             }
         }
     }
-
 }

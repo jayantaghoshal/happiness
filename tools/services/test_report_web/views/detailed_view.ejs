@@ -1,0 +1,130 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/volvo_logo.png"/>
+    <title>VCC test report</title>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'>
+    <script src="/js/jquery-3.2.1.js" ></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+    <link rel='stylesheet' href='/css/user_defined.css'>    
+</head>
+
+<body>
+    <%- include navbar.ejs %>
+    
+    <div class="container">
+    <%if (test_detail["Top Job"]==""){%>
+        <a href=<%="/tests/?top_job_name=" + "ihu_gate" + "&build_number=" + test_detail["test_job_build_number"] %> style="font-size:3em; color:#15317E;"><i class="fas fa-arrow-alt-circle-left"></i></a>
+    <%}else{%>
+        <a href=<%="/tests/?top_job_name=" + test_detail["Top Job"] + "&build_number=" + test_detail["top_test_job_build_number"] %> style="font-size:3em; color:#15317E;"><i class="fas fa-arrow-alt-circle-left"></i></a>
+    <%}%>
+            <h1 style="text-align:center; "><%= test_detail["Module"]%></h1>
+            <fieldset>    	
+                    <legend>Meta Data</legend>
+                        <div class="user_defined_table">
+                            <table>
+                                <tr><td>Result :</td>
+                                <% if (test_detail["Result"]){ %>
+                                            <td><span class="badge badge-success">Success</span></td>
+                                <% }else{ %>
+                                            <td><span class="badge badge-danger">Failure</span></td>
+                                <% } %>
+                                </tr>
+                                <tr><td>Test Directory :</td><td style="font-weight:bold"><%= test_detail["Test Directory"]%></td></tr>
+                                <tr><td>Test Type :</td><td style="font-weight:bold"><%= test_detail["Test Type"]%></td></tr>
+                                <tr><td>Host :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/computer/" + test_detail["Host"]%>><%= test_detail["Host"]%></td></tr>
+                                <tr><td>Test Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Test Job"] + "/" + test_detail["test_job_build_number"]%>><%= test_detail["Test Job"]%></td></tr>
+                                <tr><td>Test Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Top Job"] + "/" + test_detail["top_test_job_build_number"]%>><%= test_detail["Top Job"]%></td></tr>
+                                <tr><td>Capabilities :</td><td style="font-weight:bold"><%= test_detail["Capabilities"]%></td></tr>
+                                <tr><td>Runtime :</td><td style="font-weight:bold"><%= test_detail["Runtime"]%></td></tr>
+                            </table>
+                        </div>
+            </fieldset>	
+            <br>
+            <%if(test_detail["Test Type"] == "vts"){%>
+                <fieldset >    	
+                        <legend>Sub Tests</legend>
+                            <%if (testcases_test_record.length>0){%>
+                            <table class="table table-hover table-striped table-bordered display" id="result_table" >
+                                <thead>
+                                    <tr style="color:white;background-color:#15317E;">
+                                        <th>Test Modules</th>
+                                        <th>Tests</th>
+                                        <th>Result</th>
+                                    </tr>
+                                    
+                                    
+                                    
+                                </thead>
+                                <tbody>
+                                <% for (var i in testcases_test_record){ %>
+                                        <%for(var j in testcases_test_record[i]["tests"]){%>
+                                        <tr>
+                                            <% if(j==0){%>
+                                            <td rowspan=<%=testcases_test_record[i]["tests"].length %> > <%= testcases_test_record[i]["testcase_name"]%></td>
+                                            <%}%>
+                                            <td><%=testcases_test_record[i]["tests"][j]["name"]%></td>
+                                            <% if (testcases_test_record[i]["tests"][j]["status"]=="pass"){ %>
+                                            <td><span class="badge badge-success">Success</span></td>
+                                            <% } %>
+                                            <% if (testcases_test_record[i]["tests"][j]["status"]!="pass"){ %>
+                                            <td><span class="badge badge-danger">Failure</span></td>
+                                            <% } %>
+                                        </tr>   
+                                        <%}%>
+                                    <%}%>
+                                </tbody>
+                            </table>
+                            <%}%>
+                </fieldset>	
+            <% } %>
+            <%if(test_detail["Test Type"] == "tradefed"){%>
+                <fieldset>    	
+                            <legend>Sub Tests</legend>
+                                <%if (testcases_test_record.length>0){%>
+                                <table class="table table-hover table-striped table-bordered display" id="result_table" >
+                                    <thead>
+                                        <tr style="color:white;background-color:#15317E;">
+                                            <th>Test Modules</th>
+                                            <th>Class</th>
+                                            <th>Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for (var i in testcases_test_record){%>
+                                        <tr>
+                                            <td><%=testcases_test_record[i]["testcase_name"]%></td>
+                                            <td><%=testcases_test_record[i]["classname"]%></td>
+                                            <%if (testcases_test_record[i]["failure_log"]){%>
+                                                <td><span class="badge badge-danger">Failure</span></td>
+                                            
+                                            <%}else{%>
+                                                <td><span class="badge badge-success">Success</span></td>
+                                            <%}%>
+                                        </tr>
+                                    <%}%>
+                                    </tbody>
+                                </table>        
+                                <%}%>        
+                </fieldset>	                        
+            <% } %>
+            <br>
+            <fieldset >    	
+                    <legend>Logs</legend>
+                        <div class="list-group">
+                            <% Object.keys(logs_test_record).forEach(function(key) {%>
+                            <a class="list-group-item list-group-item-action" href=<%= "/log?log_name=" +  key + "&module_name=" + test_detail['Module'] + "&job_name=" + test_detail['Test Job'] + "&build_number=" +  test_detail['test_job_build_number'] %>> <i class="fas fa-file-alt"></i>  <%= key +" "%><span class="badge badge-secondary"><%=Buffer.byteLength(logs_test_record[key], 'utf8') + " bytes"%></span></a>
+                            <% }); %>
+                        </div>
+
+            </fieldset>	
+            <br>		
+    </div>
+            
+     
+    
+</body>
+
+</html>

@@ -9,7 +9,9 @@ cc_test {
 
     srcs: [
         "test/ut/soundwrapper_ut.cpp",
+        "test/ut/turnindicator_ut.cpp",
         "src/soundwrapper.cpp",
+        "src/turnindicator.cpp",
     ],
 
     local_include_dirs: [
@@ -40,6 +42,7 @@ cc_test {
     ],
     static_libs: [
         "libgmock",
+        "libdataelements_unittest",
     ],
     test_suites: ["vts"],
 }

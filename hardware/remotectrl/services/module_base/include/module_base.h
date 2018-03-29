@@ -67,6 +67,7 @@ class ModuleBase {
     const std::shared_ptr<vsomeip::application> vsomeip_appl_;
 
     mutable std::mutex message_tracker_mutex_;
+    // TODO (Abhi): This is a basic message_tracker. This needs to be extended to track ACKs, WFA and WFR
     std::vector<Transactions> message_tracker_;
     const ServiceInfo service_info_;
     std::thread service_launcher_thread_;

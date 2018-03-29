@@ -1,0 +1,24 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+
+    // A unique name for this module
+    name: "VtsPacExampleTest",
+
+    // Inherit default settings and flags. See vendor/volvocars/defaults/Android.bp
+    defaults: [
+        "volvocars_cc_defaults_hq_tests_pac_vts",
+    ],
+
+    srcs: [
+        "test_example.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+    ],
+
+}

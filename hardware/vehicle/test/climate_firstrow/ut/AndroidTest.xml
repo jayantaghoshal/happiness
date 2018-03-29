@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies first row climate
+-->
+<configuration description="Climate first row Unit test">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="climate_firstrow_test->/vendor/bin/test/climate_firstrow_test" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" > 
+        <option name="native-test-device-path" value="/vendor/bin/test" />   
+        <option name="module-name" value="climate_firstrow_test" />
+        <option name="runtime-hint" value="5s" />
+    </test>
+</configuration>

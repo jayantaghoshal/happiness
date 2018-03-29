@@ -36,6 +36,17 @@ def _create_env(test_module_dir_path: str) -> Dict[str, str]:
 def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
     module_name = read_module_name(os.path.join(test_module_dir_path, "AndroidTest.xml"))
     logging.info("Running test module %s" % module_name)
+
+    try:
+        os.unlink("/tmp/test_run_kpis.json")
+    except FileNotFoundError:
+        pass
+    try:
+        os.unlink("/tmp/test_run_summary.json")
+    except FileNotFoundError:
+        pass
+
+
     max_test_time_sec = 60 * 60
     try:
         test_result = check_output_logged(["vts-tradefed",

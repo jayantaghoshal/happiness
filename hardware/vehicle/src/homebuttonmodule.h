@@ -5,34 +5,28 @@
 
 #pragma once
 
-#include <IDispatcher.h>
 #include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
 #include "DesipClient.hpp"
-#include "ModuleBase.h"
-#include "i_vehicle_hal_impl.h"
-#include "vendor/volvocars/hardware/vehiclehal/1.0/types.h"
 
 namespace vendor {
 namespace volvocars {
 namespace hardware {
-namespace vehiclehal {
-namespace V1_0 {
 
-namespace impl {
-namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
-namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
+class HomeButtonCallback {
+  public:
+    virtual ~HomeButtonCallback() = default;
+    virtual void HomeButtonPressed(bool pressed) = 0;
+};
 
 /**
  *  @brief Key Manager Desip Client class
  */
-class HomeButtonModule : public DesipClient, public vhal20::impl::ModuleBase {
+class HomeButtonModule : public DesipClient {
   public:
-    HomeButtonModule(vhal20::impl::IVehicleHalImpl* vehicleHal);
-
     ~HomeButtonModule();
     /**
     * Simple structure to contain messages coming from VIP
@@ -42,32 +36,14 @@ class HomeButtonModule : public DesipClient, public vhal20::impl::ModuleBase {
         uint8_t data_length;
         int8_t data[20];
     } vip_msg;
-    /**
-    * Home button state types commanded by VIP
-    */
-    enum class ButtonStateType { kButtonPressed = 0, kButtonReleased };
-    /**
-     * Home button longpress state
-     */
-    enum class HomeButtonState { kHomeButtonLongInactive = 0, kHomeButtonLongActive };
 
     /**
      * Initiates reader and worker threads
      */
-    void init();
-    /**
-    * Android Vehicle hal functions to follow
-    */
-    std::vector<vhal20::VehiclePropConfig> listProperties() override;
-    std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
-                                                      vhal20::impl::Status& /*status*/) override;
+    void init(HomeButtonCallback* listener);
 
   private:
-    const vhal20::VehiclePropConfig keyboard_prop_config_;
-    const vhal20::VehiclePropConfig homekeylongpress_prop_config_;
-    int homekeyjobid_ = 0;
-    HomeButtonState homekeystate_ = HomeButtonState::kHomeButtonLongInactive;
-    bool homelongpress_ = false;
+    HomeButtonCallback* home_button_listener_;
 
     std::thread reader_thread_;
     /**
@@ -87,15 +63,6 @@ class HomeButtonModule : public DesipClient, public vhal20::impl::ModuleBase {
      */
     virtual void setRxMsgID(ParcelableDesipMessage* msg) override;
 
-    /**
-     * Function for handling button presses and push values to HW_KEY_INPUT.
-     */
-    uint8_t handleButtonStateRequest(int key_code, ButtonStateType req);
-    /**
-    * Function for getting HomeButtonState as VehiclePropValue
-    * with all the appropriate fields.
-    */
-    vhal20::VehiclePropValue convertToPropValue(HomeButtonState homekeystate);
     /**
      *  @brief Power Modding Desip Client Listener class
      */
@@ -132,10 +99,6 @@ class HomeButtonModule : public DesipClient, public vhal20::impl::ModuleBase {
     };
 };
 
-}  // namespace impl
-
-}  // namespace V1_0
-}  // namespace vehiclehal
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor

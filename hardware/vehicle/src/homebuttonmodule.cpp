@@ -23,12 +23,7 @@
 namespace vendor {
 namespace volvocars {
 namespace hardware {
-namespace vehiclehal {
-namespace V1_0 {
 
-namespace impl {
-
-using namespace android::hardware::automotive::vehicle::V2_0;
 using namespace std::placeholders;
 using namespace android;
 
@@ -53,28 +48,6 @@ std::string BytesToHex(const int8_t bytes[], uint32_t length) {
     return stringified_data.str();
 }
 
-HomeButtonModule::HomeButtonModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
-    : vhal20::impl::ModuleBase(vehicleHal),
-      keyboard_prop_config_{
-              // Property to control key events
-              .prop = toInt(vhal20::VehicleProperty::HW_KEY_INPUT),
-              .access = vhal20::VehiclePropertyAccess::READ,
-              .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
-              .supportedAreas = 0,
-              .areaConfigs = std::vector<vhal20::VehicleAreaConfig>(1),
-              .configFlags = 0,
-              .configArray = std::vector<int>(1),
-      },
-      homekeylongpress_prop_config_{
-              .prop = toInt(VehicleProperty::HOME_KEY_LONGPRESS),
-              .access = VehiclePropertyAccess::READ,
-              .changeMode = VehiclePropertyChangeMode::ON_CHANGE,
-              .supportedAreas = toInt(VehicleAreaZone::WHOLE_CABIN),
-              .areaConfigs = std::vector<vhal20::VehicleAreaConfig>(1),
-              .configFlags = 0,
-              .configArray = std::vector<int>(1),
-      } {}
-
 HomeButtonModule::~HomeButtonModule() {
     // Make sure we can exit thread functions and join threads
     DesipClient::setExitListen(true);
@@ -84,9 +57,8 @@ HomeButtonModule::~HomeButtonModule() {
     }
 }
 
-void HomeButtonModule::init() {
-    ModuleBase::init();  // Register getProp() and setProp() callbacks.
-
+void HomeButtonModule::init(HomeButtonCallback* listener) {
+    home_button_listener_ = listener;
     reader_thread_ = std::thread(&HomeButtonModule::VIPReader, this);
 }
 
@@ -97,46 +69,13 @@ void HomeButtonModule::VIPReader() {
     android::IPCThreadState::self()->joinThreadPool();
 }
 
-VehiclePropValue HomeButtonModule::convertToPropValue(HomeButtonState homekeystate) {
-    VehiclePropValue prop_value;
-    prop_value.timestamp = elapsedRealtimeNano();
-    prop_value.areaId = 0;
-    prop_value.prop = toInt(VehicleProperty::HOME_KEY_LONGPRESS);
-    prop_value.value.int32Values.resize(1);
-    prop_value.value.int32Values[0] = (int)homekeystate;
-    return prop_value;
-}
 void HomeButtonModule::processMessage(vip_msg& msg) {
     switch (msg.fid) {
         case FID_vip_power_mode_rep:
             if (msg.data[6] & 0b10000000) {  // Home key down
-                ALOGV("Home keydown");
-                homekeyjobid_ = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
-                        std::chrono::microseconds(3000000), [&]() {
-                            HomeButtonState state = (homekeystate_ == HomeButtonState::kHomeButtonLongInactive)
-                                                            ? HomeButtonState::kHomeButtonLongActive
-                                                            : HomeButtonState::kHomeButtonLongInactive;
-                            VehiclePropValue prop_value = convertToPropValue(state);
-                            pushProp(prop_value);
-                            homelongpress_ = true;
-                            ALOGD("Home LONGPRESS, %d", state);
-                        });
+                if (home_button_listener_) home_button_listener_->HomeButtonPressed(true);
             } else if (msg.data[6] & 0b01000000) {
-                ALOGV("start homekeyup homekeystate_:%d,homelongpress_: %d",
-                      homekeystate_,
-                      homelongpress_);  // Home key up
-                tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(homekeyjobid_);
-                if (homekeystate_ == HomeButtonState::kHomeButtonLongInactive && !homelongpress_) {
-                    handleButtonStateRequest(0x03, ButtonStateType::kButtonPressed);
-                    handleButtonStateRequest(0x03, ButtonStateType::kButtonReleased);
-                } else if (homelongpress_) {
-                    // update to new homekeystate when actually release the key
-                    homekeystate_ = (homekeystate_ == HomeButtonState::kHomeButtonLongInactive)
-                                            ? HomeButtonState::kHomeButtonLongActive
-                                            : HomeButtonState::kHomeButtonLongInactive;
-                }
-                homelongpress_ = false;  // always clear flag longpress
-                ALOGV("End homekeyup homekeystate_:%d,homelongpress_: %d", homekeystate_, homelongpress_);
+                if (home_button_listener_) home_button_listener_->HomeButtonPressed(false);
             }
             break;
         default:
@@ -144,43 +83,7 @@ void HomeButtonModule::processMessage(vip_msg& msg) {
     }
 }
 
-uint8_t HomeButtonModule::handleButtonStateRequest(int key_code, ButtonStateType req) {
-    vhal20::VehiclePropValue prop_value;
-
-    prop_value.timestamp = android::elapsedRealtimeNano();
-    prop_value.areaId = 0;
-
-    prop_value.prop = toInt(vhal20::VehicleProperty::HW_KEY_INPUT);
-    prop_value.value.int32Values.resize(3);
-    prop_value.value.int32Values[0] = (int)req;
-    prop_value.value.int32Values[1] = key_code;
-    prop_value.value.int32Values[2] = toInt(vhal20::VehicleDisplay::MAIN);
-
-    return pushProp(prop_value);
-}
-
 void HomeButtonModule::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(AID_power_synchronization); }
-
-std::vector<vhal20::VehiclePropConfig> HomeButtonModule::listProperties() {
-    ALOGV("[%s] Vehicle property configs returned.", __FUNCTION__);
-    return {homekeylongpress_prop_config_, keyboard_prop_config_};
-}
-std::unique_ptr<VehiclePropValue> HomeButtonModule::getProp(const VehiclePropValue& requestedPropValue,
-                                                            vhal20::impl::Status& /*status*/) {
-    ALOGD("getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
-    VehiclePropValue prop_value;
-    switch (requestedPropValue.prop) {
-        case toInt(VehicleProperty::HOME_KEY_LONGPRESS):
-            prop_value = convertToPropValue(homekeystate_);
-            ALOGD("get prophomekeystate_: %d", homekeystate_);
-            break;
-        default:
-            ALOGW("Unknown getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
-            return nullptr;
-            break;
-    }
-    return std::make_unique<VehiclePropValue>(prop_value);
-}
 
 HomeButtonModule::VIPListener::VIPListener(HomeButtonModule* homebuttonModule) {
     ALOGV("[%s] VIP listener created", __func__);
@@ -207,10 +110,6 @@ android::binder::Status HomeButtonModule::VIPListener::deliverMessage(const Parc
 
 String16 HomeButtonModule::VIPListener::getId() { return String16{"HomeButtonModule"}; }
 
-}  // namespace impl
-
-}  // namespace V1_0
-}  // namespace vehiclehal
 }  // namespace hardware
 }  // namespace volvocars
 }  // namespace vendor

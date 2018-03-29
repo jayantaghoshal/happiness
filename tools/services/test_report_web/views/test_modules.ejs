@@ -1,0 +1,48 @@
+    
+    <%- include index.ejs %>
+    <%if (view=="list_tests_page") { %>
+    <div class="container">
+            <% if (view=="list_tests_page") {%>
+                <div style="text-align:center; font-size:160%;"><h1>
+                <%if (top_job_name=="ihu_hourly"){%>
+                    Hourly Report
+                <%}%>
+                <%if (top_job_name=="ihu_daily"){%>
+                    Daily Report
+                <%}%>
+                <%if (top_job_name=="ihu_gate"){%>
+                    Gate Report
+                <%}%>
+                    #<%=build_numbers%></h1></div>
+            <% } %>
+        <table class="table table-hover table-striped table-bordered display" id="result_table" >
+            <thead>
+                <tr style="color:white;background-color:#15317E;">
+                    <th>Test Modules</th>
+                    <th>Type</th>
+                    <th>Job Name</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for(var i=0; i < basic_test_detail.length; i++) { %>
+            <tr>
+                <td><a href=<%= "/detailed_view?module_name="+basic_test_detail[i].module_name + "&job_name=" + basic_test_detail[i].job_name + "&build_number=" + basic_test_detail[i].test_job_build_number  %> >
+                <%= basic_test_detail[i].module_name %></a></td>
+                <td><%= basic_test_detail[i].test_type %></td>
+                <td><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/view/Hourly_Daily_Pipeline/job/" + basic_test_detail[i].job_name + "/" + basic_test_detail[i].test_job_build_number %> target="_blank">
+                <%= basic_test_detail[i].job_name %></a></td>
+                <% if (basic_test_detail[i].result==true){ %>
+                <td><span class="badge badge-success">Success</span></td>
+                <% } %>
+                <% if (basic_test_detail[i].result==false){ %>
+                <td><span class="badge badge-danger">Failure</span></td>
+                <% } %>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+
+    </div>
+
+    <% } %>

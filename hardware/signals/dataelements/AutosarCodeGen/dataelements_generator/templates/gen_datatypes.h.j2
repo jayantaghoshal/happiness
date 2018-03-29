@@ -1,0 +1,45 @@
+#pragma once
+
+#include <array>
+
+namespace autosar {
+$$ for t in sorted_types
+$$ if isinstance(t, DE_Enum)
+/*!
+ * \enum {{t.de_type_name}}{{escape_cpp_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+ */
+enum class {{t.de_type_name}} {
+$$ for v in t.values
+    {{v.name}}={{v.value}},
+$$ endfor
+};
+
+{% endif %}
+{%- endfor %}
+
+$$ for t in sorted_types:
+$$ if isinstance(t, DE_Array):
+$$ set inner_type = all_types[t.arrayitem_type_id]
+/*!
+ * \brief array {{t.de_type_name}}{{escape_cpp_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+ */
+using {{t.de_type_name}} = std::array<{{get_cpp_type(inner_type)}}, {{t.max_elements}}>; {{t.desc}}
+
+$$ elif isinstance(t, DE_Struct):
+/*!
+ * \struct {{t.de_type_name}}{{escape_cpp_comment_including_prefix_if_nonempty(t.desc.strip(), "\n * ")}}
+ */
+struct {{t.de_type_name}} {
+$$ for c in t.children:
+    $$ set member_type = all_types[c.de_type_id]
+    $$ set member_type_name = get_cpp_type(member_type)
+    $$ set attrname = clean_member_name(c.member_name, member_type_name)
+    $$ set range_comment = get_range_comment(member_type)
+    {{member_type_name}} {{attrname}};{{range_comment}}
+$$ endfor
+};
+
+$$ endif
+$$ endfor
+
+} // namespace autosar

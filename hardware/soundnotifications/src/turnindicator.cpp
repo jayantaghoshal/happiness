@@ -17,8 +17,9 @@ using namespace autosar;
 
 namespace SoundNotifications {
 TurnIndicator::TurnIndicator() : previous_IndcrDisp1WdSts(IndcrSts1::Off) {
+    ALOGI("TurnIndicator::TurnIndicator()");
     indcrRecevier.subscribe([&]() {
-        ALOGV("indcr received");
+        ALOGD("indcrRecevier received - trigger to play indicator sound");
 
         injectSignals(indcrRecevier.get(),
                       fltIndLeFrontReceiver.get(),

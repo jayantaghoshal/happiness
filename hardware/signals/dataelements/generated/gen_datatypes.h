@@ -15,7 +15,6 @@
 #include <array>
 
 namespace autosar {
-
 /*!
  * \enum AbsWarnIndcnReq
  * Controls the ABS warning indication to the driver.
@@ -3857,6 +3856,8 @@ enum class status {
     NOK=2,
 };
 
+
+
 /*!
  * \struct ADataRawSafe1
  */
@@ -3921,7 +3922,7 @@ struct AmbTWithQly {
 /*!
  * \brief array Array8ByteU8
  */
-using Array8ByteU8 = std::array<uint8_t,8>;
+using Array8ByteU8 = std::array<uint8_t, 8>;
 
 /*!
  * \struct AsyLaneChg1
@@ -4160,7 +4161,7 @@ struct DrvrHmiDispdModPen {
 /*!
  * \brief array DrvrHmiForHmiCen
  */
-using DrvrHmiForHmiCen = std::array<uint8_t,254>;
+using DrvrHmiForHmiCen = std::array<uint8_t, 254>;
 
 /*!
  * \struct DrvrHmiUserIfSetgReq
@@ -4311,7 +4312,7 @@ struct GlbRstForSetgAndData {
 /*!
  * \brief array HmiCenForDrvrHmi
  */
-using HmiCenForDrvrHmi = std::array<uint8_t,254>;
+using HmiCenForDrvrHmi = std::array<uint8_t, 254>;
 
 /*!
  * \struct HmiCmptmtTSp
@@ -5564,5 +5565,4 @@ struct WipgInfo {
 };
 
 } // namespace autosar
-
 // clang-format on

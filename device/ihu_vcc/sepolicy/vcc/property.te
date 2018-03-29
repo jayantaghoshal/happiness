@@ -1,3 +1,5 @@
 # properties
 type netboyd_prop, property_type;
 type netmand_prop, property_type;
+
+type carconfig_prop, property_type;

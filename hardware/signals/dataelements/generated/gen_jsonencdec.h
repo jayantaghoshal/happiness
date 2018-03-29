@@ -54,7 +54,6 @@ AllButAREnum<T> fromJson(const json& j) {
     return j.get<T>();
 }
 
-
 // ==========================================
 // ADataRawSafe1
 template <> json toJson<ADataRawSafe1>(const ADataRawSafe1& v);
@@ -811,5 +810,4 @@ template <> json toJson<WipgInfo>(const WipgInfo& v);
 template <> WipgInfo fromJson<WipgInfo>(const json& object);
 
 } // namespace autosar
-
 // clang-format on

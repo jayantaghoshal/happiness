@@ -37,8 +37,8 @@ test_plan_hourly = test_plan_gate + [
              deadline="2018-04-28"
     ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
-    VTSTest("vendor/volvocars/hardware/evs/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
-    VTSTest("vendor/volvocars/hardware/evs/test/ut",                                standard_caps), #Mikael Olsson
+    VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
+    VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
     VTSTest("vendor/volvocars/hardware/netman/test/ct/apix_obd_traffic_split",      standard_caps), #Samuel Idowu
@@ -49,6 +49,9 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications",                         standard_caps), #Uguudei
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps), #Patrik Ingmarsson
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -59,8 +62,8 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/climate/test/ct",                            standard_caps | {cp.flexray}), #Krzysztof Wesolowski
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
@@ -82,8 +85,7 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
     TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetPendingInstallations", standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
+
 ]

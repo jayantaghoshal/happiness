@@ -20,7 +20,7 @@
                 </com.sonyericsson.rebuild.RebuildSettings>
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -53,6 +53,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_daily
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -82,7 +86,7 @@
                 - bootstrap_ihu_daily_test_common.sh
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -102,14 +106,13 @@
                                 <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 - defaults:
     name: daily_vts_defaults
     project-type: freestyle
@@ -149,7 +152,7 @@
                 - bootstrap_ihu_daily_vts.sh
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
@@ -169,24 +172,17 @@
                                 <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/results/*.zip'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vts/android-vts/logs/*/*/*.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_daily
     project-type: multijob
-    description: Link to test report - http://gotsvl1416.got.volvocars.net/daily_test_report/<BUILD_NUMBER>
     node: high
     scm:
         - git:
@@ -203,17 +199,11 @@
             ignore-post-commit-hooks: True
     notifications:
         - http:
-            url: http://10.251.165.223:5000/events
+            url: http://gotsvl1416.got.volvocars.net:3002/events
             format: json
             event: all
             timeout: 10000
             log: 0
-    wrappers:
-        - credentials-binding:
-            - username-password-separated:
-                credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
-                username: JENKINS_USER
-                password: JENKINS_API_PASSWORD
     builders:
       - shell:
             !include-raw:
@@ -229,6 +219,7 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
             - name: ihu_daily_build_vcc_userdebug
               current-parameters: true
+              kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
@@ -244,6 +235,7 @@
           projects:
             - name: ihu_daily_test-generic
               current-parameters: true
+              kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
@@ -287,51 +279,6 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-      - copyartifact:
-          project: ihu_daily_test-generic
-          target: ihu_daily_test-generic_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_daily_test-flexray
-          target: ihu_daily_test-flexray_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_daily_test-audio
-          target: ihu_daily_test-audio_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_daily_test-apix
-          target: ihu_daily_test-apix_results/
-          which-build: multijob-build
-          optional: true
-          flatten: true  
-      - copyartifact:
-          project: ihu_daily_vts1-generic
-          target: ihu_daily_vts/1/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_daily_vts2-generic
-          target: ihu_daily_vts/2/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - copyartifact:
-          project: ihu_daily_vts3-generic
-          target: ihu_daily_vts/3/
-          which-build: multijob-build
-          optional: true
-          flatten: true
-      - shell:
-            !include-raw:
-                - bootstrap_ihu_hourly_daily_common.sh
     publishers:
       - trigger-parameterized-builds:
         - project:
@@ -394,11 +341,6 @@
     defaults: daily_test_defaults
     node: daily_test-generic
     publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
         - raw:
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">

@@ -1,0 +1,8 @@
+on fs
+    start carconfig2prop
+
+service carconfig2prop /vendor/bin/carconfig2prop
+    user root
+    group root
+    oneshot
+    seclabel u:r:carconfig2prop:s0

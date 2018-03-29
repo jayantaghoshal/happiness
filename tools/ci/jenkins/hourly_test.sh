@@ -40,7 +40,7 @@ set -e
 adb shell getprop
 
 capability=""
-if [ "${JOB_NAME}" = "ihu_hourly_test-flexray" ]; then
+if [ "${JOB_NAME}" = "ihu_hourly_test-flexray" ] || [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ; then
     capability="flexray"
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)

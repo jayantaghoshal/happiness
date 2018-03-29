@@ -1,0 +1,61 @@
+product-owners:
+ - po: 'anna.arasa@volvocars.com'
+   areas:
+   - name: 'Applications'
+     description: ''
+
+   - name: 'Radio Application'
+   - name: 'Startup and shutdown UI'
+   - name: 'Media Player Application'
+   - name: 'Settings tree'
+   - name: 'First time start up'
+
+ - po: 'pontius.nokrach@volvocars.com'
+   areas:
+   - name: 'Suspend to RAM'
+   - name: 'CSD consumer manager'
+   - name: 'Clock'
+   - name: 'Power Moding'
+   - name: 'Cloud and Cloud Tunnel'
+   - name: 'Parking Assist Camera'
+
+ - po: 'ahmed.kachroudi@volvocars.com'
+   areas:
+    - name: 'Vehicle Functions'
+      description: 'ADAS settings, Parking Climate, Drive Modes'
+
+    - name: 'Climate Function'
+    - name: 'User Profiles'
+
+ - po: 'anas.al-daghestani@volvocars.com'
+   areas:
+   - name: 'Connectivity'
+   - name: 'In Vehicle Communication'
+   - name: 'Internet Source Selector'
+   - name: 'WiFI Tethering'
+   - name: 'Convenience API'
+   - name: 'Electronic Horizon'
+   - name: 'Warning Sounds'
+   - name: 'GAS Integration'
+
+ - po: 'krzysztof.wesolowski@volvocars.com'
+   areas:
+   - name: 'Diagnostics'
+
+   - name: 'VCC Software Download'
+     description: 'VBFs, DSA/SWUT/DVA tool compatibility, '
+
+   - name: 'Engineering Software Download'
+     description: 'Fastboot, ADB, ihu_update, what developers needs across world'
+
+   - name: 'Installation Master Boot'
+     description: 'Fastboot, ADB, ihu_update, what developers needs across world'
+
+ - po: 'shwan.ciyako@@volvocars.com'
+   areas:
+     - name: 'Configuration Management'
+     - name: 'Continues Integration'
+
+ - po: 'hans.bleckert@volvocars.com'
+   areas:
+   - name: 'GAS functions - proxy to Google'

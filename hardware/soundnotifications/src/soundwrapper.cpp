@@ -40,6 +40,9 @@ void Sound::play() {
         case State::Idle: {
             _state = State::Starting;  // we set this here since we dont know if playSound maybe does the callback
                                        // directly
+            ALOGI("Sound::play() play sound notif sound type=%d component=%d",
+                  static_cast<int32_t>(_soundID.type),
+                  static_cast<int32_t>(_soundID.component));
             android::hardware::Return<void> ret = am_service->playSound(
                     static_cast<int32_t>(_soundID.type),
                     static_cast<int32_t>(_soundID.component),
@@ -293,9 +296,12 @@ SoundWrapper* SoundWrapper::instance() {
 }
 
 SoundWrapper::~SoundWrapper() {
+    ALOGD("%s %d", __FUNCTION__, initialized.load());
     if (initialized.load()) {
         am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
     }
+
+    initialized = false;
 }
 
 bool SoundWrapper::getInitialized() const { return initialized.load(); }
@@ -359,7 +365,10 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
 }
 
 #ifdef UNIT_TEST
-// void SoundWrapper::clearAll() { sounds.clear(); }
+void SoundWrapper::clearAll() {
+    ALOGD("%s", __FUNCTION__);
+    sounds.clear();
+}
 
 int SoundWrapper::getSoundState(SoundID soundid) {
     auto i = sounds.find(soundid);

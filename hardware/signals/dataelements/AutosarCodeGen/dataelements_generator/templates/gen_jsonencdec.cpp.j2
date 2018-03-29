@@ -1,0 +1,64 @@
+
+#include "gen_jsonencdec.h"
+
+namespace autosar {
+$$ for t in sorted_types
+$$ if isinstance(t, DE_Array)
+$$ set subtype_name = get_cpp_type(all_types[t.arrayitem_type_id])
+$$ set arrayTypeStr = "std::array<%s,%d>" % (subtype_name, t.max_elements)
+// ==========================================
+// {{arrayTypeStr}}
+template <>
+json toJson<{{arrayTypeStr}}>(const {{arrayTypeStr}}& v) {
+    json j;
+    for (int i=0 ; i < v.size(); ++i) {
+        j.push_back(v[i]);
+    }
+    return j;
+}
+template <>
+{{arrayTypeStr}} fromJson<{{arrayTypeStr}}>(const json& a) {
+    if (!a.is_array()) {
+        return {{arrayTypeStr}}();  {#- TODO: Log error? #}
+    }
+    {{arrayTypeStr}} result;
+    if (a.size()!=result.max_size()) {
+        return {{arrayTypeStr}}();  {#- TODO: Log error? #}
+    }
+
+    for (int i=0 ; i < result.max_size() ; ++i) {
+        result[i] = a[i].get<{{subtype_name}}>();
+    }
+    return result;
+}
+$$ elif isinstance(t, DE_Struct)
+// ==========================================
+// {{t.de_type_name}}
+template <>
+json toJson<{{t.de_type_name}}>(const {{t.de_type_name}}& v) {
+    json j;
+    $$ for c in t.children
+    $$ set subtype_name = get_cpp_type(all_types[c.de_type_id])
+    $$ set attrname = clean_member_name(c.member_name, subtype_name)
+    j["{{attrname}}"] = toJson<{{subtype_name}}>(v.{{attrname}});
+    $$ endfor
+    return j;
+}
+template <>
+{{t.de_type_name}} fromJson<{{t.de_type_name}}>(const json& object) {
+    if (!object.is_object()) {
+        return {{t.de_type_name}}();
+    }
+    {{t.de_type_name}} v;
+    $$ for c in t.children
+    $$ set subtype_name = get_cpp_type(all_types[c.de_type_id])
+    $$ set attrname = clean_member_name(c.member_name, subtype_name )
+    v.{{attrname}} = fromJson<{{subtype_name}}>(object["{{attrname}}"]);
+    $$ endfor
+    return v;
+}
+
+
+$$ endif
+$$ endfor
+} //namespace autosar

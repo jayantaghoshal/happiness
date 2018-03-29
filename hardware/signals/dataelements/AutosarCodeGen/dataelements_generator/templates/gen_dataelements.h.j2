@@ -31,11 +31,25 @@ class InternalTag : public InTag, public OutTag {
 };
 
 
+{% macro get_dirtag(is_internal, is_insignal) -%}
+{%- if is_internal -%}
+    InternalTag
+{%- else -%}
+    {%- if is_insignal -%}
+        InTag
+    {%- else -%}
+        OutTag
+    {%- endif -%}
+{%- endif -%}
+{%- endmacro %}
+
 {% for de_de in all_dataelements %}
 
-{{de_de.desc_comment }}
-struct {{de_de.de_dataelementname}}_info : {{de_de.dirtag}}, public DataElemInfo {
-    using data_elem_type = {{de_de.cpp_type}};{{de_de.range_comment}}
+/*!
+ * \brief Signal {{de_de.de_dataelementname}}{{escape_cpp_comment_including_prefix_if_nonempty(de_de.description.strip(), "\n * ")}}
+ */
+struct {{de_de.de_dataelementname}}_info : {{get_dirtag(de_de.is_internal, de_de.is_insignal)}}, public DataElemInfo {
+    using data_elem_type = {{de_de.cpp_type}}; {{create_cpp_brief_comment_if_nonempty(de_de.range_comment)}}
 
     static const char* Name();
     static const char* TypeName();

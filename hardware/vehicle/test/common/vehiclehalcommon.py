@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -293,5 +293,9 @@ class VehicleHalCommon():
 
     def assert_prop_equals(self, propId, expected_value):
         value = self.readVhalProperty(propId)
+        asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
+
+    def assert_prop_area_equals(self, propId, areaId, expected_value):
+        value = self.readVhalProperty(propId, areaId)
         asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
 

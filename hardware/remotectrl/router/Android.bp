@@ -6,7 +6,7 @@
 cc_binary {
     name: "remotectrl_routerd",
     defaults: ["volvocars_cc_defaults_hq"],
-
+    rtti: true,
     local_include_dirs: [
         "include/",
     ],
@@ -24,9 +24,13 @@ cc_binary {
         "libvsomeip_sd_2_10_10",
     ],
 
+    static_libs: [
+        "libboost_1_64_0_vcc",
+    ],
+
     init_rc: ["init/remotectrl_routerd.rc"],
 
     required: [
-        "vsomeip.json",
+        "vsomeip_convapi.json",
     ],
 }

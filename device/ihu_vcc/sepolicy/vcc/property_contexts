@@ -1,3 +1,5 @@
 # property contexts
 netboyd. u:object_r:netboyd_prop:s0
 netmand. u:object_r:netmand_prop:s0
+
+vendor.carconfig. u:object_r:carconfig_prop:s0

@@ -89,10 +89,17 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               repository: str,
                                               stage_changes: bool = False,
                                               using_zuul: bool = True):
-    print("Arguments for copy_and_apply...: stage_changes= %s using_zuul= %s" % (stage_changes, using_zuul))
+    print("Arguments for copy_and_apply...: stage_changes= %s using_zuul= %s aosp_root_dir: %s volvocars_repo: %s manifest_repo: %s repository: %s" % (stage_changes,
+                                                                                                                                                       using_zuul,
+                                                                                                                                                       aosp_root_dir,
+                                                                                                                                                       volvocars_repo,
+                                                                                                                                                       manifest_repo,
+                                                                                                                                                       repository))
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
-
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
+
+    print("Path for vcc_manifest_files " + str(volvocars_repo.path))
+    print("Path for old_manifest_files_in_manifest_repo: " + str(manifest_repo.path))
 
     for manifest_file in old_manifest_files_in_manifest_repo:
         print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
@@ -110,10 +117,11 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
         print("Checking this manifest file: " + str(manifest_template_file))
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
         manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
-        manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
-        manifest_repo.run_git(["diff"])
         if stage_changes:
             manifest_repo.add([dest])
+
+    manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
+    manifest_repo.run_git(["diff"])
 
     if not manifest_repo.any_changes(staged=stage_changes):
         manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
@@ -205,13 +213,13 @@ def post_merge(aosp_root_dir: str,
                commit_message: str,
                repo_path_name: str):
     manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
-    repo_path = os.path.join(aosp_root_dir, repo_path_name)
-    git_repo = git.Repo(repo_path)
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
 
     repo_init(aosp_root_dir, branch)
 
     copy_and_apply_templates_to_manifest_repo(aosp_root_dir,
-                                              git_repo,
+                                              volvocars_repo,
                                               manifest_repo,
                                               repo_path_name,
                                               stage_changes=True,

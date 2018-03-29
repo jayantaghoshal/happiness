@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # Set mandatory vars
@@ -11,6 +11,7 @@ LOCAL_CFLAGS+= -Wall \
                -Wextra \
                -Wmissing-field-initializers \
                -Wunused-variable \
+               -Wunreachable-code \
                -Werror=macro-redefined
 
 # On some platforms even C needs this flag to forward exceptions through callback etc.

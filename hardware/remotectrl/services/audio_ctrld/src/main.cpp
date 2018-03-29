@@ -3,11 +3,16 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include <audio_ctrl_service.h>
+#include "audio_ctrl_service.h"
+
 #include <hidl/HidlTransportSupport.h>
+
+#include <chrono>
+#include <cstdlib>
 #include <memory>
-#include <new>
 #include <stdexcept>
+#include <thread>
+
 #include "convapi_signals_def.h"
 #include "service_info.h"
 
@@ -18,8 +23,20 @@
 using namespace ::android::hardware;
 using namespace vcc::remotectrl;
 
-int main() {
+int main(int argc, char* argv[]) {
     ALOGI("Convenience API audio control daemon 0.1 starting");
+
+    if (argc < 2) {
+        ALOGE("Expects vsomeip configuration file location as argument");
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(1s);
+        return EXIT_FAILURE;
+    }
+
+    const char* environment_variable = "VSOMEIP_CONFIGURATION";
+    const char* environment_value = argv[1];
+
+    setenv(environment_variable, environment_value, 1 /*override*/);
 
     try {
         ServiceInfo service_info{
@@ -41,10 +58,7 @@ int main() {
         }
 
         joinRpcThreadpool();
-    } catch (const std::runtime_error& e) {
-        ALOGE("%s", e.what());
-        return EXIT_FAILURE;
-    } catch (const std::bad_alloc& e) {
+    } catch (const std::exception& e) {
         ALOGE("%s", e.what());
         return EXIT_FAILURE;
     }

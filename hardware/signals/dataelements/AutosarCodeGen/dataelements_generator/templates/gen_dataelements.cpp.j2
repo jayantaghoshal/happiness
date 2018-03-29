@@ -1,13 +1,24 @@
 #include "gen_dataelements.h"
 
 
+{% macro get_direction(is_internal, is_insignal) -%}
+{%- if is_internal -%}
+    Dir::INTERNAL
+{%- else -%}
+    {%- if is_insignal -%}
+        Dir::IN
+    {%- else -%}
+        Dir::OUT
+    {%- endif -%}
+{%- endif -%}
+{%- endmacro %}
 namespace autosar {
 {% for de_de in all_dataelements %}
 
 //==========================================
 const char* {{de_de.de_dataelementname}}_info::Name() { return "{{de_de.de_dataelementname}}"; }
 const char* {{de_de.de_dataelementname}}_info::TypeName() { return "{{de_de.cpp_type}}"; }
-Dir {{de_de.de_dataelementname}}_info::Direction() { return {{de_de.direct}}; }
+Dir {{de_de.de_dataelementname}}_info::Direction() { return {{get_direction(de_de.is_internal, de_de.is_insignal)}}; }
 
 const char* {{de_de.de_dataelementname}}_info::name() const { return Name(); }
 const char* {{de_de.de_dataelementname}}_info::typeName() const { return TypeName(); }

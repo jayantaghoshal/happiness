@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration description="Software Management Test -- Tests Get Assignments and Commission Assignment">
 
-    <target_preparer class="com.android.tradefed.targetprep.DeviceSetup">
-        <option name="screen-always-on" value="ON" />
-    </target_preparer>
-
     <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
         <option name="apk-name" value="softwareupdateapp.apk" />
     </target_preparer>
@@ -18,11 +14,12 @@
     </target_preparer>
 
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
-        <option name="run-command" value="stop cloudd" />
-        <option name="run-command" value="killall -9 cloudd" />
+        <option name="run-command" value="settings put global package_verifier_enable 0" />
         <option name="run-command" value="am force-stop com.volvocars.cloudservice" />
         <option name="run-command" value="am force-stop com.volvocars.softwareupdate" />
         <option name="run-command" value="am force-stop com.volvocars.softwareupdateapp" />
+        <option name="run-command" value="stop cloudd" />
+        <option name="run-command" value="killall -9 cloudd" />
         <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/cloudd" />
     </target_preparer>
 

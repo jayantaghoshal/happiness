@@ -4,6 +4,7 @@
  */
 
 #include "module_base.h"
+#include <set>
 #include <stdexcept>
 #include <thread>
 
@@ -33,8 +34,6 @@ ModuleBase::ModuleBase(const ServiceInfo& service_info)
                 method,
                 std::bind(&ModuleBase::MessageReceivedHook, this, std::placeholders::_1));
     }
-
-    // vsomeip_event_groups_.insert(vsomeip_event_groups_.cend(), service_info_.events_);
 }
 
 ModuleBase::~ModuleBase() {
@@ -65,6 +64,14 @@ void ModuleBase::StartOffer() {
           service_info_.instance_id_);
 
     vsomeip_appl_->offer_service(service_info_.service_id_, service_info_.instance_id_);
+
+    for (const auto& event : service_info_.events_) {
+        vsomeip_appl_->offer_event(service_info_.service_id_,
+                                   service_info_.instance_id_,
+                                   event,
+                                   std::set<vsomeip::eventgroup_t>({service_info_.eventgroup_id_}),
+                                   false);
+    }
 }
 
 void ModuleBase::StopOffer() {
@@ -72,6 +79,10 @@ void ModuleBase::StopOffer() {
           service_info_.service_name_,
           service_info_.service_id_,
           service_info_.instance_id_);
+
+    for (const auto& event : service_info_.events_) {
+        vsomeip_appl_->stop_offer_event(service_info_.service_id_, service_info_.instance_id_, event);
+    }
 
     vsomeip_appl_->stop_offer_service(service_info_.service_id_, service_info_.instance_id_);
 }

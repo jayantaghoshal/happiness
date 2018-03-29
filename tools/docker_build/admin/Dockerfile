@@ -189,10 +189,15 @@ RUN apt-get install -y \
 
 ##################################################
 # Tools required for Cloud Simulation
+
+# Nodejs 6 required for running the timezone boundary builder script
+# The default available nodejs version via apt is 4.x at the time of
+# this writting.
+RUN curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+
 RUN apt-get install -y \
-    nodejs \
-    nodejs-legacy \
-    npm
+    nodejs
 
 RUN npm config set proxy $HTTP_PROXY
 RUN npm config set proxy-https $HTTPS_PROXY
@@ -200,6 +205,29 @@ RUN npm install -g \
     lowdb \
     js2xmlparser \
     json-server
+
+# The timezone boundary builder script depends
+# on the following node packages.(Note that these
+# packages were to have local installation. Hence
+# without -g flag)
+RUN npm install \
+    @mapbox/geojson-area \
+    @turf/helpers \
+    async \
+    jsts \
+    rimraf \
+    query-overpass
+
+# Python package for cloning git repositories
+# and running nodejs scripts
+RUN pip3 install gitpython
+RUN pip3 install Naked
+
+#This installs the CLI for spatialite tools needed
+#for creating sqlite3 timezonedb from shapefiles
+RUN apt-get install -y spatialite-bin
+
+
 
 ##################################################
 # Preload with python packages required for VTS

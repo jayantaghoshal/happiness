@@ -1,6 +1,6 @@
 #!/bin/python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import codecs
@@ -13,8 +13,7 @@ from dataelements_generator.dataelements_generation_config import SIGNALS_EXCLUD
 logger = logging.getLogger(__name__)
 from typing import Dict, List, cast, Tuple
 
-from . import render_json
-from .render_datatypes import render_datatype
+from .render_datatypes import render_datatype, render_json
 
 import autosar
 from autosar.components import AR_RPort
@@ -274,7 +273,7 @@ def generate(swc_input_file, options):
      gen_vsm_sink_subscribe_cpp,
      gen_vsm_all_dataelements_cpp
      ) = render_dataelements.render_dataelments(header, footer, mp_only_de_elements, all_types)
-    (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents) = render_json.render_json(header, footer, all_arrays, all_structs, all_types)
+    (gen_jsonenc_h_contents, gen_jsonenc_cpp_contents) = render_json(header, footer, all_arrays, all_structs, all_types)
 
     with codecs.open(datatypespath, 'w', encoding=OUTPUT_FILE_ENCODING) as fout:
         fout.write(render_datatype(header, footer, all_enums, all_arrays, all_structs, all_types))
