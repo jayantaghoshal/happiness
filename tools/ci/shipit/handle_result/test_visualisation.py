@@ -31,7 +31,7 @@ class VCCCIProxy(object):
         self.target = "VCC-CI"
 
     def getLogURL(self, module_name: str):
-        log = "http://10.251.165.178:3000/detailed_view?module_name=%s&job_name=%s&build_number=%s" % (
+        log = "http://gotsvl1416.got.volvocars.net:3001/detailed_view?module_name=%s&job_name=%s&build_number=%s" % (
             module_name,
             self.testsuite_name,
             self.test_job_build_number)

@@ -9,7 +9,7 @@
             project-name: ihu_daily_build_vcc_eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
         - run:
-            name: ihu_staging
+            name: TOP_JOB
             project-name: ihu_staging
             description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.            
     properties:
