@@ -64,7 +64,9 @@ vhal20::VehiclePropConfig propconfig_recirculation() {
 }
 
 vhal20::VehiclePropConfig propconfig_acon() {
-    return boolConfig(VehicleProperty::HVAC_AC_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
+    return boolConfig(VehicleProperty::HVAC_AC_ON, toInt(VehicleAreaZone::ROW_1));  // TODO: Invesigate which AreaZone
+                                                                                    // to use here. Must be the same
+                                                                                    // zone in ClimateService.java)
 }
 
 vhal20::VehiclePropConfig propconfig_defroster() {
@@ -72,7 +74,7 @@ vhal20::VehiclePropConfig propconfig_defroster() {
                       toInt(VehicleAreaWindow::FRONT_WINDSHIELD) | toInt(VehicleAreaWindow::REAR_WINDSHIELD));
 }
 vhal20::VehiclePropConfig propconfig_maxdefrost() {
-    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
+    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, toInt(VehicleAreaZone::ROW_1));
 }
 
 vhal20::VehiclePropConfig propconfig_fanlevelfront() {
