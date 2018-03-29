@@ -8,6 +8,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
+        - run:
+            name: ihu_staging
+            project-name: ihu_staging
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.            
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -33,6 +37,11 @@
                                 <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
 
@@ -118,12 +127,6 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-flexray
@@ -146,12 +149,6 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-audio
@@ -174,12 +171,6 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-apix
@@ -202,9 +193,3 @@
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
