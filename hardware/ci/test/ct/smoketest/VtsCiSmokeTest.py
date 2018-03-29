@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -34,7 +34,6 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def testCpuLoad(self):
-        #requirement = 1
         requirement = 90
         self.dut.shell.InvokeTerminal("my_shell3")
         my_shell = getattr(self.dut.shell, "my_shell3")
@@ -52,10 +51,21 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
             self.write_kpi("cpu_core_%d" % core, total_load[core], "%")
             if total_load[core] > requirement:
-                process_running = my_shell.Execute(["top -n1"])
-                logging.info("top -n1")
-                logging.info(process_running[const.STDOUT][0])
-                asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
+                #Before there is a clear indication of system boot completed,
+                #give CPU load another measurement to avoid the load spike after ihu_update and boot.
+                third_cpu_data = self.get_data(int(number_of_cores))
+                sleep(15)
+                fourth_cpu_data = self.get_data(int(number_of_cores))
+                total_load_secondtry = self.calc_load(third_cpu_data, fourth_cpu_data, int(number_of_cores))
+
+                for core in range(int(number_of_cores)):
+                    logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load_secondtry[core])
+                    self.write_kpi("cpu_core_%d" % core, total_load_secondtry[core], "%")
+                    if total_load_secondtry[core] > requirement:
+                        process_running = my_shell.Execute(["top -n1"])
+                        logging.info("top -n1")
+                        logging.info(process_running[const.STDOUT][0])
+                        asserts.assertLess(total_load_secondtry[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
 
         logging.info("Cpu cores: " + number_of_cores)
         logging.info("model_name: " + model_name)
