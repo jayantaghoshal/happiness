@@ -20,6 +20,7 @@ from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, Dis
 test_plan_gate = [
     VTSTest("vendor/volvocars/tools/test/daemon_test",                              standard_caps), #VtsDaemonTest, Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps), #VtsCiSmokeTest, Magnus Larsson
+    VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #libdbgTest, Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",               standard_caps), #VtsDEUnitTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",                   standard_caps), #VtsEventLoopCTTestCases, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                        standard_caps), #liblocalconfig_ut, Magnus Larsson
@@ -37,7 +38,6 @@ test_plan_hourly = test_plan_gate + [
              deadline="2018-04-28"
     ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
-    VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
