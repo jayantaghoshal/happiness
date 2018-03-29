@@ -75,11 +75,11 @@ def run_test(test: IhuBaseTest) -> ResultData:
         return test_types.ResultData(False, str(e), None, None, dict(), dict())
 
 
-def check_result(test_result: NamedTestResult) -> None:
-    results = test_result.result.json_result
+def check_result(test_results: List[NamedTestResult], abort_on_first_failure: bool) -> None:
+    results = test_results[-1].result.json_result
 
     if results is not None:
-        print("Test name: " + test_result.name)
+        print("Test name: " + test_results[-1].name)
         print("Test class: " + results["Results"][0]["Test Class"])
         for result in results["Results"]:
             print("\tTest name: " + result["Test Name"])
@@ -89,10 +89,13 @@ def check_result(test_result: NamedTestResult) -> None:
             if result["Result"] != "PASS":
                 print("Details: " + result["Details"])
                 print("Test failed! The result from " + result["Test Class"] + ", " + result["Test Name"] + " is " + result["Result"])
+                if abort_on_first_failure:
+                    print_test_summary(test_results)
+                    sys.exit(1)
 
         print("Number of executed tests in JSON file: " + str(results["Summary"]["Executed"]))
     else:
-        print("The current test case %s does not generate a JSON file" % test_result.name)
+        print("The current test case %s does not generate a JSON file" % test_results[-1].name)
 
 
 def build_testcases(tests_to_run: List[IhuBaseTest], skip_build_vts):
@@ -190,7 +193,7 @@ def print_test_summary(test_results: List[NamedTestResult]):
             print("")
 
 
-def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
+def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_first_failure: bool):
     test_results = []  # type: List[NamedTestResult]
     if ci_reporting:# initialise visualizing Testcases in VCC CI
         try:
@@ -238,11 +241,8 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
                 print(e)
                 print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
-        check_result(test_results[-1])
+        check_result(test_results, abort_on_first_failure)
 
-
-    for r in test_results:
-        check_result(r)  # TODO: Is this overlapping with print_test_summary   ???
 
     try:
         dump_test_results_to_json(test_results)
@@ -293,6 +293,8 @@ def main():
     run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
     run_parser.add_argument(
         '--ci_reporting', action='store_true')
+    run_parser.add_argument(
+        '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
     build_parser.add_argument('--test_component', default=None,
                             help="Run without a plan and test a specified directory only")
     run_parser.add_argument('--test_component', default=None,
@@ -362,7 +364,7 @@ def main():
             selected_tests = [t for t in supported_tests if is_all_selected_caps_in_required(t)]
         else:
             selected_tests = supported_tests
-        run_testcases(selected_tests, ci_reporting)
+        run_testcases(selected_tests, ci_reporting, args.abort_on_first_failure)
     else:
         root_parser.print_usage()
         sys.exit(1)
