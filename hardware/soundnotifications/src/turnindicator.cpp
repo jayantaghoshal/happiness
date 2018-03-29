@@ -6,7 +6,6 @@
 #include <AudioTable.h>
 #include <cutils/log.h>
 
-#include "soundwrapper.h"
 #include "turnindicator.h"
 
 using namespace ApplicationDataElement;
@@ -16,7 +15,9 @@ using namespace autosar;
 #define LOG_TAG "SoundNotifyTurnInd"
 
 namespace SoundNotifications {
-TurnIndicator::TurnIndicator() : previous_IndcrDisp1WdSts(IndcrSts1::Off) {
+TurnIndicator::TurnIndicator()
+    : previous_IndcrDisp1WdSts(IndcrSts1::Off),
+      lastPlayedSound(AudioTable::SoundType::LastSound, AudioTable::SoundComponent::WarnUS, false) {
     ALOGI("TurnIndicator::TurnIndicator()");
     indcrRecevier.subscribe([&]() {
         ALOGD("indcrRecevier received - trigger to play indicator sound");
@@ -40,42 +41,54 @@ void TurnIndicator::injectSignals(DataElemValue<autosar::IndcrDisp1WdSts_info> i
     IndcrSts1 from = previous_IndcrDisp1WdSts;
     IndcrSts1 to = indcr.isOk() ? (indcr.value()) : IndcrSts1::Off;
 
+    SoundWrapper::SoundID playedSound(AudioTable::SoundType::LastSound, AudioTable::SoundComponent::WarnUS, false);
+
     if (to == IndcrSts1::LeOn) {
         if (from == IndcrSts1::Off || from == IndcrSts1::RiOn || from == IndcrSts1::LeAndRiOn) {
             if (FltIndcrTurnLeFrnt.isError() || FltIndcrTurnLeRe.isError()) {
                 ALOGW("No turnindicator left sound played because FltIndcr signal not valid");
-            } else if ((FltIndcrTurnLeFrnt.value() == DevErrSts2::NoFlt) &&
-                       (FltIndcrTurnLeRe.value() == DevErrSts2::NoFlt)) {
-                SoundWrapper::play(SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
-                                                         AudioTable::SoundComponent::LeftRight));
             } else {
-                SoundWrapper::play(SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
-                                                         AudioTable::SoundComponent::LeftRightBroken));
+                if ((FltIndcrTurnLeFrnt.value() == DevErrSts2::NoFlt) &&
+                    (FltIndcrTurnLeRe.value() == DevErrSts2::NoFlt)) {
+                    playedSound = SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
+                                                        AudioTable::SoundComponent::LeftRight);
+                } else {
+                    playedSound = SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
+                                                        AudioTable::SoundComponent::LeftRightBroken);
+                }
+                SoundWrapper::play(playedSound);
             }
         }
     } else if (to == IndcrSts1::RiOn) {
         if (from == IndcrSts1::Off || from == IndcrSts1::LeOn || from == IndcrSts1::LeAndRiOn) {
             if (FltIndcrTurnRiFrnt.isError() || FltIndcrTurnRiRe.isError()) {
                 ALOGW("No turnindicator right sound played because FltIndcr signal not valid");
-            } else if ((FltIndcrTurnRiFrnt.value() == DevErrSts2::NoFlt) &&
-                       (FltIndcrTurnRiRe.value() == DevErrSts2::NoFlt)) {
-                SoundWrapper::play(SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
-                                                         AudioTable::SoundComponent::LeftRight));
-
             } else {
-                SoundWrapper::play(SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
-                                                         AudioTable::SoundComponent::LeftRightBroken));
+                if ((FltIndcrTurnRiFrnt.value() == DevErrSts2::NoFlt) &&
+                    (FltIndcrTurnRiRe.value() == DevErrSts2::NoFlt)) {
+                    playedSound = SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
+                                                        AudioTable::SoundComponent::LeftRight);
+
+                } else {
+                    playedSound = SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator,
+                                                        AudioTable::SoundComponent::LeftRightBroken);
+                }
+                SoundWrapper::play(playedSound);
             }
         }
     } else if (to == IndcrSts1::LeAndRiOn) {
         if (from == IndcrSts1::Off || from == IndcrSts1::LeOn || from == IndcrSts1::RiOn) {
-            SoundWrapper::play(
-                    SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::Hazard));
+            playedSound =
+                    SoundWrapper::SoundID(AudioTable::SoundType::TurnIndicator, AudioTable::SoundComponent::Hazard);
+            SoundWrapper::play(playedSound);
         }
+    } else if (to == IndcrSts1::Off && lastPlayedSound.isValid) {
+        SoundWrapper::stop(lastPlayedSound);
     } else {
-        // off
+        ALOGW("Unexpected IndcrSts1 for direction indicator");
     }
 
     previous_IndcrDisp1WdSts = to;
-}
-}
+    lastPlayedSound = playedSound;
+}  // namespace SoundNotifications
+}  // namespace SoundNotifications

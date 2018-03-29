@@ -380,7 +380,8 @@ bool SoundWrapper::getInitialized() const { return initialized.load(); }
 }
 
 // SoundID
-SoundWrapper::SoundID::SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c) : type(t), component(c) {}
+SoundWrapper::SoundID::SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c, bool valid)
+    : type(t), component(c), isValid(valid) {}
 
 bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
     const SoundID& lhs = *this;
@@ -388,6 +389,13 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
     // This is needed since we use SoundID as a key in an std::map
     if (lhs.type != s.type) return lhs.type < s.type;
     return lhs.component < s.component;
+}
+
+SoundWrapper::SoundID& SoundWrapper::SoundID::operator=(SoundWrapper::SoundID other) {
+    type = other.type;
+    component = other.component;
+    isValid = other.isValid;
+    return *this;
 }
 
 #ifdef UNIT_TEST

@@ -26,11 +26,13 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
   public:
     // A "sound" is uniquely identified with SoundID
     struct SoundID {
-        const AudioTable::SoundType type;
-        const AudioTable::SoundComponent component;
+        AudioTable::SoundType type;
+        AudioTable::SoundComponent component;
+        bool isValid;  // Used for indicating "No Sound", i.e. an invalid value
 
-        SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c);
+        SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c, bool valid = true);
         bool operator<(const SoundID& s) const;  // needed since we use it as a key in an std::map
+        SoundID& operator=(SoundID other);       // Copy assignment operator
     };
 
     // Start playing the given sound id
@@ -126,4 +128,4 @@ class Sound {
     tarmac::eventloop::IDispatcher& restartTimer;
 };
 
-}  // namespace
+}  // namespace SoundNotifications
