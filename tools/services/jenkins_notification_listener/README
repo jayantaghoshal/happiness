@@ -18,7 +18,7 @@ Run app in production (gotsvl1416):
 - JENKINS_API_KEY=<Jenkins API KEY> USER=<CDSID> ./run.sh
 - tail -100f log/jenkins_notification_listener.log
 
-Restart example (build & run):
+Restart example (build & run, assumes JENKINS_API_KEY is set):
 docker kill $(docker ps --filter ancestor=jenkins-notification-listener --format "{{.ID}}") && ./build.sh && USER=E9426001 ./run.sh
 
 TODO:

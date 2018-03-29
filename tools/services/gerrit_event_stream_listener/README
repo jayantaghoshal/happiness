@@ -15,8 +15,8 @@ Run app in production (gotsvl1416):
 - repo sync --no-clone-bundle vendor/volvocars
 - cd gerrit_event_stream_listener
 - ./build.sh
-- JENKINS_API_KEY=<Jenkins API KEY> GERRIT_USER=<CDSID> USER=$USER ./run.sh
+- JENKINS_API_KEY=<Jenkins API KEY> GERRIT_USER=<CDSID> ./run.sh
 - tail -100f log/gerrit_evnet_stream_listener.log
 
-Restart example (build & run):
-docker kill $(docker ps --filter ancestor=gerrit-event-stream-listener --format "{{.ID}}") && ./build.sh && USER=E9426001 ./run.sh
+Restart example (build & run, assumes JENKINS_API_KEY is set):
+docker kill $(docker ps --filter ancestor=gerrit-event-stream-listener --format "{{.ID}}") && ./build.sh && GERRIT_USER=E9426001 ./run.sh
