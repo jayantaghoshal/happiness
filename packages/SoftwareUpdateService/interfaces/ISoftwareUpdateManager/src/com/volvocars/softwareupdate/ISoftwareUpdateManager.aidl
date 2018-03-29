@@ -1,12 +1,25 @@
 package com.volvocars.softwareupdate;
 
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
+import com.volvocars.softwareupdate.Setting;
 
 oneway interface ISoftwareUpdateManager {
     /**
      * Register a callback for state updates
      */
     void GetState(in ISoftwareUpdateManagerCallback callback);
+
+    /**
+    * Get list of software information stored in service
+    * @param callback Callback
+    */
+    void GetSoftwareInformationList(in ISoftwareUpdateManagerCallback callback);
+
+    /**
+    * Get stored (OTA) settings
+    * @param callback Callback
+    */
+    void GetSettings(in ISoftwareUpdateManagerCallback callback);
 
     /**
      * Request the list of available Software Assignments.
@@ -36,5 +49,11 @@ oneway interface ISoftwareUpdateManager {
      void GetInstallNotification(in String installationOrderId);
 
      void ShowInstallationPopup(in String installationOrderId);
+
+    /**
+    * Set (OTA) setting
+    * @param setting Setting to be set
+    */
+     void SetSetting(in Setting setting);
 
 }

@@ -60,6 +60,8 @@ public class SoftwareUpdateService extends Service {
     private int state = 0; // Dummy state
 
     private ArrayList<SoftwareInformation> softwareInformationList;
+    private ArrayList<Setting> settings;
+
     private SoftwareManagementApiCallback swapiCallback;
 
     private static Handler messageHandler = new MessageHandler();
@@ -92,6 +94,7 @@ public class SoftwareUpdateService extends Service {
         swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
         swapiCallback = new SoftwareManagementApiCallback(this);
         softwareInformationList = new ArrayList();
+        settings = new ArrayList();
 
         installationMaster = new InstallationMaster(this);
         installationMaster.init();
@@ -122,6 +125,13 @@ public class SoftwareUpdateService extends Service {
         super.onDestroy();
     }
 
+    public ArrayList<SoftwareInformation> GetSoftwareInformationList() {
+        return softwareInformationList;
+    }
+
+    public ArrayList<Setting> GetSettings() {
+        return settings;
+    }
     public void GetSoftwareAssignmentList() {
         if (swapi != null) {
             try {
@@ -261,6 +271,18 @@ public class SoftwareUpdateService extends Service {
         } else {
             Log.e(LOG_TAG, "GetInstallNotification failed: Local SoftwareManagementApi variable is null");
         }
+    }
+
+    public void SetSetting(Setting setting) {
+        Log.w(LOG_TAG, "SetSetting not implemented... \n called with setting [type: " + setting.type.name() + ", value: " + setting.value + "]");
+        for (Setting s : settings) {
+            if (s.type == setting.type) {
+                s.value = setting.value;
+                return;
+            }
+        }
+
+        settings.add(setting);
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {

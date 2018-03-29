@@ -6,25 +6,79 @@
 package com.volvocars.softwareupdateapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import com.volvocars.softwareupdate.Setting;
+import com.volvocars.softwareupdate.*;
+import java.util.*;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private final String LOG_TAG = "SwUpdApp.SettingsActivity";
+    private SoftwareUpdateManager softwareUpdateManager = null;
 
-    private Switch enableOta;
-    private Switch autoDownload;
-    private Switch autoInstall;
+    private LinearLayout settingsLayout;
+    private Switch enableOtaSwitch;
+    private Switch autoDownloadSwitch;
+    private Switch autoInstallSwitch;
+
+    private Intent intent;
+    private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
+        @Override
+        public void UpdateState(int state) {
+        }
+
+        @Override
+        public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
+        }
+
+        @Override
+        public void UpdateSoftware(SoftwareInformation software) {
+        }
+
+        @Override
+        public void UpdateSettings(List<Setting> settings) {
+            updateSettings(settings);
+        }
+
+        @Override
+        public void ProvideErrorMessage(int code, String message) {
+            Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
+        }
+    };
+
+    private SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
+        @Override
+        public void onServiceConnected() {
+            Log.v(LOG_TAG, "onServiceConnected app");
+            try {
+                softwareUpdateManager.GetState(callback);
+                softwareUpdateManager.GetSettings(callback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Error GetState");
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected() {
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate");
+        Log.v(LOG_TAG, "onCreate");
+        softwareUpdateManager = new SoftwareUpdateManager(this, softwareUpdateManagerCallback);
+
         setContentView(R.layout.layout_settings);
 
         Toolbar myChildToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,28 +86,98 @@ public class SettingsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        enableOta = (Switch) findViewById(R.id.enableOta);
-        autoDownload = (Switch) findViewById(R.id.autoDownload);
-        autoInstall = (Switch) findViewById(R.id.autoInstall);
+        settingsLayout = (LinearLayout) findViewById(R.id.settingsLayout);
+        enableOtaSwitch = (Switch) findViewById(R.id.enableOta);
+        //enableOtaSwitch.setChecked(enableOta);
 
-        enableOta.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        autoDownloadSwitch = (Switch) findViewById(R.id.autoDownload);
+        autoInstallSwitch = (Switch) findViewById(R.id.autoInstall);
+        //autoInstallSwitch.setChecked(autoInstall);
+
+        enableOtaSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(LOG_TAG, "enableOta: " + isChecked);
+                Setting setting = new Setting();
+                setting.type = Setting.SettingType.ENABLE_OTA;
+                setting.value = isChecked;
+
+                try {
+                    softwareUpdateManager.SetSetting(setting);
+                } catch (RemoteException e) {
+                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
+                }
             }
         });
 
-        autoDownload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        autoDownloadSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(LOG_TAG, "autoDownload: " + isChecked);
+                Log.d(LOG_TAG, "onCheckChanged AutoDownload: " + isChecked);
+                Setting setting = new Setting();
+                setting.type = Setting.SettingType.AUTO_DOWNLOAD;
+                setting.value = isChecked;
+
+                try {
+                    softwareUpdateManager.SetSetting(setting);
+                } catch (RemoteException e) {
+                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
+                }
             }
         });
 
-        autoInstall.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        autoInstallSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(LOG_TAG, "autoInstall: " + isChecked);
+                Setting setting = new Setting();
+                setting.type = Setting.SettingType.AUTO_INSTALL;
+                setting.value = isChecked;
+
+                try {
+                    softwareUpdateManager.SetSetting(setting);
+                } catch (RemoteException e) {
+                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
+                }
             }
         });
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(LOG_TAG, "onDestroy");
+        softwareUpdateManager.disconnect();
+    }
+
+    private void updateSettings(List<Setting> settings) {
+        Log.v(LOG_TAG, "updateSettings");
+        for (Setting setting : settings) {
+            Log.d(LOG_TAG, "Type: " + setting.type + " Value: " + setting.value);
+            switch (setting.type) {
+            case ENABLE_OTA:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        enableOtaSwitch.setChecked(setting.value);
+                    }
+                });
+                break;
+            case AUTO_DOWNLOAD:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        autoDownloadSwitch.setChecked(setting.value);
+                    }
+                });
+                break;
+            case AUTO_INSTALL:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        autoInstallSwitch.setChecked(setting.value);
+                    }
+                });
+                break;
+            default:
+                Log.v(LOG_TAG, "Unknown setting, don't know what to do");
+            }
+        }
+
+    }
 }
