@@ -59,6 +59,7 @@ bootstrap_docker_run () {
     --device /dev/ttyVIP \
     --privileged \
     --volume /dev/bus/usb:/dev/bus/usb \
+    --rm \
     "${BOOTSTRAP_DOCKER_IMAGE}" \
     "$@"
 }
