@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 cc_library_shared {
     name: "libcarconfig_reader",
-    vendor: true,
+    defaults: ["volvocars_cc_defaults"],
     cpp_std: "c++14",
     generated_headers: [
         "cc_parameterlist_gen",
@@ -15,12 +15,6 @@ cc_library_shared {
         "src/carconfig_reader.cpp",
         "src/carconfig.cpp",
         "src/carconfig_file_reader.cpp",
-    ],
-
-    cppflags: [
-        "-fexceptions",
-        "-Wno-unused-parameter",
-        "-Wno-macro-redefined",
     ],
 
     local_include_dirs: [
@@ -40,13 +34,10 @@ cc_library_shared {
     required: [
         "carconfig-default.csv",
     ],
-
-    compile_multilib: "64",
 }
 
 cc_library_static {
     name: "libcarconfig_reader_mock",
-    vendor: true,
     defaults: ["volvocars_cc_defaults_hq"],
     generated_headers: [
         "cc_parameterlist_gen",
@@ -66,6 +57,10 @@ cc_library_static {
         "mock",
     ],
 
+    shared_libs: [
+        "liblog",
+    ],
+
     export_static_lib_headers: [
         "libgmock",
     ],
@@ -80,18 +75,12 @@ cc_library_static {
 // This lib is to be used from the carconfig_updater
 cc_library_shared {
     name: "libcarconfig_writer",
-    vendor: true,
     cpp_std: "c++14",
     generated_headers: ["cc_parameterlist_map_gen"],
+    defaults: ["volvocars_cc_defaults"],
 
     srcs: [
         "src/carconfig_file_writer.cpp",
-    ],
-
-    cppflags: [
-        "-fexceptions",
-        "-Wno-unused-parameter",
-        "-Wno-macro-redefined",
     ],
 
     local_include_dirs: [
@@ -110,6 +99,39 @@ cc_library_shared {
     required: [
         "carconfig-default.csv",
     ],
-
-    compile_multilib: "64",
 }
+
+cc_library_static {
+    name: "libcarconfig_reader_static",
+    generated_headers: [
+        "cc_parameterlist_gen",
+    ],
+    defaults: ["volvocars_cc_defaults"],
+
+    srcs: [
+        "src/*",
+    ],
+
+    local_include_dirs: [
+        "include",
+        "src",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    export_static_lib_headers: [
+        "libgmock",
+    ],
+
+    static_libs: [
+        "libgmock",
+        "libgtest",
+    ],
+
+}
+
+subdirs = [
+    "*",
+]

@@ -14,7 +14,7 @@
 class CarConfigFileReader {
   public:
     CarConfigFileReader();
-    void open(const std::string path);
+    void open(const std::string filePath);
     Carconfig_base::ccValue getValue(int id);
 
   private:

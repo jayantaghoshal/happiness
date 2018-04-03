@@ -48,7 +48,7 @@ const std::string carconfig_default_file_name{"/vendor/etc/config/carconfig-defa
 
 const std::string carconfig_configured_filename{"/oem_config/carconfig/CARCONFIG_CONFIGURED"};
 
-static bool fileExists(const std::string& filePath) {
+inline bool fileExists(const std::string& filePath) {
     struct stat st;
     bool status = false;
     if (stat(filePath.c_str(), &st) == 0) {
@@ -59,7 +59,7 @@ static bool fileExists(const std::string& filePath) {
     return status;
 }
 
-static bool emptyFileExists(const std::string& filePath) {
+inline bool emptyFileExists(const std::string& filePath) {
     struct stat st;
     return stat(filePath.c_str(), &st) == 0;
 }

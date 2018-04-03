@@ -29,6 +29,7 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",     standard_caps), #VtsNetmandNamespaceComponentTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/uds/test/ct",                                standard_caps), #udsdatacollector_ct, Krzysztof Wesolowski
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",             standard_caps), #GeneralPerformanceTest, Magnus Larsson
+    VTSTest("vendor/volvocars/hardware/carconfig/carconfig/test/ut",                standard_caps), #Carconfig test, Johnny Karlsson
 ]
 
 test_plan_hourly = test_plan_gate + [
