@@ -12,7 +12,7 @@
 #include <vendor/volvocars/hardware/remotectrl/1.0/INativeRemoteAudioCtrl.h>
 #include <vendor/volvocars/hardware/remotectrl/1.0/types.h>
 
-#include "module_base.h"
+#include "service_base.h"
 
 namespace vcc {
 namespace remotectrl {
@@ -24,10 +24,10 @@ using ::android::hardware::Void;
 namespace hidl_remotectrl = ::vendor::volvocars::hardware::remotectrl::V1_0;
 
 class AudioCtrlService final : public hidl_remotectrl::INativeRemoteAudioCtrl,
-                               public vcc::remotectrl::modulebase::ModuleBase,
+                               public vcc::remotectrl::servicebase::ServiceBase,
                                ::android::hardware::hidl_death_recipient {
   public:
-    explicit AudioCtrlService(const ServiceInfo& service_info) : ModuleBase(service_info) {}
+    explicit AudioCtrlService(const ServiceInfo& service_info) : ServiceBase(service_info) {}
 
     Return<void> registerAudioControlHandler(
             const ::android::sp<hidl_remotectrl::ISystemRemoteAudioCtrl>& handler) override;

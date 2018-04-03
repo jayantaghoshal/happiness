@@ -16,12 +16,12 @@
 
 namespace vcc {
 namespace remotectrl {
-namespace modulebase {
+namespace servicebase {
 
-class ModuleBase {
+class ServiceBase {
   public:
-    explicit ModuleBase(const ServiceInfo& service_info);
-    virtual ~ModuleBase();
+    explicit ServiceBase(const ServiceInfo& service_info);
+    virtual ~ServiceBase();
 
     void StartService();
     void StopService();
@@ -73,6 +73,6 @@ class ModuleBase {
     std::thread service_launcher_thread_;
 };
 
-}  // namespace modulebase
+}  // namespace servicebase
 }  // namespace remotectrl
 }  // namespace vcc

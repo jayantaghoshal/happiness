@@ -17,7 +17,7 @@ cc_binary {
 
     static_libs: [
         "libremotectrl_common_headers",
-        "libremotectrl_modulebase",
+        "libremotectrl_service_base",
     ],
 
     shared_libs: [

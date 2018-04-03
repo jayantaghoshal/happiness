@@ -3,20 +3,20 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include "module_base.h"
+#include "service_base.h"
 #include <set>
 #include <stdexcept>
 #include <thread>
 
 #undef LOG_TAG
-#define LOG_TAG "RemoteCtrlBaseModule"
+#define LOG_TAG "RemoteCtrl_ServiceBase"
 #include <cutils/log.h>
 
 namespace vcc {
 namespace remotectrl {
-namespace modulebase {
+namespace servicebase {
 
-ModuleBase::ModuleBase(const ServiceInfo& service_info)
+ServiceBase::ServiceBase(const ServiceInfo& service_info)
     : vsomeip_appl_(vsomeip_runtime_->create_application(service_info.service_name_)), service_info_(service_info) {
     // Initialize service application
     if (!vsomeip_appl_->init()) {
@@ -24,7 +24,7 @@ ModuleBase::ModuleBase(const ServiceInfo& service_info)
     }
 
     vsomeip_appl_->register_state_handler(
-            std::bind(&ModuleBase::RegistrationStateChangedHook, this, std::placeholders::_1));
+            std::bind(&ServiceBase::RegistrationStateChangedHook, this, std::placeholders::_1));
 
     for (const auto& method : service_info_.methods_) {
         // register messgage handler for get_volume signal
@@ -32,22 +32,22 @@ ModuleBase::ModuleBase(const ServiceInfo& service_info)
                 service_info_.service_id_,
                 service_info_.instance_id_,
                 method,
-                std::bind(&ModuleBase::MessageReceivedHook, this, std::placeholders::_1));
+                std::bind(&ServiceBase::MessageReceivedHook, this, std::placeholders::_1));
     }
 }
 
-ModuleBase::~ModuleBase() {
+ServiceBase::~ServiceBase() {
     StopOffer();
     StopService();
     service_launcher_thread_.join();
 }
 
-void ModuleBase::StartService() {
+void ServiceBase::StartService() {
     ALOGD("Starting service %s", service_info_.service_name_);
     service_launcher_thread_ = std::thread([this]() { vsomeip_appl_->start(); });
 }
 
-void ModuleBase::StopService() {
+void ServiceBase::StopService() {
     ALOGD("Stopping service %s", service_info_.service_name_);
     vsomeip_appl_->unregister_state_handler();
     for (const auto& method : service_info_.methods_) {
@@ -57,7 +57,7 @@ void ModuleBase::StopService() {
     vsomeip_appl_->stop();
 }
 
-void ModuleBase::StartOffer() {
+void ServiceBase::StartOffer() {
     ALOGD("Start Offer for %s: ServiceId[0x%04X] InstanceId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
@@ -74,7 +74,7 @@ void ModuleBase::StartOffer() {
     }
 }
 
-void ModuleBase::StopOffer() {
+void ServiceBase::StopOffer() {
     ALOGD("Stop Offer for %s: ServiceId[0x%04X] InstanceId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
@@ -87,7 +87,7 @@ void ModuleBase::StopOffer() {
     vsomeip_appl_->stop_offer_service(service_info_.service_id_, service_info_.instance_id_);
 }
 
-void ModuleBase::SendNotification(vsomeip::event_t event_id, const std::vector<vsomeip::byte_t>&& payload_data) {
+void ServiceBase::SendNotification(vsomeip::event_t event_id, const std::vector<vsomeip::byte_t>&& payload_data) {
     ALOGV("SendNotification: service[%s] ServiceId[0x%04X] InstanceId[0x%04X], EventId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
@@ -100,9 +100,9 @@ void ModuleBase::SendNotification(vsomeip::event_t event_id, const std::vector<v
     vsomeip_appl_->notify(service_info_.service_id_, service_info_.instance_id_, event_id, pl);
 }
 
-void ModuleBase::SendResponse(vsomeip::session_t session_id,
-                              const vsomeip::return_code_e& status,
-                              const std::vector<vsomeip::byte_t>&& payload_data) {
+void ServiceBase::SendResponse(vsomeip::session_t session_id,
+                               const vsomeip::return_code_e& status,
+                               const std::vector<vsomeip::byte_t>&& payload_data) {
     ALOGV("SendResponse: service[%s] ServiceId[0x%04X], InstanceId[0x%04X] SessionId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
@@ -110,6 +110,12 @@ void ModuleBase::SendResponse(vsomeip::session_t session_id,
           session_id);
 
     const auto& message = GetTransactionForSessionId(session_id);
+
+    if (message == message_tracker_.cend()) {
+        ALOGE("Message with SessionId[0x%04X] not found. Response not sent", session_id);
+        return;
+    }
+
     std::shared_ptr<vsomeip::message> response = vsomeip_runtime_->create_response(message->message_);
     response->set_return_code(status);
 
@@ -122,18 +128,19 @@ void ModuleBase::SendResponse(vsomeip::session_t session_id,
     {
         std::lock_guard<std::mutex> lock{message_tracker_mutex_};
         // If service do not call SendResponse should message be removed after WFR?
+        ALOGD("Removing tracking message with SessionId[0x%04X]", session_id);
         message_tracker_.erase(message);
     }
 }
 
-void ModuleBase::RegistrationStateChangedHook(vsomeip::state_type_e state) {
+void ServiceBase::RegistrationStateChangedHook(vsomeip::state_type_e state) {
     state_ = state;
 
     ALOGD("%s: %s state %d", __FUNCTION__, service_info_.service_name_, static_cast<uint8_t>(state));
     OnStateChange(state_);
 }
 
-void ModuleBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& message) {
+void ServiceBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& message) {
     if (!ValidateMessageHeader(message)) {
         return;
     }
@@ -143,6 +150,7 @@ void ModuleBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& me
     auto session_id = message->get_session();
     {
         std::lock_guard<std::mutex> lock{message_tracker_mutex_};
+        ALOGD("Tracking message with SessionId[0x%04X]", session_id);
         message_tracker_.emplace_back(session_id, message);
     }
 
@@ -150,7 +158,7 @@ void ModuleBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& me
     OnMessageReceive(message);
 }
 
-bool ModuleBase::ValidateMessageHeader(const std::shared_ptr<vsomeip::message>& message) {
+bool ServiceBase::ValidateMessageHeader(const std::shared_ptr<vsomeip::message>& message) {
     std::shared_ptr<vsomeip::message> response = vsomeip_runtime_->create_response(message);
 
     if (message->get_message_type() != vsomeip::message_type_e::MT_REQUEST) {
@@ -163,6 +171,6 @@ bool ModuleBase::ValidateMessageHeader(const std::shared_ptr<vsomeip::message>& 
     return true;
 }
 
-}  // namespace modulebase
+}  // namespace servicebase
 }  // namespace remotectrl
 }  // namespace vcc

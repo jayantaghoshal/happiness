@@ -4,7 +4,7 @@
  */
 
 cc_library_static {
-    name: "libremotectrl_modulebase",
+    name: "libremotectrl_service_base",
     defaults: ["volvocars_cc_defaults_hq"],
 
     local_include_dirs: [
