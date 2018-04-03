@@ -108,7 +108,10 @@ bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; 
 ## Download the commit to check (for vendor/volvocars-repo)
 #
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} ${ZUUL_PROJECT}"
+#bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} ${ZUUL_PROJECT}"
+bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
+bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} aic_test"
+bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/apps/ihu_test"
 
 if [ "$(git -C "$ZUUL_PROJECT" rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
     die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in $ZUUL_PROJECT"
