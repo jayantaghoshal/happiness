@@ -1,5 +1,5 @@
-var jsonServer = require('/usr/local/lib/node_modules/json-server');
-var js2xmlparser = require('/usr/local/lib/node_modules/js2xmlparser');
+var jsonServer = require('/usr/lib/node_modules/json-server');
+var js2xmlparser = require('/usr/lib/node_modules/js2xmlparser');
 var server = jsonServer.create();
 var router = jsonServer.router(__dirname + '/db.json');
 var middlewares = jsonServer.defaults({ static: __dirname + '/public' });
