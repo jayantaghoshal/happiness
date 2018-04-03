@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.os.Process;
@@ -119,16 +120,24 @@ public class BrightnessService extends Service implements HwBinder.DeathRecipien
      * @param brightnessValue int beetween 0-255
      */
     public void changeBrightness(int brightnessValue){
-        if(brightnessValue < 0 | brightnessValue > 255){
-            Log.w(TAG, "brightnessValue not witheen range: " + brightnessValue);
+        if(brightnessValue < 0 || brightnessValue > 255){
+            Log.w(TAG, "brightnessValue not within range: " + brightnessValue);
             return;
         }
         try {
             int brightnessMode = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
             if (brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
-                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                Settings.System.putIntForUser(
+                    getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
+                    UserHandle.USER_CURRENT);
             }
-            Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, brightnessValue);
+            Settings.System.putIntForUser(
+                getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS,
+                brightnessValue,
+                UserHandle.USER_CURRENT);
         }
         catch (Settings.SettingNotFoundException e) {
             Log.e(TAG,e.getMessage());

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.os.UserHandle;
 
 public class IlluminationControl extends Activity {
     private String TAG = "IlluminationControlTestApp";
@@ -21,7 +22,7 @@ public class IlluminationControl extends Activity {
     private ContentObserver mBrightnessObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
-            Log.d(TAG," " + getBrightness());
+            Log.d(TAG,"onChange brightness: " + getBrightness());
             OnBrightnessChangeImpl.onChange();
         }
     };
@@ -42,9 +43,13 @@ public class IlluminationControl extends Activity {
     public int getBrightness(){
         int brightness = -1;
         try {
-             brightness = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
+             brightness = Settings.System.getIntForUser(
+                 getContentResolver(),
+                 Settings.System.SCREEN_BRIGHTNESS,
+                 UserHandle.USER_CURRENT);
+        } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG,"Failed to get setting: " + e);
         }
         finally {
             return brightness;
