@@ -166,9 +166,9 @@ public class MainApplication extends Application implements LocationListener, Ca
     public String queryBuilder(double lat, double lon){
         String query;
 
-        query = "SELECT tzid from timezdb where within(GeomFromText('POINT(";
+        query = "SELECT tzid from timezones where within(GeomFromText('POINT(";
         query = query + String.valueOf(lon) + " " + String.valueOf(lat);
-        query = query + ")'), timezdb.Geometry);";
+        query = query + ")'), timezones.Geometry);";
 
         Log.v(LOG_TAG, "Query:" + query);
         return query;
@@ -186,7 +186,7 @@ public class MainApplication extends Application implements LocationListener, Ca
         //Open the spatialite database
         try {
             db = new jsqlite.Database();
-            db.open("/data/vendor/timezone/timezones.sqlite", jsqlite.Constants.SQLITE_OPEN_READONLY);
+            db.open("/vendor/etc/timezone/timezones.db", jsqlite.Constants.SQLITE_OPEN_READONLY);
         } catch (jsqlite.Exception e) {
             Log.e(LOG_TAG, "onCreate Exception: " + e.getMessage());
         } catch (java.lang.OutOfMemoryError me) {

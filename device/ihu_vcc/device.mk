@@ -33,7 +33,10 @@ PRODUCT_PACKAGES += \
 #############################################################
 PRODUCT_PACKAGES += \
     TimeUpdateService \
-    LcfService
+    TimeZoneService \
+    LcfService \
+    timezones.db \
+    libjsqlite
 
 ##############################################################
 # SWDL stuff
