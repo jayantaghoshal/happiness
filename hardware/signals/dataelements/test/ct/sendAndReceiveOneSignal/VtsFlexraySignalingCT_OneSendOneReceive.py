@@ -47,25 +47,8 @@ class ComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
 
     def setUp(self):
-        self.dut.stopServices() #Important for startServices() to work further down
-
-        # Starting CANoe simulation might trigger a reboot,
-        # Set up required signals for unit to boot and ensure it is booted
         log("Init FR")
         self.flexray = FrSignalInterface()
-        self.flexray.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        self.flexray.FRNetworkStatus.send(1)
-        self.flexray.VehBattUSysU.send(12)
-
-        log("Waiting for boot")
-        self.dut.waitForBootCompletion()
-        log("Boot completed")
-
-        # After reboot VTS looses the connection to the shell, recreate it
-        self.dut.startServices()
-        self.dut.shell.InvokeTerminal("one")
-        self.shell = self.dut.shell.one
-        log("Shell recreated")
 
     def tearDown(self):
         log('Teardown')
