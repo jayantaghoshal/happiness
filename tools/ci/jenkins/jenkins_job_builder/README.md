@@ -27,16 +27,19 @@ jenkins-jobs test -o output ./jobs
 
 This can be useful if you want to diff your generated files with the existing config.
 
+### Prerequisites
+
+Before continuing with the next commands, please extract your __Jenkins__ token from [targeted Jenkins instance](https://icup_android.jenkins.cm.volvocars.biz/me/configure). Click on the link and and then _Show API Token_ and copy the token into the script.
+
 ```bash
 # User is CDSID
-# Get your token at https://icup_android.jenkins.cm.volvocars.biz/me/configure after logging in
-CDSID=
-TOKEN=
+export CDSID=<YOUR_CDSID>
+export JENKINS_TOKEN=<YOUR_TOKEN>
 JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_gate_test_flexray ihu_gate_test_audio ihu_gate_test_apix ihu_hourly_test ihu_hourly_test_flexray ihu_hourly_test_apix ihu_hourly_test_audio ihu_image_build icup_android_manifest_bump)
 
 mkdir -p old
 for job in "${JOBS[@]}"; do
-    curl -s https://"$CDSID":"$TOKEN"@icup_android.jenkins.cm.volvocars.biz/job/"$job"/config.xml > old/"$job"
+    curl -s https://"$CDSID":"$JENKINS_TOKEN"@icup_android.jenkins.cm.volvocars.biz/job/"$job"/config.xml > old/"$job"
 done
 ```
 
