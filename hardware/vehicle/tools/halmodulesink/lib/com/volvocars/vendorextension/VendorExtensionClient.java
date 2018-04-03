@@ -9,6 +9,7 @@ package com.volvocars.vendorextension;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.CarVendorExtensionManager;
 import android.content.Context;
+import android.hardware.automotive.vehicle.V2_0.VehicleArea;
 import android.support.car.Car;
 import android.support.car.CarConnectionCallback;
 import android.support.car.CarNotConnectedException;
@@ -204,7 +205,7 @@ public class VendorExtensionClient {
     public Object get(int propID, int area)
             throws NotSupportedException, android.car.CarNotConnectedException {
         validate();
-        if (!isSupportedFeature(propID)) {
+        if (!isSupportedFeature(propID, area)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
@@ -308,7 +309,7 @@ public class VendorExtensionClient {
     public void set(int propID, int area, Object data)
             throws NotSupportedException, android.car.CarNotConnectedException {
         validate();
-        if (!isSupportedFeature(propID)) {
+        if (!isSupportedFeature(propID, area)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
