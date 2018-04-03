@@ -36,9 +36,8 @@ LOCAL_SRC_FILES := \
      src/daisettingimpl.cpp \
      src/interface_mapping.cpp \
      vhal_modules/curve_speed_adaption_module.cpp \
-     vhal_modules/speed_limit_adaptation_module.cpp
-
-
+     vhal_modules/speed_limit_adaptation_module.cpp \
+     vhal_modules/lane_keeping_aid_module.cpp
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src \

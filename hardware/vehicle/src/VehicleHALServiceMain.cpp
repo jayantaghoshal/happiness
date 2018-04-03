@@ -22,6 +22,7 @@
 #include "libsettings/settingsmanagerhidl.h"
 #include "sensormodule.h"
 #include "vhal_modules/curve_speed_adaption_module.h"
+#include "vhal_modules/lane_keeping_aid_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
@@ -83,6 +84,7 @@ int main(int /* argc */, char* /* argv */ []) {
     auto curve_speed_adaption_module =
             std::make_unique<CurveSpeedAdaptionModule>(hal.get(), dispatcher, settings_manager);
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
+    auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
 
     // Register modules
     powerModule->registerToVehicleHal();

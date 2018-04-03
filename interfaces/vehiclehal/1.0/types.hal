@@ -92,6 +92,54 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
+    /**
+     * Toogles activation on Lane Keeping Aid functionality
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    LANE_KEEPING_AID_ON = (
+      0x0009
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Lane Keeping Aid
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    LANE_KEEPING_AID_ON_STATUS = (
+      0x000a
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current WarnAndIntv1 for Lane Keeping Aid
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum WarnAndIntv1
+     */
+    LANE_KEEPING_AID_MODE = (
+      0x000b
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Lane Keeping Aid
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    LANE_KEEPING_AID_MODE_STATUS = (
+      0x000c
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
 };
 
 enum PAStatus: int32_t {

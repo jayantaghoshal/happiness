@@ -69,6 +69,12 @@ public class VendorExtensionClient {
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.CURVE_SPEED_ADAPTION_STATUS,
                         NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Boolean.class, VehicleProperty.LANE_KEEPING_AID_ON,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Integer.class, VehicleProperty.LANE_KEEPING_AID_MODE,
+                        NO_AREA));
 
         if (mCar == null) {
             mCar = Car.createCar(context, mServiceConnectionCallback);
