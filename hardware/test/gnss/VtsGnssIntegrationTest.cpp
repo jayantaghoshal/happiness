@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -248,7 +248,7 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
                           Connectivity::IpCmdTypes::OperationType::NOTIFICATION,
                           Connectivity::IpCmdTypes::DataType::ENCODED,
                           1);
-    temp_pdu.header.protocol_version = 2;
+    temp_pdu.header.protocol_version = 3;
     msg->gnssPositionData->utcTime->year = 2017;
     msg->gnssPositionData->utcTime->month = 10;
     msg->gnssPositionData->utcTime->day = 5;
