@@ -18,7 +18,7 @@
 #include "carconfig_reader.h"
 
 #undef LOG_TAG
-#define LOG_TAG "CarConfigUpdater"
+#define LOG_TAG "carconfig_updater"
 
 using namespace ApplicationDataElement;
 using namespace autosar;
@@ -304,29 +304,16 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
     return NewStateConfigured;
 }
 
-void CarConfigUpdater::updateVipParameters(CarConfigVipCom& vipcomClient) {
-    CarConfigReader ccReader;
-    int8_t controlByte = 0x00;
-    std::vector<int8_t> values;
-    values.push_back(controlByte);
-    values.push_back(ccReader.getRawValue(175));
-    values.push_back(ccReader.getRawValue(181));
-
-    // Send parameters to VIP and wait for response.
-    if (vipcomClient.sendConfig(values) == -1) {
-        ALOGE("Failed sending values to VIP");
-    }
-}
-
 int32_t CarConfigUpdater::runUpdater() {
     bool allOldParamsOk;
     bool allParamsOk;
     bool allParamsReceived;
     CarConfigList buffer;
+
+    ALOGI("carconfig_updater started");
+
     // diagnosticsClient diagClient;
     CarConfigVipCom vipcomClient;
-
-    ALOGI("carconfig-updater started");
 
     // Start the flexray receiver and wait for the result. (30 sec maximum)
     frameReceiver(buffer, kCCTimeout);
@@ -371,26 +358,16 @@ int32_t CarConfigUpdater::runUpdater() {
         writeEmptyFile(carconfig_configured_filename);
     }
 
-    // Send interesting parameters to VIP.
-    if (paramsChanged) {
-        // Success of updating VIP values does not matter,
-        // we always try it if parameters changed and then ask for reboot.
-        try {
-            updateVipParameters(vipcomClient);
-            rebootIsRequired = true;
-        } catch (std::exception& e) {
-            ALOGE("%s", e.what());
-        }
-    }
-
     if (rebootIsRequired) {
-        ALOGI("Signaling node state manager that a restart is needed");
         ALOGW("Proper rebooot request is not yet implemented. Rebooting with system call directly to MP");
         system("printf 'da 0\nexit\n' | hisipcmd 4");  // TODO change this to a call to "power manager"
         // restartClient r;
         // r.restart();
     } else {
-        // diagClient.runForever();
+        // Should be a proper mainloop here to answer diagnostics requests.
+        while (1) {
+            usleep(1000);
+        }
     }
     return 0;
 }

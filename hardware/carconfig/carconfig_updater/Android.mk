@@ -41,7 +41,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libtraceclient
 
 LOCAL_STATIC_LIBRARIES += \
-	libccparameterlistgen
+	libccparameterlistgen \
+	libboost_1_64_0_vcc
 
 include $(BUILD_EXECUTABLE)
 

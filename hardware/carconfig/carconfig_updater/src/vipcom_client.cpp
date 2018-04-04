@@ -7,6 +7,8 @@
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
 #include <unistd.h>
+#include <boost/crc.hpp>
+#include <cstring>
 #include <iomanip>
 
 #include <cutils/log.h>
@@ -15,7 +17,19 @@
 #define LOG_TAG "VipComClient"
 constexpr uint8_t HISIP_APPLICATION_ID_CARCONFIG = 0x77u;
 
+#define CATALOG_VERSION 1
+#define CATALOG_REVISION 0
+#define DATA_REPORT_MAX_BLOCK_SIZE 50
+
 CarConfigVipCom::CarConfigVipCom() {
+    ALOGI("Carconfig_updater:VipComClient started");
+
+    // Read the entire carconfig file into the array before
+    // there is a posibility that we might get a new one.
+    for (int i = 1; i <= Carconfig_base::cc_no_of_parameters; i++) {
+        ccList[i] = rd.getValue(i);
+    }
+
     vipReader = std::thread(&CarConfigVipCom::VipReader, this);
     versionRequest();
 }
@@ -30,47 +44,119 @@ CarConfigVipCom::~CarConfigVipCom() {
     }
 }
 
-int32_t CarConfigVipCom::versionReport(void) {
+bool CarConfigVipCom::sendDESIPMsg(ParcelableDesipMessage msg) {
+    bool sendOK;
+    sendMsg(msg, &sendOK);
+    if (!sendOK) {
+        ALOGE("DESIP send method failed");
+    }
+    return sendOK;
+}
+
+int32_t CarConfigVipCom::calculateChecksum(char* data, int32_t calcLength) {
+    boost::crc_32_type crc32;
+    crc32.process_bytes(data, calcLength);
+    return crc32.checksum();
+}
+
+void CarConfigVipCom::versionReport(void) {
     ParcelableDesipMessage msg;
     int8_t* data = msg.allocDataPtr(2);
-    bool sendOK = false;
 
-    data[0] = 0x01;  // catalog version
-    data[1] = 0x07;  // catalog revision
+    data[0] = CATALOG_VERSION;
+    data[1] = CATALOG_REVISION;
 
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
-    msg.setFid(hisipBytes::sysVersionReport);
+    msg.setFid(hisipBytes::carConfigVersionReport);
 
-    sendMsg(msg, &sendOK);
-    return (sendOK ? 0 : -1);
+    ALOGI("Sending version report (%i.%i)", data[0], data[1]);
+    sendDESIPMsg(msg);
 }
 
-int32_t CarConfigVipCom::versionRequest(void) {
+void CarConfigVipCom::versionRequest(void) {
     ParcelableDesipMessage msg;
-    bool sendOK = false;
 
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
-    msg.setFid(hisipBytes::sysVersionRequest);
+    msg.setFid(hisipBytes::carConfigVersionRequest);
 
-    sendMsg(msg, &sendOK);
-    return (sendOK ? 0 : -1);
+    ALOGI("Sending version request");
+    sendDESIPMsg(msg);
 }
 
-int CarConfigVipCom::sendConfig(std::vector<int8_t>& values) {
+void CarConfigVipCom::setTransfer(void) {
     ParcelableDesipMessage msg;
+
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
+    msg.setFid(hisipBytes::carConfigTransferCmd);
+
+    ALOGI("Sending transfer command");
+    sendDESIPMsg(msg);
+}
+
+void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
+    ParcelableDesipMessage msg;
+    int8_t* data = msg.allocDataPtr(1);
+    int16_t checkSumRangeSize;
+    int32_t vipChecksum;
+
+    std::memcpy(&checkSumRangeSize, &payload[0], 2);
+    std::memcpy(&vipChecksum, &payload[2], 4);
+
     bool sendOK = false;
 
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
-    msg.setFid(hisipBytes::sysSetCarConfigFid);
-    msg.setDataPtr(&values[0], values.size());
-    this->sendMsg(msg, &sendOK);
-    usleep(300000);
-    if (sendOK) {
-        ALOGI("Carconfig values successfully sent to VIP");
-        return 0;
+    msg.setFid(hisipBytes::carConfigVersionReport);
+
+    // This shoudn't happen, but if the VIP asks us to calculate
+    // on carconfig parameters than exists, we shoudl't try. Send
+    // carConfigChecksumReportNok will result in copying new
+    // parameters and new checksum size.
+    if (checkSumRangeSize > Carconfig_base::cc_no_of_parameters) {
+        ALOGE("Checksum calculation range large than carconfig");
+        data[0] = carConfigChecksumReportNok;
     }
-    ALOGE("Failed to send CarConfig values to VIP");
-    return -1;
+    // If we haven't received carconfig parameters from the CEM then we respond with
+    // checksum ok so that we don't overwrite the default caconfig file on the VIP with
+    // our own default file.
+    else if ((calculateChecksum(ccList.data(), checkSumRangeSize) == vipChecksum) || (rd.usingDefaultFile())) {
+        ALOGI("VIP <-> MP Checksum match, notifying VIP");
+        data[0] = carConfigChecksumReportOk;
+    } else {
+        ALOGI("VIP <-> MP Checksum mismatch, notifying VIP and requsting CC transfer");
+        data[0] = carConfigChecksumReportNok;
+    }
+
+    sendOK = sendDESIPMsg(msg);
+    if (sendOK) {
+        setTransfer();
+    }
+}
+
+void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
+    ParcelableDesipMessage msg;
+    int8_t block = payload[0];
+    int8_t blockSize = DATA_REPORT_MAX_BLOCK_SIZE;
+
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
+    msg.setFid(hisipBytes::carConfigDataReport);
+
+    ALOGI("Received Data request of block %i", uint8_t(payload[1]));
+
+    // The VIP read request starts inside the carconfig range but ends outside
+    // left to read.
+    if ((block * DATA_REPORT_MAX_BLOCK_SIZE) > Carconfig_base::cc_no_of_parameters) {
+        blockSize = (block * blockSize) - Carconfig_base::cc_no_of_parameters;
+    }
+    // The VIP is trying to start a read outside of the carconfig range,
+    // according to the protocol then we should just return with block size
+    // zero to indicate that we've sent the entire carconfig list.
+    else if ((block * DATA_REPORT_MAX_BLOCK_SIZE) == Carconfig_base::cc_no_of_parameters) {
+        blockSize = 0;
+    }
+
+    int8_t* data = msg.allocDataPtr(blockSize);
+    std::memcpy(&data[1], ccList.data(), blockSize);
+    sendDESIPMsg(msg);
 }
 
 void CarConfigVipCom::VipReader() {
@@ -82,28 +168,33 @@ void CarConfigVipCom::VipReader() {
 void CarConfigVipCom::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
 
 void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) {
-    // Accept messages with correct FID.
-    if (_fid == hisipBytes::sysRepCarConfigFid) {
-        vipAcknowledge = _payload[0];
+    if (_fid == hisipBytes::carConfigChecksumCmd) {
+        ALOGI("Received Checksum report");
+        checksumCmd(_payload);
+    }
 
-        // Sys_Car_Config_Request not implemented. VIP will always return 0
-        if (_payload[1] == 0 /*cc_175*/ && _payload[2] == 0 /*cc_181*/) {
-            ALOGI("Received correct values form VIP");
-        } else {
-            ALOGI("FID: 0x%X, Received unexpected values from VIP with data: 0x%X, 0x%X",
-                  _fid,
-                  _payload[1],
-                  _payload[2]);
+    else if (_fid == hisipBytes::carConfigDataRequest) {
+        dataRequest(_payload);
+    }
+
+    else if (_fid == hisipBytes::carConfigTransferReport) {
+        ALOGI("Received Data transfer report with status %s",
+              (uint8_t(_payload[1]) == hisipBytes::carConfigTransferReportOk ? "Ok" : "Not ok"));
+    }
+
+    else if (_fid == hisipBytes::carConfigVersionReport) {
+        ALOGI("Received version report (%i.%i)", _payload[0], _payload[1]);
+        if ((_payload[0] != CATALOG_VERSION) || (_payload[1] != CATALOG_REVISION)) {
+            ALOGE("HISIP catalog version mismatch");
         }
+    }
 
-    } else if (_fid == hisipBytes::sysVersionReport) {
-        ALOGI("Received version report from VIP");
-
-    } else if (_fid == hisipBytes::sysVersionRequest) {
-        ALOGI("Sending version report to VIP");
+    else if (_fid == hisipBytes::carConfigVersionRequest) {
+        ALOGI("Received Version request");
         versionReport();
+    }
 
-    } else {
+    else {
         ALOGE("Received a message with unexpected FID: %x", _fid);
     }
 }

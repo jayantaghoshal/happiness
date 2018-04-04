@@ -46,14 +46,16 @@ ccStatus CarConfigReader::getStatus(uint32_t position) {
     return carConfigValues[(position - 1)].status;
 }
 
+bool CarConfigReader::usingDefaultFile(void) { return !(fileExists(carconfig_file_name)); }
+
 void CarConfigReader::read() {
     CarConfigFileReader ccFileReader;
-    if (fileExists(carconfig_file_name)) {
-        ALOGI("CarConfig uses car config file");
-        ccFileReader.open(carconfig_file_name);
-    } else {
+    if (usingDefaultFile()) {
         ALOGI("CarConfig uses default car config file, no config from flexray will be considered");
         ccFileReader.open(carconfig_default_file_name);
+    } else {
+        ALOGI("CarConfig uses car config file");
+        ccFileReader.open(carconfig_file_name);
     }
 
     ccValue ccRes;
