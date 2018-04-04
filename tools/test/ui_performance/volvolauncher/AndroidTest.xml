@@ -2,6 +2,11 @@
 
 <configuration description="Config for VTS Performance tests">
     <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+    </target_preparer>
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="GeneralPerformanceTest"/>
         <option name="test-case-path" value="GeneralPerformanceTest"/>
