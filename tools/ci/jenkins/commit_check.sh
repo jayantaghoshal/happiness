@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -17,3 +17,5 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # to the commit_check.sh (this script) instead of the commit_check_and_gate_common.sh (below).
 # If sth slips through the gate and blocks commit check, we would be all very unhappy :)
 "$SCRIPT_DIR"/commit_check_and_gate_common.sh
+
+python3 ./vendor/volvocars/tools/ci/jenkins/send_visualisation_url.py
