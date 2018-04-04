@@ -381,7 +381,7 @@ def detect_loose_test_cases():
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests
-    all_testdirs_in_plans = {d.test_root_dir for d in all_tests_including_disabled if not isinstance(d, Disabled)}
+    all_testdirs_in_plans = {d.test_root_dir for d in all_tests_including_disabled if not (isinstance(d, Disabled) or isinstance(d, AndroidVTS))}
 
     android_xmls = glob.glob(vcc_root + "/**/AndroidTest.xml", recursive=True)
     directories_with_androidtestxml = {os.path.relpath(os.path.dirname(p), aosp_root) for p in android_xmls}
