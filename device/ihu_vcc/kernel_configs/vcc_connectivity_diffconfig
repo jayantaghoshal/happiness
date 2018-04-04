@@ -65,3 +65,8 @@ CONFIG_NETFILTER_XT_TARGET_LOG=y
 CONFIG_NETFILTER_XT_TARGET_NETMAP=m
 CONFIG_NF_LOG_IPV4=y
 CONFIG_NETFILTER_XT_TARGET_TEE=y
+
+# Apps need a socket created for internet access
+# This gets done via a BPF syscall in P
+# Should probably be done by Intel, so possibly temporary here
+CONFIG_BPF_SYSCALL=y
