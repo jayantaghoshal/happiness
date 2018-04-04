@@ -101,6 +101,7 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps),
     AndroidVTS("VtsHalAudioV2_0Target",                                             standard_caps), #Gustav Svensson
     AndroidVTS("VtsHalBroadcastradioV1_0Target",                                    standard_caps), #Gustav Svensson
     AndroidVTS("VtsHalMediaOmxV1_0Host",                                            standard_caps), #Gustav Svensson
