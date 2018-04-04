@@ -63,12 +63,15 @@ server.post('/commission', function (req, res, next) {
       installation_order_data['downloads_uri'] = "/downloads/";
       installation_order_data['install_notifications_uri'] = "installnotifications";
       installation_order_data['installation_report_uri'] = "/installationreport";
-      installation_order_data['software'] = [tmp];
-      var installation_order = {};
-      installation_order['installation_order'] = installation_order_data;
-      db.get('pendingInstallations').get('installation_order').push(installation_order_data).write();
-      db.get('availableUpdates').get('software').remove(tmp).write();
 
+      var tmp_copy = Object.assign({}, tmp);
+      tmp['installation_order'] = installation_order_data
+      console.log(tmp['installation_order'])
+
+      var installation_order_data_copy = Object.assign({}, installation_order_data);
+
+      installation_order_data_copy['software'] = [tmp_copy];
+      db.get('pendingInstallations').get('installation_order').push(installation_order_data_copy).write();
 
       var d = db.get('preDownloadInfo');
       for (j = 0; j < d.value().length; j++) {
@@ -267,7 +270,7 @@ server.post('/installationReport', function (req, res, next) {
     j = 0;
     var subSubXml = getValue(ecu, "software_part");
     var softwarepartArray = [];
-    while(j != count(ecu, "<software_part>")) {
+    while (j != count(ecu, "<software_part>")) {
       var softwarepartObj = {};
       var softwarepart = subSubXml;
 
@@ -293,7 +296,7 @@ server.post('/installationReport', function (req, res, next) {
     ++i;
     subXml = ecu.substring(ecu.indexOf(subXml) + subXml.length + "</ecu>".length);
     subXml = getValue(subXml, "ecu");
-}
+  }
   installationSummaryObj['ecu'] = ecuObj;
   obj["installation_summary"] = installationSummaryObj;
   db.get("installationReport").push(obj).write();
@@ -301,6 +304,39 @@ server.post('/installationReport', function (req, res, next) {
   req.method = 'GET';
   next();
 
+});
+
+server.get('/availableUpdates', function (req, res, next) {
+  var d = db.get('availableUpdates').get('software');
+  var tmpObj = {};
+  if (req.query.id) {
+    for (i = 0; i < d.value().length; i++) {
+      if (req.query.installation_order_id && d.value()[i]['installation_order']) {
+        if ((d.value()[i]['id'] == req.query.id) && (d.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
+          tmpObj['software'] = d.value()[i];
+        }
+      }
+      else if (!req.query.installation_order_id){
+        if (d.value()[i]['id'] == req.query.id) {
+          tmpObj['software'] = d.value()[i];
+        }
+      }
+    }
+  }
+
+  else if(req.query.installation_order_id) {
+    for (i = 0; i < d.value().length; i++) {
+      if ((d.value()[i]['installation_order']) && (d.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
+        tmpObj['software'] = d.value()[i];
+      }
+    }
+  }
+  else {
+    tmpObj['software'] = d.value()
+  }
+
+  var str = js2xmlparser.parse("available_updates", tmpObj);
+  return res.send(str);
 });
 
 server.use(router);

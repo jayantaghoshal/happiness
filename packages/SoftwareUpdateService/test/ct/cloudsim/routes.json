@@ -1,5 +1,8 @@
 {
     "/softwaremanagement-1/availableUpdates": "/availableUpdates",
+    "/softwaremanagement-1/availableUpdates?id=:id": "/availableUpdates?id=:id",
+    "/softwaremanagement-1/availableUpdates?installation_order_id=:installation_order_id": "/availableUpdates?installation_order_id=:installation_order_id",
+    "/softwaremanagement-1/availableUpdates?id=:id&installation_order_id=:installation_order_id": "/availableUpdates?id=:id&installation_order_id=:installation_order_id",
     "/softwaremanagement-1/availableAccessories": "/availableAccessories",
     "/softwaremanagement-1/mapUpdates": "/mapUpdates",
     "/softwaremanagement-1/downloads?id=:id": "/downloads?id=:id",
