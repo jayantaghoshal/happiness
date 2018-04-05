@@ -76,3 +76,5 @@
 
 /mnt/iptables\.rules u:object_r:iptables_data_file:s0
 
+# remote control
+/vendor/bin/remotectrl_routerd u:object_r:remotectl_exec:s0

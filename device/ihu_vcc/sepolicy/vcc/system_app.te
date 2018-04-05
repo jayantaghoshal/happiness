@@ -1,0 +1,5 @@
+# system apps
+allow system_app carconfig_prop:file { getattr open read };
+hwbinder_use(system_app)
+
+hal_client_domain(system_app, hal_remotectl)
