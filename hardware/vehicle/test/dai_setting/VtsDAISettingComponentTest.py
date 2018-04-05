@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -26,8 +26,12 @@ from generated.pyDataElements import \
     FrSignalInterface, \
     UsgModSts
 from vehiclehalcommon import VehicleHalCommon
+from com.dtmilano.android.viewclient import ViewNotFoundException
 
-ns_per_ms = 1000000
+# Button ids
+dai_off_id  = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_1_no_info_button"
+dai_visual_id   = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_2_visual_only_button"
+dai_visual_sound_id   = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_3_visual_and_audio_button"
 
 class VtsDAISettingsComponentTest(base_test.BaseTestClass):
     def setUpClass(self):
@@ -37,82 +41,45 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         results = self.dut.shell.one.Execute("id -u system")
         self.system_uid = results[const.STDOUT][0].strip()
-
         self.flexray = FrSignalInterface()
 
     def testDriveAwayInfoCCDisabled(self):
         self.dut.shell.one.Execute("changecarconfig 315 1")
-        self.dut.shell.one.Execute("reboot")
-        self.dut.stopServices()
-        self.dut.waitForBootCompletion()
-        self.dut.startServices()
-        self.dut.shell.InvokeTerminal("one")
-        self.flexray = FrSignalInterface()
+        self.deviceReboot()
         self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
-
-        self.vHalCommon.setUpVendorExtension()
         vc, device = self.vHalCommon.getViewClient()
-        vc.dump(window=-1)
+        self.vHalCommon.setUpVehicleFunction()
 
-        # TODO: Check buttons, should they be vissable, not visable or grayed out. How is this supposed to be verified?
-        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingOff")
-        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingVisual")
-        self.vHalCommon.assert_ViewNotFoundException(vc,"com.volvocars.halmodulesink:id/buttonSettingVisualAndSound")
+        vc.dump(window=-1)
+        dai_off = vc.findViewByIdOrRaise(dai_off_id)
+        dai_visual = vc.findViewByIdOrRaise(dai_visual_id)
+        dai_visual_sound = vc.findViewByIdOrRaise(dai_visual_sound_id)
+
+        # Compare result
+        asserts.assertEqual(dai_off.__getattr__('enabled')(),False, "DriveAway no info button is not disabled");
+        asserts.assertEqual(dai_visual.__getattr__('enabled')(),False, "DriveAway visual button is not disabled");
+        asserts.assertEqual(dai_visual_sound.__getattr__('enabled')(),False, "DriveAway both sound and visual button is not disabled");
+
 
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, self.flexray.DriveAwayInfoActvReq.map.Off)
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, self.flexray.DriveAwayInfoSoundWarnActvReq.map.Off)
 
     def testDriveAwayInfoCCEnabled(self):
         self.dut.shell.one.Execute("changecarconfig 315 3")
-        self.dut.shell.one.Execute("reboot")
-        self.dut.stopServices()
-        self.dut.waitForBootCompletion()
-        self.dut.startServices()
-        self.dut.shell.InvokeTerminal("one")
-        self.flexray = FrSignalInterface()
+        self.deviceReboot()
         self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
-
-        self.vHalCommon.setUpVendorExtension()
+        vc, device = self.vHalCommon.getViewClient()
+        self.vHalCommon.setUpVehicleFunction()
 
         # Get buttons
         _s = 1
-        vc, device = self.vHalCommon.getViewClient()
         vc.dump(window=-1)
-        dai_off = vc.findViewByIdOrRaise("com.volvocars.halmodulesink:id/buttonSettingOff");
-        dai_visual = vc.findViewByIdOrRaise("com.volvocars.halmodulesink:id/buttonSettingVisual");
-        dai_visual_sound = vc.findViewByIdOrRaise("com.volvocars.halmodulesink:id/buttonSettingVisualAndSound");
+        dai_off = vc.findViewByIdOrRaise(dai_off_id);
+        dai_visual = vc.findViewByIdOrRaise(dai_visual_id);
+        dai_visual_sound = vc.findViewByIdOrRaise(dai_visual_sound_id);
         vc.sleep(_s)
 
         DAI_SETTING = 557842437 # Hard coded VCC-HAL property ID for DAI_SETTING_VALUE
-
-        current_dai_settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
-        current_dai_settings_signal_visual = self.flexray.DriveAwayInfoActvReq.get()
-        current_dai_settings_signal_visual_sound = self.flexray.DriveAwayInfoSoundWarnActvReq.get()
-
-        # Set UsgModSts to NOT_ACTIVE, setting should not change in NOT_ACTIVE
-        self.flexray.UsgModSts.send(UsgModSts.map.UsgModInActv)
-        vc.sleep(_s)
-
-        # Set setting to OFF
-        dai_off.touch()
-        vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
-
-        # Set setting to VISUAL
-        dai_visual.touch()
-        vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
-
-        # Set setting to VISUAL AND SOUND
-        dai_visual_sound.touch()
-        vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
 
         # Set UsgModSts to ACTIVE, setting should change in ACTIVE
         vc.sleep(_s)
@@ -143,9 +110,46 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, self.flexray.DriveAwayInfoActvReq.map.On)
         self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, self.flexray.DriveAwayInfoSoundWarnActvReq.map.On)
 
+        # Set UsgModSts to NOT_ACTIVE, setting should not change in NOT_ACTIVE
+        current_dai_settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
+        current_dai_settings_signal_visual = self.flexray.DriveAwayInfoActvReq.get()
+        current_dai_settings_signal_visual_sound = self.flexray.DriveAwayInfoSoundWarnActvReq.get()
+
+        self.flexray.UsgModSts.send(UsgModSts.map.UsgModInActv)
+        vc.sleep(_s)
+
+        # Set setting to OFF
+        dai_off.touch()
+        vc.sleep(_s)
+        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+
+        # Set setting to VISUAL
+        dai_visual.touch()
+        vc.sleep(_s)
+        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+
+        # Set setting to VISUAL AND SOUND
+        dai_visual_sound.touch()
+        vc.sleep(_s)
+        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        self.vHalCommon.assert_signal_equals(self.flexray.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+
         # Close applicationa and go back to home screen
         self.dut.adb.shell('input keyevent 3')
         vc.sleep(_s)
+
+    def deviceReboot(self):
+        self.dut.shell.one.Execute("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("one")
+        self.flexray = FrSignalInterface()
 
 if __name__ == "__main__":
     test_runner.main()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -35,14 +35,14 @@ ActiveSafetyModule::ActiveSafetyModule(
             DAI_Setting_property.prop_config.access = VehiclePropertyAccess::READ_WRITE;
             DAI_Setting_property.prop_config.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
             DAI_Setting_property.prop_config.areaConfigs.resize(1);
-            DAI_Setting_property.prop_config.areaConfigs[0].areaId = static_cast<int32_t>(VehicleArea::GLOBAL);
+            DAI_Setting_property.prop_config.areaConfigs[0].areaId = 0;
             DAI_Setting_property.prop_config.areaConfigs[0].minInt32Value = 0;
             DAI_Setting_property.prop_config.areaConfigs[0].maxInt32Value = 2;
 
             // DAI_Setting
             vhal20::VehiclePropValue prop_value;
             prop_value.prop = DAI_Setting_property.prop_config.prop;
-            prop_value.areaId = toInt(VehicleArea::GLOBAL);
+            prop_value.areaId = 0;
 
             // Put Helper for DAI_Setting in map
             DAI_Setting_property.property_per_zone_handlers[static_cast<VehicleAreaZone>(prop_value.areaId)] =

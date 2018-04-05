@@ -38,7 +38,7 @@ public class VendorExtensionClient {
     private static final String TAG = VendorExtensionClient.class.getSimpleName();
     public static final int WAIT_TIME_MILLISECONDS = 1000;
     public static final int CAR_CONNECT_WAIT_TIME_SECONDS = 5;
-    public static final int NO_AREA = 0;
+    public static final int NO_INNER_AREA = 0;
     static Semaphore semaphore = new Semaphore(1);
     private static VendorExtensionClient sVendorExtensionClient;
     private Context context;
@@ -60,28 +60,28 @@ public class VendorExtensionClient {
         // Add supported features
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.DAI_SETTING,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Boolean.class, VehicleProperty.CURVE_SPEED_ADAPTION_ON,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.CONNECTED_SAFETY_ON,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.CURVE_SPEED_ADAPTION_STATUS,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Boolean.class, VehicleProperty.LANE_KEEPING_AID_ON,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.LANE_KEEPING_AID_MODE,
-                        NO_AREA));
-        supportedFeatures.add(
+                        NO_INNER_AREA));
+ 	supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.EMERGENCY_LANE_KEEPING_AID_STATUS,
-                        NO_AREA));
+                        NO_INNER_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.EMERGENCY_LANE_KEEPING_AID_ON,
-                        NO_AREA));
+                        NO_INNER_AREA));
 
         if (mCar == null) {
             mCar = Car.createCar(context, mServiceConnectionCallback);
@@ -363,7 +363,7 @@ public class VendorExtensionClient {
      */
     public <E> Boolean isFeatureAvailable(int propId) {
         validate();
-        return isFeatureAvailable(propId, NO_AREA);
+        return isFeatureAvailable(propId, NO_INNER_AREA);
     }
 
     /**
@@ -406,7 +406,7 @@ public class VendorExtensionClient {
      */
     public boolean isSupportedFeature(int propId) {
         validate();
-        return isSupportedFeature(propId, NO_AREA);
+        return isSupportedFeature(propId, NO_INNER_AREA);
     }
 
     /**
