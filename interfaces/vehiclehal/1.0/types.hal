@@ -139,7 +139,22 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
-
+    /**
+     * Current PAStatus for emergency Lane Keeping Aid
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    EMERGENCY_LANE_KEEPING_AID_STATUS = (
+      0x000d
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+    EMERGENCY_LANE_KEEPING_AID_ON = (
+      0x000e
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
 };
 
 enum PAStatus: int32_t {
