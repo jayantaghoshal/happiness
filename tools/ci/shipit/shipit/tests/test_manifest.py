@@ -21,13 +21,13 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
                                        'ZUUL_COMMIT'  : '44ff658186e32d408cef7d2bf1b76b6cb776430b'}):
 
             template = common.manifest([
-                '<project name="vendor/foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
+                '<project name="foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
             ])
 
             template_path = common.write_file(self.project_root, 'manifest_template.xml', template)
             output_path = os.path.join(self.project_root, 'manifest.xml')
 
-            manifest.update_file(self.project_root, template_path, output_path, "vendor/foo", True)
+            manifest.update_file(self.project_root, template_path, output_path, "foo", True)
 
             parser = ET.XMLParser()
             parsed_manifest = ET.parse(output_path, parser)
@@ -45,13 +45,13 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
                                        'ZUUL_COMMIT'  : '44ff658186e32d408cef7d2bf1b76b6cb776430b'}):
 
             template = common.manifest([
-                '<project name="vendor/foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
+                '<project name="foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
             ])
 
             template_path = common.write_file(self.project_root, 'manifest_template.xml', template)
             output_path = os.path.join(self.project_root, 'manifest.xml')
 
-            manifest.update_file(self.project_root, template_path, output_path, "vendor/foo", False)
+            manifest.update_file(self.project_root, template_path, output_path, "foo", False)
 
             parser = ET.XMLParser()
             parsed_manifest = ET.parse(output_path, parser)
@@ -68,7 +68,7 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
                                        'ZUUL_COMMIT'  : '44ff658186e32d408cef7d2bf1b76b6cb776430b'}):
 
             template = common.manifest([
-                '<project name="vendor/foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
+                '<project name="foo" path="vendor/foo" revision="ZUUL_COMMIT_OR_HEAD"/>'
             ])
 
             template_path = common.write_file(self.project_root, 'manifest_template.xml', template)
