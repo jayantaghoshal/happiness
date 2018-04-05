@@ -1,7 +1,7 @@
 <manifest>
-  <notice>AOSP:PPR1.180125.002 Intel:20180222-2018_ww08_b Aptiv:2018_ww08_b_delphi_rel_a_18w10_5</notice>
+  <notice>AOSP:PPR1.180308.003 Intel:20180313-2018_ww11 Aptiv:2018_ww08_b_delphi_rel_a_18w10_5</notice>
   <remote fetch="https://icup_android.gerrit.cm.volvocars.biz/a/" name="origin" review="https://icup_android.gerrit.cm.volvocars.biz" />
   <default remote="origin" sync-c="true" sync-j="5" />
 
-  <include name="manifest-volvocars.xml" />
+  <include name="manifest-intel.xml" />
 </manifest>
