@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,11 +19,13 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.*;
 import java.util.*;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,24 +36,13 @@ import android.graphics.Rect;
 public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp {
     private static final String LOG_TAG = "SwUpdApp";
 
-    public final static String ENABLE_OTA = "ENABLE_OTA";
-    public final static String AUTO_DOWNLOAD = "AUTO_DOWNLOAD";
-    public final static String AUTO_INSTALL = "AUTO_INSTALL";
-
     private SoftwareUpdateManager softwareUpdateManager = null;
 
     private Context context = this;
     private RecyclerView recyclerView;
     public SoftwareInformationAdapter adapter;
     private ArrayList<SoftwareInformation> swInfos;
-
-    private FloatingActionButton actionsFab;
-    private FloatingActionButton availableFab;
-    private FloatingActionButton commissionedFab;
-    private LinearLayout layoutFabAvailable;
-    private LinearLayout layoutFabCommissioned;
-
-    private boolean fabExpanded = false;
+    private Toolbar toolbar;
 
     private static long lastClickedTime = 0;
     private static final int doubleClickInterval = 500;
@@ -59,11 +51,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateState(int state) {
             Log.v(LOG_TAG, "UpdateState " + state);
-            if (state == 1) {
-                actionsFab.setEnabled(true);
-            } else {
-                actionsFab.setEnabled(false);
-            }
         }
 
         @Override
@@ -115,7 +102,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void onServiceDisconnected() {
-            actionsFab.setEnabled(false);
         }
     };
 
@@ -128,16 +114,50 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         });
     }
 
-    private void openSubMenusFab() {
-        layoutFabAvailable.setVisibility(View.VISIBLE);
-        layoutFabCommissioned.setVisibility(View.VISIBLE);
-        fabExpanded = true;
+    /**
+     * Showing popup menu when tapping on cloud icon in toolbar
+     */
+    private void showPopupMenu(View view) {
+        // inflate menu
+        PopupMenu popup = new PopupMenu(context, view, Gravity.END);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_signals, popup.getMenu());
+        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
+        popup.show();
     }
 
-    private void closeSubMenusFab() {
-        layoutFabAvailable.setVisibility(View.INVISIBLE);
-        layoutFabCommissioned.setVisibility(View.INVISIBLE);
-        fabExpanded = false;
+    /**
+     * Click listener for popup menu items
+     */
+    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+            case R.id.getAvailableItem:
+                try {
+                    Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
+                    softwareUpdateManager.GetSoftwareAssignments();
+                    Toast.makeText(context, "Sending GetSoftwareAssignments", Toast.LENGTH_SHORT).show();
+                    return true;
+                } catch (Exception e) {
+                    //TODO: handle exception
+                }
+
+            case R.id.getCommissionedItem:
+                try {
+                    Log.v(LOG_TAG, "Sending GetPendingInstallations");
+                    softwareUpdateManager.GetPendingInstallations();
+                    Toast.makeText(context, "Sending GetPendingInstallations", Toast.LENGTH_SHORT).show();
+                    return true;
+                } catch (Exception e) {
+                    //TODO: handle exception
+                }
+                return true;
+            default:
+            }
+            return false;
+        }
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,60 +173,11 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         setSupportActionBar(myToolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        layoutFabAvailable = (LinearLayout) findViewById(R.id.getAvailable);
-        layoutFabCommissioned = (LinearLayout) findViewById(R.id.getCommissioned);
-
-        actionsFab = (FloatingActionButton) findViewById(R.id.actionFab);
-        availableFab = (FloatingActionButton) findViewById(R.id.getAvailableFab);
-        commissionedFab = (FloatingActionButton) findViewById(R.id.getCommissionedFab);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ;
 
         swInfos = new ArrayList<SoftwareInformation>();
         adapter = new SoftwareInformationAdapter(this, swInfos, this);
-        actionsFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (fabExpanded)
-                    closeSubMenusFab();
-                else
-                    openSubMenusFab();
-            };
-        });
-
-        availableFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    long currentClickTime = System.currentTimeMillis();
-                    if (!(currentClickTime - lastClickedTime <= doubleClickInterval)) {
-                        Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
-                        softwareUpdateManager.GetSoftwareAssignments();
-                        lastClickedTime = System.currentTimeMillis();
-                    }
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getMessage());
-                }
-            };
-        });
-
-        commissionedFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    long currentClickTime = System.currentTimeMillis();
-                    if (currentClickTime - lastClickedTime <= doubleClickInterval) {
-                    } else {
-                        Log.v(LOG_TAG, "Sending GetPendingInstallations");
-                        softwareUpdateManager.GetPendingInstallations();
-                        lastClickedTime = System.currentTimeMillis();
-                    }
-
-                } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getMessage());
-                }
-            };
-        });
-
-        closeSubMenusFab();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -239,7 +210,9 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-
+        case R.id.simSignals:
+            Log.d(LOG_TAG, "SIM SINGALS");
+            showPopupMenu((View) toolbar);
         default:
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.

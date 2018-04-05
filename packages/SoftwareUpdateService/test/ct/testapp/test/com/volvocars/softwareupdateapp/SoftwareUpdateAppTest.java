@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -49,6 +49,7 @@ public class SoftwareUpdateAppTest {
     private static final String CLASS_TEXT_VIEW = "android.widget.TextView";
     private static final String CLASS_FLOATING_ACTION_BUTTON = "android.widget.ImageButton";
     private static final String CLASS_RECYCLER_VIEW = "android.support.v7.widget.RecyclerView";
+    private static final String CLASS_TOOLBAR = "android.support.v7.widget.Toolbar";
 
 
     @Before
@@ -68,20 +69,23 @@ public class SoftwareUpdateAppTest {
 
         mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
-        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+        BySelector toolbar = By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(toolbar), LAUNCH_TIMEOUT));
 
-        mDevice.findObject(actionFab).click();
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/simSignals");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        BySelector getAvailableFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getAvailableFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(getAvailableFab), LAUNCH_TIMEOUT));
+        mDevice.findObject(textSelector).click();
 
-        mDevice.findObject(getAvailableFab).click();
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(textSelector).click();
 
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
-        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Security patch for IHU");
@@ -98,22 +102,23 @@ public class SoftwareUpdateAppTest {
 
         mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
-        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+        BySelector toolbar = By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(toolbar), LAUNCH_TIMEOUT));
 
-        mDevice.findObject(actionFab).click();
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/simSignals");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        BySelector getAvailableFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getAvailableFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(getAvailableFab), LAUNCH_TIMEOUT));
+        mDevice.findObject(textSelector).click();
 
-        mDevice.findObject(getAvailableFab).click();
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
+        mDevice.findObject(textSelector).click();
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
-        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-
 
         UiObject2 card = mDevice.findObject(By.clazz("android.widget.FrameLayout").res("com.volvocars.softwareupdateapp:id/assignmentCV").hasDescendant(textSelector));
         UiObject2 button = card.findObject(By.clazz("android.widget.ImageView").res("com.volvocars.softwareupdateapp:id/overflow"));
@@ -124,10 +129,6 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         mDevice.findObject(textSelector).click();
-
-        assertTrue(mDevice.wait(Until.hasObject(getAvailableFab), LAUNCH_TIMEOUT));
-
-        mDevice.findObject(getAvailableFab).click();
 
         recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
@@ -150,19 +151,22 @@ public class SoftwareUpdateAppTest {
 
         mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
-        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+        BySelector toolbar = By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(toolbar), LAUNCH_TIMEOUT));
 
-        mDevice.findObject(actionFab).click();
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/simSignals");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        BySelector getCommissionedFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getCommissionedFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(getCommissionedFab), LAUNCH_TIMEOUT));
-        mDevice.findObject(getCommissionedFab).click();
+        mDevice.findObject(textSelector).click();
 
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get commissioned assignments");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(textSelector).click();
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
-        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOAD PENDING");
