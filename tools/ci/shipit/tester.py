@@ -277,7 +277,7 @@ def main():
     subparsers = root_parser.add_subparsers(dest="program")
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
-    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
+    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
@@ -293,7 +293,7 @@ def main():
                                  "Ignore other tests even though your rig has capabilities enough to run them. "
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
-    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
+    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     run_parser.add_argument(
         '--ci_reporting', action='store_true')
     run_parser.add_argument(
@@ -311,8 +311,10 @@ def main():
             return test_plan.test_plan_hourly
         elif args.plan == "nightly":
             return test_plan.test_plan_nightly
+        elif args.plan == "incubator":
+            return test_plan.test_plan_incubator_hourly
         elif args.plan == "staging":
-            return test_plan.test_plan_staging
+            return test_plan.test_plan_staging_daily
         else:
             if args.test_component:
                 androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")
@@ -377,7 +379,8 @@ def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \
                 test_plan.test_plan_nightly + \
-                test_plan.test_plan_staging
+                test_plan.test_plan_incubator_hourly + \
+                test_plan.test_plan_staging_daily
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests

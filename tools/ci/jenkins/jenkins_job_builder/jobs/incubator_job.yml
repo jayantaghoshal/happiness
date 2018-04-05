@@ -1,16 +1,24 @@
 - defaults:
-    name: staging_job_defaults
+    name: incubator_job_defaults
     project-type: freestyle
     description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
     concurrent: false
     parameters:
+        - string:
+            name: UPSTREAM_JOB_GIT_REVISION
+            default: 'master'
+            description: 'Will use latest git revision as standard'
+        - string:
+            name: UPSTREAM_JOB_GIT_URL
+            default: 'ssh://gotsvl1415.got.volvocars.net:29421/manifest'
+            description: ''
         - run:
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
         - run:
             name: TOP_JOB
-            project-name: ihu_staging
+            project-name: ihu_incubator
             description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     properties:
         - build-discarder:
@@ -25,7 +33,7 @@
     wrappers:
         - timestamps
         - timeout:
-            timeout: 240
+            timeout: 60
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
@@ -50,96 +58,59 @@
                 - file-id: 61535809-5c5c-4721-9a65-e3587159647a
                   target: $HOME/lab_config.json
                   variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
         - shell:
             !include-raw:
-                - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
                 - bootstrap_ihu_staging_test_common.sh
 
 - job:
-    name: ihu_staging
+    name: ihu_incubator
     project-type: multijob
-    description: Link to test report - http://gotsvl1416.got.volvocars.net/staging_test_report/<BUILD_NUMBER>
+    description: Link to test report - http://gotsvl1416.got.volvocars.net/incubator_test_report/<BUILD_NUMBER>
     node: high
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_daily_build_vcc_eng
-            description: UPSTREAM_JOB can be used to fetch info about the build.
-        - string:
-            name: GIT_COMMIT
-            default: ''
-            description: Normally sent from the triggering job (ihu_daily)
-        - string:
-            name: GIT_URL
-            default: ''
-            description: Normally sent from the triggering job (ihu_daily)
+    triggers:
+        - timed: "H * * * *"
     builders:
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
         - multijob:
-            name: Staging
+            name: Incubator
             condition: ALWAYS
             projects:
-              - name: ihu_staging_test-generic
+              - name: ihu_incubator_test-generic
                 current-parameters: true
-                predefined-parameters: |
-                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
-              - name: ihu_staging_test-flexray
+              - name: ihu_incubator_test-flexray
                 current-parameters: true
                 kill-phase-on: NEVER
-                predefined-parameters: |
-                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
-              - name: ihu_staging_test-audio
+              - name: ihu_incubator_test-audio
                 current-parameters: true
                 kill-phase-on: NEVER
-                predefined-parameters: |
-                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
-              - name: ihu_staging_test-apix
+              - name: ihu_incubator_test-apix
                 current-parameters: true
                 kill-phase-on: NEVER
-                predefined-parameters: |
-                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
     publishers:
         - raw:
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>ihu_staging</customProjectName>
-                <customPrefix>IhuStagingMaster</customPrefix>
+                <customProjectName>ihu_incubator</customProjectName>
+                <customPrefix>IhuIncubatorMaster</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 
 - job:
-    name: ihu_staging_test-generic
-    defaults: staging_job_defaults
+    name: ihu_incubator_test-generic
+    defaults: incubator_job_defaults
     node: daily_test-generic
 
 - job:
-    name: ihu_staging_test-flexray
-    defaults: staging_job_defaults
+    name: ihu_incubator_test-flexray
+    defaults: incubator_job_defaults
     node: daily_test-flexray
 
 - job:
-    name: ihu_staging_test-audio
-    defaults: staging_job_defaults
+    name: ihu_incubator_test-audio
+    defaults: incubator_job_defaults
     node: daily_test-audio
 
 - job:
-    name: ihu_staging_test-apix
-    defaults: staging_job_defaults
+    name: ihu_incubator_test-apix
+    defaults: incubator_job_defaults
     node: daily_test-apix
-

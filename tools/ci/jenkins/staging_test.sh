@@ -11,8 +11,29 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
+plan=""
+if [ "${JOB_NAME}" = "ihu_staging_test-generic" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-apix" ]
+then
+    plan="staging"
+elif [ "${JOB_NAME}" = "ihu_incubator_test-generic" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
+then
+    plan="incubator"
+fi
+
 # Download from Artifactory
-artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+if [ "${}" = "staging" ]
+then
+    artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+elif [ "${}" = "incubator" ]
+then
+    artifactory pull-latest ihu_hourly_build_vcc_eng out.tgz || die "artifactory pull failed"
+fi
 
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
@@ -40,28 +61,29 @@ set -e
 adb shell getprop
 
 capability=""
-if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ]
+if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ]
 then
     capability="flexray"
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ]
+elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ]
 then
     capability="audio"
-elif [ "${JOB_NAME}" = "ihu_staging_test-apix" ]
+elif [ "${JOB_NAME}" = "ihu_staging_test-apix" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
 then
     capability="apix"
 fi
-export capability
 
 set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=staging --ci_reporting -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=${plan} --ci_reporting -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
-
 
 set -e
 
