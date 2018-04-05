@@ -73,15 +73,16 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    VccTunerApp \
-    BrightnessService \
+    BrightnessService
 
 ##############################################################
 # Internal Apps
 ##############################################################
 PRODUCT_PACKAGES += \
     VccUserSwitchService \
-    VehicleFunctions
+    VehicleFunctions \
+    VccMediaCenter \
+    VccTunerBrowserService
 
 ##############################################################
 # Vendor apps
