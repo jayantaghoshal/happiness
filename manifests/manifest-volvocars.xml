@@ -21,7 +21,7 @@
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a"/>
   <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="4b0820c4f668cf35b7031ecb6f83d4d7365f4fef"/>
   <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="69d5c986453d07ce2f368ff9cf2336e5686077b5" />
-  <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="5e8c3d5b6d53e3ac6fd6471779e175f12134b832" />
+  <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="f85d5872dabe9ad9a49cc7a048b4240747386d45" />
 
   <!-- Volvo Cars partner apps -->
 
