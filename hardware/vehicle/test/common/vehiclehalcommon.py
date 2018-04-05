@@ -33,6 +33,8 @@ property_list = [
     ('CONNECTED_SAFETY_ON', 557842436),
     ('DAI_SETTING', 557842437),
     ('CURVE_SPEED_ADAPTION_ON', 555745286),
+    ('LANE_KEEPING_AID_ON', 555745289),
+    ('LANE_KEEPING_AID_MODE', 557842443),
 ]
 
 def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec):
@@ -95,7 +97,6 @@ class VehicleHalCommon():
             exceptionRaised = True
         asserts.assertTrue(exceptionRaised, buttonId + " was found when it should be invisible")
 
-
     # Get a new connection and ViewClient
     def getViewClient(self):
         kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
@@ -116,7 +117,6 @@ class VehicleHalCommon():
         self.active_view_device = device
         self.active_view_client = ViewClient(device, serialno, **kwargs2)
         return self.active_view_client, device
-
 
     def setUpVendorExtension(self):
         self.dut.adb.shell('input keyevent 3')
@@ -202,7 +202,17 @@ class VehicleHalCommon():
             time.sleep(2)
         asserts.assertTrue(False, "Time out! User didn't switch")
 
-
+    # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
+    def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10):
+        vc, device = self.getViewClient()
+        print("Searching for view with id -> ") + str(text)
+        for n in range(maxFlings):
+            vc.dump(-1)
+            v = vc.findViewById(text)
+            if v is not None:
+                return v
+            device.dragDip((100,300), (100, 100), 300)
+        asserts.assertTrue(False, "Did not find view with id -> ") + str(text)
 
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.
@@ -413,3 +423,14 @@ class VehicleHalCommon():
         value = self.readVhalProperty(propId, areaId)
         asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
 
+    def assertVhalInt32Equal(self, expectedValue, propertyId):
+        vHalProp = self.readVhalProperty(propertyId)
+        val = vHalProp['value']
+        propExtracted = val["int32Values"][0]
+        asserts.assertEqual(expectedValue, propExtracted, "Failed: Property value not equal to expected value for propertyId %d" % (propertyId))
+
+    def getVhalInt32(self, propertyId):
+        vHalProp = self.readVhalProperty(propertyId)
+        val = vHalProp['value']
+        propExtracted = val["int32Values"][0]
+        return propExtracted

@@ -37,18 +37,18 @@ class LaneKeepingAidModule {
     DESender<autosar::LaneKeepAidActv_info> lanekeepaidactv_flexray_sender_;
     DESender<autosar::IntvAndWarnModForLaneKeepAid_info> intv_and_warnmod_for_lanekeepaid_flexray_sender_;
     DESender<autosar::WarnTypForLaneKeepAid_info> warntypforlanekeepaid_flexray_sender_;
+    DESender<ActivateVfc_info> activatevfc_;
     // Receive FlexRay signal
     DEReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
     DEReceiver<autosar::LaneKeepAidSts_info> lane_keep_aid_sts_receiver_;
 
     // "States"
-    bool is_error_ = false;
-    bool is_active_ = true;
-    bool lane_keeping_aid_on_ = true;
-    int lane_keeping_aid_mode_ =
-            static_cast<std::underlying_type<autosar::WarnAndIntv1>::type>(autosar::WarnAndIntv1::WarnAndIntv);
-    bool is_invalid_lane_keep_aid_sts_signal_ = false;
-    bool is_alivetimeout_ = false;
+    bool is_error_;
+    bool is_active_;
+    bool lane_keeping_aid_on_;
+    int lane_keeping_aid_mode_;
+    bool is_invalid_lane_keep_aid_sts_signal_;
+    bool is_alivetimeout_;
 
     SettingsFramework::ProfileIdentifier current_profile_ = SettingsFramework::ProfileIdentifier::None;
 

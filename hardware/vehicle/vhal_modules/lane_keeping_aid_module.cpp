@@ -57,8 +57,15 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
                                      dispatcher,
                                      vehicleHal),
       setting_lka_on_(SettingId::LaneKeepingAid_On, true, manager),
-      setting_lka_mode_(SettingId::LaneKeepingAid_Mode, 0, manager) {
-    // Check if enabled
+      setting_lka_mode_(SettingId::LaneKeepingAid_Mode, 0, manager),
+      is_error_(false),
+      is_active_(true),
+      lane_keeping_aid_on_(true),
+      lane_keeping_aid_mode_(
+              static_cast<std::underlying_type<autosar::WarnAndIntv1>::type>(autosar::WarnAndIntv1::WarnAndIntv)),
+      is_invalid_lane_keep_aid_sts_signal_(false),
+      is_alivetimeout_(false) {
+    // Check if enabled.
     auto car_config_23 = carconfig::getValue<CC23_CruiseControlType>();
     auto car_config_150 = carconfig::getValue<CC150_LaneKeepingAidType>();
 
@@ -68,7 +75,7 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
 
     // Exit if feature is disabled in CarConfig.
     if (!is_enabled_) {
-        ALOGV("Function disabled due to CarConfig.");
+        ALOGD("LaneKeepingAid Function disabled due to CarConfig.");
         SetFlexray(false,
                    static_cast<std::underlying_type<WarnAndIntv1>::type>(WarnAndIntv1::WarnAndIntv),
                    current_profile_);
@@ -77,7 +84,7 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
 
     // Start listen to on/off setting.
     setting_lka_on_.setCallback([this](const auto& value) {
-        ALOGV("On/Off setting is changed: %d", value.value);
+        ALOGD("On/Off setting is changed: %d", value.value);
         lane_keeping_aid_on_ = value.value;
         current_profile_ = value.profileId;
         Update();
@@ -85,27 +92,27 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
 
     // Start listen to mode setting.
     setting_lka_mode_.setCallback([this](const auto& value) {
-        ALOGV("Mode setting is changed!");
+        ALOGD("Mode setting is changed!");
         lane_keeping_aid_mode_ = value.value;
         current_profile_ = value.profileId;
         Update();
     });
 
-    // Start listen to Vhal Lane Keeping Aid On/Off
+    // Start listen to Vhal Lane Keeping Aid On/Off.
     PA_prop_lane_keeping_aid_on_.registerToVehicleHal();
     PA_prop_lane_keeping_aid_on_.subscribe_set_prop([&](bool value, int32_t zone) {
         (void)zone;
-        ALOGV("VHAL is changed, on/off, lets update (Setting->MainLoop->Vhal/Flexray): %d", value);
+        ALOGD("VHAL is changed, (on/off), lets update (Setting->MainLoop->Vhal/Flexray): %d", value);
         lane_keeping_aid_on_ = value;
         setting_lka_on_.set(value);
     });
 
-    // Start listen to Vhal Lane Keeping Aid mode
+    // Start listen to Vhal Lane Keeping Aid mode.
     PA_prop_lane_keeping_aid_mode_.registerToVehicleHal();
     PA_prop_lane_keeping_aid_mode_.subscribe_set_prop([&](int mode, int32_t zone) {
         (void)zone;
         if (isModeInRange(mode)) {
-            ALOGV("VHAL is changed, mode, lets update (Setting->MainLoop->Vhal/Flexray): %d", mode);
+            ALOGD("VHAL is changed, (mode), lets update (Setting->MainLoop->Vhal/Flexray): %d", mode);
             lane_keeping_aid_mode_ = mode;
             setting_lka_mode_.set(mode);
         } else {
@@ -113,7 +120,7 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
         }
     });
 
-    // Check if function is active
+    // Check if function is active.
     vehmod_flexray_receiver_.subscribe([&]() {
         const auto signal = vehmod_flexray_receiver_.get();
         if (signal.isOk()) {
@@ -123,21 +130,24 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
                           vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModCnvinc ||
                           vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModDrvg);
 
-            ALOGV("is_active_ is changed: %d", is_active_);
+            ALOGD("is_active_ is changed: %d", is_active_);
             Update();
         }
     });
 
-    // Check system error and timeout
+    // Check system error.
     lane_keep_aid_sts_receiver_.subscribe([&]() {
         const auto signal = lane_keep_aid_sts_receiver_.get();
         if (!signal.isOk()) {
+            ALOGD("Signal not Ok. Indicating alive timeout.");
             is_alivetimeout_ = true;
 
         } else {
+            is_alivetimeout_ = false;
+            ALOGD("Signal Ok. Alive timeout is now false");
             auto lanekeepaidsts_value = signal.value();
-            is_invalid_lane_keep_aid_sts_signal_ = (lanekeepaidsts_value == autosar::FctSts2::SrvRqrd) && is_active_;
-            ALOGV("is_invalid_lane_keep_aid_sts_signal_ is changed: %d", is_invalid_lane_keep_aid_sts_signal_);
+            is_invalid_lane_keep_aid_sts_signal_ = lanekeepaidsts_value == autosar::FctSts2::SrvRqrd;
+            ALOGD("is_invalid_lane_keep_aid_sts_signal_ is changed: %d", is_invalid_lane_keep_aid_sts_signal_);
         }
         Update();
     });
@@ -149,21 +159,24 @@ void LaneKeepingAidModule::Update() {
     int defaultWarnAndIntv = static_cast<std::underlying_type<WarnAndIntv1>::type>(WarnAndIntv1::WarnAndIntv);
 
     if (is_error_) {
+        ALOGD("is_error_ is true. Indicating SystemError.");
         SetFlexray(false, defaultWarnAndIntv, current_profile_);
         PA_prop_lane_keeping_aid_on_.PushProp(false, vccvhal10::PAStatus::SystemError);
+        PA_prop_lane_keeping_aid_mode_.PushProp(defaultWarnAndIntv, vccvhal10::PAStatus::SystemError);
 
     } else {
         if (!is_active_) {
             SetFlexray(false, defaultWarnAndIntv, current_profile_);
-            PA_prop_lane_keeping_aid_on_.PushProp(false, vccvhal10::PAStatus::Disabled);
+            PA_prop_lane_keeping_aid_on_.PushProp(lane_keeping_aid_on_, vccvhal10::PAStatus::Disabled);
+            PA_prop_lane_keeping_aid_mode_.PushProp(defaultWarnAndIntv, vccvhal10::PAStatus::Disabled);
 
         } else {
-            ALOGV("Updating. Lane keeping aid On/Off is %d", lane_keeping_aid_on_);
+            ALOGD("Updating LKA On/Off to %d", lane_keeping_aid_on_);
 
             SetFlexray(lane_keeping_aid_on_, lane_keeping_aid_mode_, current_profile_);
             PA_prop_lane_keeping_aid_on_.PushProp(lane_keeping_aid_on_, vccvhal10::PAStatus::Active);
 
-            ALOGV("Mode is %d", lane_keeping_aid_mode_);
+            ALOGD("Updating LKA Mode to %d", lane_keeping_aid_mode_);
             PA_prop_lane_keeping_aid_mode_.PushProp(lane_keeping_aid_mode_, vccvhal10::PAStatus::Active);
         }
     }
@@ -171,20 +184,22 @@ void LaneKeepingAidModule::Update() {
 
 void LaneKeepingAidModule::SetFlexray(bool value, int mode, SettingsFramework::ProfileIdentifier current_profile) {
     auto flexray_profile = InterfaceMapping::ProfileIdentifier::SettingsFramework_To_Flexray(current_profile);
+    // Not sure this is needed.
+    activatevfc_.send({Vfc::UserInputSettings, 3});  // Make sure the CEM & FR is alive
 
-    // Send On/Off
+    // Send On/Off.
     OnOffPen flexray_value_onoff;
     flexray_value_onoff.Sts = value ? OnOff1::On : OnOff1::Off;
     flexray_value_onoff.Pen = flexray_profile;
     lanekeepaidactv_flexray_sender_.send(flexray_value_onoff);
 
-    // Send mode
+    // Send mode.
     WarnAndIntvPen1 flexray_value_mode;
     flexray_value_mode.Sts = static_cast<WarnAndIntv1>(mode);
     flexray_value_mode.Pen = flexray_profile;
     intv_and_warnmod_for_lanekeepaid_flexray_sender_.send(flexray_value_mode);
 
-    // Always send SoundHptc1::Hptc
+    // Always send SoundHptc1::Hptc.
     WarnTypForLaneChgWarnPen1 flexray_warn;
     flexray_warn.Sts = SoundHptc1::Hptc;
     flexray_warn.Pen = flexray_profile;
