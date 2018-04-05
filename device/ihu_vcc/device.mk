@@ -136,6 +136,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 ##############################################################
+# alsa_arecord, used for audio tests in CI
+# This is a TEMPORARY workaround until alsa_arecord are
+# added/restored to the image by aptive.
+##############################################################
+PRODUCT_COPY_FILES += \
+    vendor/volvocars/tools/lib/python/audio/alsa_arecord_omr1:vendor/bin/alsa_arecord_omr1
+
+
+##############################################################
 # Configurations for userdebug and engineering build
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
