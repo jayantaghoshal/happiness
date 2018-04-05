@@ -52,7 +52,7 @@ test_plan_hourly = test_plan_gate + [
 ]
 
 test_plan_nightly = test_plan_hourly + [
-
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/dailysmoketest",                       standard_caps), #VtsCiDailySmokeTest, Gustav Svensson
 ]
 
 #Put stable tests here so they can be tested often and then added to our gates
