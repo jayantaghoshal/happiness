@@ -15,8 +15,7 @@
   <uses-permission android:name="android.volvocars.permission.REMOTE_CTRL"/>
   <application
     android:label="RemoteCtrl.AudioCtrl"
-    android:directBootAware="true"
-    android:persistent="true">
+    android:directBootAware="true">
     <receiver
       android:name=".StartOnBoot"
       android:enabled="true">
