@@ -18,4 +18,6 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # If sth slips through the gate and blocks commit check, we would be all very unhappy :)
 "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 
-python3 ./vendor/volvocars/tools/ci/jenkins/send_visualisation_url.py
+if [ "${ZUUL_PATCHSET}" == "1" ]; then
+    python3 ./vendor/volvocars/tools/ci/jenkins/send_visualisation_url.py
+fi
