@@ -77,7 +77,8 @@ class FrSignalInterface:
 
                 self.connected = True
             except:
-                self.connection.close()
+                if self.connection is not None:
+                    self.connection.close()
                 raise
         else:
             self.connection = FDXDummyConnection()
