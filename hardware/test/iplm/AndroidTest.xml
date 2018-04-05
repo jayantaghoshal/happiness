@@ -26,6 +26,6 @@ This tests verifies iplmd
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsIplmdTestCases" />
         <option name="native-test-flag" value="--no-isolate" />
-        <option name="runtime-hint" value="5000ms" />
+        <option name="runtime-hint" value="20000ms" />
     </test>
 </configuration>
