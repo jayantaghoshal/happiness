@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This tests verifies the functionality in eventloop.
+-->
+<configuration description="Electronic Horizon unit tests">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsAdasisUnitTest->/data/local/tmp/VtsAdasisUnitTest" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsAdasisUnitTest" />
+        <option name="runtime-hint" value="1s" />
+    </test>
+</configuration>

@@ -15,6 +15,11 @@ LOCAL_INIT_RC := $(service_name)-service.rc
 LOCAL_PROPRIETARY_MODULE := true
 PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.delphi@2.0-service
 
+
+LOCAL_CPPFLAGS += -Wno-non-virtual-dtor
+LOCAL_CPPFLAGS += -Wno-unused-parameter
+
+
 LOCAL_SRC_FILES := \
      src/utils/vf_context.cpp \
      src/VehicleHALServiceMain.cpp \
@@ -42,7 +47,9 @@ LOCAL_SRC_FILES := \
      vhal_modules/driver_support_function_module.cpp \
      vhal_modules/traffic_sign_information_module.cpp \
      vhal_modules/lane_departure_warning_module.cpp \
-     vhal_modules/connected_safety_module.cpp
+     vhal_modules/connected_safety_module.cpp \
+     src/vmsmodule.cpp
+
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src \
@@ -71,7 +78,10 @@ LOCAL_SHARED_LIBRARIES := \
     libsettings \
     libihulog \
     $(lifecyclehal_v1_0) \
-    libkeyhandling
+    libkeyhandling \
+    libprotobuf-cpp-full \
+    libc++ \
+
 
 LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \
@@ -86,10 +96,16 @@ LOCAL_STATIC_LIBRARIES := \
     climate_vf_common \
     climate_commonapi_printers \
     climate_commonapi_pregen \
-	libgsl
+	libgsl \
+    libadasis \
+    android.hardware.automotive.vehicle@2.0-manager-lib \
+    android.vendor.auto.vms-libvmsadasisconverter \
+    android.vendor.auto.vms-libproto-vms \
+
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
     power_vehicle-hal-impl-lib
+
 
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 

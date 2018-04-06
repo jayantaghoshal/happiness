@@ -27,6 +27,7 @@
 #include "vhal_modules/lane_keeping_aid_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
 #include "vhal_modules/traffic_sign_information_module.h"
+#include "vmsmodule.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include <future>
@@ -84,6 +85,7 @@ int main(int /* argc */, char* /* argv */ []) {
     LaneDepartureWarningModule lane_departure_warning{&ctx};
     ConnectedSafetyModule connectedSafety{&ctx};
 
+    auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules
     powerModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
@@ -94,7 +96,7 @@ int main(int /* argc */, char* /* argv */ []) {
     carTimeModule->registerToVehicleHal();
     sensorModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
-
+    vmsModule->registerToVehicleHal();
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 
     // Configured to only use 1 thread as the VHAL Manager and Implementation is not threadsafe.

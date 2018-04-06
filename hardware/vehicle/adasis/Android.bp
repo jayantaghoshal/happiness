@@ -1,0 +1,99 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name: "libadasis",
+    defaults: ["volvocars_cc_defaults"],
+    vendor: true,
+    strip: {
+        keep_symbols: true,
+    },
+
+    srcs: [
+        "*.cpp",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+    cppflags: [
+        "-Wno-unused-parameter",
+    ],
+
+    shared_libs: [
+        "libbase",
+        "libtarmac",
+        "liblog",
+        "libihulog",
+        "libprotobuf-cpp-full",
+        "libc++",
+        "libdataelements",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libutils",
+        "libcutils",
+        "libbinder",
+        "android.hardware.automotive.vehicle@2.0",
+
+    ],
+
+    static_libs: [
+        "android.vendor.auto.vms-libproto-vms",
+        "android.vendor.auto.vms-libvmsadasisconverter",
+        "android.hardware.automotive.vehicle@2.0-manager-lib",
+    ],
+
+}
+
+// Need a seperate item for unit test for enable unit test specific functions when compiling with -DUNIT_TEST
+cc_library_static {
+    name: "libadasis_unittest",
+    defaults: ["volvocars_cc_defaults"],
+
+    srcs: [
+        "*.cpp",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+    cppflags: [
+        "-DUNIT_TEST",
+        "-Wno-unused-parameter",
+    ],
+
+    shared_libs: [
+        "libbase",
+        "libtarmac",
+        "liblog",
+        "libihulog",
+        "libprotobuf-cpp-full",
+        "libc++",
+        "libdataelements",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libutils",
+        "libcutils",
+        "libbinder",
+        "android.hardware.automotive.vehicle@2.0",
+
+    ],
+
+    static_libs: [
+        "android.vendor.auto.vms-libproto-vms",
+        "android.vendor.auto.vms-libvmsadasisconverter",
+        "android.hardware.automotive.vehicle@2.0-manager-lib",
+    ],
+}

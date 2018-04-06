@@ -28,6 +28,7 @@
           only whitelisted safe Activities will be allowed while car is not parked. -->
     <bool name="enableActivityBlockingForSafety">false</bool>
 
+
     <!-- Default home activity -->
     <string name="defaultHomeActivity">com.volvocars.launcher/com.volvocars.launcher.volvo.MainActivity</string>
 
@@ -37,5 +38,29 @@
          reference a valid activity. It is strongly recommended that the chosen activity be
          protected with the android.car.permission.STORAGE_MONITORING permission. -->
     <string name="activityHandlerForFlashWearChanges"></string>
+    <string-array translatable="false" name="allowedVmsSubscriberClients">
+        <!-- VmsSubscriberClientSample -->
+        <item>com.google.android.car.vms.subscriber</item>
+        <!-- car-test APK -->
+        <item>com.android.car</item>
+
+        <!-- g3 dev APKs -->
+        <item>com.google.android.apps.geo.autograph.vms.client.visualizer.car</item>
+        <item>com.google.android.apps.geo.autograph.vms.client.location</item>
+        <item>com.google.android.apps.geo.autograph.vms.client.localframe</item>
+        <item>com.google.android.apps.geo.autograph.vms.client.mapdata</item>
+    </string-array>
+
+    <string-array translatable="false" name="vmsPublisherClients">
+        <item>"com.google.android.apps.geo.autograph.vms.client.location/.CarLocationClientService"</item>
+        <!--item>"com.google.android.apps.geo.autograph.vms.client.examples.samplepublisher/.RandomLocalFrameProviderService"</item-->
+        <item>"com.google.android.apps.geo.autograph.vms.client.localframe/.CarLocalFrameClientService"</item>
+        <item>"com.google.android.apps.geo.autograph.vms.client.mapdata/.CarMapDataClientService"</item>
+    </string-array>
+
+    <string-array translatable="false" name="vmsSafePermissions">
+        <item>"android.permission.ACCESS_FINE_LOCATION"</item>
+    </string-array>
+
 
 </resources>

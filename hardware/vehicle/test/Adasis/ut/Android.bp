@@ -1,0 +1,55 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "VtsAdasisUnitTest",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+    srcs: [
+        "*.cpp",
+    ],
+    cflags: [
+        "-Wno-unused-lambda-capture",
+        "-Wno-unused-parameter",
+        "-DUNIT_TEST=1",
+        "-DGTEST_OS_LINUX_ANDROID=1",
+        "-g",
+        "-fexceptions",
+        "-Wno-macro-redefined",
+        "-Wno-non-virtual-dtor",
+    ],
+
+    include_dirs: [
+        "",
+    ],
+
+    shared_libs: [
+        "libbase",
+        "libtarmac",
+        "liblog",
+        "libihulog",
+        "libprotobuf-cpp-full",
+        "libc++",
+        "libdataelements",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libutils",
+        "libcutils",
+        "libbinder",
+        "android.hardware.automotive.vehicle@2.0",
+
+    ],
+
+    static_libs: [
+        "libadasis_unittest",
+        "libgmock",
+        "libdataelements_unittest",
+        "android.vendor.auto.vms-libproto-vms",
+        "android.vendor.auto.vms-libvmsadasisconverter",
+        "android.hardware.automotive.vehicle@2.0-manager-lib",
+    ],
+    test_suites: ["vts"],
+
+}

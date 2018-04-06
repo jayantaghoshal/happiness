@@ -83,7 +83,7 @@
 
 
   <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
-  <project name="aosp/platform/vendor/google_auto/vms" path="vendor/google_auto/vms" revision="329494736d16d9418663c8c42bfef7134ac7faa7" />
+  <project name="aosp/platform/vendor/google_auto/vms" path="vendor/google_auto/vms" revision="8e850fbf257eb64d5ec8e5f4f197d8b11a5ce55e" />
 
   <!-- ww11 overrides that should have been removed by Intel but are still there -->
   <remove-project name="aosp/platform/bionic" />
