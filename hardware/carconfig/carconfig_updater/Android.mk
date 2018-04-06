@@ -37,7 +37,6 @@ LOCAL_SHARED_LIBRARIES := \
 	libhidltransport \
 	libutils \
 	libbinder \
-	libhisip \
 	libhwbinder
 
 LOCAL_STATIC_LIBRARIES += \

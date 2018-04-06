@@ -32,7 +32,6 @@ LOCAL_SHARED_LIBRARIES := \
     libdataelements \
     libhidlbase \
     libhidltransport \
-    libhisip \
     libdesip
 
 include $(BUILD_EXECUTABLE)
