@@ -99,7 +99,7 @@ void SetProperty(vhal20::VehiclePropValue* property_value,
         // const auto floatvec_value = std::stof(std::string(value));
         // property_value.value.floatValues = ::android::hardware::hidl_vec<float>{floatvec_value};
 
-    } else if (property_type == vhal20::VehiclePropertyType::COMPLEX ||
+    } else if (property_type == vhal20::VehiclePropertyType::MIXED ||
                property_type == vhal20::VehiclePropertyType::MASK) {
         printf("Not implemented.\n");
         return;

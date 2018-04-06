@@ -18,7 +18,6 @@ inline vhal20::VehiclePropConfig createStatusConfig(vhal20::VehiclePropConfig va
     statusConfig.prop = vhal20::toInt(statusID);
     statusConfig.access = vhal20::VehiclePropertyAccess::READ;
     statusConfig.changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE;
-    statusConfig.supportedAreas = valueConfig.supportedAreas;
     statusConfig.areaConfigs.resize(valueConfig.areaConfigs.size());
     for (size_t i = 0; i < valueConfig.areaConfigs.size(); i++) {
         const auto& valueAreaCfg = valueConfig.areaConfigs[i];
