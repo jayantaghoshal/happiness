@@ -54,7 +54,7 @@ This will ensure correct code style for all supported files in repository
   * This should not happen if commit hook was properly installed
 -------------------------------------------------------------------""",
 
-    licensingcomponents.copyrightheader.LicenseHeaderInvalidError:
+    copyrightheader.LicenseHeaderInvalidError:
         """
 -------------------------------------------------------------------
 Automatic LICENSE file headers
@@ -65,6 +65,26 @@ applicable to mention the relevant LICENSE file in repository.
 
 This should be handled autonomously during commit phase
 if commit hook was properly installed
+-------------------------------------------------------------------""",
+
+    copyrightheader.LicenseHeaderMultipleCopyrightHoldersError:
+        """
+-------------------------------------------------------------------
+Automatic LICENSE file headers
+-------------------------------------------------------------------
+
+This will catch cases where there are multiple copyright owners
+specified in single file. Consult your team or Tech leads what to do
+with imported external/thirdparty code.
+-------------------------------------------------------------------""",
+
+    copyrightheader.LicenseHeaderNeededUpdateError:
+        """
+-------------------------------------------------------------------
+Automatic LICENSE file headers
+-------------------------------------------------------------------
+
+Notification that header needed to be changed.
 -------------------------------------------------------------------""",
 
     linters.XmlLinterError:
@@ -80,6 +100,21 @@ XML Syntax Check
     -------------------------------------------------------------------""",
 
 }
+
+ExpectedExceptions = (
+    linters.ShellcheckLinterError,
+    linters.AndroidLoggingLinterError,
+    linters.XmlLinterError,
+    codeformat.CodeFormatInvalidError,
+    copyrightheader.LicenseHeaderInvalidError,
+    copyrightheader.LicenseHeaderNeededUpdateError,
+    copyrightheader.LicenseHeaderMultipleCopyrightHoldersError,
+)
+
+SilentFixExceptions = (
+    codeformat.CodeFormatInvalidError,
+    copyrightheader.LicenseHeaderNeededUpdateError,
+)
 
 
 def collect_loop_exceptions(item_list, action_on_item, accepted_types=(Exception,)):
@@ -134,7 +169,7 @@ def build_git_file_list(repo_root: str,
     count = 0
     for file in git_files:
         abs_file_path = os.path.abspath(os.path.join(repo_abs_dir, file))
-        count = count + 1
+        count += 1
         yield abs_file_path
 
     print("Found {} of {} files in {}".format(count, file_class_description, repo_abs_dir))
@@ -152,9 +187,10 @@ def build_git_controlled_changed_file_list(repo_root):
                                ['git', 'diff', 'HEAD', '--name-only', '--diff-filter=ACMRT'])
 
 
-ExpectedExceptions = (linters.LinterError,
-                      codeformat.CodeFormatInvalidError,
-                      copyrightheader.LicenseHeaderInvalidError)
+def build_git_controlled_not_staged_file_list(repo_root):
+    return build_git_file_list(repo_root,
+                               "Git controlled and changed",
+                               ['git', 'diff', '--name-only', '--diff-filter=ACMRT'])
 
 
 def is_external_thirdparty(file_path: str) -> bool:
@@ -165,16 +201,19 @@ def is_external_thirdparty(file_path: str) -> bool:
 
     return False
 
+
 def is_known_copyright_violator(file_path: str) -> bool:
     """ Check if the specified path is known for violating the Copyright rules
 
     This function is temporary and shall be removed once all the known violators have fixed their issues
     """
-    violator_paths = ["/vendor/volvocars/hardware/infotainmentIpBus/include/tem3_interface/", # ARTINFO-2707
-                      "/vendor/volvocars/hardware/signals/dataelements/generated/", # ARTINFO-2708
-                      "/vendor/volvocars/device/vcc_emulator_x86/", # ARTINFO-2709, same issue for the two paths below
-                      "/vendor/volvocars/hardware/vehicle_emulator/",
-                      "/vendor/volvocars/hardware/vehicle/tools/halmodulesink/src/com/volvocars/test/lib/vehiclehal/"]
+    violator_paths = [
+        "/vendor/volvocars/hardware/infotainmentIpBus/include/tem3_interface/",  # ARTINFO-2707
+        "/vendor/volvocars/hardware/signals/dataelements/generated/",  # ARTINFO-2708
+        "/vendor/volvocars/device/vcc_emulator_x86/",  # ARTINFO-2709
+        "/vendor/volvocars/hardware/vehicle_emulator/",  # ARTINFO-2709
+        "/vendor/volvocars/hardware/vehicle/tools/halmodulesink/src/com/volvocars/test/lib/vehiclehal/",  # ARTINFO-2709
+    ]
 
     if any(path in file_path for path in violator_paths):
         return True
@@ -191,18 +230,23 @@ def verify_file_path(file_path):
         linters.run_for_file(file_path)
 
 
-def fix_file_path(file_path: str, is_precommit: bool):
+def fix_file_path(file_path: str, is_precommit: bool, silent_fixes: typing.Tuple[Exception, ...]):
     if not is_external_thirdparty(file_path):
-        codeformat.apply_guard2once(file_path)
-        codeformat.apply_source_file_format(file_path)
+        def __silent_fixing(fix_fun):
+            try:
+                return fix_fun(file_path)
+            except silent_fixes as ex:
+                print("Silently fixed file {}, message {}.".format(file_path, ex))
+                pass
+
+        __silent_fixing(codeformat.fix_guard2once)
+        __silent_fixing(codeformat.fix_source_file_format)
         if not is_known_copyright_violator(file_path):
             if is_precommit:
-                copyrightheader.fix_copyright_headers(file_path)
+                __silent_fixing(copyrightheader.update_copyright_headers)
             else:
-                try:
-                    copyrightheader.verify_copyright_headers(file_path)
-                except copyrightheader.LicenseHeaderInvalidError:
-                    copyrightheader.fix_copyright_headers(file_path)
+                __silent_fixing(copyrightheader.fix_copyright_headers)
+
         linters.run_for_file(file_path)
 
 
@@ -210,8 +254,12 @@ def fix_file_path_on_error(file_path: str):
     fix_file_path(file_path, is_precommit=False)
 
 
-def fix_file_path_on_precommit_hook(file_path: str):
-    fix_file_path(file_path, is_precommit=True)
+def fix_file_path_on_pre_commit_hook_silent_fixes(file_path: str):
+    fix_file_path(file_path, is_precommit=True, silent_fixes=SilentFixExceptions)
+
+
+def fix_file_path_on_pre_commit_hook_raise_fixes(file_path: str):
+    fix_file_path(file_path, is_precommit=True, silent_fixes=())
 
 
 def verify_repo(repo_root, **kwargs):
@@ -224,6 +272,19 @@ def fix_repo(repo_root, **kwargs):
     aggregate_and_exit_with_report_on_failure(paths, fix_file_path_on_error, error_types_tuple=ExpectedExceptions)
 
 
-def precommit_hook(repo_root, **kwargs):
-    paths = build_git_controlled_changed_file_list(repo_root)
-    aggregate_and_exit_with_report_on_failure(paths, fix_file_path_on_precommit_hook, error_types_tuple=ExpectedExceptions)
+def pre_commit_hook(repo_root, **kwargs):
+    paths_to_fix = build_git_controlled_changed_file_list(repo_root)
+    not_staged = list(build_git_controlled_not_staged_file_list(repo_root))
+
+    if len(not_staged) > 0:  # partial commit, fail if needed to change files
+        print("Processing partial commit caused by not staged files: \r\n{}\r\n, "
+              "it will abort your commit if changes/fixes were applied, in that "
+              "case review the changes.".format(not_staged))
+        aggregate_and_exit_with_report_on_failure(paths_to_fix, fix_file_path_on_pre_commit_hook_raise_fixes,
+                                                  error_types_tuple=ExpectedExceptions)
+    else:  # full commit, dev would be happy if we add fixes automatically
+        print("Processing full commit, will auto add changes/fixes applied")
+        aggregate_and_exit_with_report_on_failure(paths_to_fix, fix_file_path_on_pre_commit_hook_silent_fixes,
+                                                  error_types_tuple=ExpectedExceptions)
+        # if there was no issues lets add those files
+        subprocess.check_output(['git', 'add', '.'], cwd=repo_root).decode()

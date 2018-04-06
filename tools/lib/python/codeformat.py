@@ -42,17 +42,7 @@ def get_formatted_file_contents(path: str):
         return sanitize_whitespace(load_source_code(path))
 
 
-def apply_source_file_format(path: str):
-    if can_file_be_formatted(path):
-        current_content = load_source_code(path)
-        formatted_content = get_formatted_file_contents(path)
-        if current_content != formatted_content:
-            with open(path, 'w', encoding='utf-8') as file:
-                file.write(formatted_content)
-            print("Fixed code formatting in {}".format(path))
-
-
-def _get_guard2once_content(path) -> str:
+def __get_guard2once_content(path) -> str:
     subprocess.check_output([CHECKGUARD_CMD, path], stderr=subprocess.STDOUT).decode()
 
     try:
@@ -62,24 +52,34 @@ def _get_guard2once_content(path) -> str:
         if len(fixed_content) < 10:
             # unicode error returns empty content
             fixed_content = load_source_code(path)
-    except Exception as ex:
+    except Exception:
         fixed_content = load_source_code(path)
 
     return fixed_content
 
 
-def apply_guard2once(path: str):
+def fix_source_file_format(path: str) -> None:
+    if can_file_be_formatted(path):
+        current_content = load_source_code(path)
+        formatted_content = get_formatted_file_contents(path)
+        if current_content != formatted_content:
+            with open(path, 'w', encoding='utf-8') as file:
+                file.write(formatted_content)
+            raise CodeFormatInvalidError("Fixed code formatting", path)
+
+
+def fix_guard2once(path: str) -> None:
     filename, extension = os.path.splitext(path)
     if extension in clang_header_extensions:
         current_content = load_source_code(path)
-        fixed_content = _get_guard2once_content(path)
+        fixed_content = __get_guard2once_content(path)
         if current_content != fixed_content:
             with open(path, 'w', encoding='utf-8') as file:
                 file.write(fixed_content)
-            print("Fixed include guard -> #pragma once in {}".format(path))
+            raise CodeFormatInvalidError("Fixed #include guards (should have been #pragma once)", path)
 
 
-def verify_source_file_format(path: str):
+def verify_source_file_format(path: str) -> None:
     if can_file_be_formatted(path):
         current_content = load_source_code(path)
         formatted_content = get_formatted_file_contents(path)
@@ -87,10 +87,10 @@ def verify_source_file_format(path: str):
             raise CodeFormatInvalidError("Invalid formatting", path)
 
 
-def verify_guard2once(path: str):
+def verify_guard2once(path: str) -> None:
     filename, extension = os.path.splitext(path)
     if extension in clang_header_extensions:
         current_content = load_source_code(path)
-        fixed_content = _get_guard2once_content(path)
+        fixed_content = __get_guard2once_content(path)
         if current_content != fixed_content:
             raise CodeFormatInvalidError("Invalid #include guards (should be #pragma once)", path)

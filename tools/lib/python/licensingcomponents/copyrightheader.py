@@ -1,3 +1,5 @@
+# coding=utf-8
+
 # Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
@@ -9,10 +11,24 @@ from datetime import datetime
 from ihuutils.sourcecode import sanitize_whitespace
 
 
+class LicenseHeaderNeededUpdateError(Exception):
+    def __init__(self, source_file):
+        # Call the base class constructor with the parameters it needs
+        super(LicenseHeaderNeededUpdateError, self) \
+            .__init__("Copyright header needed to be fixed in file {}".format(source_file))
+
+
 class LicenseHeaderInvalidError(Exception):
-    def __init__(self, violation, source_file):
+    def __init__(self, violation: str, source_file: str):
         # Call the base class constructor with the parameters it needs
         super(LicenseHeaderInvalidError, self).__init__("{} in file {}".format(violation, source_file))
+
+
+class LicenseHeaderMultipleCopyrightHoldersError(Exception):
+    def __init__(self, copyright_headers: typing.Iterable[str], source_file: str):
+        # Call the base class constructor with the parameters it needs
+        super(LicenseHeaderMultipleCopyrightHoldersError, self) \
+            .__init__("Multiple Copyright headers found {} in file {}".format(copyright_headers, source_file))
 
 
 LanguageCommentFeatures = collections.namedtuple('LanguageCommentFeatures', ['firstline',
@@ -31,9 +47,9 @@ CopyrightInfo = collections.namedtuple("CopyrightInfo", ['start_year',
 CStyleInfoRegex = re.compile(r'^/\*\n\s\*\sCopyright\s(?P<start_year>20\d{2})'
                              r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*?(?:\n\s\*.*?){2}/',
                              re.IGNORECASE)
-CStyleGenericRegex = re.compile(r'^\s\*\s(Copyright.*)',
+CStyleGenericRegex = re.compile(r'^\s\*\s(?:Copyright.*)',
                                 re.IGNORECASE | re.MULTILINE)
-CStyleReplaceableRegex = re.compile(r'(^/\*\n\s\*\sCopyright.*(Delphi|Volvo)(.*\n)*?\s\*/)',
+CStyleReplaceableRegex = re.compile(r'(?:^/\*\n\s\*\sCopyright.*(?:Delphi|Volvo)(?:.*\n)*?\s\*/)',
                                     re.IGNORECASE)
 
 CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
@@ -49,9 +65,9 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
 HashStartInfoRegex = re.compile(r'^#\sCopyright\s(?P<start_year>20\d{2})'
                                 r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*',
                                 re.IGNORECASE)
-HashStartGenericRegex = re.compile(r'^#\s(Copyright.*)',
+HashStartGenericRegex = re.compile(r'^#\s(?:Copyright.*)',
                                    re.IGNORECASE | re.MULTILINE)
-HashStartReplaceableRegex = re.compile(r'(^#\s(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)+)',
+HashStartReplaceableRegex = re.compile(r'(?:^#\s(?:Copyright.*?(?:Delphi|Volvo).*?\n)(?:#.*?\n)+)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
@@ -81,8 +97,8 @@ KnownLanguages = {
 }
 
 PathsIgnoreRegex = re.compile(r'.*(?:'
-                              r'(__init__.py)|'
-                              r'(vendor/volvocars/interfaces/.*\.(?:bp|mk))'
+                              r'(?:__init__.py)|'
+                              r'(?:vendor/volvocars/interfaces/.*\.(?:bp|mk))'
                               r')')
 
 
@@ -105,6 +121,7 @@ def filter_ignored(files):
 def get_known_languages_extensions():
     return KnownLanguages.keys()
 
+
 def __get_copyright_headers_from_body(file_body: str, lang: LanguageCommentFeatures) -> typing.List[str]:
     headers = []
     for regex in lang.headers_matcher:
@@ -112,30 +129,30 @@ def __get_copyright_headers_from_body(file_body: str, lang: LanguageCommentFeatu
             headers.append(m)
     return headers
 
-def list_headers_and_filenames(filename: str):
-    lang = get_lang(filename)
 
-    with open(filename, 'r', encoding="utf-8") as file:
+def list_headers_and_filenames(file_path: str):
+    lang = get_lang(file_path)
+
+    with open(file_path, encoding="utf-8") as file:
         file_body = file.read()
 
     headers = __get_copyright_headers_from_body(file_body, lang)
     if headers:
-        print(filename)
+        print(file_path)
         for h in headers:
             print(h)
 
 
-def get_lang(filename: str):
-    ext = os.path.splitext(filename)[1]
+def get_lang(file_path: str) -> LanguageCommentFeatures:
+    ext = os.path.splitext(file_path)[1]
     if ext not in KnownLanguages:
-        raise Exception("File {0} is of not supported language {1}".format(filename, ext))
+        raise Exception("File {0} is of not supported language {1}".format(file_path, ext))
 
     lang = KnownLanguages.get(ext)
     return lang
 
 
-
-def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures):
+def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures) -> typing.Optional[CopyrightInfo]:
     """ Get Copyright information from the file_body content
 
     Args:
@@ -163,7 +180,7 @@ def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures
                          company=match.group('company'))
 
 
-def __remove_header_from_body(file_body: str, lang: LanguageCommentFeatures):
+def __remove_header_from_body(file_body: str, lang: LanguageCommentFeatures) -> str:
     assert isinstance(lang, LanguageCommentFeatures)
 
     file_body_without_headers = file_body
@@ -175,7 +192,7 @@ def __remove_header_from_body(file_body: str, lang: LanguageCommentFeatures):
     return file_body_without_headers
 
 
-def __add_header_to_body(file_body: str, copyright_year: str, lang: LanguageCommentFeatures):
+def __add_header_to_body(file_body: str, copyright_year: str, lang: LanguageCommentFeatures) -> str:
     copyright_header = lang.firstline
 
     for line in CommentPattern.splitlines(keepends=False):
@@ -194,6 +211,7 @@ def __add_header_to_body(file_body: str, copyright_year: str, lang: LanguageComm
 
 def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeatures):
     """ Filter the lines in the file body before the copyright as specified by lang
+        to avoid moving them below copy header which would break their purpose.
 
         Args:
             file_body: File content to filter
@@ -224,23 +242,22 @@ def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeature
     return saved_lines_before_copyright, filtered_file_body
 
 
-def __replace_headers_in_body(file_body: str, filename: str, lang: LanguageCommentFeatures):
+def __replace_headers_in_body(file_body: str, file_path: str, lang: LanguageCommentFeatures):
     removed_headers, filtered_file_body = __filter_lines_before_copyright(file_body, lang)
 
     # Remove trailing whitespace after the removed headers, needed for reproducibility
     filtered_file_body = sanitize_whitespace(filtered_file_body)
 
-    info = None
     current_year = datetime.now().year
     copyright_year = None
     copyright_headers = __get_copyright_headers_from_body(filtered_file_body, lang)
 
     if len(copyright_headers) > 1:
-        raise LicenseHeaderInvalidError("Multiple Copyright headers found {}".format(copyright_headers), filename)
+        raise LicenseHeaderMultipleCopyrightHoldersError(copyright_headers, file_path)
     elif copyright_headers:
         info = __get_copyright_info_from_body(filtered_file_body, lang)
         if info is None:
-            raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), filename)
+            raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), file_path)
         else:
             if info.company == "Delphi":
                 # If the company is Delphi a new copyright header shall be written
@@ -264,46 +281,51 @@ def __replace_headers_in_body(file_body: str, filename: str, lang: LanguageComme
     return with_copyright_and_saved_lines_applied
 
 
-def get_contents_with_header_applied(filename: str):
-    assert isinstance(filename, str)
-    filename = os.path.abspath(filename)
+def get_contents_with_header_applied(file_path: str):
+    assert isinstance(file_path, str)
+    file_path = os.path.abspath(file_path)
 
-    lang = get_lang(filename)
+    lang = get_lang(file_path)
 
-    with open(filename, 'r', encoding="utf-8") as file:
+    with open(file_path, encoding="utf-8") as file:
         file_body = file.read()
 
-    with_copyright_applied = __replace_headers_in_body(file_body, filename, lang)
-    with_copyright_applied_twice = __replace_headers_in_body(with_copyright_applied, filename, lang)
+    with_copyright_applied = __replace_headers_in_body(file_body, file_path, lang)
+    with_copyright_applied_twice = __replace_headers_in_body(with_copyright_applied, file_path, lang)
 
     if with_copyright_applied_twice != with_copyright_applied:
-        with open(filename + ".iter_orig", "w") as copy_not_applied:
+        with open(file_path + ".iter_orig", "w") as copy_not_applied:
             copy_not_applied.write(file_body)
 
-        with open(filename + ".iter1", "w") as copy_applied_once:
+        with open(file_path + ".iter1", "w") as copy_applied_once:
             copy_applied_once.write(with_copyright_applied)
 
-        with open(filename + ".iter2", "w") as copy_applied_twice:
+        with open(file_path + ".iter2", "w") as copy_applied_twice:
             copy_applied_twice.write(with_copyright_applied_twice)
 
-        raise Exception("Internal error, non reproducible application of header to file {}".format(filename))
+        raise Exception("Internal error, non reproducible application of header to file {},"
+                        "Please commit the change with git commit --no-verify and reference it "
+                        "in JIRA issue assigned to krzysztof.wesolowski@volvocars.com or CI team".format(file_path))
 
     return with_copyright_applied, file_body
 
 
-def verify_copyright_in_file(filename: str):
-    """ Verify the Copyright header in the specified file
+def verify_copyright_headers(file_path: str) -> None:
+    """ Verify the Copyright header in the specified file to be at least:
+        a) present,
+        b) pointing VCC
+        c) not pointing other company.
 
-    Args:
-        filename: The file to verify
-
-    Raises:
-        LicenseHeaderInvalidError: If the Copyright header is invalid
+    :param file_path: The file to verify
+    :raises LicenseHeaderInvalidError: If the Copyright header is invalid or missing
+    :raises LicenseHeaderMultipleCopyrightHoldersError if there is more than one copyright header
     """
-    assert isinstance(filename, str)
-    file_path = os.path.abspath(filename)
+    assert isinstance(file_path, str)
+    file_path = os.path.abspath(file_path)
+    if should_filepath_be_ignored(file_path):
+        return;
 
-    with open(file_path, 'r', encoding="utf-8") as file:
+    with open(file_path, encoding="utf-8") as file:
         file_body = file.read()
 
     lang = get_lang(file_path)
@@ -313,53 +335,54 @@ def verify_copyright_in_file(filename: str):
     copyright_headers = __get_copyright_headers_from_body(filtered_file_body, lang)
 
     if not copyright_headers:
-        raise LicenseHeaderInvalidError("Missing Copyright header", filename)
+        raise LicenseHeaderInvalidError("Missing Copyright header", file_path)
     elif len(copyright_headers) > 1:
-        raise LicenseHeaderInvalidError("Multiple Copyright headers found {}".format(copyright_headers), filename)
+        raise LicenseHeaderMultipleCopyrightHoldersError(copyright_headers, file_path)
 
     info = __get_copyright_info_from_body(filtered_file_body, lang)
     current_year = datetime.now().year
     if info is None:
         # Copyright head has unknown format
-        raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), filename)
+        raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), file_path)
     elif int(info.start_year) < 2017:
         # The old script was hard coded to only accept 2017, so copyright before that is not allowed
-        raise LicenseHeaderInvalidError("Copyright header invalid year", filename)
+        raise LicenseHeaderInvalidError("Copyright header invalid year", file_path)
     elif info.end_year is not None:
         # If the Copyright header contains a year range verify that the range is valid
         if int(info.end_year) <= int(info.start_year) or current_year < int(info.end_year):
-            raise LicenseHeaderInvalidError("Copyright header invalid year range", filename)
+            raise LicenseHeaderInvalidError("Copyright header invalid year range", file_path)
 
 
-def fix_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
-    if isinstance(file_or_files_list, str):
-        files = [file_or_files_list]
-    else:
-        files = list(file_or_files_list)
+def update_copyright_headers(file_path: str) -> None:
+    """
+    Update copyright header to  contain proper company and date range
 
-    for f in filter_ignored(files):
-        assert os.path.isfile(f)
-
-        fixed, original = get_contents_with_header_applied(f)
-        if fixed != original:
-            with(open(f, 'w', encoding="utf-8")) as target:
-                target.write(fixed)
-            print("Fixed header in file {0}".format(f))
-    pass
+    :param file_path: One files to be updated
+    :raises LicenseHeaderInvalidError if file needed to be updated
+    """
+    assert os.path.isfile(file_path)
+    fixed, original = get_contents_with_header_applied(file_path)
+    if fixed != original:
+        with(open(file_path, 'w', encoding="utf-8")) as target:
+            target.write(fixed)
+        raise LicenseHeaderNeededUpdateError(file_path)
 
 
-def verify_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
-    if isinstance(file_or_files_list, str):
-        files = [file_or_files_list]
-    else:
-        files = list(file_or_files_list)
+def fix_copyright_headers(file_path: str) -> None:
+    """
+    Ensures all files would pass subsequent verify call
 
-    for f in filter_ignored(files):
-        verify_copyright_in_file(f)
-    pass
+    :param file_path: File to be fixed fixed (updated if fails verification)
+    :raises LicenseHeaderInvalidError if any file needed fixing
+    :raises LicenseHeaderDuplicateError if file contains duplicate copyright and cannot be fixed
+    """
+    try:
+        verify_copyright_headers(file_path)
+    except LicenseHeaderInvalidError:
+        update_copyright_headers(file_path)
 
 
-def collect_supported_files(directory):
+def collect_supported_files(directory: str) -> typing.Iterable[str]:
     for entry in os.scandir(directory):
         if entry.is_dir():
             yield from collect_supported_files(entry.path)
@@ -371,15 +394,12 @@ def collect_supported_files(directory):
     pass
 
 
-def collect_copyrightable_files(directory):
+def collect_copyrightable_files(directory: str) -> typing.Iterable[str]:
     yield from filter_ignored(collect_supported_files(directory))
 
 
-def list_copyright_headers(file_or_files_list):
-    if isinstance(file_or_files_list, str):
-        files = [file_or_files_list]
-    else:
-        files = file_or_files_list
+def list_copyright_headers(file_or_files_list: typing.Union[str, typing.Iterable[str]]):
+    files = __to_file_list(file_or_files_list)
 
     for f in files:
         if should_filepath_be_ignored(f):
@@ -387,9 +407,16 @@ def list_copyright_headers(file_or_files_list):
             continue
 
         list_headers_and_filenames(f)
-    pass
 
 
 def fix_all_copyright_headers(directory):
     for path in collect_copyrightable_files(directory):
-        fix_copyright_headers(path)
+        update_copyright_headers(path)
+
+
+def __to_file_list(file_or_files_list: typing.Union[str, typing.Iterable[str]]) -> typing.Iterable[str]:
+    if isinstance(file_or_files_list, str):
+        files = [file_or_files_list]
+    else:
+        files = list(file_or_files_list)
+    return files

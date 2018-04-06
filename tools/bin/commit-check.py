@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 """
@@ -37,7 +37,7 @@ def fix(repo_root, **kwargs):
 
 @dispatch.on('pre-commit')
 def precommit(repo_root, **kwargs):
-    commitcheck.precommit_hook(repo_root)
+    commitcheck.pre_commit_hook(repo_root)
 
 
 if __name__ == "__main__" and __package__ is None:
