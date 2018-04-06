@@ -65,9 +65,6 @@ redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${GIT
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins."${JOB_NAME}".latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
 
-#TODO: Check if this is valid
-#time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/report_job_status.py "${JOB_NAME}" "${BUILD_NUMBER}" pass || true
-
 # Clean up vtsPackages
 rm -rf vtsPackage/
 
