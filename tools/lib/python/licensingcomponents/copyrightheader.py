@@ -51,7 +51,7 @@ HashStartInfoRegex = re.compile(r'^#\sCopyright\s(?P<start_year>20\d{2})'
                                 re.IGNORECASE);
 HashStartGenericRegex = re.compile(r'^#\s(Copyright.*)',
                                    re.IGNORECASE | re.MULTILINE)
-HashStartReplaceableRegex = re.compile(r'(^#.*?(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)*?\n)',
+HashStartReplaceableRegex = re.compile(r'(^#\s(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)+)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
