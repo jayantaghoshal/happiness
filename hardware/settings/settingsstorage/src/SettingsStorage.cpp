@@ -168,12 +168,12 @@ SettingsStorage::SettingsStorage() {
     }
 
     android::wp<SettingsStorage> weakThis{this};
-    profile_listener_ = new ProfileListener([weakThis](profileHidl::ProfileIdentifier newProfileId) {
+    profile_listener_ = android::sp<ProfileListener>(new ProfileListener([weakThis](profileHidl::ProfileIdentifier newProfileId) {
         android::sp<SettingsStorage> s = weakThis.promote();
         if (s != nullptr) {
             s->onProfileChange(newProfileId);
         }
-    });
+    }));
 }
 SettingsStorage::~SettingsStorage() {
     sqlite3_free(select_setting_stmt_);
