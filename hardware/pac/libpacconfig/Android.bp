@@ -1,0 +1,29 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library {
+    name: "libpacconfig",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    shared_libs: [
+        "libcutils",
+    ],
+
+    srcs: [
+        "src/config.cpp",
+    ],
+
+}

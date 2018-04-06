@@ -10,6 +10,7 @@
 #include <utils/StrongPointer.h>
 
 #include <libdbg.h>
+#include <pacconfig/config.h>
 #include "evs/hardware.h"
 #include "evs_enumerator.h"
 
@@ -24,23 +25,26 @@ using android::hardware::automotive::evs::V1_0::IEvsEnumerator;
 using android::OK;
 using android::status_t;
 
+// libpacconfig
+using ::pac::config::PacConfig;
+
 // VCC implementation
 using android::hardware::automotive::evs::V1_0::vcc_implementation::EvsEnumerator;
 
+namespace {
 namespace service_cfg {
-constexpr int8_t kPropertyBoolFalse = 0;
-constexpr char const* kPropertyBootService = "persist.vcc.service.evs.boot";
 constexpr int kMaxNumberOfThreads = 1;
 // Note that maxThreads must include the caller thread if callerWillJoin is true
 constexpr bool kCallerWillJoin = true;
 }  // namespace service_cfg
+}  // namespace
 
 int main() {
     dbgD("EVS hardware service is starting...");
     android::sp<IEvsEnumerator> service;
     status_t status;
 
-    if (static_cast<bool>(property_get_bool(service_cfg::kPropertyBootService, service_cfg::kPropertyBoolFalse))) {
+    if (!PacConfig::Evs::IsEvsServicesEnabled()) {
         dbgD("EVS hardware service did not start since it is disabled!");
         return EXIT_SUCCESS;
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Test PAC config library">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsLibPacConfig->/data/local/tmp/VtsLibPacConfig" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsLibPacConfig" />
+    </test>
+</configuration>

@@ -83,6 +83,16 @@ cc_defaults {
     ],
 }
 
+// Includes the PAC config library and its dependencies
+cc_defaults {
+    name: "vcc_pac_use_libpacconfig",
+
+    shared_libs: [
+        "libpacconfig",
+        "libcutils",
+    ],
+}
+
 // Includes the generated EVS HIDL interface and its dependencies
 cc_defaults {
     name: "vcc_pac_use_evs_hidl",

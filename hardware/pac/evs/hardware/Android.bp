@@ -38,16 +38,13 @@ cc_binary {
 
     defaults: [
         "android.hardware.automotive.evs.vcc@1.0-hardware-defaults",
+        "vcc_pac_use_libpacconfig",
     ],
 
     relative_install_path: "hw",
 
     static_libs: [
         "android.hardware.automotive.evs.vcc@1.0-hardware-static-lib",
-    ],
-
-    shared_libs: [
-        "libcutils",
     ],
 
     srcs: [
