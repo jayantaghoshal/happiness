@@ -34,7 +34,8 @@ allow netmand sysfs:dir r_file_perms;
 
 allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
 
-allow netmand self:capability { net_admin net_raw sys_module dac_override };
+#allow netmand self:capability { net_admin net_raw sys_module dac_override };
+allow netmand self:capability { net_admin net_raw sys_module };
 allow netmand self:capability2 wake_alarm;
 allow netmand self:netlink_kobject_uevent_socket { bind setopt read create };
 allow netmand self:udp_socket create;
