@@ -2,6 +2,12 @@
 # This file is covered by LICENSE file in the root of this project
 
 ##############################################################
+# Disabled standard System Services (see SystemServer.java)
+##############################################################
+PRODUCT_PROPERTY_OVERRIDES += \
+    config.disable_networktime=1
+
+##############################################################
 # Native daemons
 ##############################################################
 PRODUCT_PACKAGES += \

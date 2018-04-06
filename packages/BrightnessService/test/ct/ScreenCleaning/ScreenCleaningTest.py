@@ -79,37 +79,42 @@ class ComponentTest(base_test.BaseTestClass):
         self.pressHomeButton()
         sleep(0.3)
         self.releaseHomeButton()
+        logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
         asserts.assertEqual(logData.find(brightnesswindow),-1,"Overlay should not be active.")
         asserts.assertNotEqual(logData.find(launcherwindow),-1,"Launcher should be active")
 
+        # Long press should trigger screen cleaning
         self.pressHomeButton()
         sleep(3.5)
         self.releaseHomeButton()
         logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
         asserts.assertNotEqual(logData.find(brightnesswindow),-1,"Overlay should be active")
 
+        # Wait another 0.5, it should still be cleaning
         self.dut.shell.one.Execute(inputtap)[const.STDOUT][0]
         sleep(0.5)
         logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
         asserts.assertNotEqual(logData.find(brightnesswindow),-1,"Overlay should still be active")
 
+        # ... wait another 0.5, it should still be cleaning ... it should be forever actually
         self.dut.shell.one.Execute(inputswipe)[const.STDOUT][0]
         sleep(0.5)
         logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
         asserts.assertNotEqual(logData.find(brightnesswindow),-1,"Overlay should still be active")
 
-        #Short press should not exit screen cleaning
+        # Short press should not exit screen cleaning
         self.pressHomeButton()
         sleep(0.3)
         self.releaseHomeButton()
         logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
         asserts.assertNotEqual(logData.find(brightnesswindow),-1,"Overlay should still be active")
 
+        # Long press should leave screen cleaning
         self.pressHomeButton()
         sleep(3.5)
         self.releaseHomeButton()
         logData = self.dut.shell.one.Execute(getactiveappcmd)[const.STDOUT][0]
-        asserts.assertEqual(logData.find(launcherwindow),31,"Launcher should be active")
+        asserts.assertNotEqual(logData.find(launcherwindow),-1, "Launcher should be active")
 
 
 if __name__ == "__main__":
