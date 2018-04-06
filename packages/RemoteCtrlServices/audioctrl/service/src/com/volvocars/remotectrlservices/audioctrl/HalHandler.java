@@ -39,7 +39,6 @@ public class HalHandler {
 
         if (mSystemHalService == null) {
             mSystemHalService = new SystemHalServiceHandler();
-            mSystemHalService.registerAsService("RemoteCtrl.AudioCtrl");
         }
 
         Log.v(TAG, "Get NativeRemoteAudioCtrl HAL Service.");
