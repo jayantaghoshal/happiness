@@ -3,5 +3,5 @@
   <remote fetch="https://icup_android.gerrit.cm.volvocars.biz/a/" name="origin" review="https://icup_android.gerrit.cm.volvocars.biz" />
   <default remote="origin" sync-c="true" sync-j="5" />
 
-  <include name="manifest-delphi.xml" />
+  <include name="manifest-volvocars.xml" />
 </manifest>
