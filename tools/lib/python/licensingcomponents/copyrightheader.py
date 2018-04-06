@@ -64,7 +64,7 @@ HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     )
 
 HashStartLanguageWithShebangFeatures = HashStartLanguageFeatures._replace(
-    line_patterns_allowed_before_copyright=["^#!.*", "^#\s?coding\s?=.*"])
+    line_patterns_allowed_before_copyright=["^#!.*", "^[ \t\v]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)"])
 
 CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
                  "This file is covered by LICENSE file in the root of this project"
