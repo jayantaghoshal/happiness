@@ -31,7 +31,7 @@
   <project name="bsp/hardware/intel/evs" path="hardware/intel/evs" revision="12c7887d7760bdb4ca900726b7987ca3c40a66c4"/>
 
   <remove-project name="aosp/platform/packages/apps/Car/Hvac"/>
-  <project name="aosp/platform/packages/apps/Car/Hvac" path="packages/apps/Car/Hvac" revision="d9a85d58103781ca11a82345ba7255ee7113b43f"/>  
+  <project name="aosp/platform/packages/apps/Car/Hvac" path="packages/apps/Car/Hvac" revision="d9a85d58103781ca11a82345ba7255ee7113b43f"/>
 
   <!-- Aptiv platform extensions common to SEM and IHU (no equivalent shipped by Intel) -->
   <project name="bsp/hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" path="hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" revision="47c2d61cd787fb229a06c13867e4275ac36b572c"/>
@@ -55,29 +55,23 @@
   <project name="bsp/external/iperf2" path="vendor/aptiv/external/iperf2" revision="bc9cb1ff0d9e5442596a4821cad314a967909cb2"/>
 
   <!-- Android Product Configurations -->
-  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="dd52cfb1674b9caa25bc81ed46ecff8e74c7442b" >
+  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="373fa212e23b16b5e354d332e091356b043a4b48">
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate"/>
   </project>
 
   <!-- Project specific Aptiv building blocks -->
   <project name="vendor/delphi/android_patches" path="delphi_volvoihu_aosp_patches" revision="ced12725c4bf0c661cd77d1c59b759bc6be1987a"/>
   <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="cb455fbd6a61f873dea41121d7e013b60c6472b3"/>
-  <project name="vendor/delphi/android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="b70f6e5860a540ea579bc067b9d3e71b0af3c6c3"/>
-  <project name="vendor/delphi/android_audiocontrol-hal" path="vendor/aptiv/components/audiocontrol-hal" revision="f99ddfe74fbbc5472467879af05d1cb0582cd554"/>  
+  <project name="vendor/delphi/android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="ed0d2a1312863f883cbba3b3b86b43da87f295f5"/>
+  <project name="vendor/delphi/android_audiocontrol-hal" path="vendor/aptiv/components/audiocontrol-hal" revision="37da101681e4de617b9b11805d0bad2d822d56b5"/>
   <project name="vendor/delphi/android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="b784d64cd32290e42eeb694185c314ca3ebfea45"/>
   <project name="vendor/delphi/bb_android_desip_key_handler" path="vendor/aptiv/components/bb_android_desip_key_handler" revision="dfd69f2244bd8c11f1af1acdcb7a4f74996b86b7"/>
   <project name="vendor/delphi/android_camera" path="vendor/aptiv/components/camera" revision="18918376c90d27d447e45a101cb693cae5db7cbf" />
   <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="08f50ae7b11e0a6351955e85b408163fb533d9a3"/>
-  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="80e287c9ef9812b55d137f95c5f8805ec2150731" />
-
+  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="80e287c9ef9812b55d137f95c5f8805ec2150731"/>
+  <project name="vendor/delphi/android_hmi_engineering-menu" path="vendor/aptiv/packages/apps/EngineeringMenu" revision="e94a6fbab91209cf594340d98457cdc959a74438"/>
   <!-- Android device vendor -->
-  <project name="vendor/delphi/android_vendor_interfaces" path="vendor/aptiv/interfaces" revision="d86ea50167a7c43a7c66c0758929f9eaca63b216"/>
-
-  <!-- Aptiv apps -->
-  <project name="vendor/delphi/android_hmi_engineering-menu" path="vendor/aptiv/packages/apps/EngineeringMenu" revision="e94a6fbab91209cf594340d98457cdc959a74438" />
-
-  <!-- Remove in volvocars manifest, used here for aptiv only compile -->
-  <project name="vendor/delphi/external/vcc_carconfig" path="vendor/aptiv/external/vcc_carconfig" revision="ba6ff270f52fd5a8d895ace092fa8c78b322860e" />
+  <project name="vendor/delphi/android_vendor_interfaces" path="vendor/aptiv/interfaces" revision="d86ea50167a7c43a7c66c0758929f9eaca63b216" />
 
   <!-- Common Delphi building blocks -->
   <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="a30eda256e984c95d9732e60308a9a428b0a8edc"/>
@@ -104,12 +98,13 @@
 
   <!-- Common Delphi building blocks that are delivered as binaries -->
   <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="770eb1f3f3d0b84bcb9c426cbd0ae4df3ee32697"/>
-  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="4556a72d033478d3eda037203e922f6ce1dcb653"/>
+  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="42381adab39173cbee95b20c6429948f61aa69e2"/>
   <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="5a21a1b63ab61a0ef0929e136658aed3b2131728"/>
-  <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="87d39d899c9ebc1766d78e3433313644da9821c1" />
+  <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="af9f18425ebbd355a352701f9b3e5f3d3eaea729"/>
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="80810898f1652ddd72d7f5abd6112a3448d78a2b"/>
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="a889271876b9361e477525707e7955316352e5af"/>
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="8ebbf1e41ee85377f2b09e0fa79a969e1a5c40b6"/>
 
   <!-- External dependencies -->
   <project name="vendor/delphi/AP_libsoci" path="external/libsoci" revision="71b35446828103012d4f3f6fa12e84011fe83148"/>
+  <project name="vendor/delphi/external/vcc_carconfig" path="vendor/aptiv/external/vcc_carconfig" revision="ba6ff270f52fd5a8d895ace092fa8c78b322860e"/>
 </manifest>
