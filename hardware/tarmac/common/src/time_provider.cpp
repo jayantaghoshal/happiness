@@ -41,7 +41,7 @@ std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddSingleShotTimer(std::c
 
 std::unique_ptr<TimerSubscriptionHandle> TimeProvider::AddPeriodicTimer(std::chrono::milliseconds time,
                                                                         std::function<void()> func) {
-    IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelay(time, std::move(func), true);
+    IDispatcher::JobId timer_id = dispatcher_->EnqueueWithDelayCyclic(time, std::move(func));
     auto rval = std::make_unique<SubscriptionHandle>(timer_id, dispatcher_);
     return std::unique_ptr<TimerSubscriptionHandle>(rval.release());  //"static_pointer_cast" for unique_ptr
 }

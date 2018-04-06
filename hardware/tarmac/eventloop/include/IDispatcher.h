@@ -41,8 +41,9 @@ class IDispatcher {
     // Enqueue a job for later execution. The returned value is an id that can be used in Cancel(...).
     // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
     virtual JobId EnqueueWithDelay(std::chrono::microseconds delay,
-                                   std::function<void()>&& f,
-                                   bool cyclic_timer = false) = 0;
+                                   std::function<void()>&& f) = 0;
+    virtual JobId EnqueueWithDelayCyclic(std::chrono::microseconds delay,
+                                   std::function<void()>&& f) = 0;
 
     // Cancel a job that has been enqueued with EnqueueWithDelay()
     // return value:
@@ -50,8 +51,9 @@ class IDispatcher {
     //    false -> the job couldn't be cancelled, it was probably already dispatched or previously cancelled
     virtual bool Cancel(JobId jobid) = 0;
 
-    // Add and remove file descriptor monitoring for available in-data
-    virtual void AddFd(int fd, std::function<void()>&& f, uint32_t events = EPOLLIN) = 0;
+    // Add and remove file descriptor monitoring for available in-data    
+    virtual void AddFd(int fd, std::function<void()>&& f) = 0;  // Uses EPOLLIN if no events are specified
+    virtual void AddFd(int fd, std::function<void()>&& f, uint32_t events) = 0;
     virtual void RemoveFd(int fd) = 0;
 
     // Consumes the event-queue synchronously forever until stop_condition is fulfilled.

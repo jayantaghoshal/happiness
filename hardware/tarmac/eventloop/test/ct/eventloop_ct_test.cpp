@@ -192,16 +192,15 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
     std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     std::vector<std::chrono::steady_clock::time_point> timer_fired;
 
-    auto subscriptio_handle = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
+    auto subscriptio_handle = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelayCyclic(
             std::chrono::microseconds(100000),
-            [&timer_fired, &p, &start]() {
+            [&timer_fired, &p]() {
                 timer_fired.push_back(std::chrono::steady_clock::now());
                 if (timer_fired.size() >= 5) {
                     ALOGI("Task setting future to ready");
                     p.set_value(1);
                 }
-            },
-            true);
+            });
 
     // Wait for 50ms and check that task wasn't dispatched immediatelly
     usleep(50000);
@@ -215,16 +214,16 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
     EXPECT_TRUE(status == std::future_status::ready);
 
     if (status == std::future_status::ready) {
-        EXPECT_EQ(timer_fired.size(), 5);
+        EXPECT_EQ(timer_fired.size(), 5LU);
         auto timepoint = start;
         for (const auto& timer_fired_at : timer_fired) {
-            ALOGI("Timer fired at: %ld", std::chrono::duration_cast<Ms>((timer_fired_at - start)));
+            ALOGI("Timer fired at: %lld", std::chrono::duration_cast<Ms>(timer_fired_at - start).count());
             auto duration = timer_fired_at - timepoint;
             timepoint = timepoint + duration;
             Ms d = std::chrono::duration_cast<Ms>(duration);
             EXPECT_NEAR(d.count(), Ms(100).count(), Ms(50).count());
-            ALOGI("Expected delay time is 0.1s, measured delay time is %ld, allowed margin of error is 0.01s",
-                  std::chrono::duration_cast<Ms>(duration));
+            ALOGI("Expected delay time is 0.1s, measured delay time is %lld, allowed margin of error is 0.01s",
+                  std::chrono::duration_cast<Ms>(duration).count());
         }
     }
     tarmac::eventloop::IDispatcher::GetDefaultDispatcher().Cancel(subscriptio_handle);
