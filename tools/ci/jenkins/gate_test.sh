@@ -32,5 +32,29 @@ artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
 tar xvf "${OUT_ARCHIVE}" || die "Could not extract out archive."
 rm "${OUT_ARCHIVE}"
 
+capability=""
+if [ "${JOB_NAME}" = "ihu_gate_test_flexray" ]
+then
+    capability="flexray"
+    export VECTOR_FDX_IP
+    VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
+    ping -c1 "${VECTOR_FDX_IP}"
+elif [ "${JOB_NAME}" = "ihu_gate_test_audio" ]
+then
+    capability="audio"
+elif [ "${JOB_NAME}" = "ihu_gate_test_apix" ]
+then
+    capability="apix"
+fi
+export capability
+
+
 # Run Unit and Component tests for vendor/volvocars
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --ci_reporting --update_ihu --abort-on-first-failure -c ihu-generic adb mp-serial vip-serial
+#shellcheck disable=SC2086
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
+    --plan=gate \
+    --ci_reporting \
+    --update_ihu \
+    --abort-on-first-failure \
+    -c ihu-generic adb mp-serial vip-serial ${capability} \
+    -o ${capability}
