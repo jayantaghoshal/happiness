@@ -11,9 +11,11 @@ cc_test {
         "test/ut/soundwrapper_ut.cpp",
         "test/ut/turnindicator_ut.cpp",
         "test/ut/parking_brake_ut.cpp",
+        "test/ut/beltreminder_ut.cpp",
         "src/soundwrapper.cpp",
         "src/turnindicator.cpp",
         "src/parking_brake.cpp",
+        "src/beltreminder.cpp",
     ],
 
     local_include_dirs: [

@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH:= $(call my-dir)
@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := \
 	src/soundwrapper.cpp \
 	src/turnindicator.cpp \
 	src/parking_brake.cpp \
+	src/beltreminder.cpp \
 
 LOCAL_SHARED_LIBRARIES := \
     libdataelements \
