@@ -6,8 +6,6 @@
   <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
-  <!-- External resources-->
-  <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93"/>
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="e8c54fde6d499f36f72393ab395cbdd104a92ff4" />
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="7ffacc78a3631167f46ef34651d16c3304504334" />
@@ -18,34 +16,17 @@
   <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="5cbe46fcd4327dadfa57bd25d2530735e38c50c0" />
 
   <!-- Volvo Cars partner apps -->
-
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="c469b468179ee55f340bde69ebe7fa3ce3a83c24" />
   <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="3d0cea1660f01b564919c5559046c7ee09363552" />
 
-
-  <!-- Boost-1.64.0 -->
+  <!-- External resources -->
+  <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93" />
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049" />
-
-  <!-- vSomeIP-2.10.10 -->
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="25294b78f752dd17c37beda7854da66b190e5d24" />
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/external/iproute2" />
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
-
-  <remove-project name="aosp/platform/packages/services/Car" />
-  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="1c15e7af3a7a63f11145b622dbb78b45a1f62de9" />
-
-  <remove-project name="aosp/platform/build" />
-  <project name="aosp/platform/build" path="build/make" revision="2f899f13a5aeb6b5bf7f8f2286d9bd6686526cbf">
-    <copyfile dest="Makefile" src="core/root.mk" />
-    <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk" />
-    <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default" />
-    <linkfile dest="build/core" src="core" />
-    <linkfile dest="build/envsetup.sh" src="envsetup.sh" />
-    <linkfile dest="build/target" src="target" />
-    <linkfile dest="build/tools" src="tools" />
-  </project>
 
   <remove-project name="aosp/platform/external/iptables" />
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
@@ -53,46 +34,30 @@
   <!-- Aptiv Overrides -->
   <remove-project name="vendor/delphi/android_patches" />
   <remove-project name="bsp/external/memtester" />
+  <!-- We use vendor/volvocars vcc_carconfig code, aptiv uses a snapshot, needed only if building kraken without our repo -->
+  <remove-project name="vendor/delphi/external/vcc_carconfig" />
 
+  <!-- Aptiv stopped including these two, but we like them -->
   <project name="bsp/external/libncurses" path="vendor/aptiv/external/libncurses" revision="26b32ea6a29de8e16fcc229d942eec3b33414454" />
   <project name="bsp/external/vim" path="vendor/aptiv/external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40" />
 
-  <!-- SWDL is often preintegrated here, please do not remove, only comment out when integrating full baselines (no patches in this repo) -->
-  <remove-project name="vendor/delphi/bb_reprogramming" />
-  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="15c5576b4f409b26eda862c0542dd425ba28de28" />
-
   <remove-project name="vendor/delphi/android_vehicle-hal" />
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="4bab3d91074416faa38fa7d7fedf57a5e612ef67" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="b582f49481172e09ffe276f51e57b7f3df8d8b4f" />
 
   <remove-project name="vendor/delphi/android_devices" />
-  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="af94d164914d3d571b35d8805d644a578c2b7ace">
+  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="af376a4718610e61b7c1dc5b2f9585676c022dcd">
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate" />
   </project>
 
-  <remove-project name="vendor/delphi/bb_android_hisip_desip" />
-  <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="f3c02096e2eeac6e485f40ef09c710b766cce22b" />
-
   <remove-project name="bsp/kernel/bxt" />
-  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="fd16cf508477f900e2d9409034fe94df00654ce1" />
+  <project name="bsp/kernel/bxt" path="kernel/bxt" revision="4e380a0e6ae215a15eaf4dd6c73bfe3be3b519d1" />
 
   <remove-project name="bsp/vendor/intel/external/open-avb" />
-  <project name="bsp/vendor/intel/external/open-avb" path="hardware/intel/external/open-avb" revision="6bfc97369e9063aebdd2937727ce0a3f8f790a11" />
-
+  <project name="bsp/vendor/intel/external/open-avb" path="hardware/intel/external/open-avb" revision="0548339676b89f47d0b03ebd1f7767704149e532" />
 
   <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
 
-  <!-- Patch received from kok.fatt.chan@intel.com by email to get gdbserver working.
-        Info from ravisankar.madasamy@intel.com (2018-03-06): "Patches are integrated in mainline and you will receive it officially in our next external release on WW11."
-   -->
-  <remove-project name="aosp/platform/prebuilts/misc" />
-  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="40ffd70b5ec696f26b14654ece01c2f9cdc08ff3" />
-
-
-  <!-- Revert patch in bionic by intel
-       From yong.yao@intel.com: 2018-03-28
-          The patch in bionic: it should be the mistake that someone forgot to remove it.
-          I just tested it and it could pass the build without this change, so you can remove it safely and directly.
-  -->
+  <!-- ww11 overrides that should have been removed by Intel but are still there -->
   <remove-project name="aosp/platform/bionic" />
-  <project name="aosp/platform/bionic" path="bionic" revision="8277f4d9b31742b0795b829205099894b2848891" />
+  <project name="aosp/platform/bionic" path="bionic" revision="36928820ca1fe52aa7c5ec9c7bc3146c9320f2ad" />
 </manifest>
