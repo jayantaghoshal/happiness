@@ -59,7 +59,7 @@ set +e
 time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/"${plan}" --skip-all-system-status-check --skip-preconditions #--abi x86_64
 
 # Upload results to MongoDB
-python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/handle_result/store_vts_results.py ./out/host/linux-x86/vts/android-vts/results/
+python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/handle_result/store_vts_result.py ./out/host/linux-x86/vts/android-vts/results/
 
 # Compare to last run here and fail if new errors are found
 mkdir old
