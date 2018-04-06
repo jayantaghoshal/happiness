@@ -8,7 +8,7 @@
   <!-- Volvo Cars -->
   <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD"/>
   <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
-  <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
+  <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- External resources-->
   <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93"/>
