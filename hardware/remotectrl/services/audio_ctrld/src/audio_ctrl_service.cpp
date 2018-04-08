@@ -53,6 +53,7 @@ Return<void> AudioCtrlService::registerAudioControlHandler(
 
 Return<void> AudioCtrlService::unregisterAudioControlHandler(
         const ::android::sp<hidl_remotectrl::ISystemRemoteAudioCtrl>& handler) {
+    ALOGD("%s", __FUNCTION__);
     {
         std::lock_guard<std::mutex> lock(guard_);
         if (system_service_handler_ != handler) {

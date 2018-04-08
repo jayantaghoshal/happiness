@@ -1,0 +1,13 @@
+# Copyright 2017-2018 Volvo Car Corporation
+# This file is covered by LICENSE file in the root of this project
+
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := vsomeip_client.json
+LOCAL_VENDOR_MODULE := true
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES := vsomeip_client.json
+LOCAL_MULTILIB := 64
+LOCAL_COMPATIBILITY_SUITE := vts
+include $(BUILD_PREBUILT)

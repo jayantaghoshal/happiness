@@ -1,0 +1,23 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_static {
+    name: "libremotectrl_client_base",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libvsomeip_2_10_10",
+        "libvsomeip_cfg_2_10_10",
+    ],
+
+    export_include_dirs: [
+        "include",
+    ],
+}
