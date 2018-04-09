@@ -298,7 +298,8 @@ SoundWrapper* SoundWrapper::instance() {
 SoundWrapper::~SoundWrapper() {
     ALOGD("%s %d", __FUNCTION__, initialized.load());
     if (initialized.load()) {
-        am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
+        auto result = am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
+        ALOGW_IF(!result.isOk(), "Failed to unsubscribe IAudioManagerCallback, error=%s", result.description().c_str());
     }
 
     initialized = false;
