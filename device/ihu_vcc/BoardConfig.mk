@@ -5,7 +5,6 @@
 # SELinux policies
 #############################################################
 BOARD_SEPOLICY_DIRS += \
-    $(VCC_DEVICE_PATH)/sepolicy/capability_violators \
     $(VCC_DEVICE_PATH)/sepolicy/vcc_hal_decl \
     $(VCC_DEVICE_PATH)/sepolicy/vcc
 

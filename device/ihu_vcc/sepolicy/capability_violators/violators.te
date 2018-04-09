@@ -1,8 +1,0 @@
-neverallow { domain
-    -iptables-vcc
-    -ipcbd
-    -netboyd
-    -netmand
-    -ip-vcc
-    -cloudd
-} self:capability net_raw;

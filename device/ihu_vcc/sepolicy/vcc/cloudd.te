@@ -6,7 +6,7 @@ init_daemon_domain(cloudd)
 net_domain(cloudd)
 
 allow cloudd self:capability2 wake_alarm;
-allow cloudd self:capability net_raw;
+#allow cloudd self:capability net_raw;
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(cloudd)
