@@ -368,7 +368,7 @@ TEST_F(IplmTestFixture, RegisterUnRegisterLSC) {
     usleep(1000000 * 2);
 
     // Shouldnt have increased counter since we have unregistered the LSC
-    EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
+    EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onResourceGroupStatusCallbackCounterBefore);
     EXPECT_TRUE(onNodeStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
 
     ALOGD("- RegisterUnRegisterLSC");
