@@ -46,6 +46,8 @@ PRODUCT_PACKAGES += \
     LcfService \
     timezones.db \
     libjsqlite \
+    ConManGw \
+    ConManRelay \
 
 ##############################################################
 # SWDL stuff

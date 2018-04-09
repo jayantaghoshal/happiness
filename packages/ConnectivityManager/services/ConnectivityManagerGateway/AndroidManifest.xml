@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.connectivitymanager.gateway"
+    android:sharedUserId="android.uid.system"
+    android:exported="true"
+    coreApp="true">
+
+    <application
+        android:persistent="true"
+        android:name=".MainApplication">
+        <service
+            android:exported="true"
+            android:name=".GateWayService">
+            <intent-filter>
+                <action android:name="com.volvocars.connectivitymanager.Gateway" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
