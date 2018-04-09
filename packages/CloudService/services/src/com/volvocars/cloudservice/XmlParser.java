@@ -368,6 +368,15 @@ public final class XmlParser {
                 } else if (tag.equals("software_product_id")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
+                } else if (tag.equals("software_product_version")) {
+                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    SkipElement(parser);
+                } else if (tag.equals("status")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.status = SoftwareAssignment.stringToStatus(ParseString(tag, parser));
+                } else if (tag.equals("installation_order")) {
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.installationOrder = ParseInstallationOrderElement(parser);
                 } else if (tag.equals("type")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
@@ -380,7 +389,7 @@ public final class XmlParser {
                 } else if (tag.equals("estimated_installation_time")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if (tag.equals("ommission_uri")) {
+                } else if (tag.equals("commission_uri")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
                 } else {
@@ -521,10 +530,7 @@ public final class XmlParser {
                 } else if (tag.equals("installation_report_uri")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     installationOrder.installationReportUri = ParseString(tag, parser);
-                } else if (tag.equals("software")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
-                    installationOrder.software = ParseSoftwareElement(parser);
-                }   else {
+                }  else {
                     Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }

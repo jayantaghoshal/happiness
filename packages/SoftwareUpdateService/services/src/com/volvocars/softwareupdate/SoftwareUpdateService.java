@@ -43,6 +43,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
 import com.volvocars.cloudservice.Status;
+import com.volvocars.cloudservice.Query;
 
 /**
 *
@@ -132,10 +133,10 @@ public class SoftwareUpdateService extends Service {
     public ArrayList<Setting> GetSettings() {
         return settings;
     }
-    public void GetSoftwareAssignmentList() {
+    public void GetSoftwareAssignment(Query query) {
         if (swapi != null) {
             try {
-                swapi.GetSoftwareAssigmentList(swapiCallback);
+                swapi.GetSoftwareAssignment(query, swapiCallback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: RemoteException [" + e.getMessage() + "]");
             }
@@ -306,11 +307,11 @@ public class SoftwareUpdateService extends Service {
         for (InstallationOrder order : installationOrders) {
             boolean found = false;
             for (SoftwareInformation information : softwareInformationList) {
-                if (order.software.uuid.equals(information.softwareId)) {
+                /*if (order.software.uuid.equals(information.softwareId)) { TODO: FIX THIS
                     found = true;
                     information.AddInstallationOrder(order);
                     break;
-                }
+                }*/
             }
             if (!found) {
                 softwareInformationList.add(new SoftwareInformation(order));

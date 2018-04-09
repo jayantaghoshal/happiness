@@ -59,11 +59,11 @@ public class SoftwareInformation implements Parcelable {
         this.description = assignment.description;
     }
 
-    public SoftwareInformation(InstallationOrder installationOrder) {
+    public SoftwareInformation(InstallationOrder installationOrder) { //TODO: this needs to be re-done!
         this.softwareState = SoftwareState.DOWNLOAD_PENDING;
-        this.softwareId = installationOrder.software.uuid;
-        this.name = installationOrder.software.name;
-        this.description = installationOrder.software.description;
+        //this.softwareId = installationOrder.;
+        //this.name = installationOrder.software.name;
+        //this.description = installationOrder.software.description;
 
         this.installationId = installationOrder.uuid;
         this.installationStatus = installationOrder.status;

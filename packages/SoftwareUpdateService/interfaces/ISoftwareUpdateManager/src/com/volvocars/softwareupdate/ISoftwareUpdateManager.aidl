@@ -2,6 +2,7 @@ package com.volvocars.softwareupdate;
 
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
 import com.volvocars.softwareupdate.Setting;
+import com.volvocars.cloudservice.Query;
 
 oneway interface ISoftwareUpdateManager {
     /**
@@ -22,9 +23,9 @@ oneway interface ISoftwareUpdateManager {
     void GetSettings(in ISoftwareUpdateManagerCallback callback);
 
     /**
-     * Request the list of available Software Assignments.
-     */
-    void GetSoftwareAssignments();
+    * Request the list of available Software Assignments with specified query parameters
+    */
+    void GetSoftwareAssignment(in Query query);
 
     /**
      * Request to commission a SoftwareAssignment

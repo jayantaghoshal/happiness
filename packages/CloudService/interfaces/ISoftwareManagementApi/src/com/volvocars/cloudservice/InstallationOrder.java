@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -16,7 +16,6 @@ public class InstallationOrder implements Parcelable {
     public String downloadsUri = "";
     public String installNotificationsUri = "";
     public String installationReportUri = "";
-    public SoftwareAssignment software = null;
 
     public static final Creator<InstallationOrder> CREATOR = new Creator<InstallationOrder>() {
         @Override
@@ -46,14 +45,12 @@ public class InstallationOrder implements Parcelable {
         dest.writeString(downloadsUri);
         dest.writeString(installNotificationsUri);
         dest.writeString(installationReportUri);
-        dest.writeTypedObject(software, 0);
     }
 
     @Override
     public String toString() {
         String string = uuid + "\n" + status + "\n" + createdBy + "\n" + created + "\n" + downloadsUri + "\n"
-                + installNotificationsUri + "\n" + installationReportUri + "\n" + software.uuid + "\n" + software.name
-                + "\n" + software.description;
+                + installNotificationsUri + "\n" + installationReportUri;
         return string;
     }
 
@@ -65,7 +62,6 @@ public class InstallationOrder implements Parcelable {
         downloadsUri = in.readString();
         installNotificationsUri = in.readString();
         installationReportUri = in.readString();
-        software = in.readTypedObject(SoftwareAssignment.CREATOR);
     }
 
     @Override

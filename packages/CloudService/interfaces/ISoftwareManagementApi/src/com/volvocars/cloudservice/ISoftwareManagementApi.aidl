@@ -5,16 +5,19 @@ import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationReport;
 import com.volvocars.cloudservice.InstallNotification;
+import com.volvocars.cloudservice.Query;
 
 /**
  * An interface to access all the Software Management features.
  */
 oneway interface ISoftwareManagementApi {
+
     /**
-     * Get a the list of available assignments
+     * Get available assignments with specified query parameters
+     * @param query Query
      * @param callback
      */
-    void GetSoftwareAssigmentList(in ISoftwareManagementApiCallback callback);
+    void GetSoftwareAssignment(in Query query, in ISoftwareManagementApiCallback callback);
 
     /**
      * Issue a commission of an SoftwareAssignment.

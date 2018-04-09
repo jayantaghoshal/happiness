@@ -16,6 +16,11 @@
                 android:theme="@style/AppTheme"
                 android:parentActivityName=".SoftwareUpdateApp">
         </activity>
+        <activity
+                android:name=".AvailableAssignmentsActivity"
+                android:theme="@style/AppTheme"
+                android:parentActivityName=".SoftwareUpdateApp">
+        </activity>
         <uses-library android:name="android.test.runner" />
     </application>
     <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"

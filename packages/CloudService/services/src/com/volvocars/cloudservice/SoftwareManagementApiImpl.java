@@ -105,7 +105,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private SwListResponse<SoftwareAssignment> FetchSoftwareAssignmentsList() {
+    private SwListResponse<SoftwareAssignment> FetchSoftwareAssignment(Query query) {
         Log.v(LOG_TAG, "FetchSoftwareAssignmentsList");
         // Build request
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
@@ -123,7 +123,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         try {
             // Send request
             Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.available_software_assignments);
-            Response response = cloudConnection.doGetRequest(uris.available_software_assignments, headers, timeout);
+            Response response = null;
+
+            response = cloudConnection.doGetRequest(uris.available_software_assignments + query.buildQuery(), headers,
+                    timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -481,8 +484,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: /installNotification" + "and query: ?installation_order_id=" + installationOrderId);
-            Response response = cloudConnection.doGetRequest("/installNotification/?installation_order_id=" + installationOrderId, headers, timeout);
+            Log.v(LOG_TAG, "Calling doGetRequest with uri: /installNotification" + "and query: ?installation_order_id="
+                    + installationOrderId);
+            Response response = cloudConnection.doGetRequest(
+                    "/installNotification/?installation_order_id=" + installationOrderId, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -503,10 +508,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             notificationResponse.code = response.httpResponse;
 
         } catch (XmlPullParserException ex) {
-             //Something went bananas with the parsing.. What do?
+            //Something went bananas with the parsing.. What do?
             Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
-             //Something went bananas with the streams.. What do?
+            //Something went bananas with the streams.. What do?
             Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
@@ -514,8 +519,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private int postInstallationReport(InstallationReport report) {
-        Log.v(LOG_TAG,
-                "report: [installationOrderId: " + report.installationOrderId + ", reportReason: " + report.reportReason.toString() + "]");
+        Log.v(LOG_TAG, "report: [installationOrderId: " + report.installationOrderId + ", reportReason: "
+                + report.reportReason.toString() + "]");
 
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -541,17 +546,16 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     /**
-     * Get a the list of available assignments of a specific type
+     * Get available assignments with specified query parameters
+     * @param queryParams Query parameters
      * @param callback
      */
-    @Override
-    public void GetSoftwareAssigmentList(ISoftwareManagementApiCallback callback) throws RemoteException {
-
+    public void GetSoftwareAssignment(Query query, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (!softwareManagementAvailable) {
             callback.SoftwareAssignmentList(-1, null);
         }
 
-        SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignmentsList();
+        SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query);
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 
@@ -630,13 +634,15 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      * @param installationReport Report to be posted
      * @param callback           Callback to be called when the status of the download changes
      */
-    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
         if (!softwareManagementAvailable) {
             callback.InstallationReportStatus(-1, installationReport.installationOrderId);
             return;
         }
 
-        callback.InstallationReportStatus(postInstallationReport(installationReport), installationReport.installationOrderId);
+        callback.InstallationReportStatus(postInstallationReport(installationReport),
+                installationReport.installationOrderId);
     }
 
     /**
@@ -660,7 +666,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     * @param installationOrderId Installation order id
     * @param callback            Callback to be called
     */
-    public void GetInstallNotification(String installationOrderId, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void GetInstallNotification(String installationOrderId, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
         if (!softwareManagementAvailable) {
             callback.InstallNotification(-1, null);
             return;

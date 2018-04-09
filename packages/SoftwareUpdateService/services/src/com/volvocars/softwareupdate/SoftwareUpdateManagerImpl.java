@@ -11,6 +11,7 @@ import android.os.RemoteException;
 
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
+import com.volvocars.cloudservice.Query;
 import com.volvocars.softwareupdate.ISoftwareUpdateManager;
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
 
@@ -110,8 +111,8 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void GetSoftwareAssignments() {
-        service.GetSoftwareAssignmentList();
+    public void GetSoftwareAssignment(Query query) {
+        service.GetSoftwareAssignment(query);
     }
 
     @Override

@@ -30,7 +30,7 @@
     "pending_installations": "/softwaremanagement-1/pendingInstallations"
   },
 
-  "availableUpdates": {
+   "availableUpdates": {
     "@": {
       "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_updates",
       "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
@@ -39,16 +39,17 @@
     "this": "availableupdates",
     "software": [
       {
-        "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+        "id": "10",
         "name": "Security patch for IHU",
         "short_description": "Solves a security problem",
         "long_description": {
           "textblock": "An interesting and informative text describing the patch"
         },
-        "size": "366.4"
+        "size": "366.4",
+        "status": "COMMISSIONABLE"
       },
       {
-        "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
+        "id": "20",
         "name": "Spotify",
         "short_description": "Streaming your music",
         "long_description": {
@@ -59,7 +60,8 @@
           ],
           "linefeed": {}
         },
-        "size": "366.4"
+        "size": "366.4",
+        "status": "COMMISSIONABLE"
       }
     ]
   },

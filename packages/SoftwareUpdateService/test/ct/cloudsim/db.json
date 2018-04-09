@@ -7,7 +7,6 @@
     "host": "localhost",
     "port": 3000
   },
-
   "features-1": {
     "this": "features-1",
     "feature": [
@@ -19,7 +18,6 @@
       }
     ]
   },
-
   "softwaremanagement-1": {
     "this": "softwaremanagement-1",
     "available_updates": "/softwaremanagement-1/availableUpdates",
@@ -29,7 +27,6 @@
     "delete_notification": "/softwaremanagement-1/deleteNotification",
     "pending_installations": "/softwaremanagement-1/pendingInstallations"
   },
-
   "availableUpdates": {
     "@": {
       "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_updates",
@@ -39,16 +36,17 @@
     "this": "availableupdates",
     "software": [
       {
-        "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+        "id": "10",
         "name": "Security patch for IHU",
         "short_description": "Solves a security problem",
         "long_description": {
           "textblock": "An interesting and informative text describing the patch"
         },
-        "size": "366.4"
+        "size": "366.4",
+        "status": "COMMISSIONABLE"
       },
       {
-        "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
+        "id": "20",
         "name": "Spotify",
         "short_description": "Streaming your music",
         "long_description": {
@@ -59,7 +57,8 @@
           ],
           "linefeed": {}
         },
-        "size": "366.4"
+        "size": "366.4",
+        "status": "COMMISSIONABLE"
       }
     ]
   },
@@ -72,33 +71,31 @@
     "this": "pendingInstallations",
     "installation_order": []
   },
-
   "commission": {
     "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
     "client_id": "FTKR1EDXBPB10452",
     "reasen": "USER"
   },
-
   "preDownloadInfo": [
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
-      "downloads":
-        {
-          "file": ["/test/helloworld.txt"]
-        }
+      "downloads": {
+        "file": [
+          "/test/helloworld.txt"
+        ]
+      }
     },
     {
       "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
-      "downloads":
-      {
-        "file": ["/test/helloworld.txt", "/test/helloworld2.txt"]
+      "downloads": {
+        "file": [
+          "/test/helloworld.txt",
+          "/test/helloworld2.txt"
+        ]
       }
     }
   ],
-
   "downloads": [],
-
   "installNotification": [],
-
   "installationReport": []
 }

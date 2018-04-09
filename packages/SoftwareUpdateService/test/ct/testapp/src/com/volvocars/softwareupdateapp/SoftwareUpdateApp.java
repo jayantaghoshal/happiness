@@ -25,7 +25,6 @@ import com.volvocars.softwareupdate.*;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.*;
 import java.util.*;
-//import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -137,23 +136,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             case R.id.getAvailableItem:
                 try {
                     Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
-                    softwareUpdateManager.GetSoftwareAssignments();
-                    Toast.makeText(context, "Sending GetSoftwareAssignments", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
+                    startActivity(intent);
                     return true;
                 } catch (Exception e) {
                     //TODO: handle exception
                 }
 
-            case R.id.getCommissionedItem:
-                try {
-                    Log.v(LOG_TAG, "Sending GetPendingInstallations");
-                    softwareUpdateManager.GetPendingInstallations();
-                    Toast.makeText(context, "Sending GetPendingInstallations", Toast.LENGTH_SHORT).show();
-                    return true;
-                } catch (Exception e) {
-                    //TODO: handle exception
-                }
-                return true;
             default:
             }
             return false;
@@ -174,7 +163,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ;
 
         swInfos = new ArrayList<SoftwareInformation>();
         adapter = new SoftwareInformationAdapter(this, swInfos, this);

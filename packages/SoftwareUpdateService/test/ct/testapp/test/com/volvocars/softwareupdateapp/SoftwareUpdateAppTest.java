@@ -47,9 +47,8 @@ public class SoftwareUpdateAppTest {
 
     private static final String CLASS_BUTTON = "android.widget.Button";
     private static final String CLASS_TEXT_VIEW = "android.widget.TextView";
-    private static final String CLASS_FLOATING_ACTION_BUTTON = "android.widget.ImageButton";
     private static final String CLASS_RECYCLER_VIEW = "android.support.v7.widget.RecyclerView";
-    private static final String CLASS_TOOLBAR = "android.support.v7.widget.Toolbar";
+    private static final String CLASS_CHECKBOX = "android.widget.CheckBox";
 
 
     @Before
@@ -81,6 +80,19 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         mDevice.findObject(textSelector).click();
+
+        BySelector frame = By.clazz("android.widget.FrameLayout").res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
+
+        BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(send).click();
+
+        BySelector home = By.clazz("android.widget.ImageButton").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(home), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(home).click();
 
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
@@ -114,6 +126,20 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         mDevice.findObject(textSelector).click();
+
+        BySelector frame = By.clazz("android.widget.FrameLayout").res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
+
+        BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(send).click();
+
+        BySelector home = By.clazz("android.widget.ImageButton").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(home), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(home).click();
+
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
@@ -141,6 +167,8 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
     }
 
+/* Will fail due to changes with GetAvailableAssignments (need to update commission resource to get "correct flow").
+   Enable once this is fixed! */
     @Test
     public void happyGetPendingInstallations() {
         Context context = InstrumentationRegistry.getContext();
