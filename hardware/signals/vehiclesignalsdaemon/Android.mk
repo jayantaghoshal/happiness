@@ -32,7 +32,8 @@ LOCAL_SHARED_LIBRARIES := \
     libdataelements \
     libhidlbase \
     libhidltransport \
-    libdesip
+    libdesip \
+    libtraceclient
 
 include $(BUILD_EXECUTABLE)
 

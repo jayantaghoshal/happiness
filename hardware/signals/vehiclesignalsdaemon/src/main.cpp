@@ -13,6 +13,13 @@
 #include <thread>
 #include "desip_handler.h"
 
+
+// DO NOT CHANGE THE ORDER!
+#define DTS_PRIVATE_MODEL Tr_Declare_App(VehicleSignalsDaemon) 
+#include "DTS_GenericPrivateModel.h"
+#include "DTS_DeclarePrivateModel.h"
+// END OF: DO NOT CHANGE THE ORDER!
+
 #undef LOG_TAG
 #define LOG_TAG "VSD"
 

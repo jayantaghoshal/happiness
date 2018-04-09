@@ -37,7 +37,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libhidltransport \
 	libutils \
 	libbinder \
-	libhwbinder
+	libhwbinder \
+	libtraceclient
 
 LOCAL_STATIC_LIBRARIES += \
 	libccparameterlistgen
