@@ -2,7 +2,7 @@
 type carconfig-updater, domain;
 type carconfig-updater_exec, exec_type, file_type, vendor_file_type;
 type carconfig_config_files, file_type;
-type carconfig_default_config_file, file_type;
+type carconfig_default_config_file, file_type, vendor_file_type;
 
 init_daemon_domain(carconfig-updater)
 allow carconfig-updater carconfig_config_files:dir { rw_dir_perms };
