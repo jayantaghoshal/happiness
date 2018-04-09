@@ -29,10 +29,10 @@ fi
 # Download from Artifactory
 if [ "${plan}" = "staging" ]
 then
-    artifactory pull "${UPSTREAM_JOB}" "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+    artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
 elif [ "${plan}" = "incubator" ]
 then
-    artifactory pull-latest "${UPSTREAM_JOB}" out.tgz || die "artifactory pull failed"
+    artifactory pull-latest "${UPSTREAM_JOB_JOBNAME}" out.tgz || die "artifactory pull failed"
 fi
 
 # Unpack out.tgz
