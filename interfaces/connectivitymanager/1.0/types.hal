@@ -1,0 +1,3 @@
+package vendor.volvocars.hardware.connectivitymanager@1.0;
+
+enum WifiStationMode: uint8_t {UNKNOWN, AP_MODE, STATION_MODE};

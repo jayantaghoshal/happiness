@@ -1,0 +1,13 @@
+package vendor.volvocars.hardware.connectivitymanager@1.0;
+
+interface ISystemConnectivityManager
+{
+    //////////    WIFI FUNCTIONALITY CONTROL     //////////
+
+    /**
+     * Update the clienf of the Station Mode
+     */
+    oneway updateWifiStationMode(WifiStationMode mode);
+
+    ////////// END OF WIFI FUNCTIONALITY CONTROL //////////
+};

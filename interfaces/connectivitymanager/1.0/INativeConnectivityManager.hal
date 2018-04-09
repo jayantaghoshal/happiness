@@ -1,0 +1,39 @@
+package vendor.volvocars.hardware.connectivitymanager@1.0;
+
+import ISystemConnectivityManager;
+
+interface INativeConnectivityManager
+{
+
+    //////////    "FRAMEWORK STUFF"    //////////
+    /**
+     * Provide ISystemConnectivityManager handler to native daemon
+     * @param handler
+     */
+    registerConnectivityManagerHandler(ISystemConnectivityManager handler);
+
+    /**
+     * Unregister ISystemConnectivityManager handler to native daemon
+     * @param handler
+     */
+    unregisterConnectivityManagerHandler(ISystemConnectivityManager handler);
+
+    //////////    END OF "FRAMEWORK STUFF"    //////////
+
+    //////////    WIFI FUNCTIONALITY CONTROL     //////////
+
+    /**
+     * Request a broadcast of the current station mode
+     * @return True if request was successfully sent, false otherwise
+     */
+    requestWifiStationMode() generates (bool status);
+
+    /**
+     * Request change of station mode
+     * @param mode The requested mode
+     * @return True if request was successfully sent, false otherwise
+     */
+     requestWifiStationModeChange(WifiStationMode mode) generates (bool status);
+
+    ////////// END OF WIFI FUNCTIONALITY CONTROL //////////
+};
