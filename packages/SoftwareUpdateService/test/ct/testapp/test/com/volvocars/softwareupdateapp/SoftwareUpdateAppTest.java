@@ -163,6 +163,7 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         mDevice.findObject(textSelector).click();
+
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
@@ -183,19 +184,23 @@ public class SoftwareUpdateAppTest {
 
         mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
-        BySelector actionFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/actionFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(actionFab), LAUNCH_TIMEOUT));
+        BySelector toolbar = By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar").enabled(true);
+        assertTrue(mDevice.wait(Until.hasObject(toolbar), LAUNCH_TIMEOUT));
 
-        mDevice.findObject(actionFab).click();
+        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/simSignals");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-        BySelector getCommissionedFab = By.clazz(CLASS_FLOATING_ACTION_BUTTON).res("com.volvocars.softwareupdateapp:id/getCommissionedFab").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(getCommissionedFab), LAUNCH_TIMEOUT));
-        mDevice.findObject(getCommissionedFab).click();
+        mDevice.findObject(textSelector).click();
+
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get commissioned assignments");
+        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+        mDevice.findObject(textSelector).click();
 
         BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
         assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
-        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Security patch for IHU");
+        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Security patch for IHU");
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
         textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOADED");
