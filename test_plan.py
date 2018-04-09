@@ -33,11 +33,6 @@ test_plan_gate = [
 ]
 
 test_plan_hourly = test_plan_gate + [
-    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}), #Robin Touche
-             reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
-             jira_issue="PSS370-15982",
-             deadline="2018-04-28"
-    ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
     VTSTest("vendor/volvocars/hardware/pac/evs/hardware/test/ut",                   standard_caps), #VtsHalPacEvsHardware, Janne Petkovski
     VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
@@ -68,6 +63,11 @@ test_plan_incubator_hourly = [
 #This is for unstable tests that does not need to be run often
 test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
+    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}), #Robin Touche
+             reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
+             jira_issue="PSS370-15982",
+             deadline="2018-04-28"
+    ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
