@@ -10,15 +10,7 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_PROPRIETARY_MODULE := true
 LOCAL_INIT_RC := soundnotifications.rc
 
-LOCAL_SRC_FILES := \
-	src/soundnotifications.cpp \
-	src/soundwrapper.cpp \
-	src/turnindicator.cpp \
-	src/parking_brake.cpp \
-	src/beltreminder.cpp \
-
 LOCAL_SHARED_LIBRARIES := \
-    libdataelements \
     libbase \
     libhidlbase \
     libhidltransport \
@@ -29,10 +21,12 @@ LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libbinder \
     libtraceclient \
+    libdataelements \
     vendor.delphi.audiomanager@1.0
 
 LOCAL_STATIC_LIBRARIES := \
-    libaudiotable
+    libsoundnotifications \
+    libaudiotable  \
 
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 

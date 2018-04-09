@@ -48,7 +48,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/uds_diagnostics_test",        standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
-    VTSTest("vendor/volvocars/hardware/soundnotifications",                         standard_caps), #Uguudei
+    VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
 ]
 
 test_plan_nightly = test_plan_hourly + [

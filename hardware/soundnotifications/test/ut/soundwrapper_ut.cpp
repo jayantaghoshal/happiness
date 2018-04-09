@@ -5,8 +5,8 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <inttypes.h>
 #include <log/log.h>
+#include <cinttypes>
 #include <iostream>
 
 #include <soundwrapper.h>
@@ -23,7 +23,7 @@ class SoundWrapperUT : public Test {
   public:
     ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
                                                     int32_t soundComp,
-                                                    AudioManagerMock::playSound_cb _hidl_cb) {
+                                                    const AudioManagerMock::playSound_cb& _hidl_cb) {
         ALOGI("AudioManagerMock::mockPlaySound: %i %i", soundType, soundComp);
         connectionID++;
         bool error = false;
@@ -31,7 +31,7 @@ class SoundWrapperUT : public Test {
         try {
             AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
                                       static_cast<AudioTable::SoundComponent>(soundComp));
-        } catch (std::invalid_argument iaex) {
+        } catch (std::invalid_argument& iaex) {
             ALOGW("AudioManagerMock::mockPlaySound. Invalid combination of Type and Component");
             error = true;
         }
@@ -59,13 +59,13 @@ class SoundWrapperUT : public Test {
 
     void SetUp() override {
         SoundWrapper::clearAll();
-        ON_CALL(*am_service.get(), playSound(_, _, _)).WillByDefault(Invoke(this, &SoundWrapperUT::mockPlaySound));
-        ON_CALL(*am_service.get(), stopSound(_)).WillByDefault(Invoke(this, &SoundWrapperUT::mockStopSound));
+        ON_CALL(*am_service, playSound(_, _, _)).WillByDefault(Invoke(this, &SoundWrapperUT::mockPlaySound));
+        ON_CALL(*am_service, stopSound(_)).WillByDefault(Invoke(this, &SoundWrapperUT::mockStopSound));
     }
 
     void TearDown() override {}
 
-    virtual ~SoundWrapperUT() override = default;
+    ~SoundWrapperUT() override = default;
     static SoundWrapper* swrapper;
     static ::android::sp<AudioManagerMock> am_service;
     int64_t connectionID{0};

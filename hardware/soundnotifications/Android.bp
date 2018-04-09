@@ -3,28 +3,56 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-cc_test {
-    name: "VtsSoundNotificationTest",
+cc_library_static {
+    name: "libsoundnotifications",
     defaults: ["volvocars_cc_defaults"],
 
     srcs: [
-        "test/ut/soundwrapper_ut.cpp",
-        "test/ut/turnindicator_ut.cpp",
-        "test/ut/parking_brake_ut.cpp",
-        "test/ut/beltreminder_ut.cpp",
-        "src/soundwrapper.cpp",
-        "src/turnindicator.cpp",
-        "src/parking_brake.cpp",
-        "src/beltreminder.cpp",
+        "src/*.cpp",
     ],
 
     local_include_dirs: [
+        "src",
     ],
 
     include_dirs: [
         "vendor/aptiv/components/audio/libaudiotable/include",
-        "vendor/volvocars/hardware/soundnotifications/test/ut",
-        "vendor/volvocars/hardware/soundnotifications/src",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libbinder",
+        "libcutils",
+        "libutils",
+        "libtarmac",
+        "libdataelements",
+        "vendor.delphi.audiomanager@1.0",
+    ],
+}
+
+// Need a seperate item for unit test for enable unit test specific functions when compiling with -DUNIT_TEST
+cc_library_static {
+    name: "libsoundnotifications_unittest",
+    defaults: ["volvocars_cc_defaults"],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    local_include_dirs: [
+        "src",
+    ],
+
+    include_dirs: [
+        "vendor/aptiv/components/audio/libaudiotable/include",
     ],
 
     cppflags: [
@@ -48,5 +76,11 @@ cc_test {
         "libgmock",
         "libdataelements_unittest",
     ],
-    test_suites: ["vts"],
+    export_include_dirs: [
+        "src",
+    ],
 }
+
+subdirs = [
+    "*",
+]

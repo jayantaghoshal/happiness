@@ -6,12 +6,13 @@
 #include <cutils/log.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <inttypes.h>
+#include <cinttypes>
 #include <iostream>
 
 #include <soundwrapper.h>
 #include "audiomanagermock.h"
 #include "parking_brake.h"
+#include "ut_common.h"
 
 // DEInjector
 #include <ECD_dataelement.h>
@@ -27,58 +28,7 @@ using namespace testing;
 Unit test for EPB REQPROD:218654/MAIN;3	Audio request for EPB warning
 */
 
-class ParkingBrakeTest : public ::testing::Test {
-  public:
-    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
-                                                    int32_t soundComp,
-                                                    AudioManagerMock::playSound_cb _hidl_cb) {
-        ALOGI("AudioManagerMock::mockPlaySound: %i %i", soundType, soundComp);
-        connectionID++;
-        bool error = false;
-
-        try {
-            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
-                                      static_cast<AudioTable::SoundComponent>(soundComp));
-        } catch (std::invalid_argument& iaex) {
-            ALOGW("AudioManagerMock::mockPlaySound. Invalid combination of Type and Component");
-            error = true;
-        }
-
-        if (!error) {
-            _hidl_cb(AMStatus::OK, connectionID);
-            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
-        } else {
-            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
-        }
-        return android::hardware::Status::fromStatusT(android::OK);
-    }
-
-    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
-        ALOGI("AudioManagerMock::mockStopSound. connection ID: %" PRId64, connectionId);
-        swrapper->onDisconnected(static_cast<uint32_t>(connectionID));
-        return AMStatus::OK;
-    }
-
-    static void SetUpTestCase() {
-        swrapper = SoundWrapper::instance();
-        am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
-        swrapper->init(am_service);
-    }
-
-    void SetUp() override {
-        SoundWrapper::clearAll();
-        DataElementFramework::instance().reset();
-        ON_CALL(*am_service.get(), playSound(_, _, _)).WillByDefault(Invoke(this, &ParkingBrakeTest::mockPlaySound));
-        ON_CALL(*am_service.get(), stopSound(_)).WillByDefault(Invoke(this, &ParkingBrakeTest::mockStopSound));
-    }
-    void TearDown() override {}
-    static SoundWrapper* swrapper;
-    static ::android::sp<AudioManagerMock> am_service;
-    int64_t connectionID{0};
-};
-
-::android::sp<AudioManagerMock> ParkingBrakeTest::am_service = nullptr;
-SoundWrapper* ParkingBrakeTest::swrapper = nullptr;
+class ParkingBrakeTest : public ut_common {};
 
 /**
 Test Function : EpbLampSignal_Active_SpeedGtrThanMax_EpbSoundPlayed

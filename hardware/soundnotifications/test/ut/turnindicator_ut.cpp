@@ -12,6 +12,7 @@
 #include <soundwrapper.h>
 #include "audiomanagermock.h"
 #include "turnindicator.h"
+#include "ut_common.h"
 
 // DEInjector
 #include <ECD_dataelement.h>
@@ -26,58 +27,7 @@ using namespace testing;
 
 /// Unit test for requirement REQPROD:218373/MAIN;5	Audio request for Turn Indicator
 
-class TurnIndicatorUT : public ::testing::Test {
-  public:
-    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
-                                                    int32_t soundComp,
-                                                    AudioManagerMock::playSound_cb _hidl_cb) {
-        ALOGI("TurnIndicatorUT::mockPlaySound: %i %i", soundType, soundComp);
-        connectionID++;
-        bool error = false;
-
-        try {
-            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
-                                      static_cast<AudioTable::SoundComponent>(soundComp));
-        } catch (std::invalid_argument iaex) {
-            ALOGW("TurnIndicatorUT::mockPlaySound. Invalid combination of Type and Component");
-            error = true;
-        }
-
-        if (!error) {
-            _hidl_cb(AMStatus::OK, connectionID);
-            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
-        } else {
-            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
-        }
-        return android::hardware::Status::fromStatusT(android::OK);
-    }
-
-    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
-        ALOGI("TurnIndicatorUT::mockStopSound. connection ID: %d", connectionId);
-        return AMStatus::OK;
-    }
-
-    static void SetUpTestCase() {
-        swrapper = SoundWrapper::instance();
-        am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
-        swrapper->init(am_service);
-    }
-
-    void SetUp() override {
-        SoundWrapper::clearAll();
-        DataElementFramework::instance().reset();
-        ON_CALL(*am_service.get(), playSound(_, _, _)).WillByDefault(Invoke(this, &TurnIndicatorUT::mockPlaySound));
-        ON_CALL(*am_service.get(), stopSound(_)).WillByDefault(Invoke(this, &TurnIndicatorUT::mockStopSound));
-    }
-
-    void TearDown() override {}
-    static SoundWrapper* swrapper;
-    static ::android::sp<AudioManagerMock> am_service;
-    int64_t connectionID{0};
-};
-
-::android::sp<AudioManagerMock> TurnIndicatorUT::am_service = nullptr;
-SoundWrapper* TurnIndicatorUT::swrapper = nullptr;
+class TurnIndicatorUT : public ut_common {};
 
 TEST_F(TurnIndicatorUT, LeftOnSignalReceived_leftTurnIndSoundPlayed) {
     ALOGI("Starting %s", test_info_->name());

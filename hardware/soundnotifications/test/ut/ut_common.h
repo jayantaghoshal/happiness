@@ -81,6 +81,3 @@ class ut_common : public ::testing::Test {
     static ::android::sp<AudioManagerMock> am_service;
     int64_t connectionID{0};
 };
-
-::android::sp<AudioManagerMock> ut_common::am_service = nullptr;
-SoundWrapper* ut_common::swrapper = nullptr;

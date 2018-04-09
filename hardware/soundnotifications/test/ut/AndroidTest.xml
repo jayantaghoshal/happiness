@@ -5,11 +5,11 @@ This tests verifies the functionality in eventloop.
 <configuration description="Sound notifications unit tests">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="VtsSoundNotificationTest->/data/local/tmp/VtsSoundNotificationTest" />
+        <option name="push" value="VtsSoundNotificationUnitTest->/data/local/tmp/VtsSoundNotificationUnitTest" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
-        <option name="module-name" value="VtsSoundNotificationTest" />
+        <option name="module-name" value="VtsSoundNotificationUnitTest" />
         <option name="runtime-hint" value="1s" />
     </test>
 </configuration>
