@@ -120,7 +120,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     for manifest_template_file in vcc_manifest_files:
         print("Checking this manifest file: " + str(manifest_template_file))
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
-        manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
+        manifest.update_file_and_zuul_clone(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
         if stage_changes:
             manifest_repo.add([dest])
 

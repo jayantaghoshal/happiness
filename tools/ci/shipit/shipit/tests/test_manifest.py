@@ -27,7 +27,7 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
             template_path = common.write_file(self.project_root, 'manifest_template.xml', template)
             output_path = os.path.join(self.project_root, 'manifest.xml')
 
-            manifest.update_file(self.project_root, template_path, output_path, "vendor/foo", True)
+            manifest.update_file_and_zuul_clone(self.project_root, template_path, output_path, "vendor/foo", True)
 
             parser = ET.XMLParser()
             parsed_manifest = ET.parse(output_path, parser)
@@ -51,7 +51,7 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
             template_path = common.write_file(self.project_root, 'manifest_template.xml', template)
             output_path = os.path.join(self.project_root, 'manifest.xml')
 
-            manifest.update_file(self.project_root, template_path, output_path, "vendor/foo", False)
+            manifest.update_file_and_zuul_clone(self.project_root, template_path, output_path, "vendor/foo", False)
 
             parser = ET.XMLParser()
             parsed_manifest = ET.parse(output_path, parser)
@@ -77,7 +77,7 @@ class ManifestUpdateTest(common.ManifestTestCaseBase):
             with patch.object(git.Repo, 'ls_remote'):
                 instance = git.Repo("test")
                 instance.ls_remote.return_value = '44ff658186e32d408cef7d2bf1b76b6cb776430c'  #type: ignore
-                manifest.update_file(self.project_root, template_path, output_path, "bar", True)
+                manifest.update_file_and_zuul_clone(self.project_root, template_path, output_path, "bar", True)
 
             parser = ET.XMLParser()
             parsed_manifest = ET.parse(output_path, parser)

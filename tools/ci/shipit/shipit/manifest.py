@@ -3,10 +3,13 @@
 
 import os
 import re
+import shlex
 import tempfile
 import distutils.dir_util
 import xml.etree.ElementTree as ET
 from . import git
+from . import process_tools
+
 
 class Error(Exception):
     pass
@@ -20,26 +23,26 @@ class CommentedTreeBuilder(ET.TreeBuilder):
         self.data(data)
         self.end(ET.Comment)
 
-def update_file(project_root: str, template_path: str, output_path: str, repository: str, using_zuul: bool):
-    print("Arguments in update_file: " "project_root: "+ project_root + " template_path: " + template_path + " output_path: " + output_path + " repository: " + repository)
+def update_file_and_zuul_clone(project_root: str, template_path: str, output_path: str, repository: str, using_zuul: bool):
+    print("Arguments in update_file_and_zuul_clone: " "project_root: "+ project_root + " template_path: " + template_path + " output_path: " + output_path + " repository: " + repository)
     parser = ET.XMLParser(target=CommentedTreeBuilder())
     tree = ET.parse(template_path, parser)
     root = tree.getroot()
 
     for project in root.iter('project'):
         current_repo = project.get('name')
+        print("current_repo = " + current_repo)
         revision = project.get('revision')
         repo_path = project.get('path')
         if revision == "ZUUL_COMMIT_OR_HEAD":
             print("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
-            #There was a problem men manifest path differ from Gerrit repo name
+            # There was a problem when manifest path differ from Gerrit repo name, zuul cloner need
+            # to add the patches to repo stated in the manifest file "path"
             if repo_path != current_repo:
                 align_repo_path(repo_path, current_repo, project_root)
-
             #check what sha to use, the ZUUL_COMMIT or HEAD from repository
             revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
-            print("current_repo = " + current_repo)
-            print("revision = " + revision)
+            print("setting revision to: " + revision)
             project.set('revision', revision)
 
     tree.write(output_path)
@@ -50,14 +53,34 @@ def align_repo_path(repo_path: str, repo_name: str, project_root: str):
         source_repo_path = os.path.join(project_root, repo_name)
         destination_repo_path = os.path.join(project_root, repo_path)
 
+        # Only do alignment when the repo is downloaded, for instance in gate_build
+        # not in ihu_gate_test or ihu_gate_build
+        print("Check if the repo " + source_repo_path + "is downloaded")
         if os.path.isdir(source_repo_path):
-            print("Moving folder: " + source_repo_path)
-            try:
-                print("Removing " + destination_repo_path + " for clean up")
-                distutils.dir_util.remove_tree(destination_repo_path)
-            except FileNotFoundError:
-                print("The folder " + destination_repo_path + " does not exist.")
-            distutils.dir_util.copy_tree(source_repo_path, destination_repo_path)
+            base_folder = project_root
+            print("base_folder: " + base_folder)
+            print("destination_repo_path: " + destination_repo_path)
+            print("the whole path : " + base_folder + destination_repo_path + "/..")
+            zuul_url = os.environ['ZUUL_URL']
+            zuul_project = os.environ['ZUUL_PROJECT']
+            home = os.environ['HOME']
+            # since we iterate through the manifest the current repo could be
+            # vendor/volvocars but the repo_name coulde be = to foo
+            if zuul_project == repo_name:
+                print("Using zuul cloner on repo: " + repo_name)
+                print("zuul_url: " + zuul_url)
+                print("zuul_project: " + zuul_project)
+                zuul_wrapper = home + "/zuul_ssh_wrapper.sh"
+                print("zuul_wrapper: " + zuul_wrapper)
+                os.environ['GIT_SSH'] = zuul_wrapper
+                print(os.environ['GIT_SSH'])
+                process_tools.check_output_logged(["zuul-cloner", "-v", zuul_url, zuul_project],
+                        cwd=os.path.abspath(os.path.join(base_folder, destination_repo_path, "..")))
+                os.chdir(project_root)
+                print("Current working directory: " + project_root)
+            else:
+                print("The current ZUUL_PROJECT are not equal to current repo")
+                print("ZUUL_PROJECT = " + zuul_project + "repo_name = " + repo_name)
         else:
             print("The repo is not downloaded to workspace, ignoring alignment.")
 
