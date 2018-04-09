@@ -1,0 +1,5 @@
+service conmand /vendor/bin/ip netns exec vcc /vendor/bin/conmand
+    class vcc_net_init
+    user root
+    group root
+    oneshot

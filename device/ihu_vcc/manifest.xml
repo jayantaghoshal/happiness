@@ -104,4 +104,13 @@
             <instance>default</instance>
         </interface>
     </hal>
+        <hal format="hidl">
+        <name>vendor.volvocars.hardware.connectivitymanager</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>INativeConnectivityManager</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
 </manifest>

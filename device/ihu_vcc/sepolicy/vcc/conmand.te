@@ -1,0 +1,9 @@
+# conmand service
+type conmand, domain;
+type conmand_exec, exec_type, file_type, vendor_file_type;
+
+domain_auto_trans(conmand, ip-vcc_exec, ip-vcc)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(conmand)
+allow conmand hwservicemanager_prop:file { getattr open read };
