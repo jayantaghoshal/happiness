@@ -123,6 +123,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_daily
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     properties:
         - build-discarder:
             days-to-keep: 30
