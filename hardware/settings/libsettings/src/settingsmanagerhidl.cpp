@@ -137,7 +137,8 @@ andrHw::Return<void> SettingsManagerHidl::onRegistration(const andrHw::hidl_stri
     }
     ALOGV("Link to death ok");
 
-    reloadAllSettings(*settingsProxy);
+    auto settingsProxyCopy = settingsProxy;
+    reloadAllSettings(*settingsProxyCopy);
 
     ALOGV("Link to death reloadsettings done");
 
