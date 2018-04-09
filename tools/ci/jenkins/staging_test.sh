@@ -27,10 +27,10 @@ then
 fi
 
 # Download from Artifactory
-if [ "${}" = "staging" ]
+if [ "${plan}" = "staging" ]
 then
     artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
-elif [ "${}" = "incubator" ]
+elif [ "${plan}" = "incubator" ]
 then
     artifactory pull-latest ihu_hourly_build_vcc_eng out.tgz || die "artifactory pull failed"
 fi
