@@ -52,7 +52,7 @@ def vts_tradefed_run(test_module_dir_path: str) -> ResultData:
         test_result = check_output_logged(["vts-tradefed",
                                            "run",
                                            "commandAndExit",
-                                           "vts",
+                                           "vts-staging-default",
                                            "--skip-all-system-status-check",
                                            "--skip-preconditions",
                                            "--abi",
