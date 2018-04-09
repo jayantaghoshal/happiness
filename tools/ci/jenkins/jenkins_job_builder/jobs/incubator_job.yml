@@ -14,7 +14,7 @@
             description: ''
         - run:
             name: UPSTREAM_JOB
-            project-name: ihu_hourly_build_vcc_eng
+            project-name: ihu_hourly_build-eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
         - run:
             name: TOP_JOB
