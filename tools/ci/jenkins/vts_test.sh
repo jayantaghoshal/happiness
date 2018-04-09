@@ -45,10 +45,13 @@ then
     plan="vts-volvo1.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts2-generic" ]
 then
-	plan="vts-volvo2.xml"
+    plan="vts-volvo2.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts3-generic" ]
 then
-	plan="vts-volvo3.xml"
+    plan="vts-volvo3.xml"
+elif [ "${JOB_NAME}" = "ihu_daily_vts4-generic" ]
+then
+    plan="vts-volvo4.xml"
 fi
 export plan
 

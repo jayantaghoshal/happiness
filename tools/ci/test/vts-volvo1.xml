@@ -51,22 +51,6 @@ the plan as they do not execute properly.
   <option name="compatibility:include-filter" value="VtsHalWifiOffloadV1_0Target" />
   <option name="compatibility:include-filter" value="VtsHalWifiSupplicantV1_0Target" />
 
-  <!-- From vts-kernel.xml -->
-  <option name="compatibility:include-filter" value="VtsKernelLtp" />
-  <option name="compatibility:include-filter" value="KernelProcFileApiTest" />
-  <option name="compatibility:include-filter" value="VtsKernelLinuxKselftest" />
-  <option name="compatibility:include-filter" value="VtsKernelLinuxKselftestPresubmit" />
-  <option name="compatibility:include-filter" value="SyscallExistenceTest" />
-  <option name="compatibility:include-filter" value="VtsKernelApiSysfsTest" />
-  <option name="compatibility:include-filter" value="VtsKernelBinderTest" />
-  <option name="compatibility:include-filter" value="VtsKernelConfig" />
-  <option name="compatibility:include-filter" value="VtsKernelHwBinder" />
-  <option name="compatibility:include-filter" value="VtsKernelLibcutilsTest" />
-  <option name="compatibility:include-filter" value="VtsKernelNetdTest" />
-  <option name="compatibility:include-filter" value="VtsKernelSelinuxFileApi" />
-  <option name="compatibility:include-filter" value="VtsKernelTunTest" />
-  <option name="compatibility:include-filter" value="VtsQtaguidTest" />
-
   <!--  From vts-vndk.xml -->
   <option name="compatibility:include-filter" value="VtsVndkDependencyTest" />
 

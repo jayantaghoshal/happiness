@@ -383,3 +383,8 @@
     defaults: daily_vts_defaults
     node: daily_test-generic
 
+- job:
+    name: ihu_daily_vts4-generic
+    defaults: daily_vts_defaults
+    node: daily_test-generic
+
