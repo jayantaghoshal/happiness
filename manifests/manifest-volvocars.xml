@@ -7,9 +7,9 @@
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="47c098f0f961836183b820205b37228421ff3664" />
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="7ffacc78a3631167f46ef34651d16c3304504334" />
-  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="12c6cec6a76b6f74b418208640ebda08af955a5c" />
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="2c85cd1573c086e7719784aabde67c902cd3d0a6" />
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="e3d10d70525bc19756ea574d4bc03aacd523320c" />
+  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="bff47af127e8713a2b87bfb07767f8f2296e3855" />
 
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a" />
@@ -30,6 +30,9 @@
 
   <remove-project name="aosp/platform/external/iptables" />
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
+
+  <remove-project name="aosp/platform/frameworks/base"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="09e2d83c5bbd6100a960a7d70b0a98274763b309"/>
 
   <!-- Aptiv Overrides -->
   <remove-project name="vendor/delphi/android_patches" />
