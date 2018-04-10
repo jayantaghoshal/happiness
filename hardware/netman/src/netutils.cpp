@@ -655,10 +655,12 @@ void SetupVLan(const InterfaceConfiguration& interface_configuration) {
                               entry.at("netmask").c_str(),
                               entry.at("broadcast-address").c_str())) {
                 ALOGE("Failed to configure IP address for: %s", entry.at("name").c_str());
+                return;
             }
 
             if (!BringInterfaceUp(entry.at("name").c_str())) {
                 ALOGE("Failed to bring up interface: %s!", entry.at("name").c_str());
+                return;
             }
         } catch (const std::out_of_range& e) {
             ALOGE("Error: %s!", e.what());
