@@ -31,8 +31,6 @@ PRODUCT_PACKAGES += \
     soundnotifications \
     vendor.volvocars.hardware.settingsstorage@1.0-service \
     installationmasterd \
-    remotectrl_routerd \
-    remotectrl_audioctrld \
     android.hardware.automotive.evs.vcc@1.0-hardware \
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -47,8 +45,6 @@ PRODUCT_PACKAGES += \
     LcfService \
     timezones.db \
     libjsqlite \
-    RemoteAudioCtrlService \
-    RemoteAudioCtrlAppService \
 
 ##############################################################
 # SWDL stuff
@@ -91,8 +87,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     VccUserSwitchService \
     VehicleFunctions \
-    VccMediaCenter \
-    VccTunerBrowserService
+    VccMediaCenter
+#    VccTunerBrowserService
 
 ##############################################################
 # Vendor apps
