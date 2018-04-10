@@ -339,16 +339,6 @@ SoundWrapper* SoundWrapper::instance() {
     return &soundWrapperInstance;
 }
 
-SoundWrapper::~SoundWrapper() {
-    ALOGD("%s %d", __FUNCTION__, initialized.load());
-    if (initialized.load()) {
-        auto result = am_service->unsubscribe(::android::sp<IAudioManagerCallback>(this));
-        ALOGW_IF(!result.isOk(), "Failed to unsubscribe IAudioManagerCallback, error=%s", result.description().c_str());
-    }
-
-    initialized = false;
-}
-
 bool SoundWrapper::getInitialized() const { return initialized.load(); }
 
 ::android::hardware::Return<void> SoundWrapper::onDisconnected(uint32_t connectionID) {
