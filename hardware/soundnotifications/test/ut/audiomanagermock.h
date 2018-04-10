@@ -21,7 +21,6 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
     AudioManagerMock() {}
     virtual ~AudioManagerMock() {}
 
-
     MOCK_METHOD3(playSound, Return<void>(int32_t soundType, int32_t soundComp, playSound_cb _aidl_return));
     MOCK_METHOD1(stopSound, Return<AMStatus>(uint32_t connectionId));
     MOCK_METHOD2(setVolume, Return<void>(int32_t sinkId, int32_t volume));

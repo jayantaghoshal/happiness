@@ -22,7 +22,6 @@ cc_binary {
         "ipcbd-dim.rc",
     ],
 
-
     srcs: [
         "src/main.cpp",
         "src/service_manager.cpp",

@@ -34,11 +34,8 @@ class Dispatcher final : public IDispatcher {
 
     void Enqueue(std::function<void()>&& f) override;
 
-    
-    JobId EnqueueWithDelay(std::chrono::microseconds delay,
-                           std::function<void()>&& f) override;
-    JobId EnqueueWithDelayCyclic(std::chrono::microseconds delay,
-                           std::function<void()>&& f) override;
+    JobId EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f) override;
+    JobId EnqueueWithDelayCyclic(std::chrono::microseconds delay, std::function<void()>&& f) override;
 
     bool Cancel(JobId jobid) override;
 
@@ -52,9 +49,7 @@ class Dispatcher final : public IDispatcher {
 
   private:
     void Start();
-    JobId EnqueueWithDelayInternal(std::chrono::microseconds delay,
-                           std::function<void()>&& f,
-                           bool cyclic_timer);
+    JobId EnqueueWithDelayInternal(std::chrono::microseconds delay, std::function<void()>&& f, bool cyclic_timer);
 
     EPollQueue queue_;
     bool stop_ = false;
@@ -78,8 +73,7 @@ IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds d
                                                      bool cyclic_timer) {
     if (cyclic_timer) {
         return GetDefaultDispatcher().EnqueueWithDelayCyclic(delay, std::move(f));
-    }
-    else {
+    } else {
         return GetDefaultDispatcher().EnqueueWithDelay(delay, std::move(f));
     }
 }
@@ -99,18 +93,16 @@ Dispatcher::~Dispatcher() { Stop(); }
 
 void Dispatcher::Enqueue(std::function<void()>&& f) { queue_.enqueue(std::move(f)); }
 
-IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay,
-                                                std::function<void()>&& f) {
+IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f) {
     return EnqueueWithDelayInternal(delay, std::move(f), false);
 }
-IDispatcher::JobId Dispatcher::EnqueueWithDelayCyclic(std::chrono::microseconds delay,
-                                                std::function<void()>&& f) {
+IDispatcher::JobId Dispatcher::EnqueueWithDelayCyclic(std::chrono::microseconds delay, std::function<void()>&& f) {
     return EnqueueWithDelayInternal(delay, std::move(f), true);
 }
 
 IDispatcher::JobId Dispatcher::EnqueueWithDelayInternal(std::chrono::microseconds delay,
-                                                std::function<void()>&& f,
-                                                bool cyclic_timer) {
+                                                        std::function<void()>&& f,
+                                                        bool cyclic_timer) {
     struct itimerspec ts;
     int tfd, usec;
     JobId this_id;

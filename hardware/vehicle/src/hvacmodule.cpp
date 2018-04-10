@@ -62,9 +62,7 @@ vhal20::VehiclePropConfig propconfig_autoclimate() { return boolConfig(VehiclePr
 
 vhal20::VehiclePropConfig propconfig_recirculation() { return boolConfig(VehicleProperty::HVAC_RECIRC_ON, {0}); }
 
-vhal20::VehiclePropConfig propconfig_acon() {
-    return boolConfig(VehicleProperty::HVAC_AC_ON, {0});
-}
+vhal20::VehiclePropConfig propconfig_acon() { return boolConfig(VehicleProperty::HVAC_AC_ON, {0}); }
 
 vhal20::VehiclePropConfig propconfig_defroster() {
     return boolConfig(VehicleProperty::HVAC_DEFROSTER,

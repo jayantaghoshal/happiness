@@ -76,7 +76,7 @@ XML Syntax Check
     linters.AndroidMkLinterError:
         """
     -------------------------------------------------------------------"
-    Android.mk linter 
+    Android.mk linter
     -------------------------------------------------------------------""",
 
 }

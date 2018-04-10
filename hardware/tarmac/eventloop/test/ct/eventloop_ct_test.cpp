@@ -193,8 +193,7 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
     std::vector<std::chrono::steady_clock::time_point> timer_fired;
 
     auto subscriptio_handle = tarmac::eventloop::IDispatcher::GetDefaultDispatcher().EnqueueWithDelayCyclic(
-            std::chrono::microseconds(100000),
-            [&timer_fired, &p]() {
+            std::chrono::microseconds(100000), [&timer_fired, &p]() {
                 timer_fired.push_back(std::chrono::steady_clock::now());
                 if (timer_fired.size() >= 5) {
                     ALOGI("Task setting future to ready");

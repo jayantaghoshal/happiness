@@ -3,12 +3,12 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include <cerrno>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cerrno>
 #include <vector>
 
 #include "socket_connection.h"

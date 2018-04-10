@@ -25,7 +25,6 @@ cc_binary {
         },
     },
 
-
     init_rc: [
         "uds_data_collector.rc",
     ],

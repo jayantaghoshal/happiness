@@ -13,10 +13,10 @@
 #include <thread>
 #include "desip_handler.h"
 
-
 // DO NOT CHANGE THE ORDER!
-#define DTS_PRIVATE_MODEL Tr_Declare_App(VehicleSignalsDaemon) 
+#define DTS_PRIVATE_MODEL Tr_Declare_App(VehicleSignalsDaemon)
 #include "DTS_GenericPrivateModel.h"
+#define DUMMY_TO_NOT_MAKE_CLANG_TIDY_SORT  // clang-tidy off does not work on include sorting
 #include "DTS_DeclarePrivateModel.h"
 // END OF: DO NOT CHANGE THE ORDER!
 
