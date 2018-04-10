@@ -42,24 +42,6 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
-set +e
-for tmp in 1 2 3
-do
-    # Update IHU
-    ihu_update
-    if [ $? -eq 0 ]; then # On success, break
-        break
-    elif [ $tmp -eq 3 ]; then
-        die "Failed to flash IHU image" # failed after three attempts
-    else
-        python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/ihu_ipm_reboot.py # reboot ihu on flashing failures
-    fi
-done
-set -e
-
-# Get properties
-adb shell getprop
-
 capability=""
 if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
    [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ]
@@ -82,7 +64,7 @@ set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=${plan} --ci_reporting -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=${plan} --ci_reporting --update_ihu -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
 
 set -e

@@ -50,12 +50,6 @@ function die() {
     exit 1
 }
 
-function ihu_update() {
-  python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/ihu_update.py \
-    --vip_port /dev/ttyVIP \
-    --mp_port /dev/ttyMP
-}
-
 function repo_sync() {
   repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 "$@" || die "repo sync failed"
 }

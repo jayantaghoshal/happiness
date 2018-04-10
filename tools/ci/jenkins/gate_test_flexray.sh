@@ -29,11 +29,9 @@ artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
 tar xvf ${OUT_ARCHIVE} || die "Could not extract out archive."
 rm ${OUT_ARCHIVE}
 
-ihu_update
-
 export VECTOR_FDX_IP=198.18.34.2
 export VECTOR_FDX_PORT=2809
 ping -c1 ${VECTOR_FDX_IP}
 
 # Run Unit and Component tests for vendor/volvocars
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial flexray -o flexray
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --update_ihu -c ihu-generic adb mp-serial vip-serial flexray -o flexray

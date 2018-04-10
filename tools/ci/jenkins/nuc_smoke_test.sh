@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -22,27 +22,9 @@ artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die
 tar xfz out.tgz || die "Unpack out.tgz failed"
 
 set +e
-for tmp in 1 2 3
-do
-    # Update IHU
-    ihu_update
-    if [ $? -eq 0 ]; then # On success, break
-        break
-    elif [ $tmp -eq 3 ]; then
-        die "Failed to flash IHU image" # failed after three attempts
-    else
-        python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/ihu_ipm_reboot.py # reboot ihu on flashing failures
-    fi
-done
-set -e
-
-# Get properties
-adb shell getprop
-
-set +e
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate -c ihu-generic adb mp-serial vip-serial
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --update_ihu -c ihu-generic adb mp-serial vip-serial
 status=$?
 set -e
 

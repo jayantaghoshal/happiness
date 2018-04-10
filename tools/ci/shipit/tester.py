@@ -26,7 +26,7 @@ from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 from handle_result import store_result, test_visualisation
-
+from shipit.process_tools import check_output_logged
 sys.path.append(vcc_root)
 import test_plan    # NOQA
 
@@ -196,6 +196,26 @@ def print_test_summary(test_results: List[NamedTestResult]):
             print("")
 
 
+def flash_ihu(max_attempts=3, power_cycle_length=120):
+    logger.info("Updating ihu")
+    for attempt in range(max_attempts):
+        try:
+            check_output_logged(['ihu_update'])
+            logger.info("Updating ihu complete")
+            break
+        except Exception as e:
+            logger.error("Updating ihu failed: {}".format(e))
+            if attempt == max_attempts - 1: # The last attempt failed
+                raise Exception("Updating ihu failed, reached max attempts: {}".format(max_attempts))
+            else:
+                logger.info("Power cycling ihu and retry")
+                boot_script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'jenkins', 'ihu_ipm_reboot.py'))
+                power_result = os.system("python3 " + boot_script_path + " " + str(power_cycle_length))
+                if power_result != 0:
+                    raise Exception("Could not power cycle ihu")
+    logger.info("Update of ihu done")
+
+
 def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_first_failure: bool):
     test_results = []  # type: List[NamedTestResult]
     if ci_reporting:# initialise visualizing Testcases in VCC CI
@@ -294,8 +314,8 @@ def main():
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
     run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
-    run_parser.add_argument(
-        '--ci_reporting', action='store_true')
+    run_parser.add_argument('--ci_reporting', action='store_true')
+    run_parser.add_argument('--update_ihu', action='store_true')
     run_parser.add_argument(
         '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
     build_parser.add_argument('--test_component', default=None,
@@ -359,7 +379,6 @@ def main():
             run_parser.print_usage()
             sys.exit(1)
 
-
         supported_tests = [t for t in plan if is_test_supported(t, capabilities)]
         if len(args.only_matching) > 0:
             selected_caps = set(args.only_matching)
@@ -369,6 +388,14 @@ def main():
             selected_tests = [t for t in supported_tests if is_all_selected_caps_in_required(t)]
         else:
             selected_tests = supported_tests
+
+        if len(selected_tests) == 0:
+            logger.info('No applicable tests found.')
+            return
+
+        if args.update_ihu:
+            flash_ihu()
+
         run_testcases(selected_tests, ci_reporting, args.abort_on_first_failure)
     else:
         root_parser.print_usage()

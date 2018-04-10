@@ -29,10 +29,8 @@ artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
 tar xvf ${OUT_ARCHIVE} || die "Could not extract out archive."
 rm ${OUT_ARCHIVE}
 
-ihu_update
-
 # Run Unit and Component tests for vendor/volvocars
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
-    --plan=gate \
+    --plan=gate --update_ihu \
     -c ihu-generic adb mp-serial vip-serial apix \
     -o apix
