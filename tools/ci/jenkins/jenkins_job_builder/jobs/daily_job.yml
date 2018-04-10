@@ -283,6 +283,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+            - name: ihu_daily_vts4-generic
+              current-parameters: true
+              kill-phase-on: NEVER
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
     publishers:
       - trigger-parameterized-builds:
         - project:
