@@ -77,8 +77,10 @@ class FrSignalInterface:
 
                 self.connected = True
             except:
-                if self.connection is not None:
+                try:
                     self.connection.close()
+                except AttributeError: #If fdx_client.FDXConnection.. fails
+                    pass
                 raise
         else:
             self.connection = FDXDummyConnection()
