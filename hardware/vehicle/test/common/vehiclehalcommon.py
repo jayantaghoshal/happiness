@@ -89,13 +89,13 @@ class VehicleHalCommon():
                 return prop[1]
         return 0
 
-    def assert_ViewNotFoundException(self, vc, buttonId):
+    def assert_ViewNotFoundException(self, vc, buttonId, msg=None):
         exceptionRaised = False
         try:
             vc.findViewByIdOrRaise(buttonId)
         except ViewNotFoundException:
             exceptionRaised = True
-        asserts.assertTrue(exceptionRaised, buttonId + " was found when it should be invisible")
+        asserts.assertTrue(exceptionRaised, buttonId + self.combineMsg(" was found when it should be invisible", msg))
 
     # Get a new connection and ViewClient
     def getViewClient(self):
@@ -377,32 +377,30 @@ class VehicleHalCommon():
         else:
             return val
 
-    def verifyEnumPropIfSupported(self, propertyId, validValues):
+    def verifyEnumPropIfSupported(self, propertyId, validValues, msg=None):
         """Verifies that if given property supported it is one of the value in validValues set"""
         supported, val = self.getValueIfPropSupported(propertyId)
         if supported:
             asserts.assertEqual(int, type(val))
-            self.assertIntValueInRangeForProp(val, validValues, propertyId)
+            self.assertIntValueInRangeForProp(val, validValues, propertyId, msg)
 
     def assertLessOrEqual(self, first, second, msg=None):
         """Asserts that first <= second"""
         if second < first:
-            fullMsg = "%s is not less or equal to %s" % (first, second)
-            if msg:
-                fullMsg = "%s %s" % (fullMsg, msg)
+            fullMsg = self.combineMsg("%s is not less or equal to %s" % (first, second), msg)
             #fail(fullMsg) TODO why does fail() not work any more??
             asserts.assertTrue(False, fullMsg)
 
-    def assertIntValueInRangeForProp(self, value, validValues, prop):
+    def assertIntValueInRangeForProp(self, value, validValues, prop, msg=None):
         """Asserts that given value is in the validValues range"""
         asserts.assertTrue(value in validValues,
-                           "Invalid value %d for property: 0x%x, expected one of: %s" % (value, prop, validValues))
+            self.combineMsg("Invalid value %d for property: 0x%x, expected one of: %s" % (value, prop, validValues), msg))
 
-    def assertValueInRangeForProp(self, value, rangeBegin, rangeEnd, prop):
+    def assertValueInRangeForProp(self, value, rangeBegin, rangeEnd, prop, msg=None):
         """Asserts that given value is in the range [rangeBegin, rangeEnd]"""
-        msg = "Value %s is out of range [%s, %s] for property 0x%x" % (value, rangeBegin, rangeEnd, prop)
-        self.assertLessOrEqual(rangeBegin, value, msg)
-        self.assertLessOrEqual(value, rangeEnd,  msg)
+        fullMsg = self.combineMsg("Value %s is out of range [%s, %s] for property 0x%x" % (value, rangeBegin, rangeEnd, prop), msg)
+        self.assertLessOrEqual(rangeBegin, value, fullMsg)
+        self.assertLessOrEqual(value, rangeEnd,  fullMsg)
 
     def getPropConfig(self, propertyId):
         return self.propToConfig[propertyId]
@@ -410,18 +408,25 @@ class VehicleHalCommon():
     def isPropSupported(self, propertyId):
         return self.getPropConfig(propertyId) is not None
 
-    def assert_signal_equals(self, fdx_signal, expected_value):
+    def assert_signal_equals(self, fdx_signal, expected_value, msg=None):
         if self.flexray.connected:
             read_value = fdx_signal.get()
-            asserts.assertEqual(read_value, expected_value, "Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ))
+            asserts.assertEqual(read_value, expected_value, self.combineMsg("Flexray signal %s Equals to=%d, Expected: %d" % ( fdx_signal.de_name, read_value, expected_value ), msg))
 
-    def assert_prop_equals(self, propId, expected_value):
+    def assert_prop_equals(self, propId, expected_value, msg=None):
         value = self.readVhalProperty(propId)
-        asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
+        asserts.assertEqual(self.extractValue(value), expected_value, self.combineMsg("Failed: Property value not equal to expected value", msg))
 
-    def assert_prop_area_equals(self, propId, areaId, expected_value):
+    def assert_prop_area_equals(self, propId, areaId, expected_value, msg=None):
         value = self.readVhalProperty(propId, areaId)
-        asserts.assertEqual(self.extractValue(value), expected_value, "Failed: Property value not equal to expected value")
+        asserts.assertEqual(self.extractValue(value), expected_value, self.combineMsg("Failed: Property value not equal to expected value", msg))
+
+    # Helper function for adding optional comment.
+    def combineMsg(self, coreMsg, commentMsg):
+        if commentMsg:
+            return "%s, comment: %s" % (coreMsg, commentMsg)
+        return coreMsg
+
 
     def assertVhalInt32Equal(self, expectedValue, propertyId):
         vHalProp = self.readVhalProperty(propertyId)
