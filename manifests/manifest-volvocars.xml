@@ -8,7 +8,7 @@
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="2c85cd1573c086e7719784aabde67c902cd3d0a6" />
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="69302bcd23f1a427e177bbd9a9f780df5299d065" />
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="1c13fe85d8c1b4aa62689e14fb5dc1ed0cf6d89e" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="bff47af127e8713a2b87bfb07767f8f2296e3855" />
 
   <!-- APPS -->
