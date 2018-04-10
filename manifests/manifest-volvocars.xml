@@ -49,6 +49,9 @@
   <remove-project name="vendor/delphi/android_vehicle-hal" />
   <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="d1fcc1b4b86fc832fae7a34907670dfeaa444f10" />
 
+  <remove-project name="vendor/delphi/android_audio-hal" />
+  <project name="android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="cae7f86b0c622e023bc9ff99fbc672881aa67464" />
+
   <remove-project name="vendor/delphi/android_devices" />
   <project name="vendor/delphi/android_devices" path="device/aptiv" revision="fc0a4b5a0c8bad58b584031d0f7ba84610a652c5" >
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate" />
