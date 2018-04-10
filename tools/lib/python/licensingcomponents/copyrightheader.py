@@ -48,10 +48,10 @@ CLangFeatures = LanguageCommentFeatures(firstline='/*\n',
 
 HashStartInfoRegex = re.compile(r'^#\sCopyright\s(?P<start_year>20\d{2})'
                                 r'(?:-(?P<end_year>20\d{2}))?\s(?P<company>Delphi|Volvo)\s.*',
-                                re.IGNORECASE);
+                                re.IGNORECASE)
 HashStartGenericRegex = re.compile(r'^#\s(Copyright.*)',
                                    re.IGNORECASE | re.MULTILINE)
-HashStartReplaceableRegex = re.compile(r'(^#.*?(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)*?\n)',
+HashStartReplaceableRegex = re.compile(r'(^#\s(Copyright.*?((Delphi)|(Volvo)).*?\n)(#.*?\n)+)',
                                        re.IGNORECASE)
 HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     endline='\n',
@@ -64,7 +64,7 @@ HashStartLanguageFeatures = LanguageCommentFeatures(firstline='',
                                                     )
 
 HashStartLanguageWithShebangFeatures = HashStartLanguageFeatures._replace(
-    line_patterns_allowed_before_copyright=["^#!.*", "^#\s?coding\s?=.*"])
+    line_patterns_allowed_before_copyright=["^#!.*", "^[ \t\v]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)"])
 
 CommentPattern = "Copyright {year} Volvo Car Corporation\n" \
                  "This file is covered by LICENSE file in the root of this project"
@@ -105,16 +105,20 @@ def filter_ignored(files):
 def get_known_languages_extensions():
     return KnownLanguages.keys()
 
+def __get_copyright_headers_from_body(file_body: str, lang: LanguageCommentFeatures) -> typing.List[str]:
+    headers = []
+    for regex in lang.headers_matcher:
+        for m in regex.findall(file_body):
+            headers.append(m)
+    return headers
 
 def list_headers_and_filenames(filename: str):
+    lang = get_lang(filename)
+
     with open(filename, 'r', encoding="utf-8") as file:
         file_body = file.read()
 
-    headers = []
-    for regex in get_lang(filename).headers_matcher:
-        for m in regex.findall(file_body):
-            headers.append(m)
-
+    headers = __get_copyright_headers_from_body(file_body, lang)
     if headers:
         print(filename)
         for h in headers:
@@ -128,6 +132,7 @@ def get_lang(filename: str):
 
     lang = KnownLanguages.get(ext)
     return lang
+
 
 
 def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures):
@@ -148,7 +153,7 @@ def __get_copyright_info_from_body(file_body: str, lang: LanguageCommentFeatures
     for regex in lang.headers_info:
         match = regex.search(file_body)
         if match is not None:
-            break;
+            break
 
     if match is None:
         return None
@@ -219,30 +224,37 @@ def __filter_lines_before_copyright(file_body: str, lang: LanguageCommentFeature
     return saved_lines_before_copyright, filtered_file_body
 
 
-def __replace_headers_in_body(file_body: str, lang: LanguageCommentFeatures):
+def __replace_headers_in_body(file_body: str, filename: str, lang: LanguageCommentFeatures):
     removed_headers, filtered_file_body = __filter_lines_before_copyright(file_body, lang)
 
-    # Get year and company information from the current Copyright header if there is one
-    info = __get_copyright_info_from_body(filtered_file_body, lang)
+    # Remove trailing whitespace after the removed headers, needed for reproducibility
+    filtered_file_body = sanitize_whitespace(filtered_file_body)
+
+    info = None
     current_year = datetime.now().year
     copyright_year = None
+    copyright_headers = __get_copyright_headers_from_body(filtered_file_body, lang)
 
-    if info is not None:
-        if info.company == "Delphi":
-            # If the company is Delphi a new copyright header shall be written
-            copyright_year = str(current_year)
-        elif current_year > int(info.start_year):
-            # If the Copyright header contains an older year the header shall be written with a range from then to now
-            copyright_year = "{0}-{1}".format(info.start_year, str(current_year))
+    if len(copyright_headers) > 1:
+        raise LicenseHeaderInvalidError("Multiple Copyright headers found {}".format(copyright_headers), filename)
+    elif copyright_headers:
+        info = __get_copyright_info_from_body(filtered_file_body, lang)
+        if info is None:
+            raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), filename)
+        else:
+            if info.company == "Delphi":
+                # If the company is Delphi a new copyright header shall be written
+                copyright_year = str(current_year)
+            elif current_year > int(info.start_year):
+                # If the Copyright header contains an older year update the header with a range from then to now
+                copyright_year = "{0}-{1}".format(info.start_year, str(current_year))
 
     # If none of the above clauses apply write the current year in the Copyright header
     if copyright_year is None:
         copyright_year = str(current_year)
 
-    # removing of trailing whitespace needed for reproducibility,
-    filtered_file_body = sanitize_whitespace(filtered_file_body)
     decopyrighted = __remove_header_from_body(filtered_file_body, lang)
-    # removing of trailing whitespace needed for reproducibility,
+    # Remove trailing whitespace after the removed headers, needed for reproducibility
     decopyrighted = sanitize_whitespace(decopyrighted)
 
     with_copyright_applied = __add_header_to_body(decopyrighted, copyright_year, lang)
@@ -261,8 +273,8 @@ def get_contents_with_header_applied(filename: str):
     with open(filename, 'r', encoding="utf-8") as file:
         file_body = file.read()
 
-    with_copyright_applied = __replace_headers_in_body(file_body, lang)
-    with_copyright_applied_twice = __replace_headers_in_body(with_copyright_applied, lang)
+    with_copyright_applied = __replace_headers_in_body(file_body, filename, lang)
+    with_copyright_applied_twice = __replace_headers_in_body(with_copyright_applied, filename, lang)
 
     if with_copyright_applied_twice != with_copyright_applied:
         with open(filename + ".iter_orig", "w") as copy_not_applied:
@@ -298,12 +310,18 @@ def verify_copyright_in_file(filename: str):
 
     _, filtered_file_body = __filter_lines_before_copyright(file_body, lang)
     filtered_file_body = sanitize_whitespace(filtered_file_body)
+    copyright_headers = __get_copyright_headers_from_body(filtered_file_body, lang)
+
+    if not copyright_headers:
+        raise LicenseHeaderInvalidError("Missing Copyright header", filename)
+    elif len(copyright_headers) > 1:
+        raise LicenseHeaderInvalidError("Multiple Copyright headers found {}".format(copyright_headers), filename)
+
     info = __get_copyright_info_from_body(filtered_file_body, lang)
     current_year = datetime.now().year
-
     if info is None:
         # Copyright head has unknown format
-        raise LicenseHeaderInvalidError("Copyright header invalid", filename)
+        raise LicenseHeaderInvalidError("Unrecognized copyright found {}".format(copyright_headers), filename)
     elif int(info.start_year) < 2017:
         # The old script was hard coded to only accept 2017, so copyright before that is not allowed
         raise LicenseHeaderInvalidError("Copyright header invalid year", filename)

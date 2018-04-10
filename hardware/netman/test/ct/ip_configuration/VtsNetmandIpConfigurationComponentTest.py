@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -25,7 +25,7 @@ class VtsNetmandIpConfigurationComponentTest(base_test.BaseTestClass):
     """Interface configurations: """
     interface_configs = [
             dict(name="apix0", ip_address="198.18.18.1", broadcast_address="198.18.255.255",
-                    netmask="255.255.0.0", mtu=1500, mac_address="02:00:00:00:12:01"),
+                    netmask="255.255.240.0", mtu=1500, mac_address="02:00:00:00:12:01"),
             dict(name="meth0", ip_address="198.18.2.1", broadcast_address="198.18.255.255",
                     netmask="255.255.240.0", mtu=1500, mac_address="02:00:00:01:12:01"),
             dict(name="tcam0", ip_address="198.18.34.1", broadcast_address="198.18.255.255",

@@ -1,0 +1,74 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-defaults",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "vcc_pac_use_evs_hidl",
+        "vcc_pac_use_libdbg",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    cflags: [
+        "-DLOG_TAG=\"EvsHardwareService\"",
+    ],
+}
+
+cc_library_static {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-static-lib",
+
+    defaults: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-defaults",
+    ],
+
+    srcs: [
+        "src/evs_enumerator.cpp",
+    ],
+}
+
+cc_binary {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware",
+
+    defaults: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-defaults",
+    ],
+
+    relative_install_path: "hw",
+
+    static_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-static-lib",
+    ],
+
+    shared_libs: [
+        "libcutils",
+    ],
+
+    srcs: [
+        "src/evs_hardware.cpp",
+    ],
+}
+
+// Header library for EVS hardware clients
+cc_library_headers {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-header-lib",
+
+    export_include_dirs: [
+        "include",
+    ],
+}
+
+// Header library for EVS hardware unit tests
+cc_library_headers {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-test-header-lib",
+
+    export_include_dirs: [
+        "src",
+    ],
+}

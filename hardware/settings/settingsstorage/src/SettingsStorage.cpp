@@ -92,7 +92,7 @@ SettingsStorage::SettingsStorage() {
     {
         // NOTE: Since we run WAL mode, you also have to copy the xxx-shm and xxx-wal file
         //      in case you want to debug the contents on host side.
-        const int status = sqlite3_open("/data/vendor/vehiclesettings.db", &db_);
+        const int status = sqlite3_open("/data/vendor/vehiclesettings/vehiclesettings.db", &db_);
         if (status != 0) {
             ALOGW("Can't open database: %s", sqlite3_errmsg(db_));
             throw SqliteException("Can't open database", status, db_);
@@ -176,12 +176,13 @@ SettingsStorage::SettingsStorage() {
     }));
 }
 SettingsStorage::~SettingsStorage() {
-    sqlite3_free(select_setting_stmt_);
-    sqlite3_free(insert_stmt_);
-    sqlite3_free(db_);
+    sqlite3_finalize(select_setting_stmt_);
+    sqlite3_finalize(insert_stmt_);
+    sqlite3_close(db_);
 }
 
 void SettingsStorage::onProfileChange(profileHidl::ProfileIdentifier profileId) {
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     activeProfileId = profileId;
     for (auto& sl : settings_listeners_) {
         if (sl.user_scope_ == UserScope::NOT_USER_RELATED) {
@@ -201,7 +202,7 @@ Return<void> SettingsStorage::set(const SettingsIdHidl key,
                                   profileHidl::ProfileIdentifier profileId,
                                   const hidl_string& data) {
     ALOGD("set %d = %s", key, data.c_str());
-
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     {
         (void)sqlite3_reset(insert_stmt_);
         sqlite3_bind_int(insert_stmt_, 1, key);
@@ -218,6 +219,7 @@ Return<void> SettingsStorage::set(const SettingsIdHidl key,
 }
 
 const unsigned char* SettingsStorage::getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId) {
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     (void)sqlite3_reset(select_setting_stmt_);
     sqlite3_bind_int(select_setting_stmt_, 1, key);
     sqlite3_bind_int(select_setting_stmt_, 2, static_cast<int32_t>(profileId));
@@ -259,7 +261,7 @@ Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
                                         UserScope userScope,
                                         const sp<ISettingsListener>& listener) {
     ALOGD("subscribe key=%d, userScope=%hu", key, userScope);
-
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     settings_listeners_.emplace_back(key, userScope, listener);
     listener->linkToDeath(this, ISETTINGSLISTENER_DEATH_COOKIE);
 
@@ -277,11 +279,13 @@ Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
 
 Return<void> SettingsStorage::unsubscribe(const SettingsIdHidl key, const sp<ISettingsListener>& listener) {
     ALOGD("unsubscribe %d", key);
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     settings_listeners_.remove_if([&](const auto& x) { return x.key_ == key && ((x.listener_) == (listener)); });
     return andrHw::Return<void>();
 }
 
 void SettingsStorage::serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) {
+    std::lock_guard<std::recursive_mutex> lock(mLock);
     if (cookie != ISETTINGSLISTENER_DEATH_COOKIE) {
         return;
     }

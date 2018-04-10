@@ -12,7 +12,7 @@ interface IInstallationMasterEventListener
     /**
      * Notify the listnener of a newly created installation report
      * @param installationOrder   The UUID of the installation order attempted to be installed
-     * @param installationSummary The installation summary part of the report of an attempt of install
+     * @param summary The installation summary part of the report of an attempt of install
      */
-    oneway installationReport(string installationOrder, InstallationSummary installationSummary);
+    oneway installationReport(string installationOrder, Summary installationSummary);
 };

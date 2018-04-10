@@ -45,10 +45,13 @@ then
     plan="vts-volvo1.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts2-generic" ]
 then
-	plan="vts-volvo2.xml"
+    plan="vts-volvo2.xml"
 elif [ "${JOB_NAME}" = "ihu_daily_vts3-generic" ]
 then
-	plan="vts-volvo3.xml"
+    plan="vts-volvo3.xml"
+elif [ "${JOB_NAME}" = "ihu_daily_vts4-generic" ]
+then
+    plan="vts-volvo4.xml"
 fi
 export plan
 
@@ -57,6 +60,9 @@ set +e
 # Run vts tests
 #TODO Copy this to the above if statement as the command for cts differ a bit?
 time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/"${plan}" --skip-all-system-status-check --skip-preconditions #--abi x86_64
+
+# Upload results to MongoDB
+python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/handle_result/store_vts_result.py ./out/host/linux-x86/vts/android-vts/results/
 
 # Compare to last run here and fail if new errors are found
 mkdir old

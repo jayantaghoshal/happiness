@@ -230,6 +230,11 @@ RUN apt-get install -y spatialite-bin
 
 
 ##################################################
+# Used for serial communication in vts test
+# required for screen cleaning testcase
+RUN pip install pyserial
+
+##################################################
 # Preload with python packages required for VTS
 # This is because VTS does pip intall and by having them locally it's faster and
 # doesn't require Internet access
@@ -243,7 +248,7 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
     httplib2 oauth2client pyasn1 pyasn1-modules \
     rsa six uritemplate protobuf certifi chardet \
     idna requests urllib3 \
-    parse ply oauth2client
+    parse ply oauth2client pyserial
 
 ##################################################
 # Install python package from SWF1 Artifactory PyPi

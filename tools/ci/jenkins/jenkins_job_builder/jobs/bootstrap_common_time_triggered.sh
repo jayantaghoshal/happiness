@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -x
@@ -34,6 +34,7 @@ bootstrap_docker_run () {
     --env LOG_PATH \
     --env WORKSPACE_ROOT \
     --workdir "${WORKSPACE_ROOT}" \
+    --rm \
     "${BOOTSTRAP_DOCKER_IMAGE}" \
     "$@"
 }

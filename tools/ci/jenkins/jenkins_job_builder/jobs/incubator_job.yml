@@ -1,0 +1,116 @@
+- defaults:
+    name: incubator_job_defaults
+    project-type: freestyle
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    concurrent: false
+    parameters:
+        - string:
+            name: UPSTREAM_JOB_GIT_REVISION
+            default: 'master'
+            description: 'Will use latest git revision as standard'
+        - string:
+            name: UPSTREAM_JOB_GIT_URL
+            default: 'ssh://gotsvl1415.got.volvocars.net:29421/manifest'
+            description: ''
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_hourly_build-eng
+            description: UPSTREAM_JOB can be used to fetch info about the build.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_incubator
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+    wrappers:
+        - timestamps
+        - timeout:
+            timeout: 60
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell:
+            !include-raw:
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_staging_test_common.sh
+
+- job:
+    name: ihu_incubator
+    project-type: multijob
+    description: Link to test report - http://gotsvl1416.got.volvocars.net/incubator_test_report/<BUILD_NUMBER>
+    node: high
+    triggers:
+        - timed: "H * * * *"
+    builders:
+        - multijob:
+            name: Incubator
+            condition: ALWAYS
+            projects:
+              - name: ihu_incubator_test-generic
+                current-parameters: true
+              - name: ihu_incubator_test-flexray
+                current-parameters: true
+                kill-phase-on: NEVER
+              - name: ihu_incubator_test-audio
+                current-parameters: true
+                kill-phase-on: NEVER
+              - name: ihu_incubator_test-apix
+                current-parameters: true
+                kill-phase-on: NEVER
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_incubator</customProjectName>
+                <customPrefix>IhuIncubatorMaster</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+
+- job:
+    name: ihu_incubator_test-generic
+    defaults: incubator_job_defaults
+    node: daily_test-generic
+
+- job:
+    name: ihu_incubator_test-flexray
+    defaults: incubator_job_defaults
+    node: daily_test-flexray
+
+- job:
+    name: ihu_incubator_test-audio
+    defaults: incubator_job_defaults
+    node: daily_test-audio
+
+- job:
+    name: ihu_incubator_test-apix
+    defaults: incubator_job_defaults
+    node: daily_test-apix

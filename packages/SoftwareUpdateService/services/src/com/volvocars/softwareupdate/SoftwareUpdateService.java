@@ -19,13 +19,22 @@ import android.os.RemoteException;
 
 import android.util.Log;
 import vendor.volvocars.hardware.installationmaster.V1_0.InstallationStatus;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.volvocars.cloudservice.DownloadInfo;
+import com.volvocars.cloudservice.DownloadSummary;
+import com.volvocars.cloudservice.InstallationSummary;
+import com.volvocars.cloudservice.DataFile;
+import com.volvocars.cloudservice.Ecu;
+import com.volvocars.cloudservice.SoftwarePart;
+
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.InstallationReport;
 import com.volvocars.softwareupdate.InstallationPopup.InstallOption;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
@@ -51,6 +60,8 @@ public class SoftwareUpdateService extends Service {
     private int state = 0; // Dummy state
 
     private ArrayList<SoftwareInformation> softwareInformationList;
+    private ArrayList<Setting> settings;
+
     private SoftwareManagementApiCallback swapiCallback;
 
     private static Handler messageHandler = new MessageHandler();
@@ -83,6 +94,7 @@ public class SoftwareUpdateService extends Service {
         swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
         swapiCallback = new SoftwareManagementApiCallback(this);
         softwareInformationList = new ArrayList();
+        settings = new ArrayList();
 
         installationMaster = new InstallationMaster(this);
         installationMaster.init();
@@ -113,6 +125,13 @@ public class SoftwareUpdateService extends Service {
         super.onDestroy();
     }
 
+    public ArrayList<SoftwareInformation> GetSoftwareInformationList() {
+        return softwareInformationList;
+    }
+
+    public ArrayList<Setting> GetSettings() {
+        return settings;
+    }
     public void GetSoftwareAssignmentList() {
         if (swapi != null) {
             try {
@@ -200,10 +219,13 @@ public class SoftwareUpdateService extends Service {
     public void onInstallationNotification(String uuid, String notification) {
         Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
 
-        Log.w(LOG_TAG, "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
+        Log.w(LOG_TAG,
+                "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
         InstallNotification installNotification = new InstallNotification();
         if (notification.equals("INSTALLATION_STARTED"))
             installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
+        else if (notification.equals("INSTALLATION_COMPLETE"))
+            installNotification.notification.status.statusCode = Status.StatusCode.OK;
         installNotification.installationOrderId = uuid;
 
         try {
@@ -213,17 +235,54 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
+    public void onInstallationReport(String installationOrder, InstallationSummary installationSummary) {
+        Log.v(LOG_TAG, "onInstallationReport: [installationOrderID: " + installationOrder + ", installation summary: " + installationSummary.softwareId + "]");
+        Log.w(LOG_TAG, "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
+        InstallationReport installationReport = new InstallationReport();
+        DownloadSummary downloadSummary = new DownloadSummary();
+        DataFile file = new DataFile();
+        file.identifier = "hello world";
+        List<DataFile> dataFiles = new ArrayList();
+        dataFiles.add(file);
+
+        downloadSummary.dataFiles = dataFiles;
+
+        installationReport.installationOrderId = installationOrder;
+        installationReport.downloadSummary = downloadSummary;
+        installationReport.installationSummary = installationSummary;
+
+        Log.d(LOG_TAG, "created report");
+        try {
+            Log.i(LOG_TAG, "sending installation report");
+            swapi.PostInstallationReport(installationReport, swapiCallback);
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "onInstallationReport failed: RemoteException [" + e.getMessage() + "]");
+        }
+    }
+
     public void GetInstallNotification(String installationOrderId) {
         if (swapi != null) {
             try {
                 Log.v(LOG_TAG, "GetInstallNotification [installationOrderId: " + installationOrderId + "]");
                 swapi.GetInstallNotification(installationOrderId, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");            }
-        }
-        else {
+                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");
+            }
+        } else {
             Log.e(LOG_TAG, "GetInstallNotification failed: Local SoftwareManagementApi variable is null");
         }
+    }
+
+    public void SetSetting(Setting setting) {
+        Log.w(LOG_TAG, "SetSetting not implemented... \n called with setting [type: " + setting.type.name() + ", value: " + setting.value + "]");
+        for (Setting s : settings) {
+            if (s.type == setting.type) {
+                s.value = setting.value;
+                return;
+            }
+        }
+
+        settings.add(setting);
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
@@ -292,11 +351,11 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void showInstallationPopup(DownloadInfo info) {
+    public void showInstallationPopup(String installationOrderId) {
         Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
 
         for (SoftwareInformation information : softwareInformationList) {
-            if (info.installationOrderId.equals(information.installationId)) {
+            if (installationOrderId.equals(information.installationId)) {
                 Intent intent = new Intent(this, InstallationPopup.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(InstallationPopup.NAME, information.name);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -76,7 +76,7 @@ void IpcbSimulator::CreateAndSendIpActivityMessage() {
                      IpCmdTypes::DataType::NOT_ENCODED,
                      sequenceId_);
 
-    pdu.header.protocol_version = 2;
+    pdu.header.protocol_version = 3;
     sequenceId_++;
 
     pdu.setPayload(std::vector<uint8_t>({0x01, (uint8_t)0x00, 0, 0}));

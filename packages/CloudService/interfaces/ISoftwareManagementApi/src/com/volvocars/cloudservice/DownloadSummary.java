@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -17,7 +17,7 @@ public class DownloadSummary implements Parcelable {
     public long totalDownloadTime = 0;
     public long effectiveDownloadTime = 0;
 
-    List<DataFile> dataFiles = new ArrayList();
+    public List<DataFile> dataFiles = new ArrayList();
 
     public static final Creator<DownloadSummary> CREATOR = new Creator<DownloadSummary>() {
         @Override

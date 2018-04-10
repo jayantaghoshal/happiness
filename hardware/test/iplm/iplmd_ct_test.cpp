@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -99,7 +99,7 @@ class IplmTestFixture : public ::testing::Test {
 
         // Move test case into namespace for network mocks to work
         int fileDescriptor;
-        std::string nameSpace = "/var/run/netns/vcc";
+        std::string nameSpace = "/dev/vendor/netns/vcc";
 
         fileDescriptor = open(nameSpace.c_str(), O_RDONLY);
         if (fileDescriptor > 0) {
@@ -242,31 +242,6 @@ class IplmTestFixture : public ::testing::Test {
 TEST_F(IplmTestFixture, ReciveActivityMessage) {
     ALOGD("+ ReciveActivityMessage");
 
-    // Setup iplm. Wait for internal properties to clear.
-    {
-        std::promise<int> promise;
-        std::future<int> future = promise.get_future();
-
-        lscMocker->RegisterLSC("iplmd-test");
-        lscMocker->onNodeStatusCallback = [&](Ecu ecuType, bool ecuStatus) {
-            ALOGD("+ onNodeStatusCallback");
-            onResourceGroupStatusCallbackCounter++;
-            if (!ecuStatus && onResourceGroupStatusCallbackCounter == 1) {
-                promise.set_value(true);
-            }
-            ALOGD("- onNodeStatusCallback");
-        };
-
-        std::future_status status = future.wait_for(std::chrono::milliseconds(3000));
-        if (status == std::future_status::deferred) {
-            ASSERT_TRUE(false) << "Preconditions not met. Promise deferred exiting";
-        } else if (status == std::future_status::timeout) {
-            ASSERT_TRUE(false)
-                    << "Preconditions not met. Timeout: Didn't recive any keep alive message within timelimit. Exiting";
-        }
-        ALOGD("- Setup complete");
-    }
-
     ALOGD("- Starting test");
     bool promise_complete = false;
     Pdu temp_pdu;
@@ -275,7 +250,7 @@ TEST_F(IplmTestFixture, ReciveActivityMessage) {
     IpcbSimulator ipcbSimulator("198.18.255.255", 60000, 70000, 1);
     temp_pdu.createHeader(
             0xFFFF, 0xFF01, IpCmdTypes::OperationType::NOTIFICATION_CYCLIC, IpCmdTypes::DataType::NOT_ENCODED, 1);
-    temp_pdu.header.protocol_version = 2;
+    temp_pdu.header.protocol_version = 3;
     temp_pdu.setPayload(std::vector<uint8_t>({0x01, (uint8_t)0x00, 0, 0}));
     ipcbSimulator.SendPdu(temp_pdu);
 
@@ -298,8 +273,10 @@ TEST_F(IplmTestFixture, ReciveActivityMessage) {
 
         std::future_status status = future.wait_for(std::chrono::milliseconds(3000));
         if (status == std::future_status::deferred) {
+            lscMocker->UnregisterLSC("iplmd-test");
             ASSERT_TRUE(false) << "Promise deferred exiting";
         } else if (status == std::future_status::timeout) {
+            lscMocker->UnregisterLSC("iplmd-test");
             ASSERT_TRUE(false) << "Timeout:Didn't recive any keep alive message within timelimit. Exiting";
         } else if (status == std::future_status::ready) {
             ALOGD("Success!");

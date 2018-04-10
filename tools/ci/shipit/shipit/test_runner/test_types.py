@@ -39,6 +39,15 @@ class IhuBaseTest:
         self.require_capabilities = require_capabilities
 
 
+class AndroidVTS(IhuBaseTest):
+    def __init__(self, module_name, require_capabilities):
+        super().__init__(require_capabilities)
+        self.module_name = module_name
+
+    def __str__(self):
+        return self.module_name
+
+
 class VTSTest(IhuBaseTest):
     def __init__(self, test_root_dir, require_capabilities):
         # type: (str, Set[str]) -> None

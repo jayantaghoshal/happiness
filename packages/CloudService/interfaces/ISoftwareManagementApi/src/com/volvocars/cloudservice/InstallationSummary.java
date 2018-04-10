@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -18,7 +18,7 @@ public class InstallationSummary implements Parcelable {
     public int repeatResets = 0;
     public long totalInstallationTime = 0;
 
-    List<Ecu> ecus = new ArrayList();
+    public List<Ecu> ecus = new ArrayList();
 
     public static final Creator<InstallationSummary> CREATOR = new Creator<InstallationSummary>() {
         @Override

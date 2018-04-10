@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -193,7 +193,7 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
                                       (request.header.operation_id & 0xFF) << 16 |
                                       (static_cast<uint8_t>(request.header.operation_type)) << 8 | sequence_id++;
     request.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
-    request.header.protocol_version = 2;
+    request.header.protocol_version = 3;
 
     std::promise<bool> p_msg_cb_triggered;
     std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
@@ -313,7 +313,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
             (notification.header.service_id & 0xFF) << 24 | (notification.header.operation_id & 0xFF) << 16 |
             (static_cast<uint8_t>(notification.header.operation_type)) << 8 | sequence_id++;
     notification.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
-    notification.header.protocol_version = 2;
+    notification.header.protocol_version = 3;
 
     tcam_sim.SendPdu(notification);
 
@@ -388,7 +388,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
                                       (request.header.operation_id & 0xFF) << 16 |
                                       (static_cast<uint8_t>(request.header.operation_type)) << 8 | sequence_id++;
     request.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
-    request.header.protocol_version = 2;
+    request.header.protocol_version = 3;
 
     tcam_sim.SendPdu(request);
 
@@ -457,7 +457,7 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     response.header.operation_type = Connectivity::IpCmdTypes::OperationType::RESPONSE;
     response.header.sender_handle_id = read_pdu.header.sender_handle_id;
     response.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
-    response.header.protocol_version = 2;
+    response.header.protocol_version = 3;
 
     uint8_t response_received = 0;
     std::promise<bool> p_msg_cb_triggered;
@@ -658,7 +658,7 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
     ack.header.operation_type = Connectivity::IpCmdTypes::OperationType::ACK;
     ack.header.sender_handle_id = read_pdu.header.sender_handle_id;
     ack.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
-    ack.header.protocol_version = 2;
+    ack.header.protocol_version = 3;
     ALOGI("TestNoResponseRetry, Sending ACK from simulator");
     tcam_sim.SendPdu(ack);
 

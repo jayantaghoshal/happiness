@@ -158,10 +158,25 @@ ExpectedExceptions = (linters.LinterError,
 
 
 def is_external_thirdparty(file_path: str) -> bool:
-    if file_path.find("/external/") > 0:
+    thirdparty_paths = ["/external/", "/thirdparty/"]
+
+    if any(path in file_path for path in thirdparty_paths):
         return True
 
-    if file_path.find("/thirdparty/") > 0:
+    return False
+
+def is_known_copyright_violator(file_path: str) -> bool:
+    """ Check if the specified path is known for violating the Copyright rules
+
+    This function is temporary and shall be removed once all the known violators have fixed their issues
+    """
+    violator_paths = ["/vendor/volvocars/hardware/infotainmentIpBus/include/tem3_interface/", # ARTINFO-2707
+                      "/vendor/volvocars/hardware/signals/dataelements/generated/", # ARTINFO-2708
+                      "/vendor/volvocars/device/vcc_emulator_x86/", # ARTINFO-2709, same issue for the two paths below
+                      "/vendor/volvocars/hardware/vehicle_emulator/",
+                      "/vendor/volvocars/hardware/vehicle/tools/halmodulesink/src/com/volvocars/test/lib/vehiclehal/"]
+
+    if any(path in file_path for path in violator_paths):
         return True
 
     return False
@@ -171,7 +186,8 @@ def verify_file_path(file_path):
     if not is_external_thirdparty(file_path):
         codeformat.verify_source_file_format(file_path)
         codeformat.verify_guard2once(file_path)
-        copyrightheader.verify_copyright_headers(file_path)
+        if not is_known_copyright_violator(file_path):
+            copyrightheader.verify_copyright_headers(file_path)
         linters.run_for_file(file_path)
 
 
@@ -179,15 +195,14 @@ def fix_file_path(file_path: str, is_precommit: bool):
     if not is_external_thirdparty(file_path):
         codeformat.apply_guard2once(file_path)
         codeformat.apply_source_file_format(file_path)
-
-        if is_precommit:
-            copyrightheader.fix_copyright_headers(file_path)
-        else:
-            try:
-                copyrightheader.verify_copyright_headers(file_path)
-            except copyrightheader.LicenseHeaderInvalidError:
+        if not is_known_copyright_violator(file_path):
+            if is_precommit:
                 copyrightheader.fix_copyright_headers(file_path)
-
+            else:
+                try:
+                    copyrightheader.verify_copyright_headers(file_path)
+                except copyrightheader.LicenseHeaderInvalidError:
+                    copyrightheader.fix_copyright_headers(file_path)
         linters.run_for_file(file_path)
 
 

@@ -10,8 +10,8 @@ import android.app.Service;
 import android.os.IBinder;
 import android.content.*;
 import android.os.RemoteException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Library/wrapper class that is used to access SoftwareUpdateManager features
@@ -55,9 +55,25 @@ public class SoftwareUpdateManager implements ServiceConnection {
         context.bindService(intent, this, Context.BIND_AUTO_CREATE);
     }
 
+    public void disconnect() {
+        context.unbindService(this);
+    }
+
     public void GetState(ISoftwareUpdateManagerCallback callback) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.GetState(callback);
+        }
+    }
+
+    public void GetSoftwareInformationList(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.GetSoftwareInformationList(callback);
+        }
+    }
+
+    public void GetSettings(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.GetSettings(callback);
         }
     }
 
@@ -88,6 +104,18 @@ public class SoftwareUpdateManager implements ServiceConnection {
     public void GetInstallNotification(String installationOrderId) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.GetInstallNotification(installationOrderId);
+        }
+    }
+
+    public void ShowInstallationPopup(String installationOrderId) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.ShowInstallationPopup(installationOrderId);
+        }
+    }
+
+    public void SetSetting(Setting setting) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.SetSetting(setting);
         }
     }
 }

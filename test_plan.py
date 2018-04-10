@@ -1,7 +1,7 @@
 # Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
+from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, Disabled, standard_caps, Capabilities as cp
 
 #
 # Rules to simplify merge errors as many people will be editing this file:
@@ -20,6 +20,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, Disabled, stand
 test_plan_gate = [
     VTSTest("vendor/volvocars/tools/test/daemon_test",                              standard_caps), #VtsDaemonTest, Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps), #VtsCiSmokeTest, Magnus Larsson
+    VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #libdbgTest, Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",               standard_caps), #VtsDEUnitTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",                   standard_caps), #VtsEventLoopCTTestCases, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ut",                        standard_caps), #liblocalconfig_ut, Magnus Larsson
@@ -28,16 +29,12 @@ test_plan_gate = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/namespace_configuration",     standard_caps), #VtsNetmandNamespaceComponentTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/uds/test/ct",                                standard_caps), #udsdatacollector_ct, Krzysztof Wesolowski
     VTSTest("vendor/volvocars/tools/test/ui_performance/volvolauncher",             standard_caps), #GeneralPerformanceTest, Magnus Larsson
+    VTSTest("vendor/volvocars/hardware/carconfig/carconfig/test/ut",                standard_caps), #Carconfig test, Johnny Karlsson
 ]
 
 test_plan_hourly = test_plan_gate + [
-    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}), #Robin Touche
-             reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
-             jira_issue="PSS370-15982",
-             deadline="2018-04-28"
-    ),
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
-    VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #Carl Sjoberg
+    VTSTest("vendor/volvocars/hardware/pac/evs/hardware/test/ut",                   standard_caps), #VtsHalPacEvsHardware, Janne Petkovski
     VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
@@ -58,8 +55,19 @@ test_plan_nightly = test_plan_hourly + [
 
 ]
 
-test_plan_staging = [
+#Put stable tests here so they can be tested often and then added to our gates
+test_plan_incubator_hourly = [
+    VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
+]
+
+#This is for unstable tests that does not need to be run often
+test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_loopback/app",      standard_caps | {cp.audio}), #Robin Touche
+    Disabled(TradefedTest("vendor/volvocars/hardware/audio/test/ct/audio_mic_control/app", standard_caps | {cp.audio}), #Robin Touche
+             reason="Microphone HAL not fully implemented. Currently no ETA from Aptiv",
+             jira_issue="PSS370-15982",
+             deadline="2018-04-28"
+    ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
@@ -78,6 +86,8 @@ test_plan_staging = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting",       standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
+    VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
+
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
@@ -87,5 +97,7 @@ test_plan_staging = [
     TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
-
+    AndroidVTS("VtsHalAudioV2_0Target",                                             standard_caps), #Gustav Svensson
+    AndroidVTS("VtsHalBroadcastradioV1_0Target",                                    standard_caps), #Gustav Svensson
+    AndroidVTS("VtsHalMediaOmxV1_0Host",                                            standard_caps), #Gustav Svensson
 ]

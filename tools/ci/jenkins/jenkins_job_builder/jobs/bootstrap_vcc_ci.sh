@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 export BOOTSTRAP_DOCKER_IMAGE=swf1.artifactory.cm.volvocars.biz:5002/test/vcc_aosp_build:If943907d331a19834bdfea658f72144a0e503a08
@@ -25,6 +25,7 @@ bootstrap_docker_run () {
         --env LOG_PATH \
         --env WORKSPACE_ROOT \
         --workdir "${WORKSPACE_ROOT}" \
+        --rm \
         "${BOOTSTRAP_DOCKER_IMAGE}" \
         "$@"
 }

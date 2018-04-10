@@ -6,6 +6,7 @@
 #include "soundwrapper.h"
 #include <memory>
 #include <mutex>
+#include <string>
 
 #undef LOG_TAG
 #define LOG_TAG "SoundNotificationWrp"
@@ -13,7 +14,7 @@
 namespace SoundNotifications {
 
 android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> SoundWrapper::am_service;
-static const std::chrono::milliseconds kRestartTimeout = std::chrono::milliseconds(50);
+static const std::chrono::milliseconds kRestartTimeout = std::chrono::milliseconds(5);
 
 // ==========================================================
 // implementation Sound
@@ -22,14 +23,38 @@ Sound::Sound(const SoundWrapper::SoundID& soundID,
     : _state(State::Idle),
       connectionID(-1),
       _soundID(soundID),
-      _name(AudioTable::getSourceName(soundID.type, soundID.component)),
+      _name("invalid"),
       am_service(service),
-      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {}
+      restartTimer{tarmac::eventloop::IDispatcher::GetDefaultDispatcher()} {
+    try {
+        _name = (AudioTable::getSourceName(soundID.type, soundID.component));
+        //(AudioTable::getSourceName(soundID.type, soundID.component));
+    } catch (std::invalid_argument iaex) {
+        ALOGW("Invalid combination of Type and Component");
+    }
+}
 
 void Sound::onTimeout() {
     ALOGD("Sound::onTimeout %s", _name.c_str());
     play();
 }
+
+/*
+ * Called on disconnected callback from AM
+*/
+void Sound::onDisconnected() {
+    connectionID = -1;
+    // make sure state is idle
+    std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
+    _state = State::Idle;
+}
+
+void Sound::setState(int state) {
+    std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
+    _state = static_cast<State>(state);
+}
+
+SoundWrapper::SoundID Sound::getSoundID() const { return _soundID; }
 
 void Sound::play() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
@@ -50,7 +75,7 @@ void Sound::play() {
                         if (s == AMStatus::OK) {
                             connectionID = cId;
                             SoundWrapper::registerConnection(this, connectionID);
-                            ALOGD("Sound::play Idle->Starting %s", _name.c_str());
+                            ALOGD("Sound::play Idle->Starting %s. Connection ID %li", _name.c_str(), connectionID);
                         } else {
                             ALOGW("Sound::play failed to playSound %s. AMStatus: %i", _name.c_str(), s);
                             _state = State::Idle;  // stay in Idle
@@ -68,20 +93,21 @@ void Sound::play() {
             break;
         }
         case State::Playing:
-            ALOGD("Sound::play invalid state Playing %s", _name.c_str());
+            ALOGD("Sound::play invalid state Playing %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Starting:
-            ALOGD("Sound::play invalid state Starting %s", _name.c_str());
+            ALOGD("Sound::play invalid state Starting %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Stopping:
-            _state = State::Starting;
-            ALOGD("Sound::play Stopping->Starting %s", _name.c_str());
+            _state = State::Idle;
+            restartTimer.Enqueue([this]() { onTimeout(); });
+            ALOGD("Sound::play Stopping->Starting %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         default:
-            ALOGW("Sound::play Invalid state %d %s", (int)_state, _name.c_str());
+            ALOGW("Sound::play Invalid state %d %s. Connection ID %li", (int)_state, _name.c_str(), connectionID);
             break;
     }
 }
@@ -90,9 +116,10 @@ void Sound::stop() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
     switch (_state) {
         case State::Idle:
-            ALOGD("Sound::stop invalid state Idle %s", _name.c_str());
+            ALOGD("Sound::stop invalid state Idle %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
+        case State::Starting:
         case State::Playing: {
             _state = State::Stopping;  // we set this here since we dont know if playSound maybe does the callback
                                        // directly
@@ -102,22 +129,18 @@ void Sound::stop() {
 
             _state = State::Idle;  // got to Idle
             if (status.isOk()) {
-                ALOGD("Sound::stop Playing->Stopping %s", _name.c_str());
+                ALOGD("Sound::stop Playing->Stopping %s. Connection ID %li", _name.c_str(), connectionID);
             } else {
-                ALOGE("Sound::stop failed to stopSound %s, jumping to Idle %s",
+                ALOGE("Sound::stop failed to stopSound %s, jumping to Idle %s. Connection ID %li",
                       status.description().c_str(),
-                      _name.c_str());
+                      _name.c_str(),
+                      connectionID);
             }
             break;
         }
 
-        case State::Starting:
-            _state = State::Stopping;
-            ALOGD("Sound::stop Starting->Stopping %s", _name.c_str());
-            break;
-
         case State::Stopping:
-            ALOGD("Sound::stop invalid state Stopping %s", _name.c_str());
+            ALOGD("Sound::stop invalid state Stopping %s. Connection ID %li", _name.c_str(), connectionID);
             break;
     }
 }
@@ -131,17 +154,17 @@ void Sound::onPlayStarted() {
     switch (_state) {
         case State::Idle:
             // Do nothing
-            ALOGD("Sound::onPlayStarted invalid state Idle %s", _name.c_str());
+            ALOGD("Sound::onPlayStarted invalid state Idle %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Playing:
             // Do nothing
-            ALOGD("Sound::onPlayStarted invalid state Playing %s", _name.c_str());
+            ALOGD("Sound::onPlayStarted invalid state Playing %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Starting:
             _state = State::Playing;
-            ALOGD("Sound::onPlayStarted Starting->Playing %s", _name.c_str());
+            ALOGD("Sound::onPlayStarted Starting->Playing %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Stopping:
@@ -149,7 +172,10 @@ void Sound::onPlayStarted() {
             break;
 
         default:
-            ALOGE("Sound::onPlayStarted Invalid state %d %s", (int)_state, _name.c_str());
+            ALOGE("Sound::onPlayStarted Invalid state %d %s. Connection ID %li",
+                  (int)_state,
+                  _name.c_str(),
+                  connectionID);
             break;
     }
 }
@@ -160,25 +186,29 @@ void Sound::onPlayStopped(int32_t reason) {
     switch (_state) {
         case State::Idle:
             // Do nothing
-            ALOGD("Sound::onPlayStopped invalid state Idle %s", _name.c_str());
+            ALOGD("Sound::onPlayStopped invalid state Idle %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Playing:
             _state = State::Idle;
-            ALOGD("Sound::onPlayStopped Playing->Idle %s", _name.c_str());
+            ALOGD("Sound::onPlayStopped Playing->Idle %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         case State::Starting:
-            play();
+            _state = State::Idle;
+            restartTimer.Enqueue([this]() { onTimeout(); });
             break;
 
         case State::Stopping:
             _state = State::Idle;
-            ALOGD("Sound::onPlayStopped Stopping->Idle %s", _name.c_str());
+            ALOGD("Sound::onPlayStopped Stopping->Idle %s. Connection ID %li", _name.c_str(), connectionID);
             break;
 
         default:
-            ALOGE("Sound::onPlayStopped Invalid state %d %s", (int)_state, _name.c_str());
+            ALOGE("Sound::onPlayStopped Invalid state %d %s. Connection ID %li",
+                  (int)_state,
+                  _name.c_str(),
+                  connectionID);
             break;
     }
 }
@@ -195,8 +225,10 @@ static std::recursive_mutex soundIdsMutex;
 bool SoundWrapper::init(::android::sp<IAudioManager> service) {
     // for unit testing
 
-    if (service.get() != nullptr) {
-        am_service = ::android::sp<IAudioManager>(service);
+    if (service != nullptr) {
+        if (service != am_service) {
+            am_service = service;
+        }
     } else {
         while (am_service.get() == nullptr) {
             am_service = IAudioManager::getService();
@@ -270,7 +302,19 @@ void SoundWrapper::stop(SoundID soundid) {
 void SoundWrapper::registerConnection(Sound* sound, int64_t connectionID) {
     std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
     (void)safeLock;
-    soundIds[connectionID] = std::shared_ptr<Sound>(sound);
+    if (sound == nullptr) {
+        return;
+    }
+    std::map<SoundWrapper::SoundID, std::shared_ptr<Sound>>::iterator i;
+    std::shared_ptr<Sound> sound_;
+    {  // lock scope
+        std::lock_guard<std::recursive_mutex> safeLock(soundsMutex);
+        (void)safeLock;
+        i = sounds.find(sound->getSoundID());
+        if (i != sounds.end()) {
+            soundIds[connectionID] = std::shared_ptr<Sound>(i->second);
+        }
+    }
 }
 
 bool SoundWrapper::isPlaying(SoundID soundid) {
@@ -311,8 +355,13 @@ bool SoundWrapper::getInitialized() const { return initialized.load(); }
     ALOGD("%s %d", __FUNCTION__, connectionID);
     std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
     (void)safeLock;
-
-    return android::hardware::Return<void>();
+    std::map<int64_t, std::shared_ptr<Sound>>::iterator i = soundIds.find(static_cast<int64_t>(connectionID));
+    if (i != soundIds.end()) {
+        if (i->second->getConnectionID() == connectionID) {
+            i->second->onDisconnected();
+        }
+    }
+    return android::hardware::Status::fromStatusT(android::OK);
 }
 
 ::android::hardware::Return<void> SoundWrapper::onConnected(uint32_t connectionID) {
@@ -320,7 +369,7 @@ bool SoundWrapper::getInitialized() const { return initialized.load(); }
     std::lock_guard<std::recursive_mutex> safeLock(soundIdsMutex);
     (void)safeLock;
 
-    return android::hardware::Return<void>();
+    return android::hardware::Status::fromStatusT(android::OK);
 }
 
 ::android::hardware::Return<void> SoundWrapper::onWavFileFinished(uint32_t connectionID) {
@@ -333,7 +382,7 @@ bool SoundWrapper::getInitialized() const { return initialized.load(); }
             i->second->onPlayStopped(0);
         }
     }
-    return android::hardware::Return<void>();
+    return android::hardware::Status::fromStatusT(android::OK);
 }
 
 ::android::hardware::Return<void> SoundWrapper::onRampedIn(uint32_t connectionID) {
@@ -346,16 +395,17 @@ bool SoundWrapper::getInitialized() const { return initialized.load(); }
             i->second->onPlayStarted();
         }
     }
-    return android::hardware::Return<void>();
+    return android::hardware::Status::fromStatusT(android::OK);
 }
 
 ::android::hardware::Return<void> SoundWrapper::ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) {
     ALOGD("%s sink: %d, volume: %d", __FUNCTION__, sinkId, volume);
-    return android::hardware::Return<void>();
+    return android::hardware::Status::fromStatusT(android::OK);
 }
 
 // SoundID
-SoundWrapper::SoundID::SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c) : type(t), component(c) {}
+SoundWrapper::SoundID::SoundID(AudioTable::SoundType t, AudioTable::SoundComponent c, bool valid)
+    : type(t), component(c), isValid(valid) {}
 
 bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
     const SoundID& lhs = *this;
@@ -365,10 +415,18 @@ bool SoundWrapper::SoundID::operator<(const SoundID& s) const {
     return lhs.component < s.component;
 }
 
+SoundWrapper::SoundID& SoundWrapper::SoundID::operator=(SoundWrapper::SoundID other) {
+    type = other.type;
+    component = other.component;
+    isValid = other.isValid;
+    return *this;
+}
+
 #ifdef UNIT_TEST
 void SoundWrapper::clearAll() {
     ALOGD("%s", __FUNCTION__);
     sounds.clear();
+    soundIds.clear();
 }
 
 int SoundWrapper::getSoundState(SoundID soundid) {
@@ -380,6 +438,28 @@ int SoundWrapper::getSoundState(SoundID soundid) {
         return -1;  // sound not found
     }
 }
+
+int64_t SoundWrapper::getConnectionID(SoundID soundid) {
+    auto i = sounds.find(soundid);
+    std::shared_ptr<Sound> sound;
+    if (i != sounds.end()) {
+        return i->second->getConnectionID();
+    } else {
+        return -1;  // sound not found
+    }
+}
+
+void SoundWrapper::setSoundState(SoundID soundid, int state) {
+    auto i = sounds.find(soundid);
+    std::shared_ptr<Sound> sound;
+    if (i != sounds.end()) {
+        i->second->setState(state);
+        return;
+    } else {
+        return;  // sound not found
+    }
+}
+
 #endif
 
 }  // namespace SoundNotifications

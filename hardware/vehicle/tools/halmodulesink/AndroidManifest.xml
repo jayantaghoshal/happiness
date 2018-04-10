@@ -3,6 +3,7 @@
     package="com.volvocars.halmodulesink"
     android:versionCode="0"
     android:versionName=""
+    android:sharedUserId="android.uid.system"
     coreApp="true" >
 
     <uses-permission android:name="android.car.permission.CAR_VENDOR_EXTENSION"/>

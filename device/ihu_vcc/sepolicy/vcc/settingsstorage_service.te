@@ -1,10 +1,13 @@
 type settingsstorage_service, domain;
 type settingsstorage_service_exec, exec_type, file_type, vendor_file_type;
+type vehiclesettings_data_file, data_file_type, file_type;
 
 init_daemon_domain(settingsstorage_service)
 
 allow settingsstorage_service hal_vehicle_default:binder call;
 allow settingsstorage_service profilemanager_service:binder { call transfer };
+allow settingsstorage_service vehiclesettings_data_file:dir { rw_dir_perms };
+allow settingsstorage_service vehiclesettings_data_file:file { rw_file_perms rename };
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(settingsstorage_service)

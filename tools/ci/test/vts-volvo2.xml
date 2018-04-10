@@ -33,7 +33,7 @@ the plan as they do not execute properly.
 
   <!-- From vts-hal-hidl.xml: Internal Only -->
   <option name="compatibility:include-filter" value="VtsHalAudioEffectV2_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalAudioV2_0Target" />
+  <!-- <option name="compatibility:include-filter" value="VtsHalAudioV2_0Target" /> Causes ihu crash -->
   <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_0Target" />
   <option name="compatibility:include-filter" value="VtsHalGraphicsComposerV2_1Target" />
   <option name="compatibility:include-filter" value="VtsHalGraphicsMapperV2_0Target" />

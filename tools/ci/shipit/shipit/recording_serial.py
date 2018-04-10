@@ -65,3 +65,4 @@ class RecordingSerial:
 
     def close(self):
         self._close_event.set()
+        self._read_thread.join()

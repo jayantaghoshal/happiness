@@ -31,7 +31,8 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView swId, name, desc, installationId, installationStatus, state, downloads, downloadedResources;
-        public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout, downloadedResourcesLayout;
+        public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout,
+                downloadedResourcesLayout;
         public ImageView overflow;
         public CardView cardView;
         private boolean moreInfo = false;
@@ -77,6 +78,10 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             popup.getMenu().findItem(R.id.commission).setVisible(false);
         if (holder.state.getText().equals("INSTALL PENDING"))
             holder.showInstallNotifcationItem = true;
+        if (holder.state.getText().equals("DOWNLOADED"))
+            popup.getMenu().findItem(R.id.showPopup).setVisible(true);
+        else
+            popup.getMenu().findItem(R.id.showPopup).setVisible(false);
 
         popup.getMenu().findItem(R.id.installNotification).setVisible(holder.showInstallNotifcationItem);
         popup.show();
@@ -104,6 +109,11 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             case R.id.installNotification:
                 softwareUpdateApp.getInstallNotification(swInfo.installationId);
                 Toast.makeText(context, "Get install notification \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.showPopup:
+                softwareUpdateApp.showInstallationPopup(swInfo.installationId);
+                Toast.makeText(context, "Show installation popup \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
+                return true;
             default:
             }
             return false;

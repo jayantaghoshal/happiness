@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
-import com.volvocars.cloudservice.DownloadInfo;;
+import com.volvocars.cloudservice.DownloadInfo;
 
 import android.os.Parcel;
 import android.os.Parcelable;

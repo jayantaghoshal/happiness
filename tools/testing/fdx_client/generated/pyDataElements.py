@@ -39,7 +39,10 @@ class FrSignalInterface:
 
         self.group_id_map = {g.group_id: g for g in self.groups}
 
+        received_group_ids = set()
+
         def data_exchange(group_id, data):
+            received_group_ids.add(group_id)
             group = self.group_id_map[group_id]
             group.receive_data(data)
 
@@ -54,11 +57,28 @@ class FrSignalInterface:
                 self.connection.confirmed_start()
                 self.verify_simulation_version()
                 groups_to_subscribe = [g for g in self.groups if "ihubackbone" in g.name.lower() or "ihulin19" in g.name.lower()]
+                expected_group_ids = set([g.group_id for g in groups_to_subscribe])
                 for g in groups_to_subscribe:
-                    self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 500 * ns_per_ms, 0)
+                    # Sleep is Super ugly, super important. Seems like the Vector some times miss some free_running_request, this fixes it.
+                    time.sleep(0.3)
+                    self.connection.send_free_running_request(g.group_id, fdx_client.kFreeRunningFlag.transmitCyclic, 50 * ns_per_ms, 0)
+
+                # Extra check that free_running_request for all group ids is working, it has shown some reliability issues (see sleep above)
+                deadline = time.time() + 3
+                while True:
+                    missing_group_ids = expected_group_ids - received_group_ids
+                    if len(missing_group_ids) == 0:
+                        break
+                    time.sleep(0.05)
+                    if time.time() < deadline:
+                        continue
+                    else:
+                        raise Exception("Failed to subscribe to all groupids, missing: %r" % missing_group_ids)
+
                 self.connected = True
             except:
-                self.connection.close()
+                if self.connection is not None:
+                    self.connection.close()
                 raise
         else:
             self.connection = FDXDummyConnection()

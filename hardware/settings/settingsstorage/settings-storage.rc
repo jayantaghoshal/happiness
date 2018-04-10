@@ -1,3 +1,7 @@
+on post-fs-data
+    mkdir /data/vendor/vehiclesettings/
+    restorecon /data/vendor/vehiclesettings/
+
 service settingstorage-hidl-server /vendor/bin/vendor.volvocars.hardware.settingsstorage@1.0-service
     class main
     user root

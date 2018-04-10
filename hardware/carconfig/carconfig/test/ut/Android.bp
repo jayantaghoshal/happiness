@@ -1,0 +1,19 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "libcarconfig_ut",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+    srcs: ["*.cpp"],
+    static_libs: [
+        "libgmock",
+        "libcarconfig_reader_static",
+        "liblog",
+    ],
+    host_supported: false,
+    test_suites: [
+        "vts",
+    ],
+}

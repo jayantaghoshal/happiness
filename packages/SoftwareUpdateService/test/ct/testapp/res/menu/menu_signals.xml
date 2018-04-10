@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/getAvailableItem"
+        android:orderInCategory="1"
+        android:title="Get available assignments"
+        android:textSize="20dp"/>
+    <item
+        android:id="@+id/getCommissionedItem"
+        android:orderInCategory="2"
+        android:title="Get commissioned assignments"
+        android:textSize="20dp"/>
+</menu>

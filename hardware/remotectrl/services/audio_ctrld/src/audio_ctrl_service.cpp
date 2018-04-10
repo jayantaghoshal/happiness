@@ -15,7 +15,12 @@
 
 namespace {
 const uint64_t binder_cookie = 0x80085U;
-}
+
+// TODO (Abhi): Fix deserializer for signals based on SDB database and move these constants and related sanity checking
+// as part of deserializer
+const uint8_t REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME_PAYLOAD_LEN = 0x01U;
+const uint8_t REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME_PAYLOAD_LEN = 0x02U;
+}  // namespace
 
 namespace vcc {
 namespace remotectrl {
@@ -73,7 +78,7 @@ Return<void> AudioCtrlService::updateVolume(const hidl_remotectrl::VolumeData& d
 Return<void> AudioCtrlService::sendGetVolumeResp(uint16_t requestIdentifier,
                                                  hidl_remotectrl::StatusCode statusCode,
                                                  const hidl_remotectrl::VolumeData& data) {
-    ALOGV("%s: (%d)", __FUNCTION__, requestIdentifier);
+    ALOGD("%s: session[0x%04X]", __FUNCTION__, requestIdentifier);
 
     std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(data.context),
                                               static_cast<vsomeip::byte_t>(data.level)};
@@ -86,7 +91,7 @@ Return<void> AudioCtrlService::sendGetVolumeResp(uint16_t requestIdentifier,
 }
 
 Return<void> AudioCtrlService::sendSetVolumeResp(uint16_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) {
-    ALOGV("%s: (%d)", __FUNCTION__, requestIdentifier);
+    ALOGD("%s: session[0x%04X]", __FUNCTION__, requestIdentifier);
 
     vsomeip::return_code_e status = (statusCode == hidl_remotectrl::StatusCode::SUCCESS)
                                             ? vsomeip::return_code_e::E_OK
@@ -133,15 +138,20 @@ void AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>&
     }
 
     std::shared_ptr<vsomeip::payload> msg_payload = message->get_payload();
-    if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME) {
-        ALOGV("Get volume request received");
+    if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME &&
+        REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
+        ALOGD("Get volume request received session[0x%04X]", message->get_session());
+
         std::lock_guard<std::mutex> lock(guard_);
-        system_service_handler_->getVolume(message->get_session(), hidl_remotectrl::AudioContext::MUSIC_FLAG);
-    } else if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME) {
-        ALOGV("Set volume to %d, request received", msg_payload->get_data()[1]);
+        system_service_handler_->getVolume(message->get_session(),
+                                           static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]));
+    } else if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME &&
+               REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
+        ALOGD("Set volume to %d, request received session[0x%04X]", msg_payload->get_data()[1], message->get_session());
+
         std::lock_guard<std::mutex> lock(guard_);
         system_service_handler_->setVolume(message->get_session(),
-                                           {hidl_remotectrl::AudioContext::MUSIC_FLAG,
+                                           {static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]),
                                             static_cast<hidl_remotectrl::VolumeLevel>(msg_payload->get_data()[1])});
     }
 }

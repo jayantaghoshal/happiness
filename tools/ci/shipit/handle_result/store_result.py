@@ -67,12 +67,9 @@ def parse_vts_result_xml(vts_result_xml: str, test_detail: dict):
 
 def load_gz_logs(txt_gz_file: str):
     with gzip.open(txt_gz_file, 'rb') as f:
-        log_content = f.read().decode('UTF-8')
-        if(sys.getsizeof(log_content) >= 16700000):  # Mongodb supports to store max size of 16793598 bytes
-            print("Log file exceeds the limit")
-            return "Log file exceeds the limit"
-        else:
-            return log_content
+        # Incase of UnicodeDecodeError, the "backslashreplace" will ignore them by adding two backslashs '\\' to the front
+        log_content = f.read().decode('UTF-8', 'backslashreplace')
+        return log_content
 
 
 def parse_tradefed_result_xml(tradefed_result_xml: str, test_detail: dict):
@@ -109,14 +106,17 @@ def load_zip_logs(txt_zip_file: str):
     zip = zipfile.ZipFile(txt_zip_file)
     filename = zip.namelist()[0]
     with zip.open(filename) as f:
-                log_content = str(f.read().decode('utf-8'))
-                f.close()
+        # Incase of UnicodeDecodeError, the "backslashreplace" will ignore them by adding two backslashs '\\' to the front
+        log_content = str(f.read().decode('utf-8', 'backslashreplace'))
+        return log_content
 
-                if(sys.getsizeof(log_content) >= 16700000):  # Mongodb supports to store max size of 16793598 bytes
-                    print("Log file exceeds the limit")
-                    return "Log file exceeds the limit"
-                else:
-                    return log_content
+def truncate_to_fit_mongo(log_content: str):
+    # Mongodb supports to store max size of 16793598 bytes so we restrict each log shouldn't be more than 4 Mb
+    if(sys.getsizeof(log_content) >= 4000000):
+        print("Log file exceeds the limit")
+        return "Log file exceeds the limit so trimmed " + str(sys.getsizeof(log_content) - 4000000) + " chars in the beginning of the file !!!!!!!!!! \n" + log_content[-4000000:]
+    else:
+        return log_content
 
 
 def load_test_results(test, test_result: ResultData):
@@ -154,7 +154,7 @@ def load_test_results(test, test_result: ResultData):
 
         for filename in glob.iglob(log_dir + '**/*.gz', recursive=True):
             test_detail['file-' + str(os.path.splitext(os.path.splitext(
-                os.path.basename(filename))[0])[0])] = load_gz_logs(filename)
+                os.path.basename(filename))[0])[0])] = truncate_to_fit_mongo(load_gz_logs(filename))
 
         for filename in glob.iglob(result_dir + '**/test_result.xml', recursive=True):
             test_detail = parse_vts_result_xml(filename, test_detail)
@@ -166,11 +166,11 @@ def load_test_results(test, test_result: ResultData):
         result_dir = "/tmp/0/stub/"
 
         for filename in glob.iglob(result_dir + '**/test_result*', recursive=True):
-            parse_tradefed_result_xml(load_zip_logs(filename), test_detail)
+            parse_tradefed_result_xml(truncate_to_fit_mongo(load_zip_logs(filename)), test_detail)
 
         for filename in glob.iglob(result_dir + '**/*.zip', recursive=True):
             test_detail['file-' + str(os.path.splitext(os.path.splitext(
-                os.path.basename(filename))[0])[0])] = load_zip_logs(filename)
+                os.path.basename(filename))[0])[0])] = truncate_to_fit_mongo(load_zip_logs(filename))
 
     mongodb_wrapper.insert_data(test_detail)
 

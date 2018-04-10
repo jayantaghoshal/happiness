@@ -1,10 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 #include "Application_dataelement.h"
+#include "soundwrapper.h"
 using namespace ApplicationDataElement;
 using namespace autosar;
 
@@ -27,5 +28,6 @@ class TurnIndicator {
     ApplicationDataElement::DEReceiver<autosar::FltIndcrTurnRiRe_info> fltIndRiReReceiver;
 
     autosar::IndcrSts1 previous_IndcrDisp1WdSts;
+    SoundWrapper::SoundID lastPlayedSound;
 };
 }

@@ -4,6 +4,7 @@
 import os
 import re
 import tempfile
+import distutils.dir_util
 import xml.etree.ElementTree as ET
 from . import git
 
@@ -28,8 +29,13 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     for project in root.iter('project'):
         current_repo = project.get('name')
         revision = project.get('revision')
+        repo_path = project.get('path')
         if revision == "ZUUL_COMMIT_OR_HEAD":
             print("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
+            #There was a problem men manifest path differ from Gerrit repo name
+            if repo_path != current_repo:
+                align_repo_path(repo_path, current_repo, project_root)
+
             #check what sha to use, the ZUUL_COMMIT or HEAD from repository
             revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
             print("current_repo = " + current_repo)
@@ -37,6 +43,23 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
             project.set('revision', revision)
 
     tree.write(output_path)
+
+def align_repo_path(repo_path: str, repo_name: str, project_root: str):
+        print("The repo path and the repo name is not equal in the manifest")
+        print(repo_path + " not equal to " + repo_name)
+        source_repo_path = os.path.join(project_root, repo_name)
+        destination_repo_path = os.path.join(project_root, repo_path)
+
+        if os.path.isdir(source_repo_path):
+            print("Moving folder: " + source_repo_path)
+            try:
+                print("Removing " + destination_repo_path + " for clean up")
+                distutils.dir_util.remove_tree(destination_repo_path)
+            except FileNotFoundError:
+                print("The folder " + destination_repo_path + " does not exist.")
+            distutils.dir_util.copy_tree(source_repo_path, destination_repo_path)
+        else:
+            print("The repo is not downloaded to workspace, ignoring alignment.")
 
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
     if repo_with_commit != current_repo_in_tmp_manifest:

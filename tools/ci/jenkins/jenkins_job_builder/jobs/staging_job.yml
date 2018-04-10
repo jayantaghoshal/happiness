@@ -8,6 +8,10 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: UPSTREAM_JOB can be used to fetch info about the build.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_staging
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
     properties:
         - build-discarder:
             days-to-keep: 30
@@ -33,8 +37,30 @@
                                 <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Build job failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_daily_common.sh
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_staging_test_common.sh
 
 - job:
     name: ihu_staging
@@ -101,110 +127,19 @@
     name: ihu_staging_test-generic
     defaults: staging_job_defaults
     node: daily_test-generic
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-flexray
     defaults: staging_job_defaults
     node: daily_test-flexray
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-audio
     defaults: staging_job_defaults
     node: daily_test-audio
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
 
 - job:
     name: ihu_staging_test-apix
     defaults: staging_job_defaults
     node: daily_test-apix
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Build job failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_ihu_daily_common.sh
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_staging_test_common.sh
-    publishers:
-        - archive:
-            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/vcc_test_results*.tar.gz'
-            allow-empty: 'true'
-            latest-only: 'true'
-            only-if-success: 'false'
+

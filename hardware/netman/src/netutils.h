@@ -31,7 +31,7 @@ bool SetupInterface(const char* interface_name,
                     const char* broadcast_addr,
                     uint32_t mtu);
 
-bool SetupVLan(const InterfaceConfiguration& interface_configuration);
+void SetupVLan(const InterfaceConfiguration& interface_configuration);
 
 bool BringInterfaceUp(const char* interface_name);
 

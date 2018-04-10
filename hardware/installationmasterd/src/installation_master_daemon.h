@@ -12,7 +12,7 @@ using ::vendor::volvocars::hardware::installationmaster::V1_0::DataFile;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::IInstallationMaster;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::IInstallationMasterEventListener;
 using ::vendor::volvocars::hardware::installationmaster::V1_0::InstallationStatus;
-using ::vendor::volvocars::hardware::installationmaster::V1_0::InstallationSummary;
+using ::vendor::volvocars::hardware::installationmaster::V1_0::Summary;
 
 using ::android::hardware::Return;
 using ::android::hardware::Void;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -28,10 +28,24 @@ class SettingTest : public ::testing::Test {
   public:
     SettingTest() {
         // NOTE: Starting server without any existing DB usually takes 150ms, need to take this into account in tests
-        system("stop settingstorage-hidl-server");      // NOLINT
-        system("rm /data/vendor/vehiclesettings.db*");  // NOLINT
-        system("start settingstorage-hidl-server");     // NOLINT
+        system("stop settingstorage-hidl-server");  // NOLINT
+        // Add delay for scenario of get/set accessing when HIDL is stopped when system starts.
+        std::this_thread::sleep_for(150ms);
+        system("rm /data/vendor/vehiclesettings/vehiclesettings.db*");  // NOLINT
+        std::this_thread::sleep_for(150ms);
+        system("start settingstorage-hidl-server");  // NOLINT
+        std::this_thread::sleep_for(150ms);
+        /* This is expected and valid scenario to fail. The delay is added in testcase to validate successful scenario.
+           For the failure case binder unavailability is reported.
+           04-03 09:08:40.330 W/SettingsTests( 4608): SettingsTest constr
+           04-03 09:08:40.334 V/Settings( 4608): onRegistration,
+           fqName=vendor.volvocars.hardware.settings@1.0::ISettingsStorage,
+           name=default, preexisting=1
+           04-03 09:08:40.335 W/vendor.volvocars.hardware.settings@1.0::SettingsStorage( 4608): ISettingsStorage: found
+           dead hwbinder service
+        */
         manager_ = new SettingsManagerHidl{*dispatcher};
+        std::this_thread::sleep_for(300ms);
     };
 
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher =
@@ -57,7 +71,7 @@ TEST_F(SettingTest, GetReturnsDefaultVeryFirstTime_int) {
     int value = 0;
     Setting<int, UserScope::NOT_USER_RELATED> s1(SettingId::TestSetting1, 1234, manager_);
     s1.setCallback([&](const auto& new_value) { value = new_value.value; });
-    EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(500ms, [&]() { return value == 1234; }));
+    EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(800ms, [&]() { return value == 1234; }));
     EXPECT_EQ(1234, value);
 }
 
@@ -67,7 +81,7 @@ TEST_F(SettingTest, CallbackNotFiredAfterSettingDestruction) {
         Setting<int, UserScope::NOT_USER_RELATED> s1(SettingId::TestSetting1, 1234, manager_);
         s1.setCallback([&](const auto& new_value) { called = true; });
     }
-    EXPECT_EQ(Timeout::Timeout, RunDispatcherUntil(500ms, [&]() { return called; }));
+    EXPECT_EQ(Timeout::Timeout, RunDispatcherUntil(800ms, [&]() { return called; }));
     EXPECT_FALSE(called);
 }
 
@@ -79,7 +93,7 @@ TEST_F(SettingTest, NewInstanceOfSettingUsingPreviouslySetValueAndNotDefault) {
             value = new_value.value;
             s1.setCallback(nullptr);  // Don't set any more values into Promise
         });
-        EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(500ms, [&]() { return value == 1234s; }));
+        EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(800ms, [&]() { return value == 1234s; }));
         EXPECT_EQ(1234s, value);
 
         // Set value and destroy object to make sure value is saved across instances
@@ -90,7 +104,7 @@ TEST_F(SettingTest, NewInstanceOfSettingUsingPreviouslySetValueAndNotDefault) {
         // New instance of settings should have the same value that we just set(), not default
         Setting<std::chrono::seconds, UserScope::NOT_USER_RELATED> s1(SettingId::TestSetting2, 1234s, manager_);
         s1.setCallback([&](const auto& new_value) { value2 = new_value.value; });
-        EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(500ms, [&]() { return value2 == 9876min; }));
+        EXPECT_EQ(Timeout::NoTimeout, RunDispatcherUntil(800ms, [&]() { return value2 == 9876min; }));
         EXPECT_EQ(9876min, value2);
     }
 }

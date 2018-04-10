@@ -21,7 +21,7 @@ from typing import List, Set, Tuple
 import shipit.test_runner.test_types
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner import tradefed_test_runner
-from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
+from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
@@ -48,9 +48,12 @@ def is_test_supported(test: IhuBaseTest, machine_capabilities: Set[str]):
 
 def run_test(test: IhuBaseTest) -> ResultData:
     try:
-        if isinstance(test, VTSTest):
+        if isinstance(test, AndroidVTS):
             print(test)
-            return vts_test_run.vts_tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+            return vts_test_run.vts_tradefed_run_module(test.module_name)
+        elif isinstance(test, VTSTest):
+            print(test)
+            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir))
         elif isinstance(test, TradefedTest):
             print(test)
             return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
@@ -75,11 +78,11 @@ def run_test(test: IhuBaseTest) -> ResultData:
         return test_types.ResultData(False, str(e), None, None, dict(), dict())
 
 
-def check_result(test_result: NamedTestResult) -> None:
-    results = test_result.result.json_result
+def check_result(test_results: List[NamedTestResult], abort_on_first_failure: bool) -> None:
+    results = test_results[-1].result.json_result
 
     if results is not None:
-        print("Test name: " + test_result.name)
+        print("Test name: " + test_results[-1].name)
         print("Test class: " + results["Results"][0]["Test Class"])
         for result in results["Results"]:
             print("\tTest name: " + result["Test Name"])
@@ -89,10 +92,13 @@ def check_result(test_result: NamedTestResult) -> None:
             if result["Result"] != "PASS":
                 print("Details: " + result["Details"])
                 print("Test failed! The result from " + result["Test Class"] + ", " + result["Test Name"] + " is " + result["Result"])
+                if abort_on_first_failure:
+                    print_test_summary(test_results)
+                    sys.exit(1)
 
         print("Number of executed tests in JSON file: " + str(results["Summary"]["Executed"]))
     else:
-        print("The current test case %s does not generate a JSON file" % test_result.name)
+        print("The current test case %s does not generate a JSON file" % test_results[-1].name)
 
 
 def build_testcases(tests_to_run: List[IhuBaseTest], skip_build_vts):
@@ -190,7 +196,7 @@ def print_test_summary(test_results: List[NamedTestResult]):
             print("")
 
 
-def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
+def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_first_failure: bool):
     test_results = []  # type: List[NamedTestResult]
     if ci_reporting:# initialise visualizing Testcases in VCC CI
         try:
@@ -238,11 +244,8 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool):
                 print(e)
                 print("Storing results to mongodb failed")
         test_results.append(NamedTestResult(str(t), test_result))
-        check_result(test_results[-1])
+        check_result(test_results, abort_on_first_failure)
 
-
-    for r in test_results:
-        check_result(r)  # TODO: Is this overlapping with print_test_summary   ???
 
     try:
         dump_test_results_to_json(test_results)
@@ -274,7 +277,7 @@ def main():
     subparsers = root_parser.add_subparsers(dest="program")
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
-    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
+    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
@@ -290,9 +293,11 @@ def main():
                                  "Ignore other tests even though your rig has capabilities enough to run them. "
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
-    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging'])
+    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     run_parser.add_argument(
         '--ci_reporting', action='store_true')
+    run_parser.add_argument(
+        '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
     build_parser.add_argument('--test_component', default=None,
                             help="Run without a plan and test a specified directory only")
     run_parser.add_argument('--test_component', default=None,
@@ -306,8 +311,10 @@ def main():
             return test_plan.test_plan_hourly
         elif args.plan == "nightly":
             return test_plan.test_plan_nightly
+        elif args.plan == "incubator":
+            return test_plan.test_plan_incubator_hourly
         elif args.plan == "staging":
-            return test_plan.test_plan_staging
+            return test_plan.test_plan_staging_daily
         else:
             if args.test_component:
                 androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")
@@ -362,7 +369,7 @@ def main():
             selected_tests = [t for t in supported_tests if is_all_selected_caps_in_required(t)]
         else:
             selected_tests = supported_tests
-        run_testcases(selected_tests, ci_reporting)
+        run_testcases(selected_tests, ci_reporting, args.abort_on_first_failure)
     else:
         root_parser.print_usage()
         sys.exit(1)
@@ -372,11 +379,12 @@ def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \
                 test_plan.test_plan_nightly + \
-                test_plan.test_plan_staging
+                test_plan.test_plan_incubator_hourly + \
+                test_plan.test_plan_staging_daily
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]
     all_tests_including_disabled = all_plans + disabled_subtests
-    all_testdirs_in_plans = {d.test_root_dir for d in all_tests_including_disabled if not isinstance(d, Disabled)}
+    all_testdirs_in_plans = {d.test_root_dir for d in all_tests_including_disabled if not (isinstance(d, Disabled) or isinstance(d, AndroidVTS))}
 
     android_xmls = glob.glob(vcc_root + "/**/AndroidTest.xml", recursive=True)
     directories_with_androidtestxml = {os.path.relpath(os.path.dirname(p), aosp_root) for p in android_xmls}

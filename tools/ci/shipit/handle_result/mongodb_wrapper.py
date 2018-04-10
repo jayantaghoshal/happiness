@@ -13,7 +13,8 @@ def mongo_client():
         client = MongoClient(
             "mongodb://jenkins-icup_android:" + os.environ["MONGODB_PASSWORD"] + "@gotsvl1416.got.volvocars.net:27017/admin?authMechanism=SCRAM-SHA-1")
     except Exception:
-        print("Connection to mongoDB server failed")
+        print("ERROR: Connection to mongoDB server failed")
+        raise
     db = client['test_results']
     collection = db['records']
     return collection

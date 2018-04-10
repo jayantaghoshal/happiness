@@ -62,14 +62,16 @@ vhal20::VehiclePropConfig propconfig_autoclimate() { return boolConfig(VehiclePr
 
 vhal20::VehiclePropConfig propconfig_recirculation() { return boolConfig(VehicleProperty::HVAC_RECIRC_ON, {0}); }
 
-vhal20::VehiclePropConfig propconfig_acon() { return boolConfig(VehicleProperty::HVAC_AC_ON, {0}); }
+vhal20::VehiclePropConfig propconfig_acon() {
+    return boolConfig(VehicleProperty::HVAC_AC_ON, {0});
+}
 
 vhal20::VehiclePropConfig propconfig_defroster() {
     return boolConfig(VehicleProperty::HVAC_DEFROSTER,
                       {toInt(VehicleAreaWindow::FRONT_WINDSHIELD), toInt(VehicleAreaWindow::REAR_WINDSHIELD)});
 }
 vhal20::VehiclePropConfig propconfig_maxdefrost() {
-    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, {toInt(VehicleAreaWindow::FRONT_WINDSHIELD)});
+    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, {toInt(VehicleAreaZone::ROW_1_CENTER)});
 }
 
 vhal20::VehiclePropConfig propconfig_fanlevelfront() {

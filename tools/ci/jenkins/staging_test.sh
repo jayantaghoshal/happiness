@@ -11,8 +11,29 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
+plan=""
+if [ "${JOB_NAME}" = "ihu_staging_test-generic" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
+   [ "${JOB_NAME}" = "ihu_staging_test-apix" ]
+then
+    plan="staging"
+elif [ "${JOB_NAME}" = "ihu_incubator_test-generic" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
+then
+    plan="incubator"
+fi
+
 # Download from Artifactory
-artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+if [ "${plan}" = "staging" ]
+then
+    artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+elif [ "${plan}" = "incubator" ]
+then
+    artifactory pull-latest "${UPSTREAM_JOB_JOBNAME}" out.tgz || die "artifactory pull failed"
+fi
 
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
@@ -40,39 +61,33 @@ set -e
 adb shell getprop
 
 capability=""
-if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ]
+if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ]
 then
     capability="flexray"
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ]
+elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ]
 then
     capability="audio"
-elif [ "${JOB_NAME}" = "ihu_staging_test-apix" ]
+elif [ "${JOB_NAME}" = "ihu_staging_test-apix" ] ||
+     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
 then
     capability="apix"
 fi
-export capability
-
-clean_old_test_result_files
 
 set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=staging -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=${plan} --ci_reporting -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
 status=$?
 
 set -e
 
-collect_test_result_files
-
-# Push logs and reports to Artifactory
-artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/logs/*/*/*.txt.gz
-artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" ./out/host/linux-x86/vts/android-vts/results/*.zip
-
-echo "Logs can be found at https://swf1.artifactory.cm.volvocars.biz/artifactory/webapp/#/artifacts/browse/tree/General/ICUP_ANDROID_CI/${JOB_NAME}/${BUILD_NUMBER}"
+echo "Logs and results are stored in db"
 
 # Check status
 if [ $status -ne 0 ]; then

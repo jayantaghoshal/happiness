@@ -1,0 +1,25 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "VtsHalPacEvsHardware",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_tests_pac_vts",
+        "vcc_pac_use_evs_hidl",
+    ],
+
+    header_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-test-header-lib",
+    ],
+
+    srcs: [
+        "test_evs_enumerator.cpp",
+    ],
+
+    static_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-static-lib",
+    ],
+}

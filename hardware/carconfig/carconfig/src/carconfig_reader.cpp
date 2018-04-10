@@ -1,18 +1,18 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include "carconfig_reader.h"
-#include <cutils/log.h>
 #include <fcntl.h>
-#include <string.h>
 #include <sys/stat.h>
+#include <cstring>
 #include <stdexcept>
 #include "carconfig_file_reader.h"
 
 #undef LOG_TAG
 #define LOG_TAG "CarConfigReader"
+#include <log/log.h>
 
 using namespace Carconfig_base;
 

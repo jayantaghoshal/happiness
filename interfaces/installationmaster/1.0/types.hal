@@ -61,7 +61,7 @@ struct Ecu {
     vec<SoftwarePart> softwareParts;
 };
 
-struct InstallationSummary {
+struct Summary {
     string softwareId;
     uint64_t timestamp;
     uint32_t repeatedResets;

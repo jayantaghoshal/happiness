@@ -12,18 +12,10 @@
    android:layout_height="?attr/actionBarSize"
    android:background="?attr/colorPrimary"
    android:elevation="4dp"
+   app:titleTextColor="@android:color/white"
+   app:titleTextAppearance="@style/Toolbar.TitleText"
    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-    <TextView
-        android:id="@+id/toolbarTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Software Update"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/titleLight"
-        android:layout_marginLeft="5dp"/>
 </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
@@ -43,14 +35,4 @@
             android:layout_centerInParent="true"
             android:scrollbars="vertical" />
     </RelativeLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/actionFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recycler_view"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        app:backgroundTint="@color/fabDark"
-        android:src="@drawable/ic_cloud_white_48dp" />
-    <include layout="@layout/fab_submenu"/>
 </FrameLayout>

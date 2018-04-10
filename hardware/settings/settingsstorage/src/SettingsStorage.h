@@ -72,6 +72,7 @@ class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recip
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
   private:
+    std::recursive_mutex mLock;
     // Returned pointer is valid until next time getData is called, or until this is destroyed
     const unsigned char* getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId);
     void onProfileChange(profileHidl::ProfileIdentifier profileId);

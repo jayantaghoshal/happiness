@@ -37,7 +37,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      */
     public void UpdateState(int state) {
         Log.v(LOG_TAG, "Update state to [" + state + "]");
-        for(ISoftwareUpdateManagerCallback c : clients) {
+        for (ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateState(state);
             } catch (RemoteException e) {
@@ -59,9 +59,20 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
 
     public void UpdateSoftware(SoftwareInformation software) {
         Log.v(LOG_TAG, "Update software assinment with software id: " + software.softwareId);
-        for(ISoftwareUpdateManagerCallback c : clients) {
+        for (ISoftwareUpdateManagerCallback c : clients) {
             try {
                 c.UpdateSoftware(software);
+            } catch (Exception e) {
+                clients.remove(c);
+            }
+        }
+    }
+
+    public void UpdateSettings(List<Setting> settings) {
+        Log.v(LOG_TAG, "Update settings");
+        for (ISoftwareUpdateManagerCallback c : clients) {
+            try {
+                c.UpdateSettings(settings);
             } catch (Exception e) {
                 clients.remove(c);
             }
@@ -75,6 +86,26 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
             callback.UpdateState(service.GetState());
         } catch (RemoteException e) {
             clients.remove(callback);
+        }
+    }
+
+    @Override
+    public void GetSoftwareInformationList(ISoftwareUpdateManagerCallback callback) {
+        Log.v(LOG_TAG, "GetSoftwareInformationList");
+        try {
+            callback.UpdateSoftwareList(service.GetSoftwareInformationList());
+        } catch (RemoteException e) {
+            Log.v(LOG_TAG, "GetSoftwareInformationList RemoteException: [" + e.getMessage() + "]");
+        }
+    }
+
+    @Override
+    public void GetSettings(ISoftwareUpdateManagerCallback callback) {
+        Log.v(LOG_TAG, "GetSettings");
+        try {
+            callback.UpdateSettings(service.GetSettings());
+        } catch (RemoteException e) {
+            Log.v(LOG_TAG, "GetSoftwareInformationList RemoteException: [" + e.getMessage() + "]");
         }
     }
 
@@ -97,8 +128,19 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     public void GetDownloadInfo(String uuid) throws RemoteException {
         service.GetDownloadInfo(uuid);
     }
+
     @Override
     public void GetInstallNotification(String installationOrderId) throws RemoteException {
         service.GetInstallNotification(installationOrderId);
+    }
+
+    @Override
+    public void ShowInstallationPopup(String installationOrderId) throws RemoteException {
+        service.showInstallationPopup(installationOrderId);
+    }
+
+    @Override
+    public void SetSetting(Setting setting) throws RemoteException {
+        service.SetSetting(setting);
     }
 }

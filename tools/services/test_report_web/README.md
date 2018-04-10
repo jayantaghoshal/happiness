@@ -5,6 +5,9 @@
 * for Production, run 'MONGODB_PASSWORD=password ./run.sh'
 * for Dev, run 'MONGODB_PASSWORD=password ./debug.sh'
 
+#Restart example (build & run):
+docker kill $(docker ps --filter ancestor=test_report_web --format "{{.ID}}") && ./build.sh && MONGODB_PASSWORD=password ./run.sh
+
 # get into the shell
 docker exec -it container_id /bin/bash
 

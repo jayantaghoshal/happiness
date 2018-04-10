@@ -2,6 +2,12 @@
 # This file is covered by LICENSE file in the root of this project
 
 ##############################################################
+# Disabled standard System Services (see SystemServer.java)
+##############################################################
+PRODUCT_PROPERTY_OVERRIDES += \
+    config.disable_networktime=1
+
+##############################################################
 # Native daemons
 ##############################################################
 PRODUCT_PACKAGES += \
@@ -27,6 +33,10 @@ PRODUCT_PACKAGES += \
     installationmasterd \
     remotectrl_routerd \
     remotectrl_audioctrld \
+    android.hardware.automotive.evs.vcc@1.0-hardware \
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vcc.service.evs.boot=true
 
 #############################################################
 # VCC System Apps/Services
@@ -36,7 +46,9 @@ PRODUCT_PACKAGES += \
     TimeZoneService \
     LcfService \
     timezones.db \
-    libjsqlite
+    libjsqlite \
+    RemoteAudioCtrlService \
+    RemoteAudioCtrlAppService \
 
 ##############################################################
 # SWDL stuff
@@ -71,15 +83,16 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_PACKAGES += \
-    VccTunerApp \
-    BrightnessService \
+    BrightnessService
 
 ##############################################################
 # Internal Apps
 ##############################################################
 PRODUCT_PACKAGES += \
     VccUserSwitchService \
-    VehicleFunctions
+    VehicleFunctions \
+    VccMediaCenter \
+    VccTunerBrowserService
 
 ##############################################################
 # Vendor apps

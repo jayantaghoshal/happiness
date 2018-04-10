@@ -34,12 +34,26 @@ Return<void> InstallationMasterDaemon::assignInstallation(const hidl_string& ins
     ALOGI("assignInstallation for installationOrder: %s", installationOrder.c_str());
 
     // Used for testing! Todo: Replace with real implementation
-    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f =
+    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f_started =
             [installationOrder](auto it) {
                 return (*it)->installNotification(installationOrder, InstallationStatus::INSTALLATION_STARTED);
             };
 
-    TryNotifyListener(f);
+    TryNotifyListener(f_started);
+
+    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f_complete =
+            [installationOrder](auto it) {
+                return (*it)->installNotification(installationOrder, InstallationStatus::INSTALLATION_COMPLETE);
+            };
+
+    TryNotifyListener(f_complete);
+
+    // send installation report (simulate installation finished)
+    Summary summary;
+    std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f_report =
+            [installationOrder, summary](auto it) { return (*it)->installationReport(installationOrder, summary); };
+
+    TryNotifyListener(f_report);
 
     return Void();
 }
@@ -58,7 +72,7 @@ Return<void> InstallationMasterDaemon::verifyDownload(const hidl_string& install
     std::vector<DataFile> data_files = {};
     _hidl_cb(data_files);
 
-    InstallationSummary summary;
+    Summary summary;
     std::function<Return<void>(std::list<android::sp<IInstallationMasterEventListener>>::iterator)> f =
             [installationOrder, summary](auto it) { return (*it)->installationReport(installationOrder, summary); };
 

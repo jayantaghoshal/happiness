@@ -22,11 +22,41 @@
 using namespace SoundNotifications;
 using namespace ECDDataElement;
 using namespace autosar;
+using namespace testing;
 
 /// Unit test for requirement REQPROD:218373/MAIN;5	Audio request for Turn Indicator
 
 class TurnIndicatorUT : public ::testing::Test {
   public:
+    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
+                                                    int32_t soundComp,
+                                                    AudioManagerMock::playSound_cb _hidl_cb) {
+        ALOGI("TurnIndicatorUT::mockPlaySound: %i %i", soundType, soundComp);
+        connectionID++;
+        bool error = false;
+
+        try {
+            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
+                                      static_cast<AudioTable::SoundComponent>(soundComp));
+        } catch (std::invalid_argument iaex) {
+            ALOGW("TurnIndicatorUT::mockPlaySound. Invalid combination of Type and Component");
+            error = true;
+        }
+
+        if (!error) {
+            _hidl_cb(AMStatus::OK, connectionID);
+            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
+        } else {
+            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
+        }
+        return android::hardware::Status::fromStatusT(android::OK);
+    }
+
+    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
+        ALOGI("TurnIndicatorUT::mockStopSound. connection ID: %d", connectionId);
+        return AMStatus::OK;
+    }
+
     static void SetUpTestCase() {
         swrapper = SoundWrapper::instance();
         am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
@@ -36,11 +66,14 @@ class TurnIndicatorUT : public ::testing::Test {
     void SetUp() override {
         SoundWrapper::clearAll();
         DataElementFramework::instance().reset();
+        ON_CALL(*am_service.get(), playSound(_, _, _)).WillByDefault(Invoke(this, &TurnIndicatorUT::mockPlaySound));
+        ON_CALL(*am_service.get(), stopSound(_)).WillByDefault(Invoke(this, &TurnIndicatorUT::mockStopSound));
     }
 
     void TearDown() override {}
     static SoundWrapper* swrapper;
     static ::android::sp<AudioManagerMock> am_service;
+    int64_t connectionID{0};
 };
 
 ::android::sp<AudioManagerMock> TurnIndicatorUT::am_service = nullptr;
@@ -64,7 +97,7 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceived_leftTurnIndSoundPlayed) {
                           testing::_))
             .Times(1);
 
-    // Simulate that we receive the FltIndcrTurnLeFrnt signal left on
+    // Simulate that we receive IndcrSts1 signal left on
     DEInjector<autosar::IndcrDisp1WdSts_info> sender;
     sender.inject(IndcrSts1::LeOn);
 }
@@ -147,7 +180,6 @@ TEST_F(TurnIndicatorUT, RightOnSignalReceivedRightFrontSignalInErrorState_noSoun
                           testing::_))
             .Times(0);  // expect no call to audio manager
 
-    // Simulate that we receive the FltIndcrTurnLeFrnt signal left on
     DEInjector<autosar::IndcrDisp1WdSts_info> sender;
     sender.inject(IndcrSts1::RiOn);
 }
@@ -169,7 +201,27 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceivedRightFrontSignalInErrorState_noSound
                           testing::_))
             .Times(0);  // expect no call to audio manager
 
-    // Simulate that we receive the FltIndcrTurnLeFrnt signal left on
     DEInjector<autosar::IndcrDisp1WdSts_info> sender;
     sender.inject(IndcrSts1::LeOn);
+}
+
+TEST_F(TurnIndicatorUT, IndicatorStatusToOff_stopSoundCalled) {
+    ALOGI("Starting %s", test_info_->name());
+
+    TurnIndicator sut_;
+
+    DEInjector<autosar::FltIndcrTurnLeFrnt_info> senderLeFrnt;
+    senderLeFrnt.inject(DevErrSts2::NoFlt);
+    DEInjector<autosar::FltIndcrTurnLeRe_info> senderLeRear;
+    senderLeRear.inject(DevErrSts2::NoFlt);
+
+    // Setup expectations first
+    EXPECT_CALL(*am_service, playSound(testing::_, testing::_, testing::_)).Times(AtLeast(1));
+    // Simulate that we receive IndcrSts1 left on, should trigger sound play
+    DEInjector<autosar::IndcrDisp1WdSts_info> sender;
+    sender.inject(IndcrSts1::LeOn);
+
+    // Simulate that we receive IndcrSts1 off, should trigger sound stop
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(AtLeast(1));
+    sender.inject(IndcrSts1::Off);
 }

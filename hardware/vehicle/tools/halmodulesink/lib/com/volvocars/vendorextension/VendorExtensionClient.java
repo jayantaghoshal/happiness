@@ -9,6 +9,7 @@ package com.volvocars.vendorextension;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.CarVendorExtensionManager;
 import android.content.Context;
+import android.hardware.automotive.vehicle.V2_0.VehicleArea;
 import android.support.car.Car;
 import android.support.car.CarConnectionCallback;
 import android.support.car.CarNotConnectedException;
@@ -68,6 +69,12 @@ public class VendorExtensionClient {
                         NO_AREA));
         supportedFeatures.add(
                 new VehiclePropertySupport(Integer.class, VehicleProperty.CURVE_SPEED_ADAPTION_STATUS,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Boolean.class, VehicleProperty.LANE_KEEPING_AID_ON,
+                        NO_AREA));
+        supportedFeatures.add(
+                new VehiclePropertySupport(Integer.class, VehicleProperty.LANE_KEEPING_AID_MODE,
                         NO_AREA));
 
         if (mCar == null) {
@@ -198,7 +205,7 @@ public class VendorExtensionClient {
     public Object get(int propID, int area)
             throws NotSupportedException, android.car.CarNotConnectedException {
         validate();
-        if (!isSupportedFeature(propID)) {
+        if (!isSupportedFeature(propID, area)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
@@ -302,7 +309,7 @@ public class VendorExtensionClient {
     public void set(int propID, int area, Object data)
             throws NotSupportedException, android.car.CarNotConnectedException {
         validate();
-        if (!isSupportedFeature(propID)) {
+        if (!isSupportedFeature(propID, area)) {
             throw new NotSupportedException("This feature is not available (propID): " + propID);
         }
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()

@@ -636,8 +636,7 @@ bool SetupInterface(const char* interface_name,
     return true;
 }
 
-bool SetupVLan(const InterfaceConfiguration& interface_configuration) {
-    auto ret = false;
+void SetupVLan(const InterfaceConfiguration& interface_configuration) {
     for (auto& entry : interface_configuration.vlan) {
         try {
             // TODO (Abhi) Change below implementation to use netlink library instead
@@ -655,18 +654,18 @@ bool SetupVLan(const InterfaceConfiguration& interface_configuration) {
                               entry.at("ip-address").c_str(),
                               entry.at("netmask").c_str(),
                               entry.at("broadcast-address").c_str())) {
-                return false;
+                ALOGE("Failed to configure IP address for: %s", entry.at("name").c_str());
+                return;
             }
 
             if (!BringInterfaceUp(entry.at("name").c_str())) {
-                return false;
+                ALOGE("Failed to bring up interface: %s!", entry.at("name").c_str());
+                return;
             }
-
         } catch (const std::out_of_range& e) {
-            return false;
+            ALOGE("Error: %s!", e.what());
         }
     }
-    return ret;
 }
 
 }  // namespace netman

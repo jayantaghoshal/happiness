@@ -1,8 +1,8 @@
-var jsonServer = require('/usr/local/lib/node_modules/json-server');
-var js2xmlparser = require('/usr/local/lib/node_modules/js2xmlparser');
+var jsonServer = require('/usr/lib/node_modules/json-server');
+var js2xmlparser = require('/usr/lib/node_modules/js2xmlparser');
 var server = jsonServer.create();
 var router = jsonServer.router(__dirname + '/db.json');
-var middlewares = jsonServer.defaults({static:__dirname + '/public'});
+var middlewares = jsonServer.defaults({ static: __dirname + '/public' });
 
 var db = router.db;
 
@@ -27,12 +27,12 @@ router.render = function (req, res) {
     tag = "available_updates";
   } else if (req._parsedUrl.pathname == '/commission') {
     tag = "commission";
-  } else if(req._parsedUrl.pathname == '/pendingInstallations') {
+  } else if (req._parsedUrl.pathname == '/pendingInstallations') {
     tag = "pending_installations";
-  } else if(req._parsedUrl.pathname == '/downloads') {
+  } else if (req._parsedUrl.pathname == '/downloads') {
     tag = "downloads";
   }
-   else {
+  else {
     return res.send(data);
   }
   var str = js2xmlparser.parse(tag, data);
@@ -168,6 +168,139 @@ server.get('/installNotification', function (req, res, next) {
   }
 
   return res.send(str);
+});
+
+function count(main_str, sub_str) {
+  main_str += '';
+  sub_str += '';
+
+  if (sub_str.length <= 0) {
+    return main_str.length + 1;
+  }
+
+  subStr = sub_str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return (main_str.match(new RegExp(subStr, 'gi')) || []).length;
+}
+
+server.post('/installationReport', function (req, res, next) {
+  var t = {};
+  var obj = {};
+  t = req.body;
+  var xml = t['<?xml version'];
+
+  var tag = "installation_order_id";
+  obj[tag] = getValue(xml, tag);
+
+  tag = "timestamp";
+  obj[tag] = getValue(xml, tag);
+
+  tag = "report_reason";
+  obj[tag] = getValue(xml, tag);
+
+  var downloadSummaryObj = {};
+  var downloadSummary = getValue(xml, "download_summary");
+  tag = "timestamp";
+  downloadSummaryObj[tag] = getValue(downloadSummary, tag);
+
+  tag = "total_download_time";
+  downloadSummaryObj[tag] = getValue(downloadSummary, tag);
+
+  tag = "effective_download_time";
+  downloadSummaryObj[tag] = getValue(downloadSummary, tag);
+
+  var i = 0;
+  var subXml = getValue(downloadSummary, "data_file");
+  var dataFilesArray = []
+  while (i != count(downloadSummary, "<data_file>")) {
+    var dataFileObj = {};
+    var dataFile = subXml;
+    tag = "identifier";
+    dataFileObj[tag] = getValue(dataFile, tag);
+
+    tag = "target_storage_id";
+    dataFileObj[tag] = getValue(dataFile, tag);
+
+    tag = "status";
+    dataFileObj[tag] = getValue(dataFile, tag);
+    dataFilesArray[i] = dataFileObj;
+
+    ++i;
+    subXml = downloadSummary.substring(downloadSummary.indexOf(subXml) + subXml.length + "</data_file>".length);
+    subXml = getValue(subXml, "data_file");
+  }
+
+  downloadSummaryObj['data_file'] = dataFilesArray;
+  obj["download_summary"] = downloadSummaryObj;
+
+  var installationSummaryObj = {};
+  var installationSummary = getValue(xml, "installation_summary");
+
+  tag = "software_id";
+  installationSummaryObj[tag] = getValue(installationSummary, tag);
+
+  tag = "timestamp";
+  installationSummaryObj[tag] = getValue(installationSummary, tag);
+
+  tag = "repeat_resets";
+  installationSummaryObj[tag] = getValue(installationSummary, tag);
+
+  tag = "total_installation_time";
+  installationSummaryObj[tag] = getValue(installationSummary, tag);
+
+  i = 0;
+  subXml = getValue(installationSummary, "ecu");
+  var ecuArray = [];
+
+  while (i != count(installationSummary, "<ecu>")) {
+    var ecuObj = {}
+    var ecu = subXml;
+
+    tag = "ecu_address";
+    ecuObj[tag] = getValue(ecu, tag);
+
+    tag = "ecu_retries";
+    ecuObj[tag] = getValue(ecu, tag);
+
+    tag = "ecu_status";
+    ecuObj[tag] = getValue(ecu, tag);
+
+    j = 0;
+    var subSubXml = getValue(ecu, "software_part");
+    var softwarepartArray = [];
+    while(j != count(ecu, "<software_part>")) {
+      var softwarepartObj = {};
+      var softwarepart = subSubXml;
+
+      tag = "identifier";
+      softwarepartObj[tag] = getValue(softwarepart, tag);
+
+      tag = "retries";
+      softwarepartObj[tag] = getValue(softwarepart, tag);
+
+      tag = "measured_installation_time";
+      softwarepartObj[tag] = getValue(softwarepart, tag);
+
+      tag = "status";
+      softwarepartObj[tag] = getValue(softwarepart, tag);
+
+      softwarepartArray[j] = softwarepartObj;
+      ++j;
+      subSubXml = ecu.substring(ecu.indexOf(subSubXml) + subSubXml.length + "</software_part>".length);
+      subSubXml = getValue(subSubXml, "software_part");
+    }
+    ecuObj["software_part"] = softwarepartArray;
+    ecuArray[i] = ecuObj;
+    ++i;
+    subXml = ecu.substring(ecu.indexOf(subXml) + subXml.length + "</ecu>".length);
+    subXml = getValue(subXml, "ecu");
+}
+  installationSummaryObj['ecu'] = ecuObj;
+  obj["installation_summary"] = installationSummaryObj;
+  db.get("installationReport").push(obj).write();
+
+  req.method = 'GET';
+  next();
+
 });
 
 server.use(router);

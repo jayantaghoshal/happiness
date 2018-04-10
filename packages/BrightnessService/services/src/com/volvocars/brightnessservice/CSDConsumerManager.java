@@ -104,7 +104,9 @@ public class CSDConsumerManager {
             case VehicleIgnitionState.ON:
             case VehicleIgnitionState.START:
                 if(wakeLockVehicleIgnition ==null) {
-                    wakeLockVehicleIgnition = mPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "VehicleIgnitionOn");
+                    wakeLockVehicleIgnition = mPowerManager.newWakeLock(
+                        PowerManager.FULL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE,
+                        "VehicleIgnitionOn");
                     wakeLockVehicleIgnition.acquire();
                 }
                 break;

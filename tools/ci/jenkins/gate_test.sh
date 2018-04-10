@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -47,4 +47,4 @@ done
 set -e
 
 # Run Unit and Component tests for vendor/volvocars
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --ci_reporting -c ihu-generic adb mp-serial vip-serial
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --ci_reporting --abort-on-first-failure -c ihu-generic adb mp-serial vip-serial
