@@ -28,4 +28,7 @@
           only whitelisted safe Activities will be allowed while car is not parked. -->
     <bool name="enableActivityBlockingForSafety">false</bool>
 
+    <!-- Default home activity -->
+    <string name="defaultHomeActivity">com.volvocars.launcher/com.volvocars.launcher.volvo.MainActivity</string>
+
 </resources>

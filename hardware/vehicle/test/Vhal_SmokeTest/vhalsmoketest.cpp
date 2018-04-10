@@ -38,22 +38,19 @@ TEST(VHalSmokeTest, Verify_all_Properties) {
 
     for (const vhal20::VehiclePropConfig& property_config_list : propertiesFuture.get()) {
         vhal20::VehiclePropValue prop_value;
-        int32_t mask = 1;
         prop_value.prop = property_config_list.prop;
 
-        for (int i = 1; i < 32; i++) {
-            if ((mask & property_config_list.supportedAreas) != 0) {
-                std::function<void(StatusCode status, const VehiclePropValue& propValue)> test = [&](
-                        StatusCode status, const vhal20::VehiclePropValue& prop_value2) {
-                    (void)status;
-                    (void)prop_value2;
-                };
-                const auto get_status = service->get(prop_value, test);
-                ASSERT_EQ(get_status.isOk(), true) << "Error in get()for Prop id:" << prop_value.prop << "\n"
-                                                   << "Zone:" << mask << "\n"
-                                                   << get_status.description().c_str() << "\n";
-            }
-            mask = 1 << i;
+        for (const auto& area : property_config_list.areaConfigs) {
+            std::function<void(StatusCode status, const VehiclePropValue& propValue)> test = [&](
+                    StatusCode status, const vhal20::VehiclePropValue& prop_value2) {
+                (void)status;
+                (void)prop_value2;
+            };
+            prop_value.areaId = area.areaId;
+            const auto get_status = service->get(prop_value, test);
+            ASSERT_EQ(get_status.isOk(), true) << "Error in get()for Prop id:" << prop_value.prop << "\n"
+                                               << "Zone:" << area.areaId << "\n"
+                                               << get_status.description().c_str() << "\n";
         }
     }
 }

@@ -1,4 +1,4 @@
-service profilemanager-hidl-server /vendor/bin/hw/vendor.volvocars.hardware.profiles@1.0-impl
+service profilemanager-hidl-server /vendor/bin/vendor.volvocars.hardware.profiles@1.0-impl
     class main
     user root
     group root

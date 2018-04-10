@@ -6,7 +6,6 @@
 #include "vipcom_client.h"
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
-#include <hisip_router_api.h>
 #include <unistd.h>
 #include <iomanip>
 
@@ -14,6 +13,7 @@
 
 #undef LOG_TAG
 #define LOG_TAG "VipComClient"
+constexpr uint8_t HISIP_APPLICATION_ID_CARCONFIG = 0x77u;
 
 CarConfigVipCom::CarConfigVipCom() {
     vipReader = std::thread(&CarConfigVipCom::VipReader, this);
@@ -38,7 +38,7 @@ int32_t CarConfigVipCom::versionReport(void) {
     data[0] = 0x01;  // catalog version
     data[1] = 0x07;  // catalog revision
 
-    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::sysVersionReport);
 
     sendMsg(msg, &sendOK);
@@ -49,7 +49,7 @@ int32_t CarConfigVipCom::versionRequest(void) {
     ParcelableDesipMessage msg;
     bool sendOK = false;
 
-    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::sysVersionRequest);
 
     sendMsg(msg, &sendOK);
@@ -60,7 +60,7 @@ int CarConfigVipCom::sendConfig(std::vector<int8_t>& values) {
     ParcelableDesipMessage msg;
     bool sendOK = false;
 
-    msg.setAid(GROUP_ID_SYSTEM);
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::sysSetCarConfigFid);
     msg.setDataPtr(&values[0], values.size());
     this->sendMsg(msg, &sendOK);
@@ -79,7 +79,7 @@ void CarConfigVipCom::VipReader() {
     android::IPCThreadState::self()->joinThreadPool();
 }
 
-void CarConfigVipCom::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(GROUP_ID_SYSTEM); }
+void CarConfigVipCom::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
 
 void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) {
     // Accept messages with correct FID.

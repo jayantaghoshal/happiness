@@ -1,4 +1,4 @@
-service cloudd /vendor/bin/hw/cloudd
+service cloudd /vendor/bin/cloudd
     class vcc_net
     oneshot
     user root

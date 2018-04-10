@@ -21,6 +21,13 @@ import subprocess
 class GeneralPerformanceTest(base_test.BaseTestClass):
     """Running performance tests"""
 
+    def setUpClass(self):
+        self.dut = self.android_devices[0]
+        self.dut.start()
+        self.dut.waitForBootCompletion()
+
+    def tearDownClass(self):
+        self.dut.stop()
 
     def testPerformance(self):
         d = os.path.dirname(__file__)

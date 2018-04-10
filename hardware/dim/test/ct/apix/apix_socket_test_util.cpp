@@ -10,7 +10,9 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <cerrno>
 #include <cstdlib>
+#include <cstring>
 
 #define LOG_TAG "ApixSetupSockUtil"
 #include <cutils/log.h>

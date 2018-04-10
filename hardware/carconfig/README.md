@@ -55,15 +55,15 @@ The line number signifies the actual parameter ID, so ID 1 equals line number 0.
 
 ## Overriding car config manually
 
-On engineering builds you can run **/vendor/bin/hw/changecarconfig $PARAMNR $VALUE** and restart your services or restart the whole IHU.
+On engineering builds you can run **/vendor/bin/changecarconfig $PARAMNR $VALUE** and restart your services or restart the whole IHU.
 
-NOTE: If you are testing in a rig or vehicle with CEM, you must disable carconfig_updater to avoid CEM parameters overriding your manually set parameters (see Update Handling below). This is easiest done by simply renaming **/vendor/bin/hw/carconfig-updater** to something else.
+NOTE: If you are testing in a rig or vehicle with CEM, you must disable carconfig_updater to avoid CEM parameters overriding your manually set parameters (see Update Handling below). This is easiest done by simply renaming **/vendor/bin/carconfig-updater** to something else.
 
 
 ## Update handling
 
 On start up, carconfig will try to receive new parameters from CEM.
-This is handled by the service **carconfig_updater**, using the binary **/vendor/bin/hw/carconfig-updater**
+This is handled by the service **carconfig_updater**, using the binary **/vendor/bin/carconfig-updater**
 
 *If the parameters differ, the parameters on the IHU will be overwritten and the IHU automatically rebooted.*
 

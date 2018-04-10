@@ -1,8 +1,6 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-VCC_DEVICE_PATH := vendor/volvocars/device/ihu_vcc/
-
 ##############################################################
 # SELinux policies
 #############################################################

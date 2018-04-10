@@ -3,7 +3,7 @@ on boot
     restorecon /oem_config/carconfig
     start carconfig_updater
 
-service carconfig_updater /vendor/bin/hw/carconfig-updater
+service carconfig_updater /vendor/bin/carconfig-updater
     user root
     group root
     oneshot

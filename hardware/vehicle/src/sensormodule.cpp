@@ -17,17 +17,11 @@ SensorModule::SensorModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
       sensor_prop_config_{{.prop = toInt(vhal20::VehicleProperty::DRIVING_STATUS),
                            .access = vhal20::VehiclePropertyAccess::READ,
                            .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
-                           .supportedAreas = toInt(vhal20::VehicleAreaZone::WHOLE_CABIN),
-                           .areaConfigs = {{.areaId = toInt(vhal20::VehicleAreaZone::WHOLE_CABIN),
-                                            .minInt32Value = 0x00,
-                                            .maxInt32Value = 0x1F}}},
+                           .areaConfigs = {{.areaId = 0, .minInt32Value = 0x00, .maxInt32Value = 0x1F}}},
                           {.prop = toInt(vhal20::VehicleProperty::IGNITION_STATE),
                            .access = vhal20::VehiclePropertyAccess::READ,
                            .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
-                           .supportedAreas = toInt(vhal20::VehicleAreaZone::WHOLE_CABIN),
-                           .areaConfigs = {{.areaId = toInt(vhal20::VehicleAreaZone::WHOLE_CABIN),
-                                            .minInt32Value = 0,
-                                            .maxInt32Value = 5}}}} {
+                           .areaConfigs = {{.areaId = 0, .minInt32Value = 0, .maxInt32Value = 5}}}} {
     StartFlexraySubscribers();
 }
 

@@ -27,6 +27,13 @@ ENV NO_PROXY '.got.volvocars.net'
 # Configure proxy for apt-get.
 RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
 
+#################################################
+# Add git ppa to get newer git version than shipped with ubuntu
+# This is required to get shallow clone from commit hash to work
+RUN apt-get update
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:git-core/ppa
+
 ##################################################
 # Tools required for building AOSP image
 RUN apt-get update && apt-get -y upgrade && apt-get install -y \
@@ -271,6 +278,14 @@ RUN pip2 install \
 RUN pip2 install \
     SWAT==4.3.1 \
     --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+
+##################################################
+# Install rsync needed to build boot.img
+# TODO: Investigate who adds this dependency and move the apt install further up in this file, temp added at bottom
+#       to avoid rebuilding whole image.
+#       Required to build boot.img target
+#       This was previously installed as a dependency
+RUN apt-get install -y rsync
 
 ##################################################
 # Clean up apt package information to make image smaller

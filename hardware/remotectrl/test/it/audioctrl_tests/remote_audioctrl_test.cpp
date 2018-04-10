@@ -44,7 +44,7 @@ class RemoteAudioCtrlFixture : public ::testing::Test, public RemoteCtrlClientBa
         // Move test case into namespace for network mocks to work
         const std::string& nameSpace = "/dev/vendor/netns/vcc";
 
-        file_descriptor_ = open(nameSpace.c_str(), O_RDONLY);
+        file_descriptor_ = open(nameSpace.c_str(), O_RDONLY | O_CLOEXEC);
         if (-1 == file_descriptor_ || -1 == setns(file_descriptor_, CLONE_NEWNET)) {
             std::runtime_error("Failed to move Test in VCC namespace");
         }

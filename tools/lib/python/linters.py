@@ -6,6 +6,7 @@ import subprocess
 import xml.parsers.expat
 
 import android_logging_linter
+import android_mk_linter
 from ihuutils import external_tool_finder
 
 
@@ -26,6 +27,10 @@ class ShellcheckLinterError(LinterError):
 
 
 class XmlLinterError(LinterError):
+    pass
+
+
+class AndroidMkLinterError(LinterError):
     pass
 
 
@@ -65,3 +70,9 @@ def run_for_file(path: str):
                 parser.ParseFile(xml_as_binary_file)
         except Exception as e:
             raise XmlLinterError(e, path)
+
+    if filename.endswith("Android.mk"):
+        violations = list(android_mk_linter.lint_android_mk_file(filename))
+        if len(violations) > 0:
+            raise AndroidMkLinterError("\n".join(violations), filename)
+

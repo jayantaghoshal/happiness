@@ -12,6 +12,8 @@ source "${SCRIPT_DIR}/common.sh"
 #uncommenting the following line
 # 64bit_sanity.py "$REPO_ROOT_DIR"/vendor/volvocars/ || die "64 bit build sanity check failed"
 
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/bump.py . local no_sync "${ZUUL_PROJECT}"
+
 (repo sync --force-sync --detach prebuilts/clang/host/linux-x86)
 (repo sync --force-sync --detach prebuilts/build-tools)
 

@@ -113,6 +113,11 @@ public class UserSwitchService extends Service {
         if (androidUserId == -1) {
             Log.d(TAG, "unknown user received, switching to guest user");
             androidUserId = defaultGuest.id;
+
+            //TODO: Temp disabled automatic user switch on unpaired user-profiles
+            //      This happens instantly on startup and many services and apps today do
+            //      not handle user switching properly causing many issues.
+            return;
         }
 
         final boolean switchStatus = activityManager.switchUser(androidUserId);

@@ -9,7 +9,6 @@ LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_VENDOR_MODULE := true
 LOCAL_PROPRIETARY_MODULE := true
 LOCAL_INIT_RC := soundnotifications.rc
-LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_SRC_FILES := \
 	src/soundnotifications.cpp \

@@ -14,7 +14,7 @@ LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
-LOCAL_STATIC_JAVA_LIBRARIES := vendor.volvocars.hardware.remotectrl-V1.0-java-static
+LOCAL_STATIC_JAVA_LIBRARIES := vendor.volvocars.hardware.remotectrl-V1.0-java
 LOCAL_STATIC_JAVA_LIBRARIES += com.volvocars.remotectrlservices.audioctrl.IAudioCtrlService
 
 include $(BUILD_PACKAGE)

@@ -9,7 +9,6 @@ LOCAL_MODULE := iplmd
 
 LOCAL_INIT_RC := iplmd.rc
 
-LOCAL_MODULE_RELATIVE_PATH := hw
 
 LOCAL_SRC_FILES := \
     src/main.cpp \

@@ -6,8 +6,6 @@
 #include <desip_api.h>
 
 #include "desip_handler.h"
-#include "hisip_router.h"
-#include "hisip_router_api.h"
 
 #include <fcntl.h>
 #include <stdio.h>

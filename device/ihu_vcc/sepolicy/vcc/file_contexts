@@ -5,25 +5,25 @@
 /vendor/bin/netboyd u:object_r:netboyd_exec:s0
 
 # IplmD execution rights
-/vendor/bin/hw/iplmd u:object_r:iplmd_exec:s0
+/vendor/bin/iplmd u:object_r:iplmd_exec:s0
 
 # IpcbD execution rights
-/vendor/bin/hw/ipcbd u:object_r:ipcbd_exec:s0
+/vendor/bin/ipcbd u:object_r:ipcbd_exec:s0
 
 # GnssD execution rights
-/vendor/bin/hw/gnssd u:object_r:gnssd_exec:s0
+/vendor/bin/gnssd u:object_r:gnssd_exec:s0
 
 # CloudD execution rights
-/vendor/bin/hw/cloudd u:object_r:cloudd_exec:s0
+/vendor/bin/cloudd u:object_r:cloudd_exec:s0
 
 # Carconfig2prop execution rights
 /vendor/bin/carconfig2prop u:object_r:carconfig2prop_exec:s0
 
 # dataelements-hidl-server execution rights
-/vendor/bin/hw/dataelements-hidl-server u:object_r:dataelements-hidl-server_exec:s0
+/vendor/bin/dataelements-hidl-server u:object_r:dataelements-hidl-server_exec:s0
 
 # vehicle-signals-daemon execution rights and signalling
-/vendor/bin/hw/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
+/vendor/bin/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
 /dev/ttyACM0 u:object_r:vehicle_comm_device:s0
 
 # iproute2
@@ -48,10 +48,10 @@
 /vendor/bin/ip6tables-save u:object_r:ip6tables-save-vcc_exec:s0
 
 # carconfig-updater
-/vendor/bin/hw/carconfig-updater u:object_r:carconfig-updater_exec:s0
+/vendor/bin/carconfig-updater u:object_r:carconfig-updater_exec:s0
 
 # soundnotifications
-/vendor/bin/hw/soundnotifications u:object_r:soundnotifications_exec:s0
+/vendor/bin/soundnotifications u:object_r:soundnotifications_exec:s0
 
 # carconfig files
 /vendor/etc/carconfig-default.csv u:object_r:carconfig_default_config_file:s0
@@ -64,9 +64,9 @@
 /vendor/bin/carsim_bridge u:object_r:carsim_bridge_exec:s0
 
 # hal_vehicle_default, TODO remove when properly integrated by Delphi
-/vendor/bin/hw/android.hardware.automotive.vehicle.vcc@2.0-service u:object_r:hal_vehicle_default_exec:s0
+/vendor/bin/android.hardware.automotive.vehicle.vcc@2.0-service u:object_r:hal_vehicle_default_exec:s0
 
-/vendor/bin/hw/vendor.volvocars.hardware.uds@1.0-service u:object_r:uds_diagnostics_default_exec:s0
+/vendor/bin/vendor.volvocars.hardware.uds@1.0-service u:object_r:uds_diagnostics_default_exec:s0
 
 # dimmanager execution rights
 /vendor/bin/dimmanager u:object_r:dimmanager_exec:s0

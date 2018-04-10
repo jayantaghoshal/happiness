@@ -71,9 +71,8 @@ std::vector<VehiclePropConfig> CarTimeHal::listProperties() {
     timeconfig.prop = toInt(VehicleProperty::UNIX_TIME);
     timeconfig.access = VehiclePropertyAccess::READ_WRITE;
     timeconfig.changeMode = VehiclePropertyChangeMode::ON_SET;
-    timeconfig.supportedAreas = toInt(VehicleAreaZone::WHOLE_CABIN);
     timeconfig.areaConfigs.resize(1);
-    timeconfig.areaConfigs[0].areaId = toInt(VehicleAreaZone::WHOLE_CABIN);
+    timeconfig.areaConfigs[0].areaId = 0;
     timeconfig.areaConfigs[0].minInt64Value = 0x0000000000000000;
     timeconfig.areaConfigs[0].maxInt64Value = 0x7FFFFFFFFFFFFFFF;
 
