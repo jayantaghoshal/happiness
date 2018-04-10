@@ -7,7 +7,7 @@ include $(CLEAR_VARS)
 LOCAL_PACKAGE_NAME := MicrophoneTestApp
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_SRC_FILES := $(call all-java-files-under, /src/main/java)
+LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
 LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
 
 LOCAL_RESOURCE_DIR += $(LOCAL_PATH)/src/main/res
