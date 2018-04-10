@@ -39,7 +39,7 @@ cc_library_shared {
 cc_library_static {
     name: "libcarconfig_reader_mock",
     vendor: true,
-    defaults: ["volvocars_cc_defaults_hq"],
+    defaults: ["volvocars_cc_defaults_hq_tests"],
     generated_headers: [
         "cc_parameterlist_gen",
     ],
