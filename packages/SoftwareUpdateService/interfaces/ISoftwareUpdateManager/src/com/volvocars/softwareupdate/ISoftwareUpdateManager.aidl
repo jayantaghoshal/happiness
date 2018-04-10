@@ -33,11 +33,6 @@ oneway interface ISoftwareUpdateManager {
     void CommissionAssignment(in String uuid);
 
     /**
-    * Get a list of pending installations (installation orders)
-    */
-    void GetPendingInstallations();
-
-    /**
     * Get Download Info for an installation order
     * @param uuid installation order id
     */

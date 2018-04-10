@@ -121,11 +121,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void GetPendingInstallations() {
-        service.GetPendingInstallations();
-    }
-
-    @Override
     public void GetDownloadInfo(String uuid) throws RemoteException {
         service.GetDownloadInfo(uuid);
     }

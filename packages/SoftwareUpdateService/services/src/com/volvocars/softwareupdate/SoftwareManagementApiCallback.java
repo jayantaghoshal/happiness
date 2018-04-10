@@ -62,24 +62,6 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     }
 
     @Override
-    public void PendingInstallations(int code, List<InstallationOrder> installation_order_list) {
-        Log.v(LOG_TAG, "Got result of getting pending installations [size of list: " + installation_order_list.size()
-                + "]: " + code);
-        if (200 == code) {
-            service.UpdateSoftwareListWithInstallationOrders(installation_order_list);
-            Log.v(LOG_TAG,
-                    "Received pending installations, asking service to get download information of each installation order from the list");
-            service.doGetDownloadInfo(installation_order_list);
-        } else {
-            //try {
-            //    callback.ProvideErrorMessage(code, "Request for Pending Installations failed.");
-            //} catch (RemoteException e) {
-            //    Log.w(LOG_TAG, "Cannot even send error message. Client is super stupid...");
-            //}
-        }
-    }
-
-    @Override
     public void DownloadInfo(int code, DownloadInfo info) {
         Log.v(LOG_TAG, "Got result of getting download information [" + info.uuid + "]: " + code);
         if (200 == code) {

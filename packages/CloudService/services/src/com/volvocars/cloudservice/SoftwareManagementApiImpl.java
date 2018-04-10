@@ -263,65 +263,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private SwListResponse<InstallationOrder> FetchPendingInstallations() {
-        Log.v(LOG_TAG, "FetchPendingInstallations");
-        // Build request
-        ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
-        HttpHeaderField field = new HttpHeaderField();
-        field.name = "Accept";
-        field.value = "application/volvo.cloud.software.PendingInstallations+XML";
-        headers.add(field);
-
-        String systemLanguage = GetSystemLanguage();
-        Log.v(LOG_TAG, "SystemLanguage: " + systemLanguage);
-
-        if (!systemLanguage.isEmpty()) {
-            HttpHeaderField languagefield = new HttpHeaderField();
-            languagefield.name = "Accept-Language";
-            languagefield.value = systemLanguage;
-            headers.add(languagefield);
-        }
-
-        int timeout = 20000;
-
-        ArrayList<InstallationOrder> installationOrder = new ArrayList();
-        SwListResponse<InstallationOrder> swrsp = new SwListResponse();
-
-        try {
-            // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.pending_installations);
-            Response response = cloudConnection.doGetRequest(uris.pending_installations, headers, timeout);
-
-            if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
-                        + ".\nSomething went bananas with the request. And it is not handled properly :'(");
-            }
-
-            // Parse response
-            byte[] bytesdata = new byte[response.responseData.size()];
-            for (int i = 0; i < bytesdata.length; i++) {
-                bytesdata[i] = response.responseData.get(i);
-            }
-
-            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
-
-            InputStream stream = new ByteArrayInputStream(bytesdata);
-            installationOrder = XmlParser.ParsePendingInstallations(stream);
-
-            swrsp.swlist = installationOrder;
-            swrsp.code = response.httpResponse;
-
-        } catch (XmlPullParserException ex) {
-            // Something went bananas with the parsing.. What do?
-            Log.d(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
-        } catch (IOException ex) {
-            // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
-        }
-
-        return swrsp;
-    }
-
     private DownloadInfoResponse FetchDownloadInfo(String uuid) {
         Log.v(LOG_TAG, "FetchDownloadInfo");
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
@@ -350,8 +291,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
-
-            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
@@ -571,20 +510,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
 
         callback.CommissionStatus(uuid, CommissionSoftwareAssignment(uuid));
-    }
-
-    /**
-    * Get a list of pending installations (installation orders)
-    * @param callback
-    */
-    @Override
-    public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
-        if (!softwareManagementAvailable) {
-            callback.PendingInstallations(-1, null);
-        }
-
-        SwListResponse<InstallationOrder> swrsp = FetchPendingInstallations();
-        callback.PendingInstallations(swrsp.code, swrsp.swlist);
     }
 
     /**

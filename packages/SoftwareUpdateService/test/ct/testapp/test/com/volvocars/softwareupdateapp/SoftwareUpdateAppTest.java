@@ -167,41 +167,7 @@ public class SoftwareUpdateAppTest {
         assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
     }
 
-/* Will fail due to changes with GetAvailableAssignments (need to update commission resource to get "correct flow").
-   Enable once this is fixed! */
-    @Test
-    public void happyGetPendingInstallations() {
-        Context context = InstrumentationRegistry.getContext();
-        final Intent intent = context.getPackageManager().getLaunchIntentForPackage(SOFTWAREUPDATEAPP_PACKAGE);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
-
-        mDevice.wait(Until.hasObject(By.pkg(SOFTWAREUPDATEAPP_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
-
-        BySelector toolbar = By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar").enabled(true);
-        assertTrue(mDevice.wait(Until.hasObject(toolbar), LAUNCH_TIMEOUT));
-
-        BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/simSignals");
-        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-
-        mDevice.findObject(textSelector).click();
-
-        textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get commissioned assignments");
-        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-
-        mDevice.findObject(textSelector).click();
-
-        BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
-        assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
-
-        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
-        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-
-        textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/state").text("DOWNLOAD PENDING");
-        assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
-    }
-
+/* Will fail due to changes with GetAvailableAssignments (need to update commission resource to get "correct flow").*/
     @Test
     public void happyGetDownloads() {
         Context context = InstrumentationRegistry.getContext();

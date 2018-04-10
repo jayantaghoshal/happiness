@@ -158,19 +158,6 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void GetPendingInstallations() {
-        if (swapi != null) {
-            try {
-                Log.v(LOG_TAG, "GetPendingInstallations");
-                swapi.GetPendingInstallations(swapiCallback);
-            } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetPendingInstallations failed: RemoteException [" + e.getMessage() + "]");
-            }
-        } else {
-            Log.e(LOG_TAG, "GetPendingInstallations failed: Local SoftwareManagementApi variable is null");
-        }
-    }
-
     public void doGetDownloadInfo(List<InstallationOrder> list) {
         for (InstallationOrder io : list) {
             GetDownloadInfo(io.uuid);

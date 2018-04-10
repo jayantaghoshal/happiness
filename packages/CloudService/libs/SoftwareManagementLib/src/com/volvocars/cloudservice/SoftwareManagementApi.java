@@ -114,16 +114,6 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    * Get a list of pending installations (installation orders)
-    * @param callback
-    */
-    public void GetPendingInstallations(ISoftwareManagementApiCallback callback) throws RemoteException {
-        if (software_management != null && service_bound) {
-            software_management.GetPendingInstallations(callback);
-        }
-    }
-
-    /**
      * Return the result for GetDownloadInfo
      * @param code          The HTTP cose of the response
      * @param download_info The download information of the installation order.

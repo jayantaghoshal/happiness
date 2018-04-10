@@ -24,13 +24,6 @@ oneway interface ISoftwareManagementApiCallback {
     void SoftwareAssignmentList(in int code, in List<SoftwareAssignment> software_list);
 
     /**
-     * Return result for GetPendingInstallations when received.
-     * @param code                    The HTTP code of the response
-     * @param installation_order_list The list of InstallationOrders
-     */
-    void PendingInstallations(in int code, in List<InstallationOrder> installation_order_list);
-
-    /**
      * Return the result for GetDownloadInfo
      * @param code          The HTTP cose of the response
      * @param download_info The download information of the installation order.

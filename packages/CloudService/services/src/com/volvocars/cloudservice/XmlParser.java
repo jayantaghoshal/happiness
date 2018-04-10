@@ -226,9 +226,6 @@ public final class XmlParser {
                 } else if (tag.equals("delete_notification")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
-                } else if (tag.equals("pending_installations")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
-                    uris.pending_installations = ParseString("pending_installations", parser);
                 } else if (tag.equals("closed_installations")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
                     SkipElement(parser);
@@ -410,90 +407,6 @@ public final class XmlParser {
             }
         }
         return software;
-    }
-
-    /*
-     * ###########################################################################################
-     * #                            PARSER FOR PENDING INSTALLATIONS                             #
-     * ###########################################################################################
-     */
-    public static ArrayList<InstallationOrder> ParsePendingInstallations(InputStream in)
-            throws XmlPullParserException, IOException {
-
-        Log.v(LOG_TAG, "+ ParsePendingInstallations");
-
-        ArrayList<InstallationOrder> list = new ArrayList();
-
-        XmlPullParser parser = Xml.newPullParser();
-        parser.setInput(in, null);
-
-        int eventType = parser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_DOCUMENT) {
-                Log.v(LOG_TAG, "Start of Document");
-            } else if (eventType == XmlPullParser.START_TAG) {
-                String tag = parser.getName();
-                if (tag.equals("pending_installations")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
-                    list = ParsePendingInstallationsElement(parser);
-                } else {
-                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
-                    SkipElement(parser);
-                }
-            } else {
-                Log.d(LOG_TAG, "Unknown Element of type: " + eventType);
-            }
-            eventType = parser.next();
-        }
-        Log.v(LOG_TAG, "End of Document");
-
-        Log.v(LOG_TAG, "- ParsePendingInstallations");
-
-        return list;
-    }
-
-    private static ArrayList<InstallationOrder> ParsePendingInstallationsElement(XmlPullParser parser)
-            throws XmlPullParserException, IOException {
-        int eventType = parser.getEventType();
-        if ((eventType != XmlPullParser.START_TAG) || (!parser.getName().equals("pending_installations"))) {
-            throw new IllegalStateException();
-        }
-
-        ArrayList<InstallationOrder> list = new ArrayList();
-
-        int depth = 1;
-        while (depth != 0) {
-            eventType = parser.next();
-            if (eventType == XmlPullParser.START_TAG) {
-                String tag = parser.getName();
-                if (tag.equals("this")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
-                } else if (tag.equals("installation_order")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
-                    list.add(ParseInstallationOrderElement(parser));
-                } else if (tag.equals("Signature")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
-                } else {
-                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
-                    SkipElement(parser);
-                }
-            } else if (eventType == XmlPullParser.END_TAG) {
-                if (parser.getName().equals("pending_installations")) {
-                    depth--;
-                } else {
-                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
-                }
-            } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
-                throw new IllegalStateException();
-            } else {
-                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
-            }
-        }
-
-        return list;
     }
 
     private static InstallationOrder ParseInstallationOrderElement(XmlPullParser parser)
