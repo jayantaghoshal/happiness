@@ -102,7 +102,7 @@ class VehicleHalCommon():
 
         # Open menu drawer button
         # Not possible to press with buttonId, using coordinates instead
-        device.touchDip(35.0, 110.0, 0)
+        device.touchDip(15.0, 140.0, 0)
         vc.sleep(_s)
 
         # Open vendor extension
