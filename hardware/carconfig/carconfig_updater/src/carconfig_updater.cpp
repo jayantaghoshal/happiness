@@ -3,6 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include "carconfig_updater.h"
 #include <sys/stat.h>
 #include <utils/Log.h>
 #include <array>
@@ -11,8 +12,6 @@
 #include <set>
 #include "Application_dataelement.h"
 #include "cc_parameterlist_map.h"
-//#include "diagnostics_client.h"
-#include "carconfig_updater.h"
 //#include "restart_client.h"
 #include "carconfig_file_writer.h"
 #include "carconfig_reader.h"
@@ -32,8 +31,6 @@ const uint32_t kCCTimeout = 30;  // The maximum time to download all carconfig f
 // we can handle the slow rate which carconfig frames are relayed by the VIP.
 
 const size_t kDtcMaxParameters = 10;
-
-bool debugMode = false;
 
 void CarConfigUpdater::frameReceiver(CarConfigList& buff, uint32_t timeout) {
     // The VehCfgPrm (carconfig) flexray frame.
@@ -234,9 +231,9 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
         bool allStoredParamsOk,
         std::map<uint32_t, uint8_t> receivedBadParams,
         std::map<uint32_t, uint8_t> storedBadParams,  // diagnosticsClient &diagClient, //TODO add diagnostics
+        vcc::carconfig::DiagnosticsReporter* diag_rep,
         bool& rebootNeeded) {
     bool NewStateConfigured = false;
-    // diagClient.registerDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, {0x00});
 
     // Bulk State
     if (!stateConfigured) {
@@ -247,16 +244,15 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
             if (paramsChanged) {
                 rebootNeeded = true;
             }
-            // TODO Here we should probably report "pass" on MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS to diagnostics
+            diag_rep->central_config_not_configured->ReportTestPass();
+            diag_rep->central_config_invalid_configuration->ReportTestPass();
         }
         // All parameters received in time but some are not ok.
         else if (allParamsReceived && !allParamsOk) {
             ALOGW("Bulk state: All parameters are not in range, staying in Bulk state");
-            // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(receivedBadParams));
-            // diagClient.sendDiagnosticsMessage(
-            // MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS,
-            // {uint8_t(MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS_BYTE_0::invalid_unconfigured_error) |
-            //  uint8_t(MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS_BYTE_0::not_configured_error)});
+            diag_rep->SetFaultyParamsDid(carconfigParamFaultsPack(receivedBadParams));
+            diag_rep->central_config_not_configured->ReportTestFail();
+            diag_rep->central_config_invalid_configuration->ReportTestFail();
             if (paramsChanged) {
                 rebootNeeded = true;
             }
@@ -264,10 +260,11 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
         // all other cases
         else {
             ALOGW("Bulk state: Did not receive all/any parameters before timeout");
+            diag_rep->central_config_not_configured->ReportTestFail();
             // If we have bad parameters from a previous session, set the DID for those.
             if (!allStoredParamsOk) {
                 ALOGW("Bulk state: Restoring previous DIDs");
-                // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(storedBadParams));
+                diag_rep->SetFaultyParamsDid(carconfigParamFaultsPack(storedBadParams));
             }
         }
     } else  // Configured state
@@ -275,28 +272,33 @@ bool CarConfigUpdater::setStateAndSendDiagnostics(
         // All parameters received in time without updates.
         if (allParamsReceived && allParamsOk && !paramsChanged) {
             ALOGI("Configured state: Got all valid parameters, but no updated, doing nothing");
+            diag_rep->central_config_not_configured->ReportTestPass();
+            diag_rep->central_config_invalid_configuration->ReportTestPass();
         }
         // Parameters received in time with updated, valid data.
         else if (allParamsReceived && allParamsOk && paramsChanged) {
             ALOGI("Configured state: Got updated and valid parameters");
+            diag_rep->central_config_not_configured->ReportTestPass();
+            diag_rep->central_config_invalid_configuration->ReportTestPass();
             rebootNeeded = true;
         }
         // Parameters received in time, updated but with at least one invalid value
         else if (allParamsReceived && !allParamsOk) {
             ALOGW("Configured state: Got some invalid parameters");
-            // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(receivedBadParams));
-            // diagClient.sendDiagnosticsMessage(
-            // MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS,
-            // {uint8_t(MK_CD_DTC_CENTRAL_CONFIGURATION_STATUS_BYTE_0::not_configured_error)});
+            diag_rep->SetFaultyParamsDid(carconfigParamFaultsPack(receivedBadParams));
+            diag_rep->central_config_not_configured->ReportTestPass();
+            diag_rep->central_config_invalid_configuration->ReportTestFail();
             if (paramsChanged) {
                 rebootNeeded = true;
             }
         }
         //  Without, or with late, FlexRay signaling (passed the 30 seconds threshold)
         else {
+            diag_rep->central_config_not_configured->ReportTestPass();
             if (!allStoredParamsOk) {
-                ALOGW("Bulk state: Restoring previous DIDs");
-                // diagClient.updateDID(MK_CD_DID_CAR_CONFIG_PARAM_FAULTS, carconfigParamFaultsPack(storedBadParams));
+                ALOGW("Configured state: Restoring previous DIDs");
+                diag_rep->SetFaultyParamsDid(carconfigParamFaultsPack(storedBadParams));
+                diag_rep->central_config_invalid_configuration->ReportTestFail();
             }
             ALOGW("Configured state: Did not received parameters before timeout");
         }
@@ -309,10 +311,10 @@ int32_t CarConfigUpdater::runUpdater() {
     bool allParamsOk;
     bool allParamsReceived;
     CarConfigList buffer;
+    vcc::carconfig::DiagnosticsReporter diag_rep;
 
     ALOGI("carconfig_updater started");
 
-    // diagnosticsClient diagClient;
     CarConfigVipCom vipcomClient;
 
     // Start the flexray receiver and wait for the result. (30 sec maximum)
@@ -352,7 +354,8 @@ int32_t CarConfigUpdater::runUpdater() {
                                                  allOldParamsOk,
                                                  receivedBadParams,
                                                  storedBadParams,
-                                                 /*diagClient,*/ rebootIsRequired);
+                                                 &diag_rep,
+                                                 rebootIsRequired);
     // Set state to configured
     if (configured) {
         writeEmptyFile(carconfig_configured_filename);
@@ -361,13 +364,10 @@ int32_t CarConfigUpdater::runUpdater() {
     if (rebootIsRequired) {
         ALOGW("Proper rebooot request is not yet implemented. Rebooting with system call directly to MP");
         system("printf 'da 0\nexit\n' | hisipcmd 4");  // TODO change this to a call to "power manager"
-        // restartClient r;
-        // r.restart();
-    } else {
-        // Should be a proper mainloop here to answer diagnostics requests.
-        while (1) {
-            usleep(1000);
-        }
     }
+
+    // Wait until diagnostic message has been sent.
+    diag_rep.waitForRegistration();
+
     return 0;
 }

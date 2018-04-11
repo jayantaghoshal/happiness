@@ -154,8 +154,10 @@ void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
         blockSize = 0;
     }
 
-    int8_t* data = msg.allocDataPtr(blockSize);
-    std::memcpy(&data[1], ccList.data(), blockSize);
+    int8_t* data = msg.allocDataPtr(blockSize + 2);
+    data[0] = block;
+    data[1] = blockSize;
+    std::memcpy(&data[2], ccList.data(), blockSize);
     sendDESIPMsg(msg);
 }
 

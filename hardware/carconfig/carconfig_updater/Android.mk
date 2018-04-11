@@ -8,7 +8,8 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
 	src/carconfig_updater_main.cpp \
 	src/carconfig_updater.cpp \
-	src/vipcom_client.cpp
+	src/vipcom_client.cpp \
+	src/diagnostics_reporter.cpp
 
 LOCAL_CFLAGS += -Wno-unused-parameter
 LOCAL_C_INCLUDES += \
@@ -38,7 +39,10 @@ LOCAL_SHARED_LIBRARIES := \
 	libutils \
 	libbinder \
 	libhwbinder \
-	libtraceclient
+	libtraceclient \
+	libtarmac \
+	vendor.volvocars.hardware.uds@1.0 \
+	lib_uds_data_handler
 
 LOCAL_STATIC_LIBRARIES += \
 	libccparameterlistgen \

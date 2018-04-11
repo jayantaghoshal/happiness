@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -10,8 +10,8 @@
 #include <vector>
 
 #include <DesipClient.hpp>
-//#include "diagnostics_client.h"
 #include "carconfig_base.h"
+#include "diagnostics_reporter.h"
 #include "vipcom_client.h"
 
 class CarConfigUpdater {
@@ -43,6 +43,7 @@ class CarConfigUpdater {
             bool allStoredParamsOk,
             std::map<uint32_t, uint8_t> receivedBadParams,
             std::map<uint32_t, uint8_t> storedBadParams,  // diagnosticsClient &diagClient, //TODO add diagnostics
+            vcc::carconfig::DiagnosticsReporter* diag_rep,
             bool& rebootNeeded);
 
     static std::vector<uint8_t> carconfigParamFaultsPack(std::map<uint32_t, uint8_t> params);

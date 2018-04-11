@@ -46,7 +46,7 @@ ccStatus CarConfigReader::getStatus(uint32_t position) {
     return carConfigValues[(position - 1)].status;
 }
 
-bool CarConfigReader::usingDefaultFile(void) { return !(fileExists(carconfig_file_name)); }
+bool CarConfigReader::usingDefaultFile() { return !(fileExists(carconfig_file_name)); }
 
 void CarConfigReader::read() {
     CarConfigFileReader ccFileReader;
