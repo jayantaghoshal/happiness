@@ -87,8 +87,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 bytesdata[i] = response.responseData.get(i);
             }
 
-            String s = new String(bytesdata);
-            Log.e(LOG_TAG, s);
+            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             uris = XmlParser.ParseSoftwareManagementURIs(stream);
@@ -136,6 +135,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
+
+            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             software_list = XmlParser.ParseSoftwareAssignments(stream);
@@ -299,6 +300,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 bytesdata[i] = response.responseData.get(i);
             }
 
+            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
+
             InputStream stream = new ByteArrayInputStream(bytesdata);
             installationOrder = XmlParser.ParsePendingInstallations(stream);
 
@@ -344,6 +347,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
+
+            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
@@ -489,6 +494,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             for (int i = 0; i < bytesdata.length; i++) {
                 bytesdata[i] = response.responseData.get(i);
             }
+
+            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 

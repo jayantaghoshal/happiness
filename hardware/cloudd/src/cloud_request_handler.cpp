@@ -134,7 +134,6 @@ int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
                 ALOGW("Request failed with error: %d, %s\n", resultCode, curl_easy_strerror(resultCode));
                 cr->GetCallback()(-1, "", "");
             } else {
-                ALOGV("Calling callback method\n");
                 cr->GetCallback()(response_code, *cr->GetResponseDataBuffer(), *cr->GetResponseHeaderBuffer());
             }
         }
@@ -264,9 +263,11 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
         // TODO: Missing implementation. Add Data for PUT-request
         throw std::runtime_error("PUT request not implemented");
     } else if (request->GetRequestMethod() == CloudRequest::HttpMethod::POST) {
+        ALOGV("SendCloudRequest: [Method: POST, body %s]", request->GetRequestBody().c_str());
         verified_curl_easy_setopt(easy, CURLOPT_HTTPPOST, 1L);
         verified_curl_easy_setopt(easy, CURLOPT_COPYPOSTFIELDS, request->GetRequestBody().c_str());
     } else {
+        ALOGV("SendCloudRequest: [Method: GET]");
         verified_curl_easy_setopt(easy, CURLOPT_HTTPGET, 1L);
     }
     //
@@ -278,6 +279,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     if (!request->GetHeaderList().empty()) {
         struct curl_slist* chunk = NULL;
         for (auto p : request->GetHeaderList()) {
+            ALOGV("SendCloudRequest: [Header: %s]", p.c_str());
             chunk = curl_slist_append(chunk, p.c_str());
         }
         verified_curl_easy_setopt(easy, CURLOPT_HTTPHEADER, chunk);
