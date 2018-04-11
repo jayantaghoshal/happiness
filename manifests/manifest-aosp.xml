@@ -24,10 +24,10 @@
   <project name="aosp/device/google/atv" path="device/google/atv" revision="d96dc7018637110feba6589904b2710240070b84" />
   <project name="aosp/device/google/contexthub" path="device/google/contexthub" revision="77d2fb26b21672cab8f0c214bc4a000ba6e15ab8" />
   <project name="aosp/device/google/marlin" path="device/google/marlin" revision="4db5bb32dd23f44fe75ba01867db695505b2aef8" />
-  <project clone-depth="1" name="aosp/device/google/marlin-kernel" path="device/google/marlin-kernel" revision="b3aa564e53d19962a40ea1266b5dd86c98063d81" />
-  <project clone-depth="1" name="aosp/device/google/vrservices" path="device/google/vrservices" revision="d54f8a823540ee3c342d74e0d5ec36dd72a4aaec" />
+  <project name="aosp/device/google/marlin-kernel" path="device/google/marlin-kernel" revision="b3aa564e53d19962a40ea1266b5dd86c98063d81" />
+  <project name="aosp/device/google/vrservices" path="device/google/vrservices" revision="d54f8a823540ee3c342d74e0d5ec36dd72a4aaec" />
   <project name="aosp/device/linaro/hikey" path="device/linaro/hikey" revision="192cd7f2d4c522f8637a69e7c781ba39af868a64" />
-  <project clone-depth="1" name="aosp/device/linaro/hikey-kernel" path="device/linaro/hikey-kernel" revision="615025671cee475abf64ea957dbf8b1dec1e1966" />
+  <project name="aosp/device/linaro/hikey-kernel" path="device/linaro/hikey-kernel" revision="615025671cee475abf64ea957dbf8b1dec1e1966" />
   <project name="aosp/device/sample" path="device/sample" revision="cdb22d4258c2ffa7279a3b55c65b0431fabc1200" />
   <project name="aosp/kernel/configs" path="kernel/configs" revision="58dad0c715b9a2a621444e87071392e55c010881" />
   <project name="aosp/platform/art" path="art" revision="7c2f34de729ee14ec02b548f67f6940cca338d6e" />
@@ -83,7 +83,7 @@
   <project name="aosp/platform/external/cblas" path="external/cblas" revision="7fa0d561afbe104fd0e70ef2366792cace5fd712" />
   <project name="aosp/platform/external/chromium-libpac" path="external/chromium-libpac" revision="8c47eebd81c996f17198edb2fa504c04d48d567e" />
   <project name="aosp/platform/external/chromium-trace" path="external/chromium-trace" revision="1db90260068e9a9bf435b925d008b67810c238af" />
-  <project clone-depth="1" name="aosp/platform/external/chromium-webview" path="external/chromium-webview" revision="74c0c930d97fcd5bdcaecd094ac14cb3366d0dca" />
+  <project name="aosp/platform/external/chromium-webview" path="external/chromium-webview" revision="74c0c930d97fcd5bdcaecd094ac14cb3366d0dca" />
   <project name="aosp/platform/external/clang" path="external/clang" revision="65381079bd99982ca96ce19875137579e06eb297" />
   <project name="aosp/platform/external/cmockery" path="external/cmockery" revision="9199c7bfafefea32d1884182fa655b6e4578c1c4" />
   <project name="aosp/platform/external/cn-cbor" path="external/cn-cbor" revision="7fe9f01990a97be4df5e46d2decd894c06678072" />
@@ -554,45 +554,45 @@
   <project name="aosp/platform/packages/wallpapers/LivePicker" path="packages/wallpapers/LivePicker" revision="f59b99e5247d66c383cdb04ed3475b3787bf23b5" />
   <project name="aosp/platform/pdk" path="pdk" revision="ae91c7b945ecda836473ce1cb0548f4911bcc2ed" />
   <project name="aosp/platform/platform_testing" path="platform_testing" revision="ea52f428845319014ad21c5f01ecd001c4432a11" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/abi-dumps/ndk" path="prebuilts/abi-dumps/ndk" revision="0cf5f282d7f257fff173a5b4959ee05b9cae7836" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/abi-dumps/vndk" path="prebuilts/abi-dumps/vndk" revision="7c679b7ebfaacee13c6495847a6860e7dcbbde37" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/android-emulator" path="prebuilts/android-emulator" revision="ef1f1e40939cae80b2d5061787b1189722d41bda" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/build-tools" path="prebuilts/build-tools" revision="431bb2eed7094c49f60770c2328495e7a074daf5" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/checkcolor" path="prebuilts/checkcolor" revision="1be06cb8438d53765dbbebd5abe4e00b7e2417ee" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/checkstyle" path="prebuilts/checkstyle" revision="3d43e9d54a9c03536ca50f1aba48bfdcd9ddfda1" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/clang-tools" path="prebuilts/clang-tools" revision="b0b99d8cfbac774637637404d490c401cd4bf5f8" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/clang/host/darwin-x86" path="prebuilts/clang/host/darwin-x86" revision="38250e61570cf47c97143d0d3567754885b7736a" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/clang/host/linux-x86" path="prebuilts/clang/host/linux-x86" revision="ff785e8c3b9672f49da8fd56af715565b3974c54" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/deqp" path="prebuilts/deqp" revision="bbc2715373ce9c99ac61226e0b4f1120c4fb90ca" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/devtools" path="prebuilts/devtools" revision="273e627841392afbed91eed13385bfe5c9f3acf0" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" revision="2d9c3547645df1fd2b2d1afdade6d511c9da6865" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" revision="04d36c8d61e14d889a1c8045103e972438583e5b" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" path="prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" revision="ec5aa66aaa4964c27564d0ec84dc1f18a2d72b7e" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" revision="d942564c9331f07026a8f78502d8571206eb7be4" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" revision="7cab5e6ea2dc33f14e811de4e5aff2f005f1ed5d" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" revision="5ffcf71c7c85cb2ea9613537e2e521f458688751" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" revision="ba453a4b0dfb2b269f6da4a3aa506ca03573cb69" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" revision="2ccb38af8c940f1feef62ff5986f4bbc5d899e66" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" revision="e76a9a506d7ad132f107eb2f7c27b6a8ccb68b91" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" revision="388fdc4995d374d76a0c4b292afabac91638e134" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" revision="dc29486d97186a0d8b4a21e8298e46e8bd09499b" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/go/darwin-x86" path="prebuilts/go/darwin-x86" revision="0754ce079d936daf401bbf49cb69a318aa798280" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/go/linux-x86" path="prebuilts/go/linux-x86" revision="67845c40aa5be5001fb20ef6f6b8d52e3fe6bb1c" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/gradle-plugin" path="prebuilts/gradle-plugin" revision="49de6f17fb246d5e72d4e2b4f35bdee6550358f1" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/jdk/jdk8" path="prebuilts/jdk/jdk8" revision="a782115c262f0bc08ed2b8ffcd7d85c72c894ad2" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/jdk/jdk9" path="prebuilts/jdk/jdk9" revision="d8a16f7152833caeb7b36fb8e045d861d2d77465" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/libs/libedit" path="prebuilts/libs/libedit" revision="d32685dba4011664b590b94ad156bc734c2c9bb5" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/maven_repo/android" path="prebuilts/maven_repo/android" revision="18c83831358654e795b04570c0b77e0945bc31f9" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/maven_repo/bumptech" path="prebuilts/maven_repo/bumptech" revision="b43676b89fa091655158b52053f1fecd99ef0953" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="a72e4e70a72c640853c485a3b1fec5b0a58260c3" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/ndk" path="prebuilts/ndk" revision="e779e31468999c7ef69f424a2b8271969833df28" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/python/darwin-x86/2.7.5" path="prebuilts/python/darwin-x86/2.7.5" revision="0c5958b1636c47ed7c284f859c8e805fd06a0e63" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/python/linux-x86/2.7.5" path="prebuilts/python/linux-x86/2.7.5" revision="ec1a0b3abe08fb9a3952e8f48231cda1f6d9b1f3" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/qemu-kernel" path="prebuilts/qemu-kernel" revision="6e2e0105fdc63edece67f0ef2cc29dac68f835a2" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/r8" path="prebuilts/r8" revision="589e992dabd1d0fb998d7380131b42eacfd00f90" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/sdk" path="prebuilts/sdk" revision="803a0ef61f51dfabba652f1388bd8bace8359e81" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/tools" path="prebuilts/tools" revision="f33c3f049ed25c563fc94184ee812c4536a57b27" />
-  <project clone-depth="1" name="aosp/platform/prebuilts/vndk/v27" path="prebuilts/vndk/v27" revision="b293241366452a1e2f6d6df25c6e2b33694517c6" />
+  <project name="aosp/platform/prebuilts/abi-dumps/ndk" path="prebuilts/abi-dumps/ndk" revision="0cf5f282d7f257fff173a5b4959ee05b9cae7836" />
+  <project name="aosp/platform/prebuilts/abi-dumps/vndk" path="prebuilts/abi-dumps/vndk" revision="7c679b7ebfaacee13c6495847a6860e7dcbbde37" />
+  <project name="aosp/platform/prebuilts/android-emulator" path="prebuilts/android-emulator" revision="ef1f1e40939cae80b2d5061787b1189722d41bda" />
+  <project name="aosp/platform/prebuilts/build-tools" path="prebuilts/build-tools" revision="431bb2eed7094c49f60770c2328495e7a074daf5" />
+  <project name="aosp/platform/prebuilts/checkcolor" path="prebuilts/checkcolor" revision="1be06cb8438d53765dbbebd5abe4e00b7e2417ee" />
+  <project name="aosp/platform/prebuilts/checkstyle" path="prebuilts/checkstyle" revision="3d43e9d54a9c03536ca50f1aba48bfdcd9ddfda1" />
+  <project name="aosp/platform/prebuilts/clang-tools" path="prebuilts/clang-tools" revision="b0b99d8cfbac774637637404d490c401cd4bf5f8" />
+  <project name="aosp/platform/prebuilts/clang/host/darwin-x86" path="prebuilts/clang/host/darwin-x86" revision="38250e61570cf47c97143d0d3567754885b7736a" />
+  <project name="aosp/platform/prebuilts/clang/host/linux-x86" path="prebuilts/clang/host/linux-x86" revision="ff785e8c3b9672f49da8fd56af715565b3974c54" />
+  <project name="aosp/platform/prebuilts/deqp" path="prebuilts/deqp" revision="bbc2715373ce9c99ac61226e0b4f1120c4fb90ca" />
+  <project name="aosp/platform/prebuilts/devtools" path="prebuilts/devtools" revision="273e627841392afbed91eed13385bfe5c9f3acf0" />
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/aarch64/aarch64-linux-android-4.9" revision="2d9c3547645df1fd2b2d1afdade6d511c9da6865" />
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/darwin-x86/arm/arm-linux-androideabi-4.9" revision="04d36c8d61e14d889a1c8045103e972438583e5b" />
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" path="prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1" revision="ec5aa66aaa4964c27564d0ec84dc1f18a2d72b7e" />
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/darwin-x86/mips/mips64el-linux-android-4.9" revision="d942564c9331f07026a8f78502d8571206eb7be4" />
+  <project name="aosp/platform/prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/darwin-x86/x86/x86_64-linux-android-4.9" revision="7cab5e6ea2dc33f14e811de4e5aff2f005f1ed5d" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" revision="5ffcf71c7c85cb2ea9613537e2e521f458688751" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" revision="ba453a4b0dfb2b269f6da4a3aa506ca03573cb69" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-4.8" revision="2ccb38af8c940f1feef62ff5986f4bbc5d899e66" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" revision="e76a9a506d7ad132f107eb2f7c27b6a8ccb68b91" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" revision="388fdc4995d374d76a0c4b292afabac91638e134" />
+  <project name="aosp/platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" revision="dc29486d97186a0d8b4a21e8298e46e8bd09499b" />
+  <project name="aosp/platform/prebuilts/go/darwin-x86" path="prebuilts/go/darwin-x86" revision="0754ce079d936daf401bbf49cb69a318aa798280" />
+  <project name="aosp/platform/prebuilts/go/linux-x86" path="prebuilts/go/linux-x86" revision="67845c40aa5be5001fb20ef6f6b8d52e3fe6bb1c" />
+  <project name="aosp/platform/prebuilts/gradle-plugin" path="prebuilts/gradle-plugin" revision="49de6f17fb246d5e72d4e2b4f35bdee6550358f1" />
+  <project name="aosp/platform/prebuilts/jdk/jdk8" path="prebuilts/jdk/jdk8" revision="a782115c262f0bc08ed2b8ffcd7d85c72c894ad2" />
+  <project name="aosp/platform/prebuilts/jdk/jdk9" path="prebuilts/jdk/jdk9" revision="d8a16f7152833caeb7b36fb8e045d861d2d77465" />
+  <project name="aosp/platform/prebuilts/libs/libedit" path="prebuilts/libs/libedit" revision="d32685dba4011664b590b94ad156bc734c2c9bb5" />
+  <project name="aosp/platform/prebuilts/maven_repo/android" path="prebuilts/maven_repo/android" revision="18c83831358654e795b04570c0b77e0945bc31f9" />
+  <project name="aosp/platform/prebuilts/maven_repo/bumptech" path="prebuilts/maven_repo/bumptech" revision="b43676b89fa091655158b52053f1fecd99ef0953" />
+  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="a72e4e70a72c640853c485a3b1fec5b0a58260c3" />
+  <project name="aosp/platform/prebuilts/ndk" path="prebuilts/ndk" revision="e779e31468999c7ef69f424a2b8271969833df28" />
+  <project name="aosp/platform/prebuilts/python/darwin-x86/2.7.5" path="prebuilts/python/darwin-x86/2.7.5" revision="0c5958b1636c47ed7c284f859c8e805fd06a0e63" />
+  <project name="aosp/platform/prebuilts/python/linux-x86/2.7.5" path="prebuilts/python/linux-x86/2.7.5" revision="ec1a0b3abe08fb9a3952e8f48231cda1f6d9b1f3" />
+  <project name="aosp/platform/prebuilts/qemu-kernel" path="prebuilts/qemu-kernel" revision="6e2e0105fdc63edece67f0ef2cc29dac68f835a2" />
+  <project name="aosp/platform/prebuilts/r8" path="prebuilts/r8" revision="589e992dabd1d0fb998d7380131b42eacfd00f90" />
+  <project name="aosp/platform/prebuilts/sdk" path="prebuilts/sdk" revision="803a0ef61f51dfabba652f1388bd8bace8359e81" />
+  <project name="aosp/platform/prebuilts/tools" path="prebuilts/tools" revision="f33c3f049ed25c563fc94184ee812c4536a57b27" />
+  <project name="aosp/platform/prebuilts/vndk/v27" path="prebuilts/vndk/v27" revision="b293241366452a1e2f6d6df25c6e2b33694517c6" />
   <project name="aosp/platform/sdk" path="sdk" revision="22a206c33836f8040e3f02513939e2f06b4d373b" />
   <project name="aosp/platform/system/bt" path="system/bt" revision="afa963d73ba5e57655b9923992a655947feefcbd" />
   <project name="aosp/platform/system/ca-certificates" path="system/ca-certificates" revision="698a25049345a31eb7d55d08ad9a2a6bbe3a5371" />
