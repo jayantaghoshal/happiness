@@ -79,7 +79,7 @@ bool IsMacAddressCorrect(const std::vector<uint8_t>& mac_address, const char* in
     memset(&ifr_req, 0, sizeof(struct ifreq));
     std::strncpy(ifr_req.ifr_name, interface_name, IFNAMSIZ);
 
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
 
@@ -119,7 +119,7 @@ bool IsLinkSpeedCorrect(const std::string& interface_name) {
     struct ethtool_cmd edata;
     int rc;
 
-    sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    sock = socket(PF_INET, SOCK_DGRAM | SOCK_CLOEXEC, IPPROTO_IP);
     if (sock < 0) {
         return false;
     }
@@ -161,7 +161,7 @@ bool SetLinkSpeed(const std::string& interface_name) {
     struct ethtool_cmd edata;
     int rc;
 
-    sock = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+    sock = socket(PF_INET, SOCK_DGRAM | SOCK_CLOEXEC, IPPROTO_IP);
     if (sock < 0) {
         return false;
     }
@@ -214,7 +214,7 @@ bool IsInterfaceUp(const char* interface_name) {
 }
 
 std::string GetIpAddress(const std::string& interface_name) {
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
         throw std::system_error(EFAULT, std::system_category());
@@ -239,7 +239,7 @@ std::string GetIpAddress(const std::string& interface_name) {
 }
 
 std::string GetNetmask(const std::string& interface_name) {
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
         throw std::system_error(EFAULT, std::system_category());
@@ -263,7 +263,7 @@ std::string GetNetmask(const std::string& interface_name) {
 }
 
 std::string GetBroadcastAddress(const std::string& interface_name) {
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
         throw std::system_error(EFAULT, std::system_category());
@@ -328,7 +328,7 @@ bool SetNetmask(int skfd, const char* intf, const char* newmask) {
 
 bool SetIpAddress(const char* interface_name, const char* ip_addr, const char* netmask, const char* broadcast_address) {
     // Open AF_INET socket
-    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    int inet_sock_fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (inet_sock_fd == -1) {
         ALOGE("Failed to open AF_INET socket. Interface will not be configured");
         return false;
@@ -427,7 +427,7 @@ bool SetMacAddress(const std::vector<uint8_t>& mac_address, const char* interfac
         ifr_mac.ifr_hwaddr.sa_data[pos] = mac_address[pos];
     }
 
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    sockfd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
     if (sockfd == -1) {
         ALOGE("Unable to open socket for set MAC address for device. %s", interface_name);
         return false;

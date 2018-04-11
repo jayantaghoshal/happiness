@@ -69,7 +69,7 @@ int UEventListener::SetupSocket() {
     nladdr.nl_pid = getpid();
     nladdr.nl_groups = -1;
 
-    if ((netlink_socket_ = socket(AF_NETLINK, SOCK_DGRAM, NETLINK_KOBJECT_UEVENT)) < 0) {
+    if ((netlink_socket_ = socket(AF_NETLINK, SOCK_DGRAM | SOCK_CLOEXEC, NETLINK_KOBJECT_UEVENT)) < 0) {
         ALOGE("Unable to create netlink socket: %s", strerror(errno));
         return -1;
     }
