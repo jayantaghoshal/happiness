@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import re
@@ -7,8 +7,12 @@ from typing import NamedTuple, Any
 from .recording_serial import RecordingSerial
 
 
+class ExpectedResponseNotPresentError(RuntimeError):
+    pass
+
+
 class Serial(RecordingSerial):
-    def expect_line(self, pattern: str, timeout_sec: int, hint: str = None):
+    def expect_line(self, pattern: str, timeout_sec : int = 5, hint: str = None):
         stop_time = time.time() + timeout_sec
         while time.time() < stop_time:
             line = self.readline(timeout_sec)
@@ -18,7 +22,7 @@ class Serial(RecordingSerial):
             timeout_sec, pattern)
         if hint is not None:
             message += hint
-        raise RuntimeError(message)
+        raise ExpectedResponseNotPresentError(message)
 
     def wait_line(self, pattern: str, timeout_sec: int):
         stop_time = time.time() + timeout_sec
@@ -49,13 +53,13 @@ class VipSerial(Serial):
     VIP_PBL = 1
 
     def type(self) -> Any:
-        if self._is_vip_app():
+        if self.is_vip_app():
             return VipSerial.VIP_APP
-        if self._is_vip_pbl():
+        if self.is_vip_pbl():
             return VipSerial.VIP_PBL
         return None
 
-    def _is_vip_app(self, timeout_sec=5) -> bool:
+    def is_vip_app(self, timeout_sec=5) -> bool:
         self.writeline("version")
         stop_time = time.time() + timeout_sec
         while time.time() < stop_time:
@@ -68,7 +72,7 @@ class VipSerial(Serial):
                 return False
         return False
 
-    def _is_vip_pbl(self, timeout_sec=5) -> bool:
+    def is_vip_pbl(self, timeout_sec=5) -> bool:
         self.writeline("version")
         stop_time = time.time() + timeout_sec
         while time.time() < stop_time:
@@ -94,6 +98,7 @@ def open_serials(ports: PortMapping) -> IhuSerials:
     vip = VipSerial(ports.vip_tty_device, 115200, timeout_sec=1, log_context_name="VIP")
     mp = MpSerial(ports.mp_tty_device, 115200, timeout_sec=1, log_context_name="_MP")
     return IhuSerials(vip, mp)
+
 
 def swap_serials(ports: PortMapping, serials: IhuSerials) -> IhuSerials:
     serials.vip.close()
