@@ -49,6 +49,7 @@ cc_binary {
         "libtarmac",
         "vendor.volvocars.hardware.uds@1.0",
         "lib_uds_data_handler",
+        "libcarconfig_reader",
     ],
 
     static_libs: [
@@ -56,8 +57,16 @@ cc_binary {
         "libip4tc",
     ],
 
+    header_libs: [
+        "nlohmann-json-3.0.1",
+    ],
+
+    init_rc: [
+        "init/netmand.rc",
+        "init/dnsmasq.rc",
+    ],
+
     // Netman depends upon sysctl.conf, which it will initialize during startup
-    init_rc: ["init/netmand.rc"],
     required: [
         "sysctl.conf",
         "iptables-vcc",
@@ -91,6 +100,7 @@ cc_binary {
         "liblocalconfig",
         "libcutils",
         "libtarmac",
+        "libcarconfig_reader",
     ],
 
     static_libs: [
@@ -103,6 +113,10 @@ cc_binary {
     required: [
         "ip-vcc",
         "netboyd.rules",
+    ],
+
+    header_libs: [
+        "nlohmann-json-3.0.1",
     ],
 }
 

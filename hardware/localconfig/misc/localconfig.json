@@ -79,7 +79,8 @@
           "name=tcam0_bd, id=189, prio=2, ip-address=198.19.101.194, netmask=255.255.255.224, broadcast-address=198.19.101.223",
           "name=tcam0_be, id=190, prio=5, ip-address=198.19.102.2, netmask=255.255.255.224, broadcast-address=198.19.102.31",
           "name=tcam0_bf, id=191, prio=4, ip-address=198.19.102.33, netmask=255.255.255.224, broadcast-address=198.19.102.63",
-          "name=tcam0_ca, id=202, prio=2, ip-address=198.19.102.66, netmask=255.255.255.224, broadcast-address=198.19.102.95"
+          "name=tcam0_ca, id=202, prio=2, ip-address=198.19.102.66, netmask=255.255.255.224, broadcast-address=198.19.102.95",
+          "name=tcam0_cd, id=205, prio=2, ip-address=198.19.102.161, netmask=255.255.255.224, broadcast-address=198.19.102.191, required_car_config=100:3"
       ]
   },
   "meth0": {
@@ -96,7 +97,8 @@
       "CHAINS":[],
         "RULES":[
           "-A POSTROUTING -4 -s 198.18.2.18 -o tcam0 -j RETURN",
-          "-A POSTROUTING -o tcam0 -j MASQUERADE"
+          "-A POSTROUTING -o tcam0 -j MASQUERADE",
+          "-A POSTROUTING -o tcam0_cd -j MASQUERADE"
       ]
     },
     "FILTER_TABLE":
@@ -109,6 +111,13 @@
           "-A OUTPUT -4 -o tcam0 -p tcp --dport 13400 -m state --state NEW -j ACCEPT",
           "-A OUTPUT -4 -m state --state RELATED,ESTABLISHED -j ACCEPT"
       ]
+    },
+    "MANGLE_TABLE":
+    {
+      "CHAINS":[],
+        "RULES": [
+          "-A POSTROUTING -4 -o rtp_aud0 -p udp --dport bootpc -d 10.0.0.0/24 -j CHECKSUM --checksum-fil"
+        ]
     }
   },
   "TEST_KEY_BOOLEAN": true,

@@ -37,5 +37,11 @@ bool BringInterfaceUp(const char* interface_name);
 
 bool TakeInterfaceDown(const char* interface_name);
 
+bool CheckReqConfig(std::string value);
+
+std::vector<std::unordered_map<std::string, std::string>> GetNetmanConfig();
+
+void SetupVeth(const std::vector<std::unordered_map<std::string, std::string>>& veth_confs);
+
 }  // namespace netman
 }  // namespace vcc

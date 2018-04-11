@@ -22,6 +22,14 @@ LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES := conf/netboy.rules
 LOCAL_MULTILIB := 64
 include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := netman_conf.json
+LOCAL_VENDOR_MODULE := true
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES := conf/netman_conf.json
+LOCAL_MULTILIB := 64
+include $(BUILD_PREBUILT)
 #
 # Copy /system/bin/ip to /vendor/bin/ip
 #
@@ -54,6 +62,17 @@ LOCAL_REQUIRED_MODULES := ip6tables
 LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables; \
 	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-save; \
 	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-restore
+include $(BUILD_PHONY_PACKAGE)
+
+
+#
+# Copy /system/bin/dnsmasq to /vendor/bin/dnsmasq
+#
+include $(CLEAR_VARS)
+LOCAL_MODULE := dnsmasq-vcc
+LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/bin
+LOCAL_REQUIRED_MODULES := dnsmasq
+LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/dnsmasq $(TARGET_OUT_VENDOR)/bin/dnsmasq
 include $(BUILD_PHONY_PACKAGE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))

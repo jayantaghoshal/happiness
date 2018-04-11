@@ -5,6 +5,7 @@
 
 #include "netutils.h"
 
+#include <carconfig.h>
 #include <vcc/localconfig.h>
 
 #include <arpa/inet.h>
@@ -30,6 +31,7 @@
 #include <sys/wait.h>
 #include <cstring>
 #include <fstream>
+#include <json.hpp>
 #include <sstream>
 #include <system_error>
 
@@ -478,6 +480,7 @@ void PrintInterfaceConfiguration(const std::string& context, const InterfaceConf
 void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_configurations,
                                 const vcc::LocalConfigReaderInterface* lcfg) {
     const std::vector<std::string> interface_names = {"apix0", "tcam0", "meth0"};
+    const std::string required_conf_key = "required_car_config";
     for (auto& name : interface_names) {
         InterfaceConfiguration conf;
         conf.name = name;
@@ -496,13 +499,18 @@ void LoadInterfaceConfiguration(std::vector<InterfaceConfiguration>* interface_c
                 std::istringstream str_stream(str);
                 std::string attr;
                 InterfaceConfiguration::vlan_conf entry;
+                bool skip = false;
 
                 while (std::getline(str_stream, attr, ',') && !attr.empty()) {
                     std::string key, value;
                     std::getline(std::getline(std::istringstream(attr), key, '=') >> std::ws, value);
                     entry[key] = value;
+
+                    if (key == required_conf_key && !CheckReqConfig(value)) {
+                        skip = true;
+                    }
                 }
-                conf.vlan.push_back(entry);
+                if (!skip) conf.vlan.push_back(entry);
             }
         } catch (const std::runtime_error& e) {
             ALOGE("%s. Skipping...", e.what());
@@ -665,6 +673,104 @@ void SetupVLan(const InterfaceConfiguration& interface_configuration) {
         } catch (const std::out_of_range& e) {
             ALOGE("Error: %s!", e.what());
         }
+    }
+}
+
+bool CheckReqConfig(std::string value) {
+    std::string car_config_param;
+    std::string car_config_value;
+
+    std::getline(std::getline(std::istringstream(value), car_config_param, ':') >> std::ws, car_config_value);
+
+    if (car_config_value == std::to_string(carconfig::getValue(std::stoi(car_config_param)))) {
+        return true;
+    }
+    return false;
+}
+
+std::vector<std::unordered_map<std::string, std::string>> GetNetmanConfig() {
+    const std::string path_to_config_file = "/vendor/etc/netman_conf.json";
+    std::vector<std::unordered_map<std::string, std::string>> veth_confs;
+    const std::string required_conf_key = "required_car_config";
+
+    try {
+        nlohmann::json config_file;
+        std::ifstream input_file(path_to_config_file.c_str());
+        if (!input_file) {
+            throw std::runtime_error("JSON file " + path_to_config_file + " could not be opened.");
+        }
+        input_file >> config_file;
+
+        for (auto& item : config_file["veth"]) {
+            auto str = item.get<std::string*>();
+
+            // strip out any whitespace characters
+            str->erase(std::remove_if(str->begin(), str->end(), isspace), str->end());
+
+            std::istringstream str_stream(*str);
+            std::string attr;
+            std::unordered_map<std::string, std::string> veth_conf;
+            bool skip = false;
+
+            while (std::getline(str_stream, attr, ',') && !attr.empty()) {
+                std::string key, value;
+                std::getline(std::getline(std::istringstream(attr), key, '=') >> std::ws, value);
+                veth_conf[key] = value;
+
+                if (key == required_conf_key && !CheckReqConfig(value)) {
+                    skip = true;
+                }
+            }
+            if (!skip) veth_confs.push_back(veth_conf);
+        }
+    } catch (const std::exception& e) {
+        ALOGE("Cannot load netman.conf: %s", e.what());
+    }
+
+    return veth_confs;
+}
+
+void SetupVeth(const std::vector<std::unordered_map<std::string, std::string>>& veth_confs) {
+    try {
+        for (auto& veth : veth_confs) {
+            std::string cmd = "/vendor/bin/ip netns exec vcc ip link add " + veth.at("name") + " type veth peer name " +
+                              veth.at("peername");
+            try {
+                ValidateReturnStatus(std::system(cmd.c_str()), std::string("Failed to create veth eth0 - and0"));
+            } catch (const std::system_error& e) {
+                if (e.code().value() != ENOENT) throw;
+            }
+
+            std::vector<uint8_t> mac_addr;
+            ConvertMacAddress(veth.at("peermacaddr"), mac_addr);
+            if (!SetMacAddress(mac_addr, veth.at("peername").c_str())) {
+                ALOGE("Error: Cannot set map address for: %s", veth.at("peername").c_str());
+            }
+
+            SetIpAddress(veth.at("name").c_str(),
+                         veth.at("ipaddr").c_str(),
+                         veth.at("netmask").c_str(),
+                         veth.at("broadcast").c_str());
+
+            // Bring interface up
+            if (!BringInterfaceUp(veth.at("name").c_str())) {
+                ALOGE("Error: Cannot bring interface up: %s", veth.at("name").c_str());
+            }
+
+            // Move eth0 to default ns
+            std::string ns = (veth.at("peerns") == "default") ? "1" : veth.at("peerns");
+            cmd = "/vendor/bin/ip netns exec vcc ip link set " + veth.at("peername") + " netns " + ns;
+            try {
+                ValidateReturnStatus(std::system(cmd.c_str()),
+                                     std::string("Failed to change interface's namespace: ") + veth.at("peername"));
+            } catch (const std::system_error& e) {
+                ALOGE("Failed to move interface: %s into namespace: %s",
+                      veth.at("peername").c_str(),
+                      veth.at("peerns").c_str());
+            }
+        }
+    } catch (const std::out_of_range& e) {
+        ALOGE("Error: %s!", e.what());
     }
 }
 

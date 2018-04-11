@@ -1,0 +1,6 @@
+on property:vendor.carconfig.CC100_AutonomousDriveType=3 && property:netmand.startup_completed=1
+    start vendor_dnsmasq
+
+service vendor_dnsmasq /vendor/bin/ip netns exec vcc /vendor/bin/dnsmasq -k --dhcp-range 10.0.0.2,10.0.0.2,static --dhcp-host 06:00:00:00:00:06,10.0.0.2 --interface rtp_aud0 --no-resolv --no-hosts --pid-file
+    user root
+    group root

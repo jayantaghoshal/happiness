@@ -45,6 +45,9 @@ int main() {
         android::hardware::configureRpcThreadpool(1, false);
         DiagnosticsReporter diag_rep;
 
+        auto veth_configs = GetNetmanConfig();
+        SetupVeth(veth_configs);
+
         std::vector<InterfaceConfiguration> interface_configurations;
 
         LoadInterfaceConfiguration(&interface_configurations, lcfg);

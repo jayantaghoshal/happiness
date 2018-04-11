@@ -1,0 +1,5 @@
+{
+  "veth": [
+      "name=rtp_aud0, peername=eth1, peerns=default, ipaddr=10.0.0.1, netmask=255.255.255.240, broadcast=10.0.0.15, peermacaddr=06:00:00:00:00:06, required_car_config=100:3"
+  ]
+}
