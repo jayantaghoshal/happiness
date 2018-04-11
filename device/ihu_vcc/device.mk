@@ -32,6 +32,8 @@ PRODUCT_PACKAGES += \
     vendor.volvocars.hardware.settingsstorage@1.0-service \
     installationmasterd \
     android.hardware.automotive.evs.vcc@1.0-hardware \
+    remotectrl_routerd \
+    remotectrl_audioctrld \
     conmand \
 
 PRODUCT_PROPERTY_OVERRIDES += \
