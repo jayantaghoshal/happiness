@@ -46,8 +46,6 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
     static bool isPlaying(SoundID soundid);
     static SoundWrapper* instance();
 
-    virtual ~SoundWrapper();
-
     bool getInitialized() const;
 
     bool init(::android::sp<IAudioManager> service);

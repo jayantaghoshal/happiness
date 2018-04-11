@@ -2,7 +2,6 @@ cc_binary {
     name: "vehicle-hal-daemon", 
     init_rc: ["vehicle-hal-daemon.rc"],
     proprietary: true,
-    relative_install_path: "hw",
     vendor: true,
     tidy: true,
 

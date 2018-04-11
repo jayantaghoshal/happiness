@@ -31,8 +31,6 @@ PRODUCT_PACKAGES += \
     soundnotifications \
     vendor.volvocars.hardware.settingsstorage@1.0-service \
     installationmasterd \
-    remotectrl_routerd \
-    remotectrl_audioctrld \
     android.hardware.automotive.evs.vcc@1.0-hardware \
     conmand \
 
@@ -48,8 +46,6 @@ PRODUCT_PACKAGES += \
     LcfService \
     timezones.db \
     libjsqlite \
-    RemoteAudioCtrlService \
-    RemoteAudioCtrlAppService \
 
 ##############################################################
 # SWDL stuff
@@ -92,8 +88,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     VccUserSwitchService \
     VehicleFunctions \
-    VccMediaCenter \
-    VccTunerBrowserService
+    VccMediaCenter
+#    VccTunerBrowserService
 
 ##############################################################
 # Vendor apps
@@ -112,8 +108,8 @@ PRODUCT_PACKAGES += \
 # Files to deploy to target
 #############################################l#################
 PRODUCT_COPY_FILES += \
-    vendor/volvocars/device/ihu_vcc/init.rc:vendor/etc/init/init.${TARGET_PRODUCT}.rc \
-    vendor/volvocars/device/ihu_vcc/init.recovery.rc:vendor/etc/init/init.recovery.${TARGET_PRODUCT}.rc \
+    ${VCC_DEVICE_PATH}/init.rc:vendor/etc/init/init.${TARGET_PRODUCT}.rc \
+    ${VCC_DEVICE_PATH}/init.recovery.rc:vendor/etc/init/init.recovery.${TARGET_PRODUCT}.rc \
 
 ##############################################################
 # Aptiv init.rc file overrides
@@ -158,10 +154,10 @@ $(call inherit-product, vendor/volvocars/apps/google/GAS/google/products/gms.mk)
 ##############################################################
 # VCC required Linux kernel modules
 ##############################################################
-KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_diffconfig
+KERNEL_DIFFCONFIG += ${VCC_DEVICE_PATH}/kernel_configs/vcc_connectivity_diffconfig
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-    KERNEL_DIFFCONFIG += vendor/volvocars/device/ihu_vcc/kernel_configs/vcc_connectivity_eng_diffconfig
+    KERNEL_DIFFCONFIG += ${VCC_DEVICE_PATH}/kernel_configs/vcc_connectivity_eng_diffconfig
 endif
 
 ##############################################################

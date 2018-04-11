@@ -44,8 +44,9 @@ LOCAL_PROGUARD_ENABLED := disabled
 
 LOCAL_DEX_PREOPT := false
 
-LOCAL_SDK_VERSION := current
+#LOCAL_SDK_VERSION := current
 LOCAL_MIN_SDK_VERSION := 25
+LOCAL_PRIVATE_PLATFORM_APIS := true
 
 LOCAL_AAPT_FLAGS := \
     --auto-add-overlay \

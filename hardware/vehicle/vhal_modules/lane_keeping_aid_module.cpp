@@ -38,9 +38,8 @@ vhal20::VehiclePropConfig propconfig_lane_keeping_aid_mode() {
     config.prop = vhal20::toInt(prop);
     config.access = vhal20::VehiclePropertyAccess::READ_WRITE;
     config.changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE;
-    config.supportedAreas = toInt(VehicleAreaZone::WHOLE_CABIN);
     config.areaConfigs.resize(1);
-    config.areaConfigs[0].areaId = toInt(VehicleAreaZone::WHOLE_CABIN);
+    config.areaConfigs[0].areaId = 0;
     config.areaConfigs[0].minInt32Value = 0;
     config.areaConfigs[0].maxInt32Value = 2;
     return config;

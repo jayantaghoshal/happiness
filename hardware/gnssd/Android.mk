@@ -6,7 +6,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := gnssd
 LOCAL_INIT_RC := gnssd.rc
-LOCAL_MODULE_RELATIVE_PATH := hw
 
 # GnssD
 LOCAL_SRC_FILES := \

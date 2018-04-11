@@ -1,4 +1,4 @@
-service dataelements-hidl-server /vendor/bin/hw/dataelements-hidl-server
+service dataelements-hidl-server /vendor/bin/dataelements-hidl-server
     class main
     user root
     group root

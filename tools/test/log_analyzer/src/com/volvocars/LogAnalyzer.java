@@ -16,6 +16,7 @@ import com.android.tradefed.device.ITestDevice;
 import com.android.tradefed.log.LogUtil;
 import com.android.tradefed.result.ITestInvocationListener;
 import com.android.tradefed.result.InputStreamSource;
+import com.android.tradefed.result.TestDescription;
 import com.android.tradefed.testtype.IRemoteTest;
 import com.android.tradefed.testtype.IDeviceTest;
 import com.android.tradefed.device.LogcatReceiver;
@@ -91,7 +92,7 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
 
     @Override
     public void run(ITestInvocationListener listener) throws DeviceNotAvailableException {
-        TestIdentifier testId = new TestIdentifier(getClass().getCanonicalName(), "LogSpamDetector");
+        TestDescription testId = new TestDescription(getClass().getCanonicalName(), "LogSpamDetector");
         listener.testRunStarted("LogSpamDetector", 1);
         listener.testStarted(testId);
 
@@ -227,11 +228,11 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
         ));
         //TODO: Temporary exclusions
         HashSet<String> tempExcludedProcesses = new HashSet<String>(Arrays.asList(
-                "/vendor/bin/hw/android.hardware.audio@2.0-service",
-                "/vendor/bin/hw/android.hardware.automotive.vehicle@2.0-service",
+                "/vendor/bin/android.hardware.audio@2.0-service",
+                "/vendor/bin/android.hardware.automotive.vehicle@2.0-service",
                 "com.intel.rvc",
                 "system_server",
-                "/vendor/bin/hw/iplmd",
+                "/vendor/bin/iplmd",
                 "/system/vendor/bin/esif_ufd",
                 "/system/bin/netd",
                 "/system/bin/hwservicemanager"  // https://flow.jira.cm.volvocars.biz/browse/PSS370-4236
@@ -363,8 +364,8 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
            Example of chatty output:
                 11-11 11:21:58.611  2367  2374 I chatty  : uid=0(root) vehicle-signals expire 153 lines
                 11-11 11:21:58.687  2957  3065 I chatty  : uid=1000(system) Thread-1 identical 5 lines
-                11-11 11:21:58.947  2306  2318 I chatty  : uid=0(root) /vendor/bin/hw/ipcbd expire 6 lines
-                11-11 11:21:58.948  2308  2310 I chatty  : uid=0(root) /vendor/bin/hw/iplmd expire 7 lines
+                11-11 11:21:58.947  2306  2318 I chatty  : uid=0(root) /vendor/bin/ipcbd expire 6 lines
+                11-11 11:21:58.948  2308  2310 I chatty  : uid=0(root) /vendor/bin/iplmd expire 7 lines
 
             This regexp will match: uid, process and "expire" vs "identical"
             LogCatReceiver will parse the time/pid/thread/etc and only give us the message with getStacK()
@@ -451,7 +452,7 @@ public class LogAnalyzer implements IRemoteTest, IDeviceTest {
         try {
             return parseLogCat(logcatStream);
         } finally {
-            logcatStream.cancel();
+            logcatStream.close();
         }
     }
 

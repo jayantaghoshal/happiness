@@ -76,9 +76,8 @@ std::vector<VehiclePropConfig> IlluminationHal::listProperties() {
     illuminationconfig.prop = toInt(VehicleProperty::MANUAL_ILLUMINATION);
     illuminationconfig.access = VehiclePropertyAccess::READ;
     illuminationconfig.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    illuminationconfig.supportedAreas = toInt(VehicleAreaZone::WHOLE_CABIN);
     illuminationconfig.areaConfigs.resize(1);
-    illuminationconfig.areaConfigs[0].areaId = toInt(VehicleAreaZone::WHOLE_CABIN);
+    illuminationconfig.areaConfigs[0].areaId = 0;
     illuminationconfig.areaConfigs[0].minInt32Value = 0;    // 0%
     illuminationconfig.areaConfigs[0].maxInt32Value = 100;  // 100%
 

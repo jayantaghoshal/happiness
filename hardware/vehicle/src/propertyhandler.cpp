@@ -126,13 +126,12 @@ int VhalPropertyHandler<float>::setProp(const vhal20::VehiclePropValue& propValu
     return 0;
 };
 
-vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property, int32_t supportedAreas) {
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property) {
     vhal20::VehiclePropConfig config;
     config.prop = vhal20::toInt(property);
     config.access = vhal20::VehiclePropertyAccess::READ_WRITE;
     config.changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE;
-    config.supportedAreas = supportedAreas;
-    config.areaConfigs.resize(0);  // Important to not init this for bool properties!
+    config.areaConfigs.resize(0);  // Important to not init this for bool properties! //TODO: Not anymore???
 
     return config;
 }

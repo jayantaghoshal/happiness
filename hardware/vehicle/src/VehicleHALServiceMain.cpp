@@ -9,7 +9,6 @@
 #include "VehicleHalImpl.h"
 #include "vhal_v2_0/VehicleHalManager.h"
 
-#include "AudioVehicleHalImpl.h"
 #include "PowerModule.h"
 #include "activesafetymodule.h"
 #include "activeuserprofilemodule.h"
@@ -71,7 +70,6 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Create Modules
     auto powerModule = std::make_unique<vhal_20::impl::PowerModule>(hal.get());
-    auto audioModule = std::make_unique<vhal_20::impl::AudioModule>(hal.get());
     auto carConfigModule = std::make_unique<vccvhal_10::impl::CarConfigHal>(hal.get());
     auto activeUserProfileModule = std::make_unique<vccvhal_10::impl::ActiveUserProfileHal>(hal.get());
     auto hvacModule = std::make_unique<HvacModule>(hal.get(), m->first_row, m->commonFactory_, dispatcher);
@@ -90,7 +88,6 @@ int main(int /* argc */, char* /* argv */ []) {
 
     // Register modules
     powerModule->registerToVehicleHal();
-    audioModule->registerToVehicleHal();
     carConfigModule->registerToVehicleHal();
     keyManagerModule->registerToVehicleHal();
     activeUserProfileModule->registerToVehicleHal();

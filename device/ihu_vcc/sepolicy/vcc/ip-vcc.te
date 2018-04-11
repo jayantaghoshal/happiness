@@ -11,7 +11,7 @@ allow ip-vcc netboyd:netlink_kobject_uevent_socket { read write };
 
 allow ip-vcc nsfs_netns_vcc:file { open read };
 
-allow ip-vcc self:capability { net_admin net_raw };
+#allow ip-vcc self:capability { net_admin net_raw };
 allow ip-vcc self:netlink_route_socket { bind create getattr nlmsg_read nlmsg_write read setopt write };
 allow ip-vcc self:udp_socket { create ioctl };
 

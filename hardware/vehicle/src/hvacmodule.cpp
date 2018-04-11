@@ -29,13 +29,17 @@ using namespace std::placeholders;
 using namespace android;
 
 namespace {
-vhal20::VehiclePropConfig boolConfig(VehicleProperty prop, int32_t zones) {
+vhal20::VehiclePropConfig boolConfig(VehicleProperty prop, std::vector<int> areaIds) {
     vhal20::VehiclePropConfig c;
     c.prop = toInt(prop);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.supportedAreas = zones;
-    c.areaConfigs.resize(0);  // Important to not init this for bool properties!
+    // TODO: Verify if this shall be set for bool properties, older versions of CarService with supportedAreas would
+    // crash
+    c.areaConfigs.resize(areaIds.size());
+    for (size_t i = 0; i < areaIds.size(); i++) {
+        c.areaConfigs[i].areaId = areaIds[i];
+    }
     return c;
 }
 
@@ -44,7 +48,6 @@ vhal20::VehiclePropConfig propconfig_temperature() {
     c.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.supportedAreas = toInt(VehicleAreaZone::ROW_1_LEFT) | VehicleAreaZone::ROW_1_RIGHT;
     c.areaConfigs.resize(2);
     c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
     c.areaConfigs[0].minFloatValue = 17;  // TODO carconfig?
@@ -55,26 +58,18 @@ vhal20::VehiclePropConfig propconfig_temperature() {
     return c;
 }
 
-vhal20::VehiclePropConfig propconfig_autoclimate() {
-    return boolConfig(VehicleProperty::HVAC_AUTO_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
-}
+vhal20::VehiclePropConfig propconfig_autoclimate() { return boolConfig(VehicleProperty::HVAC_AUTO_ON, {0}); }
 
-vhal20::VehiclePropConfig propconfig_recirculation() {
-    return boolConfig(VehicleProperty::HVAC_RECIRC_ON, toInt(VehicleAreaZone::WHOLE_CABIN));
-}
+vhal20::VehiclePropConfig propconfig_recirculation() { return boolConfig(VehicleProperty::HVAC_RECIRC_ON, {0}); }
 
-vhal20::VehiclePropConfig propconfig_acon() {
-    return boolConfig(VehicleProperty::HVAC_AC_ON, toInt(VehicleAreaZone::ROW_1));  // TODO: Invesigate which AreaZone
-                                                                                    // to use here. Must be the same
-                                                                                    // zone in ClimateService.java)
-}
+vhal20::VehiclePropConfig propconfig_acon() { return boolConfig(VehicleProperty::HVAC_AC_ON, {0}); }
 
 vhal20::VehiclePropConfig propconfig_defroster() {
     return boolConfig(VehicleProperty::HVAC_DEFROSTER,
-                      toInt(VehicleAreaWindow::FRONT_WINDSHIELD) | toInt(VehicleAreaWindow::REAR_WINDSHIELD));
+                      {toInt(VehicleAreaWindow::FRONT_WINDSHIELD), toInt(VehicleAreaWindow::REAR_WINDSHIELD)});
 }
 vhal20::VehiclePropConfig propconfig_maxdefrost() {
-    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, toInt(VehicleAreaZone::ROW_1));
+    return boolConfig(VehicleProperty::HVAC_MAX_DEFROST_ON, {toInt(VehicleAreaZone::ROW_1_CENTER)});
 }
 
 vhal20::VehiclePropConfig propconfig_fanlevelfront() {
@@ -82,9 +77,8 @@ vhal20::VehiclePropConfig propconfig_fanlevelfront() {
     c.prop = toInt(VehicleProperty::HVAC_FAN_SPEED);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.supportedAreas = toInt(VehicleAreaZone::ROW_1);
     c.areaConfigs.resize(1);
-    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_CENTER);
     c.areaConfigs[0].minInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::OFF);
     c.areaConfigs[0].maxInt32Value = static_cast<int>(FirstRow::FanLevelFrontRequest::MAX);
     return c;
@@ -95,11 +89,12 @@ vhal20::VehiclePropConfig propconfig_fandirection() {
     c.prop = toInt(VehicleProperty::HVAC_FAN_DIRECTION);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.supportedAreas = toInt(VehicleAreaZone::ROW_1);
     c.areaConfigs.resize(1);
-    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1);
+    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_CENTER);
     c.areaConfigs[0].minInt32Value = 0;
-    c.areaConfigs[0].maxInt32Value = toInt(vhal20::VehicleHvacFanDirection::DEFROST_AND_FLOOR);
+    c.areaConfigs[0].maxInt32Value = toInt(vhal20::VehicleHvacFanDirection::FACE) |
+                                     toInt(vhal20::VehicleHvacFanDirection::FLOOR) |
+                                     toInt(vhal20::VehicleHvacFanDirection::DEFROST);
     return c;
 }
 
@@ -181,7 +176,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_), toInt(VehicleAreaZone::ROW_1));
+        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_), toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////

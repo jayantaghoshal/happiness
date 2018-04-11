@@ -151,7 +151,6 @@ void DumpProperties(const ::android::sp<vhal20::IVehicle>& service,
         printf("    .changeMode: %d ( %s )\n",
                property_config.changeMode,
                vhal20::toString(property_config.changeMode).c_str());
-        printf("    .supportedAreas: %d\n", property_config.supportedAreas);
         printf("    .configFlags: %d\n", property_config.configFlags);  // Dont know what this is for
 
         std::string config_array;

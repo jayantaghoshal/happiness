@@ -29,7 +29,7 @@ _anim_delay = 3 # number of seconds to wait for animations
 _seconds_to_measure_cpu = 5 # number of iterations and seconds to fetch cpu info
 
 # Connect to first device detected
-kwargs1 = {'ignoreversioncheck': False, 'verbose': False, 'ignoresecuredevice': False}
+kwargs1 = {'ignoreversioncheck': True, 'verbose': False, 'ignoresecuredevice': False}
 device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
 kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True, 'autodump': False, 'startviewserver': True, 'compresseddump': True}
 vc = ViewClient(device, serialno, **kwargs2)

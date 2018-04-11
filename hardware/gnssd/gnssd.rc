@@ -1,4 +1,4 @@
-service gnssd /vendor/bin/hw/gnssd
+service gnssd /vendor/bin/gnssd
     class vcc_net
     oneshot
     user gps

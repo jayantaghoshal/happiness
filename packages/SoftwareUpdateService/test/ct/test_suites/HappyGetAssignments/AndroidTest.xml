@@ -20,7 +20,7 @@
         <option name="run-command" value="am force-stop com.volvocars.softwareupdateapp" />
         <option name="run-command" value="stop cloudd" />
         <option name="run-command" value="killall -9 cloudd" />
-        <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/hw/cloudd" />
+        <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/cloudd" />
     </target_preparer>
 
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">

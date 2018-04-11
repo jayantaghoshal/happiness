@@ -18,7 +18,7 @@ constexpr int FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE = -1;
 using tarmac::eventloop::EPollQueue;
 using tarmac::eventloop::Task;
 
-EPollQueue::EPollQueue() : epollfd_(epoll_create1(0)), eventfd_((eventfd(0, EFD_SEMAPHORE))) {
+EPollQueue::EPollQueue() : epollfd_(epoll_create1(EPOLL_CLOEXEC)), eventfd_((eventfd(0, EFD_SEMAPHORE))) {
     epoll_event event;
     event.events = EPOLLIN;
     event.data.fd = FILE_DESCRIPTOR_FOR_NON_FD_TASK_QUEUE;

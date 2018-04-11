@@ -1,4 +1,4 @@
-service ipcbd-infotainment /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd ipcb UDP
+service ipcbd-infotainment /system/bin/ip netns exec vcc /vendor/bin/ipcbd ipcb UDP
     class vcc_net
     oneshot
     user root

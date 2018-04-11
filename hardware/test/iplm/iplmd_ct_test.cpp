@@ -56,7 +56,7 @@ class IplmTestFixture : public ::testing::Test {
         // Start IpcbD for test with mocked localconfig
         std::string new_ipcb_pid_str = getCmdOut(
                 "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /system/bin/ip netns exec vcc "
-                "/vendor/bin/hw/ipcbd iplm UDPB "
+                "/vendor/bin/ipcbd iplm UDPB "
                 "& echo $!");
 
         std::string::size_type sz;  // alias of size_t
@@ -78,7 +78,7 @@ class IplmTestFixture : public ::testing::Test {
 
         // Start IpcbD for test with mocked localconfig
         std::string new_iplm_pid_str = getCmdOut(
-                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /vendor/bin/hw/iplmd "
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /vendor/bin/iplmd "
                 "& echo $!");
 
         new_iplm_pid = std::stoi(new_iplm_pid_str, &sz);
@@ -345,7 +345,7 @@ TEST_F(IplmTestFixture, RegisterUnRegisterLSC) {
     usleep(1000000 * 2);
 
     // Shouldnt have increased counter since we have unregistered the LSC
-    EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
+    EXPECT_TRUE(onResourceGroupStatusCallbackCounter == onResourceGroupStatusCallbackCounterBefore);
     EXPECT_TRUE(onNodeStatusCallbackCounter == onNodeStatusCallbackCounterBefore);
 
     ALOGD("- RegisterUnRegisterLSC");

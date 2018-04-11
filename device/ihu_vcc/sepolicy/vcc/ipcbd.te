@@ -9,7 +9,7 @@ binder_call(ipcbd, iplmd)
 
 allow ipcbd self:udp_socket { read write create setopt bind };
 allow ipcbd self:tcp_socket { create connect setopt };
-allow ipcbd self:capability { dac_override net_raw };
+#allow ipcbd self:capability { dac_override net_raw };
 allow ipcbd port:tcp_socket name_connect;
 
 # TODO Enable when binder/inet socket is fixed

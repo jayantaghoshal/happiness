@@ -1,4 +1,4 @@
-service ipcbd-dim /system/bin/ip netns exec vcc /vendor/bin/hw/ipcbd dim TCP DIM
+service ipcbd-dim /system/bin/ip netns exec vcc /vendor/bin/ipcbd dim TCP DIM
     class vcc_net
     user root
     group root

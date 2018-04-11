@@ -7,7 +7,7 @@ init_daemon_domain(netboyd)
 
 set_prop(netboyd, netboyd_prop)
 
-allow netboyd self:capability { net_admin net_raw };
+#allow netboyd self:capability { net_admin net_raw };
 allow netboyd self:netlink_route_socket { bind create getattr nlmsg_write read setopt write };
 
 allow netboyd self:udp_socket { create ioctl };

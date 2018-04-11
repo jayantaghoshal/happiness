@@ -56,7 +56,7 @@ def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.c
         test_result = check_output_logged(["vts-tradefed",
                                            "run",
                                            "commandAndExit",
-                                           "vts",
+                                           "vts-staging-default",
                                            "--skip-all-system-status-check",
                                            "--skip-preconditions",
                                            "--abi",

@@ -39,7 +39,7 @@ class ParkingBrakeTest : public ::testing::Test {
         try {
             AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
                                       static_cast<AudioTable::SoundComponent>(soundComp));
-        } catch (std::invalid_argument iaex) {
+        } catch (std::invalid_argument& iaex) {
             ALOGW("AudioManagerMock::mockPlaySound. Invalid combination of Type and Component");
             error = true;
         }

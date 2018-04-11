@@ -78,7 +78,7 @@ class VtsGnssIntegrationTest : public ::testing::Test {
         ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
 
         // Kill conflicting IpcbD
-        int ipcb_pid = getProcIdByName("/vendor/bin/hw/ipcbd ipcb UDP");
+        int ipcb_pid = getProcIdByName("/vendor/bin/ipcbd ipcb UDP");
         if (-1 != ipcb_pid) {
             kill(ipcb_pid, SIGTERM);
         }
@@ -86,7 +86,7 @@ class VtsGnssIntegrationTest : public ::testing::Test {
         // Start IpcbD for test with mocked localconfig
         std::string new_ipcb_pid_str = getCmdOut(
                 "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
-                "/vendor/bin/hw/ipcbd ipcb UDP "
+                "/vendor/bin/ipcbd ipcb UDP "
                 "& echo $!");
 
         std::string::size_type sz;  // alias of size_t

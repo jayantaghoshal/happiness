@@ -30,14 +30,11 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
             property_value.prop = config.prop;
             values_.emplace(property_value.areaId, property_value);
         } else {
-            for (int32_t i = 0; i < 32; i++) {
-                int32_t mask = (1 << i);
-                if ((mask & config.supportedAreas) != 0) {
-                    vhal20::VehiclePropValue property_value{};
-                    property_value.areaId = mask;
-                    property_value.prop = config.prop;
-                    values_.emplace(mask, property_value);
-                }
+            for (const auto& area : config.areaConfigs) {
+                vhal20::VehiclePropValue property_value{};
+                property_value.areaId = area.areaId;
+                property_value.prop = config.prop;
+                values_.emplace(area.areaId, property_value);
             }
         }
     }
@@ -92,4 +89,4 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
     }
 };
 
-vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property, int32_t supportedAreas = 0);
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property);

@@ -12,7 +12,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := $(service_name)-service
 LOCAL_INIT_RC := $(service_name)-service.rc
 LOCAL_PROPRIETARY_MODULE := true
-LOCAL_MODULE_RELATIVE_PATH := hw
 PACKAGES.$(LOCAL_MODULE).OVERRIDES := android.hardware.automotive.vehicle.delphi@2.0-service
 
 LOCAL_SRC_FILES := \
@@ -44,15 +43,12 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src \
     $(LOCAL_PATH)/vhal_modules
 
-# TODO (Abhi) ugly hack to get symbols resolved. Ideally Delphi should use LOCAL_WHOLE_STATIC_LIBRARIES while building
-# audio_vehicle-hal-impl-lib. Delphi is informed
 LOCAL_SHARED_LIBRARIES := \
     libbase \
     libhidlbase \
     libhidltransport \
     libhwbinder \
     liblog \
-    libaudioclient \
     libutils \
     libcutils \
     libdesipclient \
@@ -61,13 +57,10 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     $(vhal_v2_0) \
     $(vccvhal_v1_0) \
-    $(audiohal_v1_0) \
     libcarconfig_reader \
     libtarmac \
     libdataelements \
     libtraceclient \
-    libAudioManagerBinder \
-    libAudioManagerCallbackBinder \
     liblocalconfig \
     libsettings \
     libihulog
@@ -76,8 +69,6 @@ LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \
     $(vhal_v2_0)-delphi-impl-lib \
     delphi-vehicle-hal-interfaces-lib \
-    libaudioparameters \
-    libaudio_comms_convert \
     libccparameterlistgen \
     climate_main \
     climate_firstrow \
@@ -89,8 +80,7 @@ LOCAL_STATIC_LIBRARIES := \
     climate_commonapi_pregen
 
 LOCAL_WHOLE_STATIC_LIBRARIES := \
-    power_vehicle-hal-impl-lib \
-    audio_vehicle-hal-impl-lib
+    power_vehicle-hal-impl-lib
 
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS_HQ)
 

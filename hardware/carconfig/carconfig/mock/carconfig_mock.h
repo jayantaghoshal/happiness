@@ -10,7 +10,7 @@
 class CarConfigMock {
   public:
     CarConfigMock();
-    ~CarConfigMock();
+    virtual ~CarConfigMock();
 
     MOCK_METHOD0(init, std::int32_t());
     MOCK_METHOD1(getValue, std::uint8_t(std::uint32_t));

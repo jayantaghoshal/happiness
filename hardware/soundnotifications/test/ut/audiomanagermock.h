@@ -21,17 +21,16 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
     AudioManagerMock() {}
     virtual ~AudioManagerMock() {}
 
-    using playSound_cb = std::function<void(AMStatus status, int64_t connectionId)>;
-
     MOCK_METHOD3(playSound, Return<void>(int32_t soundType, int32_t soundComp, playSound_cb _aidl_return));
-    MOCK_METHOD1(stopSound, Return<AMStatus>(int64_t connectionId));
+    MOCK_METHOD1(stopSound, Return<AMStatus>(uint32_t connectionId));
     MOCK_METHOD2(setVolume, Return<void>(int32_t sinkId, int32_t volume));
     MOCK_METHOD1(setBass, Return<AMStatus>(int32_t step));
     MOCK_METHOD1(setTreble, Return<AMStatus>(int32_t step));
     MOCK_METHOD1(setFader, Return<AMStatus>(int32_t step));
     MOCK_METHOD1(setSubwoofer, Return<AMStatus>(int32_t step));
     MOCK_METHOD2(setEqualizer, Return<AMStatus>(int32_t band, int32_t step));
-    MOCK_METHOD1(setLoudness, Return<AMStatus>(int32_t step));
+    MOCK_METHOD1(setLoudness, Return<AMStatus>(bool step));
+    MOCK_METHOD1(setSpeakerDelayPreset, Return<AMStatus>(SpDelayPreset preset));
     MOCK_METHOD1(setBalance, Return<AMStatus>(int32_t step));
     MOCK_METHOD0(getBass, Return<int32_t>());
     MOCK_METHOD0(getTreble, Return<int32_t>());
@@ -40,7 +39,8 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
     MOCK_METHOD0(getSubwoofer, Return<int32_t>());
     using getEqualizer_cb = std::function<void(AMStatus status, int32_t equalizerValue)>;
     MOCK_METHOD2(getEqualizer, android::hardware::Return<void>(int32_t band, getEqualizer_cb _hidl_cb));
-    MOCK_METHOD0(getLoudness, Return<int32_t>());
+    MOCK_METHOD0(getLoudness, Return<bool>());
+    MOCK_METHOD0(getSpeakerDelayPreset, Return<SpDelayPreset>());
 
     using defaultVolumeStep_cb = std::function<void(AMStatus status, int32_t volumeStep)>;
     MOCK_METHOD3(defaultVolumeStep,
