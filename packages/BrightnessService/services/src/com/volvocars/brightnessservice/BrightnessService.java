@@ -78,26 +78,26 @@ public class BrightnessService extends Service implements HwBinder.DeathRecipien
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = serviceThread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-        while (true) {
-            try {
-                mVehicle=IVehicle.getService();
-
-                if(mVehicle != null){
-                    mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
-                    break;
-                }
-                Thread.sleep(1000);
+        try {
+            mVehicle=IVehicle.getService();
+            if (mVehicle==null) {
+                Log.e(TAG, "IVehicle.getService returned null");
+                stopSelf(); // terminate ourself to get re-spawned
+                return;
             }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            catch(RemoteException ex){
-                Log.e(TAG,ex.getMessage());
-            }
-            catch(NoSuchElementException ex){
-                Log.e(TAG, "No such element exception, VHAL DOWN");
-            }
+            mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
         }
+        catch(RemoteException ex) {
+            Log.e(TAG, "VHAL failure: " + ex.getMessage());
+            stopSelf(); // terminate ourself to get re-spawned
+            return;
+        }
+        catch(NoSuchElementException ex) {
+            Log.e(TAG, "IVehicle not found: " + ex.getMessage());
+            stopSelf(); // terminate ourself to get re-spawned
+            return;
+        }
+
         mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mCSDConsumerManager = new CSDConsumerManager(mVehicle,mPowerManager);
         mIlluminationControl = new IlluminationControl(mServiceHandler,mVehicle);
@@ -112,7 +112,7 @@ public class BrightnessService extends Service implements HwBinder.DeathRecipien
     @Override
     public void serviceDied(long cookie) {
         Log.i(TAG, "Lost Connection to VHAL, re-spawning myself");
-        stopSelf();
+        stopSelf(); // terminate ourself to get re-spawned
     }
 
     /**

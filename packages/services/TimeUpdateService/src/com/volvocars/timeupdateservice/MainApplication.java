@@ -49,6 +49,7 @@ import android.hardware.automotive.vehicle.V2_0.SubscribeOptions;
 import android.hardware.automotive.vehicle.V2_0.SubscribeFlags;
 
 import android.os.HwBinder;
+import java.util.NoSuchElementException;
 
 public class MainApplication extends Application implements LocationListener, HwBinder.DeathRecipient {
     private BroadcastReceiver receiver;
@@ -199,9 +200,14 @@ public class MainApplication extends Application implements LocationListener, Hw
         } else {
             startLocationUpdates();
         }
+
         // Vehicle HAL properties
         try {
             mVehicle = IVehicle.getService();
+            if (mVehicle==null) {
+                Log.e(TimeUpdateLog.SERVICE_TAG, "IVehicle.getService returned null");
+                System.exit(0); // terminate ourself to get re-spawned
+            }
             mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
             mInternalCallback = new VehicleCallback();
             ArrayList<SubscribeOptions> options = new ArrayList<>();
@@ -213,8 +219,12 @@ public class MainApplication extends Application implements LocationListener, Hw
             if (subscribeResult != 0) {
                 Log.e(TimeUpdateLog.SERVICE_TAG, "Subscribe failed with result:" + subscribeResult);
             }
-        } catch (RemoteException re) {
-            Log.e(TimeUpdateLog.SERVICE_TAG, re.getMessage());
+        } catch(RemoteException ex) {
+            Log.e(TimeUpdateLog.SERVICE_TAG, "VHAL failure: " + ex.getMessage());
+            System.exit(0); // terminate ourself to get re-spawned
+        } catch(NoSuchElementException ex) {
+            Log.e(TimeUpdateLog.SERVICE_TAG, "IVehicle not found: " + ex.getMessage());
+            System.exit(0); // terminate ourself to get re-spawned
         }
 
         mSettingsObserver = new SettingsObserver(mHandler, EVENT_AUTO_TIME_CHANGED, this);
@@ -238,7 +248,7 @@ public class MainApplication extends Application implements LocationListener, Hw
     @Override
     public void serviceDied(long cookie) {
         Log.i(TimeUpdateLog.SERVICE_TAG, "Lost Connection to VHAL, re-spawning myself");
-        System.exit(0);
+        System.exit(0); // terminate ourself to get re-spawned
     }
 
     /**
