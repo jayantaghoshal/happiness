@@ -10,7 +10,11 @@
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 
+#include "connectivity_manager.h"
+#include "connectivity_manager_interface.h"
 #include "connectivity_manager_service.h"
+#include "signal_handler.h"
+#include "signal_handler_interface.h"
 
 #undef LOG_TAG
 #define LOG_TAG "ConMan.Main"
@@ -37,6 +41,9 @@ void SigHupHandler(int fd) {
     read(fd, &sigdata, sizeof(sigdata));
 
     ALOGD("SIGHUP received...");
+
+    IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
+    IPCThreadState::self()->stopProcess();       // Stop the binder
 }
 
 void SigIntHandler(int fd) {
@@ -50,6 +57,7 @@ void SigIntHandler(int fd) {
 }
 
 bool InitSignals() {
+    ALOGV("%s", __FUNCTION__);
     sigset_t signal_set_term;
     sigset_t signal_set_hup;
     sigset_t signal_set_int;
@@ -93,15 +101,14 @@ bool InitSignals() {
 
 using namespace vcc::conman;
 
-int main(void) {
+int main() {
     ALOGI("VCC Connectivity Manager starting");
 
     InitSignals();
 
-    std::unique_ptr<ConnectivityManagerService> connectivty_manager_service_ =
-            std::make_unique<ConnectivityManagerService>();
-
-    connectivty_manager_service_->StartService();
+    std::shared_ptr<ConnectivityManager> connectivity_manager = std::make_shared<ConnectivityManager>();
+    std::shared_ptr<ISignalHandler> signal_handler = std::make_shared<SignalHandler>(connectivity_manager);
+    connectivity_manager->Initialize(signal_handler);
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
     joinRpcThreadpool();

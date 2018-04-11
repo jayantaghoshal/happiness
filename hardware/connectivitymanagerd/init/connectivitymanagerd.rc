@@ -1,0 +1,5 @@
+service connectivitymanagerd /vendor/bin/ip netns exec vcc /vendor/bin/connectivitymanagerd
+    class vcc_net
+    user root
+    group root
+    oneshot

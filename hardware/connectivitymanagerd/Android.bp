@@ -4,18 +4,23 @@
  */
 
 cc_defaults {
-    name: "conmand_cc_defaults",
-    defaults: ["volvocars_cc_defaults"],
-    tidy_checks: [
-    ],
+    name: "connectivitymanagerd_cc_defaults",
+    defaults: ["volvocars_cc_defaults_hq"],
 }
 
 cc_binary {
-    name: "conmand",
-    defaults: ["conmand_cc_defaults"],
+    name: "connectivitymanagerd",
+    defaults: ["connectivitymanagerd_cc_defaults"],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+    ],
+
     srcs: [
         "src/main.cpp",
         "src/connectivity_manager_service.cpp",
+        "src/connectivity_manager.cpp",
+        "src/signal_handler.cpp",
     ],
 
     local_include_dirs: [
@@ -24,13 +29,11 @@ cc_binary {
 
     shared_libs: [
         "liblog",
-        "liblocalconfig",
         "libcutils",
         "libutils",
         "libhidlbase",
         "libhidltransport",
         "libhwbinder",
-        "liblocalconfig",
         "libtarmac",
         "vendor.volvocars.hardware.connectivitymanager@1.0",
     ],
@@ -39,6 +42,6 @@ cc_binary {
         "libbase",
     ],
 
-    init_rc: ["init/conmand.rc"],
+    init_rc: ["init/connectivitymanagerd.rc"],
 
 }

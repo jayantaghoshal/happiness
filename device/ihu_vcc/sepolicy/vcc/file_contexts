@@ -74,8 +74,8 @@
 # localconfig
 /vendor/etc/localconfig(/.*) u:object_r:localconfig_data_file:s0
 
-# Conman execution rights
-/vendor/bin/conmand u:object_r:conmand_exec:s0
+# Connectivitymanager execution rights
+/vendor/bin/connectivitymanagerd u:object_r:connectivitymanagerd_exec:s0
 
 /mnt/iptables\.rules u:object_r:iptables_data_file:s0
 

@@ -34,7 +34,7 @@ PRODUCT_PACKAGES += \
     android.hardware.automotive.evs.vcc@1.0-hardware \
     remotectrl_routerd \
     remotectrl_audioctrld \
-    conmand \
+    connectivitymanagerd \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.vcc.service.evs.boot=true

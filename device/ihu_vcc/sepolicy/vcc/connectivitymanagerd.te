@@ -1,0 +1,9 @@
+# connectivitymanagerd service
+type connectivitymanagerd, domain;
+type connectivitymanagerd_exec, exec_type, file_type, vendor_file_type;
+
+domain_auto_trans(connectivitymanagerd, ip-vcc_exec, ip-vcc)
+
+# hwservicemanager accesses will probably be handled by hal_client/server() macros
+hwbinder_use(connectivitymanagerd)
+allow connectivitymanagerd hwservicemanager_prop:file { getattr open read };
