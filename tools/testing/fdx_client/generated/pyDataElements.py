@@ -53,6 +53,11 @@ class FrSignalInterface:
                     data_exchange,
                     os.environ['VECTOR_FDX_IP'],
                     int(os.environ.get('VECTOR_FDX_PORT', '2809')))
+            except:
+                self.logger.error("Could not establish FDX connection " + str(
+                    os.environ['VECTOR_FDX_IP']) + "" + str(os.environ.get('VECTOR_FDX_PORT', '2809')))
+                raise
+            try:
                 self.connection.confirmed_stop()    # Stop in case previous test failed to stop
                 self.connection.confirmed_start()
                 self.verify_simulation_version()
@@ -77,10 +82,7 @@ class FrSignalInterface:
 
                 self.connected = True
             except:
-                try:
-                    self.connection.close()
-                except AttributeError: #If fdx_client.FDXConnection.. fails
-                    pass
+                self.connection.close()
                 raise
         else:
             self.connection = FDXDummyConnection()
