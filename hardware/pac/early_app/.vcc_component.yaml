@@ -1,0 +1,4 @@
+functional_area: 'Vehicle Functions'
+component: 'PAC early app'
+deployment: 'native-binary'
+aptivlicense: 'WhiteBox'

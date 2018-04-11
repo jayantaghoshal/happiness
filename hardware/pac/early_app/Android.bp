@@ -1,0 +1,72 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "pac_early_app_common_dependencies",
+
+    defaults: [
+        "vcc_pac_use_evs_hidl",
+        "vcc_pac_use_libdbg",
+    ],
+
+    shared_libs: [
+        "android.hardware.automotive.vehicle@2.0",
+        "libhardware",
+    ],
+
+    header_libs: [
+        "android.hardware.automotive.evs.vcc@1.0-manager-header-lib",
+    ],
+
+    cppflags: [
+        "-DLOG_TAG=\"PacEarlyApp\"",
+    ],
+}
+
+cc_binary {
+    name: "pac_early_app",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "pac_early_app_common_dependencies",
+    ],
+
+    srcs: [
+        "src/pac_main.cpp",
+    ],
+
+    static_libs: [
+        "pac_early_app_lib_static",
+    ],
+}
+
+// Static library used as common platform for binary and unit tests.
+cc_library_static {
+    name: "pac_early_app_lib_static",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "pac_early_app_common_dependencies",
+    ],
+
+    srcs: [
+        "src/pac_early_app.cpp",
+    ],
+}
+
+// Header library for the PAC early app unit tests
+cc_library_headers {
+    name: "pac_early_app_lib_test_headers",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "vcc_pac_early_app_common_dependencies",
+    ],
+
+    // Add the source directory to the include paths so the unit tests can find internal headers
+    export_include_dirs: [
+        "src",
+    ],
+}

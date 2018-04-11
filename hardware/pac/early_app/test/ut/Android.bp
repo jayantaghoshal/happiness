@@ -1,0 +1,25 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "VtsPacEarlyApp",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_tests_pac_vts",
+        "pac_early_app_common_dependencies",
+    ],
+
+    srcs: [
+        "test_pac_early_app.cpp",
+    ],
+
+    header_libs: [
+        "pac_early_app_lib_test_headers",
+    ],
+
+    static_libs: [
+        "pac_early_app_lib_static",
+    ],
+}

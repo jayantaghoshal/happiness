@@ -37,6 +37,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/pac/evs/hardware/test/ut",                   standard_caps), #VtsHalPacEvsHardware, Janne Petkovski
     VTSTest("vendor/volvocars/hardware/pac/evs/manager/test/ut",                    standard_caps), #VtsHalPacEvsManager, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/pac/libpacconfig/test/ut",                   standard_caps), #VtsLibPacConfig, Mikael Olsson
+    VTSTest("vendor/volvocars/hardware/pac/early_app/test/ut",                      standard_caps), #VtsPacEarlyApp, Staffan Rydén
     VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
     VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
