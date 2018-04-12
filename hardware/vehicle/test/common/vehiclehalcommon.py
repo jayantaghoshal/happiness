@@ -8,6 +8,7 @@ import time
 import sys
 import os
 import typing
+import re
 
 from vts.runners.host import asserts
 from vts.runners.host import base_test
@@ -51,6 +52,11 @@ def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec):
 
 class VehicleHalCommon():
 
+
+    # Static application context id
+    app_context_vehiclefunctions = "com.volvocars.vehiclefunctions:id/"
+    app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
+
     def __init__(self, dut, system_uid):
 
         try:
@@ -87,7 +93,7 @@ class VehicleHalCommon():
 
 
     def getViewClient(self):
-        kwargs1 = {'ignoreversioncheck': False, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
+        kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
         device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
         kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
                    'autodump': False, 'startviewserver': True, 'compresseddump': True}
@@ -97,20 +103,87 @@ class VehicleHalCommon():
         self.dut.adb.shell('input keyevent 3')
         self.dut.adb.shell('am start -n \"com.volvocars.halmodulesink/com.volvocars.halmodulesink.MainActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
 
-        _s = 0.5
         vc, device = self.getViewClient()
 
         # Open menu drawer button
         # Not possible to press with buttonId, using coordinates instead
         device.touchDip(15.0, 140.0, 0)
-        vc.sleep(_s)
 
         # Open vendor extension
         vc.dump(window=-1)
         vendorExtension = vc.findViewWithTextOrRaise("VendorExtension")
-
         vendorExtension.touch()
+
+    def setUpVehicleFunction(self):
+        # Enable it after default user is enabled
+        # waitUntilUserNotOwner()
+
+        self.dut.adb.shell('input keyevent 3')
+        self.dut.adb.shell('am start -n \"com.volvocars.vehiclefunctions/com.volvocars.vehiclefunctions.VehicleFunctionsActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
+        vc, device = self.getViewClient()
+        self.waitUntilViewAvailable(vc, "com.volvocars.vehiclefunctions:id/assistance_item")
+
+        # Open menu drawer button
+        vc.dump(window=-1)
+        drive_assistant = vc.findViewByIdOrRaise("com.volvocars.vehiclefunctions:id/assistance_item")
+        drive_assistant.touch()
+        _s = 0.5
         vc.sleep(_s)
+
+    def deviceReboot(self):
+        self.dut.shell.one.Execute("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("one")
+
+
+    def waitUntilViewNotAvailable(self, vc, view_name, timeout_seconds=15):
+        logging.info("Waiting until view " + view_name + " is closed")
+        start_time = time.time()
+        while time.time() - start_time <= timeout_seconds:
+            try:
+                vc.dump(window=-1)
+                vc.findViewByIdOrRaise(view_name);
+                logging.info("Waiting...%d", str(time.time() - start_time))
+            except ViewNotFoundException:
+                logging.info("View is not available anymore")
+                return
+            time.sleep(2)
+        asserts.assertTrue(False, "Time out! View is still visible: " + view_name)
+
+
+    def waitUntilViewAvailable(self, vc, view_name, timeout_seconds=15):
+        logging.info("Waiting until view " + view_name + " is available")
+        start_time = time.time()
+        while time.time() - start_time <= timeout_seconds:
+            try:
+                vc.dump(window=-1)
+                vc.findViewByIdOrRaise(view_name);
+                logging.info("View is available")
+                return
+            except ViewNotFoundException:
+                logging.info("Waiting...%d", str(time.time() - start_time))
+            time.sleep(2)
+        asserts.assertTrue(False, "Time out! View is still not visible: " + view_name)
+
+
+
+    def waitUntilUserNotOwner(self, timeout_seconds=30):
+        logging.info("Waiting until user not owner")
+
+        start_time = time.time()
+        while time.time() - start_time <= timeout_seconds:
+            result = self.dut.shell.one.Execute("dumpsys activity | grep mUserLru")
+            lastUserStr = result['stdouts'][0]
+            lastUser = re.findall(r'\d+',lastUserStr)[-1]
+            if lastUser != '0':
+                return
+            logging.info("Waiting...%d", str(time.time() - start_time))
+            time.sleep(2)
+        asserts.assertTrue(False, "Time out! User didn't switch")
+
+
 
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.
@@ -127,6 +200,7 @@ class VehicleHalCommon():
             'prop' : propertyId,
             'timestamp' : 0,
             'areaId' : areaId,
+            'status' : 0,
             'value' : {
                 'int32Values' : [],
                 'floatValues' : [],
