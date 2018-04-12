@@ -58,23 +58,30 @@ public class SoftwareUpdateManager implements ServiceConnection {
 
     public void disconnect() {
         context.unbindService(this);
+        serviceBound = false;
     }
 
-    public void GetState(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+    public void RegisterSwUpdClient(ISoftwareUpdateManagerCallback callback) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetState(callback);
+            softwareUpdateManager.RegisterSwUpdClient(callback);
         }
     }
 
-    public void GetSoftwareInformationList(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+    public void UnregisterSwUpdClient(ISoftwareUpdateManagerCallback callback) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetSoftwareInformationList(callback);
+            softwareUpdateManager.UnregisterSwUpdClient(callback);
         }
     }
 
-    public void GetSettings(ISoftwareUpdateManagerCallback callback) throws RemoteException {
+    public void RegisterSettingsClient(ISoftwareUpdateSettingsCallback callback) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetSettings(callback);
+            softwareUpdateManager.RegisterSettingsClient(callback);
+        }
+    }
+
+    public void UnregisterSettingsClient(ISoftwareUpdateSettingsCallback callback) throws RemoteException {
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.UnregisterSettingsClient(callback);
         }
     }
 

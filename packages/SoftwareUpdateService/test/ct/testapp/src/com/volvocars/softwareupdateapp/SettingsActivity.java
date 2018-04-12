@@ -32,28 +32,13 @@ public class SettingsActivity extends AppCompatActivity {
     private Switch autoInstallSwitch;
 
     private Intent intent;
-    private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
-        @Override
-        public void UpdateState(int state) {
-        }
-
-        @Override
-        public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
-        }
-
-        @Override
-        public void UpdateSoftware(SoftwareInformation software) {
-        }
+    private ISoftwareUpdateSettingsCallback callback = new ISoftwareUpdateSettingsCallback.Stub() {
 
         @Override
         public void UpdateSettings(List<Setting> settings) {
             updateSettings(settings);
         }
 
-        @Override
-        public void ProvideErrorMessage(int code, String message) {
-            Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
-        }
     };
 
     private SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
@@ -61,15 +46,20 @@ public class SettingsActivity extends AppCompatActivity {
         public void onServiceConnected() {
             Log.v(LOG_TAG, "onServiceConnected app");
             try {
-                softwareUpdateManager.GetState(callback);
-                softwareUpdateManager.GetSettings(callback);
+                softwareUpdateManager.RegisterSettingsClient(callback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error GetState");
+                Log.e(LOG_TAG, "Error RegisterSettingsClient");
             }
         }
 
         @Override
         public void onServiceDisconnected() {
+            Log.v(LOG_TAG, "onServiceDisconnected app");
+            try {
+                softwareUpdateManager.UnregisterSettingsClient(callback);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Error UnegisterSettingsClient");
+            }
         }
     };
 

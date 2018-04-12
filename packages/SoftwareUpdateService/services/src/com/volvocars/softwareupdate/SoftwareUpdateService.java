@@ -274,6 +274,11 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
+        Log.v(LOG_TAG, "UpdateSoftwareList: Clearing softwareInformationList");
+        softwareInformationList.clear();
+
+        Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationList.size = " + softwareInformationList.size());
+
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
             for (SoftwareInformation information : softwareInformationList) {
@@ -286,6 +291,8 @@ public class SoftwareUpdateService extends Service {
                 softwareInformationList.add(new SoftwareInformation(assignment));
             }
         }
+
+        Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationList.size = " + softwareInformationList.size());
 
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
     }

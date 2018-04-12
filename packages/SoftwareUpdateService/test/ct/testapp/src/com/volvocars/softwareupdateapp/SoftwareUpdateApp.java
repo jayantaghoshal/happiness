@@ -46,14 +46,22 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     private static long lastClickedTime = 0;
     private static final int doubleClickInterval = 500;
 
-    private ISoftwareUpdateManagerCallback callback = new ISoftwareUpdateManagerCallback.Stub() {
+    private class ISoftwareUpdateManagerCallbackImpl extends ISoftwareUpdateManagerCallback.Stub {
         @Override
         public void UpdateState(int state) {
+            if (!registered) {
+                Log.v(LOG_TAG, "UpdateState: Not registered, returning");
+                return;
+            }
             Log.v(LOG_TAG, "UpdateState " + state);
         }
 
         @Override
         public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
+            if (!registered) {
+                Log.v(LOG_TAG, "UpdateSoftwareList: Not registered, returning");
+                return;
+            }
             Log.v(LOG_TAG, "SoftwareList:");
             swInfos.clear();
             for (SoftwareInformation si : software_list) {
@@ -66,6 +74,10 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void UpdateSoftware(SoftwareInformation software) {
+            if (!registered) {
+                Log.v(LOG_TAG, "UpdateSoftware: Not registered, returning");
+                return;
+            }
             for (SoftwareInformation si : swInfos) {
                 Log.v(LOG_TAG, "UpdateSoftware: " + si.toString());
                 if (si.softwareId.equals(software.softwareId)) {
@@ -77,30 +89,38 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         }
 
         @Override
-        public void UpdateSettings(List<Setting> settings) {
-
-        }
-
-        @Override
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
         }
+
+        public boolean registered = false;
     };
 
-    private SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
+    private final ISoftwareUpdateManagerCallbackImpl callback = new ISoftwareUpdateManagerCallbackImpl();
+
+    private final SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
         @Override
         public void onServiceConnected() {
             Log.v(LOG_TAG, "onServiceConnected app");
             try {
-                softwareUpdateManager.GetState(callback);
-                softwareUpdateManager.GetSoftwareInformationList(callback);
+                Log.v(LOG_TAG, "onServiceConnected app: Register - " + callback);
+                softwareUpdateManager.RegisterSwUpdClient(callback);
+                callback.registered = true;
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error GetState");
+                Log.e(LOG_TAG, "Error RegisterSwUpdClient");
             }
         }
 
         @Override
         public void onServiceDisconnected() {
+            Log.v(LOG_TAG, "onServiceDisconnected app");
+            try {
+                Log.v(LOG_TAG, "onServiceDisconnected app: Unregister - " + callback);
+                softwareUpdateManager.UnregisterSwUpdClient(callback);
+                callback.registered = false;
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Error UnregisterSwUpdClient");
+            }
         }
     };
 
@@ -140,9 +160,8 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     startActivity(intent);
                     return true;
                 } catch (Exception e) {
-                    //TODO: handle exception
+                    Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
                 }
-
             default:
             }
             return false;
@@ -178,6 +197,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     protected void onDestroy() {
         super.onDestroy();
         Log.v(LOG_TAG, "onDestroy");
+        try {
+            Log.v(LOG_TAG, "onDestroy app: Unregister - " + callback);
+            softwareUpdateManager.UnregisterSwUpdClient(callback);
+            callback.registered = false;
+        } catch (RemoteException e) {
+            Log.e(LOG_TAG, "UnregisterSwUpdClient failed, remote exception");
+        }
         softwareUpdateManager.disconnect();
     }
 

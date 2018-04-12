@@ -1,26 +1,30 @@
 package com.volvocars.softwareupdate;
 
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
+import com.volvocars.softwareupdate.ISoftwareUpdateSettingsCallback;
 import com.volvocars.softwareupdate.Setting;
 import com.volvocars.cloudservice.Query;
 
 oneway interface ISoftwareUpdateManager {
     /**
-     * Register a callback for state updates
+     * Register a callback for state updates regarding SW updates
      */
-    void GetState(in ISoftwareUpdateManagerCallback callback);
+    void RegisterSwUpdClient(in ISoftwareUpdateManagerCallback callback);
 
     /**
-    * Get list of software information stored in service
-    * @param callback Callback
-    */
-    void GetSoftwareInformationList(in ISoftwareUpdateManagerCallback callback);
+     * Unregister a callback for state updates regarding SW updates
+     */
+    void UnregisterSwUpdClient(in ISoftwareUpdateManagerCallback callback);
 
     /**
-    * Get stored (OTA) settings
-    * @param callback Callback
-    */
-    void GetSettings(in ISoftwareUpdateManagerCallback callback);
+     * Register a callback for state updates regarding settings
+     */
+    void RegisterSettingsClient(in ISoftwareUpdateSettingsCallback callback);
+
+    /**
+     * Unregister a callback for state updates regarding settings
+     */
+    void UnregisterSettingsClient(in ISoftwareUpdateSettingsCallback callback);
 
     /**
     * Request the list of available Software Assignments with specified query parameters

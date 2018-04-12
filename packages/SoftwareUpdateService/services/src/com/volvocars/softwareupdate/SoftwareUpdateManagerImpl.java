@@ -14,6 +14,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.Query;
 import com.volvocars.softwareupdate.ISoftwareUpdateManager;
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
+import com.volvocars.softwareupdate.ISoftwareUpdateSettingsCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ import java.util.List;
 public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     private static final String LOG_TAG = "SoftwareUpdate.Manager";
 
-    private ArrayList<ISoftwareUpdateManagerCallback> clients = new ArrayList();
+    private ArrayList<ISoftwareUpdateManagerCallback> swUpdClients = new ArrayList();
+    private ArrayList<ISoftwareUpdateSettingsCallback> settingClients = new ArrayList();
 
     private SoftwareUpdateService service;
 
@@ -38,75 +40,134 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
      */
     public void UpdateState(int state) {
         Log.v(LOG_TAG, "Update state to [" + state + "]");
-        for (ISoftwareUpdateManagerCallback c : clients) {
+
+        ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
+
+        for (ISoftwareUpdateManagerCallback c : swUpdClients) {
             try {
                 c.UpdateState(state);
             } catch (RemoteException e) {
-                clients.remove(c);
+                deadSwUpdClients.add(c);
             }
+        }
+
+        if (deadSwUpdClients.size() > 0) {
+            Log.v(LOG_TAG, "Removing " + deadSwUpdClients.size() + " dead client(s)");
+            swUpdClients.removeAll(deadSwUpdClients);
         }
     }
 
     public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
         Log.v(LOG_TAG, "Update SoftwareList with a list of size " + software_list.size());
-        for (ISoftwareUpdateManagerCallback c : clients) {
+        Log.v(LOG_TAG, "Calling UpdateSoftwareList on " + swUpdClients.size() + " clients");
+
+        ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
+
+        for (ISoftwareUpdateManagerCallback c : swUpdClients) {
             try {
                 c.UpdateSoftwareList(software_list);
             } catch (RemoteException e) {
-                clients.remove(c);
+                deadSwUpdClients.add(c);
             }
+        }
+
+        if (deadSwUpdClients.size() > 0) {
+            Log.v(LOG_TAG, "Removing " + deadSwUpdClients.size() + " dead client(s)");
+            swUpdClients.removeAll(deadSwUpdClients);
         }
     }
 
     public void UpdateSoftware(SoftwareInformation software) {
         Log.v(LOG_TAG, "Update software assinment with software id: " + software.softwareId);
-        for (ISoftwareUpdateManagerCallback c : clients) {
+
+        ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
+
+        for (ISoftwareUpdateManagerCallback c : swUpdClients) {
             try {
                 c.UpdateSoftware(software);
             } catch (Exception e) {
-                clients.remove(c);
+                deadSwUpdClients.add(c);
             }
+        }
+
+        if (deadSwUpdClients.size() > 0) {
+            Log.v(LOG_TAG, "Removing " + deadSwUpdClients.size() + " dead client(s)");
+            swUpdClients.removeAll(deadSwUpdClients);
         }
     }
 
     public void UpdateSettings(List<Setting> settings) {
         Log.v(LOG_TAG, "Update settings");
-        for (ISoftwareUpdateManagerCallback c : clients) {
+
+        ArrayList<ISoftwareUpdateSettingsCallback> deadSettingsClients = new ArrayList();
+
+        for (ISoftwareUpdateSettingsCallback c : settingClients) {
             try {
                 c.UpdateSettings(settings);
             } catch (Exception e) {
-                clients.remove(c);
+                deadSettingsClients.add(c);
             }
         }
-    }
 
-    @Override
-    public void GetState(ISoftwareUpdateManagerCallback callback) {
-        clients.add(callback);
-        try {
-            callback.UpdateState(service.GetState());
-        } catch (RemoteException e) {
-            clients.remove(callback);
+        if (deadSettingsClients.size() > 0) {
+            Log.v(LOG_TAG, "Removing " + deadSettingsClients.size() + " dead client(s)");
+            swUpdClients.removeAll(deadSettingsClients);
         }
     }
 
     @Override
-    public void GetSoftwareInformationList(ISoftwareUpdateManagerCallback callback) {
-        Log.v(LOG_TAG, "GetSoftwareInformationList");
-        try {
-            callback.UpdateSoftwareList(service.GetSoftwareInformationList());
-        } catch (RemoteException e) {
-            Log.v(LOG_TAG, "GetSoftwareInformationList RemoteException: [" + e.getMessage() + "]");
+    public void RegisterSwUpdClient(ISoftwareUpdateManagerCallback callback) {
+        Log.v(LOG_TAG, "Register SwUpd client (" + callback + ")");
+
+        if (!swUpdClients.contains(callback)) {
+            try {
+                callback.UpdateState(service.GetState());
+                callback.UpdateSoftwareList(service.GetSoftwareInformationList());
+                swUpdClients.add(callback);
+            } catch (RemoteException e) {
+                Log.v(LOG_TAG, "Could not call callback method " + callback);
+            }
+        }
+        else {
+            Log.v(LOG_TAG, "Already registered");
         }
     }
 
     @Override
-    public void GetSettings(ISoftwareUpdateManagerCallback callback) {
-        Log.v(LOG_TAG, "GetSettings");
-        try {
-            callback.UpdateSettings(service.GetSettings());
-        } catch (RemoteException e) {
-            Log.v(LOG_TAG, "GetSoftwareInformationList RemoteException: [" + e.getMessage() + "]");
+    public void UnregisterSwUpdClient(ISoftwareUpdateManagerCallback callback) {
+        Log.v(LOG_TAG, "Unregister SwUpd client (" + callback + ")");
+        if (swUpdClients.contains(callback)) {
+            swUpdClients.remove(callback);
+        }
+        else {
+            Log.v(LOG_TAG, "Client not found when trying to unregister");
+        }
+    }
+
+    @Override
+    public void RegisterSettingsClient(ISoftwareUpdateSettingsCallback callback) {
+        Log.v(LOG_TAG, "Register settings client");
+        if (!settingClients.contains(callback)) {
+            try {
+                callback.UpdateSettings(service.GetSettings());
+                settingClients.add(callback);
+            } catch (RemoteException e) {
+                Log.v(LOG_TAG, "Could not call callback method " + callback);
+            }
+        }
+        else {
+            Log.v(LOG_TAG, "Already registered");
+        }
+    }
+
+    @Override
+    public void UnregisterSettingsClient(ISoftwareUpdateSettingsCallback callback) {
+        Log.v(LOG_TAG, "Unregister settings client");
+        if (settingClients.contains(callback)) {
+            settingClients.remove(callback);
+        }
+        else {
+            Log.v(LOG_TAG, "Client not found when trying to unregister");
         }
     }
 

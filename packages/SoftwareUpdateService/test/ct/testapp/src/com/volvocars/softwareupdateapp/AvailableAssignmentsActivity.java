@@ -45,10 +45,6 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void UpdateSettings(List<Setting> settings) {
-        }
-
-        @Override
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
         }
@@ -59,7 +55,7 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
         public void onServiceConnected() {
             Log.v(LOG_TAG, "onServiceConnected app");
             try {
-                softwareUpdateManager.GetState(callback);
+                softwareUpdateManager.RegisterSwUpdClient(callback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "Error GetState");
             }

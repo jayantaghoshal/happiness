@@ -6,6 +6,7 @@
         android:name=".MainApplication">
         <service
             android:exported="true"
+            android:singleUser="true"
             android:name=".CloudService">
             <intent-filter>
                 <action android:name="com.volvocars.cloudservice.ICloudService" />
