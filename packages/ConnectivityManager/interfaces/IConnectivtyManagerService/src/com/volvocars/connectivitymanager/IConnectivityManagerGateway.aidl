@@ -1,7 +1,7 @@
 package com.volvocars.connectivitymanager;
 
 import com.volvocars.connectivitymanager.IConnectivityManager;
-import com.volvocars.connectivitymanager.WifiStationMode;
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
 
 /**
  * Interface implemented by the gateway to the Connectivity Manager Daemon.
@@ -28,7 +28,7 @@ interface IConnectivityManagerGateway {
      * @param mode The mode that is requested
      * @return True if request was successful, False otherwise
      */
-    boolean setWifiStationMode(in WifiStationMode mode);
+    boolean setWifiStationMode(in WifiStationModeAidl mode);
 
     ///// End of Wifi Control /////
 }

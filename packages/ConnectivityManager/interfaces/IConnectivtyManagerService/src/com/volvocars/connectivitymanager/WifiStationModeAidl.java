@@ -8,7 +8,7 @@ package com.volvocars.connectivitymanager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class WifiStationMode implements Parcelable {
+public class WifiStationModeAidl implements Parcelable {
 
     public enum Mode {
         UNKNOWN,
@@ -17,22 +17,22 @@ public class WifiStationMode implements Parcelable {
     }
     public Mode mode = Mode.UNKNOWN;
 
-    public static final Creator<WifiStationMode> CREATOR = new Creator<WifiStationMode>() {
+    public static final Creator<WifiStationModeAidl> CREATOR = new Creator<WifiStationModeAidl>() {
         @Override
-        public WifiStationMode createFromParcel(Parcel in) {
-            return new WifiStationMode(in);
+        public WifiStationModeAidl createFromParcel(Parcel in) {
+            return new WifiStationModeAidl(in);
         }
 
         @Override
-        public WifiStationMode[] newArray(int size) {
-            return new WifiStationMode[size];
+        public WifiStationModeAidl[] newArray(int size) {
+            return new WifiStationModeAidl[size];
         }
     };
 
-    public WifiStationMode() {
+    public WifiStationModeAidl() {
     }
 
-    private WifiStationMode(Parcel in) {
+    private WifiStationModeAidl(Parcel in) {
         readFromParcel(in);
     }
 

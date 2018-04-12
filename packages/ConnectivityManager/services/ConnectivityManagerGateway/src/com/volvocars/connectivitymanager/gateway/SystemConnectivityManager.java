@@ -29,7 +29,13 @@ public class SystemConnectivityManager extends ISystemConnectivityManager.Stub {
     private static final String LOG_TAG = "ConManGw.Service";
 
     private INativeConnectivityManager nativeConnectivityManager = null;
+    private ConnectivityManagerGateway connectivityManagerGateway = null;
+
     private DeathRecipient death = new DeathRecipient(this);
+
+    public SystemConnectivityManager(ConnectivityManagerGateway gateway) {
+        connectivityManagerGateway = gateway;
+    }
 
     final class DeathRecipient implements HwBinder.DeathRecipient {
         SystemConnectivityManager connection;
@@ -85,4 +91,24 @@ public class SystemConnectivityManager extends ISystemConnectivityManager.Stub {
 
     @Override
     public void updateWifiStationMode(byte mode) {}
+
+    public boolean getWifiStationMode() {
+        boolean returnStatus = false;
+        try {
+            returnStatus = nativeConnectivityManager.requestWifiStationMode();
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Remote exception when requesting current Wifi station mode. Exception: %s", e);
+        }
+        return returnStatus;
+    }
+
+    public boolean setWifiStationMode(byte mode) {
+        boolean returnStatus = false;
+        try {
+            returnStatus = nativeConnectivityManager.requestWifiStationModeChange(mode);
+        } catch (RemoteException e) {
+            Log.w(LOG_TAG, "Remote exception when changing current Wifi station mode. Exception: %s", e);
+        }
+        return returnStatus;
+    }
 }

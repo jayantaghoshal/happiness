@@ -25,15 +25,17 @@ public class GateWayService extends Service {
     private static final String GATEWAY_SERVICE = "ConnectivityManagerGateway";
 
     private SystemConnectivityManager connectivityManager = null;
-    private ConnectivityManagerGateway connectivityManagergateway = null;
+    private ConnectivityManagerGateway connectivityManagerGateway = null;
 
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
 
-        connectivityManager = new SystemConnectivityManager();
-        connectivityManagergateway = new ConnectivityManagerGateway();
+        connectivityManagerGateway = new ConnectivityManagerGateway();
+        connectivityManager = new SystemConnectivityManager(connectivityManagerGateway);
+
+        connectivityManagerGateway.init(connectivityManager);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class GateWayService extends Service {
 
         if (action.equals(GATEWAY_SERVICE)) {
             Log.v(LOG_TAG, "Bind on " + GATEWAY_SERVICE);
-            return connectivityManagergateway;
+            return connectivityManagerGateway;
         } else {
             //handling for when couldnt find mathing binder?
             Log.d(LOG_TAG, "Trying to bind with unknown action: " + action);

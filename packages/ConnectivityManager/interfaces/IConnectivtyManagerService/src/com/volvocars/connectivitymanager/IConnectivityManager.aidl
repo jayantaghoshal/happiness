@@ -1,6 +1,6 @@
 package com.volvocars.connectivitymanager;
 
-import com.volvocars.connectivitymanager.WifiStationMode;
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
 
 /*
  * Interface implemented by some application that is interested of changes
@@ -15,7 +15,7 @@ interface IConnectivityManager {
      * Update the manager with the Wifi Station mode.
      * @param mode The new mode to send to the manager
      */
-    void updateWifiStationMode(in WifiStationMode mode);
+    void updateWifiStationMode(in WifiStationModeAidl mode);
 
     ///// End of Wifi Control /////
 

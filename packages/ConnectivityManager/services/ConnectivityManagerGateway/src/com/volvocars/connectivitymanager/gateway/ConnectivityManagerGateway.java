@@ -11,17 +11,22 @@ import android.os.SystemProperties;
 
 import com.volvocars.connectivitymanager.IConnectivityManager;
 import com.volvocars.connectivitymanager.IConnectivityManagerGateway;
-import com.volvocars.connectivitymanager.WifiStationMode;
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
+
+import vendor.volvocars.hardware.connectivitymanager.V1_0.WifiStationMode;
 
 /**
  *
  */
 public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub {
     private static final String LOG_TAG = "ConManGw.";
+    private SystemConnectivityManager systemManager = null;
 
     public ConnectivityManagerGateway() {}
 
-    public void init() {}
+    public void init(SystemConnectivityManager sysMan) {
+        systemManager = sysMan;
+    }
 
     /**
      * Register a manager interface to receive broadcasted updates.
@@ -30,6 +35,7 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
     public void registerManager(IConnectivityManager manager) {
         return;
     }
+
     ///// Wifi Control /////
     /**
      * Request a broadcast of the current Wifi Station Mode
@@ -37,15 +43,25 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
      */
     @Override
     public boolean getWifiStationMode() {
-        return false;
+        return systemManager.getWifiStationMode();
     }
+
     /**
      * Request to set the Wifi Station mode. Changes will be broadcasted.
      * @param mode The mode that is requested
      * @return True if request was successful, False otherwise
      */
     @Override
-    public boolean setWifiStationMode(WifiStationMode mode) {
-        return false;
+    public boolean setWifiStationMode(WifiStationModeAidl mode) {
+        byte hidlMode = WifiStationMode.UNKNOWN;
+        switch (mode.mode) {
+            case UNKNOWN:
+                hidlMode = WifiStationMode.UNKNOWN;
+            case AP_MODE:
+                hidlMode = WifiStationMode.AP_MODE;
+            case STATION_MODE:
+                hidlMode = WifiStationMode.STATION_MODE;
+        }
+        return systemManager.setWifiStationMode(hidlMode);
     }
 }

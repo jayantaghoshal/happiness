@@ -1,3 +1,3 @@
 package com.volvocars.connectivitymanager;
 
-parcelable WifiStationMode;
+parcelable WifiStationModeAidl;

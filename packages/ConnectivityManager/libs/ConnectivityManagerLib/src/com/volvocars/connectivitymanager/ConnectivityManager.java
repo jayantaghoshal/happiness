@@ -14,7 +14,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.RemoteException;
 
-import com.volvocars.connectivitymanager.WifiStationMode;
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
 
 /**
  *
@@ -112,7 +112,7 @@ public class ConnectivityManager implements ServiceConnection {
      * @param mode The mode that is requested
      * @return True if request was successful, False otherwise
      */
-    public boolean setWifiStationMode(WifiStationMode mode) {
+    public boolean setWifiStationMode(WifiStationModeAidl mode) {
         return false;
     }
 
