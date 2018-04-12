@@ -27,12 +27,6 @@ ENV NO_PROXY '.got.volvocars.net'
 # Configure proxy for apt-get.
 RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
 
-#################################################
-# Add git ppa to get newer git version than shipped with ubuntu
-# This is required to get shallow clone from commit hash to work
-RUN apt-get update
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:git-core/ppa
 
 ##################################################
 # Tools required for building AOSP image
