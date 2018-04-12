@@ -363,11 +363,17 @@ bool ElectricDefrosterRearLogic::checkSignalOK() {
 }
 
 bool ElectricDefrosterRearLogic::signalOK() {
-    auto ok = driveMode_.get().isOk() && vehicleMode_.get().isOk() && hmiDefrosterStatus_.get().isOk();
+    // TODO (ARTINFO-2827) Temporary remove drive mode since it is missing in the system at this moment.
+    // Add drive mode onec it is available
+    // auto ok = driveMode_.get().isOk() && vehicleMode_.get().isOk() && hmiDefrosterStatus_.get().isOk();
+    auto ok = vehicleMode_.get().isOk() && hmiDefrosterStatus_.get().isOk();
 
     if (!ok) {
-        log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " << vehicleMode_.get().isOk()
-                      << " : " << hmiDefrosterStatus_.get().isOk();
+        log_warning() << LOG_PREFIX << "Signals ok = " << vehicleMode_.get().isOk() << " : "
+                      << hmiDefrosterStatus_.get().isOk();
+        // log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " <<
+        // vehicleMode_.get().isOk()
+        //              << " : " << hmiDefrosterStatus_.get().isOk();
     }
 
     return ok;

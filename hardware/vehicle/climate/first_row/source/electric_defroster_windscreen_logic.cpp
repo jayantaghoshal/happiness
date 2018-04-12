@@ -385,11 +385,17 @@ bool ElectricDefrosterWindscreenLogic::checkSignalOK() {
 }
 
 bool ElectricDefrosterWindscreenLogic::signalOK() {
-    auto ok = (driveMode_.get().isOk() && vehicleModes_.get().isOk() && hmiDefrosterWindscreenStatus_.get().isOk());
+    // TODO (ARTINFO-2827) Temporary remove drive mode since it is missing in the system at this moment.
+    // Add drive mode onec it is available
+    // auto ok = (driveMode_.get().isOk() && vehicleModes_.get().isOk() && hmiDefrosterWindscreenStatus_.get().isOk());
+    auto ok = vehicleModes_.get().isOk() && hmiDefrosterWindscreenStatus_.get().isOk();
 
     if (!ok) {
-        log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " << vehicleModes_.get().isOk()
-                      << " : " << hmiDefrosterWindscreenStatus_.get().isOk();
+        log_warning() << LOG_PREFIX << "Signals ok = " << vehicleModes_.get().isOk() << " : "
+                      << hmiDefrosterWindscreenStatus_.get().isOk();
+        // log_warning() << LOG_PREFIX << "Signals ok = " << driveMode_.get().isOk() << " : " <<
+        // vehicleModes_.get().isOk()
+        //              << " : " << hmiDefrosterWindscreenStatus_.get().isOk();
     }
 
     return ok;
