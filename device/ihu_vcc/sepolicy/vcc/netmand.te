@@ -32,6 +32,8 @@ allow netmand ip-vcc:fd use;
 allow netmand sysfs:file rw_file_perms;
 allow netmand sysfs:dir r_file_perms;
 
+allow netmand sysfs_net:dir search;
+
 allowxperm netmand self:udp_socket ioctl { SIOCSIFFLAGS SIOCSIFADDR SIOCSIFHWADDR SIOCGIFHWADDR SIOCETHTOOL SIOCSIFBRDADDR SIOCSIFNETMASK };
 
 #allow netmand self:capability { net_admin net_raw sys_module dac_override };

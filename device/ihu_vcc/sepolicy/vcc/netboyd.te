@@ -16,6 +16,8 @@ allow netboyd self:netlink_kobject_uevent_socket { read bind create setopt };
 allow netboyd sysfs:dir r_dir_perms;
 allow netboyd sysfs:file rw_file_perms;
 
+allow netboyd sysfs_net:dir search;
+
 allow netboyd nsfs_netns_vcc:file { open read };
 domain_auto_trans(netboyd, ip-vcc_exec, ip-vcc);
 
