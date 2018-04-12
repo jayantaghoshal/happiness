@@ -67,6 +67,41 @@ class BasicAutobumpTest(common.ManifestTestCaseBase):
 
         self.assertTrue("Removed 'vendor/bar'" in body)
 
+    def test_assemble_commit_messages_added_removed_manifest(self):
+        manifest_repo = self._create_test_repo("manifest")
+        self._create_test_repo("vendor/foo")
+        self._create_test_repo("vendor/bar")
+
+        template = common.manifest([
+            '<project name="foo" path="vendor/foo" revision="${master}"/>',
+            '<project name="bar" path="vendor/bar" revision="${master}"/>'
+        ])
+
+        template_path = common.write_file(manifest_repo.path, 'manifest_template.xml', template)
+        manifest_repo.add([template_path])
+        manifest_repo.commit("initial")
+
+        self._create_test_repo("vendor/baz")
+
+        template2 = common.manifest([
+            '<project name="baz" path="vendor/baz" revision="${master}"/>'
+        ])
+
+        template_path2 = common.write_file(manifest_repo.path, 'manifest_template2.xml', template2)
+        manifest_repo.add([template_path2])
+
+        title, body = autobumper.assemble_commit_messages(self.tmp_dir.name, manifest_repo)
+
+        self.assertTrue("Added 'vendor/baz'" in body)
+
+        manifest_repo.commit("Added")
+        os.remove(template_path2)
+        manifest_repo.add([template_path2])
+
+        title, body = autobumper.assemble_commit_messages(self.tmp_dir.name, manifest_repo)
+
+        self.assertTrue("Removed 'vendor/baz'" in body)
+
     def test_git_commit_info(self):
         foo = self._create_test_repo("vendor/foo")
 

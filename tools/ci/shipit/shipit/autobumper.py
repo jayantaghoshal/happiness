@@ -13,7 +13,10 @@ from . import git
 
 class Manifest(object):
     def __init__(self, xmlstring: str) -> None:
-        self.root_element = ET.fromstring(xmlstring)
+        try:
+            self.root_element = ET.fromstring(xmlstring)
+        except Exception:
+            self.root_element = None
 
     def projects(self) -> Dict[str, Dict[str, str]]:
         """
@@ -21,10 +24,11 @@ class Manifest(object):
         all the tag attributes as a dict value.
         """
         project_list = {} # type: Dict[str, Dict[str, str]]
-        for project in self.root_element.findall("project"):
-            if 'path' not in project.attrib:
-                project.attrib['path'] = project.attrib['name']
-            project_list[project.attrib['name']] = project.attrib
+        if self.root_element:
+            for project in self.root_element.findall("project"):
+                if 'path' not in project.attrib:
+                    project.attrib['path'] = project.attrib['name']
+                project_list[project.attrib['name']] = project.attrib
         return project_list
 
     def diff(self, xmlstring: str) -> Dict[str, List[Dict[str, str]]]:
@@ -135,8 +139,16 @@ def get_changed_projects_from_manifest(manifest_repo: git.Repo) -> Dict[str, Dic
     """
     manifest_changes = {}
     for manifest_file in manifest_repo.run_git(['diff', '--staged', '--name-only']).splitlines():
-        staged_manifest = manifest_repo.run_git(['show', ':{}'.format(manifest_file)])
-        head_manifest = manifest_repo.run_git(['show', 'HEAD:{}'.format(manifest_file)])
+        try:
+            staged_manifest = manifest_repo.run_git(['show', ':{}'.format(manifest_file)])
+        except Exception:
+            # Failed to run git show manifest, assume it was removed
+            staged_manifest = ""
+        try:
+            head_manifest = manifest_repo.run_git(['show', 'HEAD:{}'.format(manifest_file)])
+        except Exception:
+            # Failed to show HEAD of manifest, assume it was added.
+            head_manifest = ""
         manifest_changes[manifest_file] = Manifest(staged_manifest).diff(head_manifest)
     return manifest_changes
 
