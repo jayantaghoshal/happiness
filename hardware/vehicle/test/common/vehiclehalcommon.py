@@ -57,6 +57,10 @@ class VehicleHalCommon():
     app_context_vehiclefunctions = "com.volvocars.vehiclefunctions:id/"
     app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
 
+    # ViewClient
+    active_view_client = None
+    active_view_device = None
+
     def __init__(self, dut, system_uid):
 
         try:
@@ -92,12 +96,27 @@ class VehicleHalCommon():
         asserts.assertTrue(exceptionRaised, buttonId + " was found when it should be invisible")
 
 
+    # Get a new connection and ViewClient
     def getViewClient(self):
         kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
         device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
         kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
                    'autodump': False, 'startviewserver': True, 'compresseddump': True}
         return ViewClient(device, serialno, **kwargs2), device
+
+    # Get ViewClient if there is any, otherwise create one
+    def getActiveViewClient(self):
+        if self.active_view_client is not None:
+            return self.active_view_client, self.active_view_device
+
+        kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
+        device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
+        kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
+                   'autodump': False, 'startviewserver': True, 'compresseddump': True}
+        self.active_view_device = device
+        self.active_view_client = ViewClient(device, serialno, **kwargs2)
+        return self.active_view_client, device
+
 
     def setUpVendorExtension(self):
         self.dut.adb.shell('input keyevent 3')
@@ -120,7 +139,7 @@ class VehicleHalCommon():
 
         self.dut.adb.shell('input keyevent 3')
         self.dut.adb.shell('am start -n \"com.volvocars.vehiclefunctions/com.volvocars.vehiclefunctions.VehicleFunctionsActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
-        vc, device = self.getViewClient()
+        vc, device = self.getActiveViewClient()
         self.waitUntilViewAvailable(vc, "com.volvocars.vehiclefunctions:id/assistance_item")
 
         # Open menu drawer button
@@ -328,8 +347,8 @@ class VehicleHalCommon():
             return val['stringValue']
         elif self.vtypes.VehiclePropertyType.INT32 == dataType or \
                 self.vtypes.VehiclePropertyType.BOOLEAN == dataType:
-                    asserts.assertEqual(1, len(val["int32Values"]))
-                    return val["int32Values"][0]
+            asserts.assertEqual(1, len(val["int32Values"]))
+            return val["int32Values"][0]
         elif self.vtypes.VehiclePropertyType.INT64 == dataType:
             asserts.assertEqual(1, len(val["int64Values"]))
             return val["int64Values"][0]
@@ -367,7 +386,7 @@ class VehicleHalCommon():
     def assertIntValueInRangeForProp(self, value, validValues, prop):
         """Asserts that given value is in the validValues range"""
         asserts.assertTrue(value in validValues,
-                "Invalid value %d for property: 0x%x, expected one of: %s" % (value, prop, validValues))
+                           "Invalid value %d for property: 0x%x, expected one of: %s" % (value, prop, validValues))
 
     def assertValueInRangeForProp(self, value, rangeBegin, rangeEnd, prop):
         """Asserts that given value is in the range [rangeBegin, rangeEnd]"""
