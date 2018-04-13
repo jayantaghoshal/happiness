@@ -13,7 +13,13 @@
                 <%if (top_job_name=="ihu_gate"){%>
                     Gate Report
                 <%}%>
-                    #<%=build_numbers%></h1></div>
+                <%if (top_job_name=="ihu_vts"){%>
+                    VTS Report
+                <%}%>
+                <%if (top_job_name=="ihu_staging"){%>
+                    Staging Report
+                <%}%>
+                #<%=build_numbers%></h1></div>
             <% } %>
         <table class="table table-hover table-striped table-bordered display" id="result_table" >
             <thead>

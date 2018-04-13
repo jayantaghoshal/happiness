@@ -43,7 +43,7 @@
                         </div>
             </fieldset>	
             <br>
-            <%if(test_detail["Test Type"] == "vts"){%>
+            <%if(test_detail["Test Type"] == "vts" || test_detail["Test Type"] == "AndroidVTS" ){%>
                 <fieldset >    	
                         <legend>Sub Tests</legend>
                             <%if (testcases_test_record.length>0){%>
