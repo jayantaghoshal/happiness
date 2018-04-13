@@ -54,7 +54,9 @@ time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 # Note: skip ABI check occasionally create a race condition in build img, with less threads could resolve the issue.
 # (The total time of make droid is almost the same regardless -j16 or -j64)
 time make -j16 droid
+cp out/.ninja_log out/ninja_log_make_droid || true
 time make -j64 tradefed-all
+cp out/.ninja_log out/ninja_log_make_tradefed_all || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -74,6 +76,7 @@ fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate --ciflow true || die "Build Unit and Component tests failed"
+cp out/.ninja_log out/ninja_log_make_tester_build || true
 
 # Push out files required for gate_test.sh to Artifactory.
 #
@@ -99,6 +102,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 # Ensure our repo can be build with mma
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
 time mmma vendor/volvocars
+cp out/.ninja_log out/ninja_log_mmmma_vendor_volvocars || true
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"

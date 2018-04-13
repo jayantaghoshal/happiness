@@ -18,12 +18,15 @@ MP_PART_NUMBER=$(ihuci vbf get SWL2)
 export MP_PART_NUMBER
 ihuci vbf inc SWL2 # Increment part number suffix
 time make droid vts tradefed-all
+cp out/.ninja_log out/ninja_log_make_droid_vts_tradefed || true
 
 # Make dist (dist, OTA & VBF)
 time make dist
+cp out/.ninja_log out/ninja_log_make_dist || true
 
 # Build tests for daily (plan=nightly)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=nightly || die "Build Unit and Component tests failed"
+cp out/.ninja_log out/ninja_log_make_tester_build || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz

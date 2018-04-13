@@ -18,5 +18,6 @@ lunch ihu_vcc-user
 
 # Build only image
 time make droid
+cp out/.ninja_log out/ninja_log_make_droid || true
 
 # TODO: Make vbf files for user target

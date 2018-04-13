@@ -30,6 +30,7 @@ time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
 time make droid tradefed-all
+cp out/.ninja_log out/ninja_log_make_droid_and_tradefed_all || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -44,6 +45,7 @@ fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly --ciflow true || die "Build Unit and Component tests failed"
+cp out/.ninja_log out/ninja_log_make_tester_build || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz

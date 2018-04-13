@@ -21,7 +21,8 @@ C_OFF="\033[0m"
 
 function buildNewVtsPackage() {
     #Build latest vts
-    cd "$REPO_ROOT_DIR"; make vts
+    make vts
+    cp out/.ninja_log out/ninja_log_make_vts || true
 
     OUT_ARCHIVE=outVTS.tgz
     tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
