@@ -62,8 +62,8 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       0x0005
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
-      | VehicleArea:GLOBAL), 
-      
+      | VehicleArea:GLOBAL),
+
     /**
      * Toogles activation on Curve Speed adaption functionality
      * @change_mode VehiclePropertyChangeMode:ON_CHANGE
@@ -111,7 +111,7 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      * @data_enum PAStatus
      */
     LANE_KEEPING_AID_ON_STATUS = (
-      0x000a
+      0x000A
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
@@ -123,7 +123,7 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      * @data_enum WarnAndIntv1
      */
     LANE_KEEPING_AID_MODE = (
-      0x000b
+      0x000B
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
@@ -135,10 +135,11 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      * @data_enum PAStatus
      */
     LANE_KEEPING_AID_MODE_STATUS = (
-      0x000c
+      0x000C
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
     /**
      * Current PAStatus for emergency Lane Keeping Aid
      * @change_mode VehiclePropertyChangeMode:ON_CHANGE
@@ -146,16 +147,76 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      * @data_enum PAStatus
      */
     EMERGENCY_LANE_KEEPING_AID_STATUS = (
-      0x000d
+      0x000D
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
     EMERGENCY_LANE_KEEPING_AID_ON = (
-      0x000e
+      0x000E
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:BOOLEAN
       | VehicleArea:GLOBAL),
-};
+
+   /**
+     * Toogles activation on ADAPTIVE CRUISE CONTROL functionality
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    ADAPTIVE_CRUISE_CONTROL_ON = (
+      0x000F
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Adaptive Cruise Control
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    ADAPTIVE_CRUISE_CONTROL_STATUS = (
+      0x0010
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    CRUISE_CONTROL_ON = (
+      0x0011
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Cruise Control
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    CRUISE_CONTROL_STATUS = (
+      0x0012
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    SPEED_LIMITER_ON = (
+      0x0013
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Speed Limiter
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    SPEED_LIMITER_STATUS = (
+      0x0014
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+    };
 
 enum PAStatus: int32_t {
   NotAvailable = 0,
