@@ -338,6 +338,7 @@
 - job:
     name: ihu_daily_build_vcc_user
     defaults: daily_build_defaults
+    disabled: true
     node: daily_build
     builders:
         - shell:
