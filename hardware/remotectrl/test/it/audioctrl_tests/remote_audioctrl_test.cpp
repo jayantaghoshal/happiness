@@ -91,7 +91,9 @@ TEST_F(RemoteAudioCtrlFixture, GetVolume_FailureTest) {
  * Asserts that on success IHU sets volume to requested volume level
  */
 TEST_F(RemoteAudioCtrlFixture, SetVolume_GetVolume_SuccessTest) {
-    const uint8_t volume_level = 0x40U;
+    // TODO (Abhi): Currently scaling in APP service is removed. So Valid range for volume is same as Android i.e.
+    // [0, 35]. Decision pending about scaling.
+    const uint8_t volume_level = 0x20U;
     EnqueueRequest([this]() { SendRequest(REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME, {MEDIA_CONTEXT, volume_level}); });
     StartClient();
 

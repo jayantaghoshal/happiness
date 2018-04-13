@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -8,6 +8,7 @@ package com.volvocars.remotectrlappservices.audioctrl;
 import android.util.Log;
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import com.volvocars.remotectrlservices.audioctrl.*;
 
 /**
@@ -25,16 +26,29 @@ public class AppApiHandler extends IAudioCtrlAppService.Stub {
     }
 
     /**
+     * Validate permission
+     */
+    private static void assertRemoteCtrlPermission(Context context) {
+        if (context.checkCallingOrSelfPermission(PERMISSION_REMOTE_CTRL)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException("requires " + PERMISSION_REMOTE_CTRL);
+        }
+    }
+
+    /**
      * Calls from system service
      */
     @Override
     public void getVolume(int requestIdentifier, byte audioContext) {
         synchronized (this) {
             assertRemoteCtrlPermission(mAppService);
-            Log.v(TAG,
-                    "Get volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
+            Log.v(TAG, "Get volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
                             + audioContext);
-            mAppService.getVolume(requestIdentifier, audioContext);
+            try {
+                mAppService.getVolume(requestIdentifier, audioContext);
+            } catch (Exception e) {
+                Log.e(TAG, "Get Volume Error : " + e.getMessage());
+            }
         }
     }
 
@@ -42,20 +56,13 @@ public class AppApiHandler extends IAudioCtrlAppService.Stub {
     public void setVolume(int requestIdentifier, byte audioContext, byte volumeLevel) {
         synchronized (this) {
             assertRemoteCtrlPermission(mAppService);
-            Log.v(TAG,
-                    "Set volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
+            Log.v(TAG, "Set volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
                             + audioContext + ", volumeLevel-" + volumeLevel);
-            mAppService.setVolume(requestIdentifier, audioContext, volumeLevel);
-        }
-    }
-
-    /**
-     * Validate permission
-     */
-    private static void assertRemoteCtrlPermission(Context context) {
-        if (context.checkCallingOrSelfPermission(PERMISSION_REMOTE_CTRL)
-                != PackageManager.PERMISSION_GRANTED) {
-            throw new SecurityException("requires " + PERMISSION_REMOTE_CTRL);
+            try {
+                mAppService.setVolume(requestIdentifier, audioContext, volumeLevel);
+            } catch (Exception e) {
+                Log.e(TAG, "Set Volume error : " + e.getMessage());
+            }
         }
     }
 }

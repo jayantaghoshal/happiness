@@ -4,7 +4,7 @@
           package="com.volvocars.remotectrlappservices.audioctrl"
           android:sharedUserId="android.uid.system">
   <uses-permission android:name="android.volvocars.permission.REMOTE_CTRL"/>
-
+  <uses-permission android:name="android.car.permission.CAR_CONTROL_AUDIO_VOLUME"/>
   <application
     android:label="RemoteCtrlAppService.AudioCtrl"
     android:exported="true">

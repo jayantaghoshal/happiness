@@ -15,6 +15,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := com.volvocars.remotectrlservices.audioctrl.IAudio
 LOCAL_STATIC_JAVA_LIBRARIES += android.car
 LOCAL_MULTILIB := 64
 
-#TODO: Temp disabled build of this service as it is broken
-#include $(BUILD_PACKAGE)
+
+include $(BUILD_PACKAGE)
 include $(call all-makefiles-under,$(LOCAL_PATH))

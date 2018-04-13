@@ -50,6 +50,9 @@ PRODUCT_PACKAGES += \
     libjsqlite \
     ConManGw \
     ConManRelay \
+    RemoteAudioCtrlService \
+    RemoteAudioCtrlAppService \
+
 
 ##############################################################
 # SWDL stuff
