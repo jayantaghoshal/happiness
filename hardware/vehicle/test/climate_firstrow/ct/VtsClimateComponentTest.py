@@ -34,6 +34,10 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
     def setUpClass(self):
         """Creates a mirror and init vehicle hal."""
         self.dut = self.registerController(android_device)[0]
+
+        self.dut.start()
+        self.dut.waitForBootCompletion()
+
         self.dut.shell.InvokeTerminal("one")
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         results = self.dut.shell.one.Execute("id -u system")
@@ -69,43 +73,43 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         # Set to OFF
         fan_off.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 0)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 0)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.Off)
 
         # Set to Level 1
         fan_level_1.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 1)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 1)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutMinusMinus)
 
         # Set to Level 2
         fan_level_2.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 2)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 2)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutMinus)
 
         # Set to Level 3
         fan_level_3.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 3)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 3)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutoNorm)
 
         # Set to Level 4
         fan_level_4.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 4)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 4)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutPlus)
 
         # Set to Level 5
         fan_level_5.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 5)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 5)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.LvlAutPlusPlus)
 
         # Set to Max
         fan_max.touch()
         vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1, 6)
+        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 6)
         vHalCommon.assert_signal_equals(fr.HmiHvacFanLvlFrnt, fr.HmiHvacFanLvlFrnt.map.Max)
 
         # Close climate view
