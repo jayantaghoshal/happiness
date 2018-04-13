@@ -27,7 +27,6 @@ bootstrap_docker_run () {
     --hostname aic-docker \
     --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
     --volume "$HOME":"$HOME":rw \
-    --volume "$RAMDISK_ROOT":"$RAMDISK_ROOT" \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \
