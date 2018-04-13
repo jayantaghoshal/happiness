@@ -7,6 +7,7 @@ vhal_v2_0 = android.hardware.automotive.vehicle@2.0
 vccvhal_v1_0 = vendor.volvocars.hardware.vehiclehal@1.0
 audiohal_v1_0 = vendor.delphi.audiomanager@1.0
 service_name = android.hardware.automotive.vehicle.vcc@2.0
+lifecyclehal_v1_0 = vendor.delphi.lifecyclecontrol@1.0
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := $(service_name)-service
@@ -63,7 +64,8 @@ LOCAL_SHARED_LIBRARIES := \
     libtraceclient \
     liblocalconfig \
     libsettings \
-    libihulog
+    libihulog \
+    $(lifecyclehal_v1_0)
 
 LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \

@@ -9,6 +9,7 @@
 #include "VehicleHalImpl.h"
 #include "vhal_v2_0/VehicleHalManager.h"
 
+#include "LifecycleControl.h"
 #include "PowerModule.h"
 #include "activesafetymodule.h"
 #include "activeuserprofilemodule.h"
@@ -85,6 +86,8 @@ int main(int /* argc */, char* /* argv */ []) {
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
     auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
     auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
+    auto lifecycleControl =
+            std::make_unique<vendor::delphi::lifecyclecontrol::V1_0::LifecycleControl>(powerModule.get());
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -110,6 +113,12 @@ int main(int /* argc */, char* /* argv */ []) {
     }
 
     ALOGI("Ready starting VCC VHAL Daemon");
+
+    auto lifecycleControl_service_status = lifecycleControl->registerAsService();
+    if (android::OK != lifecycleControl_service_status) {
+        ALOGE("Unable to register lifecycleControl HAL service (%d)", lifecycleControl_service_status);
+    }
+    ALOGI("waiting to join thread ...");
     android::hardware::joinRpcThreadpool();
 
     return 0;

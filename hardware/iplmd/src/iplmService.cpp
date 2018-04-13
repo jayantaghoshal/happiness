@@ -15,6 +15,10 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
 
+using ::vendor::delphi::lifecyclecontrol::V1_0::MPKeepAliveReason;
+using ::vendor::delphi::lifecyclecontrol::V1_0::MPKeepAliveReasonValidity;
+using ::vendor::delphi::lifecyclecontrol::V1_0::MPRestartReason;
+
 namespace LocalCfg = Iplmd::LocalConfig;
 
 namespace {
@@ -30,24 +34,16 @@ bool first_contact = false;
 // NOTE: Outside requirement document. Verbal agreement/discussion with Karl Ronqvist (VCC).
 // Flexray wakeup shall be attempted only once per InfotainmentMode change cycle i.e. IM_OFF --> IM_ON --> IM_OFF
 bool flexray_wakeup_attempted = false;
-
-enum NsmStateBitMask : std::size_t {
-    MP_IPLM_BIT_EXT_GR_1 = 2,
-    MP_IPLM_BIT_EXT_GR_3 = 3,
-    MP_IPLM_BIT_EXT_PRIORITY = 4,
-    MP_IPLM_BIT_VALUE = 5,
-    MP_IPLM_BIT_INT_PRIORITY = 6,
-};
 }
 
-IplmService::IplmService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
+IplmService::IplmService(std::string vehicleservicehal) : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
     Iplmd::LocalConfig::loadLocalConfig();
 
-    IIplm::registerAsService();  // register as handler of the IIplm hidl interface
+    IIplm::registerAsService(vehicleservicehal);  // register as handler of the IIplm hidl interface
 }
 
-void IplmService::StartSubscribe() {
-    ipcbServer_ = IVehicleCom::getService("iplm");
+void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
+    ipcbServer_ = IVehicleCom::getService(vehicleservicehal);
 
     if (ipcbServer_ != nullptr) {
         ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
@@ -71,7 +67,29 @@ void IplmService::StartSubscribe() {
         ALOGV("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
 
         // TODO: Handle return value to be able to abort retries
-        timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { StartSubscribe(); });
+        timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
+                                       [this, vehicleservicehal]() { SubscribeVehicleCom(vehicleservicehal); });
+    }
+}
+
+void IplmService::ConnectLifecycleControl(std::string vehicleservicehal) {
+    lifecyclecontrol_ = ILifecycleControl::getService(vehicleservicehal);
+
+    if (lifecyclecontrol_ != nullptr) {
+        ALOGD("ILifecycleControl found! Register subscriber!");
+
+        auto error = lifecyclecontrol_->linkToDeath(this, 2);
+        if (!error.isOk()) {
+            ALOGW("Unable to register link to death");
+        }
+
+        PreventShutdownReason();
+    } else {
+        ALOGV("[%s]: LifecycleControl Service pointer is empty! retrying in 1 sec", __func__);
+
+        // TODO: Handle return value to be able to abort retries
+        timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
+                                       [this, vehicleservicehal]() { ConnectLifecycleControl(vehicleservicehal); });
     }
 }
 
@@ -251,7 +269,7 @@ void IplmService::ActivityTimeout() {
     tem_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Tem));
     vcm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vcm));
 
-    XResourceGroupPrio rg_prio = (XResourceGroupPrio)GetExternalPrio(iplm_data_);
+    XResourceGroupPrio rg_prio = (GetExternalPrio(iplm_data_) ? XResourceGroupPrio::High : XResourceGroupPrio::Normal);
 
     if (broadcast_allowed) {
         ALOGV("ActivityTimeout: Sending IP Activity broadcast");
@@ -504,7 +522,7 @@ Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName,
         iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
     }
 
-    SetNsmSessionState();
+    PreventShutdownReason();
     SendFlexrayWakeup(rg, prio);
 
     return true;
@@ -540,7 +558,7 @@ Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XReso
     if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH) &&
         !IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3, PRIO_HIGH)) {
         iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
-        SetNsmSessionState();
+        PreventShutdownReason();
     }
 
     // Check if any LSC is still interested in this particular resource_group
@@ -603,7 +621,7 @@ Return<bool> IplmService::unregisterService(const hidl_string& lscName) {
         !IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_3, PRIO_HIGH)) {
         // No LSC needs HIGH prio on RG1 or RG3
         iplm_data_.prio_[(int)Ecu::IHU] = PRIO_NORM;
-        SetNsmSessionState();
+        PreventShutdownReason();
     }
 
     if (!IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1)) {
@@ -620,37 +638,34 @@ Return<bool> IplmService::unregisterService(const hidl_string& lscName) {
 }
 
 // Reference: https://delphisweden.atlassian.net/wiki/display/VI/NSM+-+Session+-+IPLM+Resource+Groups
-bool IplmService::SetNsmSessionState() {
-    // TODO figure out what this is doing and how we can use our new shutdown prevention API instead
-    if ((iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) != ACTION_AVAILABLE || !first_contact) return false;
+void IplmService::PreventShutdownReason() {
+    const ::android::hardware::hidl_string caller_name = "ILifecycleControl";
 
-    // bit0 reserved and set to true for legacy reasons
-    // bit1 reserved and set to true for legacy reasons
-    std::bitset<8> state = 0b00000011;
+    uint8_t state = 0b00000000;
 
+    // bit1 internal prio
+    state = (state | (IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH)
+                              ? (uint8_t)MPKeepAliveReason::INTERNAL_RG1_ACTIVE
+                              : 0));
     // bit2 external RG1
-    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_GR_1, IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_1));
+    state = (state | (IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_1)
+                              ? (uint8_t)MPKeepAliveReason::EXTERNAL_RG1_ACTIVE
+                              : 0));
     // bit3 external RG3
-    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_GR_3, IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_3));
+    state = (state | (IsRgRequestedByExternalNode(iplm_data_, ResourceGroup::RG_3)
+                              ? (uint8_t)MPKeepAliveReason::EXTERNAL_RG3_ACTIVE
+                              : 0));
     // bit4 external prio
-    state.set(NsmStateBitMask::MP_IPLM_BIT_EXT_PRIORITY, GetExternalPrio(iplm_data_));
-    // bit5 iplm value
-    state.set(NsmStateBitMask::MP_IPLM_BIT_VALUE, true);
-    // bit6 internal prio
-    state.set(NsmStateBitMask::MP_IPLM_BIT_INT_PRIORITY,
-              IsRgRequestedLocally(iplm_data_, ResourceGroup::RG_1, PRIO_HIGH));
+    state = ((state | (GetExternalPrio(iplm_data_)) ? (uint8_t)MPKeepAliveReason::EXTERNAL_PRIORITY_HIGH : 0));
+    // bit5 IPLM Active
+    state = state | MPKeepAliveReason::IP_LINK_MANAGER_ACTIVE;
 
-    ALOGV("NSM IPLM Session state: %s TODO", state.to_string().c_str());
-
-    // auto retVal = nsmState_.SetSessionState(kIPLMSessionName, kIPLMSessionOwner, NsmSeat_Driver, state.to_ulong());
-
-    // How to handle error -1 which means fails to communicate with NSM. Ponder
-    /*
-    if (retVal < 0 || NsmErrorStatus_Ok != retVal)
-    {
-        ALOGE("Failed to set NSM state with reason %d", retVal);
-        return false;
-    }
-    */
-    return true;
+    // Call method on service
+    lifecyclecontrol_->SetKeepAliveReason(state,
+                                          MPKeepAliveReasonValidity::INTERNAL_RG1_ACTIVE_VALID |
+                                                  MPKeepAliveReasonValidity::EXTERNAL_RG1_ACTIVE_VALID |
+                                                  MPKeepAliveReasonValidity::EXTERNAL_RG3_ACTIVE_VALID |
+                                                  MPKeepAliveReasonValidity::EXTERNAL_PRIORITY_VALID |
+                                                  MPKeepAliveReasonValidity::IP_LINK_MANAGER_ACTIVE_VALID,
+                                          caller_name);
 }

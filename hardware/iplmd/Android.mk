@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
@@ -28,12 +28,11 @@ LOCAL_SHARED_LIBRARIES += \
     libhwbinder \
     vendor.volvocars.hardware.common@1.0 \
     vendor.volvocars.hardware.vehiclecom@1.0 \
-    vendor.volvocars.hardware.iplm@1.0
+    vendor.volvocars.hardware.iplm@1.0 \
+    vendor.delphi.lifecyclecontrol@1.0
+
 
 include $(VENDOR_VOLVOCARS_NATIVE_MODULE_SETTINGS)
 include $(BUILD_EXECUTABLE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
-
-
-

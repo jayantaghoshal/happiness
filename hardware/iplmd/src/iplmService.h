@@ -14,6 +14,7 @@
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 
+#include <vendor/delphi/lifecyclecontrol/1.0/ILifecycleControl.h>
 #include <vendor/volvocars/hardware/iplm/1.0/IIplm.h>
 #include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
 
@@ -27,6 +28,8 @@ using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::android::sp;
 using ::tarmac::eventloop::IDispatcher;
+
+using ::vendor::delphi::lifecyclecontrol::V1_0::ILifecycleControl;
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
@@ -54,7 +57,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
                            * receiving ECUs should ignore normal power handling. */
     };
 
-    IplmService();
+    IplmService(std::string);
     ~IplmService() = default;
 
     // Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
@@ -70,7 +73,10 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     bool Initialize();
 
     // Start subscribing to ipcb
-    void StartSubscribe();
+    void SubscribeVehicleCom(std::string);
+
+    // Start Subscribing to iLifecyclecontrol
+    void ConnectLifecycleControl(std::string);
     /**
      * Deinitialize IpLmService.
      */
@@ -106,7 +112,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     Return<bool> unregisterService(const hidl_string& lscName) override;
 
     /**
-     * Get availibility for a specified node
+     * Get availibility for a specified nodeSetNsmSessionState
      * @param [in]  ecu            Node to get availibility for
      * @param [out] resourceGroup  Resource group
      * @param [out] prio           Priority
@@ -126,6 +132,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
 
   private:
     sp<IVehicleCom> ipcbServer_;
+    sp<ILifecycleControl> lifecyclecontrol_;
 
     /*! Action, bit-field of ResourceGroup(s). */
     struct IplmData;
@@ -199,7 +206,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
 
     void CreateAndSendIpActivityMessage();
 
-    bool SetNsmSessionState();
+    void PreventShutdownReason();
 
     /** @brief FlexrayWakeupTimeout - time out callback to reset wakeup signal. On timeout prio for flexraywakeup
      * resets to normal*/

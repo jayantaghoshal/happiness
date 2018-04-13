@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,12 +7,16 @@
 #include <hidl/HidlTransportSupport.h>
 #include <sys/signalfd.h>
 #include <cstdint>
+#include <cstring>
 #include <functional>
 #include <future>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
+
+#include <android/log.h>
+#include <hidl/Status.h>
 
 #include "iplmService.h"
 
@@ -21,6 +25,8 @@
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
+using namespace android::hardware;
+using namespace android;
 using namespace android::hardware;
 
 // using android::hardware::configureRpcThreadpool;
@@ -55,8 +61,6 @@ void SigIntHandler(int fd) {
 }
 
 bool InitSignals() {
-    int ret_val;
-
     sigset_t signal_set_term;
     sigset_t signal_set_hup;
     sigset_t signal_set_int;
@@ -97,14 +101,62 @@ bool InitSignals() {
 
 // ===============================================================
 // MAIN
-int main(void) {
+int main(int argc, char* argv[]) {
+    if (argc < 4) {
+        ALOGE("Three argument expected ");
+        return EXIT_FAILURE;
+    }
+
     InitSignals();
 
-    sp<IplmService> iplmService = new IplmService;
-    iplmService->StartSubscribe();
+    char* pch;
+    char* arr[2];
+    std::string interface_iplm = "IIplm";
+    std::string interface_vehiclecom = "IVehicleCom";
+    std::string interface_lifecyclecontrol = "ILifecycleControl";
+    sp<IplmService> iplmService;
+
+    for (int num = 1; num < argc; num++) {
+        int8_t i = 0;
+        char* str = argv[num];
+        pch = std::strtok(str, " =,.-:");
+        while (pch != NULL) {
+            arr[i] = pch;
+            i++;
+            pch = std::strtok(NULL, " =,.-:");
+        }
+
+        std::string argument = arr[1];
+
+        if (interface_iplm == arr[0]) {
+            iplmService = new IplmService(argument);
+            ALOGI("call to iplm service");
+        }
+    }
+    for (int num = 1; num < argc; num++) {
+        int8_t i = 0;
+        char* str = argv[num];
+        pch = std::strtok(str, " =,.-:");
+        while (pch != NULL) {
+            arr[i] = pch;
+            i++;
+            pch = std::strtok(NULL, " =,.-:");
+        }
+
+        std::string argument = arr[1];
+
+        if (interface_vehiclecom == arr[0]) {
+            iplmService->SubscribeVehicleCom(argument);
+            ALOGI("call to ipcb service");
+        } else if (interface_lifecyclecontrol == arr[0]) {
+            iplmService->ConnectLifecycleControl(argument);
+            ALOGI("call to Lifecycle Control service");
+        }
+    }
+
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 
     joinRpcThreadpool();
 
-    ALOGI("exiting ...");
+    return EXIT_SUCCESS;
 }

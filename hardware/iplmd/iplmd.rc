@@ -1,4 +1,5 @@
-service iplmd /vendor/bin/iplmd
+service iplmd /vendor/bin/iplmd --IIplm=default --IVehicleCom=iplm --ILifecycleControl=default
+
     class vcc_net
     user oem_2972
     group oem_2972
