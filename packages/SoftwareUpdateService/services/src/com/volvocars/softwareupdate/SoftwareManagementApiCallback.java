@@ -63,7 +63,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void DownloadInfo(int code, DownloadInfo info) {
-        Log.v(LOG_TAG, "Got result of getting download information [" + info.uuid + "]: " + code);
+        Log.v(LOG_TAG, "Got result of getting download information [" + info.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(info);
             Log.v(LOG_TAG, "Received download information, ask service to download according to information");
@@ -78,7 +78,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     */
     @Override
     public void DownloadData(int code, DownloadInfo downloadInfo) {
-        Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.uuid + "]: " + code);
+        Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
         }

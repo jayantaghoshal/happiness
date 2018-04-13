@@ -115,6 +115,16 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         field.value = "application/volvo.cloud.software.AvailableUpdates+XML";
         headers.add(field);
 
+        String systemLanguage = GetSystemLanguage();
+        Log.v(LOG_TAG, "SystemLanguage: " + systemLanguage);
+
+        if (!systemLanguage.isEmpty()) {
+            HttpHeaderField languagefield = new HttpHeaderField();
+            languagefield.name = "Accept-Language";
+            languagefield.value = systemLanguage;
+            headers.add(languagefield);
+        }
+
         int timeout = 20000;
 
         ArrayList<SoftwareAssignment> software_list = new ArrayList();
@@ -263,7 +273,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private DownloadInfoResponse FetchDownloadInfo(String uuid) {
+    private DownloadInfoResponse FetchDownloadInfo(Query query) {
         Log.v(LOG_TAG, "FetchDownloadInfo");
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -278,8 +288,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.downloads + "and query: ?id=" + uuid);
-            Response response = cloudConnection.doGetRequest(uris.downloads + "?id=" + uuid, headers, timeout);
+            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.downloads + query.buildQuery());
+            Response response = cloudConnection.doGetRequest(uris.downloads + query.buildQuery(), headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -495,6 +505,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
 
         SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query);
+        Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
+
+        for(SoftwareAssignment software : swrsp.swlist) {
+            Log.e(LOG_TAG, ""+software.toString());
+        }
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 
@@ -523,7 +538,9 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             callback.DownloadInfo(-1, null);
         }
 
-        DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(uuid);
+        Query query = new Query();
+        query.id = uuid;
+        DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(query);
         callback.DownloadInfo(downloadInfoResponse.code, downloadInfoResponse.downloadInfo);
     }
 

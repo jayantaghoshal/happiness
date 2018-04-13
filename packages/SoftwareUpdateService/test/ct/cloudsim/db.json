@@ -42,7 +42,8 @@
           "textblock": "An interesting and informative text describing the patch"
         },
         "size": "366.4",
-        "status": "COMMISSIONABLE"
+        "status": "COMMISSIONABLE",
+        "type": "SYSTEM"
       },
       {
         "id": "20",
@@ -57,7 +58,8 @@
           "linefeed": {}
         },
         "size": "366.4",
-        "status": "COMMISSIONABLE"
+        "status": "COMMISSIONABLE",
+        "type": "SYSTEM"
       }
     ]
   },

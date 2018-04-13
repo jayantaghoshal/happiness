@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -11,9 +11,13 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class DownloadInfo implements Parcelable {
-    public String uuid = "";
+    //Unique identifier of the software.
+    public String id = "";
+    //The URI to the install notification
     public String installNotificationUri = "";
+    //The installation order id. Only used by OTA2 vehicles.
     public String installationOrderId = "";
+    //The URI:s to the data files for download
     public ArrayList<String> resourceUris = new ArrayList();
     public ArrayList<String> downloadedResources = new ArrayList();
 
@@ -38,7 +42,7 @@ public class DownloadInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(uuid);
+        dest.writeString(id);
         dest.writeString(installNotificationUri);
         dest.writeString(installationOrderId);
         dest.writeStringList(resourceUris);
@@ -47,12 +51,12 @@ public class DownloadInfo implements Parcelable {
 
     @Override
     public String toString() {
-        String string = uuid + "\n" + installNotificationUri + "\n" + installationOrderId;
+        String string = id + "\n" + installNotificationUri + "\n" + installationOrderId;
         return string;
     }
 
     public void readFromParcel(Parcel in) {
-        uuid = in.readString();
+        id = in.readString();
         installNotificationUri = in.readString();
         installationOrderId = in.readString();
         resourceUris = in.createStringArrayList();

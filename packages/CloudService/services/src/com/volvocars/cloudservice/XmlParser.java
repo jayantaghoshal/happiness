@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -271,6 +272,7 @@ public final class XmlParser {
                 if (tag.equals("available_updates")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     list = ParseAvailableUpdatesElement(parser);
+                    Log.w(LOG_TAG, "Parse: " + list.size());
                 } else {
                     Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
@@ -338,6 +340,7 @@ public final class XmlParser {
             throw new IllegalStateException();
         }
         SoftwareAssignment software = new SoftwareAssignment();
+        Log.w(LOG_TAG, "ParseSoftwareElement called");
 
         int depth = 1;
         while (depth != 0) {
@@ -346,7 +349,7 @@ public final class XmlParser {
                 String tag = parser.getName();
                 if (tag.equals("id")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    software.uuid = ParseString(tag, parser);
+                    software.id = ParseString(tag, parser);
                 } else if (tag.equals("name")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     software.name = ParseString(tag, parser);
@@ -355,19 +358,19 @@ public final class XmlParser {
                     SkipElement(parser);
                 } else if (tag.equals("short_description")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    software.description = ParseString(tag, parser);
+                    software.shortDescription = ParseString(tag, parser);
                 } else if (tag.equals("long_description")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    SkipElement(parser); //Todo: parseLongDescription
                 } else if (tag.equals("size")) {
                     Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    software.size = Double.valueOf(ParseString(tag, parser));
                 } else if (tag.equals("software_product_id")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.softwareProductId = ParseString(tag, parser);
                 } else if (tag.equals("software_product_version")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.softwareProductVersion = ParseString(tag, parser);
                 } else if (tag.equals("status")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     software.status = SoftwareAssignment.stringToStatus(ParseString(tag, parser));
@@ -375,20 +378,20 @@ public final class XmlParser {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     software.installationOrder = ParseInstallationOrderElement(parser);
                 } else if (tag.equals("type")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.type = SoftwareAssignment.stringToType(ParseString(tag, parser));
                 } else if (tag.equals("deliverable_type")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.deliverableType = SoftwareAssignment.stringToDeliverableType(ParseString(tag, parser));
                 } else if (tag.equals("installation_type")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.installationType = SoftwareAssignment.stringToInstallationType(ParseString(tag, parser));
                 } else if (tag.equals("estimated_installation_time")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.estimatedInstallationTime = Integer.valueOf(ParseString(tag, parser));
                 } else if (tag.equals("commission_uri")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
-                    SkipElement(parser);
+                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    software.commissionUri = ParseString(tag, parser);
                 } else {
                     Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
                     SkipElement(parser);
@@ -424,10 +427,10 @@ public final class XmlParser {
                 String tag = parser.getName();
                 if (tag.equals("id")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    installationOrder.uuid = ParseString(tag, parser);
+                    installationOrder.id = ParseString(tag, parser);
                 } else if (tag.equals("status")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    installationOrder.status = ParseString(tag, parser);
+                    installationOrder.status = InstallationOrder.stringToStatus(ParseString(tag, parser));
                 } else if (tag.equals("created_by")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     installationOrder.createdBy = ParseString(tag, parser);
@@ -522,7 +525,7 @@ public final class XmlParser {
                     SkipElement(parser);
                 } else if (tag.equals("id")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
-                    downloadInfo.uuid = ParseString("id", parser);
+                    downloadInfo.id = ParseString("id", parser);
                 } else if (tag.equals("install_notification_uri")) {
                     Log.v(LOG_TAG, "Parsing: " + tag);
                     downloadInfo.installNotificationUri = ParseString("install_notification_uri", parser);

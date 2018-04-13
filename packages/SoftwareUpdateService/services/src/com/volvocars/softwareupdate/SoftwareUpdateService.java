@@ -161,7 +161,7 @@ public class SoftwareUpdateService extends Service {
 
     public void doGetDownloadInfo(List<InstallationOrder> list) {
         for (InstallationOrder io : list) {
-            GetDownloadInfo(io.uuid);
+            GetDownloadInfo(io.id);
         }
     }
 
@@ -185,7 +185,7 @@ public class SoftwareUpdateService extends Service {
     public void GetDownloadData(DownloadInfo downloadInfo) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "Get download data for downloadInfo with uuid: " + downloadInfo.uuid);
+                Log.v(LOG_TAG, "Get download data for downloadInfo with id: " + downloadInfo.id);
                 swapi.GetDownloadData(downloadInfo, swapiCallback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "GetDownloadData failed: RemoteException [" + e.getMessage() + "]");
@@ -275,7 +275,7 @@ public class SoftwareUpdateService extends Service {
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
             for (SoftwareInformation information : softwareInformationList) {
-                if (assignment.uuid.equals(information.softwareId)) {
+                if (assignment.id.equals(information.softwareId)) {
                     found = true;
                     break;
                 }
@@ -317,7 +317,7 @@ public class SoftwareUpdateService extends Service {
             }
         }
         if (!found) {
-            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), uuid [" + downloadInfo.uuid
+            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), id [" + downloadInfo.id
                     + "] not found in list which is weird...");
         }
 
