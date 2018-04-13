@@ -200,7 +200,7 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
     logger.info("Updating ihu")
     for attempt in range(max_attempts):
         try:
-            check_output_logged(['ihu_update'])
+            check_output_logged(['ihu_update', '--profile=ci-machinery'])
             logger.info("Updating ihu complete")
             break
         except Exception as e:

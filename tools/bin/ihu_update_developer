@@ -2,4 +2,4 @@
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR="${SCRIPT_DIR}"/../..
 
-python3 "$REPO_ROOT_DIR"/tools/ci/shipit/ihu_update.py $*
+python3 "$REPO_ROOT_DIR"/tools/ci/shipit/ihu_update.py --profile=developer $*

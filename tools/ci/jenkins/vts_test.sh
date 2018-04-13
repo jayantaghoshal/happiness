@@ -25,7 +25,7 @@ set +e
 for tmp in 1 2 3
 do
     # Update IHU
-    ihu_update
+    ihu_update --profile=ci-machinery
     if [ $? -eq 0 ]; then # On success, break
         break
     elif [ $tmp -eq 3 ]; then

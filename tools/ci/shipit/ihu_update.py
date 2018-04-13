@@ -12,6 +12,7 @@ import json
 import shutil
 import sys
 
+from collections import namedtuple
 from shipit.serial_mapping import open_serials, swap_serials, PortMapping, VipSerial, MpSerial, IhuSerials
 from shipit import serial_mapping
 from shipit.process_tools import check_output_logged
@@ -132,13 +133,33 @@ def expect_mp_android_default_session(mp: MpSerial) -> None:
 
 # endregion
 
+# region Profiles
+DEVELOPER = "developer"
+DEVELOPER_RIG = "developer-rig"
+CI_MACHINERY = "ci-machinery"
+AS_APTIV_FACTORY = "as-aptiv-factory"
+AS_VCC_FACTORY = "as-vcc-factory"
+
+ProfileFlags = namedtuple("ProfileFlags", ["sm_alw_1_s", "enable_verity"])
+
+Profiles = {
+    DEVELOPER: ProfileFlags(sm_alw_1_s=True, enable_verity=False),
+    DEVELOPER_RIG: ProfileFlags(sm_alw_1_s=False, enable_verity=False),
+    CI_MACHINERY: ProfileFlags(sm_alw_1_s=True, enable_verity=True),
+    AS_APTIV_FACTORY: ProfileFlags(sm_alw_1_s=False, enable_verity=True),
+    AS_VCC_FACTORY: ProfileFlags(sm_alw_1_s=False, enable_verity=True),
+}
+
+
+# endregion
+
 
 def flash_image(port_mapping: PortMapping,
                 android_product_out: str,
                 update_mp: bool,
                 force_update_abl: bool,
                 force_update_vip: bool,
-                disable_verity: bool) -> None:
+                profile_flags: ProfileFlags) -> None:
     try:
         ihu_serials = open_serials(port_mapping)
         vip, mp = ihu_serials.vip, ihu_serials.mp
@@ -186,7 +207,7 @@ Troubleshooting:
             wait_for_host_target_fastboot_connection()
 
             fastboot_command = ['bash', 'fastboot.sh', '--abl']
-            if disable_verity:
+            if not profile_flags.enable_verity:
                 fastboot_command += ['--disable-verity']
 
             bsp_provided_flashfiles_path = os.path.join(android_product_out, "fast_flashfiles")
@@ -218,13 +239,16 @@ Troubleshooting:
             logger.info("Flashing was done in PBL, going to application for subsequent boot")
             vip.writeline("sm restart")  # just restart to app
             if vip.is_vip_app(timeout_sec=60):
-                vip.writeline("sm alw 1 s")
+                if profile_flags.sm_alw_1_s:
+                    vip.writeline("sm alw 1 s")
+                else:
+                    vip.writeline("sm alw 1")
                 vip.expect_line(".*SysM- Always_On: 1.*", 15)
+
             elif vip.is_vip_pbl():
                 raise RuntimeError("VIP is stuck in PBL, please rerun with: "
                                    "--update-mp false --force-update-vip true")
 
-            # TODO decrease timeout after vip flashing stabilizes
             wait_for_boot_and_flashing_completed(timeout_sec=15 * 60)
 
             logger.info("Boot and postboot operations completed, current properties:")
@@ -284,7 +308,24 @@ Troubleshooting:
         else:
             logger.info("NOT forcing Flashing VIP manually")
 
-        logger.info("Flash completed")
+        logger.info("Flash completed, ensuring post conditions")
+
+        if vip.is_vip_pbl():
+            vip.writeline("sm restart")
+            vip.is_vip_app(timeout_sec=20)
+
+        if profile_flags.sm_alw_1_s:
+            vip.writeline("sm alw 1 s")
+            vip.expect_line(".*SysM- Always_On: 1.*", 15)
+        else:
+            vip.writeline("sm alw 0 s")
+            vip.expect_line(".*SysM- Always_On: 0.*", 15)
+
+        # Sleep some as it's nice to have output of VIP+MP before final log
+        time.sleep(2)
+
+        logger.info("SUCCESS: Flash completed and post conditions verified")
+
     except Exception:
         # Sleep some as it's nice to have output of VIP+MP shortly after exception also, in case of bad timing
         time.sleep(2)
@@ -301,6 +342,7 @@ def reboot_vip_into_pbl(vip):
     vip.writeline("swdl e")  # swdl e for PBL
     if not vip.is_vip_pbl(timeout_sec=15):
         raise RuntimeError("No VIP PBL detected")
+
     time.sleep(1)
     vip.writeline("sm st_off")
     vip.expect_line(".*Disabling startup timer.*", 15)
@@ -445,10 +487,23 @@ def main() -> None:
                         help="TTY device connected to MP console UART",
                         default="/dev/ttyUSB1")
 
-    parser.add_argument("--disable-verity",
-                        required=False,
-                        action="store_true",
-                        help="Disable dm-verity")
+    parser.add_argument("--profile",
+                        required=True,
+                        choices=[DEVELOPER, DEVELOPER_RIG, AS_APTIV_FACTORY, AS_VCC_FACTORY, CI_MACHINERY],
+                        help="""
+Select one of profiles, so the unit can take 'non-SW' factors into account.
+
+If on VCC docker you can use 'ihu_update_developer' as shortcut.
+
+Possible profiles:
+|-------------------------------------------------------------------------------------------|
+| Option:    | developer | developer-rig | as-aptiv-factory | as-vcc-factory | ci-machinery |
+|-------------------------------------------------------------------------------------------|
+| sm alw 1 s | on        | off           | off              | off            | on           |
+| dm verity  | disabled  | disabled      | enabled          | enabled        | enabled      |
+|-------------------------------------------------------------------------------------------|
+
+""")
 
     parser.add_argument("--force-update-vip",
                         default=False,
@@ -500,7 +555,7 @@ def main() -> None:
                 update_mp=parsed_args.update_mp,
                 force_update_vip=parsed_args.force_update_vip,
                 force_update_abl=parsed_args.force_update_abl,
-                disable_verity=parsed_args.disable_verity)
+                profile_flags=Profiles[parsed_args.profile])
 
 
 if __name__ == "__main__":
