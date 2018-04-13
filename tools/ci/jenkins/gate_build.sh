@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -51,9 +51,7 @@ VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
-# Note: skip ABI check occasionally create a race condition in build img, with less threads could resolve the issue.
-# (The total time of make droid is almost the same regardless -j16 or -j64)
-time make -j16 droid
+time make -j64 droid
 cp out/.ninja_log out/ninja_log_make_droid || true
 time make -j64 tradefed-all
 cp out/.ninja_log out/ninja_log_make_tradefed_all || true
