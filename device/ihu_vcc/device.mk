@@ -158,6 +158,10 @@ endif
 # everything in GAS delivery
 $(call inherit-product, vendor/volvocars/apps/google/GAS/google/products/gms.mk)
 
+# Required by Google Assistant
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.opa.eligible_product=true
+
 ##############################################################
 # VCC required Linux kernel modules
 ##############################################################
