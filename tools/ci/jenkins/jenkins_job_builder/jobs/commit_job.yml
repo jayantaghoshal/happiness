@@ -121,10 +121,10 @@
     name: ihu_gate_build
     defaults: commit_job_defaults
     node: gate_build
+    workspace: /mnt/ramdisk/ihu_gate_build
     builders:
         - shell:
             !include-raw:
-                - bootstrap_ramdisk.sh
                 - bootstrap_ihu_gate_build_stage.sh
                 - bootstrap_ihu_gate_build.sh
     publishers:
