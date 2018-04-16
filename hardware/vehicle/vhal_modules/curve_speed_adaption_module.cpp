@@ -95,7 +95,7 @@ CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(vhal20::impl::IVehicleHalImpl
         if (signal.isOk()) {
             auto vehmod_value = signal.value();
 
-            is_active_ = (vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModInActv ||
+            is_active_ = (vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModActv ||
                           vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModCnvinc ||
                           vehmod_value.UsgModSts == autosar::UsgModSts1::UsgModDrvg);
 
