@@ -90,7 +90,10 @@ public class SystemConnectivityManager extends ISystemConnectivityManager.Stub {
     }
 
     @Override
-    public void updateWifiStationMode(byte mode) {}
+    public void updateWifiStationMode(byte mode) {
+        connectivityManagerGateway.notifyWifiStationModeChange(mode);
+        return;
+    }
 
     public boolean getWifiStationMode() {
         boolean returnStatus = false;

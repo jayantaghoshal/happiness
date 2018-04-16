@@ -9,6 +9,9 @@ import android.util.Log;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 import com.volvocars.connectivitymanager.IConnectivityManager;
 import com.volvocars.connectivitymanager.IConnectivityManagerGateway;
 import com.volvocars.connectivitymanager.WifiStationModeAidl;
@@ -22,10 +25,38 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
     private static final String LOG_TAG = "ConManGw.";
     private SystemConnectivityManager systemManager = null;
 
+    private ArrayList<IConnectivityManager> subscribers;
+
     public ConnectivityManagerGateway() {}
 
     public void init(SystemConnectivityManager sysMan) {
         systemManager = sysMan;
+    }
+
+    public void notifyWifiStationModeChange(byte mode) {
+        if (subscribers.isEmpty()) {
+            return;
+        }
+
+        WifiStationModeAidl stationMode = new WifiStationModeAidl();
+        switch (mode) {
+            case WifiStationMode.UNKNOWN:
+                stationMode.mode = WifiStationModeAidl.Mode.UNKNOWN;
+            case WifiStationMode.AP_MODE:
+                stationMode.mode = WifiStationModeAidl.Mode.AP_MODE;
+            case WifiStationMode.STATION_MODE:
+                stationMode.mode = WifiStationModeAidl.Mode.STATION_MODE;
+        }
+
+        ListIterator<IConnectivityManager> it = subscribers.listIterator();
+        do {
+            try {
+                it.next().updateWifiStationMode(stationMode);
+            } catch (RemoteException e) {
+                Log.w(LOG_TAG, "Subscriber not responding, removing from list");
+                it.remove();
+            }
+        } while (it.hasNext());
     }
 
     /**
@@ -33,6 +64,7 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
      */
     @Override
     public void registerManager(IConnectivityManager manager) {
+        subscribers.add(manager);
         return;
     }
 
