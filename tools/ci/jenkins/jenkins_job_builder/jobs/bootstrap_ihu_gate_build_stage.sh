@@ -111,7 +111,7 @@ bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; 
 bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
 bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} aic_test"
 bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/apps/ihu_test"
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/apps/tunerbrowserservice"
+bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/hmi/apps/tunerbrowserservice"
 
 if [ "$(git -C "$ZUUL_PROJECT" rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
     die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in $ZUUL_PROJECT"
