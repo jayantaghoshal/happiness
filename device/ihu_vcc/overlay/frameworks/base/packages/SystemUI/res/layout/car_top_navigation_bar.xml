@@ -20,13 +20,14 @@
 <com.android.systemui.statusbar.car.CarNavigationBarView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/top_navigation_bar"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:paddingTop="48dp"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
-    android:gravity="center_vertical"
     android:background="@drawable/system_bar_background">
 
     <LinearLayout
@@ -36,51 +37,53 @@
         android:orientation="horizontal"
         android:animateLayoutChanges="true">
 
-        <com.android.systemui.statusbar.car.CarNavigationButton
+        <com.android.systemui.statusbar.car.CarImageButton
             android:id="@+id/nav_bar_cam"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_cam"/>
+            systemui:levelList="com.volvocars.launcher.volvo.MainActivity"
+            android:src="@drawable/cam_icon"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
-        <com.android.systemui.statusbar.car.CarFacetButton
+        <com.android.systemui.statusbar.car.CarImageButton
+            android:id="@+id/nav_bar_apps"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@android:color/transparent"
-            systemui:icon="@drawable/ic_apps"
-            systemui:packages="com.volvocars.launcher"
-            systemui:intent="intent:#Intent;package=com.volvocars.launcher;component=com.volvocars.launcher/.volvo.VolvoAppsPaneActivity;launchFlags=0x10000000;end"/>
-
+            android:src="@drawable/app_icon"
+            systemui:levelList="com.volvocars.launcher.volvo.MainActivity"
+            systemui:clickIntent="intent:#Intent;package=com.volvocars.launcher;component=com.volvocars.launcher/.volvo.VolvoAppsPaneActivity;launchFlags=0x10000000;end"/>
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
-        <com.android.systemui.statusbar.car.CarNavigationButton
+        <com.android.systemui.statusbar.car.CarImageButton
             android:id="@+id/nav_bar_profiles"
             android:background="@android:color/transparent"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:src="@drawable/ic_profiles"/>
+            systemui:levelList="com.volvocars.launcher.volvo.MainActivity"
+            android:src="@drawable/profiles_icon"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
-        <com.android.systemui.statusbar.car.CarFacetButton
+        <com.android.systemui.statusbar.car.CarImageButton
             android:id="@+id/nav_bar_car"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@android:color/transparent"
-            systemui:icon="@drawable/ic_vf_pane"
-            systemui:packages="com.volvocars.vehiclefunctions"
-            systemui:intent="intent:#Intent;package=com.volvocars.vehiclefunctions;component=com.volvocars.vehiclefunctions/.VehicleFunctionsActivity;launchFlags=0x10000000;end"/>
+            android:src="@drawable/vf_icon"
+            systemui:levelList="com.volvocars.launcher.volvo.MainActivity"
+            systemui:clickIntent="intent:#Intent;package=com.volvocars.vehiclefunctions;component=com.volvocars.vehiclefunctions/.VehicleFunctionsActivity;launchFlags=0x10000000;end"/>
     </LinearLayout>
 </com.android.systemui.statusbar.car.CarNavigationBarView>
 

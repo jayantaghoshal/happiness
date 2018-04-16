@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="250">
+    <item
+        android:drawable="@drawable/ic_apps"
+        android:maxLevel="0" />
+    <item
+        android:maxLevel="1">
+        <selector>
+            <item android:state_selected="true" android:drawable="@drawable/ic_apps_blue"/>
+            <item android:drawable="@drawable/ic_apps_grey"/>
+        </selector>
+    </item>
+</level-list>
