@@ -22,14 +22,24 @@ SignalHandler::SignalHandler(std::weak_ptr<IConnectivityManager> connectivity_ma
 
 bool SignalHandler::RequestWifiStationMode() {
     ALOGV("%s", __FUNCTION__);
-    ALOGW("Not Implemented");
-    return false;
+    ALOGW("Not Implemented, returning dummy value");
+
+    if (auto spt = connectivity_manager_.lock()) {
+        spt->NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode::STATION_MODE);
+    }
+
+    return true;
 }
 
-bool SignalHandler::RequestSetWifiStationMode(/* WifiStationMode mode */) {
+bool SignalHandler::RequestSetWifiStationMode(conman_hal_v1_0::WifiStationMode mode) {
     ALOGV("%s", __FUNCTION__);
-    ALOGW("Not Implemented");
-    return false;
+    ALOGW("Not Implemented, returning dummy value");
+
+    if (auto spt = connectivity_manager_.lock()) {
+        spt->NotifyWifiStationMode(mode);
+    }
+
+    return true;
 }
 
 }  // namespace conman

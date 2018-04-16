@@ -7,7 +7,11 @@ package com.volvocars.connectivitymanager;
 /**
 * For clients to implement to get callbacks
 */
-public interface ConnectivityManagerGatewayConnectionCallback {
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
+
+public interface IConnectivityManagerCallback {
    void onServiceConnected();
    void onServiceDisconnected();
+
+   void notifyWifiStationMode(WifiStationModeAidl mode);
 }

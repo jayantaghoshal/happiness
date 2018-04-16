@@ -33,6 +33,8 @@ class ConnectivityManager : public std::enable_shared_from_this<ConnectivityMana
 
     bool RequestWifiStationModeChange(conman_hal_v1_0::WifiStationMode mode) override;
 
+    void NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode mode) override;
+
   private:
     std::weak_ptr<ISignalHandler> signal_handler_;
     // std::weak_ptr<INetmanClient> netman_client_;

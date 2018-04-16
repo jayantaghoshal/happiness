@@ -84,5 +84,10 @@ Return<bool> ConnectivityManagerService::requestWifiStationModeChange(conman_hal
     throw std::runtime_error("Connectivity Manager has expired");
 }
 
+void ConnectivityManagerService::NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode mode) {
+    ALOGV("%s", __FUNCTION__);
+    system_gw_handler_->updateWifiStationMode(mode);
+}
+
 }  // namespace conman
 }  // namespace vcc

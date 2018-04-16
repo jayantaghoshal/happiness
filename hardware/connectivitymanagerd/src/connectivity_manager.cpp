@@ -53,10 +53,16 @@ bool ConnectivityManager::RequestWifiStationModeChange(conman_hal_v1_0::WifiStat
 
     // Convert Hidl WifiStationMode to SignalHandler WifiStationMode ...
     if (auto spt = signal_handler_.lock()) {
-        return spt->RequestSetWifiStationMode(/*signal_handler_mode*/);
+        return spt->RequestSetWifiStationMode(mode);
     }
 
     throw std::runtime_error("Signal Handler has expired");
+}
+
+void ConnectivityManager::NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode mode) {
+    ALOGV("%s", __FUNCTION__);
+
+    connectivity_manager_service_->NotifyWifiStationMode(mode);
 }
 
 }  // namespace conman

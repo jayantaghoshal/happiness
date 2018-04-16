@@ -22,6 +22,8 @@ class IConnectivityManager {
     virtual bool RequestWifiStationMode() = 0;
 
     virtual bool RequestWifiStationModeChange(conman_hal_v1_0::WifiStationMode mode) = 0;
+
+    virtual void NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode mode) = 0;
 };
 
 }  // namespace conman

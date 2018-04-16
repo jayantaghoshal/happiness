@@ -42,6 +42,8 @@ class ConnectivityManagerService : public conman_hal_v1_0::INativeConnectivityMa
 
     Return<bool> requestWifiStationModeChange(conman_hal_v1_0::WifiStationMode mode) override;
 
+    void NotifyWifiStationMode(conman_hal_v1_0::WifiStationMode mode);
+
   private:
     ::android::sp<conman_hal_v1_0::ISystemConnectivityManager> system_gw_handler_;
 

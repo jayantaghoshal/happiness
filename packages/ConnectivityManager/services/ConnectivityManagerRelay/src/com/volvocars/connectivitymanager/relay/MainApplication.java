@@ -16,7 +16,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.v(LOGTAG, "Starting Service");
-        Intent intent = new Intent(this, ConnectivityManagerRelay.class);
+        Intent intent = new Intent(this, ConnectivityManagerRelayService.class);
         startService(intent);
     }
 }

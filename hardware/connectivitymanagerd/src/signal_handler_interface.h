@@ -12,12 +12,14 @@
 namespace vcc {
 namespace conman {
 
+namespace conman_hal_v1_0 = ::vendor::volvocars::hardware::connectivitymanager::V1_0;
+
 class ISignalHandler {
   public:
     virtual ~ISignalHandler() = default;
 
     virtual bool RequestWifiStationMode() = 0;
-    virtual bool RequestSetWifiStationMode(/* WifiStationMode mode */) = 0;
+    virtual bool RequestSetWifiStationMode(conman_hal_v1_0::WifiStationMode mode) = 0;
 };
 
 }  // namespace conman

@@ -9,61 +9,62 @@ import android.app.Service;
 
 import android.content.Intent;
 
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import android.util.Log;
 
-import com.volvocars.connectivitymanager.ConnectivityManager;
-import com.volvocars.connectivitymanager.ConnectivityManagerGatewayConnectionCallback;
+import com.volvocars.connectivitymanager.WifiStationModeAidl;
+import com.volvocars.connectivitymanager.relay.IConnectivityManagerRelay;
+
 
 /**
 *
 */
-public class ConnectivityManagerRelay extends Service {
-    private static final String LOG_TAG = "ConManRelay.Service";
+public class ConnectivityManagerRelay extends IConnectivityManagerRelay.Stub {
+    private static final String LOG_TAG = "ConManRelay.ConManRelay";
 
-    private ConnectivityManager connectivityManager = null;
+    private ConnectivityManagerRelayService service = null;
+    private IConnectivityManagerRelayCallback callback = null;
 
-    private ConnectivityManagerGatewayConnectionCallback connectionCallback =
-            new ConnectivityManagerGatewayConnectionCallback() {
-                @Override
-                public void onServiceConnected() {
-                    Log.d(LOG_TAG, "Connected to Gateway");
-                }
-
-                @Override
-                public void onServiceDisconnected() {
-                    Log.d(LOG_TAG, "Disconnected");
-                }
-            };
-
-    @Override
-    public void onCreate() {
-        Log.v(LOG_TAG, "onCreate");
-        super.onCreate();
-
-        connectivityManager = new ConnectivityManager(this, connectionCallback);
+    public ConnectivityManagerRelay(ConnectivityManagerRelayService service) {
+        this.service = service;
     }
 
     @Override
-    public void onDestroy() {
-        Log.v(LOG_TAG, "onDestroy");
-        super.onDestroy();
+    public void registerCallback(IConnectivityManagerRelayCallback callback) {
+        Log.v(LOG_TAG, "registerCallback");
+        if (null == this.callback) {
+            this.callback = callback;
+        }
+    }
+
+    ///// Wifi Control /////
+
+    @Override
+    public void getWifiStationMode() {
+        Log.v(LOG_TAG, "getWifiStationMode");
+        service.getWifiStationMode();
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(LOG_TAG, "onStartCommand");
-
-        connectivityManager.connect();
-
-        return START_STICKY;
+    public void setWifiStationMode(WifiStationModeAidl mode) {
+        Log.v(LOG_TAG, "setWifiStationMode " + mode);
+        service.setWifiStationMode(mode);
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        Log.v(LOG_TAG, "OnBind");
-        return null;
+    public void notifyWifiStationMode(WifiStationModeAidl mode) {
+        Log.v(LOG_TAG, "notifyWifiStationMode " + mode);
+        if (null != callback) {
+            try {
+                callback.notifyWifiStationMode(mode);
+            } catch (RemoteException e) {
+                callback = null;
+            }
+        } else {
+            Log.v(LOG_TAG, "No Callback registered");
+        }
     }
 }

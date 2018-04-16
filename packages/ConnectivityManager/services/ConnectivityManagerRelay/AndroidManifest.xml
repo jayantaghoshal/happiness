@@ -8,10 +8,23 @@
 
     <application
         android:persistent="true"
-        android:name=".MainApplication">
+        android:name=".MainApplication"
+        android:label="@string/app_name">
+
+        <activity
+                android:name=".MainActivity"
+                android:theme="@style/AppTheme"
+                android:persistent="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <service
             android:exported="true"
-            android:name=".ConnectivityManagerRelay">
+            android:singleUser="true"
+            android:name=".ConnectivityManagerRelayService">
         </service>
     </application>
 </manifest>

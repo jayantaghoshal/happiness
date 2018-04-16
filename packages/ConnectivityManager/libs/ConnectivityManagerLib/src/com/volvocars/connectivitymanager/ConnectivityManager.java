@@ -19,7 +19,7 @@ import com.volvocars.connectivitymanager.WifiStationModeAidl;
 /**
  *
  */
-public class ConnectivityManager implements ServiceConnection {
+public class ConnectivityManager extends IConnectivityManager.Stub {
     private static final String LOG_TAG = "ConnectivityManager";
     private static final String PACKAGENAME = "com.volvocars.connectivitymanager.gateway";
     private static final String PACKAGENAME_SERVICENAME =
@@ -29,72 +29,71 @@ public class ConnectivityManager implements ServiceConnection {
     private IConnectivityManagerGateway gateway = null;
     private boolean gatewayBound = false;
 
-    private ConnectivityManagerGatewayConnectionCallback
-            connectivityManagerGatewayConnectionCallback = null;
+    private IConnectivityManagerCallback connectivityManagerCallback = null;
 
-    private DeathRecipient death = new DeathRecipient(this);
-
-    final class DeathRecipient implements IBinder.DeathRecipient {
-        private ConnectivityManager client;
-
-        DeathRecipient(ConnectivityManager client) {
-            this.client = client;
-        }
+    private IBinder.DeathRecipient death = new IBinder.DeathRecipient() {
 
         @Override
         public void binderDied() {
-            Log.e(LOG_TAG, "Gateway died, reconnecting...");
-            client.connect();
+            Log.w(LOG_TAG, "Gateway died, reconnecting...");
+            connectToGateway();
         }
-    }
+    };
 
-    @Override
-    public void onServiceConnected(ComponentName className, IBinder service) {
-        gateway = IConnectivityManagerGateway.Stub.asInterface(service);
-        gatewayBound = true;
-        connectivityManagerGatewayConnectionCallback.onServiceConnected();
+    private ServiceConnection connection = new ServiceConnection() {
 
-        try {
-            service.linkToDeath(death, 0 /* flags */);
-        } catch (RemoteException e) {
-            Log.w(LOG_TAG, "Unable to register Death Recipient. :(");
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            gateway = IConnectivityManagerGateway.Stub.asInterface(service);
+            gatewayBound = true;
+            registerManagerAtGateway();
+            connectivityManagerCallback.onServiceConnected();
+
+            try {
+                service.linkToDeath(death, 0 /* flags */);
+            } catch (RemoteException e) {
+                Log.w(LOG_TAG, "Unable to register Death Recipient. :(");
+            }
         }
-    }
 
-    @Override
-    public void onServiceDisconnected(ComponentName arg0) {
-        gatewayBound = false;
-        connectivityManagerGatewayConnectionCallback.onServiceDisconnected();
-    }
+        public void onServiceDisconnected(ComponentName arg0) {
+            gateway = null;
+            gatewayBound = false;
+            connectivityManagerCallback.onServiceDisconnected();
+        }
+    };
 
     /**
      *
      */
-    public ConnectivityManager(Context context,
-            ConnectivityManagerGatewayConnectionCallback
-                    connectivityManagerGatewayConnectionCallback) {
+    public ConnectivityManager(
+            Context context, IConnectivityManagerCallback connectivityManagerCallback) {
         this.context = context;
-        this.connectivityManagerGatewayConnectionCallback =
-                connectivityManagerGatewayConnectionCallback;
+        this.connectivityManagerCallback = connectivityManagerCallback;
 
-        connect();
+        connectToGateway();
     }
 
     /**
      * Used to bind to Gateway Service, can be used by client if service unbinds unexpectedly
      */
-    public void connect() {
+    private void connectToGateway() {
         Intent intent = new Intent();
         intent.setAction("ConnectivityManagerGateway");
         intent.setComponent(new ComponentName(PACKAGENAME, PACKAGENAME_SERVICENAME));
-        context.bindService(intent, this, Context.BIND_AUTO_CREATE);
+        context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
-    /**
-     * Register a manager interface to receive broadcasted updates.
-     */
-    public void registerManager(IConnectivityManager manager) {
+    private void registerManagerAtGateway() {
+        try {
+            gateway.registerManager(this);
+        } catch (RemoteException e) {
+            Log.d(LOG_TAG, "Cannot register Manager. Received exception: " + e.getMessage());
+        }
+    }
 
+    @Override
+    public void updateWifiStationMode(WifiStationModeAidl mode) {
+        connectivityManagerCallback.notifyWifiStationMode(mode);
     }
 
     ///// Wifi Control /////
@@ -104,6 +103,14 @@ public class ConnectivityManager implements ServiceConnection {
      * @return True if request was successful, False otherwise
      */
     public boolean getWifiStationMode() {
+        if (gatewayBound) {
+            try {
+                return gateway.getWifiStationMode();
+            } catch (RemoteException e) {
+                Log.d(LOG_TAG,
+                        "Cannot request WifiStatioMode. Received exception: " + e.getMessage());
+            }
+        }
         return false;
     }
 
@@ -113,9 +120,17 @@ public class ConnectivityManager implements ServiceConnection {
      * @return True if request was successful, False otherwise
      */
     public boolean setWifiStationMode(WifiStationModeAidl mode) {
+        if (gatewayBound) {
+            try {
+                return gateway.setWifiStationMode(mode);
+
+            } catch (RemoteException e) {
+                Log.d(LOG_TAG, "Cannot request to set WifiStationMode. Received exception: "
+                                + e.getMessage());
+            }
+        }
         return false;
     }
 
     ///// End of Wifi Control /////
-
 }
