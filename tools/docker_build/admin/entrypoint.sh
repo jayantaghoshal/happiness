@@ -1,31 +1,23 @@
 #!/bin/bash
-
 # Copyright 2017 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
+set -ue
 
-# Verify required parameters
-[[ -z "${HOST_GID}" ]] && {
-    echo "HOST_GID env variable not defined!"
-    exit 1
-}
-
-[[ -z "${HOST_UID}" ]] && {
-    echo "HOST_UID env variable not defined!"
-    exit 1
-}
-
-[[ -z "${HOST_UNAME}" ]] && {
-    echo "HOST_UNAME env variable not defined!"
-    exit 1
-}
+if [[ $(id -u) = "${HOST_UID}" ]]; then
+    echo ""
+    echo "Fatal error, HOST_UID same as default docker UID"
+    echo "This should not happen, should only happen if host user id is equals to container default user id(root)."
+    echo "That means you are running user as root from host which you should never do."
+    echo "If this becomes a problem in future you need to modify the useradd below to involve usermod also."
+fi
 
 # Global parameters
 CONTAINER_USERNAME=ihu
-CONTAINER_GROUPNAME=ihu
 BUILD_ENV_SETUP="${REPO_ROOT_DIR}/build/envsetup.sh"
 VOLVO_ENV_SETUP="${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 BASHRC_FILE="/home/ihu/.bashrc"
 
+#Set PYTHONUSERBASE to to prevent using python site-packages in ~/.local from host
 PYTHONUSERBASE="/tmp/${CONTAINER_USERNAME}/.local"
 
 function Failed() {
@@ -33,46 +25,44 @@ function Failed() {
     exit 1
 }
 
-function GetDirOwner() {
-    set -o pipefail               # Turn on failing the command, if any command in pipe fails
+########################################################################################################################
+# Create user groups mirroring all the groups on host
+if [[ ${MIRROR_HOST_USER_AND_GROUPS} = 1 ]]; then
+    echo "Creating users and groups mirroring the host"
 
-    local dir="$1"
-    local owner
-    owner=$(stat "$dir" | egrep -o 'Uid: \([ \t]+[0-9]+\/[ \t]+[a-zA-Z0-9]+\)' | cut -d/ -f2)
-    local rc=$?
+    IFS=','
+    for group_id in $HOST_USER_GROUPS_COMMA_SEPARATED
+    do
+      # Get group name from group id
+      group_name=$(getent group "${group_id}" | cut -d : -f 1)
+      # If group does not exist create it
+      if [[ -z ${group_name} ]]; then
+        group_name=host-group-${group_id}
+        groupadd -g "${group_id}" "${group_name}" || Failed "groupadd failed for ${group_id}"
+      fi
+    done
+    unset IFS
 
-    set +o pipefail               # Turn off failing the command, if any command in pipe fails
-
-    [[ "$rc" == "0" ]] || return $rc
-    [[ -z "${owner}" ]] && return 1     # Unexpected output
-
-
-    # shellcheck disable=SC2086
-    echo ${owner::-1}             # Do not use quotes - variable will be trimmed automatically
-    return 0
-}
-
-# Add user (matching to the host user)
-id -g "${HOST_GID}" &>/dev/null || groupadd --gid "${HOST_GID}" "${CONTAINER_GROUPNAME}" ||
-    Failed "Creating group with group id ${HOST_GID} failed"
-
-id -u "${HOST_UID}" &>/dev/null || {
-    useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --home-dir "${HOME}" ${CONTAINER_USERNAME} ||
+    useradd --uid "${HOST_UID}" --gid "${HOST_GID}" --groups "${HOST_USER_GROUPS_COMMA_SEPARATED}" --home-dir "${HOME}" ${CONTAINER_USERNAME} ||
         Failed "Creating user with id ${HOST_UID} failed"
     adduser "$CONTAINER_USERNAME" sudo > /dev/null ||
         Failed "Adding user to sudo group failed"
-}
 
-# Create home directory if missing, used if volume $HOME is not mapped (i.e. CI)
-[[ ! -d "${HOME}" ]] && {
-    echo "Home directory (${HOME}) missing, will create..."
-    mkdir "${HOME}"
-    chown ${CONTAINER_USERNAME}:${CONTAINER_GROUPNAME} "${HOME}"
-}
 
-# Allow user to sudo
-echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    # Create home directory if missing, used if volume $HOME is not mapped (i.e. CI)
+    #TODO: This is probably deprecated, investigate if can be removed
+    [[ ! -d "${HOME}" ]] && {
+        echo "Home directory (${HOME}) missing, will create..."
+        mkdir "${HOME}"
+        chown ${CONTAINER_USERNAME}:"${HOST_GID}" "${HOME}"
+    }
 
+    # Allow user to sudo
+    echo "$CONTAINER_USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+fi
+
+
+########################################################################################################################
 # Prepare script - command which will be executed as a specified user
 # NOTE: This is tricky: Inside SCRIPT_FILE we source $BUILD/VOLVO_ENV_SETUP __before__ running $@,
 #       When running interactively $@ is equal to bash, and functions included from BUILD/VOLVO_ENV_SETUP are not inherited to the subshell.
@@ -100,36 +90,11 @@ else
   COMMAND_IN_DOCKER="$SCRIPT_FILE"
 fi
 
-# Add docker user to same groups as host user
-IFS='_'
-for group_id in $HOST_USER_GROUPS
-do
-  # Get group name from group id
-  group_name=$(getent group "${group_id}" | cut -d : -f 1)
-  # If group does not exists create it
-  if [[ -z ${group_name} ]]; then
-    group_name=host-group-${group_id}
-    groupadd -g "${group_id}" "${group_name}"
-  fi
-  # Add user to group
-  echo "Adding user ${CONTAINER_USERNAME} to group ${group_name}"
-  usermod -a -G "${group_name}" "$CONTAINER_USERNAME"
-done
-unset IFS
-
-# Take group ownership of /dev/ttyUSB* due to a change in docker version 17.12
-# which results in incorrect permissions in /dev
-for tty_file in /dev/ttyUSB*
-do
-  [ -e "$tty_file" ] || continue
-  sudo -E chgrp ${CONTAINER_USERNAME} "$tty_file"
-done
 
 sudo -E \
     -u "${CONTAINER_USERNAME}" \
     BASHRC_FILE="${BASHRC_FILE}" \
     BUILD_ENV_SETUP="$BUILD_ENV_SETUP" \
-    LD_LIBRARY_PATH="$LD_LIBRARY_PATH" \
     PATH=/sbin:"$PATH" \
     PYTHONUSERBASE="${PYTHONUSERBASE}" \
     ${COMMAND_IN_DOCKER}

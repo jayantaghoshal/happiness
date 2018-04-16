@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
+
+set -e
 
 WORKING_DIR="$(pwd)"
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")"; pwd)"
@@ -21,7 +23,8 @@ function _docker_system_prune()
     # environment, we ensure that the latest image
     # won't be deleted, everything else is wiped
     build_latest_img=$(python "${THIS_DIR}/get_image_rev.py" -I "${THIS_DIR}/image.ref")
-    docker system prune --force --filter "label!=org.label-schema.vcs-ref=${build_latest_img}" &> /dev/null
+    #TODO: Remove || true once we upgrade all NUCs to Docker 17.04 or later
+    docker system prune --force --filter "label!=org.label-schema.vcs-ref=${build_latest_img}" || true
     echo 'Cleaning docker engine'
 }
 
@@ -119,7 +122,8 @@ if [[ !  -z  $EXISTING_CONTAINERS && "${MULTIUSER}" != "true" ]]; then
         echo ">>> Interactive mode -- You will now be auto attached to the already running container <<<"
         echo ""
         echo -e "${C_OFF}"
-        docker exec --tty --interactive "${EXISTING_CONTAINER_ARRAY[0]}" /tmp/entrypoint.sh bash
+        #Don't do MIRROR_HOST_USER_AND_GROUPS, because we are reattching to a container that already did so
+        docker exec --tty --interactive --env MIRROR_HOST_USER_AND_GROUPS=0 "${EXISTING_CONTAINER_ARRAY[0]}" /tmp/entrypoint.sh bash
         exit 0
     fi
     echo -e "${C_OFF}"
@@ -133,9 +137,10 @@ if [[ ! -v USE_CCACHE ]]; then
   export USE_CCACHE=true
 fi
 
-# Get a underscore-separated list of group ids for the host user groups
+# Get a comma-separated list of group ids for the host user groups
+# Used by useradd inside entrypoint
 HOST_USER_GROUPS=$(id -G "$USER")
-HOST_USER_GROUPS=${HOST_USER_GROUPS// /_}
+HOST_USER_GROUPS_COMMA_SEPARATED=${HOST_USER_GROUPS// /,}
 
 
 INTERACTIVE_OPTS=""
@@ -167,9 +172,10 @@ docker run \
     --env CXX_WRAPPER \
     --env OUT_DIR \
     --env USE_CCACHE \
-    --env=HOST_USER_GROUPS="${HOST_USER_GROUPS}" \
+    --env=HOST_USER_GROUPS_COMMA_SEPARATED="${HOST_USER_GROUPS_COMMA_SEPARATED}" \
     --env=REPO_ROOT_DIR="${REPO_ROOT_DIR}" \
     --env=HOME="$HOME" \
+    --env=MIRROR_HOST_USER_AND_GROUPS=1 \
     --workdir "${WORKING_DIR}" \
     --privileged \
     --net=host \
