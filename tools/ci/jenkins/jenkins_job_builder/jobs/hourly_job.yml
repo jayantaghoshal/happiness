@@ -46,6 +46,7 @@
             event: all
             timeout: 10000
             log: 0
+
 - job:
     name: ihu_hourly
     project-type: multijob
@@ -128,17 +129,6 @@
             name: UPSTREAM_JOB
             project-name: ihu_hourly
             description: UPSTREAM_JOB can be used to fetch info about ihu_hourly.
-    properties:
-        #TODO: Duplicated from the hourly_job_defaults, don't know how to append things to the default.
-        - build-discarder:
-            days-to-keep: 30
-            artifact-days-to-keep: 30
-        - raw:
-            xml: |
-                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
-                    <autoRebuild>false</autoRebuild>
-                    <rebuildDisabled>false</rebuildDisabled>
-                </com.sonyericsson.rebuild.RebuildSettings>
     builders:
         - shell:
             !include-raw:
