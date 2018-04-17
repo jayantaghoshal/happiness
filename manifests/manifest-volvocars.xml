@@ -36,6 +36,9 @@
   <remove-project name="aosp/platform/frameworks/base"/>
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="09e2d83c5bbd6100a960a7d70b0a98274763b309"/>
 
+  <remove-project name="aosp/platform/packages/services/Car"/>
+  <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0d98a973977bdca0c44c3183b9408add5b1ed4cd" />
+
   <!-- Aptiv Overrides -->
   <remove-project name="vendor/delphi/android_patches" />
   <remove-project name="bsp/external/memtester" />
