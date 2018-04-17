@@ -62,7 +62,7 @@ cc_library_headers {
 
     defaults: [
         "volvocars_cc_defaults_hq_pac_debug",
-        "vcc_pac_early_app_common_dependencies",
+        "pac_early_app_common_dependencies",
     ],
 
     // Add the source directory to the include paths so the unit tests can find internal headers
