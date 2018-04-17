@@ -2,7 +2,7 @@ package com.volvocars.softwareupdate;
 
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
 import com.volvocars.softwareupdate.ISoftwareUpdateSettingsCallback;
-import com.volvocars.softwareupdate.Setting;
+
 import com.volvocars.cloudservice.Query;
 
 oneway interface ISoftwareUpdateManager {
@@ -54,6 +54,6 @@ oneway interface ISoftwareUpdateManager {
     * Set (OTA) setting
     * @param setting Setting to be set
     */
-     void SetSetting(in Setting setting);
+     void SetSetting(in String key, in boolean value);
 
 }

@@ -20,8 +20,9 @@ import android.os.RemoteException;
 import android.util.Log;
 import vendor.volvocars.hardware.installationmaster.V1_0.InstallationStatus;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import com.volvocars.cloudservice.DownloadInfo;
@@ -61,7 +62,7 @@ public class SoftwareUpdateService extends Service {
     private int state = 0; // Dummy state
 
     private ArrayList<SoftwareInformation> softwareInformationList;
-    private ArrayList<Setting> settings;
+    private Map<String, Boolean> settings;
 
     private SoftwareManagementApiCallback swapiCallback;
 
@@ -95,7 +96,7 @@ public class SoftwareUpdateService extends Service {
         swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
         swapiCallback = new SoftwareManagementApiCallback(this);
         softwareInformationList = new ArrayList();
-        settings = new ArrayList();
+        settings = new HashMap();
 
         installationMaster = new InstallationMaster(this);
         installationMaster.init();
@@ -130,7 +131,7 @@ public class SoftwareUpdateService extends Service {
         return softwareInformationList;
     }
 
-    public ArrayList<Setting> GetSettings() {
+    public Map<String, Boolean> GetSettings() {
         return settings;
     }
     public void GetSoftwareAssignment(Query query) {
@@ -261,16 +262,8 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void SetSetting(Setting setting) {
-        Log.w(LOG_TAG, "SetSetting not implemented... \n called with setting [type: " + setting.type.name() + ", value: " + setting.value + "]");
-        for (Setting s : settings) {
-            if (s.type == setting.type) {
-                s.value = setting.value;
-                return;
-            }
-        }
-
-        settings.add(setting);
+    public void SetSetting(String key, boolean value) {
+        settings.put(key, value);
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {

@@ -115,9 +115,9 @@ public class SoftwareUpdateManager implements ServiceConnection {
         }
     }
 
-    public void SetSetting(Setting setting) throws RemoteException {
+    public void SetSetting(String key, boolean value) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.SetSetting(setting);
+            softwareUpdateManager.SetSetting(key, value);
         }
     }
 }

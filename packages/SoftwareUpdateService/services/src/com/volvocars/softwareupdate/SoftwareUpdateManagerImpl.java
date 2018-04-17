@@ -17,6 +17,7 @@ import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
 import com.volvocars.softwareupdate.ISoftwareUpdateSettingsCallback;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -96,14 +97,20 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         }
     }
 
-    public void UpdateSettings(List<Setting> settings) {
+    public void UpdateSettings(Map<String, Boolean> settings) {
         Log.v(LOG_TAG, "Update settings");
 
         ArrayList<ISoftwareUpdateSettingsCallback> deadSettingsClients = new ArrayList();
 
         for (ISoftwareUpdateSettingsCallback c : settingClients) {
             try {
-                c.UpdateSettings(settings);
+                settings.forEach((key, value) -> {
+                    try {
+                        c.UpdateSetting(key, value);
+                    } catch (RemoteException e) {
+                        Log.w(LOG_TAG, "UpdateSettings RemoteException: " + e.getMessage());
+                    }
+                });
             } catch (Exception e) {
                 deadSettingsClients.add(c);
             }
@@ -127,8 +134,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
             } catch (RemoteException e) {
                 Log.v(LOG_TAG, "Could not call callback method " + callback);
             }
-        }
-        else {
+        } else {
             Log.v(LOG_TAG, "Already registered");
         }
     }
@@ -138,8 +144,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         Log.v(LOG_TAG, "Unregister SwUpd client (" + callback + ")");
         if (swUpdClients.contains(callback)) {
             swUpdClients.remove(callback);
-        }
-        else {
+        } else {
             Log.v(LOG_TAG, "Client not found when trying to unregister");
         }
     }
@@ -148,14 +153,15 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     public void RegisterSettingsClient(ISoftwareUpdateSettingsCallback callback) {
         Log.v(LOG_TAG, "Register settings client");
         if (!settingClients.contains(callback)) {
-            try {
-                callback.UpdateSettings(service.GetSettings());
-                settingClients.add(callback);
-            } catch (RemoteException e) {
-                Log.v(LOG_TAG, "Could not call callback method " + callback);
-            }
-        }
-        else {
+            service.GetSettings().forEach((key, value) -> {
+                try {
+                    callback.UpdateSetting(key, value);
+                } catch (RemoteException e) {
+                    Log.w(LOG_TAG, "UpdateSettings RemoteException: " + e.getMessage());
+                }
+            });
+            settingClients.add(callback);
+        } else {
             Log.v(LOG_TAG, "Already registered");
         }
     }
@@ -165,8 +171,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         Log.v(LOG_TAG, "Unregister settings client");
         if (settingClients.contains(callback)) {
             settingClients.remove(callback);
-        }
-        else {
+        } else {
             Log.v(LOG_TAG, "Client not found when trying to unregister");
         }
     }
@@ -197,7 +202,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void SetSetting(Setting setting) throws RemoteException {
-        service.SetSetting(setting);
+    public void SetSetting(String key, boolean value) throws RemoteException {
+        service.SetSetting(key, value);
     }
 }

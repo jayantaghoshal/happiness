@@ -133,12 +133,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     };
 
     private void updateAdapter() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
 
     /**
@@ -240,21 +235,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             return super.onOptionsItemSelected(item);
 
         }
-    }
-
-    private boolean sendSetSetting(Setting setting, boolean state) {
-        if (setting.value != state) {
-            Log.v(LOG_TAG, "State has changed to: " + state);
-            try {
-                softwareUpdateManager.SetSetting(setting);
-            } catch (RemoteException e) {
-                Log.w(LOG_TAG, "sendSetSetting: RemoteException: " + e.getMessage());
-            }
-        } else {
-            Log.v(LOG_TAG, "State has not changed... Nothing to do");
-        }
-
-        return setting.value;
     }
 
     public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
