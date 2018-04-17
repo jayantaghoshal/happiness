@@ -143,11 +143,11 @@ public class CSDConsumerManager {
         public void onPropertyEvent(ArrayList<VehiclePropValue> propValues) {
             for (VehiclePropValue propValue : propValues) {
                 if(propValue.prop == VehicleProperty.IGNITION_STATE){
-                    int ignitionState = propValues.get(0).value.int32Values.get(0);
+                    int ignitionState = propValue.value.int32Values.get(0);
                     onIgnitionChange(ignitionState);
                 }
                 else if(propValue.prop == VehicleProperty.AP_POWER_STATE){
-                    int vehicleApPowerState = propValues.get(0).value.int32Values.get(0);
+                    int vehicleApPowerState = propValue.value.int32Values.get(0);
                     onApPowerStateChange(vehicleApPowerState);
                 }
             }
