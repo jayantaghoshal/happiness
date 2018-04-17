@@ -16,6 +16,6 @@
         <option name="test-module-name" value="VtsDAISettingComponentTest"/>
         <option name="test-case-path" value="VtsDAISettingComponentTest"/>
         <option name="precondition-lshal" value="android.hardware.automotive.vehicle@2.0"/>
-        <option name="test-timeout" value="3m"/>
+        <option name="test-timeout" value="6m"/>
     </test>
 </configuration>

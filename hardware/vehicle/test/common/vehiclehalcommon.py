@@ -37,7 +37,7 @@ property_list = [
     ('LANE_KEEPING_AID_MODE', 557842443),
 ]
 
-def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec):
+def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
     # type: (FrSignalInterface, PydataElementsSenderType, int, int) -> None
 
     if fr_interface.connected:
