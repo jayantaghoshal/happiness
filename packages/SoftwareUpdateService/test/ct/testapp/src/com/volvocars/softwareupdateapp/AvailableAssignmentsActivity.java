@@ -8,6 +8,7 @@ package com.volvocars.softwareupdateapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.cloudservice.Query;
 import java.util.*;
@@ -97,11 +97,9 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
                 if (softwareBox.isChecked()) query.id = "" + softwarePicker.getValue();
                 if (installationOrderBox.isChecked()) query.installationOrderId = "" + installationOrderPicker.getValue();
 
-                Log.d(LOG_TAG, "QUERY: " + query.buildQuery());
-
                 try {
                     softwareUpdateManager.GetSoftwareAssignment(query);
-                    Toast.makeText(context, "Sending GetSoftwareAssignments", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.availableAssignmentsRootLayout), "Calling GetSoftwareAssignment" , Snackbar.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     //TODO: handle exception
                 }

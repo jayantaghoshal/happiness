@@ -5,6 +5,10 @@
 
 package com.volvocars.softwareupdateapp;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,12 +24,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
-import com.volvocars.cloudservice.*;
 import java.util.*;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -63,10 +67,14 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                 return;
             }
             Log.v(LOG_TAG, "SoftwareList:");
+            boolean available = false;
             swInfos.clear();
             for (SoftwareInformation si : software_list) {
                 Log.v(LOG_TAG, "" + si.toString());
                 swInfos.add(si);
+                if (si.softwareState == SoftwareState.AVAILABLE) {
+                    createNotification();
+                }
             }
 
             updateAdapter();
@@ -225,7 +233,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             startActivity(intent);
             return true;
         case R.id.simSignals:
-            Log.d(LOG_TAG, "SIM SINGALS");
             showPopupMenu((View) toolbar);
         default:
             // If we got here, the user's action was not recognized.
@@ -265,6 +272,37 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
     }
 
+    private void createNotification() {
+        NotificationManager mgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        //Create a notification channel (does the id need to be unique for the package?)
+        NotificationChannel notificationChannel = new NotificationChannel("12345", "softwareupdate",
+                NotificationManager.IMPORTANCE_HIGH);
+        mgr.createNotificationChannel(notificationChannel);
+
+        //Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "12345");
+
+        builder.setSmallIcon(R.drawable.ic_cloud_white_18dp); //mandatory setting
+        builder.setContentTitle("Software updates"); //mandatory setting
+        builder.setContentText("A new software update can be downloaded"); //mandatory setting
+
+        //Cancel notification on tap
+        builder.setAutoCancel(true);
+
+        int notificationId = 1111;
+        //Start main activity when the notification is tapped
+        Intent intent = new Intent(this, SoftwareUpdateApp.class);
+        //Cancel any pending intent that have already been fired when the user taps the notification
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        builder.setContentIntent(pendingIntent);
+        //Notify NotficationManager about the notification
+        Notification notification = builder.build();
+
+        mgr.notify(notificationId, notification);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -286,6 +324,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void commissionAssignment(String uuid) {
         try {
+            Snackbar.make(findViewById(R.id.rootLayout), "Calling CommissionAssignment(" + uuid + ")", Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.CommissionAssignment(uuid);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
@@ -295,6 +334,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void getInstallNotification(String installationOrderId) {
         try {
+            Snackbar.make(findViewById(R.id.rootLayout), "Calling GetInstallNotification(" + installationOrderId + ")", Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.GetInstallNotification(installationOrderId);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
@@ -304,6 +344,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void showInstallationPopup(String installationOrderId) {
         try {
+            Snackbar.make(findViewById(R.id.rootLayout), "Calling ShowInstallationPopup(" + installationOrderId + ")", Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.ShowInstallationPopup(installationOrderId);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());

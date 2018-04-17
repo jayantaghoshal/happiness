@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.util.Log;
 import com.volvocars.softwareupdate.SoftwareInformation;
 
@@ -104,15 +103,12 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             switch (menuItem.getItemId()) {
             case R.id.commission:
                 softwareUpdateApp.commissionAssignment(swInfo.softwareId);
-                Toast.makeText(context, "Commissioning \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.installNotification:
                 softwareUpdateApp.getInstallNotification(swInfo.installationId);
-                Toast.makeText(context, "Get install notification \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.showPopup:
                 softwareUpdateApp.showInstallationPopup(swInfo.installationId);
-                Toast.makeText(context, "Show installation popup \"" + swInfo.name + "\"", Toast.LENGTH_SHORT).show();
                 return true;
             default:
             }
