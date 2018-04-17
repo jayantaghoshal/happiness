@@ -173,3 +173,8 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 endif
 
 ##############################################################
+# Set white-listning of packages
+##############################################################
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/extra_files/platformxml/platform.xml:system/etc/permissions/vcc_platform.xml
+
+##############################################################
