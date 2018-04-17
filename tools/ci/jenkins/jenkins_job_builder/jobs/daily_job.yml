@@ -83,6 +83,7 @@
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_daily_test_common.sh
     notifications:
         - http:
@@ -153,6 +154,7 @@
             !include-raw:
                 - bootstrap_ihu_daily_common.sh
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_daily_vts.sh
     notifications:
         - http:

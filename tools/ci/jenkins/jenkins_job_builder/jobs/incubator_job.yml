@@ -61,6 +61,7 @@
         - shell:
             !include-raw:
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_staging_test_common.sh
 
 - job:

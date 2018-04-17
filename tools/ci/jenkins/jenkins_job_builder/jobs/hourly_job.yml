@@ -183,6 +183,7 @@
         - shell:
             !include-raw:
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_hourly_test_common.sh
     publishers:            
         - raw:
@@ -221,6 +222,7 @@
         - shell:
             !include-raw:
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_hourly_test_common.sh
 
 - job:
@@ -251,6 +253,7 @@
         - shell:
             !include-raw:
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_hourly_test_common.sh
 
 - job:
@@ -281,4 +284,5 @@
         - shell:
             !include-raw:
                 - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_hourly_test_common.sh
