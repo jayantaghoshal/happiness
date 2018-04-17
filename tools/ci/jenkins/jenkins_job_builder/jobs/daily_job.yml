@@ -458,7 +458,7 @@
                     <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
                         <bindings>
                             <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
-                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <credentialsId>E9426001_SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
                         </bindings>
@@ -501,7 +501,7 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>ihu_daily_build_vcc_eng</customProjectName>
+                <customProjectName>ihu_deliver_to_infotainment</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 

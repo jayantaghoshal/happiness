@@ -33,6 +33,6 @@ rm -rf "${REPO_ROOT_DIR}"/out/*.zip
 python "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/change_vbf_file_name.py "${REPO_ROOT_DIR}"/out
 
 # Publish VBF using SWAT
-python "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/publish_using_swat.py "${REPO_ROOT_DIR}"/out
+python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/publish_using_swat.py "${REPO_ROOT_DIR}"/out
 
 rm -rf "${REPO_ROOT_DIR}"/out
