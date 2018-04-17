@@ -189,6 +189,12 @@ RUN apt-get install -y \
     python3-tk
 
 ##################################################
+# Tools required for Audio testing using Ref-channel
+RUN apt-get install -y \
+    sox \
+    aubio-tools
+
+##################################################
 # Tools required for Cloud Simulation
 
 # Nodejs 6 required for running the timezone boundary builder script

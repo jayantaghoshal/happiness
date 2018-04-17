@@ -75,7 +75,6 @@ invite the CI-team for code review.
 ### How to build the docker image locally without pulling from artifactory
 
 Update the image configuration and build it:
-
 ```bash
 vendor/volvocars/tools/docker_build/admin/create_docker_image.sh
 ```
@@ -107,6 +106,10 @@ When you have verified the image you can now push it to Artifactory. The <CHANGE
 ```bash
 vendor/volvocars/tools/docker_build/admin/push.sh <CHANGE ID>
 ```
+#### If you need to update the new image
+If you have pushed a new Image and updated the image.ref and the CI environment have run one or more job with this image, any updates needs to be commited with a new change id! If you upload several images with the same change id, there is a risk that the test system will be stuck with an older version(?)
+
+How-to: Do 'git commit --amend', change the change id randomly, and do 'git review' / 'git push ...', and you will get a 'copy' of the commit in gerrit. Update image.ref with new change-id, REBUILD the docker image (should be fast as nothing has changed), commit & push image.ref and upload/push new docker image to artifactory. Don't forget to abandon the old gerrit change.
 
 ### How to pull image from artifactory
 (Not needed since run.sh does this automatically)
