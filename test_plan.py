@@ -57,6 +57,7 @@ test_plan_nightly = test_plan_hourly + [
 
 #Put stable tests here so they can be tested often and then added to our gates
 test_plan_incubator_hourly = [
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps), # Chrsitoffer Östlin
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
@@ -104,7 +105,6 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/tools/test/log_analyzer",                                            standard_caps), #Erik Elmeke
     TradefedTest("vendor/volvocars/packages/ConnectivityManager/test/ct/ConnectivityManagerRelayApp",   standard_caps), #Patrik Ingmarsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps),
     AndroidVTS("VtsHalAudioV2_0Target",                                             standard_caps), #Gustav Svensson
     AndroidVTS("VtsHalBroadcastradioV1_0Target",                                    standard_caps), #Gustav Svensson
     AndroidVTS("VtsHalMediaOmxV1_0Host",                                            standard_caps), #Gustav Svensson

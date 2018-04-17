@@ -159,6 +159,11 @@ def load_test_results(test, test_result: ResultData):
         for filename in glob.iglob(result_dir + '**/test_result.xml', recursive=True):
             test_detail = parse_vts_result_xml(filename, test_detail)
 
+        try:
+            test_detail["kpis"] = test_result.test_kpis
+        except Exception:
+            test_detail["kpis"] = ""
+
     elif isinstance(test, TradefedTest):
 
         test_detail["test_type"] = "tradefed"

@@ -41,6 +41,9 @@ class VtsCiSmokeTestWithBootTime(ihu_base_test.IhuBaseTestClass):
         boot_time = float(re.findall('\n(\d{3,5})\n', shell_response[const.STDOUT][0])[-1])
         boot_time = boot_time / 100.0
         logging.info("The android boot time is: " + str(boot_time) + " s")
+
+        self.write_kpi("bootchart_boot_time", boot_time, "s")
+
         asserts.assertLess(boot_time, max_boot_time, "Boot time longer than the maximum allowed {} s".format(max_boot_time / 100))
         self.dut.shell.one.Execute("rm /data/bootchart/enabled")
         self.dut.shell.one.Execute("rm /data/bootchart/proc_stat.log")
