@@ -10,6 +10,7 @@ import logging
 import logging.config
 import json
 import shutil
+import sys
 
 from shipit.serial_mapping import open_serials, swap_serials, PortMapping, VipSerial, MpSerial, IhuSerials
 from shipit import serial_mapping
@@ -494,17 +495,19 @@ def main() -> None:
 
     port_mapping = PortMapping(parsed_args.mp_port, parsed_args.vip_port)
 
-    try:
-        flash_image(port_mapping=port_mapping,
-                    android_product_out=android_product_out,
-                    update_mp=parsed_args.update_mp,
-                    force_update_vip=parsed_args.force_update_vip,
-                    force_update_abl=parsed_args.force_update_abl,
-                    disable_verity=parsed_args.disable_verity)
-    except Exception as ex:
-        logger.error("Update failed exception", exc_info=True)
-        logger.error("\r\n\r\n\r\nUpdate failed with error:{}".format(ex))
+    flash_image(port_mapping=port_mapping,
+                android_product_out=android_product_out,
+                update_mp=parsed_args.update_mp,
+                force_update_vip=parsed_args.force_update_vip,
+                force_update_abl=parsed_args.force_update_abl,
+                disable_verity=parsed_args.disable_verity)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        sys.exit(0)
+    except Exception as ex:
+        logger.error("Update failed exception", exc_info=True)
+        logger.error("\r\n\r\n\r\nUpdate failed with error:{}".format(ex))
+        sys.exit(1)
