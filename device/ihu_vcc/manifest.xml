@@ -103,6 +103,14 @@
             <name>ISystemRemoteAudioCtrl</name>
             <instance>default</instance>
         </interface>
+        <interface>
+            <name>IRemoteCtrlProperty</name>
+            <instance>default</instance>
+        </interface>
+        <interface>
+            <name>IRemoteCtrlPropertyResponse</name>
+            <instance>default</instance>
+        </interface>
     </hal>
         <hal format="hidl">
         <name>vendor.volvocars.hardware.connectivitymanager</name>

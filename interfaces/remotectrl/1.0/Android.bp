@@ -6,9 +6,12 @@ hidl_interface {
     srcs: [
         "types.hal",
         "INativeRemoteAudioCtrl.hal",
+        "IRemoteCtrlProperty.hal",
+        "IRemoteCtrlPropertyResponse.hal",
         "ISystemRemoteAudioCtrl.hal",
     ],
     interfaces: [
+        "android.hardware.automotive.vehicle@2.0",
         "android.hidl.base@1.0",
     ],
     types: [
