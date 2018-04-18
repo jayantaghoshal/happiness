@@ -33,7 +33,7 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
         systemManager = sysMan;
     }
 
-    public void notifyWifiStationModeChange(byte mode) {
+    public synchronized void notifyWifiStationModeChange(byte mode) {
         if (subscribers.isEmpty()) {
             return;
         }
@@ -66,7 +66,7 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
      * Register a manager interface to receive broadcasted updates.
      */
     @Override
-    public void registerManager(IConnectivityManager manager) {
+    public synchronized void registerManager(IConnectivityManager manager) {
         subscribers.add(manager);
         return;
     }
