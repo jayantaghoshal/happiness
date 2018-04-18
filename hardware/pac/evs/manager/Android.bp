@@ -9,6 +9,7 @@ cc_defaults {
     defaults: [
         "volvocars_cc_defaults_hq_pac_debug",
         "vcc_pac_use_evs_hidl",
+        "vcc_pac_use_libdbg",
     ],
 
     local_include_dirs: [
@@ -56,6 +57,8 @@ cc_library_static {
 
     srcs: [
         "src/evs_enumerator.cpp",
+        "src/evs_camera_stream.cpp",
+        "src/virtual_camera.cpp",
     ],
 
     export_include_dirs: [
@@ -68,7 +71,6 @@ cc_binary {
 
     defaults: [
         "vcc_pac_manager_defaults",
-        "vcc_pac_use_libdbg",
         "vcc_pac_use_libpacconfig",
     ],
 

@@ -9,10 +9,13 @@ cc_test {
     defaults: [
         "volvocars_cc_defaults_hq_tests_pac_vts",
         "vcc_pac_use_evs_hidl",
+        "vcc_pac_use_libdbg",
     ],
 
     srcs: [
         "test_evs_enumerator.cpp",
+        "test_evs_camera_stream.cpp",
+        "test_virtual_camera.cpp",
     ],
 
     header_libs: [
