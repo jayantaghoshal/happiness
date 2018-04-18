@@ -33,7 +33,7 @@ bool SignalHandler::RequestWifiStationMode() {
 
 bool SignalHandler::RequestSetWifiStationMode(conman_hal_v1_0::WifiStationMode mode) {
     ALOGV("%s", __FUNCTION__);
-    ALOGW("Not Implemented, returning dummy value");
+    ALOGW("Not Implemented, returning dummy value: %hhu", mode);
 
     if (auto spt = connectivity_manager_.lock()) {
         spt->NotifyWifiStationMode(mode);

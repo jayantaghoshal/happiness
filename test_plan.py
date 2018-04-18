@@ -96,10 +96,11 @@ test_plan_staging_daily = [
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
     # a reboot.
-    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
-    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests", standard_caps), #Tobias Ohrstrom
-    TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",         standard_caps), #Patrik Ingmarsson
-    TradefedTest("vendor/volvocars/tools/test/log_analyzer",                        standard_caps), #Erik Elmeke
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ct/BrightnessServiceTests",          standard_caps), #Tobias Ohrstrom
+    TradefedTest("vendor/volvocars/packages/BrightnessService/test/ut/BrightnessServiceTests",          standard_caps), #Tobias Ohrstrom
+    TradefedTest("vendor/volvocars/packages/CloudService/test/ut/services",                             standard_caps), #Patrik Ingmarsson
+    TradefedTest("vendor/volvocars/tools/test/log_analyzer",                                            standard_caps), #Erik Elmeke
+    TradefedTest("vendor/volvocars/packages/ConnectivityManager/test/ct/ConnectivityManagerRelayApp",   standard_caps), #Patrik Ingmarsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ut",           standard_caps), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps),
     AndroidVTS("VtsHalAudioV2_0Target",                                             standard_caps), #Gustav Svensson

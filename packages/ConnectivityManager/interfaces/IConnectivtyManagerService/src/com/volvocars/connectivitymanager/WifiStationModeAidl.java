@@ -43,7 +43,7 @@ public class WifiStationModeAidl implements Parcelable {
 
     @Override
     public String toString() {
-        String string = "";
+        String string = mode.toString();
         return string;
     }
 

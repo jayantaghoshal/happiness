@@ -19,7 +19,6 @@ import android.util.Log;
 import com.volvocars.connectivitymanager.WifiStationModeAidl;
 import com.volvocars.connectivitymanager.relay.IConnectivityManagerRelay;
 
-
 /**
 *
 */
@@ -36,9 +35,7 @@ public class ConnectivityManagerRelay extends IConnectivityManagerRelay.Stub {
     @Override
     public void registerCallback(IConnectivityManagerRelayCallback callback) {
         Log.v(LOG_TAG, "registerCallback");
-        if (null == this.callback) {
-            this.callback = callback;
-        }
+        this.callback = callback;
     }
 
     ///// Wifi Control /////

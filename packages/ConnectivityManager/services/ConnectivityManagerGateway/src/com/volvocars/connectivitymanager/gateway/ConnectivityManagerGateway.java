@@ -25,7 +25,7 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
     private static final String LOG_TAG = "ConManGw.";
     private SystemConnectivityManager systemManager = null;
 
-    private ArrayList<IConnectivityManager> subscribers;
+    private ArrayList<IConnectivityManager> subscribers = new ArrayList<IConnectivityManager>();
 
     public ConnectivityManagerGateway() {}
 
@@ -40,12 +40,15 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
 
         WifiStationModeAidl stationMode = new WifiStationModeAidl();
         switch (mode) {
-            case WifiStationMode.UNKNOWN:
-                stationMode.mode = WifiStationModeAidl.Mode.UNKNOWN;
             case WifiStationMode.AP_MODE:
                 stationMode.mode = WifiStationModeAidl.Mode.AP_MODE;
+                break;
             case WifiStationMode.STATION_MODE:
                 stationMode.mode = WifiStationModeAidl.Mode.STATION_MODE;
+                break;
+            case WifiStationMode.UNKNOWN:
+            default:
+                stationMode.mode = WifiStationModeAidl.Mode.UNKNOWN;
         }
 
         ListIterator<IConnectivityManager> it = subscribers.listIterator();
@@ -87,12 +90,15 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
     public boolean setWifiStationMode(WifiStationModeAidl mode) {
         byte hidlMode = WifiStationMode.UNKNOWN;
         switch (mode.mode) {
-            case UNKNOWN:
-                hidlMode = WifiStationMode.UNKNOWN;
             case AP_MODE:
                 hidlMode = WifiStationMode.AP_MODE;
+                break;
             case STATION_MODE:
                 hidlMode = WifiStationMode.STATION_MODE;
+                break;
+            case UNKNOWN:
+            default:
+                hidlMode = WifiStationMode.UNKNOWN;
         }
         return systemManager.setWifiStationMode(hidlMode);
     }
