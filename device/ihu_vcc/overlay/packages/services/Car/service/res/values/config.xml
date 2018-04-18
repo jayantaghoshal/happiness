@@ -31,4 +31,11 @@
     <!-- Default home activity -->
     <string name="defaultHomeActivity">com.volvocars.launcher/com.volvocars.launcher.volvo.MainActivity</string>
 
+    <!-- The name of an activity to be launched by CarService whenever it detects a change in the
+         level of wear of the flash storage. Value must either be an empty string, which means that
+         no activity shall be launched, or must be in the format of a flattened ComponentName and
+         reference a valid activity. It is strongly recommended that the chosen activity be
+         protected with the android.car.permission.STORAGE_MONITORING permission. -->
+    <string name="activityHandlerForFlashWearChanges"></string>
+
 </resources>
