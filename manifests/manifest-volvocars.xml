@@ -7,7 +7,7 @@
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="b7f5cd3e7cb4de36234c6ef68b2a7176f453b58a" />
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ea38bd4cce7140325780d8a262fc88b55b35034e" />
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="15989ab31bf158c20c63437a490d669b5c60422f" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="d61b7d646b94b478c6814c56c5d31444cc177da7" />
 
@@ -34,7 +34,7 @@
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
 
   <remove-project name="aosp/platform/frameworks/base"/>
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="09e2d83c5bbd6100a960a7d70b0a98274763b309"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="eb0be98d489ba463291bbed6ed94dd9b9aeb11da"/>
 
   <remove-project name="aosp/platform/packages/services/Car"/>
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0d98a973977bdca0c44c3183b9408add5b1ed4cd" />
