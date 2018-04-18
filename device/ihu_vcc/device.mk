@@ -31,6 +31,8 @@ PRODUCT_PACKAGES += \
     vendor.volvocars.hardware.settingsstorage@1.0-service \
     installationmasterd \
     android.hardware.automotive.evs.vcc@1.0-hardware \
+    android.hardware.automotive.evs.vcc@1.0-manager \
+    pac_early_app \
     remotectrl_routerd \
     remotectrl_audioctrld \
     connectivitymanagerd \
