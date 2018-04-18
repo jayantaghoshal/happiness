@@ -48,12 +48,18 @@ then
 fi
 export capability
 
+ci_reporting=""
+if [ "${JOB_NAME}" != "ihu_check_test" ]
+then
+    ci_reporting="--ci_reporting"
+fi
+export ci_reporting
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
     --plan=gate \
-    --ci_reporting \
+    ${ci_reporting} \
     --update_ihu \
     --abort-on-first-failure \
     -c ihu-generic adb mp-serial vip-serial ${capability} \

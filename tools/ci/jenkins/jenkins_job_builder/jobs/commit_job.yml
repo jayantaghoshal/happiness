@@ -204,6 +204,47 @@
                 - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_gate_test.sh
 
+- job:
+    name: ihu_check_build
+    defaults: commit_job_defaults
+    node: gate_build
+    workspace: /mnt/ramdisk/ihu_gate_build
+    builders:
+        - shell:
+            !include-raw:
+                - bootstrap_ihu_gate_build_stage.sh
+                - bootstrap_ihu_gate_build.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_check_build</customProjectName>
+                <customPrefix>CommitGate</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+
+- job:
+    name: ihu_check_test
+    defaults: commit_job_defaults
+    node: gate_test-generic
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell:
+            !include-raw:
+                - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_gate_test.sh
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_check_test</customProjectName>
+                <customPrefix>CommitGate</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
 - project:
     name: ihu
     node: master
