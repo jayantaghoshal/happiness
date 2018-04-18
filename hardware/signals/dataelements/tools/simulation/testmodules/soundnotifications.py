@@ -7,3 +7,4 @@ def init(app):
     app.add_sender_element("CllsnFwdWarnReq")
     app.add_sender_element("EpbLampReq")
     app.add_sender_element("VehSpdLgtSafe")
+    app.add_sender_element("BrkRelsWarnReq")

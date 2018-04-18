@@ -12,7 +12,7 @@ using namespace ApplicationDataElement;
 using namespace autosar;
 
 #undef LOG_TAG
-#define LOG_TAG "SoundNotifyTurnInd"
+#define LOG_TAG "SoundNotifyBeltRmndr"
 
 namespace SoundNotifications {
 BeltReminder::BeltReminder()
@@ -60,5 +60,6 @@ void BeltReminder::injectSignals(S bltSnd) {
     } else if (bltSnd.value() == Trig1::NoTrig && lastPlayedSound.isValid) {
         SoundWrapper::stop(lastPlayedSound);
     }
-}  // namespace SoundNotifications
+}
+
 }  // namespace SoundNotifications

@@ -8,6 +8,7 @@
 
 #include "soundwrapper.h"
 
+#include "accbrakerelease.h"
 #include "beltreminder.h"
 #include "parking_brake.h"
 #include "turnindicator.h"
@@ -34,6 +35,10 @@ int32_t main(int argc, char* argv[]) {
     (void)parkingBreakModule;
     auto beltReminderModule = std::unique_ptr<SoundNotifications::BeltReminder>(new SoundNotifications::BeltReminder());
     (void)beltReminderModule;
+
+    auto accBrakeReleaseModule = std::unique_ptr<SoundNotifications::ACCBrakeReleaseWarning>(
+            new SoundNotifications::ACCBrakeReleaseWarning());
+    (void)accBrakeReleaseModule;
 
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
     android::hardware::joinRpcThreadpool();
