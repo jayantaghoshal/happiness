@@ -60,6 +60,7 @@ test_plan_incubator_hourly = [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
+    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting", standard_caps | {cp.flexray}), #Martin Stigels
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -90,7 +91,6 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests", standard_caps), #Abhijeet Shirolikar
-    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting", standard_caps | {cp.flexray}), #Martin Stigels
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set

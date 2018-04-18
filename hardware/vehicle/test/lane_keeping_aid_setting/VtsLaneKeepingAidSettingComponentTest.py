@@ -72,12 +72,12 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getViewClient()
+        vc, device = vHalCommon.getActiveViewClient()
         vc.dump(window=-1)
 
         # Find buttons. They shall be disabled when CC is disabled.
-        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off, 5)
-        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on, 5)
+        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off)
+        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
         asserts.assertEqual(buttonOff.__getattr__('enabled')(),False, "Off button info button is not disabled")
@@ -100,15 +100,15 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getViewClient()
+        vc, device = vHalCommon.getActiveViewClient()
         vc.dump(window=-1)
 
         LANE_KEEPING_AID_ON = vHalCommon.get_id('LANE_KEEPING_AID_ON')
         LANE_KEEPING_AID_MODE = vHalCommon.get_id('LANE_KEEPING_AID_MODE')
 
         # Get buttons. They shall be enabled if CC is enabled
-        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off, 5)
-        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on, 5)
+        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off)
+        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
 
@@ -120,115 +120,125 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(buttonOff.__getattr__('enabled')(),True, "Off button is disabled")
         asserts.assertEqual(buttonOn.__getattr__('enabled')(),True, "On button is disabled")
 
-        buttonOn.touch()
-
         # ----------------------------------------------------------------------------------------------------------
         # Test active state
         # ----------------------------------------------------------------------------------------------------------
 
-        print("----------- PRE UsgModSts ACTIVE -----------")
+        # print("----------- PRE UsgModSts ACTIVE -----------")
 
         # UsgModSts ACTIVE
         # LaneKeepAidActvSts ON or OFF
-        fr.LaneKeepAidSts.send_repetitive(LaneKeepAidSts.map.On)
+        # fr.LaneKeepAidSts.send_repetitive(LaneKeepAidSts.map.On)
 
-        fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        vc.sleep(waitTimeSeconds)
-        currentLKAMode = vHalCommon.getVhalInt32(LANE_KEEPING_AID_MODE)
+        # fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
+        # wait_for_signal(fr, fr.UsgModSts, fr.UsgModSts.map.UsgModDrvg, 3)
+        # fr.LaneKeepAidSts.stop_send()
 
-        buttonOff.touch()
-        vc.sleep(waitTimeSeconds)
-        vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, False)
-        # Mode should be the default.
-        vHalCommon.assertVhalInt32Equal(currentLKAMode, LANE_KEEPING_AID_MODE)
-        wait_for_signal(fr, fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.Off, 3)
+        # vc.sleep(waitTimeSeconds)
+        # currentLKAMode = vHalCommon.getVhalInt32(LANE_KEEPING_AID_MODE)
 
-        buttonOn.touch()
-        vc.sleep(waitTimeSeconds)
-        vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, True)
-        vHalCommon.assertVhalInt32Equal(currentLKAMode, LANE_KEEPING_AID_MODE)
-        wait_for_signal(fr,fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.On, 3)
+        # buttonOff.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, False)
+        # # Mode should be the default.
+        # vHalCommon.assertVhalInt32Equal(currentLKAMode, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr, fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.Off, 3)
+
+        # buttonOn.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, True)
+        # vHalCommon.assertVhalInt32Equal(currentLKAMode, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr,fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.On, 3)
 
         # ----------------------------------------------------------------------------------------------------------
         # Test not_active state
         # ----------------------------------------------------------------------------------------------------------
 
-        print("----------- PRE UsgModSts NOT_ACTIVE -----------")
+        # print("----------- PRE UsgModSts NOT_ACTIVE -----------")
 
         # UsgModSts NOT_ACTIVE
         # LaneKeepAidActvSts ON/OFF
-        fr.UsgModSts.send(UsgModSts.map.UsgModInActv)
-        vc.sleep(waitTimeSeconds)
+        # fr.UsgModSts.send_repetitive(UsgModSts.map.UsgModInActv)
+        # vc.sleep(waitTimeSeconds)
 
-        buttonOff.touch()
-        vc.sleep(waitTimeSeconds)
+        # buttonOff.touch()
+        # vc.sleep(waitTimeSeconds)
 
-        vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, 0)
-        wait_for_signal(fr,fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.Off, 3)
+        # m = vHalCommon.getVhalInt32(LANE_KEEPING_AID_MODE)
+        # print("mode -> ") + str(m)
+        # vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, 0)
+        # vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)   # Default value
+        # print("post mode A")
+        # # wait_for_signal(fr,fr.LaneKeepAidActvSts, fr.LaneKeepAidActvSts.map.Off, 3)
+
+        # fr.UsgModSts.stop_send()
+
 
         # ----------------------------------------------------------------------------------------------------------
         # Test LKA Modes
         # ----------------------------------------------------------------------------------------------------------
 
-        fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        vc.sleep(waitTimeSeconds)
+        # fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
+        # vc.sleep(waitTimeSeconds)
 
         buttonOn.touch()
-        vc.sleep(waitTimeSeconds)
 
-        buttonBoth = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_both, 5)
-        buttonSteering = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_steering, 5)
-        buttonSound = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_sound, 5)
+        buttonBoth = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_both)
+        buttonSteering = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_steering)
+        buttonSound = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_sound)
         print("buttonBoth -> ") + str(buttonBoth)
         print("buttonSteering -> ") + str(buttonSteering)
         print("buttonSound -> ") + str(buttonSound)
+        asserts.assertNotEqual(None, buttonBoth)
+        asserts.assertNotEqual(None, buttonSteering)
+        asserts.assertNotEqual(None, buttonSound)
 
-        buttonBoth.touch()
-        vc.sleep(waitTimeSeconds)
-        vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)
 
-        buttonSteering.touch()
-        vc.sleep(waitTimeSeconds)
-        vHalCommon.assertVhalInt32Equal(1, LANE_KEEPING_AID_MODE)
+        # buttonBoth.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.WarnAndIntv, 5)
 
-        wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.Intv, 5)
+        # buttonSteering.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assertVhalInt32Equal(1, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.Intv, 5)
 
-        buttonSound.touch()
-        vc.sleep(waitTimeSeconds)
-        vHalCommon.assertVhalInt32Equal(2, LANE_KEEPING_AID_MODE)
-
-        wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.Warn, 5)
+        # buttonSound.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assertVhalInt32Equal(2, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.Warn, 5)
 
         # WarnTypForLaneKeepAidSts.Hptc shall always be sent
-        wait_for_signal(fr,fr.WarnTypForLaneKeepAidSts, fr.WarnTypForLaneKeepAidSts.map.Hptc, 3)
+        # wait_for_signal(fr,fr.WarnTypForLaneKeepAidSts, fr.WarnTypForLaneKeepAidSts.map.Hptc, 3)
 
 
-        fr.LaneKeepAidSts.stop_send()
+        # fr.LaneKeepAidSts.stop_send()
 
 
         # ----------------------------------------------------------------------------------------------------------
         # Test System Error
         # ----------------------------------------------------------------------------------------------------------
-        print("UsgModSts ACTIVE and system error")
+        # print("UsgModSts ACTIVE and system error")
 
-        # UsgModSts ACTIVE
-        # LaneKeepAidActvSts ON or OFF
-        fr.LaneKeepAidSts.send_repetitive(LaneKeepAidSts.map.SrvRqrd)
-        fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        vc.sleep(waitTimeSeconds)
+        # # UsgModSts ACTIVE
+        # # LaneKeepAidActvSts ON or OFF
+        # fr.LaneKeepAidSts.send_repetitive(LaneKeepAidSts.map.SrvRqrd)
+        # fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
+        # vc.sleep(waitTimeSeconds)
 
-        # On/Off shall be Off and LKA mode shall be the default (0) on System error.
-        vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, False)
-        vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)
+        # wait_for_signal(fr,fr.IntvAndWarnModForLaneKeepAidSts, fr.IntvAndWarnModForLaneKeepAidSts.map.WarnAndIntv, 5)
 
-        fr.LaneKeepAidSts.stop_send()
+        # # On/Off shall be Off and LKA mode shall be the default (0) on System error.
+        # vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, False)
+        # vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)
 
-        # ----------------------------------------------------------------------------------------------------------
-        # All tests done
-        # ----------------------------------------------------------------------------------------------------------
-        # Close applicationa and go back to home screen
-        self.dut.adb.shell('input keyevent 3')
-        vc.sleep(waitTimeSeconds)
+        # # Mode shall not be modified from default value.
+        # buttonSound.touch()
+        # vc.sleep(waitTimeSeconds)
+        # vHalCommon.assertVhalInt32Equal(0, LANE_KEEPING_AID_MODE)
+
+        # fr.LaneKeepAidSts.stop_send()
 
 if __name__ == "__main__":
     test_runner.main()

@@ -204,7 +204,7 @@ class VehicleHalCommon():
 
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
     def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10):
-        vc, device = self.getViewClient()
+        vc, device = self.getActiveViewClient()
         print("Searching for view with id -> ") + str(text)
         for n in range(maxFlings):
             vc.dump(-1)
