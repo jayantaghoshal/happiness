@@ -230,31 +230,22 @@ Troubleshooting:
                 logger.info("Waiting for ABL update confirmation")
                 mp.expect_line("Update time:.*", timeout_sec=120)
                 logger.info("ABL update completed.")
-            except serial_mapping.ExpectedResponseNotPresentError as ex:
+            except serial_mapping.ExpectedResponseNotPresentError as exp:
                 raise RuntimeError("Failed for confirm reboot or ABL self update,\r\n"
                                    "with exception message {}\r\n"
                                    "Consider reporting bug and ensuring you ABL is correct by running script"
-                                   "with --update-mp=false and --force-abl-update true".format(ex))
+                                   "with --update-mp=false and --force-abl-update true".format(exp))
 
-            logger.info("Flashing was done in PBL, going to application for subsequent boot")
-            vip.writeline("sm restart")  # just restart to app
+            try:
+                logger.info("Waiting for 30 seconds for sth looking like MP bootup")
+                mp.expect_line("Loader: Launch VMM", timeout_sec=30)
+            except serial_mapping.ExpectedResponseNotPresentError:
+                logger.error("Failed to boot after initial startup, sth around fastboot reboot command is broken\r\n"
+                             "will try to restart manually...")
 
-            if vip.is_vip_app(timeout_sec=60):
-                if profile_flags.sm_alw_1_s:
-                    vip.writeline("sm alw 1 s")
-                else:
-                    vip.writeline("sm alw 1")
-                vip.expect_line(".*SysM- Always_On: 1.*", 15)
+                reboot_vip_into_app(profile_flags, vip)
 
-            elif vip.is_vip_pbl():
-                vip.writeline("sm st_off")
-                vip.expect_line(".*Disabling startup timer.*", 15)
-
-                # we are probably in PBL becouse of VIP auto update
-                logger.warning("VIP is in PBL after reboot, if booting fails please rerun with: "
-                                   "--update-mp false --force-update-vip true")
-
-            wait_for_boot_and_flashing_completed(timeout_sec=15 * 60)
+            wait_for_boot_and_flashing_completed(profile_flags, vip, timeout_sec=15 * 60)
 
             logger.info("Boot and postboot operations completed, current properties:")
             dump_props()
@@ -281,7 +272,7 @@ Troubleshooting:
             logger.info("Flashing VIP")
 
             reboot_vip_into_pbl(vip)
-            ensure_mp_mode_for_force_vip_flashing(ihu_serials)
+            ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
 
             output = run(['adb',
                           "shell",
@@ -292,7 +283,7 @@ Troubleshooting:
             logger.info("VIP PBL update finished with result %s", output)
 
             reboot_vip_into_pbl(vip)
-            ensure_mp_mode_for_force_vip_flashing(ihu_serials)
+            ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
 
             output = run(['adb',
                           "shell",
@@ -307,7 +298,7 @@ Troubleshooting:
             logger.info("New VIP APP booted successfully")
 
             wait_for_device_adb()
-            wait_for_boot_and_flashing_completed()
+            wait_for_boot_and_flashing_completed(profile_flags, vip)
             logger.info("MP booted successfully with new VIP APP")
 
         else:
@@ -340,17 +331,69 @@ Troubleshooting:
         mp.close()
 
 
-def reboot_vip_into_pbl(vip):
-    # issue both so it works no matter PBL or APP
-    # app tends to fails swdl e, PBL would ignore er.
-    vip.writeline("swdl er")  # brutal swdl e
-    vip.writeline("swdl e")  # swdl e for PBL
-    if not vip.is_vip_pbl(timeout_sec=15):
-        raise RuntimeError("No VIP PBL detected")
+def reboot_vip_into_app(profile_flags: ProfileFlags, vip: VipSerial):
+    vip_type = vip.type()
 
-    time.sleep(1)
+    def reboot_pbl_to_app():
+        vip.writeline("sm restart")  # just restart pbl to app
+        # matching first second log timestamps is more robust in case of lost traces
+        vip.expect_line(r"\[0\.\d+\]", timeout_sec=30, hint="VIP has not booted (no traces indicating booting up)")
+
+    if vip_type == vip.VIP_PBL:
+        reboot_pbl_to_app()
+    elif vip_type == vip.VIP_APP:
+        vip.writeline("sm restart 0")  # just restart pbl to app
+        try:
+            vip.expect_line("r\[0\.\d+\]", timeout_sec=60, hint="VIP has not booted (no traces indicating booting up)")
+        except serial_mapping.ExpectedResponseNotPresentError:
+            logger.error("VIP failed to reboot, trying to go through PBL")
+            reboot_vip_into_pbl(vip)
+            reboot_pbl_to_app()
+
+    ensure_no_powermoding_or_resets(profile_flags, vip)
+    logger.info("VIP ready in APP mode")
+
+
+def reboot_vip_into_pbl(vip):
+    logger.info("Rebooting VIP into PBL mode")
+    vip_type = vip.type()
+
+    if vip_type == vip.VIP_APP:
+        logger.info("VIP APP detected, using swdl er")
+        vip.writeline("swdl er")  # brutal swdl e
+    elif vip_type == vip.VIP_PBL:
+        logger.info("VIP PBL detected, using swdl e")
+        vip.writeline("swdl e")  # swdl e for PBL
+
+    logger.info("Waiting for VIP reboot")
+    vip.expect_line(r"\[0\.\d+\]", timeout_sec=30, hint="VIP has not booted (no traces indicating booting up)")
+
+    time.sleep(1)  # a lot console traffic in this second
+    logger.info("Confirming VIP in PBL mode...")
+
+    if not vip.is_vip_pbl():
+        raise RuntimeError("Failed to confirm VIP PBL")
+
     vip.writeline("sm st_off")
     vip.expect_line(".*Disabling startup timer.*", 15)
+
+    logger.info("VIP ready in PBL mode")
+
+
+def ensure_no_powermoding_or_resets(profile_flags: ProfileFlags, vip: VipSerial):
+    logger.info("Ensuring VIP will not reboot by accident")
+    if vip.is_vip_app():
+        if profile_flags.sm_alw_1_s:
+            vip.writeline("sm alw 1 s")
+        else:
+            vip.writeline("sm alw 1")
+        vip.expect_line(".*SysM- Always_On: 1.*", 15)
+
+    elif vip.is_vip_pbl():
+        vip.writeline("sm st_off")
+        vip.expect_line(".*Disabling startup timer.*", 15)
+
+    logger.info("VIP Power Moding/startup timers disabled")
 
 
 def wait_for_host_target_fastboot_connection() -> None:
@@ -375,7 +418,7 @@ def start_fastboot_from_mp_abl_cmdline(mp: MpSerial) -> None:
     logger.info("Fastboot confirmed on console")
 
 
-def ensure_mp_mode_for_force_vip_flashing(ihu_serials: IhuSerials) -> None:
+def ensure_mp_mode_for_force_vip_flashing(profile_flags: ProfileFlags, ihu_serials: IhuSerials) -> None:
     try:
         wait_for_device_adb()
         adb_bootmode = run(['adb', "get-state"],
@@ -386,21 +429,27 @@ def ensure_mp_mode_for_force_vip_flashing(ihu_serials: IhuSerials) -> None:
     if adb_bootmode != 'device':
         logger.info("In VIP PBL unit does not booted into device mode, forcing...")
         reboot_mp_into_android_default_mode_and_verify_abl_bootmode_confirmation(ihu_serials.vip, ihu_serials.mp)
-        wait_for_boot_and_flashing_completed()
+        wait_for_device_adb()
 
 
-def wait_for_boot_and_flashing_completed(timeout_sec=60 * 8) -> None:
+def wait_for_boot_and_flashing_completed(profile_flags: ProfileFlags,
+                                         vip: VipSerial,
+                                         timeout_sec=60 * 8) -> None:
     logger.info("Wait for device to complete boot/onboot actions with timeout %r", timeout_sec)
+
+    vip_recovery_reboots_left = 2
 
     started_at = time.time()
     finished_by_deadline = started_at + timeout_sec
 
     # str as its direct readout of Android Property, and its 3 valued by default:
     # empty -> unknown, 0 -> know to be failed, 1 -> known to be succesful
+    vip_auto_flashing = ""
     vip_version_ok = ""
 
     while True:
         try:
+            wait_for_device_adb(10)
             boot_completed = run(['adb', "shell", 'getprop', 'sys.boot_completed'],
                                  timeout_sec=7)
             session = run(['adb', "shell", 'getprop', 'ro.boot.swdl.session'],
@@ -413,23 +462,43 @@ def wait_for_boot_and_flashing_completed(timeout_sec=60 * 8) -> None:
                     vip_version_ok = run(['adb', "shell", 'getprop', 'swdl.vip_version_ok'],
                                          timeout_sec=1)
                     if vip_version_ok == "1":
+                        logger.info("Everything went fine, all properties seem like healthy system")
                         break
                     elif vip_version_ok == "0":
-                        logger.error("VIP auto update failed")
-                        run(['adb', "logcat", '-s', 'vip_flashing_service'],
-                            timeout_sec=7)
-                        dump_props()
-                        break
+                        logger.error("VIP auto update failed, retries left %r, getting logs...",
+                                     vip_recovery_reboots_left)
+                        try:
+                            run(['adb', "logcat", '-s', '-d', 'vip_flashing_service'],
+                                timeout_sec=7)
+                            logger.info("Logged adb logs form vip_flashing service.")
+                        except Exception:
+                            logger.warning("Failed to get logs from ADB")
+
+                        if vip_recovery_reboots_left > 0:
+                            logger.info("Rebooting VIP into APP as an attempt to let vip_flashing_service suceeed")
+                            vip_recovery_reboots_left -= 1
+                            reboot_vip_into_app(profile_flags, vip)
+                            vip_version_ok = ""
+                            time.sleep(30)
+                        else:
+                            logger.error("No more VIP auto update retries left")
 
                 else:
+                    logger.info("System booted and VIP auto flashing is disabled")
                     break
             elif boot_completed == "1" and session == "programming":
-                break
+                logger.info("System booted in programming session, waiting for booting back to default.")
             else:
                 pass  # continue polling
 
-        except Exception:
-            # keep polling after sleep below
+            logger.info("Waiting for booting and flashing on startup to complete, status:\r\n" +
+                        "sys.boot_completed = {}\r\n".format(boot_completed) +
+                        "ro.boot.swdl.session = {}\r\n".format(session) +
+                        "sys.persist.swdl.EnableAutoFlashing = {}\r\n".format(vip_auto_flashing) +
+                        "swdl.vip_version_ok = {}\r\n".format(vip_version_ok))
+
+        except Exception as waiting_ex:
+            logger.info("Waiting for system to read all properties, current error {}".format(waiting_ex))
             pass
 
         if vip_version_ok == "0":
@@ -453,9 +522,12 @@ def wait_for_boot_and_flashing_completed(timeout_sec=60 * 8) -> None:
 
 def wait_for_device_adb(timeout_sec=60 * 7) -> None:
     logger.info("Wait for device to enter device-mode via ADB with timeout %r", timeout_sec)
-    run(['adb', "wait-for-device"],
-        timeout_sec=timeout_sec)
-    logger.info("Unit entered ADB mode")
+    try:
+        run(['adb', "wait-for-device"],
+            timeout_sec=timeout_sec)
+        logger.info("Unit entered ADB mode")
+    except Exception:
+        raise RuntimeError("Waiting {} seconds for ADB failed".format(timeout_sec))
 
 
 def dump_props(timeout_sec=15) -> None:
@@ -569,5 +641,5 @@ if __name__ == "__main__":
         sys.exit(0)
     except Exception as ex:
         logger.error("Update failed exception", exc_info=True)
-        logger.error("\r\n\r\n\r\nUpdate failed with error:{}".format(ex))
+        logger.error("\r\n\r\n\r\nUpdate failed with error: {}".format(ex))
         sys.exit(1)

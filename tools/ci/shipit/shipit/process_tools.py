@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import asyncio
@@ -8,6 +8,7 @@ import subprocess
 import logging
 from typing import Union, List
 import typing
+
 
 class Result:
     def __init__(self, pid: int, exitcode: int, stdout: bytes, stderr: bytes, encoding: str) -> None:
@@ -22,10 +23,9 @@ class Result:
         return self.stdout.decode(self.encoding)
 
 
-
 async def _log_and_concat(logger: logging.Logger,
-                    stream: asyncio.StreamReader,
-                    encoding: str) -> bytes:
+                          stream: asyncio.StreamReader,
+                          encoding: str) -> bytes:
     output = b''
     while True:
         line_bytes = await stream.readline()
@@ -35,7 +35,7 @@ async def _log_and_concat(logger: logging.Logger,
         try:
             logger.debug("%s", line_bytes.decode(encoding).strip())  # but we are decoding here
         except UnicodeDecodeError as e:
-            logger.error("Failed to decode program output: %s", e.reason) # TODO: fallback decode to hex or something?
+            logger.error("Failed to decode program output: %s", e.reason)  # TODO: fallback decode to hex or something?
     return output
 
 
@@ -43,17 +43,17 @@ async def _log_and_concat(logger: logging.Logger,
 # simultaneously. Standard simple solutions such as read(), readline(), communicate(), etc are blocking.
 # In such cases if you get no output on stderr you will be blocked and not get be able to read the output on stdout.
 async def _run_logged_helper(command: Union[str, List[str]],
-                       encoding: str,
-                       shell: bool,
-                       cwd: str = None,
-                       **kwargs) -> Result:
+                             encoding: str,
+                             shell: bool,
+                             cwd: str = None,
+                             **kwargs) -> Result:
     if shell:
         command = typing.cast(str, command)
         s = await asyncio.create_subprocess_shell(command,
                                                   stdout=subprocess.PIPE,
                                                   stderr=subprocess.PIPE,
                                                   cwd=cwd,
-                                                  limit=2**20,
+                                                  limit=2 ** 20,
                                                   **kwargs)
     else:
         command = typing.cast(List[str], command)
@@ -61,9 +61,9 @@ async def _run_logged_helper(command: Union[str, List[str]],
                                                  stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE,
                                                  cwd=cwd,
-                                                 limit=2**20,
+                                                 limit=2 ** 20,
                                                  **kwargs)
-    logging.info("Executing command: %r, started PID=%d", command, s.pid)
+    logging.debug("Executing command: %r, started PID=%d", command, s.pid)
     logger = logging.getLogger("PID%d" % s.pid)
     try:
         stdout, stderr = await asyncio.gather(
@@ -104,6 +104,7 @@ def _close_event_loop():
     except Exception:
         pass
 
+
 atexit.register(_close_event_loop)
 
 
@@ -130,7 +131,7 @@ def check_output_logged(command,
                         **kwargs) -> bytes:
     result = run(command, encoding=encoding, shell=shell, timeout_sec=timeout_sec, cwd=cwd, **kwargs)
     if result.exitcode != 0:
-        logging.info("PID%d exit with non-0 exitcode: %d", result.pid, result.exitcode)
+        logging.debug("PID%d exit with non-0 exitcode: %d", result.pid, result.exitcode)
         raise subprocess.CalledProcessError(result.exitcode, command, result.stdout, result.stderr)
-    logging.info("Process exit successfully")
+    logging.debug("Process exit successfully")
     return result.stdout
