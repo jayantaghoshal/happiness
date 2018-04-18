@@ -3,7 +3,7 @@
   "IIPS_LM_NofNodesRG1": 3,
   "IIPS_LM_NofNodesRG3": 3,
   "IIPS_LM_RequestMonitoringTimeout": 3000,
-  "IIPS_LM_NofLSCs": 3,
+  "IIPS_LM_NofLSCs": 0,
   "TEST_KEY_STRING": "KEY_TYPE_STRING",
   "IIPS_IpAddress_LOCAL": "198.19.101.66",
   "IIPS_IpAddress_BROADCAST": "198.19.101.95",

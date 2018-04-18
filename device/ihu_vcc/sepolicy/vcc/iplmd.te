@@ -11,7 +11,6 @@ hal_server_domain(iplmd, hal_vehiclecom)
 hal_server_domain(iplmd, hal_iplm)
 
 binder_call(iplmd, ipcbd)
-binder_call(iplmd, lscd)
 binder_call(iplmd, dataelements-hidl-server)
 
 hwbinder_use(iplmd)

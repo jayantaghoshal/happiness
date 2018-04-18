@@ -1,5 +1,0 @@
-service lscd /vendor/bin/lscd
-    class vcc_net
-    user root
-    group root
-    seclabel u:r:lscd:s0
