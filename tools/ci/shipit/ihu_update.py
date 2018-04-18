@@ -238,6 +238,7 @@ Troubleshooting:
 
             logger.info("Flashing was done in PBL, going to application for subsequent boot")
             vip.writeline("sm restart")  # just restart to app
+
             if vip.is_vip_app(timeout_sec=60):
                 if profile_flags.sm_alw_1_s:
                     vip.writeline("sm alw 1 s")
@@ -246,7 +247,11 @@ Troubleshooting:
                 vip.expect_line(".*SysM- Always_On: 1.*", 15)
 
             elif vip.is_vip_pbl():
-                raise RuntimeError("VIP is stuck in PBL, please rerun with: "
+                vip.writeline("sm st_off")
+                vip.expect_line(".*Disabling startup timer.*", 15)
+
+                # we are probably in PBL becouse of VIP auto update
+                logger.warning("VIP is in PBL after reboot, if booting fails please rerun with: "
                                    "--update-mp false --force-update-vip true")
 
             wait_for_boot_and_flashing_completed(timeout_sec=15 * 60)
