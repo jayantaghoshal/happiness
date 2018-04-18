@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # TODO: We should move the vts_test_runner.py to ../test-fw directory.
@@ -41,7 +41,7 @@ def vts_tradefed_run_file(test_module_dir: str) -> ResultData:
 
 
 def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.copy()) -> ResultData:
-    logging.info("Running test module %s" % module_name)
+    logging.info("Running test module %s with environment %r" % (module_name, env))
     try:
         os.unlink("/tmp/test_run_kpis.json")
     except FileNotFoundError:
