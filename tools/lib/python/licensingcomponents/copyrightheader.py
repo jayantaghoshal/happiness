@@ -361,6 +361,9 @@ def update_copyright_headers(file_path: str) -> None:
     :raises LicenseHeaderInvalidError if file needed to be updated
     """
     assert os.path.isfile(file_path)
+    if should_filepath_be_ignored(file_path):
+        return;
+
     fixed, original = get_contents_with_header_applied(file_path)
     if fixed != original:
         with(open(file_path, 'w', encoding="utf-8")) as target:
