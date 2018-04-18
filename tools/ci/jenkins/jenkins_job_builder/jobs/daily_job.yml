@@ -301,13 +301,6 @@
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - shell: touch "${JOB_NAME}".success
     publishers:
-      - trigger-parameterized-builds:
-        - project:
-            - ihu_staging
-          condition: ALWAYS
-          predefined-parameters: |
-            GIT_COMMIT=${GIT_COMMIT}
-            GIT_URL=${GIT_URL}
       - raw:
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
@@ -315,7 +308,7 @@
                 <customProjectName>ihu_daily</customProjectName>
                 <customPrefix>IhuDailyMaster</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
-        - post-tasks:
+      - post-tasks:
           - matches:
             - log-text: 
               operator: AND
@@ -324,6 +317,13 @@
             script:
               !include-raw:
                 - bootstrap_report_status.sh
+      - trigger-parameterized-builds:
+        - project:
+            - ihu_staging
+          condition: ALWAYS
+          predefined-parameters: |
+            GIT_COMMIT=${GIT_COMMIT}
+            GIT_URL=${GIT_URL}
 
 - job:
     name: ihu_daily_build_vcc_eng
