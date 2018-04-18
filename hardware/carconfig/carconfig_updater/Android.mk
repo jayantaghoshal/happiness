@@ -9,7 +9,8 @@ LOCAL_SRC_FILES := \
 	src/carconfig_updater_main.cpp \
 	src/carconfig_updater.cpp \
 	src/vipcom_client.cpp \
-	src/diagnostics_reporter.cpp
+	src/diagnostics_reporter.cpp \
+	src/restart_client.cpp
 
 LOCAL_CFLAGS += -Wno-unused-parameter
 LOCAL_C_INCLUDES += \
@@ -42,7 +43,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libtraceclient \
 	libtarmac \
 	vendor.volvocars.hardware.uds@1.0 \
-	lib_uds_data_handler
+	lib_uds_data_handler \
+	vendor.delphi.lifecyclecontrol@1.0
 
 LOCAL_STATIC_LIBRARIES += \
 	libccparameterlistgen \

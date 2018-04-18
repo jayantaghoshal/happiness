@@ -14,7 +14,7 @@
 #include <cutils/log.h>
 
 #undef LOG_TAG
-#define LOG_TAG "VipComClient"
+#define LOG_TAG "carconfig_updater"
 constexpr uint8_t HISIP_APPLICATION_ID_CARCONFIG = 0x77u;
 
 #define CATALOG_VERSION 1

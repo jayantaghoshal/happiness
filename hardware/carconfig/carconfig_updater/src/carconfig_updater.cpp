@@ -11,10 +11,12 @@
 #include <fstream>
 #include <set>
 #include "Application_dataelement.h"
-#include "cc_parameterlist_map.h"
-//#include "restart_client.h"
 #include "carconfig_file_writer.h"
 #include "carconfig_reader.h"
+#include "carconfig_updater.h"
+#include "cc_parameterlist_map.h"
+#include "diagnostics_reporter.h"
+#include "restart_client.h"
 
 #undef LOG_TAG
 #define LOG_TAG "carconfig_updater"
@@ -362,8 +364,7 @@ int32_t CarConfigUpdater::runUpdater() {
     }
 
     if (rebootIsRequired) {
-        ALOGW("Proper rebooot request is not yet implemented. Rebooting with system call directly to MP");
-        system("printf 'da 0\nexit\n' | hisipcmd 4");  // TODO change this to a call to "power manager"
+        restartClient::requestRestart();
     }
 
     // Wait until diagnostic message has been sent.
