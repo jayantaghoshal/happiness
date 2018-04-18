@@ -245,7 +245,7 @@ Troubleshooting:
 
                 reboot_vip_into_app(profile_flags, vip)
 
-            wait_for_boot_and_flashing_completed(profile_flags, vip, timeout_sec=15 * 60)
+            wait_for_boot_and_flashing_completed(profile_flags, ihu_serials, timeout_sec=15 * 60)
 
             logger.info("Boot and postboot operations completed, current properties:")
             dump_props()
@@ -271,34 +271,11 @@ Troubleshooting:
         if force_update_vip:
             logger.info("Flashing VIP")
 
-            reboot_vip_into_pbl(vip)
-            ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
+            force_flash_vip_pbl_and_app(profile_flags, ihu_serials)
 
-            output = run(['adb',
-                          "shell",
-                          "vbf_flasher",
-                          "/vendor/vip-update/pbl/vip-ssbl.VBF",
-                          "/vendor/vip-update/pbl/vip-pbl.VBF"],
-                         timeout_sec=60 * 2)
-            logger.info("VIP PBL update finished with result %s", output)
+            logger.info("Freshly flashed VIP APP started successfully")
 
-            reboot_vip_into_pbl(vip)
-            ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
-
-            output = run(['adb',
-                          "shell",
-                          "vbf_flasher",
-                          "/vendor/vip-update/app/*"],
-                         timeout_sec=60 * 2)
-            logger.info("VIP APP update finished with result %r", output)
-
-            vip.writeline("sm restart")  # new command, already in our PBL
-            vip.expect_line("Rebooting to normal mode", 30, hint="Reseting VIP app failed, try power cycling")
-
-            logger.info("New VIP APP booted successfully")
-
-            wait_for_device_adb()
-            wait_for_boot_and_flashing_completed(profile_flags, vip)
+            wait_for_boot_and_flashing_completed(profile_flags, ihu_serials, timeout_sec=5 * 60)
             logger.info("MP booted successfully with new VIP APP")
 
         else:
@@ -329,6 +306,27 @@ Troubleshooting:
     finally:
         vip.close()
         mp.close()
+
+
+def force_flash_vip_pbl_and_app(profile_flags, ihu_serials):
+    reboot_vip_into_pbl(ihu_serials.vip)
+    ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
+    output = run(['adb',
+                  "shell",
+                  "vbf_flasher",
+                  "/vendor/vip-update/pbl/vip-ssbl.VBF",
+                  "/vendor/vip-update/pbl/vip-pbl.VBF"],
+                 timeout_sec=60 * 2)
+    logger.info("VIP PBL update finished with result %s", output)
+    reboot_vip_into_pbl(ihu_serials.vip)
+    ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
+    output = run(['adb',
+                  "shell",
+                  "vbf_flasher",
+                  "/vendor/vip-update/app/*"],
+                 timeout_sec=60 * 2)
+    logger.info("VIP APP update finished with result %r", output)
+    reboot_vip_into_app(profile_flags, ihu_serials.vip)
 
 
 def reboot_vip_into_app(profile_flags: ProfileFlags, vip: VipSerial):
@@ -433,11 +431,11 @@ def ensure_mp_mode_for_force_vip_flashing(profile_flags: ProfileFlags, ihu_seria
 
 
 def wait_for_boot_and_flashing_completed(profile_flags: ProfileFlags,
-                                         vip: VipSerial,
-                                         timeout_sec=60 * 8) -> None:
+                                         ihu_serials: IhuSerials,
+                                         timeout_sec: int) -> None:
     logger.info("Wait for device to complete boot/onboot actions with timeout %r", timeout_sec)
 
-    vip_recovery_reboots_left = 2
+    vip_recovery_retries_left = 3
 
     started_at = time.time()
     finished_by_deadline = started_at + timeout_sec
@@ -466,7 +464,7 @@ def wait_for_boot_and_flashing_completed(profile_flags: ProfileFlags,
                         break
                     elif vip_version_ok == "0":
                         logger.error("VIP auto update failed, retries left %r, getting logs...",
-                                     vip_recovery_reboots_left)
+                                     vip_recovery_retries_left)
                         try:
                             run(['adb', "logcat", '-s', '-d', 'vip_flashing_service'],
                                 timeout_sec=7)
@@ -474,12 +472,18 @@ def wait_for_boot_and_flashing_completed(profile_flags: ProfileFlags,
                         except Exception:
                             logger.warning("Failed to get logs from ADB")
 
-                        if vip_recovery_reboots_left > 0:
-                            logger.info("Rebooting VIP into APP as an attempt to let vip_flashing_service suceeed")
-                            vip_recovery_reboots_left -= 1
-                            reboot_vip_into_app(profile_flags, vip)
-                            vip_version_ok = ""
-                            time.sleep(30)
+                        if vip_recovery_retries_left > 0:
+                            vip_recovery_retries_left -= 1
+
+                            if vip_recovery_retries_left > 0:
+                                logger.info("Rebooting VIP into APP as an attempt to help vip_flashing_service suceeed")
+                                reboot_vip_into_app(profile_flags, ihu_serials.vip)
+                                vip_version_ok = ""
+                                time.sleep(30)
+                            else:
+                                logger.info("Flashing VIP via command line as last resort")
+                                force_flash_vip_pbl_and_app(profile_flags, ihu_serials)
+
                         else:
                             logger.error("No more VIP auto update retries left")
 
