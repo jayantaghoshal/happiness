@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -31,6 +31,9 @@ def main(args):
             sync = True
         repository = args[3]
         autobumper.on_commit(aosp_root_dir, sync, repository)
+    elif mode == "sync_zuul_repos":
+        repository = args[2]
+        autobumper.sync_zuul_repos(aosp_root_dir, repository)
     elif mode == "autobump":
         if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')

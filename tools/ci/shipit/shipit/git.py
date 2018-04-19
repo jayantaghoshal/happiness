@@ -58,6 +58,34 @@ class Repo:
 
         return revision
 
+    @classmethod
+    def repo_reset(cls, full_path: str):
+        process_tools.check_output_logged(["git", "reset",
+                                    "--hard"], cwd=full_path)
+
+    @classmethod
+    def repo_clean(cls, full_path: str):
+        process_tools.check_output_logged(["git", "clean",
+                                "-fdx"], cwd=full_path)
+
+    @classmethod
+    def repo_sync_repo(cls, repo_name: str, aosp_root_dir: str):
+        process_tools.check_output_logged(["repo", "sync",
+                                "--jobs=6",
+                                "--no-clone-bundle",
+                                "--force-sync",
+                                "--detach",
+                                "--current-branch",
+                                repo_name], cwd=aosp_root_dir)
+
+    @classmethod
+    def repo_rev_parse(cls, repo_full_path: str):
+        revision = process_tools.check_output_logged(["git",
+                                "rev-parse",
+                                "HEAD"], cwd=repo_full_path)
+
+        return revision
+
     def add(self, path_specs: List[str]):
         self._run_git(['add', '--'] + path_specs)
 

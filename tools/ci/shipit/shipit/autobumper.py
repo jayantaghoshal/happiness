@@ -5,11 +5,14 @@ import os
 import glob
 import logging
 import re
+import logging.config
 from xml.etree import ElementTree as ET
 from typing import Tuple, List, Dict, Union, Any
 from . import manifest
 from . import process_tools
 from . import git
+
+logger = logging.getLogger(__name__)
 
 class Manifest(object):
     def __init__(self, xmlstring: str) -> None:
@@ -68,6 +71,66 @@ def repo_init(aosp_root_dir: str, branch: str):
          "-b", branch],
         cwd=os.path.abspath(aosp_root_dir))
 
+
+def sync_zuul_repos(aosp_root_dir: str, repository: str):
+    logger.info("Syncing Zuul repos")
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    logger.debug("volvocars_repo_path = " + volvocars_repo_path)
+    volvocars_repo = git.Repo(volvocars_repo_path)
+    vcc_manifest_file = os.path.join(volvocars_repo.path, "manifests/manifest-volvocars.xml")
+    path_to_repository_with_commit = manifest.get_repo_path_from_git_name(vcc_manifest_file, repository)
+
+    repos_with_zuul_changes = manifest.get_all_zuul_repos()
+
+    for repo in repos_with_zuul_changes:
+        logger.info("current Zuul-repo = " + repo)
+        repo_path = manifest.get_repo_path_from_git_name(vcc_manifest_file, repo)
+        logger.info("The current repo have the repo_path = " + repo_path)
+        full_path = os.path.join(aosp_root_dir, repo_path)
+        logger.info("The full_path = " + full_path)
+        git.Repo.repo_sync_repo(repo, aosp_root_dir)
+        git.Repo.repo_reset(full_path)
+        git.Repo.repo_clean(full_path)
+        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo)
+    # check that the commit has the zuul commit hash
+    if not repo_have_zuul_change(path_to_repository_with_commit, aosp_root_dir):
+        raise SystemExit('zuul-cloner failed to checkout commit the Zuul commit in " + repo')
+
+
+def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):
+    logger.info("Check if the repo have zuul change")
+    full_path = os.path.join(aosp_root_dir, repo_path)
+    git_head = process_tools.check_output_logged(["git", "rev-parse",
+                            "HEAD"], cwd=full_path)
+
+    zuul_commit = os.environ['ZUUL_COMMIT']
+    logger.info("ZUUL_COMMIT = + " + zuul_commit + " and HEAD is " + git_head.decode('utf-8').strip())
+    if zuul_commit == git_head.decode('utf-8').strip():
+        return True
+    else:
+        return False
+
+
+def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_name: str):
+    destination_repo_path = os.path.join(aosp_root_dir, repo_path)
+    logger.debug("base_folder: " + aosp_root_dir)
+    logger.debug("destination_repo_path: " + destination_repo_path)
+    logger.info("the whole path : " + aosp_root_dir + destination_repo_path)
+    zuul_url = os.environ['ZUUL_URL']
+    home = os.environ['HOME']
+    logger.debug("home = " + home)
+    logger.info("Using zuul cloner on repo: " + repo_name)
+    logger.debug("zuul_url: " + zuul_url)
+    logger.info("zuul_change_on: " + repo_name)
+    zuul_wrapper = os.path.join(home, "zuul_ssh_wrapper.sh")
+    logger.debug("zuul_wrapper: " + zuul_wrapper)
+    os.environ['GIT_SSH'] = zuul_wrapper
+    logger.debug("GIT_SSH is set to " + os.environ['GIT_SSH'])
+    process_tools.check_output_logged(["zuul-cloner", "-v", zuul_url, repo_name],
+            cwd=os.path.abspath(os.path.join(aosp_root_dir)))
+    logger.debug("Current working directory: " + aosp_root_dir)
+
+
 def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     # Zuul will have already cloned vendor/volvocars
 
@@ -93,7 +156,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               repository: str,
                                               stage_changes: bool = False,
                                               using_zuul: bool = True):
-    print("Arguments for copy_and_apply...: stage_changes= %s using_zuul= %s aosp_root_dir: %s volvocars_repo: %s manifest_repo: %s repository: %s" % (stage_changes,
+    logger.info("Arguments for copy_and_apply...: stage_changes= %s using_zuul= %s aosp_root_dir: %s volvocars_repo: %s manifest_repo: %s repository: %s" % (stage_changes,
                                                                                                                                                        using_zuul,
                                                                                                                                                        aosp_root_dir,
                                                                                                                                                        volvocars_repo,
@@ -102,25 +165,25 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
 
-    print("Path for vcc_manifest_files " + str(volvocars_repo.path))
-    print("Path for old_manifest_files_in_manifest_repo: " + str(manifest_repo.path))
+    logger.info("Path for vcc_manifest_files " + str(volvocars_repo.path))
+    logger.info("Path for old_manifest_files_in_manifest_repo: " + str(manifest_repo.path))
 
     for manifest_file in old_manifest_files_in_manifest_repo:
-        print("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
+        logger.debug("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
 
     for manifest_file in vcc_manifest_files:
-        print("Manifests in vcc_manifest_files: " + manifest_file)
+        logger.debug("Manifests in vcc_manifest_files: " + manifest_file)
 
     for f in old_manifest_files_in_manifest_repo:
         os.unlink(f)
 
-    print("Number of vcc_manifest_files files: " + str(len(vcc_manifest_files)))
-    print("Number of old_manifest_files_in_manifest_repo files: " + str(len(old_manifest_files_in_manifest_repo)))
+    logger.info("Number of vcc_manifest_files files: " + str(len(vcc_manifest_files)))
+    logger.info("Number of old_manifest_files_in_manifest_repo files: " + str(len(old_manifest_files_in_manifest_repo)))
 
     for manifest_template_file in vcc_manifest_files:
-        print("Checking this manifest file: " + str(manifest_template_file))
+        logger.info("Checking this manifest file: " + str(manifest_template_file))
         dest = os.path.join(manifest_repo.path, os.path.basename(manifest_template_file))
-        manifest.update_file_and_zuul_clone(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
+        manifest.update_file(aosp_root_dir, manifest_template_file, dest, repository, using_zuul)
         if stage_changes:
             manifest_repo.add([dest])
 
@@ -191,7 +254,7 @@ def assemble_commit_messages(base_dir: str,
                 if not os.path.exists(os.path.join(base_dir, details[1]['path'])):
                     commit_body_prefix += " - Updated '{}' to commit {}\n".format(details[0]['name'],
                                                                                   details[0]['revision'])
-                    print("Repository {} is MIA (expected it to be at '{}')".format(
+                    logger.info("Repository {} is MIA (expected it to be at '{}')".format(
                         details[1]['name'],
                         os.path.join(base_dir, details[1]['path'])))
                     continue
@@ -203,7 +266,7 @@ def assemble_commit_messages(base_dir: str,
                                                  '^{}'.format(details[0]['revision']),
                                                  details[1]['revision']]).splitlines()
                 except Exception:
-                    print("ERROR: Failed to execute 'git {}'".format(" ".join(['rev-list',
+                    logger.info("ERROR: Failed to execute 'git {}'".format(" ".join(['rev-list',
                                                                                '^{}'.format(details[0]['revision']),
                                                                                details[1]['revision']])))
                 for rev in revlist:
