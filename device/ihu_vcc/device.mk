@@ -113,38 +113,6 @@ PRODUCT_PACKAGES += \
     SoftwareUpdateService
 
 ##############################################################
-# Files to deploy to target
-#############################################l#################
-PRODUCT_COPY_FILES += \
-    ${VCC_DEVICE_PATH}/init.rc:vendor/etc/init/init.${TARGET_PRODUCT}.rc \
-    ${VCC_DEVICE_PATH}/init.recovery.rc:vendor/etc/init/init.recovery.${TARGET_PRODUCT}.rc \
-
-##############################################################
-# Aptiv init.rc file overrides
-# Be aware that to override files in PRODUCT_COPY_FILES, files
-# need to be added _FIRST_ in the list as the first instance
-# in the target filesystem is copied and all other that could
-# potentially overwrite the same target file are ignored.
-##############################################################
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init_rc_files/init.delphi.vcc_ihu.doip_router.rc:root/init.delphi.vcc_ihu.doip_router.rc \
-
-##############################################################
-# Hardware permissions on target
-##############################################################
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
-
-##############################################################
-# alsa_arecord, used for audio tests in CI
-# This is a TEMPORARY workaround until alsa_arecord are
-# added/restored to the image by aptive.
-##############################################################
-PRODUCT_COPY_FILES += \
-    vendor/volvocars/tools/lib/python/audio/alsa_arecord_omr1:vendor/bin/alsa_arecord_omr1
-
-
-##############################################################
 # Configurations for userdebug and engineering build
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
@@ -180,10 +148,5 @@ KERNEL_DIFFCONFIG += ${VCC_DEVICE_PATH}/kernel_configs/vcc_connectivity_diffconf
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
     KERNEL_DIFFCONFIG += ${VCC_DEVICE_PATH}/kernel_configs/vcc_connectivity_eng_diffconfig
 endif
-
-##############################################################
-# Set white-listning of packages
-##############################################################
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/extra_files/platformxml/platform.xml:system/etc/permissions/vcc_platform.xml
 
 ##############################################################

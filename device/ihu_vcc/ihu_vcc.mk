@@ -58,6 +58,7 @@ APTIV_PATH_DEVICE := device/delphi/volvoihu
 # Include at the end of BSP's BoardConfig.mk
 PRODUCT_BOARD_CONFIG_APPEND := $(APTIV_KRAKEN_DEVICE_PATH)/BoardConfig-append.mk $(LOCAL_PATH)/BoardConfig.mk
 
+$(call inherit-product, $(LOCAL_PATH)/device_prepend.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core.mk)
 $(call inherit-product, $(APTIV_KRAKEN_DEVICE_PATH)/kraken_product.mk)
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
