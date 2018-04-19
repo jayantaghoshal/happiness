@@ -8,4 +8,8 @@
         <item name="android:colorControlNormal">?android:attr/textColorPrimary</item>
         <item name="android:colorBackgroundFloating">@*android:color/material_grey_900</item>
     </style>
+
+    <style name="TextAppearance.StatusBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <item name="android:fontFamily">@font/instrument101</item>
+    </style>
 </resources>
