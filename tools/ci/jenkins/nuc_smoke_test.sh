@@ -24,7 +24,7 @@ tar xfz out.tgz || die "Unpack out.tgz failed"
 set +e
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan=gate --update_ihu -c ihu-generic adb mp-serial vip-serial
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan gate --update_ihu -c ihu-generic adb mp-serial vip-serial
 status=$?
 set -e
 

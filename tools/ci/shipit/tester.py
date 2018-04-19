@@ -34,6 +34,14 @@ import test_plan    # NOQA
 logger = logging.getLogger(__name__)
 
 
+_PLAN_MAP = {
+    "gate" : test_plan.test_plan_gate,
+    "hourly": test_plan.test_plan_hourly,
+    "nightly": test_plan.test_plan_nightly,
+    "incubator": test_plan.test_plan_incubator_hourly,
+    "staging": test_plan.test_plan_staging_daily
+}
+
 class NamedTestResult():
     def __init__(self, name: str, result: ResultData) -> None:
         self.name = name
@@ -288,6 +296,7 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_
         print("All %d tests successful" % len(test_results))
 
 
+
 def main():
     with open(pathjoin(os.path.dirname(__file__), "logging.json"), "rt") as f:
         log_config = json.load(f)
@@ -297,7 +306,7 @@ def main():
     subparsers = root_parser.add_subparsers(dest="program")
     analyze_parser = subparsers.add_parser("analyze")  # NOQA
     build_parser = subparsers.add_parser("build")
-    build_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
+    build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     build_parser.add_argument('--ciflow', choices=['true', 'false'])
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("-c", "--capabilities",
@@ -313,7 +322,7 @@ def main():
                                  "Ignore other tests even though your rig has capabilities enough to run them. "
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
-    run_parser.add_argument('--plan', choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
+    run_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
     run_parser.add_argument('--ci_reporting', action='store_true')
     run_parser.add_argument('--update_ihu', action='store_true')
     run_parser.add_argument(
@@ -324,18 +333,10 @@ def main():
                             help="Run without a plan and test a specified directory only")
     args = root_parser.parse_args()
 
-    def get_plan():
-        if args.plan == "gate":
-            return test_plan.test_plan_gate
-        elif args.plan == "hourly":
-            return test_plan.test_plan_hourly
-        elif args.plan == "nightly":
-            return test_plan.test_plan_nightly
-        elif args.plan == "incubator":
-            return test_plan.test_plan_incubator_hourly
-        elif args.plan == "staging":
-            return test_plan.test_plan_staging_daily
-        else:
+
+
+    def assemble_plan():
+        if len(args.plan) == 0:
             if args.test_component:
                 androidtest_xml_path = pathjoin(args.test_component, "AndroidTest.xml")
                 if not os.path.isfile(androidtest_xml_path):
@@ -357,6 +358,12 @@ def main():
             else:
                 run_parser.print_usage()
                 sys.exit(1)
+        else:
+            complete_plan = []  # type: List[IhuBaseTest]
+            for p in args.plan:
+                complete_plan.extend(_PLAN_MAP[p])
+            return complete_plan
+
 
     def get_option():
         if args.ciflow == "true":
@@ -367,11 +374,11 @@ def main():
     if args.program == "analyze":
         detect_loose_test_cases()
     elif args.program == "build":
-        plan = get_plan()
+        plan = assemble_plan()
         skip_build_vts = get_option()
         build_testcases(plan, skip_build_vts)
     elif args.program == "run":
-        plan = get_plan()
+        plan = assemble_plan()
         ci_reporting = args.ci_reporting
         capabilities = set(args.capabilities)
         if len(args.capabilities) == 0:

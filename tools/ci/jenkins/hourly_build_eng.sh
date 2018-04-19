@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
@@ -44,7 +44,7 @@ else
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=hourly --ciflow true || die "Build Unit and Component tests failed"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly incubator --ciflow true || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/ninja_log_make_tester_build || true
 
 # Create archive out.tgz

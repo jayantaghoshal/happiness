@@ -73,7 +73,7 @@ if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan=gate --ciflow true || die "Build Unit and Component tests failed"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate --ciflow true || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/ninja_log_make_tester_build || true
 
 # Push out files required for gate_test.sh to Artifactory.

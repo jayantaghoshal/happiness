@@ -61,6 +61,9 @@ test_plan_incubator_hourly = [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting", standard_caps | {cp.flexray}), #Martin Stigels
+    VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
+    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}), #Torbjorn Sandsgard
+    VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -72,7 +75,6 @@ test_plan_staging_daily = [
              deadline="2018-04-28"
     ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
-    VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
@@ -80,12 +82,10 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
     VTSTest("vendor/volvocars/hardware/profiles/test/ct",                           standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                           standard_caps), #Erik Elmeke
-    VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray}), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/signals/vehiclesignalsdaemon/test/ut",       standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/test/gnss",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/iplm",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/keypanel",                              standard_caps | {cp.flexray}), #Tobias Ohrstrom
-    VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting",       standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
