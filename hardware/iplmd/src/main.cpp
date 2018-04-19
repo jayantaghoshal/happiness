@@ -110,48 +110,51 @@ int main(int argc, char* argv[]) {
     InitSignals();
 
     char* pch;
-    char* arr[2];
+    std::string argument;
     std::string interface_iplm = "IIplm";
     std::string interface_vehiclecom = "IVehicleCom";
     std::string interface_lifecyclecontrol = "ILifecycleControl";
     sp<IplmService> iplmService;
+    std::map<std::string, std::string> arguments;
 
+    // Parse arguments of the format "--X=Y" ...
+    // and put them in a map with X as key and Y as value
     for (int num = 1; num < argc; num++) {
-        int8_t i = 0;
+        int i = 0;
         char* str = argv[num];
-        pch = std::strtok(str, " =,.-:");
-        while (pch != NULL) {
-            arr[i] = pch;
-            i++;
-            pch = std::strtok(NULL, " =,.-:");
-        }
-
-        std::string argument = arr[1];
-
-        if (interface_iplm == arr[0]) {
-            iplmService = new IplmService(argument);
-            ALOGI("call to iplm service");
+        pch = std::strtok(str, "-=");
+        if (pch != NULL) {
+            argument = pch;
+            pch = std::strtok(NULL, "=");
+            if (pch != NULL) {
+                arguments[argument] = pch;
+            }
         }
     }
-    for (int num = 1; num < argc; num++) {
-        int8_t i = 0;
-        char* str = argv[num];
-        pch = std::strtok(str, " =,.-:");
-        while (pch != NULL) {
-            arr[i] = pch;
-            i++;
-            pch = std::strtok(NULL, " =,.-:");
-        }
 
-        std::string argument = arr[1];
+    // IIplm
+    argument = arguments[interface_iplm];
+    if (argument != "") {
+        iplmService = new IplmService(argument);
+        ALOGW("iplm registered as IIplm/%s", argument.c_str());
 
-        if (interface_vehiclecom == arr[0]) {
+        // IVehicleCom
+        argument = arguments[interface_vehiclecom];
+        if (argument != "") {
             iplmService->SubscribeVehicleCom(argument);
-            ALOGI("call to ipcb service");
-        } else if (interface_lifecyclecontrol == arr[0]) {
-            iplmService->ConnectLifecycleControl(argument);
-            ALOGI("call to Lifecycle Control service");
+        } else {
+            ALOGW("--%s missing", interface_vehiclecom.c_str());
         }
+
+        // ILifecycleControl
+        argument = arguments[interface_lifecyclecontrol];
+        if (argument != "") {
+            iplmService->ConnectLifecycleControl(argument);
+        } else {
+            ALOGW("--%s missing", interface_lifecyclecontrol.c_str());
+        }
+    } else {
+        ALOGW("--%s missing", interface_iplm.c_str());
     }
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);

@@ -46,7 +46,7 @@ void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
     ipcbServer_ = IVehicleCom::getService(vehicleservicehal);
 
     if (ipcbServer_ != nullptr) {
-        ALOGD("Ipcb HAL with name 'iplm' found! Register subscriber!");
+        ALOGD("Ipcb HAL with name '%s' found! Register subscriber!", vehicleservicehal.c_str());
 
         auto error = ipcbServer_->linkToDeath(this, 2);
         if (!error.isOk()) {
@@ -64,7 +64,7 @@ void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
         }
         Initialize();
     } else {
-        ALOGV("Ipcb HAL with name 'iplm' not found in binder list, retrying in 1 sec");
+        ALOGE("Ipcb HAL with name '%s' not found in binder list, retrying in 1 sec", vehicleservicehal.c_str());
 
         // TODO: Handle return value to be able to abort retries
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
@@ -85,7 +85,7 @@ void IplmService::ConnectLifecycleControl(std::string vehicleservicehal) {
 
         PreventShutdownReason();
     } else {
-        ALOGV("[%s]: LifecycleControl Service pointer is empty! retrying in 1 sec", __func__);
+        ALOGE("[%s]: LifecycleControl Service pointer is empty! retrying in 1 sec", __func__);
 
         // TODO: Handle return value to be able to abort retries
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
