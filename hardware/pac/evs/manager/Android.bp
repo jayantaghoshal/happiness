@@ -72,6 +72,10 @@ cc_binary {
         "vcc_pac_use_libpacconfig",
     ],
 
+    init_rc: [
+        "evs_manager-1-0.rc",
+    ],
+
     header_libs: [
         "android.hardware.automotive.evs.vcc@1.0-hardware-header-lib",
     ],

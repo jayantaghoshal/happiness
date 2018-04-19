@@ -41,6 +41,10 @@ cc_binary {
         "vcc_pac_use_libpacconfig",
     ],
 
+    init_rc: [
+        "evs_hardware-1-0.rc",
+    ],
+
     relative_install_path: "hw",
 
     static_libs: [

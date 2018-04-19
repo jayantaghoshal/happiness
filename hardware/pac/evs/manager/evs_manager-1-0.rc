@@ -1,0 +1,6 @@
+on property:init.svc.evs_hardware-1-0=running
+    start evs_manager-1-0
+
+service evs_manager-1-0 /vendor/bin/android.hardware.automotive.evs.vcc@1.0-manager
+    user root
+    group root

@@ -1,0 +1,5 @@
+# EVS hardware service
+type evs_hardware, domain;
+type evs_hardware_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(evs_hardware)

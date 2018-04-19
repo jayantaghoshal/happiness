@@ -81,3 +81,8 @@
 
 # remote control
 /vendor/bin/remotectrl_routerd u:object_r:remotectl_exec:s0
+
+# PAC
+/vendor/bin/hw/android.hardware.automotive.evs.vcc@1.0-hardware   u:object_r:evs_hardware_exec:s0
+/vendor/bin/android.hardware.automotive.evs.vcc@1.0-manager       u:object_r:evs_manager_exec:s0
+/vendor/bin/pac_early_app                                         u:object_r:pac_early_app_exec:s0

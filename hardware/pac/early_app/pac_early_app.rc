@@ -1,0 +1,6 @@
+on property:init.svc.evs_manager-1-0=running
+    start pac_early_app
+
+service pac_early_app /vendor/bin/pac_early_app
+    user root
+    group root

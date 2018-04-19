@@ -1,0 +1,5 @@
+# EVS manager service
+type evs_manager, domain;
+type evs_manager_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(evs_manager)

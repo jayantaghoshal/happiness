@@ -1,0 +1,5 @@
+# PAC early application
+type pac_early_app, domain;
+type pac_early_app_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(pac_early_app)

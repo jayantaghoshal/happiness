@@ -33,6 +33,10 @@ cc_binary {
         "pac_early_app_common_dependencies",
     ],
 
+    init_rc: [
+        "pac_early_app.rc",
+    ],
+
     srcs: [
         "src/pac_main.cpp",
     ],
