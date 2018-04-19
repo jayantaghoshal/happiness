@@ -102,7 +102,7 @@
   <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="5a21a1b63ab61a0ef0929e136658aed3b2131728"/>
   <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="af9f18425ebbd355a352701f9b3e5f3d3eaea729"/>
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="80810898f1652ddd72d7f5abd6112a3448d78a2b"/>
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="8da3da5aa34f2f64897a081defb8a84aa2dc379f"/>
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="8ebbf1e41ee85377f2b09e0fa79a969e1a5c40b6"/>
 
   <!-- External dependencies -->
   <project name="vendor/delphi/AP_libsoci" path="external/libsoci" revision="71b35446828103012d4f3f6fa12e84011fe83148"/>
