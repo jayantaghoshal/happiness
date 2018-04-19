@@ -25,6 +25,11 @@ rm -rf out  # Remove previous OUT_DIR for clean build.
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 
+# Add part number for hourly build
+MP_PART_NUMBER=$(ihuci vbf get SWL2H)
+export MP_PART_NUMBER
+ihuci vbf inc SWL2H # Increment part number suffix
+
 # Check vts package is up to date
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 

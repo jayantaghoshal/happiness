@@ -17,6 +17,14 @@ lunch ihu_vcc-eng
 MP_PART_NUMBER=$(ihuci vbf get SWL2)
 export MP_PART_NUMBER
 ihuci vbf inc SWL2 # Increment part number suffix
+
+# Add vbf tags for hourly depend on daily tag
+CHARACTOR_PART="${MP_PART_NUMBER//[[:digit:]]/}"
+DIGITAL_PART="${MP_PART_NUMBER//[!0-9]/}"
+CHARACTOR_PART+=A
+# Note: Set sw tag requires a space in between
+ihuci vbf set SWL2H "$DIGITAL_PART" "$CHARACTOR_PART" --build-type eng
+
 time make droid vts tradefed-all
 cp out/.ninja_log out/ninja_log_make_droid_vts_tradefed || true
 
