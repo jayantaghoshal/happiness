@@ -69,6 +69,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             systemui:levelList="com.volvocars.launcher.volvo.MainActivity"
+            systemui:clickIntent="intent:#Intent;package=com.volvocars.launcher;component=com.volvocars.launcher/.user.UserProfilesActivity;launchFlags=0x10000000;end"
             android:src="@drawable/profiles_icon"/>
 
         <Space
