@@ -27,6 +27,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
 
 ##############################################################
+# Software permissions on target
+##############################################################
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:system/etc/permissions/android.software.activities_on_secondary_displays.xml
+
+##############################################################
 # alsa_arecord, used for audio tests in CI
 # This is a TEMPORARY workaround until alsa_arecord are
 # added/restored to the image by aptive.
