@@ -316,6 +316,7 @@
             run-if-job-successful: false
             script:
               !include-raw:
+                - bootstrap_common_time_triggered.sh
                 - bootstrap_report_status.sh
       - trigger-parameterized-builds:
         - project:
