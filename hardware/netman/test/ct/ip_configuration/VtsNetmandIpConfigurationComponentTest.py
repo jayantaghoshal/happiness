@@ -53,6 +53,9 @@ class VtsNetmandIpConfigurationComponentTest(base_test.BaseTestClass):
                     vlan_egress_prio=4),
             dict(name="tcam0_ca",  ip_address="198.19.102.66", broadcast_address="198.19.102.95",
                     netmask="255.255.255.224", mtu=1500, mac_address="02:00:00:02:12:01", vlan_id=202,
+                    vlan_egress_prio=2),
+            dict(name="tcam0_cd",  ip_address="198.19.102.161", broadcast_address="198.19.102.191",
+                    netmask="255.255.255.224", mtu=1500, mac_address="02:00:00:02:12:01", vlan_id=205,
                     vlan_egress_prio=2)
         ]
 
