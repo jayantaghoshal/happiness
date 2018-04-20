@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <cinttypes>
 #include <string>
 
 namespace fsapi {
@@ -33,7 +34,10 @@ class LogClass {
     ~LogClass();
 
     LogClass& writeFormatted();
-    LogClass& writeFormatted(const char* fmt, ...);
+
+    // Tell the compiler that the function uses printf style formatting to avoid non-liternal string warnings.
+    // Parameters start at 2 because of the implicit first parameter with the class this pointer.
+    __attribute__((__format__(__printf__, 2, 3))) LogClass& writeFormatted(const char* fmt, ...);
 
     LogClass& operator<<(const char* str) {
         this->writeFormatted("%s", str);
@@ -51,7 +55,7 @@ class LogClass {
     }
 
     LogClass& operator<<(const uint32_t& i) {
-        this->writeFormatted("%lu", i);
+        this->writeFormatted("%" PRIu32, i);
         return *this;
     }
 
@@ -61,7 +65,7 @@ class LogClass {
     }
 
     LogClass& operator<<(const double& i) {
-        this->writeFormatted("%d", i);
+        this->writeFormatted("%f", i);
         return *this;
     }
 

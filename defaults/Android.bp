@@ -13,6 +13,8 @@ cc_defaults {
         "-fexceptions",
         "-Wall",
         "-Wextra",
+        "-Wunused",
+        "-Wformat=2",
         "-Wunreachable-code",
     ],
 

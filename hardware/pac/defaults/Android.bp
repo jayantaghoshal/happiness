@@ -7,10 +7,6 @@
 cc_defaults {
     name: "vcc_pac_common_flags",
     cpp_std: "c++14",
-
-    cflags: [
-        "-Wunused",
-    ],
 }
 
 // Common debug flags for PAC modules and tests
