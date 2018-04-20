@@ -224,9 +224,9 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
     logger.info("Update of ihu done")
 
 
-def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_first_failure: bool):
+def run_testcases(tests_to_run: List[IhuBaseTest], vcc_dashboard_reporting: bool, report_results_to_ci_database: bool, abort_on_first_failure: bool):
     test_results = []  # type: List[NamedTestResult]
-    if ci_reporting:# initialise visualizing Testcases in VCC CI
+    if vcc_dashboard_reporting:  # initialise visualizing Testcases in VCC CI
         try:
             if "UPSTREAM_JOB_GIT_REVISION" in os.environ and os.environ["UPSTREAM_JOB_GIT_REVISION"]:
                 change_id = test_visualisation.redis_con.get(
@@ -242,22 +242,23 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_
                 print(e)
                 print("Initialization of VCC CI failed")
     for t in tests_to_run:
-        if ci_reporting:
+        if vcc_dashboard_reporting:
             try:
                 vccciproxy.testcase_started(store_result.get_module_name(t))
             except Exception as e:
                 print(traceback.format_exc())
                 print(e)
                 print("Testcase started message to VCC CI failed")
+        if report_results_to_ci_database:
             try:
                 store_result.clean_old_results()
             except Exception as e:
                 print(traceback.format_exc())
                 print(e)
                 print("Cleaning old results failed")
-                ci_reporting = False  # It will prohibit running rest of mongodb operation
+                report_results_to_ci_database = False  # It will prohibit running rest of mongodb operation
         test_result = run_test(t)
-        if ci_reporting and not isinstance(t, Disabled):
+        if vcc_dashboard_reporting and not isinstance(t, Disabled):
             try:
                 vccciproxy.testcase_finished(store_result.get_module_name(
                     t), store_result.get_result(test_result))
@@ -265,6 +266,7 @@ def run_testcases(tests_to_run: List[IhuBaseTest], ci_reporting: bool, abort_on_
                 print(traceback.format_exc())
                 print(e)
                 print("Testcase finished message to VCC CI failed")
+        if report_results_to_ci_database and not isinstance(t, Disabled):
             try:
                 store_result.load_test_results(t, test_result)
             except Exception as e:
@@ -323,7 +325,8 @@ def main():
                                  "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                  "dont run generic test cases")
     run_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
-    run_parser.add_argument('--ci_reporting', action='store_true')
+    run_parser.add_argument('--vcc_dashboard_reporting', action='store_true')
+    run_parser.add_argument('--report_results_to_ci_database', action='store_true')
     run_parser.add_argument('--update_ihu', action='store_true')
     run_parser.add_argument(
         '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
@@ -379,7 +382,8 @@ def main():
         build_testcases(plan, skip_build_vts)
     elif args.program == "run":
         plan = assemble_plan()
-        ci_reporting = args.ci_reporting
+        vcc_dashboard_reporting = args.vcc_dashboard_reporting
+        report_results_to_ci_database = args.report_results_to_ci_database
         capabilities = set(args.capabilities)
         if len(args.capabilities) == 0:
             print("ERROR: No capabilities specified, no tests will be able to run")
@@ -403,7 +407,8 @@ def main():
         if args.update_ihu:
             flash_ihu()
 
-        run_testcases(selected_tests, ci_reporting, args.abort_on_first_failure)
+        run_testcases(selected_tests, vcc_dashboard_reporting,
+                      report_results_to_ci_database, args.abort_on_first_failure)
     else:
         root_parser.print_usage()
         sys.exit(1)
