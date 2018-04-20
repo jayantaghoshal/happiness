@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  For permissions -->
+    <!-- Permission text: Grant permission for app service to use remoteCtrl API -->
+    <string name="volvocars_permission_label_remote_ctrl"> RemoteCtrlServices </string>
+    <string name="volvocars_permission_desc_remote_ctrl"> Allow use of remote control convenience API to control system settings </string>
+</resources>
+
