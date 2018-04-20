@@ -34,6 +34,7 @@ from generated.pyDataElements import \
     BaseIntegerSender
 
 PydataElementsSenderType = typing.Union[BaseEnumSender, BaseBoolSender, BaseFloatSender, BaseIntegerSender]
+T = typing.TypeVar('T')
 
 property_list = [
     ('CONNECTED_SAFETY_ON', 557842436),
@@ -42,6 +43,20 @@ property_list = [
     ('LANE_KEEPING_AID_ON', 555745289),
     ('LANE_KEEPING_AID_MODE', 557842443),
 ]
+
+
+def wait_for(get_function, expected_value, timeout_sec, extra_message=None):
+    # type: (typing.Callable[[], T], T, int, str) -> None
+    end = time.time() + timeout_sec
+    read_value = get_function()
+    while time.time() < end:
+        read_value = get_function()
+        if read_value == expected_value:
+            break
+        time.sleep(0.2)
+    asserts.assertEqual(read_value, expected_value,
+                        "Expected get function to be %s within %d sec, got %s. %s)" %
+                        (expected_value, timeout_sec, read_value, extra_message))
 
 def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
     # type: (FrSignalInterface, PydataElementsSenderType, int, int) -> None
@@ -73,6 +88,11 @@ class VehicleHalCommon():
     fan_level_4 = "com.volvocars.launcher:id/fan_four"
     fan_level_5 = "com.volvocars.launcher:id/fan_five"
     fan_max = "com.volvocars.launcher:id/fan_max"
+    temperature_controller_left = "com.volvocars.launcher:id/temperature_controller_driver"
+    temperature_controller_right = "com.volvocars.launcher:id/temperature_controller_passenger"
+    temperature_plus_button = "com.volvocars.launcher:id/plus_button"
+    temperature_minus_button = "com.volvocars.launcher:id/minus_button"
+
 
     # ViewClient
     active_view_client = None
@@ -118,7 +138,7 @@ class VehicleHalCommon():
         kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
         device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
         kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
-                   'autodump': False, 'startviewserver': True, 'compresseddump': True}
+                   'autodump': False, 'startviewserver': True, 'compresseddump': False}
         return ViewClient(device, serialno, **kwargs2), device
 
     # Get ViewClient if there is any, otherwise create one
@@ -126,13 +146,8 @@ class VehicleHalCommon():
         if self.active_view_client is not None:
             return self.active_view_client, self.active_view_device
 
-        kwargs1 = {'ignoreversioncheck': True, 'verbose': True, 'ignoresecuredevice': False, 'serialno': '.*'}
-        device, serialno = ViewClient.connectToDeviceOrExit(**kwargs1)
-        kwargs2 = {'forceviewserveruse': False, 'useuiautomatorhelper': False, 'ignoreuiautomatorkilled': True,
-                   'autodump': False, 'startviewserver': True, 'compresseddump': True}
-        self.active_view_device = device
-        self.active_view_client = ViewClient(device, serialno, **kwargs2)
-        return self.active_view_client, device
+        self.active_view_client, self.active_view_device = self.getViewClient()
+        return self.active_view_client, self.active_view_device
 
     def setUpVendorExtension(self):
         self.dut.adb.shell('input keyevent 3')

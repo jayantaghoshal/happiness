@@ -82,8 +82,8 @@ test_plan_staging_daily = [
              deadline="2018-04-28"
     ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",           standard_caps), #Joel Gustafsson
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
@@ -100,6 +100,7 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps), #Samuel Idowu
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray}), #Abhijeet Shirolikar
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set

@@ -25,8 +25,8 @@ from generated.datatypes import VehModMngtGlbSafe1, HmiHvacFanLvl
 from generated import datatypes as DE
 
 
-class VtsClimateComponentTest(base_test.BaseTestClass):
-    """Testing Climate functions"""
+class VtsFanLevelComponentTest(base_test.BaseTestClass):
+    """Testing Fan Level"""
     def setUpClass(self):
         """Creates a mirror and init vehicle hal."""
         self.dut = self.registerController(android_device)[0]
@@ -45,7 +45,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         self.vc, self.device = self.vHalCommon.getViewClient()
 
         # Open climate view and dump the view
-        self.device.touchDip(388.0, 948.0, 0)
+        self.device.touchDip(388.0, 988.0, 0)
         self.vc.dump()
 
         #Get fan buttons
@@ -60,7 +60,7 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
 
     def setUp(self):
         # Open climate view
-        self.device.touchDip(388.0, 948.0, 0)
+        self.device.touchDip(388.0, 988.0, 0)
 
         self.vehmod = VehModMngtGlbSafe1()
         self.vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
@@ -143,7 +143,6 @@ class VtsClimateComponentTest(base_test.BaseTestClass):
         _s = 0.5
         fr = self.fr
         vHalCommon = self.vHalCommon
-
 
         # Set climate to Active
         print("set to active")

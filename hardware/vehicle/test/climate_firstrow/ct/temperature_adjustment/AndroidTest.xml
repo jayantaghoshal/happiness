@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<configuration description="Config for VTS ClimateComponentTest test cases">
+<configuration description="VTS for Temperature Adjustment inside the Climate Pane.
+    The test handles the increase and decrease to, but not from, Temperature High and Low.
+    The test also makes sure that the temperature adjustment is disabled with invalid preconditions">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="abort-on-push-failure" value="true"/>
         <option name="push-group" value="HalHidlHostTest.push"/>
@@ -13,9 +15,9 @@
     </target_preparer>
     <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
-        <option name="test-module-name" value="VtsClimateComponentTest"/>
-        <option name="test-case-path" value="VtsClimateComponentTest"/>
+        <option name="test-module-name" value="VtsTemperatureAdjustmentComponentTest"/>
+        <option name="test-case-path" value="VtsTemperatureAdjustmentComponentTest"/>
         <option name="precondition-lshal" value="android.hardware.automotive.vehicle@2.0"/>
-        <option name="test-timeout" value="1m"/>
+        <option name="test-timeout" value="3m"/>
     </test>
 </configuration>
