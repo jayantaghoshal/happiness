@@ -12,7 +12,17 @@ class ExpectedResponseNotPresentError(RuntimeError):
 
 
 class Serial(RecordingSerial):
-    def expect_line(self, pattern: str, timeout_sec : int = 5, hint: str = None):
+    def __init__(self, *args, **kwargs):
+        super(Serial, self).__init__(*args, **kwargs)
+
+    def try_expect_line(self, pattern: str, timeout_sec: int = 5, hint: str = None):
+        try:
+            self.expect_line(pattern, timeout_sec, hint)
+            return True
+        except Exception:
+            return False
+
+    def expect_line(self, pattern: str, timeout_sec: int = 5, hint: str = None):
         stop_time = time.time() + timeout_sec
         while time.time() < stop_time:
             line = self.readline(timeout_sec)
@@ -52,6 +62,9 @@ class VipSerial(Serial):
     VIP_APP = 0
     VIP_PBL = 1
 
+    def __init__(self, *args, **kwargs):
+        super(VipSerial, self).__init__(*args, **kwargs)
+
     def type(self) -> Any:
         if self.is_vip_app():
             return VipSerial.VIP_APP
@@ -79,7 +92,10 @@ class VipSerial(Serial):
             line = self.readline(timeout_sec)
             if not line:
                 continue
-            if re.match(r".*PBL Version: PBL/.*", line) is not None:
+            pbl_version_match = re.match(r".*PBL Version: PBL/v(.*)$", line)
+            if pbl_version_match is not None:
+                # Tuck away PBL version since we've already found it
+                self.pbl_version = pbl_version_match.group(1)
                 return True
             if re.match(r".*/sh: version: not found", line) is not None:
                 return False

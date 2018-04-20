@@ -9,6 +9,7 @@ import argparse
 import logging
 import logging.config
 import json
+import re
 import shutil
 import sys
 
@@ -16,6 +17,7 @@ from collections import namedtuple
 from shipit.serial_mapping import open_serials, swap_serials, PortMapping, VipSerial, MpSerial, IhuSerials
 from shipit import serial_mapping
 from shipit.process_tools import check_output_logged
+from distutils.version import LooseVersion
 
 logger = logging.getLogger("ihu_update")
 
@@ -75,7 +77,7 @@ def reboot_mp_to_android_default_with_gpios(vip: VipSerial) -> None:
 
 
 def expect_mp_abl_on_serial(mp: MpSerial) -> None:
-    logger.info("Waiting for ABL commandline, it is usually quick but"
+    logger.info("Waiting for ABL commandline, it is usually quick but "
                 "it might take longer in case ABL has some update/init work to do.")
 
     mp.expect_line("abl-APL:.*", 30, "Is the MP UART connected? Or do you have the TTY open already?\r\n"
@@ -198,6 +200,9 @@ Troubleshooting:
     try:
         reboot_vip_into_pbl(vip)
 
+        old_pbl = (LooseVersion(vip.pbl_version) <= LooseVersion("6.6.0"))
+        logger.info("PBL version is {}".format(vip.pbl_version))
+
         if update_mp:
             logger.info("Updating MP software (via Fastboot)")
             logger.info("Starting ABL command line")
@@ -236,14 +241,53 @@ Troubleshooting:
                                    "Consider reporting bug and ensuring you ABL is correct by running script"
                                    "with --update-mp=false and --force-abl-update true".format(exp))
 
-            try:
-                logger.info("Waiting for 30 seconds for sth looking like MP bootup")
-                mp.expect_line("Loader: Launch VMM", timeout_sec=30)
-            except serial_mapping.ExpectedResponseNotPresentError:
-                logger.error("Failed to boot after initial startup, sth around fastboot reboot command is broken\r\n"
-                             "will try to restart manually...")
+            if old_pbl:
+                logger.info("VIP had old PBL ({}) so first action after fastboot is to fix that".format(vip.pbl_version))
+                # Go into APP to make the MP go into device mode since it needs to complete IFWI update. When
+                # IFWI update is done, the MP will reboot. To make sure that it goes into device mode, we need the
+                # VIP to be in APP mode.
+                if not vip.is_vip_app():
+                    reboot_vip_into_app(profile_flags, vip)
+                    if not vip.is_vip_app():
+                        raise RuntimeError("VIP needs to be in APP")
+                vip.writeline("sm alw 1") # Keep system up
+                wait_for_device_adb()
+                # IFWI update should be done here. Boot back into PBL.
+                reboot_vip_into_pbl(vip)
+                vip.writeline("sm alw 1")
+                # Give fastboot mode a few retries, just in case IFWI update runs at startup
+                wait_for_fastboot(retries=10, time_between_retries=10)
+                run(["fastboot", "continue"])
+                wait_for_device_adb()
+                # Flash APP
+                run(["adb", "shell", "vbf_flasher", "/vendor/vip-update/app/*"])
+                # Reboot pbl to pbl
+                reboot_vip_into_pbl(vip)
+                vip.writeline("sm alw 1") # Keep alive for flashing
+                wait_for_fastboot(retries=10, time_between_retries=10)
+                run(["fastboot", "continue"])
+                wait_for_device_adb()
+                # Flash PBL
+                run(["adb", "shell", "vbf_flasher", "/vendor/vip-update/pbl/*"])
+                # Reboot into APP
+                run(["adb", "shell", "vbf_flasher", "-a"])
+                # Wait for APP to come up
+                vip.expect_line(r"\[0\.\d+\].*Sys_Man_Init.*", timeout_sec=3 * 60)
+                time.sleep(2) # Lots of traffic on this port during boot, wait until it dies down a bit.
+                if not vip.is_vip_app():
+                    raise RuntimeError("VIP did not return to APP mode")
+                ensure_no_powermoding_or_resets(profile_flags, vip)
+                wait_for_device_adb()
+            else:
+                try:
+                    logger.info("Waiting for 30 seconds for sth looking like MP bootup")
+                    mp.expect_line("Loader: Launch VMM", timeout_sec=30)
+                except serial_mapping.ExpectedResponseNotPresentError:
+                    logger.error("Failed to boot after initial startup, "
+                                 "sth around fastboot reboot command is broken\r\n"
+                                 "will try to restart via serials...")
 
-                reboot_vip_into_app(profile_flags, vip)
+                    reboot_vip_into_app(profile_flags, vip)
 
             wait_for_boot_and_flashing_completed(profile_flags, ihu_serials, timeout_sec=15 * 60)
 
@@ -309,8 +353,27 @@ Troubleshooting:
 
 
 def force_flash_vip_pbl_and_app(profile_flags, ihu_serials):
-    reboot_vip_into_pbl(ihu_serials.vip)
-    ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
+    def ensure_mp_mode_for_force_vip_flashing() -> None:
+        def ensure_mp_with_with_adb_even_if_fastboot():
+            try:
+                wait_for_device_adb()
+            except Exception:
+                logger.warning("Unit not booted into device, maybe its fastboot...")
+                wait_for_host_target_fastboot_connection()
+                run(['fastboot', "continue"])
+                wait_for_device_adb()
+
+        try:
+            ensure_mp_with_with_adb_even_if_fastboot()
+        except Exception:
+            logger.info("In VIP PBL unit does not booted into device mode, forcing...")
+            reboot_mp_into_android_default_mode_without_waiting(ihu_serials.vip)
+            ensure_mp_with_with_adb_even_if_fastboot()
+
+    if ihu_serials.vip.type() != VipSerial.VIP_APP:
+        logger.info("VIP not in APP mode. Ensuring that it is.")
+        reboot_vip_into_app(profile_flags, ihu_serials.vip)
+    ensure_mp_mode_for_force_vip_flashing()
     output = run(['adb',
                   "shell",
                   "vbf_flasher",
@@ -318,8 +381,10 @@ def force_flash_vip_pbl_and_app(profile_flags, ihu_serials):
                   "/vendor/vip-update/pbl/vip-pbl.VBF"],
                  timeout_sec=60 * 2)
     logger.info("VIP PBL update finished with result %s", output)
-    reboot_vip_into_pbl(ihu_serials.vip)
-    ensure_mp_mode_for_force_vip_flashing(profile_flags, ihu_serials)
+    if ihu_serials.vip.type() != VipSerial.VIP_PBL:
+        logger.info("VIP not in PBL mode. Ensuring that it is.")
+        reboot_vip_into_pbl(ihu_serials.vip)
+    ensure_mp_mode_for_force_vip_flashing()
     output = run(['adb',
                   "shell",
                   "vbf_flasher",
@@ -334,8 +399,27 @@ def reboot_vip_into_app(profile_flags: ProfileFlags, vip: VipSerial):
 
     def reboot_pbl_to_app():
         vip.writeline("sm restart")  # just restart pbl to app
-        # matching first second log timestamps is more robust in case of lost traces
-        vip.expect_line(r"\[0\.\d+\]", timeout_sec=30, hint="VIP has not booted (no traces indicating booting up)")
+        if vip.try_expect_line(r"Missing parameter - command: sm restart", timeout_sec=1):
+            logger.info("Apparently we're dealing with a VIP from the dark ages...")
+            # Ok, so this appears to be an old VIP that doesn't support "sm restart".
+            # Let's set sm alw 0 and restart to PBL. That, and the startup timer timing out should
+            # take us back to APP
+            vip.writeline("swdl e") # Restart to PBL
+            if vip.try_expect_line(r"\[0\.\d+\].*Sys_Man_Init.*", timeout_sec=30):
+                if not vip.is_vip_pbl(timeout_sec=30):
+                    raise RuntimeError("Unable to boot into PBL")
+            else:
+                raise RuntimeError("No sign of life from VIP")
+            logger.info("Booted into VIP PBL, awaiting boot timeout for transition to APP mode")
+            if vip.try_expect_line(r"\[0\.\d+\].*Sys_Man_Init.*", timeout_sec=3 * 60):
+                time.sleep(2) # Wait for console traffic to die down a bit before issuing commands
+                if not vip.is_vip_app(timeout_sec=30):
+                    raise RuntimeError("VIP not in APP after timeout and reboot")
+            else:
+                raise RuntimeError("VIP not responding")
+        else:
+            # matching first second log timestamps is more robust in case of lost traces
+            vip.expect_line(r"\[0\.\d+\]", timeout_sec=30, hint="VIP has not booted (no traces indicating booting up)")
 
     if vip_type == vip.VIP_PBL:
         reboot_pbl_to_app()
@@ -364,7 +448,9 @@ def reboot_vip_into_pbl(vip):
         vip.writeline("swdl e")  # swdl e for PBL
 
     logger.info("Waiting for VIP reboot")
-    vip.expect_line(r"\[0\.\d+\]", timeout_sec=30, hint="VIP has not booted (no traces indicating booting up)")
+    vip.expect_line(r"\[0\.\d+\].*Sys_Man_Init",
+                    timeout_sec=30,
+                    hint="VIP has not booted (no traces indicating booting up)")
 
     time.sleep(1)  # a lot console traffic in this second
     logger.info("Confirming VIP in PBL mode...")
@@ -416,18 +502,22 @@ def start_fastboot_from_mp_abl_cmdline(mp: MpSerial) -> None:
     logger.info("Fastboot confirmed on console")
 
 
-def ensure_mp_mode_for_force_vip_flashing(profile_flags: ProfileFlags, ihu_serials: IhuSerials) -> None:
-    try:
-        wait_for_device_adb()
-        adb_bootmode = run(['adb', "get-state"],
-                           timeout_sec=60)
-    except Exception:
-        adb_bootmode = 'unknown'
+def is_mp_in_fastboot() -> bool:
+    output = run(["fastboot", "devices"])
+    if output:
+        return True
+    return False
 
-    if adb_bootmode != 'device':
-        logger.info("In VIP PBL unit does not booted into device mode, forcing...")
-        reboot_mp_into_android_default_mode_and_verify_abl_bootmode_confirmation(ihu_serials.vip, ihu_serials.mp)
-        wait_for_device_adb()
+
+def wait_for_fastboot(retries: int = 10, time_between_retries: int = 10) -> None:
+    check_fastboot_retries = retries
+    while check_fastboot_retries > 0:
+        if is_mp_in_fastboot():
+            break
+        time.sleep(time_between_retries)
+        check_fastboot_retries -= 1
+    if not is_mp_in_fastboot():
+        raise RuntimeError("For some reason MP did not go into fastboot")
 
 
 def wait_for_boot_and_flashing_completed(profile_flags: ProfileFlags,
@@ -605,6 +695,9 @@ Possible profiles:
     with open(os.path.dirname(__file__) + "/logging.json", "rt") as f:
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
+
+    script_version = run(["git", "-C", os.path.dirname(sys.argv[0]), "rev-parse", "HEAD"])
+    logger.info("{} ({})".format(sys.argv[0], script_version))
 
     logger.info("Starting parsing for args:\r\n %r", parsed_args)
 
