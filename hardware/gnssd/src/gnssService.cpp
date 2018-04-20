@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -236,7 +236,7 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
                                                 Icb_OpGNSSPositionData_Response_Decode)) {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionData->utcTime);
-        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
               p->gnssPositionData->utcTime->year,
               p->gnssPositionData->utcTime->month,
               p->gnssPositionData->utcTime->day,
@@ -277,10 +277,10 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
         location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;    // dm -> meters
         location_.speedMetersPerSec = p->gnssPositionData->movement->speed / 1000.0;  // mm/s -> m/s
         location_.bearingDegrees = p->gnssPositionData->heading / 100.0;              // 1/100 degrees -> degrees
-        ALOGV("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
+        ALOGD("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
 
         if (sendnow) {
-            ALOGV("location send to gnss, triggered by location");
+            ALOGD("location send to gnss, triggered by location");
             gnss_.updateLocation(location_);
             location_.timestamp = 0;
             location_.gnssLocationFlags = 0;
@@ -305,7 +305,7 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
                                                 Icb_OpGNSSPositionDataAccuracy_Response_Decode)) {
         // All ok.
         const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
-        ALOGV("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
               p->gnssPositionDataAccuracy->utcTime->year,
               p->gnssPositionDataAccuracy->utcTime->month,
               p->gnssPositionDataAccuracy->utcTime->day,
@@ -341,7 +341,7 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
         location_.verticalAccuracyMeters = p->gnssPositionDataAccuracy->accuracy->sdAltitude / 100.0;  // cm -> m
 
         if (sendnow) {
-            ALOGV("location send to gnss, triggered by accuracy");
+            ALOGD("location send to gnss, triggered by accuracy");
             gnss_.updateLocation(location_);
             location_.timestamp = 0;
             location_.gnssLocationFlags = 0;
