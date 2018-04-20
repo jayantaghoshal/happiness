@@ -29,7 +29,7 @@ import vendor.volvocars.hardware.iplm.V1_0.ResourceGroupPrio;
  *
  * CSDConsumerManager
  */
-public class CSDConsumerManager {
+public class CSDConsumerManager implements DimmingMonitor.DimmingCallback {
     public static final String TAG = "BrightnessService.CSDMa";
     private PowerManager mPowerManager;
     private IVehicle mVehicle;
@@ -39,8 +39,10 @@ public class CSDConsumerManager {
     private IplmCallback miplmCallback;
     private int mSubcribeRetries =0;
     private final int VEHICLE_HAL_SUBSCRIBE_RETRIES = 10;
-    private PowerManager.WakeLock wakeLockVehicleIgnition = null;
-    private PowerManager.WakeLock wakeLockIplm = null;
+    private PowerManager.WakeLock wakeLockVehicleIgnition;
+    private PowerManager.WakeLock wakeLockIplm;
+    private DimmingMonitor mDimMonitor;
+
     public CSDConsumerManager(IVehicle vehicle, PowerManager powerManager) {
         try {
             Log.d(TAG, "BrightnessService.CSDMan start ");
@@ -54,13 +56,9 @@ public class CSDConsumerManager {
             //Setup SubscribeOptions
             ArrayList<SubscribeOptions> options = new ArrayList<>();
             SubscribeOptions opts = new SubscribeOptions();
-            opts.propId = VehicleProperty.AP_POWER_STATE;
+            opts.propId = VehicleProperty.IGNITION_STATE;
             opts.flags = SubscribeFlags.DEFAULT;
             options.add(opts);
-            SubscribeOptions opts2 = new SubscribeOptions();
-            opts2.propId = VehicleProperty.IGNITION_STATE;
-            opts2.flags = SubscribeFlags.DEFAULT;
-            options.add(opts2);
 
             //subscribe to vehicleproperty events.
             while (mSubcribeRetries < VEHICLE_HAL_SUBSCRIBE_RETRIES) {
@@ -73,17 +71,11 @@ public class CSDConsumerManager {
                 else {
                     //Since wo dont get latest values when we subscribe we do get on each property
                     VehiclePropValue requestedprop = new VehiclePropValue();
-                    requestedprop.prop = VehicleProperty.AP_POWER_STATE;
-                    VehicleHalUtils.ValueResult vehicleApPowerStateprop = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
-                    int vehicleApPowerState = vehicleApPowerStateprop.propValue.value.int32Values.get(0);
-                    onApPowerStateChange(vehicleApPowerState);
-
                     requestedprop.prop = VehicleProperty.IGNITION_STATE;
                     VehicleHalUtils.ValueResult vehicleignitionstateprop2 = VehicleHalUtils.GetVehiclePropValue(mVehicle,requestedprop);
                     int ignitionState = vehicleignitionstateprop2.propValue.value.int32Values.get(0);
                     onIgnitionChange(ignitionState);
 
-                    Log.v(TAG, "vehicleApPowerState " + vehicleApPowerState);
                     Log.v(TAG, "ignitionstate " + ignitionState);
                     break;
                 }
@@ -94,7 +86,10 @@ public class CSDConsumerManager {
         catch (InterruptedException ex) {
             Log.e(TAG, ex.getMessage());
         }
+
+        mDimMonitor = new DimmingMonitor(this);
     }
+
     /**
      * Called on VehicleIgnitionState change
      * @param ignitionState int with ignitionstate
@@ -118,25 +113,9 @@ public class CSDConsumerManager {
                 break;
         }
     }
-    /**
-     * * Called on VehicleApPowerState change
-     * @param powerstate VehicleApPowerState
-     * */
-    private void onApPowerStateChange(int powerstate){
-        switch (powerstate){
-            case VehicleApPowerState.ON_DISP_OFF:
-                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_OFF);
-                break;
-            case VehicleApPowerState.ON_FULL:
-                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_ON);
-                break;
-            default:
-                break;
-        }
-    }
+
     /**
      * Callback class used when subscribing to property events in VehicleHal.
-     * onPropertyEvent we call onApPowerStateChange or onIgnitionChange depending on type.
      * */
     public class VehicleCallback extends IVehicleCallback.Stub {
         @Override
@@ -145,10 +124,6 @@ public class CSDConsumerManager {
                 if(propValue.prop == VehicleProperty.IGNITION_STATE){
                     int ignitionState = propValue.value.int32Values.get(0);
                     onIgnitionChange(ignitionState);
-                }
-                else if(propValue.prop == VehicleProperty.AP_POWER_STATE){
-                    int vehicleApPowerState = propValue.value.int32Values.get(0);
-                    onApPowerStateChange(vehicleApPowerState);
                 }
             }
         }
@@ -184,5 +159,21 @@ public class CSDConsumerManager {
         }
         @Override
         public void onNodeStatus(byte ecuType, boolean ecuStatus){} // not used
+    }
+
+    public void onDisplayStateChanged(DimmingMonitor.State state) {
+        Log.d(TAG, "onDisplayStateChanged " + state);
+        switch(state) {
+            case BRIGHT:
+                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_ON);
+            break;
+
+            case DIMMED:
+                VehicleHalUtils.SetVehiclePropValue(mVehicle,VehicleProperty.AP_POWER_STATE, VehicleApPowerSetState.DISPLAY_OFF);
+            break;
+
+            default:
+            break;
+        }
     }
 }
