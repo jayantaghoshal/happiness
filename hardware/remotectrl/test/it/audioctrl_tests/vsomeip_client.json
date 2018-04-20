@@ -3,7 +3,7 @@
     "logging" :
     {
         "level" : "debug",
-        "console" : "false",
+        "console" : "true",
         "version" : {"enable":"false"}
     },
 

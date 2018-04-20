@@ -200,7 +200,7 @@ public class AudioCtrlAppService extends Service {
                 try {
                     byte actualVolume = volumeLevel;
                     mCarAudioManager.setGroupVolume(volumeGroupId, actualVolume, 0);
-                    Log.d(TAG, "Max vol of stream" + String.valueOf(volumeGroupId) + " is "
+                    Log.d(TAG, "Max vol of stream " + String.valueOf(volumeGroupId) + " is "
                                     + String.valueOf(
                                               mCarAudioManager.getGroupMaxVolume(volumeGroupId)));
 
@@ -215,9 +215,9 @@ public class AudioCtrlAppService extends Service {
                 } catch (RemoteException e) {
                     Log.e(TAG, "SendSetVolumeResp error +" + e.getMessage());
                 }
-                byte bytecontext = (byte) volumeGroupId;
+
                 // Send notification
-                updateVolume(bytecontext);
+                updateVolume(audioContext);
             }
         }).start();
     }
@@ -232,8 +232,7 @@ public class AudioCtrlAppService extends Service {
             try {
                 int[] usage = mCarAudioManager.getUsagesForVolumeGroupId(groupId);
                 for (int musage : usage) {
-                    if (musage == AudioAttributes.USAGE_MEDIA
-                            || musage == AudioAttributes.USAGE_UNKNOWN) {
+                    if (musage == AudioAttributes.USAGE_MEDIA) {
                         updateVolume((byte) musage);
                     }
                 }

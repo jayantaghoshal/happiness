@@ -5,6 +5,8 @@
 
 #include "remotectrl_client_base.h"
 
+#include <iostream>
+
 using namespace vcc::remotectrlsim;
 
 RemoteCtrlClientBase::RemoteCtrlClientBase(const std::string& config_path, const ClientInfo& client_info)
@@ -50,6 +52,13 @@ bool RemoteCtrlClientBase::WaitForResponse(const std::chrono::milliseconds& peri
     return status;
 }
 
+bool RemoteCtrlClientBase::WaitForNotification(const std::chrono::milliseconds& period) {
+    std::unique_lock<std::mutex> lk(notification_mtx_);
+    auto status = notification_cv_.wait_for(lk, period, [this]() { return notification_received_; });
+    notification_received_ = false;
+    return status;
+}
+
 void RemoteCtrlClientBase::StartClient() {
     client_thread_ = std::thread([this]() { application_->start(); });
 }
@@ -67,6 +76,11 @@ void RemoteCtrlClientBase::StopClient() {
 void RemoteCtrlClientBase::OnStateChange(vsomeip::state_type_e state) {
     if (state == vsomeip::state_type_e::ST_REGISTERED) {
         application_->request_service(client_info_.service_id_, client_info_.instance_id_);
+        for (const vsomeip::event_t& e : client_info_.events_) {
+            application_->request_event(
+                    client_info_.service_id_, client_info_.instance_id_, e, {client_info_.eventgroup_id_}, false);
+        }
+        application_->subscribe(client_info_.service_id_, client_info_.instance_id_, client_info_.eventgroup_id_);
     }
 }
 
@@ -80,10 +94,25 @@ void RemoteCtrlClientBase::OnAvailabilityChanged(vsomeip::service_t /*service*/,
 }
 
 void RemoteCtrlClientBase::OnMessageReceived(const std::shared_ptr<vsomeip::message>& message) {
-    if (message->get_message_type() == vsomeip::message_type_e::MT_RESPONSE) {
-        received_reply_ = message;
-        response_received_ = true;
-        response_cv_.notify_all();
+    switch (message->get_message_type()) {
+        case vsomeip::message_type_e::MT_RESPONSE: {
+            std::cout << "Received Response Message" << std::endl;
+            received_reply_ = message;
+            response_received_ = true;
+            response_cv_.notify_all();
+            break;
+        }
+        case vsomeip::message_type_e::MT_NOTIFICATION: {
+            std::cout << "Received Notification Message" << std::endl;
+            received_notification_ = message;
+            notification_received_ = true;
+            notification_cv_.notify_all();
+            break;
+        }
+        default: {
+            // Dont care about the others, yet...
+            std::cout << "Received Unknown Message [" << unsigned(message->get_message_type()) << "]" << std::endl;
+        }
     }
 }
 

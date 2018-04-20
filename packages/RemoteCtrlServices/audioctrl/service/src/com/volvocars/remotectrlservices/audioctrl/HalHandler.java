@@ -108,8 +108,7 @@ public class HalHandler {
         try {
             mNativeHalService.updateVolume(volumeData);
         } catch (RemoteException ex) {
-            Log.e(TAG,
-                    "Error calling updateVolume function on native HAL interface: "
+            Log.e(TAG, "Error calling updateVolume function on native HAL interface: "
                             + ex.getMessage());
         }
     }
@@ -127,8 +126,7 @@ public class HalHandler {
             mNativeHalService.sendGetVolumeResp((short) requestIdentifier,
                     (requestStatus == true) ? StatusCode.SUCCESS : StatusCode.ERROR, volumeData);
         } catch (RemoteException ex) {
-            Log.e(TAG,
-                    "Error calling sendGetVolumeResp function on native HAL interface: "
+            Log.e(TAG, "Error calling sendGetVolumeResp function on native HAL interface: "
                             + ex.getMessage());
         }
     }
@@ -138,8 +136,7 @@ public class HalHandler {
             mNativeHalService.sendSetVolumeResp((short) requestIdentifier,
                     (requestStatus == true) ? StatusCode.SUCCESS : StatusCode.ERROR);
         } catch (RemoteException ex) {
-            Log.e(TAG,
-                    "Error calling sendSetVolumeResp function over native HAL interface: "
+            Log.e(TAG, "Error calling sendSetVolumeResp function over native HAL interface: "
                             + ex.getMessage());
         }
     }
@@ -169,8 +166,7 @@ public class HalHandler {
                 try {
                     mAppService.getVolume(requestIdentifier, context);
                 } catch (RemoteException ex) {
-                    Log.e(TAG,
-                            "Error forwarding GetVolume request to appService : "
+                    Log.e(TAG, "Error forwarding GetVolume request to appService : "
                                     + ex.getMessage());
                 }
             }
@@ -183,8 +179,7 @@ public class HalHandler {
                 try {
                     mAppService.setVolume(requestIdentifier, data.context, data.level);
                 } catch (RemoteException ex) {
-                    Log.e(TAG,
-                            "Error forwarding SetVolume request to appService : "
+                    Log.e(TAG, "Error forwarding SetVolume request to appService : "
                                     + ex.getMessage());
                 }
             }

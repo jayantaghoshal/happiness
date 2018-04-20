@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
                 .service_name_ = "RemoteCtrl_AudioCtrl",
                 .service_id_ = REMOTECTRL_AUDIOCTRL_SERVICE_ID,
                 .instance_id_ = REMOTECTRL_AUDIOCTRL_SERVICE_INSTANCE_ID,
+                .eventgroup_id_ = REMOTECTRL_AUDIOCTRL_EVENTGROUP_ID,
                 .methods_ = {REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME, REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME},
                 .events_ = {REMOTECTRL_AUDIOCTRL_EVENT_ID_VOLUMESTATUS}};
 

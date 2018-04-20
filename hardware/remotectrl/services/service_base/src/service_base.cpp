@@ -88,7 +88,7 @@ void ServiceBase::StopOffer() {
 }
 
 void ServiceBase::SendNotification(vsomeip::event_t event_id, const std::vector<vsomeip::byte_t>&& payload_data) {
-    ALOGV("SendNotification: service[%s] ServiceId[0x%04X] InstanceId[0x%04X], EventId[0x%04X]",
+    ALOGD("SendNotification: service[%s] ServiceId[0x%04X] InstanceId[0x%04X], EventId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
           service_info_.instance_id_,
@@ -103,7 +103,7 @@ void ServiceBase::SendNotification(vsomeip::event_t event_id, const std::vector<
 void ServiceBase::SendResponse(vsomeip::session_t session_id,
                                const vsomeip::return_code_e& status,
                                const std::vector<vsomeip::byte_t>&& payload_data) {
-    ALOGV("SendResponse: service[%s] ServiceId[0x%04X], InstanceId[0x%04X] SessionId[0x%04X]",
+    ALOGD("SendResponse: service[%s] ServiceId[0x%04X], InstanceId[0x%04X] SessionId[0x%04X]",
           service_info_.service_name_,
           service_info_.service_id_,
           service_info_.instance_id_,

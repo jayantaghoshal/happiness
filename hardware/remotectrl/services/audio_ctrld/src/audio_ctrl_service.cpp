@@ -66,7 +66,7 @@ Return<void> AudioCtrlService::unregisterAudioControlHandler(
 }
 
 Return<void> AudioCtrlService::updateVolume(const hidl_remotectrl::VolumeData& data) {
-    ALOGD("%s: sending Volume update", __FUNCTION__);
+    ALOGD("%s: Context: %hhu, Level: %hhu", __FUNCTION__, data.context, data.level);
 
     std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(data.context),
                                               static_cast<vsomeip::byte_t>(data.level)};

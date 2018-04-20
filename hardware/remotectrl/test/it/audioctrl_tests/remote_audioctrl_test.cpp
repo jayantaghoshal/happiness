@@ -32,8 +32,9 @@ const ClientInfo client_info = {
         .methods_ = {REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME, REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME},
         .events_ = {REMOTECTRL_AUDIOCTRL_EVENT_ID_VOLUMESTATUS}};
 
-const std::uint16_t GETVOLUME_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x02U;
-const std::uint16_t SETVOLUME_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x00U;
+const std::uint16_t GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
+const std::uint16_t SETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x00U;
+const std::uint16_t VOLUME_NOTIFICATION_EXPECTED_PAYLOAD_LEN = 0x02U;
 const std::uint16_t MEDIA_CONTEXT = 0x01U;
 
 }  // namespace
@@ -71,7 +72,7 @@ TEST_F(RemoteAudioCtrlFixture, GetVolume_SuccessTest) {
     ASSERT_THAT(WaitForResponse(2s), true);
 
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[0], MEDIA_CONTEXT);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(0), Le(100)));
 }
@@ -87,6 +88,30 @@ TEST_F(RemoteAudioCtrlFixture, GetVolume_FailureTest) {
     ASSERT_THAT(WaitForResponse(2s), false);
 }
 
+/* SetVolume_SuccessTest
+ * Asserts that on success IHU notifies changed volume to requested volume level
+ */
+TEST_F(RemoteAudioCtrlFixture, SetVolume_SuccessTest) {
+    // TODO (Abhi): Currently scaling in APP service is removed. So Valid range for volume is same as Android i.e.
+    // [0, 35]. Decision pending about scaling.
+    const uint8_t volume_level = 0x20U;
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME, {MEDIA_CONTEXT, volume_level}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+
+    ASSERT_THAT(WaitForResponse(2s), true);
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
+
+    ASSERT_THAT(WaitForNotification(2s), true);
+    ASSERT_THAT(received_notification_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_notification_->get_payload()->get_length(), VOLUME_NOTIFICATION_EXPECTED_PAYLOAD_LEN);
+    // EXPECT_THAT(received_notification_->get_payload()->get_data()[0], availability_status);
+    EXPECT_THAT(received_notification_->get_payload()->get_data()[0], MEDIA_CONTEXT);
+    EXPECT_THAT(received_notification_->get_payload()->get_data()[1], volume_level);
+}
+
 /* SetVolume_GetVolume_SuccessTest
  * Asserts that on success IHU sets volume to requested volume level
  */
@@ -98,15 +123,16 @@ TEST_F(RemoteAudioCtrlFixture, SetVolume_GetVolume_SuccessTest) {
     StartClient();
 
     using namespace std::chrono_literals;
+
     ASSERT_THAT(WaitForResponse(2s), true);
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETVOLUME_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
 
     EnqueueRequest([this]() { SendRequest(REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME, {MEDIA_CONTEXT}); });
 
     ASSERT_THAT(WaitForResponse(2s), true);
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[0], MEDIA_CONTEXT);
     // TODO (Abhi) : because of up/down scaling involved in volume levels in between ConvAPI and Android; below
     // expectioation is currently disabled. This should be enabled/removed(?) after discussion is concluded
@@ -122,4 +148,6 @@ TEST_F(RemoteAudioCtrlFixture, SetVolume_FailureTest) {
 
     using namespace std::chrono_literals;
     ASSERT_THAT(WaitForResponse(2s), false);
+
+    ASSERT_THAT(WaitForNotification(2s), false);
 }

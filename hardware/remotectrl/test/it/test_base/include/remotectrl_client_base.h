@@ -30,6 +30,8 @@ class RemoteCtrlClientBase {
 
     bool WaitForResponse(const std::chrono::milliseconds& period);
 
+    bool WaitForNotification(const std::chrono::milliseconds& period);
+
     void SendRequest(const uint16_t& method_id, const std::vector<vsomeip::byte_t>& payload_data);
 
     void StartClient();
@@ -45,6 +47,7 @@ class RemoteCtrlClientBase {
     virtual void OnMessageReceived(const std::shared_ptr<vsomeip::message>& message);
 
     std::shared_ptr<vsomeip::message> received_reply_;
+    std::shared_ptr<vsomeip::message> received_notification_;
 
   private:
     const int env_set_;
@@ -59,6 +62,10 @@ class RemoteCtrlClientBase {
     bool response_received_ = false;
     std::mutex response_mtx_;
     std::condition_variable response_cv_;
+
+    bool notification_received_ = false;
+    std::mutex notification_mtx_;
+    std::condition_variable notification_cv_;
 };
 
 }  // namespace remotectrlsim
