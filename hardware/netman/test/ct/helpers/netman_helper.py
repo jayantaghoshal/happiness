@@ -151,7 +151,7 @@ class NetmanHelper(BaseHelper):
 
     def namespace_exists(self, namespace):
         cmd ="ip netns show"
-        return namespace in self.execute_cmd(cmd)[const.STDOUT][0].split("\n")
+        return namespace in [name.split()[0] for name in self.execute_cmd(cmd)[const.STDOUT][0].split("\n") if name]
 
     def _format_cmd_line(self, cmd, run_in_vcc_namespace):
         if run_in_vcc_namespace:
