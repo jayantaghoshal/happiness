@@ -39,10 +39,13 @@
 #define dbgV(message, ...)
 #endif
 
-bool pdgb(const char* log_tag,
-          android_LogPriority log_prio,
-          const char* file_name,
-          const char* function_name,
-          int line,
-          const char* message_format,
-          ...);
+// Tell the compiler that the function uses the printf format style and that the 6th argument is the
+// format string and the 7th the first format argument to check. This makes it possible to validate
+// the format string passed to the function in compile time with the -Wformat flag.
+__attribute__((__format__(__printf__, 6, 7))) bool pdgb(const char* log_tag,
+                                                        android_LogPriority log_prio,
+                                                        const char* file_name,
+                                                        const char* function_name,
+                                                        int line,
+                                                        const char* message_format,
+                                                        ...);
