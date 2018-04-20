@@ -245,9 +245,16 @@ class VCCCIProxy(object):
         logs.append(self.url() + "consoleFull")
         if self.phase() == "COMPLETED":
             if self.name() not in self.SUB_JOBS:
+
+                name = ""
+                if self.name() == "ihu_gate_test":  # TODO: remove this code when ihu_gate_test becomes part of multijob
+                    name = "ihu_gate"
+                else:
+                    name = self.name()
+
                 logs.append("%s/tests?top_job_name=%s&build_number=%s" % (
                     self.TEST_REPORT_URL,
-                    self.name(),
+                    name,
                     self.number()))
         return logs
 
