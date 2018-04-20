@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Test sending multiple signals simultaneously or very close to each other. Regression test for ARTINFO-2913">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+        <option name="push" value="flexray_burst_test_sender->/vendor/bin/flexray_burst_test_sender" />
+    </target_preparer>
+    <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+           <option name="test-module-name" value="flexray_burst_test_receiver"/>
+           <option name="test-case-path" value="flexray_burst_test_receiver"/>
+           <option name="test-timeout" value="10m"/>
+       </test>
+</configuration>

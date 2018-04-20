@@ -1,0 +1,19 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_test {
+    name: "flexray_burst_test_sender",
+    defaults: ["volvocars_cc_defaults_hq"],
+    cpp_std: "c++14",
+    srcs: [
+        "flexray_burst_sender.cpp",
+    ],
+    test_suites: ["vts"],
+    shared_libs: [
+        "liblog",
+        "libc++",
+        "libdataelements",
+    ],
+}
