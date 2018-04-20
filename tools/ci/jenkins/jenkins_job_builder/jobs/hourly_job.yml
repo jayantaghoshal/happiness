@@ -13,6 +13,15 @@
                     <autoRebuild>false</autoRebuild>
                     <rebuildDisabled>false</rebuildDisabled>
                 </com.sonyericsson.rebuild.RebuildSettings>
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_hourly_build-eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
+        - run:
+            name: TOP_JOB
+            project-name: ihu_hourly
+            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.    
     wrappers:
         - timestamps
         - timeout:
@@ -35,6 +44,23 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    builders:
+        - config-file-provider:
+            files:
+                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
+                  target: $HOME/lab_config.json
+                  variable: IPM_MAP_FILE
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Hourly build failed!!!"
+                exit 1
+            fi
+        - shell:
+            !include-raw:
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_ihu_repo_sync_before_test.sh
+                - bootstrap_ihu_hourly_test_common.sh
     publishers:
       - archive:
           artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
@@ -111,7 +137,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-      - shell: touch "${JOB_NAME}".success
+      - conditional-step:
+          condition-kind: current-status
+          condition-worst: SUCCESS
+          condition-best: SUCCESS
+          steps:
+              - shell: touch "${JOB_NAME}".success
     publishers:
         - raw:
             xml: |
@@ -122,7 +153,7 @@
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
         - post-tasks:
           - matches:
-            - log-text: 
+            - log-text:
               operator: AND
             escalate-status: false
             run-if-job-successful: false
@@ -159,33 +190,7 @@
     name: ihu_hourly_test-generic
     defaults: hourly_job_defaults
     node: hourly_test-generic
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
-        - run:
-            name: TOP_JOB
-            project-name: ihu_hourly
-            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.    
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Hourly test generic failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_repo_sync_before_test.sh
-                - bootstrap_ihu_hourly_test_common.sh
-    publishers:            
+    publishers:
         - raw:
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
@@ -198,91 +203,13 @@
     name: ihu_hourly_test-flexray
     defaults: hourly_job_defaults
     node: hourly_test-flexray
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
-        - run:
-            name: TOP_JOB
-            project-name: ihu_hourly
-            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Hourly test flexray failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_repo_sync_before_test.sh
-                - bootstrap_ihu_hourly_test_common.sh
 
 - job:
     name: ihu_hourly_test-audio
     defaults: hourly_job_defaults
     node: hourly_test-audio
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
-        - run:
-            name: TOP_JOB
-            project-name: ihu_hourly
-            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.            
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Hourly test audio failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_repo_sync_before_test.sh
-                - bootstrap_ihu_hourly_test_common.sh
 
 - job:
     name: ihu_hourly_test-apix
     defaults: hourly_job_defaults
     node: hourly_test-apix
-    parameters:
-        - run:
-            name: UPSTREAM_JOB
-            project-name: ihu_hourly_build-eng
-            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the hourly build has passed.
-        - run:
-            name: TOP_JOB
-            project-name: ihu_hourly
-            description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.
-    builders:
-        - config-file-provider:
-            files:
-                - file-id: 61535809-5c5c-4721-9a65-e3587159647a
-                  target: $HOME/lab_config.json
-                  variable: IPM_MAP_FILE
-        - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
-            then
-                echo "Hourly test apix failed!!!"
-                exit 1
-            fi
-        - shell:
-            !include-raw:
-                - bootstrap_common_time_triggered.sh
-                - bootstrap_ihu_repo_sync_before_test.sh
-                - bootstrap_ihu_hourly_test_common.sh

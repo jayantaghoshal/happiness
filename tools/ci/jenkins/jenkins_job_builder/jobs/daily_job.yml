@@ -301,7 +301,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-      - shell: touch "${JOB_NAME}".success
+      - conditional-step:
+          condition-kind: current-status
+          condition-worst: SUCCESS
+          condition-best: SUCCESS
+          steps:
+              - shell: touch "${JOB_NAME}".success
     publishers:
       - raw:
             xml: |
