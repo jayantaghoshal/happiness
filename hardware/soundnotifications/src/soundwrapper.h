@@ -10,6 +10,7 @@
 #include <binder/IServiceManager.h>
 #include <binder/ProcessState.h>
 #include <cutils/log.h>
+#include <hidl/HidlSupport.h>
 #include <vendor/delphi/audiomanager/1.0/IAudioManager.h>
 #include <cstdint>
 #include "vendor/delphi/audiomanager/1.0/types.h"
@@ -21,7 +22,8 @@ namespace SoundNotifications {
 class Sound;
 using namespace vendor::delphi::audiomanager::V1_0;
 
-class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name could be found
+class SoundWrapper : public IAudioManagerCallback,
+                     private android::hardware::hidl_death_recipient {  // Maybe a better name could be found
 
   public:
     // A "sound" is uniquely identified with SoundID
@@ -42,7 +44,7 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
     // Stop playing the given sound id. This should probably ONLY be called for Non-flank triggerd sounds
     static void stop(SoundID soundid);
 
-    static void registerConnection(Sound* sound, int64_t connectionID);
+    static void registerConnection(Sound* sound, uint32_t connectionID);
     static bool isPlaying(SoundID soundid);
     static SoundWrapper* instance();
 
@@ -58,6 +60,8 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
     virtual ::android::hardware::Return<void> onRampedIn(uint32_t connectionID) override;
     virtual ::android::hardware::Return<void> ackSetSinkVolumeChange(uint32_t sinkId, int16_t volume) override;
 
+    virtual void serviceDied(uint64_t cookie, const ::android::wp<::android::hidl::base::V1_0::IBase>& who) override;
+
   private:
     SoundWrapper() = default;
 
@@ -69,7 +73,7 @@ class SoundWrapper : public IAudioManagerCallback {  // Maybe a better name coul
   public:
     static void clearAll();
     static int getSoundState(SoundID);
-    static int64_t getConnectionID(SoundID soundid);
+    static uint32_t getConnectionID(SoundID soundid);
     static void setSoundState(SoundID, int state);
 #endif
 };
@@ -103,7 +107,7 @@ class Sound {
 
     State getState() { return _state; }
 
-    int64_t getConnectionID() const;
+    uint32_t getConnectionID() const;
 
     // Timer callback
     void onTimeout();
@@ -118,7 +122,7 @@ class Sound {
     std::recursive_mutex _stateMutex;
 
     // connection ID from Audio Manager
-    int64_t connectionID;
+    uint32_t connectionID;
 
     // Which soundid we "are"
     SoundWrapper::SoundID _soundID;
@@ -126,6 +130,8 @@ class Sound {
     std::string _name;
     android::sp<IAudioManager> am_service;
     tarmac::eventloop::IDispatcher& restartTimer;
+    // current job id for running restartTimer
+    tarmac::eventloop::IDispatcher::JobId job_id_{0};
 };
 
 }  // namespace SoundNotifications

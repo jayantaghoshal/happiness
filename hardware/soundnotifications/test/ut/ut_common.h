@@ -46,19 +46,16 @@ class ut_common : public ::testing::Test {
 
         if (!error) {
             _hidl_cb(AMStatus::OK, connectionID);
-            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
+            swrapper->onRampedIn(connectionID);
         } else {
-            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
+            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, 0);
         }
         return android::hardware::Status::fromStatusT(android::OK);
     }
 
-    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
-        ALOG(LOG_INFO,
-             "SoundNotificationsUT",
-             "AudioManagerMock::mockStopSound. connection ID: %" PRId64,
-             connectionId);
-        swrapper->onDisconnected(static_cast<uint32_t>(connectionID));
+    ::android::hardware::Return<AMStatus> mockStopSound(uint32_t connectionId) {
+        ALOG(LOG_INFO, "SoundNotificationsUT", "AudioManagerMock::mockStopSound. connection ID: %d", connectionId);
+        swrapper->onDisconnected(connectionID);
         return AMStatus::OK;
     }
 
@@ -79,5 +76,5 @@ class ut_common : public ::testing::Test {
 
     static SoundWrapper* swrapper;
     static ::android::sp<AudioManagerMock> am_service;
-    int64_t connectionID{0};
+    uint32_t connectionID{0};
 };
