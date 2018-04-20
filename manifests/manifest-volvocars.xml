@@ -8,13 +8,13 @@
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ea38bd4cce7140325780d8a262fc88b55b35034e" />
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="15989ab31bf158c20c63437a490d669b5c60422f" />
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="5c8529d76e9baded392ee58373736cd78827cbdb" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="d61b7d646b94b478c6814c56c5d31444cc177da7" />
 
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a" />
   <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="030c4339d345e43799ba93a01384a0ad57c98b0a" />
-  <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="8c7cc0a6a0155bad100523ebad232d58cb419811" />
+  <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="ec97bad7e111e7f783dcc391c6a9ed92c506ae1a" />
   <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="ZUUL_COMMIT_OR_HEAD" />
 
   <!-- Volvo Cars partner apps -->
