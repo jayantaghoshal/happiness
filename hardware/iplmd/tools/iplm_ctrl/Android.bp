@@ -1,0 +1,33 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+    name: "iplm_ctrl",
+    vendor: true,
+    srcs: [
+        "src/main.cpp",
+        "src/lsc_service.cpp",
+    ],
+
+    cppflags: [
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    shared_libs: [
+        "liblog",
+        "libcutils",
+        "libbase",
+        "libhidlbase",
+        "libhidltransport",
+        "libutils",
+        "libhwbinder",
+        "libtarmac",
+        "vendor.volvocars.hardware.common@1.0",
+        "vendor.volvocars.hardware.iplm@1.0",
+    ],
+
+    // compile_multilib: "64",
+}

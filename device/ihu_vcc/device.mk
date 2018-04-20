@@ -37,6 +37,7 @@ PRODUCT_PACKAGES += \
     remotectrl_audioctrld \
     remotectrl_climatectrld \
     connectivitymanagerd \
+    iplm_ctrl
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.vcc.service.evs.boot=true
