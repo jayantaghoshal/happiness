@@ -40,6 +40,7 @@
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0d98a973977bdca0c44c3183b9408add5b1ed4cd" />
 
   <!-- Aptiv Overrides -->
+  <remove-project name="bsp/hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" />
   <remove-project name="vendor/delphi/android_patches" />
   <remove-project name="bsp/external/memtester" />
   <!-- We use vendor/volvocars vcc_carconfig code, aptiv uses a snapshot, needed only if building kraken without our repo -->
