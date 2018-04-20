@@ -21,29 +21,20 @@ public class SoftwareInformation implements Parcelable {
 
     public SoftwareState softwareState = SoftwareState.UNDEFINED;
 
-    public String softwareId = "";
-    public String name = "";
-    public String description = "";
-    //public List<Byte> image;
+    public SoftwareAssignment softwareAssignment = new SoftwareAssignment();
+    public DownloadInfo downloadInfo = new DownloadInfo();
 
-    public String installationId = "";
-    public String installationStatus = "";
+    public static final Creator<SoftwareInformation> CREATOR = new Creator<SoftwareInformation>() {
+        @Override
+        public SoftwareInformation createFromParcel(Parcel in) {
+            return new SoftwareInformation(in);
+        }
 
-    public ArrayList<String> downloads = new ArrayList();
-    public String downloadFilePath = "";
-
-    public ArrayList<String> downloadedResources = new ArrayList();
-
-    public static final Creator<SoftwareInformation> CREATOR =
-        new Creator<SoftwareInformation>() {
-            @Override public SoftwareInformation createFromParcel(Parcel in) {
-                return new SoftwareInformation(in);
-            }
-
-            @Override public SoftwareInformation[] newArray(int size) {
-                return new SoftwareInformation[size];
-            }
-        };
+        @Override
+        public SoftwareInformation[] newArray(int size) {
+            return new SoftwareInformation[size];
+        }
+    };
 
     public SoftwareInformation() {
     }
@@ -53,37 +44,19 @@ public class SoftwareInformation implements Parcelable {
     }
 
     public SoftwareInformation(SoftwareAssignment assignment) {
-        this.softwareState = SoftwareState.AVAILABLE;
-        this.softwareId = assignment.id;
-        this.name = assignment.name;
-        this.description = assignment.shortDescription;
+        this.softwareAssignment = assignment;
     }
 
-    public SoftwareInformation(InstallationOrder installationOrder) { //TODO: this needs to be re-done!
-        this.softwareState = SoftwareState.DOWNLOAD_PENDING;
-        //this.softwareId = installationOrder.;
-        //this.name = installationOrder.software.name;
-        //this.description = installationOrder.software.description;
-
-        this.installationId = installationOrder.id;
-        this.installationStatus = installationOrder.status.name();
-    }
-
-    public void AddInstallationOrder(InstallationOrder installationOrder) {
-        this.softwareState = SoftwareState.DOWNLOAD_PENDING;
-        this.installationId = installationOrder.id;
-        this.installationStatus = installationOrder.status.name();
+    public void updateSoftwareAssignment(SoftwareAssignment assignment) {
+        this.softwareAssignment = assignment;
     }
 
     public void AddDownloadInfo(DownloadInfo downloadInfo) {
-        this.softwareState = SoftwareState.DOWNLOADING_META;
-        this.downloads = downloadInfo.resourceUris;
-        this.downloadedResources = downloadInfo.downloadedResources;
-
-        if(!this.downloads.isEmpty()) {
+        this.downloadInfo = downloadInfo;
+        if(!this.downloadInfo.resourceUris.isEmpty()) { //TODO: remove and replace with installNotification
             this.softwareState = SoftwareState.DOWNLOADING;
         } else {
-            if (!this.downloadedResources.isEmpty()) {
+            if (!this.downloadInfo.downloadedResources.isEmpty()) {
                 this.softwareState = SoftwareState.DOWNLOADED;
             }
         }
@@ -91,45 +64,45 @@ public class SoftwareInformation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(softwareState.name());
-        dest.writeString(softwareId);
-        dest.writeString(name);
-        dest.writeString(description);
-
-        dest.writeString(installationId);
-        dest.writeString(installationStatus);
-
-        dest.writeStringList(downloads);
-        dest.writeString(downloadFilePath);
-
-        dest.writeStringList(downloadedResources);
+        dest.writeString(softwareState.toString());
+        dest.writeTypedObject(softwareAssignment, flags);
+        dest.writeTypedObject(downloadInfo, flags);
     }
 
     @Override
     public String toString() {
-        String string = softwareId + "\n" + softwareState.name() + "\n" + name + "\n" + description +
-                        "\nDownloads: " + downloads.toString() + "\nResources: " + downloadedResources.toString();
+        String string = softwareAssignment.toString() + downloadInfo.toString();
         return string;
     }
 
     public void readFromParcel(Parcel in) {
-        softwareState = SoftwareState.valueOf(in.readString());
-        softwareId = in.readString();
-        name = in.readString();
-        description = in.readString();
-
-        installationId = in.readString();
-        installationStatus = in.readString();
-
-        downloads = in.createStringArrayList();
-        downloadFilePath = in.readString();
-
-        downloadedResources = in.createStringArrayList();
+        softwareState = stringToSoftwareState(in.readString());
+        softwareAssignment = in.readTypedObject(SoftwareAssignment.CREATOR);
+        downloadInfo = in.readTypedObject(DownloadInfo.CREATOR);
     }
 
     @Override
     public int describeContents() {
         // As long there are no children, this function is quite useless?
         return 0;
+    }
+
+    public SoftwareState stringToSoftwareState(String str) {
+        if (null != str) {
+            switch(str) {
+                case "AVAILABLE": return SoftwareState.AVAILABLE;
+                case "COMMISSIONED": return SoftwareState.COMMISSIONED;
+                case "DOWNLOAD_PENDING": return SoftwareState.DOWNLOAD_PENDING;
+                case "DOWNLOADING_META": return SoftwareState.DOWNLOADING_META;
+                case "DOWNLOADING": return SoftwareState.DOWNLOADING;
+                case "DOWNLOADED": return SoftwareState.DOWNLOADED;
+                case "INSTALL_PENDING": return SoftwareState.INSTALL_PENDING;
+                case "INSTALLING": return SoftwareState.INSTALL_PENDING;
+                case "UNDEFINED": return SoftwareState.UNDEFINED;
+                default: return SoftwareState.UNDEFINED;
+            }
+        }
+
+        return SoftwareState.UNDEFINED;
     }
 }

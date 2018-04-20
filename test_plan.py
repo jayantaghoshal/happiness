@@ -61,6 +61,7 @@ test_plan_incubator_hourly = [
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps), # Chrsitoffer Östlin
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission",            standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting", standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson

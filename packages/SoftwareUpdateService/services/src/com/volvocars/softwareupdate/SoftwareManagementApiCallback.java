@@ -35,6 +35,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void CommissionStatus(String uuid, int code) {
         Log.v(LOG_TAG, "Got result of commissioning assignment [" + uuid + "]: " + code);
         if (code == 200) {
+            Log.d(LOG_TAG, "updating softwarestate, remove when MQTT is in place!");
             service.UpdateSoftwareState(uuid, SoftwareState.COMMISSIONED);
             //try {
             //    callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");
@@ -50,7 +51,7 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
                 "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
 
         if (code == 200) {
-            service.UpdateSoftwareList(software_list);
+            service.onNewSoftwareAssignmentList(software_list);
         } else {
             //try {
             //    callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");

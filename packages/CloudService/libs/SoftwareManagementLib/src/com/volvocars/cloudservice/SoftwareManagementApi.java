@@ -101,14 +101,15 @@ public class SoftwareManagementApi implements ServiceConnection {
         }
     }
 
-    /**
+     /**
      * Issue a commission of an SoftwareAssignment.
-     * @param id The id of the assignment to fetch.
+     * @param commissionElement commission element containing id of the assignment to fetch
+     * @param callback
      */
-    public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
+    public void CommissionSoftwareAssignment(CommissionElement commissionElement, ISoftwareManagementApiCallback callback)
             throws RemoteException {
         if (software_management != null && service_bound) {
-            software_management.CommissionSoftwareAssignment(uuid, callback);
+            software_management.CommissionSoftwareAssignment(commissionElement, callback);
         }
 
     }

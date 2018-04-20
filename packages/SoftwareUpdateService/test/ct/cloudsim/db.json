@@ -43,7 +43,8 @@
         },
         "size": "366.4",
         "status": "COMMISSIONABLE",
-        "type": "SYSTEM"
+        "type": "SYSTEM",
+        "commission_uri": "commission"
       },
       {
         "id": "20",
@@ -59,7 +60,8 @@
         },
         "size": "366.4",
         "status": "COMMISSIONABLE",
-        "type": "SYSTEM"
+        "type": "SYSTEM",
+        "commission_uri": "commission"
       }
     ]
   },
@@ -70,7 +72,7 @@
   },
   "preDownloadInfo": [
     {
-      "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9",
+      "id": "10",
       "downloads": {
         "file": [
           "/test/helloworld.txt"
@@ -78,7 +80,7 @@
       }
     },
     {
-      "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa",
+      "id": "20",
       "downloads": {
         "file": [
           "/test/helloworld.txt",

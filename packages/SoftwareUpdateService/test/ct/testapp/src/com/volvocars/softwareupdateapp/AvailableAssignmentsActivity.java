@@ -19,6 +19,7 @@ import android.widget.NumberPicker;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.cloudservice.Query;
 import java.util.*;
+import android.view.MenuItem;
 
 public class AvailableAssignmentsActivity extends AppCompatActivity {
     private final String LOG_TAG = "SwUpdApp.AssignmentsActivity";
@@ -94,8 +95,10 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Query query = new Query();
-                if (softwareBox.isChecked()) query.id = "" + softwarePicker.getValue();
-                if (installationOrderBox.isChecked()) query.installationOrderId = "" + installationOrderPicker.getValue();
+                if (softwareBox.isChecked())
+                    query.id = "" + softwarePicker.getValue();
+                if (installationOrderBox.isChecked())
+                    query.installationOrderId = "" + installationOrderPicker.getValue();
 
                 try {
                     softwareUpdateManager.GetSoftwareAssignment(query);
@@ -105,8 +108,18 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            // todo: goto back activity from here
 
+            Log.w(LOG_TAG, "Home button clicked");
+        default:
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

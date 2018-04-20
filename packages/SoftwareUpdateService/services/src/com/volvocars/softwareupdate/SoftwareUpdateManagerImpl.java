@@ -9,6 +9,7 @@ import android.util.Log;
 
 import android.os.RemoteException;
 
+import com.volvocars.cloudservice.CommissionElement;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.Query;
@@ -79,7 +80,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     public void UpdateSoftware(SoftwareInformation software) {
-        Log.v(LOG_TAG, "Update software assinment with software id: " + software.softwareId);
+        Log.v(LOG_TAG, "Update software assinment with software id: " + software.softwareAssignment.id);
 
         ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
 
@@ -183,7 +184,7 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
 
     @Override
     public void CommissionAssignment(String uuid) {
-        service.CommissionAssignment(uuid);
+        service.CommissionAssignment(uuid, CommissionElement.Reason.USER);
     }
 
     @Override

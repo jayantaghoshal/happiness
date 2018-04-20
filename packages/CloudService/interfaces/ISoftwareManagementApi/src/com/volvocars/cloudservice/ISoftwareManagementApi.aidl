@@ -6,6 +6,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationReport;
 import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.Query;
+import com.volvocars.cloudservice.CommissionElement;
 
 /**
  * An interface to access all the Software Management features.
@@ -21,10 +22,10 @@ oneway interface ISoftwareManagementApi {
 
     /**
      * Issue a commission of an SoftwareAssignment.
-     * @param id The id of the assignment to fetch.
+     * @param commissionElement commission element containing id of the assignment to fetch
      * @param callback
      */
-    void CommissionSoftwareAssignment(in String uuid, in ISoftwareManagementApiCallback callback);
+    void CommissionSoftwareAssignment(in CommissionElement commissionElement, in ISoftwareManagementApiCallback callback);
 
     /**
      * Get Download Info for an installation order

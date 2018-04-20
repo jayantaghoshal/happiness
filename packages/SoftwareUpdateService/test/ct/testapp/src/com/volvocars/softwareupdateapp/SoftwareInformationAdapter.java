@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.util.Log;
+import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.softwareupdate.SoftwareInformation;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_assignment, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(holder, sw));
-        if (!holder.state.getText().equals(SoftwareInformation.SoftwareState.AVAILABLE.name()))
+        if (!holder.state.getText().equals(SoftwareAssignment.Status.COMMISSIONABLE.name()))
             popup.getMenu().findItem(R.id.commission).setVisible(false);
         if (holder.state.getText().equals("INSTALL PENDING"))
             holder.showInstallNotifcationItem = true;
@@ -102,13 +103,13 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
             case R.id.commission:
-                softwareUpdateApp.commissionAssignment(swInfo.softwareId);
+                softwareUpdateApp.commissionAssignment(swInfo.softwareAssignment.id);
                 return true;
             case R.id.installNotification:
-                softwareUpdateApp.getInstallNotification(swInfo.installationId);
+                softwareUpdateApp.getInstallNotification(swInfo.softwareAssignment.installationOrder.id);
                 return true;
             case R.id.showPopup:
-                softwareUpdateApp.showInstallationPopup(swInfo.installationId);
+                softwareUpdateApp.showInstallationPopup(swInfo.softwareAssignment.installationOrder.id);
                 return true;
             default:
             }
@@ -126,44 +127,44 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         SoftwareInformation swInfo = swInfos.get(position);
 
-        holder.name.setText(swInfo.name);
-        holder.desc.setText(swInfo.description);
-        holder.state.setText(swInfo.softwareState.name().replace("_", " "));
+        holder.name.setText(swInfo.softwareAssignment.name);
+        holder.desc.setText(swInfo.softwareAssignment.shortDescription);
+        holder.state.setText(((swInfo.softwareState == SoftwareInformation.SoftwareState.UNDEFINED) ? swInfo.softwareAssignment.status.name() : swInfo.softwareState.name()).replace("_", " "));
 
-        holder.swId.setText(swInfo.softwareId);
+        holder.swId.setText(swInfo.softwareAssignment.id);
         if (holder.moreInfo)
             holder.swIdLayout.setVisibility(View.VISIBLE);
         else
             holder.swIdLayout.setVisibility(View.INVISIBLE);
 
-        holder.installationId.setText(swInfo.installationId);
-        if (holder.moreInfo && !swInfo.installationId.isEmpty())
+        holder.installationId.setText(swInfo.softwareAssignment.installationOrder.id);
+        if (holder.moreInfo && !swInfo.softwareAssignment.installationOrder.id.isEmpty())
             holder.installationIdLayout.setVisibility(View.VISIBLE);
         else
             holder.installationIdLayout.setVisibility(View.INVISIBLE);
 
-        holder.installationStatus.setText(swInfo.installationStatus);
-        if (holder.moreInfo && !swInfo.installationStatus.isEmpty())
+        holder.installationStatus.setText(swInfo.softwareAssignment.installationOrder.status.name());
+        if (holder.moreInfo && !swInfo.softwareAssignment.installationOrder.status.name().isEmpty())
             holder.installationStatusLayout.setVisibility(View.VISIBLE);
         else
             holder.installationStatusLayout.setVisibility(View.INVISIBLE);
 
         String str = "";
-        for (String download : swInfo.downloads) {
+        for (String download : swInfo.downloadInfo.resourceUris) {
             str += download + "\n";
         }
         holder.downloads.setText(str);
-        if (holder.moreInfo && !swInfo.downloads.isEmpty())
+        if (holder.moreInfo && !swInfo.downloadInfo.resourceUris.isEmpty())
             holder.downloadsLayout.setVisibility(View.VISIBLE);
         else
             holder.downloadsLayout.setVisibility(View.INVISIBLE);
 
         str = "";
-        for (String download : swInfo.downloadedResources) {
+        for (String download : swInfo.downloadInfo.downloadedResources) {
             str += download + "\n";
         }
         holder.downloadedResources.setText(str);
-        if (holder.moreInfo && !swInfo.downloadedResources.isEmpty())
+        if (holder.moreInfo && !swInfo.downloadInfo.downloadedResources.isEmpty())
             holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
         else
             holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
@@ -180,13 +181,13 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                 holder.moreInfo = !holder.moreInfo;
                 if (holder.moreInfo) {
                     holder.swIdLayout.setVisibility(View.VISIBLE);
-                    if (!swInfo.installationId.isEmpty())
+                    if (!swInfo.softwareAssignment.installationOrder.id.isEmpty())
                         holder.installationIdLayout.setVisibility(View.VISIBLE);
-                    if (!swInfo.installationStatus.isEmpty())
+                    if (!swInfo.softwareAssignment.installationOrder.status.name().isEmpty())
                         holder.installationStatusLayout.setVisibility(View.VISIBLE);
-                    if (!swInfo.downloads.isEmpty())
+                    if (!swInfo.downloadInfo.resourceUris.isEmpty())
                         holder.downloadsLayout.setVisibility(View.VISIBLE);
-                    if (!swInfo.downloadedResources.isEmpty())
+                    if (!swInfo.downloadInfo.downloadedResources.isEmpty())
                         holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
                 } else {
                     holder.swIdLayout.setVisibility(View.INVISIBLE);

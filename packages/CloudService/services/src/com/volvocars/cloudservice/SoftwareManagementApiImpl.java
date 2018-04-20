@@ -168,8 +168,12 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         return swrsp;
     }
 
-    private int CommissionSoftwareAssignment(String uuid) {
-        Log.v(LOG_TAG, "CommissionSoftwareAssignment [" + uuid + "]");
+    private int CommissionSoftwareAssignment(CommissionElement commissionElement) {
+        Log.v(LOG_TAG,
+                "CommissionSoftwareAssignment [id: " + commissionElement.id + ", reason:" + commissionElement.reason
+                        + ", action:" + commissionElement.action + ", client_id: " + commissionElement.clientId
+                        + ", uri: " + commissionElement.commissionUri + "]");
+
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
         HttpHeaderField field = new HttpHeaderField();
@@ -179,13 +183,19 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         int timeout = 20000;
 
-        Log.w(LOG_TAG, "Building body, NOTE: client_id and reason is currently hardcoded values!");
-        String body = "id=" + uuid + "&client_id=" + "" + "&reason=USER"; //TODO: Remove hardcoded values (client_id and reason)
+        String body = "id=" + commissionElement.id + "&client_id=" + commissionElement.clientId + "&reason="
+                + commissionElement.reason;
 
         //Do we need to fetch commission uri?
-        Log.v(LOG_TAG, "Calling doPostRequest with uri: " + softwareManagementUri + " and body: " + body);
-        Response response = cloudConnection.doPostRequest(softwareManagementUri + "/commission", headers, body,
-                timeout);
+        Log.v(LOG_TAG,
+                "Calling doPostRequest with uri: " + softwareManagementUri
+                        + (commissionElement.commissionUri.startsWith("/") ? commissionElement.commissionUri
+                                : "/" + commissionElement.commissionUri)
+                        + " and body: " + body);
+        Response response = cloudConnection.doPostRequest(softwareManagementUri
+                + (commissionElement.commissionUri.startsWith("/") ? commissionElement.commissionUri
+                        : "/" + commissionElement.commissionUri),
+                headers, body, timeout);
 
         return response.httpResponse;
 
@@ -507,24 +517,25 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query);
         Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
 
-        for(SoftwareAssignment software : swrsp.swlist) {
-            Log.e(LOG_TAG, ""+software.toString());
+        for (SoftwareAssignment software : swrsp.swlist) {
+            Log.e(LOG_TAG, "" + software.toString());
         }
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 
     /**
      * Issue a commission of an SoftwareAssignment.
-     * @param id The id of the assignment to fetch.
+     * @param commissionElement commission element containing id of the assignment to fetch
+     * @param callback
      */
     @Override
-    public void CommissionSoftwareAssignment(String uuid, ISoftwareManagementApiCallback callback)
-            throws RemoteException {
+    public void CommissionSoftwareAssignment(CommissionElement commissionElement,
+            ISoftwareManagementApiCallback callback) throws RemoteException {
         if (!softwareManagementAvailable) {
-            callback.CommissionStatus(uuid, -1);
+            callback.CommissionStatus(commissionElement.id, -1);
         }
 
-        callback.CommissionStatus(uuid, CommissionSoftwareAssignment(uuid));
+        callback.CommissionStatus(commissionElement.id, CommissionSoftwareAssignment(commissionElement));
     }
 
     /**

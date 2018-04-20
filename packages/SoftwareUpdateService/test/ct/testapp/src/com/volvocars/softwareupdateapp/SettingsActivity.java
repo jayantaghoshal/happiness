@@ -18,7 +18,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import com.volvocars.softwareupdate.*;
-
 import java.util.*;
 
 public class SettingsActivity extends AppCompatActivity {

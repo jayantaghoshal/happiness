@@ -28,10 +28,10 @@ import java.util.List;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.DownloadSummary;
 import com.volvocars.cloudservice.InstallationSummary;
+import com.volvocars.cloudservice.CommissionElement;
 import com.volvocars.cloudservice.DataFile;
 import com.volvocars.cloudservice.Ecu;
 import com.volvocars.cloudservice.SoftwarePart;
-
 import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.InstallationOrder;
@@ -146,11 +146,41 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void CommissionAssignment(String uuid) {
+    public void onNewSoftwareAssignmentList( List<SoftwareAssignment> software_list) {
+        for (SoftwareAssignment software : software_list) {
+            if (SoftwareAssignment.Status.COMMISSIONED == software.status) {
+                doGetDownloadInfo(software.installationOrder);
+            }
+            if ((SoftwareAssignment.Status.COMMISSIONABLE == software.status) && (settings.getOrDefault("AUTO_DOWNLOAD", false)) ) {
+                CommissionAssignment(software.id, CommissionElement.Reason.AUTOMATIC_UPDATE);
+            }
+        }
+
+        UpdateSoftwareList(software_list);
+    }
+
+    public void CommissionAssignment(String uuid, CommissionElement.Reason reason) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "Commissioning assignment with uuid: " + uuid);
-                swapi.CommissionSoftwareAssignment(uuid, swapiCallback);
+                Log.v(LOG_TAG, "CommissionAssignment called with uuid: " + uuid + " and reason: " + reason.name());
+                for (SoftwareInformation software : softwareInformationList) {
+                    //check if assignment is valid for commssion (i.e in status COMMISSONABLE)
+                    if (software.softwareAssignment.id.equals(uuid)) {
+                        if (software.softwareAssignment.status.equals(SoftwareAssignment.Status.COMMISSIONABLE)) {
+                            CommissionElement commissionElement = new CommissionElement();
+                            commissionElement.id = uuid;
+                            commissionElement.action = CommissionElement.Action.ORDER_SOFTWARE_INSTALLATION;
+                            commissionElement.reason = reason;
+                            commissionElement.commissionUri = software.softwareAssignment.commissionUri;
+                            Log.w(LOG_TAG,
+                                    "Calling CommissionSoftwareAssignment: client_id not set (implement!)");
+                            swapi.CommissionSoftwareAssignment(commissionElement, swapiCallback);
+                        } else {
+                            Log.v(LOG_TAG, "CommissionSoftwareAssignment not called, software status is: "
+                                    + software.softwareAssignment.status.name());
+                        }
+                    }
+                }
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
             }
@@ -159,10 +189,8 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void doGetDownloadInfo(List<InstallationOrder> list) {
-        for (InstallationOrder io : list) {
-            GetDownloadInfo(io.id);
-        }
+    public void doGetDownloadInfo(InstallationOrder installationOrder) {
+        GetDownloadInfo(installationOrder.id);
     }
 
     public void GetDownloadInfo(String uuid) {
@@ -225,8 +253,10 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void onInstallationReport(String installationOrder, InstallationSummary installationSummary) {
-        Log.v(LOG_TAG, "onInstallationReport: [installationOrderID: " + installationOrder + ", installation summary: " + installationSummary.softwareId + "]");
-        Log.w(LOG_TAG, "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
+        Log.v(LOG_TAG, "onInstallationReport: [installationOrderID: " + installationOrder + ", installation summary: "
+                + installationSummary.softwareId + "]");
+        Log.w(LOG_TAG,
+                "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
         InstallationReport installationReport = new InstallationReport();
         DownloadSummary downloadSummary = new DownloadSummary();
         DataFile file = new DataFile();
@@ -269,13 +299,13 @@ public class SoftwareUpdateService extends Service {
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
         Log.v(LOG_TAG, "UpdateSoftwareList: Clearing softwareInformationList");
         softwareInformationList.clear();
-
-        Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationList.size = " + softwareInformationList.size());
+        Log.v(LOG_TAG,
+                "UpdateSoftwareList: Before update, softwareInformationList.size = " + softwareInformationList.size());
 
         for (SoftwareAssignment assignment : softwareAssignments) {
             boolean found = false;
             for (SoftwareInformation information : softwareInformationList) {
-                if (assignment.id.equals(information.softwareId)) {
+                if (assignment.id.equals(information.softwareAssignment.id)) {
                     found = true;
                     break;
                 }
@@ -285,34 +315,19 @@ public class SoftwareUpdateService extends Service {
             }
         }
 
-        Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationList.size = " + softwareInformationList.size());
+        Log.v(LOG_TAG,
+                "UpdateSoftwareList: After update, softwareInformationList.size = " + softwareInformationList.size());
 
-        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
-    }
-
-    public void UpdateSoftwareListWithInstallationOrders(List<InstallationOrder> installationOrders) {
-        for (InstallationOrder order : installationOrders) {
-            boolean found = false;
-            for (SoftwareInformation information : softwareInformationList) {
-                /*if (order.software.uuid.equals(information.softwareId)) { TODO: FIX THIS
-                    found = true;
-                    information.AddInstallationOrder(order);
-                    break;
-                }*/
-            }
-            if (!found) {
-                softwareInformationList.add(new SoftwareInformation(order));
-            }
-        }
         softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
     }
 
     public void UpdateSoftwareList(DownloadInfo downloadInfo) {
         boolean found = false;
         for (SoftwareInformation information : softwareInformationList) {
-            if (downloadInfo.installationOrderId.equals(information.installationId)) {
+            if (downloadInfo.installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
+                Log.e(LOG_TAG, ""+information.softwareState);
                 break;
             }
         }
@@ -327,7 +342,8 @@ public class SoftwareUpdateService extends Service {
     public void UpdateSoftwareState(String uuid, SoftwareInformation.SoftwareState state) {
         boolean found = false;
         for (SoftwareInformation information : softwareInformationList) {
-            if (uuid.equals(information.softwareId) || uuid.equals(information.installationId)) {
+            if (uuid.equals(information.softwareAssignment.id)
+                    || uuid.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
                 information.softwareState = state;
                 softwareUpdateManager.UpdateSoftware(information);
@@ -343,11 +359,11 @@ public class SoftwareUpdateService extends Service {
         Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
 
         for (SoftwareInformation information : softwareInformationList) {
-            if (installationOrderId.equals(information.installationId)) {
+            if (installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 Intent intent = new Intent(this, InstallationPopup.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(InstallationPopup.NAME, information.name);
-                intent.putExtra(InstallationPopup.UUID, information.installationId);
+                intent.putExtra(InstallationPopup.NAME, information.softwareAssignment.name);
+                intent.putExtra(InstallationPopup.UUID, information.softwareAssignment.installationOrder.id);
                 intent.putExtra("MESSENGER", new Messenger(messageHandler));
                 startActivity(intent);
             }

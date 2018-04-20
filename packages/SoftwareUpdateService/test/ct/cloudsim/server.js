@@ -57,21 +57,16 @@ server.post('/commission', function (req, res, next) {
 
       var installation_order_data = {};
       installation_order_data['id'] = counter;
-      installation_order_data['status'] = "PENDING";
+      installation_order_data['status'] = "READY";
       installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
       installation_order_data['created'] = "2002-05-30T09:00:00";
       installation_order_data['downloads_uri'] = "/downloads/";
       installation_order_data['install_notifications_uri'] = "installnotifications";
       installation_order_data['installation_report_uri'] = "/installationreport";
 
-      var tmp_copy = Object.assign({}, tmp);
       tmp['installation_order'] = installation_order_data
-      console.log(tmp['installation_order'])
-
-      var installation_order_data_copy = Object.assign({}, installation_order_data);
-
-      installation_order_data_copy['software'] = [tmp_copy];
-      db.get('pendingInstallations').get('installation_order').push(installation_order_data_copy).write();
+      tmp['status'] = "COMMISSIONED";
+      db.get('availableUpdates').get('software').write();
 
       var d = db.get('preDownloadInfo');
       for (j = 0; j < d.value().length; j++) {

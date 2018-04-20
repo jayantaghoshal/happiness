@@ -70,7 +70,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             boolean available = false;
             swInfos.clear();
             for (SoftwareInformation si : software_list) {
-                Log.v(LOG_TAG, "" + si.toString());
+                Log.v(LOG_TAG, "" + si.toString() + "\n" + si.softwareState.name());
                 swInfos.add(si);
                 if (si.softwareState == SoftwareState.AVAILABLE) {
                     createNotification();
@@ -88,7 +88,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             }
             for (SoftwareInformation si : swInfos) {
                 Log.v(LOG_TAG, "UpdateSoftware: " + si.toString());
-                if (si.softwareId.equals(software.softwareId)) {
+                if (si.softwareAssignment.id.equals(software.softwareAssignment.id)) {
                     swInfos.set(swInfos.indexOf(si), software);
                     break;
                 }
@@ -223,7 +223,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.actionbarMain:
+        case R.id.settings:
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
