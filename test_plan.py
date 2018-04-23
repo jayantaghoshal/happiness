@@ -94,6 +94,7 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests", standard_caps), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps), #Samuel Idowu
+    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray}), #Abhijeet Shirolikar
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
