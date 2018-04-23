@@ -59,7 +59,7 @@ test_plan_nightly = test_plan_hourly + [
 ]
 
 #Put stable tests here so they can be tested often and then added to our gates
-test_plan_incubator_hourly = [
+test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps), # Chrsitoffer Östlin
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson

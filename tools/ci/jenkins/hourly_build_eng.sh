@@ -53,7 +53,7 @@ else
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly incubator --ciflow true || die "Build Unit and Component tests failed"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly staging_hourly --ciflow true || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_tester_build.trace.gz || true
 

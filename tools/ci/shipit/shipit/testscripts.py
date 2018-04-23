@@ -27,8 +27,8 @@ _PLAN_MAP = {
     "gate" : test_plan.test_plan_gate,
     "hourly": test_plan.test_plan_hourly,
     "nightly": test_plan.test_plan_nightly,
-    "incubator": test_plan.test_plan_incubator_hourly,
-    "staging": test_plan.test_plan_staging_daily
+    "staging_hourly": test_plan.test_plan_staging_hourly,
+    "staging_daily": test_plan.test_plan_staging_daily
 }
 
 
@@ -151,7 +151,7 @@ def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \
                 test_plan.test_plan_nightly + \
-                test_plan.test_plan_incubator_hourly + \
+                test_plan.test_plan_staging_hourly + \
                 test_plan.test_plan_staging_daily
 
     disabled_subtests = [d.disabled_test for d in all_plans if isinstance(d, test_types.Disabled)]

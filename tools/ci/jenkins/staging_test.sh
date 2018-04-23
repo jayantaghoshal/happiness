@@ -12,25 +12,25 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 cd "${REPO_ROOT_DIR}"
 
 plan=""
-if [ "${JOB_NAME}" = "ihu_staging_test-generic" ] ||
-   [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
-   [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
-   [ "${JOB_NAME}" = "ihu_staging_test-apix" ]
+if [ "${JOB_NAME}" = "ihu_daily_staging_test-generic" ] ||
+   [ "${JOB_NAME}" = "ihu_daily_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_daily_staging_test-audio" ] ||
+   [ "${JOB_NAME}" = "ihu_daily_staging_test-apix" ]
 then
-    plan="staging"
-elif [ "${JOB_NAME}" = "ihu_incubator_test-generic" ] ||
-     [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ] ||
-     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ] ||
-     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
+    plan="staging_daily"
+elif [ "${JOB_NAME}" = "ihu_hourly_staging_test-generic" ] ||
+     [ "${JOB_NAME}" = "ihu_hourly_staging_test-flexray" ] ||
+     [ "${JOB_NAME}" = "ihu_hourly_staging_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_hourly_staging_test-apix" ]
 then
-    plan="incubator"
+    plan="staging_hourly"
 fi
 
 # Download from Artifactory
-if [ "${plan}" = "staging" ]
+if [ "${plan}" = "staging_daily" ]
 then
     artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
-elif [ "${plan}" = "incubator" ]
+elif [ "${plan}" = "staging_hourly" ]
 then
     artifactory pull-latest "${UPSTREAM_JOB_JOBNAME}" out.tgz || die "artifactory pull failed"
 fi
@@ -43,19 +43,19 @@ lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
 capability=""
-if [ "${JOB_NAME}" = "ihu_staging_test-flexray" ] ||
-   [ "${JOB_NAME}" = "ihu_incubator_test-flexray" ]
+if [ "${JOB_NAME}" = "ihu_daily_staging_test-flexray" ] ||
+   [ "${JOB_NAME}" = "ihu_hourly_staging_test-flexray" ]
 then
     capability="flexray"
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif [ "${JOB_NAME}" = "ihu_staging_test-audio" ] ||
-     [ "${JOB_NAME}" = "ihu_incubator_test-audio" ]
+elif [ "${JOB_NAME}" = "ihu_daily_staging_test-audio" ] ||
+     [ "${JOB_NAME}" = "ihu_hourly_staging_test-audio" ]
 then
     capability="audio"
-elif [ "${JOB_NAME}" = "ihu_staging_test-apix" ] ||
-     [ "${JOB_NAME}" = "ihu_incubator_test-apix" ]
+elif [ "${JOB_NAME}" = "ihu_daily_staging_test-apix" ] ||
+     [ "${JOB_NAME}" = "ihu_hourly_staging_test-apix" ]
 then
     capability="apix"
 fi

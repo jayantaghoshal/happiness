@@ -78,7 +78,7 @@ class tester:
         subparsers = root_parser.add_subparsers(dest="program")
         analyze_parser = subparsers.add_parser("analyze")  # NOQA
         build_parser = subparsers.add_parser("build")
-        build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
+        build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
         build_parser.add_argument('--ciflow', choices=['true', 'false'])
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("-c", "--capabilities",
@@ -94,7 +94,7 @@ class tester:
                                      "Ignore other tests even though your rig has capabilities enough to run them. "
                                      "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                      "dont run generic test cases")
-        run_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging', 'incubator'])
+        run_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
         run_parser.add_argument('--vcc_dashboard_reporting', action='store_true')
         run_parser.add_argument('--report_results_to_ci_database', action='store_true')
         run_parser.add_argument('--update_ihu', action='store_true')

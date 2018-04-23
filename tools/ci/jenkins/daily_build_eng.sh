@@ -38,7 +38,7 @@ cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_dist || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_dist.trace.gz || true
 
 # Build tests for daily (plan=nightly)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan nightly staging || die "Build Unit and Component tests failed"
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan nightly staging_daily || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_tester_build.trace.gz || true
 
