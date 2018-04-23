@@ -340,7 +340,7 @@ def reboot_vip_into_app(profile_flags: ProfileFlags, vip: VipSerial):
     if vip_type == vip.VIP_PBL:
         reboot_pbl_to_app()
     elif vip_type == vip.VIP_APP:
-        vip.writeline("sm restart 0")  # just restart pbl to app
+        vip.writeline("sm restart 3")  # just restart APP to APP with "neutral" restart reason diagnostics
         try:
             vip.expect_line("r\[0\.\d+\]", timeout_sec=60, hint="VIP has not booted (no traces indicating booting up)")
         except serial_mapping.ExpectedResponseNotPresentError:
