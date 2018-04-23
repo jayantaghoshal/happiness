@@ -222,6 +222,7 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
                 if power_result != 0:
                     raise Exception("Could not power cycle ihu")
     logger.info("Update of ihu done")
+    check_output_logged(["adb", "remount"])
 
 
 def run_testcases(tests_to_run: List[IhuBaseTest], vcc_dashboard_reporting: bool, report_results_to_ci_database: bool, abort_on_first_failure: bool):
