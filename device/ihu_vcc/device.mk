@@ -54,6 +54,8 @@ PRODUCT_PACKAGES += \
     ConManRelay \
     RemoteAudioCtrlService \
     RemoteAudioCtrlAppService \
+    RemoteClimateGateway \
+    RemoteClimateService \
 
 
 ##############################################################

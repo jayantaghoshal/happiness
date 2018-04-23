@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.volvocars.remotectrlservices.climatectrl.service"
+          android:sharedUserId="android.uid.system"
+          coreApp="true">
+
+  <original-package android:name="com.volvocars.remotectrlservices.climatectrl.service" />
+
+  <permission
+    android:name="android.volvocars.permission.REMOTE_CTRL"
+    android:protectionLevel="system|signature"
+    android:label="@string/volvocars_permission_label_remote_ctrl"
+    android:description="@string/volvocars_permission_desc_remote_ctrl" />
+
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+  <application
+    android:label="RemoteClimateCtrl.Service"
+    android:directBootAware="true"
+    android:persistent="true"
+    android:singleUser="true">
+
+    <receiver
+      android:name="com.volvocars.remotectrlservices.climatectrl.OnBootStarter"
+      android:enabled="true">
+      <intent-filter android:priority="1000">
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+      </intent-filter>
+    </receiver>
+
+      <service
+             android:name="com.volvocars.remotectrlservices.climatectrl.service.RemoteClimateService"
+             android:exported="true">
+      <intent-filter>
+        <action android:name=".RemoteClimateService.BIND" />
+      </intent-filter>
+    </service>
+
+  </application>
+
+</manifest>
