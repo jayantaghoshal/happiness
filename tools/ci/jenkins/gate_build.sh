@@ -38,14 +38,6 @@ lunch ihu_vcc-eng
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/bin/gate_check.py
 
-# Patch library.go if we want to skip abi checks
-if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
-    # Patch build/soong/cc/library.go to skip generating .sdump files for ABI checking
-    git -C "${REPO_ROOT_DIR}/build/soong" apply "${REPO_ROOT_DIR}/vendor/volvocars/tools/ci/jenkins/abi-dump.patch"
-    # Restore file at exit/user break/external termination during builds
-    trap 'git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go' EXIT SIGINT SIGTERM
-fi
-
 VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 # Check vts package is up to date
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
@@ -65,11 +57,6 @@ else
     mkdir -p -m 755 vtsPackage
     tar xvf outVTS.tgz -C vtsPackage/
     cp -r -n -a vtsPackage/out/* out/
-fi
-
-# Restore library.go
-if [ ! -z "${SKIP_ABI_CHECKS+x}" ]; then
-    git -C "${REPO_ROOT_DIR}/build/soong" checkout cc/library.go
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
