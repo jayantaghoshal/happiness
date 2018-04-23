@@ -5,6 +5,7 @@
 
 package com.volvocars.remotectrlservices.climatectrl.service;
 
+import android.support.annotation.Nullable;
 import android.content.Context;
 import android.content.ComponentName;
 import android.app.Service;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.IBinder.DeathRecipient;
 import android.os.RemoteException;
+import android.os.Bundle;
 import android.util.Log;
 import android.content.ServiceConnection;
 
@@ -29,7 +31,7 @@ import com.volvocars.remotectrlservices.climatectrl.service.task.SetCarPropertyA
 import com.volvocars.remotectrlservices.climatectrl.*;
 
 public class RemoteClimateService extends Service {
-    private static final String TAG = "RemoteCtrl.ClimateCtrl.RemoteClimateService";
+    private static final String TAG = "RemoteCtrl.ClimateCtrl.Service";
 
     private static final String REMOTE_CLIMATE_SERVICE_PACKAGE =
             "com.volvocars.remotectrlservices.climatectrl.gateway";
@@ -38,6 +40,8 @@ public class RemoteClimateService extends Service {
 
     private static final String REMOTE_CLIMATE_SERVICE_RESPONSE_BIND_INTENT =
             ".RemoteClimateResponseService.BIND";
+
+    private static final String REMOTE_CLIMATE_SERVICE_BIND_INTENT = ".RemoteClimateService.BIND";
 
     private boolean mIsRemoteClimateResponseServiceBound = false;
     IRemoteClimateResponseService mIRemoteClimateResponseService = null;
@@ -58,6 +62,8 @@ public class RemoteClimateService extends Service {
     private Car mCar = null;
     private CarHvacManager mCarHvacManager = null;
 
+    private boolean isBinderClientConnected = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -77,7 +83,29 @@ public class RemoteClimateService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.v(TAG, "onBind");
+        isBinderClientConnected = true;
         return mRemoteClimateServiceBinder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.v(TAG, "onUnbind");
+
+        if (intent.getAction().equals(REMOTE_CLIMATE_SERVICE_BIND_INTENT)) {
+            Log.v(TAG, "Remote climate service unbound");
+
+            isBinderClientConnected = false;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(TAG, "onDestroy");
+        super.onDestroy();
     }
 
     private void bindRemoteClimateResponseService() {
@@ -118,6 +146,22 @@ public class RemoteClimateService extends Service {
         mCarHvacManager.unregisterCallback(onPropertyChangedCallback);
     }
 
+    private boolean isCommunicationHandshakeReady() {
+        if (mCarHvacManager == null) {
+            return false;
+        }
+
+        if (mIRemoteClimateResponseService == null) {
+            return false;
+        }
+
+        if (!isBinderClientConnected) {
+            return false;
+        }
+
+        return true;
+    }
+
     private final CarHvacManager.CarHvacEventCallback onPropertyChangedCallback =
             new CarHvacManager.CarHvacEventCallback() {
 
@@ -130,6 +174,11 @@ public class RemoteClimateService extends Service {
                 public void onChangeEvent(CarPropertyValue value) {
                     try {
                         Log.v(TAG, "CarHvacEventCallback: " + value.toString());
+
+                        if (!isCommunicationHandshakeReady()) {
+                            Log.v(TAG, "Communication handshake not completed. Ignoring callback.");
+                        }
+
                         if (mPropertiesListeningOn.contains(value.getPropertyId())) {
                             mIRemoteClimateResponseService.notifyPropertyChanged(value);
                         } else {

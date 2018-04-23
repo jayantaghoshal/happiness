@@ -17,9 +17,7 @@
 
   <application
     android:label="RemoteClimateCtrl.Service"
-    android:directBootAware="true"
-    android:persistent="true"
-    android:singleUser="true">
+    android:exported="true">
 
     <receiver
       android:name="com.volvocars.remotectrlservices.climatectrl.OnBootStarter"
@@ -30,8 +28,9 @@
     </receiver>
 
       <service
-             android:name="com.volvocars.remotectrlservices.climatectrl.service.RemoteClimateService"
-             android:exported="true">
+        android:persistent="true"
+        android:name="com.volvocars.remotectrlservices.climatectrl.service.RemoteClimateService"
+        android:exported="true">
       <intent-filter>
         <action android:name=".RemoteClimateService.BIND" />
       </intent-filter>

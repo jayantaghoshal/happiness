@@ -37,10 +37,10 @@ import com.volvocars.remotectrlservices.climatectrl.gateway.task.request.SetProp
 public class RemoteClimateServiceHandler extends IRemoteCtrlProperty.Stub {
     private static final String TAG = "RemoteCtrl.ClimateCtrl.RemoteClimateServiceHandler";
 
-    private static final int COOKIE = 1190;
-
     private IRemoteClimateService mRemoteClimateService;
     private IRemoteCtrlPropertyResponse mNativeRemoteClimateCtrl;
+
+    public RemoteClimateServiceHandler() {}
 
     public RemoteClimateServiceHandler(IRemoteCtrlPropertyResponse nativeRemoteClimateCtrl) {
         mNativeRemoteClimateCtrl = nativeRemoteClimateCtrl;
@@ -48,6 +48,11 @@ public class RemoteClimateServiceHandler extends IRemoteCtrlProperty.Stub {
 
     public void setRemoteClimateService(IRemoteClimateService remoteClimateService) {
         mRemoteClimateService = remoteClimateService;
+    }
+
+    public void setRemoteCtrlPropertyResponseService(
+            IRemoteCtrlPropertyResponse remoteCtrlPropertyResponseService) {
+        mNativeRemoteClimateCtrl = remoteCtrlPropertyResponseService;
     }
 
     @Override
@@ -68,13 +73,14 @@ public class RemoteClimateServiceHandler extends IRemoteCtrlProperty.Stub {
                 .execute();
     }
 
-    public void registerClimateControlHandler(HwBinder.DeathRecipient deathRecipient) {
+    public void registerClimateControlHandler(
+            HwBinder.DeathRecipient deathRecipient, int deathRecipientCookie) {
         try {
             Log.v(TAG, "Registering climate control handler on the native daemon");
 
             mNativeRemoteClimateCtrl.registerRemoteCtrlPropertyHandler(this);
 
-            mNativeRemoteClimateCtrl.linkToDeath(deathRecipient, COOKIE /* cookie */);
+            mNativeRemoteClimateCtrl.linkToDeath(deathRecipient, deathRecipientCookie);
 
         } catch (RemoteException ex) {
             Log.e(TAG, "RemoteException: ", ex);
@@ -89,4 +95,3 @@ public class RemoteClimateServiceHandler extends IRemoteCtrlProperty.Stub {
         }
     }
 }
-

@@ -19,7 +19,7 @@ import com.volvocars.remotectrlservices.carproperty.CarPropertyUtils;
 
 public class SetPropertyResponseAsyncTask extends BasePropertyResponseAsyncTask {
     private static final String TAG =
-            "RemoteCtrl.ClimateCtrl.RemoteClimateResponseServiceHandler.SetPropertyResponseAsyncTask";
+            "RemoteCtrl.ClimateCtrl.Gateway.RemoteClimateResponseServiceHandler.SetPropertyResponseAsyncTask";
 
     protected SetPropertyResponseAsyncTask(int requestIdentifier,
             IRemoteCtrlPropertyResponse nativeRemoteClimateCtrl, CarPropertyValue propValue) {
@@ -37,8 +37,12 @@ public class SetPropertyResponseAsyncTask extends BasePropertyResponseAsyncTask 
         try {
             VehiclePropValue vehiclePropValue = CarPropertyUtils.toVehiclePropValue(mPropValue);
 
+            Log.v(TAG, "vehiclePropValue: " + vehiclePropValue);
+
             mNativeRemoteClimateCtrl.sendSetPropertyResp(
                     (short) mRequestIdentifier, vehiclePropValue);
+        } catch (IllegalArgumentException ex) {
+            Log.e(TAG, "IllegalArgumentException: ", ex);
         } catch (RemoteException ex) {
             Log.v(TAG, "RemoteException: " + ex);
         }
@@ -47,4 +51,3 @@ public class SetPropertyResponseAsyncTask extends BasePropertyResponseAsyncTask 
         return null;
     }
 }
-

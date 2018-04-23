@@ -34,7 +34,14 @@ public class RemoteClimateResponseServiceHandler extends IRemoteClimateResponseS
 
     private IRemoteCtrlPropertyResponse mRemoteCtrlPropertyResponseService = null;
 
+    public RemoteClimateResponseServiceHandler() {}
+
     public RemoteClimateResponseServiceHandler(
+            IRemoteCtrlPropertyResponse remoteCtrlPropertyResponseService) {
+        mRemoteCtrlPropertyResponseService = remoteCtrlPropertyResponseService;
+    }
+
+    public void setRemoteCtrlPropertyResponseService(
             IRemoteCtrlPropertyResponse remoteCtrlPropertyResponseService) {
         mRemoteCtrlPropertyResponseService = remoteCtrlPropertyResponseService;
     }
@@ -61,4 +68,3 @@ public class RemoteClimateResponseServiceHandler extends IRemoteClimateResponseS
                 .execute();
     }
 }
-
