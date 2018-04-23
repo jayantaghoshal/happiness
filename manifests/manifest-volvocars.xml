@@ -7,12 +7,12 @@
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ea38bd4cce7140325780d8a262fc88b55b35034e" />
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="f0b98996b611b24ef928cb0b4317ca2044206526" />
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="5c8529d76e9baded392ee58373736cd78827cbdb" />
-  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="d61b7d646b94b478c6814c56c5d31444cc177da7" />
+  <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="ac1af6e59a2c72bb97d454b618e79fbd67374be0" />
 
   <!-- APPS -->
-  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="002f03b09cdc575b44214a0d1f09b94fb8f1b93a" />
+  <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="b00693d8f8b0bb05ab1316f8faabd6c45e8bbfae" />
   <project name="vendor/volvocars/hmi/apps/vehiclefunctions" path="vendor/volvocars/hmi/apps/vehiclefunctions" revision="030c4339d345e43799ba93a01384a0ad57c98b0a" />
   <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="ec97bad7e111e7f783dcc391c6a9ed92c506ae1a" />
   <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="ZUUL_COMMIT_OR_HEAD" />
@@ -34,7 +34,7 @@
   <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
 
   <remove-project name="aosp/platform/frameworks/base"/>
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="eb0be98d489ba463291bbed6ed94dd9b9aeb11da"/>
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="ea5db54714b41f42b4bced45e4f1847e59976bae"/>
 
   <remove-project name="aosp/platform/packages/services/Car"/>
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0d98a973977bdca0c44c3183b9408add5b1ed4cd" />
