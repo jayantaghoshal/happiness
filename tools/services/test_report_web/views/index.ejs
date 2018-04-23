@@ -35,18 +35,23 @@
     <div style="text-align:center; font-size:160%;"><h1>VCC TEST REPORT</h1>
     <img src="/volvo_logo.png" alt="Volvo logo" width="350" height="300"></div>
 
+    <h2>Latest</h2>
+    <ul>
+        <% for(var i=0; i<top_job_names.length; i++) {%>
+           <% if (top_job_names[i].name!='ihu_gate') {%>
+                <li><a class="" href=<%="/tests/?top_job_name=" + top_job_names[i]["name"] + "&build_number=" + top_job_names[i]["latest_id"] %> ><%= top_job_names[i].name%></a></li>
+            <% } %>
+        <% } %>
+    </ul>
+
+    <h2>Gate + manual select</h2>
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Select Build Job
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <% for(var i=0; i<top_job_names.length; i++) {%>
-                <% if (top_job_names[i]=='') {%>
-                    <a class="dropdown-item" href="/jobs/?top_job=ihu_gate">ihu_gate</a>
-                <% } %>
-                <% if (top_job_names[i]!='') {%>
-                    <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i]%>><%= top_job_names[i] %></a>
-                <% } %>
+                <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i].name%>><%= top_job_names[i].name %></a>
             <% } %>
         </div>
     </div>

@@ -34,19 +34,20 @@ MongoClient.connect('mongodb://jenkins-icup_android:'+ process.env.MONGODB_PASSW
 
 
 app.get('/', cors(), (req, res) => {
-    var cursor = db.collection('records').find({}).project({ "top_test_job_name": 1, "_id": 0 }).toArray(function(err, top_test_job_names) {
+    var cursor = db.collection('records').aggregate([{$group:{'_id':'$top_test_job_name', 'max':{$max:'$top_test_job_build_number'}}}]).toArray().then(
+        function(top_test_job_names) {
         var extracted_top_test_job_names = [];
         for (var list_index in top_test_job_names) {
-            for (var key in top_test_job_names[list_index]) {
-                extracted_top_test_job_names.push(top_test_job_names[list_index][key]);
-            }
+            var name = top_test_job_names[list_index]["_id"];
+            if (name == "")
+                name = "ihu_gate"
+            extracted_top_test_job_names.push(
+            {
+                "name" : name,
+                "latest_id": top_test_job_names[list_index]["max"]}
+            );
         }
-
-        var unique_top_test_job_names = new Set(extracted_top_test_job_names);
-        var array_top_test_job_names = Array.from(unique_top_test_job_names);
-        res.render('index.ejs', { view: "top_job_page", top_job_names: array_top_test_job_names });
-
-
+        res.render('index.ejs', { view: "top_job_page", top_job_names: extracted_top_test_job_names });
     });
 
 });
