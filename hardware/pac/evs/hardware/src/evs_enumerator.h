@@ -6,6 +6,7 @@
 #pragma once
 
 #include <android/hardware/automotive/evs/1.0/IEvsEnumerator.h>
+#include <gtest/gtest_prod.h>
 
 namespace android {
 namespace hardware {
@@ -22,6 +23,16 @@ class EvsEnumerator : public IEvsEnumerator {
     Return<sp<IEvsDisplay>> openDisplay() override;
     Return<void> closeDisplay(const sp<IEvsDisplay>& display) override;
     Return<DisplayState> getDisplayState() override;
+
+  private:
+    wp<IEvsDisplay> active_display_;
+
+    FRIEND_TEST(EvsEnumeratorTest, ConstructObject);
+
+    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplayNullPtr);
+    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplaySuccess);
+    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplayUnknownDisplay);
+    FRIEND_TEST(EvsEnumeratorDisplayTest, OpenDisplay);
 };
 
 }  // namespace vcc_implementation

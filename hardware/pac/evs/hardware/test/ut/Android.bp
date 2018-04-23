@@ -9,6 +9,7 @@ cc_test {
     defaults: [
         "volvocars_cc_defaults_hq_tests_pac_vts",
         "vcc_pac_use_evs_hidl",
+        "vcc_pac_use_libdbg",
     ],
 
     header_libs: [
@@ -17,6 +18,7 @@ cc_test {
 
     srcs: [
         "test_evs_enumerator.cpp",
+        "test_evs_drm_display.cpp",
     ],
 
     static_libs: [

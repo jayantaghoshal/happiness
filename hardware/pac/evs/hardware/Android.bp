@@ -28,8 +28,13 @@ cc_library_static {
         "android.hardware.automotive.evs.vcc@1.0-hardware-defaults",
     ],
 
+    whole_static_libs: [
+        "libgtest_prod",
+    ],
+
     srcs: [
         "src/evs_enumerator.cpp",
+        "src/evs_drm_display.cpp",
     ],
 }
 
