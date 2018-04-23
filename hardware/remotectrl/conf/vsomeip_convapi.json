@@ -16,6 +16,10 @@
         {
             "name" : "RemoteCtrl_AudioCtrl",
             "id" : "0x4444"
+        },
+        {
+            "name" : "RemoteCtrl_ClimateCtrl",
+            "id" : "0x4454"
         }
     ],
 
@@ -31,6 +35,15 @@
             "eventgroups" : {
                 "eventgroup" : "0x1150",
                 "events" : ["0x1122"]
+            }
+        },
+        {
+            "service" : "0x1200",
+            "instance" : "0x1201",
+            "unreliable" : "50023",
+            "eventgroups" : {
+                "eventgroup" : "0x1202",
+                "events" : ["0x1222"]
             }
         }
     ],

@@ -35,6 +35,7 @@ PRODUCT_PACKAGES += \
     pac_early_app \
     remotectrl_routerd \
     remotectrl_audioctrld \
+    remotectrl_climatectrld \
     connectivitymanagerd \
 
 PRODUCT_PROPERTY_OVERRIDES += \

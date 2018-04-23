@@ -1,0 +1,4 @@
+service remotectrl_climatectrld /vendor/bin/ip netns exec vcc /vendor/bin/remotectrl_climatectrld /vendor/etc/vsomeip/vsomeip_convapi.json
+    class vcc_conv_api
+    user root
+    group root
