@@ -111,6 +111,42 @@
                 </fieldset>	                        
             <% } %>
             <br>
+
+            <fieldset>
+            <legend>Build trend</legend>
+                <table>
+                    <tr>
+                        <td>Build ID:</td>
+                        <% for (var i in build_trend) { %>
+                        <td>
+                            <a href=<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + build_trend[i]["test_job_build_number"]  %> >
+                                <%=build_trend[i]["test_job_build_number"]%>
+                            </a>
+                        </td>
+                        <% } %>
+                    </tr>
+                    <tr>
+                        <td>Pass/fail</td>
+                        <% for (var i in build_trend) { %>
+                        <td>
+                            <% if (build_trend[i]["pass"]){ %>
+                                        <span class="badge badge-success">PASS</span>
+                            <% }else{ %>
+                                        <span class="badge badge-danger">FAIL</span>
+                            <% } %>
+                        </td>
+
+                        <% } %>
+                    </tr>
+                    <tr>
+                        <td>Test time</td>
+                        <% for (var i in build_trend) { %>
+                        <td><%=build_trend[i]["runtime"]%></td>
+                        <% } %>
+                    </tr>
+                </table>
+            </fieldset>
+
             <fieldset >    	
                     <legend>Logs</legend>
                         <div class="list-group">

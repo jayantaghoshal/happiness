@@ -139,14 +139,14 @@ app.get('/detailed_view', cors(), (req, res) => {
 
 
 
-    var cursor = db.collection('records').find({
+    var details = db.collection('records').find({
             "job_name": test_job_name,
             "test_job_build_number": parseInt(test_job_build_number),
             "module_name": module_name
         })
         .project({
             _id: 0
-        }).toArray(function(err, test_detail) {
+        }).toArray().then(function(test_detail) {
 
             var test_record = test_detail[0];
 
@@ -177,14 +177,40 @@ app.get('/detailed_view', cors(), (req, res) => {
                     logs_test_record[Object.keys(test_record)[i]] = test_record[Object.keys(test_record)[i]]
                 }
             }
-
-            res.render('detailed_view.ejs', {
+            return {
                 test_detail: meta_test_record,
                 logs_test_record: logs_test_record,
                 testcases_test_record: testcases_test_record
-            });
-
+            };
         });
+
+    var trend = db.collection('records').find({
+            "job_name": test_job_name,
+            "module_name": module_name
+        })
+        .project({
+            pass: 1,
+            runtime: 1,
+            test_job_build_number: 1
+        })
+        .sort({test_job_build_number: -1})
+        .limit(15)
+        .toArray();
+
+    Promise.all([details, trend]).then(
+        function(promiseResults) {
+            var detailResults = promiseResults[0];
+            var trendResults = promiseResults[1];
+            res.render('detailed_view.ejs', {
+                module_name: module_name,
+                test_job_name : test_job_name,
+                test_detail: detailResults.test_detail,
+                logs_test_record: detailResults.logs_test_record,
+                testcases_test_record: detailResults.testcases_test_record,
+                build_trend: trendResults.reverse()
+            });
+        }
+    );
 });
 
 app.get('/log', cors(), (req, res) => {
