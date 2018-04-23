@@ -71,6 +71,7 @@ def get_all_zuul_repos():
     return repos_with_zuul_changes_set
 
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
+    repos_with_zuul_changes_set = set()
     if using_zuul:
         repos_with_zuul_changes_set = get_all_zuul_repos()
         base_dir = os.getcwd()
