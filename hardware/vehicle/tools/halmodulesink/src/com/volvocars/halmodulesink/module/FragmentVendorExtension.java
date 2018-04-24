@@ -51,26 +51,6 @@ public class FragmentVendorExtension extends AModuleFragment {
         settingConnSafetyOff.setVisibility(View.INVISIBLE);
         settingConnSafetyOn.setVisibility(View.INVISIBLE);
 
-        // Dummy
-
-        runBackgroundAndUpdate(() -> {
-            try {
-                vendorExtensionClient.registerCallback(new VendorExtensionCallBack(0x21400003, 0) {
-                    @Override
-                    public void onChangeEvent(CarPropertyValue value) {
-                        Log.d(TAG, "onChangeEvent: Custom Works!");
-                    }
-
-                    @Override
-                    public void onErrorEvent(int propertyId, int zone) {
-                        Log.d(TAG, "onErrorEvent: Custom Works!");
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "Error", e);
-            }
-        });
-
         runBackgroundAndUpdate(() -> {
             try {
                 if (vendorExtensionClient.isFeatureAvailable(VehicleProperty.DAI_SETTING)) {
