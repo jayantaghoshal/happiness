@@ -124,7 +124,8 @@ public final class CarPropertyUtils {
         VehiclePropValue.RawValue v = halValue.value;
 
         if (Boolean.class == clazz) {
-            return new CarPropertyValue<>(propertyId, areaId, v.int32Values.get(0) == 1);
+            boolean value = v.int32Values.isEmpty() ? false : v.int32Values.get(0) == 1;
+            return new CarPropertyValue<>(propertyId, areaId, value);
         } else if (String.class == clazz) {
             return new CarPropertyValue<>(propertyId, areaId, v.stringValue);
         } else if (Long.class == clazz) {
