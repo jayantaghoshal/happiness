@@ -105,7 +105,7 @@ def split(audio_file,  # type: str
         else:
             seg_file = fn + '_part%03d' % seg_nbr
 
-        proc_res = subprocess.check_output(['sox', fn, seg_file, 'trim', start, duration],
+        proc_res = subprocess.check_output(['sox', fn, seg_file, 'trim', str(start), str(duration)],
                                            universal_newlines=True)
 
         if os.path.exists(seg_file):
