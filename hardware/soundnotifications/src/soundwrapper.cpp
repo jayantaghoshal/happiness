@@ -70,10 +70,10 @@ void Sound::play() {
             ALOGI("Sound::play() play sound notif sound type=%d component=%d",
                   static_cast<int32_t>(_soundID.type),
                   static_cast<int32_t>(_soundID.component));
+            android::hardware::hidl_string soundTypeHidl(AudioTable::getSoundTypeName(_soundID.type));
+
             android::hardware::Return<void> ret = am_service->playSound(
-                    static_cast<int32_t>(_soundID.type),
-                    static_cast<int32_t>(_soundID.component),
-                    [&](AMStatus s, uint32_t cId) {
+                    soundTypeHidl, static_cast<int32_t>(_soundID.component), [&](AMStatus s, uint32_t cId) {
                         if (s == AMStatus::OK) {
                             connectionID = cId;
                             SoundWrapper::registerConnection(this, connectionID);

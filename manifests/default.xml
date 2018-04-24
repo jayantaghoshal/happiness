@@ -1,5 +1,5 @@
 <manifest>
-  <notice>AOSP:PPR1.180308.003 Intel:20180313-2018_ww11 Aptiv:2018_ww11_delphi_rel_a_18w14_3</notice>
+  <notice>AOSP:PPR1.180308.003 Intel:20180313-2018_ww11 Aptiv:VCC-IHU40-COMB-NB-P-65_VIP_AH</notice>
   <remote fetch="https://icup_android.gerrit.cm.volvocars.biz/a/" name="origin" review="https://icup_android.gerrit.cm.volvocars.biz" />
   <default remote="origin" sync-c="true" sync-j="5" />
 

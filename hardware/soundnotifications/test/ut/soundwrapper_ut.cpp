@@ -12,73 +12,25 @@
 #include <soundwrapper.h>
 #include "audiomanagermock.h"
 
+#include "ut_common.h"
+
 #undef LOG_TAG
 #define LOG_TAG "soundwrapperUT.Tests"
 
 using namespace SoundNotifications;
 using namespace AudioTable;
 
+class SoundWrapperUT : public ut_common {};
+
+using namespace android::hardware;
+
 using namespace testing;
-class SoundWrapperUT : public Test {
-  public:
-    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
-                                                    int32_t soundComp,
-                                                    const AudioManagerMock::playSound_cb& _hidl_cb) {
-        ALOGI("AudioManagerMock::mockPlaySound: %i %i", soundType, soundComp);
-        connectionID++;
-        bool error = false;
-
-        try {
-            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
-                                      static_cast<AudioTable::SoundComponent>(soundComp));
-        } catch (std::invalid_argument& iaex) {
-            ALOGW("AudioManagerMock::mockPlaySound. Invalid combination of Type and Component");
-            error = true;
-        }
-
-        if (!error) {
-            _hidl_cb(AMStatus::OK, connectionID);
-            swrapper->onRampedIn(static_cast<uint32_t>(connectionID));
-        } else {
-            _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, -1);
-        }
-        return android::hardware::Status::fromStatusT(android::OK);
-    }
-
-    ::android::hardware::Return<AMStatus> mockStopSound(int64_t connectionId) {
-        ALOGI("AudioManagerMock::mockStopSound. connection ID: %" PRId64, connectionId);
-        swrapper->onDisconnected(static_cast<uint32_t>(connectionID));
-        return AMStatus::OK;
-    }
-
-    static void SetUpTestCase() {
-        swrapper = SoundWrapper::instance();
-        am_service = ::android::sp<AudioManagerMock>(new AudioManagerMock);
-        swrapper->init(am_service);
-    }
-
-    void SetUp() override {
-        SoundWrapper::clearAll();
-        ON_CALL(*am_service, playSound(_, _, _)).WillByDefault(Invoke(this, &SoundWrapperUT::mockPlaySound));
-        ON_CALL(*am_service, stopSound(_)).WillByDefault(Invoke(this, &SoundWrapperUT::mockStopSound));
-    }
-
-    void TearDown() override {}
-
-    ~SoundWrapperUT() override = default;
-    static SoundWrapper* swrapper;
-    static ::android::sp<AudioManagerMock> am_service;
-    int64_t connectionID{0};
-};
-
-::android::sp<AudioManagerMock> SoundWrapperUT::am_service = nullptr;
-SoundWrapper* SoundWrapperUT::swrapper = nullptr;
 
 TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
     ALOGI("Starting %s", test_info_->name());
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRight),
                           testing::_))
             .Times(1);
@@ -96,7 +48,7 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
     // Idle->Starting->Playing->Stopping->Idle
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRight),
                           testing::_))
             .Times(1);
@@ -126,7 +78,7 @@ TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates) {
     EXPECT_EQ(-1, SoundWrapper::getSoundState(soundToPlay));
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRight),
                           testing::_))
             .Times(1);
@@ -146,7 +98,7 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
     ALOGI("Starting %s", test_info_->name());
     // Idle->Starting->Playing->Stopping->Starting->Starting
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRightBroken),
                           testing::_))
             .Times(1);
@@ -163,7 +115,7 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
 
     // Play again and we shall come to Playing
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRightBroken),
                           testing::_))
             .Times(1);
@@ -171,7 +123,7 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
     EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRightBroken),
                           testing::_))
             .Times(1);
@@ -184,7 +136,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromStarting_alwaysBackToIdle) {
     // Idle->Starting->Idle
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::AndroidPhone),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::AndroidPhone)),
                           static_cast<int32_t>(SoundComponent::Left),
                           testing::_))
             .Times(1);
@@ -198,7 +150,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromStarting_alwaysBackToIdle) {
 TEST_F(SoundWrapperUT, onPlayFailedFromPlaying_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::SSDoorOpenVehicleActive),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::SSDoorOpenVehicleActive)),
                           static_cast<int32_t>(SoundComponent::Left),
                           testing::_))
             .Times(1);
@@ -211,7 +163,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromPlaying_alwaysBackToIdle) {
 TEST_F(SoundWrapperUT, onPlayFailedFromStopping_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::SSDoorOpenVehicleActive),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::SSDoorOpenVehicleActive)),
                           static_cast<int32_t>(SoundComponent::Left),
                           testing::_))
             .Times(1);
@@ -227,7 +179,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromStopping_alwaysBackToIdle) {
 TEST_F(SoundWrapperUT, playSoundFailsInIdle_StayInIdle) {
     // Idle->Idle
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::AndroidPhone),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::AndroidPhone)),
                           static_cast<int32_t>(SoundComponent::Left),
                           testing::_))
             .Times(1);
@@ -240,7 +192,7 @@ TEST_F(SoundWrapperUT, stopSoundFailsInStopping_toIdle) {
     // Idle->Starting->Stopping->Idle
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
                           static_cast<int32_t>(SoundComponent::Right),
                           testing::_))
             .Times(1);
@@ -262,7 +214,7 @@ TEST_F(SoundWrapperUT, stopSoundFailsInPlaying_toIdle) {
     // Idle->Starting->Playing->Idle
 
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
                           static_cast<int32_t>(SoundComponent::Warn1),
                           testing::_))
             .Times(1);

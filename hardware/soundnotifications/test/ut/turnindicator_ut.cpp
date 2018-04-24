@@ -23,6 +23,8 @@
 using namespace SoundNotifications;
 using namespace ECDDataElement;
 using namespace autosar;
+
+using namespace android::hardware;
 using namespace testing;
 
 /// Unit test for requirement REQPROD:218373/MAIN;5	Audio request for Turn Indicator
@@ -42,7 +44,7 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceived_leftTurnIndSoundPlayed) {
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
                           static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),  // Same sound for left and right
                           testing::_))
             .Times(1);
@@ -65,7 +67,7 @@ TEST_F(TurnIndicatorUT, RightOnSignalReceived_rightTurnIndSoundPlayed) {
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
                           static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),  // Same sound for left and right
                           testing::_))
             .Times(1);
@@ -81,7 +83,7 @@ TEST_F(TurnIndicatorUT, LeftAndRightOnSignalReceived_hazardSoundPlayed) {
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
                           static_cast<int32_t>(AudioTable::SoundComponent::Hazard),  // Same sound for left and right
                           testing::_))
             .Times(1);
@@ -103,7 +105,7 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceivedLeftRearFaulty_leftTurnIndSoundBroke
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::TurnIndicator),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
                           static_cast<int32_t>(
                                   AudioTable::SoundComponent::LeftRightBroken),  // Same sound for left and right
                           testing::_))

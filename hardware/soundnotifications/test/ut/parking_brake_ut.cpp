@@ -30,6 +30,7 @@ Unit test for EPB REQPROD:218654/MAIN;3	Audio request for EPB warning
 
 class ParkingBrakeTest : public ut_common {};
 
+using namespace android::hardware;
 /**
 Test Function : EpbLampSignal_Active_SpeedGtrThanMax_EpbSoundPlayed
 Description: To test the audio sound play for the EPB warning activation as per the requirement.
@@ -48,7 +49,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedGtrThanMax_EpbSoundPlayed) {
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);
@@ -80,7 +81,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_InActive_EpbSoundStopped) {
    Expecting a call for playSound just to mitigate error "expected to be never called".
    */
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);
@@ -117,7 +118,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_On_SpeedGtrThanMax_EpbSoundPlayed) {
 
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);
@@ -149,7 +150,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedLessThanMin_EpbSoundStopped) 
     Expecting a call for playSound just to mitigate error "expected to be never called".
     */
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);
@@ -189,7 +190,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedEqlToMin_EpbSoundStopped) {
     Expecting a call for playSound just to mitigate error "expected to be never called".
     */
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);
@@ -224,7 +225,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedLessThanMax_EpbNotPlayed) {
     // Setup expectations first
     // Not expecting the call because conditions does not meet.
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(0);
@@ -251,7 +252,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_InActive_SpeedGtrThanMax_EpbNotPlayed) {
     // Setup expectations first
     // Not expecting the call because conditions does not meet.
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(0);
@@ -280,7 +281,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedGtrThanMin_EpbNotStopped) {
     Expecting a call for playSound just to mitigate error "expected to be never called".
     */
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::ElectricalParkingBrakeEPB),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
                           static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
                           testing::_))
             .Times(1);

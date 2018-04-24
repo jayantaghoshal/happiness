@@ -68,7 +68,8 @@ LOCAL_SHARED_LIBRARIES := \
     liblocalconfig \
     libsettings \
     libihulog \
-    $(lifecyclehal_v1_0)
+    $(lifecyclehal_v1_0) \
+    libkeyhandling
 
 LOCAL_STATIC_LIBRARIES := \
     $(vhal_v2_0)-delphi-manager-lib \

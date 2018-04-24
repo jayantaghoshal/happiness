@@ -19,6 +19,8 @@ class BeltReminderTest : public ut_common {};
 Test Function : BeltReminder_WarnUS_SoundPlayed
 Description: To test the audio sound play for the WarnUS belt reminder.
 */
+using namespace android::hardware;
+
 TEST_F(BeltReminderTest, BeltReminder_WarnUS_SoundPlayed) {
     ALOGI("Starting %s", test_info_->name());
     SoundNotifications::BeltReminder br;
@@ -26,7 +28,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnUS_SoundPlayed) {
     DEInjector<autosar::BltRmnSound1_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnUS),
                           testing::_))
             .Times(1);
@@ -47,7 +49,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnUS_SoundStopped) {
     DEInjector<autosar::BltRmnSound1_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnUS),
                           testing::_))
             .Times(1);
@@ -72,7 +74,7 @@ TEST_F(BeltReminderTest, BeltReminder_Warn1_SoundPlayed) {
     DEInjector<autosar::BltRmnSound2_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::Warn1),
                           testing::_))
             .Times(1);
@@ -93,7 +95,7 @@ TEST_F(BeltReminderTest, BeltReminder_Warn1_SoundStopped) {
     DEInjector<autosar::BltRmnSound2_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::Warn1),
                           testing::_))
             .Times(1);
@@ -118,7 +120,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnFinal_SoundPlayed) {
     DEInjector<autosar::BltRmnSound3_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnFinal),
                           testing::_))
             .Times(1);
@@ -139,7 +141,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnFinal_SoundStopped) {
     DEInjector<autosar::BltRmnSound3_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnFinal),
                           testing::_))
             .Times(1);
@@ -164,7 +166,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnRear_SoundPlayed) {
     DEInjector<autosar::BltRmnSound4_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnRear),
                           testing::_))
             .Times(1);
@@ -185,7 +187,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnRear_SoundStopped) {
     DEInjector<autosar::BltRmnSound4_info> sendBltRmndr;
     // Setup expectations first
     EXPECT_CALL(*am_service,
-                playSound(static_cast<int32_t>(AudioTable::SoundType::BeltReminder),
+                playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
                           static_cast<int32_t>(AudioTable::SoundComponent::WarnRear),
                           testing::_))
             .Times(1);

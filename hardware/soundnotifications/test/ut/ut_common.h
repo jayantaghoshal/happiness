@@ -27,15 +27,15 @@ class ut_common : public ::testing::Test {
   public:
     ut_common() = default;
     ~ut_common() override = default;
-    ::android::hardware::Return<void> mockPlaySound(int32_t soundType,
+    ::android::hardware::Return<void> mockPlaySound(const ::android::hardware::hidl_string& soundType,
                                                     int32_t soundComp,
                                                     const AudioManagerMock::playSound_cb& _hidl_cb) {
-        ALOG(LOG_INFO, "SoundNotificationsUT", "AudioManagerMock::mockPlaySound: %i %i", soundType, soundComp);
+        ALOG(LOG_INFO, "SoundNotificationsUT", "AudioManagerMock::mockPlaySound: %s %i", soundType.c_str(), soundComp);
         connectionID++;
         bool error = false;
 
         try {
-            AudioTable::getSourceName(static_cast<AudioTable::SoundType>(soundType),
+            AudioTable::getSourceName(AudioTable::getSoundType(soundType.c_str()),
                                       static_cast<AudioTable::SoundComponent>(soundComp));
         } catch (std::invalid_argument& iaex) {
             ALOG(LOG_WARN,
