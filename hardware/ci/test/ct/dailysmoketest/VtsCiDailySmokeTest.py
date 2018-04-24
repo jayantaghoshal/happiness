@@ -113,9 +113,6 @@ class VtsCiDailySmokeTest(ihu_base_test.IhuBaseTestClass):
 
     def testCrashes(self):
         def crash_allowed(process_name):
-            if process_name.strip() == "/vendor/bin/hw/vendor.volvocars.hardware.settingsstorage@1.0-service":
-                #TODO(ARTINFO-2180): Remove exclusion
-                return True
             return False
 
         shell_response = self.dut.shell.one.Execute(["ls /data/tombstones"])
