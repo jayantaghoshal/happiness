@@ -33,6 +33,10 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL = 0x1220U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL = 0x1221U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED = 0x1222U;
 
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE = 0x1270U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE = 0x1271U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED = 0x1210U;
+
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE = 0x1223U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE = 0x1224U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED = 0x1225U;
@@ -65,6 +69,8 @@ enum class FanLevel : uint8_t {
     FanLevel_Max = 0x06
 };
 
+constexpr uint8_t TEMPERATURE_MAX_VALUE = 22U;
+
 inline void ValidateRow(const char* method_name, const uint8_t& row) {
     if (row >= static_cast<uint8_t>(Rows::Row_Max)) {
         throw RemoteCtrlParamRangeError(method_name, "Row", static_cast<uint8_t>(Rows::Row_Max), row);
@@ -80,6 +86,12 @@ inline void ValidateSeat(const char* method_name, const uint8_t& seat) {
 inline void ValidateRequstedFanLevel(const char* method_name, const uint8_t& fan_level) {
     if (fan_level > static_cast<uint8_t>(FanLevel::FanLevel_Max)) {
         throw RemoteCtrlParamRangeError(method_name, "FanLevel", 6, fan_level);
+    }
+}
+
+inline void ValidateRequstedTemperature(const char* method_name, const uint8_t& temperature) {
+    if (temperature > static_cast<uint8_t>(TEMPERATURE_MAX_VALUE)) {
+        throw RemoteCtrlParamRangeError(method_name, "Temperature", TEMPERATURE_MAX_VALUE, temperature);
     }
 }
 

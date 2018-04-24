@@ -33,17 +33,22 @@ const ClientInfo client_info = {.app_name_ = "ClimateCtrlSim",
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE,
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE,
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE,
-                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE},
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE},
                                 .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED,
-                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED}};
+                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED,
+                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED}};
 
-constexpr std::uint16_t GETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x02U;
-constexpr std::uint16_t SETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x01U;
+constexpr std::uint16_t GETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
+constexpr std::uint16_t SETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
 constexpr std::uint16_t GET_MAX_DEFROSTER_STATE_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SET_MAX_DEFROSTER_STATE_PAYLOAD_LEN = 0x01U;
 constexpr std::uint16_t GET_AC_STATE_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SET_AC_STATE_PAYLOAD_LEN = 0x01U;
+constexpr std::uint16_t GETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
+constexpr std::uint16_t SETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
 
 }  // namespace
 
@@ -82,7 +87,7 @@ TEST_F(RemoteClimateCtrlFixture, GetFanLevel_SuccessTest) {
     ASSERT_THAT(WaitForResponse(2s), true);
 
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(1), Le(5)));
 }
@@ -111,7 +116,7 @@ TEST_F(RemoteClimateCtrlFixture, GetFanLevel_SetFanLevel_SuccessTest) {
     ASSERT_THAT(WaitForResponse(2s), true);
 
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
     uint8_t fan_speed = received_reply_->get_payload()->get_data()[1];
     fan_speed = fan_speed == 5 ? fan_speed - 1 : fan_speed + 1;
@@ -122,7 +127,7 @@ TEST_F(RemoteClimateCtrlFixture, GetFanLevel_SetFanLevel_SuccessTest) {
     using namespace std::chrono_literals;
     ASSERT_THAT(WaitForResponse(2s), true);
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
-    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
 }
 
@@ -260,4 +265,79 @@ TEST_F(RemoteClimateCtrlFixture, SetACState_FailureTest) {
 
     using namespace std::chrono_literals;
     ASSERT_THAT(WaitForResponse(2s), false);
+}
+
+/* GetTemperature_SuccessTest
+ * Asserts that on success IHU returns temperature within range [0, 22]
+ */
+TEST_F(RemoteClimateCtrlFixture, GetTemperature_SuccessTest) {
+    EnqueueRequest([this]() {
+        SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE, {0x00 /*row*/, 0x00 /*pos*/});
+    });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);  // wat is dis value?
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(0), Le(22)));
+}
+
+/* GetTemperature_FailureTest
+ * Asserts that on receiving malformed message IHU returns no response
+ */
+TEST_F(RemoteClimateCtrlFixture, GetTemperature_FailureTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE, {0x00 /*row*/}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+}
+
+/* GetTemperature_SetTemperature_SuccessTest
+ * Asserts that on success IHU sets temperature to requested temperature
+ */
+TEST_F(RemoteClimateCtrlFixture, GetTemperature_SetTemperature_SuccessTest) {
+    EnqueueRequest([this]() {
+        SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE, {0x00 /*row*/, 0x00 /*pos*/});
+    });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
+    uint8_t temperature = received_reply_->get_payload()->get_data()[1];
+    temperature = temperature == 22 ? temperature - 1 : temperature + 1;
+    EnqueueRequest([this, temperature]() {
+        SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE, {0x00 /*row*/, 0x00 /*pos*/, temperature});
+    });
+
+    using namespace std::chrono_literals;
+
+    ASSERT_THAT(WaitForResponse(2s), true);
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);  // wat dis value??
+
+    ASSERT_THAT(WaitForNotification(2s), true);  // look at it.. And maybe confirm that it is the same as the Response?
+}
+
+/* SetTemperature_FailureTest
+ * Asserts that on receiving malformed message IHU returns no response
+ */
+TEST_F(RemoteClimateCtrlFixture, SetTemperature_FailureTest) {
+    EnqueueRequest([this]() {
+        SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE, {0x00 /*row*/, 0x00 /*pos*/});
+    });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+
+    ASSERT_THAT(WaitForNotification(2s), false);
 }

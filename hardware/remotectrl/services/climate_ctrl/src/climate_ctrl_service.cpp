@@ -85,6 +85,11 @@ Return<void> ClimateCtrlService::sendGetPropertyResp(uint16_t requestIdentifier,
                                                     requestedPropValue);
                 break;
             }
+            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
+                payload_data = CreateSomeIpResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>(),
+                                                    requestedPropValue);
+                break;
+            }
             default: {
                 ALOGW("%s: Unhandled Prop [%d]", __func__, requestedPropValue.prop);
                 return Void();
@@ -118,6 +123,11 @@ Return<void> ClimateCtrlService::sendSetPropertyResp(uint16_t requestIdentifier,
             }
             case vhal_2_0::VehicleProperty::HVAC_AC_ON: {
                 payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>(),
+                                                       requestedPropValue);
+                break;
+            }
+            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
+                payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>(),
                                                        requestedPropValue);
                 break;
             }
@@ -158,6 +168,12 @@ Return<void> ClimateCtrlService::notifyPropertyChanged(const vhal_2_0::VehiclePr
                 payload_data = CreateSomeIpNotification(SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED>(),
                                                         propValue);
                 event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED;
+                break;
+            }
+            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
+                payload_data = CreateSomeIpNotification(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED>(), propValue);
+                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED;
                 break;
             }
             default: {
@@ -266,6 +282,26 @@ void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
             case REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE: {
                 const auto& prop_value =
                         VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>(), msg_payload);
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->setProperty(message->get_session(), prop_value);
+                }
+                break;
+            }
+
+            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE: {
+                const auto& prop_value =
+                        VhalGetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>(), msg_payload);
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->getProperty(message->get_session(), prop_value);
+                }
+                break;
+            }
+
+            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE: {
+                const auto& prop_value =
+                        VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>(), msg_payload);
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
                     system_service_handler_->setProperty(message->get_session(), prop_value);
