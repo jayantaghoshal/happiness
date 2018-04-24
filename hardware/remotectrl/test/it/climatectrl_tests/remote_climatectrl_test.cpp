@@ -24,16 +24,21 @@ using ::testing::Le;
 
 namespace {
 
-const ClientInfo client_info = {
-        .app_name_ = "ClimateCtrlSim",
-        .service_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_ID,
-        .instance_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_INSTANCE_ID,
-        .eventgroup_id_ = REMOTECTRL_CLIMATECTRL_EVENTGROUP_ID,
-        .methods_ = {REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL, REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL},
-        .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED}};
+const ClientInfo client_info = {.app_name_ = "ClimateCtrlSim",
+                                .service_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_ID,
+                                .instance_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_INSTANCE_ID,
+                                .eventgroup_id_ = REMOTECTRL_CLIMATECTRL_EVENTGROUP_ID,
+                                .methods_ = {REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE},
+                                .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
+                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED}};
 
 constexpr std::uint16_t GETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SETFANLEVEL_RESPONSE_EXEPCTED_PAYLOAD_LEN = 0x01U;
+constexpr std::uint16_t GET_MAX_DEFROSTER_STATE_PAYLOAD_LEN = 0x02U;
+constexpr std::uint16_t SET_MAX_DEFROSTER_STATE_PAYLOAD_LEN = 0x01U;
 
 }  // namespace
 
@@ -123,6 +128,68 @@ TEST_F(RemoteClimateCtrlFixture, SetFanLevel_FailureTest) {
     EnqueueRequest([this]() {
         SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL, {0x00 /*row*/, 0x00 /*pos*/});
     });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+}
+
+/* GetMaxDefrostState_SuccessTest
+ * Asserts that on success IHU returns MaxDefrostState
+ */
+TEST_F(RemoteClimateCtrlFixture, GetMaxDefrostState_SuccessTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE, {}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GET_MAX_DEFROSTER_STATE_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(0), Le(1)));
+}
+
+/* GetMaxDefrostState_FailureTest
+ */
+TEST_F(RemoteClimateCtrlFixture, GetMaxDefrostState_FailureTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE, {0x01}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+}
+
+/* GetMaxDefrostState_SetMaxDefrostState_SuccessTest
+ * Asserts that on success IHU sets MaxDefrostState to requested value
+ */
+TEST_F(RemoteClimateCtrlFixture, GetMaxDefrostState_SetMaxDefrostState_SuccessTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE, {}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GET_MAX_DEFROSTER_STATE_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
+    uint8_t defrost_state = received_reply_->get_payload()->get_data()[1];
+    defrost_state = defrost_state == 0x01 ? 0x00 : 0x01;
+    EnqueueRequest([this, defrost_state]() {
+        SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE, {defrost_state});
+    });
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SET_MAX_DEFROSTER_STATE_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
+}
+
+/* SetMaxDefrostState_FailureTest
+ */
+TEST_F(RemoteClimateCtrlFixture, SetMaxDefrostState_FailureTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE, {}); });
     StartClient();
 
     using namespace std::chrono_literals;

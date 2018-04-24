@@ -43,7 +43,7 @@
             "unreliable" : "50023",
             "eventgroups" : {
                 "eventgroup" : "0x1202",
-                "events" : ["0x1222"]
+                "events" : ["0x1222", "0x1225"]
             }
         }
     ],

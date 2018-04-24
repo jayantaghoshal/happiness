@@ -75,6 +75,11 @@ Return<void> ClimateCtrlService::sendGetPropertyResp(uint16_t requestIdentifier,
                                                     requestedPropValue);
                 break;
             }
+            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
+                payload_data = CreateSomeIpResponse(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE>(), requestedPropValue);
+                break;
+            }
             default: {
                 ALOGW("%s: Unhandled Prop [%d]", __func__, requestedPropValue.prop);
                 return Void();
@@ -99,6 +104,11 @@ Return<void> ClimateCtrlService::sendSetPropertyResp(uint16_t requestIdentifier,
             case vhal_2_0::VehicleProperty::HVAC_FAN_SPEED: {
                 payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL>(),
                                                        requestedPropValue);
+                break;
+            }
+            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
+                payload_data = CreateSomeIpSetResponse(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE>(), requestedPropValue);
                 break;
             }
             default: {
@@ -126,6 +136,12 @@ Return<void> ClimateCtrlService::notifyPropertyChanged(const vhal_2_0::VehiclePr
                 payload_data = CreateSomeIpNotification(SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED>(),
                                                         propValue);
                 event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED;
+                break;
+            }
+            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
+                payload_data = CreateSomeIpNotification(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED>(), propValue);
+                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED;
                 break;
             }
             default: {
@@ -198,6 +214,24 @@ void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
             case REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL: {
                 const auto& prop_value =
                         VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL>(), msg_payload);
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->setProperty(message->get_session(), prop_value);
+                }
+                break;
+            }
+            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE: {
+                const auto& prop_value = VhalGetPropertyReq(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE>(), msg_payload);
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->getProperty(message->get_session(), prop_value);
+                }
+                break;
+            }
+            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE: {
+                const auto& prop_value = VhalSetPropertyReq(
+                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE>(), msg_payload);
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
                     system_service_handler_->setProperty(message->get_session(), prop_value);
