@@ -17,6 +17,6 @@
         <option name="test-module-name" value="VtsLaneKeepingAidSettingComponentTest"/>
         <option name="test-case-path" value="VtsLaneKeepingAidSettingComponentTest"/>
         <option name="precondition-lshal" value="android.hardware.automotive.vehicle@2.0"/>
-        <option name="test-timeout" value="3m"/>
+        <option name="test-timeout" value="7m"/>
     </test>
 </configuration>

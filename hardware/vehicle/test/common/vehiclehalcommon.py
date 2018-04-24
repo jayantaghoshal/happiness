@@ -211,6 +211,12 @@ class VehicleHalCommon():
 
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
     def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10):
+        view = self.scrollAndFindViewById(text, maxFlings)
+        asserts.assertNotEqual(None, view, "Did not find view")
+        return view
+
+    # Scroll until view with given Id is found within maxFlings tries. Returns None if view not found.
+    def scrollAndFindViewById(self, text, maxFlings=10):
         vc, device = self.getActiveViewClient()
         print("Searching for view with id -> ") + str(text)
         for n in range(maxFlings):
@@ -219,7 +225,7 @@ class VehicleHalCommon():
             if v is not None:
                 return v
             device.dragDip((100,300), (100, 100), 300)
-        asserts.assertTrue(False, "Did not find view with id -> ") + str(text)
+        return None
 
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.

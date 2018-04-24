@@ -166,8 +166,9 @@ void LaneKeepingAidModule::Update() {
 
     } else {
         if (!is_active_) {
+            ALOGD("is_active_ is false. Setting props to default and sending default signals on Flexray.");
             SetFlexray(false, defaultWarnAndIntv, current_profile_);
-            PA_prop_lane_keeping_aid_on_.PushProp(lane_keeping_aid_on_, vccvhal10::PAStatus::Disabled);
+            PA_prop_lane_keeping_aid_on_.PushProp(false, vccvhal10::PAStatus::Disabled);
             PA_prop_lane_keeping_aid_mode_.PushProp(defaultWarnAndIntv, vccvhal10::PAStatus::Disabled);
 
         } else {
