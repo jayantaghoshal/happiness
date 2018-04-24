@@ -20,6 +20,8 @@ import android.os.RemoteException;
 import android.util.Log;
 import vendor.volvocars.hardware.installationmaster.V1_0.InstallationStatus;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,6 +136,7 @@ public class SoftwareUpdateService extends Service {
     public Map<String, Boolean> GetSettings() {
         return settings;
     }
+
     public void GetSoftwareAssignment(Query query) {
         if (swapi != null) {
             try {
@@ -146,17 +149,63 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void onNewSoftwareAssignmentList( List<SoftwareAssignment> software_list) {
+    public void onNewSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
+        //Check if software has been removed from list (and downloaded) to clear local storage
+        clearStorageOnRemovedSoftwareAssignment(software_list);
+
+        //Check status of software assignment if there is an action to be taken
         for (SoftwareAssignment software : software_list) {
             if (SoftwareAssignment.Status.COMMISSIONED == software.status) {
                 doGetDownloadInfo(software.installationOrder);
             }
-            if ((SoftwareAssignment.Status.COMMISSIONABLE == software.status) && (settings.getOrDefault("AUTO_DOWNLOAD", false)) ) {
+            if ((SoftwareAssignment.Status.COMMISSIONABLE == software.status)
+                    && (settings.getOrDefault("AUTO_DOWNLOAD", false))) {
                 CommissionAssignment(software.id, CommissionElement.Reason.AUTOMATIC_UPDATE);
             }
         }
 
         UpdateSoftwareList(software_list);
+    }
+
+    public void clearStorageOnRemovedSoftwareAssignment(List<SoftwareAssignment> software_list) {
+        for (SoftwareInformation swInfo : softwareInformationList) {
+            boolean found = false;
+            for (SoftwareAssignment swAssignment : software_list) {
+                if (swInfo.softwareAssignment.id.equals(swAssignment.id)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found && !swInfo.downloadInfo.downloadedResources.isEmpty()) {
+                Log.d(LOG_TAG, "SoftwareAssignment " + swInfo.softwareAssignment.name + " removed from list");
+
+                String directory = "/data/vendor/ota/" + swInfo.softwareAssignment.installationOrder.id;
+                File file = new File(directory);
+                try {
+                    delete(file);
+                } catch (IOException e) {
+                    Log.w(LOG_TAG, "Directory " + directory + "could not be deleted [IOException: " + e.getMessage() + "]");
+                }
+
+            }
+        }
+    }
+
+    private void delete(File file) throws IOException {
+        for (File childFile : file.listFiles()) {
+            if (childFile.isDirectory()) {
+                delete(childFile);
+            } else {
+                if (!childFile.delete()) {
+                    throw new IOException();
+                }
+            }
+        }
+
+        if (!file.delete()) {
+            throw new IOException();
+        }
     }
 
     public void CommissionAssignment(String uuid, CommissionElement.Reason reason) {
@@ -327,7 +376,7 @@ public class SoftwareUpdateService extends Service {
             if (downloadInfo.installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
-                Log.e(LOG_TAG, ""+information.softwareState);
+                Log.e(LOG_TAG, "" + information.softwareState);
                 break;
             }
         }

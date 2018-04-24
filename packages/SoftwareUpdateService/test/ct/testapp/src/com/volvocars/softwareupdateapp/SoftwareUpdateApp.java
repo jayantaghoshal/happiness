@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
+
+import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import java.util.*;
@@ -72,9 +74,9 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             for (SoftwareInformation si : software_list) {
                 Log.v(LOG_TAG, "" + si.toString() + "\n" + si.softwareState.name());
                 swInfos.add(si);
-                if (si.softwareState == SoftwareState.AVAILABLE) {
+                /*if (si.softwareAssignment.status = SoftwareAssignment.Status.COMMISSIONABLE) {
                     createNotification();
-                }
+                }*/
             }
 
             updateAdapter();
