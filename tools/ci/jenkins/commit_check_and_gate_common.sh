@@ -14,8 +14,10 @@ source "${SCRIPT_DIR}/common.sh"
 
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/bump.py . local no_sync "${ZUUL_PROJECT}"
 
-(repo sync --force-sync --detach prebuilts/clang/host/linux-x86)
-(repo sync --force-sync --detach prebuilts/build-tools)
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/bump.py . sync_repo_based_on_manifest aosp/platform/prebuilts/clang/host/linux-x86
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/bump.py . sync_repo_based_on_manifest aosp/platform/prebuilts/build-tools
+#(repo sync --force-sync --detach prebuilts/clang/host/linux-x86)
+#(repo sync --force-sync --detach prebuilts/build-tools)
 
 commit-check.sh verify vendor/volvocars
 licensing-components.py software-bom vendor/volvocars/ .

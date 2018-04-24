@@ -7,6 +7,7 @@ import logging
 import re
 import logging.config
 from xml.etree import ElementTree as ET
+import distutils
 from typing import Tuple, List, Dict, Union, Any
 from . import manifest
 from . import process_tools
@@ -80,7 +81,8 @@ def sync_zuul_repos(aosp_root_dir: str, repository: str):
     vcc_manifest_file = os.path.join(volvocars_repo.path, "manifests/manifest-volvocars.xml")
     path_to_repository_with_commit = manifest.get_repo_path_from_git_name(vcc_manifest_file, repository)
 
-    repos_with_zuul_changes = manifest.get_all_zuul_repos()
+    #repos_with_zuul_changes = manifest.get_all_zuul_repos()
+    repos_with_zuul_changes = manifest.get_all_repos_with_zuul_commit_or_head(vcc_manifest_file)
 
     for repo in repos_with_zuul_changes:
         logger.info("current Zuul-repo = " + repo)
@@ -92,6 +94,7 @@ def sync_zuul_repos(aosp_root_dir: str, repository: str):
         git.Repo.repo_reset(full_path)
         git.Repo.repo_clean(full_path)
         clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo)
+
     # check that the commit has the zuul commit hash
     if not repo_have_zuul_change(path_to_repository_with_commit, aosp_root_dir):
         raise SystemExit('zuul-cloner failed to checkout commit the Zuul commit in " + repo')
@@ -112,7 +115,8 @@ def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):
 
 
 def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_name: str):
-    destination_repo_path = os.path.join(aosp_root_dir, repo_path)
+    destination_repo_path = os.path.abspath(os.path.join(aosp_root_dir, repo_path))
+    git_path = os.path.abspath(os.path.join(aosp_root_dir, repo_name))
     logger.debug("base_folder: " + aosp_root_dir)
     logger.debug("destination_repo_path: " + destination_repo_path)
     logger.info("the whole path : " + aosp_root_dir + destination_repo_path)
@@ -130,6 +134,15 @@ def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_na
             cwd=os.path.abspath(os.path.join(aosp_root_dir)))
     logger.debug("Current working directory: " + aosp_root_dir)
 
+    if repo_name != repo_path:
+        try:
+            print("Removing " + destination_repo_path)
+            distutils.dir_util.remove_tree(destination_repo_path)
+        except FileNotFoundError:
+            print("The folder " + destination_repo_path + " does not exist.")
+        print("Moving folder: " + git_path + " to " + destination_repo_path)
+        os.replace(git_path, destination_repo_path)
+
 
 def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     # Zuul will have already cloned vendor/volvocars
@@ -140,8 +153,10 @@ def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     volvocars_repo = git.Repo(volvocars_repo_path)
 
     repo_init(aosp_root_dir, head_sha)
-    copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo, repository)
+    # Copy vendor/volvocars template manifest to .repo without Zuul repos (vendor/volvocars is kept)
+    zuul_repos = copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo, repository)
 
+    # Sync all repos without the zuul repos
     if sync:
         process_tools.check_output_logged(["repo", "sync",
                                         "--jobs=6",
@@ -149,6 +164,61 @@ def on_commit(aosp_root_dir: str, sync: bool, repository: str):
                                         "--force-sync",
                                         "--detach",
                                         "--current-branch"], cwd=aosp_root_dir)
+
+    for repo_name, repo_path in zuul_repos.items():
+        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+
+def sync_repo(aosp_root_dir: str, repository: str):
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
+    vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
+    logger.info("Syncing repository based on manifest version " + repository)
+
+    revision = ""
+    path = ""
+    basename = os.path.basename(repository)
+
+    for manifest_file in vcc_manifest_files:
+        logger.info("Manfiest = " + manifest_file)
+        revision = manifest.get_revision_from_git_name(manifest_file, repository)
+        if not revision :
+            continue
+        else:
+            logger.info("The revision is set to: " + revision)
+            break
+
+    if not revision:
+        raise Exception("Could not find the revision in manifest for " + repository)
+
+    for manifest_file in vcc_manifest_files:
+        logger.info("Manfiest = " + manifest_file)
+        path = manifest.get_repo_path_from_git_name(manifest_file, repository)
+        if not path:
+            continue
+        else:
+            logger.info("The path is set to " + path)
+            break
+
+    if not path:
+        raise Exception("Could not find the path in manifest for " + repository)
+
+    process_tools.check_output_logged(["git", "clone",
+                                        "ssh://gotsvl1415.got.volvocars.net:29421" + "/" + repository], cwd=aosp_root_dir)
+
+    process_tools.check_output_logged(["git", "reset",
+                                        "--hard",
+                                        revision], cwd=os.path.abspath(os.path.join(aosp_root_dir, basename)))
+
+    if basename != path:
+        try:
+            print("Removing " + path)
+            distutils.dir_util.remove_tree(path)
+        except FileNotFoundError:
+            print("The folder " + path + " does not exist.")
+        print("Moving folder: " + basename + " to " + path)
+        distutils.dir_util.copy_tree(basename, path)
+        distutils.dir_util.remove_tree(basename)
+
 
 def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                               volvocars_repo: git.Repo,
@@ -164,6 +234,7 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
                                                                                                                                                        repository))
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
     old_manifest_files_in_manifest_repo = glob.glob(os.path.join(manifest_repo.path, "manifests") + "/*.xml")
+    vcc_manifest_file = os.path.join(volvocars_repo.path, "manifests/manifest-volvocars.xml")
 
     logger.info("Path for vcc_manifest_files " + str(volvocars_repo.path))
     logger.info("Path for old_manifest_files_in_manifest_repo: " + str(manifest_repo.path))
@@ -193,6 +264,8 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     if not manifest_repo.any_changes(staged=stage_changes):
         manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
         raise RuntimeError('No manifest changes found. Failed to clone/update repo(s)?')
+
+    return manifest.get_zuul_repos_map(vcc_manifest_file)
 
 def get_changed_projects_from_manifest(manifest_repo: git.Repo) -> Dict[str, Dict[str, List[Dict[str, str]]]]:
     """

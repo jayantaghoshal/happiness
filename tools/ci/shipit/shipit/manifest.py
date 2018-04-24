@@ -34,15 +34,24 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     tree = ET.parse(template_path, parser)
     root = tree.getroot()
 
+    project_to_remove = []
     for project in root.iter('project'):
+
         current_repo = project.get('name')
         logger.info("current_repo = " + current_repo)
         revision = project.get('revision')
-        if revision == "ZUUL_COMMIT_OR_HEAD":
+        if (revision == "ZUUL_COMMIT_OR_HEAD"):
             logger.info("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
-            revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
-            logger.info("setting revision to: " + revision)
-            project.set('revision', revision)
+            if (current_repo == "vendor/volvocars") and False:
+                revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
+                logger.info("setting revision to: " + revision)
+                project.set('revision', revision)
+            else:
+                project_to_remove.append(project)
+                #root.remove(project)
+
+    for project in project_to_remove:
+        root.remove(project)
 
     tree.write(output_path)
 
@@ -60,7 +69,27 @@ def get_repo_path_from_git_name(template_path: str, git_repo: str):
             logger.info("The path = " + path)
             return str(path)
 
-    raise Exception("Could not find the repo path in manifest for " + git_repo)
+    return None
+    #raise Exception("Could not find the repo path in manifest for " + git_repo)
+
+def get_revision_from_git_name(template_path: str, git_repo: str):
+    parser = ET.XMLParser(target=CommentedTreeBuilder())
+    tree = ET.parse(template_path, parser)
+    root = tree.getroot()
+
+    for project in root.findall('project'):
+        name = project.get('name')
+        path = project.get('path')
+        revision = project.get('revision')
+        logger.info("path = " + path)
+        logger.info("name = " + name)
+        if name == git_repo:
+            logger.info("The path = " + path)
+            return str(revision)
+
+    return None
+    #raise Exception("Could not find the repo path in manifest for " + git_repo)
+
 
 def get_all_zuul_repos():
     # The Zuul Changes states the changes in the Gate and the corresponding repos
@@ -70,6 +99,37 @@ def get_all_zuul_repos():
     repos_with_zuul_changes_set = set(repos_with_zuul_changes)
 
     return repos_with_zuul_changes_set
+
+def get_all_repos_with_zuul_commit_or_head(template_path: str):
+    parser = ET.XMLParser(target=CommentedTreeBuilder())
+    tree = ET.parse(template_path, parser)
+    root = tree.getroot()
+
+    for project in root.findall('project'):
+        name = project.get('name')
+        path = project.get('path')
+        revision = project.get('revision')
+        zuul_repos = []
+        if revision == "ZUUL_COMMIT_OR_HEAD":
+            zuul_repos.append(name)
+            logger.info("The path = " + path)
+    return zuul_repos
+
+def get_zuul_repos_map(template_path: str):
+    parser = ET.XMLParser(target=CommentedTreeBuilder())
+    tree = ET.parse(template_path, parser)
+    root = tree.getroot()
+    zuul_repos = {}
+
+    for project in root.findall('project'):
+        name = project.get('name')
+        path = project.get('path')
+        revision = project.get('revision')
+        if revision == "ZUUL_COMMIT_OR_HEAD":
+            zuul_repos[name] = path
+            logger.info("The path = " + path)
+    return zuul_repos
+
 
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
     repos_with_zuul_changes_set = set() # type: typing.Set[str]

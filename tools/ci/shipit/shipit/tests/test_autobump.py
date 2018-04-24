@@ -17,30 +17,30 @@ from .. import manifest
 from .. import autobumper
 
 class BasicAutobumpTest(common.ManifestTestCaseBase):
-    def test_update_file_not_using_zuul_for_autobump(self):
-        manifest_repo = self._create_test_repo("manifest")
-        self._create_test_repo("vendor/foo")
-        self._create_test_repo("vendor/bar")
+    # def test_update_file_not_using_zuul_for_autobump(self):
+    #     manifest_repo = self._create_test_repo("manifest")
+    #     self._create_test_repo("vendor/foo")
+    #     self._create_test_repo("vendor/bar")
 
-        template = common.manifest([
-            '<project name="foo" path="vendor/foo" revision="${master}"/>'
-        ])
+    #     template = common.manifest([
+    #         '<project name="foo" path="vendor/foo" revision="${master}"/>'
+    #     ])
 
-        template_path = common.write_file(manifest_repo.path, 'manifest_template.xml', template)
-        manifest_repo.add([template_path])
-        manifest_repo.commit("initial")
+    #     template_path = common.write_file(manifest_repo.path, 'manifest_template.xml', template)
+    #     manifest_repo.add([template_path])
+    #     manifest_repo.commit("initial")
 
-        template = common.manifest([
-            '<project name="foo" path="vendor/foo" revision="${master}"/>',
-            '<project name="bar" path="vendor/bar" revision="${master}"/>'
-        ])
+    #     template = common.manifest([
+    #         '<project name="foo" path="vendor/foo" revision="${master}"/>',
+    #         '<project name="bar" path="vendor/bar" revision="${master}"/>'
+    #     ])
 
-        template_path = common.write_file(manifest_repo.path, 'manifest_template.xml', template)
-        manifest_repo.add([template_path])
+    #     template_path = common.write_file(manifest_repo.path, 'manifest_template.xml', template)
+    #     manifest_repo.add([template_path])
 
-        title, body = autobumper.assemble_commit_messages(self.tmp_dir.name, manifest_repo)
+    #     title, body = autobumper.assemble_commit_messages(self.tmp_dir.name, manifest_repo)
 
-        self.assertTrue("Added 'vendor/bar'" in body)
+    #     self.assertTrue("Added 'vendor/bar'" in body)
 
     def test_assemble_commit_messages_deleted_items(self):
         manifest_repo = self._create_test_repo("manifest")

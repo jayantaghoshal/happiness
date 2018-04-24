@@ -93,7 +93,7 @@ function get_repos {
     fi
     bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || return $?
     rm -rf ./* || sleep 30 && rm -rf ./*  # Try again if needed, due to dangling processes.
-    bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars" || return $?
+    #bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars" || return $?
 }
 
 function clean_all {
@@ -117,9 +117,6 @@ bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; 
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
 #bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} ${ZUUL_PROJECT}"
 bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} aic_test"
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/apps/ihu_test"
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars/hmi/apps/tunerbrowserservice"
 
 if [ "$(git -C "$ZUUL_PROJECT" rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
     die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in $ZUUL_PROJECT"
@@ -132,7 +129,7 @@ if [ ! -f ./vendor/volvocars/tools/ci/ci_version ]; then
     exit -1
 fi
 
-export REQUIRED_CI_VERSION=I0a72d73f2bb7925ccde548e2e834792700920f4e
+export REQUIRED_CI_VERSION=I9505846e311988b661939b91917e3df7c3dbce50
 DETECTED_CI_VERSION=$(cat ./vendor/volvocars/tools/ci/ci_version)
 if [ $REQUIRED_CI_VERSION != "$DETECTED_CI_VERSION" ]; then
     # If you are a CI developer, you should update the CI version both here and in the repo.

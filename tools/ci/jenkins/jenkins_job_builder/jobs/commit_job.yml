@@ -140,6 +140,31 @@
     name: ihu_gate_test
     defaults: commit_job_defaults
     node: gate_test-generic
+    wrappers:
+        - workspace-cleanup
+        - timestamps
+        - timeout:
+            timeout: 180
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
+        - raw:
+            xml: |
+                    <org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper plugin="credentials-binding@1.10">
+                        <bindings>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                                <credentialsId>SWF1_ARTIFACTORY_API_KEY</credentialsId>
+                                <variable>ARTIFACTORY_API_KEY</variable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>17703053-422c-421c-a292-315cdb52c385</credentialsId>
+                                <usernameVariable>MONGODB_USER</usernameVariable>
+                                <passwordVariable>MONGODB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                        </bindings>
+                    </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+
+
     builders:
         - config-file-provider:
             files:
