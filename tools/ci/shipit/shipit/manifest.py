@@ -59,8 +59,8 @@ def get_repo_path_from_git_name(template_path: str, git_repo: str):
         if name == git_repo:
             logger.info("The path = " + path)
             return str(path)
-        else:
-            raise Exception("Could not find the repo path in manifest for " + git_repo)
+
+    raise Exception("Could not find the repo path in manifest for " + git_repo)
 
 def get_all_zuul_repos():
     # The Zuul Changes states the changes in the Gate and the corresponding repos
