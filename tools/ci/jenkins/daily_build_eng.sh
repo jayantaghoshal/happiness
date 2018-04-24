@@ -26,15 +26,18 @@ CHARACTOR_PART+=A
 ihuci vbf set SWL2H "$DIGITAL_PART" "$CHARACTOR_PART" --build-type eng
 
 time make droid vts tradefed-all
-cp out/.ninja_log out/ninja_log_make_droid_vts_tradefed || true
+
+# Create a generic subdirectory for build meta data files
+mkdir -p -m 755 out/vcc_build_metadata
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid_vts_tradefed || true
 
 # Make dist (dist, OTA & VBF)
 time make dist
-cp out/.ninja_log out/ninja_log_make_dist || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_dist || true
 
 # Build tests for daily (plan=nightly)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan nightly staging || die "Build Unit and Component tests failed"
-cp out/.ninja_log out/ninja_log_make_tester_build || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz
@@ -60,12 +63,21 @@ time tar -c --use-compress-program='pigz -1' -f "${IHU_UPDATE_ARCHIVE}" \
             ./vendor/volvocars/tools/ci/shipit
 du -sh "${IHU_UPDATE_ARCHIVE}"
 
+# Create build meta data metaData.tgz
+BUILD_META_DATA=metaData.tgz
+time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
+            ./out/vcc_build_metadata || die "Could not create metadata archive"
+
+du -sh "$BUILD_META_DATA"
+
 # Upload to Artifactory
 time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}"
 time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_ARCHIVE}"
 time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${IHU_UPDATE_ARCHIVE}"
+time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${BUILD_META_DATA}"
 
 # Cleanup
 rm "${OUT_ARCHIVE}"
 rm "${DIST_ARCHIVE}"
 rm "${IHU_UPDATE_ARCHIVE}"
+rm "${BUILD_META_DATA}"

@@ -44,9 +44,13 @@ time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
 time make -j64 droid
-cp out/.ninja_log out/ninja_log_make_droid || true
+
+# Create a generic subdirectory for build meta data files
+mkdir -p -m 755 out/vcc_build_metadata
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid || true
+
 time make -j64 tradefed-all
-cp out/.ninja_log out/ninja_log_make_tradefed_all || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tradefed_all || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -61,7 +65,7 @@ fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate --ciflow true || die "Build Unit and Component tests failed"
-cp out/.ninja_log out/ninja_log_make_tester_build || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 
 # Push out files required for gate_test.sh to Artifactory.
 #
@@ -87,10 +91,18 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 # Ensure our repo can be build with mma
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
 time mmma vendor/volvocars
-cp out/.ninja_log out/ninja_log_mmmma_vendor_volvocars || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_mmmma_vendor_volvocars || true
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
+
+# Create build meta data metaData.tgz
+BUILD_META_DATA=metaData.tgz
+time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
+            ./out/vcc_build_metadata || die "Could not create metadata archive"
+
+ls -lh "$BUILD_META_DATA"
+time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${BUILD_META_DATA}"
 
 # Clean up vtsPackages
 rm -rf vtsPackage/

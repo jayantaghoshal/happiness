@@ -35,7 +35,10 @@ time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
 time make droid tradefed-all
-cp out/.ninja_log out/ninja_log_make_droid_and_tradefed_all || true
+
+# Create a generic subdirectory for build meta data files
+mkdir -p -m 755 out/vcc_build_metadata
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid_and_tradefed_all || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -50,7 +53,7 @@ fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly incubator --ciflow true || die "Build Unit and Component tests failed"
-cp out/.ninja_log out/ninja_log_make_tester_build || true
+cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz
@@ -69,6 +72,14 @@ redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${GIT
 
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins."${JOB_NAME}".latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"
+
+# Create build meta data metaData.tgz
+BUILD_META_DATA=metaData.tgz
+time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
+            ./out/vcc_build_metadata  || die "Could not create metadata archive"
+
+ls -lh "$BUILD_META_DATA"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" "${BUILD_META_DATA}" || die "Could not push out archive to Artifactory."
 
 # Clean up vtsPackages
 rm -rf vtsPackage/
