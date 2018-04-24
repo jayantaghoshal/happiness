@@ -36,12 +36,31 @@
                                 <tr><td>Test Type :</td><td style="font-weight:bold"><%= test_detail["Test Type"]%></td></tr>
                                 <tr><td>Host :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/computer/" + test_detail["Host"]%>><%= test_detail["Host"]%></td></tr>
                                 <tr><td>Test Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Test Job"] + "/" + test_detail["test_job_build_number"]%>><%= test_detail["Test Job"]%></td></tr>
-                                <tr><td>Test Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Top Job"] + "/" + test_detail["top_test_job_build_number"]%>><%= test_detail["Top Job"]%></td></tr>
+                                <tr><td>Top Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Top Job"] + "/" + test_detail["top_test_job_build_number"]%>><%= test_detail["Top Job"]%></td></tr>
                                 <tr><td>Capabilities :</td><td style="font-weight:bold"><%= test_detail["Capabilities"]%></td></tr>
                                 <tr><td>Runtime :</td><td style="font-weight:bold"><%= test_detail["Runtime"]%></td></tr>
                             </table>
                         </div>
             </fieldset>	
+            <br>
+            <%if(typeof test_detail["KPI"] !== 'undefined' && Object.keys(test_detail["KPI"]).length){%>
+                <fieldset >    	
+                        <legend>KPIs</legend>
+                        <div class="user_defined_table">
+                            <table class="table table-hover table-striped table-bordered display" id="result_table">
+                                <thead>
+                                    <tr style="color:white;background-color:#15317E;">
+                                        <th>Attribute</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <% for (var i in test_detail["KPI"]){%>
+                                    <tr><td><%= i %> </td><td style="font-weight:bold;"><%= test_detail["KPI"][i]%></td></tr>
+                                <%}%>
+                            </table>
+                        </div>    
+                </fieldset>
+            <%}%>
             <br>
             <%if(test_detail["Test Type"] == "vts" || test_detail["Test Type"] == "AndroidVTS" ){%>
                 <fieldset >    	
@@ -112,11 +131,11 @@
             <% } %>
             <br>
 
-            <fieldset>
+            <fieldset style="min-width: -webkit-min-content;">
             <legend>Build trend</legend>
-                <table>
+                <table class="table table-hover table-striped table-bordered display" id="result_table">
                     <tr>
-                        <td>Build ID:</td>
+                        <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
                         <% for (var i in build_trend) { %>
                         <td>
                             <a href=<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + build_trend[i]["test_job_build_number"]  %> >
@@ -126,7 +145,7 @@
                         <% } %>
                     </tr>
                     <tr>
-                        <td>Pass/fail</td>
+                        <td style="font-weight:bold;color:white;background-color:#15317E;">Status:</td>
                         <% for (var i in build_trend) { %>
                         <td>
                             <% if (build_trend[i]["pass"]){ %>
@@ -139,14 +158,14 @@
                         <% } %>
                     </tr>
                     <tr>
-                        <td>Test time</td>
+                        <td style="font-weight:bold;color:white;background-color:#15317E;">Test time: </td>
                         <% for (var i in build_trend) { %>
                         <td><%=build_trend[i]["runtime"]%></td>
                         <% } %>
                     </tr>
                 </table>
             </fieldset>
-
+            <br>
             <fieldset >    	
                     <legend>Logs</legend>
                         <div class="list-group">

@@ -24,7 +24,7 @@ app.use(function(err, req, res, next) {
 var db;
 const MongoClient = require('mongodb').MongoClient;
 var mongo_ip = process.env.ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR
-MongoClient.connect('mongodb://jenkins-icup_android:'+ process.env.MONGODB_PASSWORD + '@'+ mongo_ip + ':27017', (err, client) => {
+MongoClient.connect('mongodb://jenkins-icup_android:' + process.env.MONGODB_PASSWORD + '@' + mongo_ip + ':27017', (err, client) => {
     if (err) return errorlog.error(err);
     db = client.db('test_results');
     app.listen(3001, () => {
@@ -162,6 +162,7 @@ app.get('/detailed_view', cors(), (req, res) => {
             meta_test_record["Capabilities"] = test_record["capabilities"];
             meta_test_record["Host"] = test_record["hostname"];
             meta_test_record["Runtime"] = test_record["runtime"];
+            meta_test_record["KPI"] = test_record["kpis"];
 
             if (typeof test_record["testcases"] !== 'undefined' && test_record["testcases"]) {
                 testcases_test_record = test_record["testcases"];
