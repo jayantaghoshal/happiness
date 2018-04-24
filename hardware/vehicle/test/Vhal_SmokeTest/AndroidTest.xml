@@ -6,10 +6,10 @@ If property with Ivalid Zone is accessed it shows that  property Id along with t
 <configuration description="Vhal Smoke test">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="cleanup" value="true" />
-        <option name="push" value="vhalsmoketest->/vendor/bin/test/vhalsmoketest" />
+        <option name="push" value="vhalsmoketest->/data/nativetest64/vhalsmoketest" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" > 
-        <option name="native-test-device-path" value="/vendor/bin/test" />   
+        <option name="native-test-device-path" value="/data/nativetest64" />
         <option name="module-name" value="vhalsmoketest" />
         <option name="runtime-hint" value="2s" />
     </test>

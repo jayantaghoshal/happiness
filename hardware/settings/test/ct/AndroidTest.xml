@@ -6,10 +6,10 @@ It relies on Localconfig to fallback or on correct default to be present in oem_
 <configuration description="Settings test">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="cleanup" value="false" />
-        <option name="push" value="libsettings_ct->/vendor/bin/test/libsettings_ct" />
+        <option name="push" value="libsettings_ct->/data/nativetest64/libsettings_ct" />
     </target_preparer>
     <test class="com.android.tradefed.testtype.GTest" > 
-        <option name="native-test-device-path" value="/vendor/bin/test" />   
+        <option name="native-test-device-path" value="/data/nativetest64" />
         <option name="module-name" value="libsettings_ct" />
         <option name="runtime-hint" value="5s" />
     </test>

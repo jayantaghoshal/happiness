@@ -69,7 +69,7 @@ class ComponentTest(base_test.BaseTestClass):
 
         timeout_ms = int((TOGGLE_DT_MS * NR_OF_TOGGLES) * 1.5)
         log("timeout ms is : %r" % timeout_ms )
-        retval = self.shell.Execute("/vendor/bin/flexray_toggle_test_receiver %d %d %d" % (
+        retval = self.shell.Execute("/data/nativetest64/flexray_toggle_test_receiver %d %d %d" % (
             int(NR_OF_TOGGLES * 0.8),   # *0.8 because we don't really care about number, only interval between toggles
             TOGGLE_DT_MS,
             timeout_ms

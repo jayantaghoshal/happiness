@@ -28,5 +28,4 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
                 if power_result != 0:
                     raise Exception("Could not power cycle ihu")
     logger.info("Update of IHU done")
-    check_output_logged(["adb", "remount"])
 

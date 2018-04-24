@@ -145,7 +145,7 @@ ProfileFlags = namedtuple("ProfileFlags", ["sm_alw_1_s", "enable_verity"])
 Profiles = {
     DEVELOPER: ProfileFlags(sm_alw_1_s=True, enable_verity=False),
     DEVELOPER_RIG: ProfileFlags(sm_alw_1_s=False, enable_verity=False),
-    CI_MACHINERY: ProfileFlags(sm_alw_1_s=True, enable_verity=False),
+    CI_MACHINERY: ProfileFlags(sm_alw_1_s=True, enable_verity=True),
     AS_APTIV_FACTORY: ProfileFlags(sm_alw_1_s=False, enable_verity=True),
     AS_VCC_FACTORY: ProfileFlags(sm_alw_1_s=False, enable_verity=True),
 }
@@ -581,7 +581,7 @@ Possible profiles:
 | Option:    | developer | developer-rig | as-aptiv-factory | as-vcc-factory | ci-machinery |
 |-------------------------------------------------------------------------------------------|
 | sm alw 1 s | on        | off           | off              | off            | on           |
-| dm verity  | disabled  | disabled      | enabled          | enabled        | disabled     |
+| dm verity  | disabled  | disabled      | enabled          | enabled        | enabled      |
 |-------------------------------------------------------------------------------------------|
 
 """)

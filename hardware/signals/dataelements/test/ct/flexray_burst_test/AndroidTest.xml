@@ -4,7 +4,7 @@
         <option name="push-group" value="HostDrivenTest.push"/>
         <option name="abort-on-push-failure" value="true"/>
         <option name="cleanup" value="true" />
-        <option name="push" value="flexray_burst_test_sender->/vendor/bin/flexray_burst_test_sender" />
+        <option name="push" value="flexray_burst_test_sender->/data/nativetest64/flexray_burst_test_sender" />
     </target_preparer>
     <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">

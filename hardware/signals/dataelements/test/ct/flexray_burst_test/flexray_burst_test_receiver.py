@@ -67,7 +67,7 @@ class ComponentTest(base_test.BaseTestClass):
                 for i in range(nr_of_iterations):
                     logging.info('Burst sleep time: %d ms. Iteration %d/%d' % (burst_sleep_ms, i, nr_of_iterations))
                     logging.info('starting test program: flexray_test')
-                    self.shell.Execute("/vendor/bin/flexray_burst_test_sender %d 150 %d&" % (nr_of_signals_to_burst, burst_sleep_ms))
+                    self.shell.Execute("/data/nativetest64/flexray_burst_test_sender %d 150 %d&" % (nr_of_signals_to_burst, burst_sleep_ms))
 
 
                     vehiclehalcommon.wait_for_signal(fr, fr.AntithftRednReq, 2, timeout_sec=5)    # Trigger signal that all signals reset to Off done
