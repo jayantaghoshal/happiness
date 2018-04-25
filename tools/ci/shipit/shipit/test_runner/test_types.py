@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import typing
@@ -91,3 +91,9 @@ class ResultData:
         self.json_change_time = json_change_time
         self.test_kpis = test_kpis
         self.logs = logs
+
+    def __str__(self):
+        if self.passed:
+            return "PASSED"
+        else:
+            return "FAILED"
