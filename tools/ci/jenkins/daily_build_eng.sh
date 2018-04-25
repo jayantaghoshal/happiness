@@ -30,14 +30,17 @@ time make droid vts tradefed-all
 # Create a generic subdirectory for build meta data files
 mkdir -p -m 755 out/vcc_build_metadata
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid_vts_tradefed || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_droid_vts_tradefed_build.trace.gz || true
 
 # Make dist (dist, OTA & VBF)
 time make dist
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_dist || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_dist.trace.gz || true
 
 # Build tests for daily (plan=nightly)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan nightly staging || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_tester_build.trace.gz || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz

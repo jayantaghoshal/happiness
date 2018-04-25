@@ -39,6 +39,7 @@ time make droid tradefed-all
 # Create a generic subdirectory for build meta data files
 mkdir -p -m 755 out/vcc_build_metadata
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid_and_tradefed_all || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_droid_and_tradefedall.trace.gz || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -54,6 +55,7 @@ fi
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly incubator --ciflow true || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_tester_build.trace.gz || true
 
 # Create archive out.tgz
 OUT_ARCHIVE=out.tgz

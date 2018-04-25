@@ -48,9 +48,11 @@ time make -j64 droid
 # Create a generic subdirectory for build meta data files
 mkdir -p -m 755 out/vcc_build_metadata
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_droid.trace.gz || true
 
 time make -j64 tradefed-all
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tradefed_all || true
+cp out/.build.trace.gz out/vcc_build_metadata/make_tradefedall.trace.gz || true
 
 # Download VTS package from artifactory
 # Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
@@ -92,6 +94,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
 time mmma vendor/volvocars
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_mmmma_vendor_volvocars || true
+cp out/.build.trace.gz out/vcc_build_metadata/mmma_vendorvolvocars.trace.gz || true
 
 ls -lh "$OUT_ARCHIVE"
 time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
