@@ -20,7 +20,7 @@ from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, Dis
 test_plan_gate = [
     VTSTest("vendor/volvocars/tools/test/daemon_test",                              standard_caps), #VtsDaemonTest, Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps,
-            tests_to_run=["testCpuLoadShort", "testMemory", "testDisk"]),           #VtsCiSmokeTest, Kenneth Karlsson
+            tests_to_run=["testCpuLoadShort", "testMemory", "testDisk", "testBootchartBootTime"]),  #VtsCiSmokeTest, Kenneth Karlsson
     VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #libdbgTest, Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",               standard_caps), #VtsDEUnitTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",                   standard_caps), #VtsEventLoopCTTestCases, Magnus Larsson
@@ -55,12 +55,11 @@ test_plan_hourly = test_plan_gate + [
 
 test_plan_nightly = test_plan_hourly + [
     VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest", standard_caps,
-            tests_to_run=["testCpuLoadLong", "testMemory", "testDisk", "testCrashes"]),    # VtsCiSmokeTest, Kenneth Karlsson
+            tests_to_run=["testCpuLoadLong", "testMemory", "testDisk", "testCrashes", "testBootchartBootTime"]),    # VtsCiSmokeTest, Kenneth Karlsson
 ]
 
 #Put stable tests here so they can be tested often and then added to our gates
 test_plan_staging_hourly = [
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest_with_boot_time",        standard_caps), # Chrsitoffer Östlin
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission",            standard_caps), #Matilda Bengtsson

@@ -57,6 +57,20 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         logging.info("Cpu cores: " + number_of_cores)
         logging.info("model_name: " + model_name)
 
+    def testBootchartBootTime(self):
+        max_boot_time = 40  # s
+        self.dut.shell.one.Execute("touch /data/bootchart/enabled")
+        self.deviceReboot()
+        shell_response = self.dut.shell.one.Execute("tail -20 /data/bootchart/proc_stat.log")
+        boot_time = float(re.findall('\n(\d{3,5})\n', shell_response[const.STDOUT][0])[-1])
+        boot_time = boot_time / 100.0
+        logging.info("The bootchart boot time is: " + str(boot_time) + " s")
+
+        self.write_kpi("bootchart_boot_time", boot_time, "s")
+
+        asserts.assertLess(boot_time, max_boot_time, "Bootchart boot time longer than the maximum allowed {} s".format(max_boot_time / 100))
+        self.dut.shell.one.Execute("rm /data/bootchart/enabled")
+        self.dut.shell.one.Execute("rm /data/bootchart/proc_stat.log")
 
     def testCpuLoadShort(self):
         requirement = 90
@@ -139,6 +153,12 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
 
+    def deviceReboot(self):
+        self.dut.shell.one.Execute("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("one")
 
     def testCrashes(self):
         def crash_allowed(process_name):
