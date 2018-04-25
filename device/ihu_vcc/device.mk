@@ -102,7 +102,8 @@ PRODUCT_PACKAGES += \
     VccUserSwitchService \
     VehicleFunctions \
     VccMediaCenter \
-    VccTunerBrowserService
+    VccTunerBrowserService \
+    VccSettings
 
 ##############################################################
 # Vendor apps
