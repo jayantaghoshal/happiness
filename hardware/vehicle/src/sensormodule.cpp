@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -21,7 +21,12 @@ SensorModule::SensorModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
                           {.prop = toInt(vhal20::VehicleProperty::IGNITION_STATE),
                            .access = vhal20::VehiclePropertyAccess::READ,
                            .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
-                           .areaConfigs = {{.areaId = 0, .minInt32Value = 0, .maxInt32Value = 5}}}} {
+                           .areaConfigs = {{.areaId = 0, .minInt32Value = 0, .maxInt32Value = 5}}},
+                          {// Fix for preventing evs_app to continously restart
+                           .prop = toInt(vhal20::VehicleProperty::GEAR_SELECTION),
+                           .access = vhal20::VehiclePropertyAccess::READ,
+                           .changeMode = vhal20::VehiclePropertyChangeMode::ON_CHANGE,
+                           .areaConfigs = {{.areaId = 0, .minInt32Value = 1, .maxInt32Value = 0x1FFF}}}} {
     StartFlexraySubscribers();
 }
 
@@ -34,14 +39,25 @@ bool SensorModule::GetDrivingStatus(vhal20::VehiclePropValue& driving_status) {
     return true;
 }
 
+bool SensorModule::GetGearSelection(vhal20::VehiclePropValue& gear_selection) {
+    gear_selection.timestamp = elapsedRealtimeNano();
+    gear_selection.areaId = static_cast<int32_t>(vhal20::VehicleArea::GLOBAL);
+    gear_selection.prop = toInt(vhal20::VehicleProperty::GEAR_SELECTION);
+    gear_selection.value.int32Values.resize(1);
+    gear_selection.value.int32Values[0] = 0x0001;  // GEAR_NEUTRAL
+    return true;
+}
+
 std::vector<vhal20::VehiclePropValue> SensorModule::getAllPropValues() {
     vhal20::VehiclePropValue drivingstatus;
     vhal20::VehiclePropValue ignitionstate;
+    vhal20::VehiclePropValue gearselection;
 
     GetDrivingStatus(drivingstatus);
     GetIgnitionState(ignitionstate);
+    GetGearSelection(gearselection);
 
-    return {drivingstatus, ignitionstate};
+    return {drivingstatus, ignitionstate, gearselection};
 }
 
 std::vector<vhal20::VehiclePropConfig> SensorModule::listProperties() {
@@ -69,7 +85,14 @@ std::unique_ptr<vhal20::VehiclePropValue> SensorModule::getProp(const vhal20::Ve
                 status = vhal20::impl::Status::TRY_AGAIN;
             }
             break;
-
+        case toInt(vhal20::VehicleProperty::GEAR_SELECTION):
+            // Fix for preventing evs_app to continously restart
+            if (GetGearSelection(prop_value)) {
+                status = vhal20::impl::Status::SUCCESS;
+            } else {
+                status = vhal20::impl::Status::TRY_AGAIN;
+            }
+            break;
         default:
             ALOGW("Unknown getProp: 0x%0x", static_cast<int>(requestedPropValue.prop));
             status = vhal20::impl::Status::PERMISSION_ERROR;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -31,8 +31,9 @@ class SensorModule : public vhal20::impl::ModuleBase {
     const std::vector<vhal20::VehiclePropConfig> sensor_prop_config_;
 
     bool GetDrivingStatus(vhal20::VehiclePropValue& driving_status);
-
     bool GetIgnitionState(vhal20::VehiclePropValue& ignition_state);
+    bool GetGearSelection(vhal20::VehiclePropValue& gear_selection);
+
     void StartFlexraySubscribers();
     ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> veh_mod_receiver_;
 };
