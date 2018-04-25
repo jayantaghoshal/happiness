@@ -49,10 +49,11 @@ class AndroidVTS(IhuBaseTest):
 
 
 class VTSTest(IhuBaseTest):
-    def __init__(self, test_root_dir, require_capabilities):
-        # type: (str, Set[str]) -> None
+    def __init__(self, test_root_dir, require_capabilities, tests_to_run=None):
+        # type: (str, Set[str], typing.Optional[typing.List[str]]) -> None
         super().__init__(require_capabilities)
         self.test_root_dir = test_root_dir  # Relative to AOSP root
+        self.tests_to_run = tests_to_run
 
     def __str__(self):
         return self.test_root_dir

@@ -19,7 +19,8 @@ from shipit.test_runner.test_types import AndroidVTS, VTSTest, TradefedTest, Dis
 # block other developers from continuing development. Such as "unit not booting", "adb not working", "black screen", etc
 test_plan_gate = [
     VTSTest("vendor/volvocars/tools/test/daemon_test",                              standard_caps), #VtsDaemonTest, Krzysztof Wesolowski
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps), #VtsCiSmokeTest, Magnus Larsson
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps,
+            tests_to_run=["testCpuLoadShort", "testMemory", "testDisk"]),           #VtsCiSmokeTest, Kenneth Karlsson
     VTSTest("vendor/volvocars/hardware/pac/libdbg/test/ut",                         standard_caps), #libdbgTest, Carl Sjoberg
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ut",               standard_caps), #VtsDEUnitTest, Magnus Larsson
     VTSTest("vendor/volvocars/hardware/tarmac/eventloop/test/ct",                   standard_caps), #VtsEventLoopCTTestCases, Magnus Larsson
@@ -50,10 +51,12 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps), #Abhijeet Shirolikar
+    VTSTest("vendor/volvocars/hardware/ci/test/ct/smoketest",                       standard_caps,
+            tests_to_run=["testCpuLoadLong", "testMemory", "testDisk", "testCrashes"]),           #VtsCiSmokeTest, Kenneth Karlsson
 ]
 
 test_plan_nightly = test_plan_hourly + [
-    VTSTest("vendor/volvocars/hardware/ci/test/ct/dailysmoketest",                       standard_caps), #VtsCiDailySmokeTest, Gustav Svensson
+
 ]
 
 #Put stable tests here so they can be tested often and then added to our gates

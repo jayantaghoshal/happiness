@@ -33,7 +33,35 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         self.dut = self.registerController(android_device)[0]
 
 
-    def testCpuLoad(self):
+    def testCpuLoadLong(self):
+        requirement = 90
+        #Before there is a clear indication of system boot completed,
+        #give CPU load some time to avoid the load spike after ihu_update and boot.
+        sleep(30) # wait a bit
+        shell_response = self.dut.shell.one.Execute("cat /proc/cpuinfo")
+
+        model_name = re.findall('model\s*name\s*:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0]
+        number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
+
+        first_cpu_data = self.get_data(int(number_of_cores))
+        sleep(60)
+        second_cpu_data = self.get_data(int(number_of_cores))
+        total_load = self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
+
+        for core in range(int(number_of_cores)):
+            logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
+            self.write_kpi("cpu_core_%d" % core, total_load[core], "%")
+            if total_load[core] > requirement:
+                process_running = self.dut.shell.one.Execute(["top -n1"])
+                logging.info("top -n1")
+                logging.info(process_running[const.STDOUT][0])
+                asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
+
+        logging.info("Cpu cores: " + number_of_cores)
+        logging.info("model_name: " + model_name)
+
+
+    def testCpuLoadShort(self):
         requirement = 90
         self.dut.shell.InvokeTerminal("my_shell3")
         my_shell = getattr(self.dut.shell, "my_shell3")
@@ -125,6 +153,30 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
 
+
+    def testCrashes(self):
+        def crash_allowed(process_name):
+            return False
+
+        shell_response = self.dut.shell.one.Execute(["ls /data/tombstones"])
+        shell_response_stdout = shell_response[const.STDOUT][0].strip()
+        tombstones_files = [x.strip() for x in shell_response_stdout.split("\n") if len(x) > 0]
+        if len(tombstones_files) > 0:
+            logging.info("Found tombstones:")
+        crashing_processes = []
+        for t in tombstones_files:
+            tombstone_output = self.dut.shell.one.Execute(["cat /data/tombstones/%s" %t ])[const.STDOUT][0]
+            pidmatches = re.findall("^pid:.*>>>(.*)<<<.*$", tombstone_output, re.MULTILINE)
+            if pidmatches:
+                crashing_processes.extend(pidmatches)
+            else:
+                crashing_processes.append("???")
+            logging.info("Tombstone: %s : %s" % (t, tombstone_output))
+
+        disallowed_crashes = [p for p in crashing_processes if not crash_allowed(p)]
+        asserts.assertEqual(0, len(disallowed_crashes),
+                            "No crashes are allowed, found tombstones in /data/tombstones on the device. "
+                            "Crashing apps: [%s]. Full tombstone-details in logs" % ", ".join(crashing_processes))
 
     def get_data(self, cores):
         self.dut.shell.InvokeTerminal("data_shell")

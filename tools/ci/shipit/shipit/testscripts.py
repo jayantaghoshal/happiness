@@ -73,10 +73,10 @@ def run_test(test: test_types.IhuBaseTest) -> test_types.ResultData:
     try:
         if isinstance(test, test_types.AndroidVTS):
             print(test)
-            return vts_test_run.vts_tradefed_run_module(test.module_name)
+            return vts_test_run.vts_tradefed_run_module(test.module_name, None)
         elif isinstance(test, test_types.VTSTest):
             print(test)
-            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir))
+            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir), test.tests_to_run)
         elif isinstance(test, test_types.TradefedTest):
             print(test)
             return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))

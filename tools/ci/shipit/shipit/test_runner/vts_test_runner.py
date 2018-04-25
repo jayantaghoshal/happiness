@@ -19,7 +19,7 @@ from shipit.process_tools import check_output_logged
 from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
-from typing import Dict
+from typing import Dict, List, Optional
 from subprocess import check_output
 
 # Add pwd to the PYTHONPATH because VTS runs in its own environment with different working directory
@@ -34,13 +34,13 @@ def _create_env(test_module: str) -> Dict[str, str]:
     return env
 
 
-def vts_tradefed_run_file(test_module_dir: str) -> ResultData:
+def vts_tradefed_run_file(test_module_dir: str, tests_to_run: Optional[List[str]]) -> ResultData:
     xml_path = os.path.join(test_module_dir, "AndroidTest.xml")
     module_name = read_module_name(xml_path)
-    return vts_tradefed_run_module(module_name, _create_env(test_module_dir))
+    return vts_tradefed_run_module(module_name, tests_to_run, _create_env(test_module_dir))
 
 
-def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.copy()) -> ResultData:
+def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]], env: Dict[str, str] = os.environ.copy()) -> ResultData:
     logging.info("Running test module %s with environment %r" % (module_name, env))
     try:
         os.unlink("/tmp/test_run_kpis.json")
@@ -50,6 +50,11 @@ def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.c
         os.unlink("/tmp/test_run_summary.json")
     except FileNotFoundError:
         pass
+
+    tests_to_run_args = []  # type: List[str]
+    if tests_to_run is not None:
+        assert len(tests_to_run) != 0
+        tests_to_run_args = ["--test", ",".join(tests_to_run)]
 
     max_test_time_sec = 60 * 60
     try:
@@ -62,7 +67,8 @@ def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.c
                                            "--abi",
                                            "x86_64",
                                            "--module",
-                                           module_name],
+                                           module_name] +
+                                          tests_to_run_args,
                                           timeout_sec=max_test_time_sec,
                                           env=env).decode().strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
@@ -76,10 +82,23 @@ def vts_tradefed_run_module(module_name: str, env: Dict[str, str] = os.environ.c
         exception_string = ("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
         raise VtsTestFailedException(exception_string, get_json_object(module_name), get_json_change_time(module_name))
 
-    fail_pattern2 = "PASSED: [1-9][0-9]*"
-    if not re.search(fail_pattern2, test_result):
-        exception_string2 = ("Test failed! This pattern was missing in the output:  \"%s\"" % fail_pattern2)
-        raise VtsTestFailedException(exception_string2, get_json_object(module_name), get_json_change_time(module_name))
+    pass_pattern = "I\/ResultReporter:\s*Invocation finished in.*PASSED:\s*(\d*),\s*FAILED:\s*(\d*)"
+    pass_match = re.search(pass_pattern, test_result)
+    if pass_match is None:
+        raise VtsTestFailedException("Test failed, did not find nr of PASSED/FAILED in resultreporter output",
+                                     get_json_object(module_name), get_json_change_time(module_name))
+    nr_of_pass = int(pass_match.group(1))
+    nr_of_fail = int(pass_match.group(2))
+
+    if nr_of_fail != 0:
+        raise VtsTestFailedException("Test failed, Number of FAILED: %d != 0:" % nr_of_fail,
+                                     get_json_object(module_name), get_json_change_time(module_name))
+
+    if tests_to_run is not None and nr_of_pass != len(tests_to_run):
+        raise VtsTestFailedException("Test failed, Number of PASSED not equal to number of requested test cases. " +
+                                     "(Maybe you misspelled one of the requested test cases?)" +
+                                     "Nr of pass: %d, Requested test-cases: [%s]" % (nr_of_pass, ", ".join(tests_to_run)),
+                                     get_json_object(module_name), get_json_change_time(module_name))
 
 
     log_dir_match = re.search(r"I\/ResultReporter:\s+Test Logs:\s+(\S+)", test_result)
@@ -171,7 +190,7 @@ def main():
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
-    vts_tradefed_run_file(getattr(parsed_args, "test-module-dir"))
+    vts_tradefed_run_file(getattr(parsed_args, "test-module-dir"), None)
 
     logging.info("Test completed")
 
