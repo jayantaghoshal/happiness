@@ -45,9 +45,12 @@ int main(int argc, char* argv[]) {
                                  .methods_ = {REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL,
                                               REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL,
                                               REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE},
+                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE,
+                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE,
+                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE},
                                  .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
-                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED}};
+                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED,
+                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED}};
 
         ::android::sp<remoteclimatectrl::ClimateCtrlService> climate_ctrl_service =
                 new remoteclimatectrl::ClimateCtrlService(service_info);

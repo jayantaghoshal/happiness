@@ -37,6 +37,10 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE = 0x
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE = 0x1224U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED = 0x1225U;
 
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE = 0x1226U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE = 0x1227U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED = 0x1228U;
+
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
 //
