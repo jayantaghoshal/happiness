@@ -1,0 +1,16 @@
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.volvocars.settingsstorageservice"
+    android:sharedUserId="android.uid.system">
+    <application
+        android:persistent="true"
+        android:name=".MainApplication">
+        <service
+            android:exported="true"
+            android:singleUser="true"
+            android:name=".SettingsStorageService">
+            <intent-filter>
+                <action android:name="com.volvocars.settingsstorageservice.ISettingsStorageService" />
+            </intent-filter>-
+        </service>
+    </application>
+</manifest>

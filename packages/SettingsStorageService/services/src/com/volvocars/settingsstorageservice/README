@@ -1,0 +1,20 @@
+{
+    "app_settings": [
+        {
+            // Mandatory value, needed for identification of application
+            "app_id": "SoftwareUpdate",
+            // Mandatory value if the settings are synced with the cloud (optional otherwise)
+            "cloud_settings_package": {
+                //name of carsettings package (must conform to fsapi specs)
+                "name": "software_management",
+                //name of settings in carsettings package (must conform to fsapi specs)
+                "settings": [
+                    "ota_enabled",
+                    "automatic_download_enabled"
+                ]
+            },
+            //Mandatory value and needs to be unique!
+            "app_settings_offset": 1,
+        }
+    ]
+}

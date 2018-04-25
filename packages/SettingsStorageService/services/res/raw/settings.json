@@ -1,0 +1,15 @@
+{
+    "app_settings": [
+        {
+            "app_id": "SoftwareUpdate",
+            "cloud_settings_package": {
+                "name": "software_management",
+                "settings": [
+                    "ota_enabled",
+                    "automatic_download_enabled"
+                ]
+            },
+            "app_settings_offset": 1
+        }
+    ]
+}
