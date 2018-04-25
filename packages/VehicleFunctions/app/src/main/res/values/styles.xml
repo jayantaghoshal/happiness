@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Themes -->
+    <style name="VolvoTheme.VehicleFunction" parent="VolvoTheme">
+        <item name="android:windowBackground">@color/darkBackground</item>
+    </style>
+
+
+    <!-- Styles -->
+    <style name="FunctionCard" parent="FunctionCardBase">
+        <item name="cardElevation">1dp</item>
+    </style>
+
+    <style name="SectionCard" parent="FunctionCardBase">
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="FunctionCardBase">
+        <item name="android:layout_margin">@dimen/function_margin</item>
+    </style>
+
+    <style name="FunctionLayout">
+        <item name="android:paddingTop">@dimen/function_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/function_padding_vertical</item>
+        <item name="android:paddingLeft">@dimen/function_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/function_padding_horizontal</item>
+    </style>
+
+    <style name="SectionTitle" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="FunctionTitle" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+</resources>

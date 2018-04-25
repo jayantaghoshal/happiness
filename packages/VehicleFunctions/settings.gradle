@@ -1,0 +1,4 @@
+include ':app'
+
+include ':uxlibrary'
+project(':uxlibrary').projectDir = new File('../../ComponentLibrary/uxlibrary')

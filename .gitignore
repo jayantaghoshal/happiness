@@ -1,7 +1,7 @@
 # other repos imported by repo tool
 # also uincludes services/packages and so on,
 # as long as they are imported via repo manifests
-hmi/*/
+hmi/*
 apps/*/
 
 # Temporary files/buffers

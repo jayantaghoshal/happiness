@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--
+    Generate a static id for the settings buttons
+-->
+    <item name="dai_state_1_no_info_button" type="id"/>
+    <item name="dai_state_2_visual_only_button" type="id"/>
+    <item name="dai_state_3_visual_and_audio_button" type="id"/>
+    <item name="connected_safety_button_on" type="id"/>
+    <item name="connected_safety_button_off" type="id"/>
+    <item name="lane_keeping_aid_button_on" type="id"/>
+    <item name="lane_keeping_aid_button_off" type="id"/>
+    <item name="lane_keeping_aid_button_mode_both" type="id"/>
+    <item name="lane_keeping_aid_button_mode_steering" type="id"/>
+    <item name="lane_keeping_aid_button_mode_sound" type="id"/>
+    <item name="emergency_lane_keeping_aid_button_on" type="id"/>
+    <item name="emergency_lane_keeping_aid_button_off" type="id"/>
+    <item name="adaptive_cruise_control_on" type="id" />
+    <item name="cruise_control_on" type="id" />
+    <item name="speed_limiter_on" type="id"/>
+</resources>
