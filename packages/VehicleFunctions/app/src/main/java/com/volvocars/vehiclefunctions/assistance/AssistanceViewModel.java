@@ -86,23 +86,11 @@ public class AssistanceViewModel extends ViewModel {
 
         {
             List<Function> driverSupportFunctions = new ArrayList<Function>();
-            if (supportedFeatures.contains(VehicleProperty.CRUISE_CONTROL_ON)) {
-                driverSupportFunctions.add(new OneButtonFunction("CC",
-                        new VhalOneButtonDelegate(mVendorExtensionClient,
-                                VehicleProperty.CRUISE_CONTROL_ON),
-                        R.id.cruise_control_on));
-            }
-            if (supportedFeatures.contains(VehicleProperty.ADAPTIVE_CRUISE_CONTROL_ON)) {
-                driverSupportFunctions.add(new OneButtonFunction("ACC",
-                        new VhalOneButtonDelegate(mVendorExtensionClient,
-                                VehicleProperty.ADAPTIVE_CRUISE_CONTROL_ON),
-                        R.id.adaptive_cruise_control_on));
-            }
-            if (supportedFeatures.contains(VehicleProperty.SPEED_LIMITER_ON)) {
-                driverSupportFunctions.add(new OneButtonFunction("SL",
-                        new VhalOneButtonDelegate(mVendorExtensionClient,
-                                VehicleProperty.SPEED_LIMITER_ON),
-                        R.id.speed_limiter_on));
+            if (supportedFeatures.contains(VehicleProperty.DRIVER_SUPPORT_FUNCTION_ON)) {
+                driverSupportFunctions.add(new ThreeStateFunction("Driver Support Functions",
+                        "Cruise Control", "Adaptive Cruise Control", "Speed Limiter",
+                        new VhalThreeStateDelegate(mVendorExtensionClient, VehicleProperty.DRIVER_SUPPORT_FUNCTION_ON, true),
+                        R.id.cruise_control_on, R.id.adaptive_cruise_control_on, R.id.speed_limiter_on));
             }
             sections.add(new Section("Driver Support Function", driverSupportFunctions));
         }

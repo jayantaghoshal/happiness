@@ -40,6 +40,7 @@ LOCAL_SRC_FILES := \
      vhal_modules/speed_limit_adaptation_module.cpp \
      vhal_modules/lane_keeping_aid_module.cpp \
      vhal_modules/e_lane_keeping_aid_module.cpp \
+     vhal_modules/driver_support_function_module.cpp \
      vhal_modules/traffic_sign_information_module.cpp \
      vhal_modules/lane_departure_warning_module.cpp
 

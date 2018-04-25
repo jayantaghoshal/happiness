@@ -24,6 +24,7 @@ public class ThreeStateFunction extends Function {
     private final Delegate mDelegate;
     private final MutableLiveData<Integer> mStateLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> mEnabledLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> mDisabledModeLiveData = new MutableLiveData<>();
     private final int mState1ButtonId;
     private final int mState2ButtonId;
     private final int mState3ButtonId;
@@ -41,6 +42,7 @@ public class ThreeStateFunction extends Function {
         mState2ButtonId = state2ButtonId;
         mState3ButtonId = state3ButtonId;
         mEnabledLiveData.postValue(false);
+        mDisabledModeLiveData.postValue(0);
     }
 
     public CharSequence getState1Name() {
@@ -69,6 +71,8 @@ public class ThreeStateFunction extends Function {
 
     public int getState3ButtonId() { return mState3ButtonId; }
 
+    public LiveData<Integer> getDisabledMode() { return mDisabledModeLiveData; }
+
     public void setState(int state) {
         CompletableFuture.runAsync(() -> mDelegate.onUserChangedState(state));
     }
@@ -83,6 +87,9 @@ public class ThreeStateFunction extends Function {
         public void enabledChanged(boolean enabled) {
             mEnabledLiveData.postValue(enabled);
         }
+
+        @Override
+        public void disabledModeChanged(int disabledMode) { mDisabledModeLiveData.postValue(disabledMode); }
     };
 
 
@@ -101,6 +108,8 @@ public class ThreeStateFunction extends Function {
             mListener.enabledChanged(enabled);
         }
 
+        protected void setDisabledMode(int disabledMode) { mListener.disabledModeChanged(disabledMode); }
+
         private void setListener(StateChangedListener listener) {
             this.mListener = listener;
         }
@@ -108,6 +117,7 @@ public class ThreeStateFunction extends Function {
         private interface StateChangedListener {
             void stateChanged(int value);
             void enabledChanged(boolean enabled);
+            void disabledModeChanged(int disabledMode);
         }
     }
 }

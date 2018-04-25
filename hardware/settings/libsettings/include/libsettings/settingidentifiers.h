@@ -79,6 +79,7 @@ enum class SettingId : uint32_t {
     Climate_AutoRearDefrosterDyno,
     Climate_AdditionalHeater,
     Climate_AdditionalHeaterDyno,
+    DriverSuprtFct_On,
     LaneKeepingAid_On,
     LaneKeepingAid_Mode,
     EmergencyLaneKeepingAid_On,

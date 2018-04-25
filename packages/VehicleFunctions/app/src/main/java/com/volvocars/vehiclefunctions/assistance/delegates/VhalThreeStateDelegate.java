@@ -20,18 +20,32 @@ import java.util.concurrent.CompletableFuture;
  * Function Delegates encapsulate the logic to communicate with a vehicle function
  * API and then propagate changes back to the UI by calling setUiState().
  * Dependencies should be injected.
- *
- * This class can be removed when real functionality is implemented.
  */
 public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
-
     public static final String TAG = VhalThreeStateDelegate.class.getSimpleName();
+
+    private static final int MODE_1_DISABLED = 0b00011011;  // 0001 1011 = 16 + 8 + 2 + 1
+    private static final int MODE_2_DISABLED = 0b00010111;  // 0001 0111 = 16 + 4 + 2 + 1
+    private static final int MODE_3_DISABLED = 0b00001111;  // 0000 1111 =  8 + 4 + 2 + 1
+
+    private static final int STATE_1 = 1;
+    private static final int STATE_2 = 2;
+    private static final int STATE_3 = 3;
+
+    private boolean mUseDisabledMode = false;
+
     private final VendorExtensionClient mVendorExtensionClient;
     private final int mVehicleProperty;
 
     public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty) {
         mVendorExtensionClient = vendorExtensionClient;
         mVehicleProperty = vehicleProperty;
+    }
+
+    public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty, boolean useDisabledMode) {
+        mVendorExtensionClient = vendorExtensionClient;
+        mVehicleProperty = vehicleProperty;
+        mUseDisabledMode = useDisabledMode;
     }
 
     @Override
@@ -97,8 +111,34 @@ public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
                 } catch (CarNotConnectedException e) {
                     mVendorExtensionClient.reconnect();
                 }
+                if (mUseDisabledMode) {
+                    setDisabledMode();
+                }
                 setUiEnabled(true);
             }
         });
+    }
+
+    /**
+     * Sets the disabled mode for the ThreeStateFunction.
+     * Valid disabled modes (1, 2, 3).
+     * Default: DisabledMode = 0. In this case, no modes are disabled.
+     * TODO: change from using maxValue to configFlags.
+     */
+    private void setDisabledMode(){
+        try {
+            int maxValue = (int)mVendorExtensionClient.getCarPropertyConfig(mVehicleProperty).getMaxValue();
+            if (maxValue == MODE_1_DISABLED) {
+                setDisabledMode(STATE_1);
+            } else if (maxValue == MODE_2_DISABLED) {
+                setDisabledMode(STATE_2);
+            } else if (maxValue == MODE_3_DISABLED) {
+                setDisabledMode(STATE_3);
+            }
+        } catch (VendorExtensionClient.NotSupportedException e) {
+            Log.e(TAG, "Property not supported: " + e.getMessage());
+        } catch (CarNotConnectedException e) {
+            Log.e(TAG, "Car is not connected: " + e.getMessage());
+        }
     }
 }
