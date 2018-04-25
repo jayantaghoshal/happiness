@@ -28,3 +28,7 @@
         max-height: 250px;
         overflow-x: hidden;
     }
+    
+    .loading-iframe {
+        background: url(/loading.gif) center center no-repeat;
+    }

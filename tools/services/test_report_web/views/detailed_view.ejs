@@ -47,7 +47,7 @@
                 <fieldset >    	
                         <legend>KPIs</legend>
                         <div class="user_defined_table">
-                            <table class="table table-hover table-striped table-bordered display" id="result_table">
+                            <table class="table table-hover table-striped table-bordered display">
                                 <thead>
                                     <tr style="color:white;background-color:#15317E;">
                                         <th>Attribute</th>
@@ -66,7 +66,7 @@
                 <fieldset >    	
                         <legend>Sub Tests</legend>
                             <%if (testcases_test_record.length>0){%>
-                            <table class="table table-hover table-striped table-bordered display" id="result_table" >
+                            <table class="table table-hover table-striped table-bordered display" >
                                 <thead>
                                     <tr style="color:white;background-color:#15317E;">
                                         <th>Test Modules</th>
@@ -103,7 +103,7 @@
                 <fieldset>    	
                             <legend>Sub Tests</legend>
                                 <%if (testcases_test_record.length>0){%>
-                                <table class="table table-hover table-striped table-bordered display" id="result_table" >
+                                <table class="table table-hover table-striped table-bordered display">
                                     <thead>
                                         <tr style="color:white;background-color:#15317E;">
                                             <th>Test Modules</th>
@@ -133,7 +133,7 @@
 
             <fieldset style="min-width: -webkit-min-content;">
             <legend>Build trend</legend>
-                <table class="table table-hover table-striped table-bordered display" id="result_table">
+                <table class="table table-hover table-striped table-bordered display table-sm">
                     <tr>
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
                         <% for (var i in build_trend) { %>
@@ -148,7 +148,7 @@
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Status:</td>
                         <% for (var i in build_trend) { %>
                         <td>
-                            <% if (build_trend[i]["pass"]){ %>
+                            <% if (build_trend[i]["result"]){ %>
                                         <span class="badge badge-success">PASS</span>
                             <% }else{ %>
                                         <span class="badge badge-danger">FAIL</span>

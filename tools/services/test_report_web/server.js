@@ -21,6 +21,10 @@ app.use(function(err, req, res, next) {
     res.status(500).send('Something broke!');
 });
 
+function compare(a, b) {
+    return a - b;
+}
+
 var db;
 const MongoClient = require('mongodb').MongoClient;
 var mongo_ip = process.env.ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR
@@ -32,24 +36,25 @@ MongoClient.connect('mongodb://jenkins-icup_android:' + process.env.MONGODB_PASS
     });
 });
 
-
 app.get('/', cors(), (req, res) => {
-    var cursor = db.collection('records').aggregate([{$group:{'_id':'$top_test_job_name', 'max':{$max:'$top_test_job_build_number'}}}]).toArray().then(
-        function(top_test_job_names) {
-        var extracted_top_test_job_names = [];
-        for (var list_index in top_test_job_names) {
-            var name = top_test_job_names[list_index]["_id"];
-            if (name == "")
-                name = "ihu_gate"
-            extracted_top_test_job_names.push(
-            {
-                "name" : name,
-                "latest_id": top_test_job_names[list_index]["max"]}
-            );
-        }
-        res.render('index.ejs', { view: "top_job_page", top_job_names: extracted_top_test_job_names });
-    });
+    res.render('home_frame.ejs');
+});
 
+app.get('/home', cors(), (req, res) => {
+    var cursor = db.collection('records').aggregate([{ $group: { '_id': '$top_test_job_name', 'max': { $max: '$top_test_job_build_number' } } }]).toArray().then(
+        function(top_test_job_names) {
+            var extracted_top_test_job_names = [];
+            for (var list_index in top_test_job_names) {
+                var name = top_test_job_names[list_index]["_id"];
+                if (name == "")
+                    name = "ihu_gate";
+                extracted_top_test_job_names.push({
+                    "name": name,
+                    "latest_id": top_test_job_names[list_index]["max"]
+                });
+            }
+            res.render('index.ejs', { view: "top_job_page", top_job_names: extracted_top_test_job_names });
+        });
 });
 
 app.get('/jobs', cors(), (req, res) => {
@@ -66,7 +71,7 @@ app.get('/jobs', cors(), (req, res) => {
             var unique_build_numbers = new Set(extracted_build_number);
 
             var array_unique_build_numbers = Array.from(unique_build_numbers);
-            array_unique_build_numbers.sort().reverse();
+            array_unique_build_numbers.sort(compare).reverse();
             res.render('index.ejs', { view: "select_build_page", build_numbers: array_unique_build_numbers, top_job_name: req.query.top_job });
 
 
@@ -84,7 +89,7 @@ app.get('/jobs', cors(), (req, res) => {
             var unique_build_numbers = new Set(extracted_build_number);
 
             var array_unique_build_numbers = Array.from(unique_build_numbers);
-            array_unique_build_numbers.sort().reverse();
+            array_unique_build_numbers.sort(compare).reverse();
             res.render('index.ejs', { view: "select_build_page", build_numbers: array_unique_build_numbers, top_job_name: req.query.top_job });
 
 
@@ -190,11 +195,11 @@ app.get('/detailed_view', cors(), (req, res) => {
             "module_name": module_name
         })
         .project({
-            pass: 1,
+            result: 1,
             runtime: 1,
             test_job_build_number: 1
         })
-        .sort({test_job_build_number: -1})
+        .sort({ test_job_build_number: -1 })
         .limit(15)
         .toArray();
 
@@ -204,7 +209,7 @@ app.get('/detailed_view', cors(), (req, res) => {
             var trendResults = promiseResults[1];
             res.render('detailed_view.ejs', {
                 module_name: module_name,
-                test_job_name : test_job_name,
+                test_job_name: test_job_name,
                 test_detail: detailResults.test_detail,
                 logs_test_record: detailResults.logs_test_record,
                 testcases_test_record: detailResults.testcases_test_record,

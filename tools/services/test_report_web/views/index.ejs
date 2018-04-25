@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <%- include navbar.ejs %>
+    
     <div class="container">
     
 
@@ -39,7 +39,7 @@
     <ul>
         <% for(var i=0; i<top_job_names.length; i++) {%>
            <% if (top_job_names[i].name!='ihu_gate') {%>
-                <li><a class="" href=<%="/tests/?top_job_name=" + top_job_names[i]["name"] + "&build_number=" + top_job_names[i]["latest_id"] %> ><%= top_job_names[i].name%></a></li>
+                <li><a class="" href=<%="/tests/?top_job_name=" + top_job_names[i]["name"] + "&build_number=" + top_job_names[i]["latest_id"] %> target="_parent"><%= top_job_names[i].name%></a></li>
             <% } %>
         <% } %>
     </ul>
@@ -51,7 +51,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <% for(var i=0; i<top_job_names.length; i++) {%>
-                <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i].name%>><%= top_job_names[i].name %></a>
+                <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i].name%> target="_parent"><%= top_job_names[i].name %></a>
             <% } %>
         </div>
     </div>
@@ -59,6 +59,7 @@
     <% } %>
 
     <% if (view=="select_build_page"){%>
+        <%- include navbar.ejs %>
         <div style="text-align:center; font-size:160%;"><h1>VCC TEST REPORT</h1>
         <img src="/volvo_logo.png" alt="Volvo logo" width="350" height="300"></div>
 
@@ -72,7 +73,7 @@
                 <ul class="dropdown-menu scrollable-menu" role="menu">
                 <% for(var i=0; i<build_numbers.length; i++) {%>
 
-                        <li ><a class="dropdown-item" href=<%="/tests/?top_job_name=" + top_job_name + "&build_number=" + build_numbers[i] %> ><%= build_numbers[i]%></a></li>
+                        <li ><a class="dropdown-item" href=<%="/tests/?top_job_name=" + top_job_name + "&build_number=" + build_numbers[i] %> target="_parent"><%= build_numbers[i]%></a></li>
 
                 <% } %>
                 </ul>

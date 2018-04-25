@@ -11,18 +11,14 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+    <link rel='stylesheet' href='/css/user_defined.css'>
 </head>
 
 <body class="container-flueid">
     <%- include navbar.ejs %>
-    <a class="container" href=<%= "/detailed_view?module_name="+back_page_detail.module_name + "&job_name=" + back_page_detail.job_name + "&build_number=" + back_page_detail.build_number  %> style="font-size:3em; color:#15317E;"><i class="fas fa-arrow-alt-circle-left"></i></a>
-    
-    <div class="form-group">
-            <pre><%= log_data %></pre>
+    <div class="embed-responsive embed-responsive-21by9 loading-iframe" >
+        <iframe class="embed-responsive-item" src="/home"></iframe>
     </div>
-    
-            
-     
     
 </body>
 
