@@ -78,7 +78,8 @@ class IplmTestFixture : public ::testing::Test {
 
         // Start IpcbD for test with mocked localconfig
         std::string new_iplm_pid_str = getCmdOut(
-                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /vendor/bin/iplmd "
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json /vendor/bin/iplmd --IIplm=default "
+                "--IVehicleCom=iplm --ILifecycleControl=default"
                 "& echo $!");
 
         new_iplm_pid = std::stoi(new_iplm_pid_str, &sz);
