@@ -80,7 +80,8 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y \
     xsltproc \
     zip \
     zlib1g-dev \
-    kmod=22-1ubuntu5
+    kmod=22-1ubuntu5 \
+    time
 
 ###########################################################
 # Tools required for "make dist" (required for VBF creation)
