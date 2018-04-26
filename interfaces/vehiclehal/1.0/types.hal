@@ -216,6 +216,121 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
+     /**
+     * Toggles activation on Traffic sign information
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    TSI_RSI_ON = (
+      0x0015
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Traffic sign information
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    TSI_RSI_STATUS = (
+      0x0016
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Visual warning for TSI when the speed limit is exceeded
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    TSI_SPEED_VISUAL_WARN_ON = (
+      0x0017
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for TSI_SPEED_VISUAL_WARN_ON
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    TSI_SPEED_VISUAL_WARN_STATUS = (
+      0x0018
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Activates sound warning when the TSI speed limit is exceeded
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    TSI_SPEED_AUDIO_WARN_ON = (
+      0x0019
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for TSI_SPEED_AUDIO_WARN_ON
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    TSI_SPEED_AUDIO_WARN_STATUS = (
+      0x001A
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Sound alert when speed camera is detected
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    TSI_SPEEDCAM_AUDIO_WARN_ON = (
+      0x001B
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for TSI_SPEEDCAM_AUDIO_WARN_ON
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    TSI_SPEEDCAM_AUDIO_WARN_STATUS = (
+      0x001C
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Static Offset value with the resolution of 5. The maxoffset value is based on CC and SpedUnit
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    TSI_SPEED_WARN_OFFSET = (
+      0x001D
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for TSI_SPEED_WARN_OFFSET
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    TSI_SPEED_WARN_OFFSET_STATUS = (
+      0x001E
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
     };
 
 enum PAStatus: int32_t {

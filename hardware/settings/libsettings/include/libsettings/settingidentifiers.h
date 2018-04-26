@@ -82,5 +82,9 @@ enum class SettingId : uint32_t {
     LaneKeepingAid_On,
     LaneKeepingAid_Mode,
     EmergencyLaneKeepingAid_On,
-
+    TrafficSignInfo_RsiOn,
+    TrafficSignInfo_SpeedCamAudioWarnOn,
+    TrafficSignInfo_SpeedVisualWarnOn,
+    TrafficSignInfo_SpeedAudioWarnOn,
+    TrafficSignInfo_SpeedWarnOffset,
 };

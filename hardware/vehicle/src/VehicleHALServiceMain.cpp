@@ -24,6 +24,7 @@
 #include "vhal_modules/e_lane_keeping_aid_module.h"
 #include "vhal_modules/lane_keeping_aid_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
+#include "vhal_modules/traffic_sign_information_module.h"
 
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
 #include <future>
@@ -89,6 +90,8 @@ int main(int /* argc */, char* /* argv */ []) {
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
     auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
     auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
+    auto traffic_sign_information_module =
+            std::make_unique<TrafficSignInformationModule>(hal.get(), dispatcher, settings_manager);
 
     CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
 
