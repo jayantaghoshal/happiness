@@ -261,10 +261,6 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
     manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
     manifest_repo.run_git(["diff"])
 
-    if not manifest_repo.any_changes(staged=stage_changes):
-        manifest_repo.run_git(["log", "-2", "--pretty=oneline"])
-        raise RuntimeError('No manifest changes found. Failed to clone/update repo(s)?')
-
     return manifest.get_zuul_repos_map(vcc_manifest_file)
 
 def get_changed_projects_from_manifest(manifest_repo: git.Repo) -> Dict[str, Dict[str, List[Dict[str, str]]]]:
