@@ -66,7 +66,7 @@ else
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-citime python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate --ciflow true || die "Build Unit and Component tests failed"
+citime python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 
 # Push out files required for gate_test.sh to Artifactory.

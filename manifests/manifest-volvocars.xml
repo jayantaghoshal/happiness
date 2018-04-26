@@ -38,6 +38,8 @@
   <remove-project name="aosp/platform/system/bt" />
   <project name="aosp/platform/system/bt" path="system/bt" revision="45a741539d47524c263daf190380fd4523862099" />
 
+  <remove-project name="aosp/platform/tools/tradefederation"/>
+  <project name="aosp/platform/tools/tradefederation" path="tools/tradefederation/core" revision="68ba69290e3673b95766200b3076836936f61086" />
   <!-- Aptiv Overrides -->
   <remove-project name="bsp/hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" />
   <remove-project name="vendor/delphi/android_patches" />

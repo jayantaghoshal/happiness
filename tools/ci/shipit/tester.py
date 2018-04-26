@@ -79,7 +79,6 @@ class tester:
         analyze_parser = subparsers.add_parser("analyze")  # NOQA
         build_parser = subparsers.add_parser("build")
         build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
-        build_parser.add_argument('--ciflow', choices=['true', 'false'])
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("-c", "--capabilities",
                             type=str,
@@ -130,10 +129,7 @@ class tester:
 
         elif args.program == "build":
             plan = self._get_plan(args)
-            if args.ciflow == "true":
-                build_testcases(plan, "CI_FLOW")
-            else:
-                build_testcases(plan, "BUILD")
+            build_testcases(plan)
 
         elif args.program == "run":
             plan = self._get_plan(args)

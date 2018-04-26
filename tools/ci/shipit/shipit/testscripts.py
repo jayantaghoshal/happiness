@@ -17,6 +17,7 @@ from shipit.test_runner import tradefed_test_runner
 from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
+import subprocess
 sys.path.append(vcc_root)
 import test_plan    # NOQA
 
@@ -38,7 +39,7 @@ class NamedTestResult():
         self.result = result
 
 
-def build_testcases(tests_to_run: List[test_types.IhuBaseTest], skip_build_vts):
+def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
     all_vts_tests = [t for t in tests_to_run if isinstance(t, test_types.VTSTest)]
     all_tradefed_tests = [t for t in tests_to_run if isinstance(t, test_types.TradefedTest)]
     logging.debug("VTS tests: %r" % all_vts_tests)
@@ -48,25 +49,16 @@ def build_testcases(tests_to_run: List[test_types.IhuBaseTest], skip_build_vts):
         [t.test_root_dir for t in all_vts_tests] +
         [t.test_root_dir for t in all_tradefed_tests])
 
-    if len(all_vts_tests) > 0:
-        logger.info("Found VTS test cases, building VTS")
-        test_modules_to_build.append("test/vts/runners/target/gtest")
-        if(skip_build_vts == "CI_FLOW"):
-            print("CI flow, skip multi VTS build")
-        else:
-            run_in_lunched_env("make vts -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
-
-    if len(all_tradefed_tests) > 0:
-        logger.info("Found Tradefed test cases, building tradefed-all")
-        if(skip_build_vts== "CI_FLOW"):
-            print("CI flow, skip multi tradefed build")
-        else:
-            run_in_lunched_env("make tradefed-all -j%d" % multiprocessing.cpu_count(), cwd=aosp_root)
-
     if len(test_modules_to_build) > 0:
         print(test_modules_to_build)
         test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
-        run_in_lunched_env("mmma -j%d %s" % (multiprocessing.cpu_count(), test_modules_space_separated), cwd=aosp_root)
+        try:
+            run_in_lunched_env("atest --rebuild-module-info --build %s" % (test_modules_space_separated), cwd=aosp_root)
+        except subprocess.CalledProcessError as cpe:
+            print(cpe.output.decode())
+            print(cpe.stderr.decode())
+            print("%s Failed to build test cases" % (os.linesep * 3))
+            sys.exit(-1)
 
 
 def run_test(test: test_types.IhuBaseTest) -> test_types.ResultData:
