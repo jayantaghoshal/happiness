@@ -16,7 +16,7 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-using size_type_clients = std::list<wp<VirtualCamera>>::size_type;
+using size_type_clients = std::list<wp<IVirtualCamera>>::size_type;
 
 using android::hardware::automotive::evs::V1_0::vcc_implementation::EvsCameraStream;
 
@@ -47,7 +47,7 @@ TEST_F(EvsCameraStreamTest, MakeAndDisownClient) {
     size_type_clients client_count_initial_expected = 0;
     EXPECT_EQ(client_count_initial, client_count_initial_expected);
 
-    sp<VirtualCamera> evs_camera = evs_camera_stream->MakeVirtualCamera();
+    sp<IVirtualCamera> evs_camera = evs_camera_stream->MakeVirtualCamera();
     size_type_clients client_count_after_make = evs_camera_stream->GetClientCount();
     EXPECT_EQ(client_count_after_make, client_count_initial + 1);
 
@@ -57,8 +57,8 @@ TEST_F(EvsCameraStreamTest, MakeAndDisownClient) {
 }
 
 TEST_F(EvsCameraStreamTest, MakeAndDisownMultipleClients) {
-    sp<VirtualCamera> client_1 = evs_camera_stream->MakeVirtualCamera();
-    sp<VirtualCamera> client_2 = evs_camera_stream->MakeVirtualCamera();
+    sp<IVirtualCamera> client_1 = evs_camera_stream->MakeVirtualCamera();
+    sp<IVirtualCamera> client_2 = evs_camera_stream->MakeVirtualCamera();
     size_type_clients client_count_after_make = evs_camera_stream->GetClientCount();
     EXPECT_EQ(client_count_after_make, static_cast<size_type_clients>(2));
 

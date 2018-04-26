@@ -5,7 +5,10 @@
 
 #include "evs_camera_stream.h"
 
+#include <cinttypes>
+
 #include <libdbg.h>
+#include "virtual_camera.h"
 
 namespace android {
 namespace hardware {
@@ -14,11 +17,11 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-sp<VirtualCamera> EvsCameraStream::MakeVirtualCamera() {
+sp<IVirtualCamera> EvsCameraStream::MakeVirtualCamera() {
     dbgD("called");
 
     // Create the EVS camera interface object
-    sp<VirtualCamera> client = new VirtualCamera(this);
+    sp<IVirtualCamera> client = new VirtualCamera(this);
     if (client == nullptr) {
         dbgE("Failed to create VirtualCamera object, returning nullpointer.");
         return nullptr;
@@ -33,7 +36,7 @@ sp<VirtualCamera> EvsCameraStream::MakeVirtualCamera() {
     return client;
 }
 
-void EvsCameraStream::DisownVirtualCamera(const sp<VirtualCamera>& virtual_camera) {
+void EvsCameraStream::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) {
     dbgD("called");
     // Validate input
     if (virtual_camera == nullptr) {
@@ -56,7 +59,7 @@ void EvsCameraStream::DisownVirtualCamera(const sp<VirtualCamera>& virtual_camer
 }
 
 Return<void> EvsCameraStream::deliverFrame(const BufferDesc& buffer) {
-    dbgD("called with bufferId %u", buffer.bufferId);
+    dbgD("called with bufferId %" PRIu32, buffer.bufferId);
     // TODO(ihu) Implement EvsCameraStream::deliverFrame method
     return Void();
 }

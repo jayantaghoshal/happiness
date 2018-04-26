@@ -7,6 +7,7 @@
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
 #include "i_evs_camera_stream_wrapper.h"
+#include "i_virtual_camera.h"
 
 namespace android {
 namespace hardware {
@@ -15,18 +16,19 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-class IEvsCameraStreamWrapper;  // From evs_camera_stream.h
-
 // The VirtualCamera acts as a middle-man between the consumer of the camera stream and the
 // wrapper of the hardware camera (EvsCameraStream). Many VirtualCamera:s can share the same
 // EvsCameraStream.
-class VirtualCamera : public IEvsCamera {
+class VirtualCamera final : public IVirtualCamera {
   public:
     explicit VirtualCamera(sp<IEvsCameraStreamWrapper> input_stream);
-    virtual ~VirtualCamera();
-    void Shutdown();
+    ~VirtualCamera();
 
-    sp<IEvsCameraStreamWrapper> GetEvsCameraStream() { return input_stream_; };
+    // Performs a controlled stop of the video stream
+    void Shutdown() override;
+
+    // Inline implementations
+    sp<IEvsCameraStreamWrapper> GetEvsCameraStream() override { return input_stream_; };
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCamera follow.
     Return<void> getCameraInfo(getCameraInfo_cb hidl_cb) override;

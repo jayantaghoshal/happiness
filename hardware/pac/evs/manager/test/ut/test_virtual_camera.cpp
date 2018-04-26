@@ -21,10 +21,10 @@ using testing::_;  // Matches any type
 
 class MockIEvsCameraStreamWrapper : public IEvsCameraStreamWrapper {
   public:
-    MOCK_METHOD0(MakeVirtualCamera, sp<VirtualCamera>());
-    MOCK_METHOD1(DisownVirtualCamera, void(const sp<VirtualCamera>& virtual_camera));
+    MOCK_METHOD0(MakeVirtualCamera, sp<IVirtualCamera>());
+    MOCK_METHOD1(DisownVirtualCamera, void(const sp<IVirtualCamera>& virtual_camera));
     MOCK_METHOD0(GetHwCamera, sp<IEvsCamera>());
-    MOCK_METHOD0(GetClientCount, std::list<wp<VirtualCamera>>::size_type());
+    MOCK_METHOD0(GetClientCount, std::list<wp<IVirtualCamera>>::size_type());
     MOCK_METHOD1(deliverFrame, Return<void>(const BufferDesc& buffer));
 };
 

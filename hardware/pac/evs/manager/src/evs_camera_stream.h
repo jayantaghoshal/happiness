@@ -28,19 +28,19 @@ class EvsCameraStream : public IEvsCameraStreamWrapper {
     explicit EvsCameraStream(const sp<IEvsCamera>& hw_camera) : hw_camera_(hw_camera){};
 
     // Factory methods for VirtualCamera:s
-    sp<VirtualCamera> MakeVirtualCamera() override;
-    void DisownVirtualCamera(const sp<VirtualCamera>& virtual_camera) override;
+    sp<IVirtualCamera> MakeVirtualCamera() override;
+    void DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) override;
 
     // Inline implementations
     sp<IEvsCamera> GetHwCamera() override { return hw_camera_; };
-    std::list<wp<VirtualCamera>>::size_type GetClientCount() override { return clients_.size(); };
+    std::list<wp<IVirtualCamera>>::size_type GetClientCount() override { return clients_.size(); };
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCameraStream follow.
     Return<void> deliverFrame(const BufferDesc& buffer) override;
 
   private:
     sp<IEvsCamera> hw_camera_;
-    std::list<wp<VirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
+    std::list<wp<IVirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
 };
 
 }  // namespace vcc_implementation
