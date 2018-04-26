@@ -65,6 +65,15 @@ class VehicleHalCommon():
     app_context_vehiclefunctions = "com.volvocars.vehiclefunctions:id/"
     app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
 
+    # ClimatePane buttons
+    fan_off = "com.volvocars.launcher:id/fan_off"
+    fan_level_1 = "com.volvocars.launcher:id/fan_one"
+    fan_level_2 = "com.volvocars.launcher:id/fan_two"
+    fan_level_3 = "com.volvocars.launcher:id/fan_three"
+    fan_level_4 = "com.volvocars.launcher:id/fan_four"
+    fan_level_5 = "com.volvocars.launcher:id/fan_five"
+    fan_max = "com.volvocars.launcher:id/fan_max"
+
     # ViewClient
     active_view_client = None
     active_view_device = None
