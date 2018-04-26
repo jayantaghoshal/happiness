@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Overriding the material resources. Note that this modification will not pass CTS!
+     Long term we should use the DeviceDefault theme - but that would mean that the platform classes
+     need to refer to that theme instead of Material directly -->
+<resources>
+    <style name="TextAppearance.Material.Notification">
+        <item name="textColor">@color/notification_secondary_text_color_light</item>
+        <item name="textSize">@dimen/notification_text_size</item>
+        <item name="android:fontFamily">volvo-sans-serif-global</item>
+    </style>
+</resources>

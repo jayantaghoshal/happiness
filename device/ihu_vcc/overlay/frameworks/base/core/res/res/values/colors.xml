@@ -2,4 +2,9 @@
 <resources>
     <!-- The background color for the container of notification actions. -->
     <color name="notification_action_list">#00000000</color>
+
+    <!-- Override the notification text colors to match the dark style -->
+    <color name="notification_primary_text_color_light">@color/primary_text_default_material_dark</color>
+    <color name="notification_secondary_text_color_light">@color/secondary_text_material_dark</color>
+    <color name="notification_default_color">@color/primary_text_default_material_dark</color>
 </resources>
