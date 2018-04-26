@@ -42,7 +42,7 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
         revision = project.get('revision')
         if (revision == "ZUUL_COMMIT_OR_HEAD"):
             logger.info("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
-            if (current_repo == "vendor/volvocars") and False:
+            if not using_zuul:
                 revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
                 logger.info("setting revision to: " + revision)
                 project.set('revision', revision)
