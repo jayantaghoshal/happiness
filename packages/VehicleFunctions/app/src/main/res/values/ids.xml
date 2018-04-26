@@ -18,4 +18,6 @@
     <item name="adaptive_cruise_control_on" type="id" />
     <item name="cruise_control_on" type="id" />
     <item name="speed_limiter_on" type="id"/>
+    <item name="curve_speed_adaption_on" type="id"/>
+    <item name="curve_speed_adaption_off" type="id"/>
 </resources>

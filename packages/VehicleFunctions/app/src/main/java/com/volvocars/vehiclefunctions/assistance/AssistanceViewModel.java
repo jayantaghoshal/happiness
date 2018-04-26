@@ -76,12 +76,18 @@ public class AssistanceViewModel extends ViewModel {
                         R.id.emergency_lane_keeping_aid_button_on, R.id.emergency_lane_keeping_aid_button_off))
                 .create();
 
+          Section curveSpeedAdaptionSection = new Section.Builder()
+                .setTitle("Curve Speed Adaption")
+                .addFunction(new OnOffFunction("Curve Speed Adaption", new VhalOnOffDelegate(mVendorExtensionClient, VehicleProperty.CURVE_SPEED_ADAPTION_ON),
+                        R.id.curve_speed_adaption_on, R.id.curve_speed_adaption_off))
+                .create();
 
         ArrayList<Section> sections = new ArrayList<>();
         sections.add(driveAwayInformationSection);
         sections.add(driverSupportFunctionSection);
         sections.add(intellisafeSection);
         sections.add(laneKeepingAidSection);
+        sections.add(curveSpeedAdaptionSection);
 
         return sections;
     }
