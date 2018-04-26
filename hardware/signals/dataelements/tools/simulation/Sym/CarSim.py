@@ -872,3 +872,5 @@ class App:
         # of that, instead of sending json directly, but not sure there is that
         # much benefit.
 
+    def external_send2(self, dataelement_name: str, value: typing.Any):
+        self.connection_wrapper.send(dataelement_name, value)
