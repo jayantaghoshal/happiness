@@ -2,7 +2,7 @@
        <!-- Dimensions for Volvo -->
        <dimen name="status_bar_height">132dp</dimen>
        <dimen name="status_bar_height_portrait">132dp</dimen>
-       <dimen name="navigation_bar_height">120dp</dimen>
+       <dimen name="navigation_bar_height">140dp</dimen>
 
        <!-- Notifications -->
        <eat-comment/>
