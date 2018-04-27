@@ -91,7 +91,6 @@ if [[ -d .repo ]]; then
     (cd .repo/manifests && git reset --hard HEAD || true)
 fi
 bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
-#bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars"
 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail
@@ -102,11 +101,13 @@ bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; 
 ## Download the commit to check (for vendor/volvocars-repo)
 #
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
-#bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} ${ZUUL_PROJECT}"
 bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
 
-if [ "$(git -C "$ZUUL_PROJECT" rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
-    die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in $ZUUL_PROJECT"
+# Check that Zuul have downloaded the correct commit
+if [ "$ZUUL_PROJECT" == "vendor/volvocars" ]; then
+  if [ "$(git -C "$ZUUL_PROJECT" rev-parse HEAD)" != "$ZUUL_COMMIT" ]; then
+      die "zuul-cloner failed to checkout commit $ZUUL_COMMIT in $ZUUL_PROJECT"
+  fi
 fi
 
 ################################################################################################
