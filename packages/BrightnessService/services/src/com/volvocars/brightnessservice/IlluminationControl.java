@@ -27,8 +27,12 @@ public class IlluminationControl {
     private BrightnessService.ServiceHandler mServiceHandler;
     private int mLatestManualIllumination=101;
     private int mLatestNight=0;//It is day by default;
-    private final float PERCENTAGE_OF_MAX_VALUE = 406.0f/1023.0f; // Percentage of max CSD brightness.
-    private final float SCALED_MAX_VALUE = PERCENTAGE_OF_MAX_VALUE * 255; // whats the max manual illumination in android scale?
+
+    private final double CSD_DEVICE_MANUAL_MIN = 1.0;   // min value we want on the csd brightness device (manual)
+    private final double CSD_DEVICE_MANUAL_MAX = 406.0; // max value we want on the csd brightness device (manual)
+    private final double CSD_DEVICE_MAX = 1023.0;       // max value for csd device brightness
+    private final double BRIGHTNESS_SETTING_MAX = 255.0; // max value for the Android brightness setting
+
     private final int VEHICLE_HAL_SUBSCRIBE_RETRIES = 10;
     private int mSubcribeRetries = 0;
 
@@ -110,14 +114,16 @@ public class IlluminationControl {
             }
             else if (prop.prop == VehicleProperty.MANUAL_ILLUMINATION) {
                 //Note.
-                //The csd max Value is 1023
+                //The csd device values are 0 - 1023
                 //In Android, sceeen brightness is between 0 - 255
-                //VehicleProperty.MANUAL_ILLUMINATION is defined as a value between 0-100
-                //which is the percentage value of full manual illumination which is max 406.
-                //We need to convert CSD brightness to Android scale. This is the variable SCALED_MAX_VALUE
-                float ManualPercentage = (float)prop.value.int32Values.get(0) /100.0f; //Int to float conversion
-                float BrightnessValue = SCALED_MAX_VALUE * ManualPercentage; //new proposed brightness
-                mLatestManualIllumination = Math.round(BrightnessValue);
+                //VehicleProperty.MANUAL_ILLUMINATION is defined as a value between 0-100%
+                //which is the percentage value of full manual illumination which shall be 1 - 406.
+                final double ManualPercentage = prop.value.int32Values.get(0)/100.0; //Int to double conversion
+                // Provides a value 1 - 406
+                final double DeviceValue = ManualPercentage*(CSD_DEVICE_MANUAL_MAX-CSD_DEVICE_MANUAL_MIN)+CSD_DEVICE_MANUAL_MIN;
+
+                double BrightnessValue = BRIGHTNESS_SETTING_MAX/CSD_DEVICE_MAX * DeviceValue; //new proposed brightness
+                mLatestManualIllumination = (int)Math.round(BrightnessValue);
                 Log.v(TAG, "MANUAL_ILLUMINATION ManualIntPercentage " + ManualPercentage);
                 Log.v(TAG, "MANUAL_ILLUMINATION BrightnessValue " +BrightnessValue);
             }

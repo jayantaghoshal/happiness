@@ -16,14 +16,14 @@ public class IlluminationControl extends Activity {
     private String TAG = "IlluminationControlTestApp";
 
     public interface OnBrightnessChange{
-        void onChange();
+        void onChange(int br);
     }
     private OnBrightnessChange OnBrightnessChangeImpl = null;
     private ContentObserver mBrightnessObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
             Log.d(TAG,"onChange brightness: " + getBrightness());
-            OnBrightnessChangeImpl.onChange();
+            OnBrightnessChangeImpl.onChange(getBrightness());
         }
     };
     @Override

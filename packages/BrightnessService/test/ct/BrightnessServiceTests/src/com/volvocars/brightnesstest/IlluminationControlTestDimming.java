@@ -26,6 +26,10 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.lang.Integer;
+
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)
@@ -33,74 +37,44 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
     @Rule
     public ActivityTestRule<IlluminationControl> mActivityRule = new ActivityTestRule<>(IlluminationControl.class);
     private String TAG = "IlluminationControlTestDimming";
-    private ArrayList<Integer> mAcceptedBrightnessValues;
     private CountDownLatch mLatch = null;
-    private static final long TIMEOUT_S = 15;
-    private static final long TIMEOUT_BRIGHTNESSFULL = 5;
-    private Integer mExpectedCallCount = 15;
-    private Integer mDimmingCallCount = 0;
-    private boolean ignoredFirstCallback = false;
+    private static final long TIMEOUT_S = 5;
 
     public IlluminationControlTestDimming() {
         super(IlluminationControl.class);
-        mAcceptedBrightnessValues = new ArrayList<>();
-        mAcceptedBrightnessValues.add(0);
-        mAcceptedBrightnessValues.add(7);
-        mAcceptedBrightnessValues.add(13);
-        mAcceptedBrightnessValues.add(20);
-        mAcceptedBrightnessValues.add(27);
-        mAcceptedBrightnessValues.add(33);
-        mAcceptedBrightnessValues.add(40);
-        mAcceptedBrightnessValues.add(48);
-        mAcceptedBrightnessValues.add(54);
-        mAcceptedBrightnessValues.add(61);
-        mAcceptedBrightnessValues.add(68);
-        mAcceptedBrightnessValues.add(74);
-        mAcceptedBrightnessValues.add(81);
-        mAcceptedBrightnessValues.add(88);
-        mAcceptedBrightnessValues.add(94);
-        mAcceptedBrightnessValues.add(101);
-        mExpectedCallCount = mAcceptedBrightnessValues.size();
     }
+
     public class OnBrightnessChangeImpl implements IlluminationControl.OnBrightnessChange {
         @Override
-        public void onChange() {
-            if(!ignoredFirstCallback) {
-                ignoredFirstCallback = true;
-                return;
-            }
-            int brightness = mActivityRule.getActivity().getBrightness();
-            Log.d(TAG,"" +brightness);
-            if(mDimmingCallCount < mExpectedCallCount) {
-                Assert.assertTrue(mAcceptedBrightnessValues.contains(brightness));
-                mDimmingCallCount++;
-            }
-            else{
+        public synchronized void onChange(int brightness) {
+            Log.d(TAG,"OnBrightnessChangeImpl onChange:"+brightness);
+            brightnessChanged = true;
+            if(brightness==expectedBrightness) {
                 Log.d(TAG,"release latch OnBrightnessChangeImpl");
-                mLatch.countDown();
+                if (mLatch!=null) mLatch.countDown();
             }
         }
-    }
-    public class OnBrightnessChangeImplTestFull implements IlluminationControl.OnBrightnessChange {
-        @Override
-        public void onChange() {
-            if(!ignoredFirstCallback){
-                ignoredFirstCallback = true;
-                int brightness = mActivityRule.getActivity().getBrightness();
-                assertEquals(brightness,255);
-                return;
-            }
-            Log.d(TAG,"Release latch OnBrightnessChangeImplTestFull");
-            //Shouldn't be called..
-            mLatch.countDown();
 
+        public synchronized CountDownLatch start(int expectedBr, boolean expectBrightnessCallbackBeforeEvaluating) {
+            expectedBrightness = expectedBr;
+            brightnessChanged = false;
+            mLatch = new CountDownLatch(1);
+            if (!expectBrightnessCallbackBeforeEvaluating &&
+                mActivityRule.getActivity().getBrightness()==expectedBrightness) {
+                   Log.d(TAG,"release latch on start "+expectedBrightness);
+                   mLatch.countDown();
+            }
+            return mLatch;
         }
+
+        public boolean brightnessChanged;
+        private int expectedBrightness;
+        private CountDownLatch mLatch;
     }
+
     @Before
     public void init() {
         Log.d(TAG,"init ");
-        mLatch = new CountDownLatch(1);
-        ignoredFirstCallback = false;
     }
     @After
     public void tearDownTest() {
@@ -108,7 +82,7 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
 
         try {
             mActivityRule.getActivity().unRegisterChangeCallback();
-            runCommand("killall InjectDEForBrightness &");
+            runCommand("killall InjectDEForBrightness");
         }
         catch (InterruptedException ex){
             Log.d(TAG,ex.getMessage());
@@ -128,29 +102,53 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
     /**
      * Test verifies that the brightness is
      * settable via FlexRay signal IntrBriSts = (rheostat wheel)
+     * AND also that the CSD brightness device is updated accordingly.
      * TwliBriSts = 0 (Night)
      *
      * Arrange : TwliBriSts = 0 (Night) IntrBriSts 0-15
      * Act: Change brightnesslevel via IntrBriSts
-     * Assert : BrightnessLevel has changed, Should be any of values in mAcceptedBrightnessValues
+     * Assert : BrightnessLevel has changed
+     * lets try the rheo values 1,5,15 and expect brightness to be 7,34,101 (device values:28,136,406)
      */
     @Test
     public void TestBrightnessIsSettable() throws Exception {
-        runCommand("/data/local/tmp/InjectDEForBrightness illtest night &");
+        Log.d(TAG,"TestBrightnessIsSettable Test Starting");
+
+        runCommand("/data/local/tmp/InjectDEForBrightness night");
+
         OnBrightnessChangeImpl impl = new OnBrightnessChangeImpl();
         mActivityRule.getActivity().registerChangeCallback(impl);
-        Log.d(TAG,"Lets wait ");
-        assertTrue(mLatch.await(TIMEOUT_S, TimeUnit.SECONDS));
-        mActivityRule.getActivity().unRegisterChangeCallback();
+        CountDownLatch latch;
+
+        Log.d(TAG,"rheo=1, exp 7");
+        latch = impl.start(7, false);
+        runCommand("/data/local/tmp/InjectDEForBrightness ill 1");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS));
+        AssertDeviceBrightness(28);
+
+        Log.d(TAG,"rheo=5, exp 34");
+        latch = impl.start(34, true);
+        runCommand("/data/local/tmp/InjectDEForBrightness ill 5");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS));
+        AssertDeviceBrightness(136);
+
+        Log.d(TAG,"rheo=15, exp 101");
+        latch = impl.start(101, true);
+        runCommand("/data/local/tmp/InjectDEForBrightness ill 15");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS));
+        AssertDeviceBrightness(406);
+
+        runCommand("/data/local/tmp/InjectDEForBrightness day"); //go back to full brightness
+        Thread.sleep(1000);
         Log.d(TAG,"TestBrightnessIsSettable Test Done");
-        runCommand("/data/local/tmp/InjectDEForBrightness illtest day noloop &"); //just inject day signal
-        Thread.sleep(500); //to be sure that its injected
     }
+
     /**
      * Test verifies that the brightness is NOT settable
      * via FlexRay signal IntrBriSts = (rheostat wheel)
      * When TwliBriSts = 1 (Day)
-     * Then maximum brightness should be set instead.
+     * Then maximum brightness should in this case always be set.
+     * Also the value written to the CSD brightness device is verified.
      *
      * Arrange : TwliBriSts = 1 (Day) IntrBriSts 0-15
      * Act: Change brightness level via IntrBriSts
@@ -158,10 +156,85 @@ public class IlluminationControlTestDimming extends ActivityTestRule<Illuminatio
      */
     @Test
     public void TestBrightnessFull() throws Exception {
-        runCommand("/data/local/tmp/InjectDEForBrightness illtest day &");
-        OnBrightnessChangeImplTestFull impl = new OnBrightnessChangeImplTestFull();
+        Log.d(TAG,"TestBrightnessFull Test Starting");
+
+        runCommand("/data/local/tmp/InjectDEForBrightness night");
+
+        OnBrightnessChangeImpl impl = new OnBrightnessChangeImpl();
         mActivityRule.getActivity().registerChangeCallback(impl);
-        assertFalse(mLatch.await(TIMEOUT_BRIGHTNESSFULL, TimeUnit.SECONDS)); //shouldn't be release before timeout.
-        assertEquals(mActivityRule.getActivity().getBrightness(), 255);
+        CountDownLatch latch;
+
+        Log.d(TAG,"rheo=0, exp 0");
+        latch = impl.start(0, false);
+        runCommand("/data/local/tmp/InjectDEForBrightness ill 0");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS));
+
+        // Now switch to day and expect 255 in brightness
+        Log.d(TAG,"day, rheo=0, exp 255");
+        latch = impl.start(255, true);
+        runCommand("/data/local/tmp/InjectDEForBrightness day");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS));
+        AssertDeviceBrightness(1023);
+
+        // Set another rheo value -> brightness still 255
+        // Either nothing has happened at all (brightnessChanged==false)
+        // or we received a "new" value that is still 255.
+        Log.d(TAG,"day, rheo=15, exp 255");
+        latch = impl.start(255, true);
+        runCommand("/data/local/tmp/InjectDEForBrightness ill 15");
+        assertTrue(latch.await(TIMEOUT_S, TimeUnit.SECONDS) || !impl.brightnessChanged);
+        AssertDeviceBrightness(1023);
+
+        Log.d(TAG,"TestBrightnessFull Test Done");
+    }
+
+    // The reason this is needed is that when the brightness is set to the Android
+    // brightness setting the change is "animated" towards the device so the
+    // value isn't updated immediately. It is ramping up/down for a period of time.
+    public int GetStableDeviceBrightness(int waitMillisecs) {
+        final long endTime = System.currentTimeMillis()+waitMillisecs;
+        try {
+            Thread.sleep(500);
+        } catch(Exception e) {}
+        int lastbr = -10; // just an impossible value
+        int br = GetBrightnessFromDevice();
+        // wait for value to stabilize
+        while(lastbr!=br && endTime>System.currentTimeMillis()) {
+            lastbr = br;
+            try {
+                Thread.sleep(200);
+            } catch(Exception e) {}
+            br = GetBrightnessFromDevice();
+        }
+        Log.d(TAG,"Device says: "+lastbr);
+        return lastbr;
+    }
+
+    public int GetBrightnessFromDevice() {
+        String line=null;
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("/sys/class/csd_display/csd_display0/csd/brightness"));
+            line = reader.readLine();
+            if (line == null) {
+                Log.d(TAG,"Failed to read brightness (null)");
+                return -1;
+            }
+            return Integer.parseInt(line);
+        } catch (Exception e) {
+            Log.d(TAG,"Failed to read brightness: "+line);
+            return -1;
+        }
+    }
+
+    public void AssertDeviceBrightness(int expectedBrightness) {
+        // Since we don't have exactly control over how Android maps the setting 0..255
+        // to the device values 0..1023 we do allow that it is not exactly what we expect.
+        final int currentDeviceBrightness = GetStableDeviceBrightness(5000);
+        final int maxdiff=5; // the largest diff in expected device value we allow
+        Log.d(TAG,"Asserting "+expectedBrightness+"=="+currentDeviceBrightness+" (+/-"+maxdiff+")");
+        assertTrue(currentDeviceBrightness>=0); // <0 means some sort of error
+        final int diff = Math.abs(expectedBrightness-currentDeviceBrightness);
+        assertTrue(diff<maxdiff);
     }
 }
