@@ -5,6 +5,7 @@
 
 package com.volvocars.vehiclefunctions.assistance;
 
+import android.arch.lifecycle.LiveData;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,15 +32,27 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionViewHolder> {
 
     private final List<Function> mFunctionsFlatList = new ArrayList<>();
 
-    public FunctionsAdapter(LayoutInflater layoutInflater, List<Section> sections) {
+    public FunctionsAdapter(LayoutInflater layoutInflater, LiveData<List<Section>> sections) {
         mLayoutInflater = layoutInflater;
+        sections.observeForever(newSections -> {
+            setSections(newSections);
+        });
+    }
 
+    private void setSections(List<Section> sections)
+    {
+        mFunctionsFlatList.clear();
         //Flatten the Sections/Functions into a single list for use by adapter.
         for (Section section : sections) {
-            mFunctionsFlatList.add(section);
-            mFunctionsFlatList.addAll(section.getFunctions());
+            List<Function> sectionFunctions = section.getFunctions();
+            if (!sectionFunctions.isEmpty()) {
+                mFunctionsFlatList.add(section);
+                mFunctionsFlatList.addAll(sectionFunctions);
+            }
         }
+        notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemCount() {

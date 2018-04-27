@@ -19,31 +19,12 @@ public class Section extends Function {
 
     private final List<Function> mFunctions;
 
-    private Section(CharSequence title, List<Function> functions) {
+    public Section(CharSequence title, List<Function> functions) {
         super(title, R.layout.vh_function_section, COLUMNS_OCCUPIED);
         mFunctions = functions;
     }
 
     public List<Function> getFunctions() {
         return mFunctions;
-    }
-
-    public static class Builder {
-        private CharSequence mTitle;
-        private List<Function> functions = new ArrayList<>();
-
-        public Builder setTitle(CharSequence title) {
-            mTitle = title;
-            return this;
-        }
-
-        public Builder addFunction(Function function) {
-            functions.add(function);
-            return this;
-        }
-
-        public Section create() {
-            return new Section(mTitle, functions);
-        }
     }
 }

@@ -40,7 +40,7 @@ public class ThreeStateFunction extends Function {
         mState1ButtonId = state1ButtonId;
         mState2ButtonId = state2ButtonId;
         mState3ButtonId = state3ButtonId;
-        mEnabledLiveData.setValue(false);
+        mEnabledLiveData.postValue(false);
     }
 
     public CharSequence getState1Name() {

@@ -31,7 +31,7 @@ public class OneButtonFunction extends Function {
         mButtonId = onButtonId;
         mDelegate.setListener(stateChangedListener);
         mDelegate.onSetInitialState();
-        mEnabledLiveData.setValue(false);
+        mEnabledLiveData.postValue(false);
     }
 
     public LiveData<Boolean> getState() {

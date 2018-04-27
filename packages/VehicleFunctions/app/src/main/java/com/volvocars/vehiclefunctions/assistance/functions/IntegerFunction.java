@@ -36,13 +36,13 @@ public class IntegerFunction extends Function {
         incButtonId = plusButtonId;
         IntTextId = textViewId;
         decButtonId = minusButtonId;
-        minimum.setValue(min);
-        maximum.setValue(max);
-        incDecStepSize.setValue(resolution);
+        minimum.postValue(min);
+        maximum.postValue(max);
+        incDecStepSize.postValue(resolution);
 
         mDelegate.setListener(stateChangedListener);
         mDelegate.onSetInitialState();
-        mEnabledLiveData.setValue(false);
+        mEnabledLiveData.postValue(false);
     }
 
     public LiveData<Integer> getTextValue() {

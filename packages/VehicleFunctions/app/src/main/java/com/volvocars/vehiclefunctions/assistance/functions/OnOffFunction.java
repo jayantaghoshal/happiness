@@ -32,7 +32,7 @@ public class OnOffFunction extends Function {
         mOffButtonId = offButtonId;
         mDelegate.setListener(stateChangedListener);
         mDelegate.onSetInitialState();
-        mEnabledLiveData.setValue(false);
+        mEnabledLiveData.postValue(false);
     }
 
     public LiveData<Boolean> getState() {
