@@ -43,14 +43,14 @@ VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
-time make -j64 droid
+citime make -j64 droid
 
 # Create a generic subdirectory for build meta data files
 mkdir -p -m 755 out/vcc_build_metadata
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_droid.trace.gz || true
 
-time make -j64 tradefed-all
+citime make -j64 tradefed-all
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tradefed_all || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_tradefedall.trace.gz || true
 
@@ -66,7 +66,7 @@ else
 fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate --ciflow true || die "Build Unit and Component tests failed"
+citime python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate --ciflow true || die "Build Unit and Component tests failed"
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tester_build || true
 
 # Push out files required for gate_test.sh to Artifactory.
@@ -92,7 +92,7 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 
 # Ensure our repo can be build with mma
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
-time mmma vendor/volvocars
+citime mmma vendor/volvocars
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_mmmma_vendor_volvocars || true
 cp out/.build.trace.gz out/vcc_build_metadata/mmma_vendorvolvocars.trace.gz || true
 

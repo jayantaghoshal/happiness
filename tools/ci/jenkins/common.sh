@@ -54,3 +54,34 @@ function die() {
 function repo_sync() {
   repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 "$@" || die "repo sync failed"
 }
+
+function storecimetrix() {
+    buildFunc=$1
+    buildTime=$2
+    timeStamp=$3
+
+    if [[ "$buildFunc" == *"droid"* ]]; then
+       buildFunc="makedroid"
+    elif [[ "$buildFunc" == *"tradefed-all"* ]]; then
+       buildFunc="maketradefed"
+    elif [[ "$buildFunc" == *"tester.py"* ]]; then
+       buildFunc="makecomponent"
+    elif [[ "$buildFunc" == *"mmma"* ]]; then
+       buildFunc="mmma"
+    fi
+
+    curl -i -XPOST 'http://gotsvl1416.got.volvocars.net:8086/write?db=ciflowtime' --data-binary "$buildFunc,build_stage=${JOB_NAME} build_number=${BUILD_NUMBER},build_time=$buildTime $timeStamp"
+}
+
+function citime(){
+  timer_start=$(date '+%s')
+  "$@"
+  #sleep 3
+  timer_stop=$(date '+%s')
+  elapsedTime=$((timer_stop - timer_start))
+  echo $((elapsedTime / 3600))"h" $(((elapsedTime / 60) % 60))"m" $((elapsedTime % 60))"s"
+
+  storecimetrix "$*" "$elapsedTime" "$timer_stop"
+}
+
+
