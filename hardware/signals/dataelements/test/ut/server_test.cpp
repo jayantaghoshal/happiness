@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -68,6 +68,13 @@ TEST_F(ServerTest, multipleSubscriptions_sameSignals_bothFired) {
     sut.subscribe(signalName_A, Dir::IN, callbackB);
     EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
     EXPECT_CALL(*callbackB, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
+    sut.send(signalName_A, Dir::IN, value_B);
+}
+
+TEST_F(ServerTest, multipleSubscriptions_sameSignals_sameCallback_oneFired) {
+    sut.subscribe(signalName_A, Dir::IN, callbackA);
+    sut.subscribe(signalName_A, Dir::IN, callbackA);
+    EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
     sut.send(signalName_A, Dir::IN, value_B);
 }
 

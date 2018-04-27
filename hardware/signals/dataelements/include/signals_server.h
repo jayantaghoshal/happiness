@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -8,6 +8,7 @@
 #include <vendor/volvocars/hardware/signals/1.0/ISignalsChangedCallback.h>
 #include <vendor/volvocars/hardware/signals/1.0/types.h>
 #include <regex>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -32,7 +33,7 @@ class SignalsServer final : public ISignals {
     using signal_key = std::pair<std::string, Dir>;
     signal_key make_key(std::string s, Dir dir);
 
-    std::map<signal_key, std::vector<::android::sp<ISignalsChangedCallback>>> subscriptions;
+    std::map<signal_key, std::set<::android::sp<ISignalsChangedCallback>>> subscriptions;
     std::vector<WildCardSubscription> wildcard_subscriptions;
     std::map<signal_key, std::string> signalStorage;
     std::vector<Result> get_all_matching(const ::android::hardware::hidl_string& filter, const Dir dir);

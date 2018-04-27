@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -92,10 +92,10 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
         const auto key = make_key(signalName, dir);
         auto it = subscriptions.find(key);
         if (it == subscriptions.end()) {
-            auto ins_it = subscriptions.emplace(key, std::vector<::android::sp<ISignalsChangedCallback>>());
-            ins_it.first->second.push_back(cb);
+            auto ins_it = subscriptions.emplace(key, std::set<::android::sp<ISignalsChangedCallback>>());
+            ins_it.first->second.insert(cb);
         } else {
-            it->second.push_back(cb);
+            it->second.insert(cb);
         }
 
         // Instantly call the callback if we already have the signal
