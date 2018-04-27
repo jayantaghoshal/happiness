@@ -15,6 +15,7 @@
 #include <string>
 #include <thread>
 
+#include "Application_dataelement.h"
 #include "homebuttonmodule.h"
 #include "i_vehicle_hal_impl.h"
 #include "vendor/volvocars/hardware/vehiclehal/1.0/types.h"
@@ -114,9 +115,9 @@ class KeyManagerModule : public DesipClient,
     uint8_t HandleButtonStateRequest(int key_code, ButtonStateType req);
 
     /**
-    * Function for getting HomeButtonState as VehiclePropValue
-    * with all the appropriate fields.
-    */
+     * Function for getting HomeButtonState as VehiclePropValue
+     * with all the appropriate fields.
+     */
     vhal20::VehiclePropValue convertToLongpressPropValue(HomeButtonState homekeystate);
 
     void HomeButtonPressed(bool pressed) override;
@@ -155,4 +156,28 @@ class KeyManagerModule : public DesipClient,
         // The instance of the Desip Client to communicate with
         KeyManagerModule* key_manager_module_;
     };
+
+    /**
+     * @brief Key event handler for autonomous drive
+     */
+    class AutonomousDriveHandler {
+      public:
+        AutonomousDriveHandler();
+        bool shouldIgnoreKey(const vip_msg& msg);
+
+        enum class AutonomousDriveStatus { kManual, kAuto };
+        enum class VehicleOperatorMode { kNoVO, kVO };
+
+      private:
+        // TODO change to correct signal AutmnsDrvModeSts1
+        // Also change the check in constructor
+        ApplicationDataElement::DEReceiver<autosar::DoorDrvrSts_info> aut_drive_status_receiver_;
+        // TODO change to correct signal VehOperModSts1
+        ApplicationDataElement::DEReceiver<autosar::DoorPassSts_info> veh_oper_mod_receiver_;
+
+        AutonomousDriveStatus autonomous_drive_status_ = AutonomousDriveStatus::kManual;
+        VehicleOperatorMode vehicle_operator_mode_ = VehicleOperatorMode::kNoVO;
+
+        bool autonomous_drive_ = false;
+    } autonomous_drive_handler_;
 };

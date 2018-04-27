@@ -6,6 +6,8 @@
 #include <android/keycodes.h>
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
+#include <carconfig.h>
+#include <cc_parameterlist.h>
 #include <utils/SystemClock.h>
 #include <vhal_v2_0/VehicleUtils.h>
 #include <iomanip>
@@ -47,6 +49,7 @@ typedef enum
     VIP_KEY_NO_KEY                                = 0x00,
     VIP_KEY_VOLUME_KNOB                           = 0x01,
     VIP_KEY_HOME_BTN                              = 0x01,
+    VIP_KEY_LIN19_DMSM_KNOB                       = 0x02,
     VIP_KEY_LIN19_DEFROST_FRONT                   = 0x05,
     VIP_KEY_LIN19_NEXT                            = 0x09,
     VIP_KEY_LIN19_PLAY_PAUSE                      = 0x07,
@@ -142,6 +145,83 @@ std::string BytesToHex(const int8_t bytes[], uint32_t length) {
     }
     return stringified_data.str();
 }
+
+}  // namespace
+
+KeyManagerModule::AutonomousDriveHandler::AutonomousDriveHandler() {
+    aut_drive_status_receiver_.subscribe([this]() {
+        const auto signal_value = aut_drive_status_receiver_.get();
+        if (!signal_value.isOk()) {
+            return;
+        }
+        // TODO real enum instead of door
+        if (signal_value.value() == autosar::DoorSts2::Clsd) {
+            autonomous_drive_status_ = AutonomousDriveStatus::kManual;
+        } else {
+            autonomous_drive_status_ = AutonomousDriveStatus::kAuto;
+        }
+    });
+
+    veh_oper_mod_receiver_.subscribe([this]() {
+        const auto signal_value = veh_oper_mod_receiver_.get();
+        if (!signal_value.isOk()) {
+            return;
+        }
+        // TODO real enum instead of door
+        if (signal_value.value() == autosar::DoorSts2::Clsd) {
+            vehicle_operator_mode_ = VehicleOperatorMode::kVO;
+        } else {
+            vehicle_operator_mode_ = VehicleOperatorMode::kNoVO;
+        }
+    });
+    autonomous_drive_ =
+            carconfig::checkValue(CarConfigParams::CC100_AutonomousDriveType::Autonomous_Vehicle_Preparation);
+}
+
+bool KeyManagerModule::AutonomousDriveHandler::shouldIgnoreKey(const vip_msg& msg) {
+    // If not autonomous drive return immediately
+    if (!autonomous_drive_) {
+        return false;
+    }
+
+    auto input_device = msg.data[HID_CMD_INPUT_DEVICE];
+    auto key = msg.data[HID_CMD_KEY_ID];
+
+    // Center stack audio controls should always be disabled
+    if (INPUT_KNOB == input_device && VIP_KEY_VOLUME_KNOB == key) {
+        return true;
+    }
+    if (INPUT_KEY == input_device &&
+        (VIP_KEY_LIN19_PLAY_PAUSE == key || VIP_KEY_LIN19_NEXT == key || VIP_KEY_LIN19_PREVIOUS == key)) {
+        return true;
+    }
+
+    // Defroster keys should always be disabled in automatic mode
+    if (INPUT_KEY == input_device && (VIP_KEY_LIN19_DEFROST_FRONT == key || VIP_KEY_LIN19_DEFROST_REAR == key)) {
+        if (AutonomousDriveStatus::kAuto == autonomous_drive_status_) {
+            return true;
+        }
+    }
+
+    // Drive mode should always be disabled in automatic mode
+    if ((INPUT_KNOB == input_device && VIP_KEY_LIN19_DMSM_KNOB == key) ||
+        (INPUT_KEY == input_device && VIP_KEY_LIN19_DMSM_ACCEPT == key)) {
+        if (AutonomousDriveStatus::kAuto == autonomous_drive_status_) {
+            return true;
+        }
+    }
+
+    // Steering wheel right hand buttons should only be disabled in fully automatic mode
+    if (INPUT_KEY == input_device &&
+        (VIP_KEY_FLRAY_SWC_LEFT_RIGHT == key || VIP_KEY_FLRAY_SWC_SET == key || VIP_KEY_FLRAY_SWC_MODE == key ||
+         VIP_KEY_FLRAY_SWC_PUSH_TO_TALK == key || VIP_KEY_FLRAY_SWC_VOLUME == key)) {
+        if (AutonomousDriveStatus::kAuto == autonomous_drive_status_ &&
+            VehicleOperatorMode::kNoVO == vehicle_operator_mode_) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 KeyManagerModule::KeyManagerModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
@@ -221,6 +301,11 @@ void KeyManagerModule::ProcessMessage(vip_msg& msg) {
                   msg.data[HID_CMD_TIME_STAMP_H],
                   msg.data[HID_CMD_TIME_STAMP_L],
                   msg.data[HID_CMD_FRAME_SIZE]);
+
+            if (autonomous_drive_handler_.shouldIgnoreKey(msg)) {
+                ALOGD("Key input disabled, ignoring key event");
+                break;
+            }
 
             if (INPUT_KNOB == msg.data[HID_CMD_INPUT_DEVICE]) {
                 processKnob(msg.data);
