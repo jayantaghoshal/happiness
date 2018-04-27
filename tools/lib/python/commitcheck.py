@@ -251,7 +251,7 @@ def fix_file_path(file_path: str, is_precommit: bool, silent_fixes: typing.Tuple
 
 
 def fix_file_path_on_error(file_path: str):
-    fix_file_path(file_path, is_precommit=False)
+    fix_file_path(file_path, is_precommit=False, silent_fixes=())
 
 
 def fix_file_path_on_pre_commit_hook_silent_fixes(file_path: str):
