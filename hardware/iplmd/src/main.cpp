@@ -21,7 +21,7 @@
 #include "iplmService.h"
 
 #undef LOG_TAG  // workaround #include <hidl/HidlTransportSupport.h>
-#define LOG_TAG "iplmd"
+#define LOG_TAG "IplmD"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -37,7 +37,7 @@ void SigTermHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGTERM received...");
+    ALOGD("[Main] SIGTERM received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -47,14 +47,14 @@ void SigHupHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGHUP received...");
+    ALOGD("[Main] SIGHUP received...");
 }
 
 void SigIntHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGINT received...");
+    ALOGD("[Main] SIGINT received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -69,7 +69,7 @@ bool InitSignals() {
     if ((sigemptyset(&signal_set_term) < 0) || (sigemptyset(&signal_set_hup) < 0) ||
         (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
         (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0)) {
-        ALOGE("Failed to create signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to create signals: %s", strerror(errno));
         return false;
     }
 
@@ -77,7 +77,7 @@ bool InitSignals() {
     if ((sigprocmask(SIG_BLOCK, &signal_set_term, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0)) {
-        ALOGE("Failed to block signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to block signals: %s", strerror(errno));
         return false;
     }
 
@@ -86,7 +86,7 @@ bool InitSignals() {
     int intfd = signalfd(-1, &signal_set_int, 0);
 
     if (termfd < 0 || hupfd < 0 || intfd < 0) {
-        ALOGE("signalfd failed: %s", strerror(errno));
+        ALOGE("[Main] signalfd failed: %s", strerror(errno));
         return false;
     }
 
@@ -103,7 +103,7 @@ bool InitSignals() {
 // MAIN
 int main(int argc, char* argv[]) {
     if (argc < 4) {
-        ALOGE("Three argument expected ");
+        ALOGE("[Main] Three argument expected ");
         return EXIT_FAILURE;
     }
 
@@ -136,14 +136,14 @@ int main(int argc, char* argv[]) {
     argument = arguments[interface_iplm];
     if (argument != "") {
         iplmService = new IplmService(argument);
-        ALOGW("iplm registered as IIplm/%s", argument.c_str());
+        ALOGW("[Main] iplm registered as IIplm/%s", argument.c_str());
 
         // IVehicleCom
         argument = arguments[interface_vehiclecom];
         if (argument != "") {
             iplmService->SubscribeVehicleCom(argument);
         } else {
-            ALOGW("--%s missing", interface_vehiclecom.c_str());
+            ALOGW("[Main] --%s missing", interface_vehiclecom.c_str());
         }
 
         // ILifecycleControl
@@ -151,10 +151,10 @@ int main(int argc, char* argv[]) {
         if (argument != "") {
             iplmService->ConnectLifecycleControl(argument);
         } else {
-            ALOGW("--%s missing", interface_lifecyclecontrol.c_str());
+            ALOGW("[Main] --%s missing", interface_lifecyclecontrol.c_str());
         }
     } else {
-        ALOGW("--%s missing", interface_iplm.c_str());
+        ALOGW("[Main] --%s missing", interface_iplm.c_str());
     }
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);

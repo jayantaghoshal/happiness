@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <sstream>
 
-#define LOG_TAG "lipcb.Pdu"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 namespace Connectivity {
@@ -19,7 +19,7 @@ bool Pdu::fromData(std::vector<uint8_t>& fromData) {
     // Sanity check of header length field
     if (header.length < VCCPDUHeader::BASE_LENGTH ||
         header.length > fromData.end() - fromData.begin() - VCCPDUHeader::BASE_LENGTH) {
-        ALOGE("Invalid header length parameter, some packets might be lost");
+        ALOGE("[Pdu] Invalid header length parameter, some packets might be lost");
         fromData.erase(fromData.begin(), fromData.end());
         return false;
     }
@@ -27,7 +27,7 @@ bool Pdu::fromData(std::vector<uint8_t>& fromData) {
     // Check header length
     uint32_t pduSize = VCCPDUHeader::DATA_SIZE + header.length - 8;
     if (fromData.size() < pduSize) {
-        ALOGE("Not enough data in PDU buffer. Expected %d, but have %zu", pduSize, fromData.size());
+        ALOGE("[Pdu] Not enough data in PDU buffer. Expected %d, but have %zu", pduSize, fromData.size());
         return false;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -10,7 +10,7 @@
 
 #include "cloud_service.h"
 
-#define LOG_TAG "CloudD.main"
+#define LOG_TAG "CloudD"
 
 using namespace Connectivity;
 
@@ -22,7 +22,7 @@ void SigTermHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGTERM received...");
+    ALOGD("[Main] SIGTERM received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -32,14 +32,14 @@ void SigHupHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGHUP received...");
+    ALOGD("[Main] SIGHUP received...");
 }
 
 void SigIntHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGINT received...");
+    ALOGD("[Main] SIGINT received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -56,7 +56,7 @@ bool InitSignals() {
     if ((sigemptyset(&signal_set_term) < 0) || (sigemptyset(&signal_set_hup) < 0) ||
         (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
         (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0)) {
-        ALOGE("Failed to create signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to create signals: %s", strerror(errno));
         return false;
     }
 
@@ -64,7 +64,7 @@ bool InitSignals() {
     if ((sigprocmask(SIG_BLOCK, &signal_set_term, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0)) {
-        ALOGE("Failed to block signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to block signals: %s", strerror(errno));
         return false;
     }
 
@@ -73,7 +73,7 @@ bool InitSignals() {
     int intfd = signalfd(-1, &signal_set_int, 0);
 
     if (termfd < 0 || hupfd < 0 || intfd < 0) {
-        ALOGE("signalfd failed: %s", strerror(errno));
+        ALOGE("[Main] signalfd failed: %s", strerror(errno));
         return false;
     }
 
@@ -98,5 +98,5 @@ int main(void) {
         joinRpcThreadpool();
     }
 
-    ALOGI("exiting ...");
+    ALOGI("[Main] exiting ...");
 }

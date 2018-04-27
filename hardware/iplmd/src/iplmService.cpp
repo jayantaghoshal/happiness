@@ -7,7 +7,7 @@
 #include "local_config.h"
 
 #undef LOG_TAG
-#define LOG_TAG "iplmd.service"
+#define LOG_TAG "IplmD"
 #include <cutils/log.h>
 
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
@@ -46,11 +46,11 @@ void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
     ipcbServer_ = IVehicleCom::getService(vehicleservicehal);
 
     if (ipcbServer_ != nullptr) {
-        ALOGD("Ipcb HAL with name '%s' found! Register subscriber!", vehicleservicehal.c_str());
+        ALOGD("[Service] Ipcb HAL with name '%s' found! Register subscriber!", vehicleservicehal.c_str());
 
         auto error = ipcbServer_->linkToDeath(this, 2);
         if (!error.isOk()) {
-            ALOGW("Unable to register link to death");
+            ALOGW("[Service] Unable to register link to death");
         }
 
         SubscribeResult result;
@@ -60,11 +60,12 @@ void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
             result = sr;
         });
         if (!result.commandResult.success) {
-            ALOGE("Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
+            ALOGE("[Service] Subscribe failed with error: %s", result.commandResult.errMsg.c_str());
         }
         Initialize();
     } else {
-        ALOGE("Ipcb HAL with name '%s' not found in binder list, retrying in 1 sec", vehicleservicehal.c_str());
+        ALOGE("[Service] Ipcb HAL with name '%s' not found in binder list, retrying in 1 sec",
+              vehicleservicehal.c_str());
 
         // TODO: Handle return value to be able to abort retries
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
@@ -76,16 +77,16 @@ void IplmService::ConnectLifecycleControl(std::string vehicleservicehal) {
     lifecyclecontrol_ = ILifecycleControl::getService(vehicleservicehal);
 
     if (lifecyclecontrol_ != nullptr) {
-        ALOGD("ILifecycleControl found! Register subscriber!");
+        ALOGD("[Service] ILifecycleControl found! Register subscriber!");
 
         auto error = lifecyclecontrol_->linkToDeath(this, 2);
         if (!error.isOk()) {
-            ALOGW("Unable to register link to death");
+            ALOGW("[Service] Unable to register link to death");
         }
 
         PreventShutdownReason();
     } else {
-        ALOGE("[%s]: LifecycleControl Service pointer is empty! retrying in 1 sec", __func__);
+        ALOGE("[Service] [%s]: LifecycleControl Service pointer is empty! retrying in 1 sec", __func__);
 
         // TODO: Handle return value to be able to abort retries
         timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000),
@@ -94,11 +95,11 @@ void IplmService::ConnectLifecycleControl(std::string vehicleservicehal) {
 }
 
 void IplmService::serviceDied(uint64_t, const android::wp<IBase>&) {
-    ALOGD("IPCB died. Exiting IPLM and hoping to restart!");
+    ALOGD("[Service] IPCB died. Exiting IPLM and hoping to restart!");
     exit(EXIT_SUCCESS);
 }
 void IplmService::HandleMessageRcvd(const Msg& msg) {
-    ALOGV("CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)",
+    ALOGV("[Service] CbLmBroadcast %04X.%04X.%02d 0x%08X(size: %d)",
           msg.pdu.header.serviceID,
           (int)msg.pdu.header.operationID,
           (int)msg.pdu.header.operationType,
@@ -108,7 +109,7 @@ void IplmService::HandleMessageRcvd(const Msg& msg) {
     if (OperationType::ERROR == msg.pdu.header.operationType) return;
 
     first_contact = true;
-    ALOGV("Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
+    ALOGV("[Service] Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
           ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
           ToString(static_cast<Prio>(msg.pdu.payload.data()[1])),
           (int)msg.ecu,
@@ -173,7 +174,7 @@ bool IplmService::Initialize() {
         // How to handle error -1 which means fails to communicate with NSM. Ponder
         if (NsmSessionState_Unregistered == session_state)
         {
-            ALOGE("Failed to Register NSM sessions for IPLM.");
+            ALOGE("[Service] Failed to Register NSM sessions for IPLM.");
             return false;
         }
         // session_state != Unregistered; indicates that a valid session for IPLM exists (this can happen if for e.g.
@@ -204,14 +205,14 @@ void IplmService::FlexrayWakeupTimeout() {
 
     senderWakeup_.send(wakeup);
 
-    ALOGV("FlexrayWakeupTimeout");
+    ALOGV("[Service] FlexrayWakeupTimeout");
 }
 
 bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
     // If any LSC locally has requested RG to be kept active and RG is unavailable; time to request wakeup
     if (((iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) != ACTION_AVAILABLE) ||
         iplm_data_.rg1_availabilityStatus_.all() || !first_contact || flexray_wakeup_attempted) {
-        ALOGW("Flexray wakeup not sent "
+        ALOGW("[Service] Flexray wakeup not sent "
               "(registeredServices [%d], rg1_availabilityStatus_ [%d]), first_contact[%d], "
               "flexray_wakeup_attempted[%d]",
               (int)iplm_data_.registered_LSCs_.size(),
@@ -236,7 +237,7 @@ bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
     flexray_wakeup_attempted = true;
 
     senderWakeupTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(3000), tmoHandler);
-    ALOGV("SendFlexrayWakeup rg=%d , prio=%d", _rg, _prio);
+    ALOGV("[Service] SendFlexrayWakeup rg=%d , prio=%d", _rg, _prio);
     return true;
 }
 
@@ -252,7 +253,7 @@ void IplmService::restartTemActivityTimer() {
 }
 
 void IplmService::ActivityTimeout() {
-    ALOGV("+ ActivityTimeout");
+    ALOGV("[Service] + ActivityTimeout");
 
     bool broadcast_allowed = false;
     bool tem_available = false;
@@ -272,12 +273,12 @@ void IplmService::ActivityTimeout() {
     XResourceGroupPrio rg_prio = (GetExternalPrio(iplm_data_) ? XResourceGroupPrio::High : XResourceGroupPrio::Normal);
 
     if (broadcast_allowed) {
-        ALOGV("ActivityTimeout: Sending IP Activity broadcast");
+        ALOGV("[Service] ActivityTimeout: Sending IP Activity broadcast");
 
         // time to send new activity message
         CreateAndSendIpActivityMessage();
     } else {
-        ALOGV("ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
+        ALOGV("[Service] ActivityTimeout: No LSCs registered, not sending IP Activity broadcast");
     }
 
     // Copy map of callbacks
@@ -303,12 +304,12 @@ void IplmService::ActivityTimeout() {
         bool isDead =
                 result1.isDeadObject() || result2.isDeadObject() || result3.isDeadObject() || result4.isDeadObject();
         if (isDead) {
-            ALOGV("IplmService::ActivityTimeout, %s is dead, lets remove it", regs.first.c_str());
+            ALOGV("[Service] ActivityTimeout, %s is dead, lets remove it", regs.first.c_str());
             unregisterService(regs.first);
         }
     }
-    // ALOGI("Tem available: %d",tem_available);
-    // ALOGI("Vcm available: %d",vcm_available);
+    // ALOGI("[Service] Tem available: %d",tem_available);
+    // ALOGI("[Service] Vcm available: %d",vcm_available);
 
     for (auto const& notifyAvailabilityToRegisteredService : node_availability_notifications_) {
         notifyAvailabilityToRegisteredService(EcuId::ECU_Tem, tem_available);
@@ -318,7 +319,7 @@ void IplmService::ActivityTimeout() {
     // Restart activity timer
     activityTimer_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { ActivityTimeout(); });
 
-    ALOGV("- ActivityTimeout");
+    ALOGV("[Service] - ActivityTimeout");
 }
 
 void IplmService::RequestMonitoringTimeout(EcuId ecu) {
@@ -326,7 +327,7 @@ void IplmService::RequestMonitoringTimeout(EcuId ecu) {
 
     first_contact = true;
 
-    ALOGV("Timeout on IP_Activity for %d", ecu);
+    ALOGV("[Service] Timeout on IP_Activity for %d", ecu);
 
     iplm_data_.rg1_availabilityStatus_.reset(static_cast<int>(ecu));
     iplm_data_.rg3_availabilityStatus_.reset(static_cast<int>(ecu));
@@ -339,7 +340,7 @@ void IplmService::RequestMonitoringTimeout(EcuId ecu) {
 }
 
 void IplmService::CreateAndSendIpActivityMessage() {
-    ALOGV("LM: Timeout, prepare new broadcast message");
+    ALOGV("[Service] LM: Timeout, prepare new broadcast message");
 
     Action action = iplm_data_.action_[(int)Ecu::IHU];
     Prio prio = iplm_data_.prio_[(int)Ecu::IHU];
@@ -361,12 +362,12 @@ void IplmService::CreateAndSendIpActivityMessage() {
 
     message.pdu.payload = std::vector<uint8_t>({action, (uint8_t)prio, 0, 0});
 
-    ALOGV("Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
+    ALOGV("[Service] Send IP_Activity(%s,%s)", ToString(action).c_str(), ToString(prio));
 
     CommandResult result;
     ipcbServer_->sendMessage(message, {false, 0, 0}, [&result](CommandResult sr) { result = sr; });
     if (!result.success) {
-        ALOGE("sendMessage failed with error: %s", result.errMsg.c_str());
+        ALOGE("[Service] sendMessage failed with error: %s", result.errMsg.c_str());
     }
 }
 
@@ -427,7 +428,7 @@ const char* IplmService::ToString(const ResourceGroup r) {
         case ResourceGroup::RG_3:
             return "RG_3";
         default:
-            ALOGW("ToString() called with unsupported ResourceGroup");
+            ALOGW("[Service] ToString() called with unsupported ResourceGroup");
             return "";
     }
 }
@@ -439,7 +440,7 @@ const char* IplmService::ToString(const XResourceGroup r) {
         case XResourceGroup::ResourceGroup3:
             return "RG_3";
         default:
-            ALOGW("ToString() called with unsupported ResourceGroup");
+            ALOGW("[Service] ToString() called with unsupported ResourceGroup");
             return "";
     }
 }
@@ -466,7 +467,7 @@ const char* IplmService::ToString(const Prio a) {
         case PRIO_HIGH:
             return "HIGH";
         default:
-            ALOGW("ToString() called with unsupported Prio");
+            ALOGW("[Service] ToString() called with unsupported Prio");
             return "";
     }
 }
@@ -478,7 +479,7 @@ const char* IplmService::ToString(const XResourceGroupPrio prio) {
         case XResourceGroupPrio::High:
             return "HIGH";
         default:
-            ALOGW("ToString() called with unsupported Prio");
+            ALOGW("[Service] ToString() called with unsupported Prio");
             return "";
     }
 }
@@ -486,11 +487,14 @@ const char* IplmService::ToString(const XResourceGroupPrio prio) {
 Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName,
                                                XResourceGroup _rg,
                                                XResourceGroupPrio _prio) {
-    ALOGI("Request called for service (%s) and RG (%s) and prio (%s)", lscName.c_str(), ToString(_rg), ToString(_prio));
+    ALOGI("[Service] Request called for service (%s) and RG (%s) and prio (%s)",
+          lscName.c_str(),
+          ToString(_rg),
+          ToString(_prio));
 
     // IHU is part of RG1 or RG3. Filter out requests for other RGs
     if (!IsRequestedRGValid(_rg)) {
-        ALOGW("unexpected resource group %hhu", _rg);
+        ALOGW("[Service] unexpected resource group %hhu", _rg);
         return false;
     }
 
@@ -500,7 +504,7 @@ Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName,
     // Look for registered service and update requested parameters corresponding to service
     ServicePrioMap::iterator it;
     if (!IsServiceRegistered(iplm_data_, lscName, it)) {
-        ALOGW("RG request from unregistered service %s", lscName.c_str());
+        ALOGW("[Service] RG request from unregistered service %s", lscName.c_str());
         return false;
     }
 
@@ -529,11 +533,11 @@ Return<bool> IplmService::requestResourceGroup(const hidl_string& lscName,
 }
 
 Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XResourceGroup _rg) {
-    ALOGI("Release called for service (%s) and RG (%s)", lscName.c_str(), ToString(_rg));
+    ALOGI("[Service] Release called for service (%s) and RG (%s)", lscName.c_str(), ToString(_rg));
 
     // IHU is part of RG1 or RG3. Filter out requests for other RGs
     if (!IsRequestedRGValid(_rg)) {
-        ALOGW("Unexpected resource group %hhu. Ignored", _rg);
+        ALOGW("[Service] Unexpected resource group %hhu. Ignored", _rg);
         return false;
     }
 
@@ -541,7 +545,7 @@ Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XReso
 
     ServicePrioMap::iterator it;
     if (!IsServiceRegistered(iplm_data_, lscName, it)) {
-        ALOGW("RG request from unregistered service (%s). Ignored", lscName.c_str());
+        ALOGW("[Service] RG request from unregistered service (%s). Ignored", lscName.c_str());
         return false;
     }
 
@@ -571,7 +575,7 @@ Return<bool> IplmService::releaseResourceGroup(const hidl_string& lscName, XReso
 }
 
 Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<IIplmCallback>& iIplmCallback) {
-    ALOGV("RegisterService: called for service (%s)", lscName.c_str());
+    ALOGV("[Service] RegisterService: called for service (%s)", lscName.c_str());
 
     // Guard with mutex
     std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
@@ -591,20 +595,20 @@ Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<I
             restartTemActivityTimer();
         }
     } else {
-        ALOGW("registration request from already registered service (%s) ", lscName.c_str());
+        ALOGW("[Service] registration request from already registered service (%s) ", lscName.c_str());
     }
 
     return true;
 }
 
 Return<bool> IplmService::unregisterService(const hidl_string& lscName) {
-    ALOGV("UnRegisterService: called for service (%s)", lscName.c_str());
+    ALOGV("[Service] UnRegisterService: called for service (%s)", lscName.c_str());
 
     {  // Guard list access with mutex
         std::lock_guard<std::mutex> lock(iplm_data_.registered_callbacks_mutex_);
         ServicePrioMap::iterator it;
         if (!IsServiceRegistered(iplm_data_, lscName, it)) {
-            ALOGW("UnRegistration request from a not registered service (%s)", lscName.c_str());
+            ALOGW("[Service] UnRegistration request from a not registered service (%s)", lscName.c_str());
             return false;
         }
 

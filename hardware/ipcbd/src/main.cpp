@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -24,7 +24,7 @@
 #include "service_manager.h"
 
 #undef LOG_TAG
-#define LOG_TAG "Ipcb.main"
+#define LOG_TAG "IpcbD"
 
 using namespace Connectivity;
 using namespace IpCmdTypes;
@@ -42,16 +42,16 @@ void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu) {
 
     // Wait for-ever, no need to stop since service is dependent on this to work
     std::string previousError;
-    ALOGI("Setup socket for ecu %u", ecu);
+    ALOGI("[Main] Setup socket for ecu %u", ecu);
     do {
         try {
             sock->setup(ecu);
-            ALOGV("Setup socket for Ecu %u successfully", ecu);
+            ALOGV("[Main] Setup socket for Ecu %u successfully", ecu);
             return;
         } catch (const SocketException& e) {
             if (e.what() != previousError) {
                 previousError = e.what();
-                ALOGE("Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
+                ALOGE("[Main] Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
             }
             usleep(sleep_time);
         }
@@ -63,7 +63,7 @@ void SigTermHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGTERM received...");
+    ALOGD("[Main] SIGTERM received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -73,14 +73,14 @@ void SigHupHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGHUP received...");
+    ALOGD("[Main] SIGHUP received...");
 }
 
 void SigIntHandler(int fd) {
     struct signalfd_siginfo sigdata;
     read(fd, &sigdata, sizeof(sigdata));
 
-    ALOGD("SIGINT received...");
+    ALOGD("[Main] SIGINT received...");
 
     IDispatcher::GetDefaultDispatcher().Stop();  // stop our own IDispatcher mainloop
     IPCThreadState::self()->stopProcess();       // Stop the binder
@@ -95,7 +95,7 @@ bool InitSignals() {
     if ((sigemptyset(&signal_set_term) < 0) || (sigemptyset(&signal_set_hup) < 0) ||
         (sigemptyset(&signal_set_int) < 0) || (sigaddset(&signal_set_term, SIGTERM) < 0) ||
         (sigaddset(&signal_set_hup, SIGHUP) < 0) || (sigaddset(&signal_set_int, SIGINT) < 0)) {
-        ALOGE("Failed to create signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to create signals: %s", strerror(errno));
         return false;
     }
 
@@ -103,7 +103,7 @@ bool InitSignals() {
     if ((sigprocmask(SIG_BLOCK, &signal_set_term, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_hup, nullptr) < 0) ||
         (sigprocmask(SIG_BLOCK, &signal_set_int, nullptr) < 0)) {
-        ALOGE("Failed to block signals: %s", strerror(errno));
+        ALOGE("[Main] Failed to block signals: %s", strerror(errno));
         return false;
     }
 
@@ -112,7 +112,7 @@ bool InitSignals() {
     int intfd = signalfd(-1, &signal_set_int, 0);
 
     if (termfd < 0 || hupfd < 0 || intfd < 0) {
-        ALOGE("signalfd failed: %s", strerror(errno));
+        ALOGE("[Main] signalfd failed: %s", strerror(errno));
         return false;
     }
 
@@ -129,7 +129,7 @@ bool InitSignals() {
 // MAIN
 int main(int argc, char* argv[]) {
     if (argc < 3) {
-        ALOGE("Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
+        ALOGE("[Main] Usage: ipcbd <service_name> <protocol> -optional: [ecu]"
               "\nExamples:\n 1. infotainment UDP\n"
               "\n2. iplm UDPB\n3. dim TCP DIM\n");
         return EXIT_FAILURE;
@@ -161,18 +161,18 @@ int main(int argc, char* argv[]) {
             setupSocket(sock, Message::ALL);
         } else if (protocol == "TCP") {
             if (argc < 4) {
-                ALOGE("Needs ECU name. Check .rc file");
+                ALOGE("[Main] Needs ECU name. Check .rc file");
                 return EXIT_FAILURE;
             }
             if (std::string(argv[3]) == "DIM") {
                 sock = std::make_shared<TcpSocket>(dispatcher, Message::Ecu::DIM);
                 transport.setSocket(sock.get());
             } else {
-                ALOGE("Only DIM is supported currently");
+                ALOGE("[Main] Only DIM is supported currently");
                 return EXIT_FAILURE;
             }
         } else {
-            ALOGE("Unknown protocol specified");
+            ALOGE("[Main] Unknown protocol specified");
             return EXIT_FAILURE;
         }
 
@@ -186,9 +186,9 @@ int main(int argc, char* argv[]) {
 
         joinRpcThreadpool();
 
-        ALOGI("exiting ...");
+        ALOGI("[Main] exiting ...");
     } catch (const SocketException& e) {
-        ALOGE("%s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
+        ALOGE("[Main] %s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
         return EXIT_FAILURE;
     }
 

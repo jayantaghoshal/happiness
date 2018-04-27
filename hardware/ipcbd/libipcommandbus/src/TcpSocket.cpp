@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -13,7 +13,7 @@
 #include <thread>
 #include "ipcommandbus/vcc_pdu_header.h"
 
-#define LOG_TAG "TCP_Socket"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -28,7 +28,7 @@ TcpSocket::TcpSocket(IDispatcher& dispatcher, Message::Ecu ecu, EcuIpMap ecu_ip_
             setup(ecu);
             is_connection_established = true;
         } catch (const SocketException& e) {
-            ALOGV("Error Msg: %s", e.what());
+            ALOGV("[TcpSocket] Error Msg: %s", e.what());
             std::this_thread::sleep_for(100ms);
         }
     }
@@ -45,7 +45,7 @@ void TcpSocket::setup(const Message::Ecu& ecu) {
                            ecu_ip_map_.end(),
                            [ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
     if (it == ecu_ip_map_.end()) {
-        ALOGD("No ECU");
+        ALOGD("[TcpSocket] No ECU");
         assert(false);
         return;
     }
@@ -81,7 +81,7 @@ void TcpSocket::setup(const Message::Ecu& ecu) {
     }
 
     peer_ecu_ = ecu;
-    ALOGD("Setting Handler");
+    ALOGD("[TcpSocket] Setting Handler");
     setHandler([this] { readEventHandler(); });
     return;
 }

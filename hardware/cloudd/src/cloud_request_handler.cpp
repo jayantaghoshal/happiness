@@ -10,7 +10,7 @@
 
 #include <IDispatcher.h>
 
-#define LOG_TAG "CloudD.RequestHandler"
+#define LOG_TAG "CloudD"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -42,7 +42,7 @@ CloudRequestHandler::CloudRequestHandler() : timer_id_{-1}, multi_{nullptr} {
     curl_version_info_data* data = curl_version_info(CURLVERSION_NOW);
 
     // TODO: Check version??
-    ALOGD("Version: %s\n", data->version);
+    ALOGD("[RequestHandler] Version: %s\n", data->version);
 
     multi_ = curl_multi_init();
 
@@ -58,7 +58,7 @@ CloudRequestHandler::~CloudRequestHandler() {
 }
 
 int CloudRequestHandler::SocketCallback(CURL* easy, curl_socket_t fd, int operation, void* user_data, void* s) {
-    ALOGV("sock_cb: socket=%d, what=%d, sockp=%p\n", fd, operation, s);
+    ALOGV("[RequestHandler] sock_cb: socket=%d, what=%d, sockp=%p\n", fd, operation, s);
 
     CloudRequestHandler* request_handler = static_cast<CloudRequestHandler*>(user_data);
 
@@ -69,7 +69,7 @@ int CloudRequestHandler::SocketCallback(CURL* easy, curl_socket_t fd, int operat
         IDispatcher::GetDefaultDispatcher().RemoveFd(fd);
     } else {
         if (!s) {
-            ALOGV("Adding data: %s\n", whatstr[operation]);
+            ALOGV("[RequestHandler] Adding data: %s\n", whatstr[operation]);
             IDispatcher::GetDefaultDispatcher().AddFd(
                     fd,
                     [request_handler, fd]() { return Perform(request_handler->GetMultiHandle(), fd); },
@@ -80,7 +80,7 @@ int CloudRequestHandler::SocketCallback(CURL* easy, curl_socket_t fd, int operat
 }
 
 int CloudRequestHandler::TimerCallback(CURLM* multi, long timeout_ms, void* user_data) {
-    ALOGV("multi_timer_cb: timeout_ms %ld\n", timeout_ms);
+    ALOGV("[RequestHandler] multi_timer_cb: timeout_ms %ld\n", timeout_ms);
 
     int code = CURLcode::CURLE_OK;
 
@@ -94,12 +94,12 @@ int CloudRequestHandler::TimerCallback(CURLM* multi, long timeout_ms, void* user
         /* update timer */
         *timer_id = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay(
                 std::chrono::milliseconds(timeout_ms), [multi]() { Perform(multi, CURL_SOCKET_TIMEOUT); });
-        ALOGV("Timer Set With Timer ID: %d\n", *timer_id);
+        ALOGV("[RequestHandler] Timer Set With Timer ID: %d\n", *timer_id);
     } else if (timeout_ms == 0) {
-        ALOGV("Timer Off immediately\n");
+        ALOGV("[RequestHandler] Timer Off immediately\n");
         code = Perform(request_handler->GetMultiHandle(), CURL_SOCKET_TIMEOUT);
     } else {
-        ALOGV("Timer aborted");
+        ALOGV("[RequestHandler] Timer aborted");
     }
 
     return code;
@@ -115,7 +115,7 @@ int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
         CURLMsg* curl_message = curl_multi_info_read(multi, &msgs_queue_out);
 
         if (curl_message && curl_message->msg == CURLMSG_DONE) {
-            ALOGV("Done %i\n", msgs_queue_out);
+            ALOGV("[RequestHandler] Done %i\n", msgs_queue_out);
 
             std::int32_t response_code = -1;
             int ret1 = curl_easy_getinfo(curl_message->easy_handle, CURLINFO_RESPONSE_CODE, &response_code);
@@ -126,12 +126,14 @@ int CloudRequestHandler::Perform(CURL* multi, curl_socket_t fd) {
             const CURLcode resultCode = curl_message->data.result;
 
             if (ret1 != CURLcode::CURLE_OK) {
-                ALOGW("Failed to get CURL response1: %d\n", ret1);
+                ALOGW("[RequestHandler] Failed to get CURL response1: %d\n", ret1);
             } else if (resultCode == CURLcode::CURLE_OPERATION_TIMEDOUT) {
-                ALOGV("Request timeout\n");
+                ALOGV("[RequestHandler] Request timeout\n");
                 cr->GetCallback()(599, "", "");
             } else if (resultCode != CURLcode::CURLE_OK) {
-                ALOGW("Request failed with error: %d, %s\n", resultCode, curl_easy_strerror(resultCode));
+                ALOGW("[RequestHandler] Request failed with error: %d, %s\n",
+                      resultCode,
+                      curl_easy_strerror(resultCode));
                 cr->GetCallback()(-1, "", "");
             } else {
                 cr->GetCallback()(response_code, *cr->GetResponseDataBuffer(), *cr->GetResponseHeaderBuffer());
@@ -152,9 +154,9 @@ int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_
         // Create directory if it doesn't exist already
         boost::filesystem::path file_name = cr->GetFilePath().c_str();
         boost::filesystem::path folder_name = file_name.parent_path();
-        ALOGD("Check if path exists: %s", folder_name.string().c_str());
+        ALOGD("[RequestHandler] Check if path exists: %s", folder_name.string().c_str());
         if (!boost::filesystem::exists(folder_name)) {
-            ALOGD("Directory does not exist, create it");
+            ALOGD("[RequestHandler] Directory does not exist, create it");
             boost::filesystem::create_directories(folder_name);
         }
 
@@ -164,7 +166,7 @@ int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_
             out_file.write(ptr, real_size);
             success = true;
         } else {
-            ALOGW("Failed to write to file: %s", cr->GetFilePath().c_str());
+            ALOGW("[RequestHandler] Failed to write to file: %s", cr->GetFilePath().c_str());
         }
         out_file.close();
     } else {
@@ -174,7 +176,7 @@ int CloudRequestHandler::WriteCallback(char* ptr, const size_t size, const size_
             write_buffer->append(ptr, real_size);
             success = true;
         } catch (...) {
-            ALOGW("Failed to write to request buffer");
+            ALOGW("[RequestHandler] Failed to write to request buffer");
         }
     }
 
@@ -194,7 +196,7 @@ int CloudRequestHandler::WriteHeaderCallback(char* ptr, const size_t size, const
         write_buffer->append(ptr, real_size);
         return real_size;
     } catch (...) {
-        ALOGW("Failed to write to request buffer");
+        ALOGW("[RequestHandler] Failed to write to request buffer");
     }
     return 0;
 }
@@ -206,7 +208,7 @@ int CloudRequestHandler::DebugCallback(CURL* handle, curl_infotype type, char* d
 
     switch (type) {
         case CURLINFO_TEXT:
-            ALOGD("== Info: %s", data);
+            ALOGD("[RequestHandler] == Info: %s", data);
         default: /* in case a new one is introduced to shock us */
             return 0;
 
@@ -230,7 +232,7 @@ int CloudRequestHandler::DebugCallback(CURL* handle, curl_infotype type, char* d
             break;
     }
 
-    ALOGD("%s %s", text, data);
+    ALOGD("[RequestHandler] %s %s", text, data);
 
     return 0;
 }
@@ -263,11 +265,11 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
         // TODO: Missing implementation. Add Data for PUT-request
         throw std::runtime_error("PUT request not implemented");
     } else if (request->GetRequestMethod() == CloudRequest::HttpMethod::POST) {
-        ALOGV("SendCloudRequest: [Method: POST, body %s]", request->GetRequestBody().c_str());
+        ALOGV("[RequestHandler] SendCloudRequest: [Method: POST, body %s]", request->GetRequestBody().c_str());
         verified_curl_easy_setopt(easy, CURLOPT_HTTPPOST, 1L);
         verified_curl_easy_setopt(easy, CURLOPT_COPYPOSTFIELDS, request->GetRequestBody().c_str());
     } else {
-        ALOGV("SendCloudRequest: [Method: GET]");
+        ALOGV("[RequestHandler] SendCloudRequest: [Method: GET]");
         verified_curl_easy_setopt(easy, CURLOPT_HTTPGET, 1L);
     }
     //
@@ -279,7 +281,7 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     if (!request->GetHeaderList().empty()) {
         struct curl_slist* chunk = NULL;
         for (auto p : request->GetHeaderList()) {
-            ALOGV("SendCloudRequest: [Header: %s]", p.c_str());
+            ALOGV("[RequestHandler] SendCloudRequest: [Header: %s]", p.c_str());
             chunk = curl_slist_append(chunk, p.c_str());
         }
         verified_curl_easy_setopt(easy, CURLOPT_HTTPHEADER, chunk);

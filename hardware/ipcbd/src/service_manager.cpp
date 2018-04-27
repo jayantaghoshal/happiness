@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -9,7 +9,7 @@
 #include "service_manager.h"
 
 #undef LOG_TAG
-#define LOG_TAG "IpcbD.manager"
+#define LOG_TAG "IpcbD"
 
 using namespace tarmac::eventloop;
 
@@ -21,9 +21,9 @@ ServiceManager::ServiceManager(std::string service_name, ::Connectivity::Message
     android::status_t status = registerAsService(service_name);  // TODO: Need name from main args here!
 
     if (status != android::OK) {
-        ALOGE("Failed to register Ipcb binder service: %d", status);
+        ALOGE("[ServiceManager] Failed to register Ipcb binder service: %d", status);
     } else {
-        ALOGI("Ipcb binder service register ok");
+        ALOGI("[ServiceManager] Ipcb binder service register ok");
     }
 }
 
@@ -33,10 +33,11 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID,
                                        OperationType operationType,
                                        const sp<IMessageCallback>& callbackHandler,
                                        subscribe_cb _hidl_cb) {
-    ALOGV("+ Ipcb::subscribeMessage");
+    ALOGV("[ServiceManager] + subscribeMessage");
 
     if (operationType == OperationType::RESPONSE || operationType == OperationType::ERROR) {
-        ALOGE("- Ipcb::subscribeMessage failed, provided OperationType not allowed (%d)", uint8_t(operationType));
+        ALOGE("[ServiceManager] - subscribeMessage failed, provided OperationType not allowed (%d)",
+              uint8_t(operationType));
         _hidl_cb({{false, ("Provided OperationType not allowed ") + std::to_string(uint8_t(operationType))}, 0});
         return Void();
     }
@@ -47,7 +48,7 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID,
             operationID,
             (IpCmdTypes::OperationType)operationType,
             [this, callbackHandler](Message& message, uint64_t& registeredReceiverId) {
-                ALOGD("+ Ipcb::registerMessageCallback called");
+                ALOGD("[ServiceManager] + registerMessageCallback called");
                 Msg msg;
                 msg.ecu = (vendor::volvocars::hardware::common::V1_0::Ecu)message.ecu;
                 msg.pdu.header.serviceID = message.pdu.header.service_id;
@@ -61,7 +62,7 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID,
                 // https://source.android.com/devices/architecture/hidl-cpp/functions
                 result.isOk();
                 if (result.isDeadObject()) {
-                    ALOGE("Callback function does not exist!");
+                    ALOGE("[ServiceManager] Callback function does not exist!");
                     messageDispatcher_.unregisterCallback(registeredReceiverId);
                     return false;
                 }
@@ -69,18 +70,18 @@ Return<void> ServiceManager::subscribe(uint16_t serviceID,
             });
 
     if (0 == subscriberId) {
-        ALOGW("- Ipcb::subscribeMessage (FAILED)");
+        ALOGW("[ServiceManager] - subscribeMessage (FAILED)");
         _hidl_cb({{false, "Could not subscribe, probably a subscriber already exists!"}, subscriberId});
         return Void();
     } else {
-        ALOGV("- Ipcb::subscribeMessage (SUCCESS)");
+        ALOGV("[ServiceManager] - subscribeMessage (SUCCESS)");
         _hidl_cb({{true, ""}, subscriberId});
         return Void();
     }
 }
 
 Return<void> ServiceManager::unsubscribe(uint64_t subscriberId, unsubscribe_cb _hidl_cb) {
-    ALOGV("Ipcb::unsubscribe");
+    ALOGV("[ServiceManager] unsubscribe");
 
     if (!messageDispatcher_.unregisterCallback(subscriberId)) {
         _hidl_cb({false, "Failed to unsubscribe"});
@@ -92,12 +93,12 @@ Return<void> ServiceManager::unsubscribe(uint64_t subscriberId, unsubscribe_cb _
 }
 
 Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryInfo, sendMessage_cb _hidl_cb) {
-    ALOGV("+ Ipcb::sendMessage");
+    ALOGV("[ServiceManager] + sendMessage");
 
     if ((OperationType)msg.pdu.header.operationType == OperationType::REQUEST ||
         (OperationType)msg.pdu.header.operationType == OperationType::SETREQUEST ||
         (OperationType)msg.pdu.header.operationType == OperationType::NOTIFICATION_REQUEST) {
-        ALOGE("- Ipcb::sendMessage failed, message with OperationType %d cannot be sent, use sendRequest()",
+        ALOGE("[ServiceManager] - sendMessage failed, message with OperationType %d cannot be sent, use sendRequest()",
               uint8_t(msg.pdu.header.operationType));
         _hidl_cb({false,
                   std::string("Message with OperationType " + std::to_string(uint8_t(msg.pdu.header.operationType)) +
@@ -122,7 +123,7 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGV(" Sending message (%04X.%04X) to %s",
+    ALOGV("[ServiceManager]  Sending message (%04X.%04X) to %s",
           message.pdu.header.service_id,
           message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
@@ -133,7 +134,7 @@ Return<void> ServiceManager::sendMessage(const Msg& msg, const RetryInfo& retryI
 
     messageDispatcher_.sendMessage(std::move(message), caller_data);
 
-    ALOGV("- Ipcb::sendMessage");
+    ALOGV("[ServiceManager] - sendMessage");
     _hidl_cb({true, ""});
     return Void();
 }
@@ -142,12 +143,12 @@ Return<void> ServiceManager::sendRequest(const Msg& msg,
                                          const RetryInfo& retryInfo,
                                          const sp<IResponseCallback>& callbackHandler,
                                          sendRequest_cb _hidl_cb) {
-    ALOGV("+ Ipcb::sendRequest");
+    ALOGV("[ServiceManager] + sendRequest");
 
     if ((OperationType)msg.pdu.header.operationType != OperationType::REQUEST &&
         (OperationType)msg.pdu.header.operationType != OperationType::SETREQUEST &&
         (OperationType)msg.pdu.header.operationType != OperationType::NOTIFICATION_REQUEST) {
-        ALOGE("- Ipcb::sendRequest failed, request with OperationType %d cannot be sent, use sendMessage()",
+        ALOGE("[ServiceManager] - sendRequest failed, request with OperationType %d cannot be sent, use sendMessage()",
               uint8_t(msg.pdu.header.operationType));
         _hidl_cb({false,
                   std::string("Request with OperationType " + std::to_string(uint8_t(msg.pdu.header.operationType)) +
@@ -173,7 +174,7 @@ Return<void> ServiceManager::sendRequest(const Msg& msg,
             // https://source.android.com/devices/architecture/hidl-cpp/functions
             result.isOk();
             if (result.isDeadObject()) {
-                ALOGE("Callback function does not exist!");
+                ALOGE("[ServiceManager] Callback function does not exist!");
                 return false;
             }
         } else {
@@ -185,7 +186,7 @@ Return<void> ServiceManager::sendRequest(const Msg& msg,
             // https://source.android.com/devices/architecture/hidl-cpp/functions
             result.isOk();
             if (result.isDeadObject()) {  // TODO: make a better error message here, maube unsubscribe?
-                ALOGE("Callback function does not exist!");
+                ALOGE("[ServiceManager] Callback function does not exist!");
                 return false;
             }
         }
@@ -209,7 +210,7 @@ Return<void> ServiceManager::sendRequest(const Msg& msg,
 
     message.retry_info = {retryInfo.overrideDefault, retryInfo.maxRetries, retryInfo.retryTimeoutMs};
 
-    ALOGV(" Sending message (%04X.%04X) to %s",
+    ALOGV("[ServiceManager]  Sending message (%04X.%04X) to %s",
           message.pdu.header.service_id,
           message.pdu.header.operation_id,
           Message::EcuStr(message.ecu));
@@ -217,7 +218,7 @@ Return<void> ServiceManager::sendRequest(const Msg& msg,
     // Send the request
     messageDispatcher_.sendMessage(std::move(message), caller_data);
 
-    ALOGV("- Ipcb::sendRequest");
+    ALOGV("[ServiceManager] - Ipcb::sendRequest");
     _hidl_cb({true, ""});
     return Void();
 }

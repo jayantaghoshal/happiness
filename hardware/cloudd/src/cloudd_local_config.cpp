@@ -1,12 +1,12 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include "cloudd_local_config.h"
 #include <vcc/localconfig.h>
 
-#define LOG_TAG "CloudD.lco0"
+#define LOG_TAG "CloudD"
 #include <cutils/log.h>
 
 namespace {

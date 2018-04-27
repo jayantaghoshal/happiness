@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include "ipcommandbus/socket.h"
 
-#define LOG_TAG "ipcb_socket"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -113,7 +113,7 @@ void Socket::setup(int domain, int type, int protocol) {
     dispatcher_.AddFd(socket_fd_, [this] {
         if (read_ready_cb_) read_ready_cb_();
     });
-    ALOGD("Socket created %d/%d/%d", domain, type, protocol);
+    ALOGD("[Socket] Socket created %d/%d/%d", domain, type, protocol);
 }
 
 void Socket::teardown() {

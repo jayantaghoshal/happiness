@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -8,7 +8,7 @@
 #include <vcc/localconfig.h>
 #include "ipcommandbus/IpCmdTypes.h"
 
-#define LOG_TAG "libipcb.localconfig"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 using namespace vcc;
@@ -54,11 +54,11 @@ void LocalconfigParameters::InitTimeoutValues() {
     lcfg_->TryGetValue(&defaultRespNumRetries_, "CONN_numberOfRetriesWFR");
     lcfg_->TryGetValue(&defaultRespMultiplier_, "CONN_increaseTimerValueWFR");
 
-    ALOGD("Ack: timeout: %lli retries: %i multiplier: %f\n",
+    ALOGD("[lco0] Ack: timeout: %lli retries: %i multiplier: %f\n",
           defaultAckTimeout_.count(),
           defaultAckNumRetries_,
           defaultAckMultiplier_);
-    ALOGD("Resp: timeout: %lli retires: %i multiplier: %f\n",
+    ALOGD("[lco0] Resp: timeout: %lli retires: %i multiplier: %f\n",
           defaultRespTimeout_.count(),
           defaultRespNumRetries_,
           defaultRespMultiplier_);
@@ -70,10 +70,10 @@ void LocalconfigParameters::InitNetworkPriority() {
         if (priority >= 0 && priority < 8) {
             networkControlPrio_ = priority;
         } else {
-            ALOGW("Network control prrioity level out of range, leaving to default");
+            ALOGW("[lco0] Network control prrioity level out of range, leaving to default");
         }
     } else {
-        ALOGE("Failed to read network control priority level from local config");
+        ALOGE("[lco0] Failed to read network control priority level from local config");
     }
 }
 

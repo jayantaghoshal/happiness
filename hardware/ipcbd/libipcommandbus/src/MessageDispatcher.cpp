@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -10,7 +10,7 @@
 
 #include "ipcommandbus/net_serializer.h"
 
-#define LOG_TAG "lipcb.MessageDispatcher"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -42,7 +42,7 @@ uint64_t MessageDispatcher::registerMessageCallback(IpCmdTypes::ServiceId servic
                                                     IpCmdTypes::OperationId operationId,
                                                     IpCmdTypes::OperationType operationType,
                                                     MessageCallback messageCb) {
-    ALOGD("Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'",
+    ALOGD("[MessageDispatcher] Register message callback for (0x%04X, 0x%04X, 0x%02X) '%s'",
           (unsigned int)serviceId,
           (unsigned int)operationId,
           (unsigned int)operationType,
@@ -86,14 +86,14 @@ bool MessageDispatcher::unregisterCallback(uint64_t registeredReceiverId) {
 }
 
 void MessageDispatcher::sendMessage(Message&& msg, std::shared_ptr<CallerData> pCallerData) {
-    ALOGD("Send message %s to %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
+    ALOGV("[MessageDispatcher] Send message %s to %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     {
         std::lock_guard<std::mutex> guard(m_msgQueueMutex);
         m_msgQueue.push(std::move(msg));
         const unsigned long size = m_msgQueue.size();
         if ((size > 300) && (size % 20 == 0)) {
-            ALOGW("Message queue exceedingly large, size: %lu ", size);
+            ALOGW("[MessageDispatcher] Message queue exceedingly large, size: %lu ", size);
         }
     }
 
@@ -108,12 +108,13 @@ void MessageDispatcher::sendMessage(Message&& msg, std::shared_ptr<CallerData> p
             if (m_requestsMap.find(senderHandleId) != m_requestsMap.end()) {
                 // ...Can't completely rule out that this may happen some time
                 //    due to using 8 bit 'global' sequence number...
-                ALOGW("There already is an outstanding request with sender handle id 0x%08X!", senderHandleId);
+                ALOGW("[MessageDispatcher] There already is an outstanding request with sender handle id 0x%08X!",
+                      senderHandleId);
             }
 
             m_requestsMap[senderHandleId] = pCallerData;
         } else {
-            ALOGW("Missing caller data for request for %s", Pdu::toString(msg.pdu).c_str());
+            ALOGW("[MessageDispatcher] Missing caller data for request for %s", Pdu::toString(msg.pdu).c_str());
         }
     }
 
@@ -123,7 +124,7 @@ void MessageDispatcher::sendMessage(Message&& msg, std::shared_ptr<CallerData> p
 }
 
 void MessageDispatcher::IPCBThread_sendPendingMessages(void) {
-    ALOGV("MessageDispatcher::IPCBThread_sendPendingMessages");
+    ALOGV("[MessageDispatcher] IPCBThread_sendPendingMessages");
 
     std::queue<Message> queueReadInMutex;
     {
@@ -139,7 +140,7 @@ void MessageDispatcher::IPCBThread_sendPendingMessages(void) {
 }
 
 bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
-    ALOGD("Incoming request %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
+    ALOGD("[MessageDispatcher] Incoming request %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     bool receiverExists = false;
     bool serviceAndOpExists = true;
@@ -150,11 +151,11 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
         // Find all receivers for the message
         std::vector<RegInfo> receivers = FindReceivers(msg);
         ALOGE_IF(receivers.size() > 1,
-                 "More than one receiver registered for request! This should not be possible, calling only first "
-                 "receiver!");
+                 "[MessageDispatcher] More than one receiver registered for request! This should not be possible, "
+                 "calling only first receiver!");
 
         if (1 == receivers.size()) {
-            ALOGV("MessageDispatcher::cbIncomingRequest, Request callback for service found");
+            ALOGV("[MessageDispatcher] cbIncomingRequest, Request callback for service found");
 
             // Indicate that we found at least one subscriber to this message
             receiverExists = true;
@@ -184,7 +185,7 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
     } else {
         if (serviceAndOpExists) {
             // The operation id is supported but we do not support requests.
-            ALOGW("No callback registered for service %s'. Responding 'invalid op. type'.",
+            ALOGW("[MessageDispatcher] No callback registered for service %s'. Responding 'invalid op. type'.",
                   Pdu::toString(msg.pdu).c_str());
 
             m_transport->sendError(msg.ecu,
@@ -193,7 +194,7 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
                                    static_cast<std::uint16_t>(msg.pdu.header.operation_type));
         } else if (serviceExists) {
             // The operation id is not supported at all (for any operation type).
-            ALOGW("No callback registered for service %s. Responding 'invalid op. id'.",
+            ALOGW("[MessageDispatcher] No callback registered for service %s. Responding 'invalid op. id'.",
                   Pdu::toString(msg.pdu).c_str());
 
             m_transport->sendError(msg.ecu,
@@ -201,7 +202,7 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
                                    ITransportServices::ErrorCode::INVALID_OPERATION_ID,
                                    static_cast<std::uint16_t>(msg.pdu.header.operation_id));
         } else {
-            ALOGW("No callback registered for service %s. Responding 'invalid service id'.",
+            ALOGW("[MessageDispatcher] No callback registered for service %s. Responding 'invalid service id'.",
                   Pdu::toString(msg.pdu).c_str());
 
             m_transport->sendError(msg.ecu,
@@ -215,10 +216,11 @@ bool MessageDispatcher::IPCBThread_cbIncomingRequest(Message& msg) {
 
 void MessageDispatcher::AppThread_cbIncomingRequest(RegInfo ri, Message& msg) {
     if (ri.messageCb) {
-        ALOGD("MessageDispatcher::AppThread_cbIncomingRequest, Call messageCb()");
+        ALOGD("[MessageDispatcher] AppThread_cbIncomingRequest, Call messageCb()");
         if (!ri.messageCb(msg, ri.registeredReceiverId)) {
             // The operation id is supported but we do not support requests.
-            ALOGW("Application registered to handle incoming request died (%s). Responding 'invalid op. type'.",
+            ALOGW("[MessageDispatcher] Application registered to handle incoming request died (%s). Responding "
+                  "'invalid op. type'.",
                   Pdu::toString(msg.pdu).c_str());
 
             m_transport->sendError(msg.ecu,
@@ -238,7 +240,9 @@ void MessageDispatcher::IPCBThread_cbIncomingNotification(Message& msg) {
 }
 
 void MessageDispatcher::Appthread_cbIncomingNotification(Message& msg) {
-    ALOGD("Incoming notification %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
+    ALOGD("[MessageDispatcher] Incoming notification %s from %s",
+          Pdu::toString(msg.pdu).c_str(),
+          Message::EcuStr(msg.ecu));
 
     {  // Mutex scope
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
@@ -253,12 +257,13 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message& msg) {
 
         // If there were at least one receiver, report "No invalid data" to diagnostics
         if (receivers.size() != 0) {
-            ALOGV("MessageDispatcher::cbIncomingNotification, Notification callback for service found");
+            ALOGV("[MessageDispatcher] cbIncomingNotification, Notification callback for service found");
             assert(m_diagnostics);
             m_diagnostics->SetInvalidData(msg.ecu, false);
         } else  // If there were no receivers, report "Invalid data" to diagnostics
         {
-            ALOGW("No notification callback registered for service %s", Pdu::toString(msg.pdu).c_str());
+            ALOGW("[MessageDispatcher] No notification callback registered for service %s",
+                  Pdu::toString(msg.pdu).c_str());
 
             // NOTE! We shall NOT send error message on ip bus here!
             //       Ip Command Protocol specification says [VCC IP Prot: 0037/;-1]
@@ -273,7 +278,7 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message& msg) {
 }
 
 void MessageDispatcher::IPCBThread_cbIncomingResponse(Message& msg) {
-    ALOGD("Incoming response %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
+    ALOGD("[MessageDispatcher] Incoming response %s from %s", Pdu::toString(msg.pdu).c_str(), Message::EcuStr(msg.ecu));
 
     wakeUpApplicationThread.Enqueue([ this, m2 = msg ]() mutable { AppThread_cbIncomingResponse(m2); });
 }
@@ -308,7 +313,8 @@ void MessageDispatcher::AppThread_cbIncomingResponse(Message& msg) {
         Message::Ecu ecu = msg.ecu;
         wakeUpApplicationThread.Enqueue([this, ecu]() { m_diagnostics->SetInvalidData(ecu, true); });
     } else {
-        ALOGW("Received response with sender handle id 0x%08X without finding caller data from request (timed out?)",
+        ALOGW("[MessageDispatcher] Received response with sender handle id 0x%08X without finding caller data from "
+              "request (timed out?)",
               msg.pdu.header.sender_handle_id);
         // There should be no point in service specific handling in case we don't (any longer) know which request
         // the response maps to.
@@ -321,7 +327,7 @@ void MessageDispatcher::IPCBThread_cbIncomingError(Message& msg, ITransportServi
 }
 
 void MessageDispatcher::AppThread_cbIncomingError(Message& msg, ITransportServices::ErrorType eType) {
-    ALOGD("Incoming error %u,  %s from %s",
+    ALOGD("[MessageDispatcher] Incoming error %u,  %s from %s",
           static_cast<uint32_t>(eType),
           Pdu::toString(msg.pdu).c_str(),
           Message::EcuStr(msg.ecu));
@@ -341,12 +347,14 @@ void MessageDispatcher::AppThread_cbIncomingError(Message& msg, ITransportServic
         }
 
         if (pCallerData->responseCallback(msg)) {
-            ALOGV("MessageDispatcher::cbIncomingError, Reponse callback for service found");
+            ALOGV("[MessageDispatcher] cbIncomingError, Reponse callback for service found");
         } else {
-            ALOGW("No error/response callback registered for service %s", Pdu::toString(msg.pdu).c_str());
+            ALOGW("[MessageDispatcher] No error/response callback registered for service %s",
+                  Pdu::toString(msg.pdu).c_str());
         }
     } else {
-        ALOGW("Received error / timeout with sender handle id 0x%08X without finding caller data from request (timed "
+        ALOGW("[MessageDispatcher] Received error / timeout with sender handle id 0x%08X without finding caller data "
+              "from request (timed "
               "out?)",
               msg.pdu.header.sender_handle_id);
         // There should be no point in service specific handling in case we don't (any longer) know which request
@@ -356,7 +364,9 @@ void MessageDispatcher::AppThread_cbIncomingError(Message& msg, ITransportServic
 }
 
 void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& errorReturn) {
-    ALOGD("DecodeGenericError %s (size: %zu)", Pdu::toString(msg.pdu).c_str(), msg.pdu.payload.size());
+    ALOGD("[MessageDispatcher] DecodeGenericError %s (size: %zu)",
+          Pdu::toString(msg.pdu).c_str(),
+          msg.pdu.payload.size());
 
     // NOTE! Not explicitly mentioned in specification, but since errorInfo is an optional element,
     //       the ASN encoding does in fact use an initial boolean byte to indicate whether errorInfo is included or not.
@@ -370,7 +380,7 @@ void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& 
     errorReturn.errorInfo = 0;
 
     if (msg.pdu.payload.size() < 1) {
-        ALOGI("Failed to decode error details, payload is too short.");
+        ALOGI("[MessageDispatcher] Failed to decode error details, payload is too short.");
         return;
     }
 
@@ -384,11 +394,12 @@ void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& 
             uint16_t errInfo = static_cast<uint16_t>((errInfoHi << 13u) | (errInfoMi << 5u) | errInfoLo);
             errorReturn.errorInfo = errInfo;
         } else {
-            ALOGI("Failed to decode service specific info from error message, payload is too short.");
+            ALOGI("[MessageDispatcher] Failed to decode service specific info from error message, payload is too "
+                  "short.");
         }
     }
 
-    ALOGW("DecodeGenericError: error: 0x%X-%d:0x%X for %s, byte0 = 0x%02x'",
+    ALOGW("[MessageDispatcher] DecodeGenericError: error: 0x%X-%d:0x%X for %s, byte0 = 0x%02x'",
           errorReturn.errorCode,
           errorReturn.exists__optional__errorInfo,
           errorReturn.errorInfo,

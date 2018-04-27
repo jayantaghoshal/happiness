@@ -1,18 +1,18 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include "cloud_request.h"
 
-#define LOG_TAG "CloudD.request"
+#define LOG_TAG "CloudD"
 #include <cutils/log.h>
 
 namespace Connectivity {
 
 bool CloudRequest::SetCurlHandle(CURL* curl_handle) {
     if (curl_handle_) {
-        ALOGW("Trying to set a null pointer as curl handle");
+        ALOGW("[Request] Trying to set a null pointer as curl handle");
         return false;
     }
     curl_handle_ = curl_handle;
@@ -31,7 +31,7 @@ void CloudRequest::SetURL(std::string url) {
             positions.push_back(pos);
             pos = url.find(http, pos + 1);
             use_https_ = false;
-            ALOGV("use_https false");
+            ALOGV("[Request] use_https false");
         }
 
         pos = url.find(https, 0);
@@ -39,7 +39,7 @@ void CloudRequest::SetURL(std::string url) {
             positions.push_back(pos);
             pos = url.find(https, pos + 1);
             use_https_ = true;
-            ALOGV("use_https true");
+            ALOGV("[Request] use_https true");
         }
 
         if (positions.empty() || (positions.size() > 1) ||
@@ -48,7 +48,7 @@ void CloudRequest::SetURL(std::string url) {
         } else {
             // To validate an URL is extremely complex and consumes enormous resources, so lets not?
             url_ = url;
-            ALOGV("url_ = %s", url_.c_str());
+            ALOGV("[Request] url_ = %s", url_.c_str());
         }
 
     } else {

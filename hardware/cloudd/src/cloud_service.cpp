@@ -12,7 +12,7 @@
 #include <future>
 #include <regex>
 
-#define LOG_TAG "CloudD.service"
+#define LOG_TAG "CloudD"
 #include <cutils/log.h>
 
 namespace Connectivity {
@@ -28,10 +28,10 @@ bool CloudService::Initialize() {
     // Subscribe to ipcbd
     android::status_t status = ICloudConnection::registerAsService();
     if (status != android::OK) {
-        ALOGW("Failed to register Http binder service: %d", status);
+        ALOGW("[Service] Failed to register Http binder service: %d", status);
         return false;
     } else {
-        ALOGV("Http binder service register ok");
+        ALOGV("[Service] Http binder service register ok");
     }
     return FetchEntryPoint();
 }
@@ -41,9 +41,9 @@ bool CloudService::FetchEntryPoint() {
 
     entry_point_fetcher_.WhenResultAvailable([&, lcfg_entrypoint_url](const EntryPointParser::EntryPoint& entry_point) {
         if (entry_point.host.empty()) {
-            ALOGW("Entry point URL is empty, what do?");
+            ALOGW("[Service] Entry point URL is empty, what do?");
         } else {
-            ALOGV("Cloud daemon received entry point");
+            ALOGV("[Service] Cloud daemon received entry point");
         }
 
         size_t pos = lcfg_entrypoint_url.find("://");
@@ -51,14 +51,15 @@ bool CloudService::FetchEntryPoint() {
         if (pos != std::string::npos) {
             protocol = lcfg_entrypoint_url.substr(0, pos + 3);
         } else {
-            ALOGW("CNEP URL %s doesn't contain a protocol. Using 'https' as default.", lcfg_entrypoint_url.c_str());
+            ALOGW("[Service] CNEP URL %s doesn't contain a protocol. Using 'https' as default.",
+                  lcfg_entrypoint_url.c_str());
             protocol = "https://";
         }
 
         cep_url_ = protocol + entry_point.host;
         cep_port_ = entry_point.port;
 
-        ALOGD("CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
+        ALOGD("[Service] CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
 
         state_ = ConnectionState::CONNECTED;
 
@@ -67,7 +68,7 @@ bool CloudService::FetchEntryPoint() {
     try {
         entry_point_fetcher_.Fetch(lcfg_entrypoint_url);
     } catch (std::exception& e) {
-        ALOGE("Failed to fetch entry point: %s", e.what());
+        ALOGE("[Service] Failed to fetch entry point: %s", e.what());
         return false;
     }
 
@@ -86,7 +87,7 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
                                             {}};
 
     if (!header_strings.empty()) {
-        ALOGW("TODO: Do we want to include status and code in header? [%s]", header_strings[0].c_str());
+        ALOGW("[Service] TODO: Do we want to include status and code in header? [%s]", header_strings[0].c_str());
     }
 
     std::vector<HttpHeaderField> http_headers;
@@ -129,11 +130,11 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri,
                                         const HttpHeaders& headers,
                                         uint32_t timeout,
                                         doGetRequest_cb _hidl_cb) {
-    ALOGV("doGetRequest with uri: %s", uri.c_str());
+    ALOGV("[Service] doGetRequest with uri: %s", uri.c_str());
 
     if (state_ != ConnectionState::CONNECTED) {
-        ALOGW("Illegal call: CEP URL not fetch yet.");
-        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        ALOGW("[Service] Illegal call: CEP URL not fetch yet.");
+        ALOGE("[Service] TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
         Response error;
         error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
         _hidl_cb(error);
@@ -149,7 +150,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri,
     } else {
         url = url + "/" + path;
     }
-    ALOGV("doGetRequest url: %s", url.c_str());
+    ALOGV("[Service] doGetRequest url: %s", url.c_str());
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
 
@@ -174,7 +175,7 @@ Return<void> CloudService::doGetRequest(const hidl_string& uri,
         cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
 
     } catch (const std::exception& e) {
-        ALOGW("Failed to initiate cloud request: %s", e.what());
+        ALOGW("[Service] Failed to initiate cloud request: %s", e.what());
         Response error;
         error.httpResponse = 400;  // Bad request.
         _hidl_cb(error);
@@ -199,10 +200,10 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri,
                                          const hidl_string& body,
                                          uint32_t timeout,
                                          doPostRequest_cb _hidl_cb) {
-    ALOGV("doPostRequest with uri: %s and body: %s", uri.c_str(), body.c_str());
+    ALOGV("[Service] doPostRequest with uri: %s and body: %s", uri.c_str(), body.c_str());
     if (state_ != ConnectionState::CONNECTED) {
-        ALOGW("Illegal call: CEP URL not fetch yet.");
-        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        ALOGW("[Service] Illegal call: CEP URL not fetch yet.");
+        ALOGE("[Service] TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
         Response error;
         error.httpResponse = 600;  // Made up HTTP code. This one stands for "Not Ready Yet". I.E., no CEP fetched.
         _hidl_cb(error);
@@ -219,7 +220,7 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri,
         url = url + "/" + path;
     }
 
-    ALOGV("doPostRequest url: %s", url.c_str());
+    ALOGV("[Service] doPostRequest url: %s", url.c_str());
 
     std::promise<Response> promise;
     std::future<Response> future_response = promise.get_future();
@@ -247,7 +248,7 @@ Return<void> CloudService::doPostRequest(const hidl_string& uri,
         cloud_request_handler_->SendCloudRequest(cr);  // May throw Runtime Exception if curl fails to set options.
 
     } catch (const std::exception& e) {
-        ALOGW("Failed to initiate cloud request: %s", e.what());
+        ALOGW("[Service] Failed to initiate cloud request: %s", e.what());
         Response error;
         error.httpResponse = 400;  // Bad request.
         _hidl_cb(error);
@@ -272,11 +273,11 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri,
                                            const hidl_string& file_path,
                                            uint32_t timeout,
                                            const android::sp<ICloudConnectionDownloadResponseCallback>& callback) {
-    ALOGV("downloadRequest with uri: %s and file_path: %s", uri.c_str(), file_path.c_str());
+    ALOGV("[Service] downloadRequest with uri: %s and file_path: %s", uri.c_str(), file_path.c_str());
 
     if (state_ != ConnectionState::CONNECTED) {
-        ALOGW("Illegal call: CEP URL not fetch yet.");
-        ALOGE("TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
+        ALOGW("[Service] Illegal call: CEP URL not fetch yet.");
+        ALOGE("[Service] TODO: Fix HIDL interface to manage calls before CEP URL is fetched...");
         return Void();
     }
 
@@ -289,7 +290,7 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri,
     } else {
         url = url + "/" + path;
     }
-    ALOGV("downloadRequest url: %s", url.c_str());
+    ALOGV("[Service] downloadRequest url: %s", url.c_str());
 
     try {
         download_request_ = std::make_shared<CloudRequest>(cert_handler_);
@@ -313,7 +314,7 @@ Return<void> CloudService::downloadRequest(const hidl_string& uri,
                 download_request_);  // May throw Runtime Exception if curl fails to set options.
 
     } catch (const std::exception& e) {
-        ALOGW("Failed to initiate cloud request: %s", e.what());
+        ALOGW("[Service] Failed to initiate cloud request: %s", e.what());
     }
 
     return Void();

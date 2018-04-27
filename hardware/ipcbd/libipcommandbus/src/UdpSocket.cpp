@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -11,7 +11,7 @@
 #include <cassert>
 #include <string>
 
-#define LOG_TAG "UDP_Socket"
+#define LOG_TAG "libipcb"
 #include <cutils/log.h>
 
 using namespace tarmac::eventloop;
@@ -40,7 +40,7 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
                 });
 
         if (it == ecu_ip_map_.end()) {
-            ALOGW("IHU not found in ECU map!");
+            ALOGW("[UdpSocket] IHU not found in ECU map!");
             return;
         }
 
@@ -56,7 +56,7 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
                     });
 
             if (it == ecu_ip_map_.end()) {
-                ALOGW("\"ALL\" (broadcast) not found in ECU map!");
+                ALOGW("[UdpSocket] \"ALL\" (broadcast) not found in ECU map!");
                 return;
             }
 
@@ -70,7 +70,7 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
         sa.sin_family = AF_INET;
         sa.sin_port = htons(local_port);
 
-        ALOGD("UdpSocket setup %s:%d - ecu %d", local_ip.c_str(), local_port, ecu);
+        ALOGD("[UdpSocket] UdpSocket setup %s:%d - ecu %d", local_ip.c_str(), local_port, ecu);
 
         if (1 != inet_pton(AF_INET, local_ip.c_str(), &sa.sin_addr)) {
             throw SocketException(errno, "Address not in correct format");
@@ -84,7 +84,7 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
 
         ecu_ = ecu;
     } else {
-        ALOGE("Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : "
+        ALOGE("[UdpSocket] Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : "
               "%d)",
               ecu);
     }
@@ -106,20 +106,20 @@ void UdpSocket::read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) {
 void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) {
     // Protect from trying to send to a bad ECU
     if (Message::Ecu::UNKNOWN == ecu) {
-        ALOGE("Can not send to UNKNOWN socket!");
+        ALOGE("[UdpSocket] Can not send to UNKNOWN socket!");
         return;
     }
 
     // Protect from trying to send to self
     if (Message::Ecu::IHU == ecu) {
-        ALOGE("Can not send to self!");
+        ALOGE("[UdpSocket] Can not send to self!");
         return;
     }
 
     // Protect from trying to send broadcast from normal socket
     if (Message::Ecu::ALL == ecu) {
         if (Message::Ecu::ALL != ecu_) {
-            ALOGE("Can not send broadcast on ordinary socket! (socket set up for %d "
+            ALOGE("[UdpSocket] Can not send broadcast on ordinary socket! (socket set up for %d "
                   "and trying to send to %d",
                   ecu_,
                   ecu);
@@ -131,7 +131,7 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
     // Protect from trying to send normal message from broadcast socket
     if (Message::Ecu::ALL != ecu) {
         if (Message::Ecu::ALL == ecu_) {
-            ALOGE("Can not send normal packet on broadcast socket! (socket set up "
+            ALOGE("[UdpSocket] Can not send normal packet on broadcast socket! (socket set up "
                   "for %d and trying to send to %d",
                   ecu_,
                   ecu);
@@ -216,7 +216,7 @@ void UdpSocket::readEventHandler() {
     char buf[INET_ADDRSTRLEN];
     const char* const bufConst = inet_ntop(AF_INET, &sa_out.sin_addr, buf, INET_ADDRSTRLEN);
     if (bufConst == nullptr || bufConst != buf) {
-        ALOGW("Address not in correct format");
+        ALOGW("[UdpSocket] Address not in correct format");
         return;
     }
 

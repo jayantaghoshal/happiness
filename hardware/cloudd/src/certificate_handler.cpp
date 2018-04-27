@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -19,7 +19,7 @@
 #include <sstream>
 #include <string>
 
-#define LOG_TAG "CloudD.CertHandler"
+#define LOG_TAG "CloudD"
 #include <cutils/log.h>
 
 namespace Connectivity {
@@ -139,20 +139,20 @@ EVP_PKEYUnqPtr EVP_PKeyNull() { return EVP_PKEYUnqPtr(nullptr, EVP_PKEY_free); }
 X509UnqPtr CertFromPem(std::string pem_data) {
     BIOUnqPtr cert_bio(BIO_new(BIO_s_mem()), BIO_free);
     if (nullptr == cert_bio) {
-        ALOGE("Could not create new BIO buffer");
+        ALOGE("[CertHandler] Could not create new BIO buffer");
         return X509Null();
     }
 
     // Write the cert data to the BIO buffer
     if (BIO_write(cert_bio.get(), static_cast<void*>(&pem_data[0]), pem_data.size()) <= 0) {
-        ALOGE("Could not write data to BIO structure");
+        ALOGE("[CertHandler] Could not write data to BIO structure");
         return X509Null();
     }
 
     // Read the cert from BIO
     X509UnqPtr cert = X509UnqPtr(PEM_read_bio_X509_AUX(cert_bio.get(), NULL, NULL, NULL), X509_free);
     if (nullptr == cert) {
-        ALOGE("Could not load certificate from BIO");
+        ALOGE("[CertHandler] Could not load certificate from BIO");
         return X509Null();
     }
     return cert;
@@ -161,13 +161,13 @@ X509UnqPtr CertFromPem(std::string pem_data) {
 EVP_PKEYUnqPtr KeyFromPem(std::string pem_data) {
     BIOUnqPtr key_data(BIO_new(BIO_s_mem()), BIO_free);
     if (nullptr == key_data) {
-        ALOGE("Could not create new mem buffer");
+        ALOGE("[CertHandler] Could not create new mem buffer");
         return EVP_PKeyNull();
     }
 
     // Insert the key data in the BIO structure
     if (BIO_write(key_data.get(), static_cast<void*>(&pem_data[0]), pem_data.size()) <= 0) {
-        ALOGE("Could not write to BIO");
+        ALOGE("[CertHandler]Could not write to BIO");
         return EVP_PKeyNull();
     }
 
@@ -175,7 +175,7 @@ EVP_PKEYUnqPtr KeyFromPem(std::string pem_data) {
     EVP_PKEYUnqPtr private_key =
             EVP_PKEYUnqPtr(PEM_read_bio_PrivateKey(key_data.get(), nullptr, nullptr, nullptr), EVP_PKEY_free);
     if (nullptr == private_key) {
-        ALOGE("Could not read memory as EC private key");
+        ALOGE("[CertHandler] Could not read memory as EC private key");
         return EVP_PKeyNull();
     }
 
@@ -190,27 +190,27 @@ CertHandler::CertHandler(const std::string& client_cert_pem,
     if (!ca_cert.empty()) {
         m_ca_cert = CertFromPem(ca_cert);
         if (nullptr == m_ca_cert) {
-            ALOGE("Could not load CA cert");
+            ALOGE("[CertHandler] Could not load CA cert");
         } else {
-            ALOGV("CA cert set up");
+            ALOGV("[CertHandler] CA cert set up");
         }
     } else {
-        ALOGW("No CA cert data available");
+        ALOGW("[CertHandler] No CA cert data available");
     }
 
     m_client_cert = CertFromPem(client_cert_pem);
     if (nullptr == m_client_cert) {
-        ALOGE("Could not load client cert");
+        ALOGE("[CertHandler] Could not load client cert");
     } else {
-        ALOGV("Client cert set up");
+        ALOGV("[CertHandler] Client cert set up");
     }
 
     // Set up the static key
     m_client_key = KeyFromPem(client_key_pem);
     if (nullptr == m_client_key) {
-        ALOGE("Could not load client key");
+        ALOGE("[CertHandler] Could not load client key");
     } else {
-        ALOGV("Client key set up");
+        ALOGV("[CertHandler] Client key set up");
     }
 }
 
@@ -227,25 +227,25 @@ CertificateValidationStatus CertHandler::OnCreateOpenSslContext(void* ssl_ctx) n
     EVP_PKEY* client_key = GetClientKey();
 
     if (nullptr == client_cert) {
-        ALOGE("Could not fetch client cert");
+        ALOGE("[CertHandler] Could not fetch client cert");
         return CertificateValidationStatus::Error;
     }
     if (nullptr == client_key) {
-        ALOGE("Could not fetch client key");
+        ALOGE("[CertHandler] Could not fetch client key");
         return CertificateValidationStatus::Error;
     }
 
     if (nullptr == ca_cert) {
-        ALOGW("No CA certificate available");
+        ALOGW("[CertHandler] No CA certificate available");
         return CertificateValidationStatus::Error;
     } else {
-        ALOGD("Setting CA cert");
+        ALOGD("[CertHandler] Setting CA cert");
 
         // better to use https://www.openssl.org/docs/man1.0.2/ssl/SSL_CTX_load_verify_locations.html if CA is in a file
         // instead of hard coded?
         X509_STORE* store = SSL_CTX_get_cert_store(ctx);
         if (X509_STORE_add_cert(store, ca_cert) == 0) {
-            ALOGE("Could not add CA-certificate");
+            ALOGE("[CertHandler] Could not add CA-certificate");
             return CertificateValidationStatus::Error;
         }
     }
@@ -255,12 +255,12 @@ CertificateValidationStatus CertHandler::OnCreateOpenSslContext(void* ssl_ctx) n
     //    The information is passed to SSL objects ssl created from ctx with SSL_new(3) by copying,
     //    so that changes applied to ctx do not propagate to already existing SSL objects."
     if (!SSL_CTX_use_certificate(ctx, client_cert)) {
-        ALOGE("Could not assign client cert to TLS layer");
+        ALOGE("[CertHandler] Could not assign client cert to TLS layer");
         return CertificateValidationStatus::Error;
     }
 
     if (!SSL_CTX_use_PrivateKey(ctx, client_key)) {
-        ALOGE("Could not assign client key to TLS layer");
+        ALOGE("[CertHandler] Could not assign client key to TLS layer");
         return CertificateValidationStatus::Error;
     }
 
@@ -279,7 +279,7 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
 
     std::unique_ptr<SSL_CTX, decltype(ctx_deleter)> ctx_handle(SSL_CTX_new(SSLv3_server_method()), ctx_deleter);
     if (!ctx_handle) {
-        ALOGE("new SSL_CTX object failed (%s)", ERR_error_string(ERR_get_error(), nullptr));
+        ALOGE("[CertHandler] new SSL_CTX object failed (%s)", ERR_error_string(ERR_get_error(), nullptr));
         return OcspRetCode::NetworkFailure;
     }
 
@@ -292,7 +292,7 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
     hints.ai_socktype = SOCK_STREAM;
 
     if ((rv = getaddrinfo(server_url.c_str(), "https", &hints, &servinfo)) != 0) {
-        ALOGE("Unable to identify internet host for OCSP, error code %d", rv);
+        ALOGE("[CertHandler] Unable to identify internet host for OCSP, error code %d", rv);
         return OcspRetCode::NetworkFailure;
     }
 
@@ -314,7 +314,7 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
 
     if (p == NULL) {
         // looped off the end of the list with no connection
-        ALOGE("Failed to connect to %s for OCSP URI", server_url.c_str());
+        ALOGE("[CertHandler] Failed to connect to %s for OCSP URI", server_url.c_str());
         return OcspRetCode::NetworkFailure;
     }
 
@@ -328,23 +328,25 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
     if (ssl_handle.get()) {
         int ret_set_fd = SSL_set_fd(ssl_handle.get(), sockfd.sockfd_);
         if (ret_set_fd == 0) {
-            ALOGE("SSL set failed for OCSP socket fd (%s)", ERR_error_string(ERR_get_error(), nullptr));
+            ALOGE("[CertHandler] SSL set failed for OCSP socket fd (%s)", ERR_error_string(ERR_get_error(), nullptr));
             return OcspRetCode::NetworkFailure;
         }
 
         int err = SSL_connect(ssl_handle.get());
-        ALOGW("Typically returns error code 0 and is still is connected. This is not according to SSL documentation.");
+        ALOGW("[CertHandler] Typically returns error code 0 and is still is connected. This is not according to SSL "
+              "documentation.");
         // Typically returns error code 0 and is still is connected. This is not according to SSL documentation.
         if (err >= 0) {
             X509* server_cert = SSL_get_peer_certificate(ssl_handle.get());
             if (!server_cert) {
-                ALOGE("Unable to get certificate from peer (%s)", ERR_error_string(ERR_get_error(), nullptr));
+                ALOGE("[CertHandler] Unable to get certificate from peer (%s)",
+                      ERR_error_string(ERR_get_error(), nullptr));
                 return OcspRetCode::NetworkFailure;
             }
             stack_st_ACCESS_DESCRIPTION* values = reinterpret_cast<stack_st_ACCESS_DESCRIPTION*>(
                     X509_get_ext_d2i(server_cert, NID_info_access, NULL, NULL));
             if (!values) {
-                ALOGE("Unable to extract values from certificate");
+                ALOGE("[CertHandler] Unable to extract values from certificate");
                 X509_free(server_cert);
                 return OcspRetCode::OcspFailure;
             }
@@ -364,14 +366,14 @@ OcspRetCode CertHandler::GetOcspUrlFromServerCert(const std::string& server_url,
             AUTHORITY_INFO_ACCESS_free(values);
             X509_free(server_cert);
         } else {
-            ALOGE("Unable to SSL connect to VCC sensus server (ret code %d) (%s)",
+            ALOGE("[CertHandler] Unable to SSL connect to VCC sensus server (ret code %d) (%s)",
                   err,
                   ERR_error_string(ERR_get_error(), nullptr));
             return OcspRetCode::Ok;
         }
     }
 
-    ALOGE("SSL new failed for OCSP (%s)", ERR_error_string(ERR_get_error(), nullptr));
+    ALOGE("[CertHandler] SSL new failed for OCSP (%s)", ERR_error_string(ERR_get_error(), nullptr));
     return OcspRetCode::NetworkFailure;
 }
 }
