@@ -6,11 +6,10 @@
 package com.volvocars.vehiclefunctions.assistance.delegates;
 
 import android.car.CarNotConnectedException;
-import android.car.hardware.CarPropertyValue;
 import android.util.Log;
 
-import com.volvocars.vehiclefunctions.assistance.functions.ThreeStateFunction;
-import com.volvocars.vendorextension.VendorExtensionCallBack;
+import com.volvocars.vehiclefunctions.assistance.functions.VHalDelegate;
+import com.volvocars.vehiclefunctions.assistance.functions.FunctionViewHolder;
 import com.volvocars.vendorextension.VendorExtensionClient;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,10 +17,10 @@ import java.util.concurrent.CompletableFuture;
 /*
  * VhalThreeStateDelegate used for VHAL properties
  * Function Delegates encapsulate the logic to communicate with a vehicle function
- * API and then propagate changes back to the UI by calling setUiState().
+ * API and then propagate changes back to the UI by calling setUiValue().
  * Dependencies should be injected.
  */
-public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
+public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
     public static final String TAG = VhalThreeStateDelegate.class.getSimpleName();
 
     private static final int MODE_1_DISABLED = 0b00011011;  // 0001 1011 = 16 + 8 + 2 + 1
@@ -34,45 +33,49 @@ public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
 
     private boolean mUseDisabledMode = false;
 
-    private final VendorExtensionClient mVendorExtensionClient;
-    private final int mVehicleProperty;
-
     public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty) {
         mVendorExtensionClient = vendorExtensionClient;
         mVehicleProperty = vehicleProperty;
     }
 
-    public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty, boolean useDisabledMode) {
+    public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty, int vehiclePropertyStatus, boolean useDisabledMode) {
         mVendorExtensionClient = vendorExtensionClient;
         mVehicleProperty = vehicleProperty;
         mUseDisabledMode = useDisabledMode;
     }
 
+    /*
+     * Used for property with status
+     */
+    public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty, int vehiclePropertyStatus) {
+        this(vendorExtensionClient, vehicleProperty);
+        this.vehiclePropertyStatus = vehiclePropertyStatus;
+    }
+
     @Override
-    protected void onUserChangedState(int state) {
-        // Use API to communicate with vehicle and then call setUiState() when ready
+    protected void onUserChangedValue(Integer state) {
+        // Use API to communicate with vehicle and then call setUiValue() when ready
         Log.d(TAG, "OnUserChangedState = " + String.valueOf(state));
-        setUiEnabled(false);
+        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
         // Check and correct, state of the HMI
         try {
-            if (state == (int) mVendorExtensionClient.get(mVehicleProperty)){
-                setUiState(state);
-                setUiEnabled(true);
+            if (state == (int) mVendorExtensionClient.get(mVehicleProperty)) {
+                setUiValue(state);
+                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
                 return;
             }
         } catch (VendorExtensionClient.NotSupportedException e) {
-            Log.e(TAG, "NotSupportedException: " + mVehicleProperty ,e);
+            Log.e(TAG, "NotSupportedException: " + mVehicleProperty, e);
             return;
         } catch (CarNotConnectedException e) {
             Log.e(TAG, "CarNotConnectedException", e);
             return;
         }
 
-
         try {
             mVendorExtensionClient.set(mVehicleProperty, state);
         } catch (VendorExtensionClient.NotSupportedException e) {
-            Log.e(TAG,"Setting is not supported", e);
+            Log.e(TAG, "Setting is not supported", e);
         } catch (CarNotConnectedException e) {
             Log.w(TAG, "Car is not connected.", e);
             CompletableFuture.runAsync(() -> {
@@ -85,36 +88,32 @@ public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
 
     @Override
     protected void onSetInitialState() {
-        setUiState(0);
-        setUiEnabled(false);
+        setUiValue(0);
+        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
         CompletableFuture.runAsync(() -> {
-            // Use API to communicate with vehicle and then call setUiState() when ready
-            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)){
+            // Use API to communicate with vehicle and then call setUiValue() when ready
+            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)) {
                 Log.d(TAG, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
-                mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(mVehicleProperty, 0) {
-                    @Override
-                    public void onChangeEvent(CarPropertyValue value) {
-                        Log.d(TAG, "onChangeEvent: Value received: " + value);
-                        setUiState((Integer)value.getValue());
-                        setUiEnabled(true);
-                    }
+                // Register Property value callback
+                registerPropCallback();
 
-                    @Override
-                    public void onErrorEvent(int propertyId, int zone) {
-                        Log.d(TAG, "onErrorEvent: propertyId = " + propertyId + ", zone = " + zone);
-                    }
-                });
-                try {
-                    setUiState((int)mVendorExtensionClient.get(mVehicleProperty));
-                } catch (VendorExtensionClient.NotSupportedException e) {
-                    Log.e(TAG, "NotSupported propID: " + mVehicleProperty);
-                } catch (CarNotConnectedException e) {
-                    mVendorExtensionClient.reconnect();
-                }
+                // Chech if mode is supported
                 if (mUseDisabledMode) {
                     setDisabledMode();
                 }
-                setUiEnabled(true);
+
+                // Since the feature is available, enable it and register PA status handling
+                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                registerStatusCallback();
+
+                try {
+                    setUiValue((int) mVendorExtensionClient.get(mVehicleProperty));
+                } catch (VendorExtensionClient.NotSupportedException e) {
+                    Log.e(TAG, "NotSupported propID: " + mVehicleProperty);
+                } catch (CarNotConnectedException e) {
+                    Log.e(TAG, "CarNotConnectedException, reconnecting", e);
+                    mVendorExtensionClient.reconnect();
+                }
             }
         });
     }
@@ -125,9 +124,9 @@ public class VhalThreeStateDelegate extends ThreeStateFunction.Delegate {
      * Default: DisabledMode = 0. In this case, no modes are disabled.
      * TODO: change from using maxValue to configFlags.
      */
-    private void setDisabledMode(){
+    private void setDisabledMode() {
         try {
-            int maxValue = (int)mVendorExtensionClient.getCarPropertyConfig(mVehicleProperty).getMaxValue();
+            int maxValue = (int) mVendorExtensionClient.getCarPropertyConfig(mVehicleProperty).getMaxValue();
             if (maxValue == MODE_1_DISABLED) {
                 setDisabledMode(STATE_1);
             } else if (maxValue == MODE_2_DISABLED) {

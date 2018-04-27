@@ -34,10 +34,36 @@ public class OneButtonFunctionViewHolder extends FunctionViewHolder {
             mButton.setText(!state1 ? "Off" : "On");
         });
 
-        LiveData<Boolean> enabled = Transformations.switchMap(mFunction, OneButtonFunction::getEnabled);
-        enabled.observeForever(enabled1 -> {
-            itemView.setEnabled(enabled1);
-            mButton.setEnabled(enabled1);
+        // View state handling
+        LiveData<FunctionState> enabled = Transformations.switchMap(mFunction, OneButtonFunction::getFunctionState);
+        enabled.observeForever(buttonState -> {
+            switch (buttonState){
+                case ENABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(true);
+                    mButton.setEnabled(true);
+                    break;
+                case DISABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mButton.setEnabled(false);
+                    break;
+                case INVISIBLE:
+                    itemView.setVisibility(View.GONE);
+                    mButton.setVisibility(View.GONE);
+                    itemView.setEnabled(false);
+                    mButton.setEnabled(false);
+                    break;
+                case ERROR:
+                    // TODO: found out what to show
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mButton.setEnabled(false);
+                    break;
+            }
             mButton.setId(mFunction.getValue().getOnButtonId());
         });
 
@@ -47,6 +73,6 @@ public class OneButtonFunctionViewHolder extends FunctionViewHolder {
     @Override
     public void bind(Function function) {
         super.bind(function);
-        mFunction.setValue((OneButtonFunction)function);
+        mFunction.setValue((OneButtonFunction) function);
     }
 }

@@ -1,0 +1,126 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+package com.volvocars.vehiclefunctions.assistance.functions;
+
+import android.car.CarNotConnectedException;
+import android.car.hardware.CarPropertyValue;
+import android.util.Log;
+
+import com.volvocars.vendorextension.VendorExtensionCallBack;
+import com.volvocars.vendorextension.VendorExtensionClient;
+
+import java.util.concurrent.CompletableFuture;
+
+import vendor.volvocars.hardware.vehiclehal.V1_0.PAStatus;
+
+public abstract class VHalDelegate<T> {
+    String TAG_COMMON = VHalDelegate.class.getSimpleName();
+
+    protected VendorExtensionClient mVendorExtensionClient;
+    protected final static int NO_STATUS = -1;  // -1 = No status registered for this propID
+    protected int mVehicleProperty;
+    protected int vehiclePropertyStatus = NO_STATUS;
+    protected StateChangedListener mListener;
+
+    protected abstract void onUserChangedValue(T value);
+
+    protected void onSetInitialState() {
+        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
+        CompletableFuture.runAsync(() -> {
+            // Use API to communicate with vehicle and then call setUiState() when ready
+            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)) {
+                Log.d(TAG_COMMON, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
+
+                // Register Property callback
+                registerPropCallback();
+
+                // Since the feature is available, enable it and register PA status handling
+                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                registerStatusCallback();
+
+                try {
+                    setUiValue((T) mVendorExtensionClient.get(mVehicleProperty));
+                } catch (VendorExtensionClient.NotSupportedException e) {
+                    Log.e(TAG_COMMON, "NotSupported propID: " + mVehicleProperty);
+                } catch (CarNotConnectedException e) {
+                    Log.e(TAG_COMMON, "CarNotConnectedException, reconnecting", e);
+                    mVendorExtensionClient.reconnect();
+                }
+            }
+        });
+    }
+
+    protected void setUiValue(T value) {
+        mListener.valueChanged(value);
+    }
+
+    protected void setUiFunctionState(FunctionViewHolder.FunctionState enabled) {
+        mListener.buttonStateChanged(enabled);
+    }
+
+    protected void setListener(StateChangedListener listener) {
+        this.mListener = listener;
+    }
+
+    protected void setDisabledMode(int disabledMode) {
+        mListener.disabledModeChanged(disabledMode);
+    }
+
+    protected interface StateChangedListener<T> {
+        void valueChanged(T value);
+
+        void buttonStateChanged(FunctionViewHolder.FunctionState buttonState);
+
+        default void disabledModeChanged(int disabledMode){
+        }
+    }
+
+    protected void registerPropCallback() {
+        mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(mVehicleProperty, 0) {
+            @Override
+            public void onChangeEvent(CarPropertyValue value) {
+                Log.d(TAG_COMMON, "onChangeEvent: Value received: " + value + " Property ID :" + mVehicleProperty);
+                setUiValue((T) value.getValue());
+            }
+
+            @Override
+            public void onErrorEvent(int propertyId, int zone) {
+                Log.d(TAG_COMMON, "onErrorEvent: propertyId = " + propertyId + ", zone = " + zone);
+            }
+        });
+    }
+
+    protected void registerStatusCallback() {
+        // Register for PA status
+        mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(vehiclePropertyStatus, 0) {
+            @Override
+            public void onChangeEvent(CarPropertyValue value) {
+                Log.d(TAG_COMMON, "onChangeEvent: vehiclePropertyStatus: " + value);
+                switch ((Integer) value.getValue()) {
+                    case PAStatus.Active:
+                        setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                        break;
+                    case PAStatus.Disabled:
+                        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
+                        break;
+                    case PAStatus.NotAvailable:
+                        setUiFunctionState(FunctionViewHolder.FunctionState.INVISIBLE);
+                        break;
+                    case PAStatus.SystemError:
+                        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onErrorEvent(int propertyId, int zone) {
+                Log.d(TAG_COMMON, "onErrorEvent: propertyId = " + propertyId + ", zone = " + zone);
+            }
+        });
+    }
+}

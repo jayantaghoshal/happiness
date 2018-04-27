@@ -49,15 +49,49 @@ public class ThreeStateFunctionViewHolder extends FunctionViewHolder {
             mButton3.setTextColor(state1 == STATE_3 ? colorGreen : colorRed);
         });
 
-        LiveData<Boolean> enabled = Transformations.switchMap(mFunction, ThreeStateFunction::getEnabled);
-        enabled.observeForever(enabled1 -> {
-            itemView.setEnabled(enabled1);
-            mButton1.setEnabled(enabled1);
-            mButton2.setEnabled(enabled1);
-            mButton3.setEnabled(enabled1);
-            mButton1.setId(mFunction.getValue().getState1ButtonId());
-            mButton2.setId(mFunction.getValue().getState2ButtonId());
-            mButton3.setId(mFunction.getValue().getState3ButtonId());
+        LiveData<FunctionState> enabled = Transformations.switchMap(mFunction, ThreeStateFunction::getFunctionState);
+        enabled.observeForever(buttonState -> {
+
+            switch (buttonState){
+
+                case ENABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton1.setVisibility(View.VISIBLE);
+                    mButton2.setVisibility(View.VISIBLE);
+                    mButton3.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(true);
+                    mButton1.setEnabled(true);
+                    mButton2.setEnabled(true);
+                    mButton3.setEnabled(true);
+                    break;
+                case DISABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton1.setVisibility(View.VISIBLE);
+                    mButton2.setVisibility(View.VISIBLE);
+                    mButton3.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mButton1.setEnabled(false);
+                    mButton2.setEnabled(false);
+                    mButton3.setEnabled(false);
+                    break;
+                case INVISIBLE:
+                    itemView.setVisibility(View.GONE);
+                    mButton1.setVisibility(View.GONE);
+                    mButton2.setVisibility(View.GONE);
+                    mButton3.setVisibility(View.GONE);
+                    break;
+                case ERROR:
+                    // TODO: found out what to show
+                    itemView.setVisibility(View.VISIBLE);
+                    mButton1.setVisibility(View.VISIBLE);
+                    mButton2.setVisibility(View.VISIBLE);
+                    mButton3.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mButton1.setEnabled(false);
+                    mButton2.setEnabled(false);
+                    mButton3.setEnabled(false);
+                    break;
+            }
         });
 
         LiveData<Integer> disabledMode = Transformations.switchMap(mFunction, ThreeStateFunction::getDisabledMode);
@@ -75,12 +109,13 @@ public class ThreeStateFunctionViewHolder extends FunctionViewHolder {
                 default:
                     break;
             }
+            mButton1.setId(mFunction.getValue().getState1ButtonId());
+            mButton2.setId(mFunction.getValue().getState2ButtonId());
+            mButton3.setId(mFunction.getValue().getState3ButtonId());
         });
 
         mButton1.setOnClickListener(v -> mFunction.getValue().setState(STATE_1));
-
         mButton2.setOnClickListener(v -> mFunction.getValue().setState(STATE_2));
-
         mButton3.setOnClickListener(v -> mFunction.getValue().setState(STATE_3));
     }
 

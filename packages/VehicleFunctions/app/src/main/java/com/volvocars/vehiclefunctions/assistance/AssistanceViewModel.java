@@ -10,26 +10,22 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
+import com.volvocars.carconfig.CarConfigApi;
+import com.volvocars.carconfig.CarConfigEnums;
 import com.volvocars.vehiclefunctions.R;
-import com.volvocars.vehiclefunctions.assistance.delegates.VhalOnOffDelegate;
-import com.volvocars.vehiclefunctions.assistance.delegates.VhalOneButtonDelegate;
-import com.volvocars.vehiclefunctions.assistance.delegates.VhalThreeStateDelegate;
 import com.volvocars.vehiclefunctions.assistance.delegates.VhalIntegerDelegate;
+import com.volvocars.vehiclefunctions.assistance.delegates.VhalOnOffDelegate;
+import com.volvocars.vehiclefunctions.assistance.delegates.VhalThreeStateDelegate;
 import com.volvocars.vehiclefunctions.assistance.functions.Function;
+import com.volvocars.vehiclefunctions.assistance.functions.IntegerFunction;
 import com.volvocars.vehiclefunctions.assistance.functions.OnOffFunction;
-import com.volvocars.vehiclefunctions.assistance.functions.OneButtonFunction;
 import com.volvocars.vehiclefunctions.assistance.functions.Section;
 import com.volvocars.vehiclefunctions.assistance.functions.ThreeStateFunction;
-import com.volvocars.vehiclefunctions.assistance.functions.IntegerFunction;
 import com.volvocars.vendorextension.VendorExtensionClient;
-
-import com.volvocars.carconfig.CarConfigEnums;
-import com.volvocars.carconfig.CarConfigApi;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
 
 import vendor.volvocars.hardware.vehiclehal.V1_0.VehicleProperty;
 
@@ -44,8 +40,7 @@ public class AssistanceViewModel extends ViewModel {
         CompletableFuture.runAsync(() -> {
             try {
                 mSections.postValue(createSections());
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Exception in createsections: " + Log.getStackTraceString(e));
             }
         });
@@ -89,7 +84,10 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.DRIVER_SUPPORT_FUNCTION_ON)) {
                 driverSupportFunctions.add(new ThreeStateFunction("Driver Support Functions",
                         "Cruise Control", "Adaptive Cruise Control", "Speed Limiter",
-                        new VhalThreeStateDelegate(mVendorExtensionClient, VehicleProperty.DRIVER_SUPPORT_FUNCTION_ON, true),
+                        new VhalThreeStateDelegate(mVendorExtensionClient,
+                                VehicleProperty.DRIVER_SUPPORT_FUNCTION_ON,
+                                VehicleProperty.DRIVER_SUPPORT_FUNCTION_STATUS,
+                                true),
                         R.id.cruise_control_on, R.id.adaptive_cruise_control_on, R.id.speed_limiter_on));
             }
             sections.add(new Section("Driver Support Function", driverSupportFunctions));
@@ -100,14 +98,14 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.LANE_KEEPING_AID_ON)) {
                 lkaFunctions.add(new OnOffFunction("Lane Keeping Aid",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.LANE_KEEPING_AID_ON),
+                                VehicleProperty.LANE_KEEPING_AID_ON, VehicleProperty.LANE_KEEPING_AID_ON_STATUS),
                         R.id.lane_keeping_aid_button_on, R.id.lane_keeping_aid_button_off));
             }
             if (supportedFeatures.contains(VehicleProperty.LANE_KEEPING_AID_MODE)) {
                 lkaFunctions.add(new ThreeStateFunction("Lane Keeping Aid mode",
                         "Both", "Steering", "Sound",
                         new VhalThreeStateDelegate(mVendorExtensionClient,
-                                VehicleProperty.LANE_KEEPING_AID_MODE),
+                                VehicleProperty.LANE_KEEPING_AID_MODE, VehicleProperty.LANE_KEEPING_AID_MODE_STATUS),
                         R.id.lane_keeping_aid_button_mode_both,
                         R.id.lane_keeping_aid_button_mode_steering,
                         R.id.lane_keeping_aid_button_mode_sound));
@@ -115,7 +113,7 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.EMERGENCY_LANE_KEEPING_AID_ON)) {
                 lkaFunctions.add(new OnOffFunction("Emergency Lane Keeping Aid",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.EMERGENCY_LANE_KEEPING_AID_ON),
+                                VehicleProperty.EMERGENCY_LANE_KEEPING_AID_ON, VehicleProperty.EMERGENCY_LANE_KEEPING_AID_STATUS),
                         R.id.emergency_lane_keeping_aid_button_on,
                         R.id.emergency_lane_keeping_aid_button_off));
             }
@@ -126,7 +124,7 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.CURVE_SPEED_ADAPTION_ON)) {
                 csaFunctions.add(new OnOffFunction("Curve Speed Adaption",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.CURVE_SPEED_ADAPTION_ON),
+                                VehicleProperty.CURVE_SPEED_ADAPTION_ON, VehicleProperty.CURVE_SPEED_ADAPTION_STATUS),
                         R.id.curve_speed_adaption_on, R.id.curve_speed_adaption_off));
             }
 
@@ -149,31 +147,31 @@ public class AssistanceViewModel extends ViewModel {
             List<Function> speedManagementFunctions = new ArrayList<Function>();
             if (supportedFeatures.contains(VehicleProperty.TSI_RSI_ON)) {
                 speedManagementFunctions.add(new OnOffFunction("Road Sign Information",
-                        new VhalOnOffDelegate(mVendorExtensionClient, VehicleProperty.TSI_RSI_ON),
+                        new VhalOnOffDelegate(mVendorExtensionClient, VehicleProperty.TSI_RSI_ON, VehicleProperty.TSI_RSI_STATUS),
                         R.id.tsi_rsi_button_on, R.id.tsi_rsi_button_off));
             }
             if (supportedFeatures.contains(VehicleProperty.TSI_SPEEDCAM_AUDIO_WARN_ON)) {
                 speedManagementFunctions.add(new OnOffFunction("Speed Camera Warning",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.TSI_SPEEDCAM_AUDIO_WARN_ON),
+                                VehicleProperty.TSI_SPEEDCAM_AUDIO_WARN_ON, VehicleProperty.TSI_SPEEDCAM_AUDIO_WARN_STATUS),
                         R.id.tsi_spdCamWarn_button_on, R.id.tsi_spdCamWarn_button_off));
             }
             if (supportedFeatures.contains(VehicleProperty.TSI_SPEED_VISUAL_WARN_ON)) {
                 speedManagementFunctions.add(new OnOffFunction("Speed Alert Visual Warning",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.TSI_SPEED_VISUAL_WARN_ON),
+                                VehicleProperty.TSI_SPEED_VISUAL_WARN_ON, VehicleProperty.TSI_SPEED_VISUAL_WARN_STATUS),
                         R.id.tsi_spdAlrtVisWarn_button_on, R.id.tsi_spdAlrtVisWarn_button_off));
             }
             if (supportedFeatures.contains(VehicleProperty.TSI_SPEED_AUDIO_WARN_ON)) {
                 speedManagementFunctions.add(new OnOffFunction("Speed Alert Sound Warning",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.TSI_SPEED_AUDIO_WARN_ON),
+                                VehicleProperty.TSI_SPEED_AUDIO_WARN_ON, VehicleProperty.TSI_SPEED_AUDIO_WARN_STATUS),
                         R.id.tsi_spdAlrtSndWarn_button_on, R.id.tsi_spdAlrtSndWarn_button_off));
             }
             if (supportedFeatures.contains(VehicleProperty.TSI_SPEED_WARN_OFFSET)) {
                 speedManagementFunctions.add(new IntegerFunction("Speed Alert Offset",
                         new VhalIntegerDelegate(mVendorExtensionClient,
-                                VehicleProperty.TSI_SPEED_WARN_OFFSET),
+                                VehicleProperty.TSI_SPEED_WARN_OFFSET, VehicleProperty.TSI_SPEED_WARN_OFFSET_STATUS),
                         R.id.tsi_offset_button_plus, R.id.tsi_offset_text,
                         R.id.tsi_offset_button_minus, tsi_offset_min, tsi_offset_max, 5));
             }
@@ -187,13 +185,12 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.LANE_DEPARTURE_WARNING_ON)) {
                 ldwFunctions.add(new OnOffFunction("Lane Departure Warning",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.LANE_DEPARTURE_WARNING_ON),
+                                VehicleProperty.LANE_DEPARTURE_WARNING_ON, VehicleProperty.LANE_DEPARTURE_WARNING_STATUS),
                         R.id.lane_departureWarning_button_on, R.id.lane_departureWarning_button_off));
             }
 
             sections.add(new Section("Lane Departure Warning", ldwFunctions));
         }
-
 
 
         return sections;

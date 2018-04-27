@@ -8,7 +8,6 @@ package com.volvocars.vehiclefunctions.assistance.functions;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,12 +61,47 @@ public class IntegerFunctionViewHolder extends FunctionViewHolder {
                 }
         );
 
-        LiveData<Boolean> enabled = Transformations.switchMap(mFunction, IntegerFunction::getEnabled);
-        enabled.observeForever(enabled1 -> {
-            itemView.setEnabled(enabled1);
-            plusButton.setEnabled(enabled1);
-            textView.setEnabled(enabled1);
-            minusButton.setEnabled(enabled1);
+        LiveData<FunctionState> enabled = Transformations.switchMap(mFunction, IntegerFunction::getFunctionState);
+        enabled.observeForever(buttonState -> {
+            switch (buttonState) {
+                case ENABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    plusButton.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                    minusButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(true);
+                    plusButton.setEnabled(true);
+                    textView.setEnabled(true);
+                    minusButton.setEnabled(true);
+                    break;
+                case DISABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    plusButton.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                    minusButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    plusButton.setEnabled(false);
+                    textView.setEnabled(false);
+                    minusButton.setEnabled(false);
+                    break;
+                case INVISIBLE:
+                    itemView.setVisibility(View.GONE);
+                    plusButton.setVisibility(View.GONE);
+                    textView.setVisibility(View.GONE);
+                    minusButton.setVisibility(View.GONE);
+                    break;
+                case ERROR:
+                   // TODO: found out what to show
+                    itemView.setVisibility(View.VISIBLE);
+                    plusButton.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                    minusButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    plusButton.setEnabled(false);
+                    textView.setEnabled(false);
+                    minusButton.setEnabled(false);
+                    break;
+            }
         });
 
         LiveData<Integer> value = Transformations.switchMap(mFunction, IntegerFunction::getTextValue);

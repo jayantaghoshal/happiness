@@ -19,73 +19,51 @@ import java.util.concurrent.CompletableFuture;
 public class OnOffFunction extends Function {
     private static final int COLUMNS_OCCUPIED = 1;
 
-    private final Delegate mDelegate;
+    private final VHalDelegate mVHalDelegate;
     private final MutableLiveData<Boolean> mStateLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> mEnabledLiveData = new MutableLiveData<>();
+    private final MutableLiveData<FunctionViewHolder.FunctionState> buttonStateLiveData = new MutableLiveData<>();
     private final int mOnButtonId;
     private final int mOffButtonId;
 
-    public OnOffFunction(CharSequence title, Delegate delegate, int onButtonId, int offButtonId) {
+    public OnOffFunction(CharSequence title, VHalDelegate VHalDelegate, int onButtonId, int offButtonId) {
         super(title, R.layout.vh_function_onoff, COLUMNS_OCCUPIED);
-        mDelegate = delegate;
+        mVHalDelegate = VHalDelegate;
         mOnButtonId = onButtonId;
         mOffButtonId = offButtonId;
-        mDelegate.setListener(stateChangedListener);
-        mDelegate.onSetInitialState();
-        mEnabledLiveData.postValue(false);
+        mVHalDelegate.setListener(stateChangedListener);
+        mVHalDelegate.onSetInitialState();
     }
 
     public LiveData<Boolean> getState() {
         return mStateLiveData;
     }
 
-    public LiveData<Boolean> getEnabled() {
-        return mEnabledLiveData;
+    public LiveData<FunctionViewHolder.FunctionState> getFunctionState() {
+        return buttonStateLiveData;
     }
 
-    public int getOnButtonId() { return mOnButtonId; }
+    public int getOnButtonId() {
+        return mOnButtonId;
+    }
 
-    public int getOffButtonId() { return mOffButtonId; }
+    public int getOffButtonId() {
+        return mOffButtonId;
+    }
 
     public void setState(boolean state) {
-        CompletableFuture.runAsync(() -> mDelegate.onUserChangedState(state));
+        CompletableFuture.runAsync(() -> mVHalDelegate.onUserChangedValue(state));
     }
 
-    private final Delegate.StateChangedListener stateChangedListener =
-            new Delegate.StateChangedListener() {
-        @Override
-        public void stateChanged(boolean state) {
-            mStateLiveData.postValue(state);
-        }
+    private final VHalDelegate.StateChangedListener<Boolean> stateChangedListener =
+            new VHalDelegate.StateChangedListener<Boolean>() {
+                @Override
+                public void valueChanged(Boolean state) {
+                    mStateLiveData.postValue(state);
+                }
 
-        @Override
-        public void enabledChanged(boolean enabled) {
-            mEnabledLiveData.postValue(enabled);
-        }
-    };
-
-
-    public static abstract class Delegate {
-        private StateChangedListener mListener;
-
-        protected abstract void onUserChangedState(boolean value);
-        protected abstract void onSetInitialState();
-
-        protected void setUiState(boolean state) {
-            mListener.stateChanged(state);
-        }
-
-        protected void setUiEnabled(boolean enabled) {
-            mListener.enabledChanged(enabled);
-        }
-
-        private void setListener(StateChangedListener listener) {
-            this.mListener = listener;
-        }
-
-        private interface StateChangedListener {
-            void stateChanged(boolean state);
-            void enabledChanged(boolean enabled);
-        }
-    }
+                @Override
+                public void buttonStateChanged(FunctionViewHolder.FunctionState buttonState) {
+                    buttonStateLiveData.postValue(buttonState);
+                }
+            };
 }

@@ -15,8 +15,8 @@ public class Function {
     private int mSlotsOccupied;
 
     /**
-     * @param title The name to be displayed for this function.
-     * @param layoutId The layout file id to show this function in a recyclerview.
+     * @param title         The name to be displayed for this function.
+     * @param layoutId      The layout file id to show this function in a recyclerview.
      * @param slotsOccupied Functions occupy different amounts of UI space. This is the number of columns to occupy.
      */
     public Function(CharSequence title, int layoutId, int slotsOccupied) {

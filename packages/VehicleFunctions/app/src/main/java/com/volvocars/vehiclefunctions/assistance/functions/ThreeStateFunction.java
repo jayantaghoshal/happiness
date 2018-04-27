@@ -21,27 +21,26 @@ public class ThreeStateFunction extends Function {
     private final CharSequence mState1Name;
     private final CharSequence mState2Name;
     private final CharSequence mState3Name;
-    private final Delegate mDelegate;
+    private final VHalDelegate mVHalDelegate;
     private final MutableLiveData<Integer> mStateLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> mEnabledLiveData = new MutableLiveData<>();
+    private final MutableLiveData<FunctionViewHolder.FunctionState> buttonStateLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> mDisabledModeLiveData = new MutableLiveData<>();
     private final int mState1ButtonId;
     private final int mState2ButtonId;
     private final int mState3ButtonId;
 
     public ThreeStateFunction(CharSequence title, CharSequence state1Name, CharSequence state2Name,
-                              CharSequence state3Name, Delegate delegate, int state1ButtonId, int state2ButtonId, int state3ButtonId) {
+                              CharSequence state3Name, VHalDelegate VHalDelegate, int state1ButtonId, int state2ButtonId, int state3ButtonId) {
         super(title, R.layout.vh_function_threestate, COLUMNS_OCCUPIED);
         mState1Name = state1Name;
         mState2Name = state2Name;
         mState3Name = state3Name;
-        mDelegate = delegate;
-        mDelegate.setListener(stateChangedListener);
-        mDelegate.onSetInitialState();
+        mVHalDelegate = VHalDelegate;
+        mVHalDelegate.setListener(stateChangedListener);
+        mVHalDelegate.onSetInitialState();
         mState1ButtonId = state1ButtonId;
         mState2ButtonId = state2ButtonId;
         mState3ButtonId = state3ButtonId;
-        mEnabledLiveData.postValue(false);
         mDisabledModeLiveData.postValue(0);
     }
 
@@ -61,8 +60,8 @@ public class ThreeStateFunction extends Function {
         return mStateLiveData;
     }
 
-    public LiveData<Boolean> getEnabled() {
-        return mEnabledLiveData;
+    public LiveData<FunctionViewHolder.FunctionState> getFunctionState() {
+        return buttonStateLiveData;
     }
 
     public int getState1ButtonId() { return mState1ButtonId; }
@@ -74,50 +73,20 @@ public class ThreeStateFunction extends Function {
     public LiveData<Integer> getDisabledMode() { return mDisabledModeLiveData; }
 
     public void setState(int state) {
-        CompletableFuture.runAsync(() -> mDelegate.onUserChangedState(state));
+        CompletableFuture.runAsync(() -> mVHalDelegate.onUserChangedValue(state));
     }
 
-    private final Delegate.StateChangedListener stateChangedListener = new Delegate.StateChangedListener() {
+    private final VHalDelegate.StateChangedListener<Integer> stateChangedListener = new VHalDelegate.StateChangedListener<Integer>(){
         @Override
-        public void stateChanged(int state) {
+        public void valueChanged(Integer state) {
             mStateLiveData.postValue(state);
         }
 
         @Override
-        public void enabledChanged(boolean enabled) {
-            mEnabledLiveData.postValue(enabled);
+        public void buttonStateChanged(FunctionViewHolder.FunctionState buttonState) {
+            buttonStateLiveData.postValue(buttonState);
         }
-
         @Override
         public void disabledModeChanged(int disabledMode) { mDisabledModeLiveData.postValue(disabledMode); }
     };
-
-
-    public static abstract class Delegate {
-        private StateChangedListener mListener;
-
-        protected abstract void onUserChangedState(int value);
-
-        protected abstract void onSetInitialState();
-
-        protected void setUiState(int value) {
-            mListener.stateChanged(value);
-        }
-
-        protected void setUiEnabled(boolean enabled) {
-            mListener.enabledChanged(enabled);
-        }
-
-        protected void setDisabledMode(int disabledMode) { mListener.disabledModeChanged(disabledMode); }
-
-        private void setListener(StateChangedListener listener) {
-            this.mListener = listener;
-        }
-
-        private interface StateChangedListener {
-            void stateChanged(int value);
-            void enabledChanged(boolean enabled);
-            void disabledModeChanged(int disabledMode);
-        }
-    }
 }

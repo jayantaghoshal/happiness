@@ -6,12 +6,10 @@
 package com.volvocars.vehiclefunctions.assistance.delegates;
 
 import android.car.CarNotConnectedException;
-import android.car.hardware.CarPropertyValue;
 import android.util.Log;
 
-import com.volvocars.vehiclefunctions.assistance.functions.OnOffFunction;
-import com.volvocars.vehiclefunctions.assistance.functions.OneButtonFunction;
-import com.volvocars.vendorextension.VendorExtensionCallBack;
+import com.volvocars.vehiclefunctions.assistance.functions.VHalDelegate;
+import com.volvocars.vehiclefunctions.assistance.functions.FunctionViewHolder;
 import com.volvocars.vendorextension.VendorExtensionClient;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,28 +21,37 @@ import java.util.concurrent.CompletableFuture;
  * Dependencies should be injected.
  *
  */
-public class VhalOneButtonDelegate extends OneButtonFunction.Delegate {
+public class VhalOneButtonDelegate extends VHalDelegate<Boolean> {
 
     public static final String TAG = VhalOneButtonDelegate.class.getSimpleName();
-    private final VendorExtensionClient mVendorExtensionClient;
-    private final int mVehicleProperty;
 
-    public VhalOneButtonDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty) {
+    /*
+     * Used for property with status
+     */
+    public VhalOneButtonDelegate(VendorExtensionClient vendorExtensionClient, int mVehicleProperty, int vehiclePropertyStatus) {
+        this(vendorExtensionClient, mVehicleProperty);
+        this.vehiclePropertyStatus = vehiclePropertyStatus;
+    }
+
+    /*
+     * Used for property without status
+     */
+    public VhalOneButtonDelegate(VendorExtensionClient vendorExtensionClient, int mVehicleProperty) {
         mVendorExtensionClient = vendorExtensionClient;
-        mVehicleProperty = vehicleProperty;
+        this.mVehicleProperty = mVehicleProperty;
     }
 
     @Override
-    protected void onUserChangedState(boolean value) {
+    protected void onUserChangedValue(Boolean value) {
         // Use API to communicate with vehicle and then call setUiState() when ready
-        Log.d(TAG, "OnUserChangedState = " + String.valueOf(value) );
-        setUiEnabled(false);
+        Log.d(TAG, "OnUserChangedState = " + String.valueOf(value));
+        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
 
         // Check and correct, state of the HMI
         try {
-            if (value == (boolean) mVendorExtensionClient.get(mVehicleProperty)){
-                setUiState(value);
-                setUiEnabled(true);
+            if (value == mVendorExtensionClient.get(mVehicleProperty)) {
+                setUiValue(value);
+                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
                 return;
             }
         } catch (VendorExtensionClient.NotSupportedException e) {
@@ -58,7 +65,7 @@ public class VhalOneButtonDelegate extends OneButtonFunction.Delegate {
         try {
             mVendorExtensionClient.set(mVehicleProperty, value);
         } catch (VendorExtensionClient.NotSupportedException e) {
-            Log.e(TAG,"Setting is not supported", e);
+            Log.e(TAG, "Setting is not supported", e);
         } catch (CarNotConnectedException e) {
             Log.e(TAG, "Car is not connected", e);
             CompletableFuture.runAsync(() -> {
@@ -66,38 +73,5 @@ public class VhalOneButtonDelegate extends OneButtonFunction.Delegate {
                 mVendorExtensionClient.reconnect();
             });
         }
-    }
-
-    @Override
-    protected void onSetInitialState() {
-        setUiEnabled(false);
-        CompletableFuture.runAsync(() -> {
-            // Use API to communicate with vehicle and then call setUiState() when ready
-            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)){
-                Log.d(TAG, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
-                mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(mVehicleProperty, 0) {
-                    @Override
-                    public void onChangeEvent(CarPropertyValue value) {
-                        Log.d(TAG, "onChangeEvent: Value received: " + value);
-                        setUiState((Boolean) value.getValue());
-                        setUiEnabled(true);
-                    }
-
-                    @Override
-                    public void onErrorEvent(int propertyId, int zone) {
-                        Log.d(TAG, "onErrorEvent: propertyId = " + propertyId + ", zone = " + zone);
-                    }
-                });
-                try {
-                    setUiState((boolean)mVendorExtensionClient.get(mVehicleProperty));
-                } catch (VendorExtensionClient.NotSupportedException e) {
-                    Log.e(TAG, "NotSupported propID: " + mVehicleProperty);
-                } catch (CarNotConnectedException e) {
-                    Log.e(TAG, "CarNotConnectedException, reconnecting", e);
-                    mVendorExtensionClient.reconnect();
-                }
-                setUiEnabled(true);
-            }
-        });
     }
 }

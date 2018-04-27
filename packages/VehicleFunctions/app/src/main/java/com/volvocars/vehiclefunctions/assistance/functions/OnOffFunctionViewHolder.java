@@ -37,23 +37,53 @@ public class OnOffFunctionViewHolder extends FunctionViewHolder {
                     : itemView.getResources().getColor(R.color.colorGreenLight));
         });
 
-        LiveData<Boolean> enabled = Transformations.switchMap(mFunction, OnOffFunction::getEnabled);
-        enabled.observeForever(enabled1 -> {
-            itemView.setEnabled(enabled1);
-            mOnButton.setEnabled(enabled1);
-            mOffButton.setEnabled(enabled1);
+        // View state handling
+        LiveData<FunctionState> enabled = Transformations.switchMap(mFunction, OnOffFunction::getFunctionState);
+        enabled.observeForever(buttonState -> {
+            switch (buttonState){
+                case ENABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mOnButton.setVisibility(View.VISIBLE);
+                    mOffButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(true);
+                    mOnButton.setEnabled(true);
+                    mOffButton.setEnabled(true);
+                    break;
+                case DISABLED:
+                    itemView.setVisibility(View.VISIBLE);
+                    mOnButton.setVisibility(View.VISIBLE);
+                    mOffButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mOnButton.setEnabled(false);
+                    mOffButton.setEnabled(false);
+                    break;
+                case INVISIBLE:
+                    itemView.setVisibility(View.GONE);
+                    mOnButton.setVisibility(View.GONE);
+                    mOffButton.setVisibility(View.GONE);
+                    break;
+                case ERROR:
+                    // TODO: found out what to show
+                    itemView.setVisibility(View.VISIBLE);
+                    mOnButton.setVisibility(View.VISIBLE);
+                    mOffButton.setVisibility(View.VISIBLE);
+                    itemView.setEnabled(false);
+                    mOnButton.setEnabled(false);
+                    mOffButton.setEnabled(false);
+
+            }
+
             mOnButton.setId(mFunction.getValue().getOnButtonId());
             mOffButton.setId(mFunction.getValue().getOffButtonId());
         });
 
         mOnButton.setOnClickListener(v -> mFunction.getValue().setState(true));
-
         mOffButton.setOnClickListener(v -> mFunction.getValue().setState(false));
     }
 
     @Override
     public void bind(Function function) {
         super.bind(function);
-        mFunction.setValue((OnOffFunction)function);
+        mFunction.setValue((OnOffFunction) function);
     }
 }
