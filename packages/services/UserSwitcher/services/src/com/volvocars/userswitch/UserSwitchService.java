@@ -55,11 +55,12 @@ public class UserSwitchService extends Service {
         userSwitchManagerHMI = new UserSwitchManagerHMI();
 
         List<UserInfo> listUser = userManager.getUsers(false);
+        String guestUserName = getString(R.string.default_guest_name);
         Optional<UserInfo> result =
-                listUser.stream().filter(u -> u.name.equals("DEFAULT_GUEST")).findAny();
+                listUser.stream().filter(u -> u.name.equals(guestUserName)).findAny();
         if (!result.isPresent()) {
             // TODO (ARTINFO-507 - Guest Account) Change user flag for the defalut guest.
-            VolvoUser user = new VolvoUser(-1, "DEFAULT_GUEST", VolvoUser.FLAG_ADMIN);
+            VolvoUser user = new VolvoUser(-1, guestUserName, VolvoUser.FLAG_ADMIN);
             defaultGuest = userManager.createUser(user.name, user.flags);
             Log.d(TAG, "Created default guest: " + defaultGuest);
         } else {

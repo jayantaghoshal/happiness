@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UserSwitchService</string>
+    <string name="default_guest_name">Guest</string>
 </resources>
