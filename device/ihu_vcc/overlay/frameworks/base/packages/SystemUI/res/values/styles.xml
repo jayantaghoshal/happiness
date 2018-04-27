@@ -10,6 +10,6 @@
     </style>
 
     <style name="TextAppearance.StatusBar.Clock" parent="@*android:style/TextAppearance.StatusBar.Icon">
-        <item name="android:fontFamily">@font/instrument101</item>
+        <item name="android:fontFamily">volvo-instrument-sans-serif-monospace</item>
     </style>
 </resources>
