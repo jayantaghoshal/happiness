@@ -51,7 +51,8 @@ Automatic code formatting
 This will ensure correct code style for all supported files in repository
   * Adherence to decided style is mandatory
   * If no good workaround exists you can add //clang-format on/off guards
-  * This should not happen if commit hook was properly installed
+  * This should not happen if commit hook was properly installed (https://c1.confluence.cm.volvocars.biz/x/fKMtAQ)
+  * More information: https://c1.confluence.cm.volvocars.biz/display/IHUA/Coding+Standards+and+Policies
 -------------------------------------------------------------------""",
 
     copyrightheader.LicenseHeaderInvalidError:
@@ -64,7 +65,8 @@ This will ensure correct license header in all files where it is
 applicable to mention the relevant LICENSE file in repository.
 
 This should be handled autonomously during commit phase
-if commit hook was properly installed
+if commit hook was properly installed (https://c1.confluence.cm.volvocars.biz/x/fKMtAQ)
+More information on https://c1.confluence.cm.volvocars.biz/display/IHUA/04+Copyright+header
 -------------------------------------------------------------------""",
 
     copyrightheader.LicenseHeaderMultipleCopyrightHoldersError:
