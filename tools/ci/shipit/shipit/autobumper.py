@@ -99,19 +99,32 @@ def sync_zuul_repos(aosp_root_dir: str, repository: str):
     if not repo_have_zuul_change(path_to_repository_with_commit, aosp_root_dir):
         raise SystemExit('zuul-cloner failed to checkout commit the Zuul commit in " + repo')
 
+def on_commit(aosp_root_dir: str, sync: bool, repository: str):
+    # Zuul will have already cloned vendor/volvocars
 
-def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):
-    logger.info("Check if the repo have zuul change")
-    full_path = os.path.join(aosp_root_dir, repo_path)
-    git_head = process_tools.check_output_logged(["git", "rev-parse",
-                            "HEAD"], cwd=full_path)
+    manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
+    head_sha = manifest_repo.rev_parse('HEAD')
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
 
-    zuul_commit = os.environ['ZUUL_COMMIT']
-    logger.info("ZUUL_COMMIT = + " + zuul_commit + " and HEAD is " + git_head.decode('utf-8').strip())
-    if zuul_commit == git_head.decode('utf-8').strip():
-        return True
-    else:
-        return False
+    repo_init(aosp_root_dir, head_sha)
+    # Copy vendor/volvocars template manifest to .repo without Zuul repos (vendor/volvocars is kept)
+    zuul_repos = copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo, repository)
+
+    # Sync all repos without the zuul repos
+    if sync:
+        process_tools.check_output_logged(["repo", "sync",
+                                        "--jobs=6",
+                                        "--no-clone-bundle",
+                                        "--force-sync",
+                                        "--detach",
+                                        "--current-branch"], cwd=aosp_root_dir)
+
+    for repo_name, repo_path in zuul_repos.items():
+        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+        if repo_name == os.environ['ZUUL_PROJECT']:
+            if not repo_have_zuul_change(repo_path, aosp_root_dir):
+                raise SystemExit("zuul-cloner failed to checkout commit the Zuul commit in " + repo_name)
 
 
 def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_name: str):
@@ -144,29 +157,23 @@ def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_na
         os.replace(git_path, destination_repo_path)
 
 
-def on_commit(aosp_root_dir: str, sync: bool, repository: str):
-    # Zuul will have already cloned vendor/volvocars
 
-    manifest_repo = git.Repo(os.path.join(aosp_root_dir, ".repo/manifests"))
-    head_sha = manifest_repo.rev_parse('HEAD')
-    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
-    volvocars_repo = git.Repo(volvocars_repo_path)
+def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):
+    logger.info("Check if the repo have zuul change")
+    full_path = os.path.join(aosp_root_dir, repo_path)
+    git_head = process_tools.check_output_logged(["git", "rev-parse",
+                            "HEAD"], cwd=full_path)
 
-    repo_init(aosp_root_dir, head_sha)
-    # Copy vendor/volvocars template manifest to .repo without Zuul repos (vendor/volvocars is kept)
-    zuul_repos = copy_and_apply_templates_to_manifest_repo(aosp_root_dir, volvocars_repo, manifest_repo, repository)
+    zuul_commit = os.environ['ZUUL_COMMIT']
+    logger.info("ZUUL_COMMIT = + " + zuul_commit + " and HEAD is " + git_head.decode('utf-8').strip())
+    if zuul_commit == git_head.decode('utf-8').strip():
+        return True
+    else:
+        return False
 
-    # Sync all repos without the zuul repos
-    if sync:
-        process_tools.check_output_logged(["repo", "sync",
-                                        "--jobs=6",
-                                        "--no-clone-bundle",
-                                        "--force-sync",
-                                        "--detach",
-                                        "--current-branch"], cwd=aosp_root_dir)
-
-    for repo_name, repo_path in zuul_repos.items():
-        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+# This is used when you want to sync a repo from Gerrit to a
+# path with a revision that is specified in the manifest.
+# We can not use repo sync after that Zuul repos are cloned
 
 def sync_repo(aosp_root_dir: str, repository: str):
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
