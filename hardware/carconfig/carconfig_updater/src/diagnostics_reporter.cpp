@@ -61,7 +61,9 @@ Return<void> DiagnosticsReporter::onRegistration(const ::android::hardware::hidl
     return Void();
 }
 
-Return<void> DiagnosticsReporter::readDidValue(uint16_t did, readDidValue_cb _hidl_cb) { return Void(); }
+Return<void> DiagnosticsReporter::readDidValue(uint16_t did, readDidValue_cb _hidl_cb) {
+    return Void();
+}
 
 Return<DidWriteStatusCode> DiagnosticsReporter::writeDidValue(uint16_t did,
                                                               const ::android::hardware::hidl_vec<uint8_t>& data) {

@@ -28,7 +28,9 @@ UEventListener& UEventListener::Instance() {
     return instance;
 }
 
-UEventListener::~UEventListener() { StopListening(); }
+UEventListener::~UEventListener() {
+    StopListening();
+}
 
 bool UEventListener::StartListening() {
     if (nullptr == event_handler_) {
@@ -54,7 +56,9 @@ void UEventListener::StopListening() {
     }
 }
 
-void UEventListener::SetNetlinkEventHandler(UeventHandler& event_handler) { event_handler_ = &event_handler; }
+void UEventListener::SetNetlinkEventHandler(UeventHandler& event_handler) {
+    event_handler_ = &event_handler;
+}
 
 int UEventListener::SetupSocket() {
     if (netlink_socket_ != -1) {

@@ -41,4 +41,6 @@ int property_get(const char* key, char* value, const char* /*default_value*/) {
 }
 
 void klog_writev(int /* level */, const struct iovec* /* iov */, int /* iov_count */) {}
-int __android_log_print(int /* prio */, const char* /* tag */, const char* /* fmt */, ...) { return 0; }
+int __android_log_print(int /* prio */, const char* /* tag */, const char* /* fmt */, ...) {
+    return 0;
+}

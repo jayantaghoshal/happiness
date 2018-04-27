@@ -11,7 +11,9 @@ namespace dim {
 DimImage::DimImage(uint16_t id, uint16_t groupID, TextAlignment align, TextTruncation trunc, ItemSelectable select)
     : DimItem(id, groupID, align, trunc, select) {}
 
-DimItem::ItemType DimImage::GetType() const { return ItemType::Item_Image; }
+DimItem::ItemType DimImage::GetType() const {
+    return ItemType::Item_Image;
+}
 
 }  // namespace dim
 }  // namespace vcc

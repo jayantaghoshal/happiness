@@ -846,6 +846,8 @@ const char* TransportServices::ErrorTypeToCString(ErrorType error_type) {
     return "Unknown error type";
 }
 
-IDispatcher& TransportServices::getThreadDispatcher() { return threadDispatcher; }
+IDispatcher& TransportServices::getThreadDispatcher() {
+    return threadDispatcher;
+}
 
 }  // namespace Connectivity

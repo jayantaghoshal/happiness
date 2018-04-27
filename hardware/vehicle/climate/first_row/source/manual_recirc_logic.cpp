@@ -203,7 +203,9 @@ void ManualRecircLogic::sendSignal() {
     }
 }
 
-bool ManualRecircLogic::signalsOk() { return vehModSts_.get().isOk() && climateActiveSignal_.get().isOk(); }
+bool ManualRecircLogic::signalsOk() {
+    return vehModSts_.get().isOk() && climateActiveSignal_.get().isOk();
+}
 
 bool ManualRecircLogic::activationCheck(const UsgModSts1 usgMode,
                                         const CarModSts1 carMode,

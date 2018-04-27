@@ -133,8 +133,12 @@ const std::string& CLIENT_KEY_PEM() {
 }
 
 using BIOUnqPtr = std::unique_ptr<BIO, int (*)(BIO*)>;
-X509UnqPtr X509Null() { return X509UnqPtr(nullptr, X509_free); }
-EVP_PKEYUnqPtr EVP_PKeyNull() { return EVP_PKEYUnqPtr(nullptr, EVP_PKEY_free); }
+X509UnqPtr X509Null() {
+    return X509UnqPtr(nullptr, X509_free);
+}
+EVP_PKEYUnqPtr EVP_PKeyNull() {
+    return EVP_PKEYUnqPtr(nullptr, EVP_PKEY_free);
+}
 
 X509UnqPtr CertFromPem(std::string pem_data) {
     BIOUnqPtr cert_bio(BIO_new(BIO_s_mem()), BIO_free);
@@ -214,11 +218,17 @@ CertHandler::CertHandler(const std::string& client_cert_pem,
     }
 }
 
-X509* CertHandler::GetCaCert() { return m_ca_cert.get(); }
+X509* CertHandler::GetCaCert() {
+    return m_ca_cert.get();
+}
 
-X509* CertHandler::GetClientCert() { return m_client_cert.get(); }
+X509* CertHandler::GetClientCert() {
+    return m_client_cert.get();
+}
 
-EVP_PKEY* CertHandler::GetClientKey() { return m_client_key.get(); }
+EVP_PKEY* CertHandler::GetClientKey() {
+    return m_client_key.get();
+}
 
 CertificateValidationStatus CertHandler::OnCreateOpenSslContext(void* ssl_ctx) noexcept {
     SSL_CTX* ctx = static_cast<SSL_CTX*>(ssl_ctx);

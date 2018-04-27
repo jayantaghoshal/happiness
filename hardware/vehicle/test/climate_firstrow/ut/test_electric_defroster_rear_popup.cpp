@@ -56,7 +56,9 @@ class ElectricDefrosterRearPopupTest : public ::testing::Test {
 //               Simple error startup           //
 //==============================================//
 
-TEST_F(ElectricDefrosterRearPopupTest, startUp) { auto erdp = createLogic(); }
+TEST_F(ElectricDefrosterRearPopupTest, startUp) {
+    auto erdp = createLogic();
+}
 
 TEST_F(ElectricDefrosterRearPopupTest, callRequest) {
     auto edrp = createLogic();

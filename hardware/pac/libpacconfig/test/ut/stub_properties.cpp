@@ -14,6 +14,10 @@ int8_t property_get_bool(const char* key, int8_t default_value) {
     return stub_value;
 }
 
-void property_set_stub_value(int8_t value) { stub_value = value; }
+void property_set_stub_value(int8_t value) {
+    stub_value = value;
+}
 
-void property_reset_stub_value(void) { stub_value = 0; }
+void property_reset_stub_value(void) {
+    stub_value = 0;
+}

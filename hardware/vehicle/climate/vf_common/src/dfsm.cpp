@@ -146,47 +146,69 @@ TransitionPointer DFsm_Transition::create(StatePointer state1, StatePointer stat
 DFsm_Transition::DFsm_Transition(StatePointer state1, StatePointer state2, GuardPointer guard)
     : State1_(state1), State2_(state2), Guard_(guard) {}
 //==================== //
-StatePointer DFsm_Transition::getState1() { return State1_; }
+StatePointer DFsm_Transition::getState1() {
+    return State1_;
+}
 //==================== //
-StatePointer DFsm_Transition::getState2() { return State2_; }
+StatePointer DFsm_Transition::getState2() {
+    return State2_;
+}
 //==================== //
-GuardPointer DFsm_Transition::getGuard() { return Guard_; }
+GuardPointer DFsm_Transition::getGuard() {
+    return Guard_;
+}
 //==================== //
 
 // ===  DFsm_Entry === //
 
-EntryPointer DFsm_Entry::create(std::function<void()> entry) { return EntryPointer(new DFsm_Entry(entry)); }
+EntryPointer DFsm_Entry::create(std::function<void()> entry) {
+    return EntryPointer(new DFsm_Entry(entry));
+}
 //==================== //
 DFsm_Entry::DFsm_Entry(std::function<void()> entry) : entry_(entry) {}
 //==================== //
-void DFsm_Entry::execute(void) { entry_(); }
+void DFsm_Entry::execute(void) {
+    entry_();
+}
 //==================== //
 
 // ===  DFsm_Body === //
 
-BodyPointer DFsm_Body::create(std::function<void()> body) { return BodyPointer(new DFsm_Body(body)); }
+BodyPointer DFsm_Body::create(std::function<void()> body) {
+    return BodyPointer(new DFsm_Body(body));
+}
 //==================== //
 DFsm_Body::DFsm_Body(std::function<void()> body) : body_(body) {}
 //==================== //
-void DFsm_Body::execute() { body_(); }
+void DFsm_Body::execute() {
+    body_();
+}
 //==================== //
 
 // ===  DFsm_Guard === //
 
-GuardPointer DFsm_Guard::create(std::function<bool()> guard) { return GuardPointer(new DFsm_Guard(guard)); }
+GuardPointer DFsm_Guard::create(std::function<bool()> guard) {
+    return GuardPointer(new DFsm_Guard(guard));
+}
 //==================== //
 DFsm_Guard::DFsm_Guard(std::function<bool()> guard) : guard_(guard) {}
 //==================== //
-bool DFsm_Guard::execute() { return guard_(); }
+bool DFsm_Guard::execute() {
+    return guard_();
+}
 //==================== //
 
 // ===  DFsm_Exit === //
 
-ExitPointer DFsm_Exit::create(std::function<void()> exit) { return ExitPointer(new DFsm_Exit(exit)); }
+ExitPointer DFsm_Exit::create(std::function<void()> exit) {
+    return ExitPointer(new DFsm_Exit(exit));
+}
 //==================== //
 DFsm_Exit::DFsm_Exit(std::function<void()> exit) : exit_(exit) {}
 //==================== //
-void DFsm_Exit::execute() { exit_(); }
+void DFsm_Exit::execute() {
+    exit_();
+}
 //==================== //
 
 // ===  DFsm_State === //
@@ -202,29 +224,53 @@ StatePointer DFsm_State::create(StatePointer parent,
 DFsm_State::DFsm_State(StatePointer parent, int state, EntryPointer entry, ExitPointer exit, BodyPointer body)
     : parent_(parent), state_(state), entry_(entry), body_(body), exit_(exit), historyState_(nullptr) {}
 //==================== //
-StatePointer DFsm_State::getParent() { return parent_; }
+StatePointer DFsm_State::getParent() {
+    return parent_;
+}
 //==================== //
-int DFsm_State::getState() { return state_; }
+int DFsm_State::getState() {
+    return state_;
+}
 //==================== //
-void DFsm_State::addEntry(EntryPointer entry) { entry_ = entry; }
+void DFsm_State::addEntry(EntryPointer entry) {
+    entry_ = entry;
+}
 //==================== //
-void DFsm_State::addExit(ExitPointer exit) { exit_ = exit; }
+void DFsm_State::addExit(ExitPointer exit) {
+    exit_ = exit;
+}
 //==================== //
-void DFsm_State::addBody(BodyPointer body) { body_ = body; }
+void DFsm_State::addBody(BodyPointer body) {
+    body_ = body;
+}
 //==================== //
-EntryPointer DFsm_State::getEntry() { return entry_; }
+EntryPointer DFsm_State::getEntry() {
+    return entry_;
+}
 //==================== //
-ExitPointer DFsm_State::getExit() { return exit_; }
+ExitPointer DFsm_State::getExit() {
+    return exit_;
+}
 //==================== //
-BodyPointer DFsm_State::getBody() { return body_; }
+BodyPointer DFsm_State::getBody() {
+    return body_;
+}
 //==================== //
-void DFsm_State::UpdateHistoryPoint(StatePointer state) { historyState_ = state; }
+void DFsm_State::UpdateHistoryPoint(StatePointer state) {
+    historyState_ = state;
+}
 //==================== //
-StatePointer DFsm_State::getHistoryPoint() { return historyState_; }
+StatePointer DFsm_State::getHistoryPoint() {
+    return historyState_;
+}
 //==================== //
-StatePointer DFsm_State::getInitState() { return initState_; }
+StatePointer DFsm_State::getInitState() {
+    return initState_;
+}
 //==================== //
-void DFsm_State::registerInitState(StatePointer state) { initState_ = state; }
+void DFsm_State::registerInitState(StatePointer state) {
+    initState_ = state;
+}
 //==================== //
 
 // ===  DFsm_Main === //
@@ -280,7 +326,9 @@ void DFsm_Main::addStateBody(int state, std::function<void()> bodyFunction) {
     if (nullptr != state1) state1->addBody(body);
 }
 //==================== //
-void DFsm_Main::registerMainInitState(int initState) { currentState_ = stateMap_[initState]; }
+void DFsm_Main::registerMainInitState(int initState) {
+    currentState_ = stateMap_[initState];
+}
 //==================== //
 void DFsm_Main::addInitState(int inState, int initState) {
     StatePointer state1 = stateMap_[inState];

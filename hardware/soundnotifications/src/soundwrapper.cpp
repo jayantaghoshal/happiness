@@ -59,7 +59,9 @@ void Sound::onDisconnected() {
     _state = State::Idle;
 }
 
-SoundWrapper::SoundID Sound::getSoundID() const { return _soundID; }
+SoundWrapper::SoundID Sound::getSoundID() const {
+    return _soundID;
+}
 
 void Sound::play() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
@@ -156,9 +158,13 @@ void Sound::stop() {
     }
 }
 
-std::string Sound::name() const { return _name; }
+std::string Sound::name() const {
+    return _name;
+}
 
-uint32_t Sound::getConnectionID() const { return connectionID; }
+uint32_t Sound::getConnectionID() const {
+    return connectionID;
+}
 
 void Sound::onPlayStarted() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
@@ -357,7 +363,9 @@ SoundWrapper* SoundWrapper::instance() {
     return &soundWrapperInstance;
 }
 
-bool SoundWrapper::getInitialized() const { return initialized.load(); }
+bool SoundWrapper::getInitialized() const {
+    return initialized.load();
+}
 
 ::android::hardware::Return<void> SoundWrapper::onDisconnected(uint32_t connectionID) {
     ALOGD("%s %d", __FUNCTION__, connectionID);

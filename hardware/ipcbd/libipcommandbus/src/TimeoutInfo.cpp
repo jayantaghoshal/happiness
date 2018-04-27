@@ -29,7 +29,9 @@ bool TimeoutInfo::increaseTimeout() {
     return true;
 }
 
-std::chrono::milliseconds TimeoutInfo::getTimeoutValue(void) { return timeoutValue_; }
+std::chrono::milliseconds TimeoutInfo::getTimeoutValue(void) {
+    return timeoutValue_;
+}
 
 void TimeoutInfo::reset(void) {
     retry_ = 0;

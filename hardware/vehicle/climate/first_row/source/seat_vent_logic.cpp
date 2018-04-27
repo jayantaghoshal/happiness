@@ -42,7 +42,9 @@ SeatVentLogic::SeatVentLogic(UserLocation userLocation,
     }
 }
 
-SeatVentLogic::~SeatVentLogic() { sVentLevel_.unSubscribe(); }
+SeatVentLogic::~SeatVentLogic() {
+    sVentLevel_.unSubscribe();
+}
 
 autosar::SeatClimaLvl SeatVentLogic::convertVentLevelToAutosar(FirstRowGen::VentLevel level) {
     switch (level) {

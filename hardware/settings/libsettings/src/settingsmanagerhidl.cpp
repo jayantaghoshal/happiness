@@ -15,11 +15,19 @@ namespace profilesHidl = vendor::volvocars::hardware::profiles::V1_0;
 static constexpr uint64_t ISETTINGS_HAL_DEATH_COOKIE = 0xDEAD;
 
 namespace {
-uint32_t toHidl(const SettingId& key) { return static_cast<uint32_t>(key); }
-settingsHidl::UserScope toHidl(const UserScope& u) { return static_cast<settingsHidl::UserScope>(u); }
-SettingId fromHidl(const uint32_t& key) { return static_cast<SettingId>(key); }
+uint32_t toHidl(const SettingId& key) {
+    return static_cast<uint32_t>(key);
+}
+settingsHidl::UserScope toHidl(const UserScope& u) {
+    return static_cast<settingsHidl::UserScope>(u);
+}
+SettingId fromHidl(const uint32_t& key) {
+    return static_cast<SettingId>(key);
+}
 
-std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
+std::string toString(SettingId id) {
+    return std::to_string(static_cast<uint32_t>(id));
+}
 }  // namespace
 
 SettingsManagerHidl::SettingsManagerHidl(tarmac::eventloop::IDispatcher& dispatcher) : dispatcher{dispatcher} {

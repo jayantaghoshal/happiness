@@ -18,7 +18,9 @@ extern int __real_open(const char* pathname, int flags, mode_t mode);
 extern ssize_t __real_read(int fd, void* buf, size_t count);
 }
 
-void misc_mock_init(MiscMock* mockInstance) { miscMock = mockInstance; }
+void misc_mock_init(MiscMock* mockInstance) {
+    miscMock = mockInstance;
+}
 
 int unlink(const char* pathName) {
     miscMock->unlink(pathName);

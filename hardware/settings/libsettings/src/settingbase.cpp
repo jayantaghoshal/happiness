@@ -14,7 +14,9 @@
 namespace SettingsFramework {
 
 namespace {
-std::string toString(SettingId id) { return std::to_string(static_cast<uint32_t>(id)); }
+std::string toString(SettingId id) {
+    return std::to_string(static_cast<uint32_t>(id));
+}
 }  // namespace
 
 SettingBase::SettingBase(android::sp<SettingsManager> context, const SettingId& name, UserScope userScope)
@@ -71,6 +73,8 @@ void SettingBase::setStringData(const std::string& data, ProfileIdentifier profi
     context->setRawData(name_, profid, data);
 }
 
-std::string SettingBase::jsonToVec(const nlohmann::json& j) { return j.dump(); }
+std::string SettingBase::jsonToVec(const nlohmann::json& j) {
+    return j.dump();
+}
 
 }  // namespace SettingsFramework

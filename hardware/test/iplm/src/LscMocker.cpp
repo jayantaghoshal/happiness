@@ -17,7 +17,9 @@ LscMocker::LscMocker() {
     }
 }
 
-LscMocker::~LscMocker() { ALOGD("~LscMocker"); }
+LscMocker::~LscMocker() {
+    ALOGD("~LscMocker");
+}
 
 void LscMocker::RegisterLSC(std::string LSCName) {
     if (iplmservice != nullptr) iplmservice->registerService(LSCName, this);

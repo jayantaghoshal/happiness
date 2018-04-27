@@ -12,15 +12,25 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-Return<void> EvsDrmDisplay::getDisplayInfo(getDisplayInfo_cb /* hidl_cb */) { return Return<void>(); }
+Return<void> EvsDrmDisplay::getDisplayInfo(getDisplayInfo_cb /* hidl_cb */) {
+    return Return<void>();
+}
 
-Return<EvsResult> EvsDrmDisplay::setDisplayState(DisplayState /* state */) { return EvsResult::OK; }
+Return<EvsResult> EvsDrmDisplay::setDisplayState(DisplayState /* state */) {
+    return EvsResult::OK;
+}
 
-Return<DisplayState> EvsDrmDisplay::getDisplayState() { return DisplayState::DEAD; }
+Return<DisplayState> EvsDrmDisplay::getDisplayState() {
+    return DisplayState::DEAD;
+}
 
-Return<void> EvsDrmDisplay::getTargetBuffer(getTargetBuffer_cb /* hidl_cb */) { return Return<void>(); }
+Return<void> EvsDrmDisplay::getTargetBuffer(getTargetBuffer_cb /* hidl_cb */) {
+    return Return<void>();
+}
 
-Return<EvsResult> EvsDrmDisplay::returnTargetBufferForDisplay(const BufferDesc& /* buffer */) { return EvsResult::OK; }
+Return<EvsResult> EvsDrmDisplay::returnTargetBufferForDisplay(const BufferDesc& /* buffer */) {
+    return EvsResult::OK;
+}
 
 }  // namespace vcc_implementation
 }  // namespace V1_0

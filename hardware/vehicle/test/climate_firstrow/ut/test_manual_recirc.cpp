@@ -163,7 +163,9 @@ class RecircTest : public Test {
     std::unique_ptr<ManualRecircLogic> _sut;
 };
 
-TEST_F(RecircTest, Constructor_WillInitialize) { EXPECT_EQ(FirstRowGen::ManualRecircState::DISABLED, recirc.get()); }
+TEST_F(RecircTest, Constructor_WillInitialize) {
+    EXPECT_EQ(FirstRowGen::ManualRecircState::DISABLED, recirc.get());
+}
 
 TEST_F(RecircTest, Constructor_WillBeError_WhenVehModError) {
     setVehicleModeError();

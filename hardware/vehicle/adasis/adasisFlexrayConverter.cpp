@@ -44,7 +44,9 @@ adasisFlexrayConverterImpl::adasisFlexrayConverterImpl() {
     layerAvailaible = false;
     messageSubscribe = false;
 }
-adasisFlexrayConverterImpl::~adasisFlexrayConverterImpl() { converter->StopVmsAdasisConverter(); }
+adasisFlexrayConverterImpl::~adasisFlexrayConverterImpl() {
+    converter->StopVmsAdasisConverter();
+}
 
 adasisFlexrayConverter::~adasisFlexrayConverter() = default;
 
@@ -62,7 +64,9 @@ bool adasisFlexrayConverterImpl::startConverterInstance() {
     return open_result;
 }
 
-bool adasisFlexrayConverterImpl::getConverterStarted() { return open_result; }
+bool adasisFlexrayConverterImpl::getConverterStarted() {
+    return open_result;
+}
 
 void adasisFlexrayConverterImpl::vmsMessageController(const VehiclePropValue& value) {
     ALOGI("Pranay :Handle VMS property: %d, Vms Message type: %d", isValidVmsMessage(value), parseMessageType(value));
@@ -96,7 +100,9 @@ void adasisFlexrayConverterImpl::HandleVmsVehicleProperty(const VehiclePropValue
     }
 }
 
-void adasisFlexrayConverterImpl::stopConverterInstance() { converter->StopVmsAdasisConverter(); }
+void adasisFlexrayConverterImpl::stopConverterInstance() {
+    converter->StopVmsAdasisConverter();
+}
 
 int sgn(double v) {  // Returns the sign.
     return ((static_cast<uint8_t>(v > 0)) - (static_cast<uint8_t>(v < 0)));

@@ -167,7 +167,9 @@ FirstRowGen::Range TemperatureLogic::range() {
     return {range.first, range.second};
 }
 
-bool TemperatureLogic::signalsOk() const { return (vehModMngtGlbSafe1_.get().isOk() && climateActive_.get().isOk()); }
+bool TemperatureLogic::signalsOk() const {
+    return (vehModMngtGlbSafe1_.get().isOk() && climateActive_.get().isOk());
+}
 
 bool TemperatureLogic::activationCheck(const autosar::UsgModSts1 usgMode,
                                        const autosar::CarModSts1 carMode,

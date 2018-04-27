@@ -18,7 +18,9 @@ extern int __real_pthread_create(pthread_t* thread,
                                  void* arg);
 }
 
-void pthread_mock_init(PthreadMock* mockInstance) { pthreadMock = mockInstance; }
+void pthread_mock_init(PthreadMock* mockInstance) {
+    pthreadMock = mockInstance;
+}
 
 int pthread_attr_init(pthread_attr_t* attr) {
     pthreadMock->pthread_attr_init(attr);

@@ -662,7 +662,9 @@ U32 ASN_ObjectId_EncodedSize(ASN_ObjectId ThisPtr) {
     return encoded_size * 8;
 }
 
-U32 ASN_ObjectId_SessionSize() { return sizeof(struct ASN_ObjectId_t); }
+U32 ASN_ObjectId_SessionSize() {
+    return sizeof(struct ASN_ObjectId_t);
+}
 
 void ASN_OctetString_Associate(ASN_OctetString ThisPtr, ASN_BYTE* data, U32 length) {
     ThisPtr->data = data;
@@ -1136,7 +1138,9 @@ U32 ASN_RelativeObjectId_EncodedSize(ASN_RelativeObjectId ThisPtr) {
     return ASN_ObjectId_EncodedSize(ThisPtr);
 }
 
-U32 ASN_RelativeObjectId_SessionSize() { return ASN_ObjectId_SessionSize(); }
+U32 ASN_RelativeObjectId_SessionSize() {
+    return ASN_ObjectId_SessionSize();
+}
 
 U32 ASN_S32CountBits(S32 low, S32 high) {
     U32 range = 0;
@@ -1156,7 +1160,9 @@ U32 ASN_S32CountBits(S32 low, S32 high) {
     return nBits;
 }
 
-U32 ASN_Session_BytesLeft(ASN_Session session) { return session->malloc_end_ptr - session->malloc_next_ptr; }
+U32 ASN_Session_BytesLeft(ASN_Session session) {
+    return session->malloc_end_ptr - session->malloc_next_ptr;
+}
 
 void ASN_Session_ClearError(ASN_Session session) {
     session->error.error = ASN_ERROR_NO_ERROR;
@@ -1305,7 +1311,9 @@ U32 ASN_Stream_BitsLeft(ASN_Stream stream) {
     // return ( (U32)(stream->endPtr - stream->startPtr) - stream->bytePointer ) * 8 + stream->bitPointer - 8;
 }
 
-U32 ASN_Stream_BitsUsed(ASN_Stream stream) { return stream->bytePointer * 8 + (8 - stream->bitPointer); }
+U32 ASN_Stream_BitsUsed(ASN_Stream stream) {
+    return stream->bytePointer * 8 + (8 - stream->bitPointer);
+}
 
 U32 ASN_Stream_BytesUsed(ASN_Stream stream) {
     return (stream->bitPointer == 8) ? stream->bytePointer : stream->bytePointer + 1;
@@ -1375,7 +1383,9 @@ ASN_BYTE* ASN_Stream_GetBuffer(ASN_Stream stream, U32* size) {
     return stream->startPtr;
 }
 
-ASN_Result ASN_Stream_GetResult(ASN_Stream stream) { return &stream->error; }
+ASN_Result ASN_Stream_GetResult(ASN_Stream stream) {
+    return &stream->error;
+}
 
 void ASN_Stream_Reset(ASN_Stream stream) {
     stream->error.error = ASN_ERROR_NO_ERROR;
@@ -1402,7 +1412,9 @@ void ASN_UTF8String_AssociateText(ASN_UTF8String ThisPtr, char* text) {
     ASN_OctetString_AssociateText((ASN_OctetString)ThisPtr, text);
 }
 
-ASN_UTF8String ASN_UTF8String_Create(ASN_Session session) { return (ASN_UTF8String)ASN_OctetString_Create(session); }
+ASN_UTF8String ASN_UTF8String_Create(ASN_Session session) {
+    return (ASN_UTF8String)ASN_OctetString_Create(session);
+}
 
 ASN_Result ASN_UTF8String_Decode(ASN_UTF8String ThisPtr, ASN_Session session, ASN_Stream stream, U32 low, U32 high) {
     U32 i;
@@ -1562,10 +1574,14 @@ U32 ASN_UTF8String_Get(ASN_UTF8String ThisPtr, ASN_BYTE** data) {
     return ASN_OctetString_Get((ASN_OctetString)ThisPtr, data);
 }
 
-char* ASN_UTF8String_GetText(ASN_UTF8String ThisPtr) { return ASN_OctetString_GetText((ASN_OctetString)ThisPtr); }
+char* ASN_UTF8String_GetText(ASN_UTF8String ThisPtr) {
+    return ASN_OctetString_GetText((ASN_OctetString)ThisPtr);
+}
 
 #ifdef ENABLE_ASN_SESSION_SIZE
-U32 ASN_UTF8String_SessionSize(U32 low, U32 high) { return ASN_OctetString_SessionSize(low, high); }
+U32 ASN_UTF8String_SessionSize(U32 low, U32 high) {
+    return ASN_OctetString_SessionSize(low, high);
+}
 #endif /* #ifdef ENABLE_ASN_SESSION_SIZE */
 
 ASN_Result ASN_UTF8String_Set(ASN_UTF8String ThisPtr, ASN_Session session, ASN_BYTE* data, U32 length) {
@@ -1741,7 +1757,9 @@ void ASN_ObjectId_Print(ASN_ObjectId ThisPtr) {
     ASN_Print(EOL);
 }
 
-void ASN_OctetString_Print(ASN_OctetString ThisPtr) { ASN_String_Print((struct ASN_String_t*)ThisPtr); }
+void ASN_OctetString_Print(ASN_OctetString ThisPtr) {
+    ASN_String_Print((struct ASN_String_t*)ThisPtr);
+}
 
 void ASN_PrintableString_Print(ASN_PrintableString ThisPtr) {
     U32 i;
@@ -1751,7 +1769,9 @@ void ASN_PrintableString_Print(ASN_PrintableString ThisPtr) {
     ASN_String_Print(&tString);
 }
 
-void ASN_UTF8String_Print(ASN_UTF8String ThisPtr) { ASN_String_Print((struct ASN_String_t*)ThisPtr); }
+void ASN_UTF8String_Print(ASN_UTF8String ThisPtr) {
+    ASN_String_Print((struct ASN_String_t*)ThisPtr);
+}
 
 #endif /* #ifdef ASN_PRINT */
 
@@ -1811,7 +1831,9 @@ void test_S32CountBits(void) {
     assertEqualsU32(8, ASN_S32CountBits(-256, -128), __LINE__);
 }
 
-void test_Stream() { assertEqualsU32(sizeof(struct ASN_Stream_t), ASN_STREAM_SIZE, __LINE__); }
+void test_Stream() {
+    assertEqualsU32(sizeof(struct ASN_Stream_t), ASN_STREAM_SIZE, __LINE__);
+}
 
 void test_StreamDecodeByte() {
     void* encode_buffer = malloc(ASN_STREAM_SIZE);

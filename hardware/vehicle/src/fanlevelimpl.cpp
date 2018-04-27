@@ -26,7 +26,9 @@ FanLevelImpl::FanLevelImpl() : m_fanLevel(FAN_4) {
     setFanLevel(FAN_4);  // TODO Hard coded init value due to no persistant settings are available
 }
 
-ReadOnlyNotifiableProperty<int32_t>* FanLevelImpl::fanLevelValue() { return &m_fanLevel; }
+ReadOnlyNotifiableProperty<int32_t>* FanLevelImpl::fanLevelValue() {
+    return &m_fanLevel;
+}
 
 void FanLevelImpl::setFanLevel(int32_t fanLevel) {
     ALOGI("setFanLevel: Send HmiHvacFanLvlFrnt_info for setting fan speed to: %d", fanLevel);

@@ -82,7 +82,9 @@ class HisipMessageInjectTestFixture : public ::testing::Test {
     MessageSendMock messageSendMock;
 };
 
-void messageSend(Message_Send_T* msg_data) { messageSendMockPtr->messageSend(msg_data); }
+void messageSend(Message_Send_T* msg_data) {
+    messageSendMockPtr->messageSend(msg_data);
+}
 
 TEST_F(HisipMessageInjectTestFixture, avmpMessageInject_nullPtrMessage_shallBeIgnored) {
     avmpMessageInject(nullptr, 0);
@@ -233,7 +235,9 @@ TEST_F(VsmTestFixture, vsmInit_noPresumptions_shallCallVsmInjectInit) {
     vsm_init();
 }
 
-TEST_F(VsmTestFixture, vsmDeInit_noPresumptions_shallDoNothing) { vsm_deInit(); }
+TEST_F(VsmTestFixture, vsmDeInit_noPresumptions_shallDoNothing) {
+    vsm_deInit();
+}
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

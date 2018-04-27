@@ -24,7 +24,9 @@ Return<void> GnssNi::respond(int32_t notifId, IGnssNiCallback::GnssUserResponseT
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssNi* HIDL_FETCH_IGnssNi(const char* /* name */) { return new GnssNi(); }
+IGnssNi* HIDL_FETCH_IGnssNi(const char* /* name */) {
+    return new GnssNi();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

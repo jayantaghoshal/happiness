@@ -244,9 +244,13 @@ std::pair<double, double> TemperatureConverter::range(autosar::AmbTIndcdUnit uni
     return std::make_pair(celsiusFahrenheitMap.front().first, celsiusFahrenheitMap.back().first);
 }
 
-double TemperatureConverter::roundToClosestWholeDegree(double temp) const { return std::round(temp); }
+double TemperatureConverter::roundToClosestWholeDegree(double temp) const {
+    return std::round(temp);
+}
 
-double TemperatureConverter::roundToClosestHalfDegree(double temp) const { return std::round(temp * 2) / 2; }
+double TemperatureConverter::roundToClosestHalfDegree(double temp) const {
+    return std::round(temp * 2) / 2;
+}
 
 }  // namespace daemon
 }  // namespace common

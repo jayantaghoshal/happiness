@@ -36,24 +36,40 @@ ReadOnlyNotifiableProperty<FirstRowGen::TemperatureSyncState>& Factory::getTempe
     return temperatureSync_;
 }
 
-ReadOnlyNotifiableProperty<double>& Factory::getDriverTempProperty() { return driverTemp_; }
+ReadOnlyNotifiableProperty<double>& Factory::getDriverTempProperty() {
+    return driverTemp_;
+}
 
 ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& Factory::getDriverTempHiLoNProperty() {
     return driverTempHiLoN_;
 }
 
-ReadOnlyNotifiableProperty<double>& Factory::getTempRearLeft() { return tempRearLeft_; }
+ReadOnlyNotifiableProperty<double>& Factory::getTempRearLeft() {
+    return tempRearLeft_;
+}
 
-ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& Factory::getTempHiLoNRearLeft() { return tempHiLoNRearLeft_; }
+ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& Factory::getTempHiLoNRearLeft() {
+    return tempHiLoNRearLeft_;
+}
 
-ReadOnlyNotifiableProperty<double>& Factory::getTempRearRight() { return tempRearRight_; }
+ReadOnlyNotifiableProperty<double>& Factory::getTempRearRight() {
+    return tempRearRight_;
+}
 
-ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& Factory::getTempHiLoNRearRight() { return tempHiLoNRearRight_; }
+ReadOnlyNotifiableProperty<autosar::HmiCmptmtTSpSpcl>& Factory::getTempHiLoNRearRight() {
+    return tempHiLoNRearRight_;
+}
 
-ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& Factory::getMaxDefrosterProperty() { return maxDefroster_; }
+ReadOnlyNotifiableProperty<FirstRowGen::MaxDefrosterState>& Factory::getMaxDefrosterProperty() {
+    return maxDefroster_;
+}
 
-ReadOnlyNotifiableProperty<bool>& Factory::getWakeupByIPLMProperty() { return wakeupByIPLM_; }
+ReadOnlyNotifiableProperty<bool>& Factory::getWakeupByIPLMProperty() {
+    return wakeupByIPLM_;
+}
 
-ReadOnlyNotifiableProperty<bool>& Factory::getShutdownInProgressProperty() { return shutdownInProgress_; }
+ReadOnlyNotifiableProperty<bool>& Factory::getShutdownInProgressProperty() {
+    return shutdownInProgress_;
+}
 }  // namespace daemon
 }  // namespace common

@@ -78,7 +78,9 @@ BufferDesc CreateDummyBuffer(uint32_t buffer_id) {
 }  // namespace test_utils
 }  // namespace
 
-TEST_F(EvsVideoProviderTest, ConstructObject) { EXPECT_NE(evs_video_provider, nullptr); }
+TEST_F(EvsVideoProviderTest, ConstructObject) {
+    EXPECT_NE(evs_video_provider, nullptr);
+}
 
 TEST_F(EvsVideoProviderTest, DeleteObject) {
     evs_video_provider.clear();

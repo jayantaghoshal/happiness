@@ -469,7 +469,9 @@ bool KeyManagerModule::VIPListener::onMessageFromVip(const HisipMessage& msg) {
     return true;
 }
 
-std::string KeyManagerModule::VIPListener::getUserId() { return "KeyManagerModule"; }
+std::string KeyManagerModule::VIPListener::getUserId() {
+    return "KeyManagerModule";
+}
 
 vhal20::VehiclePropValue KeyManagerModule::convertToLongpressPropValue(HomeButtonState homekeystate) {
     vhal20::VehiclePropValue prop_value;

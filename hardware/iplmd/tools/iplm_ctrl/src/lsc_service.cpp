@@ -71,7 +71,9 @@ void LscService::RequestResourceGroup(const std::string& lscName, ResourceGroup 
     }
 }
 
-LscService::~LscService() { ALOGD("~LscService"); }
+LscService::~LscService() {
+    ALOGD("~LscService");
+}
 
 // Methods from ::vendor::volvocars::hardware::iplm::V1_0::IIplmCallback follow.
 Return<void> IplmCallbackImpl::onResourceGroupStatus(ResourceGroup resourceGroup,

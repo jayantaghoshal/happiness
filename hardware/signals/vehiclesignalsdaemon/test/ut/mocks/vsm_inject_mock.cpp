@@ -8,7 +8,9 @@
 
 static VsmInjectMock* vsmInjectMock;
 
-void vsm_inject_mock_init(VsmInjectMock* mockInstance) { vsmInjectMock = mockInstance; }
+void vsm_inject_mock_init(VsmInjectMock* mockInstance) {
+    vsmInjectMock = mockInstance;
+}
 
 void vsm_inject_init(void) {
     ASSERT_TRUE(vsmInjectMock != nullptr);

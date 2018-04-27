@@ -19,7 +19,9 @@ Return<void> GnssXtraCallback::downloadRequestCb() {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssXtraCallback* HIDL_FETCH_IGnssXtraCallback(const char* /* name */) { return new GnssXtraCallback(); }
+IGnssXtraCallback* HIDL_FETCH_IGnssXtraCallback(const char* /* name */) {
+    return new GnssXtraCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

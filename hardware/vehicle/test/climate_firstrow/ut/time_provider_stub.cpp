@@ -11,7 +11,9 @@
 
 using namespace tarmac::timeprovider;
 
-std::chrono::steady_clock::time_point TimeProviderStub::steady_clock_now() const { return steady_now; }
+std::chrono::steady_clock::time_point TimeProviderStub::steady_clock_now() const {
+    return steady_now;
+}
 
 void TimeProviderStub::sleep_for(const std::chrono::milliseconds duration) {
     const auto end_time = steady_now + duration;
@@ -83,7 +85,9 @@ TimeProviderStub::UserSubscriptionHandle::UserSubscriptionHandle(
         std::shared_ptr<TimeProviderStub::SubscriptionData> meta)
     : TimerSubscriptionHandle(), meta(meta) {}
 
-TimeProviderStub::UserSubscriptionHandle::~UserSubscriptionHandle() { meta->unsubscribe(); }
+TimeProviderStub::UserSubscriptionHandle::~UserSubscriptionHandle() {
+    meta->unsubscribe();
+}
 
 TimeProviderStub::SubscriptionData::SubscriptionData(std::function<void()> func) : func(func) {}
 
@@ -112,7 +116,9 @@ TimeProviderStub::PeriodicTimerSubscriptionHandle::PeriodicTimerSubscriptionHand
         std::shared_ptr<TimeProviderStub::ProxyHandle> handle)
     : handle(handle) {}
 
-TimeProviderStub::PeriodicTimerSubscriptionHandle::~PeriodicTimerSubscriptionHandle() { handle->handle.reset(nullptr); }
+TimeProviderStub::PeriodicTimerSubscriptionHandle::~PeriodicTimerSubscriptionHandle() {
+    handle->handle.reset(nullptr);
+}
 
 TimeProviderStub::ProxyHandle::ProxyHandle(std::chrono::milliseconds interval,
                                            std::function<void()> func,

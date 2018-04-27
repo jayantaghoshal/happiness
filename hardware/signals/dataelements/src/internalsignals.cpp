@@ -7,13 +7,25 @@
 
 // ==============================================================
 // ActivateVfc
-const char* ActivateVfc_info::Name() { return "ActivateVfc"; }
-const char* ActivateVfc_info::TypeName() { return "ActivateVfc"; }
-autosar::Dir ActivateVfc_info::Direction() { return autosar::Dir::OUT; }
+const char* ActivateVfc_info::Name() {
+    return "ActivateVfc";
+}
+const char* ActivateVfc_info::TypeName() {
+    return "ActivateVfc";
+}
+autosar::Dir ActivateVfc_info::Direction() {
+    return autosar::Dir::OUT;
+}
 
-const char* ActivateVfc_info::name() const { return Name(); }
-const char* ActivateVfc_info::typeName() const { return TypeName(); }
-autosar::Dir ActivateVfc_info::direction() const { return Direction(); }
+const char* ActivateVfc_info::name() const {
+    return Name();
+}
+const char* ActivateVfc_info::typeName() const {
+    return TypeName();
+}
+autosar::Dir ActivateVfc_info::direction() const {
+    return Direction();
+}
 
 namespace autosar {
 template <>

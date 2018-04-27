@@ -75,7 +75,9 @@ class VFCClimatisationTest : public ::testing::Test {
 /*               Tests begins here              */
 /*==============================================*/
 
-TEST_F(VFCClimatisationTest, test_instantiate) { VFCDrivingClimatisationLogic vfc{dispatcher_}; }
+TEST_F(VFCClimatisationTest, test_instantiate) {
+    VFCDrivingClimatisationLogic vfc{dispatcher_};
+}
 
 TEST_F(VFCClimatisationTest, test_that_vfc_should_be_default_off) {
     // Listen to outgoing dataelement

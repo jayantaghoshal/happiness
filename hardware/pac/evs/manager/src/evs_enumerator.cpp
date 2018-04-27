@@ -22,17 +22,29 @@ bool EvsEnumerator::Init(const sp<IEvsEnumerator>& hw_enumerator) {
     return (hw_enumerator_ != nullptr);
 }
 
-Return<void> EvsEnumerator::getCameraList(getCameraList_cb /*list_cb*/) { return Void(); }
+Return<void> EvsEnumerator::getCameraList(getCameraList_cb /*list_cb*/) {
+    return Void();
+}
 
-Return<sp<IEvsCamera>> EvsEnumerator::openCamera(const hidl_string& /*camera_id*/) { return sp<IEvsCamera>(); }
+Return<sp<IEvsCamera>> EvsEnumerator::openCamera(const hidl_string& /*camera_id*/) {
+    return sp<IEvsCamera>();
+}
 
-Return<void> EvsEnumerator::closeCamera(const sp<IEvsCamera>& /*car_camera*/) { return Void(); }
+Return<void> EvsEnumerator::closeCamera(const sp<IEvsCamera>& /*car_camera*/) {
+    return Void();
+}
 
-Return<sp<IEvsDisplay>> EvsEnumerator::openDisplay() { return sp<IEvsDisplay>(); }
+Return<sp<IEvsDisplay>> EvsEnumerator::openDisplay() {
+    return sp<IEvsDisplay>();
+}
 
-Return<void> EvsEnumerator::closeDisplay(const sp<IEvsDisplay>& /*display*/) { return Void(); }
+Return<void> EvsEnumerator::closeDisplay(const sp<IEvsDisplay>& /*display*/) {
+    return Void();
+}
 
-Return<DisplayState> EvsEnumerator::getDisplayState() { return DisplayState(); }
+Return<DisplayState> EvsEnumerator::getDisplayState() {
+    return DisplayState();
+}
 
 }  // namespace vcc_implementation
 }  // namespace V1_0

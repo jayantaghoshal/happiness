@@ -18,7 +18,9 @@ namespace vcc_implementation {
 
 VirtualCamera::VirtualCamera(sp<IEvsVideoProvider> input_stream) : input_stream_(std::move(input_stream)) {}
 
-VirtualCamera::~VirtualCamera() { Shutdown(); }
+VirtualCamera::~VirtualCamera() {
+    Shutdown();
+}
 
 void VirtualCamera::Shutdown() {
     dbgD("called");

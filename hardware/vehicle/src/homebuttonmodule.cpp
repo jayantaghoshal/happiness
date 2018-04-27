@@ -108,7 +108,9 @@ bool HomeButtonModule::VIPListener::onMessageFromVip(const HisipMessage& msg) {
     return true;
 }
 
-std::string HomeButtonModule::VIPListener::getUserId() { return "HomeButtonModule"; }
+std::string HomeButtonModule::VIPListener::getUserId() {
+    return "HomeButtonModule";
+}
 
 }  // namespace hardware
 }  // namespace volvocars

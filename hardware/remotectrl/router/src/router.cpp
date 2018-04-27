@@ -26,10 +26,16 @@ Router::Router() : vsomeip_appl_(vsomeip::runtime::get()->create_application(REM
     }
 }
 
-Router::~Router() { Stop(); }
+Router::~Router() {
+    Stop();
+}
 
-void Router::Start() { vsomeip_appl_->start(); }
-void Router::Stop() { vsomeip_appl_->stop(); }
+void Router::Start() {
+    vsomeip_appl_->start();
+}
+void Router::Stop() {
+    vsomeip_appl_->stop();
+}
 
 }  // namespace router
 }  // namespace remotectrl

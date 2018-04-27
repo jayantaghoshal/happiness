@@ -24,7 +24,9 @@ class RestartClientTestFixture : public ::testing::Test {
     virtual void TearDown() {}
 };
 
-TEST_F(RestartClientTestFixture, restart) { EXPECT_TRUE(r.restart()); }
+TEST_F(RestartClientTestFixture, restart) {
+    EXPECT_TRUE(r.restart());
+}
 
 int main(int argc, char* argv[]) {
     ::testing::InitGoogleTest(&argc, argv);

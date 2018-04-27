@@ -98,7 +98,9 @@ LogClass::~LogClass() {
     }
 }
 
-LogClass& LogClass::writeFormatted() { return *this; }
+LogClass& LogClass::writeFormatted() {
+    return *this;
+}
 
 LogClass& LogClass::writeFormatted(const char* fmt, ...) {
     if ((LogLevel::None == g_log_level) || (severity_ > g_log_level)) {

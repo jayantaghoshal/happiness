@@ -51,14 +51,24 @@ class Configuration {
 
 static Configuration config;
 
-void loadLocalConfig() { config.init(); }
+void loadLocalConfig() {
+    config.init();
+}
 
-int getNofNodesInRG1() { return config.getNofNodesInRG1(); }
+int getNofNodesInRG1() {
+    return config.getNofNodesInRG1();
+}
 
-int getNofNodesInRG3() { return config.getNofNodesInRG3(); }
+int getNofNodesInRG3() {
+    return config.getNofNodesInRG3();
+}
 
-int getRequestMonitoringTmo() { return config.getRequestMonitoringTmo(); }
+int getRequestMonitoringTmo() {
+    return config.getRequestMonitoringTmo();
+}
 
-int getNofLocalSoftwareComponents() { return config.getNofLSCs(); }
+int getNofLocalSoftwareComponents() {
+    return config.getNofLSCs();
+}
 }
 }

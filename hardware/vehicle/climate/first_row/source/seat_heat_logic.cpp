@@ -98,7 +98,9 @@ SeatHeatLogic::SeatHeatLogic(const vcc::LocalConfigReaderInterface* lcfg,
     }
 }
 
-SeatHeatLogic::~SeatHeatLogic() { sHeatLevel_.unSubscribe(); }
+SeatHeatLogic::~SeatHeatLogic() {
+    sHeatLevel_.unSubscribe();
+}
 
 autosar::SeatClimaLvl& SeatHeatLogic::getSeatHeatSignal() {
     auto const steeringWheelPos = carconfig::getValue<CarConfigParams::CC8_SteeringWheelPositionType>();
@@ -181,7 +183,9 @@ bool SeatHeatLogic::activationCheck() const {
     return carModeStatusOk && usageModeOk;
 }
 
-bool SeatHeatLogic::signalsOk() const { return vehicleModeSignal_.get().isOk(); }
+bool SeatHeatLogic::signalsOk() const {
+    return vehicleModeSignal_.get().isOk();
+}
 
 bool SeatHeatLogic::inDynoMode() const {
     return vehicleModeSignal_.get().value().CarModSts1_ == autosar::CarModSts1::CarModDyno;

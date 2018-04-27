@@ -68,7 +68,9 @@ class VFCVisibilityTest : public ::testing::Test {
 /*               Tests begins here              */
 /*==============================================*/
 
-TEST_F(VFCVisibilityTest, test_instantiate) { VFCVisibilityLogic vfc{}; }
+TEST_F(VFCVisibilityTest, test_instantiate) {
+    VFCVisibilityLogic vfc{};
+}
 
 TEST_F(VFCVisibilityTest, test_that_vfc_should_be_default_off) {
     // Listen to outgoing dataelement

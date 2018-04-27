@@ -75,7 +75,9 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
     }
 }
 
-void UdpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { read_cb_ = std::move(readReadyCb); }
+void UdpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) {
+    read_cb_ = std::move(readReadyCb);
+}
 
 void UdpSocket::read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) {
     buffer.clear();

@@ -38,7 +38,9 @@ TcpSocket::~TcpSocket() {
     // flush buffers as well
 }
 
-void TcpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) { ready_cb_ = std::move(readReadyCb); }
+void TcpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) {
+    ready_cb_ = std::move(readReadyCb);
+}
 
 void TcpSocket::setup(const Message::Ecu& ecu) {
     auto it = std::find_if(ecu_ip_map_.begin(),
@@ -86,7 +88,9 @@ void TcpSocket::setup(const Message::Ecu& ecu) {
     return;
 }
 
-void TcpSocket::endConnection() { resetConnection(); }
+void TcpSocket::endConnection() {
+    resetConnection();
+}
 
 void TcpSocket::read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) {
     buffer.clear();

@@ -49,7 +49,9 @@ Return<bool> GnssConfiguration::setEmergencySuplPdn(bool enable) {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssConfiguration* HIDL_FETCH_IGnssConfiguration(const char* /* name */) { return new GnssConfiguration(); }
+IGnssConfiguration* HIDL_FETCH_IGnssConfiguration(const char* /* name */) {
+    return new GnssConfiguration();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

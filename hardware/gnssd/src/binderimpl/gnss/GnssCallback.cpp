@@ -59,7 +59,9 @@ Return<void> GnssCallback::gnssSetSystemInfoCb(const IGnssCallback::GnssSystemIn
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssCallback* HIDL_FETCH_IGnssCallback(const char* /* name */) { return new GnssCallback(); }
+IGnssCallback* HIDL_FETCH_IGnssCallback(const char* /* name */) {
+    return new GnssCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

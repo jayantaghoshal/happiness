@@ -23,9 +23,13 @@ DiagnosticTestResultsReporterImpl::DiagnosticTestResultsReporterImpl(
         std::chrono::steady_clock::duration reporting_interval)
     : dtc_id_(dtc_id), reporting_interval_(reporting_interval) {}
 
-void DiagnosticTestResultsReporterImpl::ReportTestPass() { ReportStatus(DiagnosticCheckStatus::PASSED); }
+void DiagnosticTestResultsReporterImpl::ReportTestPass() {
+    ReportStatus(DiagnosticCheckStatus::PASSED);
+}
 
-void DiagnosticTestResultsReporterImpl::ReportTestFail() { ReportStatus(DiagnosticCheckStatus::FAILED); }
+void DiagnosticTestResultsReporterImpl::ReportTestFail() {
+    ReportStatus(DiagnosticCheckStatus::FAILED);
+}
 
 void DiagnosticTestResultsReporterImpl::SendReportToCollector(DiagnosticCheckStatus status,
                                                               std::chrono::steady_clock::time_point now) {

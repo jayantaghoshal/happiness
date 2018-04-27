@@ -97,7 +97,9 @@ DAISettingImpl::DAISettingImpl(gsl::not_null<VFContext*> ctx)
     }
 }
 
-ReadOnlyNotifiableProperty<int32_t>* DAISettingImpl::DAISetting() { return &daiSetting_; }
+ReadOnlyNotifiableProperty<int32_t>* DAISettingImpl::DAISetting() {
+    return &daiSetting_;
+}
 
 void DAISettingImpl::setDAISetting(int settings_value) {
     auto vehModMngtGlbSafe1_signal = vehmod_flexray_receiver_.get();

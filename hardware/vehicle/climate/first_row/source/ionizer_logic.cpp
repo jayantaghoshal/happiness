@@ -81,7 +81,9 @@ IonizerLogic::IonizerLogic(NotifiableProperty<FirstRowGen::IonizerState>& ionize
     log_debug() << LOG_PREFIX << "Ionizer running";
 }
 
-bool IonizerLogic::signalsOk() const { return vehicleModeSignal_.get().isOk() && climaActvSignal_.get().isOk(); }
+bool IonizerLogic::signalsOk() const {
+    return vehicleModeSignal_.get().isOk() && climaActvSignal_.get().isOk();
+}
 
 void IonizerLogic::activationCheck() {
     isOk_ = signalsOk();

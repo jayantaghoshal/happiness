@@ -24,7 +24,9 @@ Return<bool> GnssXtra::injectXtraData(const hidl_string& xtraData) {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssXtra* HIDL_FETCH_IGnssXtra(const char* /* name */) { return new GnssXtra(); }
+IGnssXtra* HIDL_FETCH_IGnssXtra(const char* /* name */) {
+    return new GnssXtra();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

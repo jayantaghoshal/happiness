@@ -39,7 +39,9 @@ ClimateClient::ClimateClient(std::string path) : RemoteCtrlClientBase(path, clim
         actions.push_back(e.first);
     }
 }
-ClimateClient::~ClimateClient() { StopClient(); }
+ClimateClient::~ClimateClient() {
+    StopClient();
+}
 
 void ClimateClient::Run() {
     StartClient();

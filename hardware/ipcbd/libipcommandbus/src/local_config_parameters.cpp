@@ -14,7 +14,9 @@
 using namespace vcc;
 
 namespace Connectivity {
-LocalconfigParameters::LocalconfigParameters(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) { Init(); }
+LocalconfigParameters::LocalconfigParameters(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {
+    Init();
+}
 
 void LocalconfigParameters::Init() {
     InitTimeoutValues();
@@ -72,47 +74,83 @@ void LocalconfigParameters::InitNetworkPriority() {
     }
 }
 
-std::chrono::milliseconds LocalconfigParameters::getDefaultAckTimeout() { return defaultAckTimeout_; }
-uint32_t LocalconfigParameters::getDefaultAckNumRetries() { return defaultAckNumRetries_; }
-double LocalconfigParameters::getDefaultAckMultiplier() { return defaultAckMultiplier_; }
+std::chrono::milliseconds LocalconfigParameters::getDefaultAckTimeout() {
+    return defaultAckTimeout_;
+}
+uint32_t LocalconfigParameters::getDefaultAckNumRetries() {
+    return defaultAckNumRetries_;
+}
+double LocalconfigParameters::getDefaultAckMultiplier() {
+    return defaultAckMultiplier_;
+}
 
-double LocalconfigParameters::getDefaultRespMultiplier() { return defaultRespMultiplier_; }
+double LocalconfigParameters::getDefaultRespMultiplier() {
+    return defaultRespMultiplier_;
+}
 
-const std::string& LocalconfigParameters::getLocalIpAddress() { return ip_address_local_; }
+const std::string& LocalconfigParameters::getLocalIpAddress() {
+    return ip_address_local_;
+}
 
-const std::string& LocalconfigParameters::getBroadcastIpAddress() { return ip_address_broadcast_; }
+const std::string& LocalconfigParameters::getBroadcastIpAddress() {
+    return ip_address_broadcast_;
+}
 
 ISocket::IpPrecedence LocalconfigParameters::getNetworkControlPriority() {
     return static_cast<ISocket::IpPrecedence>(networkControlPrio_);
 }
 
-const std::string& LocalconfigParameters::getDIMIpAddress() { return ip_address_dim_; }
+const std::string& LocalconfigParameters::getDIMIpAddress() {
+    return ip_address_dim_;
+}
 
-const std::string& LocalconfigParameters::getTCAMIpAddress() { return ip_address_tcam_; }
+const std::string& LocalconfigParameters::getTCAMIpAddress() {
+    return ip_address_tcam_;
+}
 
-const std::string& LocalconfigParameters::getVGMIpAddress() { return ip_address_vgm_; }
+const std::string& LocalconfigParameters::getVGMIpAddress() {
+    return ip_address_vgm_;
+}
 
-uint16_t LocalconfigParameters::getLocalPort() { return port_local_; }
+uint16_t LocalconfigParameters::getLocalPort() {
+    return port_local_;
+}
 
-uint16_t LocalconfigParameters::getBroadcastPort() { return port_broadcast_; }
+uint16_t LocalconfigParameters::getBroadcastPort() {
+    return port_broadcast_;
+}
 
-uint16_t LocalconfigParameters::getDIMPort() { return port_dim_; }
+uint16_t LocalconfigParameters::getDIMPort() {
+    return port_dim_;
+}
 
-uint16_t LocalconfigParameters::getTCAMPort() { return port_tcam_; }
+uint16_t LocalconfigParameters::getTCAMPort() {
+    return port_tcam_;
+}
 
-uint16_t LocalconfigParameters::getVGMPort() { return port_vgm_; }
+uint16_t LocalconfigParameters::getVGMPort() {
+    return port_vgm_;
+}
 
-uint32_t LocalconfigParameters::getTestPort() { return port_test_; }
+uint32_t LocalconfigParameters::getTestPort() {
+    return port_test_;
+}
 
 LocalconfigParameters& LocalconfigParameters::getInstance() {
     static LocalconfigParameters instance;
     return instance;
 }
 
-std::chrono::seconds LocalconfigParameters::getDIMKeepAliveTime() { return dim_keep_alive_time_; }
+std::chrono::seconds LocalconfigParameters::getDIMKeepAliveTime() {
+    return dim_keep_alive_time_;
+}
 
-std::chrono::seconds LocalconfigParameters::getDIMKeepAliveInterval() { return dim_keep_alive_interval_; }
+std::chrono::seconds LocalconfigParameters::getDIMKeepAliveInterval() {
+    return dim_keep_alive_interval_;
+}
 
-int LocalconfigParameters::getDIMKeepAliveProbes() { return dim_keep_alive_probes_; }
+int LocalconfigParameters::getDIMKeepAliveProbes() {
+    return dim_keep_alive_probes_;
+}
 
 }  // Connectivity

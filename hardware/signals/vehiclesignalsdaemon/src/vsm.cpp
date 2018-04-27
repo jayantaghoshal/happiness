@@ -14,6 +14,10 @@
 #include <vsm.h>
 #include <vsm_inject.h>
 
-void vsm_init(void) { vsm_inject_init(); }
+void vsm_init(void) {
+    vsm_inject_init();
+}
 void vsm_deInit(void) {}
-void vsm_start(void) { vsm_inject_start(); }
+void vsm_start(void) {
+    vsm_inject_start();
+}

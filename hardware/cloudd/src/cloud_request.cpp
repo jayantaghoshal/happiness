@@ -18,7 +18,9 @@ bool CloudRequest::SetCurlHandle(CURL* curl_handle) {
     curl_handle_ = curl_handle;
     return true;
 }
-CURL* CloudRequest::GetCurlHandle() { return curl_handle_; }
+CURL* CloudRequest::GetCurlHandle() {
+    return curl_handle_;
+}
 
 void CloudRequest::SetURL(std::string url) {
     if (!url.empty()) {
@@ -55,30 +57,50 @@ void CloudRequest::SetURL(std::string url) {
         throw std::runtime_error("Trying to set an empty url");
     }
 }
-std::string CloudRequest::GetURL() { return url_; }
+std::string CloudRequest::GetURL() {
+    return url_;
+}
 
-CertHandlerInterface* CloudRequest::GetCertHandler() { return certificate_handler_.get(); }
+CertHandlerInterface* CloudRequest::GetCertHandler() {
+    return certificate_handler_.get();
+}
 
 void CloudRequest::SetHeaderList(std::vector<std::string> header_list) {
     // Assumes that every entry is correct.
     header_list_ = header_list;
 }
 
-std::vector<std::string> CloudRequest::GetHeaderList() { return header_list_; }
+std::vector<std::string> CloudRequest::GetHeaderList() {
+    return header_list_;
+}
 
-bool CloudRequest::GetUseHttps() { return use_https_; }
+bool CloudRequest::GetUseHttps() {
+    return use_https_;
+}
 
-void CloudRequest::SetTimeout(std::chrono::milliseconds timeout) { timeout_ = timeout; }
+void CloudRequest::SetTimeout(std::chrono::milliseconds timeout) {
+    timeout_ = timeout;
+}
 
-std::chrono::milliseconds CloudRequest::GetTimeout() { return timeout_; }
+std::chrono::milliseconds CloudRequest::GetTimeout() {
+    return timeout_;
+}
 
-void CloudRequest::SetRequestBody(std::string body) { body_ = body; }
+void CloudRequest::SetRequestBody(std::string body) {
+    body_ = body;
+}
 
-std::string CloudRequest::GetRequestBody() { return body_; }
+std::string CloudRequest::GetRequestBody() {
+    return body_;
+}
 
-void CloudRequest::SetRequestMethod(CloudRequest::HttpMethod method) { method_ = method; }
+void CloudRequest::SetRequestMethod(CloudRequest::HttpMethod method) {
+    method_ = method;
+}
 
-CloudRequest::HttpMethod CloudRequest::GetRequestMethod() { return method_; }
+CloudRequest::HttpMethod CloudRequest::GetRequestMethod() {
+    return method_;
+}
 
 void CloudRequest::SetCallback(ResponseCallback&& callback) {
     if (!callback) {
@@ -88,9 +110,15 @@ void CloudRequest::SetCallback(ResponseCallback&& callback) {
     }
 }
 
-ResponseCallback CloudRequest::GetCallback() { return response_callback_; }
+ResponseCallback CloudRequest::GetCallback() {
+    return response_callback_;
+}
 
-std::string* CloudRequest::GetResponseDataBuffer() { return &response_data_; }
-std::string* CloudRequest::GetResponseHeaderBuffer() { return &response_header_; }
+std::string* CloudRequest::GetResponseDataBuffer() {
+    return &response_data_;
+}
+std::string* CloudRequest::GetResponseHeaderBuffer() {
+    return &response_header_;
+}
 
 }  // namespace Connectivity

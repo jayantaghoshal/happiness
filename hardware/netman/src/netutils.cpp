@@ -113,7 +113,9 @@ bool IsMacAddressCorrect(const std::vector<uint8_t>& mac_address, const char* in
     return match;
 }
 
-std::uint32_t ethtool_cmd_speed_(const struct ethtool_cmd* ep) { return (ep->speed_hi << 16) | ep->speed; }
+std::uint32_t ethtool_cmd_speed_(const struct ethtool_cmd* ep) {
+    return (ep->speed_hi << 16) | ep->speed;
+}
 
 bool IsLinkSpeedCorrect(const std::string& interface_name) {
     int sock;

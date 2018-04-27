@@ -30,7 +30,9 @@ MediaClient::MediaClient(const std::string& path) : RemoteCtrlClientBase(path, m
     }
 }
 
-MediaClient::~MediaClient() { StopClient(); }
+MediaClient::~MediaClient() {
+    StopClient();
+}
 
 void MediaClient::Run() {
     StartClient();

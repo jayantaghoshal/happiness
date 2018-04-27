@@ -226,7 +226,9 @@ bool FanLevelFrontLogic::carConfigState(ClimateControl& climateControl) {
     }
 }
 
-bool FanLevelFrontLogic::isInState(int state) { return inState(state); }
+bool FanLevelFrontLogic::isInState(int state) {
+    return inState(state);
+}
 
 bool FanLevelFrontLogic::activationCheck() const {
     return ((carMode_ == autosar::CarModSts1::CarModDyno || carMode_ == autosar::CarModSts1::CarModNorm) &&

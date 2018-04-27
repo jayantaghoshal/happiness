@@ -39,7 +39,9 @@ Return<bool> AGnss::dataConnOpen(const hidl_string& apn, IAGnss::ApnIpType apnIp
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnss* HIDL_FETCH_IAGnss(const char* /* name */) { return new AGnss(); }
+IAGnss* HIDL_FETCH_IAGnss(const char* /* name */) {
+    return new AGnss();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

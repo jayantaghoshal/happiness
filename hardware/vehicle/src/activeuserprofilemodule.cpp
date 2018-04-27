@@ -74,7 +74,9 @@ std::unique_ptr<VehiclePropValue> ActiveUserProfileHal::getProp(const VehiclePro
     return std::make_unique<VehiclePropValue>(active_user_profile_);
 }
 
-std::vector<VehiclePropValue> ActiveUserProfileHal::getAllPropValues() { return {active_user_profile_}; }
+std::vector<VehiclePropValue> ActiveUserProfileHal::getAllPropValues() {
+    return {active_user_profile_};
+}
 
 std::vector<VehiclePropConfig> ActiveUserProfileHal::listProperties() {
     std::vector<VehiclePropConfig> propConfigs;

@@ -25,7 +25,9 @@ WildCardSubscription::WildCardSubscription(const std::string filter,
                                            ::android::sp<ISignalsChangedCallback> callback)
     : filter{filter}, regexFilter{buildRegexFromFilter(filter)}, dir{dir}, callback{callback} {}
 
-SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir) { return std::make_pair(name, dir); }
+SignalsServer::signal_key SignalsServer::make_key(std::string name, Dir dir) {
+    return std::make_pair(name, dir);
+}
 
 bool isValidName(const std::string& name) {
     if (name.size() == 0) {

@@ -32,7 +32,9 @@ void ConnectivityManagerService::StartService() {
     ALOGW_IF(status != android::OK, "Failed to register binder service: %d", status);
 }
 
-void ConnectivityManagerService::StopService() { ALOGV("%s", __FUNCTION__); }
+void ConnectivityManagerService::StopService() {
+    ALOGV("%s", __FUNCTION__);
+}
 
 Return<void> ConnectivityManagerService::registerConnectivityManagerHandler(
         const ::android::sp<conman_hal_v1_0::ISystemConnectivityManager>& handler) {

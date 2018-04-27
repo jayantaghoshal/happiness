@@ -91,9 +91,13 @@ Dispatcher::Dispatcher(bool auto_start_on_new_thread) {
 }
 
 // destructor
-Dispatcher::~Dispatcher() { Stop(); }
+Dispatcher::~Dispatcher() {
+    Stop();
+}
 
-void Dispatcher::Enqueue(std::function<void()>&& f) { queue_.enqueue(std::move(f)); }
+void Dispatcher::Enqueue(std::function<void()>&& f) {
+    queue_.enqueue(std::move(f));
+}
 
 IDispatcher::JobId Dispatcher::EnqueueWithDelay(std::chrono::microseconds delay, std::function<void()>&& f) {
     return EnqueueWithDelayInternal(delay, std::move(f), false);
@@ -168,10 +172,16 @@ bool Dispatcher::Cancel(JobId jobid) {
     return false;
 }
 
-void Dispatcher::AddFd(int fd, std::function<void()>&& f, uint32_t events) { queue_.addFd(fd, std::move(f), events); }
-void Dispatcher::AddFd(int fd, std::function<void()>&& f) { AddFd(fd, std::move(f), EPOLLIN); }
+void Dispatcher::AddFd(int fd, std::function<void()>&& f, uint32_t events) {
+    queue_.addFd(fd, std::move(f), events);
+}
+void Dispatcher::AddFd(int fd, std::function<void()>&& f) {
+    AddFd(fd, std::move(f), EPOLLIN);
+}
 
-void Dispatcher::RemoveFd(int fd) { queue_.removeFd(fd); }
+void Dispatcher::RemoveFd(int fd) {
+    queue_.removeFd(fd);
+}
 
 // private
 void Dispatcher::Start() {

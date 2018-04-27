@@ -16,7 +16,9 @@
 
 namespace CarSim {
 
-void close_wrapper(int* socket_fd_Ptr) { close(*socket_fd_Ptr); }
+void close_wrapper(int* socket_fd_Ptr) {
+    close(*socket_fd_Ptr);
+}
 
 SocketConnection::SocketConnection(int socket_fd) : socket_fd_Ptr_{new int(socket_fd), &close_wrapper} {
     ALOGV("SocketConnection::SocketConnection");

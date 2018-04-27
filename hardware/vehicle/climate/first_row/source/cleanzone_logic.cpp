@@ -47,7 +47,9 @@ CleanZoneLogic::CleanZoneLogic(NotifiableProperty<FirstRowGen::CleanzoneState>& 
     evaluateAndSetRightState();
 }
 
-CleanZoneLogic::~CleanZoneLogic() { log_info() << "CleanZoneLogic::~CleanZoneLogic"; }
+CleanZoneLogic::~CleanZoneLogic() {
+    log_info() << "CleanZoneLogic::~CleanZoneLogic";
+}
 
 CleanZoneLogic::InternalState CleanZoneLogic::setFsmState(CleanZoneLogic::InternalState newState) {
     switch (FsmState_) {

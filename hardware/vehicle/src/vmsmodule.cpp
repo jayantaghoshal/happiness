@@ -119,14 +119,26 @@ std::vector<VehiclePropConfig> vmsHal::listProperties() {
     return {vms};
 }
 
-void vmsHal::sendPositionMessage() { googleAdasisConverter->sendPositionMessage(); }
+void vmsHal::sendPositionMessage() {
+    googleAdasisConverter->sendPositionMessage();
+}
 
-void vmsHal::sendShortHorizonMessage() { googleAdasisConverter->sendShortHorizonMessage(); }
+void vmsHal::sendShortHorizonMessage() {
+    googleAdasisConverter->sendShortHorizonMessage();
+}
 
-void vmsHal::sendLongHorizonMessage() { googleAdasisConverter->sendLongHorizonMessage(); }
+void vmsHal::sendLongHorizonMessage() {
+    googleAdasisConverter->sendLongHorizonMessage();
+}
 
-void vmsHal::sendHorizonMetaData() { googleAdasisConverter->sendHorizonMetaData(); }
+void vmsHal::sendHorizonMetaData() {
+    googleAdasisConverter->sendHorizonMetaData();
+}
 
-void vmsHal::sendStubMessage() { googleAdasisConverter->sendStubMessage(); }
+void vmsHal::sendStubMessage() {
+    googleAdasisConverter->sendStubMessage();
+}
 
-void vmsHal::sendSegmentMessage() { googleAdasisConverter->sendSegmentMessage(); }
+void vmsHal::sendSegmentMessage() {
+    googleAdasisConverter->sendSegmentMessage();
+}

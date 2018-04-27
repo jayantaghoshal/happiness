@@ -51,7 +51,9 @@ Return<void> GnssGeofenceCallback::gnssGeofenceResumeCb(int32_t geofenceId,
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssGeofenceCallback* HIDL_FETCH_IGnssGeofenceCallback(const char* /* name */) { return new GnssGeofenceCallback(); }
+IGnssGeofenceCallback* HIDL_FETCH_IGnssGeofenceCallback(const char* /* name */) {
+    return new GnssGeofenceCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

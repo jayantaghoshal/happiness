@@ -28,7 +28,9 @@ std::uint8_t NetDeserializer::read_uint8() {
     return value;
 }
 
-std::uint16_t NetDeserializer::read_uint16() { return (read_uint8() << 8) | read_uint8(); }
+std::uint16_t NetDeserializer::read_uint16() {
+    return (read_uint8() << 8) | read_uint8();
+}
 
 std::uint32_t NetDeserializer::read_uint32() {
     return (read_uint8() << 24) | (read_uint8() << 16) | (read_uint8() << 8) | read_uint8();

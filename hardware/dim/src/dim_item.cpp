@@ -14,9 +14,13 @@ namespace dim {
 DimItem::DimItem(uint16_t id, uint16_t groupID, TextAlignment align, TextTruncation trunc, ItemSelectable select)
     : id_(id), groupID_(groupID), aligment_(align), truncation_(trunc), selectable_(select), rawData_() {}
 
-void DimItem::SetRawData(std::vector<uint8_t> const& data) { rawData_ = data; }
+void DimItem::SetRawData(std::vector<uint8_t> const& data) {
+    rawData_ = data;
+}
 
-void DimItem::SetRawData(std::string const& data) { rawData_ = dim_tools::DimTools::ConvertStringToHexData(data); }
+void DimItem::SetRawData(std::string const& data) {
+    rawData_ = dim_tools::DimTools::ConvertStringToHexData(data);
+}
 
 std::vector<uint8_t> DimItem::GetItemData(VccIpCmd::OperationId fType) const {
     std::vector<uint8_t> itemData;

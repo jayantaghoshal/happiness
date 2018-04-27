@@ -13,7 +13,9 @@ CarConfigMock::CarConfigMock() {
     carConfigMock = this;
 }
 
-CarConfigMock::~CarConfigMock() { carConfigMock = nullptr; }
+CarConfigMock::~CarConfigMock() {
+    carConfigMock = nullptr;
+}
 
 namespace carconfig {
 std::int32_t init() {

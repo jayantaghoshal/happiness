@@ -30,7 +30,9 @@ AudioClient::AudioClient(std::string path) : RemoteCtrlClientBase(path, audio_in
         actions.push_back(e.first);
     }
 }
-AudioClient::~AudioClient() { StopClient(); }
+AudioClient::~AudioClient() {
+    StopClient();
+}
 
 void AudioClient::Run() {
     StartClient();

@@ -156,7 +156,9 @@ void CarConfigVipCom::VipReader() {
     android::IPCThreadState::self()->joinThreadPool();
 }
 
-void CarConfigVipCom::setRxMsgID(HisipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
+void CarConfigVipCom::setRxMsgID(HisipMessage* msg) {
+    msg->setAid(HISIP_APPLICATION_ID_CARCONFIG);
+}
 
 std::vector<uint8_t> CarConfigVipCom::getApplicationId() {
     std::vector<uint8_t> applicationId = {static_cast<uint8_t>(HISIP_APPLICATION_ID_CARCONFIG)};
@@ -208,4 +210,6 @@ bool CC_HISIP_Listener::onMessageFromVip(const HisipMessage& msg) {
     return true;
 }
 
-std::string CC_HISIP_Listener::getUserId() { return "Carconfig-updater"; }
+std::string CC_HISIP_Listener::getUserId() {
+    return "Carconfig-updater";
+}

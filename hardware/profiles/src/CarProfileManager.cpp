@@ -190,7 +190,9 @@ Return<KeyId> CarProfileManager::getUserProfileInformation(const hidl_string& an
     }
 }
 
-Return<int16_t> CarProfileManager::getNrOfUnusedProfiles() { return static_cast<int16_t>(unused_profiles_.size()); }
+Return<int16_t> CarProfileManager::getNrOfUnusedProfiles() {
+    return static_cast<int16_t>(unused_profiles_.size());
+}
 
 Return<bool> CarProfileManager::pairAndroidUserToUnusedVehicleProfile(const hidl_string& androidUserId) {
     ALOGD("%s android_user_id=%s", __FUNCTION__, androidUserId.c_str());  // TODO (TS) remove log

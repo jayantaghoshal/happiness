@@ -40,7 +40,9 @@ const std::string connNhTrafficLimit = "CONN_NhTrafficLimit"; */
 
 namespace Connectivity {
 
-ClouddLocalConfig::ClouddLocalConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) { Init(); }
+ClouddLocalConfig::ClouddLocalConfig(const vcc::LocalConfigReaderInterface* lcfg) : lcfg_(lcfg) {
+    Init();
+}
 /*
 bool ClouddLocalConfig::ReadLocalConfig(const std::string &configId, std::string &config)
 {
@@ -198,7 +200,9 @@ uint32_t ClouddLocalConfig::GetTcpKeepAliveIntvl() { return tcp_keepalive_intvl_
 
 uint32_t ClouddLocalConfig::GetTcpKeepAliveProbes() { return tcp_keepalive_probes_; }
 */
-const std::string ClouddLocalConfig::GetCloudEntryPointAddress() { return cloud_entry_point_address_; }
+const std::string ClouddLocalConfig::GetCloudEntryPointAddress() {
+    return cloud_entry_point_address_;
+}
 /*
 std::string ClouddLocalConfig::GetCarNet() { return carNet_; }
 

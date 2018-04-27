@@ -18,6 +18,8 @@ class ICustomSetting {
     virtual bool isEqualTo(const ICustomSetting& other) const = 0;
 };
 
-inline bool operator!=(const ICustomSetting& lhs, const ICustomSetting& rhs) { return !lhs.isEqualTo(rhs); }
+inline bool operator!=(const ICustomSetting& lhs, const ICustomSetting& rhs) {
+    return !lhs.isEqualTo(rhs);
+}
 
 }  // namespace SettingsFramework

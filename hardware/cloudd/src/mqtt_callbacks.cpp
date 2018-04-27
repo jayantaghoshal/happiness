@@ -7,7 +7,9 @@
 #include <cutils/log.h>
 
 #define LOG_TAG "CloudD"
-action_listener::action_listener(const std::string& name) { name_ = name; }
+action_listener::action_listener(const std::string& name) {
+    name_ = name;
+}
 // Callbacks for the success or failures of requested actions.
 // This could be used to initiate further action, but here we just log the
 // results to the console.
@@ -38,7 +40,9 @@ void MqttCallback::SetMessageHandler(std::function<void(mqtt::const_message_ptr 
 }
 
 // Re-connection failure
-void MqttCallback::on_failure(const mqtt::token& tok) { ALOGD("Connection failed"); }
+void MqttCallback::on_failure(const mqtt::token& tok) {
+    ALOGD("Connection failed");
+}
 
 // Re-connection success
 void MqttCallback::on_success(const mqtt::token& tok) {

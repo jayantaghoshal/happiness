@@ -77,7 +77,9 @@ BufferDesc CreateDummyBuffer(uint32_t buffer_id) {
 }  // namespace test_utils
 }  // namespace
 
-TEST_F(VirtualCameraTest, ConstructObject) { EXPECT_NE(virtual_camera, nullptr); }
+TEST_F(VirtualCameraTest, ConstructObject) {
+    EXPECT_NE(virtual_camera, nullptr);
+}
 
 TEST_F(VirtualCameraTest, DeleteObject) {
     virtual_camera.clear();

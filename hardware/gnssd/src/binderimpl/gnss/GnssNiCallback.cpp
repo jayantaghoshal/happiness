@@ -19,7 +19,9 @@ Return<void> GnssNiCallback::niNotifyCb(const IGnssNiCallback::GnssNiNotificatio
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssNiCallback* HIDL_FETCH_IGnssNiCallback(const char* /* name */) { return new GnssNiCallback(); }
+IGnssNiCallback* HIDL_FETCH_IGnssNiCallback(const char* /* name */) {
+    return new GnssNiCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

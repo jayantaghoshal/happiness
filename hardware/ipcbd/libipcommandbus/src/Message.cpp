@@ -29,6 +29,8 @@ const char* Message::EcuStr(Ecu ecu) {
     return "UNKNOWN";
 }
 
-Message::Message(Pdu&& p) { pdu = p; }
+Message::Message(Pdu&& p) {
+    pdu = p;
+}
 
 }  // Connectivity

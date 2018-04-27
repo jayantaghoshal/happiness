@@ -94,7 +94,9 @@ void EntryPointFetcher::Fetch(const std::string& entry_point_url) throw(std::run
     ALOGV("[EpFetcher] - Fetch()");
 }
 
-void EntryPointFetcher::Stop() { IDispatcher::GetDefaultDispatcher().Cancel(retry_timer_handle_); }
+void EntryPointFetcher::Stop() {
+    IDispatcher::GetDefaultDispatcher().Cancel(retry_timer_handle_);
+}
 
 void EntryPointFetcher::WhenResultAvailable(std::function<void(const EntryPointParser::EntryPoint&)>&& callback) {
     when_result_available_callback_ = std::move(callback);

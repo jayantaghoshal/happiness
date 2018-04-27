@@ -56,7 +56,9 @@ ElectricDefrosterWindscreenLogic::ElectricDefrosterWindscreenLogic(
     }
 }
 
-bool ElectricDefrosterWindscreenLogic::isInState(int state) { return inState(state); }
+bool ElectricDefrosterWindscreenLogic::isInState(int state) {
+    return inState(state);
+}
 
 void ElectricDefrosterWindscreenLogic::request(ElectricDefrosterWindscreenRequest requestedState) {
     log_debug() << LOG_PREFIX << "request = " << requestedState

@@ -21,9 +21,19 @@ DataElemValueBase::DataElemValueBase(int64_t timestamp, State state, int errorCo
 DataElemValueBase::~DataElemValueBase() = default;
 
 // State check convenience
-bool DataElemValueBase::isOk() const { return _state == State::OK; }
-bool DataElemValueBase::isError() const { return _state == State::ERROR; }
+bool DataElemValueBase::isOk() const {
+    return _state == State::OK;
+}
+bool DataElemValueBase::isError() const {
+    return _state == State::ERROR;
+}
 
-int64_t DataElemValueBase::timestamp() const { return _timestamp; }
-DataElemValueBase::State DataElemValueBase::state() const { return _state; }
-int DataElemValueBase::errorCode() const { return _errorCode; }
+int64_t DataElemValueBase::timestamp() const {
+    return _timestamp;
+}
+DataElemValueBase::State DataElemValueBase::state() const {
+    return _state;
+}
+int DataElemValueBase::errorCode() const {
+    return _errorCode;
+}

@@ -19,7 +19,9 @@ Return<void> GnssBatchingCallback::gnssLocationBatchCb(const hidl_vec<GnssLocati
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssBatchingCallback* HIDL_FETCH_IGnssBatchingCallback(const char* /* name */) { return new GnssBatchingCallback(); }
+IGnssBatchingCallback* HIDL_FETCH_IGnssBatchingCallback(const char* /* name */) {
+    return new GnssBatchingCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

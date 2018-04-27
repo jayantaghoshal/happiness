@@ -16,7 +16,9 @@
 
 using namespace Carconfig_base;
 
-CarConfigReader::CarConfigReader() { read(); }
+CarConfigReader::CarConfigReader() {
+    read();
+}
 
 // Get the so called substitue value, this is the function normally used by applications.
 // Substitue value is the last received valid value
@@ -46,7 +48,9 @@ ccStatus CarConfigReader::getStatus(uint32_t position) {
     return carConfigValues[(position - 1)].status;
 }
 
-bool CarConfigReader::usingDefaultFile() { return !(fileExists(carconfig_file_name)); }
+bool CarConfigReader::usingDefaultFile() {
+    return !(fileExists(carconfig_file_name));
+}
 
 void CarConfigReader::read() {
     CarConfigFileReader ccFileReader;

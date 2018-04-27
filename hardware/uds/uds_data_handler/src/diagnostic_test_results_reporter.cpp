@@ -22,6 +22,10 @@ DiagnosticTestResultsReporter::DiagnosticTestResultsReporter(uint32_t dtc_id,
                                                              std::chrono::steady_clock::duration reporting_interval)
     : pimpl_(std::make_unique<DiagnosticTestResultsReporterImpl>(dtc_id, reporting_interval)) {}
 
-void DiagnosticTestResultsReporter::ReportTestPass() { pimpl_->ReportTestPass(); }
+void DiagnosticTestResultsReporter::ReportTestPass() {
+    pimpl_->ReportTestPass();
+}
 
-void DiagnosticTestResultsReporter::ReportTestFail() { pimpl_->ReportTestFail(); }
+void DiagnosticTestResultsReporter::ReportTestFail() {
+    pimpl_->ReportTestFail();
+}

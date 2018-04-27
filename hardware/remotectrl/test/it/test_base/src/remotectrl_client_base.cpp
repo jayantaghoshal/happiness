@@ -35,7 +35,9 @@ RemoteCtrlClientBase::RemoteCtrlClientBase(const std::string& config_path, const
             std::bind(&RemoteCtrlClientBase::OnMessageReceived, this, std::placeholders::_1));
 }
 
-RemoteCtrlClientBase::~RemoteCtrlClientBase() { StopClient(); }
+RemoteCtrlClientBase::~RemoteCtrlClientBase() {
+    StopClient();
+}
 
 void RemoteCtrlClientBase::EnqueueRequest(std::function<void()>&& request) {
     enqueued_request_ = std::move(request);

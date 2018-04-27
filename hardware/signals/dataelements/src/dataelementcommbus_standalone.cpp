@@ -25,9 +25,13 @@ class DataElementCommBus_standalone : public IDataElementCommBus {
     std::map<std::string, std::string> _datacache;
 };
 
-IDataElementCommBus* IDataElementCommBus::create() { return new DataElementCommBus_standalone(); }
+IDataElementCommBus* IDataElementCommBus::create() {
+    return new DataElementCommBus_standalone();
+}
 
-DataElementCommBus_standalone::DataElementCommBus_standalone() { ALOGI("Using DataElementCommBus_standalone"); }
+DataElementCommBus_standalone::DataElementCommBus_standalone() {
+    ALOGI("Using DataElementCommBus_standalone");
+}
 
 void DataElementCommBus_standalone::send(const std::string& name, const std::string& payload, autosar::Dir /*dir*/) {
     // Just call it back directly again
@@ -52,4 +56,6 @@ void DataElementCommBus_standalone::addName(autosar::Dir dir, const std::string&
     }
 }
 
-void DataElementCommBus_standalone::reset() { _datacache.clear(); }
+void DataElementCommBus_standalone::reset() {
+    _datacache.clear();
+}

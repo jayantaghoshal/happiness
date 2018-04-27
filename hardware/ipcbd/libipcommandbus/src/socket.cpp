@@ -40,7 +40,9 @@ Socket::Socket(IDispatcher& dispatcher, int domain, int type, int protocol, EcuI
     setup(domain, type, protocol);
 }
 
-Socket::~Socket() { teardown(); }
+Socket::~Socket() {
+    teardown();
+}
 
 void Socket::set_option(int level, int option, int value) {
     socklen_t length = sizeof value;
@@ -118,14 +120,18 @@ void Socket::teardown() {
     }
 }
 
-void Socket::setHandler(std::function<void(void)> readEventHandler) { read_ready_cb_ = std::move(readEventHandler); }
+void Socket::setHandler(std::function<void(void)> readEventHandler) {
+    read_ready_cb_ = std::move(readEventHandler);
+}
 
 uint32_t Socket::getTestSimPort() {
     uint32_t test_port = local_config.getTestPort();
     return test_port;
 }
 
-void Socket::backoffReset() { backoff_timeout_ = std::chrono::milliseconds(100); }
+void Socket::backoffReset() {
+    backoff_timeout_ = std::chrono::milliseconds(100);
+}
 
 // get the current backoff timeout and then backoff with a factor 2 upto a max value
 std::chrono::milliseconds Socket::backoffGet() {

@@ -237,4 +237,6 @@ ReadOnlyNotifiableProperty<FirstRowGen::VentAttribute>& FirstRowFactory::getSeat
     return seatVentPassenger_;
 }
 
-ReadOnlyNotifiableProperty<FirstRowGen::IonizerState>& FirstRowFactory::getIonizerProperty() { return ionizer_; }
+ReadOnlyNotifiableProperty<FirstRowGen::IonizerState>& FirstRowFactory::getIonizerProperty() {
+    return ionizer_;
+}

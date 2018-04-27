@@ -15,11 +15,17 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-Return<void> EvsEnumerator::getCameraList(getCameraList_cb /* hidl_cb */) { return Return<void>(); }
+Return<void> EvsEnumerator::getCameraList(getCameraList_cb /* hidl_cb */) {
+    return Return<void>();
+}
 
-Return<sp<IEvsCamera>> EvsEnumerator::openCamera(const hidl_string& /* camera_id */) { return sp<IEvsCamera>(); }
+Return<sp<IEvsCamera>> EvsEnumerator::openCamera(const hidl_string& /* camera_id */) {
+    return sp<IEvsCamera>();
+}
 
-Return<void> EvsEnumerator::closeCamera(const sp<IEvsCamera>& /* car_camera */) { return Return<void>(); }
+Return<void> EvsEnumerator::closeCamera(const sp<IEvsCamera>& /* car_camera */) {
+    return Return<void>();
+}
 
 Return<sp<IEvsDisplay>> EvsEnumerator::openDisplay() {
     sp<IEvsDisplay> current_active_display = active_display_.promote();

@@ -46,7 +46,9 @@ Return<void> GnssGeofencing::removeGeofence(int32_t geofenceId) {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssGeofencing* HIDL_FETCH_IGnssGeofencing(const char* /* name */) { return new GnssGeofencing(); }
+IGnssGeofencing* HIDL_FETCH_IGnssGeofencing(const char* /* name */) {
+    return new GnssGeofencing();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

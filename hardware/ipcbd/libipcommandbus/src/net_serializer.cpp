@@ -9,7 +9,9 @@
 #include "ipcommandbus/net_serializer.h"
 
 namespace Connectivity {
-void NetSerializer::write_uint8(std::uint8_t value) { vector.push_back(static_cast<std::uint8_t>(value)); }
+void NetSerializer::write_uint8(std::uint8_t value) {
+    vector.push_back(static_cast<std::uint8_t>(value));
+}
 
 void NetSerializer::write_uint16(std::uint16_t value) {
     write_uint8((value & 0xff00) >> 8);

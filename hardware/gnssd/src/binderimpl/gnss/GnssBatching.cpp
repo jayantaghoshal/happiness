@@ -44,7 +44,9 @@ Return<void> GnssBatching::cleanup() {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssBatching* HIDL_FETCH_IGnssBatching(const char* /* name */) { return new GnssBatching(); }
+IGnssBatching* HIDL_FETCH_IGnssBatching(const char* /* name */) {
+    return new GnssBatching();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

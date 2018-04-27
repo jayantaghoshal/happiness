@@ -55,7 +55,9 @@ static void printStartupErrorMessage(DESIP::ReturnCode error) {
     }
 }
 
-void messageReceive(ROUTER_MESSAGE* in_msg) { avmpMessageInject((uint8_t*)in_msg->data, (uint32_t)in_msg->data_size); }
+void messageReceive(ROUTER_MESSAGE* in_msg) {
+    avmpMessageInject((uint8_t*)in_msg->data, (uint32_t)in_msg->data_size);
+}
 
 void messageSend(Message_Send_T* msg_data) {
     if (nullptr == msg_data) {

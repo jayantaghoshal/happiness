@@ -16,7 +16,9 @@ class NotifiablePropertyTest : public Test {
     NotifiableProperty<int> property_{0};
 };
 
-TEST_F(NotifiablePropertyTest, WhenInitiliased_ContainsValue) { EXPECT_EQ(0, property_.get()); }
+TEST_F(NotifiablePropertyTest, WhenInitiliased_ContainsValue) {
+    EXPECT_EQ(0, property_.get());
+}
 
 TEST_F(NotifiablePropertyTest, WhenPropertySet_WillSet) {
     property_.set(10);

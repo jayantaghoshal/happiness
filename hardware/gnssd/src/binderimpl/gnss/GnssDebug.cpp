@@ -19,7 +19,9 @@ Return<void> GnssDebug::getDebugData(getDebugData_cb _hidl_cb) {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssDebug* HIDL_FETCH_IGnssDebug(const char* /* name */) { return new GnssDebug(); }
+IGnssDebug* HIDL_FETCH_IGnssDebug(const char* /* name */) {
+    return new GnssDebug();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

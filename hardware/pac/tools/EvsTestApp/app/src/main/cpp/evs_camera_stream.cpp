@@ -56,4 +56,6 @@ Return<void> EvsCameraStream::deliverFrame(const BufferDesc& buffer) {
     return Void();
 }
 
-bool EvsCameraStream::NewFrameAvailable() { return current_frame_amount_ > 0; }
+bool EvsCameraStream::NewFrameAvailable() {
+    return current_frame_amount_ > 0;
+}

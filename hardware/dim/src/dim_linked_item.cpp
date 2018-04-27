@@ -16,7 +16,9 @@ DimLinkedItem::DimLinkedItem(uint16_t id,
                              ItemSelectable select)
     : itemType_(itemType), DimItem(id, groupID, align, trunc, select) {}
 
-DimItem::ItemType DimLinkedItem::GetType() const { return itemType_; }
+DimItem::ItemType DimLinkedItem::GetType() const {
+    return itemType_;
+}
 
 }  // namespace dim
 }  // namespace vcc

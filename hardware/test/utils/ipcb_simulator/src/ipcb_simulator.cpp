@@ -100,7 +100,9 @@ void IpcbSimulator::StartActivityMessageTimer() {
             timer_.EnqueueWithDelay(std::chrono::milliseconds(1000), [this]() { CreateAndSendIpActivityMessage(); });
 }
 
-void IpcbSimulator::StopActivityMessageTimer() { timer_.Cancel(activityPacketInjectorId_); }
+void IpcbSimulator::StopActivityMessageTimer() {
+    timer_.Cancel(activityPacketInjectorId_);
+}
 
 bool IpcbSimulator::SendPdu(Pdu pdu) {
     ALOGD("Send pdu");

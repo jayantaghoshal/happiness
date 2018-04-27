@@ -152,7 +152,9 @@ bool SteeringWheelHeatLogic::activationCheckOk() const {
     return carModeStatusOk && usageModeOk;
 }
 
-bool SteeringWheelHeatLogic::signalsOk() const { return vehicleModeSignal_.get().isOk(); }
+bool SteeringWheelHeatLogic::signalsOk() const {
+    return vehicleModeSignal_.get().isOk();
+}
 
 void SteeringWheelHeatLogic::handleVehicleMode() {
     if (signalsOk()) {

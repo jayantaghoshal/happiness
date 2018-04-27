@@ -10,7 +10,9 @@ DEDispatcher::DEDispatcher(std::shared_ptr<tarmac::eventloop::IDispatcher> dispa
 
 void DEDispatcher::assertInExecutionContext() {}
 
-void DEDispatcher::enqueueFunction(std::function<void()>&& func) { dispatcher_->Enqueue(std::move(func)); }
+void DEDispatcher::enqueueFunction(std::function<void()>&& func) {
+    dispatcher_->Enqueue(std::move(func));
+}
 
 VFContext::VFContext(const std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
                      android::sp<SettingsFramework::SettingsManagerHidl> settings,

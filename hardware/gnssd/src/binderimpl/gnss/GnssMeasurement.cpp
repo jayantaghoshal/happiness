@@ -25,7 +25,9 @@ Return<void> GnssMeasurement::close() {
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IGnssMeasurement* HIDL_FETCH_IGnssMeasurement(const char* /* name */) { return new GnssMeasurement(); }
+IGnssMeasurement* HIDL_FETCH_IGnssMeasurement(const char* /* name */) {
+    return new GnssMeasurement();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

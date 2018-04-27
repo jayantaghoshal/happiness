@@ -134,4 +134,6 @@ bool MaxDefrosterLogic::activationCheck(autosar::UsgModSts1 const usgModeSts1,
     return ((usgModeIsDriving || climaActiveIsOn) && (carModeIsDyno || carModeIsNormal));
 }
 
-bool MaxDefrosterLogic::signalsOk() const { return (vehicleModeSignal.get().isOk() && climaActiveSignal.get().isOk()); }
+bool MaxDefrosterLogic::signalsOk() const {
+    return (vehicleModeSignal.get().isOk() && climaActiveSignal.get().isOk());
+}

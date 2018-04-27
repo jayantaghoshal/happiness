@@ -52,7 +52,9 @@ ElectricDefrosterRearLogic::ElectricDefrosterRearLogic(
     handleVehicleMode();
 }
 
-bool ElectricDefrosterRearLogic::isInState(int state) { return inState(state); }
+bool ElectricDefrosterRearLogic::isInState(int state) {
+    return inState(state);
+}
 
 void ElectricDefrosterRearLogic::request(ElectricDefrosterRearRequest requestedState) {
     log_debug() << LOG_PREFIX << "request = " << requestedState << " current = " << electricDefrosterRearState_.get();

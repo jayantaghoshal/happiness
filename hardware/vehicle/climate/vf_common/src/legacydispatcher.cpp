@@ -29,7 +29,9 @@ void LegacyDispatcher::setGlobalInstanceHackTimeProvider(tarmac::timeprovider::T
 
 LegacyDispatcher::LegacyDispatcher() {}
 
-LegacyDispatcher::~LegacyDispatcher() { Cancel(); }
+LegacyDispatcher::~LegacyDispatcher() {
+    Cancel();
+}
 
 void LegacyDispatcher::Start(std::chrono::milliseconds timeout, std::function<void()> timeout_function, bool repeat) {
     cb_func_ = timeout_function;
@@ -41,13 +43,21 @@ void LegacyDispatcher::Start(std::chrono::milliseconds timeout, std::function<vo
     }
 }
 
-void LegacyDispatcher::Startnow(std::function<void(void)> dispatch_function) { Start(0ms, dispatch_function, false); }
+void LegacyDispatcher::Startnow(std::function<void(void)> dispatch_function) {
+    Start(0ms, dispatch_function, false);
+}
 
-void LegacyDispatcher::Restart(std::chrono::milliseconds timeout, bool repeat) { Start(timeout, cb_func_, repeat); }
+void LegacyDispatcher::Restart(std::chrono::milliseconds timeout, bool repeat) {
+    Start(timeout, cb_func_, repeat);
+}
 
-void LegacyDispatcher::Cancel() { timer_handle_ = nullptr; }
+void LegacyDispatcher::Cancel() {
+    timer_handle_ = nullptr;
+}
 
-bool LegacyDispatcher::IsRunning() const { return timer_handle_ != nullptr; }
+bool LegacyDispatcher::IsRunning() const {
+    return timer_handle_ != nullptr;
+}
 
 void LegacyDispatcher::Dispatch() {
     if (cb_func_) cb_func_();

@@ -39,7 +39,9 @@ Return<bool> AGnssRil::updateNetworkAvailability(bool available, const hidl_stri
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnssRil* HIDL_FETCH_IAGnssRil(const char* /* name */) { return new AGnssRil(); }
+IAGnssRil* HIDL_FETCH_IAGnssRil(const char* /* name */) {
+    return new AGnssRil();
+}
 
 }  // namespace implementation
 }  // namespace V1_0

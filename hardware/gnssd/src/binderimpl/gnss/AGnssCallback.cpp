@@ -24,7 +24,9 @@ Return<void> AGnssCallback::agnssStatusIpV6Cb(const IAGnssCallback::AGnssStatusI
 
 // Methods from ::android::hidl::base::V1_0::IBase follow.
 
-IAGnssCallback* HIDL_FETCH_IAGnssCallback(const char* /* name */) { return new AGnssCallback(); }
+IAGnssCallback* HIDL_FETCH_IAGnssCallback(const char* /* name */) {
+    return new AGnssCallback();
+}
 
 }  // namespace implementation
 }  // namespace V1_0
