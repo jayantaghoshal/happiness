@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -42,6 +42,8 @@ class DiagnosticsReporter final : public virtual ::android::RefBase,
     ::android::hardware::Return<::vendor::volvocars::hardware::uds::V1_0::DidWriteStatusCode> writeDidValue(
             uint16_t did,
             const ::android::hardware::hidl_vec<uint8_t>& data) override;
+
+    bool isSplitTrafficSet();
 
     bool isApixOnObdParamValid(const ::android::hardware::hidl_vec<uint8_t>& data);
 

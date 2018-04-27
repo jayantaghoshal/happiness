@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -9,7 +9,6 @@
 #include <uds/diagnostic_test_results_reporter.h>
 #include <fstream>
 #include <mutex>
-#include "iptables_config.h"
 
 #define LOG_TAG "Netmand"
 #include <cutils/log.h>
@@ -51,7 +50,7 @@ DiagnosticsReporter::DiagnosticsReporter(const vcc::LocalConfigReaderInterface* 
     eth_gw_address_ = lcfg_->GetString("tcam0", "ip-address");
 
     try {
-        apix_traffic_splitting_ = IptablesConfig().isSplitTrafficSet(interfaces_[APIX].name, eth_gw_address_);
+        apix_traffic_splitting_ = isSplitTrafficSet();
     } catch (const std::runtime_error& e) {
         ALOGE("%s", e.what());
     }
@@ -141,8 +140,29 @@ Return<DidWriteStatusCode> DiagnosticsReporter::setApixOnObd(const ::android::ha
 
     // Configure iptables to mirror APIX traffic to TCAM
     try {
-        if (!IptablesConfig().configureSplitTraffic(interfaces_[APIX].name, eth_gw_address_, action)) {
-            ALOGE("Failed to configure APIX-OBD traffic split");
+        const std::string iptable_flag = (action) ? "-A" : "-D";
+
+        const std::string pre_routing_cmd = "/vendor/bin/iptables -t mangle " + iptable_flag + " PREROUTING -i " +
+                                            interfaces_[APIX].name + " -p tcp -j TEE --gateway " + eth_gw_address_;
+        const std::string post_routing_cmd = "/vendor/bin/iptables -t mangle " + iptable_flag + " POSTROUTING -o " +
+                                             interfaces_[APIX].name + " -p tcp -j TEE --gateway " + eth_gw_address_;
+
+        int command_status = std::system(pre_routing_cmd.c_str());
+        if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
+            ALOGE("Pre-routing: failed to configure APIX-OBD traffic split");
+            return DidWriteStatusCode::CONDITIONS_NOT_CORRECT;
+        }
+
+        command_status = std::system(post_routing_cmd.c_str());
+        if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
+            ALOGE("Post-routing: failed to configure APIX-OBD traffic split");
+
+            const std::string undo_iptable_flag = (action) ? "-D" : "-A";
+            const std::string undo_pre_routing_cmd = "/vendor/bin/iptables -t mangle " + undo_iptable_flag +
+                                                     " PREROUTING -i " + interfaces_[APIX].name +
+                                                     " -p tcp -j TEE --gateway " + eth_gw_address_;
+            std::system(undo_pre_routing_cmd.c_str());
+
             return DidWriteStatusCode::CONDITIONS_NOT_CORRECT;
         }
     } catch (const std::runtime_error& e) {
@@ -152,6 +172,25 @@ Return<DidWriteStatusCode> DiagnosticsReporter::setApixOnObd(const ::android::ha
 
     apix_traffic_splitting_ = action;
     return DidWriteStatusCode::SUCCESS;
+}
+
+bool DiagnosticsReporter::isSplitTrafficSet() {
+    const std::string pre_routing_cmd = "/vendor/bin/iptables -t mangle -C PREROUTING -i " + interfaces_[APIX].name +
+                                        " -p tcp -j TEE --gateway " + eth_gw_address_;
+
+    const std::string post_routing_cmd = "/vendor/bin/iptables -t mangle -C POSTROUTING -o " + interfaces_[APIX].name +
+                                         " -p tcp -j TEE --gateway " + eth_gw_address_;
+
+    int command_status = std::system(pre_routing_cmd.c_str());
+    if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
+        return false;
+    }
+    command_status = std::system(post_routing_cmd.c_str());
+    if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
+        return false;
+    }
+
+    return true;
 }
 
 bool DiagnosticsReporter::isApixOnObdParamValid(const ::android::hardware::hidl_vec<uint8_t>& data) {

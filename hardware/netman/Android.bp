@@ -25,16 +25,11 @@ cc_binary {
         "src/netman/netman_event_handler.cpp",
         "src/netman/firewall_config.cpp",
         "src/netman/diagnostics_reporter.cpp",
-        "src/netman/iptables_config.cpp",
     ],
 
     local_include_dirs: [
         "src/",
         "src/netman/",
-    ],
-
-    include_dirs: [
-        "external/iptables/include/",
     ],
 
     shared_libs: [
@@ -54,7 +49,6 @@ cc_binary {
 
     static_libs: [
         "libbase",
-        "libip4tc",
     ],
 
     header_libs: [
