@@ -9,8 +9,14 @@ allow carconfig-updater carconfig_config_files:dir { rw_dir_perms };
 allow carconfig-updater carconfig_config_files:file { rw_file_perms rename };
 allow carconfig-updater carconfig_default_config_file:file { r_file_perms };
 
+hal_client_domain(carconfig-updater, hal_uds_diagnostics);
+allow carconfig-updater uds_diagnostics_default:binder { call };
 
-allow carconfig-updater dataelements-hidl-server:binder { call transfer };
+allow carconfig-updater dataelements-hidl-server:binder { call };
+allow carconfig-updater desip_service:binder { call };
+
+allow carconfig-updater vndbinder_device:chr_file { open read write ioctl };
+allow carconfig-updater vndservicemanager:binder call;
 
 # hwservicemanager accesses will probably be handled by hal_client/server() macros
 hwbinder_use(carconfig-updater)
