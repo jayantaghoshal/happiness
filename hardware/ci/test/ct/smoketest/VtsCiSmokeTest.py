@@ -31,7 +31,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     """
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
-
+        self.dut.shell.InvokeTerminal("one")
 
     def testCpuLoadLong(self):
         requirement = 90
@@ -43,10 +43,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         model_name = re.findall('model\s*name\s*:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0]
         number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
 
-        first_cpu_data = self.get_data(int(number_of_cores))
-        sleep(60)
-        second_cpu_data = self.get_data(int(number_of_cores))
-        total_load = self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
+        total_load = self.getCpuLoad(int(number_of_cores), 60)
 
         for core in range(int(number_of_cores)):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
@@ -63,17 +60,12 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
     def testCpuLoadShort(self):
         requirement = 90
-        self.dut.shell.InvokeTerminal("my_shell3")
-        my_shell = getattr(self.dut.shell, "my_shell3")
-        shell_response = my_shell.Execute(["cat /proc/cpuinfo"])
+        shell_response = self.dut.shell.one.Execute(["cat /proc/cpuinfo"])
 
         model_name = re.findall('model\s*name\s*:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0]
         number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
 
-        first_cpu_data = self.get_data(int(number_of_cores))
-        sleep(30)
-        second_cpu_data = self.get_data(int(number_of_cores))
-        total_load = self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
+        total_load = self.getCpuLoad(int(number_of_cores), 30)
 
         for core in range(int(number_of_cores)):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
@@ -81,16 +73,14 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             if total_load[core] > requirement:
                 #Before there is a clear indication of system boot completed,
                 #give CPU load another measurement to avoid the load spike after ihu_update and boot.
-                third_cpu_data = self.get_data(int(number_of_cores))
-                sleep(15)
-                fourth_cpu_data = self.get_data(int(number_of_cores))
-                total_load_secondtry = self.calc_load(third_cpu_data, fourth_cpu_data, int(number_of_cores))
+
+                total_load_secondtry = self.getCpuLoad(int(number_of_cores), 15)
 
                 for core in range(int(number_of_cores)):
                     logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load_secondtry[core])
                     self.write_kpi("cpu_core_%d" % core, total_load_secondtry[core], "%")
                     if total_load_secondtry[core] > requirement:
-                        process_running = my_shell.Execute(["top -n1"])
+                        process_running = self.dut.shell.one.Execute(["top -n1"])
                         logging.info("top -n1")
                         logging.info(process_running[const.STDOUT][0])
                         asserts.assertLess(total_load_secondtry[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
@@ -102,9 +92,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     def testMemory(self):
         requirement = 10
         #requirement = 99
-        self.dut.shell.InvokeTerminal("my_shell4")
-        my_shell = getattr(self.dut.shell, "my_shell4")
-        shell_response = my_shell.Execute(["cat /proc/meminfo"])
+        shell_response = self.dut.shell.one.Execute(["cat /proc/meminfo"])
 
         mem_free_kb = float(re.findall('MemFree:\s*(\d+)', shell_response[const.STDOUT][0])[0])
         buffers_kb = float(re.findall('Buffers:\s*(\d+)', shell_response[const.STDOUT][0])[0])
@@ -129,10 +117,8 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
     def testDisk(self):
         requirement = 75
-        self.dut.shell.InvokeTerminal("my_shell5")
-        my_shell = getattr(self.dut.shell, "my_shell5")
         number_of_disks = [] # type: typing.List[str]
-        shell_response = my_shell.Execute(["df","-h"])
+        shell_response = self.dut.shell.one.Execute(["df","-h"])
         vendor = re.findall('([^\n]*/\s*vendor\s*)', shell_response[const.STDOUT][0])[0]
         number_of_disks.append(vendor)
         data = re.findall('([^\n]*/\s*data\s*)', shell_response[const.STDOUT][0])[0]
@@ -178,11 +164,16 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
                             "No crashes are allowed, found tombstones in /data/tombstones on the device. "
                             "Crashing apps: [%s]. Full tombstone-details in logs" % ", ".join(crashing_processes))
 
+    def getCpuLoad(self, number_of_cores, measure_time):
+        first_cpu_data = self.get_data(int(number_of_cores))
+        sleep(measure_time)
+        second_cpu_data = self.get_data(int(number_of_cores))
+        return self.calc_load(first_cpu_data, second_cpu_data, int(number_of_cores))
+
+
     def get_data(self, cores):
-        self.dut.shell.InvokeTerminal("data_shell")
-        my_shell = getattr(self.dut.shell, "data_shell")
-        shell_response = my_shell.Execute(["cat /proc/stat"])
-        stats_data = io.StringIO(unicode(shell_response[const.STDOUT][0]))
+        shell_response = self.dut.shell.one.Execute(["cat /proc/stat"])
+        stats_data = io.StringIO((shell_response[const.STDOUT][0]).decode('utf-8'))
         stats_data.readline() #remove first line with total cpu load
         core_load = {} # type: typing.Any
 
@@ -193,7 +184,6 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             core_load[str(core)]['total'] = sum(core_load[str(core)]['stats'])
 
         return core_load
-
 
     def calc_load(self, core_first_data, core_last_data, cores):
         utilisation = [] # type: typing.List[float]
