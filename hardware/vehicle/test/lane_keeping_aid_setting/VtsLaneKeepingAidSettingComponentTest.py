@@ -179,6 +179,10 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
 
+        vc.dump(window=-1)
+        buttonOff = vc.findViewByIdOrRaise(lka_button_off)
+        buttonOn = vc.findViewByIdOrRaise(lka_button_on)
+
         print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
         print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
         asserts.assertEqual(buttonOff.__getattr__('enabled')(),True, "Off button is disabled")
@@ -304,6 +308,12 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         buttonBoth = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_both)
         buttonSteering = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_steering)
         buttonSound = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_sound)
+
+        vc.dump(window=-1)
+        buttonBoth = vc.findViewByIdOrRaise(lka_button_mode_both)
+        buttonSteering = vc.findViewByIdOrRaise(lka_button_mode_steering)
+        buttonSound = vc.findViewByIdOrRaise(lka_button_mode_sound)
+
 
         print("buttonBoth enabled -> ") + str(buttonBoth.__getattr__('enabled')())
         print("buttonSteering  enabled -> ") + str(buttonSteering.__getattr__('enabled')())
