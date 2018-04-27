@@ -6,7 +6,7 @@
 #pragma once
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
-#include "i_evs_camera_stream_wrapper.h"
+#include "i_evs_video_provider.h"
 #include "i_virtual_camera.h"
 
 namespace android {
@@ -21,14 +21,14 @@ namespace vcc_implementation {
 // EvsCameraStream.
 class VirtualCamera final : public IVirtualCamera {
   public:
-    explicit VirtualCamera(sp<IEvsCameraStreamWrapper> input_stream);
+    explicit VirtualCamera(sp<IEvsVideoProvider> input_stream);
     ~VirtualCamera();
 
     // Performs a controlled stop of the video stream
     void Shutdown() override;
 
     // Inline implementations
-    sp<IEvsCameraStreamWrapper> GetEvsCameraStream() override { return input_stream_; };
+    sp<IEvsVideoProvider> GetEvsVideoProvider() override { return input_stream_; };
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCamera follow.
     Return<void> getCameraInfo(getCameraInfo_cb hidl_cb) override;
@@ -40,7 +40,7 @@ class VirtualCamera final : public IVirtualCamera {
     Return<EvsResult> setExtendedInfo(uint32_t opaque_identifier, int32_t opaque_value) override;
 
   private:
-    sp<IEvsCameraStreamWrapper> input_stream_;  // The low level camera interface
+    sp<IEvsVideoProvider> input_stream_;  // The low level camera interface
 };
 
 }  // namespace vcc_implementation

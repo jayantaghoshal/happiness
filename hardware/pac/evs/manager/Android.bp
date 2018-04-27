@@ -57,7 +57,7 @@ cc_library_static {
 
     srcs: [
         "src/evs_enumerator.cpp",
-        "src/evs_camera_stream.cpp",
+        "src/evs_video_provider.cpp",
         "src/virtual_camera.cpp",
     ],
 

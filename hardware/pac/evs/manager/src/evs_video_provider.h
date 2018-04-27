@@ -8,7 +8,7 @@
 #include <list>
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
-#include "i_evs_camera_stream_wrapper.h"
+#include "i_evs_video_provider.h"
 #include "virtual_camera.h"
 
 namespace android {
@@ -20,12 +20,12 @@ namespace vcc_implementation {
 
 // This class wraps the actual hardware IEvsCamera objects. There is a one to many relationship
 // between instances of this class and instances of the VirtualCamera class. This class implements
-// the IEvsCameraStream interface, via the IEvsCameraStreamWrapper wrapper interface, so that it
-// can receive the video stream from the hardware camera and distribute it to the associated
-// VirtualCamera objects.
-class EvsCameraStream : public IEvsCameraStreamWrapper {
+// the HIDL IEvsCameraStream interface, via the IEvsVideoProvider wrapper interface, so that it
+// can receive video from the hardware camera and distribute it to the associated VirtualCamera
+// objects.
+class EvsVideoProvider : public IEvsVideoProvider {
   public:
-    explicit EvsCameraStream(const sp<IEvsCamera>& hw_camera) : hw_camera_(hw_camera){};
+    explicit EvsVideoProvider(const sp<IEvsCamera>& hw_camera) : hw_camera_(hw_camera){};
 
     // Factory methods for VirtualCamera:s
     sp<IVirtualCamera> MakeVirtualCamera() override;

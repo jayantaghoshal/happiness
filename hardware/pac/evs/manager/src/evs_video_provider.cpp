@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include "evs_camera_stream.h"
+#include "evs_video_provider.h"
 
 #include <cinttypes>
 
@@ -17,7 +17,7 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-sp<IVirtualCamera> EvsCameraStream::MakeVirtualCamera() {
+sp<IVirtualCamera> EvsVideoProvider::MakeVirtualCamera() {
     dbgD("called");
 
     // Create the EVS camera interface object
@@ -36,7 +36,7 @@ sp<IVirtualCamera> EvsCameraStream::MakeVirtualCamera() {
     return client;
 }
 
-void EvsCameraStream::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) {
+void EvsVideoProvider::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) {
     dbgD("called");
     // Validate input
     if (virtual_camera == nullptr) {
@@ -58,9 +58,9 @@ void EvsCameraStream::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_came
     // TODO(ihu) Recalculate the number of buffers required with the client removed from the list.
 }
 
-Return<void> EvsCameraStream::deliverFrame(const BufferDesc& buffer) {
+Return<void> EvsVideoProvider::deliverFrame(const BufferDesc& buffer) {
     dbgD("called with bufferId %" PRIu32, buffer.bufferId);
-    // TODO(ihu) Implement EvsCameraStream::deliverFrame method
+    // TODO(ihu) Implement EvsVideoProvider::deliverFrame method
     return Void();
 }
 

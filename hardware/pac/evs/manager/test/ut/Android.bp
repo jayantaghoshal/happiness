@@ -14,7 +14,7 @@ cc_test {
 
     srcs: [
         "test_evs_enumerator.cpp",
-        "test_evs_camera_stream.cpp",
+        "test_evs_video_provider.cpp",
         "test_virtual_camera.cpp",
     ],
 

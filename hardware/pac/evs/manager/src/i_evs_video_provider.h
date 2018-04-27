@@ -20,7 +20,7 @@ namespace vcc_implementation {
 
 // This interface is a wrapper to allow for easy mocking of the implementation class.
 // See the implementation class for details on use.
-class IEvsCameraStreamWrapper : public IEvsCameraStream {
+class IEvsVideoProvider : public IEvsCameraStream {
   public:
     // Factory methods for VirtualCamera:s
     virtual sp<IVirtualCamera> MakeVirtualCamera() = 0;

@@ -6,7 +6,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <i_evs_camera_stream_wrapper.h>
+#include <i_evs_video_provider.h>
 #include <virtual_camera.h>
 #include "mock_hw_camera.h"
 
@@ -19,7 +19,7 @@ namespace vcc_implementation {
 
 using testing::_;  // Matches any type
 
-class MockIEvsCameraStreamWrapper : public IEvsCameraStreamWrapper {
+class MockIEvsVideoProvider : public IEvsVideoProvider {
   public:
     MOCK_METHOD0(MakeVirtualCamera, sp<IVirtualCamera>());
     MOCK_METHOD1(DisownVirtualCamera, void(const sp<IVirtualCamera>& virtual_camera));
@@ -31,11 +31,11 @@ class MockIEvsCameraStreamWrapper : public IEvsCameraStreamWrapper {
 class VirtualCameraTest : public ::testing::Test {
   protected:
     sp<MockHwCamera> mock_hw_camera;
-    sp<MockIEvsCameraStreamWrapper> mock_input_stream;
+    sp<MockIEvsVideoProvider> mock_input_stream;
     sp<VirtualCamera> virtual_camera;
     void SetUp() override {
         mock_hw_camera = new MockHwCamera();
-        mock_input_stream = new MockIEvsCameraStreamWrapper();
+        mock_input_stream = new MockIEvsVideoProvider();
         virtual_camera = new VirtualCamera(mock_input_stream);
     }
 

@@ -6,7 +6,7 @@
 #pragma once
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
-#include "i_evs_camera_stream_wrapper.h"
+#include "i_evs_video_provider.h"
 
 namespace android {
 namespace hardware {
@@ -15,7 +15,7 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-class IEvsCameraStreamWrapper;  // From i_evs_camera_stream_wrapper.h
+class IEvsVideoProvider;  // From i_evs_video_provider.h
 
 // The VirtualCamera acts as a middle-man between the consumer of the camera stream and the wrapper of the hardware
 // camera (EvsCameraStream). Many VirtualCamera:s can share the same EvsCameraStream.
@@ -25,7 +25,7 @@ class IVirtualCamera : public IEvsCamera {
     virtual void Shutdown() = 0;
 
     // Inline implementations
-    virtual sp<IEvsCameraStreamWrapper> GetEvsCameraStream() = 0;
+    virtual sp<IEvsVideoProvider> GetEvsVideoProvider() = 0;
 };
 
 }  // namespace vcc_implementation
