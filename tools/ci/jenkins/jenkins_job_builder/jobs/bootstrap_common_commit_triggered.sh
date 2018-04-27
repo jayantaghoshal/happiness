@@ -25,8 +25,10 @@ WORKSPACE_ROOT=$(pwd)
 bootstrap_docker_run () {
     docker run \
     --hostname aic-docker \
-    --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
     --volume "$HOME":"$HOME":rw \
+    --volume "$WORKSPACE_ROOT":"$WORKSPACE_ROOT" \
+    --volume /cm/repo-mirror:/cm/repo-mirror \
+    --volume /dev/bus/usb:/dev/bus/usb \
     --env=HOST_UID="$(id -u)" \
     --env=HOST_GID="$(id -g)" \
     --env=HOST_UNAME="$(id -un)" \
@@ -57,7 +59,6 @@ bootstrap_docker_run () {
     --device /dev/ttyMP \
     --device /dev/ttyVIP \
     --privileged \
-    --volume /dev/bus/usb:/dev/bus/usb \
     --rm \
     "${BOOTSTRAP_DOCKER_IMAGE}" \
     "$@"
@@ -90,7 +91,7 @@ if [[ -d .repo ]]; then
     # Hard reset manifest repo (current branch)
     (cd .repo/manifests && git reset --hard HEAD || true)
 fi
-bootstrap_docker_run "repo init -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
+bootstrap_docker_run "repo init --reference=/cm/repo-mirror -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail

@@ -7,7 +7,7 @@
 # Repo sync
 #
 function get_repos {
-    bootstrap_docker_run "repo init -u ${UPSTREAM_JOB_GIT_URL} -b ${UPSTREAM_JOB_GIT_REVISION}" || die "repo init failed"
+    bootstrap_docker_run "repo init --reference=/cm/repo-mirror -u ${UPSTREAM_JOB_GIT_URL} -b ${UPSTREAM_JOB_GIT_REVISION}" || die "repo init failed"
     #fetching only the required codes for running the tests
     SYNC_OPTIONS="--no-clone-bundle --force-sync --detach --optimized-fetch --current-branch -q -j4"
     SYNC_REPOSITORIES="aosp/platform/build/soong \

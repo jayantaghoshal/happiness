@@ -20,11 +20,13 @@ fi
 
 
 function docker_run() {
-  local volumes
   local mp_dev=/dev/ttyMP
   local vip_dev=/dev/ttyVIP
-
-  volumes=--volume="${WORKSPACE}":"${WORKSPACE}"\ --volume="${CCACHE_DIR}":"${CCACHE_DIR}"\ --volume=$mp_dev:$mp_dev\ --volume=$vip_dev:$vip_dev
+  local repo_mirror=/cm/repo-mirror
+  local volumes=--volume="${WORKSPACE}":"${WORKSPACE}"\ --volume="${CCACHE_DIR}":"${CCACHE_DIR}"\ --volume=$mp_dev:$mp_dev\ --volume=$vip_dev:$vip_dev
+  if [ -d /cm/repo-mirror ]; then
+     volumes="${volumes}"\ --volume=$repo_mirror:$repo_mirror
+  fi
 
   # Need to create dirs passed as volumes that may not exist so Docker does not
   # create them with root.root ownership.

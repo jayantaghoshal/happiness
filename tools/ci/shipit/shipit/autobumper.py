@@ -68,6 +68,7 @@ def check_manifest(aosp_root_dir: str, branch: str):
 def repo_init(aosp_root_dir: str, branch: str):
     process_tools.check_output_logged(
         ["repo", "init",
+         "--reference=/cm/repo-mirror",
          "-u", "ssh://gotsvl1415.got.volvocars.net:29421/manifest",
          "-b", branch],
         cwd=os.path.abspath(aosp_root_dir))
