@@ -18,13 +18,18 @@ from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-
 from com.dtmilano.android.viewclient import ViewClient
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
-from generated.pyDataElements import \
-    FrSignalInterface, \
-    UsgModSts
+import vehiclehalcommon
+import threading
+from generated.datatypes import \
+    VehModMngtGlbSafe1
+
+from generated import datatypes as DE
+import logging.config
+import logging.handlers
+
 from vehiclehalcommon import VehicleHalCommon, wait_for_signal
 from com.dtmilano.android.viewclient import ViewNotFoundException
 
@@ -41,39 +46,84 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         results = self.dut.shell.one.Execute("id -u system")
         self.system_uid = results[const.STDOUT][0].strip()
-        self.fr = FrSignalInterface()
+        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
+
+
+    def tearDownClass(self):
+        try:
+            self.fr.close()
+        except:
+            pass
 
     def testDriveAwayInfoCCDisabled(self):
+
+        print("------------------testDriveAwayInfoCCDisabled ---------------")
+
         self.dut.shell.one.Execute("changecarconfig 315 1")
         self.deviceReboot()
-        self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
-        vc, device = self.vHalCommon.getViewClient()
-        self.vHalCommon.setUpVehicleFunction()
+
+        fr=self.fr
+
+        vehmod = VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
+        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
+
+        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
+        vHalCommon.setUpVehicleFunction()
+
+        vc, device = vHalCommon.getActiveViewClient()
 
         vc.dump(window=-1)
-        dai_off = vc.findViewByIdOrRaise(dai_off_id)
-        dai_visual = vc.findViewByIdOrRaise(dai_visual_id)
-        dai_visual_sound = vc.findViewByIdOrRaise(dai_visual_sound_id)
+        dai_off = vc.findViewById(dai_off_id)
+        dai_visual = vc.findViewById(dai_visual_id)
+        dai_visual_sound = vc.findViewById(dai_visual_sound_id)
 
-        # Compare result
-        asserts.assertEqual(dai_off.__getattr__('enabled')(),False, "DriveAway no info button is not disabled");
-        asserts.assertEqual(dai_visual.__getattr__('enabled')(),False, "DriveAway visual button is not disabled");
-        asserts.assertEqual(dai_visual_sound.__getattr__('enabled')(),False, "DriveAway both sound and visual button is not disabled");
+        # Check if buttons are invisible
+        asserts.assertEqual(dai_off, None, "Button is visible:" + dai_off_id)
+        asserts.assertEqual(dai_visual, None, "Button is visible:" + dai_visual_id)
+        asserts.assertEqual(dai_visual_sound, None, "Button is visible:" + dai_visual_sound_id)
 
-
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, self.fr.DriveAwayInfoActvReq.map.Off)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, self.fr.DriveAwayInfoSoundWarnActvReq.map.Off)
+        # Check default values for daisetting
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 0, "on/off shall be 0")
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
 
     def testDriveAwayInfoCCEnabled(self):
+
+        print("------------------testDriveAwayInfoCCEnabled----------------------")
+
         self.dut.shell.one.Execute("changecarconfig 315 3")
         self.deviceReboot()
-        self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid)
-        vc, device = self.vHalCommon.getViewClient()
-        self.vHalCommon.setUpVehicleFunction()
+
+        fr = self.fr
+
+        vehmod = VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
+        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
+
+        vHalCommon = VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
+        vc, device = vHalCommon.getActiveViewClient()
+        vHalCommon.setUpVehicleFunction()
 
         # Get buttons
         _s = 1
         vc.dump(window=-1)
+        vHalCommon.waitUntilViewAvailable(vc, dai_off_id, timeout_seconds=2)
         dai_off = vc.findViewByIdOrRaise(dai_off_id);
         dai_visual = vc.findViewByIdOrRaise(dai_visual_id);
         dai_visual_sound = vc.findViewByIdOrRaise(dai_visual_sound_id);
@@ -82,73 +132,78 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
         DAI_SETTING = 557842437 # Hard coded VCC-HAL property ID for DAI_SETTING_VALUE
 
         # Set UsgModSts to ACTIVE, setting should change in ACTIVE
-        self.fr.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        wait_for_signal(self.fr, self.fr.UsgModSts, UsgModSts.map.UsgModDrvg)
+        fr.send_VehModMngtGlbSafe1(vehmod)
 
         # Set setting to OFF
         dai_off.touch()
         vc.sleep(_s)
-        settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(self.vHalCommon.extractValue(settings_value), 0, "Failed to set prop to OFF")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, self.fr.DriveAwayInfoActvReq.map.Off)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, self.fr.DriveAwayInfoSoundWarnActvReq.map.Off)
+        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
+        asserts.assertEqual(vHalCommon.extractValue(settings_value), 0, "Failed to set prop to OFF")
+
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 0, "on/off shall be 0")
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
 
         # Set setting to VISUAL
         dai_visual.touch()
         vc.sleep(_s)
-        settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(self.vHalCommon.extractValue(settings_value), 1, "Failed to set prop to VISUAL")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, self.fr.DriveAwayInfoActvReq.map.On)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, self.fr.DriveAwayInfoSoundWarnActvReq.map.Off)
+        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
+        asserts.assertEqual(vHalCommon.extractValue(settings_value), 1, "Failed to set prop to VISUAL")
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 1, "on/off shall be 1")
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
 
         # Set setting to VISUAL AND SOUND
         dai_visual_sound.touch()
         vc.sleep(_s)
-        settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(self.vHalCommon.extractValue(settings_value), 2, "Failed to set prop to VISUAL AND SOUND")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, self.fr.DriveAwayInfoActvReq.map.On)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, self.fr.DriveAwayInfoSoundWarnActvReq.map.On)
+        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
+        asserts.assertEqual(vHalCommon.extractValue(settings_value), 2, "Failed to set prop to VISUAL AND SOUND")
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 1, "on/off shall be 1")
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 1, "on/off shall be 1")
 
         # Set UsgModSts to NOT_ACTIVE, setting should not change in NOT_ACTIVE
-        current_dai_settings_value = self.vHalCommon.readVhalProperty(DAI_SETTING)
-        current_dai_settings_signal_visual = self.fr.DriveAwayInfoActvReq.get()
-        current_dai_settings_signal_visual_sound = self.fr.DriveAwayInfoSoundWarnActvReq.get()
+        current_dai_settings_value = vHalCommon.getVhalInt32(DAI_SETTING)
+        current_dai_settings_signal_visual = fr.get_DriveAwayInfoActvReq()
+        current_dai_settings_signal_visual_sound = fr.get_DriveAwayInfoSoundWarnActvReq()
 
-        self.fr.UsgModSts.send(UsgModSts.map.UsgModInActv)
-        wait_for_signal(self.fr, self.fr.UsgModSts, UsgModSts.map.UsgModInActv)
+        vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
+        fr.send_VehModMngtGlbSafe1(vehmod)
 
         # Set setting to OFF
         dai_off.touch()
         vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
 
         # Set setting to VISUAL
         dai_visual.touch()
         vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
 
         # Set setting to VISUAL AND SOUND
         dai_visual_sound.touch()
         vc.sleep(_s)
-        asserts.assertEqual(self.vHalCommon.readVhalProperty(DAI_SETTING), current_dai_settings_value, "Value of prop changed in NOT_ACTIVE")
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoActvReq, current_dai_settings_signal_visual)
-        self.vHalCommon.assert_signal_equals(self.fr.DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
+        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
+        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
 
         # Close applicationa and go back to home screen
         self.dut.adb.shell('input keyevent 3')
         vc.sleep(_s)
 
     def deviceReboot(self):
+        if self.fr is not None:
+            self.fr.close()
+        time.sleep(1)
         self.dut.shell.one.Execute("reboot")
         self.dut.stopServices()
         self.dut.waitForBootCompletion()
         self.dut.startServices()
         self.dut.shell.InvokeTerminal("one")
-        self.fr = FrSignalInterface()
+        time.sleep(1)
+        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
+        time.sleep(1)
 
 if __name__ == "__main__":
     test_runner.main()
