@@ -70,7 +70,7 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
                                            module_name] +
                                           tests_to_run_args,
                                           timeout_sec=max_test_time_sec,
-                                          env=env).decode().strip(" \n\r\t")
+                                          env=env).decode('UTF-8', 'backslashreplace').strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
         raise VtsTestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
     except Exception as e:
@@ -113,7 +113,7 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
             logging.info("Attempting %s, found mathces: %r" % (pattern, matches))
             if len(matches) == 1:
                 gzip_filename = matches[0]
-                logdict[name] = check_output(["gzip", "-d", "-c", gzip_filename]).decode()
+                logdict[name] = check_output(["gzip", "-d", "-c", gzip_filename]).decode('UTF-8', 'backslashreplace')
         read("device_logcat_setup", os.path.join(log_dir, "**", "*device_logcat_setup*.txt.gz"))
         read("device_logcat_teardown", os.path.join(log_dir, "**", "*device_logcat_teardown*.txt.gz"))
         read("device_logcat_test", os.path.join(log_dir, "**", "*device_logcat_test*.txt.gz"))
