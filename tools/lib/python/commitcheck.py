@@ -273,18 +273,19 @@ def fix_repo(repo_root, **kwargs):
 
 
 def pre_commit_hook(repo_root, **kwargs):
-    paths_to_fix = build_git_controlled_changed_file_list(repo_root)
+    staged = build_git_controlled_changed_file_list(repo_root)
     not_staged = list(build_git_controlled_not_staged_file_list(repo_root))
 
     if len(not_staged) > 0:  # partial commit, fail if needed to change files
-        print("Processing partial commit caused by not staged files: \r\n{}\r\n, "
+        print("Processing partial commit caused by not fully staged files: \r\n{}\r\n, "
               "it will abort your commit if changes/fixes were applied, in that "
               "case review the changes.".format(not_staged))
-        aggregate_and_exit_with_report_on_failure(paths_to_fix, fix_file_path_on_pre_commit_hook_raise_fixes,
+        aggregate_and_exit_with_report_on_failure(staged, fix_file_path_on_pre_commit_hook_raise_fixes,
                                                   error_types_tuple=ExpectedExceptions)
     else:  # full commit, dev would be happy if we add fixes automatically
         print("Processing full commit, will auto add changes/fixes applied")
-        aggregate_and_exit_with_report_on_failure(paths_to_fix, fix_file_path_on_pre_commit_hook_silent_fixes,
+        aggregate_and_exit_with_report_on_failure(staged, fix_file_path_on_pre_commit_hook_silent_fixes,
                                                   error_types_tuple=ExpectedExceptions)
         # if there was no issues lets add those files
-        subprocess.check_output(['git', 'add', '.'], cwd=repo_root).decode()
+        for staged_filepath in staged:
+            subprocess.check_output(['git', 'add', staged_filepath], cwd=repo_root).decode()
