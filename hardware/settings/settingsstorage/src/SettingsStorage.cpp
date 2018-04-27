@@ -274,7 +274,13 @@ Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
     if (data == nullptr) {
         reason = SettingsChangeReason::Reset;
     }
-    listener->settingsForCurrentUserChanged(key, reason, profileToGet);
+    auto status = listener->settingsForCurrentUserChanged(key, reason, profileToGet);
+    if (!status.isOk()) {
+        // Don't remove the listener, it should be removed by serviceDied
+        ALOGW("Failed to notify settings change to key=%d directly after subscribe. Reason: %s",
+              key,
+              status.description().c_str());
+    }
     return andrHw::Return<void>();
 }
 
