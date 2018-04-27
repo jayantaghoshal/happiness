@@ -29,9 +29,6 @@
   <remove-project name="aosp/platform/external/iproute2" />
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
 
-  <remove-project name="aosp/platform/external/iptables" />
-  <project name="aosp/platform/external/iptables" path="external/iptables" revision="143336295328ece4bd57e0c4bc79eb677fd219f6" />
-
   <remove-project name="aosp/platform/frameworks/base" />
   <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="ea5db54714b41f42b4bced45e4f1847e59976bae" />
 
