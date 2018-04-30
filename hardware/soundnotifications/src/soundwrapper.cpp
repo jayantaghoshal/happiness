@@ -16,6 +16,7 @@ namespace SoundNotifications {
 
 android::sp<vendor::delphi::audiomanager::V1_0::IAudioManager> SoundWrapper::am_service;
 static const std::chrono::milliseconds kRestartTimeout = std::chrono::milliseconds(5);
+static const std::chrono::milliseconds kStartWaitTimeout = std::chrono::milliseconds(10);
 
 // ==========================================================
 // implementation Sound
@@ -41,6 +42,13 @@ void Sound::onTimeout() {
     play();
 }
 
+void Sound::cancelTimer() {
+    if (job_id_ > 0) {
+        restartTimer.Cancel(job_id_);
+        job_id_ = 0;
+    }
+}
+
 /*
  * Called on disconnected callback from AM
 */
@@ -51,17 +59,15 @@ void Sound::onDisconnected() {
     _state = State::Idle;
 }
 
-void Sound::setState(int state) {
-    std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
-    _state = static_cast<State>(state);
-}
-
 SoundWrapper::SoundID Sound::getSoundID() const { return _soundID; }
 
 void Sound::play() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
 
     using namespace vendor::delphi::audiomanager::V1_0;
+
+    // cancel any running timer to be able to accept new play request while we are working on the previous play request.
+    cancelTimer();
 
     switch (_state) {
         case State::Idle: {
@@ -103,9 +109,8 @@ void Sound::play() {
             break;
 
         case State::Stopping:
-            _state = State::Idle;
-            restartTimer.Enqueue([this]() { onTimeout(); });
-            ALOGD("Sound::play Stopping->Starting %s. Connection ID %d", _name.c_str(), connectionID);
+            job_id_ = restartTimer.EnqueueWithDelay(kStartWaitTimeout, [this]() { onTimeout(); });
+            ALOGD("Sound::play Waiting to enter in the Idle %s. Connection ID %d", _name.c_str(), connectionID);
             break;
 
         default:
@@ -117,10 +122,8 @@ void Sound::play() {
 void Sound::stop() {
     std::lock_guard<std::recursive_mutex> safeLock(_stateMutex);
 
-    if (job_id_ > 0) {
-        restartTimer.Cancel(job_id_);
-        job_id_ = 0;
-    }
+    // cancel any running timer to stop the sound.
+    cancelTimer();
 
     switch (_state) {
         case State::Idle:
@@ -135,7 +138,6 @@ void Sound::stop() {
 
             ::android::hardware::Return<AMStatus> status = am_service->stopSound(connectionID);
 
-            _state = State::Idle;  // got to Idle
             if (status.isOk()) {
                 ALOGD("Sound::stop Playing->Stopping %s. Connection ID %d", _name.c_str(), connectionID);
             } else {
@@ -202,18 +204,16 @@ void Sound::onPlayStopped(int32_t reason) {
             break;
 
         case State::Playing:
-            _state = State::Idle;
+            _state = State::Stopping;
             ALOGD("Sound::onPlayStopped Playing->Idle %s. Connection ID %d", _name.c_str(), connectionID);
             break;
 
         case State::Starting:
             _state = State::Idle;
-            restartTimer.Enqueue([this]() { onTimeout(); });
             break;
 
         case State::Stopping:
-            _state = State::Idle;
-            ALOGD("Sound::onPlayStopped Stopping->Idle %s. Connection ID %d", _name.c_str(), connectionID);
+            ALOGW("Sound::onPlayStopped Not Expected ever %s. Connection ID %d", _name.c_str(), connectionID);
             break;
 
         default:
@@ -464,17 +464,6 @@ uint32_t SoundWrapper::getConnectionID(SoundID soundid) {
         return i->second->getConnectionID();
     } else {
         return 0;  // sound not found
-    }
-}
-
-void SoundWrapper::setSoundState(SoundID soundid, int state) {
-    auto i = sounds.find(soundid);
-    std::shared_ptr<Sound> sound;
-    if (i != sounds.end()) {
-        i->second->setState(state);
-        return;
-    } else {
-        return;  // sound not found
     }
 }
 
