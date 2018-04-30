@@ -301,6 +301,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
+      - multijob:
+          name: Code_Analysis
+          condition: ALWAYS
+          projects:
+            - name: ihu_analyze_code-sonarqube
+              current-parameters: true
       - conditional-step:
           condition-kind: current-status
           condition-worst: SUCCESS
@@ -351,6 +357,9 @@
                 <customProjectName>ihu_daily_build_vcc_eng</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+        - archive:
+            artifacts: 'aosp/vendor/volvocars/*'
+            allow-empty: 'true'
 
 - job:
     name: ihu_daily_build_vcc_userdebug
@@ -422,6 +431,54 @@
     name: ihu_daily_vts4-generic
     defaults: daily_vts_defaults
     node: daily_test-generic
+
+- job:
+    name: ihu_analyze_code-sonarqube
+    node: sonarqube
+    project-type: freestyle
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    concurrent: false
+    parameters:
+        - run:
+            name: UPSTREAM_JOB
+            project-name: ihu_daily_build_vcc_eng
+            description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed and to copy files for the scan.
+    properties:
+        - build-discarder:
+            days-to-keep: 30
+            artifact-days-to-keep: 30
+        - raw:
+            xml: |
+                <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+                    <autoRebuild>false</autoRebuild>
+                    <rebuildDisabled>false</rebuildDisabled>
+                </com.sonyericsson.rebuild.RebuildSettings>
+    builders:
+        - shell: |
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
+            then
+                echo "Daily build ihu_vcc-eng failed!!!"
+                exit 1
+            fi
+        - copyartifact:
+            project: $UPSTREAM_JOB_JOBNAME
+            filter: vendor/volvocars/*
+            do-not-fingerprint: true
+        - sonar:
+            sonar-name: Sonar
+            properties: |
+                sonar.projectKey=ihua:androidcomplete
+                sonar.projectName=IHUA_IHU Android - complete source code
+                sonar.projectVersion=1.0
+                sonar.sources=./vendor/volvocars/
+    wrappers:
+        - timestamps
+        - workspace-cleanup
+        - timeout:
+            timeout: 10
+            timeout-var: 'BUILD_TIMEOUT'
+            abort: true
+            type: absolute
 
 - job:
     name: ihu_deliver_to_infotainment
