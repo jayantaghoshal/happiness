@@ -692,8 +692,19 @@ Possible profiles:
                         help="Flash MP software via fastboot")
     parsed_args = parser.parse_args()
 
-    with open(os.path.dirname(__file__) + "/logging.json", "rt") as f:
+    with open(os.path.join(os.path.dirname(__file__), "logging.json"), "rt") as f:
         log_config = json.load(f)
+        # Add a file handler to log to ihu_update.log as well
+        log_config['handlers']['update_ihu_file_handler'] = {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'formatter': 'simple',
+            'filename': 'ihu_update.log',
+            'maxBytes': 0,
+            'backupCount': 5,
+            'encoding': 'utf8'
+        }
+        log_config['root']['handlers'].append("update_ihu_file_handler")
     logging.config.dictConfig(log_config)
 
     script_version = run(["git", "-C", os.path.dirname(sys.argv[0]), "rev-parse", "HEAD"])
