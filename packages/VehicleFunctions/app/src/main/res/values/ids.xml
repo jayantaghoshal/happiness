@@ -20,4 +20,15 @@
     <item name="speed_limiter_on" type="id"/>
     <item name="curve_speed_adaption_on" type="id"/>
     <item name="curve_speed_adaption_off" type="id"/>
+    <item name="tsi_rsi_button_on" type="id"/>
+    <item name="tsi_rsi_button_off" type="id"/>
+    <item name="tsi_spdCamWarn_button_on" type="id"/>
+    <item name="tsi_spdCamWarn_button_off" type="id"/>
+    <item name="tsi_spdAlrtVisWarn_button_on" type="id"/>
+    <item name="tsi_spdAlrtVisWarn_button_off" type="id"/>
+    <item name="tsi_spdAlrtSndWarn_button_on" type="id"/>
+    <item name="tsi_spdAlrtSndWarn_button_off" type="id"/>
+    <item name="tsi_offset_button_plus" type="id"/>
+    <item name="tsi_offset_text" type="id"/>
+    <item name="tsi_offset_button_minus" type="id"/>
 </resources>

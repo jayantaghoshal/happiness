@@ -44,7 +44,8 @@ LOCAL_STATIC_ANDROID_LIBRARIES := \
 LOCAL_JAVA_LIBRARIES += android.car
 LOCAL_STATIC_JAVA_LIBRARIES += \
         vendor.volvocars.hardware.vehiclehal-V1.0-java \
-        volvo.vendorextension
+        volvo.vendorextension \
+        carconfigapi
 
 # Android architecture components
 LOCAL_STATIC_JAVA_LIBRARIES += \

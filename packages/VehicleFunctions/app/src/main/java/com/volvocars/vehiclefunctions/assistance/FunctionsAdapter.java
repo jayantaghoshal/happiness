@@ -18,7 +18,7 @@ import com.volvocars.vehiclefunctions.assistance.functions.OneButtonFunctionView
 import com.volvocars.vehiclefunctions.assistance.functions.Section;
 import com.volvocars.vehiclefunctions.assistance.functions.SectionViewHolder;
 import com.volvocars.vehiclefunctions.assistance.functions.ThreeStateFunctionViewHolder;
-
+import com.volvocars.vehiclefunctions.assistance.functions.IntegerFunctionViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +69,9 @@ public class FunctionsAdapter extends RecyclerView.Adapter<FunctionViewHolder> {
                 break;
             case R.layout.vh_function_onebutton:
                 viewHolder = new OneButtonFunctionViewHolder(view);
+                break;
+            case R.layout.vh_function_plusminus:
+                viewHolder = new IntegerFunctionViewHolder(view);
                 break;
             default:
                 viewHolder = new FunctionViewHolder(view);
