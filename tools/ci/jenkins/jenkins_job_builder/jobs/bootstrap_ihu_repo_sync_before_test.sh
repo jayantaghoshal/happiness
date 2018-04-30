@@ -22,5 +22,6 @@ vendor/delphi/android_devices \
 vendor/delphi/bb_reprogramming \
 vendor/delphi/binaries_android_tunermanager \
 vendor/delphi/android_diagnostics \
+vendor/delphi/binaries_android_traffic \
 vendor/google/apps/GAS"
 bootstrap_docker_run "repo sync ${SYNC_OPTIONS} ${SYNC_REPOSITORIES}" || die "repo sync failed"
