@@ -58,7 +58,7 @@ function repo_sync() {
 function storecimetrix() {
     buildFunc=$1
     buildTime=$2
-    timeStamp=$3
+    timeStamp=$(date +%s%N)
 
     if [[ "$buildFunc" == *"droid"* ]]; then
        buildFunc="makedroid"
@@ -81,7 +81,7 @@ function citime(){
   elapsedTime=$((timer_stop - timer_start))
   echo $((elapsedTime / 3600))"h" $(((elapsedTime / 60) % 60))"m" $((elapsedTime % 60))"s"
 
-  storecimetrix "$*" "$elapsedTime" "$timer_stop"
+  storecimetrix "$*" "$elapsedTime"
 }
 
 
