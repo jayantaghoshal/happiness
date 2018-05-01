@@ -22,14 +22,11 @@ constexpr uint8_t HISIP_APPLICATION_ID_CARCONFIG = 0x77u;
 #define DATA_REPORT_MAX_BLOCK_SIZE 50
 
 CarConfigVipCom::CarConfigVipCom() {
-    ALOGI("Carconfig_updater:VipComClient started");
-
     // Read the entire carconfig file into the array before
     // there is a posibility that we might get a new one.
     for (int i = 1; i <= Carconfig_base::cc_no_of_parameters; i++) {
-        ccList[i] = rd.getValue(i);
+        ccList[i - 1] = rd.getValue(i);
     }
-
     vipReader = std::thread(&CarConfigVipCom::VipReader, this);
     versionRequest();
 }
@@ -38,7 +35,6 @@ CarConfigVipCom::~CarConfigVipCom() {
     // Make sure we can exit thread functions and join threads
     DesipClient::setExitListen(true);
     android::IPCThreadState::self()->stopProcess();
-
     if (vipReader.joinable()) {
         vipReader.join();
     }
@@ -96,19 +92,21 @@ void CarConfigVipCom::setTransfer(void) {
 void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
     ParcelableDesipMessage msg;
     int8_t* data = msg.allocDataPtr(1);
-    int16_t checkSumRangeSize;
-    int32_t vipChecksum;
-
-    std::memcpy(&checkSumRangeSize, &payload[0], 2);
-    std::memcpy(&vipChecksum, &payload[2], 4);
-
+    int16_t checkSumRangeSize = 0;
+    int32_t vipChecksum = 0;
+    bool checkSumMatch = false;
     bool sendOK = false;
 
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
-    msg.setFid(hisipBytes::carConfigVersionReport);
+    msg.setFid(hisipBytes::carConfigChecksumReport);
+
+    // Copy and flip endianness
+    checkSumRangeSize = (payload[0] << 8) | (payload[1] << 0 & 0xFF);
+    vipChecksum =
+            (payload[2] << 24) | (payload[3] << 16 & 0xFF0000) | (payload[4] << 8 & 0xFF00) | (payload[5] << 0 & 0xFF);
 
     // This shoudn't happen, but if the VIP asks us to calculate
-    // on carconfig parameters than exists, we shoudl't try. Send
+    // on carconfig parameters than exists, we shouldn't try. Send
     // carConfigChecksumReportNok will result in copying new
     // parameters and new checksum size.
     if (checkSumRangeSize > Carconfig_base::cc_no_of_parameters) {
@@ -119,15 +117,15 @@ void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
     // checksum ok so that we don't overwrite the default caconfig file on the VIP with
     // our own default file.
     else if ((calculateChecksum(ccList.data(), checkSumRangeSize) == vipChecksum) || (rd.usingDefaultFile())) {
-        ALOGI("VIP <-> MP Checksum match, notifying VIP");
         data[0] = carConfigChecksumReportOk;
+        checkSumMatch = true;
     } else {
         ALOGI("VIP <-> MP Checksum mismatch, notifying VIP and requsting CC transfer");
         data[0] = carConfigChecksumReportNok;
     }
 
     sendOK = sendDESIPMsg(msg);
-    if (sendOK) {
+    if (sendOK && (checkSumMatch == false)) {
         setTransfer();
     }
 }
@@ -135,17 +133,16 @@ void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
 void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
     ParcelableDesipMessage msg;
     int8_t block = payload[0];
+    int8_t nextBlock = block + 1;
     int8_t blockSize = DATA_REPORT_MAX_BLOCK_SIZE;
 
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigDataReport);
 
-    ALOGI("Received Data request of block %i", uint8_t(payload[1]));
-
     // The VIP read request starts inside the carconfig range but ends outside
     // left to read.
-    if ((block * DATA_REPORT_MAX_BLOCK_SIZE) > Carconfig_base::cc_no_of_parameters) {
-        blockSize = (block * blockSize) - Carconfig_base::cc_no_of_parameters;
+    if ((nextBlock * DATA_REPORT_MAX_BLOCK_SIZE) > Carconfig_base::cc_no_of_parameters) {
+        blockSize = (nextBlock * blockSize) - Carconfig_base::cc_no_of_parameters;
     }
     // The VIP is trying to start a read outside of the carconfig range,
     // according to the protocol then we should just return with block size
@@ -157,7 +154,7 @@ void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
     int8_t* data = msg.allocDataPtr(blockSize + 2);
     data[0] = block;
     data[1] = blockSize;
-    std::memcpy(&data[2], ccList.data(), blockSize);
+    std::memcpy(&data[2], ccList.data() + (block * blockSize), blockSize);
     sendDESIPMsg(msg);
 }
 
