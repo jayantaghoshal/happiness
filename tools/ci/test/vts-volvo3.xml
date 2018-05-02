@@ -19,7 +19,7 @@ This is part of the complete Gootls VTS.
 It is separated into three pieces as it then is easier to run on many
 devices and it will be faster.
 We also have issues with logs building up during tests making long test
-runs sometimes fail. Lastly we also need to remove some modules from 
+runs sometimes fail. Lastly we also need to remove some modules from
 the plan as they do not execute properly.
 -->
 
@@ -29,27 +29,33 @@ the plan as they do not execute properly.
   <option name="test-tag" value="vts-volvo3" />
   <option name="vts-plan-result:plan-name" value="vts-volvo3" />
 
-  <option name="compatibility:test-arg" value="com.android.tradefed.testtype.VtsMultiDeviceTest:precondition-vintf-override:true" />
-
-  <!-- From vts-hal-hidl.xml: Internal Only -->
-
-  <option name="compatibility:include-filter" value="VtsHalHealthV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalKeymasterV3_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalLightV2_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalMemtrackV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalMediaOmxStoreV1_0Host" />
-<!--  <option name="compatibility:include-filter" value="VtsHalMediaOmxV1_0Host" /> TAKES 2H ???-->
-  <option name="compatibility:include-filter" value="VtsHalOemHookV1_0Host" />
-  <option name="compatibility:include-filter" value="VtsHalOemLockV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalPowerV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalPowerV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalRenderscriptV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalSapV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalSecureElementV1_0Target" />
   <option name="compatibility:include-filter" value="VtsHalSensorsV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalTetherOffloadConfigV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalTetherOffloadControlV1_0Target" />
   <option name="compatibility:include-filter" value="VtsHalThermalV1_0Target" />
   <option name="compatibility:include-filter" value="VtsHalThermalV1_1Target" />
   <option name="compatibility:include-filter" value="VtsHalUsbV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalUsbV1_0TargetReplay" />
   <option name="compatibility:include-filter" value="VtsHalUsbV1_1Target" />
   <option name="compatibility:include-filter" value="VtsHalVibratorV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalVibratorV1_0TargetReplay" />
   <option name="compatibility:include-filter" value="VtsHalVibratorV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalVibratorV1_2Target" />
+  <option name="compatibility:include-filter" value="VtsHalVrV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalVrV1_0TargetReplay" />-->
   <option name="compatibility:include-filter" value="VtsHalWeaverV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalWifiNanV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalWifiOffloadV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalWifiSupplicantV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalWifiSupplicantV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalWifiV1_0Host" />
+  <option name="compatibility:include-filter" value="VtsHalWifiV1_1Target" />
+  <!-- <option name="compatibility:include-filter" value="VtsHalWifiV1_2Target" /> Does not compile -->
+  <!-- <option name="compatibility:include-filter" value="VtsHalWifiV1_2TargetProfiling" /> Does not compile -->
 
 </configuration>

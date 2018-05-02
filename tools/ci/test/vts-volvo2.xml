@@ -19,7 +19,7 @@ This is part of the complete Gootls VTS.
 It is separated into three pieces as it then is easier to run on many
 devices and it will be faster.
 We also have issues with logs building up during tests making long test
-runs sometimes fail. Lastly we also need to remove some modules from 
+runs sometimes fail. Lastly we also need to remove some modules from
 the plan as they do not execute properly.
 -->
 
@@ -29,26 +29,34 @@ the plan as they do not execute properly.
   <option name="test-tag" value="vts-volvo2" />
   <option name="vts-plan-result:plan-name" value="vts-volvo2" />
 
-  <option name="compatibility:test-arg" value="com.android.tradefed.testtype.VtsMultiDeviceTest:precondition-vintf-override:true" />
-
-  <!-- From vts-hal-hidl.xml: Internal Only -->
-  <option name="compatibility:include-filter" value="VtsHalAudioEffectV2_0Target" />
-  <!-- <option name="compatibility:include-filter" value="VtsHalAudioV2_0Target" /> Causes ihu crash -->
-  <option name="compatibility:include-filter" value="VtsHalSoundtriggerV2_0Target" />
   <option name="compatibility:include-filter" value="VtsHalGraphicsComposerV2_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalGraphicsComposerV2_2Target" />
   <option name="compatibility:include-filter" value="VtsHalGraphicsMapperV2_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalTetherOffloadConfigV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalTetherOffloadControlV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalVrV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalBiometricsFingerprintV2_1Target" />
-<!--  <option name="compatibility:include-filter" value="VtsHalBroadcastradioV1_0Target" /> 15 MIN TIMEOUT -->
-  <option name="compatibility:include-filter" value="VtsHalCameraProviderV2_4Target" /> 
-  <option name="compatibility:include-filter" value="VtsHalCasV1_0Target" /> 
-  <option name="compatibility:include-filter" value="VtsHalConfigstoreV1_0Target" /> 
-  <option name="compatibility:include-filter" value="VtsHalContexthubV1_0Target" /> 
-  <option name="compatibility:include-filter" value="VtsHalDrmV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalGatekeeperV1_0Target" />
-  <option name="compatibility:include-filter" value="VtsHalGnssV1_0Target" />
-
+  <option name="compatibility:include-filter" value="VtsHalGraphicsMapperV2_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalHealthV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalHealthV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalIrV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalKeymasterV3_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalKeymasterV3_0TargetReplay" />
+  <option name="compatibility:include-filter" value="VtsHalKeymasterV4_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalLightV2_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalLightV2_0TargetReplay" />
+  <option name="compatibility:include-filter" value="VtsHalMediaOmxStoreV1_0Host" />
+  <option name="compatibility:include-filter" value="VtsHalMediaOmxV1_0Host" />
+  <option name="compatibility:include-filter" value="VtsHalMemtrackV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalMemtrackV1_0TargetReplay" />
+  <option name="compatibility:include-filter" value="VtsHalNeuralnetworksV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalNeuralnetworksV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalNfcV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalNfcV1_0TargetReplay" />
+  <option name="compatibility:include-filter" value="VtsHalNfcV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalOemLockV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalPowerV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalPowerV1_0TargetReplay" />
+  <option name="compatibility:include-filter" value="VtsHalPowerV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalPowerV1_2Target" />
+  <option name="compatibility:include-filter" value="VtsHalRadioV1_0Target" />
+  <option name="compatibility:include-filter" value="VtsHalRadioV1_1Target" />
+  <option name="compatibility:include-filter" value="VtsHalRadioV1_2Target" />
 
 </configuration>
