@@ -733,12 +733,10 @@ std::vector<std::unordered_map<std::string, std::string>> GetNetmanConfig() {
 void SetupVeth(const std::vector<std::unordered_map<std::string, std::string>>& veth_confs) {
     try {
         for (auto& veth : veth_confs) {
-            std::string cmd =
-                    "/vendor/bin/ip link add " + veth.at("name") + " type veth peer name " + veth.at("peername");
+            std::string cmd = "/vendor/bin/ip netns exec vcc ip link add " + veth.at("name") + " type veth peer name " +
+                              veth.at("peername");
             try {
-                ValidateReturnStatus(
-                        std::system(cmd.c_str()),
-                        std::string("Failed to create " + veth.at("name") + " and " + veth.at("peername")));
+                ValidateReturnStatus(std::system(cmd.c_str()), std::string("Failed to create veth eth0 - and0"));
             } catch (const std::system_error& e) {
                 if (e.code().value() != ENOENT) throw;
             }
@@ -761,7 +759,7 @@ void SetupVeth(const std::vector<std::unordered_map<std::string, std::string>>& 
 
             // Move eth0 to default ns
             std::string ns = (veth.at("peerns") == "default") ? "1" : veth.at("peerns");
-            cmd = "/vendor/bin/ip link set " + veth.at("peername") + " netns " + ns;
+            cmd = "/vendor/bin/ip netns exec vcc ip link set " + veth.at("peername") + " netns " + ns;
             try {
                 ValidateReturnStatus(std::system(cmd.c_str()),
                                      std::string("Failed to change interface's namespace: ") + veth.at("peername"));

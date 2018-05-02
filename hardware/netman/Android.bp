@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 Volvo Car Corporation
+ * Copyright 2017 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -65,7 +65,6 @@ cc_binary {
         "sysctl.conf",
         "iptables-vcc",
         "ip6tables-vcc",
-        "netman_conf.json",
     ],
 }
 
@@ -112,24 +111,6 @@ cc_binary {
 
     header_libs: [
         "nlohmann-json-3.0.1",
-    ],
-}
-
-//
-// Dnsmasq wrapper for deployment to system
-//
-cc_binary {
-    name: "dnsmasq_wrapper",
-    defaults: ["netman_cc_defaults"],
-    srcs: [
-        "src/dnsmasq_wrapper/dnsmasq_wrapper.cpp",
-    ],
-    shared_libs: [
-        "liblog",
-    ],
-    required: [
-        "ip-vcc",
-        "dnsmasq-vcc",
     ],
 }
 
