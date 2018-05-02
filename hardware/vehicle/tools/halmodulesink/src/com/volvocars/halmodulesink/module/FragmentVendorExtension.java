@@ -53,20 +53,20 @@ public class FragmentVendorExtension extends AModuleFragment {
 
         runBackgroundAndUpdate(() -> {
             try {
-                if (vendorExtensionClient.isFeatureAvailable(VehicleProperty.DAI_SETTING)) {
+                if (vendorExtensionClient.isSupportedFeature(VehicleProperty.DAI_SETTING)) {
                     updateUI(() -> {
                         settingDaiOff.setVisibility(View.VISIBLE);
                         settingDaiVisual.setVisibility(View.VISIBLE);
                         settingDaiVisualSound.setVisibility(View.VISIBLE);
                     });
                 }
-                if (vendorExtensionClient.isFeatureAvailable(VehicleProperty.CURVE_SPEED_ADAPTION_ON)) {
+                if (vendorExtensionClient.isSupportedFeature(VehicleProperty.CURVE_SPEED_ADAPTION_ON)) {
                     updateUI(() -> {
                         settingCsaButtonOff.setVisibility(View.VISIBLE);
                         settingCsaButtonOn.setVisibility(View.VISIBLE);
                     });
                 }
-                if (vendorExtensionClient.isFeatureAvailable(VehicleProperty.CONNECTED_SAFETY_ON)) {
+                if (vendorExtensionClient.isSupportedFeature(VehicleProperty.CONNECTED_SAFETY_ON)) {
                     updateUI(() -> {
                         settingConnSafetyOff.setVisibility(View.VISIBLE);
                         settingConnSafetyOn.setVisibility(View.VISIBLE);

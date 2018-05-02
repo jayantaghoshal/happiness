@@ -92,7 +92,7 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
         setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
         CompletableFuture.runAsync(() -> {
             // Use API to communicate with vehicle and then call setUiValue() when ready
-            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)) {
+            if (mVendorExtensionClient.isSupportedFeature(mVehicleProperty)) {
                 Log.d(TAG, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
                 // Register Property value callback
                 registerPropCallback();
@@ -126,7 +126,7 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
      */
     private void setDisabledMode() {
         try {
-            int maxValue = (int) mVendorExtensionClient.getCarPropertyConfig(mVehicleProperty).getMaxValue();
+            int maxValue = (int) mVendorExtensionClient.getCarPropertyConfig(mVehicleProperty).get().getMaxValue();
             if (maxValue == MODE_1_DISABLED) {
                 setDisabledMode(STATE_1);
             } else if (maxValue == MODE_2_DISABLED) {
@@ -138,6 +138,8 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
             Log.e(TAG, "Property not supported: " + e.getMessage());
         } catch (CarNotConnectedException e) {
             Log.e(TAG, "Car is not connected: " + e.getMessage());
+        } catch (NullPointerException e){
+            Log.e(TAG, "Couldn't find the property config " + e.getMessage());
         }
     }
 }

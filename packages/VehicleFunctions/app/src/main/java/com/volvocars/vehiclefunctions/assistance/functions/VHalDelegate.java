@@ -31,7 +31,7 @@ public abstract class VHalDelegate<T> {
         setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
         CompletableFuture.runAsync(() -> {
             // Use API to communicate with vehicle and then call setUiState() when ready
-            if (mVendorExtensionClient.isFeatureAvailable(mVehicleProperty)) {
+            if (mVendorExtensionClient.isSupportedFeature(mVehicleProperty)) {
                 Log.d(TAG_COMMON, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
 
                 // Register Property callback

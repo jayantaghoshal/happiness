@@ -255,13 +255,12 @@ public class VendorExtensionClient {
 
     /**
      * Get CarPropertyConfig using ID
-     *
      * @param propID
-     * @return
+     * @return Optional<CarPropertyConfig>
      * @throws NotSupportedException
      * @throws android.car.CarNotConnectedException
      */
-    public CarPropertyConfig getCarPropertyConfig(int propID)
+    public Optional<CarPropertyConfig>  getCarPropertyConfig(int propID)
             throws NotSupportedException, android.car.CarNotConnectedException {
         validateCarConnection();
         if (!isSupportedFeature(propID)) {
@@ -270,26 +269,24 @@ public class VendorExtensionClient {
         List<CarPropertyConfig> properties = carVEManager.getProperties();
         Optional<CarPropertyConfig> result = properties.stream()
                 .filter(property -> property.getPropertyId() == propID).findFirst();
-        return result.get();
+        return result;
     }
 
     /**
      * Get the type information of the PropID
-     *
      * @param propID
      * @param area
-     * @return
+     * @return Optional<VehiclePropertySupport>
      */
-    public VehiclePropertySupport getVehiclePropertySupport(int propID, int area) {
+    public Optional<VehiclePropertySupport>  getVehiclePropertySupport(int propID, int area) {
         validateCarConnection();
         Optional<VehiclePropertySupport> result = supportedFeatures.stream()
                 .filter(feature -> feature.vehicleProperty == propID & feature.area == area).findFirst();
-        return result.get();
+        return result;
     }
 
     /**
      * Set propID value using Global zone ID
-     *
      * @param propID
      * @param data
      * @param <E>
@@ -310,7 +307,6 @@ public class VendorExtensionClient {
 
     /**
      * Set propID value using zone area ID
-     *
      * @param propID
      * @param area
      * @param data
@@ -343,78 +339,17 @@ public class VendorExtensionClient {
         return sVendorExtensionClient;
     }
 
-    // Feature handling methods
-
-    /**
-     * TODO: Maybe hide this? can get all information
-     *
-     * @param propertyClass
-     * @param propId
-     * @param area
-     * @param <E>
-     * @return
-     */
-    private <E> Boolean isFeatureAvailable(Class<E> propertyClass, int propId, int area) {
-        validateCarConnection();
-        return isFeatureAvailable(new VehiclePropertySupport(propertyClass, propId, area));
-    }
-
-    /**
-     * Checks if this feature is available
-     *
-     * @param propId
-     * @param <E>
-     * @return
-     */
-    public <E> Boolean isFeatureAvailable(int propId) {
-        return isFeatureAvailable(propId, NO_INNER_AREA);
-    }
-
-    /**
-     * Checks if this feature is available
-     *
-     * @param propId
-     * @param area
-     * @param <E>
-     * @return
-     */
-    public <E> Boolean isFeatureAvailable(int propId, int area) {
-        return isFeatureAvailable(new VehiclePropertySupport(getVehiclePropertySupport(propId, area).type, propId, area));
-    }
-
-    /**
-     * Checks if this feature is available, Maybe force to use only defined propIds.
-     * Right now getProperty can get all the properties even not vendor extension.
-     *
-     * @param vehiclePropertySupport
-     * @param <E>
-     * @return
-     */
-    private <E> Boolean isFeatureAvailable(VehiclePropertySupport vehiclePropertySupport) {
-        validateCarConnection();
-        try {
-            carVEManager.getProperty(vehiclePropertySupport.type,
-                    vehiclePropertySupport.vehicleProperty, vehiclePropertySupport.area);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     /**
      * Checks if this feature supported by the API
-     *
      * @param propId
      * @return
      */
     public boolean isSupportedFeature(int propId) {
-        validateCarConnection();
         return isSupportedFeature(propId, NO_INNER_AREA);
     }
 
     /**
      * Checks if this feature supported by the API
-     *
      * @param propId
      * @param areaId
      * @return
@@ -427,38 +362,19 @@ public class VendorExtensionClient {
 
     /**
      * Checks if this feature supported by the API
-     *
      * @return
      */
     public List<Integer> getSupportedFeatures() {
         validateCarConnection();
         return new Vector<Integer>(supportedFeatures.stream()
-                .filter(this::isFeatureAvailable)
                 .map(vehiclePropertySupport -> vehiclePropertySupport.vehicleProperty)
                 .collect(Collectors.toList()));
 
-    }
-
-    public List<Integer> getAvailableFeatures() {
-        validateCarConnection();
-        return new Vector<Integer>(supportedFeatures.stream()
-                .filter(this::isFeatureAvailable)
-                .map(vehiclePropertySupport -> vehiclePropertySupport.vehicleProperty)
-                .collect(Collectors.toList()));
     }
 
     /**
-     * TODO: decide either supported features synced with vehicle hal and only allow public access "isSupportedFeature"
-     *
-     * @return
+     * Register the main call back to the VendorExtension
      */
-    public List<Integer> getAvailableFeaturesAndSupported() {
-        validateCarConnection();
-        supportedFeatures.stream().map(vehiclePropertySupport -> vehiclePropertySupport.available =
-                isFeatureAvailable(vehiclePropertySupport));
-        return getAvailableFeatures();
-    }
-
     private void registerCallback() {
         validateCarConnection();
         try {
@@ -468,6 +384,10 @@ public class VendorExtensionClient {
         }
     }
 
+    /**
+     * Register a specific property callback
+     * @param callBack
+     */
     public void registerCallback(VendorExtensionCallBack callBack) {
         validateCarConnection();
         ArrayList<VendorExtensionCallBack> foundExisting = vendorCallBacks.get(callBack.propId);
@@ -480,6 +400,10 @@ public class VendorExtensionClient {
         }
     }
 
+    /**
+     * Remove the registered property callback
+     * @param callBack
+     */
     public void removeCallback(VendorExtensionCallBack callBack) {
         ArrayList<VendorExtensionCallBack> foundExisting = vendorCallBacks.get(callBack.propId);
         if (foundExisting != null) {
