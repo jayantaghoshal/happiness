@@ -25,7 +25,7 @@ python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
 # Update the manifests based on the templates and download all other
 # repositories. First time this will take a very long time but subsequent
 # downloads are incremental and faster.
-time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local sync "${ZUUL_PROJECT}"
+citime python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local sync "${ZUUL_PROJECT}"
 
 # Unable to remove out folder when the server is in process of
 # copying files at the same time.

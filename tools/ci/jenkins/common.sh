@@ -66,17 +66,20 @@ function storecimetrix() {
        buildFunc="maketradefed"
     elif [[ "$buildFunc" == *"tester.py"* ]]; then
        buildFunc="makecomponent"
+    elif [[ "$buildFunc" == *"bump.py"* ]]; then
+       buildFunc="reposync"
     elif [[ "$buildFunc" == *"mmma"* ]]; then
        buildFunc="mmma"
     fi
 
+    set +e
     curl -i -XPOST 'http://gotsvl1416.got.volvocars.net:8086/write?db=ciflowtime' --data-binary "$buildFunc,build_stage=${JOB_NAME} build_number=${BUILD_NUMBER},build_time=$buildTime $timeStamp"
+    set -e
 }
 
 function citime(){
   timer_start=$(date '+%s')
   "$@"
-  #sleep 3
   timer_stop=$(date '+%s')
   elapsedTime=$((timer_stop - timer_start))
   echo $((elapsedTime / 3600))"h" $(((elapsedTime / 60) % 60))"m" $((elapsedTime % 60))"s"
