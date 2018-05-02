@@ -33,6 +33,12 @@ from generated.pyDataElements import \
     BaseFloatSender, \
     BaseIntegerSender
 
+from generated.datatypes import \
+    VehModMngtGlbSafe1, \
+    OnOffPen
+
+from generated import datatypes as DE
+
 PydataElementsSenderType = typing.Union[BaseEnumSender, BaseBoolSender, BaseFloatSender, BaseIntegerSender]
 T = typing.TypeVar('T')
 
@@ -476,6 +482,20 @@ class VehicleHalCommon():
         val = vHalProp['value']
         propExtracted = val["int32Values"][0]
         return propExtracted
+
+    def GetDefaultInitiated_VehModMngtGlbSafe1(self):
+        vehmod = VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
+        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
+        return vehmod
 
 
 def get_dataelements_connection(adb, mode=None):
