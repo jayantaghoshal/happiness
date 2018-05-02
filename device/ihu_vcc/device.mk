@@ -88,9 +88,7 @@ PRODUCT_PACKAGES += \
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += \
-    HalModulesSink \
-    VccMediaCenterTest \
-    VccTunerBrowserServiceTest
+    HalModulesSink
 endif
 
 PRODUCT_PACKAGES += \
