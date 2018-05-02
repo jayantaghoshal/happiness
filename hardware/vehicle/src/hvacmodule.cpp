@@ -36,9 +36,14 @@ vhal20::VehiclePropConfig boolConfig(VehicleProperty prop, std::vector<int> area
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
     // TODO: Verify if this shall be set for bool properties, older versions of CarService with supportedAreas would
     // crash
+
     c.areaConfigs.resize(areaIds.size());
     for (size_t i = 0; i < areaIds.size(); i++) {
         c.areaConfigs[i].areaId = areaIds[i];
+        c.areaConfigs[i].minInt32Value = 0;
+        c.areaConfigs[i].maxInt32Value = 1;
+        c.areaConfigs[i].minFloatValue = 0;  // TODO carconfig?
+        c.areaConfigs[i].maxFloatValue = 0;  // TODO carconfig?
     }
     return c;
 }
@@ -134,14 +139,14 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         }
     });
 
-    subs_.push_back(logicFactory_.driverConvertedTemp_.subscribe([this](const auto& value) {
+    subs_.push_back(logicFactory_.driverConvertedTemp_.subscribeAndCall([this](const auto& value) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
         prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
-    subs_.push_back(logicFactory_.driverTempState_.subscribe([this](const auto&) {
+    subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
@@ -149,7 +154,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         // TODO: PA Availability to VHAL
     }));
 
-    subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribe([this](const auto& value) {
+    subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribeAndCall([this](const auto& value) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
@@ -157,7 +162,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
-    subs_.push_back(logicFactory_.passengerTempState_.subscribe([this](const auto&) {
+    subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
@@ -180,7 +185,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         FirstRow::FanLevelFrontRequest req(static_cast<FirstRow::FanLevelFrontRequest::Literal>(fan_speed));
         logicFactory_.fanLevelFrontLogic_.requestFanLevel(req);
     });
-    subs_.push_back(logicFactory_.fanLevelFront_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.fanLevelFront_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
         prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_), toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
@@ -194,7 +199,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         ALOGD("Request auto climate %d", auto_on);
         logicFactory_.autoClimateLogic_.requestAutoClimate();
     });
-    subs_.push_back(logicFactory_.autoClimate_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.autoClimate_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAutoClimateAttributeChanged " << state;
         bool on = (state == FirstRowGen::AutoClimateState::ON);
         prop_autoclimate.PushProp(on, toInt(VehicleAreaZone::ROW_1_CENTER));
@@ -210,7 +215,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         logicFactory_.manualRecircLogic_.requestManualRecirc(recirculation_on ? FirstRowGen::ManualRecircRequest::ON
                                                                               : FirstRowGen::ManualRecircRequest::OFF);
     });
-    subs_.push_back(logicFactory_.manualRecirc_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.manualRecirc_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireManualRecircAttributeChanged " << state;
         prop_recirculation.PushProp(state == FirstRowGen::ManualRecircState::ON, toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
@@ -238,12 +243,12 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
                                  : FirstRowGen::ElectricDefrosterWindscreenRequest::OFF);
         }
     });
-    subs_.push_back(logicFactory_.electricDefrosterRear_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.electricDefrosterRear_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
         prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
                                 toInt(VehicleAreaWindow::REAR_WINDSHIELD));
     }));
-    subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
         prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
                                 toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
@@ -259,7 +264,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         logicFactory_.maxDefrosterLogic_.request(maxdefroster_on ? FirstRow::MaxDefrosterRequest::ON
                                                                  : FirstRow::MaxDefrosterRequest::OFF);
     });
-    subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribe([this](const auto& state) {
+    subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribeAndCall([this](const auto& state) {
         log_debug() << "fireMaxDefrosterAttributeChanged " << state;
         prop_maxdefroster.PushProp(state == FirstRowGen::MaxDefrosterState::ON, {toInt(VehicleAreaZone::ROW_1_CENTER)});
     }));
@@ -274,7 +279,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         logicFactory_.airConditionerLogic_.requestAirConditioner(ac_on ? FirstRowGen::AirConditionerRequest::AUTO
                                                                        : FirstRowGen::AirConditionerRequest::OFF);
     });
-    subs_.push_back(logicFactory_.airConditioner_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.airConditioner_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
         prop_ac.PushProp(state == FirstRowGen::AirConditionerState::AUTO, {toInt(VehicleAreaZone::ROW_1_CENTER)});
     }));
@@ -314,7 +319,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         }
         // TODO: Return/log error
     });
-    subs_.push_back(logicFactory_.airDistribution_.subscribe([this](const auto& state) {
+    subs_.push_back(logicFactory_.airDistribution_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAirDistributionAttributeChanged " << state;
 
         for (const auto& c : air_dist_conversions) {
@@ -333,52 +338,52 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Old not yet ported
 
-    subs_.push_back(logicFactory_.cleanZone_.subscribe([](const auto& state) {
+    subs_.push_back(logicFactory_.cleanZone_.subscribeAndCall([](const auto& state) {
         log_debug() << "fireCleanzoneAttributeChanged " << state;
         // getStubAdapter()->fireCleanzoneAttributeChanged(state);
     }));
 
-    subs_.push_back(commonFactory_.getTemperatureSyncProperty().subscribe([](const auto& syncAttribute) {
+    subs_.push_back(commonFactory_.getTemperatureSyncProperty().subscribeAndCall([](const auto& syncAttribute) {
         log_info() << "fireTemperatureSyncAttributeChanged, " << syncAttribute;
         // getStubAdapter()->fireTemperatureSyncAttributeChanged(syncAttribute);
     }));
 
-    subs_.push_back(logicFactory_.getSeatHeatDriverProperty().subscribe([](const auto& heatAttribute) {
+    subs_.push_back(logicFactory_.getSeatHeatDriverProperty().subscribeAndCall([](const auto& heatAttribute) {
         log_debug() << "fireSeatHeatDriverAttributeChanged, " << heatAttribute;
         // getStubAdapter()->fireSeatHeatDriverAttributeChanged(heatAttribute);
     }));
 
-    subs_.push_back(logicFactory_.getSeatHeatPassengerProperty().subscribe([](const auto& heatAttribute) {
+    subs_.push_back(logicFactory_.getSeatHeatPassengerProperty().subscribeAndCall([](const auto& heatAttribute) {
         log_debug() << "fireSeatHeatPassengerAttributeChanged, " << heatAttribute;
         // getStubAdapter()->fireSeatHeatPassengerAttributeChanged(heatAttribute);
     }));
 
-    subs_.push_back(logicFactory_.electricDefrosterRearPopup_.subscribe([](const auto& state) {
+    subs_.push_back(logicFactory_.electricDefrosterRearPopup_.subscribeAndCall([](const auto& state) {
         log_debug() << "fireElectricDefrosterRearPopupAttributeChanged " << state;
         // getStubAdapter()->fireElectricDefrosterRearPopupAttributeChanged(state);
     }));
 
-    subs_.push_back(logicFactory_.getElectricDefrosterWindscreenPopupProperty().subscribe([](const auto& state) {
+    subs_.push_back(logicFactory_.getElectricDefrosterWindscreenPopupProperty().subscribeAndCall([](const auto& state) {
         log_debug() << "fireElectricDefrosterWindscreenPopupAttributeChanged " << state;
         // getStubAdapter()->fireElectricDefrosterWindscreenPopupAttributeChanged(state);
     }));
 
-    subs_.push_back(logicFactory_.getSteeringWheelHeatProperty().subscribe([](auto heatAttribute) {
+    subs_.push_back(logicFactory_.getSteeringWheelHeatProperty().subscribeAndCall([](auto heatAttribute) {
         log_debug() << "fireSteeringWheelHeatAttributeChanged, " << heatAttribute;
         // getStubAdapter()->fireSteeringWheelHeatAttributeChanged(heatAttribute);
     }));
 
-    subs_.push_back(logicFactory_.getSeatVentDriverProperty().subscribe([](auto ventAttribute) {
+    subs_.push_back(logicFactory_.getSeatVentDriverProperty().subscribeAndCall([](auto ventAttribute) {
         log_debug() << "fireSeatVentDriverAttributeChanged, " << ventAttribute;
         // getStubAdapter()->fireSeatVentDriverAttributeChanged(ventAttribute);
     }));
 
-    subs_.push_back(logicFactory_.getSeatVentPassengerProperty().subscribe([](auto ventAttribute) {
+    subs_.push_back(logicFactory_.getSeatVentPassengerProperty().subscribeAndCall([](auto ventAttribute) {
         log_debug() << "fireSeatVentPassengerAttributeChanged, " << ventAttribute;
         // getStubAdapter()->fireSeatVentPassengerAttributeChanged(ventAttribute);
     }));
 
-    subs_.push_back(logicFactory_.getIonizerProperty().subscribe([](auto ionizerAttribute) {
+    subs_.push_back(logicFactory_.getIonizerProperty().subscribeAndCall([](auto ionizerAttribute) {
         log_debug() << "fireIonizerAttributeChanged" << ionizerAttribute;
         // getStubAdapter()->fireIonizerAttributeChanged(ionizerAttribute);
     }));
