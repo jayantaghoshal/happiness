@@ -13,7 +13,6 @@ from handle_result.abstract_reporter import abstract_reporter
 from handle_result.ci_database_reporter import ci_database_reporter
 from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
-from handle_result.json_reporter import json_reporter
 from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, detect_loose_test_cases, NamedTestResult
 from utilities import ihuhandler
 
@@ -141,11 +140,10 @@ class tester:
             selected_tests = get_test_set(plan, capabilities, args.only_matching)
 
             if len(selected_tests) == 0:
-                logger.warn('No applicable tests found.')
+                logger.warning('No applicable tests found.')
                 return
 
             self.reporter_list.add(console_reporter())
-            self.reporter_list.add(json_reporter())
             if args.vcc_dashboard_reporting:
                 self.reporter_list.add(vcc_dashboard_reporter())
             if args.report_results_to_ci_database:
