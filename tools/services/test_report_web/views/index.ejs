@@ -38,8 +38,8 @@
     <h2>Latest</h2>
     <ul>
         <% for(var i=0; i<top_job_names.length; i++) {%>
-           <% if (top_job_names[i].name!='ihu_gate') {%>
-                <li><a class="" href=<%="/tests/?top_job_name=" + top_job_names[i]["name"] + "&build_number=" + top_job_names[i]["latest_id"] %> target="_parent"><%= top_job_names[i].name%></a></li>
+           <% if (top_job_names[i] !='') {%>
+                <li><a class="" href=<%="/latest/?top_job_name=" + top_job_names[i] %> target="_parent"><%= top_job_names[i]%></a></li>
             <% } %>
         <% } %>
     </ul>
@@ -51,8 +51,9 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <% for(var i=0; i<top_job_names.length; i++) {%>
-                <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i].name%> target="_parent"><%= top_job_names[i].name %></a>
+                <a class="dropdown-item" href=<%="/jobs/?top_job="+top_job_names[i]%> target="_parent"><%= top_job_names[i] %></a>
             <% } %>
+            <a class="dropdown-item" href="/jobs/?top_job=ihu_gate" target="_parent">ihu_gate</a>
         </div>
     </div>
     

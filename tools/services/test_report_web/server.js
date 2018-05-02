@@ -29,7 +29,7 @@ var db;
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
 var mongo_ip = process.env.ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR
-MongoClient.connect('mongodb://jenkins-icup_android:' + process.env.MONGODB_PASSWORD + '@' + mongo_ip + ':27017', (err, client) => {
+MongoClient.connect('mongodb://' + process.env.MONGODB_USER + ':' + process.env.MONGODB_PASSWORD + '@' + mongo_ip + ':27017', (err, client) => {
     if (err) return errorlog.error(err);
     db = client.db('test_results');
     app.listen(3001, () => {
@@ -41,20 +41,23 @@ app.get('/', cors(), (req, res) => {
     res.render('home_frame.ejs');
 });
 
+app.get('/latest', cors(), (req, res) => {
+    var details = db.collection('records').find(
+        { "top_test_job_name": req.query.top_job_name, }, 
+        { "test_job_build_number": 1})
+    .sort({ test_job_build_number: -1 })
+    .limit(1)
+    .toArray().then(function(test_detail) {
+        build_number = test_detail[0]["test_job_build_number"]
+        res.redirect('/tests?test_job_name=' + req.query.test_job_name +  "?build_number=" + build_number);
+    });
+});
+
+
 app.get('/home', cors(), (req, res) => {
-    var cursor = db.collection('records').aggregate([{ $group: { '_id': '$top_test_job_name', 'max': { $max: '$top_test_job_build_number' } } }]).toArray().then(
-        function(top_test_job_names) {
-            var extracted_top_test_job_names = [];
-            for (var list_index in top_test_job_names) {
-                var name = top_test_job_names[list_index]["_id"];
-                if (name == "")
-                    name = "ihu_gate";
-                extracted_top_test_job_names.push({
-                    "name": name,
-                    "latest_id": top_test_job_names[list_index]["max"]
-                });
-            }
-            res.render('index.ejs', { view: "top_job_page", top_job_names: extracted_top_test_job_names });
+    var cursor = db.collection('records').distinct("top_test_job_name")
+        .then(function(top_test_job_names) {
+            res.render('index.ejs', { view: "top_job_page", top_job_names: top_test_job_names });
         });
 });
 
