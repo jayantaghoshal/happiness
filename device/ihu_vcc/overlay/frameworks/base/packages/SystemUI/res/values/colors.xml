@@ -9,13 +9,13 @@
     <!-- Notifications -->
     <eat-comment/>
     <!-- The color of the material notification background -->
-    <color name="notification_material_background_color">#ff222222</color>
+    <color name="notification_material_background_color">#ff090909</color>
     <!-- The color of the material notification background when dimmed -->
-    <color name="notification_material_background_dimmed_color">#80171718</color>
-    <!-- The background color of the notification shade - Semi-transparent Grey -->
-    <color name="notification_shade_background_color">#80171718</color>
+    <color name="notification_material_background_dimmed_color">#ff090909</color>
+    <!-- The background color of the notification shade -->
+    <color name="notification_shade_background_color">#ff090909</color>
 
     <!-- The background color of notifications with min importance. The color name says low
          but it actually doesn't apply to notifications with low importance. -->
-    <color name="notification_material_background_low_priority_color">#ff222222</color>
+    <color name="notification_material_background_low_priority_color">#ff090909</color>
 </resources>
