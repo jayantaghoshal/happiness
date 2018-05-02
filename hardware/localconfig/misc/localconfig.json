@@ -123,6 +123,7 @@
   "TEST_KEY_BOOLEAN": true,
   "vehiclefunctions.adas.LCFG_DAI_Enabled": true,
   "vehiclefunctions.adas.RDP_OnOffStatus_Visible": true,
+  "vehiclefunctions.adas.RDP_OnOffDefaultSetting_ON": true,
   "vehiclefunctions.profiles.T_PassiveKeysearch_Timeout_ms": 1000,
   "vehiclefunctions.profiles.T_Keysearch_Timeout_ms": 1000,
   "Climate_Defroster_delay" :1.0,
