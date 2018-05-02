@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -18,21 +18,6 @@ class RtpAudioNamespaceBridge : public ::testing::Test {
 
   protected:
     const std::string rtp_audio_vlan_ipaddr = "198.19.102.161";
-
-    bool readIptable(const std::string& table, std::string& output) {
-        std::array<char, 128> buffer;
-        std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
-        std::string cmd = vcc_netns + "/vendor/bin/iptables -w 2 -S -t " + table + " 2>&1";
-        std::unique_ptr<FILE, decltype(&pclose)> pFile(popen(cmd.c_str(), "re"), pclose);
-        if (!pFile) {
-            ALOGE("popen() failed!");
-            return false;
-        }
-        while (!feof(pFile.get())) {
-            if (fgets(buffer.data(), 128, pFile.get()) != nullptr) output += buffer.data();
-        }
-        return true;
-    }
 
     bool validateCommandStatus(int command_status) {
         if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
@@ -54,12 +39,12 @@ class RtpAudioNamespaceBridge : public ::testing::Test {
  */
 TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
     if (checkAutonomousDrive()) {
-        const std::string expected_table_rule = "-A POSTROUTING -o tcam0_cd -j MASQUERADE";
-        const std::string table_str = "nat";
-        std::string output;
-        EXPECT_THAT(readIptable(table_str, output), true);
-        bool result = (output.find(expected_table_rule) != std::string::npos);
-        EXPECT_THAT(result, true);
+        const std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
+        const std::string cmd = vcc_netns + "/vendor/bin/iptables -t mangle -C POSTROUTING -o tcam0_cd -j MASQUERADE";
+
+        int command_status = std::system(cmd.c_str());
+
+        EXPECT_TRUE(validateCommandStatus(command_status));
     } else {
         ALOGD("Nothing to test. Test not supported.");
     }
@@ -72,14 +57,13 @@ TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
  */
 TEST_F(RtpAudioNamespaceBridge, IptablesMangleTableIsConfigured) {
     if (checkAutonomousDrive()) {
-        const std::string expected_table_rule =
-                "-A POSTROUTING -d 10.0.0.0/24 -o rtp_aud0 -p udp -m udp --dport 68 -j CHECKSUM --checksum-fill";
-        const std::string table_str = "mangle";
-        std::string output;
-        EXPECT_THAT(readIptable(table_str, output), true);
-        bool result = (output.find(expected_table_rule) != std::string::npos);
-        EXPECT_THAT(result, true);
+        const std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
+        const std::string cmd = vcc_netns +
+                                "/vendor/bin/iptables -t mangle -C POSTROUTING -d 10.0.0.0/24 -o rtp_aud0 -p udp -m "
+                                "udp --dport 68 -j CHECKSUM --checksum-fill";
 
+        int command_status = std::system(cmd.c_str());
+        EXPECT_TRUE(validateCommandStatus(command_status));
     } else {
         ALOGD("Nothing to test. Test not supported.");
     }
@@ -93,8 +77,7 @@ TEST_F(RtpAudioNamespaceBridge, IptablesMangleTableIsConfigured) {
 TEST_F(RtpAudioNamespaceBridge, PingBetweenNamespaces) {
     if (checkAutonomousDrive()) {
         const std::string cmd = "ping -c 1 -w 3 " + rtp_audio_vlan_ipaddr;
-        bool res = validateCommandStatus(system(cmd.c_str()));
-        EXPECT_TRUE(res);
+        EXPECT_TRUE(validateCommandStatus(system(cmd.c_str())));
     } else {
         ALOGD("Nothing to test. Test not supported.");
     }
