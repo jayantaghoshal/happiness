@@ -24,6 +24,8 @@
   <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93" />
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049" />
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="25294b78f752dd17c37beda7854da66b190e5d24" />
+  <project name="vendor/volvocars/external/paho.mqtt.c" path="vendor/volvocars/external/paho.mqtt.c" revision="e746236fc4b78409f75c1201d7b9ea0ad8c9e6a1" />
+  <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79"/>
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/external/iproute2" />
