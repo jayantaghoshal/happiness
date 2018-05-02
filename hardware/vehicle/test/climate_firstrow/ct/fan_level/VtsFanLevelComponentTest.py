@@ -26,7 +26,7 @@ from generated import datatypes as DE
 
 
 class VtsFanLevelComponentTest(base_test.BaseTestClass):
-    """Testing Fan Level"""
+    """Testing FanLevel functions"""
     def setUpClass(self):
         """Creates a mirror and init vehicle hal."""
         self.dut = self.registerController(android_device)[0]
