@@ -56,7 +56,9 @@
                 mkdir -p .repo/manifests
                 cd .repo/manifests
                 git init
-                git remote add origin ssh://gotsvl1415.got.volvocars.net:29421/manifest || true
+                if ! git config remote.origin.url > /dev/null; then
+                   git remote add origin ssh://gotsvl1415.got.volvocars.net:29421/manifest
+                fi
                 git fetch --tags --progress origin "${GERRIT_BRANCH}"
                 git checkout "${GERRIT_BRANCH}"
                 git reset --hard origin/"${GERRIT_BRANCH}"
@@ -77,4 +79,6 @@
                 <customProjectName>icup_android_manifest_bump</customProjectName>
                 <customPrefix>IhuManifestBump</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+        - description-setter:
+            regexp-for-failed: "fatal: (.*)"
 
