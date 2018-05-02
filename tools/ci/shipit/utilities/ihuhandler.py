@@ -49,4 +49,3 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
     result.totaltime = totalElapsedTime
     logger.info("Update done with result: {}".format(str(result.success)))
     return result
-

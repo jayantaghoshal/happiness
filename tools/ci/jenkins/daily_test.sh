@@ -11,12 +11,6 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
-# Download from Artifactory
-artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
-
-# Unpack out.tgz
-tar xfz out.tgz || die "Unpack out.tgz failed"
-
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
@@ -41,7 +35,14 @@ set +e
 
 # Run Unit and Component tests for vendor/volvocars
 #shellcheck disable=SC2086
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run --plan nightly --vcc_dashboard_reporting --report_results_to_ci_database --update_ihu -c ihu-generic adb mp-serial vip-serial ${capability} -o ${capability}
+time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
+    --plan nightly \
+    --vcc_dashboard_reporting \
+    --report_results_to_ci_database \
+    --update_ihu \
+    --download ihu_daily_build-eng/"${UPSTREAM_JOB_NUMBER}"/out.tgz \
+    -c ihu-generic adb mp-serial vip-serial ${capability} \
+    -o ${capability}
 status=$?
 
 set -e

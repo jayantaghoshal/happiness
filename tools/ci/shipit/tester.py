@@ -15,7 +15,7 @@ from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
 from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, \
     detect_loose_test_cases, NamedTestResult, enforce_timeout_in_gate_tests
-from utilities import ihuhandler
+from utilities import ihuhandler, artifact_handler
 
 
 logger = logging.getLogger(__name__)
@@ -104,6 +104,8 @@ class tester:
         run_parser.add_argument('--vcc_dashboard_reporting', action='store_true')
         run_parser.add_argument('--report_results_to_ci_database', action='store_true')
         run_parser.add_argument('--update_ihu', action='store_true')
+        run_parser.add_argument('--download', default=None)
+        run_parser.add_argument('--download_latest', default=None)
         run_parser.add_argument(
             '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
         build_parser.add_argument('--test_component', default=None,
@@ -157,6 +159,11 @@ class tester:
                 self.reporter_list.add(vcc_dashboard_reporter())
             if args.report_results_to_ci_database:
                 self.reporter_list.add(ci_database_reporter())
+
+            if args.download:
+                artifact_handler.download_out(args.download)
+            elif args.download_latest:
+                artifact_handler.download_latest(args.download_latest)
 
             if args.update_ihu:
                 result = self.flash_ihu()
