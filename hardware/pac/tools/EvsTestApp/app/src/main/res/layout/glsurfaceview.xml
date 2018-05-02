@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.volvocars.evstestapp.MyGLSurfaceView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:context="com.volvocars.evstestapp.MainActivity"
+    android:layout_width="768dp"
+    android:layout_height="480dp"
+    android:layout_gravity="center">
+</com.volvocars.evstestapp.MyGLSurfaceView>

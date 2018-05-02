@@ -1,0 +1,38 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_library_shared {
+
+    name: "libevsnative",
+
+    compile_multilib: "64",
+
+    srcs: ["app/src/main/cpp/*.cpp"],
+
+    export_include_dirs: ["app/src/main/cpp/include"],
+
+    cppflags: [
+        "-Wall",
+        "-Wextra",
+        "-Wunreachable-code",
+        "-Wunused",
+        "-DGL_GLEXT_PROTOTYPES",
+        "-DEGL_EGLEXT_PROTOTYPES",
+        "-DLOG_TAG=\"EvsTestApp\"",
+        "-DLIBDBG_ENABLE_DEBUG",
+    ],
+
+    shared_libs: [
+        "libui",
+        "libhidlbase",
+        "libhidltransport",
+        "android.hardware.automotive.evs@1.0",
+        "libEGL",
+        "libGLESv2",
+        "liblog",
+        "libutils",
+        "libdbg",
+    ],
+}
