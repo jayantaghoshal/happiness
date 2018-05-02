@@ -32,9 +32,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Intent intent;
 
-    private final String ENABLE_OTA = "ENABLE_OTA";
-    private final String AUTO_DOWNLOAD = "AUTO_DOWNLOAD";
-    private final String AUTO_INSTALL = "AUTO_INSTALLs";
+    private final String ENABLE_OTA = "ota_enabled";
+    private final String AUTO_DOWNLOAD = "automatic_download_enabled";
 
     private ISoftwareUpdateSettingsCallback callback = new ISoftwareUpdateSettingsCallback.Stub() {
 
@@ -107,11 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         autoInstallSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    softwareUpdateManager.SetSetting(AUTO_INSTALL, isChecked);
-                } catch (RemoteException e) {
-                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
-                }
+
             }
         });
     }
@@ -128,8 +123,5 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (key.equals(ENABLE_OTA)) runOnUiThread(() -> enableOtaSwitch.setChecked(value));
         if (key.equals(AUTO_DOWNLOAD)) runOnUiThread(() -> autoDownloadSwitch.setChecked(value));
-        if (key.equals(AUTO_INSTALL)) runOnUiThread(() -> autoInstallSwitch.setChecked(value));
-
-
     }
 }

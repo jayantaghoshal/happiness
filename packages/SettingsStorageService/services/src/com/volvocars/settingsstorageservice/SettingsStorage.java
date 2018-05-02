@@ -42,22 +42,7 @@ public class SettingsStorage extends ISettingsListener.Stub {
     }
 
     public void init() {
-        retryService();
-    }
-
-    private void retryService() {
-        try {
-            connectToService();
-        } catch (NoSuchElementException e) {
-            Log.e(LOG_TAG, "[SettingsStorage] SettingsStorageDaemon not up yet.. Scheduling retry.");
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "[SettingsStorage] Retrying to connect to SettingsStorageDaemon");
-                    retryService();
-                }
-            }, 2000);
-        }
+        connectToService();
     }
 
     private void connectToService() {
@@ -67,13 +52,20 @@ public class SettingsStorage extends ISettingsListener.Stub {
         } catch (RemoteException e) {
             Log.e(LOG_TAG,
                     "[SettingsStorage] Cannot connect to ISettingsStorage: RemoteException [" + e.getMessage() + "]");
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Log.d(LOG_TAG, "[SettingsStorage] Retrying to connect to SettingsStorageDaemon");
+                    connectToService();
+                }
+            }, 2000);
         }
 
     }
 
     public void daemonDied() {
         settingsStorage = null;
-        retryService();
+        connectToService();
     }
 
     @Override
@@ -102,8 +94,11 @@ public class SettingsStorage extends ISettingsListener.Stub {
         Log.w(LOG_TAG, "TODO: Implement a way to retrieve current profile! Just setting 0 now as default... ");
         Log.v(LOG_TAG, "[SettingsStorage] get [key: " + key + ", ProfileIdentifier: " + profileId + "]");
         if (settingsStorage != null) {
-
-            return settingsStorage.get(key, (short) profileId);
+            try {
+                return settingsStorage.get(key, (short) profileId);
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Cannot send \"get\" to settingsstorage: RemoteException [" + e.getMessage() + "]");
+            }
         }
         else {
             Log.w(LOG_TAG, "[SettingsStorage] no connection to daemon, can't do anything...");

@@ -48,6 +48,8 @@ import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
 import com.volvocars.cloudservice.Status;
 import com.volvocars.cloudservice.CommissionElement.Reason;
 import com.volvocars.cloudservice.Query;
+import com.volvocars.settingsstorageservice.SettingsStorageManager;
+import com.volvocars.settingsstorageservice.SettingsStorageManagerConnectionCallback;
 
 /**
 *
@@ -62,11 +64,14 @@ public class SoftwareUpdateService extends Service {
     private SoftwareManagementApi swapi = null;
     private static InstallationMaster installationMaster = null;
 
+    private SettingsStorageManager settingsStorageManager;
+    private SettingsStorageManagerCallback settingsCallback;
+    private final String appId = "SoftwareUpdate";
+
     private int state = 0; // Dummy state
 
     private ArrayList<SoftwareInformation> softwareInformationList;
     private Map<String, Boolean> settings;
-
     private SoftwareManagementApiCallback swapiCallback;
 
     private static Handler messageHandler = new MessageHandler();
@@ -87,17 +92,43 @@ public class SoftwareUpdateService extends Service {
         }
     };
 
+    private SettingsStorageManagerConnectionCallback settingsConnectionCallback = new SettingsStorageManagerConnectionCallback() {
+
+        @Override
+        public void onServiceDisconnected() {
+            Log.d(LOG_TAG, "Connection to SettingsStorageManager was lost, How to handle?");
+        }
+
+        @Override
+        public void onServiceConnected() {
+            Log.v(LOG_TAG, "Connected to SettingsStorageManager");
+            try {
+                settingsStorageManager.getAsyncByString(appId, "ota_enabled", settingsCallback);
+                settingsStorageManager.getAsyncByString(appId, "automatic_download_enabled", settingsCallback);
+
+            } catch (RemoteException e) {
+                Log.d(LOG_TAG, "settingsStorageManager.registerClient RemoteException: [" + e.getMessage() + "]");
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
         super.onCreate();
 
-        // Save context in order to be able to send it to SoftwareManagementApiConnectionCallback
+        // Save context in order to be able to send it to
+        // SoftwareManagementApiConnectionCallback
         context = this;
 
         // Connect to FSApi
         swapi = new SoftwareManagementApi(context, swapiConnectionCallback);
         swapiCallback = new SoftwareManagementApiCallback(this);
+
+        // Connect so SettingsStorageService
+        settingsStorageManager = new SettingsStorageManager(context, settingsConnectionCallback);
+        settingsCallback = new SettingsStorageManagerCallback(this);
+
         softwareInformationList = new ArrayList();
         settings = new HashMap();
 
@@ -151,16 +182,17 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void onNewSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
-        //Check if software has been removed from list (and downloaded) to clear local storage
+        // Check if software has been removed from list (and downloaded) to clear local
+        // storage
         clearStorageOnRemovedSoftwareAssignment(software_list);
 
-        //Check status of software assignment if there is an action to be taken
+        // Check status of software assignment if there is an action to be taken
         for (SoftwareAssignment software : software_list) {
             if (SoftwareAssignment.Status.COMMISSIONED == software.status) {
                 doGetDownloadInfo(software.installationOrder);
             }
             if ((SoftwareAssignment.Status.COMMISSIONABLE == software.status)
-                    && (settings.getOrDefault("AUTO_DOWNLOAD", false))) {
+                    && (settings.getOrDefault("automatic_download_enabled", false))) {
                 CommissionAssignment(software.id, CommissionElement.Reason.AUTOMATIC_UPDATE);
             }
         }
@@ -186,7 +218,8 @@ public class SoftwareUpdateService extends Service {
                 try {
                     delete(file);
                 } catch (IOException e) {
-                    Log.w(LOG_TAG, "Directory " + directory + "could not be deleted [IOException: " + e.getMessage() + "]");
+                    Log.w(LOG_TAG,
+                            "Directory " + directory + "could not be deleted [IOException: " + e.getMessage() + "]");
                 }
 
             }
@@ -214,7 +247,7 @@ public class SoftwareUpdateService extends Service {
             try {
                 Log.v(LOG_TAG, "CommissionAssignment called with uuid: " + uuid + " and reason: " + reason.name());
                 for (SoftwareInformation software : softwareInformationList) {
-                    //check if assignment is valid for commssion (i.e in status COMMISSONABLE)
+                    // check if assignment is valid for commssion (i.e in status COMMISSONABLE)
                     if (software.softwareAssignment.id.equals(uuid)) {
                         if (software.softwareAssignment.status.equals(SoftwareAssignment.Status.COMMISSIONABLE)) {
                             CommissionElement commissionElement = new CommissionElement();
@@ -222,8 +255,7 @@ public class SoftwareUpdateService extends Service {
                             commissionElement.action = CommissionElement.Action.ORDER_SOFTWARE_INSTALLATION;
                             commissionElement.reason = reason;
                             commissionElement.commissionUri = software.softwareAssignment.commissionUri;
-                            Log.w(LOG_TAG,
-                                    "Calling CommissionSoftwareAssignment: client_id not set (implement!)");
+                            Log.w(LOG_TAG, "Calling CommissionSoftwareAssignment: client_id not set (implement!)");
                             swapi.CommissionSoftwareAssignment(commissionElement, swapiCallback);
                         } else {
                             Log.v(LOG_TAG, "CommissionSoftwareAssignment not called, software status is: "
@@ -335,6 +367,11 @@ public class SoftwareUpdateService extends Service {
 
     public void SetSetting(String key, boolean value) {
         settings.put(key, value);
+        try {
+            settingsStorageManager.setByString(appId, key, value ? "1" : "0");
+        } catch (RemoteException e) {
+            // TODO: handle exception
+        }
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
@@ -393,6 +430,16 @@ public class SoftwareUpdateService extends Service {
         }
         if (!found) {
             Log.v(LOG_TAG, "UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
+        }
+    }
+
+    public void UpdateSetting(String setting, String value) {
+        Log.v(LOG_TAG, "UpdateSetting [setting: " + setting + ", value: " + value + "]");
+        if (!value.isEmpty()) {
+            settings.put(setting, (Integer.parseInt(value) != 0));
+            softwareUpdateManager.UpdateSettings(settings);
+        } else {
+            Log.w(LOG_TAG, "Setting: " + setting + "is empty, what to do?");
         }
     }
 

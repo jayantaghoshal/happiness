@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 # Build the VendorVCC priv app.
@@ -16,6 +16,7 @@ LOCAL_PROGUARD_ENABLED := disabled
 LOCAL_STATIC_JAVA_LIBRARIES += \
             com.volvocars.FoundationServicesLib \
             com.volvocars.SoftwareManagementLib \
+            com.volvocars.SettingsStorageLib \
             com.volvocars.softwareupdate.ISoftwareUpdateManager \
             vendor.volvocars.hardware.installationmaster-V1.0-java \
 

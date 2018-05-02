@@ -114,7 +114,6 @@ public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
                 } catch (RemoteException e) {
                     Log.w(LOG_TAG, "[ManagerImpl] callback.keyValue RemoteException: [" + e.getMessage() + "]");
                 }
-
             } else {
                 Log.w(LOG_TAG,
                         "[ManagerImpl] Invalid offset registered for app " + appId + ", returning default offset -1");
@@ -189,6 +188,12 @@ public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
 
     public class InvalidValueException extends RemoteException {
         public InvalidValueException(String message) {
+            super(message);
+        }
+    }
+
+    public class NoSuchClientRegisteredException extends RemoteException {
+        public NoSuchClientRegisteredException(String message) {
             super(message);
         }
     }
