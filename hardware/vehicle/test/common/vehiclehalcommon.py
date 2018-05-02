@@ -64,6 +64,19 @@ def wait_for(get_function, expected_value, timeout_sec, extra_message=None):
                         "Expected get function to be %s within %d sec, got %s. %s)" %
                         (expected_value, timeout_sec, read_value, extra_message))
 
+
+
+def wait_until_signal(fdx_signal, expected_value, deadline, extra_message=""):
+    # type: (PydataElementsSenderType, int, int) -> None
+    read_value = fdx_signal.get()
+    while time.time() < deadline:
+        read_value = fdx_signal.get()
+        if read_value == expected_value:
+            break
+        time.sleep(0.2)
+    asserts.assertEqual(read_value, expected_value, "Expected signal %s to be %d got %d. %s)" %
+                        (fdx_signal.fdx_name, expected_value, read_value, extra_message))
+
 def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
     # type: (FrSignalInterface, PydataElementsSenderType, int, int) -> None
 
@@ -77,7 +90,7 @@ def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
             time.sleep(0.2)
         asserts.assertEqual(read_value, expected_value,
                             "Expected signal %s to be %d within %d sec, got %d)" %
-                            (fdx_signal.fdx_name, expected_value, timeout_sec, fdx_signal.get()))
+                            (fdx_signal.fdx_name, expected_value, timeout_sec, read_value))
 
 class VehicleHalCommon():
 

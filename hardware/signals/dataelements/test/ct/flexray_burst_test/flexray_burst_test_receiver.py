@@ -65,17 +65,22 @@ class ComponentTest(base_test.BaseTestClass):
                 signals_to_test_in_this_iteration = signals[:nr_of_signals_to_burst]
 
                 for i in range(nr_of_iterations):
-                    logging.info('Burst sleep time: %d ms. Iteration %d/%d' % (burst_sleep_ms, i, nr_of_iterations))
+                    logging.info('Burst sleep time: %d ms. Nr of signals: %d Iteration %d/%d' %
+                                 (burst_sleep_ms, len(signals_to_test_in_this_iteration), i, nr_of_iterations))
                     logging.info('starting test program: flexray_test')
                     self.shell.Execute("/data/nativetest64/flexray_burst_test_sender %d 150 %d&" % (nr_of_signals_to_burst, burst_sleep_ms))
 
 
                     vehiclehalcommon.wait_for_signal(fr, fr.AntithftRednReq, 2, timeout_sec=5)    # Trigger signal that all signals reset to Off done
+                    #NOTE(1): AntithftRednReq and tested signals might arrive in unexpected order due to flexray schedule,
+                    #         Hence the wait_until which might seem redundant.
+                    reset_deadline = time.time() + 3
                     for s in signals_to_test_in_this_iteration:
-                        asserts.assertEqual(s.get(), fr.RoadFricIndcnActvSts.map.Off, "%s was not set to 0 during init" % s.de_name)
+                        vehiclehalcommon.wait_until_signal(s, fr.RoadFricIndcnActvSts.map.Off, reset_deadline, "%s was not set to 0 during init" % s.de_name)
                     # Target binary will sleep for 2 seconds here
 
                     vehiclehalcommon.wait_for_signal(fr, fr.AntithftRednReq, 3, timeout_sec=5)    # Trigger signal that all signals set to On done
+                    # NOTE(2): No need to wait here as in NOTE(1) as the host binary waits before setting AntithftRednReq=3
                     logging.info("Signals after burst:")
                     fails = []
                     for s in signals_to_test_in_this_iteration:
