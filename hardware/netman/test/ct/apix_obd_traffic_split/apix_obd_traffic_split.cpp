@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -48,29 +48,6 @@ class ApixObdTrafficSplitFixture : public ::testing::Test {
     const std::string eth0_name = "apix0";           // localconfig's eth0.name
     const std::string eth1_gw_addr = "198.18.34.1";  // localconfig's eth1.ip-address
 
-    // Formed rules in iptables
-    const std::string apix_obd_prerouting =
-            "-A PREROUTING -i " + eth0_name + " -p tcp -j TEE --gateway " + eth1_gw_addr;
-    const std::string apix_obd_postrouting =
-            "-A POSTROUTING -o " + eth0_name + " -p tcp -j TEE --gateway " + eth1_gw_addr;
-
-    bool readIptable(const std::string& table, std::string& output) {
-        std::array<char, 128> buffer;
-        std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
-        // TODO (Samuel.Idowu): Switch to /vendor/bin/iptables
-        std::string cmd = vcc_netns + "/system/bin/iptables -w 5 -S -t " + table + " 2>&1";
-        std::unique_ptr<FILE, decltype(&pclose)> pFile(popen(cmd.c_str(), "re"), pclose);
-        if (!pFile) {
-            ALOGE("popen() failed!");
-            return false;
-        }
-
-        while (!feof(pFile.get())) {
-            if (fgets(buffer.data(), 128, pFile.get()) != nullptr) output += buffer.data();
-        }
-        return true;
-    }
-
     void disableApixOnObdIfActive() {
         auto read_ret = data_collector_tp->readDidValue(APIX_DID, [this](const DidReadResult& didread) {
             if (didread == enabled_did) {
@@ -82,13 +59,19 @@ class ApixObdTrafficSplitFixture : public ::testing::Test {
     }
 
     bool isSplitRuleInIptable() {
-        std::string iptable_rules;
-        bool res = readIptable("mangle", iptable_rules);
-        EXPECT_THAT(res, true);
-        if (iptable_rules.find(apix_obd_prerouting) == std::string::npos) {
+        const std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
+        const std::string pre_routing_cmd = vcc_netns + "/vendor/bin/iptables -t mangle -C PREROUTING -i " + eth0_name +
+                                            " -p tcp -j TEE --gateway " + eth1_gw_addr;
+
+        const std::string post_routing_cmd = vcc_netns + "/vendor/bin/iptables -t mangle -C POSTROUTING -o " +
+                                             eth0_name + " -p tcp -j TEE --gateway " + eth1_gw_addr;
+
+        int command_status = std::system(pre_routing_cmd.c_str());
+        if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
             return false;
         }
-        if (iptable_rules.find(apix_obd_postrouting) == std::string::npos) {
+        command_status = std::system(post_routing_cmd.c_str());
+        if ((command_status < 0) || !WIFEXITED(command_status) || WEXITSTATUS(command_status) != EXIT_SUCCESS) {
             return false;
         }
         return true;
