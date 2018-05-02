@@ -101,7 +101,13 @@ bootstrap_docker_run "repo forall -c 'echo -n \"### \"; pwd; git reset --hard ; 
 ## Download the commit to check (for vendor/volvocars-repo)
 #
 # zuul-cloner implicity uses other environment variables as well, such as ZUUL_REF.
-bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
+# If the ZUUL_STATUS does not contain vendor/volvocars get latest from Gerrit.
+if [[ "$ZUUL_CHANGES" = *"vendor/volvocars:"* ]]; then
+    bootstrap_docker_run "GIT_SSH=$HOME/zuul_ssh_wrapper.sh zuul-cloner -v ${ZUUL_URL} vendor/volvocars"
+else
+    bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars"
+fi
+
 
 # Check that Zuul have downloaded the correct commit
 if [ "$ZUUL_PROJECT" == "vendor/volvocars" ]; then
