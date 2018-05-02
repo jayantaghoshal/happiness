@@ -1,6 +1,7 @@
 # Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
+import datetime
 import os
 import gzip
 import zipfile
@@ -119,7 +120,7 @@ def truncate_to_fit_mongo(log_content: str):
         return log_content
 
 
-def load_test_results(test, test_result: ResultData):
+def load_test_results(test, test_result: ResultData, started_at: datetime.datetime, finished_at: datetime.datetime):
 
     test_detail = {}
     test_detail["test_dir_name"] = test.test_root_dir
@@ -127,6 +128,9 @@ def load_test_results(test, test_result: ResultData):
     test_detail["capabilities"] = str(test.require_capabilities)
     test_detail["test_job_build_number"] = int(os.environ["BUILD_NUMBER"])
     test_detail["hostname"] = os.environ["HOST_HOSTNAME"]
+    test_detail["started_at"] = started_at
+    test_detail["finished_at"] = finished_at
+    test_detail["result_stored_at"] = datetime.datetime.utcnow()
 
     try:
         test_detail["console_log"] = test_result.console

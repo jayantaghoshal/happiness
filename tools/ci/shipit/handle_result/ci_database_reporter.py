@@ -3,6 +3,7 @@
 
 import logging
 import traceback
+import datetime
 from typing import List
 from .abstract_reporter import abstract_reporter
 from handle_result import store_result, test_visualisation
@@ -25,6 +26,7 @@ class ci_database_reporter(abstract_reporter):
     def module_started(self, test: IhuBaseTest) -> None:
         if not self.continue_report:
             return
+        self.started_at = datetime.datetime.utcnow()
         try:
             store_result.clean_old_results()
         except Exception as e:
@@ -37,7 +39,7 @@ class ci_database_reporter(abstract_reporter):
         if not self.continue_report:
             return
         try:
-            store_result.load_test_results(test, test_result)
+            store_result.load_test_results(test, test_result, self.started_at, datetime.datetime.utcnow())
         except Exception as e:
             logger.error(str(traceback.format_exc()))
             logger.error(str(e))
