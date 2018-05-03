@@ -331,6 +331,24 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+      
+    /**
+     * Current PAStatus for emergency Lane Departure Warning
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    LANE_DEPARTURE_WARNING_STATUS = (
+      0x001F
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    LANE_DEPARTURE_WARNING_ON = (
+      0x0020
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
     };
 
 enum PAStatus: int32_t {

@@ -31,4 +31,7 @@
     <item name="tsi_offset_button_plus" type="id"/>
     <item name="tsi_offset_text" type="id"/>
     <item name="tsi_offset_button_minus" type="id"/>
+    <item name="lane_departureWarning_button_on" type="id"/>
+    <item name="lane_departureWarning_button_off" type="id"/>
+
 </resources>

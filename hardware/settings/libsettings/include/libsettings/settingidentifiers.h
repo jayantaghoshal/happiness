@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -87,4 +87,5 @@ enum class SettingId : uint32_t {
     TrafficSignInfo_SpeedVisualWarnOn,
     TrafficSignInfo_SpeedAudioWarnOn,
     TrafficSignInfo_SpeedWarnOffset,
+    LaneDepartureWarning_On
 };

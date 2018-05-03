@@ -193,6 +193,21 @@ public class AssistanceViewModel extends ViewModel {
             sections.add(new Section("Speed Management", speedManagementFunctions));
         }
 
+
+        {
+            List<Function> ldwFunctions = new ArrayList<Function>();
+            if (supportedFeatures.contains(VehicleProperty.LANE_DEPARTURE_WARNING_ON)) {
+                ldwFunctions.add(new OnOffFunction("Lane Departure Warning",
+                        new VhalOnOffDelegate(mVendorExtensionClient,
+                                VehicleProperty.LANE_DEPARTURE_WARNING_ON),
+                        R.id.lane_departureWarning_button_on, R.id.lane_departureWarning_button_off));
+            }
+
+            sections.add(new Section("Lane Departure Warning", ldwFunctions));
+        }
+
+
+
         return sections;
 
     }

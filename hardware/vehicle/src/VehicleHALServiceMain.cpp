@@ -22,6 +22,7 @@
 #include "sensormodule.h"
 #include "vhal_modules/curve_speed_adaption_module.h"
 #include "vhal_modules/e_lane_keeping_aid_module.h"
+#include "vhal_modules/lane_departure_warning_module.h"
 #include "vhal_modules/lane_keeping_aid_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
 #include "vhal_modules/traffic_sign_information_module.h"
@@ -94,6 +95,7 @@ int main(int /* argc */, char* /* argv */ []) {
             std::make_unique<TrafficSignInformationModule>(hal.get(), dispatcher, settings_manager);
 
     CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
+    LaneDepartureWarningModule lane_departure_warning{&ctx};
 
     // Register modules
     powerModule->registerToVehicleHal();
