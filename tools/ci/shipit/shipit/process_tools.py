@@ -9,6 +9,8 @@ import logging
 from typing import Union, List
 import typing
 
+# Constant used in the subprocesses outputs
+buffer_length = 2 ** 20
 
 class Result:
     def __init__(self, pid: int, exitcode: int, stdout: bytes, stderr: bytes, encoding: str) -> None:
@@ -28,7 +30,11 @@ async def _log_and_concat(logger: logging.Logger,
                           encoding: str) -> bytes:
     output = b''
     while True:
-        line_bytes = await stream.readline()
+        try:
+            line_bytes = await stream.readline()
+        except ValueError as e:
+            logger.warning("Buffer overflow: " + str(e))
+            line_bytes = await stream.read(buffer_length)
         if not line_bytes:
             break
         output += line_bytes  # Note we are not decoding this
@@ -53,7 +59,7 @@ async def _run_logged_helper(command: Union[str, List[str]],
                                                   stdout=subprocess.PIPE,
                                                   stderr=subprocess.PIPE,
                                                   cwd=cwd,
-                                                  limit=2 ** 20,
+                                                  limit=buffer_length,
                                                   **kwargs)
     else:
         command = typing.cast(List[str], command)
@@ -61,7 +67,7 @@ async def _run_logged_helper(command: Union[str, List[str]],
                                                  stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE,
                                                  cwd=cwd,
-                                                 limit=2 ** 20,
+                                                 limit=buffer_length,
                                                  **kwargs)
     logging.debug("Executing command: %r, started PID=%d", command, s.pid)
     logger = logging.getLogger("PID%d" % s.pid)
