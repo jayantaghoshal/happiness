@@ -183,19 +183,31 @@ SettingsStorage::~SettingsStorage() {
 }
 
 void SettingsStorage::onProfileChange(profileHidl::ProfileIdentifier profileId) {
-    std::lock_guard<std::recursive_mutex> lock(mLock);
-    activeProfileId = profileId;
-    for (auto& sl : settings_listeners_) {
-        if (sl.user_scope_ == UserScope::NOT_USER_RELATED) {
-            continue;
-        }
-        const unsigned char* data = getData(sl.key_, activeProfileId);
+    // Copy the listeners to notify and notify them outside the lock-scope,
+    // Otherwise you can get a deadlock between client and server if the client
+    // is in the process of calling subscribe. It will get blocked by mLock
+    // and can not process the settingsForCurrentUserChanged being sent from here, thus
+    // never releasing the mLock.
+    std::list<SettingsListener> listeners_to_notify;
+    SettingsChangeReason reason = SettingsChangeReason::ProfileChange;
 
-        SettingsChangeReason reason = SettingsChangeReason::ProfileChange;
-        if (data == nullptr) {
-            reason = SettingsChangeReason::Reset;
+    {
+        std::lock_guard<std::recursive_mutex> lock(mLock);
+        activeProfileId = profileId;
+        for (auto& sl : settings_listeners_) {
+            if (sl.user_scope_ == UserScope::NOT_USER_RELATED) {
+                continue;
+            }
+            const unsigned char* data = getData(sl.key_, activeProfileId);
+
+            if (data == nullptr) {
+                reason = SettingsChangeReason::Reset;
+            }
+            listeners_to_notify.push_back(sl);
         }
-        sl.listener_->settingsForCurrentUserChanged(sl.key_, reason, activeProfileId);
+    }
+    for (auto& l : listeners_to_notify) {
+        auto status = l.listener_->settingsForCurrentUserChanged(l.key_, reason, profileId);
     }
 }
 
