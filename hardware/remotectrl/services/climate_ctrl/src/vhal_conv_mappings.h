@@ -27,6 +27,9 @@ std::pair<Rows, Seats> toRowAndPosition(const int32_t& area_id);
 
 vhal_2_0::VehicleAreaZone toVhalAreaZone(const uint8_t& row, const uint8_t& pos);
 
+int32_t toVhalFanDirection(const uint8_t& air_flow);
+uint8_t toConvApiFanDirection(const int32_t& air_flow);
+
 }  // namespace remoteclimatectrl
 }  // namespace remotectrl
 }  // namespace vcc

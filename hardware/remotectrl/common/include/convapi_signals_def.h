@@ -45,6 +45,9 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE = 0x1226U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE = 0x1227U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED = 0x1228U;
 
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION = 0x1229U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION = 0x1230U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED = 0x1231U;
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
 //
@@ -67,6 +70,17 @@ enum class FanLevel : uint8_t {
     FanLevel_4 = 0x04,
     FanLevel_5 = 0x05,
     FanLevel_Max = 0x06
+};
+
+enum class AirFlow : uint8_t {
+    Automatic = 0x00,
+    Floor = 0x01,
+    Vent = 0x02,
+    Floor_Vent = 0x03,
+    Defrost = 0x04,
+    Floor_Defrost = 0x05,
+    Vent_Defrost = 0x06,
+    Floor_Vent_Defrost = 0x07
 };
 
 constexpr uint8_t TEMPERATURE_MAX_VALUE = 22U;
@@ -92,6 +106,13 @@ inline void ValidateRequstedFanLevel(const char* method_name, const uint8_t& fan
 inline void ValidateRequstedTemperature(const char* method_name, const uint8_t& temperature) {
     if (temperature > static_cast<uint8_t>(TEMPERATURE_MAX_VALUE)) {
         throw RemoteCtrlParamRangeError(method_name, "Temperature", TEMPERATURE_MAX_VALUE, temperature);
+    }
+}
+
+inline void ValidateRequstedAirFlow(const char* method_name, const uint8_t& air_flow) {
+    if (air_flow > static_cast<uint8_t>(AirFlow::Floor_Vent_Defrost)) {
+        throw RemoteCtrlParamRangeError(
+                method_name, "AirFlow", static_cast<uint8_t>(AirFlow::Floor_Vent_Defrost), air_flow);
     }
 }
 

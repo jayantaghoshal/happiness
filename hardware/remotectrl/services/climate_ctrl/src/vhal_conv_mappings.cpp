@@ -9,6 +9,7 @@
 
 #include <vsomeip/vsomeip.hpp>
 
+#include <bitset>
 #include <unordered_map>
 
 #undef LOG_TAG
@@ -90,6 +91,58 @@ std::pair<Rows, Seats> toRowAndPosition(const int32_t& area_id) {
     }
 
     return {it->second.first, it->second.second};
+}
+
+int32_t toVhalFanDirection(const uint8_t& air_flow) {
+    switch (static_cast<AirFlow>(air_flow)) {
+        case AirFlow::Floor:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FLOOR);
+        case AirFlow::Vent:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FACE);
+        case AirFlow::Floor_Vent:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FLOOR |
+                                        vhal_2_0::VehicleHvacFanDirection::FACE);
+        case AirFlow::Defrost:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::DEFROST);
+        case AirFlow::Floor_Defrost:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FLOOR |
+                                        vhal_2_0::VehicleHvacFanDirection::DEFROST);
+        case AirFlow::Vent_Defrost:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FACE |
+                                        vhal_2_0::VehicleHvacFanDirection::DEFROST);
+        case AirFlow::Floor_Vent_Defrost:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FLOOR |
+                                        vhal_2_0::VehicleHvacFanDirection::FACE |
+                                        vhal_2_0::VehicleHvacFanDirection::DEFROST);
+        case AirFlow::Automatic:
+        default:
+            return static_cast<int32_t>(vhal_2_0::VehicleHvacFanDirection::FACE);
+    }
+}
+
+uint8_t toConvApiFanDirection(const int32_t& air_flow) {
+    auto conv_air_flow = 0U;
+    std::bitset<3> bitset_air_flow(air_flow);
+
+    enum BITS { BIT0, BIT1, BIT2 };
+
+    if (bitset_air_flow.none()) {
+        return static_cast<uint8_t>(AirFlow::Automatic);
+    }
+
+    if (bitset_air_flow.test(BIT0)) {
+        conv_air_flow = static_cast<uint8_t>(AirFlow::Vent);
+    }
+
+    if (bitset_air_flow.test(BIT1)) {
+        conv_air_flow |= static_cast<uint8_t>(AirFlow::Floor);
+    }
+
+    if (bitset_air_flow.test(BIT2)) {
+        conv_air_flow |= static_cast<uint8_t>(AirFlow::Defrost);
+    }
+
+    return conv_air_flow;
 }
 
 }  // namespace remoteclimatectrl

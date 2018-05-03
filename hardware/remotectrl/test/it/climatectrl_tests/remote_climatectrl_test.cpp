@@ -35,11 +35,14 @@ const ClientInfo client_info = {.app_name_ = "ClimateCtrlSim",
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE,
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE,
                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE,
-                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE},
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION,
+                                             REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION},
                                 .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED,
                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED,
-                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED}};
+                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED,
+                                            REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED}};
 
 constexpr std::uint16_t GETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SETFANLEVEL_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
@@ -49,6 +52,8 @@ constexpr std::uint16_t GET_AC_STATE_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SET_AC_STATE_PAYLOAD_LEN = 0x01U;
 constexpr std::uint16_t GETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
 constexpr std::uint16_t SETTEMPERATURE_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
+constexpr std::uint16_t GETAIRDISTRIBUTION_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
+constexpr std::uint16_t SETAIRDISTRIBUTION_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
 
 }  // namespace
 
@@ -334,6 +339,73 @@ TEST_F(RemoteClimateCtrlFixture, SetTemperature_FailureTest) {
     EnqueueRequest([this]() {
         SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE, {0x00 /*row*/, 0x00 /*pos*/});
     });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+
+    ASSERT_THAT(WaitForNotification(2s), false);
+}
+
+/* GetAirDistribution_SuccessTest
+ * Asserts that on success IHU returns temperature within range [0, 7]
+ */
+TEST_F(RemoteClimateCtrlFixture, GetAirDistribution_SuccessTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION, {}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETAIRDISTRIBUTION_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03 /*function available*/);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(0), Le(7)));
+}
+
+/* GetAirDistribution_FailureTest
+ * Asserts that on receiving malformed message IHU returns no response
+ */
+TEST_F(RemoteClimateCtrlFixture, GetAirDistribution_FailureTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION, {0x00 /*row*/}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), false);
+}
+
+/* GetAirDistribution_SetAirDistribution_SuccessTest
+ * Asserts that on success IHU sets AirDistribution to requested AirDistribution
+ */
+TEST_F(RemoteClimateCtrlFixture, GetAirDistribution_SetAirDistribution_SuccessTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION, {}); });
+    StartClient();
+
+    using namespace std::chrono_literals;
+    ASSERT_THAT(WaitForResponse(2s), true);
+
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), GETAIRDISTRIBUTION_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03 /*function available*/);
+    uint8_t air_flow = received_reply_->get_payload()->get_data()[1];
+    EnqueueRequest(
+            [this, air_flow]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION, {air_flow}); });
+
+    using namespace std::chrono_literals;
+
+    ASSERT_THAT(WaitForResponse(2s), true);
+    ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
+    ASSERT_THAT(received_reply_->get_payload()->get_length(), SETAIRDISTRIBUTION_RESPONSE_EXPECTED_PAYLOAD_LEN);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03 /*function available*/);
+
+    ASSERT_THAT(WaitForNotification(2s), true);  // look at it.. And maybe confirm that it is the same as the Response?
+}
+
+/* SetAirDistribution_FailureTest
+ * Asserts that on receiving malformed message IHU returns no response
+ */
+TEST_F(RemoteClimateCtrlFixture, SetAirDistribution_FailureTest) {
+    EnqueueRequest([this]() { SendRequest(REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION, {}); });
     StartClient();
 
     using namespace std::chrono_literals;
