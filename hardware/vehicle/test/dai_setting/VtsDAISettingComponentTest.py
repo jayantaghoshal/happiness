@@ -122,14 +122,13 @@ class VtsDAISettingsComponentTest(base_test.BaseTestClass):
 
         # Get buttons
         _s = 1
+        # Wait for the buttons to appear, in case of the slow population
+        vHalCommon.waitUntilViewAvailable(vc, dai_off_id, timeout_seconds=5)
         vc.dump(window=-1)
-        vHalCommon.waitUntilViewAvailable(vc, dai_off_id, timeout_seconds=2)
         dai_off = vc.findViewByIdOrRaise(dai_off_id);
         dai_visual = vc.findViewByIdOrRaise(dai_visual_id);
         dai_visual_sound = vc.findViewByIdOrRaise(dai_visual_sound_id);
-        vc.sleep(_s)
-
-        DAI_SETTING = 557842437 # Hard coded VCC-HAL property ID for DAI_SETTING_VALUE
+        DAI_SETTING = vHalCommon.get_id('DAI_SETTING')
 
         # Set UsgModSts to ACTIVE, setting should change in ACTIVE
         fr.send_VehModMngtGlbSafe1(vehmod)
