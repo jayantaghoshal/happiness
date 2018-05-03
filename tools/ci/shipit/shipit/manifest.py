@@ -34,6 +34,7 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     tree = ET.parse(template_path, parser)
     root = tree.getroot()
 
+    repos_with_zuul_changes_set = get_all_zuul_repos()
     project_to_remove = []
     for project in root.iter('project'):
 
@@ -46,7 +47,13 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
                 revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
                 logger.info("setting revision to: " + revision)
                 project.set('revision', revision)
+            # Check if the repo should be updated with latest revision in manifest
+            elif current_repo not in repos_with_zuul_changes_set:
+                revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
+                logger.info("setting revision to: " + revision)
+                project.set('revision', revision)
             else:
+                logger.info("Removing " + current_repo + " from manifest")
                 project_to_remove.append(project)
                 #root.remove(project)
 
@@ -100,6 +107,7 @@ def get_all_zuul_repos():
 
     return repos_with_zuul_changes_set
 
+
 def get_all_repos_with_zuul_commit_or_head(template_path: str):
     parser = ET.XMLParser(target=CommentedTreeBuilder())
     tree = ET.parse(template_path, parser)
@@ -114,6 +122,7 @@ def get_all_repos_with_zuul_commit_or_head(template_path: str):
             zuul_repos.append(name)
             logger.info("The path = " + path)
     return zuul_repos
+
 
 def get_zuul_repos_map(template_path: str):
     parser = ET.XMLParser(target=CommentedTreeBuilder())
@@ -137,15 +146,17 @@ def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest:
         repos_with_zuul_changes_set = get_all_zuul_repos()
         base_dir = os.getcwd()
         full_path = os.path.join(base_dir, current_repo_in_tmp_manifest)
-
+    # This will get the revision for the repo that have revision "ZUUL_COMMIT_OR_HEAD" but not currently tested in the gate
     if (current_repo_in_tmp_manifest != repo_with_commit) and (current_repo_in_tmp_manifest not in repos_with_zuul_changes_set):
         logger.info("Checking master on Gerrit server for latest revision")
         revision = git.Repo.ls_remote(current_repo_in_tmp_manifest)
         return revision
+    # Used for the bumping of manifest, since it is not using Zuul and triggered by merge to master
     elif (not using_zuul) and (repo_with_commit == current_repo_in_tmp_manifest):
         logger.info("Using GERRIT_NEWREV as revision")
         revision = os.environ['GERRIT_NEWREV']
         return revision
+    # Get the revision for the Zuul change that have been downloaded
     elif current_repo_in_tmp_manifest in repos_with_zuul_changes_set:
         logger.info("Using rev-parse in Git repo as revision")
         revision = git.Repo.repo_rev_parse(full_path)
