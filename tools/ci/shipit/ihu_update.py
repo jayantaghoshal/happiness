@@ -280,6 +280,7 @@ Troubleshooting:
                 wait_for_device_adb()
             else:
                 try:
+                    reboot_mp_to_android_default_with_bootmodes(vip) # VIP command to reboot MP to normal mode
                     logger.info("Waiting for 30 seconds for sth looking like MP bootup")
                     mp.expect_line("Loader: Launch VMM", timeout_sec=30)
                 except serial_mapping.ExpectedResponseNotPresentError:
