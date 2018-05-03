@@ -47,7 +47,7 @@ def extract_channel(audio_file,  # type: str
     else:
         ch_file = audio_file + '_ch%d' % ch_nbr
 
-    proc_res = subprocess.check_output(['sox', audio_file, ch_file, 'remix', str(ch_nbr)],
+    proc_res = subprocess.check_output(['sox', '-D', '-R', audio_file, ch_file, 'remix', str(ch_nbr)],
                                        universal_newlines=True)
 
     if os.path.exists(ch_file):
@@ -65,7 +65,7 @@ def squash_stereo(audio_file,  # type: str
     else:
         mono_file = audio_file + '_mono'
 
-    proc_res = subprocess.check_output(['sox', audio_file, mono_file, 'remix', '1-2'],
+    proc_res = subprocess.check_output(['sox', '-D', '-R', audio_file, mono_file, 'remix', '1-2'],
                                        universal_newlines=True)
 
     if os.path.exists(mono_file):
@@ -83,7 +83,7 @@ def normalize(audio_file,  # type: str
     else:
         norm_file = audio_file + '_norm%f' % abs(level)
 
-    proc_res = subprocess.check_output(['sox', audio_file, norm_file, 'norm', str(level)],
+    proc_res = subprocess.check_output(['sox', '-D', '-R', audio_file, norm_file, 'norm', str(level)],
                                        universal_newlines=True)
 
     if os.path.exists(norm_file):
@@ -105,7 +105,7 @@ def split(audio_file,  # type: str
         else:
             seg_file = fn + '_part%03d' % seg_nbr
 
-        proc_res = subprocess.check_output(['sox', fn, seg_file, 'trim', str(start), str(duration)],
+        proc_res = subprocess.check_output(['sox', '-D', '-R', fn, seg_file, 'trim', str(start), str(duration)],
                                            universal_newlines=True)
 
         if os.path.exists(seg_file):
@@ -126,7 +126,8 @@ def split(audio_file,  # type: str
 # This function depends on the aubioquiet executable:
 # sudo apt-get install aubio-tools libaubio-dev libaubio-doc
 #
-def get_sounds(audio_file  # type: str
+def get_sounds(audio_file,  # type: str
+               skip_noisy_start=True  # type: bool
                ):
     res = subprocess.check_output(['aubioquiet', audio_file],
                                        universal_newlines=True)
@@ -135,7 +136,7 @@ def get_sounds(audio_file  # type: str
     # create list with (type, timestamp) tuple
     split_list = [(part[0], float(part[1])) for part in [line.split(':') for line in line_list]]
     sound_list = list()
-    if split_list[0][0] == 'NOISY' and split_list[0][1] == 0.0:
+    if skip_noisy_start and split_list[0][0] == 'NOISY' and split_list[0][1] == 0.0:
         split_list = split_list[1:]
     for i, l in enumerate(split_list):
         if l[0] == 'QUIET':

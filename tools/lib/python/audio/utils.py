@@ -19,7 +19,7 @@ import os
 def analyze(args):
     files = {'org': args.file}
     if not args.no_copy:
-        dest = os.path.join('/tmp/', os.path.split(args.file)[1])
+        dest = os.path.join('/tmp/', args.prefix + os.path.split(args.file)[1])
         shutil.copy(args.file, dest)
         files['org'] = dest
     if args.stereo and args.channel is not None:
@@ -36,16 +36,16 @@ def analyze(args):
     files['norm_-0.5'] = audioutils.normalize(files['mono'], level=-0.5)
     files['norm_-0.1'] = audioutils.normalize(files['mono'], level=-0.1)
 
-    sounds_09 = audioutils.get_sounds(files['norm_-0.9'])
-    sounds_05 = audioutils.get_sounds(files['norm_-0.5'])
-    sounds_01 = audioutils.get_sounds(files['norm_-0.1'])
+    sounds_09_F = audioutils.get_sounds(files['norm_-0.9'], skip_noisy_start=False)
+    sounds_05_F = audioutils.get_sounds(files['norm_-0.5'], skip_noisy_start=False)
+    sounds_01 = audioutils.get_sounds(files['norm_-0.1'], skip_noisy_start=False)
 
-    print("Sounds for norm -0.9:")
-    for s in sounds_09:
+    print("Sounds for norm -0.9F:")
+    for s in sounds_09_F:
         print('\t', s)
 
-    print("Sounds for norm -0.5:")
-    for s in sounds_05:
+    print("Sounds for norm -0.5F:")
+    for s in sounds_05_F:
         print('\t', s)
 
     print("Sounds for norm -0.1:")
@@ -61,8 +61,9 @@ if __name__ == "__main__":
     parser.add_argument('--stereo', action='store_true', help='Input file is stereo')
     parser.add_argument('--channel', type=int, help='Use only the given channel (ref-ch is 5)')
     parser.add_argument('file', help='The file to operate on')
+    parser.add_argument('--prefix', default='')
 
     parsed_args = parser.parse_args()
     #print(parsed_args.no_copy)
-    analyze(**args)
+    analyze(parsed_args)
 
