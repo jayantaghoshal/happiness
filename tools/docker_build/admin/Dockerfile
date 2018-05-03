@@ -155,7 +155,8 @@ RUN pip3 install redis \
     termcolor \
     tabulate \
     zuul==2.5.2 \
-    pymongo
+    pymongo \
+    influxdb
 
 ##################################################
 # Commit hooks and commit
