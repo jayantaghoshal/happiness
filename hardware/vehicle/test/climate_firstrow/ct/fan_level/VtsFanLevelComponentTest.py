@@ -21,7 +21,7 @@ from subprocess import call
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from com.dtmilano.android.viewclient import ViewClient
 import vehiclehalcommon
-from generated.datatypes import VehModMngtGlbSafe1, HmiHvacFanLvl
+from generated.datatypes import VehModMngtGlbSafe1, HmiHvacFanLvl, TwliBriSts1, IdPen
 from generated import datatypes as DE
 
 
@@ -57,6 +57,10 @@ class VtsFanLevelComponentTest(base_test.BaseTestClass):
         self.fan_level_5 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_5)
         self.fan_max = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_max)
 
+        # To avoid setting illumination to night mode which will dim the CSD
+        self.fr.send_TwliBriSts(TwliBriSts1.Day)
+        self.fr.send_ProfPenSts1(IdPen.Prof13)
+
 
     def setUp(self):
         # Open climate view
@@ -76,7 +80,6 @@ class VtsFanLevelComponentTest(base_test.BaseTestClass):
 
     def tearDown(self):
             self.dut.shell.one.Execute("input keyevent 3")
-
 
     def tearDownClass(self):
         try:
