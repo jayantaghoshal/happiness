@@ -144,8 +144,6 @@ void ServiceBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& m
     if (!ValidateMessageHeader(message)) {
         return;
     }
-    // send ack message
-    vsomeip_appl_->send(vsomeip_runtime_->create_request_ack(message));
 
     auto session_id = message->get_session();
     {
