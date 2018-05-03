@@ -96,14 +96,12 @@ void RemoteCtrlClientBase::OnAvailabilityChanged(vsomeip::service_t /*service*/,
 void RemoteCtrlClientBase::OnMessageReceived(const std::shared_ptr<vsomeip::message>& message) {
     switch (message->get_message_type()) {
         case vsomeip::message_type_e::MT_RESPONSE: {
-            std::cout << "Received Response Message" << std::endl;
             received_reply_ = message;
             response_received_ = true;
             response_cv_.notify_all();
             break;
         }
         case vsomeip::message_type_e::MT_NOTIFICATION: {
-            std::cout << "Received Notification Message" << std::endl;
             received_notification_ = message;
             notification_received_ = true;
             notification_cv_.notify_all();
@@ -111,7 +109,6 @@ void RemoteCtrlClientBase::OnMessageReceived(const std::shared_ptr<vsomeip::mess
         }
         default: {
             // Dont care about the others, yet...
-            std::cout << "Received Unknown Message [" << unsigned(message->get_message_type()) << "]" << std::endl;
         }
     }
 }
