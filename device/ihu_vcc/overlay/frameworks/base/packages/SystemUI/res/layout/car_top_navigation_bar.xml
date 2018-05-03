@@ -26,8 +26,8 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:layout_marginTop="48dp"
-    android:paddingLeft="32dp"
-    android:paddingRight="32dp"
+    android:paddingLeft="23dp"
+    android:paddingRight="23dp"
     android:background="@drawable/system_bar_background">
 
     <LinearLayout
@@ -42,7 +42,6 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@android:color/transparent"
-            systemui:levelList="com.volvocars.launcher.MainActivity"
             android:src="@drawable/cam_icon"/>
 
         <Space
@@ -56,7 +55,6 @@
             android:layout_height="64dp"
             android:background="@android:color/transparent"
             android:src="@drawable/app_icon"
-            systemui:levelList="com.volvocars.launcher.MainActivity"
             systemui:clickIntent="intent:#Intent;package=com.volvocars.launcher;component=com.volvocars.launcher/.volvo.VolvoAppsPaneActivity;launchFlags=0x10000000;end"/>
         <Space
             android:layout_width="0dp"
@@ -68,7 +66,6 @@
             android:background="@android:color/transparent"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            systemui:levelList="com.volvocars.launcher.MainActivity"
             systemui:clickIntent="intent:#Intent;package=com.volvocars.launcher;component=com.volvocars.launcher/.user.UserProfilesActivity;launchFlags=0x10000000;end"
             android:src="@drawable/profiles_icon"/>
 
@@ -83,7 +80,6 @@
             android:layout_height="64dp"
             android:background="@android:color/transparent"
             android:src="@drawable/vf_icon"
-            systemui:levelList="com.volvocars.launcher.MainActivity"
             systemui:clickIntent="intent:#Intent;package=com.volvocars.vehiclefunctions;component=com.volvocars.vehiclefunctions/.VehicleFunctionsActivity;launchFlags=0x10000000;end"/>
     </LinearLayout>
 </com.android.systemui.statusbar.car.CarNavigationBarView>
