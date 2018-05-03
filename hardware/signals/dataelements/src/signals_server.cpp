@@ -63,7 +63,8 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
 
 ::android::hardware::Return<void> SignalsServer::subscribe(const ::android::hardware::hidl_string& signalName,
                                                            Dir dir,
-                                                           const ::android::sp<ISignalsChangedCallback>& cb) {
+                                                           const ::android::sp<ISignalsChangedCallback>& cb,
+                                                           uint32_t pid) {
     ALOGV("SignalsServer::subscribe %s", signalName.c_str());
 
     bool containsWildcard = false;
@@ -91,11 +92,29 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
     } else {
         const auto key = make_key(signalName, dir);
         auto it = subscriptions.find(key);
-        if (it == subscriptions.end()) {
-            auto ins_it = subscriptions.emplace(key, std::set<::android::sp<ISignalsChangedCallback>>());
-            ins_it.first->second.insert(cb);
-        } else {
-            it->second.insert(cb);
+        if (it == subscriptions.end()) {  // Subscription not found at all, add it
+
+            signal_subscr newSubscr;
+            newSubscr[pid] = cb;
+            auto ins_it = subscriptions.emplace(key, newSubscr);
+            ALOGV("No one subscribed on this signal before, inserting new subscription for %s callback = %d pid = %d",
+                  signalName.c_str(),
+                  cb.get(),
+                  pid);
+
+        } else {  // subscription found, check if subscr already exists for PID
+            signal_subscr& subscrMap = it->second;
+            auto itSubscr = subscrMap.find(pid);
+            if (itSubscr == subscrMap.end()) {  // subscription for that process not found, add it
+                subscrMap.emplace(pid, cb);
+                ALOGV("Subscription for %s already exist for other process, adding pid=%d", signalName.c_str(), pid);
+            } else {
+                ALOGV("Subscription for signal %s already exists for process %d: Updating with new callback: %d",
+                      signalName.c_str(),
+                      pid,
+                      (uint64_t)cb.get());
+                itSubscr->second = cb;
+            }
         }
 
         // Instantly call the callback if we already have the signal
@@ -116,11 +135,10 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
 ::android::hardware::Return<void> SignalsServer::send(const ::android::hardware::hidl_string& signalname,
                                                       Dir dir,
                                                       const ::android::hardware::hidl_string& data) {
-    ALOGV("SignalsServer::send name %s", signalname.c_str());
     if (!isValidName(signalname)) {
         return ::android::hardware::Return<void>();
     }
-    ALOGV("SignalsServer::send value %s", data.c_str());
+    ALOGV("SignalsServer::sending signal %s value %s", signalname.c_str(), data.c_str());
 
     {
         // Exact match subscriptions
@@ -132,8 +150,12 @@ bool isValidFilter(const std::string signalName, bool& contains_wildcard_out) {
             auto& subList = map_iter->second;
 
             for (auto subList_it = subList.begin(); subList_it != subList.end();) {
-                auto sub = *subList_it;
-                auto result = sub->signalChanged(signalname, dir, data);
+                auto subscr = *subList_it;
+                auto result = subscr.second->signalChanged(signalname, dir, data);
+                ALOGV("SignalsServer::notifying %s client pid = %d callback = %ld",
+                      signalname.c_str(),
+                      subscr.first,
+                      (uint64_t)subscr.second.get());
 
                 if (result.isDeadObject()) {
                     subList_it = subList.erase(subList_it);

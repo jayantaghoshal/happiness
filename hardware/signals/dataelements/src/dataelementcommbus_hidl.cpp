@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -10,7 +10,7 @@
 #define LOG_TAG "DataElementCommbusHidl"
 
 DataElementCommBusHIDL::DataElementCommBusHIDL()
-    : pendingSendMessages_{}, vsd_proxy_{nullptr}, dataElementCallback_{nullptr} {}
+    : pendingSendMessages_{}, vsd_proxy_{nullptr}, dataElementCallback_{nullptr}, pid_(getpid()) {}
 
 IDataElementCommBus* IDataElementCommBus::create() {
     ALOGV("DataElementCommBus::create()");
@@ -72,7 +72,7 @@ void DataElementCommBusHIDL::addNameWithoutProxyMutex(const autosar::Dir dir,
                                                       const std::string& name,
                                                       ::android::sp<dataElemHidl::ISignals>& vsd_proxy_local) {
     if (vsd_proxy_local != nullptr) {
-        auto result = vsd_proxy_local->subscribe(name, static_cast<dataElemHidl::Dir>(dir), this);
+        auto result = vsd_proxy_local->subscribe(name, static_cast<dataElemHidl::Dir>(dir), this, pid_);
         if (!result.isOk()) {
             ALOGE("Signaling service not available: %s, subscription of %s not registered",
                   result.description().c_str(),

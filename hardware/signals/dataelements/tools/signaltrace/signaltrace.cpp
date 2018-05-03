@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -104,7 +104,7 @@ bool HidlSubscriber::resubscribe() {
         return false;
     }
     for (const Dir& d : dirs) {
-        auto subscribe = service->subscribe(filter, d, signalChangedListener);
+        auto subscribe = service->subscribe(filter, d, signalChangedListener, getpid());
         if (!subscribe.isOk()) {
             printf("ERROR: Failed to subscribe to server with dir=%s and filter=%s . Description: %s\n",
                    dirStr(d),

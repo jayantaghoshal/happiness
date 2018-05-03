@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
             }
 
             {
-                auto subscribe = service->subscribe("*", Dir::IN, myCallBackObj);
+                auto subscribe = service->subscribe("*", Dir::IN, myCallBackObj, getpid());
                 if (!subscribe.isOk()) {
                     ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
                           subscribe.description().c_str());
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
                 }
             }
             {
-                auto subscribe = service->subscribe("*", Dir::OUT, myCallBackObj);
+                auto subscribe = service->subscribe("*", Dir::OUT, myCallBackObj, getpid());
                 if (!subscribe.isOk()) {
                     ALOGE("Error: Failed to subscribe to HIDL service. Description: %s.\nExiting...",
                           subscribe.description().c_str());

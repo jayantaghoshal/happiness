@@ -33,7 +33,8 @@ class SignalsServer final : public ISignals {
     using signal_key = std::pair<std::string, Dir>;
     signal_key make_key(std::string s, Dir dir);
 
-    std::map<signal_key, std::set<::android::sp<ISignalsChangedCallback>>> subscriptions;
+    using signal_subscr = std::map<uint32_t, ::android::sp<ISignalsChangedCallback>>;
+    std::map<signal_key, signal_subscr> subscriptions;
     std::vector<WildCardSubscription> wildcard_subscriptions;
     std::map<signal_key, std::string> signalStorage;
     std::vector<Result> get_all_matching(const ::android::hardware::hidl_string& filter, const Dir dir);
@@ -41,7 +42,8 @@ class SignalsServer final : public ISignals {
   public:
     ::android::hardware::Return<void> subscribe(const ::android::hardware::hidl_string&,
                                                 Dir dir,
-                                                const ::android::sp<ISignalsChangedCallback>& cb) override;
+                                                const ::android::sp<ISignalsChangedCallback>& cb,
+                                                uint32_t pid) override;
 
     ::android::hardware::Return<void> send(const ::android::hardware::hidl_string& signalname,
                                            Dir dir,

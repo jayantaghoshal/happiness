@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -59,6 +59,7 @@ class DataElementCommBusHIDL final : public IDataElementCommBus,
     std::set<std::tuple<std::string, autosar::Dir>> pendingSubscriptions_;
     ::android::sp<dataElemHidl::ISignals> vsd_proxy_;
     std::function<void(const std::string& name, const std::string& payload)> dataElementCallback_;
+    const pid_t pid_;
 
     static const uint64_t ISIGNAL_HAL_DEATH_COOKIE = 0xDEAD;  // Cookie sent for ISignal hal death notification.
 };

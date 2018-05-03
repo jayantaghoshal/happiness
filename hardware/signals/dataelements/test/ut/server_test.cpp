@@ -41,40 +41,50 @@ class ServerTest : public ::testing::Test {
     vendor::volvocars::hardware::signals::V1_0::implementation::SignalsServer sut;
     ::android::sp<SignalsChangedMock> callbackA = ::android::sp<SignalsChangedMock>(new SignalsChangedMock());
     ::android::sp<SignalsChangedMock> callbackB = ::android::sp<SignalsChangedMock>(new SignalsChangedMock());
+    uint32_t pidA = 1111;
+    uint32_t pidB = 2222;
 };
 
 TEST_F(ServerTest, subscription_for_name_fired) {
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
     EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_A)).Times(1);
     sut.send(signalName_A, Dir::IN, value_A);
 }
 
 TEST_F(ServerTest, subscription_for_other_name_not_fired) {
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
     EXPECT_CALL(*callbackA, signalChanged(signalName_A, _, ::testing::_)).Times(0);
     sut.send(signalName_B, Dir::IN, value_B);
 }
 
 TEST_F(ServerTest, multipleSubscriptions_differentSignals_onlyMatchingFired) {
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
-    sut.subscribe(signalName_B, Dir::IN, callbackB);
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
+    sut.subscribe(signalName_B, Dir::IN, callbackB, pidA);
     EXPECT_CALL(*callbackA, signalChanged(signalName_A, _, ::testing::_)).Times(0);
     EXPECT_CALL(*callbackB, signalChanged(signalName_B, Dir::IN, value_B)).Times(1);
     sut.send(signalName_B, Dir::IN, value_B);
 }
 
-TEST_F(ServerTest, multipleSubscriptions_sameSignals_bothFired) {
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
-    sut.subscribe(signalName_A, Dir::IN, callbackB);
-    EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
+TEST_F(ServerTest, multipleSubscriptions_sameSignals_samePID_onlyLastFired) {
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
+    sut.subscribe(signalName_A, Dir::IN, callbackB, pidA);
+    EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(0);
     EXPECT_CALL(*callbackB, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
     sut.send(signalName_A, Dir::IN, value_B);
 }
 
-TEST_F(ServerTest, multipleSubscriptions_sameSignals_sameCallback_oneFired) {
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
-    sut.subscribe(signalName_A, Dir::IN, callbackA);
+TEST_F(ServerTest, multipleSubscriptions_sameSignals_sameCallback_samePID_oneFired) {
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
     EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
+    sut.send(signalName_A, Dir::IN, value_B);
+}
+
+TEST_F(ServerTest, multipleSubscriptions_sameSignals_differentPID_bothFired) {
+    sut.subscribe(signalName_A, Dir::IN, callbackA, pidA);
+    sut.subscribe(signalName_A, Dir::IN, callbackB, pidB);
+    EXPECT_CALL(*callbackA, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
+    EXPECT_CALL(*callbackB, signalChanged(signalName_A, Dir::IN, value_B)).Times(1);
     sut.send(signalName_A, Dir::IN, value_B);
 }
 
@@ -131,24 +141,24 @@ TEST_F(ServerTest, get_wildcard_match) {
 }
 
 TEST_F(ServerTest, subscription_wildcard_match1) {
-    sut.subscribe("abc*", Dir::IN, callbackA);
-    sut.subscribe("abc", Dir::IN, callbackB);
+    sut.subscribe("abc*", Dir::IN, callbackA, pidA);
+    sut.subscribe("abc", Dir::IN, callbackB, pidA);
 
     EXPECT_CALL(*callbackA, signalChanged(hidl_string{"abcdefg"}, _, value_A)).Times(1);
     EXPECT_CALL(*callbackB, signalChanged(_, _, _)).Times(0);
     sut.send("abcdefg", Dir::IN, value_A);
 }
 TEST_F(ServerTest, subscription_wildcard_match2) {
-    sut.subscribe("abc*", Dir::IN, callbackA);
-    sut.subscribe("abc", Dir::IN, callbackB);
+    sut.subscribe("abc*", Dir::IN, callbackA, pidA);
+    sut.subscribe("abc", Dir::IN, callbackB, pidA);
 
     EXPECT_CALL(*callbackA, signalChanged(hidl_string{"abc"}, Dir::IN, value_A)).Times(1);
     EXPECT_CALL(*callbackB, signalChanged(hidl_string{"abc"}, Dir::IN, value_A)).Times(1);
     sut.send("abc", Dir::IN, value_A);
 }
 TEST_F(ServerTest, subscription_wildcard_match3) {
-    sut.subscribe("abc*", Dir::IN, callbackA);
-    sut.subscribe("abc", Dir::IN, callbackB);
+    sut.subscribe("abc*", Dir::IN, callbackA, pidA);
+    sut.subscribe("abc", Dir::IN, callbackB, pidA);
 
     EXPECT_CALL(*callbackA, signalChanged(_, _, _)).Times(0);
     EXPECT_CALL(*callbackB, signalChanged(_, _, _)).Times(0);
