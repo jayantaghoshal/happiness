@@ -14,4 +14,6 @@ export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor
 export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/tools/testing/fdx_client
 export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/signals/dataelements/tools/simulation
 export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/netman/test/ct/helpers
-export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/vehicle/test/common
+# TODO: To be removed once transitioning from vehiclehalcommon is done
+export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/vehicle/test/vf_common
+export PYTHONPATH=$PYTHONPATH:$ANDROID_BUILD_TOP/vendor/volvocars/hardware/vehicle/test

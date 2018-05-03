@@ -3,203 +3,98 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-import logging
 import time
 import sys
-import os
 
 from vts.runners.host import asserts
-from vts.runners.host import base_test
-from vts.runners.host import const
-from vts.runners.host import keys
 from vts.runners.host import test_runner
-from vts.utils.python.controllers import android_device
-from vts.utils.python.precondition import precondition_utils
-from subprocess import call
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-from fdx import fdx_client
-from fdx import fdx_description_file_parser
-import vehiclehalcommon
-import threading
-from generated.datatypes import \
-    VehModMngtGlbSafe1
-
+from vf_common import vf_base_test
+from vf_common import uiautomator_common
+from vf_common.signals_common import wait_for_fr_signal, assert_fr_signal_equals
 from generated import datatypes as DE
-import logging.config
-import logging.handlers
-
-from vehiclehalcommon import VehicleHalCommon, wait_for_signal
-from com.dtmilano.android.viewclient import ViewNotFoundException
-from uiautomator import device as device
 
 # Button ids
-dai_off_id  = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_1_no_info_button"
-dai_visual_id   = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_2_visual_only_button"
-dai_visual_sound_id   = VehicleHalCommon.app_context_vehiclefunctions + "dai_state_3_visual_and_audio_button"
+dai_off_id = uiautomator_common.AppId.app_context_vehiclefunctions + "dai_state_1_no_info_button"
+dai_visual_id = uiautomator_common.AppId.app_context_vehiclefunctions + "dai_state_2_visual_only_button"
+dai_visual_sound_id  = uiautomator_common.AppId.app_context_vehiclefunctions + "dai_state_3_visual_and_audio_button"
 wait_after_button_click = 0.5
-
-class VtsDAISettingsComponentTest(base_test.BaseTestClass):
-    def setUpClass(self):
-        """Creates a mirror and init vehicle hal."""
-        self.dut = self.registerController(android_device)[0]
-        self.dut.shell.InvokeTerminal("one")
-        self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
-        results = self.dut.shell.one.Execute("id -u system")
-        self.system_uid = results[const.STDOUT][0].strip()
-        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
+DAI_SETTING = 557842437 # Hard coded VCC-HAL property ID for DAI_SETTING_VALUE
 
 
-    def tearDownClass(self):
-        try:
-            self.fr.close()
-        except:
-            pass
+class VtsDAISettingsComponentTest(vf_base_test.VFBaseTest):
 
-    def testDriveAwayInfoCCDisabled(self):
+    def testDriveAwayInfoCCDisabled_NoButtons_SendDefaultValues(self):
+        self.change_carconfig_and_reboot_if_needed([(315, 1)])
+        self.setUpVehicleFunction()
 
-        print("------------------testDriveAwayInfoCCDisabled ---------------")
+        self.ui.scrollAndAssertViewsAreNotFound([
+            dai_off_id,
+            dai_visual_id,
+            dai_visual_sound_id])
 
-        self.dut.shell.one.Execute("changecarconfig 315 1")
-        self.deviceReboot()
+        wait_for_fr_signal(self.fr.get_DriveAwayInfoActvReq, 0)
+        wait_for_fr_signal(self.fr.get_DriveAwayInfoSoundWarnActvReq, 0)
 
-        fr = self.fr
-
-        vehmod = VehModMngtGlbSafe1()
-        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
-        vehmod.Chks = 0
-        vehmod.Cntr = 0
-        vehmod.CarModSubtypWdCarModSubtyp = 0
-        vehmod.EgyLvlElecMai = 0
-        vehmod.EgyLvlElecSubtyp = 0
-        vehmod.PwrLvlElecMai = 0
-        vehmod.PwrLvlElecSubtyp = 0
-        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
-
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
-
-        dai_off = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_off_id, device)
-        dai_visual = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_visual_id, device)
-        dai_visual_sound = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_visual_sound_id, device)
-
-        # Check if buttons are invisible
-        print("dai_off -> ") + str(dai_off)
-        print("dai_visual -> ") + str(dai_visual)
-        print("dai_visual_sound ->") + str(dai_visual_sound)
-        asserts.assertEqual(dai_off, None, "Button is visible:" + dai_off_id)
-        asserts.assertEqual(dai_visual, None, "Button is visible:" + dai_visual_id)
-        asserts.assertEqual(dai_visual_sound, None, "Button is visible:" + dai_visual_sound_id)
-
-        # Check default values for daisetting
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 0, "on/off shall be 0")
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
 
     def testDriveAwayInfoCCEnabled(self):
-
-        print("------------------testDriveAwayInfoCCEnabled----------------------")
-
-        self.dut.shell.one.Execute("changecarconfig 315 3")
-        self.deviceReboot()
-
+        self.change_carconfig_and_reboot_if_needed([(315, 3)])
+        self.setUpVehicleFunction()
         fr = self.fr
+        vhal = self.vhal
 
-        vehmod = VehModMngtGlbSafe1()
-        vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
-        vehmod.Chks = 0
-        vehmod.Cntr = 0
-        vehmod.CarModSubtypWdCarModSubtyp = 0
-        vehmod.EgyLvlElecMai = 0
-        vehmod.EgyLvlElecSubtyp = 0
-        vehmod.PwrLvlElecMai = 0
-        vehmod.PwrLvlElecSubtyp = 0
-        vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
-
-        vHalCommon = VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
-
-        # Wait for the buttons to appear, in case of the slow population
-        vHalCommon.waitUntilViewAvailable(dai_off_id, timeout_seconds=5)
-        dai_off = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_off_id, device)
-        dai_visual = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_visual_id, device)
-        dai_visual_sound = vHalCommon.scrollDownAndFindViewByIdUiAutomator(dai_visual_sound_id, device)
-        DAI_SETTING = vHalCommon.get_id('DAI_SETTING')
+        self.ui.waitUntilViewAvailable(dai_off_id, timeout_seconds=5)
+        dai_off_button = self.ui.scrollDownAndFindViewById(dai_off_id)
+        dai_visual_button = self.ui.scrollDownAndFindViewById(dai_visual_id)
+        dai_visual_sound_button = self.ui.scrollDownAndFindViewById(dai_visual_sound_id)
 
         # Set UsgModSts to ACTIVE, setting should change in ACTIVE
-        fr.send_VehModMngtGlbSafe1(vehmod)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
         # Set setting to OFF
-        dai_off.click()
-        time.sleep(wait_after_button_click)
-        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(vHalCommon.extractValue(settings_value), 0, "Failed to set prop to OFF")
-
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 0, "on/off shall be 0")
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
+        dai_off_button.click()
+        vhal.wait_for_Int32_equals(0, DAI_SETTING)
+        wait_for_fr_signal(fr.get_DriveAwayInfoActvReq, 0)
+        wait_for_fr_signal(fr.get_DriveAwayInfoSoundWarnActvReq, 0)
 
         # Set setting to VISUAL
-        dai_visual.click()
-        time.sleep(wait_after_button_click)
-        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(vHalCommon.extractValue(settings_value), 1, "Failed to set prop to VISUAL")
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 1, "on/off shall be 1")
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 0, "on/off shall be 0")
+        dai_visual_button.click()
+        vhal.wait_for_Int32_equals(1, DAI_SETTING)
+        wait_for_fr_signal(fr.get_DriveAwayInfoActvReq, 1)
+        wait_for_fr_signal(fr.get_DriveAwayInfoSoundWarnActvReq, 0)
 
         # Set setting to VISUAL AND SOUND
-        dai_visual_sound.click()
-        time.sleep(wait_after_button_click)
-        settings_value = vHalCommon.readVhalProperty(DAI_SETTING)
-        asserts.assertEqual(vHalCommon.extractValue(settings_value), 2, "Failed to set prop to VISUAL AND SOUND")
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), 1, "on/off shall be 1")
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), 1, "on/off shall be 1")
+        dai_visual_sound_button.click()
+        vhal.wait_for_Int32_equals(2, DAI_SETTING)
+        wait_for_fr_signal(fr.get_DriveAwayInfoActvReq, 1)
+        wait_for_fr_signal(fr.get_DriveAwayInfoSoundWarnActvReq, 1)
+
+
 
         # Set UsgModSts to NOT_ACTIVE, setting should not change in NOT_ACTIVE
-        current_dai_settings_value = vHalCommon.getVhalInt32(DAI_SETTING)
+        current_dai_settings_value = vhal.getVhalInt32(DAI_SETTING)
         current_dai_settings_signal_visual = fr.get_DriveAwayInfoActvReq()
         current_dai_settings_signal_visual_sound = fr.get_DriveAwayInfoSoundWarnActvReq()
 
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
-        fr.send_VehModMngtGlbSafe1(vehmod)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModInActv)
 
-        # Set setting to OFF
-        dai_off.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
+        dai_off_button.click()
+        vhal.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
 
-        # Set setting to VISUAL
-        dai_visual.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
+        dai_visual_button.click()
+        vhal.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
 
-        # Set setting to VISUAL AND SOUND
-        dai_visual_sound.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
-        asserts.assertEqual(fr.get_DriveAwayInfoActvReq(), current_dai_settings_signal_visual)
-        asserts.assertEqual(fr.get_DriveAwayInfoSoundWarnActvReq(), current_dai_settings_signal_visual_sound)
+        dai_visual_sound_button.click()
+        vhal.assertVhalInt32Equal(current_dai_settings_value, DAI_SETTING)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoActvReq, current_dai_settings_signal_visual)
+        assert_fr_signal_equals(fr.get_DriveAwayInfoSoundWarnActvReq, current_dai_settings_signal_visual_sound)
 
-        # Close applicationa and go back to home screen
-        self.dut.adb.shell('input keyevent 3')
 
-    def deviceReboot(self):
-        if self.fr is not None:
-            self.fr.close()
-        time.sleep(1)
-        self.dut.shell.one.Execute("reboot")
-        self.dut.stopServices()
-        self.dut.waitForBootCompletion()
-        self.dut.startServices()
-        # self.dut.reboot()
-        self.dut.shell.InvokeTerminal("one")
-        time.sleep(1)
-        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-        time.sleep(1)
 
 if __name__ == "__main__":
     test_runner.main()
